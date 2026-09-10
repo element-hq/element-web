@@ -136,23 +136,51 @@ class Helpers {
     }
 
     /**
-     * Add a custom theme
-     * Mock the request to the custom and return a fake local custom theme
+     * Open the "Custom themes" devtools tool.
+     * Assumes a room is currently open, since the devtools dialog requires an active room in
+     * order to render its tool list, and that no other dialog is currently open.
      */
-    async addCustomTheme() {
-        await this.page.route(this.CUSTOM_THEME_URL, (route) =>
-            route.fulfill({ body: JSON.stringify(this.CUSTOM_THEME) }),
-        );
-        await this.page.getByRole("textbox", { name: "Add custom theme" }).fill(this.CUSTOM_THEME_URL);
-        await this.page.getByRole("button", { name: "Add custom theme" }).click();
-        await this.page.unroute(this.CUSTOM_THEME_URL);
+    private async openCustomThemesDevtool(): Promise<Locator> {
+        const composer = this.app.getComposer().locator("[contenteditable]");
+        await composer.fill("/devtools");
+        await composer.press("Enter");
+
+        const dialog = this.page.locator(".mx_Dialog");
+        await dialog.getByRole("button", { name: "Custom themes" }).click();
+        return dialog;
     }
 
     /**
-     * Remove the custom theme
+     * Add a custom theme via the devtools "Custom themes" tool.
+     * Mocks the request to the custom theme URL and returns a fake local custom theme.
+     * Assumes a room is currently open.
      */
-    removeCustomTheme() {
-        return this.getThemePanel().getByRole("listitem", { name: this.CUSTOM_THEME.name }).getByRole("button").click();
+    async addCustomTheme() {
+        const dialog = await this.openCustomThemesDevtool();
+
+        await this.page.route(this.CUSTOM_THEME_URL, (route) =>
+            route.fulfill({ body: JSON.stringify(this.CUSTOM_THEME) }),
+        );
+        await dialog.getByRole("textbox", { name: "Custom theme URL" }).fill(this.CUSTOM_THEME_URL);
+        await dialog.getByRole("button", { name: "Add custom theme" }).click();
+        await this.page.unroute(this.CUSTOM_THEME_URL);
+
+        await this.app.closeDialog();
+    }
+
+    /**
+     * Remove the custom theme via the devtools "Custom themes" tool.
+     * Assumes a room is currently open.
+     */
+    async removeCustomTheme() {
+        const dialog = await this.openCustomThemesDevtool();
+
+        await dialog
+            .getByRole("listitem", { name: this.CUSTOM_THEME.name })
+            .getByRole("button", { name: "Delete" })
+            .click();
+
+        await this.app.closeDialog();
     }
 
     // Message layout Panel

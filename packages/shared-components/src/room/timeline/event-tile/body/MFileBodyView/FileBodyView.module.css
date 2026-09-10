@@ -61,6 +61,7 @@
 .content [data-type="download"] {
     align-items: center;
     height: var(--cpd-space-9x);
+    margin-block-start: var(--event-tile-file-download-margin-block-start, 0);
 
     & iframe {
         margin: 0;

@@ -134,7 +134,7 @@ test.describe("triple-click message selection", () => {
         const messageTile = timeline.locator(".mx_EventTile").last();
 
         // Triple-click on the message body to select its entire content
-        const messageBody = messageTile.locator(".mx_EventTile_body");
+        const messageBody = messageTile.getByTestId("event-tile-slot-body");
         await messageBody.click({ clickCount: 3 });
 
         // Get the expected text content of the message, including pills

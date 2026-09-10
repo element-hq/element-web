@@ -94,6 +94,10 @@
     pointer-events: none;
 }
 
+.body :global(.mx_MBeaconBody) {
+    pointer-events: none;
+}
+
 .body :where(p, blockquote, dl, ol, pre, table, ul) {
     margin-block: 0 4px;
 }

@@ -61,14 +61,6 @@ Please see LICENSE files in the repository root for full details.
         height: 100%;
     }
 
-    .mx_EventTile[data-layout="group"] {
-        .mx_MessageActionBar {
-            right: 0;
-            top: -36px; /* 2px above EventTile */
-            z-index: 10; /* See _EventTile.pcss */
-        }
-    }
-
     /* For style rules of EventTile in a thread, see _EventTile.pcss */
     &.mx_ThreadView {
         max-height: 100%;
@@ -116,17 +108,12 @@ Please see LICENSE files in the repository root for full details.
         content-visibility: visible;
     }
 
-    .mx_EventTile,
     .mx_GenericEventListSummary {
         /* Account for scrollbar when hovering */
         padding-top: 0;
 
         .mx_TimelineSeparator {
             display: none;
-        }
-
-        &.mx_EventTile_clamp:hover {
-            cursor: pointer;
         }
     }
 

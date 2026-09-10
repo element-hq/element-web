@@ -85,6 +85,8 @@ export interface RoomListItemViewSnapshot {
     isFavourite: boolean;
     /** Whether the room is a low priority room */
     isLowPriority: boolean;
+    /** Whether the room is a direct message */
+    isDm: boolean;
     /** Can invite other users in the room */
     canInvite: boolean;
     /** Can copy the room link */
@@ -99,6 +101,11 @@ export interface RoomListItemViewSnapshot {
     sections: Section[];
     /** Whether sections are enabled in the room list */
     areSectionsEnabled: boolean;
+    /**
+     * Whether the room can be moved to another section, by dragging it or through the menu entries
+     * that assign a section (Favourited, Low priority and "Move to").
+     */
+    canChangeSection: boolean;
 }
 
 /**

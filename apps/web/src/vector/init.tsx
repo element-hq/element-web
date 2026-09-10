@@ -62,6 +62,23 @@ export function preparePlatform(): void {
         logger.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
     }
+
+    // Deliberately not awaited: the version is only wanted for the logs, so it must not hold up startup.
+    void logAppVersion();
+}
+
+/**
+ * Log the version of the app, so that each rageshake log file starts with the version that produced it.
+ *
+ * The rageshake store keeps one log file per app instance, so logging this at startup means an upgrade or
+ * downgrade between sessions is visible when reading a report.
+ */
+export async function logAppVersion(): Promise<void> {
+    try {
+        logger.info(`App version: ${await PlatformPeg.get()!.getAppVersion()}`);
+    } catch (e) {
+        logger.warn("Unable to determine app version for logging", e);
+    }
 }
 
 export function setupLogStorage(): Promise<void> {

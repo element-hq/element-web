@@ -6,21 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi } from "../setup/adapter.ts";
+export const REPEATABLE_DATE = new Date(Date.UTC(2022, 10, 17, 16, 58, 32, 517));
 
-export const REPEATABLE_DATE = new Date(2022, 10, 17, 16, 58, 32, 517);
-
-const RealDateTimeFormat = globalThis.Intl.DateTimeFormat;
-
-// allow setting default locale and set timezone
-// defaults to en-GB / Europe/London
-// so tests run the same everywhere
-export const mockIntlDateTimeFormat = (defaultLocale = "en-GB", defaultTimezone = "Europe/London"): void => {
-    vi.spyOn(globalThis.Intl, "DateTimeFormat").mockImplementation(function (locale, options) {
-        return new RealDateTimeFormat(locale || defaultLocale, { ...options, timeZone: defaultTimezone });
-    });
-};
-
-export const unmockIntlDateTimeFormat = (): void => {
-    vi.spyOn(globalThis.Intl, "DateTimeFormat").mockRestore();
-};
+export { mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../src/test/intlDateTimeFormatMock";

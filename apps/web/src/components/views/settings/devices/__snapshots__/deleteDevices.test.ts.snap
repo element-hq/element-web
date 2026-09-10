@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`deleteDevices() > opens interactive auth dialog when delete fails with 401 1`] = `
+{
+  "m.login.sso": {
+    "1": {
+      "body": "Confirm removing these devices by using Single Sign On to prove your identity.",
+      "continueKind": "primary",
+      "continueText": "Single Sign On",
+      "title": "Use Single Sign On to continue",
+    },
+    "2": {
+      "body": "Click the button below to confirm removing these devices.",
+      "continueKind": "danger",
+      "continueText": "Remove devices",
+      "title": "Confirm removing these devices",
+    },
+  },
+  "org.matrix.login.sso": {
+    "1": {
+      "body": "Confirm removing these devices by using Single Sign On to prove your identity.",
+      "continueKind": "primary",
+      "continueText": "Single Sign On",
+      "title": "Use Single Sign On to continue",
+    },
+    "2": {
+      "body": "Click the button below to confirm removing these devices.",
+      "continueKind": "danger",
+      "continueText": "Remove devices",
+      "title": "Confirm removing these devices",
+    },
+  },
+}
+`;

@@ -1,0 +1,75 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReplyChain > should call setQuoteExpanded if chain is longer than 2 lines 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ReplyChain_wrapper"
+  >
+    <div />
+    <div>
+      <blockquote
+        class="mx_ReplyChain mx_ReplyChain_color2"
+      >
+        <div
+          class="_root_hpj7k_8"
+          data-testid="reply-tile"
+        >
+          <a
+            class="_link_hpj7k_14"
+            href="#"
+          >
+            <div
+              class="_sender_hpj7k_43"
+              data-testid="reply-tile-sender"
+            >
+              <span
+                aria-label="@userId:matrix.org"
+                class="_avatar_va14e_8 _avatar_hpj7k_52 _avatar-imageless_va14e_55"
+                data-color="2"
+                data-type="round"
+                role="img"
+                style="--cpd-avatar-size: 16px;"
+              >
+                u
+              </span>
+              <div
+                class="_senderProfile_hpj7k_56 _disambiguatedProfile_1a1j2_8"
+                data-event-density="default"
+                data-event-layout="group"
+                role="button"
+                tabindex="0"
+              >
+                <span
+                  class="mx_Username_color2 _disambiguatedProfile_displayName_1a1j2_18 mx_DisambiguatedProfile_displayName"
+                  dir="auto"
+                >
+                  @userId:matrix.org
+                </span>
+              </div>
+            </div>
+            <div
+              class="_body_hpj7k_63"
+              data-testid="reply-tile-body"
+            >
+              <div
+                class="mx_MTextBody mx_EventTile_content _root_j01hv_8 _text_j01hv_24"
+                data-event-density="default"
+                data-event-layout="group"
+              >
+                <div
+                  class="mx_EventTile_body translate"
+                  dir="auto"
+                >
+                  A
+B
+C
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+</DocumentFragment>
+`;

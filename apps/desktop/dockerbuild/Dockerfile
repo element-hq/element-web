@@ -1,11 +1,13 @@
 # syntax=docker.io/docker/dockerfile:1.26-labs@sha256:63e440b412b6acba117974e793b7e7f702e58ee65e044bdff1b8d388ee0d853b
-# Docker image to facilitate building Element Desktop's native bits using a glibc version (2.31)
-# with broader compatibility, down to Debian bullseye & Ubuntu focal.
+# Docker image to facilitate building Element Desktop's native bits against Debian bookworm (glibc 2.36).
+# The resulting binaries are checked to require at most glibc 2.35,
+# so they run down to Ubuntu jammy (2.35) & Debian bookworm (2.36). Bookworm also still ships sqlcipher 3.4.1
+# (libsqlcipher0), which the system-linked sqlcipher variant depends on.
 
 # PNPM source
-FROM ghcr.io/pnpm/pnpm:11.21.0@sha256:ff1b4619e8299734f35afb21bd2be18f51b7b6e49cd30fb14300fadeafe871da AS pnpm
+FROM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
 
-FROM rust:bullseye@sha256:02d78ca3f928195c2a907543de778adfd728ad7e2a24fdc6aef582b7c77842e0
+FROM rust:bookworm@sha256:82150a52ec202c1b14d7817e14516c392bb7f5cfebd88f1ed531cb37ebd39922
 
 ENV DEBIAN_FRONTEND=noninteractive
 

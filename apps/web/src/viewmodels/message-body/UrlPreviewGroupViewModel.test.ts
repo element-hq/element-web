@@ -11,8 +11,9 @@ import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, type Mock, type MockedObject } from "vitest";
 
 import { BUNDLED_LINK_PREVIEWS, MAX_PREVIEWS_WHEN_LIMITED, UrlPreviewGroupViewModel } from "./UrlPreviewGroupViewModel";
-import type { UrlPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
+import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -89,6 +90,7 @@ function getViewModel({
             id: "$id",
         }),
         urlPreviewBundleEnabled,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
     });
     return { vm, client, onImageClicked };
 }
@@ -266,6 +268,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
                 },
             });
@@ -298,6 +301,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: BUNDLE_PREVIEW_WITH_IMAGE.matched_url,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
                 },
             });
@@ -322,6 +326,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewBundleEnabled: true,
                 content: {
                     msgtype: MsgType.Text,
+                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url} ${BUNDLE_PREVIEW_THREE.matched_url}`,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
                 },
             });

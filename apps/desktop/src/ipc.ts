@@ -9,8 +9,8 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
-import Store, { clearDataAndRelaunch } from "./store.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
 
 let focusHandlerAttached = false;
@@ -149,21 +149,26 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }
             break;
         case "getDesktopCapturerSources":
-            ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
-                id: source.id,
-                name: source.name,
-                thumbnailURL: source.thumbnail.toDataURL(),
-            }));
+            try {
+                ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
+                    id: source.id,
+                    name: source.name,
+                    thumbnailURL: source.thumbnail.toDataURL(),
+                }));
+            } catch (e) {
+                console.error("Failed to get desktop capturer sources", e);
+                ret = [];
+            }
             break;
         case "callDisplayMediaCallback":
-            getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
             break;
 
         case "clearStorage":
-            await clearDataAndRelaunch(global.mainWindow.webContents.session);
-            return; // the app is about to stop, we don't need to reply to the IPC
+            await clearData(global.mainWindow.webContents.session);
+            ret = null;
+            break;
 
         case "breadcrumbs": {
             if (process.platform === "darwin") {
@@ -185,7 +190,8 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                             },
                         });
                         if (r.avatarUrl) {
-                            void fetch(r.avatarUrl)
+                            void global.mainWindow?.webContents.session
+                                .fetch(r.avatarUrl)
                                 .then((resp) => {
                                     if (!resp.ok) return;
                                     return resp.arrayBuffer();

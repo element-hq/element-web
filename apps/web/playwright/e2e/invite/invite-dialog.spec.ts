@@ -157,7 +157,7 @@ test.describe("Invite dialog", function () {
             await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
 
             // Assert that the message is displayed at the bottom
-            await expect(page.locator(".mx_EventTile_last").getByText("Hello")).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByText("Hello")).toBeVisible();
         },
     );
 });

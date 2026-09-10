@@ -72,6 +72,9 @@
         "save_image_as_error_description": "Seda pilti ei õnnestunud salvestada",
         "save_image_as_error_title": "Pildi salvestamine ei õnnestunud"
     },
+    "save_dialog": {
+        "all_files": "Kõik failid"
+    },
     "store": {
         "error": {
             "backend_changed": "Kas kustutame andmed ja laadime uuesti?",

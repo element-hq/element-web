@@ -35,7 +35,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: [1, 2, 3]
+                runner: [1, 2]
         steps:
             - name: Checkout code
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -93,12 +93,21 @@ jobs:
                       !apps/web/coverage/lcov-report
 
     vitest:
-        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }}
+        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }} ${{ format('{0}/{1}', matrix.runner, matrix.num-runners) }}
         strategy:
+            fail-fast: false
             matrix:
-                path:
-                    - packages/shared-components
-                    - "."
+                include:
+                    - path: packages/shared-components
+                      runner: 1
+                      num-runners: 1
+                    # Run multiple instances in parallel to speed up the tests
+                    - path: "."
+                      runner: 1
+                      num-runners: 2
+                    - path: "."
+                      runner: 2
+                      num-runners: 2
         runs-on: ubuntu-24.04
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
@@ -145,7 +154,9 @@ jobs:
 
             - name: Run tests
               working-directory: ${{ matrix.path }}
-              run: pnpm test:unit --coverage=$ENABLE_COVERAGE
+              run: pnpm test:unit --coverage=$ENABLE_COVERAGE --shard "$SHARD"
+              env:
+                  SHARD: ${{ format('{0}/{1}', matrix.runner, matrix.num-runners) }}
 
             # Dump the disk usage on failure, because this job seems to fail with disk fills sometimes
             - name: df
@@ -159,13 +170,13 @@ jobs:
                   NAME=$(basename "$MATRIX_PATH")
                   echo "name=$NAME" >> $GITHUB_OUTPUT
               env:
-                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vite', format(' {0}', matrix.path)) }}
+                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vitest', format(' {0}', matrix.path)) }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
-                  name: coverage-${{ steps.artifact.outputs.name }}
+                  name: coverage-${{ steps.artifact.outputs.name }}-${{ matrix.runner }}
                   path: |
                       ${{ matrix.path }}/coverage
                       !${{ matrix.path }}/coverage/lcov-report

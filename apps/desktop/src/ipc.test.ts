@@ -5,9 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, describe, it, beforeEach, vi } from "vitest";
+import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
+import { desktopCapturer, nativeImage, TouchBar } from "electron";
 
 import { getConfig } from "./config.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import { clearData } from "./store.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -39,19 +42,21 @@ vi.mock("electron", () => ({
         }),
     },
     powerSaveBlocker: { isStarted: vi.fn(), start: vi.fn(), stop: vi.fn() },
-    TouchBar: class {},
+    TouchBar: class {
+        static TouchBarPopover = class {};
+        static TouchBarButton = vi.fn(function () {});
+    },
     nativeImage: { createFromBuffer: vi.fn() },
 }));
 
 vi.mock("./store.js", () => ({
     default: { instance: mockStore },
-    clearDataAndRelaunch: vi.fn(),
+    clearData: vi.fn(),
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
 vi.mock("./displayMediaCallback.js", () => ({
-    getDisplayMediaCallback: vi.fn(),
-    setDisplayMediaCallback: vi.fn(),
+    consumeDisplayMediaCallback: vi.fn(),
 }));
 vi.mock("./config.js");
 
@@ -59,8 +64,8 @@ await import("./ipc.js");
 
 const ARGS = ["@alice:example.org", "DEVICEID"];
 
-async function callIpc(name: string, id = 1): Promise<void> {
-    await ipcHandlers["ipcCall"]({}, { id, name, args: ARGS });
+async function callIpc(name: string, id = 1, args: unknown[] = ARGS): Promise<void> {
+    await ipcHandlers["ipcCall"]({}, { id, name, args });
 }
 
 describe("ipc pickle key handling", () => {
@@ -122,5 +127,123 @@ describe("getConfig", () => {
 
         expect(handler({})).toStrictEqual(config);
         expect(getConfig).toHaveBeenCalled();
+    });
+});
+
+describe("ipcCall: getDesktopCapturerSources", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(desktopCapturer.getSources).mockReset();
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    afterEach(() => {
+        vi.mocked(console.error).mockRestore();
+    });
+
+    it("maps the native sources to id/name/thumbnailURL", async () => {
+        vi.mocked(desktopCapturer.getSources).mockResolvedValue([
+            { id: "screen:1", name: "Screen 1", thumbnail: { toDataURL: (): string => "data:thumb" } },
+        ] as never);
+
+        await callIpc("getDesktopCapturerSources", 11, [{ types: ["screen"] }]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", {
+            id: 11,
+            reply: [{ id: "screen:1", name: "Screen 1", thumbnailURL: "data:thumb" }],
+        });
+    });
+
+    it("replies with an empty list rather than leaving the picker awaiting when getSources rejects", async () => {
+        vi.mocked(desktopCapturer.getSources).mockRejectedValue(new Error("native failure"));
+
+        await callIpc("getDesktopCapturerSources", 12, [{}]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 12, reply: [] });
+    });
+});
+
+describe("ipcCall: clearStorage", () => {
+    const session = { flushStorageData: vi.fn(), clearStorageData: vi.fn() };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(clearData).mockReset();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send, session } };
+    });
+
+    it("clears data for the window's session without relaunching", async () => {
+        await callIpc("clearStorage", 15, []);
+
+        expect(clearData).toHaveBeenCalledExactlyOnceWith(session);
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
+    });
+});
+
+describe("ipcCall: breadcrumbs", () => {
+    const session = { fetch: vi.fn<typeof fetch>() };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
+        vi.spyOn(global, "fetch").mockResolvedValue(new Response(null, { status: 404 }));
+        (global as unknown as { mainWindow: unknown }).mainWindow = {
+            webContents: { send, session },
+            setTouchBar: vi.fn(),
+        };
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("loads avatars through the window session so authenticated media interception applies", async () => {
+        const avatarUrl = "https://example.org/_matrix/media/v3/thumbnail/example.org/avatar";
+        const bytes = new Uint8Array([1, 2, 3]);
+        session.fetch.mockResolvedValue(new Response(bytes));
+        const icon = {} as Electron.NativeImage;
+        vi.mocked(nativeImage.createFromBuffer).mockReturnValue(icon);
+
+        await callIpc("breadcrumbs", 16, [
+            [
+                { roomId: "!room:example.org", avatarUrl, initial: "R" },
+                { roomId: "!no-avatar:example.org", avatarUrl: null, initial: "N" },
+            ],
+        ]);
+
+        expect(session.fetch).toHaveBeenCalledExactlyOnceWith(avatarUrl);
+        expect(global.fetch).not.toHaveBeenCalled();
+        await vi.waitFor(() => {
+            expect(nativeImage.createFromBuffer).toHaveBeenCalledExactlyOnceWith(Buffer.from(bytes));
+            expect(vi.mocked(TouchBar.TouchBarButton).mock.instances[0]).toMatchObject({ icon, label: "" });
+        });
+    });
+});
+
+describe("ipcCall: callDisplayMediaCallback", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.mocked(consumeDisplayMediaCallback).mockReset();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    it("invokes the consumed callback once with the chosen video source", async () => {
+        const callback = vi.fn();
+        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(callback);
+
+        await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
+
+        expect(consumeDisplayMediaCallback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith({ video: { id: "screen:1" } });
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
+    });
+
+    it("is a safe no-op when a stale or duplicate IPC finds no pending callback", async () => {
+        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(null);
+
+        await callIpc("callDisplayMediaCallback", 14, [{}]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: null });
     });
 });

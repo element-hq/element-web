@@ -146,10 +146,16 @@ describe("ReplyTileView", () => {
 
     it("keeps nested controls inert inside the reply preview", () => {
         renderReplyTile({
-            body: <button type="button">Nested action</button>,
+            body: (
+                <>
+                    <button type="button">Nested action</button>
+                    <div className="mx_MBeaconBody">Beacon body</div>
+                </>
+            ),
         });
 
         expect(getComputedStyle(screen.getByRole("button", { name: "Nested action" })).pointerEvents).toBe("none");
+        expect(getComputedStyle(screen.getByText("Beacon body")).pointerEvents).toBe("none");
     });
 
     it("passes clicks to the reply action", async () => {
