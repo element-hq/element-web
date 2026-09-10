@@ -39,6 +39,8 @@ export interface PdfMedia {
     uri: string;
     /** The file name, as sent. */
     name?: string;
+    /** The size in bytes the sender declared for the file, if any. A claim, not a measurement. */
+    size?: number;
     /** Resolves the file contents, decrypting first if the media is encrypted. */
     blob: () => Promise<Blob>;
 }
