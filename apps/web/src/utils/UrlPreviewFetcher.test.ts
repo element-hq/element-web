@@ -9,6 +9,8 @@ import { vi, describe, it, expect, beforeAll, afterAll, type Mock } from "vitest
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+
+import type { UrlPreview } from "shared-types";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
@@ -263,6 +265,17 @@ describe("UrlPreviewFetcher", () => {
             "matrix:image:size": 10000,
         };
 
+        /** The UrlPreview.image that IMAGE_BUNDLE resolves to once the media is mocked. */
+        const IMAGE_PREVIEW: NonNullable<UrlPreview["image"]> = {
+            imageThumb: "https://example.org/image/thumb",
+            imageFull: "https://example.org/image/src",
+            imageType: "image/png",
+            mxcImageFull: IMAGE_MXC,
+            width: 500,
+            height: 400,
+            playable: false,
+        };
+
         function mockMedia(client: { mxcUrlToHttp: Mock }): void {
             // eslint-disable-next-line no-restricted-properties
             client.mxcUrlToHttp.mockImplementation((url, width) => {
@@ -331,29 +344,51 @@ describe("UrlPreviewFetcher", () => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
             const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_EVENT);
-            expect(preview!.image).toEqual({
-                imageThumb: "https://example.org/image/thumb",
-                imageFull: "https://example.org/image/src",
-                imageType: "image/png",
-                mxcImageFull: IMAGE_MXC,
-                width: 500,
-                height: 400,
-                playable: false,
-            });
+            expect(preview!.image).toEqual(IMAGE_PREVIEW);
         });
 
-        it.each<Partial<UnstableBundledUrlPreviewSingle>>([
-            { "og:image": undefined },
-            { "og:image:type": undefined },
-            { "og:image:width": undefined },
-            { "og:image:height": undefined },
-            // Non-numeric dimensions are ignored (bundle values are trusted as-is).
-            { "og:image:width": "500" as unknown as number },
-        ])("should omit the image when image metadata is incomplete %s", async (override) => {
+        it("should omit the image when there is no og:image", async () => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
-            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, ...override }, BASIC_EVENT);
+            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, "og:image": undefined }, BASIC_EVENT);
             expect(preview!.image).toBeUndefined();
+        });
+
+        // The type and dimensions are optional on UrlPreview.image, and the tiles only need
+        // imageThumb to render, so a bundle that omits them still gets a preview image. This
+        // matches fetchPreview, which shows an image even when the server omits these fields.
+        it.each<[keyof UnstableBundledUrlPreviewSingle, Partial<NonNullable<UrlPreview["image"]>>]>([
+            ["og:image:type", { imageType: undefined }],
+            ["og:image:width", { width: undefined }],
+            ["og:image:height", { height: undefined }],
+        ])("should still include the image when %s is absent", async (field, expected) => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, [field]: undefined }, BASIC_EVENT);
+            expect(preview!.image).toEqual({ ...IMAGE_PREVIEW, ...expected });
+        });
+
+        // The sender controls the bundle, so a dimension that is not a number is dropped rather
+        // than passed through as a string. The image itself is still shown.
+        it("should ignore non-numeric image dimensions", async () => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle(
+                { ...IMAGE_BUNDLE, "og:image:width": {} as unknown as number },
+                BASIC_EVENT,
+            );
+            expect(preview!.image).toEqual({ ...IMAGE_PREVIEW, width: undefined });
+        });
+
+        // A numeric string is still usable, so it is parsed rather than dropped.
+        it("should parse image dimensions given as numeric strings", async () => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle(
+                { ...IMAGE_BUNDLE, "og:image:width": "500" as unknown as number },
+                BASIC_EVENT,
+            );
+            expect(preview!.image).toEqual(IMAGE_PREVIEW);
         });
 
         it("should omit the image when the media mxc URL is malformed", async () => {

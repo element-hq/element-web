@@ -311,8 +311,8 @@ export class UrlPreviewFetcher {
                 imageFull: objectUrl,
                 imageType: single["og:image:type"],
                 mxcImageFull: encryptedImage.url,
-                width: single["og:image:width"],
-                height: single["og:image:height"],
+                width: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:width"]),
+                height: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:height"]),
                 playable: false, // no way to know from bundle, so assume false
             };
 
@@ -334,8 +334,8 @@ export class UrlPreviewFetcher {
             imageFull: media.srcHttp,
             imageType: single["og:image:type"],
             mxcImageFull: single["og:image"]!,
-            width: single["og:image:width"],
-            height: single["og:image:height"],
+            width: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:width"]),
+            height: UrlPreviewFetcher.getNumberFromOpenGraph(single["og:image:height"]),
             playable: false, // assume false
         };
 
