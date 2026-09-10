@@ -20,13 +20,18 @@ import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveR
 import RightPanelStore from "./RightPanelStore";
 import { RightPanelPhases } from "./RightPanelStorePhases";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { pendingVerificationRequestForUser } from "../../verification.ts";
 
 vi.mock("../../verification");
 
 describe("RightPanelStore", () => {
-    // Mock out the settings store so the right panel store can't persist values between tests
-    vi.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
+    // The store persists its own phase history, which would otherwise carry across rooms and tests.
+    // Everything else is left alone so tests can write real settings, e.g. the labs flags below.
+    const realSetValue = SettingsStore.setValue.bind(SettingsStore);
+    vi.spyOn(SettingsStore, "setValue").mockImplementation((name, ...args) =>
+        name === "RightPanel.phases" ? Promise.resolve() : realSetValue(name, ...args),
+    );
 
     const store = RightPanelStore.instance;
     let cli: MockedObject<MatrixClient>;
@@ -38,6 +43,11 @@ describe("RightPanelStore", () => {
         // Make sure we start with a clean store
         store.reset();
         store.useUnitTestClient(cli);
+    });
+
+    // Stops anything the store persists, or a setting a test writes, leaking into the next one.
+    afterEach(() => {
+        SettingsStore.reset();
     });
 
     const viewRoom = async (roomId: string) => {
@@ -141,24 +151,12 @@ describe("RightPanelStore", () => {
                 state: { pdfViewerEvent: { getId: () => "$pdf" } as unknown as MatrixEvent },
             };
 
-            // Captured once: re-reading it inside the helper would pick up the previous test's spy and
-            // recurse.
-            const originalGetValue = SettingsStore.getValue;
-
             /** The viewer sits behind a lab, so the card is only valid while that is on. */
-            const setPdfViewerLab = (enabled: boolean): void => {
-                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
-                    if (setting === "feature_pdf_viewer") return enabled;
-                    return originalGetValue(setting, ...args);
-                });
-            };
-
-            afterEach(() => {
-                vi.mocked(SettingsStore.getValue).mockRestore?.();
-            });
+            const setPdfViewerLab = (enabled: boolean): Promise<void> =>
+                SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, enabled);
 
             it("drops a card with no event to display", async () => {
-                setPdfViewerLab(true);
+                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
 
                 store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
@@ -167,7 +165,7 @@ describe("RightPanelStore", () => {
             });
 
             it("opens the card for the event when the open action is dispatched", async () => {
-                setPdfViewerLab(true);
+                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
                 const event = {
                     getId: () => "$pdf",
@@ -182,7 +180,7 @@ describe("RightPanelStore", () => {
             });
 
             it("keeps a card with an event to display", async () => {
-                setPdfViewerLab(true);
+                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
 
                 store.setCard(pdfCard, true, "!1:example.org");
@@ -191,7 +189,7 @@ describe("RightPanelStore", () => {
             });
 
             it("drops an otherwise valid card while the lab is off", async () => {
-                setPdfViewerLab(false);
+                await setPdfViewerLab(false);
                 await viewRoom("!1:example.org");
 
                 store.setCard(pdfCard, true, "!1:example.org");

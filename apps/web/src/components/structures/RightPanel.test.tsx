@@ -21,6 +21,7 @@ import { Action } from "../../dispatcher/actions";
 import dis from "../../dispatcher/dispatcher";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -58,6 +59,7 @@ describe("RightPanel", () => {
 
         dis.fire(Action.OnLoggedOut, true); // Shut down the stores
         vi.restoreAllMocks();
+        SettingsStore.reset();
     });
 
     const spinUpStores = async () => {
@@ -169,11 +171,7 @@ describe("RightPanel", () => {
         });
 
         // The card is only valid while the lab is on, so the store would otherwise drop it.
-        const realGetValue = SettingsStore.getValue;
-        vi.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
-            if (name === "feature_pdf_viewer") return true;
-            return realGetValue(name, roomId);
-        });
+        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
 
         await spinUpStores();
 
