@@ -44,6 +44,12 @@ const MAX_PDF_BYTES = 256 * 1024 * 1024;
 
 /** Cap on decoded image size. pdf.js defaults to no limit, so a document can exhaust memory. */
 const MAX_IMAGE_PIXELS = 8192 * 8192;
+/**
+ * Caps on the canvas a page is rasterised to. These are pdf.js's own defaults, pinned so an upstream
+ * change cannot quietly raise them.
+ */
+const MAX_CANVAS_PIXELS = 2 ** 25;
+const MAX_CANVAS_DIM = 32767;
 
 /** Scale value that makes pdf.js keep every page fitted to the width of the panel. */
 const FIT_TO_WIDTH = "page-width";
@@ -178,9 +184,16 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             viewer: viewerElement,
             eventBus,
             linkService,
-            // A chat attachment preview is read-only: no forms, no annotation editing.
-            annotationMode: AnnotationMode.DISABLE,
+            // A chat attachment preview is read-only, but its links should work. ENABLE builds the layer
+            // that carries them without turning form fields into inputs (that is ENABLE_FORMS, pdf.js's
+            // default), and editing stays off entirely. Everything else in that layer is hidden by CSS.
+            annotationMode: AnnotationMode.ENABLE,
             annotationEditorMode: AnnotationEditorType.DISABLE,
+            // Already the default; pinned because it is what makes a URL in body text clickable. The links
+            // it creates go through the same link service as the document's own.
+            enableAutoLinking: true,
+            maxCanvasPixels: MAX_CANVAS_PIXELS,
+            maxCanvasDim: MAX_CANVAS_DIM,
         });
         linkService.setViewer(pdfViewer);
         pdfViewerRef.current = pdfViewer;
