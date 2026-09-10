@@ -90,11 +90,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
 
         await user.click(screen.getByRole("button", { name: "Forgot recovery key?" }));
-        expect(
-            screen.getByRole("heading", {
-                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
-            }),
-        ).toBeVisible();
+        expect(await screen.findByRole("heading", { name: "Get recovery key" })).toBeVisible();
     });
 
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
