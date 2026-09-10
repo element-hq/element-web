@@ -531,8 +531,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.7
       '@element-hq/element-call-component':
-        specifier: github:element-hq/element-call#valere/component_ec_M1&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/be4023dd66b2af9f994ecf2a5b415aa8d82cbb37#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
+        specifier: github:element-hq/element-call#main&path:/component
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/5c6fa7c864bc860d2bb842a3ae09d657bbfdea2c#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2906,8 +2906,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/be4023dd66b2af9f994ecf2a5b415aa8d82cbb37#path:/component':
-    resolution: {gitHosted: true, integrity: sha512-3gE/WO8QqqAO+Tia45NJAWvHXpJrIrddlyMlIWGTv+sOJqqtx/i8HMXdzCv3ezbPIKQJkh0vwvyp3n94mnIJlg==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/be4023dd66b2af9f994ecf2a5b415aa8d82cbb37}
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/5c6fa7c864bc860d2bb842a3ae09d657bbfdea2c#path:/component':
+    resolution: {gitHosted: true, integrity: sha512-7Wto/cwHd9uT9hpXQ8viaJQ2ZmBAZKiXX1dnZ+HbCwPOdV6Dz5alMeVt97FUimPergtrVgSsDAf+O/X1+WjfqA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/5c6fa7c864bc860d2bb842a3ae09d657bbfdea2c}
     version: 0.0.0
     peerDependencies:
       livekit-client: ^2.18.1
@@ -15940,7 +15940,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/be4023dd66b2af9f994ecf2a5b415aa8d82cbb37#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/5c6fa7c864bc860d2bb842a3ae09d657bbfdea2c#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
       livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
       matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6a2e333566931273876991567ca4f36036261bc
