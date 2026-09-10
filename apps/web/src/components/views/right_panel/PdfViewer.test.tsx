@@ -50,6 +50,7 @@ const viewerMock = vi.hoisted(() => {
 
         public currentScaleValue = "";
         public pagesCount = 100;
+        #currentPageNumber = 1;
         public readonly setDocument = vi.fn();
         public readonly cleanup = vi.fn();
         public readonly update = vi.fn();
@@ -73,8 +74,6 @@ const viewerMock = vi.hoisted(() => {
         public get currentPageNumber(): number {
             return this.#currentPageNumber;
         }
-
-        #currentPageNumber = 1;
     }
 
     class MockPDFLinkService {
