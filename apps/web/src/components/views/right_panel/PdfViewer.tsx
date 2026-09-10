@@ -17,7 +17,7 @@ import {
     type PDFDocumentLoadingTask,
     type PDFDocumentProxy,
 } from "pdfjs-dist";
-import { EventBus, PDFLinkService, PDFViewer as PdfJsViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
+import { EventBus, PDFViewer as PdfJsViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
 
 import { type PdfMedia } from "../../../@types/pdf-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
@@ -246,6 +246,9 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
                 maxImageSize: MAX_IMAGE_PIXELS,
                 // Already the default; pinned so an upstream change cannot quietly enable XFA forms.
                 enableXfa: false,
+                // pdf.js warns about whatever it finds odd in the file, quoting it, and rageshakes
+                // capture the console.
+                verbosity: VerbosityLevel.ERRORS,
             });
             pdfDocument = await loadingTask.promise;
             if (disposed) return;
