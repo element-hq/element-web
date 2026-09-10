@@ -24,7 +24,7 @@ import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../..
 
 const loggerPdf = logger.getChild("PdfViewer");
 
-const WORKER_SRC = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).toString();
+const WORKER_SRC = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
 /** `%PDF-`, the signature every PDF carries. */
 const PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d];
