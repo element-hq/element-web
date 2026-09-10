@@ -88,7 +88,7 @@ export async function encryptPickleKey(
 /**
  * Decrypts the provided data into a pickle key and base64-encodes it ready for use elsewhere.
  *
- * If `data` is undefined in part or in full, returns undefined.
+ * If any of the fields of `data` are undefined, returns undefined.
  *
  * @param data An object containing the encrypted pickle key data: encrypted payload, initialization vector (IV), and crypto key. Typically loaded from indexedDB.
  * @param userId The user ID the pickle key belongs to.
@@ -107,7 +107,7 @@ export async function buildAndEncodePickleKey(
 
     if (!crypto?.subtle) {
         throw new Error(
-            `WebCrypto is not available to decrypt the pickle key. secureContext=${window?.isSecureContext}`,
+            `WebCrypto is not available to decrypt the pickle key. secureContext=${globalThis.isSecureContext}`,
         );
     }
 
