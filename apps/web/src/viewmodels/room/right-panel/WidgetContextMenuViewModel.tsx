@@ -163,9 +163,9 @@ export class WidgetContextMenuViewModel
                     button: _t("widget|context_menu|delete"),
                 });
 
-                finished.then(([confirmed]) => {
+                void finished.then(([confirmed]) => {
                     if (!confirmed) return;
-                    WidgetUtils.setRoomWidget(this._cli, this._roomId!, this._app.id);
+                    void WidgetUtils.setRoomWidget(this._cli, this._roomId!, this._app.id);
                 });
             }
 

@@ -64,11 +64,14 @@ describe("UserStatusIconViewModel", () => {
         const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
         await waitFor(() => expect(client.getExtendedProfileProperty).toHaveBeenCalled());
 
+        client.getExtendedProfileProperty.mockResolvedValue({ emoji: "😵", text: "off a horse" });
         client.emit(ClientEvent.UserProfileUpdate, userId, {
             "org.matrix.msc4426.status": { emoji: "😵", text: "off a horse" },
         });
 
-        expect(vm.getSnapshot().status).toEqual({ emoji: "😵", text: "off a horse" });
+        await waitFor(() => {
+            expect(vm.getSnapshot().status).toEqual({ emoji: "😵", text: "off a horse" });
+        });
     });
 
     it("ignores UserProfileUpdate events for other users", async () => {

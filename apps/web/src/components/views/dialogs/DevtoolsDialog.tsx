@@ -29,6 +29,7 @@ import RoomNotifications from "./devtools/RoomNotifications";
 import { Crypto } from "./devtools/Crypto";
 import SettingsField from "../elements/SettingsField.tsx";
 import { StickyStateExplorer } from "./devtools/StickyEventState.tsx";
+import { CustomThemes } from "./devtools/CustomThemes.tsx";
 
 enum Category {
     Room,
@@ -57,6 +58,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|settings_explorer"), SettingExplorer],
         [_td("devtools|server_info"), ServerInfo],
         [_td("devtools|crypto|title"), Crypto],
+        [_td("devtools|custom_themes|title"), CustomThemes],
     ],
 };
 
@@ -97,7 +99,12 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                                 setTool([label, tool]);
                             };
                             return (
-                                <button className="mx_DevTools_button" key={label} onClick={onClick}>
+                                <button
+                                    className="mx_LegacyDialogButton mx_DevTools_button"
+                                    key={label}
+                                    onClick={onClick}
+                                    type="button"
+                                >
                                     {_t(label)}
                                 </button>
                             );

@@ -43,7 +43,7 @@ export default function NewRecoveryMethodDialog({ onFinished }: NewRecoveryMetho
             setIsKeyBackupEnabled(Boolean(crypto && (await crypto.getActiveSessionBackupVersion()) !== null));
         };
 
-        checkBackupEnabled();
+        void checkBackupEnabled();
     }, [matrixClient]);
 
     function onClick(): void {
@@ -51,7 +51,7 @@ export default function NewRecoveryMethodDialog({ onFinished }: NewRecoveryMetho
             onFinished();
         } else {
             const { finished } = Modal.createDialog(RestoreKeyBackupDialog, {}, undefined, false, true);
-            finished.then(onFinished);
+            void finished.then(onFinished);
         }
     }
 

@@ -1,0 +1,96 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { composeStories } from "@storybook/react-vite";
+import { fireEvent, render, screen } from "@test-utils";
+import React from "react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+
+import { MockViewModel } from "../../../core/viewmodel";
+import {
+    RoomAvatarView,
+    type RoomAvatarViewActions,
+    type RoomAvatarViewModel,
+    type RoomAvatarViewSnapshot,
+} from "./RoomAvatarView";
+import * as stories from "./RoomAvatar.stories";
+
+const { Default, SpaceRoom, Clickable } = composeStories(stories);
+
+describe("RoomAvatarView", () => {
+    it("renders a round avatar with initial letter", () => {
+        const { container } = render(<Default />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders a square avatar for a space", () => {
+        const { container } = render(<SpaceRoom />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders a clickable avatar", () => {
+        const { container } = render(<Clickable />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("invokes the click action when the avatar is clicked", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+
+        class TestRoomAvatarViewModel extends MockViewModel<RoomAvatarViewSnapshot> implements RoomAvatarViewActions {
+            public onClick: () => void;
+
+            public constructor(snapshot: RoomAvatarViewSnapshot, actions: RoomAvatarViewActions) {
+                super(snapshot);
+                this.onClick = actions.onClick;
+            }
+        }
+
+        const vm = new TestRoomAvatarViewModel(
+            {
+                size: "36px",
+                name: "Test Room",
+                idName: "!room:example.com",
+                urls: ["https://example.com/avatar.png"],
+                type: "round",
+                isClickable: true,
+            },
+            { onClick },
+        ) as RoomAvatarViewModel;
+
+        render(<RoomAvatarView vm={vm} />);
+
+        await user.click(screen.getByTestId("avatar-img"));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("cycles to the next URL on image load error", () => {
+        const vm = new MockViewModel<RoomAvatarViewSnapshot>({
+            size: "36px",
+            name: "Test Room",
+            idName: "!room:example.com",
+            urls: ["https://example.com/first.png", "https://example.com/fallback.png"],
+            type: "round",
+            isClickable: false,
+        }) as unknown as RoomAvatarViewModel;
+
+        render(<RoomAvatarView vm={vm} />);
+
+        // The image lives inside the avatar root rendered with data-testid="avatar-img".
+        const getImg = (): HTMLImageElement => screen.getByTestId("avatar-img").querySelector("img")!;
+
+        // Verify initial URL is the first one.
+        expect(getImg()).toHaveAttribute("src", "https://example.com/first.png");
+
+        // Trigger image error on the <img> itself to cycle to the fallback URL.
+        fireEvent.error(getImg());
+
+        expect(getImg()).toHaveAttribute("src", "https://example.com/fallback.png");
+    });
+});

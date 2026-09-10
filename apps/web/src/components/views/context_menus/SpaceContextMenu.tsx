@@ -151,7 +151,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             ev.stopPropagation();
 
             PosthogTrackers.trackInteraction("WebSpaceContextMenuNewRoomItem", ev);
-            showCreateNewRoom(space);
+            void showCreateNewRoom(space);
             onFinished();
         };
 
@@ -159,7 +159,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             ev.preventDefault();
             ev.stopPropagation();
 
-            showCreateNewRoom(space, elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo);
+            void showCreateNewRoom(space, elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo);
             onFinished();
         };
 

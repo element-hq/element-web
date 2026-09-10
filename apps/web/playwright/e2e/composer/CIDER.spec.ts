@@ -42,22 +42,20 @@ test.describe("Composer", () => {
             // Type a message
             await composer.pressSequentially("my message 0");
             // It has not been sent yet
-            await expect(page.locator(".mx_EventTile_body", { hasText: "my message 0" })).not.toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 0" }),
+            ).not.toBeVisible();
 
             // Click send
             await page.getByRole("button", { name: "Send message" }).click();
             // It has been sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 0" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
 
             // Type another and press Enter afterward
             await composer.pressSequentially("my message 1");
             await composer.press("Enter");
             // It was sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 1" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
         });
 
         test("can write formatted text", async ({ page }) => {
@@ -68,18 +66,20 @@ test.describe("Composer", () => {
             await composer.pressSequentially(" message");
             await page.getByRole("button", { name: "Send message" }).click();
             // Note: both "bold" and "message" are bold, which is probably surprising
-            await expect(page.locator(".mx_EventTile_body strong", { hasText: "bold message" })).toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").locator("strong", { hasText: "bold message" }),
+            ).toBeVisible();
         });
 
         test("should allow user to input emoji via graphical picker", async ({ page, app }) => {
             await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
 
-            await page.getByTestId("mx_EmojiPicker").locator(".mx_EmojiPicker_item", { hasText: "😇" }).click();
+            await page.getByLabel("Emoji picker").getByRole("button", { name: "😇" }).click();
 
             await page.locator(".mx_ContextualMenu_background").click(); // Close emoji picker
             await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter"); // Send message
 
-            await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
+            await expect(page.getByTestId("event-tile-slot-body").filter({ hasText: "😇" })).toBeVisible();
         });
 
         test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
@@ -97,7 +97,7 @@ test.describe("Composer", () => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
                 // Mask the background of the screenshot to avoid failing the test just because some
                 // other component have changed its rendering.
-                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker.png", {
+                await expect(page.getByLabel("Emoji picker")).toMatchScreenshot("emoji-picker.png", {
                     css: `
                         .mx_ContextualMenu_background {
                             background-color: magenta !important;
@@ -113,7 +113,7 @@ test.describe("Composer", () => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
                 // Mask the background of the screenshot to avoid failing the test just because some
                 // other component have changed its rendering.
-                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker-small.png", {
+                await expect(page.getByLabel("Emoji picker")).toMatchScreenshot("emoji-picker-small.png", {
                     css: `
                         .mx_ContextualMenu_background {
                             background-color: magenta !important;
@@ -130,7 +130,7 @@ test.describe("Composer", () => {
             await emojiButton.click();
 
             // Wait for emoji picker to be visible
-            const emojiPicker = page.getByTestId("mx_EmojiPicker");
+            const emojiPicker = page.getByLabel("Emoji picker");
             await expect(emojiPicker).toBeVisible();
 
             // Get initial focused element (should be search input)
@@ -145,8 +145,8 @@ test.describe("Composer", () => {
             await page.keyboard.press("Tab");
 
             // Verify we're still within the emoji picker (not back to composer)
-            const focusedElement = await page.evaluate(() => document.activeElement?.closest(".mx_EmojiPicker"));
-            expect(focusedElement).not.toBeNull();
+            const focusStillInPicker = await emojiPicker.evaluate((el) => el.contains(document.activeElement));
+            expect(focusStillInPicker).toBe(true);
 
             // Close with Escape key
             await page.keyboard.press("Escape");
@@ -169,14 +169,14 @@ test.describe("Composer", () => {
                 await composer.pressSequentially("my message 3");
                 await composer.press("Enter");
                 // It has not been sent yet
-                await expect(page.locator(".mx_EventTile_body", { hasText: "my message 3" })).not.toBeVisible();
+                await expect(
+                    page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 3" }),
+                ).not.toBeVisible();
 
                 // Press Control+Enter
                 await composer.press(`${CtrlOrMeta}+Enter`);
                 // It was sent
-                await expect(
-                    page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 3" }),
-                ).toBeVisible();
+                await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
             });
         });
 
@@ -198,7 +198,7 @@ test.describe("Composer", () => {
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");
-            await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toContainText("Bob");
         });
 
         test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {

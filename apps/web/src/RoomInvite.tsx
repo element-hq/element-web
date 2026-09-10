@@ -82,64 +82,68 @@ export function showAnyInviteErrors(
         });
         return false;
     } else {
-        const errorList: string[] = [];
+        const failuresByReason = new Map<string, string[]>();
         for (const addr of failedUsers) {
-            if (states[addr] === "error") {
-                const reason = inviter.getErrorText(addr);
-                errorList.push(addr + ": " + reason);
+            const reason = inviter.getErrorText(addr) ?? "";
+            const sharing = failuresByReason.get(reason);
+            if (sharing) {
+                sharing.push(addr);
+            } else {
+                failuresByReason.set(reason, [addr]);
             }
         }
 
         const cli = room.client;
-        if (errorList.length > 0) {
-            // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
+        if (failedUsers.length > 0) {
             const description = (
                 <div className="mx_InviteDialog_multiInviterError">
-                    <h4>
-                        {_t(
-                            "invite|room_failed_partial",
-                            {},
-                            {
-                                RoomName: () => <strong>{room.name}</strong>,
-                            },
-                        )}
-                    </h4>
-                    <div>
-                        {failedUsers.map((addr) => {
-                            const user = userMap?.get(addr) || cli.getUser(addr);
-                            const name = (user as Member).name || (user as User).rawDisplayName;
-                            const avatarUrl = (user as Member).getMxcAvatarUrl?.() || (user as User).avatarUrl;
-                            return (
-                                <div key={addr} className="mx_InviteDialog_tile mx_InviteDialog_tile--inviterError">
-                                    <div className="mx_InviteDialog_tile_avatarStack">
-                                        <BaseAvatar
-                                            url={
-                                                (avatarUrl && mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24)) ??
-                                                undefined
-                                            }
-                                            name={name}
-                                            idName={user?.userId}
-                                            size="36px"
-                                        />
-                                    </div>
-                                    <div className="mx_InviteDialog_tile_nameStack">
-                                        <span className="mx_InviteDialog_tile_nameStack_name">{name}</span>
-                                        <span className="mx_InviteDialog_tile_nameStack_userId">{user?.userId}</span>
-                                    </div>
-                                    <div className="mx_InviteDialog_tile--inviterError_errorText">
-                                        {inviter.getErrorText(addr)}
-                                    </div>
+                    <h4>{_t("invite|room_failed_partial_description")}</h4>
+                    {Array.from(failuresByReason, ([reason, addrs]) => (
+                        <div key={reason} className="mx_InviteDialog_multiInviterError_group">
+                            {reason && (
+                                <div className="mx_InviteDialog_multiInviterError_reason">
+                                    {_t("invite|room_failed_partial_reason", { reason })}
                                 </div>
-                            );
-                        })}
-                    </div>
+                            )}
+                            {addrs.map((addr) => {
+                                const user = userMap?.get(addr) || cli.getUser(addr);
+                                const name = (user as Member).name || (user as User).rawDisplayName;
+                                const avatarUrl = (user as Member).getMxcAvatarUrl?.() || (user as User).avatarUrl;
+                                return (
+                                    <div key={addr} className="mx_InviteDialog_tile mx_InviteDialog_tile--inviterError">
+                                        <div className="mx_InviteDialog_tile_avatarStack">
+                                            <BaseAvatar
+                                                url={
+                                                    (avatarUrl && mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24)) ??
+                                                    undefined
+                                                }
+                                                name={name}
+                                                idName={user?.userId}
+                                                size="36px"
+                                            />
+                                        </div>
+                                        <div className="mx_InviteDialog_tile_nameStack">
+                                            <span className="mx_InviteDialog_tile_nameStack_name">{name}</span>
+                                            <span className="mx_InviteDialog_tile_nameStack_userId">
+                                                {user?.userId}
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
             );
 
-            Modal.createDialog(ErrorDialog, {
-                title: _t("invite|room_failed_partial_title"),
-                description,
-            });
+            Modal.createDialog(
+                ErrorDialog,
+                {
+                    title: _t("invite|room_failed_partial_title"),
+                    description,
+                },
+                "mx_InviteDialog_multiInviterErrorWrapper",
+            );
             return false;
         }
     }

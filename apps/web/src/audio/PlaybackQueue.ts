@@ -112,8 +112,7 @@ export class PlaybackQueue {
         const currentClockState = this.clockStates.get(mxEvent.getId()!);
 
         if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
-            // noinspection JSIgnoredPromiseFromCall
-            playback.skipTo(currentClockState);
+            void playback.skipTo(currentClockState);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId()!);
@@ -137,8 +136,7 @@ export class PlaybackQueue {
 
                             // This should cause a Play event, which will re-populate our playback order
                             // and update our current playback ID.
-                            // noinspection JSIgnoredPromiseFromCall
-                            instance.play();
+                            void instance.play();
                         }
                     } else {
                         // else no explicit next event, so find an event we haven't played that comes next. The live
@@ -181,8 +179,7 @@ export class PlaybackQueue {
 
                             // This should cause a Play event, which will re-populate our playback order
                             // and update our current playback ID.
-                            // noinspection JSIgnoredPromiseFromCall
-                            instance?.play();
+                            void instance?.play();
                         }
                     }
                 } else {

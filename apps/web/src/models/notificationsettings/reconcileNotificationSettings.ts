@@ -15,6 +15,7 @@ import { RoomNotifState } from "../../RoomNotifs";
 import { type NotificationSettings } from "./NotificationSettings";
 import { type PushRuleDiff, type PushRuleUpdate } from "./PushRuleDiff";
 import { buildPushRuleMap } from "./PushRuleMap";
+import { keywordRuleId } from "./keywordRuleId";
 
 function toStandardRules(
     model: NotificationSettings,
@@ -225,9 +226,12 @@ export function reconcileNotificationSettings(
         }
         newKeywords.delete(rule.pattern!);
     }
+    const ruleIds = new Set(contentRules.map((rule) => rule.rule_id));
     for (const keyword of newKeywords) {
+        const ruleId = keywordRuleId(keyword, ruleIds);
+        ruleIds.add(ruleId);
         changes.added.push({
-            rule_id: keyword,
+            rule_id: ruleId,
             kind: PushRuleKind.ContentSpecific,
             default: false,
             enabled: model.mentions.keywords,

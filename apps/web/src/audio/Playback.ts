@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -128,12 +129,12 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
-        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
-        this.stop();
+        void this.stop();
         this.removeAllListeners();
         this.clock.destroy();
         this.waveformObservable.close();
         if (this.element) {
+            this.element.removeEventListener("ended", this.onPlaybackEnd);
             URL.revokeObjectURL(this.element.src);
             this.element.remove();
         }
@@ -166,6 +167,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
             await deferred.promise; // make sure the audio element is ready for us
         } else {
+            // decodeAudioData detaches the buffer it is given, so the copy the fallback needs has
+            // to be taken before we call it rather than inside the error handler.
+            const fallbackBuf = this.buf.slice(0);
             try {
                 this.audioBuf = await this.context.decodeAudioData(this.buf);
             } catch (e) {
@@ -174,7 +178,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
                 try {
                     // This error handler is largely for Safari, which doesn't support Opus/Ogg very well.
-                    const wav = await decodeOgg(this.buf);
+                    const wav = await decodeOgg(fallbackBuf);
                     this.audioBuf = await this.context.decodeAudioData(wav);
                 } catch (e) {
                     logger.error("Error decoding recording:", e);
@@ -235,12 +239,16 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
         if (this.element) {
             this.source = this.context.createMediaElementSource(this.element);
+            // A MediaElementAudioSourceNode is not a scheduled source node and never emits "ended",
+            // so the media element has to be listened to instead. Without this, playback of a large
+            // file never returns to Stopped and the clock keeps running past the end of the clip.
+            this.element.addEventListener("ended", this.onPlaybackEnd);
         } else {
             this.source = this.context.createBufferSource();
             this.source.buffer = this.audioBuf ?? null;
+            this.source.addEventListener("ended", this.onPlaybackEnd);
         }
 
-        this.source.addEventListener("ended", this.onPlaybackEnd);
         this.source.connect(this.context.destination);
     }
 

@@ -191,7 +191,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     private onOk = (): void => {
         const { timeout, position } = this.state;
 
-        this.props.onChoose(
+        void this.props.onChoose(
             position
                 ? { uri: getGeoUri(position), timestamp: position.timestamp, timeout }
                 : {

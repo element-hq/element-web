@@ -40,6 +40,7 @@ describe("loadJsonFile", () => {
         vol.fromJSON({
             "./file.json": JSON.stringify({ file1: true }),
             "./nested/deep/file.json": JSON.stringify({ file2: true }),
+            "./bom.json": "\uFEFF" + JSON.stringify({ file3: true }),
         });
     });
 
@@ -53,6 +54,12 @@ describe("loadJsonFile", () => {
 
     it("should return an empty object when file does not exist", () => {
         expect(loadJsonFile("unknown-file.json")).toStrictEqual({});
+    });
+
+    it("should parse a file saved with a UTF-8 byte order mark", () => {
+        // Guard: the fixture really does start with a BOM, otherwise this test passes vacuously.
+        expect(memfs.readFileSync("bom.json", { encoding: "utf-8" })).toMatch(/^\uFEFF/);
+        expect(loadJsonFile("bom.json")).toStrictEqual({ file3: true });
     });
 });
 

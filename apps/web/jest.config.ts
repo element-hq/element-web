@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { env } from "node:process";
-import path, { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Config } from "jest";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: Config = {
     testEnvironment: "jest-fixed-jsdom",
@@ -62,6 +62,8 @@ const config: Config = {
         "!<rootDir>/src/**/*.d.ts",
         // Ignore vitest tests
         "!<rootDir>/src/**/*.test.{ts,tsx}",
+        // ...including the browser-mode ones, whose name does not end in `.test.ts`
+        "!<rootDir>/src/**/*.test.browser.{ts,tsx}",
         "!<rootDir>/src/test/**",
         // Exclude mocks
         "!<rootDir>/src/**/*-{mock,mocks}.{ts,tsx}",

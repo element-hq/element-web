@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect } from "vitest";
 
 import EditorModel from "./model";
+import HistoryManager from "./history";
 import { createPartCreator, createRenderer, type MockAutoComplete } from "./__mocks__";
 import DocumentOffset from "./offset";
 import { type PillPart } from "./parts";
@@ -190,6 +191,43 @@ describe("editor/model", function () {
             expect(model.parts[0].text).toBe("hello ");
             expect(model.parts[1].type).toBe("user-pill");
             expect(model.parts[1].text).toBe("Alice");
+        });
+
+        it("reverses a confirmed completion with a single undo", function () {
+            const history = new HistoryManager();
+            const pc = createPartCreator([{ resourceId: "@alice", text: "Alice" } as PillPart]);
+            // Stands in for the composer, which pushes every update it is told about onto the
+            // undo stack.
+            const model: EditorModel = new EditorModel([pc.plain("hello ")], pc, (caret) =>
+                history.tryPush(model, caret),
+            );
+
+            model.update("hello @a", "insertText", new DocumentOffset(8, true));
+            history.ensureLastChangesPushed(model);
+            const autoComplete = model.autoComplete as unknown as MockAutoComplete;
+            autoComplete.tryComplete();
+            // Confirming a completion closes the autocomplete a second time, which is what used to
+            // put an identical second state on the undo stack.
+            autoComplete.close();
+
+            const undone = history.undo(model);
+            expect(undone).toBeTruthy();
+            expect(undone!.parts.map((p) => p.text)).toEqual(["hello ", "@a"]);
+        });
+
+        it("does not report the redundant close which follows a completion", function () {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{ resourceId: "@alice", text: "Alice" } as PillPart]);
+            const model = new EditorModel([pc.plain("hello ")], pc, renderer);
+
+            model.update("hello @a", "insertText", new DocumentOffset(8, true));
+            const autoComplete = model.autoComplete as unknown as MockAutoComplete;
+            autoComplete.tryComplete();
+            expect(renderer.count).toBe(2);
+
+            autoComplete.close();
+
+            expect(renderer.count).toBe(2);
         });
 
         it("insert room pill", function () {

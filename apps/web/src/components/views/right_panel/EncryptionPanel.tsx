@@ -66,7 +66,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             setPhase(requestFromPromise?.phase);
         }
         if (verificationRequestPromise) {
-            awaitPromise();
+            void awaitPromise();
         }
     }, [verificationRequestPromise]);
     // Use a ref to track whether we are already showing the mismatch modal as state may not update fast enough

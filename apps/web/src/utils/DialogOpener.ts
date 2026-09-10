@@ -104,7 +104,7 @@ export class DialogOpener {
                 );
                 break;
             case Action.OpenInviteDialog:
-                Modal.createDialog(
+                void Modal.createDialog(
                     InviteDialog,
                     {
                         kind: payload.kind,
@@ -124,7 +124,7 @@ export class DialogOpener {
                     AddExistingToSpaceDialog,
                     {
                         onCreateRoomClick: (ev: ButtonEvent) => {
-                            showCreateNewRoom(space);
+                            void showCreateNewRoom(space);
                             PosthogTrackers.trackInteraction("WebAddExistingToSpaceDialogCreateRoomButton", ev);
                         },
                         onAddSubspaceClick: () => showAddExistingSubspace(space),
@@ -132,7 +132,7 @@ export class DialogOpener {
                     },
                     "mx_AddExistingToSpaceDialog_wrapper",
                 );
-                finished.then(([added]) => {
+                void finished.then(([added]) => {
                     if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
                         defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                     }

@@ -63,7 +63,7 @@ export class Jitsi {
         const cli = MatrixClientPeg.safeGet();
         cli.on(ClientEvent.ClientWellKnown, this.update);
         // call update initially in case we missed the first WellKnown.client event and for if no well-known present
-        this.update(cli.getClientWellKnown());
+        void this.update(cli.getClientWellKnown());
     }
 
     private update = async (discoveryResponse?: IClientWellKnown): Promise<any> => {

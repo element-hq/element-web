@@ -119,6 +119,14 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
                         logger.error("Discarding stale search results");
                         return false;
                     }
+                    if (error?.name === "AbortError") {
+                        // Opening a result aborts the search, which rejects whatever request is
+                        // still in flight. We asked for that, so there is nothing to tell the user
+                        // about — and the rejection can reach us before the unmount which would
+                        // otherwise have set `aborted`.
+                        debuglog("search aborted");
+                        return false;
+                    }
                     logger.error("Search failed", error);
                     onUpdate(false, null, error);
                     return false;
@@ -131,7 +139,7 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
     // Mount & unmount effect
     useEffect(() => {
         aborted.current = false;
-        handleSearchResult(promise);
+        void handleSearchResult(promise);
         return () => {
             aborted.current = true;
         };

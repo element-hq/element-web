@@ -7,10 +7,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_SettingsFieldset {
+    /* Reset the browser default <fieldset> styling */
+    display: inline-block;
+    margin-inline: unset;
+    padding-block: unset;
+    padding-inline: unset;
+    min-inline-size: unset;
+    border: none;
     box-sizing: content-box;
 }
 
 .mx_SettingsFieldset_legend {
+    /* Reset the browser default <legend> styling */
+    padding-inline: unset;
+    border: none;
     font: var(--cpd-font-heading-md-semibold);
     font-weight: var(--cpd-font-weight-semibold);
     display: block;

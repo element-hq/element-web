@@ -31,6 +31,6 @@ export const LotOfSeconds: Story = {
 export const SingleDigitMinutes: Story = {
     args: {
         seconds: 100,
-        minutesMaxLength: 1,
+        minutesMinLength: 1,
     },
 };

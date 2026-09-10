@@ -46,6 +46,13 @@ export interface MatrixClientPegAssignOpts {
      * directly where possible.
      */
     rustCryptoStorePassword?: string;
+
+    /**
+     * Optional PEM-formatted string that provides CA certificates. These will be used to check
+     * X.509 signatures on user identities. Any user identity that has a valid signature according to the supplied
+     * CAs will be considered verified, without any manual verification taking place.
+     */
+    userVerificationCaCertsPem?: string;
 }
 
 /**
@@ -199,7 +206,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     private onUnexpectedStoreClose = async (): Promise<void> => {
         if (!this.matrixClient) return;
         this.matrixClient.stopClient(); // stop the client as the database has failed
-        this.matrixClient.store.destroy();
+        void this.matrixClient.store.destroy();
 
         if (!this.matrixClient.isGuest()) {
             // If the user is not a guest then prompt them to reload rather than doing it for them
@@ -256,7 +263,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         // try to initialise e2e on the new client
         if (!SettingsStore.getValue("lowBandwidth")) {
-            await this.initClientCrypto(assignOpts.rustCryptoStoreKey, assignOpts.rustCryptoStorePassword);
+            await this.initClientCrypto(assignOpts);
         }
 
         const opts = utils.deepCopy(this.opts);
@@ -282,7 +289,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
-            SlidingSyncManager.instance.checkSupport(this.matrixClient);
+            void SlidingSyncManager.instance.checkSupport(this.matrixClient);
         }
 
         // Connect the matrix client to the dispatcher and setting handlers
@@ -294,28 +301,21 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     /**
-     * Attempt to initialize the crypto layer on a newly-created MatrixClient
-     *
-     * @param rustCryptoStoreKey - A key with which to encrypt the rust crypto indexeddb.
-     *   If provided, it must be exactly 32 bytes of data. If both this and `rustCryptoStorePassword` are
-     *   undefined, the store will be unencrypted.
-     *
-     * @param rustCryptoStorePassword - An alternative to `rustCryptoStoreKey`. Ignored if `rustCryptoStoreKey` is set.
-     *    A password which will be used to derive a key to encrypt the store with. Deriving a key from a password is
-     *    (deliberately) a slow operation, so prefer to pass a `rustCryptoStoreKey` directly where possible.
+     * Attempt to initialize the crypto layer on a newly-created MatrixClient.
      */
-    private async initClientCrypto(rustCryptoStoreKey?: Uint8Array, rustCryptoStorePassword?: string): Promise<void> {
+    private async initClientCrypto(opts: MatrixClientPegAssignOpts): Promise<void> {
         if (!this.matrixClient) {
             throw new Error("createClient must be called first");
         }
 
-        if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
+        if (!opts.rustCryptoStoreKey && !opts.rustCryptoStorePassword) {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
 
         await this.matrixClient.initRustCrypto({
-            storageKey: rustCryptoStoreKey,
-            storagePassword: rustCryptoStorePassword,
+            storageKey: opts.rustCryptoStoreKey,
+            storagePassword: opts.rustCryptoStorePassword,
+            caCertsPem: opts.userVerificationCaCertsPem,
         });
 
         StorageManager.setCryptoInitialised(true);
