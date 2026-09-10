@@ -235,7 +235,7 @@ describe("Lifecycle", () => {
                             userId,
                             guest: true,
                         }),
-                        "test-client-id",
+                        undefined,
                     );
                     expect(localStorage.getItem("mx_is_guest")).toEqual("true");
                 });
@@ -285,7 +285,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey: undefined,
                         },
-                        "test-client-id",
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({});
@@ -418,7 +418,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey,
                         },
-                        "test-client-id",
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStoreKey: expect.any(Uint8Array) });
@@ -509,7 +509,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey,
                         },
-                        "test-client-id",
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStorePassword: pickleKey });
@@ -683,7 +683,7 @@ describe("Lifecycle", () => {
                         guest: false,
                         pickleKey: undefined,
                     },
-                    "test-client-id",
+                    undefined,
                 );
             });
         });
@@ -778,7 +778,7 @@ describe("Lifecycle", () => {
                         guest: false,
                         pickleKey: expect.any(String),
                     },
-                    "test-client-id",
+                    undefined,
                 );
             });
         });
@@ -835,7 +835,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId,
                 }),
-                "test-client-id",
+                undefined,
             );
 
             const otherCredentials = {
@@ -869,7 +869,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId: otherCredentials.userId,
                 }),
-                "test-client-id",
+                undefined,
             );
 
             expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
