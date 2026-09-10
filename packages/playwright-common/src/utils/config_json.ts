@@ -64,7 +64,8 @@ export async function routeConfigJson(
     labsFlags: string[] = [],
     disablePresence: boolean = false,
 ): Promise<void> {
-    await context.route(`http://localhost:8080/config.json*`, async (route) => {
+    // Any origin, so that a `BASE_URL` other than the default dev server is served the same config
+    await context.route("**/config.json*", async (route) => {
         const json = buildConfigJson(homeserverBaseUrl, additionalConfig, labsFlags, disablePresence);
         await route.fulfill({ json });
     });

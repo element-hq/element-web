@@ -223,6 +223,7 @@ export interface Settings {
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
+    "feature_element_call_react": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
@@ -365,6 +366,7 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "Developer.elementCallMockComponent": IBaseSetting<boolean>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
@@ -597,6 +599,16 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|feature_disable_call_per_sender_encryption"),
+        default: false,
+    },
+    "feature_element_call_react": {
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_element_call_react"),
+        // A call that is already mounted in one transport cannot be switched to the other.
+        controller: new ReloadOnChangeController(),
         default: false,
     },
     "feature_location_share_live": {
@@ -1482,5 +1494,12 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
+    },
+    "Developer.elementCallMockComponent": {
+        // With feature_element_call_react: render the mock Element Call component (HostBridge buttons, no
+        // media) instead of the real one. Used by Playwright and for development without a LiveKit backend.
+        supportedLevels: [SettingLevel.DEVICE],
+        displayName: _td("devtools|settings|elementCallMockComponent"),
+        default: false,
     },
 };
