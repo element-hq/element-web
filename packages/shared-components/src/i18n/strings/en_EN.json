@@ -3,6 +3,7 @@
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
+        "apply": "Apply",
         "back": "Back",
         "cancel": "Cancel",
         "click": "Click",
@@ -252,6 +253,16 @@
             "space_settings": "Space settings"
         },
         "unread_messages": "Unread messages"
+    },
+    "room_settings": {
+        "policy_server": {
+            "error_lookup_failed": "Could not find a policy server at this server name. Check the name and try again.",
+            "error_update_failed": "Could not update the room's policy server. Try again.",
+            "generic_support": "This policy server may need additional setup before it works. Check its documentation for details.",
+            "legacy_config": "This room's policy server was set up with a pre-release version of this setting. Apply it again to update the configuration.",
+            "server_name_label": "Policy server name",
+            "support_page": "This policy server may need additional setup before it works. See the <a>policy server's support page</a> for details."
+        }
     },
     "status": {
         "set_status": {
