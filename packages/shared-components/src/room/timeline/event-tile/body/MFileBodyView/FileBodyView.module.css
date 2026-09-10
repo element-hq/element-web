@@ -24,7 +24,7 @@
     align-items: center;
     flex-grow: 1;
 
-    & button {
+    & > button {
         display: flex;
         margin: 0;
         padding: 0;
@@ -55,6 +55,31 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+    }
+}
+
+/*
+ * Actions sitting after the file name, inside the same pill. Only rendered for files we can open, so
+ * everything here is scoped to a row that actually has them and the plain row is untouched.
+ */
+.content [data-type="info"]:has([data-type="actions"]) > button {
+    /* The name no longer owns the whole pill: let it share, and ellipsize, rather than push the icons out. */
+    width: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.content [data-type="actions"] {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--cpd-space-1x);
+    margin-inline-start: var(--cpd-space-2x);
+
+    & svg {
+        width: 16px;
+        height: 16px;
+        color: var(--cpd-color-icon-secondary);
     }
 }
 
