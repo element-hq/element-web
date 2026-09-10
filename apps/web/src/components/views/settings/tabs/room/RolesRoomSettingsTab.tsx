@@ -294,7 +294,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
 
         // MSC4284: Policy servers
         let policyServerSection: JSX.Element | undefined;
-        if (SettingsStore.getValue("feature_msc4284_setup")) {
+        if (SettingsStore.getValue("feature_policy_server_setup")) {
             plEventsToLabels[EventType.RoomPolicy] = _td("room_settings|permissions|m.room.policy");
             policyServerSection = <PolicyServerSettings room={this.props.room} />;
         }

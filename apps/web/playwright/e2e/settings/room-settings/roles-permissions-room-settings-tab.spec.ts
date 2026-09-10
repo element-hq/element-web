@@ -65,7 +65,7 @@ test.describe("Roles & Permissions room settings tab", () => {
 
     test.describe("with policy server setup enabled", () => {
         test.use({
-            labsFlags: ["feature_msc4284_setup"],
+            labsFlags: ["feature_policy_server_setup"],
         });
 
         const policyServerName = "policy.example.org";
