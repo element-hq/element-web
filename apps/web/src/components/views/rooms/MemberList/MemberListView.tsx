@@ -6,12 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Form } from "@vector-im/compound-web";
-import React, { type JSX, useCallback } from "react";
+import React, { type JSX, useCallback, useMemo } from "react";
 import { Flex, type VirtualizedListContext, FlatVirtualizedList } from "@element-hq/web-shared-components";
 
 import {
+    isMemberListSeparator,
     type MemberWithSeparator,
-    SEPARATOR,
     useMemberListViewModel,
 } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
@@ -39,9 +39,18 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const { isPresenceEnabled, memberCount } = vm;
 
+    const separatorIndexes = useMemo(
+        () => vm.members.flatMap((item, index) => (isMemberListSeparator(item) ? [index] : [])),
+        [vm.members],
+    );
+    const getFocusableMemberIndex = useCallback(
+        (index: number): number => index - separatorIndexes.filter((separatorIndex) => separatorIndex < index).length,
+        [separatorIndexes],
+    );
+
     const getItemKey = useCallback((item: MemberWithSeparator): string => {
-        if (item === SEPARATOR) {
-            return "separator";
+        if (isMemberListSeparator(item)) {
+            return item.key;
         } else if (item.member) {
             return `member-${item.member.userId}`;
         } else {
@@ -59,17 +68,18 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             const itemKey = getItemKey(item);
             const isRovingItem = itemKey === context.tabIndexKey;
             const focused = isRovingItem && context.focused;
-            if (item === SEPARATOR) {
+            if (isMemberListSeparator(item)) {
                 return <hr className="mx_MemberListView_separator" />;
             } else if (item.member) {
                 return (
                     <RoomMemberTileView
                         item={item}
                         member={item.member}
+                        isCallParticipant={item.isCallParticipant}
                         showPresence={isPresenceEnabled}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}
-                        index={index}
+                        memberIndex={getFocusableMemberIndex(index)}
                         memberCount={memberCount}
                         onFocus={onFocus}
                     />
@@ -81,18 +91,18 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         threePidInvite={item.threePidInvite}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}
-                        memberIndex={index - 1} // Adjust as invites are below the separator
+                        memberIndex={getFocusableMemberIndex(index)}
                         memberCount={memberCount}
                         onFocus={onFocus}
                     />
                 );
             }
         },
-        [isPresenceEnabled, getItemKey, memberCount],
+        [getItemKey, getFocusableMemberIndex, isPresenceEnabled, memberCount],
     );
 
     const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {
-        return item !== SEPARATOR;
+        return !isMemberListSeparator(item);
     }, []);
 
     return (
