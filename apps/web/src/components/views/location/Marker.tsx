@@ -67,6 +67,7 @@ const Marker = ({ id, roomMember, useMemberColor, tooltip, ref }: Props): JSX.El
             className={classNames("mx_Marker", memberColorClass, {
                 mx_Marker_defaultColor: !memberColorClass,
             })}
+            aria-label={_t("location_sharing|map_marker")}
         >
             <OptionalTooltip tooltip={tooltip}>
                 <div className="mx_Marker_border">
