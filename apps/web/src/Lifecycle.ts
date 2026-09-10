@@ -52,7 +52,7 @@ import { SDKContextClass } from "./contexts/SDKContextClass";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOAuthLogin, type CompleteOAuthLoginResponse } from "./utils/oauth/authorize";
 import { getOAuthErrorMessage } from "./utils/oauth/error";
-import { persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
+import { getStoredOAuthClientId, persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
@@ -812,7 +812,17 @@ async function doSetLoggedIn(
 
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.set(createClientWithCreds(credentials));
+
+    let oauthClientId: string | undefined;
+    if (credentials.refreshToken) {
+        try {
+            oauthClientId = getStoredOAuthClientId();
+        } catch (e) {
+            logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed", e);
+        }
+    }
+
+    MatrixClientPeg.set(createClientWithCreds(credentials, oauthClientId));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);

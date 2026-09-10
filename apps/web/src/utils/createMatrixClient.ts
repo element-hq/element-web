@@ -121,14 +121,9 @@ function roomNameGenerator(_: string, state: RoomNameState): string | null {
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export function createClientWithCreds(creds: IMatrixClientCreds): MatrixClient {
-    let oauthClientId: string | undefined;
-    if (creds.refreshToken) {
-        try {
-            oauthClientId = getStoredOAuthClientId();
-        } catch (e) {
-            logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed", e);
-        }
+export function createClientWithCreds(creds: IMatrixClientCreds, oauthClientId?: string): MatrixClient {
+    if (creds.refreshToken && !oauthClientId) {
+        logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed");
     }
 
     const opts: ICreateClientOpts = {
