@@ -13,6 +13,7 @@ import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/loc
 
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import MemberAvatar from "../avatars/MemberAvatar";
+import { _t } from "../../../i18n";
 
 interface Props {
     id?: string;
