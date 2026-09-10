@@ -813,16 +813,7 @@ async function doSetLoggedIn(
     // check the session lock just before creating the new client
     checkSessionLock();
 
-    let oauthClientId: string | undefined;
-    if (credentials.refreshToken) {
-        try {
-            oauthClientId = getStoredOAuthClientId();
-        } catch (e) {
-            logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed", e);
-        }
-    }
-
-    MatrixClientPeg.set(createClientWithCreds(credentials, oauthClientId));
+    MatrixClientPeg.set(createClientWithCreds(credentials, getStoredOAuthClientId()));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);

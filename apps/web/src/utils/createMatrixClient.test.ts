@@ -156,14 +156,6 @@ describe("createMatrixClient", () => {
     });
 
     describe("oauth2ClientConfig", () => {
-        const stubLocalStorage = (clientId: string | null): void => {
-            vi.stubGlobal("localStorage", {
-                getItem: vi.fn().mockImplementation((key: string) => (key === "mx_oidc_client_id" ? clientId : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-            });
-        };
-
         beforeEach(() => {
             mockPlatformPeg();
             Object.defineProperty(PlatformPeg.get(), "getOAuthCallbackUrl", {
@@ -172,8 +164,6 @@ describe("createMatrixClient", () => {
         });
 
         it("should not be set when there is no refresh token", () => {
-            stubLocalStorage("test-client-id");
-
             client = createClientWithCreds({
                 homeserverUrl: "https://test.dummy",
                 userId: "@user:test.dummy",
@@ -184,8 +174,6 @@ describe("createMatrixClient", () => {
         });
 
         it("should not be set when there is a refresh token but no stored OAuth2 client ID", () => {
-            stubLocalStorage(null);
-
             client = createClientWithCreds({
                 homeserverUrl: "https://test.dummy",
                 userId: "@user:test.dummy",
@@ -197,19 +185,19 @@ describe("createMatrixClient", () => {
         });
 
         it("should be set from the stored OAuth2 client ID when there is a refresh token", () => {
-            stubLocalStorage("test-client-id");
-
-            client = createClientWithCreds({
-                homeserverUrl: "https://test.dummy",
-                userId: "@user:test.dummy",
-                accessToken: "access_token",
-                refreshToken: "refresh_token",
-            });
+            client = createClientWithCreds(
+                {
+                    homeserverUrl: "https://test.dummy",
+                    userId: "@user:test.dummy",
+                    accessToken: "access_token",
+                    refreshToken: "refresh_token",
+                },
+                "test-client-id",
+            );
 
             expect(client.http.opts.oauth2ClientConfig).toEqual(
                 expect.objectContaining({
                     clientId: "test-client-id",
-                    getAuthMetadata: expect.any(Function),
                 }),
             );
         });

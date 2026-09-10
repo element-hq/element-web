@@ -80,10 +80,12 @@ describe("Lifecycle", () => {
 
         localStorage.clear();
         sessionStorage.clear();
+
+        localStorage.setItem("mx_oidc_client_id", "test-client-id");
     });
 
     afterEach(() => {
-        vi.resetAllMocks();
+        vi.restoreAllMocks();
     });
 
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
@@ -233,6 +235,7 @@ describe("Lifecycle", () => {
                             userId,
                             guest: true,
                         }),
+                        "test-client-id",
                     );
                     expect(localStorage.getItem("mx_is_guest")).toEqual("true");
                 });
@@ -271,16 +274,19 @@ describe("Lifecycle", () => {
                 it("should create and start new matrix client with credentials", async () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                        userId,
-                        accessToken,
-                        homeserverUrl,
-                        identityServerUrl,
-                        deviceId,
-                        freshLogin: false,
-                        guest: false,
-                        pickleKey: undefined,
-                    });
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                        {
+                            userId,
+                            accessToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey: undefined,
+                        },
+                        "test-client-id",
+                    );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({});
                 });
@@ -300,7 +306,6 @@ describe("Lifecycle", () => {
                 describe("with a refresh token", () => {
                     beforeEach(() => {
                         localStorage.setItem("mx_refresh_token", refreshToken);
-                        localStorage.setItem("mx_oidc_client_id", "test-client-id");
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
@@ -318,18 +323,21 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                            userId,
-                            accessToken,
-                            // refreshToken included in credentials
-                            refreshToken,
-                            homeserverUrl,
-                            identityServerUrl,
-                            deviceId,
-                            freshLogin: false,
-                            guest: false,
-                            pickleKey: undefined,
-                        });
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                            {
+                                userId,
+                                accessToken,
+                                // refreshToken included in credentials
+                                refreshToken,
+                                homeserverUrl,
+                                identityServerUrl,
+                                deviceId,
+                                freshLogin: false,
+                                guest: false,
+                                pickleKey: undefined,
+                            },
+                            "test-client-id",
+                        );
                     });
                 });
             });
@@ -398,17 +406,20 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                        userId,
-                        // decrypted accessToken
-                        accessToken,
-                        homeserverUrl,
-                        identityServerUrl,
-                        deviceId,
-                        freshLogin: false,
-                        guest: false,
-                        pickleKey,
-                    });
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                        {
+                            userId,
+                            // decrypted accessToken
+                            accessToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey,
+                        },
+                        "test-client-id",
+                    );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStoreKey: expect.any(Uint8Array) });
                 });
@@ -433,18 +444,21 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                            userId,
-                            accessToken,
-                            // refreshToken included in credentials
-                            refreshToken,
-                            homeserverUrl,
-                            identityServerUrl,
-                            deviceId,
-                            freshLogin: false,
-                            guest: false,
-                            pickleKey: pickleKey,
-                        });
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                            {
+                                userId,
+                                accessToken,
+                                // refreshToken included in credentials
+                                refreshToken,
+                                homeserverUrl,
+                                identityServerUrl,
+                                deviceId,
+                                freshLogin: false,
+                                guest: false,
+                                pickleKey: pickleKey,
+                            },
+                            "test-client-id",
+                        );
                     });
                 });
             });
@@ -483,17 +497,20 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                        userId,
-                        // decrypted accessToken
-                        accessToken,
-                        homeserverUrl,
-                        identityServerUrl,
-                        deviceId,
-                        freshLogin: false,
-                        guest: false,
-                        pickleKey,
-                    });
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                        {
+                            userId,
+                            // decrypted accessToken
+                            accessToken,
+                            homeserverUrl,
+                            identityServerUrl,
+                            deviceId,
+                            freshLogin: false,
+                            guest: false,
+                            pickleKey,
+                        },
+                        "test-client-id",
+                    );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStorePassword: pickleKey });
                 });
@@ -534,7 +551,6 @@ describe("Lifecycle", () => {
         beforeEach(() => {
             initIdbMock();
 
-            vi.clearAllMocks();
             vi.spyOn(logger, "log").mockClear();
 
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
@@ -542,6 +558,16 @@ describe("Lifecycle", () => {
             vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
             vi.spyOn(mockPlatform, "createPickleKey");
+
+            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
+            vi.stubGlobal("localStorage", {
+                getItem: vi
+                    .fn()
+                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
+                setItem: vi.fn(),
+                removeItem: vi.fn(),
+                clear: vi.fn(),
+            });
         });
 
         const refreshToken = "test-refresh-token";
@@ -599,10 +625,10 @@ describe("Lifecycle", () => {
             it("should persist credentials", async () => {
                 await setLoggedIn(credentials);
 
-                expect(localStorage.getItem("mx_user_id")).toEqual(userId);
-                expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_is_guest")).toEqual("false");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 // dont put accessToken in localstorage when we have idb
@@ -620,7 +646,7 @@ describe("Lifecycle", () => {
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_refresh_token", refreshToken);
                 // dont put accessToken in localstorage when we have idb
-                expect(localStorage.getItem("mx_access_token")).not.toEqual(accessToken);
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -631,8 +657,8 @@ describe("Lifecycle", () => {
                     accessToken: undefined,
                 });
 
-                expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
-                expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
             });
 
             it("should clear stores", async () => {
@@ -646,16 +672,19 @@ describe("Lifecycle", () => {
             it("should create new matrix client with credentials", async () => {
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
-                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                    userId,
-                    accessToken,
-                    homeserverUrl,
-                    identityServerUrl,
-                    deviceId,
-                    freshLogin: true,
-                    guest: false,
-                    pickleKey: undefined,
-                });
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    {
+                        userId,
+                        accessToken,
+                        homeserverUrl,
+                        identityServerUrl,
+                        deviceId,
+                        freshLogin: true,
+                        guest: false,
+                        pickleKey: undefined,
+                    },
+                    "test-client-id",
+                );
             });
         });
 
@@ -680,12 +709,12 @@ describe("Lifecycle", () => {
             it("should persist credentials", async () => {
                 await setLoggedIn(credentials);
 
-                expect(localStorage.getItem("mx_user_id")).toEqual(userId);
-                expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_is_guest")).toEqual("false");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
-                expect(localStorage.getItem("mx_has_pickle_key")).toEqual("true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_pickle_key", "true");
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                     "account",
                     "mx_access_token",
@@ -693,7 +722,7 @@ describe("Lifecycle", () => {
                 );
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("pickleKey", [userId, deviceId], expect.any(Object));
                 // dont put accessToken in localstorage when we have idb
-                expect(localStorage.getItem("mx_access_token")).not.toEqual(accessToken);
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should persist token when encrypting the token fails", async () => {
@@ -714,7 +743,7 @@ describe("Lifecycle", () => {
                 await setLoggedIn(credentials);
 
                 // put plain accessToken in localstorage when we dont have idb
-                expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -730,24 +759,27 @@ describe("Lifecycle", () => {
                     accessToken: undefined,
                 });
 
-                expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
-                expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
             });
 
             it("should create new matrix client with credentials", async () => {
                 vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
-                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith({
-                    userId,
-                    accessToken,
-                    homeserverUrl,
-                    identityServerUrl,
-                    deviceId,
-                    freshLogin: true,
-                    guest: false,
-                    pickleKey: expect.any(String),
-                });
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    {
+                        userId,
+                        accessToken,
+                        homeserverUrl,
+                        identityServerUrl,
+                        deviceId,
+                        freshLogin: true,
+                        guest: false,
+                        pickleKey: expect.any(String),
+                    },
+                    "test-client-id",
+                );
             });
         });
     });
@@ -765,6 +797,16 @@ describe("Lifecycle", () => {
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+
+            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
+            vi.stubGlobal("localStorage", {
+                getItem: vi
+                    .fn()
+                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
+                setItem: vi.fn(),
+                removeItem: vi.fn(),
+                clear: vi.fn(),
+            });
         });
 
         it("should replace the current login with a new one", async () => {
@@ -793,6 +835,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId,
                 }),
+                "test-client-id",
             );
 
             const otherCredentials = {
@@ -826,6 +869,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId: otherCredentials.userId,
                 }),
+                "test-client-id",
             );
 
             expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
