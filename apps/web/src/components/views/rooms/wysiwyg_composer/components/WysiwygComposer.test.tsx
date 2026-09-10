@@ -598,6 +598,9 @@ describe("WysiwygComposer", () => {
 
             customRender(client, roomContext, editorState);
             await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+            if (editorState) {
+                await waitFor(() => expect(screen.getByRole("textbox").textContent).not.toBe(""));
+            }
             return { textbox: screen.getByRole("textbox"), spyDispatcher };
         };
 
