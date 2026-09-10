@@ -55,6 +55,12 @@ describe("CustomStatusView", () => {
         expect(onSave).not.toHaveBeenCalled();
     });
 
+    it("limits custom status text to 30 characters", () => {
+        render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} />);
+
+        expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "30");
+    });
+
     it("lets the user pick an emoji from the picker popover", async () => {
         const onSave = vi.fn();
         render(<CustomStatusView onSave={onSave} onCancel={vi.fn()} />);
