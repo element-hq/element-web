@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { app, safeStorage } from "electron";
+import { app, dialog, safeStorage } from "electron";
 
 import Store, { SafeStorageDecryptionError } from "./store.js";
 
@@ -191,6 +191,51 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.get("safeStorageBackendOverride")).toBe(true);
             expect(backing.has("safeStorageBackendMigrate")).toBe(false);
             expect(app.relaunch).toHaveBeenCalled();
+        });
+    });
+
+    describe("degraded mode consent", () => {
+        const consult = (backend: "plaintext" | "basic_text"): Promise<void> =>
+            (
+                store as unknown as {
+                    consultUserConsentDegradedMode(backend: string): Promise<void>;
+                }
+            ).consultUserConsentDegradedMode(backend);
+
+        beforeEach(() => {
+            vi.mocked(dialog.showMessageBox).mockClear();
+            // getSelectedStorageBackend is Linux-only; calling this method throws on all other platforms
+            // See https://www.electronjs.org/docs/latest/api/safe-storage#safestoragegetselectedstoragebackend-linux
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockImplementation(() => {
+                throw new Error("getSelectedStorageBackend is not available on this platform");
+            });
+        });
+
+        it.each(["darwin", "win32"] as const)("does not query the Linux-only backend on %s", async (platform) => {
+            vi.spyOn(process, "platform", "get").mockReturnValue(platform);
+
+            await consult("plaintext");
+
+            expect(safeStorage.getSelectedStorageBackend).not.toHaveBeenCalled();
+            expect(dialog.showMessageBox).toHaveBeenCalled();
+        });
+
+        it("queries the selected keyring backend on Linux", async () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("kwallet6");
+
+            await consult("plaintext");
+
+            expect(safeStorage.getSelectedStorageBackend).toHaveBeenCalled();
+        });
+
+        it("throws when the user rejects plaintext", async () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 0,
+            } as Electron.MessageBoxReturnValue);
+
+            await expect(consult("plaintext")).rejects.toThrow("user rejected plaintext");
         });
     });
 });
