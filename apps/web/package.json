@@ -40,6 +40,7 @@
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "workspace:*",
+        "@element-hq/element-web-shared-utils": "workspace:*",
         "@element-hq/web-shared-components": "workspace:*",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "catalog:",
@@ -122,7 +123,7 @@
         "@babel/preset-env": "^7.12.11",
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
-        "@element-hq/element-call-embedded": "0.24.0",
+        "@element-hq/element-call-embedded": "0.25.0",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@fetch-mock/vitest": "^0.2.18",
