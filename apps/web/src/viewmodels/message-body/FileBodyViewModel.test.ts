@@ -88,6 +88,7 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
+            pdfViewerEnabled: false,
             ...overrides,
         });
 
@@ -325,7 +326,7 @@ describe("FileBodyViewModel", () => {
     describe("open in viewer", () => {
         const pdf = { info: { mimetype: "application/pdf" } };
 
-        /** The viewer sits behind a lab, which the view model takes as a prop rather than reading here. */
+        /** The lab flag is read by the view and handed in, so a test just sets it directly. */
         const createPdfVm = (
             overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
         ): FileBodyViewModel => createVm({ pdfViewerEnabled: true, ...overrides });
@@ -340,18 +341,6 @@ describe("FileBodyViewModel", () => {
 
             expect(vm.getSnapshot().showOpen).toBe(false);
             expect(vm.getSnapshot().showInlineDownload).toBe(false);
-        });
-
-        it("falls back to the lab setting when the flag is not passed", () => {
-            // No prop and no mocking: the setting's own default is off, so this also pins the
-            // constructor actually consulting it.
-            const vm = createVm({
-                mxEvent: mkMediaEvent(pdf),
-                showFileInfo: true,
-                timelineRenderingType: TimelineRenderingType.Room,
-            });
-
-            expect(vm.getSnapshot().showOpen).toBe(false);
         });
 
         it("offers the viewer for a PDF shown as a file in the timeline", () => {

@@ -28,7 +28,6 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
-import SettingsStore from "../../settings/SettingsStore";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -38,11 +37,8 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
-    /**
-     * Whether the PDF viewer lab is on. Defaults to the setting, resolved once in the constructor so
-     * callers — tests especially — can pass it rather than mutating the settings store.
-     */
-    pdfViewerEnabled?: boolean;
+    /** Whether the PDF viewer lab is on. Read by the view, so this model needs no settings access. */
+    pdfViewerEnabled: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -122,12 +118,7 @@ export class FileBodyViewModel
     private readonly fileDownloader: FileDownloader;
 
     public constructor(props: FileBodyViewModelProps) {
-        const propsWithSettingDefaults: FileBodyViewModelProps = {
-            ...props,
-            pdfViewerEnabled: props.pdfViewerEnabled ?? SettingsStore.getValue("feature_pdf_viewer"),
-        };
-
-        super(propsWithSettingDefaults, FileBodyViewModel.computeSnapshot(propsWithSettingDefaults));
+        super(props, FileBodyViewModel.computeSnapshot(props));
         this.refIFrame = props.refIFrame;
         this.refLink = props.refLink;
         this.fileDownloader = new FileDownloader(() => this.refIFrame.current);
@@ -171,7 +162,7 @@ export class FileBodyViewModel
             showFileInfo &&
             !props.forExport &&
             !!props.mediaEventHelper &&
-            !!props.pdfViewerEnabled &&
+            props.pdfViewerEnabled &&
             isPdfEvent(props.mxEvent);
         const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
         // Once the row carries an action for opening, downloading needs to be an action too rather than
