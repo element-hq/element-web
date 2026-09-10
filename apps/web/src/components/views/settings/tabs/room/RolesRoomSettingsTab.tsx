@@ -27,7 +27,7 @@ import { PowerLevelSelector } from "../../PowerLevelSelector";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
 import { objectClone } from "../../../../../utils/objects.ts";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { PolicyServerConfig } from "../../PolicyServerConfig.tsx";
+import { PolicyServerSettings } from "../../PolicyServerSettings";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -296,7 +296,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         let policyServerSection: JSX.Element | undefined;
         if (SettingsStore.getValue("feature_msc4284_setup")) {
             plEventsToLabels[EventType.RoomPolicy] = _td("room_settings|permissions|m.room.policy");
-            policyServerSection = <PolicyServerConfig room={this.props.room} />;
+            policyServerSection = <PolicyServerSettings room={this.props.room} />;
         }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {

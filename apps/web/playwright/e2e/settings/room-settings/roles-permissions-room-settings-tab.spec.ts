@@ -59,45 +59,70 @@ test.describe("Roles & Permissions room settings tab", () => {
         await expect(axe).toHaveNoViolations();
     });
 
-    test("should not see policy server configuration by default", async () => {
-        const section = settings.locator(".mx_SettingsFieldset_legend").first();
-        await expect(section).not.toHaveText("Policy server");
+    test("should not show policy server settings by default", async () => {
+        await expect(settings.getByRole("group", { name: "Policy server" })).not.toBeVisible();
     });
 
-    test("should be able to set policy server with labs flag enabled", async ({ app, page }) => {
-        // Back out of the room settings dialog from beforeEach and enable the labs flag
-        await app.settings.closeDialog();
-        const labs = await app.settings.openUserSettings("Labs");
-        await labs.getByLabel("Enable options to set up Policy Servers in rooms").check();
-        await app.settings.closeDialog();
+    test.describe("with policy server setup enabled", () => {
+        test.use({
+            labsFlags: ["feature_msc4284_setup"],
+        });
 
-        // Go back to the room settings and verify our new options are there
-        settings = await app.settings.openRoomSettings("Roles & Permissions");
-        const section = settings.locator(".mx_SettingsFieldset_legend").first();
-        await expect(section).toHaveText("Policy server");
+        const policyServerName = "policy.example.org";
+        const publicKeys = { ed25519: "not_a_real_key" };
 
-        // Prepare to serve a valid policy server config
-        await page.route("**/.well-known/matrix/org.matrix.msc4284.policy_server", async (route) => {
-            await route.fulfill({
-                status: 200,
-                json: {
-                    public_key: "not_a_real_key",
-                },
+        test.beforeEach(async ({ page }) => {
+            // Serve the well-known documents the client looks up on the entered server name
+            await page.route(`https://${policyServerName}/.well-known/matrix/policy_server`, async (route) => {
+                await route.fulfill({ json: { public_keys: publicKeys } });
+            });
+            await page.route(`https://${policyServerName}/.well-known/matrix/support`, async (route) => {
+                await route.fulfill({ status: 404, json: {} });
             });
         });
 
-        // Intercept our request to set the policy server
-        await page.route("**/_matrix/client/*/rooms/*/state/org.matrix.msc4284.policy", async (route) => {
-            expect(route.request().postDataJSON()).toEqual({
-                via: "localhost:1111",
-                public_key: "not_a_real_key",
-            });
-            await route.fulfill({ status: 200 });
+        test("should be able to set and clear the room's policy server", async ({ page }) => {
+            const section = settings.getByRole("group", { name: "Policy server" });
+            const serverNameInput = section.getByRole("textbox", { name: "Policy server name" });
+            const applyButton = section.getByRole("button", { name: "Apply" });
+
+            await expect(serverNameInput).toHaveValue("");
+            await expect(applyButton).toBeDisabled();
+
+            // Set the policy server: the client resolves the public keys and sends m.room.policy
+            await serverNameInput.fill(policyServerName);
+            const setRequest = page.waitForRequest(
+                (request) => request.method() === "PUT" && /\/state\/m\.room\.policy\/?$/.test(request.url()),
+            );
+            await applyButton.click();
+            expect((await setRequest).postDataJSON()).toEqual({ via: policyServerName, public_keys: publicKeys });
+
+            await expect(serverNameInput).toHaveValue(policyServerName);
+            await expect(applyButton).toBeDisabled();
+            await expect(section.getByText("This policy server may need additional setup")).toBeVisible();
+
+            // Clear it again by applying an empty value
+            await serverNameInput.clear();
+            const clearRequest = page.waitForRequest(
+                (request) => request.method() === "PUT" && /\/state\/m\.room\.policy\/?$/.test(request.url()),
+            );
+            await applyButton.click();
+            expect((await clearRequest).postDataJSON()).toEqual({});
+
+            await expect(applyButton).toBeDisabled();
+            await expect(section.getByText("This policy server may need additional setup")).not.toBeVisible();
         });
 
-        // Find the text box and choose a server which hits that route
-        await section.locator("input").fill("http://localhost:1111");
-        await section.locator(".mx_AccessibleButton").click();
-        await expect(section.locator(".error")).not.toBeVisible();
+        test("should report a server name that is not a policy server", async ({ page }) => {
+            await page.route("https://nothing.example.org/.well-known/matrix/policy_server", async (route) => {
+                await route.fulfill({ status: 404 });
+            });
+
+            const section = settings.getByRole("group", { name: "Policy server" });
+            await section.getByRole("textbox", { name: "Policy server name" }).fill("nothing.example.org");
+            await section.getByRole("button", { name: "Apply" }).click();
+
+            await expect(section.getByText("Could not find a policy server at this server name")).toBeVisible();
+        });
     });
 });
