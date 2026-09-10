@@ -29,6 +29,7 @@ import {
     defaultWatchManager,
     type SettingKey,
     type Settings,
+    type ModuleSettings,
 } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import { type CallbackFn as WatchCallbackFn } from "./WatchManager";
@@ -139,6 +140,14 @@ export default class SettingsStore {
 
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
+
+    /**
+     * Register runtime settings, mostly used by the module api.
+     * @param settings Runtime settings to be registered.
+     */
+    public static registerRuntimeSettings(settings: ModuleSettings): void {
+        Object.assign(SETTINGS, settings);
+    }
 
     public static reset(): void {
         for (const handler of Object.values(LEVEL_HANDLERS)) {

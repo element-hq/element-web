@@ -75,6 +75,12 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
 }
 
 // @alpha
+export interface BaseSettings<T extends SettingValueType = SettingValueType> {
+    default: T;
+    supportedLevels: Level[];
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -319,6 +325,12 @@ export interface LegacyModuleApiExtension {
     _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void>;
 }
 
+// @alpha
+export enum Level {
+    // (undocumented)
+    DEVICE = "device"
+}
+
 // @alpha @deprecated (undocumented)
 export interface LifecycleCustomisations {
     // (undocumented)
@@ -492,9 +504,22 @@ export interface RoomViewProps {
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 
 // @alpha
-export interface SettingsApi {
-    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+export interface Settings {
+    // (undocumented)
+    [settingsName: `module.${string}`]: BaseSettings;
 }
+
+// @alpha
+export interface SettingsApi<T extends Settings = Settings> {
+    getValue<K extends keyof Settings>(settingName: K, roomId?: string | null, excludeDefault?: boolean): Watchable<T[K]["default"]>;
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): Watchable<T>;
+    registerSettings(settings: T): void;
+    setValue<K extends keyof Settings>(settingName: K, roomId: string | null, level: Level, value: T[K]["default"]): Promise<void>;
+    setValue<T = any>(settingName: string, roomId: string | null, level: Level, value: T): Promise<void>;
+}
+
+// @alpha
+export type SettingValueType = null | string | number | boolean;
 
 // @alpha
 export interface SpacePanelItemProps {

@@ -207,7 +207,12 @@ export interface IFeature extends Omit<IBaseSetting<boolean>, "isFeature"> {
 // Type using I-identifier for backwards compatibility from before it became a discriminated union
 export type ISetting = IBaseSetting | IFeature;
 
-export interface Settings {
+export interface ModuleSettings {
+    // Settings added by modules
+    [settingsName: `module.${string}`]: IBaseSetting;
+}
+
+export interface Settings extends ModuleSettings {
     [settingName: `UIFeature.${string}`]: IBaseSetting<boolean>;
 
     // We can't use the following type because of `feature_sliding_sync_proxy_url` & `feature_hidebold` being in the namespace incorrectly
