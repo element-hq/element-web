@@ -12,7 +12,7 @@ import {
     AnnotationEditorType,
     AnnotationMode,
     getDocument,
-    GlobalWorkerOptions,
+    PDFWorker,
     RenderingCancelledException,
     type PDFDocumentLoadingTask,
     type PDFDocumentProxy,
@@ -88,12 +88,6 @@ function hasPdfHeader(data: Uint8Array): boolean {
     return false;
 }
 
-function configurePdfWorker(): void {
-    if (!GlobalWorkerOptions.workerSrc) {
-        GlobalWorkerOptions.workerSrc = WORKER_SRC;
-    }
-}
-
 function isCancellationError(error: unknown): boolean {
     return (
         error instanceof RenderingCancelledException ||
@@ -148,7 +142,6 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         const viewerElement = viewerElementRef.current;
         if (!container || !viewerElement) return;
 
-        configurePdfWorker();
         setStatus("loading");
         setCurrentPage(1);
         setPageCount(0);
@@ -156,6 +149,20 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         let disposed = false;
         let loadingTask: PDFDocumentLoadingTask | undefined;
         let pdfDocument: PDFDocumentProxy | undefined;
+
+        // Left to itself pdf.js starts its own worker, and if that fails for any reason it falls back to
+        // parsing the document on the main thread and carries on. Handing it a worker we made removes
+        // that fallback: the untrusted bytes are parsed off the main thread or not at all.
+        const worker = new Worker(WORKER_SRC, { type: "module" });
+        // pdf.js documents `port` as a Worker but its declaration file types it as `null`.
+        const pdfWorker = new PDFWorker({ port: worker } as unknown as ConstructorParameters<typeof PDFWorker>[0]);
+        const onWorkerError = (event: ErrorEvent): void => {
+            if (disposed) return;
+
+            loggerPdf.error("PDF worker failed", event.error ?? event.message);
+            setStatus("error");
+        };
+        worker.addEventListener("error", onWorkerError);
 
         const eventBus = new EventBus();
         const linkService = new ElementPdfLinkService({ eventBus });
@@ -234,6 +241,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
 
             loadingTask = getDocument({
                 data,
+                worker: pdfWorker,
                 stopAtErrors: true,
                 maxImageSize: MAX_IMAGE_PIXELS,
                 // Already the default; pinned so an upstream change cannot quietly enable XFA forms.
@@ -268,10 +276,18 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             pdfViewer.setDocument(null as unknown as PDFDocumentProxy);
             linkService.setDocument(null);
 
-            void loadingTask?.destroy().catch((error: unknown) => {
-                if (!isCancellationError(error)) {
-                    loggerPdf.warn("Unable to destroy PDF loading task", error);
-                }
+            const destroyed =
+                loadingTask?.destroy().catch((error: unknown) => {
+                    if (!isCancellationError(error)) {
+                        loggerPdf.warn("Unable to destroy PDF loading task", error);
+                    }
+                }) ?? Promise.resolve();
+
+            // pdf.js only terminates workers it started itself; this one is ours to stop.
+            void destroyed.finally(() => {
+                worker.removeEventListener("error", onWorkerError);
+                pdfWorker.destroy();
+                worker.terminate();
             });
         };
     }, [media]);
