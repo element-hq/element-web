@@ -34,10 +34,7 @@
         },
         {
             "groupName": "oxc",
-            "matchDepNames": [
-                "oxlint",
-                "oxfmt"
-            ]
+            "matchDepNames": ["oxlint", "oxfmt"]
         }
     ],
     "customManagers": [
