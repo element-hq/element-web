@@ -73,7 +73,7 @@ function failFrom(e: unknown, staleSessionSerial?: string): X509Failure {
         return {
             ok: false,
             error: {
-                code: "PKCS11",
+                code: "UPSTREAM_PKCS11",
                 pkcs11Code: e.code,
                 message: e.message,
             },

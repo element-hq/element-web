@@ -39,7 +39,8 @@ export type X509IpcErrorCode =
     | "PRIVATE_KEY_NOT_FOUND"
     /** `signData` was called before `logIntoKey`, or the session was invalidated since. */
     | "LOGIN_REQUIRED"
-    | "PKCS11"
+    /** An upstream error from the PKCS#11 library. Carries a `CKR_*` code. */
+    | "UPSTREAM_PKCS11"
     | "UNKNOWN";
 
 export interface X509IpcError {
