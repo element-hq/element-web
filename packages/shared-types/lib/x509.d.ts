@@ -46,7 +46,7 @@ export type X509IpcErrorCode =
 export interface X509IpcError {
     code: X509IpcErrorCode;
     /**
-     * `CKR_*` return value from the hardware key, present when `code` is `IpcErrorCode.Pkcs11`.
+     * `CKR_*` return value from the hardware key, present when `code` is `UPSTREAM_PKCS11`.
      */
     pkcs11Code?: number;
     message?: string;
