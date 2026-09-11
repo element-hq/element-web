@@ -712,7 +712,10 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|activityIsUnread"),
         default: false,
-        controller: new RequiresSettingsController(["Notifications.showbold"]),
+        controller: [
+            new AnalyticsController("WebSettingsActivityIsUnreadToggle"),
+            new RequiresSettingsController(["Notifications.showbold"]),
+        ],
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -1239,12 +1242,16 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+        controller: new AnalyticsController("WebRoomListSectionToggle"),
     },
     "RoomList.showPeopleSection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_people_sections"),
-        controller: new RequiresSettingsController(["RoomList.showSections"]),
+        controller: [
+            new AnalyticsController("WebRoomListPeopleSectionToggle"),
+            new RequiresSettingsController(["RoomList.showSections"]),
+        ],
     },
     "composerUrlPreviewCollapsed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

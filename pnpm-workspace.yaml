@@ -44,7 +44,7 @@ catalog:
     "@vitest/browser-playwright": 4.1.11
     "@vitest/browser": 4.1.11
     "@vitejs/plugin-react": 6.1.1
-    unplugin-dts: 1.0.1
+    unplugin-dts: 1.1.0
     # nx
     nx: 23.2.0
 
