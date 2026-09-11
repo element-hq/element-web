@@ -1,7 +1,3 @@
-# This workflow relies on actions/cache to store the hak dependency artifacts as they take a long time to build
-# Due to this extra care must be taken to only ever run all build_* scripts against the same branch to ensure
-# the correct cache scoping, and additional care must be taken to not run untrusted actions on the develop branch.
-
 # Windows GHA runner by default uses the pwsh shell which breaks codeSigningCert in the workflow
 # We always sign using eSignerCKA to ensure it keeps working, but aside from release & nightlies we use demo credentials
 # which do not yield trusted signatures.
@@ -45,8 +41,6 @@ on:
                     The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
-                    + electronVersion - the version of electron to use for cache keying
-                    + hakHash - the hash of the .hak directory to use for cache keying
                     + variant.json - the variant configuration to use for the build
 
 
@@ -92,13 +86,9 @@ jobs:
                   export_to: output
                   map: |
                       {
-                        "x64": {
-                          "target": "x86_64-pc-windows-msvc"
-                        },
+                        "x64": {},
                         "arm64": {
-                          "target": "aarch64-pc-windows-msvc",
-                          "build-args": "--arm64",
-                          "arch": "amd64_arm64"
+                          "build-args": "--arm64"
                         }
                       }
 
@@ -119,44 +109,24 @@ jobs:
                   name: ${{ inputs.prepare-artifact-name }}
                   path: apps/desktop/
 
-            - name: Cache .hak
-              id: cache
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-              with:
-                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
-                  path: |
-                      apps/desktop/.hak
-
-            # ActiveTCL package on choco is from 2015,
-            # this one is newer but includes more than we need
-            - name: Choco install tclsh
-              if: steps.cache.outputs.cache-hit != 'true'
-              shell: pwsh
-              run: |
-                  choco install -y magicsplat-tcl-tk --no-progress
-                  echo "${HOME}/AppData/Local/Apps/Tcl86/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-            - name: Choco install NetWide Assembler
-              if: steps.cache.outputs.cache-hit != 'true'
-              shell: pwsh
-              run: |
-                  choco install -y nasm --no-progress
-                  echo "C:/Program Files/NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-            - name: Install Rust
-              if: steps.cache.outputs.cache-hit != 'true'
-              run: |
-                  rustup toolchain install stable --profile minimal --no-self-update
-                  rustup default stable
-                  rustup target add $env:TARGET
-              env:
-                  TARGET: ${{ steps.config.outputs.target }}
-
             - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
+
+            # Ensure the prebuilt seshat binaries for the target architecture get installed when cross-building
+            - name: Enable installing optional dependencies for the target architecture
+              shell: bash
+              run: |
+                  cat >> pnpm-workspace.yaml <<EOF
+
+                  supportedArchitectures:
+                      os: [current]
+                      cpu: [current, $ARCH]
+                  EOF
+              env:
+                  ARCH: ${{ inputs.arch }}
 
             - name: Install Deps
               working-directory: apps/desktop
@@ -176,27 +146,6 @@ jobs:
                   cd ..
                   rm webapp.asar
                   pnpm asar pack config-edit/ webapp.asar
-
-            - name: Set up sqlcipher macros
-              if: steps.cache.outputs.cache-hit != 'true' && contains(inputs.arch, 'arm')
-              shell: pwsh
-              run: |
-                  echo "NCC=${{ github.workspace }}\scripts\cl.bat" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-            - name: Set up build tools
-              if: steps.cache.outputs.cache-hit != 'true'
-              uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-              with:
-                  arch: ${{ steps.config.outputs.arch || inputs.arch }}
-
-            - name: Build Natives
-              if: steps.cache.outputs.cache-hit != 'true'
-              working-directory: apps/desktop
-              run: |
-                  refreshenv
-                  pnpm run build:native --target $env:TARGET
-              env:
-                  TARGET: ${{ steps.config.outputs.target }}
 
             - name: Install and configure eSigner CKA
               run: |

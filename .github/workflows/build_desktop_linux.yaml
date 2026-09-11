@@ -1,6 +1,3 @@
-# This workflow relies on actions/cache to store the hak dependency artifacts as they take a long time to build
-# Due to this extra care must be taken to only ever run all build_* scripts against the same branch to ensure
-# the correct cache scoping, and additional care must be taken to not run untrusted actions on the develop branch.
 on:
     workflow_call:
         inputs:
@@ -16,10 +13,6 @@ on:
                 type: string
                 required: false
                 description: "Version string to override the one in package.json, used for non-release builds"
-            sqlcipher:
-                type: string
-                required: true
-                description: "How to link sqlcipher, one of 'system' | 'static'"
             blob_report:
                 type: boolean
                 required: false
@@ -31,8 +24,6 @@ on:
                     The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
-                    + electronVersion - the version of electron to use for cache keying
-                    + hakHash - the hash of the .hak directory to use for cache keying
                     + changelog.Debian - the changelog file to embed in the Debian package
                     + variant.json - the variant configuration to use for the build
 
@@ -63,20 +54,14 @@ on:
                 description: "List of targets to build"
                 default: "tar.gz deb"
 env:
-    SQLCIPHER_BUNDLED: ${{ inputs.sqlcipher == 'static' && '1' || '' }}
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro that still ships libsqlcipher0,
-    # which the system-sqlcipher variant needs. Debian bookworm (2.36) and newer are a superset.
-    # Currently, our newest linked glibc version is 2.34 in Seshat, Electron only links against 2.25.
+    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro. Debian bookworm (2.36) and newer are a superset.
+    # Currently, our newest linked glibc version is 2.34 in the prebuilt Seshat binaries, Electron only links against 2.25.
     MAX_GLIBC: 2.34
 permissions: {} # No permissions required
 jobs:
     build:
-        name: Build Linux ${{ inputs.arch }} SQLCipher ${{ inputs.sqlcipher }}
-        # We build on native infrastructure as matrix-seshat fails to cross-compile properly
-        # https://github.com/matrix-org/seshat/issues/135
+        name: Build Linux ${{ inputs.arch }}
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
-        env:
-            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
         steps:
             - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
               id: config
@@ -105,14 +90,6 @@ jobs:
                   name: ${{ inputs.prepare-artifact-name }}
                   path: apps/desktop
 
-            - name: Cache .hak
-              id: cache
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-              with:
-                  key: ${{ runner.os }}-${{ github.ref_name }}-${{ inputs.sqlcipher }}-${{ inputs.arch }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion', 'apps/desktop/dockerbuild/*') }}
-                  path: |
-                      apps/desktop/.hak
-
             - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
@@ -125,53 +102,6 @@ jobs:
             - name: Install Deps
               working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile --filter element-desktop"
-
-            - name: "Get modified files"
-              id: changed_files
-              if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
-              uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47
-              with:
-                  files: |
-                      apps/desktop/dockerbuild/**
-
-            # This allows contributors to test changes to the dockerbuild image within a pull request
-            - name: Build docker image
-              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
-              if: steps.changed_files.outputs.any_modified == 'true' || github.event_name == 'merge_group'
-              with:
-                  file: apps/desktop/dockerbuild/Dockerfile
-                  context: apps/desktop
-                  load: true
-                  platforms: linux/${{ inputs.arch }}
-                  tags: ${{ env.HAK_DOCKER_IMAGE }}
-
-            - name: Build Natives
-              if: steps.cache.outputs.cache-hit != 'true'
-              run: |
-                  docker run \
-                    -v ${{ github.workspace }}:/work -w /work \
-                    -e SQLCIPHER_BUNDLED \
-                    -e CI=1 \
-                    $HAK_DOCKER_IMAGE \
-                    pnpm -C apps/desktop run build:native
-
-            - name: Fix permissions
-              run: |
-                  shopt -s globstar
-
-                  # For .hak
-                  sudo chown -R $USER:$USER apps/desktop/.hak
-                  # For node_modules
-                  sudo chown -R $USER:$USER **/node_modules
-
-            - name: Check native libraries in hak dependencies
-              working-directory: apps/desktop
-              run: |
-                  shopt -s globstar
-
-                  for filename in ./.hak/hakModules/**/*.node; do
-                      ./scripts/glibc-check.sh $filename
-                  done
 
             - name: Generate debian files and arguments
               working-directory: apps/desktop
@@ -208,14 +138,13 @@ jobs:
 
                   set +x
                   assert_contains_string() { [[ "$1" == *"$2"* ]]; }
-                  ! assert_contains_string "$LIBS" "libcrypto.so.1.1"
-                  if [ "$SQLCIPHER_BUNDLED" == "1" ]; then
-                      ! assert_contains_string "$LIBS" "libsqlcipher.so.0"
-                  else
-                      assert_contains_string "$LIBS" "libsqlcipher.so.0"
-                  fi
+                  # The prebuilt seshat binaries statically link sqlcipher & openssl
+                  ! assert_contains_string "$LIBS" "libcrypto.so"
+                  ! assert_contains_string "$LIBS" "libsqlcipher.so"
 
-                  ./scripts/glibc-check.sh dist/linux-*unpacked/element-desktop*
+                  for filename in dist/**/*.node dist/linux-*unpacked/element-desktop*; do
+                      ./scripts/glibc-check.sh $filename
+                  done
               env:
                   ARCH: ${{ steps.config.outputs.arch }}
 
@@ -223,7 +152,7 @@ jobs:
             - name: Upload Artifacts
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
-                  name: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
+                  name: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}
                   path: |
                       apps/desktop/dist
                       !apps/desktop/dist/*-unpacked/**
@@ -254,17 +183,17 @@ jobs:
                   ! echo "$TAR_GZ_LISTING" | grep '^h'
 
     test:
-        name: Test Linux ${{ inputs.arch }} SQLCipher ${{ inputs.sqlcipher }}
+        name: Test Linux ${{ inputs.arch }}
         needs: build
         if: inputs.test && contains(inputs.targets, 'deb')
         uses: ./.github/workflows/build_desktop_test.yaml
         with:
-            project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
-            artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
-            runs-on: ${{ inputs.runs-on || (inputs.sqlcipher == 'system' && (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04')) }}
+            project: linux-${{ inputs.arch }}
+            artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}
+            runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
             executable: /opt/Element*/element-desktop*
             prepare_cmd: |
                 sudo apt-get -qq update
                 sudo apt install ./dist/*.deb
             blob_report: ${{ inputs.blob_report }}
-            args: ${{ inputs.sqlcipher == 'system' && '--ignore-snapshots' || '' }} ${{ inputs.test-args }}
+            args: ${{ inputs.test-args }}

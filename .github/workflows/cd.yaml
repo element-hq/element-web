@@ -4,7 +4,6 @@ on:
         branches: [master, staging, develop]
         paths:
             - "**/Dockerfile"
-            - "**/dockerbuild"
             - "**/docker"
             - "**/docker-*"
             - "pnpm-lock.yaml"
