@@ -118,12 +118,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
         syncedRuleIds: [RuleId.IsRoomMention],
     }),
 
-    // Messages that intentionally mention the user (via `m.mentions.user_ids`).
-    // Only rendered when the server does not serve `.m.rule.contains_user_name`: while it
-    // does, that rule is the row and this one is written as its synced rule (see above).
-    // The legacy text-matching mention rules were removed from the spec in Matrix v1.17
-    // (MSC4210) and servers are starting to drop them. The translation key is shared
-    // with `.m.rule.contains_user_name` so the row reads the same either way.
+    // Messages containing an intentional mention of the user (via `m.mentions.user_ids`)
     ".m.rule.is_user_mention": new VectorPushRuleDefinition({
         description: _td("settings|notifications|rule_contains_user_name"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
@@ -134,9 +129,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
         },
     }),
 
-    // Messages that intentionally mention the whole room (via `m.mentions.room`).
-    // Only rendered when the server does not serve `.m.rule.roomnotif`, see
-    // `.m.rule.is_user_mention` above.
+    // Messages containing an intentional mention of the room (via `m.mentions.room`)
     ".m.rule.is_room_mention": new VectorPushRuleDefinition({
         description: _td("settings|notifications|rule_roomnotif"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
