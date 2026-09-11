@@ -139,22 +139,24 @@ async function getSession(
         // This is an error variant, so we can just return it directly.
         return result;
     }
-    if (!sessions[serialNumber]) {
-        try {
-        for (const slot of result.data.getSlots(true)) {
-                if (slot.getToken().serialNumber == serialNumber) {
-                    sessions[serialNumber] = { session: slot.open(), authenticated: false };
-                    break;
-                }
-            }
-        } catch (e) {
-            return failFrom(e);
-        }
-        if (!sessions[serialNumber]) {
-            return fail("KEY_NOT_FOUND");
-        }
+
+    // If we already have a session for this key, return it.
+    if (sessions[serialNumber]) {
+        return ok(sessions[serialNumber]);
     }
-    return ok(sessions[serialNumber]);
+
+    // Otherwise, let's look for the key and attempt to open a new session.
+    try {
+        for (const slot of result.data.getSlots(true)) {
+            if (slot.getToken().serialNumber == serialNumber) {
+                return ok((sessions[serialNumber] = { session: slot.open(), authenticated: false }));
+            }
+        }
+    } catch (e) {
+        return failFrom(e);
+    }
+
+    return fail("KEY_NOT_FOUND");
 }
 
 /**
