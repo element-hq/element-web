@@ -36,11 +36,19 @@
         "view_source": "View Source"
     },
     "common": {
+        "and_n_others": {
+            "one": "and one other...",
+            "other": "and %(count)s others..."
+        },
         "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
         "loading": "Loading…",
+        "no_results": "No results",
         "options": "Options",
         "preferences": "Preferences",
+        "send": "Send",
+        "sending": "Sending",
+        "sent": "Sent",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "composer": {
@@ -87,6 +95,13 @@
     "emoji_picker": {
         "cancel_search_label": "Cancel search",
         "emoji_picker": "Emoji picker"
+    },
+    "forward_dialog": {
+        "filter_placeholder": "Search for rooms or people",
+        "message_preview_heading": "Message preview",
+        "no_perms_title": "You don't have permission to do this",
+        "open_room": "Open room",
+        "send_to": "Send to"
     },
     "keyboard": {
         "shift": "Shift"
@@ -367,6 +382,7 @@
         },
         "pending_moderation": "Message pending moderation",
         "pending_moderation_reason": "Message pending moderation: %(reason)s",
+        "send_state_failed": "Failed to send",
         "url_preview": {
             "close": "Close preview",
             "open_link": "Open link",
