@@ -20,7 +20,17 @@ export enum MediaPreviewValue {
     Off = "off",
 }
 
-export const MEDIA_PREVIEW_ACCOUNT_DATA_TYPE = "io.element.msc4278.media_preview_config";
+/**
+ * The stable account data type for media preview configuration, as specified in the
+ * Client-Server API. This is preferred over the unstable type when both exist.
+ */
+export const MEDIA_PREVIEW_ACCOUNT_DATA_TYPE = "m.media_preview_config";
+/**
+ * The unstable account data type from MSC4278. Still read for backwards compatibility
+ * with older clients, but new values are always written to the stable type.
+ * Can be removed once enough clients have migrated to the stable type.
+ */
+export const MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE = "io.element.msc4278.media_preview_config";
 export interface MediaPreviewConfig extends Record<string, unknown> {
     /**
      * Media preview setting for thumbnails of media in rooms.
