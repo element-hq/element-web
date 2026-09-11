@@ -150,6 +150,15 @@ jobs:
                   path: |
                       ./.vitest
 
+            - name: Upload vis results
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              if: always()
+              with:
+                  name: vis-results-${{ matrix.runner }}
+                  # Only used for the stale-screenshot check
+                  path: packages/shared-components/__vis__/linux/__results__
+                  if-no-files-found: ignore
+
     complete:
         name: Tests
         needs:
@@ -209,6 +218,20 @@ jobs:
                   pattern: vitest-blob-*
                   merge-multiple: true
                   path: .vitest
+
+            - name: Download vis results
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  pattern: vis-results-*
+                  merge-multiple: true
+                  path: packages/shared-components/__vis__/linux/__results__
+
+            - name: Detect stale screenshots
+              working-directory: packages/shared-components/__vis__/linux
+              run: |
+                  if diff -rq __baselines__ __results__ | grep "^Only in __baselines__"; then
+                      exit 1
+                  fi
 
             - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
             - name: pnpm cache

@@ -1,0 +1,122 @@
+diff --git a/dist/client/actions/match_image_snapshot_action.mjs b/dist/client/actions/match_image_snapshot_action.mjs
+index 9b3027d840321ada4bb8f594854593a067f25dd7..7280e874a473147d69bd8bcfbc3d1ee75b1e136f 100644
+--- a/dist/client/actions/match_image_snapshot_action.mjs
++++ b/dist/client/actions/match_image_snapshot_action.mjs
+@@ -4,9 +4,9 @@ import { convertElementToCssSelector } from "../external/browser/selector.mjs";
+ import { compareImageSnapshot } from "../snapshot/compare_image_snapshot.mjs";
+ 
+ //#region src/client/actions/match_image_snapshot_action.ts
+-async function matchImageSnapshotAction(commands, taskId, subject, options) {
++async function matchImageSnapshotAction(commands, taskId, subject, options, task) {
+ 	assertSnapshotKeyWithoutDash(options?.snapshotKey);
+-	return compareImageSnapshot(commands, taskId, await commands.prepareImageSnapshotComparison(taskId, parseImageSnapshotSubject(subject), options), options);
++	return compareImageSnapshot(commands, taskId, await commands.prepareImageSnapshotComparison(taskId, parseImageSnapshotSubject(subject), options), options, task);
+ }
+ function parseImageSnapshotSubject(subject) {
+ 	if (subject instanceof Element) return convertElementToCssSelector(subject);
+diff --git a/dist/client/actions/match_page_image_snapshot_action.mjs b/dist/client/actions/match_page_image_snapshot_action.mjs
+index 5c4f05e64eaec12327f82ec80ef974ee035f15a0..fbd68183c71d1afa8a6c069c7815a408bd81cb0c 100644
+--- a/dist/client/actions/match_page_image_snapshot_action.mjs
++++ b/dist/client/actions/match_page_image_snapshot_action.mjs
+@@ -2,11 +2,11 @@ import { assertSnapshotKeyWithoutDash } from "../../shared/asserts.mjs";
+ import { compareImageSnapshot } from "../snapshot/compare_image_snapshot.mjs";
+ 
+ //#region src/client/actions/match_page_image_snapshot_action.ts
+-async function matchPageImageSnapshotAction(commands, taskId, options) {
++async function matchPageImageSnapshotAction(commands, taskId, options, task) {
+ 	assertSnapshotKeyWithoutDash(options?.snapshotKey);
+ 	const info = await commands.preparePageImageSnapshotComparison(taskId, options);
+ 	if (!info) return;
+-	return compareImageSnapshot(commands, taskId, info, options);
++	return compareImageSnapshot(commands, taskId, info, options, task);
+ }
+ 
+ //#endregion
+diff --git a/dist/client/expect/to_match_image_snapshot.mjs b/dist/client/expect/to_match_image_snapshot.mjs
+index 91e55cf9296f16f1a81c0146339996148658661f..65151b2a67c6c1158705799a094b4ea2e98efcd5 100644
+--- a/dist/client/expect/to_match_image_snapshot.mjs
++++ b/dist/client/expect/to_match_image_snapshot.mjs
+@@ -8,7 +8,7 @@ function toMatchImageSnapshot(subject, options) {
+ 	const test = ctx.getCurrentTest();
+ 	if (!test) throw new Error("`toMatchImageSnapshot()` must be called in a test.");
+ 	if (test.concurrent) throw new Error("`toMatchImageSnapshot()` cannot be called in a concurrent test because concurrent tests run at the same time in the same iframe and affect each other's environment.");
+-	return matchImageSnapshotAction(ctx.commands, toTaskId(test), subject, options).then(() => success);
++	return matchImageSnapshotAction(ctx.commands, toTaskId(test), subject, options, test).then(() => success);
+ }
+ 
+ //#endregion
+diff --git a/dist/client/page/to_match_image_snapshot.mjs b/dist/client/page/to_match_image_snapshot.mjs
+index 7d83a32a9bef2651ee261ec0dbcc48f3d4bb467c..4d74a92589d610f2098c1e6960d5d6f04d46ec2a 100644
+--- a/dist/client/page/to_match_image_snapshot.mjs
++++ b/dist/client/page/to_match_image_snapshot.mjs
+@@ -7,7 +7,7 @@ function toMatchImageSnapshot(options) {
+ 	const test = ctx.getCurrentTest();
+ 	if (!test) throw new Error("`toMatchImageSnapshot()` must be called in a test.");
+ 	if (test.concurrent) throw new Error("`toMatchImageSnapshot()` cannot be called in a concurrent test because concurrent tests run at the same time in the same iframe and affect each other's environment.");
+-	return matchPageImageSnapshotAction(ctx.commands, toTaskId(test), options);
++	return matchPageImageSnapshotAction(ctx.commands, toTaskId(test), options, test);
+ }
+ 
+ //#endregion
+diff --git a/dist/client/snapshot/compare_image_snapshot.mjs b/dist/client/snapshot/compare_image_snapshot.mjs
+index 6dadb7f2bf021c2a8a2513a0c666ae38620d548c..238565eacbd5fff404bd92363d93fcb25db403b9 100644
+--- a/dist/client/snapshot/compare_image_snapshot.mjs
++++ b/dist/client/snapshot/compare_image_snapshot.mjs
+@@ -5,9 +5,10 @@ import { alignImagesToSameSize } from "../image/align_images.mjs";
+ import { prettifyOptions } from "./compare_image_snapshot.logic.mjs";
+ import { resolve } from "pathe";
+ import dedent from "dedent";
++import { recordArtifact } from "vitest";
+ 
+ //#region src/client/snapshot/compare_image_snapshot.ts
+-async function compareImageSnapshot(commands, taskId, info, options) {
++async function compareImageSnapshot(commands, taskId, info, options, task) {
+ 	options = {
+ 		...info,
+ 		...options
+@@ -18,6 +19,9 @@ async function compareImageSnapshot(commands, taskId, info, options) {
+ 			await writeSnapshot(commands, resolve(info.projectRoot, info.baselinePath), resultImage);
+ 			return;
+ 		}
++		await recordVisualRegressionArtifact(task, `Snapshot \`${taskId}\` has no baseline image`, [
++			{ name: "actual", path: resolve(info.projectRoot, info.resultPath), contentType: "image/png", width: resultImage.width, height: resultImage.height }
++		]);
+ 		throw new Error(dedent`Snapshot \`${taskId}\` has no baseline image. Please review the new snapshot and update the baseline image.
+ 
+ 				Options:    ${prettifyOptions(options)}
+@@ -43,6 +47,11 @@ async function compareImageSnapshot(commands, taskId, info, options) {
+ 		return;
+ 	}
+ 	await writeSnapshot(commands, resolve(info.projectRoot, info.diffPath), diffImage);
++	await recordVisualRegressionArtifact(task, `Snapshot \`${taskId}\` mismatched`, [
++		{ name: "reference", path: resolve(info.projectRoot, info.baselinePath), contentType: "image/png", width: baselineImage.width, height: baselineImage.height },
++		{ name: "actual", path: resolve(info.projectRoot, info.resultPath), contentType: "image/png", width: resultImage.width, height: resultImage.height },
++		{ name: "diff", path: resolve(info.projectRoot, info.diffPath), contentType: "image/png", width, height }
++	]);
+ 	throw new Error(dedent`Snapshot \`${taskId}\` mismatched
+ 
+ 					${options?.failureThreshold ? options?.failureThresholdType === "percent" ? `Expected image to match within ${options.failureThreshold}% but was differ by ${diffAmount}%.` : `Expected image to match within ${options.failureThreshold} pixels but was differ by ${diffAmount} pixels.` : `Expected image to match but was differ by ${options?.failureThresholdType === "percent" ? `${diffAmount}%` : `${diffAmount} pixels`}.`}${baselineImage.width !== resultImage.width || baselineImage.height !== resultImage.height ? `\nThe image size changed from ${baselineImage.width}x${baselineImage.height} to ${resultImage.width}x${resultImage.height}.` : ""}
+@@ -57,6 +66,23 @@ async function writeSnapshot(commands, path, image) {
+ 	const content = (await toDataURL(image)).split(",")[1];
+ 	return commands.writeFile(path, content, { encoding: "base64" });
+ }
++// Recorded as vitest's own built-in `internal:toMatchScreenshot`/"visual-regression" artifact shape
++// (the same one `@vitest/browser`'s native `toMatchScreenshot()` uses), so the HTML/UI reporter
++// renders these with its existing image-diff viewer. Unlike `context.annotate`, `recordArtifact`
++// has no "must be called during the test's own run" restriction, so this works equally from the
++// `afterEach`-based "auto" snapshot matcher and from an explicit assertion in a story's `play()`.
++// Still best-effort: never let a recording failure mask the real comparison error below.
++async function recordVisualRegressionArtifact(task, message, attachments) {
++	if (!task) return;
++	try {
++		await recordArtifact(task, {
++			type: "internal:toMatchScreenshot",
++			kind: "visual-regression",
++			message,
++			attachments
++		});
++	} catch {}
++}
+ 
+ //#endregion
+ export { compareImageSnapshot };

@@ -124,6 +124,9 @@ patchedDependencies:
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
     # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
+    # Tweaks to record screenshot diffs as vitest artifacts
+    vitest-plugin-vis@5.1.1: patches/vitest-plugin-vis@5.1.1.patch
+    storybook-addon-vis@4.2.3: patches/storybook-addon-vis@4.2.3.patch
 
 peerDependencyRules:
     allowedVersions:
