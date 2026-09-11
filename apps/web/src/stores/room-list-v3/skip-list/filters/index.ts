@@ -30,3 +30,15 @@ export interface Filter {
      */
     key: FilterKey;
 }
+
+/**
+ * A filter that picks the one key a room belongs to out of several, so the answer is
+ * worked out once per room instead of once per key.
+ */
+export interface MultiKeyFilter {
+    /** The key that applies to this room, or undefined when none does. */
+    keyFor(room: Room): FilterKey | undefined;
+}
+
+/** Anything the skip list can apply to a room to work out its filter keys. */
+export type AnyFilter = Filter | MultiKeyFilter;
