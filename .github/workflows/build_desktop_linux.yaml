@@ -215,7 +215,10 @@ jobs:
                       assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   fi
 
-                  ./scripts/glibc-check.sh dist/linux-*unpacked/element-desktop*
+                  for filename in dist/linux-*unpacked/element-desktop* dist/linux-*unpacked/**/*.node; do
+                      echo "Checking $filename"
+                      ./scripts/glibc-check.sh "$filename"
+                  done
               env:
                   ARCH: ${{ steps.config.outputs.arch }}
 
