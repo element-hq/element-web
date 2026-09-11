@@ -155,3 +155,71 @@ export function mentionNotificationSettingsTests(legacyRulesServed: boolean): vo
         expect(errors).toEqual([]);
     });
 }
+
+/**
+ * The server stops serving the legacy rules while the settings tab is open, as happens
+ * when a homeserver is upgraded mid-session. Writes to the legacy rules are still accepted
+ * by the homeserver under test, so this covers the current Synapse behaviour; the case where
+ * they are rejected is covered by unit tests.
+ */
+export function mentionNotificationSettingsTransitionTests(): void {
+    test("keeps the user's preference when the server stops serving the legacy rules mid-session", async ({
+        page,
+        app,
+        user,
+        homeserver,
+        credentials,
+    }) => {
+        const fetchRules = getServerPushRules(page, homeserver.baseUrl, credentials.accessToken);
+        const errors = trackPushRuleErrors(page);
+        expect((await fetchRules()).has(LEGACY_USER_NAME_RULE)).toBe(true);
+
+        const settings = await app.settings.openUserSettings("Notifications");
+        await settings.getByLabel("Enable notifications for this account").check();
+
+        // The user turns user mentions off while the legacy rules are still served
+        const legacyUserRow = settings.getByTestId(`vector_mentions${LEGACY_USER_NAME_RULE}`);
+        await radioLabel(legacyUserRow, "Off").click();
+        await expect(legacyUserRow.getByRole("radio", { name: "Off", exact: true })).toBeChecked();
+        let rules = await fetchRules();
+        expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(false);
+        expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(false);
+
+        // The server stops serving the legacy rules: every read from now on comes back without them
+        await page.route(
+            (url) => url.pathname.endsWith("/pushrules/"),
+            async (route) => {
+                const response = await route.fetch();
+                const body = (await response.json()) as IPushRules;
+                const global = body.global as Record<string, IPushRule[] | undefined>;
+                for (const kind of Object.keys(global)) {
+                    global[kind] = global[kind]?.filter((rule) => !LEGACY_RULES.includes(rule.rule_id));
+                }
+                await route.fulfill({ response, json: body });
+            },
+        );
+
+        // The open tab still shows the legacy rows; the next change goes through one of them
+        const legacyRoomRow = settings.getByTestId(`vector_mentions${LEGACY_ROOM_MENTION_RULE}`);
+        await radioLabel(legacyRoomRow, "On").click();
+
+        // After the write the page re-reads the rules and switches to the intentional rows
+        const userMentionRow = settings.getByTestId(`vector_mentions${USER_MENTION_RULE}`);
+        const roomMentionRow = settings.getByTestId(`vector_mentions${ROOM_MENTION_RULE}`);
+        await expect(userMentionRow).toBeVisible();
+        await expect(roomMentionRow).toBeVisible();
+        for (const ruleId of LEGACY_RULES) {
+            await expect(settings.getByTestId(`vector_mentions${ruleId}`)).toHaveCount(0);
+        }
+        await expect(settings.getByText(UPDATE_ERROR)).toHaveCount(0);
+
+        // The preference set before the switch survives it, and the change made during it applied
+        await expect(userMentionRow.getByRole("radio", { name: "Off", exact: true })).toBeChecked();
+        await expect(roomMentionRow.getByRole("radio", { name: "On", exact: true })).toBeChecked();
+        rules = await fetchRules();
+        expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(false);
+        expect(rules.get(ROOM_MENTION_RULE)!.actions).toEqual(["notify", { set_tweak: "highlight", value: false }]);
+
+        expect(errors).toEqual([]);
+    });
+}

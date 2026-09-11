@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test } from "../../../element-web-test";
-import { mentionNotificationSettingsTests } from "./mention-rules";
+import { mentionNotificationSettingsTests, mentionNotificationSettingsTransitionTests } from "./mention-rules";
 
 test.use({
     displayName: "Alice",
@@ -20,4 +20,5 @@ test.use({
 
 test.describe("Mention notification settings, legacy mention rules served", () => {
     mentionNotificationSettingsTests(true);
+    mentionNotificationSettingsTransitionTests();
 });

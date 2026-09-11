@@ -559,6 +559,9 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         } catch (e) {
             this.setSavingError(rule.ruleId);
             logger.error("Error updating push rule:", e);
+            // The rules may have changed under us, for example the server stopped serving a
+            // rule this row wrote to. Re-read them so the next attempt works on fresh rules.
+            await this.refreshFromServer();
         }
     };
 

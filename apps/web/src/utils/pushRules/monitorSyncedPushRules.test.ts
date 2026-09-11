@@ -18,6 +18,7 @@ import {
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { logger } from "matrix-js-sdk/src/logger";
 import { getMockClientWithEventEmitter } from "test-utils";
 
 import { monitorSyncedPushRules } from "./monitorSyncedPushRules";
@@ -118,7 +119,8 @@ describe("monitorSyncedPushRules", () => {
         expect(client.setPushRuleEnabled).not.toHaveBeenCalled();
     });
 
-    it("writes the intentional mention rules to match the legacy rules when they disagree", async () => {
+    // Transitional: goes away with the legacy rule definitions once servers no longer serve them.
+    it("writes the intentional mention rules to match the legacy rules while the server still serves them", async () => {
         // legacy rules changed elsewhere: user mentions off, @room mentions set to 'on'
         const client = makeClient(
             makePushRules(
@@ -171,5 +173,21 @@ describe("monitorSyncedPushRules", () => {
 
         expect(client.setPushRuleActions).not.toHaveBeenCalled();
         expect(client.setPushRuleEnabled).not.toHaveBeenCalled();
+    });
+    it("relies on matrix-js-sdk not adding the legacy mention rules as client defaults", () => {
+        // If it did, the monitor would treat a rule the server does not serve as the primary rule.
+        const rules = PushProcessor.rewriteDefaultRules(
+            logger,
+            makePushRules([isUserMentionRule, isRoomMentionRule]),
+            "@alice:localhost",
+        );
+        const ruleIds = Object.values(rules.global)
+            .flat()
+            .map((rule) => rule.rule_id);
+
+        expect(ruleIds).toContain(RuleId.IsUserMention);
+        expect(ruleIds).not.toContain(RuleId.ContainsUserName);
+        expect(ruleIds).not.toContain(RuleId.ContainsDisplayName);
+        expect(ruleIds).not.toContain(RuleId.AtRoomNotification);
     });
 });

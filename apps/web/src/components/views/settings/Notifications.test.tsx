@@ -25,6 +25,7 @@ import {
     PushRuleKind,
     type IThreepid,
     ThreepidMedium,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import {
@@ -911,11 +912,14 @@ describe("<Notifications />", () => {
                 expect(roomNotifElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
             });
 
-            it("updates the intentional user mention rule along with the legacy one", async () => {
+            it("updates the intentional rules along with the legacy ones", async () => {
                 await getComponentAndWait();
                 const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
 
                 fireEvent.click(userNameElement.querySelector('input[aria-label="On"]')!);
+                await flushPromises();
+                fireEvent.click(roomNotifElement.querySelector('input[aria-label="Off"]')!);
                 await flushPromises();
 
                 // legacy rule first, then its synced intentional rule; the display name rule is separate
@@ -926,23 +930,73 @@ describe("<Notifications />", () => {
                 expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
                     ["global", "content", RuleId.ContainsUserName, true],
                     ["global", "override", RuleId.IsUserMention, true],
-                ]);
-                expect(within(userNameElement).queryByText(updateError)).not.toBeInTheDocument();
-            });
-
-            it("updates the intentional @room rule along with the legacy one", async () => {
-                await getComponentAndWait();
-                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
-
-                fireEvent.click(roomNotifElement.querySelector('input[aria-label="Off"]')!);
-                await flushPromises();
-
-                expect(mockClient.setPushRuleActions).not.toHaveBeenCalled();
-                expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
                     ["global", "override", RuleId.AtRoomNotification, false],
                     ["global", "override", RuleId.IsRoomMention, false],
                 ]);
+                expect(within(userNameElement).queryByText(updateError)).not.toBeInTheDocument();
                 expect(within(roomNotifElement).queryByText(updateError)).not.toBeInTheDocument();
+            });
+
+            describe("when the server stops serving the legacy rules while the page is open", () => {
+                const expectIntentionalRows = (): void => {
+                    expect(screen.getByTestId(section + RuleId.IsUserMention)).toBeInTheDocument();
+                    expect(screen.getByTestId(section + RuleId.IsRoomMention)).toBeInTheDocument();
+                    for (const ruleId of legacyMentionRuleIds) {
+                        expect(screen.queryByTestId(section + ruleId)).not.toBeInTheDocument();
+                    }
+                    expect(screen.queryByText(updateError)).not.toBeInTheDocument();
+                };
+
+                it("switches to the intentional rules after a write the server still accepts", async () => {
+                    await getComponentAndWait();
+                    const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                    // the next read comes back without the legacy rules; writes to them are still
+                    // accepted and ignored, as Synapse does today
+                    setPushRuleMock(withRules([{ ...isUserMentionRule, enabled: false }], legacyMentionRuleIds));
+
+                    fireEvent.click(userNameElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                        ["global", "override", RuleId.IsUserMention, false],
+                    ]);
+                    expectIntentionalRows();
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    expect(userMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
+                });
+
+                it("recovers when the server rejects the write to the legacy rule", async () => {
+                    await getComponentAndWait();
+                    const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                    // as Synapse will once it rejects writes to rules it does not serve
+                    setPushRuleMock(withRules([], legacyMentionRuleIds));
+                    mockClient.setPushRuleEnabled.mockRejectedValueOnce(
+                        new MatrixError({ errcode: "M_NOT_FOUND", error: "Unknown rule" }, 404),
+                    );
+
+                    fireEvent.click(userNameElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    // the failed write stopped there, and the page re-read the rules
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                    ]);
+                    expectIntentionalRows();
+
+                    // the next attempt only writes the intentional rule
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    setPushRuleMock(withRules([{ ...isUserMentionRule, enabled: false }], legacyMentionRuleIds));
+                    fireEvent.click(userMentionElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                        ["global", "override", RuleId.IsUserMention, false],
+                    ]);
+                    expect(userMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
+                    expect(within(userMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                });
             });
 
             describe("when the server does not serve the legacy rules", () => {
