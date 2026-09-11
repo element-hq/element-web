@@ -91,7 +91,7 @@
         "pako": "^3.0.0",
         "pdfjs-dist": "^6.2.108",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.428.3",
+        "posthog-js": "1.428.4",
         "qrcode": "1.5.4",
         "re-resizable": "6.11.2",
         "react": "catalog:",
