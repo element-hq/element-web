@@ -6,11 +6,14 @@
 /deploys
 node_modules/
 /pkg/control
+/.yarnrc
+/docker
 /.npmrc
 .vscode
 .vscode/
 /test_artifacts/
 /coverage/
+yarn-error.log
 .DS_Store
 /playwright-report
 .pnpm-store

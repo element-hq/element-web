@@ -74,6 +74,20 @@ This will do a couple of things:
 - Run electron-builder to build a package. The package built will match the operating system
   you're running the build process on.
 
+## Docker
+
+Alternatively, you can also build using docker, which will always produce the linux package:
+
+```
+# Run this once to make the docker image
+pnpm run docker:setup
+
+pnpm run docker:install
+pnpm run docker:build
+```
+
+After running, the packages should be in `dist/`.
+
 # Starting
 
 If you'd just like to run the electron app locally for development:

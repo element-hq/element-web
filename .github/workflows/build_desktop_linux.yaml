@@ -62,6 +62,8 @@ jobs:
     build:
         name: Build Linux ${{ inputs.arch }}
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
+        env:
+            BUILDENV_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
         steps:
             - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
               id: config
@@ -102,6 +104,25 @@ jobs:
             - name: Install Deps
               working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile --filter element-desktop"
+
+            - name: "Get modified files"
+              id: changed_files
+              if: github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
+              uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47
+              with:
+                  files: |
+                      apps/desktop/dockerbuild/**
+
+            # This allows contributors to test changes to the dockerbuild image within a pull request
+            - name: Build docker image
+              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+              if: steps.changed_files.outputs.any_modified == 'true' || github.event_name == 'merge_group'
+              with:
+                  file: apps/desktop/dockerbuild/Dockerfile
+                  context: apps/desktop
+                  load: true
+                  platforms: linux/${{ inputs.arch }}
+                  tags: ${{ env.BUILDENV_DOCKER_IMAGE }}
 
             - name: Generate debian files and arguments
               working-directory: apps/desktop
