@@ -17,10 +17,6 @@ import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/typ
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
 // oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
-import {
-    RoomViewLifecycle,
-    type ViewRoomOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -48,7 +44,6 @@ import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -113,8 +108,6 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
-
-    viewRoomOpts: ViewRoomOpts;
 }
 
 const INITIAL_STATE: State = {
@@ -136,7 +129,6 @@ const INITIAL_STATE: State = {
     wasContextSwitch: false,
     viewingCall: false,
     promptAskToJoin: false,
-    viewRoomOpts: { buttons: [] },
 };
 
 type Listener = (isActive: boolean) => void;
@@ -327,10 +319,6 @@ export class RoomViewStore extends EventEmitter {
             }
             case Action.CancelAskToJoin: {
                 this.cancelAskToJoin(payload as CancelAskToJoinPayload);
-                break;
-            }
-            case Action.RoomLoaded: {
-                this.setViewRoomOpts();
                 break;
             }
         }
@@ -823,26 +811,6 @@ export class RoomViewStore extends EventEmitter {
                     description: err.message,
                 }),
             );
-    }
-
-    /**
-     * Gets the current state of the 'viewRoomOpts' property.
-     *
-     * @returns {ViewRoomOpts} The value of the 'viewRoomOpts' property.
-     */
-    public getViewRoomOpts(): ViewRoomOpts {
-        return this.state.viewRoomOpts;
-    }
-
-    /**
-     * Invokes the view room lifecycle to set the view room options.
-     *
-     * @returns {void}
-     */
-    private setViewRoomOpts(): void {
-        const viewRoomOpts: ViewRoomOpts = { buttons: [] };
-        ModuleRunner.instance.invoke(RoomViewLifecycle.ViewRoom, viewRoomOpts, this.getRoomId());
-        this.setState({ viewRoomOpts });
     }
 
     /**

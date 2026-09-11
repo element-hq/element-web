@@ -17,7 +17,6 @@ import { _t } from "./languageHandler";
 import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -94,13 +93,6 @@ async function getSecretStorageKey(
     if (secretStorageBeingAccessed && secretStorageKeys[keyId]) {
         logger.debug(`getSecretStorageKey: returning key ${keyId} from cache`);
         return [keyId, secretStorageKeys[keyId]];
-    }
-
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
-    if (keyFromCustomisations) {
-        logger.debug("getSecretStorageKey: Using secret storage key from CryptoSetupExtension");
-        cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
-        return [keyId, keyFromCustomisations];
     }
 
     // We only prompt the user for the default key
@@ -266,7 +258,6 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
         await func();
         logger.debug("accessSecretStorage: operation complete");
     } catch (e) {
-        ModuleRunner.instance.extensions.cryptoSetup.catchAccessSecretStorageError(e as Error);
         logger.error("accessSecretStorage: error during operation", e);
         // Re-throw so that higher level logic can abort as needed
         throw e;

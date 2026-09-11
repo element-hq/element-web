@@ -31,6 +31,10 @@
             "matchFileNames": ["pnpm-workspace.yaml"],
             "matchDepTypes": ["pnpm-workspace.overrides"],
             "enabled": false
+        },
+        {
+            "groupName": "oxc",
+            "matchDepNames": ["oxlint", "oxfmt"]
         }
     ],
     "customManagers": [

@@ -106,6 +106,7 @@ export function ReadReceiptGroup({
                 readReceiptPosition = readReceiptMap[userId];
                 if (!readReceiptPosition) {
                     readReceiptPosition = {};
+                    // oxlint-disable-next-line react/immutability
                     readReceiptMap[userId] = readReceiptPosition;
                 }
             }

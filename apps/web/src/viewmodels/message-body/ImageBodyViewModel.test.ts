@@ -9,13 +9,12 @@
 
 import { createRef, type RefObject } from "react";
 import { ClientEvent, EventType, MatrixEvent, SyncState } from "matrix-js-sdk/src/matrix";
-import { type Media } from "@element-hq/element-web-module-api";
 import { ImageBodyViewPlaceholder, ImageBodyViewState } from "@element-hq/web-shared-components";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { ImageSize } from "../../settings/enums/ImageSize";
-import { mediaFromContent } from "../../customisations/Media";
+import { type Media, mediaFromContent } from "../../customisations/Media";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
