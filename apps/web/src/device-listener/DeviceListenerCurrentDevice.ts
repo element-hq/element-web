@@ -262,11 +262,14 @@ export class DeviceListenerCurrentDevice {
 
     /**
      * If the upload of the key backup is not working when it should, show a
-     * toast and return true. Otherwise, return false.
+     * toast.
+     *
+     * Returns a structure including information on whether the toast was shown,
+     * and other information about backup status.
      */
     private async failIfKeyBackupUploadIsFailing(logSpan: LogSpan): Promise<KeyBackupStatus> {
         const uploadActive = await this.isKeyBackupUploadActive(logSpan);
-        const disabled = await this.recheckBackupDisabled();
+        const disabled = await this.isKeyBackupDisabled();
         let failed;
 
         // We warn if key backup upload is turned off and we have not explicitly
@@ -324,17 +327,26 @@ export class DeviceListenerCurrentDevice {
         logSpan: LogSpan,
         keyBackupStatus: KeyBackupStatus,
     ): Promise<boolean> {
-        // We warn if key backup is set up, but we don't have the decryption
-        // key, so can't fetch keys from backup.
+        // We warn if key backup upload is active, but we don't have the decryption
+        // key, so can't *fetch* keys from backup.
+        //
+        // This condition is independent of the explicit opt-out (keyBackupStatus.disabled). Likely
+        // we're in this situation because there was an existing key backup which we happen to trust
+        // (presumably because it is signed by a trusted key); the `m.key_backup` opt-out doesn't
+        // really apply in that case because it is really about whether we will automatically create a
+        // *new* backup.
         const keyBackupDownloadIsOk =
-            !keyBackupStatus.uploadActive ||
-            keyBackupStatus.disabled ||
-            (await crypto.getSessionBackupPrivateKey()) !== null;
+            !keyBackupStatus.uploadActive || (await crypto.getSessionBackupPrivateKey()) !== null;
 
         if (keyBackupDownloadIsOk) {
             return false;
         } else {
-            await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
+            await this.failedCheck(
+                "key_storage_out_of_sync",
+                logSpan,
+                "warn",
+                "Backup upload is active, but decryption key is not cached locally",
+            );
             return true;
         }
     }
@@ -384,13 +396,18 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Fetch the account data for `m.key_backup`. If this is the first time,
-     * fetch it from the server (in case the initial sync has not finished).
-     * Otherwise, fetch it from the store as normal.
+     * Determine if the user has deliberately disabled key backup.
      *
-     * Returns true if `m.key_backup` has `enabled: false`.
+     * We inspect the account data for `m.key_backup`, which indicates that the
+     * user has actively opted out of key backup. If `m.key_backup` has
+     * `enabled: false`, that means that the user does not want key backup so we
+     * should not treat the absence of working key backup as a problem requiring
+     * recovery or reset.
+     *
+     * (If there is no `m.key_backup` entry, we also check its unstable equivalent,
+     * `m.org.matrix.custom.backup_disabled`.)
      */
-    public async recheckBackupDisabled(): Promise<boolean> {
+    public async isKeyBackupDisabled(): Promise<boolean> {
         const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
         if (keyBackup) {
             return keyBackup.enabled === false;
@@ -526,10 +543,22 @@ export class DeviceListenerCurrentDevice {
 }
 
 /**
- * The current state of Key backup.
+ * The result of {@link DeviceListenerCurrentDevice.failIfKeyBackupUploadIsFailing}.
  */
 interface KeyBackupStatus {
+    /** Is key backup upload active, according to {@link DeviceListenerCurrentDevice.isKeyBackupUploadActive}? */
     uploadActive: boolean;
+
+    /**
+     * Has the user deliberately disabled key backup via account data, per
+     * {@link DeviceListenerCurrentDevice.isKeyBackupDisabled}?
+     */
     disabled: boolean;
+
+    /**
+     * Did {@link DeviceListenerCurrentDevice.failIfKeyBackupUploadIsFailing} show the toast?
+     *
+     * (True if neither {@link uploadActive} nor {@link disabled} is true.)
+     */
     failed: boolean;
 }

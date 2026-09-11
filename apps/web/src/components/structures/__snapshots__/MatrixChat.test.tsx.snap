@@ -593,17 +593,13 @@ exports[`<MatrixChat /> > with an existing session > onAction() > room actions >
       class="mx_Heading_h3 mx_Dialog_title"
       id="mx_BaseDialog_title"
     >
-      Leave room
+      Leave '!room:server.org'?
     </h1>
   </div>
   <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"
-  >
-    <span>
-      Are you sure you want to leave the room '!room:server.org'?
-    </span>
-  </div>
+  />
   <div
     class="mx_Dialog_buttons"
   >
@@ -664,17 +660,13 @@ exports[`<MatrixChat /> > with an existing session > onAction() > room actions >
       class="mx_Heading_h3 mx_Dialog_title"
       id="mx_BaseDialog_title"
     >
-      Leave space
+      Leave '!spaceRoom:server.org'?
     </h1>
   </div>
   <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"
-  >
-    <span>
-      Are you sure you want to leave the space '!spaceRoom:server.org'?
-    </span>
-  </div>
+  />
   <div
     class="mx_Dialog_buttons"
   >
