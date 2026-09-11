@@ -67,6 +67,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
                 vm.getSnapshot(),
                 newContent,
                 linksIn(newContent.body).size !== 0,
+                vm.getEncryptedImageCache(),
             );
         },
         [vm, props.mxClient, props.editState],
