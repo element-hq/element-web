@@ -96,7 +96,15 @@ interface PreviewFileBodyProps {
 
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper));
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const vm = useCreateAutoDisposedViewModel(
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+    );
+
+    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
+    useEffect(() => {
+        vm.setPdfViewerEnabled(pdfViewerEnabled);
+    }, [pdfViewerEnabled, vm]);
 
     return (
         <div className="mx_EventTile_content">
