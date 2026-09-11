@@ -485,6 +485,28 @@ async function ipcSignData(keySerialNumber: string, data: Uint8Array): Promise<X
 
 // --- Top-level IPC handler ---
 
+async function handleIpcX509(name: string, args: unknown[]): Promise<X509Result<unknown>> {
+    switch (name) {
+        case "getUserCertificate":
+            return await getUserCertificate();
+
+        case "listHardwareKeys":
+            return await ipcListHardwareKeys();
+
+        case "getKeyState":
+            return await ipcGetKeyState(args[0] as string);
+
+        case "logIntoKey":
+            return await ipcLogIntoKey(args[0] as string, args[1] as string);
+
+        case "signData":
+            return await ipcSignData(args[0] as string, args[1] as Uint8Array);
+
+        default:
+            return fail("UNKNOWN", `Unknown X.509 IPC command ${name}`);
+    }
+}
+
 ipcMain.on("x509", async function (ev: IpcMainEvent, payload): Promise<void> {
     if (!global.mainWindow) {
         return;
@@ -493,24 +515,12 @@ ipcMain.on("x509", async function (ev: IpcMainEvent, payload): Promise<void> {
     const args = payload.args || [];
     let ret: X509Result<unknown>;
 
-    switch (payload.name as X509IpcCommand) {
-        case "getUserCertificate":
-            ret = await getUserCertificate();
-            break;
-        case "listHardwareKeys":
-            ret = await ipcListHardwareKeys();
-            break;
-        case "getKeyState":
-            ret = await ipcGetKeyState(args[0]);
-            break;
-        case "logIntoKey":
-            ret = await ipcLogIntoKey(args[0], args[1]);
-            break;
-        case "signData":
-            ret = await ipcSignData(args[0], args[1]);
-            break;
-        default:
-            ret = fail("UNKNOWN", `Unknown X.509 IPC command ${payload.name}`);
+    try {
+        ret = await handleIpcX509(payload.name as X509IpcCommand, args);
+    } catch (e) {
+        // Fall back to a generic error if something goes wrong in a way we didn't expect.
+        // This should only ever happen in the case of programming errors in the renderer.
+        ret = fail("UNKNOWN", e instanceof Error ? e.message : String(e));
     }
 
     global.mainWindow?.webContents.send("x509Reply", {
