@@ -18,7 +18,6 @@ import ExportDialog from "./ExportDialog";
 import { ExportType, ExportFormat } from "../../../utils/exportUtils/exportUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
-import ChatExport from "../../../customisations/ChatExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 
 vi.useFakeTimers();
@@ -32,13 +31,6 @@ const plainTextExporterInstance = {
 vi.mock("../../../utils/exportUtils/HtmlExport", () => ({ default: vi.fn() }));
 vi.mock("../../../utils/exportUtils/PlainTextExport", () => ({ default: vi.fn() }));
 
-vi.mock("../../../customisations/ChatExport", () => ({
-    default: {
-        getForceChatExportParameters: vi.fn().mockReturnValue({}),
-    },
-}));
-
-const ChatExportMock = vi.mocked(ChatExport);
 const HTMLExporterMock = vi.mocked(HTMLExporter);
 const PlainTextExporterMock = vi.mocked(PlainTextExporter);
 
@@ -84,9 +76,6 @@ describe("<ExportDialog />", () => {
         });
         htmlExporterInstance.export.mockClear();
         plainTextExporterInstance.export.mockClear();
-
-        // default setting value
-        vi.mocked(ChatExportMock.getForceChatExportParameters!).mockClear().mockReturnValue({});
     });
 
     it("renders export dialog", () => {
@@ -120,31 +109,6 @@ describe("<ExportDialog />", () => {
         expect(htmlExporterInstance.export).toHaveBeenCalled();
     });
 
-    it("exports room using values set from ForceRoomExportParameters", async () => {
-        vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-            format: ExportFormat.PlainText,
-            range: ExportType.Beginning,
-            sizeMb: 7000,
-            numberOfMessages: 30,
-            includeAttachments: true,
-        });
-        const component = getComponent();
-        await submitForm(component);
-
-        // 4th arg is an component function
-        const exportConstructorProps = PlainTextExporterMock.mock.calls[0].slice(0, 3);
-        expect(exportConstructorProps).toEqual([
-            defaultProps.room,
-            ExportType.Beginning,
-            {
-                attachmentsIncluded: true,
-                maxSize: 7000 * 1024 * 1024,
-                numberOfMessages: 30,
-            },
-        ]);
-        expect(plainTextExporterInstance.export).toHaveBeenCalled();
-    });
-
     it("renders success screen when export is finished", async () => {
         const component = getComponent();
         await submitForm(component);
@@ -166,19 +130,6 @@ describe("<ExportDialog />", () => {
             expect(getExportFormatInput(component, ExportFormat.PlainText)).toBeChecked();
             expect(getExportFormatInput(component, ExportFormat.Html)).not.toBeChecked();
         });
-
-        it("hides export format input when format is valid in ForceRoomExportParameters", () => {
-            const component = getComponent();
-            expect(getExportFormatInput(component, ExportFormat.Html)).toBeChecked();
-        });
-
-        it("does not render export format when set in ForceRoomExportParameters", () => {
-            vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-                format: ExportFormat.PlainText,
-            });
-            const component = getComponent();
-            expect(getExportFormatInput(component, ExportFormat.Html)).toBeFalsy();
-        });
     });
 
     describe("export type", () => {
@@ -191,14 +142,6 @@ describe("<ExportDialog />", () => {
             const component = getComponent();
             await selectExportType(component, ExportType.Beginning);
             expect(getExportTypeInput(component)).toHaveValue(ExportType.Beginning);
-        });
-
-        it("does not render export type when set in ForceRoomExportParameters", () => {
-            vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-                range: ExportType.Beginning,
-            });
-            const component = getComponent();
-            expect(getExportTypeInput(component)).toBeFalsy();
         });
 
         it("does not render message count input", async () => {
@@ -285,27 +228,6 @@ describe("<ExportDialog />", () => {
             await flushPromisesWithFakeTimers();
             expect(htmlExporterInstance.export).toHaveBeenCalled();
         });
-
-        it("does not render size limit input when set in ForceRoomExportParameters", () => {
-            vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-                sizeMb: 10000,
-            });
-            const component = getComponent();
-            expect(getSizeInput(component)).toBeFalsy();
-        });
-
-        /**
-         * 2000mb size limit does not apply when higher limit is configured in config
-         */
-        it("exports when size limit set in ForceRoomExportParameters is larger than 2000", async () => {
-            vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-                sizeMb: 10000,
-            });
-            const component = getComponent();
-            await submitForm(component);
-
-            expect(htmlExporterInstance.export).toHaveBeenCalled();
-        });
     });
 
     describe("include attachments", () => {
@@ -318,14 +240,6 @@ describe("<ExportDialog />", () => {
             const component = getComponent();
             fireEvent.click(getAttachmentsCheckbox(component));
             expect(getAttachmentsCheckbox(component)).toBeChecked();
-        });
-
-        it("does not render input when set in ForceRoomExportParameters", () => {
-            vi.mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
-                includeAttachments: false,
-            });
-            const component = getComponent();
-            expect(getAttachmentsCheckbox(component)).toBeFalsy();
         });
     });
 });
