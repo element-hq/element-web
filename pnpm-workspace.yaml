@@ -96,7 +96,7 @@ allowBuilds:
     workerd: true
     # Optionally builds itself from source if a specific environment variable is present, which we do not need
     "@parcel/watcher": false
-    # Builds itself from source via node-gyp, needed for interacting with hardware security modules via PKCS#11.
+    # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
     pkcs11js: true
 
 patchedDependencies:
