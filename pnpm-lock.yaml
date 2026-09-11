@@ -258,8 +258,8 @@ catalogs:
       specifier: 7.0.2
       version: 7.0.2
     unplugin-dts:
-      specifier: 1.0.1
-      version: 1.0.1
+      specifier: 1.1.0
+      version: 1.1.0
     vite:
       specifier: 8.2.2
       version: 8.2.2
@@ -549,8 +549,8 @@ importers:
         specifier: ^12.0.0
         version: 12.2.13
       '@matrix-org/analytics-events':
-        specifier: ^0.37.0
-        version: 0.37.0
+        specifier: ^0.38.0
+        version: 0.38.0
       '@matrix-org/emojibase-bindings':
         specifier: 'catalog:'
         version: 1.5.0
@@ -624,8 +624,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5
       filesize:
-        specifier: 11.0.22
-        version: 11.0.22
+        specifier: 11.0.23
+        version: 11.0.23
       github-markdown-css:
         specifier: ^5.5.1
         version: 5.9.0
@@ -687,8 +687,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       posthog-js:
-        specifier: 1.423.0
-        version: 1.423.0(@types/react@19.2.18)(react@19.2.8)
+        specifier: 1.428.4
+        version: 1.428.4(@types/react@19.2.18)(react@19.2.8)
       qrcode:
         specifier: 1.5.4
         version: 1.5.4
@@ -1351,7 +1351,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.0.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
+        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -1426,8 +1426,8 @@ importers:
         specifier: ^1.7.0
         version: 1.16.0
       '@tanstack/react-virtual':
-        specifier: 3.14.10
-        version: 3.14.10(react-dom@19.2.8)(react@19.2.8)
+        specifier: 3.14.11
+        version: 3.14.11(react-dom@19.2.8)(react@19.2.8)
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 10.2.1(@types/react@19.2.18)(react@19.2.8)
@@ -1578,7 +1578,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.0.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
+        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -1618,7 +1618,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.0.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
+        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3)
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -3637,8 +3637,8 @@ packages:
   '@maplibre/vt-pbf@4.3.0':
     resolution: {integrity: sha512-jIvp8F5hQCcreqOOpEt42TJMUlsrEcpf/kI1T2v85YrQRV6PPXUcEXUg5karKtH6oh47XJZ4kHu56pUkOuqA7w==}
 
-  '@matrix-org/analytics-events@0.37.0':
-    resolution: {integrity: sha512-lHFX5dEPqKCXChLoNh919JaYjW6jUcyGEZNUSaazD1wNVUiL8SbDo9wd9sFlJOFpedZgLnhhlaBh1OSjKvvJ9w==}
+  '@matrix-org/analytics-events@0.38.0':
+    resolution: {integrity: sha512-D5sTxEBkUeU2NSX4f8DrWO2YmotZtsiEWZnHiHn0/MxZyBrAiKUK7T4ofGaDI5E21sEyOXaPLmoNP/w2zT1QfQ==}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
@@ -4800,14 +4800,14 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
-  '@posthog/browser-common@0.7.1':
-    resolution: {integrity: sha512-JO/5dIVx3NTrbg0W2VciDDmmizsvwaYYHE5cnJE1Gra+UqBnEuVGH9DTE/kBFgVMp+08z5uj/aAprsYD2WG/QQ==}
+  '@posthog/browser-common@0.8.2':
+    resolution: {integrity: sha512-8g7+ijrx8bfWmpDjmP07e0ZmdRnJoFqZ6PCcMQvfBTUrr422GRXvQWpQn7yD028zIJHIIn/rUTipKgUC5UkWpw==}
 
-  '@posthog/core@1.50.2':
-    resolution: {integrity: sha512-El7y/ipZ45OFBRTN/+ixat9Nw21bW+pKKnX0G+rG4rWxBtDA47Ub/ZUnHvZNhAufNInQr4AYCUeWQsuJsTcoKg==}
+  '@posthog/core@1.52.1':
+    resolution: {integrity: sha512-WT4TUgmsyBYHAmhsifg+LdaFH9wzOcp3UNWnIaeVOgodfMeG/X39V9n0lyebaxoHLR/NMCMq8gsrF69ldzuMhg==}
 
-  '@posthog/types@1.408.0':
-    resolution: {integrity: sha512-xMY8QrRKsTYu4A4Of7XF/xEt0HcnZOWwnICm3do7tGKA0lTlnnr4YW0AHQN1Uv2P3BDqf5GQoqh91MKE+dgdcA==}
+  '@posthog/types@1.410.0':
+    resolution: {integrity: sha512-741sltt/h+l0eYH+Nkow96qKfDmRxwKacfjF93Z+kMySjzL0a87ptmpklZxGkbjBp/DJH/CSowGrolYWK/1ToA==}
 
   '@preact/signals-core@1.14.2':
     resolution: {integrity: sha512-RZHdBj9ZF4n40Rp4jS052EHHjBWf96P9oNdXPfhQTovCuWY9iQn3Gq+gOTJSgBO9A/JBuPfMOWsSX/lIU9Pc/A==}
@@ -6100,14 +6100,14 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@tanstack/react-virtual@3.14.10':
-    resolution: {integrity: sha512-SRyoUbdFMRHuYXMijV5H4ZarQWpXkj3iANq8OFre+pybeVap8ZJjZ3Nz9bVjx4d8PfobVUQUdKyyyHYk3E+djw==}
+  '@tanstack/react-virtual@3.14.11':
+    resolution: {integrity: sha512-SStWf8bYdTgAquYqG4Pi2+d1XimQKoCIJ94H3jsm0D6UA0yqffvWuvUzrrQ4idewFWq8BSPpahnmLVosJIAs6g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/virtual-core@3.17.8':
-    resolution: {integrity: sha512-BfEvehNpOT75r5Ksc5xW6NZuXujTfb7nlSEyVu4XHG3gdxNg1KqXruWbDewXOUaUYIo4oRbSfkjIajz4MAT8tA==}
+  '@tanstack/virtual-core@3.17.9':
+    resolution: {integrity: sha512-M8Bzy7CCMvUjRiuoHVH9mRjyUVczRs8v8RcUEphLFGc445ZP4KQ15Y1sLqhQqJi/HgGJrxfCHnEnIX0x9mVrBg==}
 
   '@testcontainers/postgresql@12.1.0':
     resolution: {integrity: sha512-Pjf2VSVNirEPfz36nidyrVAnZvc2YhajOznY4VgyEsvfTd5qiMNOuPq96drREvxAUtXl5SFLX7vXj7sSq4aTcA==}
@@ -9126,8 +9126,8 @@ packages:
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
 
-  filesize@11.0.22:
-    resolution: {integrity: sha512-RlCVs9CY+oSsRnNZn95J9vDXjNjOwddKyTFjOYtA4yxYVIxBnwiVVGJX+TFhsmu3uUf81JDGyijtYL9xgawlTw==}
+  filesize@11.0.23:
+    resolution: {integrity: sha512-EzB9Km94xm3V7szupSlcGVJpkvXWuNtSZmr7qBoj229q7lEJEEYGMk8gwGnA4ZTAGQmHZigTDEIuOfCQXec1fQ==}
     engines: {node: '>= 10.8.0'}
 
   fill-range@7.1.1:
@@ -11787,8 +11787,8 @@ packages:
     resolution: {integrity: sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.423.0:
-    resolution: {integrity: sha512-r9s9uFhGDoftboOfTxD0ePtDE6s9xROxvjr3bGzZ1QcCbm6kZOZB/S708zkOjSufEUDGCuUOMluc9XKYixFBtA==}
+  posthog-js@1.428.4:
+    resolution: {integrity: sha512-tVkQ0ZXWPaeYaRs/d6yVkBXAOYy3E0VFmoRQvYV3eCLWXZE9rhBQ/nl/Lw9e9FN8R0Hjk0O7ENNnzuUSs4nJkQ==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: '>=16.8.0'
@@ -13356,12 +13356,12 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unplugin-dts@1.0.1:
-    resolution: {integrity: sha512-EdJZxdWP4Tm/xhe58/zAge3Tu0OKDYygm8rucRrcCZ4XzgA31jexUKhaJuEMddOPBDs9ONnq6vwigbjeBqkfuw==}
+  unplugin-dts@1.1.0:
+    resolution: {integrity: sha512-KZJ+qk+lmd9dJY/PJvDRFL9BUtVubKDiX7Ai/X6mlkCArcQNzwmupKjVqHbRA42uqO5ZfFRFc+o8/OCbQ1GonQ==}
     peerDependencies:
       '@microsoft/api-extractor': '>=7'
       '@rspack/core': ^1
-      '@vue/language-core': ~3.1.5
+      '@vue/language-core': ^3.1.5
       esbuild: 0.27.4
       rolldown: '*'
       rollup: '>=3'
@@ -16861,7 +16861,7 @@ snapshots:
       pbf: 4.0.1
       supercluster: 8.0.1
 
-  '@matrix-org/analytics-events@0.37.0': {}
+  '@matrix-org/analytics-events@0.38.0': {}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     dependencies:
@@ -17825,16 +17825,16 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@posthog/browser-common@0.7.1':
+  '@posthog/browser-common@0.8.2':
     dependencies:
-      '@posthog/core': 1.50.2
-      '@posthog/types': 1.408.0
+      '@posthog/core': 1.52.1
+      '@posthog/types': 1.410.0
 
-  '@posthog/core@1.50.2':
+  '@posthog/core@1.52.1':
     dependencies:
-      '@posthog/types': 1.408.0
+      '@posthog/types': 1.410.0
 
-  '@posthog/types@1.408.0': {}
+  '@posthog/types@1.410.0': {}
 
   '@preact/signals-core@1.14.2': {}
 
@@ -19022,13 +19022,13 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/react-virtual@3.14.10(react-dom@19.2.8)(react@19.2.8)':
+  '@tanstack/react-virtual@3.14.11(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
-      '@tanstack/virtual-core': 3.17.8(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)
+      '@tanstack/virtual-core': 3.17.9(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@tanstack/virtual-core@3.17.8(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)': {}
+  '@tanstack/virtual-core@3.17.9(patch_hash=9db9d80c4fe7a7a9911643522aef9bc9359075570c38f3d847ff75ed635d921c)': {}
 
   '@testcontainers/postgresql@12.1.0(supports-color@10.2.2)':
     dependencies:
@@ -22468,7 +22468,7 @@ snapshots:
     dependencies:
       minimatch: 5.1.9
 
-  filesize@11.0.22: {}
+  filesize@11.0.23: {}
 
   fill-range@7.1.1:
     dependencies:
@@ -25773,11 +25773,11 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  posthog-js@1.423.0(@types/react@19.2.18)(react@19.2.8):
+  posthog-js@1.428.4(@types/react@19.2.18)(react@19.2.8):
     dependencies:
-      '@posthog/browser-common': 0.7.1
-      '@posthog/core': 1.50.2
-      '@posthog/types': 1.408.0
+      '@posthog/browser-common': 0.8.2
+      '@posthog/core': 1.52.1
+      '@posthog/types': 1.410.0
       core-js: 3.49.0
       dompurify: 3.4.13
       fflate: 0.4.8
@@ -27537,12 +27537,13 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-dts@1.0.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3):
+  unplugin-dts@1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.5)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.2.2)(webpack@5.110.3):
     dependencies:
       '@rollup/pluginutils': 5.4.0(rollup@4.60.1)
       '@volar/typescript': 2.4.28(@typescript/typescript6@6.0.2)
       compare-versions: 6.1.1
       debug: 4.4.3(supports-color@10.2.2)
+      glob-to-regexp: 0.4.1
       kolorist: 1.8.0
       local-pkg: 1.1.2
       magic-string: 0.30.21
