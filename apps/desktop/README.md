@@ -58,8 +58,8 @@ ln -s ../web/webapp ./
 
 TODO: List native pre-requisites
 
-Optionally, [build the native modules](https://github.com/element-hq/element-web/blob/develop/docs/native-node-modules.md),
-which include support for searching in encrypted rooms and secure storage. Skipping this step is fine, you just won't have those features.
+Support for searching in encrypted rooms is provided by [prebuilt native modules](https://github.com/element-hq/element-web/blob/develop/docs/native-node-modules.md)
+which are installed automatically by `pnpm install`.
 
 Then, run
 
@@ -73,22 +73,6 @@ This will do a couple of things:
   version of Element you installed above.
 - Run electron-builder to build a package. The package built will match the operating system
   you're running the build process on.
-
-## Docker
-
-Alternatively, you can also build using docker, which will always produce the linux package:
-
-```
-# Run this once to make the docker image
-pnpm run docker:setup
-
-pnpm run docker:install
-# if you want to build the native modules (this will take a while)
-pnpm run docker:build:native
-pnpm run docker:build
-```
-
-After running, the packages should be in `dist/`.
 
 # Starting
 
