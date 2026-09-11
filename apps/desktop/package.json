@@ -62,11 +62,13 @@
         "counterpart": "^0.18.6",
         "electron-store": "^11.0.0",
         "electron-window-state": "^5.0.3",
-        "graphene-pk11": "^2.3.6",
         "minimist": "^1.2.6",
-        "pkcs11js": "^2.1.6",
         "png-to-ico": "^3.0.0",
         "uuid": "^14.0.0"
+    },
+    "optionalDependencies": {
+        "graphene-pk11": "^2.3.6",
+        "pkcs11js": "^2.1.6"
     },
     "devDependencies": {
         "@babel/core": "^7.18.10",
