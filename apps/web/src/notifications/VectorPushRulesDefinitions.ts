@@ -118,6 +118,28 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
         syncedRuleIds: [RuleId.IsRoomMention],
     }),
 
+    // Messages containing an intentional mention of the user (via `m.mentions.user_ids`)
+    ".m.rule.is_user_mention": new VectorPushRuleDefinition({
+        description: _td("settings|notifications|rule_contains_user_name"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
+        },
+    }),
+
+    // Messages containing an intentional mention of the room (via `m.mentions.room`)
+    ".m.rule.is_room_mention": new VectorPushRuleDefinition({
+        description: _td("settings|notifications|rule_roomnotif"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
+        },
+    }),
+
     // Messages just sent to the user in a 1:1 room
     ".m.rule.room_one_to_one": new VectorPushRuleDefinition({
         description: _td("settings|notifications|rule_room_one_to_one"), // passed through _t() translation in src/components/views/settings/Notifications.js
