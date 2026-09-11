@@ -2122,6 +2122,7 @@
         "section": {
             "chats": "聊天",
             "favourites": "收藏",
+            "invites": "邀请",
             "low_priority": "低优先级"
         },
         "show_less": "显示更少"
@@ -2827,7 +2828,13 @@
             "message_search_unsupported_web": "%(brand)s 在 Web 浏览器中运行时无法安全地在本地缓存加密消息。请使用 <desktopLink>%(brand)s Desktop</desktopLink> 使加密消息出现在搜索结果中。",
             "record_session_details": "在设备管理器中记录客户端名称、版本及 URL 以更易于识别",
             "send_analytics": "发送分析数据",
-            "strict_encryption": "仅向已验证用户发送消息"
+            "strict_encryption": "仅向已验证用户发送消息",
+            "tokenizer_mode": "搜索分词器模式",
+            "tokenizer_mode_change_warning": "更改分词器模式需要删除现有的搜索索引。索引将自动重建。是否继续？",
+            "tokenizer_mode_language": "基于语言",
+            "tokenizer_mode_language_description": "仅支持基于用户界面语言的单一语言。目前仅支持部分语言（例如英文、德文等）。",
+            "tokenizer_mode_ngram": "N-gram",
+            "tokenizer_mode_ngram_description": "支持包括没有单词边界的所有语言。也支持混合语言。"
         },
         "send_read_receipts": "发送已读回执",
         "send_read_receipts_unsupported": "你的服务器不支持禁用发送已读回执。",
