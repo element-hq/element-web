@@ -90,7 +90,7 @@ export interface CertificateInfo {
  *
  * - `absent` - no attached key reports this serial number.
  * - `noSigningKey` - the key is attached but holds no private key matching the configured certificate,
- *   so it is the wrong hardware key. Asking for a PIN would be pointless.
+ *                    so it is the wrong hardware key. Asking for a PIN would be pointless.
  * - `open` - the key holds our private key but has not been logged into yet.
  * - `authenticated` - logged in; `signData` will work.
  */
