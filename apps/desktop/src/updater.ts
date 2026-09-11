@@ -13,14 +13,26 @@ import { getSquirrelExecutable } from "./squirrelhooks.js";
 import { _t } from "./language-helper.js";
 import { initialisePromise } from "./ipc.js";
 import { getConfig } from "./config.js";
+import Store from "./store.js";
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
 const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
+
+/**
+ * How many consecutive install attempts may provably fail before we stop automatically downloading the
+ * same update on every launch. A single failure isn't worth acting on: a user who quits mid-handover,
+ * or who dismisses the macOS authorization prompt once, should still have the update retried.
+ */
+const MAX_FAILED_INSTALLS = 2;
 
 function installUpdate(): void {
     // for some reason, quitAndInstall does not fire the
     // before-quit event, so we need to set the flag here.
     global.appQuitting = true;
+    // Record what we handed to the updater so the next launch can tell whether it actually landed.
+    // This is deliberately recorded at install time rather than at download time: an update which was
+    // downloaded but never installed (because the user simply hasn't restarted) is not a failure.
+    Store.instance?.set("pendingUpdateVersion", latestUpdateDownloaded?.releaseName);
     autoUpdater.quitAndInstall();
 }
 
@@ -100,6 +112,16 @@ export async function start(updateBaseUrl: string): Promise<void> {
         if (url) {
             console.log(`Update URL: ${url}`);
             autoUpdater.setFeedURL({ url, serverType });
+
+            // Downloading an update which then fails to install achieves nothing but spending the
+            // user's bandwidth, and without this we would do it again on every single launch, forever
+            // (#32404). Once we have proof that it keeps failing, stop checking automatically. The feed
+            // URL is still set above, so a manual check from Settings continues to work and clears this.
+            if (reconcileInstallAttempt() >= MAX_FAILED_INSTALLS) {
+                console.warn("Automatic update checks paused: recent updates failed to install");
+                return;
+            }
+
             // We check for updates ourselves rather than using 'updater' because we need to
             // do it in the main process (and we don't really need to check every 10 minutes:
             // every hour should be just fine for a desktop app)
@@ -114,6 +136,53 @@ export async function start(updateBaseUrl: string): Promise<void> {
         // will fail if running in debug mode
         console.log("Couldn't enable update checking", err);
     }
+}
+
+/**
+ * Reconcile the previous launch's install attempt, if there was one.
+ *
+ * Electron's autoUpdater cannot report a failed *install* on macOS: Squirrel.Mac hands off to a separate
+ * ShipIt process after the app has already quit, so nothing is left running to observe the outcome and
+ * the `error` event never fires (electron/electron#8912). The one signal that always survives is the
+ * version we come back as — if we asked to install `x` and relaunched as anything else, it didn't take.
+ *
+ * This deliberately says nothing about *why* an install failed. In particular it does not check whether
+ * the install location is writable: Squirrel.Mac already makes that exact check itself and responds by
+ * escalating to a privileged install behind a native macOS authorization prompt, so second-guessing it
+ * here would both duplicate its logic and pre-empt the prompt that lets the update succeed.
+ *
+ * @returns The number of consecutive install attempts which provably did not take effect.
+ */
+function reconcileInstallAttempt(): number {
+    const store = Store.instance;
+    if (!store) return 0;
+
+    const pendingVersion = store.get("pendingUpdateVersion");
+    if (pendingVersion === undefined) return store.get("failedUpdateInstalls") ?? 0;
+    store.delete("pendingUpdateVersion");
+
+    if (pendingVersion === app.getVersion()) {
+        // We came back as the version we asked for, so it installed and any earlier failure was transient.
+        store.set("failedUpdateInstalls", 0);
+        return 0;
+    }
+
+    const failures = (store.get("failedUpdateInstalls") ?? 0) + 1;
+    store.set("failedUpdateInstalls", failures);
+    console.warn(
+        `Update to ${pendingVersion} did not install, still running ${app.getVersion()} ` +
+            `(${failures} consecutive failure(s))`,
+    );
+    return failures;
+}
+
+/**
+ * Check for updates at the user's explicit request, overriding any pause applied by `start`. Someone who
+ * deliberately asks should always get an attempt, and it gives them a way out if the pause was wrong.
+ */
+function manuallyCheckForUpdates(): void {
+    Store.instance?.set("failedUpdateInstalls", 0);
+    void pollForUpdates();
 }
 
 /**
@@ -171,7 +240,7 @@ async function available(): Promise<boolean> {
 }
 
 ipcMain.on("install_update", installUpdate);
-ipcMain.on("check_updates", pollForUpdates);
+ipcMain.on("check_updates", manuallyCheckForUpdates);
 
 function ipcChannelSendUpdateStatus(status: boolean | string): void {
     global.mainWindow?.webContents.send("check_updates", status);
