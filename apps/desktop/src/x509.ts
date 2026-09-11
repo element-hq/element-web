@@ -134,13 +134,14 @@ async function reloadModule(): Promise<void> {
 async function getSession(
     serialNumber: string,
 ): Promise<X509Result<{ session: Graphene.Session; authenticated: boolean }>> {
-    const loaded = await getModuleInstance();
-    if (!loaded.ok) {
-        return loaded;
+    const result = await getModuleInstance();
+    if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
+        return result;
     }
     if (!sessions[serialNumber]) {
         try {
-            for (const slot of loaded.data.getSlots(true)) {
+        for (const slot of result.data.getSlots(true)) {
                 if (slot.getToken().serialNumber == serialNumber) {
                     sessions[serialNumber] = { session: slot.open(), authenticated: false };
                     break;
@@ -160,11 +161,11 @@ async function getSession(
  * Fetch the RSA public key of the current user's configured certificate.
  */
 async function getSigningPublicKey(): Promise<{ modulus: Buffer; publicExponent: Buffer } | null> {
-    const found = await findUserLeaf();
-    if (!found.ok) {
+    const result = await findUserLeaf();
+    if (!result.ok) {
         return null;
     }
-    const jwk = found.data.leaf.publicKey.export({ format: "jwk" }) as { kty?: string; n?: string; e?: string };
+    const jwk = result.data.leaf.publicKey.export({ format: "jwk" }) as { kty?: string; n?: string; e?: string };
     if (jwk.kty !== "RSA" || !jwk.n || !jwk.e) {
         return null;
     }
@@ -179,13 +180,14 @@ async function findSigningKeyId(keySerialNumber: string): Promise<X509Result<str
     if (!wanted) {
         return fail("CERTIFICATE_NOT_FOUND", "No usable RSA certificate is provisioned on disk");
     }
-    const session = await getSession(keySerialNumber);
-    if (!session.ok) {
-        return session;
+    const result = await getSession(keySerialNumber);
+    if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
+        return result;
     }
 
     try {
-        for (const object of session.data.session.find({ class: graphene.ObjectClass.PUBLIC_KEY })) {
+        for (const object of result.data.session.find({ class: graphene.ObjectClass.PUBLIC_KEY })) {
             const { id, modulus, publicExponent } = object.getAttribute({
                 id: null,
                 modulus: null,
@@ -324,13 +326,13 @@ async function findUserLeaf(): Promise<X509Result<{ leaf: X509Certificate; chain
  * Read user's own certificate and chain from disk.
  */
 export async function getUserCertificate(): Promise<X509Result<UserCertificate>> {
-    const found = await findUserLeaf();
-    if (!found.ok) {
-        return found;
+    const result = await findUserLeaf();
+    if (!result.ok) {
+        return result;
     }
     return ok({
-        certificate: toCertificateInfo(found.data.leaf),
-        chain: buildChain(found.data.leaf, found.data.chain),
+        certificate: toCertificateInfo(result.data.leaf),
+        chain: buildChain(result.data.leaf, result.data.chain),
     });
 }
 
@@ -340,25 +342,25 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
  * IPC call to list available hardware keys.
  */
 async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
-    let loaded = await getModuleInstance();
-    if (!loaded.ok) {
-        return loaded;
+    let result = await getModuleInstance();
+    if (!result.ok) {
+        return result;
     }
     try {
-        if (loaded.data.getSlots(true).length === 0) {
+        if (result.data.getSlots(true).length === 0) {
             // PKCS#11 module implementations can cache the hardware key list, so we reload it
             // just in case if no keys are found.
             await reloadModule();
-            loaded = await getModuleInstance();
-            if (!loaded.ok) {
-                return loaded;
+            result = await getModuleInstance();
+            if (!result.ok) {
+                return result;
             }
         }
     } catch (e) {
         return failFrom(e);
     }
     try {
-        const slots = loaded.data.getSlots(true);
+        const slots = result.data.getSlots(true);
         const keys: HardwareKey[] = [];
         for (let slot = 0; slot < slots.length; slot++) {
             const {
@@ -388,15 +390,15 @@ async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
  * IPC call reporting how far along the signing sequence the given hardware key is.
  */
 async function ipcGetKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>> {
-    const session = await getSession(serialNumber);
-    if (!session.ok) {
-        if (session.error.code === "MODULE_NOT_LOADED") {
-            return session;
+    const result = await getSession(serialNumber);
+    if (!result.ok) {
+        if (result.error.code === "MODULE_NOT_LOADED") {
+            return result;
         }
         // TODO: Should we present keys we did have but now don't to the user?
         return ok("absent");
     }
-    if (session.data.authenticated) {
+    if (result.data.authenticated) {
         return ok("authenticated");
     }
     const keyId = await findSigningKeyId(serialNumber);
@@ -417,17 +419,17 @@ async function ipcGetKeyState(serialNumber: string): Promise<X509Result<Hardware
  * IPC call to log in to the given hardware key, so that `signData` can use its private key.
  */
 async function ipcLogIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult> {
-    const session = await getSession(serialNumber);
-    if (!session.ok) {
-        return session;
+    const result = await getSession(serialNumber);
+    if (!result.ok) {
+        return result;
     }
     try {
-        session.data.session.login(pin);
-        session.data.authenticated = true;
+        result.data.session.login(pin);
+        result.data.authenticated = true;
         return ok(undefined);
     } catch (e) {
         const { error } = failFrom(e);
-        const triesRemaining = decodeTriesRemaining(session.data.session.slot.getToken().flags);
+        const triesRemaining = decodeTriesRemaining(result.data.session.slot.getToken().flags);
         return { ok: false, error: { ...error, triesRemaining } };
     }
 }
@@ -437,22 +439,22 @@ async function ipcLogIntoKey(serialNumber: string, pin: string): Promise<X509Log
  * Requires `logIntoKey` to have been called successfuly first.
  */
 async function ipcSignData(keySerialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>> {
-    const session = await getSession(keySerialNumber);
-    if (!session.ok) {
-        return session;
+    const sessionResult = await getSession(keySerialNumber);
+    if (!sessionResult.ok) {
+        return sessionResult;
     }
-    if (!session.data.authenticated) {
+    if (!sessionResult.data.authenticated) {
         return fail("LOGIN_REQUIRED", "logIntoKey must succeed before signing");
     }
-    const keyId = await findSigningKeyId(keySerialNumber);
-    if (!keyId.ok) {
-        return keyId;
+    const signingKeyResult = await findSigningKeyId(keySerialNumber);
+    if (!signingKeyResult.ok) {
+        return signingKeyResult;
     }
 
     try {
-        const pks = session.data.session.find({
+        const pks = sessionResult.data.session.find({
             class: graphene.ObjectClass.PRIVATE_KEY,
-            id: Buffer.from(keyId.data, "hex"),
+            id: Buffer.from(signingKeyResult.data, "hex"),
         });
         if (pks.length === 0) {
             return fail("PRIVATE_KEY_NOT_FOUND");
@@ -460,7 +462,7 @@ async function ipcSignData(keySerialNumber: string, data: Uint8Array): Promise<X
         const pk = pks.items(0).toType<Graphene.Key>();
 
         return ok(
-            session.data.session
+            sessionResult.data.session
                 .createSign(
                     {
                         name: "SHA512_RSA_PKCS_PSS",
