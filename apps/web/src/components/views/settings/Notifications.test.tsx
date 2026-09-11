@@ -876,7 +876,7 @@ describe("<Notifications />", () => {
 
                 const mentionsSection = screen.getByTestId(`notif-section-${section}`);
                 // user name, @room, display name and keywords
-                expect(mentionsSection.querySelectorAll("fieldset").length).toEqual(4);
+                expect(mentionsSection.querySelectorAll("fieldset")).toHaveLength(4);
 
                 const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
                 expect(within(userNameElement).getByText("@mentions and replies")).toBeInTheDocument();
@@ -955,7 +955,7 @@ describe("<Notifications />", () => {
 
                     const mentionsSection = screen.getByTestId(`notif-section-${section}`);
                     // user mentions, @room mentions and keywords
-                    expect(mentionsSection.querySelectorAll("fieldset").length).toEqual(3);
+                    expect(mentionsSection.querySelectorAll("fieldset")).toHaveLength(3);
 
                     const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
                     expect(within(userMentionElement).getByText("@mentions and replies")).toBeInTheDocument();
