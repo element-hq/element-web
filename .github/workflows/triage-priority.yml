@@ -1,0 +1,14 @@
+name: Apply priority label
+
+on:
+    issues:
+        types: [labeled, unlabeled]
+
+permissions: {}
+
+jobs:
+    apply-priority-label:
+        name: Derive P-label from S-* and O-* labels
+        uses: element-hq/element-meta/.github/workflows/apply-priority-label.yml@develop # zizmor: ignore[unpinned-uses]
+        permissions:
+            issues: write
