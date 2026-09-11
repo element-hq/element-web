@@ -31,17 +31,11 @@ import {
     OpenIDRequestState,
     type IOpenIDUpdate,
 } from "matrix-widget-api";
-import {
-    type ApprovalOpts,
-    type CapabilitiesOpts,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import { mkEvent, stubClient } from "test-utils";
 
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
@@ -159,42 +153,6 @@ describe("ElementWidgetDriver", () => {
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
 
-    it("approves capabilities via module api", async () => {
-        const driver = mkDefaultDriver();
-
-        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
-
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo, requested) => {
-            if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
-                (opts as CapabilitiesOpts).approvedCapabilities = requested;
-            }
-        });
-
-        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
-        expect(approvedCapabilities).toEqual(requestedCapabilities);
-    });
-
-    it("approves identity via module api", async () => {
-        const driver = mkDefaultDriver();
-
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
-                (opts as ApprovalOpts).approved = true;
-            }
-        });
-
-        const listener = vi.fn();
-        const observer = new SimpleObservable<IOpenIDUpdate>();
-        observer.onUpdate(listener);
-        await driver.askOpenID(observer);
-
-        const openIdUpdate: IOpenIDUpdate = {
-            state: OpenIDRequestState.Allowed,
-            token: await client.getOpenIdToken(),
-        };
-        expect(listener).toHaveBeenCalledWith(openIdUpdate);
-    });
-
     it("approves capabilities via new widget lifecycle API", async () => {
         const driver = mkDefaultDriver();
 
@@ -206,48 +164,10 @@ describe("ElementWidgetDriver", () => {
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
 
-    it("falls back to legacy module API when new API returns undefined for capabilities", async () => {
-        const driver = mkDefaultDriver();
-
-        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
-
-        vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveCapabilities").mockResolvedValue(undefined);
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo, requested) => {
-            if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
-                (opts as CapabilitiesOpts).approvedCapabilities = requested;
-            }
-        });
-
-        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
-        expect(approvedCapabilities).toEqual(requestedCapabilities);
-    });
-
     it("approves identity via new widget lifecycle API", async () => {
         const driver = mkDefaultDriver();
 
         vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(true);
-
-        const listener = vi.fn();
-        const observer = new SimpleObservable<IOpenIDUpdate>();
-        observer.onUpdate(listener);
-        await driver.askOpenID(observer);
-
-        const openIdUpdate: IOpenIDUpdate = {
-            state: OpenIDRequestState.Allowed,
-            token: await client.getOpenIdToken(),
-        };
-        expect(listener).toHaveBeenCalledWith(openIdUpdate);
-    });
-
-    it("falls back to legacy module API when new API returns false for identity", async () => {
-        const driver = mkDefaultDriver();
-
-        vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(false);
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
-                (opts as ApprovalOpts).approved = true;
-            }
-        });
 
         const listener = vi.fn();
         const observer = new SimpleObservable<IOpenIDUpdate>();

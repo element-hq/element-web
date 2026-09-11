@@ -252,5 +252,46 @@ describe("<ChangeRecoveryKey />", () => {
             expect(screen.getByText("encoded private key")).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
+
+        it("should ask the user to enter the recovery key", async () => {
+            vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
+            const user = userEvent.setup();
+
+            const onFinish = vi.fn();
+            const { asFragment } = renderComponent(true, onFinish);
+
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
+            await waitFor(() =>
+                expect(
+                    screen.getByText("Enter your new recovery key below to finish. Your old one will no longer work."),
+                ).toBeInTheDocument(),
+            );
+            expect(asFragment()).toMatchSnapshot();
+
+            // The finish button should be disabled by default
+            const finishButton = screen.getByRole("button", { name: "Confirm new recovery key" });
+            expect(finishButton).toHaveAttribute("aria-disabled", "true");
+
+            const input = screen.getByTitle("Enter recovery key");
+            // If the user enters an incorrect recovery key, the finish button should be disabled
+            // and we display an error message
+            await userEvent.type(input, "wrong recovery key");
+            expect(finishButton).toHaveAttribute("aria-disabled", "true");
+            expect(screen.getByText("The recovery key you entered is not correct.")).toBeInTheDocument();
+            expect(asFragment()).toMatchSnapshot();
+
+            const setAccountDataSpy = vi.spyOn(matrixClient, "setAccountData");
+            await userEvent.clear(input);
+            // If the user enters the correct recovery key, the finish button should be enabled
+            await userEvent.type(input, "encoded private key");
+            await waitFor(() => expect(finishButton).not.toHaveAttribute("aria-disabled", "true"));
+
+            await user.click(finishButton);
+            expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery", { enabled: true });
+            expect(onFinish).toHaveBeenCalledWith();
+        });
     });
 });
