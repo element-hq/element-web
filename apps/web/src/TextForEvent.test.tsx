@@ -28,17 +28,11 @@ import { createTestClient, stubClient } from "test-utils";
 import { hasText, textForEvent } from "./TextForEvent";
 import SettingsStore from "./settings/SettingsStore";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import UserIdentifierCustomisations from "./customisations/UserIdentifier";
 import { getSenderName } from "./utils/event/getSenderName";
 import { ElementCallEventType } from "./call-types";
 import Spoiler from "./components/views/elements/Spoiler";
 
 vi.mock("./settings/SettingsStore");
-vi.mock("./customisations/UserIdentifier", () => ({
-    default: {
-        getDisplayUserIdentifier: vi.fn().mockImplementation((userId) => userId),
-    },
-}));
 
 function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: string[]): MatrixEvent {
     return new MatrixEvent({
@@ -199,12 +193,6 @@ describe("TextForEvent", () => {
                 .mockClear()
                 .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId) || null);
             vi.mocked(SettingsStore.getValue).mockReturnValue(true);
-        });
-
-        beforeEach(() => {
-            vi.mocked(UserIdentifierCustomisations.getDisplayUserIdentifier)
-                .mockClear()
-                .mockImplementation((userId) => userId);
         });
 
         it("returns falsy when no users have changed power level", () => {

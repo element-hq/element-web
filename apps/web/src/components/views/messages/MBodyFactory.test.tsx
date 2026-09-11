@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "test-utils-rtl";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, render, screen } from "test-utils-rtl";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import {
@@ -22,6 +22,7 @@ import {
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
@@ -153,6 +154,35 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
             expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        });
+    });
+
+    describe("FileBodyFactory and the PDF viewer lab", () => {
+        afterEach(() => {
+            SettingsStore.reset();
+        });
+
+        const renderPdfBody = (): ReturnType<typeof render> => {
+            const mediaEvent = mkEvent("m.file", { info: { mimetype: "application/pdf" } });
+
+            return render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    {renderMBody(
+                        { ...props, mxEvent: mediaEvent, mediaEventHelper: new MediaEventHelper(mediaEvent) },
+                        FileBodyFactory,
+                    )}
+                </ScopedRoomContextProvider>,
+            );
+        };
+
+        it("offers the viewer only once the lab is turned on, without a remount", async () => {
+            renderPdfBody();
+            expect(screen.queryByRole("button", { name: "Open PDF" })).not.toBeInTheDocument();
+
+            // The view reads the setting, so turning the lab on has to reach an already-rendered tile.
+            await act(() => SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true));
+
+            expect(screen.getByRole("button", { name: "Open PDF" })).toBeInTheDocument();
         });
     });
 

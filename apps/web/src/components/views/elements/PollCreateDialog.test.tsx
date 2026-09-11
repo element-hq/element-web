@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { fireEvent, render, type RenderResult } from "test-utils-rtl";
+import { fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
 import {
     Room,
     MatrixEvent,
@@ -17,15 +17,17 @@ import {
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_START,
     M_TEXT,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { type ReplacementEvent } from "matrix-js-sdk/src/types";
-import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterAll, MockedObject } from "vitest";
 import { getMockClientWithEventEmitter } from "test-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PollCreateDialog from "./PollCreateDialog";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import Modal from "../../../Modal.tsx";
 
 // Fake date to give a predictable snapshot
 const realDateNow = Date.now;
@@ -41,12 +43,12 @@ afterAll(() => {
 });
 
 describe("PollCreateDialog", () => {
-    const mockClient = getMockClientWithEventEmitter({
-        sendEvent: vi.fn().mockResolvedValue({ event_id: "1" }),
-    });
+    let mockClient: MockedObject<MatrixClient>;
 
     beforeEach(() => {
-        mockClient.sendEvent.mockClear();
+        mockClient = getMockClientWithEventEmitter({
+            sendEvent: vi.fn().mockResolvedValue({ event_id: "1" }),
+        });
     });
 
     it("renders a blank poll", () => {
@@ -167,6 +169,24 @@ describe("PollCreateDialog", () => {
 
         fireEvent.click(dialog.container.querySelector("button")!);
         expect(dialog.container.querySelector(".mx_Spinner")).toBeDefined();
+    });
+
+    it("hides the spinner on error", async () => {
+        mockClient.sendEvent.mockRejectedValue(new Error("Test"));
+        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        });
+
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        fireEvent.click(dialog.container.querySelector("button")!);
+        expect(dialog.container.querySelector(".mx_Spinner")).toBeVisible();
+        await waitFor(() => expect(spy).toHaveBeenCalled());
+        expect(dialog.container.querySelector(".mx_Spinner")).toBeFalsy();
     });
 
     it("sends a poll create event when submitted", () => {

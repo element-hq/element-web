@@ -22,8 +22,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.61.1
-    "playwright-core": 1.61.1
+    "@playwright/test": 1.62.1
+    "playwright-core": 1.62.1
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
@@ -44,9 +44,9 @@ catalog:
     "@vitest/browser": 5.0.0
     "@vitest/ui": 5.0.0
     "@vitejs/plugin-react": 6.1.1
-    unplugin-dts: 1.0.1
+    unplugin-dts: 1.1.0
     # nx
-    nx: 23.1.2
+    nx: 23.2.0
 
 catalogs:
     ts6:
@@ -104,8 +104,6 @@ patchedDependencies:
     react-blurhash: patches/react-blurhash.patch
     # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
-    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
-    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
     # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
     # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock

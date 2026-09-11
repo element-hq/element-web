@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room, EventType, type RoomMember, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import AliasCustomisations from "./customisations/Alias";
 import { filterValidMDirect } from "./utils/dm/filterValidMDirect.ts";
 
 /**
@@ -27,9 +26,6 @@ export function getDisplayAliasForRoom(room: Room): string | null {
 // The various display alias getters should all feed through this one path so
 // there's a single place to change the logic.
 export function getDisplayAliasForAliasSet(canonicalAlias: string | null, altAliases: string[]): string | null {
-    if (AliasCustomisations.getDisplayAliasForAliasSet) {
-        return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
-    }
     return (canonicalAlias || altAliases?.[0]) ?? "";
 }
 

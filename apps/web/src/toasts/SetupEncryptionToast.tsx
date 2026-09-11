@@ -21,8 +21,6 @@ import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEnc
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
-import { ModuleRunner } from "../modules/ModuleRunner";
-import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import Spinner from "../components/views/elements/Spinner";
 import { type OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
@@ -32,6 +30,7 @@ import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeySt
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
+import { encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery } from "../components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx";
 
 const TOAST_KEY = "setupencryption";
 
@@ -156,14 +155,6 @@ const getDescription = (state: DeviceStateForToast): string | React.ReactNode =>
  */
 export const showToast = (state: DeviceStateForToast): void => {
     const myLogger = logger.getChild(`SetupEncryptionToast[${state}]:`);
-    if (
-        ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
-            kind: state as any,
-            storeProvider: { getInstance: () => SetupEncryptionStore.sharedInstance() },
-        })
-    ) {
-        return;
-    }
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (state) {
@@ -273,11 +264,8 @@ export const showToast = (state: DeviceStateForToast): void => {
             }
             case "key_storage_out_of_sync": {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
-                const deviceListener = DeviceListener.sharedInstance();
-                const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
-                const props = {
-                    initialEncryptionState: needsCrossSigningReset ? "reset_identity_forgot" : "change_recovery_key",
-                };
+                const initialEncryptionState = await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery();
+                const props = { initialEncryptionState };
                 myLogger.debug(`Secondary button clicked: opening encryption settings dialog with props`, props);
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -329,7 +317,7 @@ export const showToast = (state: DeviceStateForToast): void => {
             // A real error happened - jump to the reset identity or change
             // recovery tab
             const needsCrossSigningReset =
-                await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(true);
+                await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
             const props = {
                 initialEncryptionState: needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
             };
