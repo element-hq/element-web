@@ -117,6 +117,7 @@ async function reloadModule(): Promise<void> {
         delete sessions[serialNumber];
     }
     try {
+        // Inform the underlying library that we're done with it, presumably so it can clean up its own resources.
         module?.finalize();
     } catch (e) {
         console.warn("Failed to finalize the PKCS#11 module before reloading it:", e);
@@ -125,6 +126,7 @@ async function reloadModule(): Promise<void> {
     // a stale module reference hanging around.
     module = null;
     moduleLoad = undefined;
+    // Prepare a fresh instance in advance of the next call to `getModuleInstance`.
     await getModuleInstance();
 }
 
