@@ -333,6 +333,7 @@ async function findUserLeaf(): Promise<X509Result<{ leaf: X509Certificate; chain
 export async function getUserCertificate(): Promise<X509Result<UserCertificate>> {
     const result = await findUserLeaf();
     if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
         return result;
     }
     return ok({
@@ -349,6 +350,7 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
 async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
     let result = await getModuleInstance();
     if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
         return result;
     }
     try {
@@ -358,6 +360,7 @@ async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
             await reloadModule();
             result = await getModuleInstance();
             if (!result.ok) {
+                // This is an error variant, so we can just return it directly.
                 return result;
             }
         }
@@ -398,9 +401,9 @@ async function ipcGetKeyState(serialNumber: string): Promise<X509Result<Hardware
     const result = await getSession(serialNumber);
     if (!result.ok) {
         if (result.error.code === "MODULE_NOT_LOADED") {
+            // This is an error variant, so we can just return it directly.
             return result;
         }
-        // TODO: Should we present keys we did have but now don't to the user?
         return ok("absent");
     }
     if (result.data.authenticated) {
@@ -426,6 +429,7 @@ async function ipcGetKeyState(serialNumber: string): Promise<X509Result<Hardware
 async function ipcLogIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult> {
     const result = await getSession(serialNumber);
     if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
         return result;
     }
     try {
