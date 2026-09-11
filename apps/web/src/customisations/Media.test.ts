@@ -6,17 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import { mediaFromMxc } from "../../../src/customisations/Media";
-import { stubClient } from "../../test-utils";
+import { describe, it, expect, vi } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { stubClient } from "test-utils";
+
+import { mediaFromMxc } from "./Media";
 
 describe("Media", () => {
     it("should not download error if server returns one", async () => {
         const cli = stubClient();
         // eslint-disable-next-line no-restricted-properties
-        mocked(cli.mxcUrlToHttp).mockImplementation(
+        vi.mocked(cli.mxcUrlToHttp).mockImplementation(
             (mxc) => `https://matrix.org/_matrix/media/r0/download/${mxc.slice(6)}`,
         );
 
