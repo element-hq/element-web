@@ -51,16 +51,6 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const size = content.info?.size;
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
-            {
-                label: _t("action|download"),
-                icon: <DownloadIcon />,
-                onClick: async () => {
-                    await downloader.download({
-                        blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
-                        name: mediaEventHelper.fileName || _t("common|attachment"),
-                    });
-                },
-            },
             // Behind the same lab as the legacy file body's viewer, and only for PDFs.
             ...(pdfViewerEnabled && isPdfEvent(mxEvent)
                 ? [
@@ -71,6 +61,16 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                       },
                   ]
                 : []),
+            {
+                label: _t("action|download"),
+                icon: <DownloadIcon />,
+                onClick: async () => {
+                    await downloader.download({
+                        blob: await mediaEventHelper.sourceBlob.value, // decrypts transparently if E2EE
+                        name: mediaEventHelper.fileName || _t("common|attachment"),
+                    });
+                },
+            },
         ];
 
         return {
