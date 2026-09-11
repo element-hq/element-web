@@ -24,7 +24,7 @@ export function formatSeconds(
     const minutes = Math.floor((inSeconds % (60 * 60)) / 60);
     const minutesText = minutes.toFixed(0).padStart(minutesMinLength, "0");
 
-    const seconds = Math.ceil((inSeconds % (60 * 60)) % 60);
+    const seconds = Math.round((inSeconds % (60 * 60)) % 60);
     const secondsText = seconds.toFixed(0).padStart(2, "0");
 
     let output = "";
