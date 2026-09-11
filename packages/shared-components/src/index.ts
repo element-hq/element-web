@@ -87,6 +87,7 @@ export * from "./core/utils/Scrollbar";
 export * from "./core/VirtualizedList";
 export * from "./resize";
 export * from "./core/RoomPickerView";
+export * from "./room/ForwardDialogView";
 
 // Utils
 export * from "./core/i18n/i18n";
