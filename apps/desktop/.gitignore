@@ -6,17 +6,11 @@
 /deploys
 node_modules/
 /pkg/control
-/.hak
-/.yarnrc
-/docker
 /.npmrc
 .vscode
 .vscode/
 /test_artifacts/
 /coverage/
-yarn-error.log
-/hak/**/*.js
-/scripts/hak/**/*.js
 .DS_Store
 /playwright-report
 .pnpm-store

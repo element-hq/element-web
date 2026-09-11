@@ -35,9 +35,6 @@
         "lint:types:node": "tsc --noEmit -p tsconfig.node.json",
         "lint:types:test": "tsc --noEmit -p playwright/tsconfig.json",
         "lint:types:scripts": "tsc --noEmit -p scripts/tsconfig.json",
-        "lint:types:hak": "tsc --noEmit -p hak/tsconfig.json",
-        "build:native": "pnpm run hak",
-        "build:native:universal": "pnpm run hak --target x86_64-apple-darwin fetchandbuild && pnpm run hak --target aarch64-apple-darwin fetchandbuild && pnpm run hak --target x86_64-apple-darwin --target aarch64-apple-darwin copyandlink",
         "build:32": "nx build --ia32",
         "build:64": "nx build --x64",
         "build:universal": "nx build --universal",
@@ -47,7 +44,6 @@
         "docker:build": "scripts/in-docker.sh pnpm run build",
         "docker:install": "scripts/in-docker.sh pnpm install --filter=element-desktop --frozen-lockfile",
         "clean": "rimraf webapp.asar dist packages deploys lib",
-        "hak": "node scripts/hak/index.ts",
         "test:unit": "vitest",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
@@ -96,9 +92,6 @@
         "tar": "^7.5.8",
         "typescript": "catalog:ts6",
         "vitest": "catalog:"
-    },
-    "hakDependencies": {
-        "matrix-seshat": "5.0.0"
     },
     "nx": {
         "includedScripts": [
