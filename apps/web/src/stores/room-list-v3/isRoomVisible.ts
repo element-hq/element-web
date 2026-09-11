@@ -8,7 +8,6 @@
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { RoomListCustomisations } from "../../customisations/RoomList";
 
 /**
  * Determines whether a room should be visible in the room list
@@ -22,8 +21,6 @@ export function isRoomVisible(room?: Room): boolean {
 
     // local rooms shouldn't show up anywhere
     if (isLocalRoom(room)) return false;
-
-    if (RoomListCustomisations.isRoomVisible) return RoomListCustomisations.isRoomVisible(room);
 
     return true; // default
 }

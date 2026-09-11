@@ -14,11 +14,6 @@ import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { act, render, waitForElementToBeRemoved, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
-import {
-    type ApprovalOpts,
-    type WidgetInfo,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "test-utils";
 
 import RightPanel from "../../structures/RightPanel";
@@ -38,7 +33,6 @@ import AppsDrawer from "../rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 
@@ -449,12 +443,6 @@ describe("AppTile", () => {
         });
 
         it("should render permission request", async () => {
-            vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = false;
-                }
-            });
-
             // userId and creatorUserId are different
             const { container, asFragment, queryByRole } = render(
                 <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />,
@@ -465,31 +453,7 @@ describe("AppTile", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
-        it("should not display 'Continue' button on permission load", async () => {
-            vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = true;
-                }
-            });
-
-            // userId and creatorUserId are different
-            const renderResult = render(
-                <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />,
-                clientAndSDKContextRenderOptions(cli, sdkContext),
-            );
-            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
-
-            expect(renderResult.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
-        });
-
         it("should auto-approve preload via new widget lifecycle API", async () => {
-            // Legacy module API denies preload
-            vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = false;
-                }
-            });
-
             // New API approves preload
             vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapprovePreload").mockResolvedValue(true);
 

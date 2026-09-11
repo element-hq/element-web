@@ -22,14 +22,6 @@ import ImageView from "../../../views/elements/ImageView";
 import * as Media from "../../../../customisations/Media";
 import { type IConfigOptions } from "../../../../IConfigOptions";
 
-vi.mock("../../../../customisations/UserIdentifier", () => {
-    return {
-        default: {
-            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
-        },
-    };
-});
-
 describe("useUserInfoHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
     const defaultUserId = "@user:example.com";
