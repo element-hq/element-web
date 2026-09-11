@@ -3,6 +3,9 @@
 **/package.json           @element-hq/element-web-team
 /pnpm-lock.yaml           @element-hq/element-web-team
 
+/apps/desktop/src/__fixtures/x509/                                               @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/x509.ts                                                        @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/x509.test.ts                                                   @element-hq/element-crypto-web-reviewers
 /apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
 /apps/web/test/unit-tests/SecurityManager-test.ts                                @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
@@ -18,6 +21,7 @@
 /apps/web/playwright/e2e/crypto/                                                 @element-hq/element-crypto-web-reviewers
 /apps/web/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
 /packages/shared-components/src/crypto/                                          @element-hq/element-crypto-web-reviewers
+/packages/shared-types/lib/x509.d.ts                                             @element-hq/element-crypto-web-reviewers
 
 
 /apps/web/src/models/Call.ts                             @element-hq/element-call-reviewers
@@ -42,4 +46,3 @@
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating
 /apps/web/playwright/testcontainers/synapse.ts
 /apps/web/playwright/testcontainers/mas.ts
-

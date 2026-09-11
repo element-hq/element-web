@@ -113,19 +113,6 @@ jobs:
                   path: |
                       apps/desktop/.hak
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              with:
-                  node-version-file: apps/desktop/.node-version
-                  cache: "pnpm"
-              env:
-                  # Workaround for https://github.com/actions/setup-node/issues/317
-                  FORCE_COLOR: 0
-
-            - name: Install Deps
-              working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile --filter element-desktop"
-
             - name: "Get modified files"
               id: changed_files
               if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
@@ -144,6 +131,16 @@ jobs:
                   load: true
                   platforms: linux/${{ inputs.arch }}
                   tags: ${{ env.HAK_DOCKER_IMAGE }}
+
+            # Install dependencies inside container so we compile native modules (like pkcs11js)
+            # against bookworm's glibc.
+            - name: Install Deps
+              run: |
+                  docker run \
+                    -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    -e CI=1 \
+                    $HAK_DOCKER_IMAGE \
+                    pnpm install --frozen-lockfile --filter element-desktop
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
@@ -181,8 +178,18 @@ jobs:
                   fi
 
             - name: Build App
-              working-directory: apps/desktop
-              run: pnpm run build --publish never $BUILD_ARGS -l $TARGETS
+              run: |
+                  docker run \
+                    -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    -e SQLCIPHER_BUNDLED \
+                    -e CI=1 \
+                    -e VARIANT_PATH \
+                    -e VERSION \
+                    -e USE_HARD_LINKS \
+                    -e ED_DEBIAN_CHANGELOG \
+                    $HAK_DOCKER_IMAGE \
+                    pnpm run build --publish never $BUILD_ARGS -l $TARGETS
+                  sudo chown -R $USER:$USER apps/desktop/dist
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
@@ -215,7 +222,10 @@ jobs:
                       assert_contains_string "$LIBS" "libsqlcipher.so.0"
                   fi
 
-                  ./scripts/glibc-check.sh dist/linux-*unpacked/element-desktop*
+                  for filename in dist/linux-*unpacked/element-desktop* dist/linux-*unpacked/**/*.node; do
+                      echo "Checking $filename"
+                      ./scripts/glibc-check.sh "$filename"
+                  done
               env:
                   ARCH: ${{ steps.config.outputs.arch }}
 
