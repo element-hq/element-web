@@ -111,6 +111,28 @@ type Context = {
 const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
 
 /**
+ * Work out which entry to put at the top of a grouped list to show the room at `roomIndex`.
+ *
+ * Room indices don't count section headers, but the list is given a flat list of entries in which
+ * every section contributes a header entry before its rooms. A room that comes first in its section
+ * resolves to its header, so it is not shown detached from the section it belongs to; an index past
+ * the last room resolves to the last entry.
+ */
+export function getScrollTargetEntryIndex(sections: { roomIds: string[] }[], roomIndex: number): number {
+    let headerEntry = 0;
+    let roomsBefore = 0;
+    for (const section of sections) {
+        if (roomIndex < roomsBefore + section.roomIds.length) {
+            const indexInSection = roomIndex - roomsBefore;
+            return indexInSection === 0 ? headerEntry : headerEntry + 1 + indexInSection;
+        }
+        headerEntry += section.roomIds.length + 1;
+        roomsBefore += section.roomIds.length;
+    }
+    return Math.max(0, headerEntry - 1);
+}
+
+/**
  * A virtualized list of rooms.
  * This component provides efficient rendering of large room lists using virtualization,
  * and renders RoomListItemView components for each room.
@@ -485,6 +507,11 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         ],
     );
 
+    const activeEntryIndex = useMemo(() => {
+        if (activeRoomIndex === undefined) return undefined;
+        return isFlatList ? activeRoomIndex : getScrollTargetEntryIndex(sections, activeRoomIndex);
+    }, [activeRoomIndex, isFlatList, sections]);
+
     /**
      * Determine if we should scroll the active index into view
      * This happens when the space or filters change
@@ -505,13 +532,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             if (shouldScrollIndexIntoView) {
                 return {
                     align: "start",
-                    index: activeRoomIndex || 0,
+                    index: activeEntryIndex ?? 0,
                     behavior: "auto",
                 };
             }
             return false;
         },
-        [activeRoomIndex],
+        [activeEntryIndex],
     );
 
     // Imperatively scroll to a newly created section header.
@@ -554,7 +581,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         scrollIntoViewOnChange,
         // If fixedItemHeight is not set and initialTopMostItemIndex=undefined, virtuoso crashes
         // If we don't set it, it works
-        ...(activeRoomIndex !== undefined ? { initialTopMostItemIndex: activeRoomIndex } : {}),
+        ...(activeEntryIndex !== undefined ? { initialTopMostItemIndex: activeEntryIndex } : {}),
         ["data-testid"]: "room-list",
         ["aria-label"]: _t("room_list|list_title"),
         getItemKey,

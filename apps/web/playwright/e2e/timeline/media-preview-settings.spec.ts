@@ -54,7 +54,6 @@ test.describe("Media preview settings", () => {
             `,
         });
 
-        await page.getByRole("button", { name: "Toggle Invites section" }).click();
         const testRoomTile = page
             .getByRole("treegrid", { name: "Room list" })
             .getByRole("button", { name: "Test room" });

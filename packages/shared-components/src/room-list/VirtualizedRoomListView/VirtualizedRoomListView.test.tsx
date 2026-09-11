@@ -13,7 +13,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
-import { KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
+import { getScrollTargetEntryIndex, KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
 
 const { Default, Sections } = composeStories(stories);
 
@@ -65,6 +65,26 @@ describe("<VirtualizedRoomListView />", () => {
     it("should call updateVisibleRooms on render", () => {
         renderWithMockContext(<Default />);
         expect(Default.args.updateVisibleRooms).toHaveBeenCalled();
+    });
+
+    describe("getScrollTargetEntryIndex", () => {
+        // Entry space: [hdr(0), a(1), b(2), c(3), hdr(4), d(5), hdr(6), e(7), f(8)]
+        const sections = [{ roomIds: ["a", "b", "c"] }, { roomIds: ["d"] }, { roomIds: ["e", "f"] }];
+
+        it.each([
+            [sections, 1, 2],
+            [sections, 2, 3],
+            [sections, 5, 8],
+            // Rooms 0, 3 and 4 come first in their section, so their header is targeted instead.
+            [sections, 0, 0],
+            [sections, 3, 4],
+            [sections, 4, 6],
+            // Past the last room, and no sections at all.
+            [sections, 99, 8],
+            [[], 0, 0],
+        ])("maps room index %#", (input, roomIndex, entryIndex) => {
+            expect(getScrollTargetEntryIndex(input, roomIndex)).toBe(entryIndex);
+        });
     });
 
     describe("updateVisibleRooms range reporting", () => {
