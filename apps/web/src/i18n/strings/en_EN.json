@@ -1664,6 +1664,7 @@
         "loading_live_location": "Loading live location…",
         "location_not_available": "Location not available",
         "map_feedback": "Map feedback",
+        "map_marker": "Map marker",
         "mapbox_logo": "Mapbox logo",
         "reset_bearing": "Reset bearing to north",
         "share_button": "Share location",
