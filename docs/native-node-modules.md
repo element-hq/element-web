@@ -19,7 +19,6 @@ per-platform `optionalDependencies`:
 | macOS    | x64, arm64    | static    |
 | Windows  | x64, arm64    | static    |
 
-
 pnpm only installs the binary matching the machine running the install. Building for
 another architecture (for example a Windows arm64 package on an x64 machine, or the macOS
 universal package) needs pnpm to install the extra binaries too. This is done by adding a
