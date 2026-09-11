@@ -272,7 +272,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                                 level={SettingLevel.PLATFORM}
                                 hideIfCannotSet
                             />
-                        </SettingsSubsection>
+                    </SettingsSubsection>
                     )}
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
@@ -377,6 +377,8 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
 
                     <SettingsSubsection heading={_t("common|general")} stretchContent formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
+
+                        <SettingsFlag name="protocolHandlerRegistered" level={SettingLevel.DEVICE} hideIfCannotSet />
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag

@@ -322,6 +322,13 @@ export default abstract class BasePlatform {
         return null;
     }
 
+    public async supportsRegisterProtocolHandler(): Promise<boolean> {
+        console.log("supportsRegisterProtocolHandler", "WRONG ONE");
+        return false;
+    }
+
+    public abstract registerProtocolHandler(): Promise<boolean>|boolean;
+
     /**
      * The URL to return to after a successful SSO authentication
      * @param fragmentAfterLogin optional fragment for specific view to return to

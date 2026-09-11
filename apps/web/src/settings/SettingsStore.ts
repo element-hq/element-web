@@ -287,6 +287,9 @@ export default class SettingsStore {
         if (typeof displayName === "string") {
             return _t(displayName);
         }
+        if (typeof displayName === "function") {
+            return displayName();
+        }
         if (displayName?.[atLevel]) {
             return _t(displayName[atLevel]);
         }

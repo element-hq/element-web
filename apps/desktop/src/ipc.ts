@@ -169,6 +169,10 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             await clearData(global.mainWindow.webContents.session);
             ret = null;
             break;
+        case "canRegisterProtocolHandler":
+            // These are the conditions in setAsDefaultMatrixProtocolClient
+            ret = app.isPackaged || process.platform === "win32";
+            break;
 
         case "breadcrumbs": {
             if (process.platform === "darwin") {

@@ -60,14 +60,22 @@ export default class ProtocolHandler {
         if (app.isPackaged) {
             app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
             app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
-            app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, args);
         } else if (process.platform === "win32") {
             // on Mac/Linux this would just cause the electron binary to open
             // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
             app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
             app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
-            app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
         }
+    }
+
+    public setAsDefaultMatrixProtocolClient(parsedArgs: Args): boolean {
+        const args = getArgsForProtocolRegistration(parsedArgs);
+        if (app.isPackaged) {
+            return app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, args);
+        } else if (process.platform === "win32") {
+            return  app.setAsDefaultProtocolClient(MATRIX_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
+        }
+        throw new Error("Unsupported platform");
     }
 
     private readonly onGetProtocol = (): { protocol: string; sessionId: string } => {
@@ -136,6 +144,14 @@ export default class ProtocolHandler {
      */
     public initialise(args: Args): boolean {
         this.setAsDefaultProtocolClient(args);
+
+        ipcMain.on("registerProtocolHandler", (_event, payload) => {
+            const reply = this.setAsDefaultMatrixProtocolClient(args);
+            global.mainWindow?.webContents.send("ipcReply", {
+                id: payload.id,
+                reply,
+            });
+        });
 
         const url = args.positional.find(this.checkArgIsUrl);
         const hasDeeplink = url ? this.handleDeeplink(url) : false;

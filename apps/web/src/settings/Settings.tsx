@@ -61,6 +61,8 @@ import {
 } from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
 import VideoRoomsBetaImage from "../../res/img/betas/video_rooms.png";
+import PlatformPeg from "../PlatformPeg.ts";
+import { RegisterProtocolHandlerController } from "./controllers/RegisterProtocolHandlerController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -133,6 +135,7 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // Display name can also be an object for different levels.
     displayName?:
         | TranslationKey
+        | (() => string)
         | Partial<{
               [level in SettingLevel]: TranslationKey;
           }>;
@@ -374,6 +377,7 @@ export interface Settings {
     "RoomList.showSections": IBaseSetting<boolean>;
     "RoomList.showPeopleSection": IBaseSetting<boolean>;
     "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
+    "protocolHandlerRegistered": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1208,6 +1212,15 @@ export const SETTINGS: Settings = {
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
         controller: new FallbackIceServerController(),
+    },
+    "protocolHandlerRegistered": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: () => _t("settings|protocolHandlerRegistered|display_name", {
+            brand: SdkConfig.get().brand,
+        }),
+        description: _td("settings|protocolHandlerRegistered|description"),
+        default: false,
+        controller: new RegisterProtocolHandlerController(PlatformPeg.platformPromise),
     },
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],

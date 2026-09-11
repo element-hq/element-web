@@ -276,4 +276,19 @@ export default class WebPlatform extends BasePlatform {
     public async getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
         return SessionLock.getSessionLock(onNewInstance);
     }
+
+    public async supportsRegisterProtocolHandler(): Promise<boolean> {
+        console.log("supportsRegisterProtocolHandler", "registerProtocolHandler" in navigator);
+        return "registerProtocolHandler" in navigator;
+    }
+
+    public registerProtocolHandler(): boolean {
+        try {
+            navigator.registerProtocolHandler("matrix", window.location.origin + "/#%s");
+        } catch (ex) {
+            logger.warn("Failed to register protocol handler", ex);
+            return false;
+        }
+        return true;
+    }
 }

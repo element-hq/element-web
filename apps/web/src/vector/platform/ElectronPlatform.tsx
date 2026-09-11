@@ -568,4 +568,15 @@ export default class ElectronPlatform extends BasePlatform {
     public async getSessionLock(_onNewInstance: () => Promise<void>): Promise<boolean> {
         return true;
     }
+
+    public async supportsRegisterProtocolHandler(): Promise<boolean> {
+        // Electron always does.
+        return (await this.ipc.call("canRegisterProtocolHandler")) as boolean;
+    }
+
+    public registerProtocolHandler(): Promise<void> {
+        // TODO: Pass through to Electron.
+        return this.ipc.call("registerProtocolHandler");
+    }
+
 }

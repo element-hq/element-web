@@ -829,7 +829,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private getPermalink(): string {
-        if (this.props.permalinkCreator) {
+        if (this.props.permalinkCreator && this.props.mxEvent.status === EventStatus.SENT) {
             return this.props.permalinkCreator.forEvent(this.props.mxEvent.getId()!);
         }
 

@@ -2979,6 +2979,10 @@
             "label": "Open %(brand)s when you log in to your computer",
             "minimised": "Minimised"
         },
+        "protocolHandlerRegistered": {
+            "display_name": "Make %(brand)s my default Matrix client",
+            "description": "This will handle all supported `matrix:/` links."
+        },
         "tac_only_notifications": "Only show notifications in the thread activity centre",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
