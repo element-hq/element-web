@@ -15,7 +15,7 @@ import { name as ModuleName } from "../package.json";
 import style from "./style.css" with { type: "css" };
 
 class BannerModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0 | ^2.0.0";
+    public static readonly moduleApiVersion = "^1.0.0 || ^2.0.0";
 
     private config?: ModuleConfig;
 
