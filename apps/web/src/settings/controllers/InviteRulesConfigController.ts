@@ -33,7 +33,7 @@ export default class InviteRulesConfigController extends MatrixClientBackedContr
     }
 
     public initMatrixClient(newClient: MatrixClient): void {
-        newClient.doesServerSupportUnstableFeature("org.matrix.msc4155").then((result) => {
+        void newClient.doesServerSupportUnstableFeature("org.matrix.msc4155").then((result) => {
             this.featureSupported = result;
         });
     }

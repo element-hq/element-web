@@ -134,13 +134,19 @@ export const mockClientPushProcessor = () =>
 /**
  * Returns basic mocked client methods related to server support
  */
-export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
+export const mockClientMethodsServer = (): Partial<
+    Record<MethodLikeKeys<MatrixClient> | PropertyLikeKeys<MatrixClient>, unknown>
+> => ({
     getIdentityServerUrl: vi.fn(),
     getHomeserverUrl: vi.fn(),
     getCapabilities: vi.fn().mockResolvedValue({}),
     getCachedCapabilities: vi.fn().mockResolvedValue({}),
     getClientWellKnown: vi.fn().mockReturnValue({}),
     waitForClientWellKnown: vi.fn().mockResolvedValue({}),
+    cachedRtcTransports: {
+        wait: vi.fn().mockResolvedValue([]),
+        get: vi.fn().mockReturnValue([]),
+    },
     doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
     isVersionSupported: vi.fn().mockResolvedValue(false),
     getVersions: vi.fn().mockResolvedValue({}),

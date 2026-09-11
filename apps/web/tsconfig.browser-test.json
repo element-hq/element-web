@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": ["node", "modernizr", "@vitest/browser/matchers"]
+    },
+    "exclude": [],
+    "include": ["./src/**/*.test.browser.ts", "./src/@types/png.d.ts", "./src/@types/vitest-browser.d.ts"]
+}

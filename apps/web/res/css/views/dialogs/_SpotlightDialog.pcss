@@ -352,6 +352,15 @@ Please see LICENSE files in the repository root for full details.
                     .mx_SpotlightDialog_option--notifications {
                         display: block;
                     }
+
+                    /* $secondary-content/$tertiary-content do not have enough contrast against
+                       the hover background ($quinary-content) to meet WCAG AA (4.5:1). */
+                    .mx_SpotlightDialog_result_publicRoomDetails {
+                        .mx_SpotlightDialog_result_publicRoomHeader .mx_SpotlightDialog_result_publicRoomAlias,
+                        .mx_SpotlightDialog_result_publicRoomDescription {
+                            color: $primary-content;
+                        }
+                    }
                 }
 
                 &[aria-selected="true"] .mx_SpotlightDialog_enterPrompt {

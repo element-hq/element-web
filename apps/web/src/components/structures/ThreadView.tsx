@@ -110,7 +110,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         );
 
         if (this.state.thread) {
-            this.postThreadUpdate(this.state.thread);
+            void this.postThreadUpdate(this.state.thread);
         }
 
         this.setupThread(this.props.mxEvent);

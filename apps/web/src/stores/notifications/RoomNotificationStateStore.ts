@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { throttle } from "lodash";
 import { type Room, ClientEvent, SyncState, type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { type ActionPayload } from "../../dispatcher/payloads";
@@ -13,6 +14,7 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
 import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
+import { NotificationStateEvents } from "./NotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { isRoomVisible } from "../room-list-v3/isRoomVisible";
@@ -24,7 +26,7 @@ export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new RoomNotificationStateStore();
-        instance.start();
+        void instance.start();
         return instance;
     })();
     private roomMap = new Map<Room, RoomNotificationState>();
@@ -87,7 +89,9 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
      */
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            this.roomMap.set(room, new RoomNotificationState(room, false));
+            const state = new RoomNotificationState(room, false);
+            state.on(NotificationStateEvents.Update, this.onRoomStateUpdate);
+            this.roomMap.set(room, state);
         }
         return this.roomMap.get(room)!;
     }
@@ -99,6 +103,23 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
     private onSync = (state: SyncState, prevState: SyncState | null): void => {
         this.emitUpdateIfStateChanged(state, state !== prevState);
     };
+
+    /**
+     * Recompute the summary when one of the room states it is built from reports a change. Sync
+     * alone is not enough: receipts, decryption and local echo all move a room's state between
+     * sync responses, and the space badges follow those immediately, so a sync-only summary can
+     * contradict the space panel for the rest of a sync-loop iteration.
+     */
+    private onRoomStateUpdate = throttle(
+        (): void => {
+            // The sync state travels with the update and decides whether the app calls itself
+            // offline, so report the real one: a room going unread while the connection is down
+            // must not be the thing that clears the offline indicator.
+            this.emitUpdateIfStateChanged(this.matrixClient?.getSyncState() ?? SyncState.Syncing, false);
+        },
+        100,
+        { leading: false, trailing: true },
+    );
 
     /**
      * If the SummarizedNotificationState of this room has changed, or forceEmit
@@ -117,7 +138,11 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         let numFavourites = 0;
         for (const room of visibleRooms) {
             if (isRoomVisible(room)) {
-                globalState.add(this.getRoomState(room));
+                const state = this.getRoomState(room);
+                // The space badges leave a low priority room's activity out, so the summary must
+                // too — otherwise Home and the tab badge light up for a room that no space badge
+                // admits to (https://github.com/vector-im/element-web/issues/20372).
+                if (!state.isLowPriorityActivity) globalState.add(state);
 
                 if (room.tags[DefaultTagID.Favourite] && !room.getType()) numFavourites++;
             }
@@ -143,6 +168,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
 
     protected async onNotReady(): Promise<any> {
         this.matrixClient?.off(ClientEvent.Sync, this.onSync);
+        this.onRoomStateUpdate.cancel();
         for (const roomState of this.roomMap.values()) {
             roomState.destroy();
         }

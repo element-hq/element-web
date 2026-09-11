@@ -72,6 +72,10 @@
         "save_image_as_error_description": "L’image n’a pas pu être enregistrée",
         "save_image_as_error_title": "Échec de la sauvegarde de l’image"
     },
+    "save_dialog": {
+        "all_files": "Tous les fichiers",
+        "named_file_type": "Fichier %(extension)s"
+    },
     "store": {
         "error": {
             "backend_changed": "Effacer les données et recharger ?",

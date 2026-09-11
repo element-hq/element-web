@@ -163,6 +163,10 @@ describe("<MatrixChat />", () => {
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        },
         waitForClientWellKnown: vi.fn().mockResolvedValue({}),
         isVersionSupported: vi.fn().mockResolvedValue(false),
         initRustCrypto: vi.fn(),
@@ -257,7 +261,6 @@ describe("<MatrixChat />", () => {
     }
 
     beforeEach(async () => {
-        vi.restoreAllMocks();
         vi.spyOn(MediaDeviceHandler, "loadDevices").mockResolvedValue(undefined);
         vi.doMock("../../utils/SessionLock.ts", () => ({
             getSessionLock: vi.fn().mockResolvedValue(true),
@@ -340,6 +343,8 @@ describe("<MatrixChat />", () => {
 
         // Anything the drain kicked off may have opened a dialog again
         await clearAllModals();
+
+        vi.restoreAllMocks();
     });
 
     resetJsDomAfterEach();

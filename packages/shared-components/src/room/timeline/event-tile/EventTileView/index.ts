@@ -10,6 +10,7 @@ export type {
     EventTileViewClassNames,
     EventTileRenderingMode,
     EventTileViewHandlers,
+    EventTileViewLine,
     EventTileViewProps,
     EventTileViewRefs,
     EventTileViewRoot,

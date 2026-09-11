@@ -24,6 +24,12 @@ import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../../components/views/dialogs/UserTab";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import * as recent from "../../emojipicker/recent";
+
+vi.mock("../../emojipicker/recent", () => ({
+    add: vi.fn(),
+    get: vi.fn(),
+}));
 
 const STATUS: MatrixUserStatus = { emoji: "🧪", text: "Testing" };
 
@@ -43,6 +49,7 @@ describe("SetStatusViewModel", () => {
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
+        vi.mocked(recent.get).mockReturnValue([]);
     });
 
     afterEach(() => {
@@ -58,6 +65,12 @@ describe("SetStatusViewModel", () => {
     it("initialises snapshot with undefined when no status is set", () => {
         const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
         expect(vm.getSnapshot().userStatus).toBeUndefined();
+    });
+
+    it("initialises snapshot from the recently used emojis", () => {
+        vi.mocked(recent.get).mockReturnValue(["🧪", "🦎"]);
+        const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+        expect(vm.getSnapshot().recentEmojis).toEqual(["🧪", "🦎"]);
     });
 
     it("updates the snapshot when OwnProfileStore emits an update", () => {
@@ -116,6 +129,25 @@ describe("SetStatusViewModel", () => {
             expect(vm.getSnapshot().userStatus).toEqual(newStatus);
 
             await waitFor(() => expect(vm.getSnapshot().userStatus).toEqual(STATUS));
+        });
+    });
+
+    describe("recordRecentEmoji", () => {
+        it("records the emoji as recently used", () => {
+            const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+            vm.recordRecentEmoji("🎉");
+            expect(recent.add).toHaveBeenCalledWith("🎉");
+        });
+
+        it("updates the snapshot with the new list of recent emojis", () => {
+            vi.mocked(recent.get).mockReturnValue(["🧪"]);
+            const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+            expect(vm.getSnapshot().recentEmojis).toEqual(["🧪"]);
+
+            vi.mocked(recent.get).mockReturnValue(["🎉", "🧪"]);
+            vm.recordRecentEmoji("🎉");
+
+            expect(vm.getSnapshot().recentEmojis).toEqual(["🎉", "🧪"]);
         });
     });
 
@@ -183,14 +215,15 @@ describe("UserMenuSetStatusViewModel", () => {
         vi.restoreAllMocks();
     });
 
-    it("dispatches ToggleUserMenu and ViewUserSettings on onSetStatusClick", async () => {
+    it("dispatches ToggleUserMenu and ViewUserSettings on onSetCustomStatusClick", async () => {
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
-        vm.onSetStatusClick();
+        vm.onSetCustomStatusClick();
         await waitFor(() => {
             expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.ToggleUserMenu });
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Account,
+                props: { startCustomStatus: true },
             });
         });
     });

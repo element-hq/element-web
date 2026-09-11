@@ -52,7 +52,7 @@ const LanguageSection: React.FC = () => {
         (newLanguage: string) => {
             if (language === newLanguage) return;
 
-            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
+            void SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
             setLanguage(newLanguage);
             const platform = PlatformPeg.get();
             if (platform) {
@@ -185,7 +185,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
 
     private onTimezoneChange = (tz: string): void => {
         this.setState({ timezone: tz });
-        TimezoneHandler.setUserTimezone(tz);
+        void TimezoneHandler.setUserTimezone(tz);
     };
 
     /**
@@ -204,17 +204,22 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ autocompleteDelay: e.target.value });
-        SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.valueAsNumber);
+        void SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.valueAsNumber);
     };
 
     private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ readMarkerInViewThresholdMs: e.target.value });
-        SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.valueAsNumber);
+        void SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.valueAsNumber);
     };
 
     private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ readMarkerOutOfViewThresholdMs: e.target.value });
-        SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.valueAsNumber);
+        void SettingsStore.setValue(
+            "readMarkerOutOfViewThresholdMs",
+            null,
+            SettingLevel.DEVICE,
+            e.target.valueAsNumber,
+        );
     };
 
     private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): JSX.Element {
@@ -273,6 +278,11 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
                         <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
                         <SettingsFlag name="RoomList.showSections" level={SettingLevel.ACCOUNT} />
+                        <SettingsFlag
+                            name="RoomList.showPeopleSection"
+                            level={SettingLevel.ACCOUNT}
+                            requires={["RoomList.showSections"]}
+                        />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")} formWrap>

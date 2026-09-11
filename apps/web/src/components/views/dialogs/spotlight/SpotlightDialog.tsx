@@ -29,7 +29,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import {
     ChatIcon,
     RoomIcon,
@@ -343,7 +343,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
     useEffect(() => {
-        cli.isVersionSupported("v1.4")
+        void cli
+            .isVersionSupported("v1.4")
             .then((supported) => {
                 return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
             })
@@ -559,7 +560,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             recents.delete(room.roomId);
             recents.add(room.roomId);
 
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "SpotlightSearch.recentSearches",
                 null,
                 SettingLevel.ACCOUNT,
@@ -685,7 +686,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         id={`mx_SpotlightDialog_button_result_${result.member.userId}`}
                         key={`${Section[result.section]}-${result.member.userId}`}
                         onClick={() => {
-                            startDmOnFirstMessage(cli, [result.member]);
+                            void startDmOnFirstMessage(cli, [result.member]);
                             onFinished();
                         }}
                         aria-label={
@@ -978,7 +979,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_inviteLink"
                         onClick={() => {
                             setInviteLinkCopied(true);
-                            copyPlaintext(ownInviteLink);
+                            void copyPlaintext(ownInviteLink);
                         }}
                         onTooltipOpenChange={(open) => {
                             if (!open) setInviteLinkCopied(false);
@@ -1039,8 +1040,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
+        // The shortcuts below the results are options in their own right, so with nothing above them
+        // the first one is selected by default and enter drops the user into a filter they never
+        // asked for. Saying there are no results gives that default selection somewhere harmless to
+        // land, and the shortcuts are still an arrow key away.
+        let noResultsSection: JSX.Element | undefined;
+        const hasResults =
+            !!results[Section.People].length ||
+            (filter === Filter.People && !!results[Section.Suggestions].length) ||
+            !!results[Section.Rooms].length ||
+            !!results[Section.Spaces].length ||
+            !!results[Section.PublicRoomsAndSpaces].length ||
+            !!spaceResults.length ||
+            !!joinRoomSection;
+        if (trimmedQuery && !hasResults) {
+            noResultsSection = (
+                <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
+                    <Option id="mx_SpotlightDialog_button_noResults" onClick={null}>
+                        {_t("spotlight_dialog|no_results")}
+                    </Option>
+                </div>
+            );
+        }
+
         content = (
             <>
+                {noResultsSection}
                 {peopleSection}
                 {suggestionsSection}
                 {roomsSection}

@@ -195,11 +195,11 @@ export class ReactionsRowButtonViewModel
         if (disabled) return;
 
         if (myReactionEvent) {
-            client.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId()!);
+            void client.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId()!);
             return;
         }
 
-        client.sendEvent(mxEvent.getRoomId()!, EventType.Reaction, {
+        void client.sendEvent(mxEvent.getRoomId()!, EventType.Reaction, {
             "m.relates_to": {
                 rel_type: RelationType.Annotation,
                 event_id: mxEvent.getId()!,

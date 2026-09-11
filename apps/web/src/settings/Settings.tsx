@@ -15,6 +15,7 @@ import { type JsonDocument, type JsonValue } from "shared-types";
 import { _t, _td } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
+import { type PdfViewerState } from "../@types/pdf-viewer.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -30,6 +31,7 @@ import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";
+import { TokenizerMode } from "./enums/TokenizerMode";
 import ReducedMotionController from "./controllers/ReducedMotionController";
 import IncompatibleController from "./controllers/IncompatibleController";
 import { ImageSize } from "./enums/ImageSize";
@@ -98,7 +100,6 @@ export enum LabGroup {
     Threads,
     VoiceAndVideo,
     Moderation,
-    Themes,
     Encryption,
     Experimental,
     Developer,
@@ -118,7 +119,6 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
@@ -150,8 +150,10 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // represent a boolean).
     default: T;
 
-    // Optional settings controller. See SettingsController for more information.
-    controller?: SettingController;
+    // Optional setting controller(s). See SettingController for more information.
+    // When several are given they are consulted in the order they are declared in: the first one
+    // to return an override wins, and the first one to refuse a change stops the change.
+    controller?: SettingController | SettingController[];
 
     // Optional flag to make supportedLevels be respected as the order to handle
     // settings. The first element is treated as "most preferred". The "default"
@@ -216,7 +218,6 @@ export interface Settings {
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
-    "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -227,6 +228,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
+    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
@@ -249,6 +251,7 @@ export interface Settings {
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
     "Notifications.showbold": IBaseSetting<boolean>;
+    "Notifications.activityIsUnread": IBaseSetting<boolean>;
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
     "showRedactions": IBaseSetting<boolean>;
@@ -294,6 +297,7 @@ export interface Settings {
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
     "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
+    "pdfViewerState": IBaseSetting<{ [mxcUri: string]: PdfViewerState }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -336,6 +340,7 @@ export interface Settings {
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
+    "tokenizerMode": IBaseSetting<TokenizerMode>;
     "ircDisplayNameWidth": IBaseSetting<number>;
     "layout": IBaseSetting<Layout>;
     "Images.size": IBaseSetting<ImageSize>;
@@ -369,6 +374,8 @@ export interface Settings {
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
     "RoomList.showSections": IBaseSetting<boolean>;
+    "RoomList.showPeopleSection": IBaseSetting<boolean>;
+    "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -488,14 +495,6 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Moderation,
         displayName: _td("labs|mjolnir"),
         description: _td("labs|currently_experimental"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_custom_themes": {
-        isFeature: true,
-        labsGroup: LabGroup.Themes,
-        displayName: _td("labs|custom_themes"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -634,6 +633,15 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
+    "feature_pdf_viewer": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|pdf_viewer"),
+        description: _td("labs|pdf_viewer_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
         labsGroup: LabGroup.Ui,
@@ -699,6 +707,15 @@ export const SETTINGS: Settings = {
         default: false,
         invertedSettingName: "feature_hidebold",
         controller: new AnalyticsController("WebSettingsNotificationsShowBoldToggle"),
+    },
+    "Notifications.activityIsUnread": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|activityIsUnread"),
+        default: false,
+        controller: [
+            new AnalyticsController("WebSettingsActivityIsUnreadToggle"),
+            new RequiresSettingsController(["Notifications.showbold"]),
+        ],
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -1037,6 +1054,13 @@ export const SETTINGS: Settings = {
         // Exports event IDs
         shouldExportToRageshake: false,
     },
+    "pdfViewerState": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // MXC URI => where the reader had got to in that PDF
+        // Exports MXC URIs
+        shouldExportToRageshake: false,
+    },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_nsfw_content"),
@@ -1218,6 +1242,20 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+        controller: new AnalyticsController("WebRoomListSectionToggle"),
+    },
+    "RoomList.showPeopleSection": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_people_sections"),
+        controller: [
+            new AnalyticsController("WebRoomListPeopleSectionToggle"),
+            new RequiresSettingsController(["RoomList.showSections"]),
+        ],
+    },
+    "composerUrlPreviewCollapsed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: true,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -1236,6 +1274,11 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|security|message_search_sleep_time"),
         default: 3000,
+    },
+    "tokenizerMode": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("settings|security|tokenizer_mode"),
+        default: TokenizerMode.Language,
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default

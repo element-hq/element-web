@@ -43,7 +43,32 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
         "toggle_event": "toggle event"
     },
     "emoji": {
@@ -75,7 +100,6 @@
             "clear_status": "Clear",
             "create_an_account": "Create an account",
             "got_an_account": "Got an account?",
-            "manage_account": "Manage account",
             "sign_in": "Sign in",
             "title": "User menu"
         }
@@ -87,6 +111,12 @@
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
+    },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "loading": "Loading PDF…",
+        "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -199,6 +229,10 @@
         },
         "room_options": "Room Options",
         "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
         "section_header": {
             "edit_section": "Edit section",
             "more_options": "More options",

@@ -56,6 +56,16 @@ describe("SetStatusView", () => {
         expect(vm.setStatus).toHaveBeenCalledWith({ emoji: "🤩", text: "Starstruck" });
     });
 
+    it("starts in the custom editor if initialCustomMode is set", async () => {
+        const vm = new SetStatusViewModel({});
+        render(<SetStatusView vm={vm} initialCustomMode={true} />);
+
+        await userEvent.type(screen.getByRole("textbox", { name: "What's your status?" }), "Happy");
+        await userEvent.click(await screen.findByRole("button", { name: "Save" }));
+
+        expect(vm.setStatus).toHaveBeenCalledWith({ emoji: "😄", text: "Happy" });
+    });
+
     it("returns to the set status prompt if the custom editor is cancelled", async () => {
         const vm = new SetStatusViewModel({});
         render(<SetStatusView vm={vm} />);

@@ -88,7 +88,7 @@ const config: StorybookConfig = {
                     name: "language-middleware",
                     configureServer(server) {
                         server.middlewares.use((req, res, next) => {
-                            if (req.url === "/i18n/languages.json") {
+                            if (req.url?.split("?")[0] === "/i18n/languages.json") {
                                 // Dynamically generate a languages.json file based on what files are available
                                 res.setHeader("Content-Type", "application/json");
                                 res.end(JSON.stringify(languages));

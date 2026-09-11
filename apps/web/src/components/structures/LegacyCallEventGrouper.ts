@@ -158,7 +158,10 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     public callBack = (): void => {
         const roomId = this.roomId;
         if (!roomId) return;
-        SDKContextClass.instance.legacyCallHandler.placeCall(roomId, this.isVoice ? CallType.Voice : CallType.Video);
+        void SDKContextClass.instance.legacyCallHandler.placeCall(
+            roomId,
+            this.isVoice ? CallType.Voice : CallType.Video,
+        );
     };
 
     public toggleSilenced = (): void => {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
@@ -19,9 +19,12 @@ vi.mock("matrix-js-sdk/src/logger");
 
 describe("SupportedBrowser", () => {
     beforeEach(() => {
-        vi.resetAllMocks();
         localStorage.clear();
         getBrowserSupport.clear();
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     const testUserAgentFactory =

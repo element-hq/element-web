@@ -41,6 +41,7 @@ export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
 export * from "./room/WidgetPip";
 export * from "./room/HistoryVisibilityBadge";
+export * from "./room/right-panel/PdfViewerView";
 export * from "./room/right-panel/WidgetContextMenuView";
 export * from "./room/timeline/DateSeparatorView";
 export * from "./room/timeline/TimelineSeparator";
@@ -72,6 +73,7 @@ export * from "./core/rich-list/RichItem";
 export * from "./core/rich-list/RichList";
 export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
+export * from "./room-list/SectionCreationView";
 export * from "./room-list/RoomListView";
 export * from "./room-list/VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 export * from "./room-list/RoomListPrimaryFilters";
@@ -84,6 +86,7 @@ export * from "./core/utils/LinkedText";
 export * from "./core/utils/Scrollbar";
 export * from "./core/VirtualizedList";
 export * from "./resize";
+export * from "./core/RoomPickerView";
 
 // Utils
 export * from "./core/i18n/i18n";
@@ -96,8 +99,10 @@ export * from "./core/utils/ToastContext";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
+export * from "./room/avatar/RoomAvatar";
 export * from "./status/SetStatusView";
 export * from "./status/StatusTextView";
 export * from "./status/UserStatusIconView";
+export * from "./devtools/CustomThemesView";
 // MVVM
 export * from "./core/viewmodel";

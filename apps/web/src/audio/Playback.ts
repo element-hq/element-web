@@ -129,8 +129,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
-        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
-        this.stop();
+        void this.stop();
         this.removeAllListeners();
         this.clock.destroy();
         this.waveformObservable.close();

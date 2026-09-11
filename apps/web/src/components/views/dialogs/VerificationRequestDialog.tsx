@@ -51,7 +51,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
         // phase up-to-date.
         this.state.verificationRequest?.on(VerificationRequestEvent.Change, this.onRequestChange);
 
-        this.props.verificationRequestPromise?.then((r) => {
+        void this.props.verificationRequestPromise?.then((r) => {
             // The request promise completed, so we have a new request
 
             // Stop listening to the old request (if we have one, which normally we won't)

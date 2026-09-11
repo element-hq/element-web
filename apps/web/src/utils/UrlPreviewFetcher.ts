@@ -6,13 +6,14 @@
  */
 
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
-import type { UrlPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "shared-types";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { type UrlPreviewApi as ModuleUrlPreviewApi } from "../modules/UrlPreviewApi";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -33,6 +34,7 @@ export class UrlPreviewFetcher {
         private readonly client: MatrixClient,
         private readonly previewRequestTs: number,
         private readonly showTooltips: boolean,
+        private readonly previewModuleApi: ModuleUrlPreviewApi,
     ) {}
 
     public clearCache(): void {
@@ -129,34 +131,15 @@ export class UrlPreviewFetcher {
     }
 
     /**
-     * Fetch a preview for a single URL, returning a cached result if available.
-     * @param link The URL to preview.
-     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     * Determine the preview image from the URL preview response.
+     * @param response - The preview response from the URL preview API.
+     * @param loadMedia - Whether to load the media from the preview response.
+     * @returns The preview image and site icon, if available.
      */
-    public async fetchPreview(link: string, loadMedia: boolean): Promise<UrlPreview | null> {
-        const cached = this.cache.get(link);
-        if (cached) return cached;
-
-        let response: IPreviewUrlResponse;
-        try {
-            response = await this.client.getUrlPreview(link, this.previewRequestTs);
-        } catch (error) {
-            if (error instanceof MatrixError && error.httpStatus === 404) {
-                logger.debug("Failed to get URL preview: ", error);
-            } else {
-                logger.error("Failed to get URL preview: ", error);
-            }
-            return null;
-        }
-
-        const { title, description, siteName } = UrlPreviewFetcher.getBaseMetadataFromResponse(response, link);
-        const author = UrlPreviewFetcher.getAuthorFromResponse(response);
-        const hasImage = response["og:image"] && typeof response["og:image"] === "string";
-
-        if (title === link && !hasImage) {
-            return null;
-        }
-
+    private getPreviewImage(
+        response: IPreviewUrlResponse,
+        loadMedia: boolean,
+    ): { image: UrlPreview["image"]; siteIcon?: string } {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
@@ -192,6 +175,45 @@ export class UrlPreviewFetcher {
                 siteIcon = media.srcHttp;
             }
         }
+        return { image, siteIcon };
+    }
+
+    /**
+     * Fetch a preview for a single URL, returning a cached result if available.
+     * @param link The URL to preview.
+     * @param event The Matrix event to preview.
+     * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
+     */
+    public async fetchPreview(link: string, loadMedia: boolean, event?: MatrixEvent): Promise<UrlPreview | null> {
+        const moduleResponse = await this.previewModuleApi.getPreview(link, event);
+        if (moduleResponse) {
+            return moduleResponse;
+        }
+
+        const cached = this.cache.get(link);
+        if (cached) return cached;
+
+        let response: IPreviewUrlResponse;
+        try {
+            response = await this.client.getUrlPreview(link, this.previewRequestTs);
+        } catch (error) {
+            if (error instanceof MatrixError && error.httpStatus === 404) {
+                logger.debug("Failed to get URL preview: ", error);
+            } else {
+                logger.error("Failed to get URL preview: ", error);
+            }
+            return null;
+        }
+
+        const { title, description, siteName } = UrlPreviewFetcher.getBaseMetadataFromResponse(response, link);
+        const author = UrlPreviewFetcher.getAuthorFromResponse(response);
+        const hasImage = response["og:image"] && typeof response["og:image"] === "string";
+
+        if (title === link && !hasImage) {
+            return null;
+        }
+
+        const { image, siteIcon } = this.getPreviewImage(response, loadMedia);
 
         const result = {
             link,
@@ -208,14 +230,47 @@ export class UrlPreviewFetcher {
         return result;
     }
 
-    /*
-     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+    /**
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview.
+     * This will load previews via the server if `single` only contains `matched_url`.
+     *
+     * @param single A single preview.
+     * @param body The message text body. `matched_url` must appear within it.
+     * @param loadMedia Whether to include the preview image WHEN falling back to loading
+     *                  from the server. Pass false when media is hidden.
      */
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public async previewFromBundle(
+        single: UnstableBundledUrlPreviewSingle,
+        event: MatrixEvent,
+        loadMedia = false,
+    ): Promise<UrlPreview | null> {
+        if (!URL.canParse(single.matched_url)) {
+            return null;
+        }
+        const body = event.getContent().body;
+        const modulePreview = await this.previewModuleApi.getPreview(single.matched_url, event);
+        if (modulePreview) {
+            return modulePreview;
+        }
+        const url = new URL(single.matched_url);
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            // Invalid protocol, skip.
+            return null;
+        }
+
+        if (!body.includes(single.matched_url)) {
+            return null;
+        }
+
+        if (Object.keys(single).length === 1) {
+            // We ONLY have the matched_url, so request a preview.
+            return await this.fetchPreview(single.matched_url, loadMedia);
+        }
+
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
-            siteName: new URL(single.matched_url).hostname,
+            siteName: url.hostname,
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],

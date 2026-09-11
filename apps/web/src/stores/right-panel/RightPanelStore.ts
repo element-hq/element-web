@@ -26,6 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type OpenPdfViewerPayload } from "../../dispatcher/payloads/OpenPdfViewerPayload";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
@@ -89,6 +90,16 @@ export default class RightPanelStore extends ReadyWatchingStore {
             case Action.ActiveRoomChanged: {
                 const changePayload = <ActiveRoomChangedPayload>payload;
                 this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
+                break;
+            }
+
+            case Action.OpenPdfViewer: {
+                const { event } = <OpenPdfViewerPayload>payload;
+                this.setCard(
+                    { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: event } },
+                    true,
+                    event.getRoomId(),
+                );
                 break;
             }
 
@@ -169,9 +180,17 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
 
         if (targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState) {
-            // Update state: set right panel with a new state but keep the phase (don't know it this is ever needed...)
-            const hist = this.byRoom[rId]?.history ?? [];
-            hist[hist.length - 1].state = cardState;
+            // Update state: set right panel with a new state but keep the phase. A matching phase can
+            // only have come from this room's own history, so the panel is always present here.
+            const panel = this.byRoom[rId];
+
+            if (panel?.history.length) {
+                panel.history[panel.history.length - 1].state = cardState;
+                // Setting a card shows it. Without this, re-selecting the phase that is already at the
+                // top of a closed panel would silently swap the state behind a panel that stays hidden.
+                panel.isOpen = true;
+            }
+
             this.emitAndUpdateSettings();
         } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
             // Set right panel and initialize/erase history
@@ -315,13 +334,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private emitAndUpdateSettings(): void {
         this.filterValidCards(this.global);
         const storePanelGlobal = convertToStorePanel(this.global);
-        SettingsStore.setValue("RightPanel.phasesGlobal", null, SettingLevel.DEVICE, storePanelGlobal);
+        void SettingsStore.setValue("RightPanel.phasesGlobal", null, SettingLevel.DEVICE, storePanelGlobal);
 
         if (!!this.viewedRoomId) {
             const panelThisRoom = this.byRoom[this.viewedRoomId];
             this.filterValidCards(panelThisRoom);
             const storePanelThisRoom = convertToStorePanel(panelThisRoom);
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "RightPanel.phases",
                 this.viewedRoomId,
                 SettingLevel.ROOM_DEVICE,
@@ -368,6 +387,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state?.widgetId;
+            case RightPanelPhases.PdfViewer:
+                // Also drop a card stored before the lab was turned off, so disabling it closes any
+                // viewer that was left open rather than restoring it on the next load.
+                if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
+                if (!card.state?.pdfViewerEvent) {
+                    logger.warn("removed card from right panel because of missing pdfViewerEvent in card state");
+                }
+                return !!card.state?.pdfViewerEvent;
         }
         return true;
     }
@@ -449,7 +476,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     public static get instance(): RightPanelStore {
         if (!this.internalInstance) {
             this.internalInstance = new RightPanelStore();
-            this.internalInstance.start();
+            void this.internalInstance.start();
         }
         return this.internalInstance;
     }

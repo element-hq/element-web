@@ -895,7 +895,7 @@ const onMessage = function (event: MessageEvent): void {
             setWidget(event, null);
             return;
         } else if (event.data.action === Action.GetOpenIdToken) {
-            getOpenIdToken(event);
+            void getOpenIdToken(event);
             return;
         } else {
             sendError(event, _t("scalar|error_missing_room_id_request"));
@@ -928,16 +928,16 @@ const onMessage = function (event: MessageEvent): void {
         getMembershipCount(event, roomId);
         return;
     } else if (event.data.action === Action.GetRoomEncryptionState) {
-        getRoomEncState(event, roomId);
+        void getRoomEncState(event, roomId);
         return;
     } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
         return;
     } else if (event.data.action === Action.SendEvent) {
-        sendEvent(event, roomId);
+        void sendEvent(event, roomId);
         return;
     } else if (event.data.action === Action.ReadEvents) {
-        readEvents(event, roomId);
+        void readEvents(event, roomId);
         return;
     }
 
@@ -962,7 +962,7 @@ const onMessage = function (event: MessageEvent): void {
             setBotOptions(event, roomId, userId);
             break;
         case Action.SetBotPower:
-            setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
+            void setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
             break;
         default:
             logger.warn("Unhandled postMessage event with action '" + event.data.action + "'");

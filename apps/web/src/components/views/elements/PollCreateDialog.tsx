@@ -152,7 +152,17 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     }
 
     protected submit(): void {
-        this.setState({ busy: true, canSubmit: false });
+        const { actionLabel } = this.state;
+
+        this.setState({
+            busy: true,
+            canSubmit: false,
+            actionLabel: (
+                <>
+                    <Spinner size={20} /> {actionLabel}
+                </>
+            ),
+        });
         const pollEvent = this.createEvent();
         doMaybeLocalRoomAction(
             this.props.room.roomId,
@@ -174,11 +184,11 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     button: _t("action|try_again"),
                     cancelButton: _t("action|cancel"),
                 });
-                finished.then(([tryAgain]) => {
+                void finished.then(([tryAgain]) => {
                     if (!tryAgain) {
                         this.cancel();
                     } else {
-                        this.setState({ busy: false, canSubmit: true });
+                        this.setState({ busy: false, canSubmit: true, actionLabel });
                     }
                 });
             });
@@ -192,7 +202,12 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         return (
             <div className="mx_PollCreateDialog">
                 <h2>{_t("poll|type_heading")}</h2>
-                <Field element="select" value={this.state.kind.name} onChange={this.onPollTypeChange}>
+                <Field
+                    element="select"
+                    value={this.state.kind.name}
+                    onChange={this.onPollTypeChange}
+                    disabled={this.state.busy}
+                >
                     <option key={M_POLL_KIND_DISCLOSED.name} value={M_POLL_KIND_DISCLOSED.name}>
                         {_t("poll|type_open")}
                     </option>
@@ -249,11 +264,6 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 >
                     {_t("poll|options_add_button")}
                 </AccessibleButton>
-                {this.state.busy && (
-                    <div className="mx_PollCreateDialog_busy">
-                        <Spinner />
-                    </div>
-                )}
             </div>
         );
     }

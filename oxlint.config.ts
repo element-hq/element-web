@@ -198,6 +198,15 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
+        // Require explicit handling of promises
+        "typescript/no-floating-promises": [
+            "error",
+            {
+                checkThenables: true,
+                ignoreIIFE: true,
+                ignoreVoid: true,
+            },
+        ],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
@@ -236,7 +245,6 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",
@@ -549,6 +557,9 @@ export default defineConfig({
                 "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
                 "no-proto": "off",
+                "no-restricted-globals": "off",
+                "typescript/consistent-type-imports": "off",
+                "node/no-top-level-await": "off",
 
                 // Disable a11y rules for components in tests
                 "jsx-a11y/role-has-required-aria-props": "off",

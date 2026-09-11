@@ -165,7 +165,7 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
             // Note: We need to use .then notation instead of async/await,
             // because async/await would cause this function to return a
             // promise, which `useEffect` doesn't like.
-            fn(...args)
+            void fn(...args)
                 .then((v) => {
                     if (!(v instanceof NoChange)) {
                         setValue(v);

@@ -26,6 +26,8 @@
     border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: var(--cpd-radius-pill-effect);
     background: var(--cpd-color-bg-canvas-default);
+    /* UA sets a font for button but we want to inherit the emoji font from body */
+    font-family: inherit;
     font-size: var(--cpd-font-size-heading-sm);
     line-height: 1;
     cursor: pointer;

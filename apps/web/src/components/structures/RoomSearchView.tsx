@@ -139,7 +139,7 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
     // Mount & unmount effect
     useEffect(() => {
         aborted.current = false;
-        handleSearchResult(promise);
+        void handleSearchResult(promise);
         return () => {
             aborted.current = true;
         };

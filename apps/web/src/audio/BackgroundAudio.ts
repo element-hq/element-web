@@ -60,7 +60,7 @@ export class BackgroundAudio {
             // that it can be reused. Suspending it while another sound is still going would cut that
             // one off mid-way and leave it to pick up again the next time anything is played.
             if (this.playing === 0) {
-                this.audioContext.suspend();
+                void this.audioContext.suspend();
             }
         };
 

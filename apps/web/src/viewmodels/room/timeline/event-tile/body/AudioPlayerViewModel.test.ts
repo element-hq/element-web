@@ -14,7 +14,7 @@ import { waitFor } from "@testing-library/dom";
 
 import { type Playback, PlaybackState } from "../../../../../audio/Playback";
 import { AudioPlayerViewModel } from "./AudioPlayerViewModel";
-import { MockedPlayback } from "../../../../../../test/unit-tests/audio/MockedPlayback";
+import { MockedPlayback } from "../../../../../audio/__mocks__";
 
 describe("AudioPlayerViewModel", () => {
     let playback: Playback;

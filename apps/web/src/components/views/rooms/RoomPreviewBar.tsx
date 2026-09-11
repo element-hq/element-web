@@ -127,12 +127,12 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.checkInvitedEmail();
+        void this.checkInvitedEmail();
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
-            this.checkInvitedEmail();
+            void this.checkInvitedEmail();
         }
     }
 

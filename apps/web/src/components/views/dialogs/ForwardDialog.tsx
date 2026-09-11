@@ -30,6 +30,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { Layout } from "../../../settings/enums/Layout";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 import BaseDialog from "./BaseDialog";
 import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
@@ -253,7 +254,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const userId = cli.getSafeUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
-        cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
+        void cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
     const { type, content } = transformEvent(event, cli);
@@ -345,13 +346,15 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                     mx_IRCLayout: previewLayout == Layout.IRC,
                 })}
             >
-                <EventTile
-                    mxEvent={mockEvent}
-                    layout={previewLayout}
-                    permalinkCreator={permalinkCreator}
-                    as="div"
-                    inhibitInteraction
-                />
+                <EventPresentationContextProvider layout={previewLayout}>
+                    <EventTile
+                        mxEvent={mockEvent}
+                        layout={previewLayout}
+                        permalinkCreator={permalinkCreator}
+                        as="div"
+                        inhibitInteraction
+                    />
+                </EventPresentationContextProvider>
             </div>
             <hr />
             <RovingTabIndexProvider

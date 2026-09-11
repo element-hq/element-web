@@ -45,13 +45,35 @@ describe("tagRoom()", () => {
         vi.restoreAllMocks();
     });
 
-    it("does nothing when room tag is not allowed", () => {
+    // The invite tag is a section tag, but it is derived from the membership rather than stored as
+    // account data, so it can never be applied or removed.
+    it.each([DefaultTagID.ServerNotice, DefaultTagID.Invite])("does nothing when applying %s", (tag) => {
         const room = makeRoom();
 
-        tagRoom(room, DefaultTagID.ServerNotice);
+        tagRoom(room, tag);
 
         expect(defaultDispatcher.dispatch).not.toHaveBeenCalled();
         expect(RoomListActions.tagRoom).not.toHaveBeenCalled();
+    });
+
+    describe("when a room has a pending invitation", () => {
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, customTag])(
+            "should apply %s without removing the invite tag",
+            (tag) => {
+                const room = makeRoom(DefaultTagID.Invite);
+
+                tagRoom(room, tag);
+
+                expect(defaultDispatcher.dispatch).toHaveBeenCalled();
+                expect(RoomListActions.tagRoom).toHaveBeenCalledWith(
+                    room.client,
+                    room,
+                    null, // remove
+                    tag, // add
+                    false,
+                );
+            },
+        );
     });
 
     describe("when a room has no section tag", () => {
@@ -66,6 +88,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 DefaultTagID.Favourite, // add
+                false, // showToast
             );
         });
 
@@ -80,6 +103,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 DefaultTagID.LowPriority, // add
+                false, // showToast
             );
         });
 
@@ -94,6 +118,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 customTag, // add
+                false, // showToast
             );
         });
 
@@ -108,6 +133,7 @@ describe("tagRoom()", () => {
                 room,
                 null, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -124,6 +150,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 null, // add
+                false, // showToast
             );
         });
 
@@ -138,6 +165,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 DefaultTagID.LowPriority, // add
+                false, // showToast
             );
         });
 
@@ -152,6 +180,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -168,6 +197,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 DefaultTagID.Favourite, // add
+                false, // showToast
             );
         });
 
@@ -182,6 +212,7 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 null, // add
+                false, // showToast
             );
         });
     });
@@ -205,6 +236,7 @@ describe("tagRoom()", () => {
                 room,
                 customTag, // remove
                 expectedAdd, // add
+                false, // showToast
             );
         });
     });
