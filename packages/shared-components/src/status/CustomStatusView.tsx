@@ -17,6 +17,7 @@ import classNames from "classnames";
  * The emoji shown on the picker trigger before the user has chosen one.
  */
 const DEFAULT_EMOJI = "😄";
+const MAX_STATUS_LENGTH = 30;
 
 export interface CustomStatusViewProps {
     /**
@@ -124,6 +125,7 @@ export function CustomStatusView({
                 <TextControl
                     value={text}
                     onChange={(ev) => setText(ev.currentTarget.value)}
+                    maxLength={MAX_STATUS_LENGTH}
                     placeholder={_t("status|set_status|set_status_prompt")}
                     aria-label={_t("status|set_status|set_status_prompt")}
                     autoFocus
