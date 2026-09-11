@@ -5,20 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import React, { act } from "react";
-import { render, type RenderOptions } from "jest-matrix-react";
+import { render, type RenderOptions } from "test-utils-rtl";
 import { type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:events";
+import { stubClient, TestSDKContext } from "test-utils";
 
-import { stubClient } from "../../test-utils";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { SDKContext } from "../../../src/contexts/SDKContext";
-import { TestSDKContext } from "../TestSDKContext.ts";
-import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
-import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
-import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
-import { RoomView } from "../../../src/components/structures/RoomView";
-import { ModuleApi } from "../../../src/modules/Api";
+import DMRoomMap from "../utils/DMRoomMap";
+import { SDKContext } from "../contexts/SDKContext";
+import { ScopedRoomContextProvider } from "../contexts/ScopedRoomContext";
+import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
+import MatrixClientContext from "../contexts/MatrixClientContext";
+import { RoomView } from "../components/structures/RoomView";
+import { ModuleApi } from "./Api";
 
 describe("ExtrasApi", () => {
     let client: MatrixClient;
@@ -33,10 +35,10 @@ describe("ExtrasApi", () => {
         });
         sdkContext = new TestSDKContext();
         sdkContext._client = client;
-        jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
+        vi.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
 
         const mockRoomViewStore = new (class extends EventEmitter {
-            isViewingCall = jest.fn().mockReturnValue(false);
+            isViewingCall = vi.fn().mockReturnValue(false);
         })();
 
         roomContext = {
@@ -46,8 +48,8 @@ describe("ExtrasApi", () => {
         } as unknown as RoomContextType;
 
         DMRoomMap.setShared({
-            getUserIdForRoomId: jest.fn(),
-            getRoomIds: jest.fn().mockReturnValue(new Set()),
+            getUserIdForRoomId: vi.fn(),
+            getRoomIds: vi.fn().mockReturnValue(new Set()),
         } as unknown as DMRoomMap);
     });
 
@@ -64,7 +66,7 @@ describe("ExtrasApi", () => {
     }
 
     it("addRoomHeaderButtonCallback stores and uses the provided callback", () => {
-        const callback = jest.fn();
+        const callback = vi.fn();
         ModuleApi.instance.extras.addRoomHeaderButtonCallback(callback);
 
         render(<RoomView />, getWrapper());
