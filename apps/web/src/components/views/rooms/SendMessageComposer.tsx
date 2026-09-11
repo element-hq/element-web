@@ -67,6 +67,7 @@ import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { linksIn } from "../../../utils/UrlUtils";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
@@ -451,10 +452,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
-            attachUrlPreviews(urlPreviewSnapshot, content);
+            // must be read before the composer is cleared out from under us
+            const messageHasLinks = linksIn(this.model.contentPlainText).size !== 0;
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
+            if (
+                await attachUrlPreviews(
+                    this.props.mxClient,
+                    this.props.room,
+                    urlPreviewSnapshot,
+                    content,
+                    messageHasLinks,
+                )
+            ) {
+                return;
+            }
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

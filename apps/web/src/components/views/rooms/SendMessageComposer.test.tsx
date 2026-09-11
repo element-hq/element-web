@@ -32,10 +32,18 @@ import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadVi
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
+import { attachUrlPreviews } from "../../../utils/messages";
 
 vi.mock("../../../utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
 }));
+
+// Wrapped rather than replaced: every other test relies on the real attach behaviour, only the
+// cancellation test below overrides it.
+vi.mock("../../../utils/messages", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../utils/messages")>();
+    return { ...actual, attachUrlPreviews: vi.fn(actual.attachUrlPreviews) };
+});
 
 describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: RoomContextType = {
@@ -189,8 +197,8 @@ describe("<SendMessageComposer/>", () => {
             client: mockClient,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
+            urlPreviewBundle: false,
         });
         const defaultProps = {
             room: mockRoom,
@@ -298,7 +306,7 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("correctly sends a message", () => {
+        it("correctly sends a message", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -311,11 +319,39 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "test message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            // sending awaits attachUrlPreviews, so the message goes out a tick after the keypress
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "test message",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
+        });
+
+        // Attaching the previews can take a while in an encrypted room, and the user may cancel the
+        // pending message in the meantime; the message must then not be sent after all.
+        it("does not send the message when attaching the previews reports a cancellation", async () => {
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
+            vi.mocked(attachUrlPreviews).mockResolvedValueOnce(true);
+
+            const { container } = getComponent();
+
+            addTextToComposer(container, "cancelled message");
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(attachUrlPreviews).toHaveBeenCalled());
+            // The client mock is shared across the suite, so look for this message specifically
+            // rather than asserting that nothing at all was sent.
+            expect(mockClient.sendMessage).not.toHaveBeenCalledWith(
+                "myfakeroom",
+                null,
+                expect.objectContaining({ body: "cancelled message" }),
+            );
         });
 
         it("correctly sends a reply using a slash command", async () => {
@@ -356,7 +392,7 @@ describe("<SendMessageComposer/>", () => {
             );
         });
 
-        it("shows chat effects on message sending", () => {
+        it("shows chat effects on message sending", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -375,7 +411,9 @@ describe("<SendMessageComposer/>", () => {
                 "m.mentions": {},
             });
 
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
+            await waitFor(() =>
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` }),
+            );
         });
 
         it("not to send chat effects on message sending for threads", () => {
@@ -449,8 +487,8 @@ describe("<SendMessageComposer/>", () => {
             client: cli,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
+            urlPreviewBundle: false,
         });
 
         cli.isRoomEncrypted = vi.fn().mockReturnValue(true);

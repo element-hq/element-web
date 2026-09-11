@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, render, screen } from "test-utils-rtl";
+import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
@@ -78,8 +78,16 @@ describe("<EditMessageComposer/>", () => {
 
     const defaultRoomContext = getRoomContext(room, {});
 
-    const getComponent = (editState: EditorStateTransfer, roomContext: RoomContextType = defaultRoomContext) =>
-        render(<EditMessageComposerWithMatrixClient editState={editState} />, {
+    const getComponent = (
+        editState: EditorStateTransfer,
+        roomContext: RoomContextType = defaultRoomContext,
+        urlPreviewProps: {
+            updateUrlPreviews?: (model: EditorModel) => void;
+            attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
+            isUrlPreviewsModified?: boolean;
+        } = {},
+    ) =>
+        render(<EditMessageComposerWithMatrixClient editState={editState} {...urlPreviewProps} />, {
             wrapper: ({ children }) => (
                 <SDKContext.Provider value={SDKContextClass.instance}>
                     <MatrixClientContext.Provider value={mockClient}>
@@ -145,7 +153,9 @@ describe("<EditMessageComposer/>", () => {
             },
             "m.mentions": {},
         };
-        expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody);
+        await waitFor(() =>
+            expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody),
+        );
     });
 
     it("should throw when room for message is not found", () => {
@@ -294,6 +304,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -311,6 +322,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -331,6 +343,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -353,6 +366,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -379,6 +393,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -455,6 +470,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -477,6 +493,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -499,6 +516,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -540,6 +558,7 @@ describe("<EditMessageComposer/>", () => {
 
             fireEvent.click(screen.getByText("Save"));
 
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalled());
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
 
@@ -549,6 +568,83 @@ describe("<EditMessageComposer/>", () => {
             expect(messageContent["m.new_content"]!["m.mentions"]).toEqual({
                 user_ids: [originalEvent.getSender()],
             });
+        });
+    });
+
+    describe("URL previews", () => {
+        // Removing a preview changes the event without changing a character of its text, so Save
+        // has to be available and the edit has to be sent even though the body is untouched.
+        it("should enable Save when only the preview list is modified", () => {
+            getComponent(new EditorStateTransfer(editedEvent), defaultRoomContext, {
+                isUrlPreviewsModified: true,
+            });
+
+            expect(screen.getByText("Save")).not.toHaveAttribute("disabled");
+        });
+
+        it("should keep Save disabled when nothing is modified", () => {
+            getComponent(new EditorStateTransfer(editedEvent));
+
+            expect(screen.getByText("Save")).toHaveAttribute("disabled");
+        });
+
+        it("should send the edit when only the preview list is modified", async () => {
+            getComponent(new EditorStateTransfer(editedEvent), defaultRoomContext, {
+                isUrlPreviewsModified: true,
+            });
+
+            fireEvent.click(screen.getByText("Save"));
+
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+        });
+
+        it("should attach the bundle to the new content before sending", async () => {
+            const attachBundles = vi.fn(async (content: RoomMessageEventContent) => {
+                (content as unknown as Record<string, unknown>)["com.beeper.linkpreviews"] = [
+                    { matched_url: "https://example.org" },
+                ];
+                return false;
+            });
+
+            getComponent(new EditorStateTransfer(editedEvent), defaultRoomContext, {
+                isUrlPreviewsModified: true,
+                attachBundles,
+            });
+
+            fireEvent.click(screen.getByText("Save"));
+
+            await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+            const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
+                ReplacementEvent<RoomMessageEventContent>;
+            const newContent = messageContent["m.new_content"] as unknown as Record<string, unknown>;
+            expect(newContent["com.beeper.linkpreviews"]).toEqual([{ matched_url: "https://example.org" }]);
+        });
+
+        // The user cancelled the pending message while its preview images were uploading.
+        it("should not send the edit when attaching reports a cancellation", async () => {
+            const attachBundles = vi.fn().mockResolvedValue(true);
+
+            getComponent(new EditorStateTransfer(editedEvent), defaultRoomContext, {
+                isUrlPreviewsModified: true,
+                attachBundles,
+            });
+
+            fireEvent.click(screen.getByText("Save"));
+
+            await waitFor(() => expect(attachBundles).toHaveBeenCalledTimes(1));
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+        });
+
+        // The preview view model only learns about new links by being handed the editor model.
+        it("should report the editor model as the composer changes", async () => {
+            const updateUrlPreviews = vi.fn();
+            getComponent(new EditorStateTransfer(editedEvent), defaultRoomContext, { updateUrlPreviews });
+
+            await editText(" https://example.org");
+
+            await waitFor(() => expect(updateUrlPreviews).toHaveBeenCalled());
+            const model = updateUrlPreviews.mock.calls.at(-1)![0] as EditorModel;
+            expect(model.contentPlainText).toContain("https://example.org");
         });
     });
 });

@@ -36,8 +36,8 @@ function getViewModel({ visible } = { visible: true }): {
         client,
         visible,
         showTooltips: false,
-        urlPreviewBundle: false,
         moduleUrlPreviewApi: new UrlPreviewApi(),
+        urlPreviewBundle: false,
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }
@@ -66,18 +66,6 @@ function getMockClient(): MockClient {
     };
 }
 
-/** Build the message event being edited, carrying the content under test. */
-function mkMessageEvent(content: RoomMessageEventContent): MatrixEvent {
-    return new MatrixEvent({
-        type: "m.room.message",
-        content,
-        event_id: "$event-id",
-        room_id: "!room:example.org",
-        sender: "@alice:example.org",
-        origin_server_ts: 0,
-    });
-}
-
 /**
  * `restoreFromMessage` starts fetching immediately, so `client` must already be set up with the
  * responses the test expects. Pass one built with {@link getMockClient}.
@@ -93,9 +81,15 @@ function restoreViewModel(
         client: client as unknown as MatrixClient,
         moduleUrlPreviewApi: new UrlPreviewApi(),
         visible,
-        showTooltips: false,
         urlPreviewBundle,
-        event: mkMessageEvent(content),
+        mxEvent: new MatrixEvent({
+            type: "m.room.message",
+            content,
+            event_id: "$event-id",
+            room_id: "!room:example.org",
+            sender: "@alice:example.org",
+            origin_server_ts: 0,
+        }),
     });
     return { vm, client };
 }

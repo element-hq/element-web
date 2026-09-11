@@ -93,9 +93,9 @@ interface IEditMessageComposerProps extends MatrixClientProps {
      */
     updateUrlPreviews?: (model: EditorModel) => void;
     /**
-     * Function to attach URL preview bundles, this should be from attachUrlPreviews
+     * Promise to attach URL preview bundles, this should be from attachUrlPreviews
      */
-    attachBundles?: (content: RoomMessageEventContent) => void;
+    attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
     /**
      * Whether the list of URL has been modified, even if the text content has not been changed
      */
@@ -361,10 +361,17 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const event = this.props.editState.getEvent();
                 const threadId = event.threadRootId || null;
 
-                this.props.attachBundles?.(editContent["m.new_content"]!);
+                // the previews are read synchronously, so the editor can be closed straight away
+                // rather than making the user wait for any preview images to upload
+                const attachingPromise = this.props.attachBundles?.(editContent["m.new_content"]!);
+                this.endEdit();
+
+                // the edit was cancelled while its preview images were uploading
+                if (await attachingPromise) return;
 
                 void this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });
+                return;
             }
         }
 

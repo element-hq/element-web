@@ -13,12 +13,12 @@ import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EditWysiwygComposer } from "./wysiwyg_composer";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import PlatformPeg from "../../../PlatformPeg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import EditMessageComposer from "./EditMessageComposer";
 import type EditorModel from "../../../editor/model";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
+import { linksIn } from "../../../utils/UrlUtils";
 import { ModuleApi } from "../../../modules/Api";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
@@ -35,9 +35,8 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
             client: props.mxClient,
             moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             visible: props.showUrlPreview,
-            showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             urlPreviewBundle: urlPreviewBundleEnabled,
-            event: props.editState.getEvent(),
+            mxEvent: props.editState.getEvent(),
         }),
     );
 
@@ -58,10 +57,19 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     );
 
     const attachBundles = useCallback(
-        (newContent: RoomMessageEventContent): void => {
-            attachUrlPreviews(vm.getSnapshot(), newContent);
+        async (newContent: RoomMessageEventContent): Promise<boolean> => {
+            const room = props.mxClient.getRoom(props.editState.getEvent().getRoomId());
+            if (!room) return false;
+
+            return await attachUrlPreviews(
+                props.mxClient,
+                room,
+                vm.getSnapshot(),
+                newContent,
+                linksIn(newContent.body).size !== 0,
+            );
         },
-        [vm],
+        [vm, props.mxClient, props.editState],
     );
 
     const isWysiwygComposerEnabled = useSettingValue("feature_wysiwyg_composer");

@@ -201,4 +201,36 @@ describe("PreferencesUserSettingsTab", () => {
             });
         });
     });
+
+    describe("bundled url previews only", () => {
+        const LABEL = "Only show bundled previews in encrypted rooms";
+
+        beforeEach(() => {
+            MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
+                ...mockClientMethodsServer(),
+                ...mockClientMethodsUser(),
+            });
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        // The setting only makes sense alongside the bundle lab flag, so it stays hidden until
+        // that flag is on rather than showing a control that cannot do anything.
+        it("is not offered when the bundle feature is disabled", () => {
+            renderTab();
+            expect(screen.queryByText(LABEL)).not.toBeInTheDocument();
+        });
+
+        it("is offered when the bundle feature is enabled", () => {
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                setting === "feature_msc4095_url_preview_bundle" ? true : original(setting, ...rest),
+            );
+
+            renderTab();
+            expect(screen.getByText(LABEL)).toBeInTheDocument();
+        });
+    });
 });

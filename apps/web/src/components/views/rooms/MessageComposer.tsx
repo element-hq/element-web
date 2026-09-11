@@ -63,8 +63,8 @@ import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
-import { useSettingValue } from "../../../hooks/useSettings";
 import { ModuleApi } from "../../../modules/Api";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -758,8 +758,8 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
                 client,
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundle,
                 moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
+                urlPreviewBundle,
             }),
     );
 

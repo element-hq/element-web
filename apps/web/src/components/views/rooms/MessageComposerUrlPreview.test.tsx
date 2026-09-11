@@ -45,8 +45,8 @@ function getUrlPreviewVm(client: MatrixClient, content?: string): MessageCompose
         client,
         visible: true,
         showTooltips: false,
-        urlPreviewBundle: false,
         moduleUrlPreviewApi: new UrlPreviewApi(),
+        urlPreviewBundle: false,
     };
 
     if (content !== undefined) {

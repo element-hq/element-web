@@ -28,7 +28,10 @@ import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
 import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
-import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import {
+    UrlPreviewGroupViewModel,
+    type UrlPreviewKind,
+} from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
@@ -61,7 +64,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
+
+    let urlPreviewKind: UrlPreviewKind;
+
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -123,7 +134,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 },
                 visible: props.showUrlPreview ?? false,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundleEnabled,
+                urlPreviewKind,
             }),
     );
 

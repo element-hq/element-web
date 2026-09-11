@@ -35,6 +35,7 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
+import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -114,7 +115,9 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content);
+    if (await attachUrlPreviews(mxClient, room, urlPreviewSnapshot, content, linksIn(message).size !== 0)) {
+        return;
+    }
 
     // TODO replace emotion end of message ?
 
@@ -185,7 +188,7 @@ interface EditMessageParams {
     /**
      * Function to attach bundles of current URL previews
      */
-    attachBundles?: (content: RoomMessageEventContent) => void;
+    attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
     /**
      * whether the list of previews to attach has changed even if the text body is unchanged
      */
@@ -244,10 +247,17 @@ export async function editMessage(
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
 
-            attachBundles?.(newContent);
+            // the previews are read synchronously, so the editor can be closed straight away
+            // rather than making the user wait for any preview images to upload
+            const attaching = attachBundles?.(newContent);
+            endEditing(roomContext);
+
+            // the edit was cancelled while its preview images were uploading
+            if (await attaching) return;
 
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });
+            return response;
         }
     }
 

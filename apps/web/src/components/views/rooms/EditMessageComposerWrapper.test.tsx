@@ -99,6 +99,9 @@ describe("<EditMessageComposerWrapper />", () => {
         client = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             getUrlPreview: vi.fn().mockResolvedValue(BASIC_PREVIEW_OGDATA),
+            // attachUrlPreviews looks the room up to decide whether it has to encrypt
+            // the preview images.
+            getRoom: vi.fn().mockReturnValue(null),
         });
 
         const realGetValue = SettingsStore.getValue;
@@ -120,13 +123,12 @@ describe("<EditMessageComposerWrapper />", () => {
         const editState = new EditorStateTransfer(
             mkEvent({ event: true, type: "m.room.message", user: "@alice:server.org", content }),
         );
+        const room = mkRoom(client, "!foo:bar");
+        vi.mocked(client.getRoom).mockReturnValue(room);
         render(<EditMessageComposerWrapper mxClient={client} editState={editState} showUrlPreview={true} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={client}>
-                    <ScopedRoomContextProvider
-                        roomId="!foo:bar"
-                        {...getRoomContext(mkRoom(client, "!foo:bar"), { showUrlPreview: true })}
-                    >
+                    <ScopedRoomContextProvider roomId="!foo:bar" {...getRoomContext(room, { showUrlPreview: true })}>
                         {children}
                     </ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>
