@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type FormEvent } from "react";
+import React, { type FormEvent, type ReactNode } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import FocusLock from "react-focus-lock";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -21,7 +21,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 export interface IScrollableBaseState {
     canSubmit: boolean;
     title: string;
-    actionLabel: string;
+    actionLabel: ReactNode;
     cancelLabel?: string;
 }
 
