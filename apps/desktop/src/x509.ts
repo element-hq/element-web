@@ -24,9 +24,24 @@ import type {
 import { ipcMain, type IpcMainEvent } from "electron";
 import { getConfig } from "./config.js";
 
+/**
+ * A top-level reference to `graphene-pk11`. This is only ever defined if `pkcs11js` is installed and was imported successfully.
+ */
 let graphene: typeof Graphene;
+
+/**
+ * A top-level reference to `pkcs11js`. This is only ever defined if `pkcs11js` is installed and was imported successfully.
+ */
 let pkcs11: typeof Pkcs11;
+
+/**
+ * The PKCS#11 module, if it has been loaded successfully. If this is `null`, X.509 support is disabled.
+ */
 let module: Graphene.Module | null = null;
+
+/**
+ * Promise that resolves when the PKCS#11 module has been loaded. Used to avoid multiple concurrent loads.
+ */
 let moduleLoad: Promise<void> | undefined;
 
 /**
@@ -44,7 +59,8 @@ function fail(code: X509IpcErrorCode, message?: string): X509Failure {
 
 /**
  * Converts a caught exception into a failed result, keeping the `CKR_*` code.
- * @param e
+ * @param e - the exception to convert. This is almost always a `Pkcs11Error` from `pkcs11js`, but can be
+ *     from `graphene-pk11` if something goes horrifically wrong.
  * @param staleSessionSerial - if given, the cached session for this key is dropped on a PKCS#11 error so the
  *     next call reopens it rather than reusing a handle the token may no longer recognise.
  * @returns
@@ -67,7 +83,8 @@ function failFrom(e: unknown, staleSessionSerial?: string): X509Failure {
 }
 
 /**
- * Loads the PKCS#11 library specified in the X.509 config.
+ * Loads the PKCS#11 library specified in the X.509 config, or returns a cached instance if this method has
+ * previously been called successfully.
  */
 async function getModule(): Promise<X509Result<Graphene.Module>> {
     moduleLoad ??= (async () => {
@@ -78,6 +95,7 @@ async function getModule(): Promise<X509Result<Graphene.Module>> {
         try {
             graphene = await import("graphene-pk11");
             pkcs11 = (await import("pkcs11js")).default;
+            // Load and initialise the underlying PKCS#11 native library.
             module = graphene.Module.load(config.library_path, config.library_name);
             module.initialize();
         } catch (e) {
@@ -103,6 +121,8 @@ async function reloadModule(): Promise<void> {
     } catch (e) {
         console.warn("Failed to finalize the PKCS#11 module before reloading it:", e);
     }
+    // Clean up old references to the module in advance of reloading it - if the reload fails, we don't want
+    // a stale module reference hanging around.
     module = null;
     moduleLoad = undefined;
     await getModule();
@@ -248,7 +268,9 @@ async function readCertsDirectory(): Promise<X509Certificate[]> {
 }
 
 /**
- * Build the certificate chain by walking on the issuer from `leaf`.
+ * Build the certificate chain by walking over the list of CA certificates, starting from
+ * the leaf and working up to the root, picking the next certificate in the chain by matching against
+ * the `issuer` field of the current certificate.
  */
 function buildChain(leaf: X509Certificate, cas: X509Certificate[]): string {
     const chain = [leaf];
