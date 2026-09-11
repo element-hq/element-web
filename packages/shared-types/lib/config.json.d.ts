@@ -214,6 +214,13 @@ export interface WebConfigJson {
     };
 
     modules?: string[];
+
+    /**
+     * When `true`, prompt the user after login to make this client the default handler for
+     * `matrix:` links. Defaults to `false`.
+     * OPTIONAL
+     */
+    protocol_handler_nag_toast?: boolean;
 }
 
 /**

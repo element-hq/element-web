@@ -74,6 +74,7 @@ import ThreepidInviteStore, {
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
+import { showToast as showProtocolHandlerToast } from "../../toasts/ProtocolHandlerToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
@@ -1423,6 +1424,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // check if it has been dismissed before, etc.
             showMobileGuideToast();
         }
+
+        // The toast checks the `protocol_handler_nag_toast` config option itself, along with
+        // whether the platform can register a handler and whether the user has already been asked.
+        void showProtocolHandlerToast();
 
         const userNotice = SdkConfig.get("user_notice");
         if (userNotice) {

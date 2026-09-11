@@ -1814,6 +1814,10 @@
         "unknown_for": "Unknown for %(duration)s",
         "unreachable": "User's server unreachable"
     },
+    "protocol_handler": {
+        "toast_accept": "Set as default",
+        "toast_description": "Let %(brand)s open matrix: links to rooms, people and messages."
+    },
     "quick_settings": {
         "all_settings": "All settings",
         "sidebar_settings": "More options",

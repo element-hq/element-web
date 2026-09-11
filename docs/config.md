@@ -171,6 +171,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
 20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
 21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
 22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+23. `protocol_handler_nag_toast`: When `true` (default `false`), users will be shown a toast after login prompting them to make the app their default handler for `matrix:` links, if it is not already set.
 
 ### `desktop_builds` and `mobile_builds`
 

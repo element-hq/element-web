@@ -9,10 +9,8 @@ export class RegisterProtocolHandlerController extends SettingController {
     public constructor(private platformPromise: Promise<BasePlatform>) {
         super();
         void (async () => {
-            console.log("Hello world?!");
             this.platform = await this.platformPromise;
             this.platformSupported = await this.platform.supportsRegisterProtocolHandler();
-            console.log("this.platformSupported", this.platformSupported);
         })();
     }
 
@@ -22,7 +20,7 @@ export class RegisterProtocolHandlerController extends SettingController {
     // }
 
     public async beforeChange(level: SettingLevel, roomId: string | null, newValue: boolean): Promise<boolean> {
-        if (newValue !== true || !this.platform) {
+        if (!this.platform) {
             // How to unregister?
             return false;
         }
