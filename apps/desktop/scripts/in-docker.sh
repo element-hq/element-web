@@ -15,7 +15,6 @@ fi
 mkdir -p \
       docker/workspace_node_modules \
       docker/node_modules \
-      docker/.hak \
       docker/.gnupg
 
 # Taken from https://www.electron.build/multi-platform-build#docker
@@ -28,7 +27,6 @@ docker run --rm -ti \
  -v ${PWD}/../../:/project \
  -v ${PWD}/docker/workspace_node_modules:/project/node_modules \
  -v ${PWD}/docker/node_modules:/project/apps/desktop/node_modules \
- -v ${PWD}/docker/.hak:/project/apps/desktop/.hak \
  -v ${PWD}/docker/.gnupg:/root/.gnupg \
  -v ~/.cache/electron:/root/.cache/electron \
  -v ~/.cache/electron-builder:/root/.cache/electron-builder \
