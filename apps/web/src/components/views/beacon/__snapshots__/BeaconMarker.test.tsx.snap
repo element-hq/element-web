@@ -4,6 +4,7 @@ exports[`<BeaconMarker /> > renders marker when beacon has location 1`] = `
 <DocumentFragment>
   <span>
     <div
+      aria-label="Map marker"
       class="mx_Marker mx_Username_color6"
       id="!room:server_@alice:server"
     >

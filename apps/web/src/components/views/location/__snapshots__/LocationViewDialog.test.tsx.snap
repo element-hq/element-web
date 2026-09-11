@@ -7,6 +7,7 @@ exports[`<LocationViewDialog /> > renders map correctly 1`] = `
 >
   <span>
     <div
+      aria-label="Map marker"
       class="mx_Marker mx_Marker_defaultColor"
       id="mx_LocationViewDialog_$2-marker"
     >

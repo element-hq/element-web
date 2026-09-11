@@ -4,6 +4,7 @@ exports[`<SmartMarker /> > creates a marker on mount 1`] = `
 <div>
   <span>
     <div
+      aria-label="Map marker"
       class="mx_Marker mx_Marker_defaultColor"
     >
       <div
