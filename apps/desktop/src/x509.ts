@@ -86,7 +86,7 @@ function failFrom(e: unknown, staleSessionSerial?: string): X509Failure {
  * Loads the PKCS#11 library specified in the X.509 config, or returns a cached instance if this method has
  * previously been called successfully.
  */
-async function getModule(): Promise<X509Result<Graphene.Module>> {
+async function getModuleInstance(): Promise<X509Result<Graphene.Module>> {
     moduleLoad ??= (async () => {
         const config = getConfig().x509;
         if (!config) {
@@ -125,7 +125,7 @@ async function reloadModule(): Promise<void> {
     // a stale module reference hanging around.
     module = null;
     moduleLoad = undefined;
-    await getModule();
+    await getModuleInstance();
 }
 
 /**
@@ -134,7 +134,7 @@ async function reloadModule(): Promise<void> {
 async function getSession(
     serialNumber: string,
 ): Promise<X509Result<{ session: Graphene.Session; authenticated: boolean }>> {
-    const loaded = await getModule();
+    const loaded = await getModuleInstance();
     if (!loaded.ok) {
         return loaded;
     }
@@ -340,7 +340,7 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
  * IPC call to list available hardware keys.
  */
 async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
-    let loaded = await getModule();
+    let loaded = await getModuleInstance();
     if (!loaded.ok) {
         return loaded;
     }
@@ -349,7 +349,7 @@ async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
             // PKCS#11 module implementations can cache the hardware key list, so we reload it
             // just in case if no keys are found.
             await reloadModule();
-            loaded = await getModule();
+            loaded = await getModuleInstance();
             if (!loaded.ok) {
                 return loaded;
             }
