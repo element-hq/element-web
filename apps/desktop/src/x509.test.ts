@@ -21,30 +21,16 @@ import type {
     X509Result,
 } from "shared-types";
 
-import { getConfig } from "./config.js";
+import type { ConfigOptions } from "./config.js";
 
 // --- Mocks ---
-
-const { send, moduleLoad, RsaPssParams, Pkcs11Error } = vi.hoisted(() => ({
-    send: vi.fn(),
-    moduleLoad: vi.fn(),
-    RsaPssParams: vi.fn(),
-    Pkcs11Error: class Pkcs11Error extends Error {
-        public constructor(
-            public readonly code: number,
-            message: string,
-        ) {
-            super(message);
-        }
-    },
-}));
 
 /**
  * The `x509` IPC handler, captured when x509.ts registers it.
  */
 let ipcHandler: (ev: unknown, payload: unknown) => Promise<void>;
 
-vi.mock("./config.js");
+// x509.ts registers its IPC handler at import time, so every test in this file needs electron mocked.
 vi.mock("electron", () => ({
     ipcMain: {
         on: vi.fn((channel: string, cb: (ev: unknown, payload: unknown) => Promise<void>) => {
@@ -52,14 +38,19 @@ vi.mock("electron", () => ({
         }),
     },
 }));
-vi.mock("graphene-pk11", () => ({
-    Module: { load: moduleLoad },
-    ObjectClass: { PUBLIC_KEY: "public", PRIVATE_KEY: "private" },
-    MechanismEnum: { SHA512: "SHA512" },
-    RsaMgf: { MGF1_SHA512: "MGF1_SHA512" },
-    RsaPssParams,
-}));
-vi.mock("pkcs11js", () => ({ default: { Pkcs11Error } }));
+
+const send = vi.fn();
+const getConfig = vi.fn<() => ConfigOptions>();
+const moduleLoad = vi.fn();
+const RsaPssParams = vi.fn();
+class Pkcs11Error extends Error {
+    public constructor(
+        public readonly code: number,
+        message: string,
+    ) {
+        super(message);
+    }
+}
 
 // --- Fixtures ---
 
@@ -92,21 +83,32 @@ const PKCS11_LIBRARY = {
 
 // --- Helpers ---
 
-let dir: string;
+let testDir: string;
 let x509: typeof import("./x509.js");
 
 /**
- * Point x509.ts at the given `x509` config section.
+ * Override the `x509` config section returned by config.js. Requires that `getConfig` is mocked
+ * via {@link loadX509WithConfig} or similar.
  */
-function mockX509Config(x509: ReturnType<typeof getConfig>["x509"]): void {
-    vi.mocked(getConfig).mockReturnValue({ x509 } as ReturnType<typeof getConfig>);
+function mockX509Config(x509: ConfigOptions["x509"]): void {
+    getConfig.mockReturnValue({ x509 } as ConfigOptions);
+}
+
+/**
+ * Mock config.js with the given `x509` config section, then import x509.js (which reads it at import time).
+ * The config can be overridden later with {@link mockX509Config} if desired.
+ */
+async function loadX509WithConfig(config: ConfigOptions["x509"]): Promise<void> {
+    vi.doMock("./config.js", () => ({ getConfig }));
+    mockX509Config(config);
+    x509 = await import("./x509.js");
 }
 
 /**
  * Write the given certificates into the configured certificate directory.
  */
 async function writeCerts(...pems: string[]): Promise<void> {
-    await Promise.all(pems.map((pem, index) => writeFile(path.join(dir, `cert-${index}.pem`), pem)));
+    await Promise.all(pems.map((pem, index) => writeFile(path.join(testDir, `cert-${index}.pem`), pem)));
 }
 
 /**
@@ -234,32 +236,40 @@ async function callIpcAndUnwrap<T>(name: X509IpcCommand, ...args: unknown[]): Pr
 beforeEach(async () => {
     vi.resetModules();
     vi.resetAllMocks();
-    dir = await mkdtemp(path.join(tmpdir(), "x509-test-"));
-    mockX509Config({ ...PKCS11_LIBRARY, certs_path: dir });
-    // N.B. this `any` should't be necessary, but Zed complains regardless.
+    testDir = await mkdtemp(path.join(tmpdir(), "x509-test-"));
+    // N.B. this `any` shouldn't be necessary, but Zed complains regardless.
     (global as any).mainWindow = { webContents: { send } } as unknown as BrowserWindow;
-    x509 = await import("./x509.js");
 });
 
-afterEach(() => rm(dir, { recursive: true, force: true }));
+afterEach(() => rm(testDir, { recursive: true, force: true }));
 
 describe("decodeTriesRemaining", () => {
-    it.each([
-        [0, 3],
-        [CKF_USER_PIN_COUNT_LOW, 2],
-        [CKF_USER_PIN_FINAL_TRY, 1],
-        [CKF_USER_PIN_LOCKED, 0],
-        // The most severe flag should win.
-        [CKF_USER_PIN_COUNT_LOW | CKF_USER_PIN_FINAL_TRY, 1],
-        [CKF_USER_PIN_COUNT_LOW | CKF_USER_PIN_FINAL_TRY | CKF_USER_PIN_LOCKED, 0],
-        // Other flags should be ignored.
-        [CKF_RNG | CKF_USER_PIN_FINAL_TRY, 1],
-    ])("decodes flags %d as %d tries remaining", (flags, tries) => {
-        expect(x509.decodeTriesRemaining(flags)).toBe(tries);
+    beforeEach(async () => {
+        x509 = await import("./x509.js");
+    });
+
+    it("decodes flags correctly", () => {
+        expect(x509.decodeTriesRemaining(3)).toBe(3);
+        expect(x509.decodeTriesRemaining(CKF_USER_PIN_COUNT_LOW)).toBe(2);
+        expect(x509.decodeTriesRemaining(CKF_USER_PIN_FINAL_TRY)).toBe(1);
+        expect(x509.decodeTriesRemaining(CKF_USER_PIN_LOCKED)).toBe(0);
+    });
+
+    it("considers the most severe flag", () => {
+        expect(x509.decodeTriesRemaining(CKF_USER_PIN_COUNT_LOW | CKF_USER_PIN_FINAL_TRY)).toBe(1);
+        expect(x509.decodeTriesRemaining(CKF_USER_PIN_COUNT_LOW | CKF_USER_PIN_FINAL_TRY | CKF_USER_PIN_LOCKED)).toBe(
+            0,
+        );
+    });
+
+    it("ignores other flags", () => {
+        expect(x509.decodeTriesRemaining(CKF_RNG | CKF_USER_PIN_FINAL_TRY)).toBe(1);
     });
 });
 
 describe("getUserCertificate", () => {
+    beforeEach(() => loadX509WithConfig({ ...PKCS11_LIBRARY, certs_path: testDir }));
+
     it("returns the single non-CA certificate and its chain", async () => {
         await writeCerts(rootPem, intermediatePem, leafPem);
 
@@ -283,10 +293,10 @@ describe("getUserCertificate", () => {
 
     it("ignores files that are not certificates", async () => {
         await writeCerts(leafPem);
-        await writeFile(path.join(dir, "notes.txt"), "coyotes!");
+        await writeFile(path.join(testDir, "notes.txt"), "coyotes!");
         // A private key sharing the directory has a .pem extension but will not parse.
         await writeFile(
-            path.join(dir, "key.pem"),
+            path.join(testDir, "key.pem"),
             "-----BEGIN PRIVATE KEY-----\ncoyotes!\n-----END PRIVATE KEY-----\n",
         );
 
@@ -306,7 +316,7 @@ describe("getUserCertificate", () => {
     });
 
     it("fails when the certificate directory cannot be read", async () => {
-        mockX509Config({ ...PKCS11_LIBRARY, certs_path: path.join(dir, "missing") });
+        mockX509Config({ ...PKCS11_LIBRARY, certs_path: path.join(testDir, "missing") });
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
@@ -334,7 +344,20 @@ describe("getUserCertificate", () => {
 });
 
 describe("IPC", () => {
-    beforeEach(() => writeCerts(leafPem));
+    beforeEach(async () => {
+        // `graphene-pk11` and `pkcs11js` are imported lazily, so can be mocked here rather
+        // than at import time via `vi.mock`.
+        vi.doMock("graphene-pk11", () => ({
+            Module: { load: moduleLoad },
+            ObjectClass: { PUBLIC_KEY: "public", PRIVATE_KEY: "private" },
+            MechanismEnum: { SHA512: "SHA512" },
+            RsaMgf: { MGF1_SHA512: "MGF1_SHA512" },
+            RsaPssParams,
+        }));
+        vi.doMock("pkcs11js", () => ({ default: { Pkcs11Error } }));
+        await loadX509WithConfig({ ...PKCS11_LIBRARY, certs_path: testDir });
+        await writeCerts(leafPem);
+    });
 
     it("routes the on-disk certificate command", async () => {
         const { certificate } = await callIpcAndUnwrap<UserCertificate>("getUserCertificate");
@@ -463,7 +486,7 @@ describe("IPC", () => {
 
                 await expect(callIpc<X509LoginResult>("logIntoKey", "SERIAL1", "wrong")).resolves.toMatchObject({
                     ok: false,
-                    error: { code: "PKCS11", pkcs11Code: CKR_PIN_INCORRECT, triesRemaining: 1 },
+                    error: { code: "UPSTREAM_PKCS11", pkcs11Code: CKR_PIN_INCORRECT, triesRemaining: 1 },
                 });
             });
 
@@ -558,7 +581,7 @@ describe("IPC", () => {
                 await login();
                 await expect(callIpc("signData", "SERIAL1", data)).resolves.toMatchObject({
                     ok: false,
-                    error: { code: "PKCS11", pkcs11Code: CKR_SESSION_HANDLE_INVALID },
+                    error: { code: "UPSTREAM_PKCS11", pkcs11Code: CKR_SESSION_HANDLE_INVALID },
                 });
                 expect(token.slot.open).toHaveBeenCalledTimes(1);
 
