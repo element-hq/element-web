@@ -25,7 +25,7 @@ describe("ModuleLoader", () => {
     test("should load a module", async () => {
         const TestModule = {
             default: class TestModule {
-                public static moduleApiVersion = "^2.0.0";
+                public static moduleApiVersion = "^1.0.0";
                 public constructor(private readonly api: Api) {}
                 public async load(): Promise<void> {}
             },
