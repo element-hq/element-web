@@ -84,5 +84,6 @@ module.exports = {
         ],
         "nesting-selector-no-missing-scoping-root": null,
         "no-invalid-position-declaration": null,
+        "at-rule-prelude-no-invalid": [true, { ignoreAtRules: ["mixin"] }],
     },
 };
