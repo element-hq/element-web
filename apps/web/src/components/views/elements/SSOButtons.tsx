@@ -116,6 +116,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const BrandIcon = idp?.brand ? getIcon(idp.brand) : null;
     if (idp?.brand && BrandIcon) {
         const brandName = idp.brand.split(".").pop();
+        // oxlint-disable-next-line react/static-components
         icon = <BrandIcon aria-label={brandName} />;
         commonProps["data-testid"] = `idp-${idp.id}`;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
