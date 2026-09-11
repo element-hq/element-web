@@ -287,7 +287,8 @@ function buildChain(leaf: X509Certificate, cas: X509Certificate[]): string {
             break;
         }
         const issuer = cas.find((candidate) => current.checkIssued(candidate) && !chain.includes(candidate));
-        // Check if this certificate has a parent in the chain.
+        // Check if we have reached the root of the chain, either because the issuer is self-signed or
+        // because we have no certificates left to check. Either way, we stop here.
         if (!issuer || issuer.checkIssued(issuer)) {
             break;
         }
