@@ -68,7 +68,7 @@ describe("message", () => {
             await sendMessage("", true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -84,7 +84,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: mockRoomContextWithoutId,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -98,7 +98,12 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -110,7 +115,12 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     relation: {},
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -125,7 +135,12 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.does_not_match",
                     },
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -141,7 +156,12 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.thread",
                     },
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -154,7 +174,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -182,7 +202,7 @@ describe("message", () => {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
                 replyToEvent: mockReplyEvent,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -212,7 +232,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -227,7 +247,7 @@ describe("message", () => {
             await sendMessage("🎉", false, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -243,7 +263,12 @@ describe("message", () => {
                 await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -256,7 +281,12 @@ describe("message", () => {
                 await sendMessage(invalidPrefixCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -274,7 +304,12 @@ describe("message", () => {
                 const result = await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -289,7 +324,12 @@ describe("message", () => {
                     await sendMessage(inputText, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
                         "myfakeroom",
@@ -309,7 +349,12 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         relation: mockRelation,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
 
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
@@ -326,7 +371,12 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     replyToEvent: mockEvent,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 expect(addReplySpy).toHaveBeenCalledTimes(1);
@@ -341,7 +391,12 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         replyToEvent: mockEvent,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
 
                     expect(result).toBeUndefined();
@@ -356,7 +411,12 @@ describe("message", () => {
                 await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // we expect the message to have been sent
@@ -377,7 +437,12 @@ describe("message", () => {
                 const result = await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 expect(result).toBeUndefined();

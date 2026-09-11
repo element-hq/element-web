@@ -88,6 +88,18 @@ export function createEditContent(
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     editState: EditorStateTransfer;
+    /**
+     * Function to update the URL preview view model
+     */
+    updateUrlPreviews?: (model: EditorModel) => void;
+    /**
+     * Function to attach URL preview bundles, this should be from attachUrlPreviews
+     */
+    attachBundles?: (content: RoomMessageEventContent) => void;
+    /**
+     * Whether the list of URL has been modified, even if the text content has not been changed
+     */
+    isUrlPreviewsModified?: boolean;
     className?: string;
 }
 interface IState {
@@ -274,7 +286,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private sendEdit = async (): Promise<void> => {
-        if (this.state.saveDisabled) return;
+        if (this.state.saveDisabled && !this.props.isUrlPreviewsModified) return;
 
         const editedEvent = this.props.editState.getEvent();
 
@@ -309,7 +321,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
 
         // If content is modified then send an updated event into the room
-        if (this.isContentModified(newContent)) {
+        // either text content or list of URL previews modified counts
+        if (this.isContentModified(newContent) || this.props.isUrlPreviewsModified) {
             const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
                 const [cmd, args, commandText] = getSlashCommand(roomId, this.model);
@@ -347,6 +360,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
                 const event = this.props.editState.getEvent();
                 const threadId = event.threadRootId || null;
+
+                this.props.attachBundles?.(editContent["m.new_content"]!);
 
                 void this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 dis.dispatch({ action: "message_sent" });
@@ -417,6 +432,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private onChange = (): void => {
+        this.props.updateUrlPreviews?.(this.model);
+
         if (!this.state.saveDisabled || !this.editorRef.current?.isModified()) {
             return;
         }
@@ -464,7 +481,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     <AccessibleButton kind="secondary" onClick={this.cancelEdit}>
                         {_t("action|cancel")}
                     </AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this.sendEdit} disabled={this.state.saveDisabled}>
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={this.sendEdit}
+                        disabled={this.state.saveDisabled && !this.props.isUrlPreviewsModified}
+                    >
                         {_t("action|save")}
                     </AccessibleButton>
                 </div>

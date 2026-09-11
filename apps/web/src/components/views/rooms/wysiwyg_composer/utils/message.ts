@@ -35,7 +35,6 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
-import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -115,7 +114,7 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    attachUrlPreviews(urlPreviewSnapshot, content, linksIn(message).size !== 0);
+    attachUrlPreviews(urlPreviewSnapshot, content);
 
     // TODO replace emotion end of message ?
 
@@ -183,11 +182,19 @@ interface EditMessageParams {
     mxClient: MatrixClient;
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
+    /**
+     * Function to attach bundles of current URL previews
+     */
+    attachBundles?: (content: RoomMessageEventContent) => void;
+    /**
+     * whether the list of previews to attach has changed even if the text body is unchanged
+     */
+    isUrlPreviewsModified?: boolean;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
+    { roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -227,7 +234,8 @@ export async function editMessage(
     const roomId = editedEvent.getRoomId();
 
     // If content is modified then send an updated event into the room
-    if (isContentModified(newContent, editorStateTransfer) && roomId) {
+    // either text content or list of URL previews modified counts
+    if ((isContentModified(newContent, editorStateTransfer) || isUrlPreviewsModified) && roomId) {
         // TODO Slash Commands
 
         if (shouldSend) {
@@ -235,6 +243,8 @@ export async function editMessage(
 
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
+
+            attachBundles?.(newContent);
 
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });
