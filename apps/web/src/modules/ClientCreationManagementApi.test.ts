@@ -5,7 +5,9 @@
  Please see LICENSE files in the repository root for full details.
  */
 
-import { ClientCreationManagementApi } from "../../../src/modules/ClientCreationManagementApi.ts";
+import { describe, it, expect } from "vitest";
+
+import { ClientCreationManagementApi } from "./ClientCreationManagementApi.ts";
 
 describe("ClientCreationManagementApi", () => {
     it("should allow setting the CaCertsPem", () => {

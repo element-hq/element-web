@@ -5,10 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { AccountDataApi } from "../../../src/modules/AccountDataApi";
-import { mkEvent, stubClient } from "../../test-utils/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { mkEvent, stubClient } from "test-utils";
+
+import { AccountDataApi } from "./AccountDataApi";
 
 describe("AccountDataApi", () => {
     describe("AccountDataWatchable", () => {
@@ -33,7 +36,7 @@ describe("AccountDataApi", () => {
             const watchable = api.get("m.test");
             expect(watchable.value).toStrictEqual(content);
 
-            const fn = jest.fn();
+            const fn = vi.fn();
             watchable.watch(fn);
 
             // Let's say that the account data event changed
@@ -50,7 +53,7 @@ describe("AccountDataApi", () => {
             expect(fn).toHaveBeenCalledTimes(1);
 
             // Make sure unwatch removed the event listener
-            cli.off = jest.fn();
+            cli.off = vi.fn();
             watchable.unwatch(fn);
             expect(cli.off).toHaveBeenCalledTimes(1);
         });

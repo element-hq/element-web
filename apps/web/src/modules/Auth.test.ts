@@ -5,12 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import defaultDispatcher from "../../../src/dispatcher/dispatcher.ts";
-import { overwriteAccountAuth } from "../../../src/modules/Auth.ts";
+import { describe, it, expect, vi } from "vitest";
+
+import defaultDispatcher from "../dispatcher/dispatcher.ts";
+import { overwriteAccountAuth } from "./Auth.ts";
 
 describe("overwriteAccountAuth", () => {
     it("should call overwrite login with accountInfo", () => {
-        const spy = jest.spyOn(defaultDispatcher, "dispatch");
+        const spy = vi.spyOn(defaultDispatcher, "dispatch");
 
         const accountInfo = {
             userId: "@user:server.com",
