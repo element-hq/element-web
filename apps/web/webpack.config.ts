@@ -165,11 +165,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         bail: true,
 
         entry: {
-            bundle: "./src/vector/index.ts",
-            mobileguide: "./src/vector/mobile_guide/index.ts",
-            jitsi: "./src/vector/jitsi/index.ts",
-            usercontent: "./src/usercontent/index.ts",
-            serviceworker: {
+            "bundle": "./src/vector/index.ts",
+            "mobileguide": "./src/vector/mobile_guide/index.ts",
+            "jitsi": "./src/vector/jitsi/index.ts",
+            "usercontent": "./src/usercontent/index.ts",
+            "usercontent-pdf": "./src/usercontent/pdf/index.ts",
+            "serviceworker": {
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
             },
@@ -637,7 +638,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
+                excludeChunks: ["mobileguide", "usercontent", "usercontent-pdf", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -681,6 +682,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 filename: "usercontent/index.html",
                 minify: false,
                 chunks: ["usercontent"],
+            }),
+
+            // This is the PDF viewer's usercontent target (see docs/usercontent.md)
+            new HtmlWebpackPlugin({
+                template: "./src/usercontent/pdf/index.html",
+                filename: "usercontent/pdf/index.html",
+                minify: false,
+                chunks: ["usercontent-pdf"],
             }),
 
             new HtmlWebpackInjectPreload({
