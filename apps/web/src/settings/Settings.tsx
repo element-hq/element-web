@@ -15,6 +15,7 @@ import { type JsonDocument, type JsonValue } from "shared-types";
 import { _t, _td } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
+import { type PdfViewerState } from "../@types/pdf-viewer.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -227,6 +228,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
+    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
@@ -295,6 +297,7 @@ export interface Settings {
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
     "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
+    "pdfViewerState": IBaseSetting<{ [mxcUri: string]: PdfViewerState }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -630,6 +633,15 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
+    "feature_pdf_viewer": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|pdf_viewer"),
+        description: _td("labs|pdf_viewer_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
         labsGroup: LabGroup.Ui,
@@ -700,7 +712,10 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|activityIsUnread"),
         default: false,
-        controller: new RequiresSettingsController(["Notifications.showbold"]),
+        controller: [
+            new AnalyticsController("WebSettingsActivityIsUnreadToggle"),
+            new RequiresSettingsController(["Notifications.showbold"]),
+        ],
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -1039,6 +1054,13 @@ export const SETTINGS: Settings = {
         // Exports event IDs
         shouldExportToRageshake: false,
     },
+    "pdfViewerState": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // MXC URI => where the reader had got to in that PDF
+        // Exports MXC URIs
+        shouldExportToRageshake: false,
+    },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_nsfw_content"),
@@ -1220,12 +1242,16 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_sections"),
+        controller: new AnalyticsController("WebRoomListSectionToggle"),
     },
     "RoomList.showPeopleSection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: true,
         displayName: _td("settings|show_people_sections"),
-        controller: new RequiresSettingsController(["RoomList.showSections"]),
+        controller: [
+            new AnalyticsController("WebRoomListPeopleSectionToggle"),
+            new RequiresSettingsController(["RoomList.showSections"]),
+        ],
     },
     "composerUrlPreviewCollapsed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

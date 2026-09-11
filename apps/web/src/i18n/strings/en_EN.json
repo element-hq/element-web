@@ -1556,6 +1556,8 @@
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
+        "pdf_viewer": "Open PDFs",
+        "pdf_viewer_description": "Read PDF attachments in the right panel.",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "sliding_sync": "Sliding Sync mode",
@@ -1732,6 +1734,10 @@
         "send_dm": "Send a Direct Message",
         "welcome_detail": "Now, let's help you get started",
         "welcome_user": "Welcome %(name)s"
+    },
+    "pdf_viewer": {
+        "open": "Open PDF",
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Message in %(room)s",

@@ -41,6 +41,7 @@ export function FileBodyFactory({
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -52,6 +53,7 @@ export function FileBodyFactory({
                 timelineRenderingType,
                 refIFrame,
                 refLink,
+                pdfViewerEnabled,
             }),
     );
 
@@ -62,8 +64,9 @@ export function FileBodyFactory({
             forExport,
             showFileInfo,
             timelineRenderingType,
+            pdfViewerEnabled,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
