@@ -44,7 +44,7 @@ if [ "$js_sdk_dep" = "github:matrix-org/matrix-js-sdk#develop" ]; then
     # `pnpm install` in a checkout of element-web: for example, js-sdk dependencies may
     # be hoisted and shared with element-web, and there is no tsconfig.json.
     pnpm -C matrix-js-sdk pack --out matrix-js-sdk.tgz
-    pnpm -C apps/web install `pwd`/matrix-js-sdk/matrix-js-sdk.tgz
+    pnpm -C apps/web install $(pwd)/matrix-js-sdk/matrix-js-sdk.tgz
 else
     echo "layered.sh: Skipping matrix-js-sdk fetch and install as package.json pins $js_sdk_dep"
 fi
