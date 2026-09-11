@@ -32,7 +32,6 @@ import { useStateCallback } from "../../../hooks/useStateCallback";
 import type Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
-import ChatExport from "../../../customisations/ChatExport";
 import { validateNumberInRange } from "../../../utils/validate";
 
 interface IProps {
@@ -59,13 +58,11 @@ interface ExportConfig {
  * Only return change handlers for editable values
  */
 const useExportFormState = (): ExportConfig => {
-    const config = ChatExport.getForceChatExportParameters();
-
-    const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
-    const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
-    const [includeAttachments, setAttachments] = useState(config.includeAttachments ?? false);
-    const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
-    const [sizeLimit, setSizeLimit] = useState<number>(config.sizeMb ?? 8);
+    const [exportFormat, setExportFormat] = useState(ExportFormat.Html);
+    const [exportType, setExportType] = useState(ExportType.Timeline);
+    const [includeAttachments, setAttachments] = useState(false);
+    const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
+    const [sizeLimit, setSizeLimit] = useState<number>(8);
 
     return {
         exportFormat,
@@ -73,11 +70,11 @@ const useExportFormState = (): ExportConfig => {
         includeAttachments,
         numberOfMessages,
         sizeLimit,
-        setExportFormat: !config.format ? setExportFormat : undefined,
-        setExportType: !config.range ? setExportType : undefined,
-        setNumberOfMessages: !config.numberOfMessages ? setNumberOfMessages : undefined,
-        setSizeLimit: !config.sizeMb ? setSizeLimit : undefined,
-        setAttachments: config.includeAttachments === undefined ? setAttachments : undefined,
+        setExportFormat,
+        setExportType,
+        setNumberOfMessages,
+        setSizeLimit,
+        setAttachments,
     };
 };
 

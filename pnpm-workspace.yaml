@@ -22,8 +22,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.61.1
-    "playwright-core": 1.61.1
+    "@playwright/test": 1.62.1
+    "playwright-core": 1.62.1
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
@@ -105,8 +105,6 @@ patchedDependencies:
     react-blurhash: patches/react-blurhash.patch
     # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
-    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
-    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
     # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
     # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
@@ -146,7 +144,7 @@ overrides:
     # Make sure we only have one instance of the widget API in the build;
     # failure to do so results in (unspecified) breakage in downstream builds
     # cf https://github.com/element-hq/element-web/pull/31851
-    matrix-widget-api: "^1.19.0"
+    matrix-widget-api: "^1.18.0"
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
