@@ -56,6 +56,7 @@ import { getOAuthParams, getStoredOAuthClientId, persistOAuthClientId } from "./
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
+    getFallbackStorageKey,
     HAS_ACCESS_TOKEN_STORAGE_KEY,
     HAS_REFRESH_TOKEN_STORAGE_KEY,
     persistTokens,
@@ -548,6 +549,24 @@ export interface IStoredSession {
  * @returns Promise that resolves to token or undefined
  */
 async function getStoredToken(storageKey: string): Promise<string | undefined> {
+    // A token at the fallback key was written because an IndexedDB write failed, and is cleared
+    // again as soon as one succeeds. It is therefore always at least as new as whatever
+    // IndexedDB holds, and must take precedence — otherwise a stale IndexedDB value shadows it
+    // forever, and a rotated refresh token is silently lost.
+    const fallbackStorageKey = getFallbackStorageKey(storageKey);
+    const fallbackToken = localStorage.getItem(fallbackStorageKey) ?? undefined;
+    if (fallbackToken) {
+        logger.warn(`Using localStorage fallback for ${storageKey}; a previous IndexedDB write failed`);
+        try {
+            // try to move the token back into IndexedDB now that it may be writable again
+            await StorageAccess.idbSave("account", storageKey, fallbackToken);
+            localStorage.removeItem(fallbackStorageKey);
+        } catch (e) {
+            logger.error(`Recovery of token ${storageKey} into IndexedDB failed`, e);
+        }
+        return fallbackToken;
+    }
+
     let token: string | undefined;
     try {
         token = await StorageAccess.idbLoad("account", storageKey);
@@ -555,6 +574,7 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
         logger.error(`StorageManager.idbLoad failed for account:${storageKey}`, e);
     }
     if (!token) {
+        // Legacy location, from before tokens were moved into IndexedDB.
         token = localStorage.getItem(storageKey) ?? undefined;
         if (token) {
             try {
@@ -566,6 +586,17 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
             }
         }
     }
+
+    // Note that when IndexedDB has a token we ignore any token at the primary key in localStorage,
+    // rather than treating it as a fallback. It is residue from an older version of
+    // persistTokenInStorage, whose fallback wrote there rather than to the fallback key above, and
+    // which never cleared it after a later successful write — so it may well be older than the
+    // IndexedDB copy, and preferring it could demote a working session to a dead token.
+    //
+    // We do not delete it here either. This is a read path, and the token we just loaded may yet
+    // turn out to be undecryptable (see tryDecryptToken), in which case that plaintext copy is the
+    // only way back into the account. persistTokenInStorage sweeps it up once it has successfully
+    // written a token of its own, which proves the copy is spare.
     return token;
 }
 
