@@ -554,6 +554,8 @@ describe("<MatrixChat />", () => {
             vi.spyOn(logger, "error").mockClear();
             vi.spyOn(logger, "log").mockClear();
 
+            mockPlatformPeg();
+
             loginClient.whoami.mockResolvedValue({
                 user_id: userId,
                 device_id: deviceId,
@@ -568,7 +570,6 @@ describe("<MatrixChat />", () => {
                     clientId,
                     codeVerifier: "123456",
                     deviceId,
-                    redirectUri: "https://cb",
                 },
             });
         });
@@ -595,21 +596,21 @@ describe("<MatrixChat />", () => {
         it("should make correct request to complete authorization", async () => {
             getComponent({ urlParams });
 
-            await flushPromises();
-
-            expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code);
+            await waitFor(() => {
+                expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, expect.anything());
+            });
         });
 
         it("should look up userId using access token", async () => {
             getComponent({ urlParams });
 
-            await flushPromises();
-
-            // check we used a client with the correct accesstoken
-            expect(MatrixJs.createClient).toHaveBeenCalledWith({
-                baseUrl: homeserverUrl,
-                accessToken,
-                idBaseUrl: identityServerUrl,
+            await waitFor(() => {
+                // check we used a client with the correct accesstoken
+                expect(MatrixJs.createClient).toHaveBeenCalledWith({
+                    baseUrl: homeserverUrl,
+                    accessToken,
+                    idBaseUrl: identityServerUrl,
+                });
             });
             expect(loginClient.whoami).toHaveBeenCalled();
         });
@@ -618,12 +619,12 @@ describe("<MatrixChat />", () => {
             loginClient.whoami.mockRejectedValue(new Error("oups"));
             getComponent({ urlParams });
 
-            await flushPromises();
-
-            expect(logger.error).toHaveBeenCalledWith(
-                "Failed to login via OAuth",
-                new Error("Failed to retrieve userId using accessToken"),
-            );
+            await waitFor(() => {
+                expect(logger.error).toHaveBeenCalledWith(
+                    "Failed to login via OAuth",
+                    new Error("Failed to retrieve userId using accessToken"),
+                );
+            });
             await expectOAuthError();
         });
 
