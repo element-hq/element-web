@@ -10,24 +10,24 @@ import React, { type HTMLAttributes } from "react";
 
 import Heading from "../../typography/Heading";
 
-export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivElement> {
-    heading: string;
+export interface SettingsSubsectionHeadingProps extends Omit<HTMLAttributes<HTMLDivElement>, "contextMenu"> {
     as?: React.ComponentProps<typeof Heading>["as"];
-    children?: React.ReactNode;
+    children?: string;
+    contextMenu?: React.ReactNode;
 }
 
 export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({
-    heading,
     as = "h2",
     children,
+    contextMenu,
     ...rest
 }) => {
     return (
         <div {...rest} className="mx_SettingsSubsectionHeading">
             <Heading className="mx_SettingsSubsectionHeading_heading" size="4" as={as}>
-                {heading}
+                {children}
             </Heading>
-            {children}
+            {contextMenu}
         </div>
     );
 };
