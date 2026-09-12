@@ -306,6 +306,32 @@ describe("ElectronPlatform", () => {
             expect(args).toEqual([userId, deviceId]);
         });
 
+        it("resolves to null when no pickle key is stored", async () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            const promise = platform.getPickleKey(userId, deviceId);
+
+            const [, { id }] = mockElectron.send.mock.calls[0];
+            const [, onIpcReply] = getElectronEventHandlerCall("ipcReply")!;
+            onIpcReply({}, { id, reply: null });
+
+            await expect(promise).resolves.toBeNull();
+        });
+
+        it("rejects, rather than resolving to null, when the pickle key could not be read", async () => {
+            const platform = new ElectronPlatform();
+            mockElectron.send.mockClear();
+            const promise = platform.getPickleKey(userId, deviceId);
+
+            const [, { id }] = mockElectron.send.mock.calls[0];
+            const [, onIpcReply] = getElectronEventHandlerCall("ipcReply")!;
+            onIpcReply({}, { id, error: { name: "SafeStorageDecryptionError", message: "Failed to decrypt" } });
+
+            // The name is carried across the IPC boundary so callers can tell the failures apart.
+            await expect(promise).rejects.toThrow("Failed to decrypt");
+            await expect(promise.catch((e) => e.name)).resolves.toBe("SafeStorageDecryptionError");
+        });
+
         it("makes correct ipc call to create pickle key", () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();

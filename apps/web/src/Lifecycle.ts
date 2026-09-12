@@ -433,7 +433,19 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
     // Try to load the pickle key
     const userId = credentials.userId;
     const deviceId = credentials.deviceId;
-    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    let pickleKey: string | undefined;
+    try {
+        pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    } catch (e) {
+        logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        // Fall through and try to create a new one. This is assumed to not destroy anything because
+        // both callers of this function are fresh logins with a server-issued device ID and clear
+        // all storage around this point (onSuccessfulDelegatedAuthLogin before, setLoggedIn ->
+        // doSetLoggedIn after), so no data encrypted under a previous pickle key for this device
+        // survives.
+        // If creation also fails we end up with no pickle key and the tokens are stored unencrypted.
+    }
+
     if (!pickleKey) {
         // Create it if it did not exist
         pickleKey =
@@ -644,7 +656,13 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
             return false;
         }
 
-        const pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        let pickleKey: string | undefined;
+        try {
+            pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        }
+
         if (pickleKey) {
             logger.log(`Got pickle key for ${userId}|${deviceId}`);
         } else {
@@ -752,8 +770,12 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 
     if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        credentials.pickleKey =
-            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        try {
+            credentials.pickleKey =
+                (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${credentials.userId}|${credentials.deviceId}`, e);
+        }
     }
 
     return doSetLoggedIn(credentials, overwrite, false);

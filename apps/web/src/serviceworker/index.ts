@@ -134,7 +134,10 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
 
     // Finally, try decrypting the thing and return that. This may fail, but that's okay.
     try {
-        const pickleKey = await buildAndEncodePickleKey(pickleKeyData, userId, deviceId);
+        // There may be no pickle key at all, in which case the access token is stored unencrypted and
+        // `tryDecryptToken` hands it back as-is. If the token *is* encrypted, `tryDecryptToken` throws,
+        // so a genuinely missing pickle key is still reported below.
+        const pickleKey = pickleKeyData ? await buildAndEncodePickleKey(pickleKeyData, userId, deviceId) : undefined;
         const accessToken = await tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_IV);
         return { accessToken, homeserver };
     } catch (e) {

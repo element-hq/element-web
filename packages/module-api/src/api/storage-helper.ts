@@ -15,6 +15,8 @@ export interface StorageHelperApi {
      * @param userId - the user ID for the user that the pickle key is for.
      * @param deviceId - the device ID that the pickle key is for.
      * @returns the previously stored pickle key, or null if no pickle key has been stored.
+     * @throws if the pickle key could not be read, e.g. because the OS keychain is unavailable.
+     *     This is distinct from returning null, which means there is definitively no pickle key.
      */
     getPickleKey(userId: string, deviceId: string): Promise<string | null>;
 }
