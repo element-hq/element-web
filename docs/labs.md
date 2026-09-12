@@ -10,6 +10,14 @@ If a labs features gets more stable, it _may_ be promoted to a beta feature
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
+## Enable options to set up Policy Servers in rooms (`feature_policy_server_setup`)
+
+Allows configuring a room's [policy server](https://spec.matrix.org/v1.18/client-server-api/#policy-servers)
+(originally [MSC4284](https://github.com/matrix-org/matrix-spec-proposals/pull/4284)).
+
+Users can see the current configuration from the 'Roles & Permissions' tab of room settings. If the user has permission
+to change the `m.room.policy` state event, they can also change or remove the policy server there.
+
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).

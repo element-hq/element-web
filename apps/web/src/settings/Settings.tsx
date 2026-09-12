@@ -215,6 +215,7 @@ export interface Settings {
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
+    "feature_policy_server_setup": IFeature;
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
@@ -452,6 +453,14 @@ export const SETTINGS: Settings = {
         // Requires a reload since this setting is cached in EventUtils
         controller: new ReloadOnChangeController(),
         displayName: _td("labs|msc3531_hide_messages_pending_moderation"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_policy_server_setup": {
+        isFeature: true,
+        labsGroup: LabGroup.Moderation,
+        displayName: _td("labs|policy_server_setup"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
