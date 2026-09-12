@@ -14,7 +14,7 @@ Please see LICENSE files in the repository root for full details.
     :root[data-storybook-root-css="app-web"] {
         [class^="cpd-theme"][class^="cpd-theme"] {
             --cpd-font-family-sans:
-                "Inter", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
+                "Inter", "Arial", "Helvetica", sans-serif, "Twemoji", "Apple Color Emoji", "Segoe UI Emoji",
                 "Noto Color Emoji";
         }
 
@@ -38,7 +38,8 @@ Please see LICENSE files in the repository root for full details.
         pre,
         code {
             font-family:
-                "Fira Code", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace, "Noto Color Emoji";
+                "Fira Code", "Courier", monospace, "Twemoji", "Apple Color Emoji", "Segoe UI Emoji",
+                "Noto Color Emoji";
             font-size: 100% !important;
         }
     }
