@@ -95,6 +95,20 @@ describe("editor/deserialize", function () {
             expect(parts.length).toBe(1);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "/spoiler broiler" });
         });
+        it("leaves text alone which markdown would not have touched", function () {
+            const parts = normalize(parseEvent(textMessage("path/to/_light.scss"), createPartCreator()));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "path/to/_light.scss" });
+        });
+        it.each([
+            ["**bold**", "\\*\\*bold\\*\\*"],
+            ["a<del>b</del>c", "a\\<del>b\\</del>c"],
+            ["> quoted", "\\> quoted"],
+            ["C:\\Program Files", "C:\\\\Program Files"],
+        ])("still escapes %s, which markdown would have consumed", function (body, expected) {
+            const parts = normalize(parseEvent(textMessage(body), createPartCreator()));
+            expect(parts[0]).toStrictEqual({ type: "plain", text: expected });
+        });
     });
     describe("html messages", function () {
         it("inline styling", function () {
