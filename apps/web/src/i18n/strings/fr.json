@@ -658,8 +658,8 @@
         "join_rule_invite": "Salon privé (uniquement sur invitation)",
         "join_rule_invite_label": "Seules les personnes invitées pourront trouver et rejoindre ce salon.",
         "join_rule_knock_label": "Tout le monde peut demander à venir, mais un admin ou un modérateur doit autoriser l’accès. Vous pouvez modifier ceci plus tard.",
-        "join_rule_public_label": "Quiconque pourra trouver et rejoindre ce salon.",
-        "join_rule_public_parent_space_label": "Quiconque pourra trouver et rejoindre ce salon, pas seulement les membres de <SpaceName/>.",
+        "join_rule_public_label": "Tout le monde peut joindre, incluant les personnes hors de votre organisation",
+        "join_rule_public_parent_space_label": "Quiconque peut rejoindre ce salon, incluant des personnes hors de votre organisation, pas seulement les membres de <SpaceName/>.",
         "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Tout le monde dans <SpaceName/> pourra trouver et rejoindre ce salon.",
         "name_validation_required": "Veuillez renseigner un nom pour le salon",
@@ -714,7 +714,7 @@
         "private_personal_heading": "Avec qui travaillez-vous ?",
         "private_space": "Moi et mon équipe",
         "private_space_description": "Un espace privé pour vous et votre équipe",
-        "public_description": "Tout le monde peut rejoindre, idéal pour les communautés",
+        "public_description": "Tout le monde peut rejoindre y compris les personnes hors de votre organisation. Idéal pour les communautés",
         "public_heading": "Votre espace public",
         "search_public_button": "Rechercher des espaces publics",
         "setup_rooms_community_description": "Commençons par créer quelques salons.",
@@ -2127,6 +2127,7 @@
         "section": {
             "chats": "Discussions",
             "favourites": "Favoris",
+            "invites": "Invitations",
             "low_priority": "Priorité basse"
         },
         "show_less": "En voir moins"
@@ -2315,7 +2316,7 @@
             "join_rule_knock": "Demander à venir",
             "join_rule_knock_description": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
             "join_rule_public": "Quiconque",
-            "join_rule_public_description": "Tout le monde peut joindre",
+            "join_rule_public_description": "Tout le monde peut joindre y compris les personnes hors de votre organisation",
             "join_rule_restricted": "Membres de l’espace",
             "join_rule_restricted_description": "Toute personne se trouvant dans un espace autorisé peut rejoindre sans invitation.<a> Gérer les espaces</a>",
             "join_rule_restricted_description_active_space": "N'importe qui dans<spaceName/> peut joindre.",

@@ -32,6 +32,11 @@
         "speech_start_speaking": "Börja tala",
         "speech_stop_speaking": "Sluta tala"
     },
+    "eol": {
+        "no_more_updates": "Du använder en version av macOS som inte stöds. Uppgradera för att få %(brand)s uppdateringar.",
+        "title": "Systemet stöds inte",
+        "warning": "Du använder en version av macOS som inte stöds. Uppgradera för att säkerställa att %(brand)s fortsätter att fungera."
+    },
     "file_menu": {
         "label": "Arkiv"
     },
@@ -57,6 +62,10 @@
         "save_image_as": "Spara bild som…",
         "save_image_as_error_description": "Bilden sparades inte",
         "save_image_as_error_title": "Misslyckades med att spara bilden"
+    },
+    "save_dialog": {
+        "all_files": "Alla filer",
+        "named_file_type": "%(extension)s Fil"
     },
     "store": {
         "error": {
