@@ -18,6 +18,24 @@ const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "s", "u", "br", "br/"];
 // These types of node are definitely text
 const TEXT_NODES = ["text", "softbreak", "linebreak", "paragraph", "document"];
 
+// The square brackets around an IPv6 host, once commonmark has percent-encoded them along with
+// everything else it normalises in a URL.
+const ENCODED_IPV6_HOST = /^([a-z][a-z0-9+.-]*:\/\/)%5b([0-9a-f:.]+)%5d/i;
+
+/**
+ * Undo the percent-encoding commonmark applies to the square brackets around an IPv6 host.
+ *
+ * Encoded brackets are not a host any browser will resolve, so the link renders but goes nowhere.
+ * Only those two characters are restored, and only when what sits between them looks like an
+ * address: the rest of commonmark's encoding is what makes its output safe to emit as an href.
+ *
+ * @param destination - The link destination as commonmark normalised it.
+ * @returns The destination with an IPv6 host readable again, unchanged if there is not one.
+ */
+function restoreIPv6Host(destination: string): string {
+    return destination.replace(ENCODED_IPV6_HOST, (_, scheme: string, address: string) => `${scheme}[${address}]`);
+}
+
 function isAllowedHtmlTag(node: commonmark.Node): boolean {
     if (!node.literal) {
         return false;
@@ -313,7 +331,7 @@ export default class Markdown {
         renderer.link = function (node, entering) {
             const attrs = this.attrs(node);
             if (entering && node.destination) {
-                attrs.push(["href", this.esc(node.destination)]);
+                attrs.push(["href", this.esc(restoreIPv6Host(node.destination))]);
                 if (node.title) {
                     attrs.push(["title", this.esc(node.title)]);
                 }
