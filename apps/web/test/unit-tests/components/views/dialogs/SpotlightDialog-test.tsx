@@ -743,6 +743,66 @@ describe("Spotlight Dialog", () => {
         });
     });
 
+    describe("page up and down", () => {
+        beforeAll(() => {
+            // jsdom lays nothing out, and the roving index passes over any node whose offsetParent
+            // is null, so without this every result looks hidden and nothing moves at all.
+            Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+                configurable: true,
+                get() {
+                    return this.parentElement;
+                },
+            });
+        });
+
+        afterAll(() => {
+            Reflect.deleteProperty(HTMLElement.prototype, "offsetParent");
+        });
+
+        it("should move the selection by a page of results", async () => {
+            const rooms = Array.from({ length: 12 }, (_, i) => mkRoom(mockedClient, `!spotlight${i}:example.com`));
+            mocked(mockedClient.getVisibleRooms).mockReturnValue(rooms);
+            // Five results of this height fit in a list this tall.
+            jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(40);
+            jest.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(200);
+
+            const { container } = render(<SpotlightDialog initialText="spotlight" onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const selectedIndex = (): number =>
+                Array.from(container.querySelectorAll("li.mx_SpotlightDialog_option")).findIndex(
+                    (option) => option.getAttribute("aria-selected") === "true",
+                );
+            const dialog = container.querySelector(".mx_SpotlightDialog")!;
+
+            expect(selectedIndex()).toBe(0);
+
+            fireEvent.keyDown(dialog, { key: "PageDown" });
+            expect(selectedIndex()).toBe(5);
+
+            fireEvent.keyDown(dialog, { key: "PageUp" });
+            expect(selectedIndex()).toBe(0);
+        });
+
+        it("should stop at the last result rather than moving nowhere", async () => {
+            const rooms = Array.from({ length: 3 }, (_, i) => mkRoom(mockedClient, `!spotlight${i}:example.com`));
+            mocked(mockedClient.getVisibleRooms).mockReturnValue(rooms);
+            // A list far taller than it has results to put in it, so one page overshoots the end.
+            jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(40);
+            jest.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(4000);
+
+            const { container } = render(<SpotlightDialog initialText="spotlight" onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const options = container.querySelectorAll("li.mx_SpotlightDialog_option");
+            fireEvent.keyDown(container.querySelector(".mx_SpotlightDialog")!, { key: "PageDown" });
+
+            expect(options[options.length - 1]).toHaveAttribute("aria-selected", "true");
+        });
+    });
+
     describe("metaspaces", () => {
         beforeEach(() => {
             jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([

@@ -141,6 +141,8 @@ export enum KeyBindingAction {
     Delete = "KeyBinding.delete",
     Home = "KeyBinding.home",
     End = "KeyBinding.end",
+    PageUp = "KeyBinding.pageUp",
+    PageDown = "KeyBinding.pageDown",
     ArrowLeft = "KeyBinding.arrowLeft",
     ArrowUp = "KeyBinding.arrowUp",
     ArrowRight = "KeyBinding.arrowRight",
@@ -266,6 +268,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.Delete,
             KeyBindingAction.Home,
             KeyBindingAction.End,
+            KeyBindingAction.PageUp,
+            KeyBindingAction.PageDown,
             KeyBindingAction.ArrowLeft,
             KeyBindingAction.ArrowUp,
             KeyBindingAction.ArrowRight,
@@ -696,6 +700,16 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.End]: {
         default: {
             key: Key.END,
+        },
+    },
+    [KeyBindingAction.PageUp]: {
+        default: {
+            key: Key.PAGE_UP,
+        },
+    },
+    [KeyBindingAction.PageDown]: {
+        default: {
+            key: Key.PAGE_DOWN,
         },
     },
     [KeyBindingAction.ArrowLeft]: {
