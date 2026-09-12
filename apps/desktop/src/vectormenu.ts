@@ -71,6 +71,15 @@ export function buildMenuTemplate(): Menu {
                     visible: false,
                 },
                 {
+                    // The zoomIn role only binds the shifted "+", so the key people actually reach
+                    // for to undo a zoom out does nothing. Zooming out has no such gap, which is how
+                    // someone ends up stuck at a smaller size: the menu bar is hidden until Alt is
+                    // pressed, so the View menu is not there to fall back on either.
+                    role: "zoomIn",
+                    accelerator: "CmdOrCtrl+=",
+                    visible: false,
+                },
+                {
                     role: "zoomOut",
                     accelerator: "CmdOrCtrl+NumSub",
                     visible: false,
