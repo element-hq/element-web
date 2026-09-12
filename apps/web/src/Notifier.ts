@@ -209,6 +209,14 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         if (msgType && this.msgTypeHandlers.hasOwnProperty(msgType)) {
             return this.msgTypeHandlers[msgType](ev);
         }
+        if (ev.getType() === EventType.Reaction) {
+            // A reaction renders as an annotation rather than a timeline line, so TextForEvent
+            // has nothing for it. Without a body of our own the push rule still plays a sound
+            // while displayPopupNotification bails out, which reads as a silent-but-audible
+            // notification.
+            const key = ev.getRelation()?.key;
+            return key ? _t("notifier|m.reaction", { reaction: key }) : null;
+        }
         return TextForEvent.textForEvent(ev, this.sdkContext.client);
     }
 
