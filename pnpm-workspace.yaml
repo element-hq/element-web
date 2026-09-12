@@ -38,11 +38,11 @@ catalog:
     vite: 8.2.2
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.11
-    "@vitest/spy": 4.1.11
-    "@vitest/coverage-v8": 4.1.11
-    "@vitest/browser-playwright": 4.1.11
-    "@vitest/browser": 4.1.11
+    vitest: 5.0.0
+    "@vitest/coverage-v8": 5.0.0
+    "@vitest/browser-playwright": 5.0.0
+    "@vitest/browser": 5.0.0
+    "@vitest/ui": 5.0.0
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.1.0
     # nx
@@ -123,6 +123,9 @@ patchedDependencies:
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
     # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
+    # Tweaks to record screenshot diffs as vitest artifacts
+    vitest-plugin-vis@5.1.1: patches/vitest-plugin-vis@5.1.1.patch
+    storybook-addon-vis@4.2.3: patches/storybook-addon-vis@4.2.3.patch
 
 peerDependencyRules:
     allowedVersions:

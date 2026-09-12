@@ -163,7 +163,6 @@
         "@typescript/native": "catalog:",
         "@vitest/browser": "catalog:",
         "@vitest/browser-playwright": "catalog:",
-        "@vitest/spy": "catalog:",
         "babel-jest": "^30.0.0",
         "babel-loader": "^10.0.0",
         "babel-plugin-jsx-remove-data-test-id": "^3.0.0",

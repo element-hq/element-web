@@ -23,7 +23,7 @@ const adapter = {
         : vi.advanceTimersByTime,
 } as Pick<typeof vi, "fn" | "spyOn" | "mocked" | "advanceTimersByTime">;
 
-const mocked = adapter.mocked;
+const mocked: typeof vi.mocked = adapter.mocked;
 export { adapter as vi, mocked };
 
 const _expect = isJest ? (expect as unknown as typeof vitest.expect) : vitest.expect;
