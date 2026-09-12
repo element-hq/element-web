@@ -26,7 +26,7 @@
         "start": "nx start",
         "lint": "pnpm lint:types && pnpm lint:style",
         "lint:types": "nx lint:types",
-        "lint:style": "stylelint \"res/css/**/*.pcss\"",
+        "lint:style": "stylelint \"res/**/*.pcss\"",
         "test": "nx test:unit",
         "test:vitest": "nx test:vitest",
         "test:unit:screenshots": "playwright-screenshots pnpm -w exec vitest run --project web-browser --update",
