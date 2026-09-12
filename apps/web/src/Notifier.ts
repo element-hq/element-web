@@ -24,6 +24,7 @@ import {
     TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
@@ -159,6 +160,10 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
     // they're decrypted until we decide whether to notify for them
     // or not
     private pendingEncryptedEventIds: string[] = [];
+
+    // Rooms we have been invited to during the sync response currently being applied, to notify
+    // about once it has been: see notifyForPendingInvites.
+    private pendingInviteRoomIds = new Set<string>();
 
     private toolbarHidden?: boolean;
     private isSyncing?: boolean;
@@ -340,6 +345,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
 
     public start(): void {
         this.sdkContext.client!.on(RoomEvent.Timeline, this.onEvent);
+        this.sdkContext.client!.on(RoomEvent.MyMembership, this.onMyMembership);
         this.sdkContext.client!.on(RoomEvent.Receipt, this.onRoomReceipt);
         this.sdkContext.client!.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.sdkContext.client!.on(ClientEvent.Sync, this.onSyncStateChange);
@@ -349,9 +355,11 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
 
     public stop(): void {
         this.sdkContext.client?.removeListener(RoomEvent.Timeline, this.onEvent);
+        this.sdkContext.client?.removeListener(RoomEvent.MyMembership, this.onMyMembership);
         this.sdkContext.client?.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
         this.sdkContext.client?.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.sdkContext.client?.removeListener(ClientEvent.Sync, this.onSyncStateChange);
+        this.pendingInviteRoomIds = new Set();
         this.isSyncing = false;
     }
 
@@ -483,6 +491,8 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
     public onSyncStateChange = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
         if (!this.sdkContext.client) return;
         if (state === SyncState.Syncing) {
+            // The sync response which carried them has been applied by the time this fires.
+            this.notifyForPendingInvites();
             this.isSyncing = true;
         } else if (state === SyncState.Stopped || state === SyncState.Error) {
             this.isSyncing = false;
@@ -523,6 +533,46 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
 
         this.evaluateEvent(ev);
     };
+
+    /**
+     * Note a room we have been invited to, to be notified about once the sync response it arrived
+     * in has been applied. An invite arrives as stripped state rather than as a timeline event, so
+     * {@link onEvent} never sees it and the `.m.rule.invite_for_me` push rule — which the
+     * notification settings still expose as "When I'm invited to a room" — went unheard.
+     *
+     * Membership is reported once per transition, whereas the stripped state itself is re-delivered
+     * on every sync that carries the invite, so this is the signal which fires exactly once.
+     */
+    private onMyMembership = (room: Room, membership: string): void => {
+        if (!this.isSyncing) return; // don't alert for invites which were already pending at startup
+        if (membership !== KnownMembership.Invite) return;
+
+        this.pendingInviteRoomIds.add(room.roomId);
+    };
+
+    /**
+     * Notify about the invites noted by {@link onMyMembership} during the sync response which has
+     * just been applied. Waiting for the response to land matters twice over: a room invited to for
+     * the first time is not in the store yet while the membership change is being emitted, and a
+     * single response can carry an invite the user has already accepted elsewhere, whose membership
+     * only settles on join once the whole response has been read.
+     */
+    private notifyForPendingInvites(): void {
+        const cli = this.sdkContext.client;
+        const roomIds = this.pendingInviteRoomIds;
+        this.pendingInviteRoomIds = new Set();
+        if (!cli) return;
+
+        for (const roomId of roomIds) {
+            const room = cli.getRoom(roomId);
+            if (room?.getMyMembership() !== KnownMembership.Invite) continue;
+
+            const ev = room.currentState.getStateEvents(EventType.RoomMember, cli.getSafeUserId());
+            if (!ev || ev.getSender() === cli.getUserId()) continue;
+
+            this.evaluateEvent(ev);
+        }
+    }
 
     private onEventDecrypted = (ev: MatrixEvent): void => {
         // 'decrypted' means the decryption process has finished: it may have failed,

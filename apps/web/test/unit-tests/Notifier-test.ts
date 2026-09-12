@@ -322,6 +322,112 @@ describe("Notifier", () => {
             // without noisy
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
         });
+
+        describe("room invites", () => {
+            // An invite arrives as stripped state rather than as a timeline event, so it reaches the
+            // room's state without ever passing through the live timeline.
+            const inviteRoomWith = (sender: string, membership = KnownMembership.Invite): Room => {
+                const room = new Room("!invite:server.org", mockClient, mockClient.getSafeUserId());
+                room.currentState.setStateEvents([
+                    new MatrixEvent({
+                        sender,
+                        type: EventType.RoomMember,
+                        state_key: userId,
+                        room_id: room.roomId,
+                        content: { membership: KnownMembership.Invite },
+                    }),
+                ]);
+                room.updateMyMembership(membership);
+                return room;
+            };
+
+            // A room invited to for the first time only reaches the store once the whole sync
+            // response has been applied, which is after the membership change is announced.
+            const beInvited = (room: Room, previous?: string): void => {
+                mockClient.getRoom.mockImplementation((id) => (id === room.roomId ? null : testRoom));
+                mockClient!.emit(RoomEvent.MyMembership, room, room.getMyMembership(), previous);
+                mockClient.getRoom.mockImplementation((id) => (id === room.roomId ? room : testRoom));
+            };
+
+            const syncCompletes = (): void => {
+                mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+            };
+
+            beforeEach(() => {
+                // Put the notifier past its startup sync, where invites are deliberately ignored.
+                mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            });
+
+            it("notifies when we are invited to a room", () => {
+                const room = inviteRoomWith("@alice:server.org");
+
+                beInvited(room);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).toHaveBeenCalled();
+                expect(MockPlatform.loudNotification).toHaveBeenCalled();
+            });
+
+            it("notifies once, however many syncs redeliver the invite", () => {
+                const room = inviteRoomWith("@alice:server.org");
+
+                beInvited(room);
+                syncCompletes();
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(1);
+            });
+
+            it("does not notify for invites which were already pending before syncing started", () => {
+                notifier.stop();
+                notifier.start();
+                const room = inviteRoomWith("@alice:server.org");
+
+                beInvited(room);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
+
+            it("does not notify for an invite we accepted elsewhere in the same sync", () => {
+                // A gappy sync can announce the invite and the join we already made from another
+                // device in one response, leaving us joined by the time it has been applied.
+                const room = inviteRoomWith("@alice:server.org", KnownMembership.Join);
+
+                beInvited(room, KnownMembership.Leave);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
+
+            it("does not notify when we join a room", () => {
+                const room = inviteRoomWith("@alice:server.org", KnownMembership.Join);
+
+                beInvited(room, KnownMembership.Invite);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
+
+            it("does not notify for an invite we sent to ourselves", () => {
+                const room = inviteRoomWith(userId);
+
+                beInvited(room);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
+
+            it("does not notify when the invite does not have a notify push action", () => {
+                mockClient.getPushActionsForEvent.mockReturnValue({ notify: false, tweaks: {} });
+                const room = inviteRoomWith("@alice:server.org");
+
+                beInvited(room);
+                syncCompletes();
+
+                expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            });
+        });
     });
 
     describe("displayPopupNotification", () => {
