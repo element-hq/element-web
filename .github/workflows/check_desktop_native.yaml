@@ -1,0 +1,57 @@
+# Verifies that the pinned matrix-seshat version has a working prebuilt for
+# each platform/arch/sqlcipher variant hak needs to build Element Desktop,
+# without a full Electron + Playwright desktop build.
+#
+# Deliberately doesn't install a Rust toolchain: if a prebuilt is missing or
+# broken, hak's build step falls back to compiling from source, which fails
+# loudly here (no cargo/rustc present) rather than silently masking a missing
+# prebuilt behind a real (slow, flaky) compile.
+on:
+    workflow_call:
+
+permissions: {} # No permissions required
+
+jobs:
+    check:
+        name: matrix-seshat (${{ matrix.arch }}, sqlcipher ${{ matrix.sqlcipher }})
+        runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                arch: [amd64, arm64]
+                sqlcipher: [static, system]
+        env:
+            SQLCIPHER_BUNDLED: ${{ matrix.sqlcipher == 'static' && '1' || '' }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version-file: apps/desktop/.node-version
+                  cache: "pnpm"
+
+            - name: Install deps
+              working-directory: apps/desktop
+              run: pnpm install --frozen-lockfile --filter element-desktop
+
+            - name: Fetch matrix-seshat
+              working-directory: apps/desktop
+              run: node scripts/hak/index.ts fetch matrix-seshat
+
+            - name: Build matrix-seshat (should use the published prebuilt, not compile from source)
+              working-directory: apps/desktop
+              run: node scripts/hak/index.ts build matrix-seshat
+              env:
+                  # Authenticates the release metadata lookup, raising the
+                  # GitHub API rate limit from 60/hour to 5000/hour.
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Verify the prebuilt loads under Electron
+              working-directory: apps/desktop
+              run: |
+                  set -eu
+                  node_file=$(find .hak/matrix-seshat -name index.node)
+                  ELECTRON_RUN_AS_NODE=1 ./node_modules/.bin/electron -e "require('$(realpath "$node_file")'); console.log('matrix-seshat loaded OK')"
