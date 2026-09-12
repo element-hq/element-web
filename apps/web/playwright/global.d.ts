@@ -17,6 +17,17 @@ declare global {
         mxSettingsStore: {
             setValue(settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void>;
         };
+        mxEventIndexPeg?: {
+            get(): {
+                search(args: {
+                    search_term: string;
+                    before_limit: number;
+                    after_limit: number;
+                    order_by_recency: boolean;
+                    limit: number;
+                }): Promise<{ count?: number } | undefined>;
+            } | null;
+        };
         mxActiveWidgetStore: {
             setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void;
         };
