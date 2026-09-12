@@ -137,8 +137,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
 5. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
    down below.
 6. `mobile_builds`: Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.
-7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
-   download the app instead.
+7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device are redirected to the
+   `/mobile_guide` page and prompted to download the app instead. Set it to `false` to leave mobile browsers on the web app.
 8. `mobile_guide_app_variant`: Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted
    the mobile guide will be configured for the new Element X apps. Allowed values are as follows:
     1. `element`: Element X Android/iOS.
