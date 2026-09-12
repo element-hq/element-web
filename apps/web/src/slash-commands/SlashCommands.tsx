@@ -73,7 +73,10 @@ export const Commands = [
         args: "<message>",
         description: _td("slash_command|spoiler"),
         runFn: function (cli, roomId, threadId, message = "") {
-            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
+            // Serialize through Markdown rather than interpolating the raw argument, which would leave it
+            // both unconverted and unescaped. forceHTML guarantees a string back even for plain text.
+            const html = htmlSerializeFromMdIfNeeded(message, { forceHTML: true }) ?? "";
+            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${html}</span>`));
         },
         category: CommandCategories.messages,
     }),
