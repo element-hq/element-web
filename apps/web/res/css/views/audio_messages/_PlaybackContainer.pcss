@@ -43,8 +43,11 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Clock {
-        width: $font-42px; /* we're not using a monospace font, so fake it */
-        min-width: $font-42px; /* force sensible layouts in awkward flexboxes (file panel, for example) */
+        /* We're not using a monospace font, so fake a stable width - but let the box grow when the
+           digits are wider than that, as they can be with a custom font. The floor also forces
+           sensible layouts in awkward flexboxes (file panel, for example). */
+        width: max-content;
+        min-width: $font-42px;
         padding-right: 6px; /* with the fixed width this ends up as a visual 8px most of the time, as intended. */
         padding-left: 8px; /* isolate from recording circle / play control */
     }
