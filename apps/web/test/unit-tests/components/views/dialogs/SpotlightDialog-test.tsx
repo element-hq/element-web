@@ -168,6 +168,7 @@ describe("Spotlight Dialog", () => {
         testDM = mkRoom(mockedClient, testDMRoomId);
         testDM.name = "Chat with Alice";
         mocked(testDM.getMyMembership).mockReturnValue(KnownMembership.Join);
+        mocked(testDM.guessDMUserId).mockReturnValue(testDMUserId);
 
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
             if (roomId === testDMRoomId) {
