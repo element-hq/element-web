@@ -18,6 +18,17 @@ Go to https://localazy.com/p/element-web. If your language is listed then you ca
 of https://localazy.com/docs/general/translating-strings if you need help getting started. If your language is not yet
 listed please express your wishes to start translating it in the general discussion room linked above.
 
+## Style guides
+
+Before translating, read the [UI copy and localisation guidelines](./ui-copy.md) — the language-independent rules for
+how any translation should relate to the English source (placeholders, plurals, punctuation, terminology).
+
+Some languages additionally have their own style guide in `docs/translations/`:
+
+- [German](./translations/de.md)
+
+If you would like to contribute a guide for your language, PRs are welcome — use the German one as a template.
+
 ### What are `%(something)s`?
 
 These things are placeholders that are expanded when displayed by Element. They can be room names, usernames or similar.
