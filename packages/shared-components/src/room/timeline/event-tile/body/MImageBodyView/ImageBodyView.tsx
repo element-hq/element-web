@@ -267,17 +267,21 @@ export function ImageBodyView({
 
     // Reserve the media box on the container itself so the timeline doesn't jump
     // while the image element or loading state is still settling.
-    const resolvedWidth = maxWidth === undefined ? undefined : `min(100%, ${maxWidth}px)`;
+    //
+    // The width is a definite length rather than `min(100%, …)`: the frame is laid out inside a
+    // shrink-to-fit anchor, and a percentage width contributes nothing to a shrink-to-fit parent's
+    // size, so the box collapsed until the image supplied an intrinsic size of its own. `max-width`
+    // keeps it inside a narrow timeline.
     const containerStyle: CSSProperties = {
-        width: resolvedWidth,
-        maxWidth,
+        width: maxWidth,
+        maxWidth: "100%",
         maxHeight,
         aspectRatio,
     };
     const mediaStyle: CSSProperties | undefined = isSvg
         ? {
-              width: resolvedWidth,
-              maxWidth,
+              width: maxWidth,
+              maxWidth: "100%",
               maxHeight,
           }
         : undefined;

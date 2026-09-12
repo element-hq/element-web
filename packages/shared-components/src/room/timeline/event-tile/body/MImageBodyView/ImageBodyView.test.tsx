@@ -84,6 +84,32 @@ describe("ImageBodyView", () => {
         expect(screen.queryByRole("img")).not.toBeInTheDocument();
     });
 
+    it("reserves the media box before the image has an intrinsic size", () => {
+        const vm = new TestImageBodyViewModel({
+            state: ImageBodyViewState.READY,
+            alt: "Reserved image",
+            src: "https://example.invalid/full.png",
+            thumbnailSrc: "https://example.invalid/thumb.png",
+            linkUrl: "https://example.invalid/full.png",
+            linkTarget: "_blank",
+            maxWidth: 320,
+            maxHeight: 240,
+            aspectRatio: "320 / 240",
+        });
+
+        render(<ImageBodyView vm={vm} />);
+
+        const image = screen.getByRole("img") as HTMLImageElement;
+        // Guard: the image has not loaded, so it contributes no size of its own and the frame can
+        // only be as wide as the box the view reserves for it.
+        expect(image.naturalWidth).toBe(0);
+
+        const link = screen.getByRole("link");
+        const frame = link.firstElementChild!;
+        expect(link.getBoundingClientRect().width).toBeGreaterThanOrEqual(320);
+        expect(frame.getBoundingClientRect().width).toBeGreaterThanOrEqual(320);
+    });
+
     it("renders a link wrapper and forwards the click handler", () => {
         const onLinkClick = vi.fn();
         const vm = new TestImageBodyViewModel(
