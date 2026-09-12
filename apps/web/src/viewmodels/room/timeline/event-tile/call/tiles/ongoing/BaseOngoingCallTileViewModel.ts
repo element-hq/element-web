@@ -157,7 +157,7 @@ export class BaseOngoingCallViewModel<
         const call = getCallOrThrow(this.props.callStore, this.props.roomId);
         this.disposables.trackListener(call, CallEvent.Participants, ((participants: Map<RoomMember, Set<string>>) => {
             this.onParticipantsChange(participants);
-        }) as (...args: unknown[]) => void);
+        }));
     }
 
     /**
