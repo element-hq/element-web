@@ -384,6 +384,23 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return newTargets;
     }
 
+    /**
+     * An email address can only be invited through an identity server, so without one there is
+     * nothing to send. Raising the identity server prompt says that; letting the invite run
+     * produces an error about the homeserver or the one-at-a-time limit, neither of which is why
+     * it failed.
+     *
+     * @param targets - The members the user is about to invite.
+     * @returns true if the prompt was raised and the caller should stop.
+     */
+    private promptForIdentityServerIfNeeded(targets: Member[]): boolean {
+        if (this.state.canUseIdentityServer || !SettingsStore.getValue(UIFeature.IdentityServer)) return false;
+        if (!this.hasFilterAtLeastOneEmail() && !targets.some((t) => t instanceof ThreepidMember)) return false;
+
+        this.setState({ busy: false, tryingIdentityServer: true });
+        return true;
+    }
+
     private startDm = async (): Promise<void> => {
         this.setBusy(true);
 
@@ -1148,6 +1165,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setBusy(true);
 
         const targets = this.convertFilter();
+        if (this.promptForIdentityServerIfNeeded(targets)) return;
+
         const unknownIdentityUsers: Member[] = [];
         const cli = MatrixClientPeg.safeGet();
         const crypto = cli.getCrypto();
