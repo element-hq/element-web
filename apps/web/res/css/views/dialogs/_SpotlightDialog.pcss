@@ -298,7 +298,10 @@ Please see LICENSE files in the repository root for full details.
                             text-overflow: ellipsis;
                         }
                         .mx_SpotlightDialog_result_publicRoomAlias {
-                            color: $tertiary-content;
+                            /* $secondary-content, not $tertiary-content: at 12px this has to meet WCAG AA
+                               (4.5:1) against the dialog background, and tertiary is 3.5:1 in the light
+                               and dark themes. */
+                            color: $secondary-content;
                             font-size: $font-12px;
                             margin-left: var(--cpd-space-2x);
                             overflow: hidden;
@@ -353,8 +356,8 @@ Please see LICENSE files in the repository root for full details.
                         display: block;
                     }
 
-                    /* $secondary-content/$tertiary-content do not have enough contrast against
-                       the hover background ($quinary-content) to meet WCAG AA (4.5:1). */
+                    /* $secondary-content is legible at rest but only 4.2:1 against the hover
+                       background ($quinary-content), so step up to $primary-content to keep WCAG AA. */
                     .mx_SpotlightDialog_result_publicRoomDetails {
                         .mx_SpotlightDialog_result_publicRoomHeader .mx_SpotlightDialog_result_publicRoomAlias,
                         .mx_SpotlightDialog_result_publicRoomDescription {
@@ -414,7 +417,8 @@ Please see LICENSE files in the repository root for full details.
         .mx_SpotlightDialog_result_details {
             margin-left: var(--cpd-space-2x);
             margin-right: var(--cpd-space-2x);
-            color: $tertiary-content;
+            /* See .mx_SpotlightDialog_result_publicRoomAlias: 12px text needs 4.5:1 at rest too. */
+            color: $secondary-content;
             font-size: $font-12px;
             line-height: $font-15px;
             min-width: 0;
