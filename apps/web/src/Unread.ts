@@ -71,6 +71,12 @@ function doesTimelineHaveUnreadMessages(room: Room, timeline: Array<MatrixEvent>
     const myUserId = room.client.getSafeUserId();
     const latestImportantEventId = findLatestImportantEvent(room.client, timeline)?.getId();
     if (latestImportantEventId) {
+        // Sending a message means we have seen everything before it. The js-sdk applies this
+        // shortcut only when our event is the *literal* last one in the timeline, so any event
+        // that doesn't trigger an unread count (a reaction, an edit, a membership change...)
+        // landing after our message would otherwise make the timeline unread again.
+        if (userSentEventAfterLatestImportantEvent(room.client, timeline)) return false;
+
         return !room.hasUserReadEvent(myUserId, latestImportantEventId);
     } else {
         // We couldn't find an important event to check - check the unimportant ones.
@@ -139,6 +145,25 @@ function findLatestImportantEvent(client: MatrixClient, timeline: Array<MatrixEv
         }
     }
     return null;
+}
+
+/**
+ * Look backwards through the timeline for whichever comes first: an event we sent, or an
+ * important event. An event we sent is never important (see {@link eventTriggersUnreadCount}),
+ * so finding ours first means it is newer than every important event in the timeline.
+ *
+ * @returns true if we sent an event after the latest important event
+ */
+function userSentEventAfterLatestImportantEvent(client: MatrixClient, timeline: Array<MatrixEvent>): boolean {
+    const myUserId = client.getSafeUserId();
+    for (let index = timeline.length - 1; index >= 0; index--) {
+        const event = timeline[index];
+        if (isImportantEvent(client, event)) return false;
+        // Ignore local echoes that haven't made it to the server yet: they carry no timeline
+        // position, and a failed send shouldn't mark anything as read.
+        if (event.getSender() === myUserId && !event.status) return true;
+    }
+    return false;
 }
 
 /**
