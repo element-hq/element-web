@@ -169,6 +169,14 @@ describe("editor/serialize", function () {
             const html = htmlSerializeFromMdIfNeeded("\\<b>test</b>", {});
             expect(html).toBe("&lt;b&gt;test&lt;/b&gt;");
         });
+        it("should render a hard line break in escaped markdown as a break, not as text", () => {
+            const html = htmlSerializeFromMdIfNeeded("\\*hello\\* world  \nsecond line", {});
+            expect(html).toBe("*hello* world<br />\nsecond line");
+        });
+        it("should keep a soft line break in escaped markdown", () => {
+            const html = htmlSerializeFromMdIfNeeded("\\*hello\\* world\nsecond line", {});
+            expect(html).toBe("*hello* world<br />second line");
+        });
     });
 
     describe("feature_latex_maths", () => {

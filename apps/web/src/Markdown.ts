@@ -365,7 +365,14 @@ export default class Markdown {
      * which has no formatting.  Otherwise it emits HTML(!).
      */
     public toPlaintext(): string {
-        const renderer = new commonmark.HtmlRenderer({ safe: false });
+        const renderer = new commonmark.HtmlRenderer({
+            safe: false,
+
+            // As with toHTML, render soft breaks as hard HTML breaks: the output of this method
+            // ends up in formatted_body, where a bare newline collapses into a space
+            // (https://github.com/element-hq/element-web/issues/33032).
+            softbreak: "<br />",
+        });
 
         renderer.paragraph = function (node: commonmark.Node, entering: boolean) {
             // as with toHTML, only append lines to paragraphs if there are
@@ -377,14 +384,22 @@ export default class Markdown {
             }
         };
 
+        // Raw HTML never reaches this method unless its tag is disallowed (see isPlainText), so the
+        // literal is escaped here rather than passed through.
+        renderer.html_inline = function (node: commonmark.Node) {
+            if (node.literal) this.lit(escape(node.literal));
+        };
+
         renderer.html_block = function (node: commonmark.Node) {
-            if (node.literal) this.lit(node.literal);
+            if (node.literal) this.lit(escape(node.literal));
             if (isMultiLine(node) && node.next) this.lit("\n\n");
         };
 
-        // We inhibit the default escape function as we escape the entire output string to correctly handle backslashes
-        renderer.esc = (input: string) => input;
+        // Escape each literal as it is emitted rather than escaping the rendered string as a whole,
+        // so that markup the renderer generates itself — a line break, for instance — survives
+        // (https://github.com/element-hq/element-web/issues/28602).
+        renderer.esc = escape;
 
-        return escape(renderer.render(this.parsed));
+        return renderer.render(this.parsed);
     }
 }
