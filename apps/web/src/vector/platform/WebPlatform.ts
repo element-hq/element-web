@@ -13,7 +13,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
 import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
-import { BrowserEventIndexManager, isBrowserEventIndexEnabled } from "./BrowserEventIndexManager";
+import {
+    BrowserEventIndexManager,
+    deleteDisabledEventIndexDb,
+    isBrowserEventIndexEnabled,
+} from "./BrowserEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
@@ -40,7 +44,13 @@ export default class WebPlatform extends BasePlatform {
     // oxlint-disable-next-line node/no-process-env
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
+    /**
+     * The browser event index, created on first use and only while the labs gate is on. Held for
+     * the life of the platform once created; see {@link getEventIndexingManager}.
+     */
     private eventIndexManager: BrowserEventIndexManager | null = null;
+    /** Whether the one-shot cleanup of a disabled index's database has already run this session. */
+    private disabledEventIndexCleanedUp = false;
 
     public constructor() {
         super();
@@ -272,10 +282,46 @@ export default class WebPlatform extends BasePlatform {
         window.location.reload();
     }
 
+    /**
+     * The browser event index; see {@link BasePlatform.getEventIndexingManager}.
+     *
+     * A manager is only ever *constructed* while the feature is gated on, so on the default
+     * configuration Element Web behaves exactly as it did before this existed, and the index
+     * database is only ever opened by a session that is going to use it.
+     *
+     * @returns The manager, or null when the feature is unavailable or turned off and none has been
+     *     constructed yet. An existing one keeps being handed back whatever the setting now says;
+     *     see the comment below, and {@link BrowserEventIndexManager.featureEnabled}.
+     */
     public getEventIndexingManager(): BaseEventIndexManager | null {
-        if (!isBrowserEventIndexEnabled()) return null;
-        this.eventIndexManager ??= new BrowserEventIndexManager();
+        // Once the manager exists it stays reachable, whatever the setting now says.
+        // Teardown must not depend on it: Lifecycle.clearStorage() wipes localStorage
+        // before it asks for the manager to delete the index. A manager is still only ever
+        // *constructed* while the feature is enabled.
+        //
+        // Handing one back is not the same as the feature being on, and nothing here can be
+        // what enforces that: EventIndexPeg reads supportsEventIndexing() once and caches it,
+        // so a manager returned after the flag went off would otherwise still index and still
+        // create a database. The gate is therefore enforced inside the manager, on every path
+        // that writes -- see BrowserEventIndexManager.featureEnabled().
+        if (this.eventIndexManager) return this.eventIndexManager;
+        if (!isBrowserEventIndexEnabled()) {
+            this.cleanUpDisabledEventIndex();
+            return null;
+        }
+        this.eventIndexManager = new BrowserEventIndexManager();
         return this.eventIndexManager;
+    }
+
+    /**
+     * Nothing deletes the index database when a user simply turns the labs flag off, so do
+     * it here: at most once per session, and only on a path where no manager has been
+     * constructed, i.e. where this session has no index of its own to race.
+     */
+    private cleanUpDisabledEventIndex(): void {
+        if (this.disabledEventIndexCleanedUp) return;
+        this.disabledEventIndexCleanedUp = true;
+        deleteDisabledEventIndexDb().catch(() => {});
     }
 
     public checkSessionLockFree(): boolean {

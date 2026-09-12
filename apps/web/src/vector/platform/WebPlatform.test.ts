@@ -313,5 +313,82 @@ describe("WebPlatform", () => {
             expect(manager).toBeInstanceOf(BrowserEventIndexManager);
             expect(platform.getEventIndexingManager()).toBe(manager);
         });
+
+        it("keeps returning an existing manager once the setting is gone, so logout can delete the index", () => {
+            vi.stubGlobal("indexedDB", {});
+            const getValue = vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            const platform = new WebPlatform();
+            const manager = platform.getEventIndexingManager();
+            expect(manager).toBeInstanceOf(BrowserEventIndexManager);
+
+            // Lifecycle.clearStorage() wipes localStorage before it asks for the manager.
+            getValue.mockReturnValue(false);
+            expect(platform.getEventIndexingManager()).toBe(manager);
+            getValue.mockImplementation(() => {
+                throw new Error("settings unavailable");
+            });
+            expect(platform.getEventIndexingManager()).toBe(manager);
+        });
+
+        it("never constructs a manager while the flag is off, and still gates on the live setting", async () => {
+            vi.stubGlobal("indexedDB", {});
+            const getValue = vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            const platform = new WebPlatform();
+            expect(platform.getEventIndexingManager()).toBeNull();
+            expect(platform.getEventIndexingManager()).toBeNull();
+
+            getValue.mockReturnValue(true);
+            const manager = platform.getEventIndexingManager();
+            expect(manager).toBeInstanceOf(BrowserEventIndexManager);
+
+            // Reachable for teardown, but the feature itself follows the setting.
+            getValue.mockReturnValue(false);
+            await expect(manager!.supportsEventIndexing()).resolves.toBe(false);
+        });
+
+        it("hands back a manager that still refuses to index once the flag is off", async () => {
+            const open = vi.fn();
+            vi.stubGlobal("indexedDB", { open });
+            const getValue = vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            const platform = new WebPlatform();
+            const manager = platform.getEventIndexingManager()!;
+
+            // The flag goes off mid-session. EventIndexPeg cached supportsEventIndexing() at
+            // start-up and never asks again, so nothing upstream of the manager re-reads the
+            // setting -- and the settings panel's Enable button calls straight into it. Keeping
+            // the manager reachable for teardown must not make that button able to put a fresh
+            // encrypted index on disk, so the gate is enforced inside the manager instead.
+            getValue.mockReturnValue(false);
+            expect(platform.getEventIndexingManager()).toBe(manager);
+            await manager.initEventIndex("@alice:example.org", "DEVICE1");
+            expect(open).not.toHaveBeenCalled();
+            await expect(manager.isEventIndexEmpty()).resolves.toBe(true);
+        });
+
+        it("drops a database left behind by a disabled index, at most once", () => {
+            const deleteDatabase = vi.fn(() => {
+                const req = {} as IDBOpenDBRequest;
+                queueMicrotask(() => req.onsuccess?.(new Event("success")));
+                return req;
+            });
+            vi.stubGlobal("indexedDB", { deleteDatabase });
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+            const platform = new WebPlatform();
+            expect(platform.getEventIndexingManager()).toBeNull();
+            expect(deleteDatabase).toHaveBeenCalledWith("element-eventindex");
+            expect(platform.getEventIndexingManager()).toBeNull();
+            expect(deleteDatabase).toHaveBeenCalledTimes(1);
+        });
+
+        it("leaves the database alone when the setting cannot be read", () => {
+            const deleteDatabase = vi.fn();
+            vi.stubGlobal("indexedDB", { deleteDatabase });
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(() => {
+                throw new Error("settings not ready");
+            });
+            expect(new WebPlatform().getEventIndexingManager()).toBeNull();
+            expect(deleteDatabase).not.toHaveBeenCalled();
+        });
     });
 });

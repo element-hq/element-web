@@ -2089,7 +2089,6 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
-            "still_indexing": "Some rooms are still being indexed. Older messages may not appear yet.",
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"
