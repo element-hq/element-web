@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import counterpart from "counterpart";
 import { type TranslationKey as TKey } from "matrix-web-i18n";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,6 +18,30 @@ import type Store from "./store.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const FALLBACK_LOCALE = "en";
+
+const STRINGS_DIR = path.join(__dirname, "i18n", "strings");
+
+/**
+ * Index the strings files the app was built with by the language key the web app names them with.
+ *
+ * The web app derives those keys from these same file names — lower cased, `_` becoming `-`, and the
+ * region dropped where it only repeats the language — so deriving them from the files here is what
+ * keeps the two ends agreeing. Guessing a file name back from a key cannot: `de` and `mg` would have
+ * to become `de_DE` and `mg_MG`, and `zh-hans` would have to become `zh_Hans` rather than `zh_HANS`,
+ * which is a different file wherever the filesystem cares about case.
+ *
+ * @returns The strings file to load for each language key, keyed as the web app keys them.
+ */
+function getStringsFiles(): Map<string, string> {
+    const files = new Map<string, string>();
+    for (const file of fs.readdirSync(STRINGS_DIR)) {
+        if (!file.endsWith(".json")) continue;
+        const parts = path.basename(file, ".json").toLowerCase().split("_");
+        const key = parts.length === 2 && parts[0] === parts[1] ? parts[0] : parts.join("-");
+        files.set(key, file);
+    }
+    return files;
+}
 
 type TranslationKey = TKey<typeof EN>;
 
@@ -66,7 +91,7 @@ export class AppLocalization {
     private readonly store: Store;
 
     public constructor({ components = [], store }: { components: Component[]; store: Store }) {
-        counterpart.registerTranslations(FALLBACK_LOCALE, this.fetchTranslationJson("en_EN"));
+        counterpart.registerTranslations(FALLBACK_LOCALE, this.fetchTranslationJson(FALLBACK_LOCALE));
         counterpart.setFallbackLocale(FALLBACK_LOCALE);
         counterpart.setSeparator("|");
 
@@ -83,22 +108,15 @@ export class AppLocalization {
         this.resetLocalizedUI();
     }
 
-    // Format language strings from normalized form to non-normalized form (e.g. en-gb to en_GB)
-    private denormalize(locale: string): string {
-        if (locale === "en") {
-            locale = "en_EN";
-        }
-        const parts = locale.split("-");
-        if (parts.length > 1) {
-            parts[1] = parts[1].toUpperCase();
-        }
-        return parts.join("_");
-    }
-
     public fetchTranslationJson(locale: string): Record<string, string> {
         try {
             console.log("Fetching translation json for locale: " + locale);
-            return loadJsonFile(__dirname, "i18n", "strings", `${this.denormalize(locale)}.json`);
+            const file = getStringsFiles().get(locale.toLowerCase());
+            if (!file) {
+                console.log(`No translation json for locale: '${locale}'`);
+                return {};
+            }
+            return loadJsonFile(STRINGS_DIR, file);
         } catch (e) {
             console.log(`Could not fetch translation json for locale: '${locale}'`, e);
             return {};
@@ -114,13 +132,15 @@ export class AppLocalization {
 
         const chosenLocale = locales.find((locale) => {
             const translations = this.fetchTranslationJson(locale);
-            if (translations !== null) {
-                counterpart.registerTranslations(locale, translations);
-            }
-            return !!translations;
+            // Nothing to register means nothing to show. Settling on the locale anyway would leave
+            // the menus in English while the app claimed to be in the chosen language, so move on to
+            // the next preference instead.
+            if (Object.keys(translations).length === 0) return false;
+            counterpart.registerTranslations(locale, translations);
+            return true;
         });
 
-        counterpart.setLocale(chosenLocale!);
+        counterpart.setLocale(chosenLocale ?? FALLBACK_LOCALE);
         this.store.set(AppLocalization.STORE_KEY, locales);
 
         this.resetLocalizedUI();
