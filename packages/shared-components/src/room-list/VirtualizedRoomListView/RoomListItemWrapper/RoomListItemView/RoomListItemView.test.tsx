@@ -125,19 +125,19 @@ describe("<RoomListItemView />", () => {
 
     it("should show hover menu when showMoreOptionsMenu is true", () => {
         const { container } = render(<WithHoverMenu />);
-        expect(container.querySelector('[aria-label="More Options"]')).not.toBeNull();
+        expect(container.querySelector('[aria-label^="More options for "]')).not.toBeNull();
     });
 
     it("should hide hover menu when showMoreOptionsMenu is false", () => {
         const { container } = render(<WithoutHoverMenu />);
-        expect(container.querySelector('[aria-label="More Options"]')).toBeNull();
+        expect(container.querySelector('[aria-label^="More options for "]')).toBeNull();
     });
 
     it("reveals the hover menu on keyboard focus and clears it when focus leaves", async () => {
         // isFocused focuses the row via the keyboard on mount, so the hover menu is revealed.
         const { container } = render(<WithHoverMenu isFocused={true} />);
         const option = screen.getByRole("option");
-        const moreButton = container.querySelector('[aria-label="More Options"]');
+        const moreButton = container.querySelector('[aria-label^="More options for "]');
 
         expect(option.className).toMatch(/keyboardActive/);
         expect(moreButton).toBeVisible();
