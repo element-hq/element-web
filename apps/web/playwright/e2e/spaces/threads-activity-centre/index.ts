@@ -387,6 +387,16 @@ export class Helpers {
     }
 
     /**
+     * Go back from a thread to the thread list in the right panel.
+     *
+     * Clicking a row in the TAC opens the thread itself on top of the thread list, so the
+     * card's back button is the way to reach the list.
+     */
+    clickBackToThreadList() {
+        return this.page.getByRole("complementary").getByRole("button", { name: "Threads" }).click();
+    }
+
+    /**
      * Clicks the button to mark all threads as read in the current room
      */
     clickMarkAllThreadsRead() {

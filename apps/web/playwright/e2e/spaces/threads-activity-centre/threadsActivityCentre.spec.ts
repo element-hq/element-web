@@ -103,12 +103,15 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             // The indicator should be shown
             await util.assertHighlightIndicator();
 
-            // Bot-sent threads appear in "Other threads" tab
+            // The thread mentioning us is relevant to us, so it lands in "My threads"
             await util.openTac();
+            await util.assertThreadsInTac([{ room: room2.name, notificationLevel: "highlight" }]);
+
+            // The other bot-sent threads land in "Other threads", most recent first
             await util.switchToOtherThreadsTab();
             await util.assertThreadsInTac([
-                { room: room2.name, notificationLevel: "highlight" },
                 { room: room1.name, notificationLevel: "notification" },
+                { room: room2.name, notificationLevel: "notification" },
             ]);
 
             // Verify that we don't have a visual regression
@@ -123,9 +126,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
 
-            // Click on the first thread in TAC (switch to Other threads tab first)
+            // The thread mentioning us is in "My threads", the tab shown by default
             await util.openTac();
-            await util.switchToOtherThreadsTab();
             await util.clickThreadInTac(room2.name);
 
             // Verify that the thread panel is opened after a click on a thread in the TAC
@@ -192,6 +194,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await util.switchToOtherThreadsTab();
         await util.clickThreadInTac(room1.name);
 
+        // The TAC opens the thread itself, so step back to the list to reach its menu
+        await util.clickBackToThreadList();
         await util.clickMarkAllThreadsRead();
 
         await util.assertNoTacIndicator();
@@ -245,9 +249,10 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             await expect(roomList.getByRole("option", { name: "Open room room 00" })).toBeVisible();
             await expect(targetRow).not.toBeInViewport();
 
-            // Clicking the room in the TAC dispatches view_room with show_room_tile…
+            // Clicking the thread in the TAC dispatches view_room with show_room_tile…
             await util.openTac();
-            await util.clickRoomInTac(room1.name);
+            await util.switchToOtherThreadsTab();
+            await util.clickThreadInTac(room1.name);
 
             // …which scrolls the room list to bring the room's tile into view.
             await expect(targetRow).toBeInViewport();
