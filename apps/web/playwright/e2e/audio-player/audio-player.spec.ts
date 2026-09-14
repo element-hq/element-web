@@ -314,7 +314,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Assert that one line contains the user name
             await expect(
-                tile.locator(".mx_ReplyChain [data-testid='reply-tile-sender']").getByText(user.displayName!),
+                tile.locator(".mx_ReplyChain").getByTestId("reply-tile-sender").getByText(user.displayName!),
             ).toBeVisible();
 
             // Assert that the other line contains the file button
