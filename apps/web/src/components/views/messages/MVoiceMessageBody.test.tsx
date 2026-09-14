@@ -13,7 +13,7 @@ import { act, render, screen } from "test-utils-rtl";
 import React from "react";
 
 import { createTestClient } from "test-utils";
-import { MockedPlayback } from "../../../../test/unit-tests/audio/MockedPlayback";
+import { MockedPlayback } from "../../../audio/__mocks__";
 import { type Playback, PlaybackState } from "../../../audio/Playback";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import type { MediaEventHelper } from "../../../utils/MediaEventHelper";

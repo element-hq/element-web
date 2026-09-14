@@ -1,0 +1,285 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React, { type ReactElement } from "react";
+import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
+import { render, screen, waitFor } from "test-utils-rtl";
+import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+    mockClientMethodsServer,
+    mockPlatformPeg,
+    mockClientMethodsCrypto,
+    mockClientMethodsRooms,
+    useMockMediaDevices,
+    TestSDKContext,
+} from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth.ts";
+
+import SettingsStore, { type CallbackFn } from "../../../settings/SettingsStore";
+import SdkConfig from "../../../SdkConfig";
+import { UserTab } from "./UserTab";
+import UserSettingsDialog from "./UserSettingsDialog";
+import { UIFeature } from "../../../settings/UIFeature";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { type FeatureSettingKey } from "../../../settings/Settings.tsx";
+
+mockPlatformPeg({
+    supportsSpellCheckSettings: vi.fn().mockReturnValue(false),
+    getAppVersion: vi.fn().mockResolvedValue("1"),
+});
+
+vi.mock("../../../settings/SettingsStore", () => ({
+    default: {
+        getValue: vi.fn(),
+        getValueAt: vi.fn(),
+        canSetValue: vi.fn(),
+        monitorSetting: vi.fn(),
+        watchSetting: vi.fn(),
+        unwatchSetting: vi.fn(),
+        getFeatureSettingNames: vi.fn(),
+        getBetaInfo: vi.fn(),
+        getDisplayName: vi.fn(),
+        getDescription: vi.fn(),
+        shouldHaveWarning: vi.fn(),
+        disabledMessage: vi.fn(),
+        settingIsOveriddenAtConfigLevel: vi.fn(),
+        doesSettingSupportLevel: vi.fn(),
+    },
+}));
+
+describe("<UserSettingsDialog />", () => {
+    const userId = "@alice:server.org";
+    const mockSettingsStore = vi.mocked(SettingsStore);
+    let mockClient!: MockedObject<MatrixClient>;
+
+    let sdkContext: TestSDKContext;
+    const defaultProps = { onFinished: vi.fn() };
+    const getComponent = (
+        props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
+    ): ReactElement => <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            ...mockClientMethodsServer(),
+            ...mockClientMethodsCrypto(),
+            ...mockClientMethodsRooms(),
+            getIgnoredUsers: vi.fn().mockResolvedValue([]),
+            getPushers: vi.fn().mockResolvedValue([]),
+            getProfileInfo: vi.fn().mockResolvedValue({}),
+            getMediaConfig: vi.fn(),
+            getAuthMetadata: vi.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
+        });
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
+        mockSettingsStore.getValue.mockReturnValue(false);
+        mockSettingsStore.getValueAt.mockReturnValue(false);
+        mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
+        SdkConfig.reset();
+        SdkConfig.put({ brand: "Test" });
+    });
+
+    const getActiveTabLabel = (container: Element) =>
+        container.querySelector(".mx_TabbedView_tabLabel_active")?.textContent;
+
+    it("should render general settings tab when no initialTabId", () => {
+        const { container } = render(getComponent());
+
+        expect(getActiveTabLabel(container)).toEqual("Account");
+    });
+
+    it("should render initial tab when initialTabId is set", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Help }));
+
+        expect(getActiveTabLabel(container)).toEqual("Help & About");
+    });
+
+    it("should render general tab if initialTabId tab cannot be rendered", () => {
+        // mjolnir tab is only rendered in some configs
+        const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
+
+        expect(getActiveTabLabel(container)).toEqual("Account");
+    });
+
+    it("renders tabs correctly", () => {
+        SdkConfig.add({
+            show_labs_settings: true,
+        });
+        const { container } = render(getComponent());
+        expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
+    });
+
+    it("renders ignored users tab when feature_mjolnir is enabled", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === "feature_mjolnir");
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
+    });
+
+    it("renders voip tab when voip is enabled", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName: any): any => settingName === UIFeature.Voip);
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
+    });
+
+    it("renders with session manager tab selected", () => {
+        const { getByTestId } = render(getComponent({ initialTabId: UserTab.SessionManager }));
+        expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Sessions");
+    });
+
+    it("renders with appearance tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Appearance }));
+
+        expect(getActiveTabLabel(container)).toEqual("Appearance");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Appearance");
+    });
+
+    it("renders with notifications tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Notifications }));
+
+        expect(getActiveTabLabel(container)).toEqual("Notifications");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Notifications");
+    });
+
+    it("renders with preferences tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Preferences }));
+
+        expect(getActiveTabLabel(container)).toEqual("Preferences");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Preferences");
+    });
+
+    it("renders with keyboard tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Keyboard }));
+
+        expect(getActiveTabLabel(container)).toEqual("Keyboard");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Keyboard");
+    });
+
+    it("renders with sidebar tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Sidebar }));
+
+        expect(getActiveTabLabel(container)).toEqual("Sidebar");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Sidebar");
+    });
+
+    it("renders with voip tab selected", () => {
+        useMockMediaDevices();
+        mockSettingsStore.getValue.mockImplementation((settingName: any): any => settingName === UIFeature.Voip);
+        const { container } = render(getComponent({ initialTabId: UserTab.Voice }));
+
+        expect(getActiveTabLabel(container)).toEqual("Voice & Video");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Voice & Video");
+    });
+
+    it("renders with security tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Security }));
+
+        expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Security & Privacy");
+    });
+
+    it("renders with labs tab selected", () => {
+        SdkConfig.add({
+            show_labs_settings: true,
+        });
+        const { container } = render(getComponent({ initialTabId: UserTab.Labs }));
+
+        expect(getActiveTabLabel(container)).toEqual("Labs");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Labs");
+    });
+
+    it("renders with mjolnir tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === "feature_mjolnir");
+        const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
+        expect(getActiveTabLabel(container)).toEqual("Ignored users");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Ignored Users");
+    });
+
+    it("renders with help tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Help }));
+
+        expect(getActiveTabLabel(container)).toEqual("Help & About");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Help & About");
+    });
+
+    it("renders labs tab when show_labs_settings is enabled in config", () => {
+        SdkConfig.add({
+            show_labs_settings: true,
+        });
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
+    });
+
+    it("renders labs tab when some feature is in beta", () => {
+        mockSettingsStore.getFeatureSettingNames.mockReturnValue([
+            "feature_beta_setting",
+            "feature_just_normal_labs",
+        ] as unknown[] as FeatureSettingKey[]);
+        mockSettingsStore.getBetaInfo.mockImplementation((settingName: any) =>
+            settingName === "feature_beta_setting" ? ({} as any) : undefined,
+        );
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
+    });
+
+    it("watches settings", async () => {
+        const watchSettingCallbacks: Record<string, CallbackFn<any>> = {};
+
+        mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
+            watchSettingCallbacks[settingName] = callback;
+            return `mock-watcher-id-${settingName}`;
+        });
+        mockSettingsStore.getValue.mockReturnValue(false);
+
+        const { queryByTestId, findByTestId, unmount } = render(getComponent());
+        expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeFalsy();
+
+        expect(mockSettingsStore.watchSetting).toHaveBeenCalledWith("feature_mjolnir", null, expect.anything());
+
+        // call the watch setting callback
+        mockSettingsStore.getValue.mockReturnValue(true);
+        watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", "", SettingLevel.ACCOUNT, true, true);
+
+        // tab is rendered now
+        await expect(findByTestId(`settings-tab-${UserTab.Mjolnir}`)).resolves.toBeTruthy();
+
+        unmount();
+
+        // unwatches settings on unmount
+        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
+    });
+
+    it("displays an indicator when user needs to set up recovery", async () => {
+        // Initially, the user doesn't have secret storage, so it should display
+        // an indicator.
+        vi.mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue(null);
+
+        const { container } = render(getComponent());
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).toBeInTheDocument();
+        });
+
+        // Test that the handler ignores unknown account data
+        mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "bar" }));
+
+        // The user now has secret storage.  Trigger an update and check that
+        // the indicator disappears.
+        vi.mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
+        mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "m.secret_storage.default_key" }));
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).not.toBeInTheDocument();
+        });
+    });
+});

@@ -30,7 +30,6 @@ describe("BugReportDialog", () => {
 
     let prevLogger: ConsoleLogger;
     beforeEach(() => {
-        vi.resetAllMocks();
         SdkConfig.put({
             bug_report_endpoint_url: BUG_REPORT_URL,
         });
@@ -58,6 +57,7 @@ describe("BugReportDialog", () => {
 
     afterEach(() => {
         global.mx_rage_logger = prevLogger;
+        vi.resetAllMocks();
         vi.restoreAllMocks();
         SdkConfig.reset();
     });

@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import React from "react";
@@ -26,9 +26,11 @@ describe("CreateSectionDialog", () => {
     let client: MatrixClient;
     let rooms: Room[];
 
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
+    });
 
+    beforeEach(() => {
         client = stubClient();
         rooms = [
             mkStubRoom("!first:example.org", "First room", client),

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { RovingAction, type RovingTabIndexProviderProps } from "@element-hq/web-shared-components";
 import { render } from "test-utils-rtl";
 
@@ -44,6 +44,9 @@ const getInjectedGetAction = (): NonNullable<RovingTabIndexProviderProps["getAct
 describe("RovingTabIndex adapter", () => {
     beforeEach(() => {
         mockSharedRovingTabIndexProvider.mockClear();
+    });
+
+    afterEach(() => {
         vi.restoreAllMocks();
     });
 

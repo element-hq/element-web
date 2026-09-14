@@ -7,10 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_ReplyChain {
-    margin: 0; /* Reset default blockquote margin */
+    margin-block: 0 var(--cpd-space-2x);
+    margin-inline: 0;
     padding-left: 10px;
     border-left: 2px solid var(--username-color);
     border-radius: 2px;
+
+    .mx_ReplyChain_compact & {
+        margin-block-end: var(--cpd-space-1x);
+    }
 
     .mx_ReplyChain_show {
         &.mx_AccessibleButton_kind_link_inline {

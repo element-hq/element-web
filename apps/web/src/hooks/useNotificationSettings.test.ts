@@ -21,7 +21,7 @@ import {
 } from "../models/notificationsettings/NotificationSettings";
 import { StandardActions } from "../notifications/StandardActions";
 import { RoomNotifState } from "../RoomNotifs";
-import samplePushRules from "../../test/unit-tests/models/notificationsettings/pushrules_sample.json" with { type: "json" };
+import samplePushRules from "../models/notificationsettings/__mocks__/pushrules_sample.json" with { type: "json" };
 
 const expectedModel: NotificationSettings = {
     globalMute: false,

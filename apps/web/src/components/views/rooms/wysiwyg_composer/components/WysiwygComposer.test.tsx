@@ -598,6 +598,9 @@ describe("WysiwygComposer", () => {
 
             customRender(client, roomContext, editorState);
             await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+            if (editorState) {
+                await waitFor(() => expect(screen.getByRole("textbox").textContent).not.toBe(""));
+            }
             return { textbox: screen.getByRole("textbox"), spyDispatcher };
         };
 
@@ -605,6 +608,14 @@ describe("WysiwygComposer", () => {
             mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
             vi.spyOn(EventUtils, "findEditableEvent").mockReturnValue(mockEvent);
         });
+
+        function select(selection: SubSelection) {
+            return act(async () => {
+                await setSelection(selection);
+                // the event is not automatically fired by jest
+                document.dispatchEvent(new CustomEvent("selectionchange"));
+            });
+        }
 
         describe("In message creation", () => {
             it("Should not moving when the composer is filled", async () => {
@@ -628,6 +639,20 @@ describe("WysiwygComposer", () => {
                 // When
                 const { textbox, spyDispatcher } = await setup();
 
+                // Put the caret at the start of the composer explicitly, as the editing tests
+                // below do. The composer does this itself once ready, but via an effect driven by
+                // a state update from the async wasm init that is not wrapped in act(), so waiting
+                // for contentEditable="true" does not guarantee the caret has landed. With no
+                // caret inside the editor, isCaretAtStart() is false, ArrowUp is ignored, and
+                // nothing is ever dispatched.
+                await select({
+                    anchorNode: textbox,
+                    anchorOffset: 0,
+                    focusNode: textbox,
+                    focusOffset: 0,
+                    isForward: true,
+                });
+
                 fireEvent.keyDown(textbox, {
                     key: "ArrowUp",
                 });
@@ -642,14 +667,6 @@ describe("WysiwygComposer", () => {
         });
 
         describe("In message editing", () => {
-            function select(selection: SubSelection) {
-                return act(async () => {
-                    await setSelection(selection);
-                    // the event is not automatically fired by jest
-                    document.dispatchEvent(new CustomEvent("selectionchange"));
-                });
-            }
-
             describe("Moving up", () => {
                 it("Should not moving when caret is not at beginning of the text", async () => {
                     // When

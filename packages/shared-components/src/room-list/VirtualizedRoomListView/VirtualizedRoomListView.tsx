@@ -581,17 +581,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     return (
         <DragDropProvider<RoomListDragData>
             onDragStart={(event) => {
-                const { source } = event.operation;
-                // Changing the state of sections (collapsed/expanded) while dragging a section header causes a double readback for the a11y announcement.
-                if (isSectionDragData(source?.data)) {
-                    vm.onSectionDragStart();
-                }
+                // Changing the state of sections (collapsed/expanded) while dragging a section header or a room causes a double readback for the a11y announcement.
+                vm.onSectionOrRoomDragStart();
             }}
             onDragEnd={(event) => {
                 const { source, target } = event.operation;
-                if (isSectionDragData(source?.data)) {
-                    vm.onSectionDragEnd();
-                }
+                vm.onSectionOrRoomDragEnd();
+
                 if (event.canceled || !source || !target) return;
                 if (isSectionDragData(source.data)) {
                     vm.changeSectionOrder(String(source.id), String(target.id));

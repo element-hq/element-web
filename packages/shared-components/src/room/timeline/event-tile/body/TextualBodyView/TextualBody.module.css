@@ -19,6 +19,7 @@
 
 .root[data-event-layout="bubble"] {
     max-width: 100%;
+    padding: 1px;
 }
 
 .text,

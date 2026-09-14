@@ -12,10 +12,12 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_IRCLayout {
     --name-width: 80px; /* cf. ircDisplayNameWidth on Settings.tsx */
-    --event-tile-irc-name-width: var(--name-width);
     --icon-width: 14px;
     --line-height: var(--irc-line-height);
     --right-padding: 5px;
+    /* Map application IRC geometry onto the shared EventTileView API. */
+    --event-tile-irc-name-width: var(--name-width);
+    --event-tile-irc-timestamp-width: var(--MessageTimestamp-width);
 
     line-height: var(--line-height) !important;
 
@@ -34,25 +36,6 @@ Please see LICENSE files in the repository root for full details.
             width: unset;
             order: unset;
             flex-shrink: unset; /* Unset flex-shrink to prevent long display name blowout */
-        }
-
-        .mx_EventTile_emote {
-            > .mx_EventTile_avatar {
-                margin-left: initial;
-            }
-        }
-
-        .mx_MessageTimestamp {
-            width: initial;
-        }
-
-        /**
-         * adding the icon back in the document flow
-         * if it's not present, there's no unwanted wasted space
-         */
-        .mx_EventTile_e2eIcon {
-            position: relative;
-            order: -1;
         }
     }
 

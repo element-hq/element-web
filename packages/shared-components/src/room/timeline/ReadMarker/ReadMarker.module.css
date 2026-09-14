@@ -27,3 +27,9 @@
         width 400ms cubic-bezier(0.12, 0, 0.39, 0) 1s,
         opacity 400ms cubic-bezier(0.12, 0, 0.39, 0) 1s;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .line {
+        transition: none;
+    }
+}

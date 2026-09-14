@@ -157,8 +157,8 @@ test.describe("Room list unread activity toast", () => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
 
-            const chatsHeader = getSectionHeader(page, "Chats");
-            await expect(chatsHeader).toBeVisible();
+            const roomsHeader = getSectionHeader(page, "Rooms");
+            await expect(roomsHeader).toBeVisible();
 
             // Notify the Chats room and collapse the section while its header is still on screen.
             await bot.sendMessage(notifyId, "Hidden in a collapsed section");
@@ -167,8 +167,8 @@ test.describe("Room list unread activity toast", () => {
                     .getByRole("row", { name: "Open room chats notify room" })
                     .getByTestId("notification-decoration"),
             ).toBeVisible();
-            await chatsHeader.click();
-            await expect(chatsHeader).toHaveAttribute("aria-expanded", "false");
+            await roomsHeader.click();
+            await expect(roomsHeader).toHaveAttribute("aria-expanded", "false");
 
             // Grow the Favourites section until the collapsed Chats header is pushed below the fold.
             for (let i = 0; i < 20; i++) {
@@ -179,14 +179,14 @@ test.describe("Room list unread activity toast", () => {
             }
 
             // Wait until the collapsed Chats header has been pushed offscreen (all favourites synced).
-            await expect(chatsHeader).not.toBeInViewport();
+            await expect(roomsHeader).not.toBeInViewport();
 
             // The collapsed Chats header is offscreen, but its hidden notification raises the toast.
             await expect(getToast(page)).toBeVisible();
 
             // Clicking the toast scrolls the collapsed section header into view.
             await getToast(page).click();
-            await expect(chatsHeader).toBeInViewport();
+            await expect(roomsHeader).toBeInViewport();
         });
     });
 });

@@ -59,7 +59,7 @@ describe("EventTileAvatarAdapter", () => {
             <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={senderSnapshot} />,
         );
 
-        expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        expect(container.querySelector('[data-testid="member-avatar"]')).not.toBeNull();
         expect(mockedMemberAvatar.mock.calls[0][0]).toMatchObject({
             member: avatarMember,
             size: "24px",
@@ -73,7 +73,7 @@ describe("EventTileAvatarAdapter", () => {
             <EventTileAvatarAdapter avatarMember={null} senderSnapshot={makeSenderSnapshot()} />,
         );
 
-        expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
+        expect(container.querySelector('[data-testid="member-avatar"]')).toBeNull();
         expect(mockedMemberAvatar).not.toHaveBeenCalled();
     });
 });

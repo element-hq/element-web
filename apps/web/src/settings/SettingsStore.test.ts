@@ -19,6 +19,7 @@ import SettingsStore from "./SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test/test-utils";
 import { SETTINGS, type SettingKey } from "./Settings.tsx";
 import MatrixClientBackedController from "./controllers/MatrixClientBackedController.ts";
+import SettingController from "./controllers/SettingController.ts";
 
 const TEST_DATA = [
     {
@@ -83,6 +84,89 @@ describe("SettingsStore", () => {
         it(`supportedLevelsAreOrdered doesn't incorrectly override setting`, async () => {
             await SettingsStore.setValue(SETTING_NAME_WITH_CONFIG_OVERRIDE, null, SettingLevel.DEVICE, true);
             expect(SettingsStore.getValueAt(SettingLevel.DEVICE, SETTING_NAME_WITH_CONFIG_OVERRIDE)).toBe(true);
+        });
+    });
+
+    describe("multiple controllers", () => {
+        /**
+         * An existing device-level boolean setting which has no controller of its own, so the
+         * tests below can attach their own without disturbing real behaviour.
+         */
+        const SETTING_NAME = "showHiddenEventsInTimeline";
+
+        /** A controller which records the calls it receives and can be told how to answer. */
+        class TestController extends SettingController {
+            public readonly calls: string[] = [];
+
+            public constructor(
+                private readonly answers: { override?: any; allowChange?: boolean; disabled?: boolean | string } = {},
+            ) {
+                super();
+            }
+
+            public getValueOverride(): any {
+                this.calls.push("getValueOverride");
+                return this.answers.override ?? null;
+            }
+
+            public async beforeChange(): Promise<boolean> {
+                this.calls.push("beforeChange");
+                return this.answers.allowChange ?? true;
+            }
+
+            public onChange(): void {
+                this.calls.push("onChange");
+            }
+
+            public get settingDisabled(): boolean | string {
+                return this.answers.disabled ?? false;
+            }
+        }
+
+        const setControllers = (...controllers: SettingController[]): void => {
+            SETTINGS[SETTING_NAME].controller = controllers;
+        };
+
+        afterEach(() => {
+            SETTINGS[SETTING_NAME].controller = undefined;
+        });
+
+        it("uses the first override given, and does not consult the controllers after it", () => {
+            const [noOverride, override, ignored] = [
+                new TestController(),
+                new TestController({ override: true }),
+                new TestController({ override: false }),
+            ];
+            setControllers(noOverride, override, ignored);
+
+            expect(SettingsStore.getValue(SETTING_NAME)).toBe(true);
+            expect(noOverride.calls).toEqual(["getValueOverride"]);
+            expect(ignored.calls).toEqual([]);
+        });
+
+        it("tells every controller about a change which goes through", async () => {
+            const [first, second] = [new TestController(), new TestController()];
+            setControllers(first, second);
+
+            await SettingsStore.setValue(SETTING_NAME, null, SettingLevel.DEVICE, true);
+            expect(first.calls).toEqual(["beforeChange", "onChange"]);
+            expect(second.calls).toEqual(["beforeChange", "onChange"]);
+        });
+
+        it("stops at the first controller which refuses a change", async () => {
+            const [refuses, ignored] = [new TestController({ allowChange: false }), new TestController()];
+            setControllers(refuses, ignored);
+
+            await SettingsStore.setValue(SETTING_NAME, null, SettingLevel.DEVICE, true);
+            expect(refuses.calls).toEqual(["beforeChange"]);
+            expect(ignored.calls).toEqual([]);
+        });
+
+        it("is disabled if any controller disables it, preferring one which gives a reason", () => {
+            setControllers(new TestController({ disabled: true }), new TestController({ disabled: "Not today" }));
+
+            expect(SettingsStore.canSetValue(SETTING_NAME, null, SettingLevel.DEVICE)).toBe(false);
+            expect(SettingsStore.disabledMessage(SETTING_NAME)).toBe("Not today");
         });
     });
 

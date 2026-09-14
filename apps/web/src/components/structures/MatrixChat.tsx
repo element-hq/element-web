@@ -12,21 +12,24 @@ import {
     createClient,
     EventType,
     HttpApiEvent,
+    JoinRule,
     type MatrixClient,
     MatrixEvent,
     MsgType,
+    RestrictedAllowType,
     type RoomType,
     SyncState,
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
+import { type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -75,7 +78,6 @@ import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from "../views/dialogs/UserSettingsDialog";
@@ -120,7 +122,7 @@ import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSet
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
-import { getHtmlText } from "../../HtmlUtils";
+import { sanitizeHtmlText } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
@@ -432,12 +434,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if the user has previously set up cross-signing, verify this device so we can fetch the
             // private keys.
 
-            const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
-            if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
-                this.onShowPostLoginScreen();
-            } else {
-                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-            }
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (!(await shouldSkipSetupEncryption(cli))) {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
@@ -1141,7 +1138,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         type: "m.room.message",
                         content: {
                             msgtype: MsgType.Text,
-                            body: getHtmlText(msg),
+                            body: sanitizeHtmlText(msg),
                             format: "org.matrix.custom.html",
                             formatted_body: sanitizeHtml(msg, sanitizeHtmlParams),
                         },
@@ -1236,10 +1233,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const memberCount = roomToLeave?.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
             warnings.push(
-                <strong className="warning" key="only_member_warning">
+                <span key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
                     {_t("leave_room_dialog|last_person_warning")}
-                </strong>,
+                </span>,
             );
 
             return warnings;
@@ -1247,15 +1244,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const joinRules = roomToLeave?.currentState.getStateEvents("m.room.join_rules", "");
         if (joinRules) {
-            const rule = joinRules.getContent().join_rule;
-            if (rule !== "public") {
+            const content = joinRules.getContent<RoomJoinRulesEventContent>();
+            if (content.join_rule !== JoinRule.Public) {
+                const hasAuthorisedSpaces =
+                    content.join_rule === JoinRule.Restricted &&
+                    !!content.allow?.some(({ type }) => type === RestrictedAllowType.RoomMembership);
+                let warning: string;
+                if (isSpace) {
+                    warning = hasAuthorisedSpaces
+                        ? _t("leave_room_dialog|space_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|space_rejoin_warning");
+                } else {
+                    warning = hasAuthorisedSpaces
+                        ? _t("leave_room_dialog|room_rejoin_warning_restricted")
+                        : _t("leave_room_dialog|room_rejoin_warning");
+                }
                 warnings.push(
-                    <strong className="warning" key="non_public_warning">
+                    <span key="non_public_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
-                        {isSpace
-                            ? _t("leave_room_dialog|space_rejoin_warning")
-                            : _t("leave_room_dialog|room_rejoin_warning")}
-                    </strong>,
+                        {warning}
+                    </span>,
                 );
             }
         }
@@ -1273,10 +1281,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         ? _t("leave_room_dialog|room_leave_admin_warning")
                         : _t("leave_room_dialog|room_leave_mod_warning");
                 warnings.push(
-                    <strong className="warning" key="last_admin_warning">
+                    <span key="last_admin_warning">
                         {" " /* Whitespace, otherwise the sentences get smashed together */}
                         {warning}
-                    </strong>,
+                    </span>,
                 );
             }
         }
@@ -1290,23 +1298,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        const { finished } = Modal.createDialog(QuestionDialog, {
-            title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
-            description: (
-                <span>
-                    {isSpace
-                        ? _t("leave_room_dialog|leave_space_question", {
-                              spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
-                          })
-                        : _t("leave_room_dialog|leave_room_question", {
-                              roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
-                          })}
-                    {warnings}
-                </span>
-            ),
-            button: _t("action|leave"),
-            danger: warnings.length > 0,
-        });
+        const { finished } = Modal.createDialog(
+            QuestionDialog,
+            {
+                title: isSpace
+                    ? _t("leave_room_dialog|leave_space_title", {
+                          spaceName: roomToLeave?.name ?? _t("common|unnamed_space"),
+                      })
+                    : _t("leave_room_dialog|leave_room_title", {
+                          roomName: roomToLeave?.name ?? _t("common|unnamed_room"),
+                      }),
+                description: warnings.length > 0 ? <span>{warnings}</span> : undefined,
+                button: _t("action|leave"),
+                danger: warnings.length > 0,
+            },
+            "mx_LeaveRoomDialog",
+        );
 
         void finished.then(async ([shouldLeave]) => {
             if (shouldLeave) {
@@ -1808,6 +1815,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // If the view is something else, that probably means it's a login or registration view; we handle that in
         // `postLoginSetup`.
         if (this.state.view === Views.PENDING_CLIENT_START) {
+            // Wait for the first sync to complete before showing the logged-in view: otherwise we render
+            // LoggedInView/HomePage against an empty store, with no loading indicator, while /sync is still
+            // in flight.
+            if (!this.firstSyncComplete) {
+                await this.firstSyncPromise.promise;
+            }
+
             if (shouldForceVerification) {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             } else {

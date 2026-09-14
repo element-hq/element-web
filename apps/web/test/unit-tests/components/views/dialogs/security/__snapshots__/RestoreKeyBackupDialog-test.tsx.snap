@@ -58,14 +58,14 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
               class="mx_Dialog_buttons_row"
             >
               <button
-                class="cancel"
+                class="mx_LegacyDialogButton cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
                 Cancel
               </button>
               <button
-                class="mx_Dialog_primary"
+                class="mx_LegacyDialogButton mx_Dialog_primary"
                 data-testid="dialog-primary-button"
                 disabled=""
                 type="button"
@@ -172,14 +172,14 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
               class="mx_Dialog_buttons_row"
             >
               <button
-                class="cancel"
+                class="mx_LegacyDialogButton cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
                 Cancel
               </button>
               <button
-                class="mx_Dialog_primary"
+                class="mx_LegacyDialogButton mx_Dialog_primary"
                 data-testid="dialog-primary-button"
                 type="button"
               >
@@ -283,14 +283,14 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
               class="mx_Dialog_buttons_row"
             >
               <button
-                class="cancel"
+                class="mx_LegacyDialogButton cancel"
                 data-testid="dialog-cancel-button"
                 type="button"
               >
                 Cancel
               </button>
               <button
-                class="mx_Dialog_primary"
+                class="mx_LegacyDialogButton mx_Dialog_primary"
                 data-testid="dialog-primary-button"
                 disabled=""
                 type="button"
@@ -381,7 +381,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when Recovery key 
             class="mx_Dialog_buttons_row"
           >
             <button
-              class="mx_Dialog_primary"
+              class="mx_LegacyDialogButton mx_Dialog_primary"
               data-testid="dialog-primary-button"
               type="button"
             >
@@ -459,7 +459,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when passphrase is
             class="mx_Dialog_buttons_row"
           >
             <button
-              class="mx_Dialog_primary"
+              class="mx_LegacyDialogButton mx_Dialog_primary"
               data-testid="dialog-primary-button"
               type="button"
             >
@@ -537,7 +537,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
             class="mx_Dialog_buttons_row"
           >
             <button
-              class="mx_Dialog_primary"
+              class="mx_LegacyDialogButton mx_Dialog_primary"
               data-testid="dialog-primary-button"
               type="button"
             >
@@ -616,7 +616,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
             class="mx_Dialog_buttons_row"
           >
             <button
-              class="mx_Dialog_primary"
+              class="mx_LegacyDialogButton mx_Dialog_primary"
               data-testid="dialog-primary-button"
               type="button"
             >

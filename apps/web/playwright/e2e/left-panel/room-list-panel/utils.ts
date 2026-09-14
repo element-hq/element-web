@@ -60,22 +60,27 @@ export async function assertRoomInSection(page: Page, sectionName: string, roomN
 export async function dragRoomToSection(page: Page, roomName: string, sectionName: string): Promise<void> {
     const sourceRow = getRoomList(page).getByRole("row", { name: `Open room ${roomName}` });
     const source = sourceRow.locator("button").first();
-    const target = getSectionHeader(page, sectionName);
 
     await expect(sourceRow).toBeVisible();
     await expect(source).toBeVisible();
-    await expect(target).toBeVisible();
 
+    // The source is safe to cache because it is grabbed before the sections collapse.
     const sourceBox = await getBoundingBox(source, `room ${roomName}`);
-    const targetBox = await getBoundingBox(target, `section ${sectionName}`);
-
     const sourceX = sourceBox.x + sourceBox.width / 2;
     const sourceY = sourceBox.y + sourceBox.height / 2;
-    const targetY = targetBox.y + targetBox.height / 2;
 
     // Grab the room
     await page.mouse.move(sourceX, sourceY);
     await page.mouse.down();
+    // Move past the 5px PointerSensor activation threshold so the drag actually starts.
+    // This triggers onSectionOrRoomDragStart, which collapses all sections.
+    await page.mouse.move(sourceX, sourceY + 10, { steps: 5 });
+
+    // Re-query the target now that the sections have collapsed and the layout reflowed.
+    const target = getSectionHeader(page, sectionName);
+    const targetBox = await getBoundingBox(target, `section ${sectionName}`);
+    const targetY = targetBox.y + targetBox.height / 2;
+
     //  Move the room on the section header
     await page.mouse.move(sourceX, targetY, { steps: 10 });
     // Drop the room

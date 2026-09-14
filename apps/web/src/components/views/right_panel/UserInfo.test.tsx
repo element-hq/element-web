@@ -47,14 +47,6 @@ vi.mock("../../../utils/direct-messages", async () => ({
 
 vi.mock("../../../dispatcher/dispatcher");
 
-vi.mock("../../../customisations/UserIdentifier", () => {
-    return {
-        default: {
-            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
-        },
-    };
-});
-
 vi.mock("../../../utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: vi.fn(),
@@ -433,6 +425,9 @@ describe("<UserInfo />", () => {
             if (screen.queryAllByRole("progressbar").length) {
                 await act(() => waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar")));
             }
+            await expect(
+                screen.findByText("User verification unavailable", { exact: false }),
+            ).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
     });

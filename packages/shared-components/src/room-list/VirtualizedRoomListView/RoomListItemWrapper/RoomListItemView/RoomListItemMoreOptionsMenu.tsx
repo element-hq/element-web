@@ -97,20 +97,26 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     hideChevron={true}
                 />
             )}
-            <ToggleMenuItem
-                checked={snapshot.isFavourite}
-                Icon={FavouriteIcon}
-                label={_t("room_list|more_options|favourited")}
-                onSelect={vm.onToggleFavorite}
-                onClick={(evt) => evt.stopPropagation()}
-            />
-            <ToggleMenuItem
-                checked={snapshot.isLowPriority}
-                Icon={ArrowDownIcon}
-                label={_t("room_list|more_options|low_priority")}
-                onSelect={vm.onToggleLowPriority}
-                onClick={(evt) => evt.stopPropagation()}
-            />
+            {/* Favourited and Low priority assign a section, so they are hidden for a room whose
+                section is fixed, such as one with a pending invitation */}
+            {snapshot.canChangeSection && (
+                <>
+                    <ToggleMenuItem
+                        checked={snapshot.isFavourite}
+                        Icon={FavouriteIcon}
+                        label={_t("room_list|more_options|favourited")}
+                        onSelect={vm.onToggleFavorite}
+                        onClick={(evt) => evt.stopPropagation()}
+                    />
+                    <ToggleMenuItem
+                        checked={snapshot.isLowPriority}
+                        Icon={ArrowDownIcon}
+                        label={_t("room_list|more_options|low_priority")}
+                        onSelect={vm.onToggleLowPriority}
+                        onClick={(evt) => evt.stopPropagation()}
+                    />
+                </>
+            )}
             <Separator />
             {snapshot.canInvite && (
                 <MenuItem
@@ -130,7 +136,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     hideChevron={true}
                 />
             )}
-            {snapshot.areSectionsEnabled && (
+            {snapshot.areSectionsEnabled && snapshot.canChangeSection && (
                 <>
                     <SubMenu
                         trigger={

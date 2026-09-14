@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Tagasi",
+        "cancel": "Katkesta",
         "click": "Klõpsa",
         "close": "Sulge",
         "collapse": "Ahenda",
@@ -28,6 +29,7 @@
         "reply": "Vasta",
         "reply_in_thread": "Vasta jutulõngas",
         "retry": "Proovi uuesti",
+        "save": "Salvesta",
         "search": "Otsing",
         "start_chat": "Alusta vestlust",
         "unpin": "Lõpeta esiletõstmine",
@@ -40,6 +42,11 @@
         "options": "Valikud",
         "preferences": "Eelistused",
         "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
+    },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Eemalda kõik"
+        }
     },
     "devtools": {
         "toggle_event": "lülita sündmus sisse/välja"
@@ -70,7 +77,7 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "Tühjenda",
+            "clear_status": "Eemalda olek",
             "create_an_account": "Loo kasutajakonto",
             "got_an_account": "Kas sul on kasutajakonto juba olemas?",
             "manage_account": "Halda kasutajakontot",
@@ -98,6 +105,8 @@
             "shared": "Uued liikmed näevad ajalugu",
             "world_readable": "Kõik võivad ajalugu näha"
         },
+        "jump_read_marker": "Keri esimese lugemata sõnumini.",
+        "jump_to_bottom_button": "Mine viimaste sõnumite juurde",
         "jump_to_date": "Vaata kuupäeva",
         "jump_to_date_beginning": "Jututoa algus",
         "jump_to_date_prompt": "Vali kuupäev, mida soovid vaadata",
@@ -192,6 +201,9 @@
         },
         "room_options": "Jututoa valikud",
         "section_created": "Jaotis on loodud",
+        "section_creation": {
+            "label": "Jaotise nimi"
+        },
         "section_header": {
             "edit_section": "Muuda jaotist",
             "more_options": "Täiendavad valikud",

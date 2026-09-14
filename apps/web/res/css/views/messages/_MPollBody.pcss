@@ -53,6 +53,16 @@ $poll-max-width: 550px;
             margin-left: var(--cpd-space-2x);
         }
     }
+
+    &.mx_MPollBody_bubble {
+        width: 550px; /* to prevent timestamp overlapping summary text */
+        max-width: 100%; /* prevent overflowing a reply tile */
+
+        .mx_MPollBody_totalVotes {
+            /* align summary text with corner timestamp */
+            padding: 4px 0;
+        }
+    }
 }
 
 /* Prevent clicking a poll within a reply */

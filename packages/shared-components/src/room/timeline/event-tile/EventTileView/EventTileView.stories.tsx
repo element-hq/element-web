@@ -9,11 +9,16 @@ import React from "react";
 import classNames from "classnames";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { Avatar } from "@vector-im/compound-web";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useMockedViewModel } from "../../../../core/viewmodel";
-import { useEventPresentation, type EventLayout } from "../../EventPresentation";
+import { MemberAvatarView, type MemberAvatarViewSnapshot } from "../../../../core/MemberAvatar/MemberAvatarView";
+import {
+    EventPresentationProvider,
+    useEventPresentation,
+    type EventDensity,
+    type EventLayout,
+} from "../../EventPresentation";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import {
     NotificationBadgeView,
@@ -47,13 +52,16 @@ import {
     type ThreadMessagePreviewViewSnapshot,
 } from "./ThreadSummary/ThreadSummaryView";
 import { EventPreviewView, type EventPreviewViewSnapshot } from "./EventPreviewView";
-import { PinnedMessageBadge } from "./PinnedMessageBadge";
 import { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";
+import bodyStyles from "../body/EventContentBodyView/EventContentBody.module.css";
+import { RoomAvatarView, type RoomAvatarViewSnapshot } from "../../../avatar/RoomAvatar/RoomAvatarView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
 
 type StoryBoundary = HTMLElement;
 const eventTileSlotTestIdPrefix = "event-tile-slot-";
+const boundarySelector = `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`;
+const slotBoundarySelector = `[data-testid^="${eventTileSlotTestIdPrefix}"]`;
 
 const getBoundaryLabel = (boundary: StoryBoundary): string => {
     const storyBoundary = boundary.dataset.storyBoundary;
@@ -68,22 +76,68 @@ const getBoundaryLabel = (boundary: StoryBoundary): string => {
     return "EventTileView.line";
 };
 
-const getBoundary = (target: EventTarget | null, root: HTMLElement): StoryBoundary | null => {
-    if (!(target instanceof HTMLElement)) return null;
-
-    const boundary = target.closest<StoryBoundary>(
-        `[data-story-boundary], [data-testid^="${eventTileSlotTestIdPrefix}"], .storyEventTile, .storyEventLine`,
-    );
-    return boundary && root.contains(boundary) ? boundary : null;
+const getBoundaryDepth = (boundary: StoryBoundary, root: HTMLElement): number => {
+    let depth = 0;
+    let current: Element | null = boundary;
+    while (current && current !== root) {
+        depth += 1;
+        current = current.parentElement;
+    }
+    return depth;
 };
 
-const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElement => {
+const containsPoint = (boundary: StoryBoundary, clientX: number, clientY: number): boolean => {
+    const elements = [boundary, ...boundary.querySelectorAll("*")];
+    return elements.some((element) =>
+        Array.from(element.getClientRects()).some(
+            (rect) => clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom,
+        ),
+    );
+};
+
+const getBoundary = (
+    target: EventTarget | null,
+    root: HTMLElement,
+    clientX?: number,
+    clientY?: number,
+): StoryBoundary | null => {
+    // Padlock icons are SVG elements, so hovering their path otherwise skips
+    // the slot boundary and leaves the Storybook diagnostics blank.
+    if (!(target instanceof Element)) return null;
+
+    const directBoundary = target.closest<StoryBoundary>(boundarySelector);
+    if (!directBoundary || !root.contains(directBoundary)) return null;
+
+    // Prefer the slot under the pointer over a structural parent. This keeps
+    // the diagnostics useful when a line overlaps a slot or when a slot uses
+    // display: contents and the browser reports the line as the target.
+    if (clientX !== undefined && clientY !== undefined) {
+        const pointElements = root.ownerDocument.elementsFromPoint(clientX, clientY);
+        for (const element of pointElements) {
+            const boundary = element.closest<StoryBoundary>(slotBoundarySelector);
+            if (boundary && root.contains(boundary)) return boundary;
+        }
+
+        const slotBoundary = Array.from(root.querySelectorAll<StoryBoundary>(slotBoundarySelector))
+            .filter((boundary) => containsPoint(boundary, clientX, clientY))
+            .sort((a, b) => getBoundaryDepth(b, root) - getBoundaryDepth(a, root))[0];
+        if (slotBoundary) return slotBoundary;
+    }
+
+    return directBoundary;
+};
+
+const StoryDebugFrame = ({
+    children,
+    ref,
+}: React.PropsWithChildren<{ ref?: React.Ref<HTMLDivElement> }>): React.ReactElement => {
     const frameRef = React.useRef<HTMLDivElement>(null);
     const activeBoundaryRef = React.useRef<StoryBoundary | null>(null);
     const [activeBoundary, setActiveBoundary] = React.useState<StoryBoundary | null>(null);
 
     const clearActiveBoundary = (): void => {
         activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
         activeBoundaryRef.current = null;
         setActiveBoundary(null);
     };
@@ -92,22 +146,35 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
         const frame = frameRef.current;
         if (!frame) return;
 
-        const boundary = getBoundary(event.target, frame);
+        const boundary = getBoundary(event.target, frame, event.clientX, event.clientY);
         if (boundary === activeBoundaryRef.current) return;
 
         activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
         boundary?.setAttribute("data-story-hovered", "true");
+        if (boundary && boundary.getClientRects().length === 0) {
+            boundary.setAttribute("data-story-hovered-contents", "true");
+        }
         activeBoundaryRef.current = boundary;
         setActiveBoundary(boundary);
     };
 
     React.useEffect(() => {
-        return () => activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+        return () => {
+            activeBoundaryRef.current?.removeAttribute("data-story-hovered");
+            activeBoundaryRef.current?.removeAttribute("data-story-hovered-contents");
+        };
     }, []);
+
+    const setFrameRef = (element: HTMLDivElement | null): void => {
+        frameRef.current = element;
+        if (typeof ref === "function") ref(element);
+        else if (ref) ref.current = element;
+    };
 
     return (
         <div
-            ref={frameRef}
+            ref={setFrameRef}
             className={styles.debugFrame}
             onPointerMove={updateActiveBoundary}
             onPointerLeave={clearActiveBoundary}
@@ -118,30 +185,42 @@ const StoryDebugFrame = ({ children }: React.PropsWithChildren): React.ReactElem
     );
 };
 
-const StoryAvatar = ({
-    room = false,
-    label = "A",
-    size = "30px",
-    className,
-}: {
-    room?: boolean;
+type StoryMemberAvatarProps = {
     label?: string;
     size?: string;
     className?: string;
-}): React.ReactElement => (
-    <Avatar
-        id={room ? "!story-room:example.org" : `@${label.toLowerCase()}:example.org`}
-        name={getStoryAvatarName(room, label)}
-        type="round"
-        size={size}
-        className={className}
-        aria-label={room ? "Story room avatar" : `${label} avatar`}
-    />
-);
+};
 
-function getStoryAvatarName(room: boolean, label: string): string {
-    if (room) return "Story room";
+const StoryMemberAvatar = ({ label = "A", size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: MemberAvatarViewSnapshot = {
+        id: `@${label.toLowerCase()}:example.org`,
+        name: getStoryMemberAvatarName(label),
+        size,
+    };
+    const vm = useMockedViewModel(snapshot, {});
+
+    return <MemberAvatarView vm={vm} classNames={className} />;
+};
+
+const StoryRoomAvatar = ({ size = "30px", className }: StoryMemberAvatarProps): React.ReactElement => {
+    const snapshot: RoomAvatarViewSnapshot = {
+        idName: "!story-room:example.org",
+        name: "Story room",
+        size,
+        urls: [],
+        type: "round",
+        isClickable: false,
+        className,
+        altText: "Story room avatar",
+    };
+    const vm = useMockedViewModel(snapshot, { onClick: fn() });
+
+    return <RoomAvatarView vm={vm} />;
+};
+
+function getStoryMemberAvatarName(label: string): string {
     if (label === "A") return "Alice Example";
+    if (label === "T") return "Taylor Example";
     return "Bob Example";
 }
 
@@ -176,7 +255,7 @@ const createStoryAvatar = (
 
     const label = isOwnEvent ? "A" : "B";
     const size = sizeOverride ?? (layout === "irc" ? "14px" : "30px");
-    return <StoryAvatar label={label} size={size} />;
+    return <StoryMemberAvatar label={label} size={size} />;
 };
 
 const StoryTimestamp = ({
@@ -202,13 +281,7 @@ const StoryTimestamp = ({
 const StoryLinkedTimestamp = (): React.ReactElement => <StoryTimestamp linked />;
 const StoryBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Here is a realistic event tile body with enough text to show the available width.
-            </div>,
-            <div key="second-line">This second line makes wrapping and vertical rhythm visible in Storybook.</div>,
-        ],
-        className: styles.body,
+        body: "Here is a realistic event tile body with enough text to show the available width.\nThis second line makes wrapping and vertical rhythm visible in Storybook.",
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodySnapshot: TextualBodyViewSnapshot = { kind: TextualBodyViewKind.TEXT };
@@ -216,26 +289,35 @@ const StoryBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
+const StoryShortBody = (): React.ReactElement => {
+    const contentVm = useMockedViewModel({ body: "Short text message." } satisfies EventContentBodyViewSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
+
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
 const StoryPreviewBody = (): React.ReactElement => {
     const snapshot: EventPreviewViewSnapshot = {
         isVisible: true,
-        previewContent: "Can you review the draft?",
-        previewTooltip: "Can you review the draft?",
+        previewContent:
+            "This is a deliberately long preview message with enough content to demonstrate the two-line clamp styling.",
+        previewTooltip:
+            "This is a deliberately long preview message with enough content to demonstrate the two-line clamp styling.",
     };
     const vm = useMockedViewModel(snapshot, {});
     return <EventPreviewView vm={vm} />;
 };
 const StorySearchBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: [
-            <div key="first-line">
-                Can you review the <mark>draft</mark> before the meeting?
-            </div>,
-            <div key="second-line">The highlighted term represents the matching search result.</div>,
-        ],
+        body: "Can you review the draft before the meeting?\nThe highlighted term represents the matching search result.",
+        formattedBody: `Can you review the <span class="${bodyStyles.EventTile_searchHighlight}">draft</span> before the meeting?\nThe highlighted term represents the matching search result.`,
         className: styles.body,
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
+    const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
+    return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
+};
+const StorySearchContextBody = ({ body }: { body: string }): React.ReactElement => {
+    const contentVm = useMockedViewModel({ body, className: styles.body } satisfies EventContentBodyViewSnapshot, {});
     const bodyVm = useMockedViewModel({ kind: TextualBodyViewKind.TEXT } satisfies TextualBodyViewSnapshot, {});
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
@@ -255,18 +337,18 @@ const StoryFileBody = (): React.ReactElement => {
     const vm = useMockedViewModel(snapshot, {});
     return <FileBodyView vm={vm} />;
 };
-const StoryInformationalBody = (): React.ReactElement => {
+const StoryInformationalBody = ({
+    children = "Alex changed the room name.",
+}: React.PropsWithChildren): React.ReactElement => {
     const snapshot: TextualEventViewSnapshot = {
-        content: (
-            <>
-                <div>Alex changed the room name to Example room.</div>
-                <div>This informational event demonstrates the shared textual event styling.</div>
-            </>
-        ),
+        content: <div>{children}</div>,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <TextualEventView vm={vm} />;
 };
+const StoryCallStartedBody = (): React.ReactElement => (
+    <StoryInformationalBody>Alex started a voice call.</StoryInformationalBody>
+);
 const StoryHighlightedBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
         body: "Message with a highlighted word.",
@@ -278,10 +360,27 @@ const StoryHighlightedBody = (): React.ReactElement => {
 
     return <TextualBodyView vm={bodyVm} body={<EventContentBodyView vm={contentVm} as="div" />} />;
 };
-const StoryEditedBody = (): React.ReactElement => {
+const StoryMessageComposer = (): React.ReactElement => (
+    <div className={styles.messageComposer} role="group" aria-label="Message composer">
+        <div
+            className={styles.messageComposerInput}
+            role="textbox"
+            aria-label="Edit message"
+            contentEditable
+            suppressContentEditableWarning
+        >
+            This message is currently being edited.
+        </div>
+        <div className={styles.messageComposerActions}>
+            <span>Editing message</span>
+            <button type="button">Save</button>
+            <button type="button">Cancel</button>
+        </div>
+    </div>
+);
+const StoryEditedMessageBody = (): React.ReactElement => {
     const contentSnapshot: EventContentBodyViewSnapshot = {
-        body: "This message is currently being edited.",
-        className: styles.body,
+        body: "This message was edited.",
     };
     const contentVm = useMockedViewModel(contentSnapshot, {});
     const bodyVm = useMockedViewModel(
@@ -316,32 +415,40 @@ const StoryReplyChain = (): React.ReactElement => (
         <span>Earlier message quoted in this reply.</span>
     </blockquote>
 );
-const StoryMediaBody = (): React.ReactElement => {
+const storyMediaSizes = {
+    small: { label: "Small", maxWidth: 1, maxHeight: 1, aspectRatio: "1 / 1" },
+    medium: { label: "Medium", maxWidth: 320, maxHeight: 180, aspectRatio: "16 / 9" },
+    large: { label: "Large", maxWidth: 800, maxHeight: 600, aspectRatio: "4 / 3" },
+} as const;
+
+type StoryMediaSize = keyof typeof storyMediaSizes;
+
+const StoryMediaImage = ({
+    label,
+    maxWidth,
+    maxHeight,
+    aspectRatio,
+}: Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio"> & { label: string }): React.ReactElement => {
     const snapshot: ImageBodyViewSnapshot = {
         state: ImageBodyViewState.READY,
-        alt: "Example media",
+        alt: `${label} example media`,
         src: storyMediaSrc,
         thumbnailSrc: storyMediaSrc,
-        maxWidth: 320,
-        maxHeight: 180,
-        aspectRatio: "16 / 9",
+        maxWidth,
+        maxHeight,
+        aspectRatio,
     };
     const vm = useMockedViewModel(snapshot, {});
     return <ImageBodyView vm={vm} />;
 };
-const StoryStickerBody = (): React.ReactElement => {
-    const snapshot: ImageBodyViewSnapshot = {
-        state: ImageBodyViewState.READY,
-        alt: "Example sticker",
-        src: storyMediaSrc,
-        thumbnailSrc: storyMediaSrc,
-        maxWidth: 240,
-        maxHeight: 240,
-        aspectRatio: "1 / 1",
-    };
-    const vm = useMockedViewModel(snapshot, {});
-    return <ImageBodyView vm={vm} />;
-};
+const StoryMediaBody = ({ size = "medium" }: { size?: StoryMediaSize }): React.ReactElement => (
+    <StoryMediaImage {...storyMediaSizes[size]} />
+);
+const StoryStickerBody = (): React.ReactElement => (
+    <div className={styles.stickerBody} role="img" aria-label="Example sticker">
+        🌈
+    </div>
+);
 const StoryDecryptionFailureBody = (): React.ReactElement => {
     const snapshot: DecryptionFailureBodyViewSnapshot = {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
@@ -383,7 +490,6 @@ const StoryActionBar = ({ isPinned = false }: { isPinned?: boolean } = {}): Reac
     );
     return <ActionBarView vm={vm} />;
 };
-const StoryPinnedActionBar = (): React.ReactElement => <StoryActionBar isPinned />;
 const StoryThreadListActionBar = (): React.ReactElement => {
     const vm = useMockedViewModel(
         {
@@ -441,12 +547,6 @@ const StoryFooter = (): React.ReactElement => {
         </ReactionsRowView>
     );
 };
-const StoryPinnedFooter = (): React.ReactElement => (
-    <div className={styles.pinnedFooter}>
-        <PinnedMessageBadge />
-        <StoryFooter />
-    </div>
-);
 const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     isVisible: true,
     avatar: {
@@ -460,15 +560,18 @@ const storyThreadPreview: ThreadMessagePreviewViewSnapshot = {
     previewTooltip: "Can you review the draft?",
 };
 
+const StoryNarrowContext = React.createContext(false);
+
 const StoryThreadInfo = (): React.ReactElement => {
-    const previewVm = useMockedViewModel(storyThreadPreview, {});
+    const narrow = React.useContext(StoryNarrowContext);
+    const previewVm = useMockedViewModel({ ...storyThreadPreview, showDisplayName: !narrow }, {});
     const threadSummaryVm = useMockedViewModel(
         {
             isVisible: true,
-            replyCountLabel: "3 replies",
+            replyCountLabel: narrow ? "3" : "3 replies",
             openThreadLabel: "Open thread",
             notificationIndicator: undefined,
-            narrow: false,
+            narrow,
             previewVm,
         },
         { onClick: fn() },
@@ -495,15 +598,25 @@ const StorySearchThreadInfo = (): React.ReactElement => (
         View in thread
     </a>
 );
-const StoryReceipt = (): React.ReactElement => (
+const StoryReceipt = ({ empty = false }: { empty?: boolean }): React.ReactElement => (
     <span className={styles.receipt}>
         <span className={styles.readReceiptGroup}>
-            <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
-                <span className={styles.readReceiptContainer} aria-hidden="true">
-                    <span className={styles.receiptAvatar}>T</span>
-                    <span className={styles.receiptAvatar}>A</span>
+            {empty ? (
+                <span className={styles.readReceiptButton} aria-hidden="true">
+                    <span className={styles.readReceiptContainer} />
                 </span>
-            </button>
+            ) : (
+                <button type="button" className={styles.readReceiptButton} aria-label="Read by Alex and Taylor">
+                    <span className={styles.readReceiptContainer} aria-hidden="true">
+                        <span className={styles.receiptAvatar}>
+                            <StoryMemberAvatar label="T" size="14px" />
+                        </span>
+                        <span className={styles.receiptAvatar}>
+                            <StoryMemberAvatar label="A" size="14px" />
+                        </span>
+                    </span>
+                </button>
+            )}
         </span>
     </span>
 );
@@ -513,26 +626,135 @@ const StoryContextMenu = (): React.ReactElement => <span className={styles.conte
 const TimelineStoryFrame = ({
     density,
     layout,
+    shape,
+    containerWidth,
+    rightPanel = false,
+    presentationNotice,
     children,
-}: React.PropsWithChildren<{ density: string; layout: string }>): React.ReactElement => (
-    <StoryDebugFrame>
-        <div className={styles.storySurface} data-story-boundary="Timeline">
-            <div className={styles.timeline} data-story-boundary="RoomView.timeline" data-event-layout={layout}>
-                <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
-                    <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
-                        <ol
-                            className={styles.messageList}
-                            data-story-boundary="RoomView.MessageList"
-                            data-event-density={density}
+}: React.PropsWithChildren<{
+    density: string;
+    layout: string;
+    shape: EventTileViewProps["root"]["shape"];
+    containerWidth?: number;
+    rightPanel?: boolean;
+    presentationNotice?: StoryPresentationResolution["notice"];
+}>): React.ReactElement => {
+    const frameRef = React.useRef<HTMLDivElement>(null);
+    const [availableWidth, setAvailableWidth] = React.useState(0);
+    const defaultContainerWidth = rightPanel ? 320 : 680;
+
+    React.useLayoutEffect(() => {
+        const frame = frameRef.current;
+        if (!frame) return;
+
+        const updateAvailableWidth = (): void => setAvailableWidth(frame.clientWidth);
+        updateAvailableWidth();
+
+        if (typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(updateAvailableWidth);
+        observer.observe(frame);
+        return () => observer.disconnect();
+    }, []);
+
+    const minContainerWidth = rightPanel ? 320 : availableWidth > 0 ? Math.floor(availableWidth / 2) : 500;
+    // MainSplit uses maxWidth="50%" for its resizable right panel. RoomView's
+    // timeline has no narrower width constraint than its available flex width.
+    const maxContainerWidth = Math.max(
+        minContainerWidth,
+        availableWidth > 0 ? (rightPanel ? Math.floor(availableWidth / 2) : availableWidth) : rightPanel ? 640 : 1000,
+    );
+    const [selectedContainerWidth, setSelectedContainerWidth] = React.useState(containerWidth ?? defaultContainerWidth);
+
+    React.useEffect(() => {
+        setSelectedContainerWidth(containerWidth ?? defaultContainerWidth);
+    }, [containerWidth, defaultContainerWidth]);
+
+    const effectiveContainerWidth = Math.min(maxContainerWidth, Math.max(minContainerWidth, selectedContainerWidth));
+    const narrow = effectiveContainerWidth <= 500;
+    const applicationContainerLabel = rightPanel ? "320px min - 50% max" : "50% min - 100% max";
+
+    const storyContext = !rightPanel
+        ? "RoomView"
+        : shape === "Card"
+          ? "TimelineCard"
+          : shape === "Notification"
+            ? "NotificationPanel"
+            : shape === "Pinned"
+              ? "PinnedMessagesCard"
+              : shape === "File"
+                ? "FilePanel"
+                : shape === "ThreadsList"
+                  ? "ThreadPanel"
+                  : "ThreadView";
+    const messageListBoundary = shape === "Pinned" ? "PinnedMessagesCard.wrapper" : `${storyContext}.MessageList`;
+    const storySurfaceClassName = classNames(styles.storySurface, {
+        [styles.storyRightPanel]: rightPanel,
+        [styles.storyPinnedPanel]: shape === "Pinned",
+        [styles.storyFilePanel]: shape === "File",
+        [styles.storyThreadsListPanel]: shape === "ThreadsList",
+        [styles.storyThreadPanel]: shape === "Thread",
+    });
+    return (
+        <StoryDebugFrame ref={frameRef}>
+            <StoryNarrowContext.Provider value={narrow}>
+                {presentationNotice && (
+                    <div
+                        className={classNames(styles.presentationNotice, {
+                            [styles.presentationNoticeInvalid]: presentationNotice.invalid,
+                        })}
+                        role="status"
+                    >
+                        {presentationNotice.text}
+                    </div>
+                )}
+                <div
+                    className={classNames(styles.storyContainer, {
+                        [styles.storyRightPanelContainer]: rightPanel,
+                    })}
+                    style={{ width: `${effectiveContainerWidth}px` }}
+                    data-story-boundary="EventTileView.container"
+                >
+                    <div className={styles.storyContainerLabel} data-story-boundary="EventTileView.containerLabel">
+                        EventTileView host · width: {applicationContainerLabel}
+                    </div>
+                    <div className={styles.storyContainerControls}>
+                        <label htmlFor="event-tile-story-container-width">{effectiveContainerWidth}px</label>
+                        <input
+                            id="event-tile-story-container-width"
+                            type="range"
+                            min={minContainerWidth}
+                            max={maxContainerWidth}
+                            step="8"
+                            value={effectiveContainerWidth}
+                            aria-label="Story host container width"
+                            onChange={(event) => setSelectedContainerWidth(Number(event.target.value))}
+                        />
+                        <output>{`${minContainerWidth}–${maxContainerWidth}px`}</output>
+                    </div>
+                    <div className={storySurfaceClassName} data-story-boundary="Timeline">
+                        <div
+                            className={styles.timeline}
+                            data-story-boundary={`${storyContext}.timeline`}
+                            data-event-layout={layout}
                         >
-                            {children}
-                        </ol>
+                            <div className={styles.scrollPanel} data-story-boundary="ScrollPanel">
+                                <div className={styles.messageListWrapper} data-story-boundary="messageListWrapper">
+                                    <ol
+                                        className={styles.messageList}
+                                        data-story-boundary={messageListBoundary}
+                                        data-event-density={density}
+                                    >
+                                        {children}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </StoryDebugFrame>
-);
+            </StoryNarrowContext.Provider>
+        </StoryDebugFrame>
+    );
+};
 
 const baseRoot: EventTileViewProps["root"] = {
     id: "event-tile-story-line",
@@ -544,23 +766,41 @@ const baseRoot: EventTileViewProps["root"] = {
     state: { isOwnEvent: false, hasReply: false },
 };
 
+/**
+ * Slots used by an ordinary room-timeline event. Optional slots are only
+ * supplied by the focused state stories below, matching the application
+ * where they are derived from the event and interaction state.
+ */
 const roomSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryTimestamp />,
-    padlock: <StoryPadlock />,
     actionBar: <StoryActionBar />,
-    footer: <StoryFooter />,
-    threadInfo: <StoryThreadInfo />,
     receipt: <StoryReceipt />,
     contextMenu: <StoryContextMenu />,
 };
 
-/** Slots for the default Room-like shapes without a context menu fixture. */
-const defaultShapeSlots: EventTileViewProps["slots"] = {
+/** A valid Room event with the optional slots that can coexist on a timeline tile. */
+const richRoomSlots: EventTileViewProps["slots"] = {
+    ...roomSlots,
+    padlock: <StoryPadlock />,
+    replyChain: <StoryReplyChain />,
+    footer: <StoryFooter />,
+    threadInfo: <StoryThreadInfo />,
+    receipt: <StoryReceipt empty />,
+};
+
+const richOwnRoomSlots: EventTileViewProps["slots"] = {
+    ...richRoomSlots,
+    replyChain: undefined,
+    receipt: <StoryReceipt />,
+};
+
+/** Slots available to message-shaped surfaces such as Card and Thread. */
+const cardSlots: EventTileViewProps["slots"] = {
     sender: <StorySender />,
-    avatar: <StoryAvatar />,
+    avatar: <StoryMemberAvatar />,
     body: <StoryBody />,
     timestamp: <StoryLinkedTimestamp />,
     padlock: <StoryPadlock />,
@@ -571,15 +811,160 @@ const defaultShapeSlots: EventTileViewProps["slots"] = {
 };
 
 const threadSlots: EventTileViewProps["slots"] = {
-    ...defaultShapeSlots,
-    avatar: <StoryAvatar size="32px" />,
+    ...cardSlots,
+    avatar: <StoryMemberAvatar size="32px" />,
     threadInfo: undefined,
+};
+
+const threadsListSlots: EventTileViewProps["slots"] = {
+    sender: <StorySender />,
+    avatar: <StoryMemberAvatar size="32px" />,
+    body: <StoryPreviewBody />,
+    timestamp: <StoryTimestamp />,
+    notificationBadge: <StoryNotificationBadge />,
+    threadInfo: <StoryThreadListInfo />,
+    actionBar: <StoryThreadListActionBar />,
+};
+
+const notificationSlots: EventTileViewProps["slots"] = {
+    sender: <StorySender />,
+    body: <StoryPreviewBody />,
+    timestamp: <StoryTimestamp />,
+    roomAvatar: <StoryRoomAvatar size="28px" />,
+    notificationRoomLabel: (
+        <span className={styles.roomLabel}>
+            {" in "}
+            <strong>Example room</strong>
+        </span>
+    ),
+    notificationBadge: <StoryNotificationBadge />,
+    threadInfo: <StoryThreadListInfo />,
 };
 
 type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     shape: EventTileViewProps["root"]["shape"];
+    /** Width of the Storybook host container around the tile, in pixels. */
+    containerWidth?: number;
+    /** Whether the story should render the EventTileView-level sender and avatar slots. */
+    showSenderAndAvatar?: boolean;
     state?: Partial<EventTileViewProps["root"]["state"]>;
-    roomMessages?: "boundaries" | "alice" | "bob";
+    roomMessages?: "boundaries" | "alice" | "bob" | "media" | "threeEach" | "informational" | "alignedBetween" | "rich";
+    searchMessages?: "result";
+    /** Whether contextual search messages should use the interactive opacity styling. */
+    showSearchContextOpacity?: boolean;
+};
+
+type StoryPresentation = {
+    layout: EventLayout;
+    density: EventDensity;
+};
+
+type StoryPresentationPolicy = {
+    host: string;
+    allowedLayouts: readonly EventLayout[];
+    fixedLayout?: EventLayout;
+    fixedDensity?: EventDensity;
+    usesSharedPresentation: boolean;
+};
+
+type StoryPresentationResolution = {
+    requested: StoryPresentation;
+    effective: StoryPresentation;
+    notice?: {
+        invalid: boolean;
+        text: string;
+    };
+};
+
+const allEventLayouts: readonly EventLayout[] = ["group", "bubble", "irc"];
+
+const storyPresentationPolicies: Partial<Record<EventTileViewProps["root"]["shape"], StoryPresentationPolicy>> = {
+    Card: {
+        host: "TimelineCard",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+    Notification: {
+        host: "NotificationPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Pinned: {
+        host: "PinnedMessagesCard",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        fixedDensity: "default",
+        usesSharedPresentation: false,
+    },
+    File: {
+        host: "FilePanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    ThreadsList: {
+        host: "ThreadPanel",
+        allowedLayouts: ["group"],
+        fixedLayout: "group",
+        usesSharedPresentation: true,
+    },
+    Thread: {
+        host: "ThreadView",
+        allowedLayouts: ["group", "bubble"],
+        usesSharedPresentation: true,
+    },
+};
+
+const formatPresentation = ({ layout, density }: StoryPresentation): string =>
+    `${layout === "group" ? "Group" : layout === "bubble" ? "Bubble" : "IRC"} / ${
+        density === "compact" ? "Compact" : "Default"
+    }`;
+
+const resolveStoryPresentation = (
+    shape: EventTileViewProps["root"]["shape"],
+    requested: StoryPresentation,
+): StoryPresentationResolution => {
+    const policy = storyPresentationPolicies[shape] ?? {
+        host: "RoomView",
+        allowedLayouts: allEventLayouts,
+        usesSharedPresentation: true,
+    };
+    const effectiveLayout =
+        policy.fixedLayout ?? (policy.allowedLayouts.includes(requested.layout) ? requested.layout : "group");
+    const effectiveDensity =
+        policy.fixedDensity ??
+        (requested.density === "default" || effectiveLayout === "group" ? requested.density : "default");
+    const effective = { layout: effectiveLayout, density: effectiveDensity };
+    const invalid = effective.layout !== requested.layout || effective.density !== requested.density;
+    const unsupportedStory = !policy.usesSharedPresentation;
+
+    if (!invalid && !unsupportedStory) {
+        return { requested, effective };
+    }
+
+    const constraints = policy.fixedLayout
+        ? `fixes the shape to ${shape} and the layout to Group`
+        : `renders the ${shape} shape and supports ${policy.allowedLayouts.map((layout) => formatPresentation({ layout, density: "default" }).split(" /")[0]).join(" or ")} layout`;
+    const densityConstraint = policy.fixedDensity
+        ? " and Default density"
+        : "; Compact density is available only with Group layout";
+    const sourceConstraint = policy.usesSharedPresentation
+        ? ""
+        : " The application currently renders this panel with PinnedEventTile";
+    const prefix = invalid ? "Unsupported presentation." : "Unsupported story.";
+    const rendered = invalid
+        ? ` Requested: ${formatPresentation(requested)} · Rendered: ${formatPresentation(effective)}.`
+        : ` Requested and rendered: ${formatPresentation(effective)}.`;
+
+    return {
+        requested,
+        effective,
+        notice: {
+            invalid: true,
+            text: `${prefix} ${policy.host} ${constraints}${densityConstraint}.${sourceConstraint}${rendered}`,
+        },
+    };
 };
 
 const createStoryTimestamp = (
@@ -606,7 +991,14 @@ const createRoomStorySlots = ({
     timestamp?: React.ReactNode;
     showActionBar: boolean;
 }): EventTileViewProps["slots"] => {
-    const baseSlots = isOwnEvent ? slots : { body: slots.body };
+    const baseSlots = isOwnEvent
+        ? slots
+        : {
+              ...slots,
+              // The application keeps an empty receipt group mounted on every event
+              // while read receipts are enabled, even when this event has no receipts.
+              receipt: slots.receipt ? <StoryReceipt empty /> : undefined,
+          };
     return {
         ...baseSlots,
         sender,
@@ -620,14 +1012,23 @@ const createPreviewStorySlots = ({
     shape,
     slots,
     showActionBar,
+    sender,
+    avatar,
+    timestamp,
 }: {
     shape: EventTileViewProps["root"]["shape"];
     slots: EventTileViewProps["slots"];
     showActionBar: boolean;
+    sender?: React.ReactNode;
+    avatar?: React.ReactNode;
+    timestamp?: React.ReactNode;
 }): EventTileViewProps["slots"] => {
     const threadInfo = shape === "Thread" ? undefined : slots.threadInfo;
     return {
         ...slots,
+        sender,
+        avatar,
+        timestamp,
         actionBar: showActionBar ? slots.actionBar : undefined,
         // The application Thread rendering branch places no thread-info slot.
         threadInfo,
@@ -636,11 +1037,17 @@ const createPreviewStorySlots = ({
 
 function EventTileViewStoryContent({
     shape,
+    containerWidth,
+    showSenderAndAvatar: showSenderAndAvatarStoryOverride,
     state,
     roomMessages = "boundaries",
+    searchMessages,
+    showSearchContextOpacity = false,
     ...props
 }: EventTileStoryProps): React.ReactElement {
-    const { layout, density } = useEventPresentation();
+    const requestedPresentation = useEventPresentation();
+    const presentation = resolveStoryPresentation(shape, requestedPresentation);
+    const { layout, density } = presentation.effective;
     const [tileInteractions, setTileInteractions] = React.useState<
         Record<string, { hovered: boolean; focused: boolean }>
     >({});
@@ -660,25 +1067,47 @@ function EventTileViewStoryContent({
         suffix: string,
         boundaryState: Partial<EventTileViewProps["root"]["state"]> = {},
         isLast = false,
+        bodyOverride?: React.ReactNode,
+        showSenderAndAvatarOverride?: boolean,
+        slotsOverride?: EventTileViewProps["slots"],
     ): React.ReactElement => {
-        const tileState = { ...boundaryState, ...state };
+        const tileState = {
+            previewClamped: shape === "ThreadsList" || shape === "Notification",
+            ...boundaryState,
+            ...state,
+        };
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
-        const showActionBar = interaction.hovered || interaction.focused;
+        const showActionBar =
+            shape === "ThreadsList" || tileState.actionBarFocused || interaction.hovered || interaction.focused;
         const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
-        const showSenderAndAvatar = layout === "irc" || !tileState.continuation;
+        const showSenderAndAvatar =
+            showSenderAndAvatarOverride ??
+            showSenderAndAvatarStoryOverride ??
+            (layout === "irc" || !tileState.continuation);
         const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
+        const tileSlots = {
+            ...(slotsOverride ?? props.slots),
+            ...(bodyOverride === undefined ? {} : { body: bodyOverride }),
+        };
         const slots =
             shape === "Room"
                 ? createRoomStorySlots({
                       isOwnEvent,
-                      slots: props.slots,
+                      slots: tileSlots,
                       sender,
                       avatar,
                       timestamp,
                       showActionBar,
                   })
-                : createPreviewStorySlots({ shape, slots: props.slots, showActionBar });
+                : createPreviewStorySlots({
+                      shape,
+                      slots: tileSlots,
+                      showActionBar,
+                      sender,
+                      avatar,
+                      timestamp,
+                  });
 
         return (
             <EventTileView
@@ -731,6 +1160,68 @@ function EventTileViewStoryContent({
     };
 
     const renderRoomTiles = (): React.ReactNode => {
+        if (roomMessages === "media") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "media-small",
+                        { continuation: false, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="small" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-medium",
+                        { continuation: true, lastInSection: false },
+                        false,
+                        <StoryMediaBody size="medium" />,
+                    )}
+                    {renderTile(
+                        false,
+                        "media-large",
+                        { continuation: true, lastInSection: true },
+                        true,
+                        <StoryMediaBody size="large" />,
+                    )}
+                </>
+            );
+        }
+
+        if (roomMessages === "rich") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "rich-bob-first",
+                        { continuation: false, lastInSection: false, hasReply: true },
+                        false,
+                        undefined,
+                        undefined,
+                        richRoomSlots,
+                    )}
+                    {renderTile(
+                        false,
+                        "rich-bob-continuation",
+                        { continuation: true, lastInSection: false },
+                        false,
+                        <StoryShortBody />,
+                        undefined,
+                        { body: <StoryShortBody />, receipt: <StoryReceipt empty /> },
+                    )}
+                    {renderTile(
+                        true,
+                        "rich-alice-last",
+                        { continuation: false, lastInSection: true },
+                        true,
+                        <StoryEditedMessageBody />,
+                        undefined,
+                        richOwnRoomSlots,
+                    )}
+                </>
+            );
+        }
+
         if (roomMessages === "alice") {
             return renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true);
         }
@@ -739,22 +1230,154 @@ function EventTileViewStoryContent({
             return renderTile(false, "bob-single", { continuation: false, lastInSection: true }, true);
         }
 
+        if (roomMessages === "threeEach") {
+            return (
+                <>
+                    {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
+                    {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
+                    {renderTile(false, "bob-last", { continuation: true, lastInSection: true }, true)}
+                    {renderTile(true, "alice-first", { continuation: false, lastInSection: false })}
+                    {renderTile(true, "alice-middle", { continuation: true, lastInSection: false })}
+                    {renderTile(true, "alice-last", { continuation: true, lastInSection: true }, true)}
+                </>
+            );
+        }
+
+        if (roomMessages === "informational") {
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "informational-first",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Alex changed the room name.</StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-second",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Notifications are enabled.</StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-last",
+                        { info: true, continuation: false, lastInSection: true },
+                        true,
+                        <StoryInformationalBody>
+                            This longer informational event demonstrates how shared textual event styling handles a
+                            detailed message that wraps across two rows in the timeline.
+                        </StoryInformationalBody>,
+                    )}
+                </>
+            );
+        }
+
+        if (roomMessages === "alignedBetween") {
+            // The application uses this placement for MatrixRTC m.rtc.notification events.
+            return (
+                <>
+                    {renderTile(
+                        false,
+                        "aligned-before",
+                        { continuation: false, lastInSection: true },
+                        false,
+                        <StoryShortBody />,
+                    )}
+                    {renderTile(
+                        false,
+                        "aligned-event",
+                        { alignedBetweenBubbles: true, continuation: false, lastInSection: true },
+                        false,
+                        <StoryCallStartedBody />,
+                        false,
+                    )}
+                    {renderTile(
+                        true,
+                        "aligned-after",
+                        { continuation: false, lastInSection: true },
+                        true,
+                        <StoryShortBody />,
+                    )}
+                </>
+            );
+        }
+
         return (
             <>
                 {renderTile(false, "bob-first", { continuation: false, lastInSection: false })}
                 {renderTile(false, "bob-middle", { continuation: true, lastInSection: false })}
                 {renderTile(false, "bob-last", { continuation: true, lastInSection: true })}
-                {renderTile(true, "alice-single", { continuation: false, lastInSection: true }, true)}
+                {renderTile(
+                    true,
+                    "alice-single",
+                    { continuation: false, lastInSection: true },
+                    true,
+                    <StoryEditedMessageBody />,
+                )}
             </>
         );
     };
 
-    const tiles = shape === "Room" ? renderRoomTiles() : renderTile(false, "event");
+    const renderSearchTiles = (): React.ReactNode => (
+        <>
+            {renderTile(
+                false,
+                "search-context-before",
+                { contextual: showSearchContextOpacity, continuation: false, lastInSection: false },
+                false,
+                <StorySearchContextBody body="Earlier context message in the room." />,
+            )}
+            {renderTile(
+                false,
+                "search-result",
+                { contextual: false, continuation: true, lastInSection: false },
+                false,
+                <StorySearchBody />,
+            )}
+            {renderTile(
+                false,
+                "search-context-after",
+                { contextual: showSearchContextOpacity, continuation: true, lastInSection: true },
+                true,
+                <StorySearchContextBody body="Later context message in the room." />,
+            )}
+        </>
+    );
+
+    // PinnedMessagesCard is still rendered by the legacy PinnedEventTile in the
+    // application. Keep this story as a presentation diagnostic rather than
+    // rendering an EventTileView that does not represent the real panel.
+    const renderTiles = (): React.ReactNode => {
+        if (shape === "Pinned") return null;
+        if (shape === "Room") return renderRoomTiles();
+        if (shape === "Search" && searchMessages === "result") return renderSearchTiles();
+
+        return renderTile(false, "event", { continuation: false, lastInSection: true }, true);
+    };
+
+    const rightPanel =
+        shape === "Card" ||
+        shape === "Notification" ||
+        shape === "Pinned" ||
+        shape === "File" ||
+        shape === "ThreadsList" ||
+        shape === "Thread";
 
     return (
-        <TimelineStoryFrame density={density} layout={layout}>
-            {tiles}
-        </TimelineStoryFrame>
+        <EventPresentationProvider value={presentation.effective}>
+            <TimelineStoryFrame
+                density={density}
+                layout={layout}
+                shape={shape}
+                containerWidth={containerWidth}
+                rightPanel={rightPanel}
+                presentationNotice={presentation.notice}
+            >
+                {renderTiles()}
+            </TimelineStoryFrame>
+        </EventPresentationProvider>
     );
 }
 
@@ -781,6 +1404,29 @@ const bubbleGlobals = {
 const ircGlobals = { eventLayout: "irc", eventDensity: "default" } as const;
 const compactGroupGlobals = { eventLayout: "group", eventDensity: "compact" } as const;
 
+const shapeDescriptions = {
+    Room: "Application slot contract: sender, avatar, body, timestamp, and optional padlock, replyChain, footer, threadInfo, receipt, actionBar, and contextMenu slots. Optional slots depend on the event and interaction state.",
+    Thread: "Application slot contract: sender, avatar, body, timestamp, and optional padlock, footer, receipt, and actionBar slots. The threadInfo slot is omitted because this shape is already rendered in a thread view.",
+    Notification:
+        "Application slot contract: sender, body, timestamp, roomAvatar, notificationRoomLabel, notificationBadge, and threadInfo slots. Member avatar, footer, receipt, padlock, and actionBar slots are omitted.",
+    ThreadsList:
+        "Application slot contract: sender, avatar, preview body, timestamp, notificationBadge, threadInfo, and actionBar slots. Footer, receipt, padlock, and contextMenu slots are omitted.",
+    File: "Application slot contract: sender, avatar, plain timestamp, and file body slots. Footer, receipt, threadInfo, and actionBar slots are omitted; the FilePanel host is not reproduced here.",
+    Card: "Application slot contract: sender, avatar, body, timestamp, padlock, footer, threadInfo, receipt, and optional actionBar slots. This shape is used by message cards and has no contextMenu slot.",
+    Search: "Application slot contract: sender, avatar, body, timestamp, and threadInfo slots. Search results omit footer and receipt slots; contextual events are dimmed while the matching formatted body remains undimmed and highlighted.",
+    Pinned: "The application currently renders PinnedEventTile for pinned messages, so this story is not an application EventTileView example and has no application slot contract.",
+} as const;
+
+const shapeDescriptionParameters = (shape: keyof typeof shapeDescriptions, note?: string) => ({
+    parameters: {
+        docs: {
+            description: {
+                story: note ? `${shapeDescriptions[shape]} ${note}` : shapeDescriptions[shape],
+            },
+        },
+    },
+});
+
 const storyHelpers = {
     EventTileViewStory,
     eventTileStoryDefaults,
@@ -790,14 +1436,22 @@ const storyHelpers = {
     compactGroupGlobals,
     StoryDecryptionFailureBody,
     StoryDecryptionFailurePadlock,
-    StoryEditedBody,
+    StoryEditedMessageBody,
+    StoryMessageComposer,
     StoryEmoteBody,
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,
+    StoryPadlock,
     StoryMediaBody,
+    StoryNotificationBadge,
+    StoryPreviewBody,
+    StoryShortBody,
     StoryReplyChain,
     StoryStickerBody,
+    StoryThreadListActionBar,
+    StoryThreadListInfo,
+    shapeDescriptionParameters,
 };
 
 const meta = {
@@ -809,7 +1463,16 @@ const meta = {
         shape: {
             table: { disable: true },
         },
+        containerWidth: {
+            table: { disable: true },
+        },
+        showSenderAndAvatar: { table: { disable: true } },
         classNames: { table: { disable: true } },
+        state: { table: { disable: true } },
+        roomMessages: { table: { disable: true } },
+        searchMessages: { table: { disable: true } },
+        showSearchContextOpacity: { table: { disable: true } },
+        line: { table: { disable: true } },
         onMouseEnter: { table: { disable: true } },
         onMouseLeave: { table: { disable: true } },
         onFocus: { table: { disable: true } },
@@ -834,61 +1497,60 @@ type Story = StoryObj<typeof meta>;
 const interactiveTags = ["skip-test", "!snapshot"];
 const visualTags = ["!dev", "!autodocs", "snapshot"];
 
-export const Room: Story = { tags: interactiveTags };
+export const Room: Story = {
+    tags: interactiveTags,
+    ...shapeDescriptionParameters("Room"),
+    args: {
+        roomMessages: "rich",
+        slots: richRoomSlots,
+    },
+};
 
 export const ThreadsList: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("ThreadsList"),
     args: {
         shape: "ThreadsList",
-        slots: {
-            sender: <StorySender />,
-            avatar: <StoryAvatar size="32px" />,
-            body: <StoryPreviewBody />,
-            timestamp: <StoryTimestamp />,
-            notificationBadge: <StoryNotificationBadge />,
-            threadInfo: <StoryThreadListInfo />,
-            actionBar: <StoryThreadListActionBar />,
-        },
+        slots: threadsListSlots,
     },
 };
 
 export const Thread: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Thread"),
     args: {
         shape: "Thread",
         slots: threadSlots,
     },
 };
 
+export const Card: Story = {
+    tags: interactiveTags,
+    ...shapeDescriptionParameters("Card"),
+    args: {
+        shape: "Card",
+        slots: cardSlots,
+    },
+};
+
 export const Notification: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Notification"),
     args: {
         shape: "Notification",
-        slots: {
-            sender: <StorySender />,
-            body: <StoryPreviewBody />,
-            timestamp: <StoryTimestamp />,
-            roomAvatar: <StoryAvatar room size="28px" />,
-            notificationRoomLabel: (
-                <span className={styles.roomLabel}>
-                    {" in "}
-                    <strong>Example room</strong>
-                </span>
-            ),
-            notificationBadge: <StoryNotificationBadge />,
-            threadInfo: <StoryThreadListInfo />,
-        },
+        slots: notificationSlots,
     },
 };
 
 export const File: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("File"),
     args: {
         shape: "File",
         slots: {
             sender: <StorySender />,
-            avatar: <StoryAvatar size="20px" />,
-            timestamp: <StoryLinkedTimestamp />,
+            avatar: <StoryMemberAvatar size="20px" />,
+            timestamp: <StoryTimestamp />,
             body: <StoryFileBody />,
         },
     },
@@ -896,11 +1558,18 @@ export const File: Story = {
 
 export const Search: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Search"),
     args: {
         shape: "Search",
+        // Search results include contextual events around the undimmed matching event.
+        searchMessages: "result",
+        showSearchContextOpacity: true,
+        state: {},
         slots: {
-            ...defaultShapeSlots,
+            sender: <StorySender />,
+            avatar: <StoryMemberAvatar />,
             body: <StorySearchBody />,
+            timestamp: <StoryLinkedTimestamp />,
             threadInfo: <StorySearchThreadInfo />,
         },
     },
@@ -908,13 +1577,9 @@ export const Search: Story = {
 
 export const Pinned: Story = {
     tags: interactiveTags,
+    ...shapeDescriptionParameters("Pinned"),
     args: {
         shape: "Pinned",
-        slots: {
-            ...defaultShapeSlots,
-            actionBar: <StoryPinnedActionBar />,
-            footer: <StoryPinnedFooter />,
-        },
     },
 };
 
@@ -944,6 +1609,20 @@ export const RoomIrcDefault: Story = {
     tags: visualTags,
     globals: ircGlobals,
     args: Room.args,
+};
+
+export const CardGroupDefault: Story = {
+    name: "Card - Group - Default",
+    tags: visualTags,
+    globals: groupGlobals,
+    args: Card.args,
+};
+
+export const CardBubbleDefault: Story = {
+    name: "Card - Bubble - Default",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    args: Card.args,
 };
 
 export const ThreadsListGroup: Story = {
@@ -978,7 +1657,7 @@ export const SearchGroup: Story = {
     name: "Search - Group",
     tags: visualTags,
     globals: groupGlobals,
-    args: Search.args,
+    args: { ...Search.args, showSearchContextOpacity: false },
 };
 
 export const PinnedGroup: Story = {

@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "test-utils-rtl";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import ConfirmKeyStorageOffDialog from "./ConfirmKeyStorageOffDialog";
 
 describe("ConfirmKeyStorageOffDialog", () => {
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
     });
 
