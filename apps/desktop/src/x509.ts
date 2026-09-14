@@ -20,7 +20,7 @@ import type {
     X509LoginResult,
     X509Result,
 } from "shared-types";
-import { ipcMain, type IpcMainEvent } from "electron";
+import { ipcMain } from "electron";
 import { getConfig } from "./config.js";
 
 /**
@@ -462,24 +462,12 @@ async function handleIpcX509(name: string, args: unknown[]): Promise<X509Result<
     }
 }
 
-ipcMain.on("x509", async function (ev: IpcMainEvent, payload): Promise<void> {
-    if (!global.mainWindow) {
-        return;
-    }
-
-    const args = payload.args || [];
-    let ret: X509Result<unknown>;
-
+ipcMain.handle("x509", async (_ev, name: X509IpcCommand, ...args: unknown[]): Promise<X509Result<unknown>> => {
     try {
-        ret = await handleIpcX509(payload.name as X509IpcCommand, args);
+        return await handleIpcX509(name, args);
     } catch (e) {
         // Fall back to a generic error if something goes wrong in a way we didn't expect.
         // This should only ever happen in the case of programming errors in the renderer.
-        ret = fail("UNKNOWN", e instanceof Error ? e.message : String(e));
+        return fail("UNKNOWN", e instanceof Error ? e.message : String(e));
     }
-
-    global.mainWindow?.webContents.send("x509Reply", {
-        id: payload.id,
-        reply: ret,
-    });
 });

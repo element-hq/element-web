@@ -10,7 +10,6 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { X509Certificate } from "node:crypto";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { BrowserWindow } from "electron";
 import type {
     HardwareKey,
     HardwareKeyState,
@@ -28,18 +27,17 @@ import type { ConfigOptions } from "./config.js";
 /**
  * The `x509` IPC handler, captured when x509.ts registers it.
  */
-let ipcHandler: (ev: unknown, payload: unknown) => Promise<void>;
+let ipcHandler: (ev: unknown, name: X509IpcCommand, ...args: unknown[]) => Promise<unknown>;
 
 // x509.ts registers its IPC handler at import time, so every test in this file needs electron mocked.
 vi.mock("electron", () => ({
     ipcMain: {
-        on: vi.fn((channel: string, cb: (ev: unknown, payload: unknown) => Promise<void>) => {
+        handle: vi.fn((channel: string, cb: typeof ipcHandler) => {
             ipcHandler = cb;
         }),
     },
 }));
 
-const send = vi.fn();
 const getConfig = vi.fn<() => ConfigOptions>();
 const moduleLoad = vi.fn();
 const RsaPssParams = vi.fn();
@@ -209,21 +207,12 @@ function mockModuleLoad(...tokens: MockHardwareToken[]) {
     return module;
 }
 
-let nextIpcId = 0;
-
 /**
  * Dispatch an IPC command and return the reply the renderer would receive. The IPC
- * should always return a response, even if it fails.
+ * should always resolve with a result, even if it fails.
  */
 async function callIpc<T>(name: X509IpcCommand, ...args: unknown[]): Promise<T> {
-    const id = nextIpcId++;
-    send.mockClear();
-    await ipcHandler({}, { id, name, args });
-    expect(send).toHaveBeenCalledExactlyOnceWith("x509Reply", {
-        id,
-        reply: expect.anything(),
-    });
-    return send.mock.lastCall![1].reply as T;
+    return (await ipcHandler({}, name, ...args)) as T;
 }
 
 /**
@@ -242,8 +231,6 @@ beforeEach(async () => {
     vi.resetModules();
     vi.resetAllMocks();
     testDir = await mkdtemp(path.join(tmpdir(), "x509-test-"));
-    // N.B. this `any` shouldn't be necessary, but Zed complains regardless.
-    (global as any).mainWindow = { webContents: { send } } as unknown as BrowserWindow;
 });
 
 afterEach(() => rm(testDir, { recursive: true, force: true }));
