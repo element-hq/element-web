@@ -39,7 +39,7 @@ interface ReplyTileProps {
 }
 
 function ReplyTile({ mxEvent, permalinkCreator }: ReplyTileProps): JSX.Element {
-    const cli = MatrixClientPeg.safeGet();
+    const cli = useMatrixClientContext();
     const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
     const vm = useCreateAutoDisposedViewModel(
         () =>
