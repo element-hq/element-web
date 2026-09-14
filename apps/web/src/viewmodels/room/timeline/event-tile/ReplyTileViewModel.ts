@@ -45,13 +45,37 @@ import {
 import { roomMemberToMemberInfo } from "../../../../hooks/room/useRoomMemberProfile";
 
 export interface ReplyTileViewModelProps {
+    /**
+     * The event being quoted in the reply.
+     */
     mxEvent: MatrixEvent;
+    /**
+     * Matrix client used to resolve event display info and sender avatars.
+     */
     cli: MatrixClient;
+    /**
+     * Creates the permalink used as the reply link target. Falls back to `#` when absent.
+     */
     permalinkCreator?: RoomPermalinkCreator;
+    /**
+     * Search terms to highlight in the quoted body.
+     */
     highlights?: string[];
+    /**
+     * Link to navigate to when a highlight is clicked.
+     */
     highlightLink?: string;
+    /**
+     * Toggles the expanded quote in the reply chain. Invoked on shift-click instead of navigating.
+     */
     toggleExpandedQuote?: () => void;
+    /**
+     * Resolves relations (edits, reactions, etc.) for the quoted event.
+     */
     getRelationsForEvent?: GetRelationsForEvent;
+    /**
+     * Presence status of the quoted event sender, shown in the sender profile.
+     */
     userStatus?: UserStatus;
 }
 
