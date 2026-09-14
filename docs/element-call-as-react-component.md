@@ -206,7 +206,8 @@ i18next instance, so the most recently set language wins for all.
   `useDefineForClassFields: false`, so class fields get define semantics. The result is a bundle no local
   build produces, and `MediaDevices`, whose field initialisers read a constructor parameter property,
   throws on mount (`Cannot read properties of undefined (reading 'behavior')`), leaving the call tile
-  blank. The web app build workflows (`build.yml`, `build_develop.yml`, `build-and-test.yaml`) therefore
+  blank. The web app build workflows (`build.yml`, `build_develop.yml`, `build-and-test.yaml`) and
+  `static_analysis.yaml` (whose type check consumes the package's declarations) therefore
   set `pnpm_config_store_dir` to `$RUNNER_TEMP/pnpm-store` before `actions/setup-node` (pnpm 11 reads
   `pnpm_config_*`, not `npm_config_*`, from the environment); a local
   `pnpm store path` (`~/Library/pnpm/store`, `~/.local/share/pnpm/store`) is unaffected. The tell-tale of
