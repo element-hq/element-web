@@ -11,7 +11,7 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
-import type { Filter, FilterKey } from "./skip-list/filters";
+import type { AnyFilter, Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -99,6 +99,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private sortedTags: string[] = [];
 
+    /** Works out which section a room belongs to. Rebuilt when the sections change. */
+    private sectionFilter?: SectionFilter;
+
+    /** The room that was open the last time the filters were applied to every room. */
+    private lastFilteredRoomId?: string | null;
+
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
     /**
@@ -117,7 +123,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         });
         SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onSectionsChange());
-        this.loadSections();
 
         SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
             this.onActivityIsUnreadChange(Boolean(newValue)),
@@ -242,6 +247,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
+        this.loadSections();
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
@@ -290,7 +296,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
             case "RoomListActions.tagRoom.success": {
                 // Tag change initiated by the local user, so surface the "chat moved" toast.
-                this.emit(ROOM_TAGGED_EVENT);
+                if (payload.result?.showToast) this.emit(ROOM_TAGGED_EVENT);
                 break;
             }
 
@@ -491,13 +497,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Get the list of filters to be used in the skip list, including the section filters.
+     * Get the list of filters to be used in the skip list, including the section filter.
      */
-    private getSkipListFilters(): Filter[] {
-        return [
-            ...this.filterByFilterKey.values(),
-            ...this.sortedTags.map((tag) => new SectionFilter(tag, this.sortedTags)),
-        ];
+    private getSkipListFilters(): AnyFilter[] {
+        if (!this.sectionFilter) this.sectionFilter = new SectionFilter(this.sortedTags);
+        return [...this.filterByFilterKey.values(), this.sectionFilter];
     }
 
     /**
@@ -543,7 +547,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Does not emit an event.
      */
     public updateRoomSkipList(): void {
-        this.roomSkipList?.useNewFilters(this.getSkipListFilters());
+        if (!this.roomSkipList) return;
+        // UnreadFilter is the only filter that depends on which room is open, so there is
+        // nothing to redo unless that room changed.
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        if (currentRoomId === this.lastFilteredRoomId) return;
+        this.lastFilteredRoomId = currentRoomId;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
     }
 
     /**
@@ -612,6 +622,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private loadSections(): void {
         this.sortedTags = getOrderedSectionTags();
+        this.sectionFilter = undefined;
     }
 }
 

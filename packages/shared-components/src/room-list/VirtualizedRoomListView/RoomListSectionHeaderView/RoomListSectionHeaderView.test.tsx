@@ -200,8 +200,9 @@ describe("<RoomListSectionHeaderView /> drop eligibility", () => {
         ["a room that is not a direct message", "the People section", "dm", false, false],
         ["a room that is not a direct message", "the Chats section", "nonDm", false, true],
         ["a direct message", "the Chats section", "nonDm", true, false],
-        ["a direct message", "a section that takes any room", undefined, true, true],
-        ["a room that is not a direct message", "a section that takes any room", undefined, false, true],
+        ["a direct message", "a section that takes any room", "any", true, true],
+        ["a room that is not a direct message", "a section that takes any room", "any", false, true],
+        ["a direct message", "the Invites section", "none", true, false],
     ] as const)("%s dropped on %s", async (_room, _section, acceptedRoomKind, isDm, isAccepted) => {
         const user = userEvent.setup();
         const onDragEnd = vi.fn();

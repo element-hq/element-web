@@ -57,7 +57,6 @@ export class UserMenuViewModel
             displayName,
             avatarUrl,
             expanded: !isPanelCollapsed,
-            manageAccountHref: undefined, // loaded async
             showAvatar: isAuthenticated,
             userStatus: ownProfileStore.userStatus,
             showUserStatus: SettingsStore.getValue("feature_user_status") && isAuthenticated,
@@ -83,7 +82,6 @@ export class UserMenuViewModel
         super(props, UserMenuViewModel.computeSnapshot(client, props.ownProfileStore, isPanelCollapsed));
         this.setStatusVm = new UserMenuSetStatusViewModel({ client, ownProfileStore: props.ownProfileStore });
         props.ownProfileStore.on(UPDATE_EVENT, this.recalculateProfile);
-        void this.loadAuthMetadata();
     }
 
     public dispose(): void {
@@ -157,9 +155,4 @@ export class UserMenuViewModel
             logger.warn("Failed to clear user status", err);
         });
     };
-
-    private async loadAuthMetadata(): Promise<void> {
-        const authMetadata = await this.client.getAuthMetadata().catch(() => {});
-        this.snapshot.merge({ manageAccountHref: authMetadata?.account_management_uri });
-    }
 }
