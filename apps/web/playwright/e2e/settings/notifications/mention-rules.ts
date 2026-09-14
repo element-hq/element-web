@@ -9,6 +9,9 @@ import { type Locator, type Page } from "@playwright/test";
 import { type IPushRule, type IPushRules } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../../element-web-test";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
+import { type Bot } from "../../../pages/bot";
+import { getRoomList } from "../../left-panel/room-list-panel/utils";
 
 const USER_MENTION_RULE = ".m.rule.is_user_mention";
 const ROOM_MENTION_RULE = ".m.rule.is_room_mention";
@@ -58,6 +61,36 @@ function radioLabel(row: Locator, name: string): Locator {
 }
 
 /**
+ * Have the bot open a room with the user in it, and send one message mentioning the user or
+ * the whole room. The bot created the room, so it may send @room mentions.
+ * The user is never viewing the room, so the room list decoration reflects the homeserver's
+ * unread counts for the user, which the homeserver computes from the user's push rules.
+ *
+ * @returns the room list item, whose accessible name says whether the message counted as a
+ * mention ("with 1 unread mention") or only as a message ("with 1 unread message")
+ */
+async function botMentionsIn(
+    page: Page,
+    app: ElementAppPage,
+    bot: Bot,
+    userId: string,
+    roomName: string,
+    mention: "user" | "room",
+): Promise<Locator> {
+    const roomId = await bot.createRoom({ name: roomName, invite: [userId] });
+    await app.client.joinRoom(roomId);
+    const room = getRoomList(page).getByRole("option", { name: new RegExp(`^Open room ${roomName}`) });
+    await expect(room).toBeVisible();
+
+    await bot.sendMessage(roomId, {
+        "msgtype": "m.text",
+        "body": mention === "user" ? "Hello you" : "@room hello all",
+        "m.mentions": mention === "user" ? { user_ids: [userId] } : { room: true },
+    });
+    return room;
+}
+
+/**
  * The legacy text-matching mention rules were removed from the spec in Matrix v1.17
  * (MSC4210). Synapse stops serving them when `msc4210_enabled` is set.
  *
@@ -66,26 +99,40 @@ function radioLabel(row: Locator, name: string): Locator {
  * rules. Once the server stops serving them, the intentional rules take their place as rows,
  * and nothing is written to the missing legacy rules.
  *
+ * Whether a setting took effect is checked end to end: the bot mentions the user in a room,
+ * and the room list shows whether the homeserver counted it as a mention.
+ *
  * `synapseConfig` is a worker-scoped fixture and can only be set at the top level of a
  * spec file, so each mode lives in its own spec file and both share these tests.
  *
  * @param legacyRulesServed - whether the homeserver under test still serves the legacy rules
  */
 export function mentionNotificationSettingsTests(legacyRulesServed: boolean): void {
-    test("shows the mention rules and writes them to the server", async ({
+    test("shows the mention rules and applies them to mentions", async ({
         page,
         app,
         user,
+        bot,
         homeserver,
         credentials,
     }) => {
         const fetchRules = getServerPushRules(page, homeserver.baseUrl, credentials.accessToken);
         const errors = trackPushRuleErrors(page);
+        const mentioned = (roomName: string, mention: "user" | "room"): Promise<Locator> =>
+            botMentionsIn(page, app, bot, user.userId, roomName, mention);
 
         // Make sure the homeserver is in the mode this test is about
         const initialRules = await fetchRules();
         expect(initialRules.has(LEGACY_ROOM_MENTION_RULE)).toBe(legacyRulesServed);
         expect(initialRules.has(USER_MENTION_RULE)).toBe(true);
+
+        // By default both kinds of mention count as mentions
+        await expect(await mentioned("defaults user", "user")).toHaveAccessibleName(
+            "Open room defaults user with 1 unread mention.",
+        );
+        await expect(await mentioned("defaults room", "room")).toHaveAccessibleName(
+            "Open room defaults room with 1 unread mention.",
+        );
 
         const settings = await app.settings.openUserSettings("Notifications");
         await settings.getByLabel("Enable notifications for this account").check();
@@ -110,47 +157,50 @@ export function mentionNotificationSettingsTests(legacyRulesServed: boolean): vo
         await expect(userMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
         await expect(roomMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
 
-        // Turn user mentions off
+        // Turn user mentions off and @room mentions down to 'On'
         await radioLabel(userMentionRow, "Off").click();
         await expect(userMentionRow.getByRole("radio", { name: "Off", exact: true })).toBeChecked();
         await expect(userMentionRow.getByText(UPDATE_ERROR)).toHaveCount(0);
-
-        let rules = await fetchRules();
-        expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(false);
-        if (legacyRulesServed) {
-            expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(false);
-            // the display name rule is a row of its own and is left alone
-            expect(rules.get(LEGACY_DISPLAY_NAME_RULE)!.enabled).toBe(true);
-        } else {
-            expect(rules.has(LEGACY_USER_NAME_RULE)).toBe(false);
-            expect(rules.has(LEGACY_DISPLAY_NAME_RULE)).toBe(false);
-        }
-
-        // Turn @room mentions down to 'On'
         await radioLabel(roomMentionRow, "On").click();
         await expect(roomMentionRow.getByRole("radio", { name: "On", exact: true })).toBeChecked();
         await expect(roomMentionRow.getByText(UPDATE_ERROR)).toHaveCount(0);
 
-        rules = await fetchRules();
-        const onActions = ["notify", { set_tweak: "highlight", value: false }];
-        expect(rules.get(ROOM_MENTION_RULE)!.enabled).toBe(true);
-        expect(rules.get(ROOM_MENTION_RULE)!.actions).toEqual(onActions);
+        // The intentional rules were written, and the legacy rules only if the server serves them
+        let rules = await fetchRules();
+        expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(false);
+        expect(rules.get(ROOM_MENTION_RULE)!.actions).toEqual(["notify", { set_tweak: "highlight", value: false }]);
         if (legacyRulesServed) {
-            expect(rules.get(LEGACY_ROOM_MENTION_RULE)!.enabled).toBe(true);
-            expect(rules.get(LEGACY_ROOM_MENTION_RULE)!.actions).toEqual(onActions);
+            expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(false);
+            expect(rules.get(LEGACY_ROOM_MENTION_RULE)!.actions).toEqual(rules.get(ROOM_MENTION_RULE)!.actions);
+            // the display name rule is a row of its own and is left alone
+            expect(rules.get(LEGACY_DISPLAY_NAME_RULE)!.enabled).toBe(true);
         } else {
-            expect(rules.has(LEGACY_ROOM_MENTION_RULE)).toBe(false);
+            for (const ruleId of LEGACY_RULES) expect(rules.has(ruleId)).toBe(false);
         }
 
+        // Neither kind of mention counts as a mention any more, they are plain unread messages
+        await app.closeDialog();
+        await expect(await mentioned("user off", "user")).toHaveAccessibleName(
+            "Open room user off with 1 unread message.",
+        );
+        await expect(await mentioned("room on", "room")).toHaveAccessibleName(
+            "Open room room on with 1 unread message.",
+        );
+
         // Turn user mentions back on
+        await app.settings.openUserSettings("Notifications");
         await radioLabel(userMentionRow, "Noisy").click();
         await expect(userMentionRow.getByRole("radio", { name: "Noisy", exact: true })).toBeChecked();
-
         rules = await fetchRules();
         expect(rules.get(USER_MENTION_RULE)!.enabled).toBe(true);
         if (legacyRulesServed) {
             expect(rules.get(LEGACY_USER_NAME_RULE)!.enabled).toBe(true);
         }
+
+        await app.closeDialog();
+        await expect(await mentioned("user back on", "user")).toHaveAccessibleName(
+            "Open room user back on with 1 unread mention.",
+        );
 
         expect(errors).toEqual([]);
     });
