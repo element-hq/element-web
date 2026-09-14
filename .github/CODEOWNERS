@@ -3,7 +3,7 @@
 **/package.json           @element-hq/element-web-team
 /pnpm-lock.yaml           @element-hq/element-web-team
 
-/apps/desktop/src/__fixtures/x509/                                               @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/__fixtures__/x509/                                             @element-hq/element-crypto-web-reviewers
 /apps/desktop/src/x509.ts                                                        @element-hq/element-crypto-web-reviewers
 /apps/desktop/src/x509.test.ts                                                   @element-hq/element-crypto-web-reviewers
 /apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
