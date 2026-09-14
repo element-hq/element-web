@@ -23,6 +23,8 @@ import type {
 import { ipcMain } from "electron";
 import { getConfig } from "./config.js";
 
+//#region IPC
+
 /**
  * A top-level reference to `graphene-pk11`. This is only ever defined if `pkcs11js` is installed and was imported successfully.
  */
@@ -48,38 +50,189 @@ let moduleLoad: Promise<void> | undefined;
  */
 const sessions: Record<string, { session: Graphene.Session; authenticated: boolean }> = {};
 
-function ok<T>(data: T): X509Result<T> {
-    return { ok: true, data };
-}
+// Top-level IPC handler.
+ipcMain.handle("x509", async (_ev, name: X509IpcCommand, ...args: unknown[]): Promise<X509Result<unknown>> => {
+    try {
+        return await handleIpcX509(name, args);
+    } catch (e) {
+        // Fall back to a generic error if something goes wrong in a way we didn't expect.
+        // This should only ever happen in the case of programming errors in the renderer.
+        return fail("UNKNOWN", e instanceof Error ? e.message : String(e));
+    }
+});
 
-function fail(code: X509IpcErrorCode, message?: string): X509Failure {
-    return { ok: false, error: { code, message } };
+async function handleIpcX509(name: string, args: unknown[]): Promise<X509Result<unknown>> {
+    switch (name) {
+        case "getUserCertificate":
+            return await getUserCertificate();
+
+        case "listHardwareKeys":
+            return await ipcListHardwareKeys();
+
+        case "getKeyState":
+            return await ipcGetKeyState(args[0] as string);
+
+        case "logIntoKey":
+            return await ipcLogIntoKey(args[0] as string, args[1] as string);
+
+        case "signData":
+            return await ipcSignData(args[0] as string, args[1] as Uint8Array);
+
+        default:
+            return fail("UNKNOWN", `Unknown X.509 IPC command ${name}`);
+    }
 }
 
 /**
- * Converts a caught exception into a failed result, keeping the `CKR_*` code.
- * @param e - the exception to convert. This is almost always a `Pkcs11Error` from `pkcs11js`, but can be
- *     from `graphene-pk11` if something goes horrifically wrong.
- * @param staleSessionSerial - if given, the cached session for this key is dropped on a PKCS#11 error so the
- *     next call reopens it rather than reusing a handle the token may no longer recognise.
- * @returns
+ * IPC call to list available hardware keys.
  */
-function failFrom(e: unknown, staleSessionSerial?: string): X509Failure {
-    if (pkcs11 && e instanceof pkcs11.Pkcs11Error) {
-        if (staleSessionSerial) {
-            delete sessions[staleSessionSerial];
-        }
-        return {
-            ok: false,
-            error: {
-                code: "UPSTREAM_PKCS11",
-                pkcs11Code: e.code,
-                message: e.message,
-            },
-        };
+async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
+    let result = await getModuleInstance();
+    if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
+        return result;
     }
-    return fail("UNKNOWN", e instanceof Error ? e.message : String(e));
+    try {
+        if (result.data.getSlots(true).length === 0) {
+            // PKCS#11 module implementations can cache the hardware key list, so we reload it
+            // just in case if no keys are found.
+            await reloadModule();
+            result = await getModuleInstance();
+            if (!result.ok) {
+                // This is an error variant, so we can just return it directly.
+                return result;
+            }
+        }
+    } catch (e) {
+        return failFrom(e);
+    }
+    try {
+        const slots = result.data.getSlots(true);
+        const keys: HardwareKey[] = [];
+        for (let slot = 0; slot < slots.length; slot++) {
+            const {
+                label,
+                serialNumber,
+                manufacturerID,
+                model,
+                maxPinLen: maxPinLength,
+                minPinLen: minPinLength,
+            } = slots.items(slot).getToken();
+            keys.push({
+                label,
+                serialNumber,
+                manufacturerID,
+                model,
+                maxPinLength,
+                minPinLength,
+            });
+        }
+        return ok(keys);
+    } catch (e) {
+        return failFrom(e);
+    }
 }
+
+/**
+ * IPC call reporting how far along the signing sequence the given hardware key is.
+ */
+async function ipcGetKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>> {
+    const result = await getSession(serialNumber);
+    if (!result.ok) {
+        if (result.error.code === "MODULE_NOT_LOADED") {
+            // This is an error variant, so we can just return it directly.
+            return result;
+        }
+        return ok("absent");
+    }
+    if (result.data.authenticated) {
+        return ok("authenticated");
+    }
+    const keyId = await findSigningKeyId(serialNumber);
+    if (!keyId.ok) {
+        switch (keyId.error.code) {
+            case "CERTIFICATE_NOT_FOUND":
+                return keyId;
+            case "PRIVATE_KEY_NOT_FOUND":
+                return ok("noSigningKey");
+            default:
+                return ok("absent");
+        }
+    }
+    return ok("open");
+}
+
+/**
+ * IPC call to log in to the given hardware key, so that `signData` can use its private key.
+ */
+async function ipcLogIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult> {
+    const result = await getSession(serialNumber);
+    if (!result.ok) {
+        // This is an error variant, so we can just return it directly.
+        return result;
+    }
+    try {
+        result.data.session.login(pin);
+        result.data.authenticated = true;
+        // No data returned, but `undefined` is a little unclear.
+        return ok(void null);
+    } catch (e) {
+        const { error } = failFrom(e);
+        const triesRemaining = decodeTriesRemaining(result.data.session.slot.getToken().flags);
+        return { ok: false, error: { ...error, triesRemaining } };
+    }
+}
+
+/**
+ * IPC call to sign the given data with the key belonging to our configured certificate.
+ * Requires `logIntoKey` to have been called successfuly first.
+ */
+async function ipcSignData(keySerialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>> {
+    const sessionResult = await getSession(keySerialNumber);
+    if (!sessionResult.ok) {
+        return sessionResult;
+    }
+    if (!sessionResult.data.authenticated) {
+        return fail("LOGIN_REQUIRED", "logIntoKey must succeed before signing");
+    }
+    const signingKeyResult = await findSigningKeyId(keySerialNumber);
+    if (!signingKeyResult.ok) {
+        return signingKeyResult;
+    }
+
+    try {
+        const pks = sessionResult.data.session.find({
+            class: graphene.ObjectClass.PRIVATE_KEY,
+            id: Buffer.from(signingKeyResult.data, "hex"),
+        });
+        if (pks.length === 0) {
+            return fail("PRIVATE_KEY_NOT_FOUND");
+        }
+        const pk = pks.items(0).toType<Graphene.Key>();
+
+        return ok(
+            sessionResult.data.session
+                .createSign(
+                    {
+                        name: "SHA512_RSA_PKCS_PSS",
+                        params: new graphene.RsaPssParams(
+                            graphene.MechanismEnum.SHA512,
+                            graphene.RsaMgf.MGF1_SHA512,
+                            64,
+                        ),
+                    },
+                    pk,
+                )
+                .once(Buffer.from(data)),
+        );
+    } catch (e) {
+        return failFrom(e, keySerialNumber);
+    }
+}
+
+//#endregion
+
+//#region HSM Managment
 
 /**
  * Loads the PKCS#11 library specified in the X.509 config, or returns a cached instance if this method has
@@ -234,7 +387,8 @@ const CKF_USER_PIN_FINAL_TRY = 0x00020000;
 const CKF_USER_PIN_LOCKED = 0x00040000;
 
 /**
- * Convert a {@link X509Certificate} to an IPC-friendly object.
+ * Details of an X.509 certificate, in a format suitable for passing from the main process to the renderer 
+ * process over IPC.
  */
 function toCertificateInfo(cert: X509Certificate): CertificateInfo {
     return {
@@ -290,184 +444,41 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
     return ok({ certificate: toCertificateInfo(result.data.leaf), chain: result.data.chain });
 }
 
-// --- IPC Methods ---
+// #endregion
 
-/**
- * IPC call to list available hardware keys.
- */
-async function ipcListHardwareKeys(): Promise<X509Result<HardwareKey[]>> {
-    let result = await getModuleInstance();
-    if (!result.ok) {
-        // This is an error variant, so we can just return it directly.
-        return result;
-    }
-    try {
-        if (result.data.getSlots(true).length === 0) {
-            // PKCS#11 module implementations can cache the hardware key list, so we reload it
-            // just in case if no keys are found.
-            await reloadModule();
-            result = await getModuleInstance();
-            if (!result.ok) {
-                // This is an error variant, so we can just return it directly.
-                return result;
-            }
-        }
-    } catch (e) {
-        return failFrom(e);
-    }
-    try {
-        const slots = result.data.getSlots(true);
-        const keys: HardwareKey[] = [];
-        for (let slot = 0; slot < slots.length; slot++) {
-            const {
-                label,
-                serialNumber,
-                manufacturerID,
-                model,
-                maxPinLen: maxPinLength,
-                minPinLen: minPinLength,
-            } = slots.items(slot).getToken();
-            keys.push({
-                label,
-                serialNumber,
-                manufacturerID,
-                model,
-                maxPinLength,
-                minPinLength,
-            });
-        }
-        return ok(keys);
-    } catch (e) {
-        return failFrom(e);
-    }
+//#region Utils
+
+function ok<T>(data: T): X509Result<T> {
+    return { ok: true, data };
+}
+
+function fail(code: X509IpcErrorCode, message?: string): X509Failure {
+    return { ok: false, error: { code, message } };
 }
 
 /**
- * IPC call reporting how far along the signing sequence the given hardware key is.
+ * Converts a caught exception into a failed result, keeping the `CKR_*` code.
+ * @param e - the exception to convert. This is almost always a `Pkcs11Error` from `pkcs11js`, but can be
+ *     from `graphene-pk11` if something goes horrifically wrong.
+ * @param staleSessionSerial - if given, the cached session for this key is dropped on a PKCS#11 error so the
+ *     next call reopens it rather than reusing a handle the token may no longer recognise.
+ * @returns
  */
-async function ipcGetKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>> {
-    const result = await getSession(serialNumber);
-    if (!result.ok) {
-        if (result.error.code === "MODULE_NOT_LOADED") {
-            // This is an error variant, so we can just return it directly.
-            return result;
+function failFrom(e: unknown, staleSessionSerial?: string): X509Failure {
+    if (pkcs11 && e instanceof pkcs11.Pkcs11Error) {
+        if (staleSessionSerial) {
+            delete sessions[staleSessionSerial];
         }
-        return ok("absent");
+        return {
+            ok: false,
+            error: {
+                code: "UPSTREAM_PKCS11",
+                pkcs11Code: e.code,
+                message: e.message,
+            },
+        };
     }
-    if (result.data.authenticated) {
-        return ok("authenticated");
-    }
-    const keyId = await findSigningKeyId(serialNumber);
-    if (!keyId.ok) {
-        switch (keyId.error.code) {
-            case "CERTIFICATE_NOT_FOUND":
-                return keyId;
-            case "PRIVATE_KEY_NOT_FOUND":
-                return ok("noSigningKey");
-            default:
-                return ok("absent");
-        }
-    }
-    return ok("open");
+    return fail("UNKNOWN", e instanceof Error ? e.message : String(e));
 }
 
-/**
- * IPC call to log in to the given hardware key, so that `signData` can use its private key.
- */
-async function ipcLogIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult> {
-    const result = await getSession(serialNumber);
-    if (!result.ok) {
-        // This is an error variant, so we can just return it directly.
-        return result;
-    }
-    try {
-        result.data.session.login(pin);
-        result.data.authenticated = true;
-        return ok(undefined);
-    } catch (e) {
-        const { error } = failFrom(e);
-        const triesRemaining = decodeTriesRemaining(result.data.session.slot.getToken().flags);
-        return { ok: false, error: { ...error, triesRemaining } };
-    }
-}
-
-/**
- * IPC call to sign the given data with the key belonging to our configured certificate.
- * Requires `logIntoKey` to have been called successfuly first.
- */
-async function ipcSignData(keySerialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>> {
-    const sessionResult = await getSession(keySerialNumber);
-    if (!sessionResult.ok) {
-        return sessionResult;
-    }
-    if (!sessionResult.data.authenticated) {
-        return fail("LOGIN_REQUIRED", "logIntoKey must succeed before signing");
-    }
-    const signingKeyResult = await findSigningKeyId(keySerialNumber);
-    if (!signingKeyResult.ok) {
-        return signingKeyResult;
-    }
-
-    try {
-        const pks = sessionResult.data.session.find({
-            class: graphene.ObjectClass.PRIVATE_KEY,
-            id: Buffer.from(signingKeyResult.data, "hex"),
-        });
-        if (pks.length === 0) {
-            return fail("PRIVATE_KEY_NOT_FOUND");
-        }
-        const pk = pks.items(0).toType<Graphene.Key>();
-
-        return ok(
-            sessionResult.data.session
-                .createSign(
-                    {
-                        name: "SHA512_RSA_PKCS_PSS",
-                        params: new graphene.RsaPssParams(
-                            graphene.MechanismEnum.SHA512,
-                            graphene.RsaMgf.MGF1_SHA512,
-                            64,
-                        ),
-                    },
-                    pk,
-                )
-                .once(Buffer.from(data)),
-        );
-    } catch (e) {
-        return failFrom(e, keySerialNumber);
-    }
-}
-
-// --- Top-level IPC handler ---
-
-async function handleIpcX509(name: string, args: unknown[]): Promise<X509Result<unknown>> {
-    switch (name) {
-        case "getUserCertificate":
-            return await getUserCertificate();
-
-        case "listHardwareKeys":
-            return await ipcListHardwareKeys();
-
-        case "getKeyState":
-            return await ipcGetKeyState(args[0] as string);
-
-        case "logIntoKey":
-            return await ipcLogIntoKey(args[0] as string, args[1] as string);
-
-        case "signData":
-            return await ipcSignData(args[0] as string, args[1] as Uint8Array);
-
-        default:
-            return fail("UNKNOWN", `Unknown X.509 IPC command ${name}`);
-    }
-}
-
-ipcMain.handle("x509", async (_ev, name: X509IpcCommand, ...args: unknown[]): Promise<X509Result<unknown>> => {
-    try {
-        return await handleIpcX509(name, args);
-    } catch (e) {
-        // Fall back to a generic error if something goes wrong in a way we didn't expect.
-        // This should only ever happen in the case of programming errors in the renderer.
-        return fail("UNKNOWN", e instanceof Error ? e.message : String(e));
-    }
-});
+//#endregion
