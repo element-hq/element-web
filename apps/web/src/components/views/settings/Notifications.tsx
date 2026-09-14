@@ -90,12 +90,12 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.EncryptedMessage,
 
     // Mentions
+    RuleId.IsUserMention,
+    RuleId.IsRoomMention,
+    // Legacy mentions rules, takes priority until the server no longer serves them
     RuleId.ContainsUserName,
     RuleId.AtRoomNotification,
     RuleId.ContainsDisplayName,
-    // Shown in place of the legacy rules above once the server no longer serves them
-    RuleId.IsUserMention,
-    RuleId.IsRoomMention,
 
     // Other
     RuleId.InviteToSelf,
@@ -367,9 +367,13 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 (rule) => LEGACY_MENTION_RULE_REPLACEMENTS[rule.rule_id] ?? [],
             ),
         );
+        // Keep legacy mention rules
         const isHiddenMentionRule = (rule: IAnnotatedPushRule): boolean =>
             replacedByServedLegacyRules.has(rule.rule_id);
+
+        // Add legacy mention rules
         defaultRules[RuleClass.Other].push(...defaultRules[RuleClass.VectorMentions].filter(isHiddenMentionRule));
+        // Add stable mention rules
         defaultRules[RuleClass.VectorMentions] = defaultRules[RuleClass.VectorMentions].filter(
             (rule) => !isHiddenMentionRule(rule),
         );
