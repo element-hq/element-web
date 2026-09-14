@@ -64,7 +64,13 @@ function LinkTitle({
     link,
     className,
 }: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link"> & { className?: string }): JSX.Element {
-    const caption = new URL(link).toString();
+    let caption: string;
+    try {
+        caption = new URL(link).toString();
+    } catch (e) {
+        caption = link;
+    }
+
     const anchor = (
         <Text
             as="a"
@@ -248,13 +254,13 @@ export function MessageComposerUrlPreviewView({
     const previewViews = collapsed
         ? null
         : links.map((entry) => (
-              <UrlPreviewExpandedEntry
-                  key={entry.matched_url}
-                  entry={entry}
-                  removePreview={removePreview}
-                  className={className}
-              />
-          ));
+            <UrlPreviewExpandedEntry
+                key={entry.matched_url}
+                entry={entry}
+                removePreview={removePreview}
+                className={className}
+            />
+        ));
 
     const summary = (
         <div className={styles.summary}>
