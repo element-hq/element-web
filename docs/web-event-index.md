@@ -130,7 +130,9 @@ That last row is the pull request as it stands, which is what a reviewer reads. 
 the increments have moved it since: chunked AES-GCM records, a bounded resident set over a durable store
 that holds more than RAM does, a recency directory that is readable without decrypting bodies, batched
 writes, a crawl bound by recency and room count, and nothing on the app-start path. Those are converged
-practices 2 to 7 and they are built; practices 1, 8 and 9 are what increment E finishes.
+practices 2 to 7 and they are built; practices 1, 8 and 9 arrived with increment E, practice 1 in its
+resume half only, since what shipped bounds a page by wall clock and hands back a session token rather than
+capping the number of pages.
 
 The practices shared by three or more independent products (a fork counts as one product with its parent)
 are the converged pattern:
@@ -361,8 +363,8 @@ for an unknown mobile and wrong for a 48 GiB desktop: Firefox and WebKit hold 49
 Chromium holds 131,072, less than four tenths as much searchable text, on the same machine and the same
 corpus. Their lower query latencies follow from that and not from a faster query path, since substring and
 miss are the two categories that scale with resident text. The fix, which reads an absent `deviceMemory`
-together with a non-mobile user agent as the desktop tier, is the first item of increment E and is not yet
-shipped; until it lands, this is a live property of the deployment, named in section 7.
+together with a non-mobile user agent as the desktop tier, was the first item of increment E and has since
+shipped, so the table above records the behaviour before it rather than a live property of the deployment.
 
 The throttled column also answers B19's proxy experiment, and the answer is that **no phase scales by a
 flat 4x**, so a single laptop multiplier would be wrong whichever value it took:
@@ -447,7 +449,9 @@ Keybase's deferred start (practice 7).
 on demand after inserts, which B15 makes necessary at these sizes), and if the hits are fewer than twice the
 limit, continue into the cold tier: page chunk headers newest-first, decrypt, scan, in the same 30 ms slices,
 streaming partial results every 200 ms or so, stopping at two pages, returning a `next_batch` cursor and
-aborting on the next keystroke. The predicted cold-scan cost is about 5 µs per event (1.2 read, 3.5 decrypt,
+aborting on the next keystroke. (What was built keeps the newest-first streamed scan and the abort, and
+replaces the cursor and the page cap with a wall-clock budget per page and an opaque session token: section 7,
+increment E.) The predicted cold-scan cost is about 5 µs per event (1.2 read, 3.5 decrypt,
 0.25 scan), so roughly 1 s for 200k cold events on this machine, streamed. The substring and CJK path is
 bounded by the same slices and never silently disabled. Precedent: Proton's `hybridSearch` and
 `uncachedSearch`, and the query cap that all nine products share (practices 1 and 8).
@@ -477,26 +481,29 @@ Android.
 
 ## 7. What has been built
 
-Four increments of section 6 exist as code. Each was implemented against a written proof requirement,
+Five increments of section 6 exist as code. Each was implemented against a written proof requirement,
 measured in real Chromium on the machine of section 5, and then handed to an adversarial review that ran
 its own repros and its own mutation campaign against the branch's test suite rather than reading the
 implementer's tests. A mutant counts as killed only when it turns a test red beyond the run's own baseline.
 Every increment below is reported with the kill ratio its review reached, because a green suite that
 survives its own mutants is evidence of nothing.
 
-| Increment | What it is                                                              | Review verdict           | Where it runs                            |
-| --------- | ----------------------------------------------------------------------- | ------------------------ | ---------------------------------------- |
-| A         | Non-blocking sliced hydration                                           | SHIP after one fix round | production, on the inblock.io deployment |
-| B         | Batched writes, O(1) stats, sorted vocabulary, flat-copy folded memo    | SHIP after one fix round | production, on the inblock.io deployment |
-| C         | Crawl window and room cap, byte budgets, the encrypted recency manifest | SHIP after five rounds   | production, on the inblock.io deployment |
-| D-core    | Schema v3: binary AES-GCM chunks                                        | SHIP after four rounds   | reviewed, not yet deployed               |
+| Increment | What it is                                                              | Review verdict           | Where it runs                             |
+| --------- | ----------------------------------------------------------------------- | ------------------------ | ----------------------------------------- |
+| A         | Non-blocking sliced hydration                                           | SHIP after one fix round | production, on the inblock.io deployments |
+| B         | Batched writes, O(1) stats, sorted vocabulary, flat-copy folded memo    | SHIP after one fix round | production, on the inblock.io deployments |
+| C         | Crawl window and room cap, byte budgets, the encrypted recency manifest | SHIP after five rounds   | production, on the inblock.io deployments |
+| D-core    | Schema v3: binary AES-GCM chunks                                        | SHIP after four rounds   | production, on the inblock.io deployments |
+| E         | Cold tier: a streamed scan of the chunks outside the hot window         | SHIP after four rounds   | production, on the inblock.io deployments |
 
-A, B and C run in production on the inblock.io deployment as a vendored patch, ahead of upstream, because
-that deployment had the feature enabled and its users were paying the blocking restore. D-core is reviewed
-and pending: it is held back so that it can be carried together with increment E, because D-core resets
-every existing database and one reset is better than a reset followed immediately by more churn. None of A
-to D is on the pull request branch,
-which is why `docs/labs.md` describes the feature as the pull request ships it and not as described here.
+**Deployment status.** All five run on the inblock.io dev and production deployments as a vendored patch,
+ahead of upstream, because those deployments had the feature enabled and their users were paying the
+blocking restore. A, B and C were carried earlier; D-core and E were promoted together on 2026-09-14,
+because D-core resets every existing database and one reset is better than a reset followed immediately by
+more churn. Existing databases were therefore reset once, to schema v3: a v2 database is dropped rather than
+converted, and the re-crawl that costs is bounded by increment C's crawl window and room cap. None of A to E
+is on the pull request branch, which is why `docs/labs.md` describes the feature as the pull request ships it
+and not as described here.
 
 ### A. Non-blocking sliced hydration
 
@@ -652,11 +659,12 @@ admits and so bounds itself. Hot, instantly searchable content should not be wha
 Neither run reached the manifest population its tier's ceiling is computed for, so that row is arithmetic on the
 per-entry estimate rather than an observation at that scale.
 
-One consequence is user-visible and is the reason increment E exists. Until the cold scan lands, an event
-that is on disk but outside the hot window is not searchable, because the query path only consults the
-resident inverted index. The coverage date therefore reads `oldestResidentTs`, what a query can actually
-see, rather than `oldestIndexedTs`, what disk still holds. That is a deliberate understatement of reach
-that will be corrected, not a permanent design property.
+One consequence was user-visible and is the reason increment E exists. While increment C was the head of
+the stack, an event that was on disk but outside the hot window was not searchable, because the query path
+only consulted the resident inverted index, so the coverage date read `oldestResidentTs`, what a query could
+actually see, rather than `oldestIndexedTs`, what disk still held. That understatement of reach has since
+been corrected rather than left standing: increment E reaches those events, and the date reads
+`oldestIndexedTs` again.
 
 Review: five rounds, ending in SHIP. Mutation campaigns across those rounds killed **16 of 23, then 17 of
 20, then 13 of 14** mutants, each round's survivors individually examined rather than counted.
@@ -752,19 +760,116 @@ rather than open-ended precisely because increment C landed first: a reset re-cr
 `CRAWL_WINDOW_DAYS` in at most `CRAWL_ROOM_CAP` rooms, not the account's whole history. The conversion code
 remains on its own branch for reference and is not part of what ships.
 
+### E. Cold tier: a search session over the chunks on disk
+
+A query answers from the hot window first and, if the page still has room, continues onto disk. The cold
+scan walks the sealed chunks newest-first and decrypts **one chunk at a time**, releasing it before reading
+the next, so the ciphertext a scan holds is bounded by one chunk rather than by the size of the corpus. Hot
+hits are delivered before cold ones and cold ones arrive newest-first, the same recency order hydration and
+the crawler already use. A new query on the same index cancels the older one's still-running scan.
+
+The resume state is not a cursor. `next_batch` is an opaque, monotonically increasing token naming an
+in-memory **session**, and the session holds the whole answer's state: the resident hit list, the
+newest-first chunk walk and the set of every event id already returned, each snapshotted once when the
+session is created. A later page is a map lookup of that token, never a recomputation, and the returned-id
+set, not a position, is what makes de-duplication exact: a chunk is re-read and re-decrypted on each visit
+and its ids filtered through that set, so a partially consumed chunk resumes correctly no matter what became
+resident, was redacted or was deleted in between. At most four sessions live at once and a new one evicts
+the oldest; an unknown or evicted token returns an empty page with no `next_batch` rather than throwing;
+sessions are dropped on teardown, on a reset and on cancellation.
+
+**That shape is the third design, and the first two failed review.** The first was a positional cursor, a
+chunk index plus a count of matches, and two independent residency changes break it: a chunk sealing after
+page 1 shifts every index by one, so page 2 repeats page 1, and a cold hit that becomes resident shifts the
+match counter, so a hit is dropped. The second was a boundary cursor of `(originServerTs, eventId)`, and the
+next round broke it in four more ways: a budget-cut page resumed in a chunk that did not contain the
+boundary and skipped everything in that chunk newer than it, a resident hit count at an exact multiple of
+the page size never reached disk at all, a cut page did not report partiality, and the gone-chunk fallback
+anchored on the boundary's timestamp rather than the missing chunk's, skipping live chunks. Every one of
+those has the same cause: a position recomputed from mutable live state on every call. Rather than patch a
+third cursor, the increment was re-scoped to the session, which removes the class: the walk position becomes
+an optimisation instead of a correctness mechanism, provably so, since a mutant that resets it to zero on
+every page still returns every hit exactly once. The precedent is Proton's client-held search state, the
+largest browser deployment in the survey (section 4).
+
+The re-scope then had to be reviewed on its own terms, and a third round found that it had inverted one
+liveness check **in each direction**, both of them user-visible. The cold scan de-duplicated against live
+residency instead of against the snapshot, so a matching event that was cold when the session was created
+and became resident before the walk reached its chunk was delivered by neither tier and dropped from every
+page of that query. In the other direction, the hot loop served snapshotted event objects without
+re-checking liveness, so an event redacted between two pages was still served on the later one, with its
+cleartext body, even though its on-disk copy had been deleted correctly. The fix is one rule in two places:
+ask the session for snapshot questions and the manager for liveness questions. The fourth round is SHIP and
+it checked the fixes in both directions rather than only the one the reports named, re-introducing each bug
+as its own mutant and confirming that the suite goes red.
+
+**The bound on a page is time, not a page count.** There is no page cap. A page ends when it holds `limit`
+results or when `COLD_SCAN_BUDGET_MS` of wall clock is spent, whichever comes first; a page cut short hands
+its token back with `isSearchPartial` true, and that flag is false only on the page that exhausts both
+tiers. It reaches the user through the warning line that already exists for an index that is still filling,
+as one extra disjunct rather than a second warning, because the two say the same thing to a reader: what is
+on screen may not be everything. The budget exists because a query that matches nothing cannot stop early:
+its only other stopping condition is an exhausted walk, so it decrypts every retained chunk before it can
+say so. Unbounded, that miss costs 2,716.9 ms at 200k events and 7,759.2 ms at 500k, roughly 18 to 21 µs per
+cold event, sliced so that it never produces a long task but with nothing on screen while it runs. A
+one-second budget turns that wait into paged progress the user can see.
+
+**The tier heuristic, E's first item.** An absent `navigator.deviceMemory` no longer means the small tier by
+itself. The fallback asks whether the device is plausibly mobile: `navigator.userAgentData.mobile` first, then
+a conservative user-agent regex, then iPadOS's default desktop-mode user agent, which since iPadOS 13 carries
+neither `iPad` nor `Mobile` and reads as a Mac. That last case is caught by `navigator.maxTouchPoints > 1`
+together with a `Macintosh` token, an iPad in desktop mode reporting 5 touch points where a Mac reports 0,
+so a genuine Mac is unaffected. Firefox and Safari on the desktop now get the desktop tier; a phone, and an
+iPad hiding behind a desktop user agent, keep the small one. The regression is worth naming, because this
+increment introduced it: an earlier form of the fix read "no `deviceMemory`" as "desktop" outright, which
+put an iPad on a 128 MiB hot window and a 512 MiB disk budget.
+
+**The coverage date now reads the oldest indexed event.** With on-disk content genuinely findable, the
+oldest _resident_ timestamp understates reach, so the line reads `oldestIndexedTs`, which is what it always
+meant to promise: the date before which a message is not covered at all, because the crawl window or the
+disk budget excluded it.
+
+Measured on real Chromium, on the machine of section 5, at two sizes and their own tiers:
+
+| Measure                                   | 200k, small tier | 500k, desktop tier |
+| ----------------------------------------- | ---------------- | ------------------ |
+| Resident events at session start          | 49,152           | 131,072            |
+| Miss query, pages to exhaust the walk     | 4                | 8                  |
+| Miss query, total wall time               | 3,058.0 ms       | 7,678.7 ms         |
+| Long tasks of 50 ms or more during it     | none             | none               |
+| Cancelling a superseded scan              | 13.4 ms          | 42.2 ms            |
+| Stale results leaked by a superseded scan | none             | none               |
+
+`isSearchPartial` is true on every page cut short by the budget and false only on the page that exhausts,
+at both sizes. The warning's own poll was counted rather than assumed: exactly one `getStats()` call per
+second while the component is mounted, none after it unmounts, and the file-panel kind arms no poll at all.
+`getStats()` is an in-memory read on this backend, which is why a poll is an acceptable answer to a backend
+that fires no event when a search settles.
+
+Review: four rounds, ending in SHIP. The mutation campaign against the session design applied **43 mutants
+and killed 23**, and the five properties the design rests on all die under mutation: token generation,
+eviction order, the returned-id de-duplication, the budget flag and the four-session bound. The survivors
+were argued one at a time rather than counted, and one of them is a real gap that the final round found in
+the branch's own claim rather than in its behaviour: the test written to pin "a page never exceeds the
+requested `limit`" uses a chunk target so small that the mutant it targets is a no-op, so that guarantee is
+pinned only against gross violation. It is a fixture defect, not a behaviour defect, and the one-line fix is
+not in the deployed build. Two smaller residuals are recorded rather than fixed: the `count` a session
+reports is a lifetime snapshot and can over-report after a redaction until the scan touches disk, and
+`loadFileEvents` deliberately has no cold tier at all (section 10).
+
 ## 8. Degradation policy
 
 The order below is the order in which pressure arrives, not an order of severity.
 
-| Step                        | Trigger                                                                    | What degrades                                                                             | What is kept                                                                             | What the user sees                                                             |
-| --------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 0. Loading                  | app start until the hot window is hydrated                                 | old hits arrive from the cold scan rather than the index, so they are slower and streamed | the app is responsive, the newest chunks are searchable first, identity is exact         | the existing `SearchWarning` line, with a `loading` disjunct                   |
-| 1. Query truncation         | hits reach two pages                                                       | this query stops scanning                                                                 | a resume cursor                                                                          | Element's existing "more results" through `next_batch`                         |
-| 2. Hot-window bound         | resident bytes exceed `HOT_WINDOW_BYTES`                                   | the oldest resident events lose postings and payload                                      | they remain reachable through the cold scan, in milliseconds to hundreds of milliseconds | results keep arriving; nothing is hidden                                       |
-| 3. Crawl window or room cap | age beyond `CRAWL_WINDOW_DAYS`, or a room outside the top `CRAWL_ROOM_CAP` | those messages are never fetched                                                          | everything newer, and every capped room                                                  | "Search covers messages newer than {date}", plus a per-room "not indexed" note |
-| 4. Disk budget              | `ciphertextBytes` over `DISK_BUDGET_BYTES`, or `QuotaExceededError`        | the oldest chunks are deleted                                                             | the newest are retained                                                                  | the date in step 3 moves forward                                               |
-| 5. Substring and CJK        | a scan exceeds the slice deadline                                          | the scan is spread across slices, never disabled                                          | correctness                                                                              | results arrive progressively; labs names CJK as scan-only                      |
-| 6. Small tier               | `navigator.deviceMemory` at 4 or below, or absent                          | smaller constants (section 9)                                                             | the same feature and the same code paths                                                 | the date in step 3 is nearer                                                   |
+| Step                        | Trigger                                                                                                      | What degrades                                                                             | What is kept                                                                                                    | What the user sees                                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 0. Loading                  | app start until the hot window is hydrated                                                                   | old hits arrive from the cold scan rather than the index, so they are slower and streamed | the app is responsive, the newest chunks are searchable first, identity is exact                                | the existing `SearchWarning` line, with a `loading` disjunct                                                                 |
+| 1. Query truncation         | a page holds `limit` results, or `COLD_SCAN_BUDGET_MS` of wall clock is spent                                | this page stops scanning                                                                  | the session, and the opaque token that resumes it                                                               | Element's existing "more results" through `next_batch`, plus the "results may be incomplete" line while a page was cut short |
+| 2. Hot-window bound         | resident bytes exceed `HOT_WINDOW_BYTES`                                                                     | the oldest resident events lose postings and payload                                      | they remain reachable through the cold scan, at seconds rather than milliseconds once a query has to sweep disk | results keep arriving; nothing is hidden                                                                                     |
+| 3. Crawl window or room cap | age beyond `CRAWL_WINDOW_DAYS`, or a room outside the top `CRAWL_ROOM_CAP`                                   | those messages are never fetched                                                          | everything newer, and every capped room                                                                         | "Search covers messages newer than {date}", plus a per-room "not indexed" note                                               |
+| 4. Disk budget              | `ciphertextBytes` over `DISK_BUDGET_BYTES`, or `QuotaExceededError`                                          | the oldest chunks are deleted                                                             | the newest are retained                                                                                         | the date in step 3 moves forward                                                                                             |
+| 5. Substring and CJK        | a scan exceeds the slice deadline                                                                            | the scan is spread across slices, never disabled                                          | correctness                                                                                                     | results arrive progressively; labs names CJK as scan-only                                                                    |
+| 6. Small tier               | `navigator.deviceMemory` at 4 or below; or, when it is absent, a mobile or iPadOS-in-desktop-mode user agent | smaller constants (section 9)                                                             | the same feature and the same code paths                                                                        | the date in step 3 is nearer                                                                                                 |
 
 **The guarantee.** At every step a query returns every hit in the hot window within the slice budget, then
 every hit from everything retained on disk, newest-first, streamed and cancellable, and it states the date
@@ -774,13 +879,15 @@ _latency for old messages_ and in _reach beyond the retained date_, never in cor
 earlier wording "findability of old messages degrades" is therefore wrong and is replaced by "old messages
 are found more slowly, and the retained date is stated".
 
-**What holds today, and what does not.** Steps 0, 3, 4 and 6 are live as described. Step 1's cap and step
-2's cold scan are the part increment E carries, so until it lands an event evicted from the hot window is
-on disk and not searchable, and the guarantee above is not yet met in full. The code does not paper over
-that: the coverage date reads the oldest **resident** event rather than the oldest indexed one, so the line
-the user sees understates reach rather than overstating it. Step 6's trigger is also the deployment issue
-named in section 5, since an absent `navigator.deviceMemory` currently sends every Firefox and Safari
-desktop user down this step; correcting that is E's first item.
+**What holds today.** Every step is live, on the deployments named in section 7, and the guarantee above is
+met: step 1's bound is a wall-clock budget per page rather than a cap on pages, step 2's cold scan reaches
+what the hot window evicted, the coverage date reads the oldest **indexed** event rather than the oldest
+resident one, and step 6 no longer sends every Firefox and Safari desktop user down the small tier. Two
+residuals are stated rather than papered over. A query whose terms match nothing on disk still has to visit
+every retained chunk before it can say so, which is seconds of work at the sizes measured in section 7; what
+the budget changes is that the user sees pages and a partiality line throughout rather than one long
+spinner. And the file panel has no cold tier at all, so an attachment list is still bounded by the hot
+window in the way search no longer is (section 10).
 
 ## 9. Constants
 
@@ -793,20 +900,22 @@ evidence than a bound derived from calibrated slopes. The validation runs still 
 can move any of them. Every budget is a count of bytes or of days, never a count of events; the event
 counts below are for intuition and are not what the code checks.
 
-| Constant                                                 | Desktop tier                         | Small tier                          | Basis                                                                                                                                                                                                 |
-| -------------------------------------------------------- | ------------------------------------ | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hotWindowBytes`                                         | 128 MiB, about 131,072 events        | 48 MiB, about 49,152 events         | roughly 3% and 5% of the old-generation ceiling (B1, B13). Gates hydrated events alone; the manifest is budgeted next to it, not inside it                                                            |
-| `diskBudgetBytes`                                        | 512 MiB, about 700k events           | 128 MiB, about 170k events          | the manager's own exact ciphertext accounting; a steady-state on-disk multiplier is still outstanding, so this is not sized from measured disk                                                        |
-| `manifestCeilingBytes`                                   | about 104.8 MiB, 700,000 times 157 B | about 25.5 MiB, 170,000 times 157 B | the events the disk budget admits times the measured per-entry cost. A documented worst case, self-enforcing through `diskBudgetBytes` (one entry per disk row), not a second runtime check           |
-| `crawlWindowDays` / `crawlRoomCap`                       | 90 / 100                             | 90 / 20                             | [element-meta#3252](https://github.com/element-hq/element-meta/issues/3252); Keybase's 100 desktop and 10 mobile                                                                                      |
-| `CHUNK_TARGET_BYTES`                                     | 48 KiB                               | same                                | B10, and the sweep below                                                                                                                                                                              |
-| `MANIFEST_PAGE_SIZE`                                     | 1,000 entries                        | same                                | the still-filling tail page is re-encrypted on every flush that touches it: 15.8 ms at 10,000 entries against 1.72 ms at 1,000. Sealed pages are rewritten only on a removal, so this is free to tune |
-| `HYDRATION_SLICE_DEADLINE_MS`                            | 30                                   | same                                | the 50 ms long-task threshold with margin (B6); boxed by deadline rather than by count because per-event cost varies about 2x with message shape                                                      |
-| `HYDRATION_CHUNK_BATCH`                                  | 64 chunks per page                   | same                                | each page is released before the next is read (B17)                                                                                                                                                   |
-| `RESIDENT_BYTES_PER_EVENT_ESTIMATE`                      | 1,024 B                              | same                                | rounds the measured 869 to 914 B per event (B13) up for headroom. Flat per event rather than weighted by text length, because the measured cost is close to a per-event constant                      |
-| `MANIFEST_BYTES_PER_ENTRY_ESTIMATE`                      | 160 B                                | same                                | rounds the measured 136.7 to 171.1 B per entry up, same convention                                                                                                                                    |
-| `LIVE_WRITE_FLUSH_INTERVAL_MS` / `LIVE_WRITE_BUFFER_MAX` | 5,000 ms / 300 events                | same                                | Seshat's `COMMIT_TIME`, converged practice 5; 300 sits inside the measured 200 to 500 records per transaction band                                                                                    |
-| `VOCABULARY_MERGE_THRESHOLD`                             | 2,000 terms                          | same                                | at the corpus's own growth rate this merges roughly once per 13,000 indexed events, and the merge is 17.28 ms at V of 200,000                                                                         |
+| Constant                                                 | Desktop tier                         | Small tier                          | Basis                                                                                                                                                                                                                |
+| -------------------------------------------------------- | ------------------------------------ | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hotWindowBytes`                                         | 128 MiB, about 131,072 events        | 48 MiB, about 49,152 events         | roughly 3% and 5% of the old-generation ceiling (B1, B13). Gates hydrated events alone; the manifest is budgeted next to it, not inside it                                                                           |
+| `diskBudgetBytes`                                        | 512 MiB, about 700k events           | 128 MiB, about 170k events          | the manager's own exact ciphertext accounting; a steady-state on-disk multiplier is still outstanding, so this is not sized from measured disk                                                                       |
+| `manifestCeilingBytes`                                   | about 104.8 MiB, 700,000 times 157 B | about 25.5 MiB, 170,000 times 157 B | the events the disk budget admits times the measured per-entry cost. A documented worst case, self-enforcing through `diskBudgetBytes` (one entry per disk row), not a second runtime check                          |
+| `crawlWindowDays` / `crawlRoomCap`                       | 90 / 100                             | 90 / 20                             | [element-meta#3252](https://github.com/element-hq/element-meta/issues/3252); Keybase's 100 desktop and 10 mobile                                                                                                     |
+| `CHUNK_TARGET_BYTES`                                     | 48 KiB                               | same                                | B10, and the sweep below                                                                                                                                                                                             |
+| `MANIFEST_PAGE_SIZE`                                     | 1,000 entries                        | same                                | the still-filling tail page is re-encrypted on every flush that touches it: 15.8 ms at 10,000 entries against 1.72 ms at 1,000. Sealed pages are rewritten only on a removal, so this is free to tune                |
+| `HYDRATION_SLICE_DEADLINE_MS`                            | 30                                   | same                                | the 50 ms long-task threshold with margin (B6); boxed by deadline rather than by count because per-event cost varies about 2x with message shape                                                                     |
+| `HYDRATION_CHUNK_BATCH`                                  | 64 chunks per page                   | same                                | each page is released before the next is read (B17)                                                                                                                                                                  |
+| `COLD_SCAN_BUDGET_MS`                                    | 1,000 ms per page                    | same                                | the same miss query, unbounded, measured 2,716.9 ms at 200k and 7,759.2 ms at 500k. One second sits under both and turns the wait into paged progress; a 4x-throttled machine argues for less, not more (section 10) |
+| `MAX_COLD_SCAN_SESSIONS`                                 | 4 live sessions                      | same                                | bounds the memory a client can pin by issuing queries. A new session evicts the oldest, and a token for an evicted one is an empty page, never a throw                                                               |
+| `RESIDENT_BYTES_PER_EVENT_ESTIMATE`                      | 1,024 B                              | same                                | rounds the measured 869 to 914 B per event (B13) up for headroom. Flat per event rather than weighted by text length, because the measured cost is close to a per-event constant                                     |
+| `MANIFEST_BYTES_PER_ENTRY_ESTIMATE`                      | 160 B                                | same                                | rounds the measured 136.7 to 171.1 B per entry up, same convention                                                                                                                                                   |
+| `LIVE_WRITE_FLUSH_INTERVAL_MS` / `LIVE_WRITE_BUFFER_MAX` | 5,000 ms / 300 events                | same                                | Seshat's `COMMIT_TIME`, converged practice 5; 300 sits inside the measured 200 to 500 records per transaction band                                                                                                   |
+| `VOCABULARY_MERGE_THRESHOLD`                             | 2,000 terms                          | same                                | at the corpus's own growth rate this merges roughly once per 13,000 indexed events, and the merge is 17.28 ms at V of 200,000                                                                                        |
 
 `CHUNK_TARGET_BYTES` deserves its caveat spelled out, because the evidence is weaker than a single number
 suggests. Swept through the real manager at 100k, write cost rises monotonically with the target and read
@@ -817,37 +926,50 @@ kept because a sealed chunk is the target plus one entry, which keeps it clear o
 externalisation threshold where a 64 KiB target would not be, and because it is the value already measured
 and gated on.
 
-`SEARCH_PAGE_CAP`, the query-time cap and resume cursor of converged practice 1, is not in this table
-because the cold scan it bounds has not shipped. It arrives with increment E.
+There is no `SEARCH_PAGE_CAP`. Converged practice 1 asks for a query-time cap and a resume cursor, and what
+shipped keeps the resume half and replaces the cap: a page is bounded by the caller's own `limit` and by
+`COLD_SCAN_BUDGET_MS`, and the resume state is a session behind an opaque token rather than a cursor
+(section 7, increment E). The fixed two-page cap the design called for was deleted along with the cursor,
+because with a per-page time bound and an explicit token the caller decides how far to page, and stopping at
+a page count would have withheld hits the user had asked for while there was still budget to find them.
+
+Which tier a browser gets is a decision rather than a constant, and it is worth stating next to the table it
+selects: `navigator.deviceMemory` of 4 or below is the small tier and above 4 the desktop tier; when the
+property is absent, which is every non-Chromium engine, the choice falls to a mobile and iPadOS user-agent
+check, and desktop otherwise.
 
 ## 10. Roadmap
 
-Increments A, B, C and D-core are built; section 7 records what each does, what it measures and what its
-review found. Two remain, plus two follow-ups. Every one of them keeps the invariants: the cleartext key
-set is pinned by a test that itself has a test, redaction removes content from memory and from disk, the
+Increments A, B, C, D-core and E are built and deployed; section 7 records what each does, what it measures
+and what its review found. One increment remains, and it is conditional, plus two follow-ups. Every one of
+them keeps the invariants: the cleartext key set is pinned by a test that itself has a test, redaction
+removes content from memory and from disk, the
 labs gate holds, teardown is reachable after `localStorage.clear()`, and there is no non-IndexedDB `await`
 inside a live transaction, which the paged and sliced reads make the single most likely regression.
 
-| Increment           | State       | What it changes                                                                                                                                                                                                                                                                                                                                                              | What it proves                                                                                                           |
-| ------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| E. Cold tier        | in progress | the streamed newest-first scan of on-disk chunks outside the hot window, capped at two pages with a resume cursor and cancelled on the next keystroke, so the coverage date can go back to reading `oldestIndexedTs`; and, as its first item, the tier heuristic, so that an absent `navigator.deviceMemory` together with a non-mobile user agent reads as the desktop tier | the cold scan holds near the predicted 5 µs per event, and Firefox and Safari desktop users stop being sized as phones   |
-| F. Postings on disk | conditional | the Keybase and Tuta shape, `HMAC(term‖room‖user)` to AES-GCM postings behind an LRU, only if E's hot window proves too small on the small tier; a Worker-resident index only if slicing fails; CJK bigrams as their own change                                                                                                                                              | CJK query latency on a CJK corpus                                                                                        |
-| Compact manifest    | follow-up   | fixed-width event ids concatenated into one byte buffer plus typed arrays for the timestamp and room columns, binary-searched rather than held in a `Map` of boxed objects, targeting under 60 B per entry against the current 160                                                                                                                                           | a tier admits a proportionally larger manifest for the same memory, and the typed arrays sit outside the 4 GiB cage (B4) |
+| Increment           | State       | What it changes                                                                                                                                                                                                                    | What it proves                                                                                                           |
+| ------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| F. Postings on disk | conditional | the Keybase and Tuta shape, `HMAC(term‖room‖user)` to AES-GCM postings behind an LRU, only if E's hot window proves too small on the small tier; a Worker-resident index only if slicing fails; CJK bigrams as their own change    | CJK query latency on a CJK corpus                                                                                        |
+| File panel          | follow-up   | either the cold scan is extended to `loadFileEvents`, or the `Files` warning kind gets the coverage-date line search already has                                                                                                   | an attachment list stops being silently bounded by the hot window                                                        |
+| Compact manifest    | follow-up   | fixed-width event ids concatenated into one byte buffer plus typed arrays for the timestamp and room columns, binary-searched rather than held in a `Map` of boxed objects, targeting under 60 B per entry against the current 160 | a tier admits a proportionally larger manifest for the same memory, and the typed arrays sit outside the 4 GiB cage (B4) |
 
 The compact manifest is a follow-up rather than an increment because it may be moot. It was queued when the
 manifest was the only recency layer; now that chunks carry their own members, some of what it holds is
-duplicated, and the right time to build it is after E has shown how much of the manifest the cold scan
-actually needs resident.
+duplicated, and now that E has shipped the question it waits on is measurable: how much of the manifest the
+cold scan actually needs resident.
 
 **The file panel is not covered by any of this yet, and should be.** `loadFileEvents` answers from
 `roomOrder`, that is from the resident set alone, so a room's attachment list is bounded by the hot window
-in exactly the way search is, and for the same reason. Increment A gave it the loading warning, so it is
-honest while hydration runs, but nothing tells a user that the list is short because the events are outside
-the window rather than because the room has no more attachments. Either E's cold scan is extended to the
-file panel, or the `Files` warning kind gets the same coverage-date line search has.
+in exactly the way search used to be, and for the same reason. Increment E deliberately did not extend the
+cold tier to it, which is now the larger gap of the two: increment A gave the panel the loading warning, so
+it is honest while hydration runs, but nothing tells a user that the list is short because the events are
+outside the window rather than because the room has no more attachments.
 
 Validation runs still outstanding, with the ones that have since run removed: attribute the 43 µs rebuild
-before anyone optimises it; measure the cold scan once E lands; fit vocabulary growth on real multilingual
+before anyone optimises it; re-run the cold-scan budget under a 4x CPU throttle, where a one-second page
+becomes roughly four and the finding would argue for a smaller budget rather than a larger one; re-run the
+cold tier and the tier heuristic on Firefox and WebKit, neither of which has seen the session design; fit
+vocabulary growth on real multilingual
 text rather than a generator (B15); measure a real mid-range laptop and a real phone rather than a CPU
 throttle (B19); re-measure disk after an idle period and again on Chrome 150, which replaces LevelDB with
 SQLite; measure Element's own baseline heap (B18); and keep running the suite against planted defects,
