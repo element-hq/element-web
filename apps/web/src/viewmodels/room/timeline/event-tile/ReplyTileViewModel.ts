@@ -79,22 +79,48 @@ export interface ReplyTileViewModelProps {
     userStatus?: UserStatus;
 }
 
+/**
+ * ViewModel backing {@link ReplyTileView}: the compact quote of an event shown
+ * in a reply chain or in the composer reply preview.
+ *
+ * Responsibilities:
+ * - Compute the snapshot (permalink, sender presentation, inline/info flags and
+ *   the rendered body) from the quoted event.
+ * - Re-compute it when the quoted event is decrypted, redacted or replaced.
+ * - Own the sender avatar and profile sub-ViewModels and dispose them.
+ * - Handle activation of the reply link (navigate to the event, or expand the
+ *   quote on shift-click).
+ *
+ * The body is rendered through {@link renderReplyTile} with reply-specific
+ * overrides so that media is shown in a compact form.
+ */
 export class ReplyTileViewModel
     extends BaseViewModel<ReplyTileViewSnapshot, ReplyTileViewModelProps>
     implements ReplyTileViewModelInterface, ReplyTileViewActions
 {
+    /** The event currently listened to for decryption, redaction and edit updates. */
     private watchedEvent?: MatrixEvent;
+    /** Avatar ViewModel for the quoted event sender, reused across snapshots. */
     private senderAvatarViewModel?: AppMemberAvatarViewModel;
+    /** Member the avatar ViewModel was created for, used to detect when it must be recreated. */
     private senderAvatarMember?: RoomMember;
+    /** Client the avatar ViewModel was created with, used to detect when it must be recreated. */
     private senderAvatarClient?: MatrixClient;
+    /** Profile ViewModel for the quoted event sender, reused across snapshots. */
     private senderProfileViewModel?: AppDisambiguatedProfileViewModel;
 
     public constructor(props: ReplyTileViewModelProps) {
+        // The sender sub-ViewModels need `this`, so compute a first snapshot without them
+        // and replace it once the instance is initialised.
         super(props, ReplyTileViewModel.computeSnapshot(props, undefined));
         this.watchEvent(props.mxEvent);
         this.snapshot.set(this.computeSnapshot());
     }
 
+    /**
+     * Update the props and re-compute the snapshot.
+     * Switches event listeners when the quoted event changes.
+     */
     public setProps(props: ReplyTileViewModelProps): void {
         this.props = props;
         this.watchEvent(props.mxEvent);
@@ -110,6 +136,9 @@ export class ReplyTileViewModel
         super.dispose();
     }
 
+    /**
+     * Permalink to the quoted event, or `#` when no permalink creator is available.
+     */
     private static readonly getPermalink = (props: ReplyTileViewModelProps): string => {
         const eventId = props.mxEvent.getId();
         if (props.permalinkCreator && eventId) {
@@ -118,6 +147,13 @@ export class ReplyTileViewModel
         return "#";
     };
 
+    /**
+     * Render the quoted event body.
+     *
+     * Media bodies are swapped for compact reply variants: images and stickers use
+     * {@link MImageReplyBody}, audio attachments use the file body (voice messages keep
+     * their player) and URL previews are disabled.
+     */
     private static readonly renderBody = (
         props: ReplyTileViewModelProps,
         isSeeingThroughMessageHiddenForModeration: boolean,
@@ -127,10 +163,12 @@ export class ReplyTileViewModel
 
         const msgtypeOverrides: Record<string, ComponentType<IBodyProps>> = {
             [MsgType.Image]: MImageReplyBody,
+            // Audio attachments render as a file body, voice messages keep their player.
             [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : ReplyTileFileBody,
             [MsgType.Video]: VideoBodyFactory,
         };
         const evOverrides: Record<string, ComponentType<IBodyProps>> = {
+            // Use the image reply body so the sticker does not take up a lot of space.
             [EventType.Sticker]: MImageReplyBody,
         };
 
@@ -153,6 +191,13 @@ export class ReplyTileViewModel
         );
     };
 
+    /**
+     * Build the view snapshot for the quoted event.
+     *
+     * Events without a renderer produce an informational "unable to render" body.
+     * Informational events and room creation already display their own sender, so the
+     * sender presentation is omitted for them.
+     */
     private static readonly computeSnapshot = (
         props: ReplyTileViewModelProps,
         sender?: ReplyTileSenderViewSnapshot,
@@ -190,6 +235,10 @@ export class ReplyTileViewModel
         return ReplyTileViewModel.computeSnapshot(this.props, this.getSenderSnapshot());
     }
 
+    /**
+     * Sender presentation for the quoted event, or `undefined` when the sender is unknown.
+     * Emotes only show the avatar, as the display name is part of the body.
+     */
     private getSenderSnapshot(): ReplyTileSenderViewSnapshot | undefined {
         const member = this.props.mxEvent.sender;
         const userId = this.props.mxEvent.getSender() ?? member?.userId;
@@ -208,6 +257,9 @@ export class ReplyTileViewModel
         };
     }
 
+    /**
+     * Get the sender profile ViewModel, creating it on first use and updating it afterwards.
+     */
     private getSenderProfileViewModel(
         fallbackName: string,
         member: MemberInfo | null,
@@ -233,6 +285,9 @@ export class ReplyTileViewModel
         this.senderProfileViewModel = undefined;
     }
 
+    /**
+     * Get the sender avatar ViewModel, recreating it when the member or client changes.
+     */
     private getSenderAvatarViewModel(member: RoomMember): AppMemberAvatarViewModel {
         if (
             !this.senderAvatarViewModel ||
@@ -252,6 +307,9 @@ export class ReplyTileViewModel
         this.snapshot.set(this.computeSnapshot());
     };
 
+    /**
+     * Listen for changes to the quoted event that require the snapshot to be re-computed.
+     */
     private watchEvent(mxEvent: MatrixEvent): void {
         if (this.watchedEvent === mxEvent) return;
         this.unwatchEvent();
@@ -268,6 +326,14 @@ export class ReplyTileViewModel
         this.watchedEvent = undefined;
     };
 
+    /**
+     * Handle activation of the reply link.
+     *
+     * Links within the quoted body are left to the browser. Clicking the reply itself
+     * navigates to the quoted event, or toggles the expanded quote on shift-click.
+     * Default navigation is prevented so the permalink can still be copied or opened in
+     * a new tab while in-app routing is used on a plain click.
+     */
     public onClick = (event: MouseEvent<HTMLAnchorElement>): void => {
         const clickTarget = event.target as HTMLElement;
         if (
