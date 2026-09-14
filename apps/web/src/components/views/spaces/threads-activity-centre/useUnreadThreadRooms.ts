@@ -15,11 +15,10 @@ import {
     type Room,
     RoomEvent,
     type Thread,
-    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
-import { doesTimelineHaveUnreadMessages, eventTriggersUnreadCount } from "../../../../Unread";
+import { doesTimelineHaveUnreadMessages } from "../../../../Unread";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { getThreadNotificationLevel } from "../../../../utils/notifications";
 import { useSettingValue } from "../../../../hooks/useSettings";
@@ -217,12 +216,6 @@ type ThreadUnread = {
  * counts and falling back to local timeline inspection for threads the server hasn't
  * pushed counts for.
  *
- * TODO: {@link doesTimelineHaveUnreadMessages} reports a thread as unread when we replied
- * but aren't the *literal* last sender, so we guard it with {@link hasUnreadAfterMyLatestReply}.
- * That guard belongs in `doesTimelineHaveUnreadMessages` itself: see
- * https://github.com/element-hq/element-web/issues/34904, fixed by
- * https://github.com/element-hq/element-web/pull/34905. Drop the guard once that lands.
- *
  * @returns the thread's unread state, or `null` when there is nothing unread to surface.
  */
 function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread): ThreadUnread | null {
@@ -238,9 +231,7 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
     const hasServerNotifs = highlight > 0 || total > 0;
 
     // Fallback: local timeline inspection, computed lazily (skip when the server already gave us a signal).
-    const hasUnread =
-        hasServerNotifs ||
-        (doesTimelineHaveUnreadMessages(room, thread.events) && hasUnreadAfterMyLatestReply(client, thread));
+    const hasUnread = hasServerNotifs || doesTimelineHaveUnreadMessages(room, thread.events);
     if (!hasUnread) return null;
 
     const notificationLevel =
@@ -254,8 +245,7 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
         notificationLevel,
         notificationCount: total,
         hasServerNotifs,
-        isRelevantToMe:
-            thread.hasCurrentUserParticipated || highlight > 0 || hasCurrentUserSentInThread(client, thread),
+        isRelevantToMe: thread.hasCurrentUserParticipated || highlight > 0,
     };
 }
 
@@ -273,71 +263,6 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
 function hasReadThroughLatestEvent(client: MatrixClient, room: Room, thread: Thread): boolean {
     const latestEventId = thread.events.at(-1)?.getId();
     return !!latestEventId && room.hasUserReadEvent(client.getSafeUserId(), latestEventId);
-}
-
-/**
- * Whether the current user has sent a reply in the thread's local timeline.
- *
- * {@link Thread.hasCurrentUserParticipated} is derived solely from the homeserver's
- * bundled `current_user_participated` flag, which is only refreshed when the server
- * re-sends the root event's aggregated relation. Immediately after the user replies
- * (e.g. Bob answering in a thread Alice started) that flag is still stale (`false`),
- * so the thread would wrongly land in "Other threads". We complement it by inspecting
- * the local timeline: if we've sent a reply in the thread, it's ours.
- *
- * We only count successfully-sent `m.thread` replies (not reactions, edits, or
- * failed/pending local echoes) to match the server's `current_user_participated`
- * semantics — the same `isRelation(THREAD_RELATION_TYPE.name) && !status` test the
- * rest of the app uses to identify a real thread reply.
- *
- * TODO: this is a workaround for https://github.com/matrix-org/matrix-js-sdk/issues/5515,
- * fixed upstream by https://github.com/matrix-org/matrix-js-sdk/pull/5516. Drop this helper
- * in favour of {@link Thread.hasCurrentUserParticipated} once that lands and we bump the pin.
- *
- * @returns true if the current user authored a reply in the thread.
- */
-function hasCurrentUserSentInThread(client: MatrixClient, thread: Thread): boolean {
-    const myUserId = client.getSafeUserId();
-    return thread.events.some(
-        (event) => event.getSender() === myUserId && event.isRelation(THREAD_RELATION_TYPE.name) && !event.status,
-    );
-}
-
-/**
- * Whether a thread has an incoming (from someone other than us) unread-triggering
- * message that is newer than any reply we've sent.
- *
- * This closes a false positive in {@link doesTimelineHaveUnreadMessages}: because
- * our own events never trigger an unread count, its "latest important event" is the
- * newest message *from someone else*. The js-sdk only treats the thread as read
- * past our receipt when we sent the very last event, so if a later reaction/edit
- * (or any event that doesn't trigger an unread count) landed after our reply, that
- * older incoming message still reads as unread even though we've clearly seen it.
- *
- * We consider the thread read once our most recent reply is at/after the latest
- * incoming message. If there is no incoming message at all, there is nothing for us
- * to read, so it is not unread either.
- *
- * @returns true if there is an incoming message newer than our latest reply.
- */
-function hasUnreadAfterMyLatestReply(client: MatrixClient, thread: Thread): boolean {
-    const myUserId = client.getSafeUserId();
-
-    let latestIncomingTs = -1;
-    let myLatestTs = -1;
-    for (const event of thread.events) {
-        const ts = event.getTs();
-        if (event.getSender() === myUserId) {
-            if (ts > myLatestTs) myLatestTs = ts;
-        } else if (eventTriggersUnreadCount(client, event) && ts > latestIncomingTs) {
-            latestIncomingTs = ts;
-        }
-    }
-
-    // No incoming unread-triggering message: nothing for us to read.
-    if (latestIncomingTs === -1) return false;
-    // Unread only if the latest incoming message is newer than our latest reply.
-    return latestIncomingTs > myLatestTs;
 }
 
 /**

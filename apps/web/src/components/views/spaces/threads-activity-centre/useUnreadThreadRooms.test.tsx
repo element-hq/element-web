@@ -20,7 +20,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { renderHook, act } from "test-utils-rtl";
 import { muteRoom, stubClient } from "test-utils";
-import { makeThreadEvent, populateThread } from "test-utils/threads";
+import { populateThread } from "test-utils/threads";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
@@ -339,51 +339,6 @@ describe("useUnreadThreadRooms", () => {
         expect(participatingThreads[0].notificationCount).toEqual(0);
     });
 
-    it("a participated thread we've read past is not surfaced in My threads (false-positive local unread)", async () => {
-        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        // Thread: root(@foo) -> reply(current user) -> redacted(@foo).
-        // Our reply is newer than the only unread-triggering incoming message (the
-        // root), but we aren't the *literal* last sender, so the js-sdk read
-        // shortcut doesn't fire and doesTimelineHaveUnreadMessages reports a false
-        // positive. Without server notifications, this must NOT surface in My threads.
-        const threadInfo = await populateThread({
-            room: room,
-            client: client,
-            authorId: "@foo:bar",
-            participantUserIds: ["@userId:matrix.org"], // reply authored by the current user
-            length: 2,
-        });
-        room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 0);
-        vi.spyOn(threadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
-
-        // A later, non-unread-triggering event from someone else (e.g. a redaction).
-        const trailing = makeThreadEvent({
-            user: "@foo:bar",
-            room: room.roomId,
-            event: true,
-            msg: "redacted",
-            rootEventId: threadInfo.rootEvent.getId()!,
-            replyToEventId: threadInfo.events.at(-1)!.getId()!,
-            ts: 100,
-        });
-        vi.spyOn(trailing, "isRedacted").mockReturnValue(true);
-        await room.addLiveEvents([trailing], { addToState: false });
-
-        client.getVisibleRooms = vi.fn().mockReturnValue([room]);
-
-        const wrapper = ({ children }: { children: React.ReactNode }) => (
-            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
-        );
-
-        const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
-        const { participatingThreads, otherThreads, rooms } = result.current;
-
-        expect(participatingThreads.length).toEqual(0);
-        expect(otherThreads.length).toEqual(0);
-        expect(rooms.length).toEqual(0);
-    });
-
     it("a participated thread with a genuinely newer incoming message still surfaces in My threads", async () => {
         vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
@@ -412,40 +367,6 @@ describe("useUnreadThreadRooms", () => {
         const { participatingThreads } = result.current;
 
         expect(participatingThreads.length).toEqual(1);
-    });
-
-    it("a thread the current user replied in surfaces in My threads even when the server flag is stale", async () => {
-        // Reviewer scenario: Alice starts a thread, Bob (the current user) replies.
-        // Thread.hasCurrentUserParticipated is server-driven and lags behind the local
-        // reply, so it is still false. The thread should still be categorised as "mine"
-        // because we sent a message in it locally.
-        //
-        // Alice replies again after us, so the thread is genuinely unread: had we sent the
-        // last event, we would have read it by definition and it would leave the list.
-        const threadInfo = await populateThread({
-            room: room,
-            client: client,
-            authorId: "@alice:bar",
-            // replies cycle as participants[i % len]: reply 1 is us, reply 2 is Alice
-            participantUserIds: ["@alice:bar", "@userId:matrix.org"],
-            length: 3,
-        });
-        // Lingering server total count keeps the thread unread.
-        room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 1);
-        // Server bundle hasn't caught up with our reply yet.
-        vi.spyOn(threadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(false);
-
-        client.getVisibleRooms = vi.fn().mockReturnValue([room]);
-
-        const wrapper = ({ children }: { children: React.ReactNode }) => (
-            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
-        );
-
-        const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
-        const { participatingThreads, otherThreads } = result.current;
-
-        expect(participatingThreads.length).toEqual(1);
-        expect(otherThreads.length).toEqual(0);
     });
 
     it("a notification and a highlight summarise to a highlight", async () => {
