@@ -85,7 +85,7 @@ function ReplyTile({
     toggleExpandedQuote,
     getRelationsForEvent,
 }: ReplyTileProps): JSX.Element {
-    const cli = MatrixClientPeg.safeGet();
+    const cli = useMatrixClientContext();
     const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
     const vm = useCreateAutoDisposedViewModel(
         () =>
