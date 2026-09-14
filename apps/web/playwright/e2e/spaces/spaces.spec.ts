@@ -149,6 +149,30 @@ test.describe("Spaces", () => {
         ).toBeVisible();
     });
 
+    test("should show error dialog when space creation fails", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        // Mock request to 404 when creating the space
+        await page.route("**/createRoom", async (route) => {
+            await route.fulfill({
+                status: 404,
+                contentType: "application/json",
+                body: JSON.stringify({ errcode: "M_UNKNOWN", error: "An unknown error occurred" }),
+            });
+        });
+
+        // Try creating the space
+        await rejectToast(page, "Verify this device");
+        const contextMenu = await openSpaceCreateMenu(page);
+        await contextMenu.getByRole("button", { name: /Public/ }).click();
+        await contextMenu.getByRole("textbox", { name: "Name" }).fill("Let's have a Riot");
+        await contextMenu.getByRole("textbox", { name: "Description" }).fill("This is a space to reminisce Riot.im!");
+        await contextMenu.getByRole("button", { name: "Create" }).click();
+
+        // Expect an error dialog
+        const dialog = page.getByRole("dialog", { name: "Failure to create space" });
+        await expect(dialog).toBeInViewport();
+        await expect(dialog).toMatchScreenshot("space-creation-failed.png");
+    });
+
     test("should allow user to create just-me space", async ({ page, app, user }) => {
         await app.client.createRoom({
             name: "Sample Room",
