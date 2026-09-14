@@ -70,9 +70,10 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
+    # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
+    "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -139,7 +140,12 @@ overrides:
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001806
+
+    # Make sure we only have one instance of the widget API in the build;
+    # failure to do so results in (unspecified) breakage in downstream builds
+    # cf https://github.com/element-hq/element-web/pull/31851
     matrix-widget-api: "^1.18.0"
+
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.35.0
