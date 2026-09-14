@@ -17,6 +17,10 @@ Please see LICENSE files in the repository root for full details.
  * ```
  * listHardwareKeys()  ->  getKeyState(serial)  ->  logIntoKey(serial, pin)  ->  signData(serial, data)
  * ```
+ *
+ * `getUserCertificate()` is the only IPC command that operates outside this sequence. It reads the
+ * provisioned certificate chain from disk which it passes back to the renderer, and hence needs
+ * no hardware key to be attached or logged into.
  */
 export type X509IpcCommand = "getUserCertificate" | "listHardwareKeys" | "getKeyState" | "logIntoKey" | "signData";
 
@@ -99,7 +103,7 @@ export interface CertificateInfo {
 export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
 /**
- * The current user's signing certificate and the chain built up from it.
+ * The current user's signing certificate and the chain it was provisioned with.
  */
 export interface UserCertificate {
     certificate: CertificateInfo;
