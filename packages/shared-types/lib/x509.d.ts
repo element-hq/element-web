@@ -4,6 +4,8 @@ Copyright 2026 Element Creations Ltd.
 SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
+// This file contains types for the X.509 IPC API, used to pass information about hardware keys and
+// certificates between the main and render processes.
 
 /**
  * X.509 IPC commands.
@@ -73,7 +75,8 @@ export interface HardwareKey {
 }
 
 /**
- * An IPC-friendly version of `X509Certificate` we can surface to Element Web.
+ * Details of an X.509 certificate, in a format suitable for passing from the main process
+ * to the renderer process over IPC.
  */
 export interface CertificateInfo {
     serialNumber: string;

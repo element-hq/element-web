@@ -387,8 +387,7 @@ const CKF_USER_PIN_FINAL_TRY = 0x00020000;
 const CKF_USER_PIN_LOCKED = 0x00040000;
 
 /**
- * Details of an X.509 certificate, in a format suitable for passing from the main process to the renderer 
- * process over IPC.
+ * Convert a {@link X509Certificate} to a format that can be sent over IPC.
  */
 function toCertificateInfo(cert: X509Certificate): CertificateInfo {
     return {
