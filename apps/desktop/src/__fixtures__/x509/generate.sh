@@ -13,8 +13,11 @@ openssl x509 -req -copy_extensions=copyall -in int.csr -CA root-ca.pem -CAkey ro
     -days 36500 -out intermediate-ca.pem
 
 for cn in alice bob; do
-    openssl req -newkey rsa:2048 -noenc -keyout "$cn.key" -subj "/CN=$cn" -out "$cn.csr"
-    openssl x509 -req -in "$cn.csr" -CA intermediate-ca.pem -CAkey int.key -days 36500 -out "$cn.pem"
+    openssl req -newkey rsa:2048 -noenc -keyout "$cn.key" -subj "/CN=$cn" \
+        -addext "subjectAltName=URI:matrix:u/$cn:localhost" \
+        -addext "basicConstraints=critical,CA:FALSE" -out "$cn.csr"
+    openssl x509 -req -copy_extensions=copyall -in "$cn.csr" -CA intermediate-ca.pem -CAkey int.key \
+        -days 36500 -out "$cn.pem"
 done
 
 rm -f ./*.key ./*.csr ./*.srl
