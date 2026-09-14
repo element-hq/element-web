@@ -26,7 +26,6 @@ import {
     type MatrixClient,
     type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
 import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -82,7 +81,6 @@ export const createSpace = async (
         spinner: false,
         encryption: false,
         andView: true,
-        inlineErrors: true,
         ...otherOpts,
     });
 };
@@ -250,13 +248,8 @@ const SpaceCreateMenu: React.FC<{
             return;
         }
 
-        try {
-            await createSpace(cli, name, visibility === Visibility.Public, alias, topic, avatar);
-
-            onFinished();
-        } catch (e) {
-            logger.error(e);
-        }
+        await createSpace(cli, name, visibility === Visibility.Public, alias, topic, avatar);
+        onFinished();
     };
 
     const onSearchClick = (): void => {
