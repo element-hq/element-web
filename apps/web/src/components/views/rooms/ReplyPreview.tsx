@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext, { type TimelineRenderingType } from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
 import { useUserStatus } from "../../../hooks/useUserStatus";
 
