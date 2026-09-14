@@ -39,6 +39,7 @@ export * from "./room/timeline/event-tile/EventTileView/TileErrorView";
 export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
+export * from "./room/settings/PolicyServerView";
 export * from "./room/WidgetPip";
 export * from "./room/HistoryVisibilityBadge";
 export * from "./room/right-panel/PdfViewerView";
