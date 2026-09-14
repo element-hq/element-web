@@ -26,6 +26,13 @@ export const useUnreadNotifications = (
     const [count, setCount] = useState<number>(0);
     const [level, setLevel] = useState<NotificationLevel>(NotificationLevel.None);
 
+    const updateNotificationState = useCallback(() => {
+        const { symbol, count, level } = determineUnreadState(room, threadId, false);
+        setSymbol(symbol);
+        setCount(count);
+        setLevel(level);
+    }, [room, threadId]);
+
     useEventEmitter(
         room,
         RoomEvent.UnreadNotifications,
@@ -47,13 +54,6 @@ export const useUnreadNotifications = (
         if (event.getRoomId() !== room?.roomId) return;
         updateNotificationState();
     });
-
-    const updateNotificationState = useCallback(() => {
-        const { symbol, count, level } = determineUnreadState(room, threadId, false);
-        setSymbol(symbol);
-        setCount(count);
-        setLevel(level);
-    }, [room, threadId]);
 
     useEffect(() => {
         updateNotificationState();

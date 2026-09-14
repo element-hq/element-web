@@ -8,7 +8,6 @@
 import { BaseViewModel, type MemberAvatarViewSnapshot } from "@element-hq/web-shared-components";
 import { type MatrixClient, RoomStateEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { mediaFromMxc } from "../../../customisations/Media";
 
 interface Props {
@@ -32,10 +31,7 @@ function computeSnapshot(props: Props): MemberAvatarViewSnapshot {
     const member = props.member;
     const id = member.userId;
     const name = member.name ?? member.userId;
-    const title =
-        UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId ?? "", {
-            roomId: member.roomId ?? "",
-        }) ?? member.userId;
+    const title = member.userId;
     let url: string | undefined;
     if (member.getMxcAvatarUrl()) {
         url =

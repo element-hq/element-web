@@ -980,7 +980,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(3000);
+            await page.waitForTimeout(2000);
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody
