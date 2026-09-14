@@ -35,7 +35,6 @@ export type X509IpcErrorCode =
     | "MODULE_NOT_LOADED"
     | "KEY_NOT_FOUND"
     | "CERTIFICATE_NOT_FOUND"
-    | "CERTIFICATE_AMBIGUOUS"
     | "PRIVATE_KEY_NOT_FOUND"
     /** `signData` was called before `logIntoKey`, or the session was invalidated since. */
     | "LOGIN_REQUIRED"
@@ -102,7 +101,8 @@ export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticat
 export interface UserCertificate {
     certificate: CertificateInfo;
     /**
-     * PEM-encoded certificate chain: the leaf followed by its intermediates, without the root.
+     * PEM-encoded certificate chain as provisioned in `certificate_path`, formatted as
+     *  the leaf followed by its intermediates, omitting the root.
      */
     chain: string;
 }

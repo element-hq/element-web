@@ -8,8 +8,7 @@ Please see LICENSE in the repository root for full details.
 import type * as Graphene from "graphene-pk11";
 import { X509Certificate } from "node:crypto";
 import type Pkcs11 from "pkcs11js";
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
+import { readFile } from "node:fs/promises";
 import type {
     CertificateInfo,
     HardwareKey,
@@ -165,7 +164,7 @@ async function getSession(
  * Fetch the RSA public key of the current user's configured certificate.
  */
 async function getSigningPublicKey(): Promise<{ modulus: Buffer; publicExponent: Buffer } | null> {
-    const result = await findUserLeaf();
+    const result = await readUserCertificate();
     if (!result.ok) {
         return null;
     }
@@ -229,74 +228,10 @@ export function decodeTriesRemaining(flags: number): number {
     return 3;
 }
 
-/**
- * Longest issuer walk before assuming the pool is malformed.
- */
-const MAX_CHAIN_DEPTH = 10;
-
 // CK_TOKEN_INFO PIN flags inlined from `graphene.TokenFlag`
 const CKF_USER_PIN_COUNT_LOW = 0x00010000;
 const CKF_USER_PIN_FINAL_TRY = 0x00020000;
 const CKF_USER_PIN_LOCKED = 0x00040000;
-
-/**
- * Reads and parses every certificate in the configured certificate directory.
- */
-async function readCertsDirectory(): Promise<X509Certificate[]> {
-    const certsPath = getConfig().x509?.certs_path;
-    // Bail if no path is configured.
-    if (!certsPath) {
-        return [];
-    }
-
-    let entries: string[];
-    try {
-        entries = await readdir(certsPath);
-    } catch (e) {
-        console.warn(`Could not read ${certsPath}:`, e);
-        return [];
-    }
-
-    const pool = await Promise.all(
-        entries
-            .filter((entry) => /\.(crt|pem|cer)$/i.test(entry))
-            .map(async (entry) => {
-                try {
-                    // Attempt to parse the certificate.
-                    return new X509Certificate(await readFile(path.join(certsPath, entry)));
-                } catch {
-                    // Not a certificate.
-                    return null;
-                }
-            }),
-    );
-    return pool.filter((cert): cert is X509Certificate => cert !== null);
-}
-
-/**
- * Build the certificate chain by walking over the list of CA certificates, starting from
- * the leaf and working up to the root, picking the next certificate in the chain by matching against
- * the `issuer` field of the current certificate.
- */
-function buildChain(leaf: X509Certificate, cas: X509Certificate[]): string {
-    const chain = [leaf];
-    let current = leaf;
-    for (let depth = 0; depth < MAX_CHAIN_DEPTH; depth++) {
-        // Check if the certificate is self-signed (i.e. the root of the chain).
-        if (current.checkIssued(current)) {
-            break;
-        }
-        const issuer = cas.find((candidate) => current.checkIssued(candidate) && !chain.includes(candidate));
-        // Check if we have reached the root of the chain, either because the issuer is self-signed or
-        // because we have no certificates left to check. Either way, we stop here.
-        if (!issuer || issuer.checkIssued(issuer)) {
-            break;
-        }
-        chain.push(issuer);
-        current = issuer;
-    }
-    return chain.join("");
-}
 
 /**
  * Convert a {@link X509Certificate} to an IPC-friendly object.
@@ -313,33 +248,46 @@ function toCertificateInfo(cert: X509Certificate): CertificateInfo {
 }
 
 /**
- * Load the current user's own leaf certificate and CA chain (as individual certificates).
+ * Read the current user's certificate chain from the configured PEM file. The file is provisioned by the
+ * admin, formatted as the leaf followed by its intermediates. This is then passed to the crypto stack verbatim.
  */
-async function findUserLeaf(): Promise<X509Result<{ leaf: X509Certificate; chain: X509Certificate[] }>> {
-    const certs = await readCertsDirectory();
-    const leaves = certs.filter((cert) => !cert.ca);
-    if (leaves.length === 0) {
-        return fail("CERTIFICATE_NOT_FOUND", "No non-CA certificate in the configured certificate directory");
+async function readUserCertificate(): Promise<X509Result<{ leaf: X509Certificate; chain: string }>> {
+    const certificatePath = getConfig().x509?.certificate_path;
+    if (!certificatePath) {
+        return fail("CERTIFICATE_NOT_FOUND", "No certificate_path is configured");
     }
-    if (leaves.length > 1) {
-        return fail("CERTIFICATE_AMBIGUOUS", `Expected one non-CA certificate on disk, found ${leaves.length}`);
+    let chain: string;
+    try {
+        chain = await readFile(certificatePath, "utf8");
+    } catch (e) {
+        return fail(
+            "CERTIFICATE_NOT_FOUND",
+            `Could not read ${certificatePath}: ${e instanceof Error ? e.message : e}`,
+        );
     }
-    return ok({ leaf: leaves[0], chain: certs.filter((cert) => cert.ca) });
+    let leaf: X509Certificate;
+    try {
+        // Only the first PEM block is parsed, and that must be the leaf.
+        leaf = new X509Certificate(chain);
+    } catch {
+        return fail("CERTIFICATE_NOT_FOUND", `${certificatePath} does not start with a certificate`);
+    }
+    if (leaf.ca) {
+        return fail("CERTIFICATE_NOT_FOUND", `The first certificate in ${certificatePath} is a CA, expected the leaf`);
+    }
+    return ok({ leaf, chain });
 }
 
 /**
  * Read user's own certificate and chain from disk.
  */
 export async function getUserCertificate(): Promise<X509Result<UserCertificate>> {
-    const result = await findUserLeaf();
+    const result = await readUserCertificate();
     if (!result.ok) {
         // This is an error variant, so we can just return it directly.
         return result;
     }
-    return ok({
-        certificate: toCertificateInfo(result.data.leaf),
-        chain: buildChain(result.data.leaf, result.data.chain),
-    });
+    return ok({ certificate: toCertificateInfo(result.data.leaf), chain: result.data.chain });
 }
 
 // --- IPC Methods ---

@@ -244,9 +244,10 @@ export interface DesktopConfigJson extends WebConfigJson {
          */
         library_name?: string;
         /**
-         * Directory holding the CA certificates used to build our own chain, plus the user's own leaf
-         * certificate. Exactly one certificate in here must be a non-CA certificate: that is the leaf.
+         * Path to a PEM file holding the current user's own certificate chain. The chain is formatted with
+         * the leaf certificate first, followed by its intermediates, omitting the root. The file is passed
+         * to the crypto stack verbatim.
          */
-        certs_path?: string;
+        certificate_path?: string;
     };
 }

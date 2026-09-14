@@ -105,10 +105,15 @@ async function loadX509WithConfig(config: ConfigOptions["x509"]): Promise<void> 
 }
 
 /**
- * Write the given certificates into the configured certificate directory.
+ * Path of the certificate chain file the tests point `certificate_path` at.
  */
-async function writeCerts(...pems: string[]): Promise<void> {
-    await Promise.all(pems.map((pem, index) => writeFile(path.join(testDir, `cert-${index}.pem`), pem)));
+const chainPath = (): string => path.join(testDir, "chain.pem");
+
+/**
+ * Write the given certificates, in order, to the chain file.
+ */
+async function writeChain(...pems: string[]): Promise<void> {
+    await writeFile(chainPath(), pems.join(""));
 }
 
 /**
@@ -268,45 +273,20 @@ describe("decodeTriesRemaining", () => {
 });
 
 describe("getUserCertificate", () => {
-    beforeEach(() => loadX509WithConfig({ ...PKCS11_LIBRARY, certs_path: testDir }));
+    beforeEach(() => loadX509WithConfig({ ...PKCS11_LIBRARY, certificate_path: chainPath() }));
 
-    it("returns the single non-CA certificate and its chain", async () => {
-        await writeCerts(rootPem, intermediatePem, leafPem);
+    it("returns the leaf and the chain file as provisioned", async () => {
+        await writeChain(leafPem, intermediatePem);
 
         const result = await x509.getUserCertificate();
         assert(result.ok);
 
         expect(result.data.certificate.subject).toContain("CN=alice");
         expect(result.data.certificate.validTo).toBeInstanceOf(Date);
-        // Leaf then intermediate - the self-signed root is excluded.
         expect(result.data.chain).toBe(leafPem + intermediatePem);
     });
 
-    it("stops the chain at the first missing issuer", async () => {
-        await writeCerts(rootPem, leafPem);
-
-        await expect(x509.getUserCertificate()).resolves.toMatchObject({
-            ok: true,
-            data: { chain: leafPem },
-        });
-    });
-
-    it("ignores files that are not certificates", async () => {
-        await writeCerts(leafPem);
-        await writeFile(path.join(testDir, "notes.txt"), "coyotes!");
-        // A private key sharing the directory has a .pem extension but will not parse.
-        await writeFile(
-            path.join(testDir, "key.pem"),
-            "-----BEGIN PRIVATE KEY-----\ncoyotes!\n-----END PRIVATE KEY-----\n",
-        );
-
-        await expect(x509.getUserCertificate()).resolves.toMatchObject({
-            ok: true,
-            data: { chain: leafPem },
-        });
-    });
-
-    it("fails when no certificate directory is configured", async () => {
+    it("fails when no certificate path is configured", async () => {
         mockX509Config(PKCS11_LIBRARY);
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
@@ -315,8 +295,15 @@ describe("getUserCertificate", () => {
         });
     });
 
-    it("fails when the certificate directory cannot be read", async () => {
-        mockX509Config({ ...PKCS11_LIBRARY, certs_path: path.join(testDir, "missing") });
+    it("fails when the certificate file cannot be read", async () => {
+        await expect(x509.getUserCertificate()).resolves.toMatchObject({
+            ok: false,
+            error: { code: "CERTIFICATE_NOT_FOUND" },
+        });
+    });
+
+    it("fails when the file does not start with a certificate", async () => {
+        await writeFile(chainPath(), "-----BEGIN PRIVATE KEY-----\ncoyotes!\n-----END PRIVATE KEY-----\n");
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
@@ -324,21 +311,12 @@ describe("getUserCertificate", () => {
         });
     });
 
-    it("fails when the directory holds no leaf", async () => {
-        await writeCerts(rootPem);
+    it("fails when the first certificate is a CA", async () => {
+        await writeChain(rootPem, leafPem);
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
             error: { code: "CERTIFICATE_NOT_FOUND" },
-        });
-    });
-
-    it("fails when the directory holds more than one leaf", async () => {
-        await writeCerts(leafPem, otherLeafPem);
-
-        await expect(x509.getUserCertificate()).resolves.toMatchObject({
-            ok: false,
-            error: { code: "CERTIFICATE_AMBIGUOUS" },
         });
     });
 });
@@ -355,8 +333,8 @@ describe("IPC", () => {
             RsaPssParams,
         }));
         vi.doMock("pkcs11js", () => ({ default: { Pkcs11Error } }));
-        await loadX509WithConfig({ ...PKCS11_LIBRARY, certs_path: testDir });
-        await writeCerts(leafPem);
+        await loadX509WithConfig({ ...PKCS11_LIBRARY, certificate_path: chainPath() });
+        await writeChain(leafPem);
     });
 
     it("routes the on-disk certificate command", async () => {
