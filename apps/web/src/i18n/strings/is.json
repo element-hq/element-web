@@ -1075,8 +1075,6 @@
     "language_dropdown_label": "Fellilisti tungumála",
     "leave_room_dialog": {
         "last_person_warning": "Þú ert eini eintaklingurinn hérna. Ef þú ferð út, mun enginn framar geta tekið þátt, að þér meðtöldum.",
-        "leave_room_question": "Ertu viss um að þú viljir yfirgefa spjallrásina '%(roomName)s'?",
-        "leave_space_question": "Ertu viss um að þú viljir yfirgefa svæðið '%(spaceName)s'?",
         "room_rejoin_warning": "Þessi spjallrás er ekki opinber. Þú munt ekki geta tekið aftur þátt nema að vera boðið.",
         "space_rejoin_warning": "Þetta svæði er ekki opinbert. Þú munt ekki geta tekið aftur þátt nema að vera boðið."
     },
@@ -1361,7 +1359,6 @@
         "join_button_account": "Nýskrá",
         "join_failed_needs_invite": "Til að skoða %(roomName)s þarftu boð",
         "join_the_discussion": "Taktu þátt í umræðunni",
-        "join_title": "Taka þátt í spjallrás",
         "join_title_account": "Taktu þátt í samtalinu með notandaaðgangi",
         "joining": "Geng í hópinn…",
         "jump_read_marker": "Fara í fyrstu ólesnu skilaboðin.",

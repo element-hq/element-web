@@ -55,7 +55,6 @@
         "user_menu": {
             "create_an_account": "계정 만들기",
             "got_an_account": "계정이 있으신가요?",
-            "manage_account": "계정 관리",
             "sign_in": "로그인",
             "title": "사용자 메뉴"
         }

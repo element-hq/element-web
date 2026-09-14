@@ -1587,8 +1587,6 @@
     "language_dropdown_label": "Menu jazyků",
     "leave_room_dialog": {
         "last_person_warning": "Jste zde jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
-        "leave_room_question": "Opravdu chcete opustit místnost '%(roomName)s'?",
-        "leave_space_question": "Opravdu chcete opustit prostor '%(spaceName)s'?",
         "room_leave_admin_warning": "V této místnosti jste jediný správce. Pokud odejdete, nikdo nebude moci měnit nastavení místnosti ani provádět jiné důležité akce.",
         "room_leave_mod_warning": "V této místnosti jste jediný moderátor. Pokud odejdete, nikdo nebude moci měnit nastavení místnosti ani provádět jiné důležité akce.",
         "room_rejoin_warning": "Tato místnost není veřejná. Bez pozvánky nebudete moci znovu vstoupit.",
@@ -2018,7 +2016,6 @@
         "join_button_account": "Zaregistrovat se",
         "join_failed_needs_invite": "Pro zobrazení %(roomName)s potřebujete pozvánku",
         "join_the_discussion": "Zapojit se do diskuze",
-        "join_title": "Připojte se k místnosti a zúčastněte se",
         "join_title_account": "Připojte se ke konverzaci s účtem",
         "joining": "Připojování…",
         "joining_room": "Vstupování do místnosti…",

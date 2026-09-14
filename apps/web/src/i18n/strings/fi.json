@@ -1282,8 +1282,6 @@
     "language_dropdown_label": "Kielipudotusvalikko",
     "leave_room_dialog": {
         "last_person_warning": "Olet ainoa henkilö täällä. Jos lähdet, kukaan ei voi liittyä tulevaisuudessa, et myöskään sinä.",
-        "leave_room_question": "Oletko varma että haluat poistua huoneesta '%(roomName)s'?",
-        "leave_space_question": "Haluatko varmasti poistua tilasta '%(spaceName)s'?",
         "room_rejoin_warning": "Tämä huone ei ole julkinen. Et voi liittyä uudelleen ilman kutsua.",
         "space_rejoin_warning": "Tämä tila ei ole julkinen. Et voi liittyä uudelleen ilman kutsua."
     },
@@ -1626,7 +1624,6 @@
         "join_button_account": "Rekisteröidy",
         "join_failed_needs_invite": "Huoneen %(roomName)s katseluun tarvitaan kutsu",
         "join_the_discussion": "Liity keskusteluun",
-        "join_title": "Liity huoneeseen osallistuaksesi",
         "join_title_account": "Liity keskusteluun tilin avulla",
         "joining": "Liitytään…",
         "joining_room": "Liitytään huoneeseen…",

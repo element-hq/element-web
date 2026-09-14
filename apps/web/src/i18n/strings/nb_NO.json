@@ -1543,8 +1543,6 @@
     "language_dropdown_label": "Språk-nedfallsmeny",
     "leave_room_dialog": {
         "last_person_warning": "Du er den eneste personen her. Hvis du forlater rommet, vil ingen kunne bli med i det i fremtiden, inkludert deg.",
-        "leave_room_question": "Er du sikker på at du vil forlate rommet '%(roomName)s'?",
-        "leave_space_question": "Er du sikker på at du vil forlate området '%(spaceName)s'?",
         "room_leave_admin_warning": "Du er den eneste administratoren i dette rommet. Hvis du forlater rommet, vil ingen kunne endre rominnstillinger eller utføre andre viktige handlinger.",
         "room_leave_mod_warning": "Du er den eneste moderatoren i dette rommet. Hvis du forlater rommet, vil ingen kunne endre rominnstillinger eller utføre andre viktige handlinger.",
         "room_rejoin_warning": "Dette rommet er ikke offentlig. Du vil ikke kunne bli med igjen uten en invitasjon.",
@@ -1962,7 +1960,6 @@
         "join_button_account": "Registrer deg",
         "join_failed_needs_invite": "For å se %(roomName)s, trenger du en invitasjon",
         "join_the_discussion": "Bli med i diskusjonen",
-        "join_title": "Bli med på rommet for å delta",
         "join_title_account": "Bli med i samtalen med en konto",
         "joining": "Blir med …",
         "joining_room": "Blir med i rommet …",

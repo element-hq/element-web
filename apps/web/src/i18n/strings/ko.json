@@ -1560,8 +1560,6 @@
     "language_dropdown_label": "언어 드롭다운",
     "leave_room_dialog": {
         "last_person_warning": "이 채팅방에는 당신만 있습니다. 나가면 앞으로 아무도 참여할 수 없으며, 당신도 다시 들어올 수 없습니다",
-        "leave_room_question": "%(roomName)s 방을 떠나겠습니까?",
-        "leave_space_question": "'%(spaceName)s' 스페이스를 정말로 떠나시겠습니까?",
         "room_leave_admin_warning": "이 채팅방의 유일한 관리자입니다. 당신이 나가면 아무도 채팅방 설정을 변경하거나 다른 중요한 작업을 수행할 수 없습니다.",
         "room_leave_mod_warning": "이 채팅방의 유일한 운영자입니다. 운영자가 방을 떠나면, 아무도 방 설정을 변경하거나 다른 중요한 작업을 수행할 수 없습니다.",
         "room_rejoin_warning": "이 방은 공개되지 않았습니다. 초대 없이는 다시 들어올 수 없습니다.",
@@ -1965,7 +1963,6 @@
         "join_button_account": "등록",
         "join_failed_needs_invite": "%(roomName)s 방을 보려면 , 초대장이 필요해요",
         "join_the_discussion": "토론에 참가",
-        "join_title": "방에 참여하려면",
         "join_title_account": "계정으로 대화에 참여",
         "joining": "참가 중…",
         "joining_room": "방에 조인 중",

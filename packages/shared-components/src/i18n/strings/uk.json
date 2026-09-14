@@ -101,7 +101,6 @@
             "clear_status": "Очистити статус",
             "create_an_account": "Створити обліковий запис",
             "got_an_account": "Маєте обліковий запис?",
-            "manage_account": "Керувати обліковим записом",
             "sign_in": "Увійти",
             "title": "Меню користувача"
         }
@@ -113,6 +112,12 @@
         "mentions_keywords": "Згадки та ключові слова",
         "message_didnt_send": "Повідомлення не надіслане. Натисніть, щоб дізнатись подробиці.",
         "mute_room": "Вимкнути сповіщення кімнати"
+    },
+    "pdf_viewer": {
+        "error_load": "Не вдалося завантажити PDF-файл.",
+        "loading": "Завантаження PDF-файлу…",
+        "page_label": "Сторінка %(page)s з %(total)s",
+        "page_number": "Номер сторінки"
     },
     "release_announcement": {
         "room_list_section_close": "ОК",

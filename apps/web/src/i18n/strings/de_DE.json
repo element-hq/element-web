@@ -1609,8 +1609,6 @@
     "language_dropdown_label": "Sprachauswahl",
     "leave_room_dialog": {
         "last_person_warning": "Du bist die einzige Person hier. Wenn du gehst, kann in Zukunft niemand mehr eintreten, auch du nicht.",
-        "leave_room_question": "Bist du sicher, dass du den Chat „%(roomName)s“ verlassen möchtest?",
-        "leave_space_question": "Bist du sicher, dass du den Space „%(spaceName)s“ verlassen möchtest?",
         "room_leave_admin_warning": "Du bist der einzige Admin in diesem Chat. Wenn du den Chat verlässt, wird niemand mehr in der Lage sein, die Chat-Einstellungen zu ändern oder andere wichtige Aktionen durchzuführen.",
         "room_leave_mod_warning": "Du bist der einzige Moderator in diesem Chat. Wenn du den Chat verlässt, kann niemand mehr die Chat-Einstellungen ändern oder andere wichtige Aktionen durchführen.",
         "room_rejoin_warning": "Dieser Chat ist nicht öffentlich und du kannst ihm ohne Einladung nicht erneut beitreten.",
@@ -2036,7 +2034,6 @@
         "join_button_account": "Registrieren",
         "join_failed_needs_invite": "Um %(roomName)s zu betrachten, benötigst du eine Einladung",
         "join_the_discussion": "An Diskussion teilnehmen",
-        "join_title": "Tritt dem Chat bei, um teilzunehmen",
         "join_title_account": "An Unterhaltung mit einem Konto teilnehmen",
         "joining": "Trete bei …",
         "joining_room": "Trete dem Chat bei …",
