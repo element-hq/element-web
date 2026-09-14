@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import dotenv from "dotenv";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import webpack from "webpack";
