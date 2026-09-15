@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useMemo, type ReactNode } from "react";
 import classNames from "classnames";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import { WysiwygComposer } from "./components/WysiwygComposer";
@@ -31,7 +32,14 @@ const Content = function Content({ disabled = false, composerFunctions, ref }: C
 
 interface EditWysiwygComposerProps {
     disabled?: boolean;
-    onChange?: (content: string) => void;
+    updateUrlPreviews?: (content: string) => void;
+    /** Attaches URL preview bundles (MSC4095) to the new content before it is sent. */
+    attachBundles?: (content: RoomMessageEventContent) => void;
+    /**
+     * Whether the user has modified the preview list (e.g. removed a preview). When true the edit is
+     * treated as modified even if the text is unchanged: the Save button is enabled and the edit is sent.
+     */
+    isUrlPreviewsModified?: boolean;
     editorStateTransfer: EditorStateTransfer;
     className?: string;
 }
@@ -40,13 +48,22 @@ interface EditWysiwygComposerProps {
 export default function EditWysiwygComposer({
     editorStateTransfer,
     className,
+    attachBundles,
+    updateUrlPreviews,
+    isUrlPreviewsModified,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
     const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
-    const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(editorStateTransfer, initialContent);
+    const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(
+        editorStateTransfer,
+        initialContent,
+        attachBundles,
+        updateUrlPreviews,
+        isUrlPreviewsModified,
+    );
 
     if (!isReady) {
         return <></>;
