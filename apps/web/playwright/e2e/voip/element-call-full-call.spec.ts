@@ -20,11 +20,10 @@ import { test, expect } from "../../element-web-test";
  * lk-jwt-service, started by the `matrixRTC` worker option). Two users, two browser contexts, media
  * flowing both ways.
  *
- * Element Call is the copy the build under test ships, embedded as a widget: no
- * `Developer.elementCallUrl` override, so the widget URL is the `widgets/element-call/` deployment
- * webpack copies out of `@element-hq/element-call-embedded`. Everything else about the widget transport
- * (call parameters, persistence, PiP, room switching) is covered against a stubbed widget page in
- * `element-call.spec.ts`; this spec exists for the one thing a stub cannot show, namely that media
+ * Element Call is the copy the build under test ships, embedded as a widget: the `widgets/element-call/`
+ * deployment webpack copies out of `@element-hq/element-call-embedded`. Everything else about the widget
+ * transport (call parameters, persistence, PiP, room switching) is covered against a stubbed widget page
+ * in `element-call.spec.ts`; this spec exists for the one thing a stub cannot show, namely that media
  * arrives.
  */
 test.use({
