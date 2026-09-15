@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked } from "jest-mock-vitest-adapter";
+import { vi, type Mocked } from "vitest";
 import {
     type MatrixClient,
     MatrixEvent,
@@ -20,7 +20,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
-import { vi } from "../setup/adapter.ts";
 import { flushPromises } from "./utilities";
 
 type Options = {

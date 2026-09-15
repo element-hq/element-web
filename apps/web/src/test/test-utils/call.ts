@@ -19,19 +19,19 @@ import {
     type IContent,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { type Mocked } from "jest-mock";
+import { vi, type Mocked } from "vitest";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { mkEvent, mkRoomMember, setupAsyncStoreWithClient, stubClient } from "./test-utils";
-import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
-import { CallStore } from "../../src/stores/CallStore";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import DMRoomMap from "../../src/utils/DMRoomMap";
+import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../models/Call";
+import { CallStore } from "../../stores/CallStore";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import DMRoomMap from "../../utils/DMRoomMap";
 import { MockEventEmitter } from "./client";
-import WidgetStore from "../../src/stores/WidgetStore";
-import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { vi, mocked } from "../setup/adapter.ts";
+import WidgetStore from "../../stores/WidgetStore";
+import { WidgetMessagingStore } from "../../stores/widgets/WidgetMessagingStore";
+import SettingsStore from "../../settings/SettingsStore";
 
 export class MockedCall extends Call {
     public static readonly EVENT_TYPE = "org.example.mocked_call";
@@ -146,7 +146,7 @@ export function enableCalls(): { enabledSettings: Set<string> } {
 }
 
 export function setUpClientRoomAndStores(): {
-    client: Mocked<MatrixClient>;
+    client: MockedObjectDeep<MatrixClient>;
     room: Room;
     alice: RoomMember;
     bob: RoomMember;
@@ -154,10 +154,10 @@ export function setUpClientRoomAndStores(): {
     roomSession: Mocked<MatrixRTCSession>;
 } {
     stubClient();
-    // Cast at this vitest/jest-mock type-system boundary: `mocked()` produces a vitest-shaped mock type at
-    // compile time, but this helper is still consumed by not-yet-migrated jest tests that expect jest-mock's
-    // (structurally different, but runtime-equivalent) `Mocked<T>` shape.
-    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet()) as unknown as Mocked<MatrixClient>;
+    // `vi.mocked()`'s own inferred type (and vitest's shallow `Mocked<T>`) doesn't deep-mock nested
+    // members (e.g. `cachedRtcTransports.get`, `matrixRTC.getRoomSession`) - cast through `unknown` to
+    // force the fully recursive `MockedObjectDeep<MatrixClient>` shape instead.
+    const client = vi.mocked<MatrixClient>(MatrixClientPeg.safeGet()) as unknown as MockedObjectDeep<MatrixClient>;
     DMRoomMap.makeShared(client);
     client.cachedRtcTransports = {
         wait: vi.fn().mockResolvedValue(undefined),

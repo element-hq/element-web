@@ -7,10 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement } from "react";
+import "@testing-library/jest-dom/vitest";
 // eslint-disable-next-line no-restricted-imports
-import { render, type RenderOptions } from "@testing-library/react";
+import { cleanup, render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { I18nApi, I18nContext } from "@element-hq/web-shared-components";
+import { afterEach } from "vitest";
+
+afterEach(cleanup);
 
 const i18nApi = new I18nApi();
 

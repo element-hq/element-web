@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MockedObject } from "jest-mock-vitest-adapter";
+import { vi, type MockedObject } from "vitest";
 import {
     type MatrixClient,
     MatrixEvent,
@@ -20,7 +20,6 @@ import {
 
 import { getMockGeolocationPositionError } from "./location";
 import { makeRoomWithStateEvents } from "./room";
-import { vi, isJest } from "../setup/adapter.ts";
 
 type InfoContentProps = {
     timeout: number;
@@ -138,13 +137,7 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
         watchPosition: vi.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
     } as unknown as MockedObject<Geolocation>;
 
-    // jest jsdom does not provide geolocation
-    if (isJest) {
-        // @ts-ignore illegal assignment to readonly property
-        navigator.geolocation = mockGeolocation;
-    } else {
-        vi.spyOn(navigator, "geolocation", "get").mockReturnValue(mockGeolocation);
-    }
+    vi.spyOn(navigator, "geolocation", "get").mockReturnValue(mockGeolocation);
 
     return mockGeolocation;
 };

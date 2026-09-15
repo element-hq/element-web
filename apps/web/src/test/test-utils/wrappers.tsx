@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentType, type Ref } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type RenderOptions } from "jest-matrix-react";
+import { type RenderOptions } from "test-utils-rtl";
 
-import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import MatrixClientContext from "../../src/contexts/MatrixClientContext";
-import { SDKContext } from "../../src/contexts/SDKContext";
-import { type SDKContextClass } from "../../src/contexts/SDKContextClass";
-import { type RoomContextType } from "../../src/contexts/RoomContext.ts";
-import { ScopedRoomContextProvider } from "../../src/contexts/ScopedRoomContext.tsx";
+import { MatrixClientPeg as peg } from "../../MatrixClientPeg";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { SDKContext } from "../../contexts/SDKContext";
+import { type SDKContextClass } from "../../contexts/SDKContextClass";
+import { type RoomContextType } from "../../contexts/RoomContext.ts";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
 

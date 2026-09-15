@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { expect } from "vitest";
 import {
     type MatrixClient,
     type MatrixEvent,
@@ -16,7 +17,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import { mkMessage, type MessageEventProps } from "./test-utils";
-import { expect } from "../setup/adapter.ts";
 
 export const makeThreadEvent = ({
     rootEventId,
