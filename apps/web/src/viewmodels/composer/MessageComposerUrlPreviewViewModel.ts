@@ -18,6 +18,7 @@ import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
 import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
+import SettingsStore from "../../settings/SettingsStore";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -26,7 +27,6 @@ export interface MessageComposerUrlPreviewViewModelRestoreProps {
     moduleUrlPreviewApi: UrlPreviewApi;
     visible: boolean;
     showTooltips: boolean;
-    urlPreviewBundle: boolean;
     /**
      * The event being edited. Its content seeds the composer and its existing URL preview bundle.
      */
@@ -38,7 +38,6 @@ export interface MessageComposerUrlPreviewViewModelProps {
     moduleUrlPreviewApi: UrlPreviewApi;
     visible: boolean;
     showTooltips: boolean;
-    urlPreviewBundle: boolean;
     content?: string;
     /**
      * Previews to seed {@link previewCache} with, used when editing an event so its existing
@@ -105,6 +104,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     public static restoreFromMessage(
         props: MessageComposerUrlPreviewViewModelRestoreProps,
     ): MessageComposerUrlPreviewViewModel {
+        const urlPreviewBundle = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
         const content = props.event.getContent<RoomMessageEventContent>();
         const bundleContent = content["com.beeper.linkpreviews"];
         const linksInMessage = linksIn(content.body);
@@ -115,11 +115,10 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             moduleUrlPreviewApi: props.moduleUrlPreviewApi,
             visible: props.visible,
             showTooltips: props.showTooltips,
-            urlPreviewBundle: props.urlPreviewBundle,
             content: content.body,
         };
 
-        if (props.urlPreviewBundle && bundleContent !== undefined) {
+        if (urlPreviewBundle && bundleContent !== undefined) {
             urlVmProps.cachedEntries = new Map(
                 bundleContent
                     .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
@@ -145,7 +144,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         }
 
         const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
-        if (props.urlPreviewBundle && bundleContent !== undefined) {
+        if (urlPreviewBundle && bundleContent !== undefined) {
             urlVm.resolveBundledPreviews(bundleContent, props.event);
         }
         return urlVm;

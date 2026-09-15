@@ -189,7 +189,6 @@ describe("<SendMessageComposer/>", () => {
             client: mockClient,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
         const defaultProps = {
@@ -449,7 +448,6 @@ describe("<SendMessageComposer/>", () => {
             client: cli,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
 
