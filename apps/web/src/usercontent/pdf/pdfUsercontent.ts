@@ -35,8 +35,8 @@ const RESPONSIVE_SCALE_VALUES = new Set(["auto", "page-fit", "page-width"]);
 
 /** How long pdf.js previews a zoom with a CSS transform before re-rendering. */
 const ZOOM_DRAWING_DELAY = 400;
-const WHEEL_LINE_HEIGHT = 32;
-const WHEEL_PAGE_HEIGHT = 400;
+/** Pixels per wheel unit for each `WheelEvent.deltaMode`: pixel, line, page. */
+const WHEEL_DELTA_SCALES = [1, 32, 400];
 const WHEEL_ZOOM_SENSITIVITY = 0.0022;
 const MAX_WHEEL_ZOOM_FACTOR = 1.5;
 
@@ -84,7 +84,7 @@ function isCancellationError(error: unknown): boolean {
 
 /** Wheel delta to zoom factor: exponential, so a step feels the same at every zoom level. */
 export function getWheelZoomFactor(delta: number, deltaMode: number): number {
-    const deltaScale = deltaMode === 1 ? WHEEL_LINE_HEIGHT : deltaMode === 2 ? WHEEL_PAGE_HEIGHT : 1;
+    const deltaScale = WHEEL_DELTA_SCALES[deltaMode] ?? 1;
     const factor = Math.exp(-delta * deltaScale * WHEEL_ZOOM_SENSITIVITY);
 
     return Math.min(MAX_WHEEL_ZOOM_FACTOR, Math.max(1 / MAX_WHEEL_ZOOM_FACTOR, factor));
