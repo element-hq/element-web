@@ -254,13 +254,13 @@ export function MessageComposerUrlPreviewView({
     const previewViews = collapsed
         ? null
         : links.map((entry) => (
-            <UrlPreviewExpandedEntry
-                key={entry.matched_url}
-                entry={entry}
-                removePreview={removePreview}
-                className={className}
-            />
-        ));
+              <UrlPreviewExpandedEntry
+                  key={entry.matched_url}
+                  entry={entry}
+                  removePreview={removePreview}
+                  className={className}
+              />
+          ));
 
     const summary = (
         <div className={styles.summary}>
