@@ -52,9 +52,12 @@ export default defineProject({
         environment: "node",
         pool: "threads",
         globals: false,
-        setupFiles: ["src/test/setupTests.ts"],
+        setupFiles: ["src/test/setupJsdomPolyfills.ts", "src/test/setupTests.ts"],
         environmentOptions: {
             happyDOM: {
+                url: "http://localhost/",
+            },
+            jsdom: {
                 url: "http://localhost/",
             },
         },

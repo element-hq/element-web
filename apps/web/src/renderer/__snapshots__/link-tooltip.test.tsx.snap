@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`link-tooltip does nothing for empty element 1`] = `
+exports[`link-tooltip > does nothing for empty element 1`] = `
 <DocumentFragment>
   <div />
 </DocumentFragment>
 `;
 
-exports[`link-tooltip wraps single anchor 1`] = `
+exports[`link-tooltip > wraps single anchor 1`] = `
 <DocumentFragment>
   
             

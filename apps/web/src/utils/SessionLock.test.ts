@@ -6,14 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { checkSessionLockFree, getSessionLock, SESSION_LOCK_CONSTANTS } from "../../../src/utils/SessionLock";
-import { resetJsDomAfterEach } from "../../test-utils";
+// @vitest-environment jsdom
+
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { logger } from "matrix-js-sdk/src/logger";
+import { resetJsDomAfterEach } from "test-utils";
+
+import { checkSessionLockFree, getSessionLock, SESSION_LOCK_CONSTANTS } from "./SessionLock";
 
 describe("SessionLock", () => {
     const otherWindows: Array<Window> = [];
 
     beforeEach(() => {
-        jest.useFakeTimers({ now: 1000 });
+        vi.useFakeTimers({ now: 1000 });
     });
 
     afterEach(() => {
@@ -25,7 +30,7 @@ describe("SessionLock", () => {
     resetJsDomAfterEach();
 
     it("A single instance starts up normally", async () => {
-        const onNewInstance = jest.fn();
+        const onNewInstance = vi.fn();
         const result = await getSessionLock(onNewInstance);
         expect(result).toBe(true);
         expect(onNewInstance).not.toHaveBeenCalled();
@@ -33,7 +38,7 @@ describe("SessionLock", () => {
 
     it("A second instance starts up normally when the first shut down cleanly", async () => {
         // first instance starts...
-        const onNewInstance1 = jest.fn();
+        const onNewInstance1 = vi.fn();
         expect(await getSessionLock(onNewInstance1)).toBe(true);
         expect(onNewInstance1).not.toHaveBeenCalled();
 
@@ -42,7 +47,7 @@ describe("SessionLock", () => {
 
         // second instance starts as normal
         expect(checkSessionLockFree()).toBe(true);
-        const onNewInstance2 = jest.fn();
+        const onNewInstance2 = vi.fn();
         expect(await getSessionLock(onNewInstance2)).toBe(true);
 
         expect(onNewInstance1).not.toHaveBeenCalled();
@@ -51,40 +56,40 @@ describe("SessionLock", () => {
 
     it("A second instance starts up *eventually* when the first terminated uncleanly", async () => {
         // first instance starts...
-        const onNewInstance1 = jest.fn();
+        const onNewInstance1 = vi.fn();
         expect(await getSessionLock(onNewInstance1)).toBe(true);
         expect(onNewInstance1).not.toHaveBeenCalled();
         expect(checkSessionLockFree()).toBe(false);
 
         // and pings the timer after 5 seconds
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
         expect(checkSessionLockFree()).toBe(false);
 
         // oops, now it dies. We simulate this by forcibly clearing the timers.
-        // For some reason `jest.clearAllTimers` also resets the simulated time, so preserve that
+        // For some reason `vi.clearAllTimers` also resets the simulated time, so preserve that
         const time = Date.now();
-        jest.clearAllTimers();
-        jest.setSystemTime(time);
+        vi.clearAllTimers();
+        vi.setSystemTime(time);
         expect(checkSessionLockFree()).toBe(false);
 
         // time advances a bit more
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
         expect(checkSessionLockFree()).toBe(false);
 
         // second instance tries to start. This should block for 10 more seconds
-        const onNewInstance2 = jest.fn();
+        const onNewInstance2 = vi.fn();
         let session2Result: boolean | undefined;
         getSessionLock(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
         // after another 9.5 seconds, we are still waiting
-        jest.advanceTimersByTime(9500);
+        vi.advanceTimersByTime(9500);
         expect(session2Result).toBe(undefined);
         expect(checkSessionLockFree()).toBe(false);
 
         // another 500ms and we get the lock
-        await jest.advanceTimersByTimeAsync(500);
+        await vi.advanceTimersByTimeAsync(500);
         expect(session2Result).toBe(true);
         expect(checkSessionLockFree()).toBe(false); // still false, because the new session has claimed it
 
@@ -99,27 +104,27 @@ describe("SessionLock", () => {
 
         // oops, now it dies. We simulate this by forcibly clearing the timers.
         const time = Date.now();
-        jest.clearAllTimers();
+        vi.clearAllTimers();
         expect(checkSessionLockFree()).toBe(false);
 
         // Now, the clock gets wound back an hour.
-        jest.setSystemTime(time - 3600 * 1000);
+        vi.setSystemTime(time - 3600 * 1000);
         expect(checkSessionLockFree()).toBe(false);
 
         // second instance tries to start. This should block for 15 seconds
-        const onNewInstance2 = jest.fn();
+        const onNewInstance2 = vi.fn();
         let session2Result: boolean | undefined;
         getSessionLock(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
         // after another 14.5 seconds, we are still waiting
-        jest.advanceTimersByTime(14500);
+        vi.advanceTimersByTime(14500);
         expect(session2Result).toBe(undefined);
         expect(checkSessionLockFree()).toBe(false);
 
         // another 500ms and we get the lock
-        await jest.advanceTimersByTimeAsync(500);
+        await vi.advanceTimersByTimeAsync(500);
         expect(session2Result).toBe(true);
         expect(checkSessionLockFree()).toBe(false); // still false, because the new session has claimed it
 
@@ -141,12 +146,12 @@ describe("SessionLock", () => {
         getSessionLock2(async () => {}).then((res) => {
             session2Result = res;
         });
-        await jest.advanceTimersByTimeAsync(100);
+        await vi.advanceTimersByTimeAsync(100);
         // should still be blocking
         expect(session2Result).toBe(undefined);
 
-        await jest.advanceTimersByTimeAsync(2000);
-        await jest.advanceTimersByTimeAsync(0);
+        await vi.advanceTimersByTimeAsync(2000);
+        await vi.advanceTimersByTimeAsync(0);
 
         // session 2 now gets the lock
         expect(session2Result).toBe(true);
@@ -158,24 +163,24 @@ describe("SessionLock", () => {
         await getSessionLock(() => new Promise(() => {}));
 
         // first instance should ping the timer after 5 seconds
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
 
         // second instance starts
         const { getSessionLock: getSessionLock2 } = buildNewContext();
         let session2Result: boolean | undefined;
-        const onNewInstance2 = jest.fn();
+        const onNewInstance2 = vi.fn();
         getSessionLock2(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
-        await jest.advanceTimersByTimeAsync(100);
+        await vi.advanceTimersByTimeAsync(100);
         // should still be blocking
         expect(session2Result).toBe(undefined);
 
         // third instance starts
         const { getSessionLock: getSessionLock3 } = buildNewContext();
         getSessionLock3(async () => {});
-        await jest.advanceTimersByTimeAsync(0);
+        await vi.advanceTimersByTimeAsync(0);
 
         // session 2 should have given up
         expect(session2Result).toBe(false);
@@ -191,7 +196,7 @@ describe("SessionLock", () => {
         });
 
         // first instance should ping the timer after 5 seconds
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
 
         // two new instances start at once
         const { getSessionLock: getSessionLock2 } = buildNewContext();
@@ -206,13 +211,13 @@ describe("SessionLock", () => {
             session3Result = res;
         });
 
-        await jest.advanceTimersByTimeAsync(100);
+        await vi.advanceTimersByTimeAsync(100);
         // session 3 still be blocking. Session 2 should have given up.
         expect(session2Result).toBe(false);
         expect(session3Result).toBe(undefined);
 
-        await jest.advanceTimersByTimeAsync(2000);
-        await jest.advanceTimersByTimeAsync(0);
+        await vi.advanceTimersByTimeAsync(2000);
+        await vi.advanceTimersByTimeAsync(0);
 
         // session 3 now gets the lock
         expect(session2Result).toBe(false);
@@ -230,7 +235,7 @@ describe("SessionLock", () => {
 
         otherWindows.push(window2);
 
-        // make the new Window use the same jest fake timers as us
+        // make the new Window use the same fake timers as us
         for (const m of ["setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date"]) {
             // @ts-ignore
             window2[m] = global[m];
@@ -251,13 +256,25 @@ describe("SessionLock", () => {
     } {
         const window2 = createWindow();
 
-        // import the dependencies of getSessionLock into the new context
-        // eslint-disable-next-line typescript/no-require-imports,typescript/no-var-requires
-        window2._logger = require("matrix-js-sdk/src/logger");
         window2.SESSION_LOCK_CONSTANTS = SESSION_LOCK_CONSTANTS;
 
+        // Vite's SSR module transform rewrites imports to internal names.
+        // Detect it from the serialized source, and reproduce whatever property path it needs on the new window.
+        const fnSource = String(getSessionLock);
+        const loggerRefMatch = fnSource.match(/(\S+)\.getChild\(/);
+        if (!loggerRefMatch) {
+            throw new Error("Could not find the `logger` reference in getSessionLock's serialized source");
+        }
+        const loggerRefPath = loggerRefMatch[1].split(".");
+        let loggerRefTarget: any = window2;
+        for (const segment of loggerRefPath.slice(0, -1)) {
+            loggerRefTarget[segment] ??= {};
+            loggerRefTarget = loggerRefTarget[segment];
+        }
+        loggerRefTarget[loggerRefPath[loggerRefPath.length - 1]] = logger;
+
         // now, define getSessionLock as a global
-        window2.eval(String(getSessionLock));
+        window2.eval(fnSource);
 
         // return a function that will call it
         function callGetSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {

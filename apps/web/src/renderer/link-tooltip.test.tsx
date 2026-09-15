@@ -6,16 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi } from "vitest";
 import React from "react";
-import { screen, fireEvent, render, type RenderResult } from "jest-matrix-react";
+import { screen, fireEvent, render, type RenderResult } from "test-utils-rtl";
 import parse from "html-react-parser";
 
-import { ambiguousLinkTooltipRenderer, combineRenderers } from "../../../src/renderer";
-import PlatformPeg from "../../../src/PlatformPeg";
-import type BasePlatform from "../../../src/BasePlatform";
+import { ambiguousLinkTooltipRenderer, combineRenderers } from "./index";
+import PlatformPeg from "../PlatformPeg";
+import type BasePlatform from "../BasePlatform";
 
 describe("link-tooltip", () => {
-    jest.spyOn(PlatformPeg, "get").mockReturnValue({ needsUrlTooltips: () => true } as unknown as BasePlatform);
+    vi.spyOn(PlatformPeg, "get").mockReturnValue({ needsUrlTooltips: () => true } as unknown as BasePlatform);
 
     function renderTooltips(input: string): RenderResult {
         return render(
