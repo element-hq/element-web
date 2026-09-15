@@ -36,6 +36,11 @@ export interface RichItemProps extends HTMLAttributes<HTMLLIElement> {
      * @default false
      */
     selected?: boolean;
+    /**
+     * Extra controls or status indicators to display at the end of the item, after the timestamp.
+     * Clicks inside this slot do not trigger the item's own `onClick`.
+     */
+    actions?: React.ReactNode;
 }
 
 /**
@@ -61,6 +66,7 @@ export const RichItem = memo(function RichItem({
     description,
     timestamp,
     selected,
+    actions,
     ...props
 }: RichItemProps): JSX.Element {
     const i18n = useI18n();
@@ -81,6 +87,16 @@ export const RichItem = memo(function RichItem({
                 <span role="timer" className={styles.timestamp}>
                     {i18n.humanizeTime(timestamp)}
                 </span>
+            )}
+            {actions && (
+                <Flex
+                    className={styles.actions}
+                    align="center"
+                    gap="var(--cpd-space-1x)"
+                    onClick={(ev) => ev.stopPropagation()}
+                >
+                    {actions}
+                </Flex>
             )}
         </li>
     );

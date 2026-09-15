@@ -6,28 +6,30 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+/* The list scrolls itself, so the dialog must never grow a scrollbar of its own: its square
+   track would paint over the frame's rounded corners. */
+.mx_Dialog:has(> .mx_ForwardDialog) {
+    overflow-y: hidden;
+}
+
+/* The list styling lives in the shared ForwardDialogView; only the dialog frame and the
+   EventTile preview (which is rendered by the web app) are styled here. */
 .mx_ForwardDialog {
-    width: 520px;
-    color: $primary-content;
+    /* A flex column so the shared view can shrink and scroll its list instead of
+       overflowing the dialog. The height must stay below the viewport, otherwise
+       .mx_Dialog scrolls as a whole and its content escapes the rounded corners. */
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
     min-height: 0;
-    height: 80vh;
+    /* Prefer a tall dialog, but never taller than the viewport (minus .mx_Dialog padding and
+       the gap .mx_Dialog_border keeps from the edges), so .mx_Dialog itself never scrolls. */
+    height: min(800px, 80vh);
 
-    > h3 {
-        margin: 0 0 6px;
-        color: $secondary-content;
-        font-size: $font-12px;
-        font-weight: var(--cpd-font-weight-semibold);
-        line-height: $font-15px;
+    > .mx_Dialog_header {
+        flex-shrink: 0;
     }
 
     > .mx_ForwardDialog_preview {
-        max-height: 30%;
-        flex-shrink: 0;
-        overflow-y: auto;
-
         div {
             pointer-events: none;
         }
@@ -41,110 +43,6 @@ Please see LICENSE files in the repository root for full details.
         .mx_MFileBody [data-type="download"],
         .mx_MFileBody [data-type="actions"] {
             display: none;
-        }
-    }
-
-    > hr {
-        width: 100%;
-        border: none;
-        border-top: 1px solid $input-border-color;
-        margin: 12px 0;
-    }
-
-    > .mx_ForwardList {
-        display: contents;
-
-        .mx_SearchBox {
-            /* To match the space around the title */
-            margin: 0 0 15px 0;
-            flex-grow: 0;
-
-            &:not(:focus-within) + .mx_ForwardList_content {
-                /* Inhibit the styling if focus is not within the input which handles keyboard accessibility */
-                --mx_ForwardList_entry_selectedBgColor: transparent;
-            }
-        }
-
-        .mx_ForwardList_content {
-            flex-grow: 1;
-        }
-
-        .mx_ForwardList_noResults {
-            display: block;
-            margin-top: 24px;
-        }
-
-        .mx_ForwardList_results {
-            &:not(:first-child) {
-                margin-top: 24px;
-            }
-
-            .mx_ForwardList_resultsList {
-                padding-right: 8px;
-            }
-
-            .mx_ForwardList_entry {
-                display: flex;
-                justify-content: space-between;
-                height: 32px;
-                padding: 6px;
-                border-radius: 8px;
-
-                &:hover,
-                &.mx_ForwardList_entry_active {
-                    background-color: var(--mx_ForwardList_entry_selectedBgColor, $spacePanel-bg-color);
-                }
-
-                .mx_ForwardList_roomButton {
-                    display: flex;
-                    margin-right: 12px;
-                    min-width: 0;
-
-                    .mx_DecoratedRoomAvatar {
-                        margin-right: 12px;
-                    }
-
-                    .mx_ForwardList_entry_name,
-                    .mx_ForwardList_entry_detail {
-                        line-height: 30px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-
-                    .mx_ForwardList_entry_name {
-                        font-size: $font-15px;
-                    }
-
-                    .mx_ForwardList_entry_detail {
-                        font-size: $font-12px;
-                        margin-left: 8px;
-                        color: $tertiary-content;
-                    }
-                }
-
-                .mx_ForwardList_sendButton {
-                    position: relative;
-                    margin-left: 12px;
-
-                    &:not(.mx_ForwardList_canSend) .mx_ForwardList_sendLabel {
-                        /* Hide the "Send" label while preserving button size */
-                        visibility: hidden;
-                    }
-
-                    & > svg {
-                        position: absolute;
-                        width: 14px;
-                        height: 14px;
-                        color: $accent;
-                    }
-
-                    .mx_ForwardDialog_notificationBadge {
-                        /* Match the failed to send indicator's color with the disabled button */
-                        background-color: $button-danger-disabled-fg-color;
-                    }
-                }
-            }
         }
     }
 }

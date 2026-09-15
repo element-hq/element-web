@@ -24,7 +24,7 @@ test.describe("share from URL", () => {
         // app straight away with a /#/share url as the room doesn't appear until the client syncs.]
         // Ideally we should fix the forward dialog to update and eliminate races, until then, there is only one
         // room so we click the first button.
-        await dialog.getByRole("listitem" /*, { name: "A test room" }*/).getByRole("button", { name: "Send" }).click();
+        await dialog.getByRole("option" /*, { name: "A test room" }*/).getByRole("button", { name: "Send" }).click();
         await dialog.getByRole("button", { name: "Close" }).click();
         await app.viewRoomByName("A test room");
         const lastMessage = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();

@@ -19,7 +19,7 @@ import {
     M_TIMESTAMP,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
-import { act, fireEvent, getByTestId, render, type RenderResult, screen, waitFor } from "test-utils-rtl";
+import { act, fireEvent, render, type RenderResult, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
@@ -31,6 +31,7 @@ import {
     mkMessage,
     mkStubRoom,
     mockPlatformPeg,
+    TestSDKContext,
 } from "test-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -39,27 +40,22 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import SettingsStore from "../../../settings/SettingsStore";
+import { SDKContext } from "../../../contexts/SDKContext";
 
 vi.mock("maplibre-gl");
 
-// mock offsetParent
-Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-    configurable: true,
-    get() {
-        return this.parentNode;
+vi.mock("../../../stores/OwnProfileStore", () => ({
+    OwnProfileStore: {
+        instance: {
+            on: vi.fn(),
+            off: vi.fn(),
+            removeListener: vi.fn(),
+            displayName: "Bob",
+            avatarMxc: null,
+            getHttpAvatarUrl: vi.fn().mockReturnValue(null),
+        },
     },
-});
-
-// Unlike jsdom/real browsers, happy-dom does not treat `.focus()` on a non-natively-focusable
-// element (no tabindex attribute, not a native interactive tag) as a no-op - it actually moves
-// `document.activeElement` there. The roving tabindex list here relies on that no-op to keep real
-// DOM focus on the search input while navigating with arrow keys, so patch it back to spec.
-const nativeFocus = HTMLElement.prototype.focus;
-HTMLElement.prototype.focus = function (this: HTMLElement, ...args: Parameters<typeof nativeFocus>) {
-    if (this.hasAttribute("tabindex") || this.matches("a[href], button, input, select, textarea, [contenteditable]")) {
-        nativeFocus.apply(this, args);
-    }
-};
+}));
 
 describe("ForwardDialog", () => {
     const sourceRoom = "!111111111111111111:example.org";
@@ -84,9 +80,6 @@ describe("ForwardDialog", () => {
         getAccountData: vi.fn().mockReturnValue(accountDataEvent),
         getPushActionsForEvent: vi.fn(),
         mxcUrlToHttp: vi.fn().mockReturnValue(""),
-        getProfileInfo: vi.fn().mockResolvedValue({
-            displayname: "Alice",
-        }),
         decryptEventIfNeeded: vi.fn(),
         sendEvent: vi.fn(),
         getClientWellKnown: vi.fn().mockReturnValue({
@@ -94,6 +87,9 @@ describe("ForwardDialog", () => {
         }),
     });
     const defaultRooms = ["a", "A", "b"].map((name) => mkStubRoom(name, name, mockClient));
+
+    const sdkContext = new TestSDKContext();
+    sdkContext._client = mockClient;
 
     const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms, stubSource = false) => {
         mockClient.getVisibleRooms.mockReturnValue(rooms);
@@ -109,15 +105,20 @@ describe("ForwardDialog", () => {
 
         const wrapper: RenderResult = render(
             <ForwardDialog
-                matrixClient={mockClient}
                 event={message}
                 permalinkCreator={new RoomPermalinkCreator(undefined!, sourceRoom)}
                 onFinished={vi.fn()}
             />,
+            {
+                wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
+            },
         );
 
         return wrapper;
     };
+
+    const getSendButtons = (): HTMLButtonElement[] =>
+        screen.getAllByRole("option").map((row) => row.querySelector<HTMLButtonElement>("button")!);
 
     beforeEach(() => {
         DMRoomMap.makeShared(mockClient);
@@ -142,42 +143,35 @@ describe("ForwardDialog", () => {
     });
 
     it("filters the rooms", async () => {
-        const { container } = mountForwardDialog();
+        mountForwardDialog();
 
-        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(3);
+        expect(screen.getAllByRole("option")).toHaveLength(3);
 
-        const searchInput = getByTestId(container, "searchbox-input");
-        await userEvent.type(searchInput, "a");
+        await userEvent.type(screen.getByRole("searchbox"), "a");
 
-        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(2);
+        expect(screen.getAllByRole("option")).toHaveLength(2);
     });
 
-    it("should be navigable using arrow keys", async () => {
-        const { container } = mountForwardDialog();
+    it("should be navigable using the keyboard", async () => {
+        mountForwardDialog();
 
-        const searchBox = getByTestId(container, "searchbox-input");
+        const searchBox = screen.getByRole("searchbox");
         searchBox.focus();
-        await waitFor(() =>
-            expect(container.querySelectorAll(".mx_ForwardList_entry")[0]).toHaveClass("mx_ForwardList_entry_active"),
-        );
 
         await userEvent.keyboard("[ArrowDown]");
-        await waitFor(() =>
-            expect(container.querySelectorAll(".mx_ForwardList_entry")[1]).toHaveClass("mx_ForwardList_entry_active"),
-        );
+        await waitFor(() => expect(screen.getAllByRole("option")[0]).toHaveFocus());
 
         await userEvent.keyboard("[ArrowDown]");
-        await waitFor(() =>
-            expect(container.querySelectorAll(".mx_ForwardList_entry")[2]).toHaveClass("mx_ForwardList_entry_active"),
-        );
+        await waitFor(() => expect(screen.getAllByRole("option")[1]).toHaveFocus());
 
         await userEvent.keyboard("[ArrowUp]");
-        await waitFor(() =>
-            expect(container.querySelectorAll(".mx_ForwardList_entry")[1]).toHaveClass("mx_ForwardList_entry_active"),
-        );
+        await waitFor(() => expect(screen.getAllByRole("option")[0]).toHaveFocus());
+
+        await userEvent.tab();
+        expect(getSendButtons()[0]).toHaveFocus();
 
         await userEvent.keyboard("[Enter]");
-        expect(mockClient.sendEvent).toHaveBeenCalledWith("A", "m.room.message", {
+        expect(mockClient.sendEvent).toHaveBeenCalledWith("a", "m.room.message", {
             "body": "Hello world!",
             "msgtype": "m.text",
             "m.mentions": {},
@@ -186,7 +180,7 @@ describe("ForwardDialog", () => {
 
     it("tracks message sending progress across multiple rooms", async () => {
         mockPlatformPeg();
-        const { container } = mountForwardDialog();
+        mountForwardDialog();
 
         // Make sendEvent require manual resolution so we can see the sending state
         let finishSend: (arg?: any) => void;
@@ -199,44 +193,35 @@ describe("ForwardDialog", () => {
                 }),
         );
 
-        let firstButton!: Element;
-        let secondButton!: Element;
-        const update = () => {
-            [firstButton, secondButton] = container.querySelectorAll(".mx_ForwardList_sendButton");
-        };
-        update();
+        const stateOf = (index: number) => getSendButtons()[index].getAttribute("data-send-state");
 
-        expect(firstButton.className).toContain("mx_ForwardList_canSend");
+        expect(stateOf(0)).toBe("can_send");
 
         act(() => {
-            fireEvent.click(firstButton);
+            fireEvent.click(getSendButtons()[0]);
         });
-        update();
-        expect(firstButton.className).toContain("mx_ForwardList_sending");
+        expect(stateOf(0)).toBe("sending");
 
         await act(async () => {
             cancelSend();
             // Wait one tick for the button to realize the send failed
             await sleep(0);
         });
-        update();
-        expect(firstButton.className).toContain("mx_ForwardList_sendFailed");
+        expect(stateOf(0)).toBe("failed");
 
-        expect(secondButton.className).toContain("mx_ForwardList_canSend");
+        expect(stateOf(1)).toBe("can_send");
 
         act(() => {
-            fireEvent.click(secondButton);
+            fireEvent.click(getSendButtons()[1]);
         });
-        update();
-        expect(secondButton.className).toContain("mx_ForwardList_sending");
+        expect(stateOf(1)).toBe("sending");
 
         await act(async () => {
             finishSend();
             // Wait one tick for the button to realize the send succeeded
             await sleep(0);
         });
-        update();
-        expect(secondButton.className).toContain("mx_ForwardList_sent");
+        expect(stateOf(1)).toBe("sent");
     });
 
     it("can render replies", async () => {
@@ -266,20 +251,19 @@ describe("ForwardDialog", () => {
         readOnlyRoom.maySendMessage = vi.fn().mockReturnValue(false);
         const rooms = [readOnlyRoom, mkStubRoom("b", "b", mockClient)];
 
-        const { container } = mountForwardDialog(undefined, rooms);
+        mountForwardDialog(undefined, rooms);
 
-        const [firstButton, secondButton] = container.querySelectorAll<HTMLButtonElement>(".mx_ForwardList_sendButton");
+        const [firstButton, secondButton] = getSendButtons();
 
-        expect(firstButton.getAttribute("aria-disabled")).toBeTruthy();
-        expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
+        expect(firstButton).toHaveAttribute("aria-disabled", "true");
+        expect(secondButton).not.toHaveAttribute("aria-disabled", "true");
     });
 
     describe("Mention recalculation", () => {
         const roomId = "a";
-        const sendClick = (container: HTMLElement): void =>
+        const sendClick = (): void =>
             act(() => {
-                const sendButton = container.querySelector(".mx_ForwardList_sendButton");
-                fireEvent.click(sendButton!);
+                fireEvent.click(getSendButtons()[0]);
             });
         const makeMessage = (body: string, mentions: object, formattedBody?: string) => {
             return mkEvent({
@@ -301,8 +285,8 @@ describe("ForwardDialog", () => {
 
         it("strips extra mentions", async () => {
             const message = makeMessage("Hi Alice", { user_ids: [aliceId] });
-            const { container } = mountForwardDialog(message);
-            sendClick(container);
+            mountForwardDialog(message);
+            sendClick();
             // Expected content should have mentions empty.
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
                 ...message.getContent(),
@@ -316,8 +300,8 @@ describe("ForwardDialog", () => {
                 { user_ids: [aliceId] },
                 `Hi <a href="https://matrix.to/#/${aliceId}">Alice</a>`,
             );
-            const { container } = mountForwardDialog(message, defaultRooms, true);
-            sendClick(container);
+            mountForwardDialog(message, defaultRooms, true);
+            sendClick();
             // Expected content should have mentions empty.
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
                 ...message.getContent(),
@@ -345,17 +329,16 @@ describe("ForwardDialog", () => {
             vi.spyOn(Date, "now").mockRestore();
         });
 
-        const sendToFirstRoom = (container: HTMLElement): void =>
+        const sendToFirstRoom = (): void =>
             act(() => {
-                const sendToFirstRoomButton = container.querySelector(".mx_ForwardList_sendButton");
-                fireEvent.click(sendToFirstRoomButton!);
+                fireEvent.click(getSendButtons()[0]);
             });
 
         it("converts legacy location events to pin drop shares", async () => {
             const { container } = mountForwardDialog(legacyLocationEvent);
 
             await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
-            sendToFirstRoom(container);
+            sendToFirstRoom();
 
             // text and description from original event are removed
             // text gets new default message from event values
@@ -382,7 +365,7 @@ describe("ForwardDialog", () => {
             const { container } = mountForwardDialog(modernLocationEvent);
 
             await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
-            sendToFirstRoom(container);
+            sendToFirstRoom();
 
             const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent())!;
             // text and description from original event are removed
@@ -423,7 +406,7 @@ describe("ForwardDialog", () => {
 
             await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
 
-            sendToFirstRoom(container);
+            sendToFirstRoom();
 
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, EventType.RoomMessage, expectedContent);
         });
@@ -433,7 +416,7 @@ describe("ForwardDialog", () => {
 
             await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
 
-            sendToFirstRoom(container);
+            sendToFirstRoom();
 
             const expectedContent = {
                 ...pinDropLocationEvent.getContent(),
