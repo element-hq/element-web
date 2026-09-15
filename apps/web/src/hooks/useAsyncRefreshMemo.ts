@@ -34,7 +34,7 @@ export function useAsyncRefreshMemo<T>(fn: Fn<T>, deps: DependencyList, initialV
         return () => {
             discard = true;
         };
-    }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+    }, deps); // oxlint-disable-line react-hooks/exhaustive-deps react/use-memo
     useEffect(refresh, [refresh]);
     return [value, refresh];
 }
