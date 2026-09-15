@@ -42,6 +42,8 @@ import { ElementCallMemberEventType } from "./call-types";
 import DMRoomMap from "./utils/DMRoomMap";
 import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SdkConfig from "./SdkConfig";
+import Modal from "./Modal";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
 /**
  * This should be the same as
@@ -240,6 +242,29 @@ describe("createRoom", () => {
         // Call waitForRoomEncryption with a small timeout ans expect an error
         const error = new Error("Timed out while waiting for room to enable encryption");
         await expect(waitForRoomEncryption(room, 1)).rejects.toThrow(error);
+    });
+
+    it("should show error dialog on failure", async () => {
+        // Mock js-sdk createRoom to throw
+        vi.spyOn(client, "createRoom").mockImplementation(async () => {
+            throw new Error();
+        });
+
+        // Assert error dialog for room
+        const roomSpy = vi.spyOn(Modal, "createDialog");
+        await createRoom(client, { name: "My Room" });
+        expect(roomSpy).toHaveBeenLastCalledWith(ErrorDialog, {
+            title: "Failure to create room",
+            description: "Server may be unavailable, overloaded, or you hit a bug.",
+        });
+
+        // Assert error dialog for space
+        const spaceSpy = vi.spyOn(Modal, "createDialog");
+        await createRoom(client, { name: "My Room", roomType: RoomType.Space });
+        expect(spaceSpy).toHaveBeenLastCalledWith(ErrorDialog, {
+            title: "Failure to create space",
+            description: "Server may be unavailable, overloaded, or you hit a bug.",
+        });
     });
 
     it("creates a private room in a space", async () => {
