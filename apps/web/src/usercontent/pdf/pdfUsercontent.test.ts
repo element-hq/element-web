@@ -310,6 +310,8 @@ describe("PDF usercontent", () => {
             );
 
             expect(iframe.posted()).toEqual([{ type: "ready" }]);
+            // Addressed to the app's origin, never to anyone who happens to embed the page.
+            expect(iframe.parent.postMessage).toHaveBeenCalledWith({ type: "ready" }, ORIGIN);
         });
 
         it("does nothing when opened directly rather than embedded", () => {

@@ -311,8 +311,8 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
     const viewer = win.document.getElementById("viewer") as HTMLDivElement | null;
     if (!container || !viewer) throw new Error("PDF usercontent markup is missing");
 
-    // "*": an opaque origin cannot name a target, and nothing sent here is sensitive.
-    const post = (message: PdfUsercontentMessage): void => win.parent.postMessage(message, "*");
+    // Only the origin this page was served by may receive anything.
+    const post = (message: PdfUsercontentMessage): void => win.parent.postMessage(message, win.location.origin);
 
     let session: PdfSession | undefined;
 
