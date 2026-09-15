@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { app, safeStorage } from "electron";
+import { app, dialog, safeStorage } from "electron";
 
-import Store, { SafeStorageDecryptionError } from "./store.js";
+import Store, { SafeStorageDecryptionError, clearData } from "./store.js";
 
 // In-memory ElectronStore replacement so the tests don't touch the filesystem or real config.
 const backing = new Map<string, unknown>();
@@ -191,6 +191,114 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.get("safeStorageBackendOverride")).toBe(true);
             expect(backing.has("safeStorageBackendMigrate")).toBe(false);
             expect(app.relaunch).toHaveBeenCalled();
+        });
+    });
+
+    describe("clearData", () => {
+        it("clears the store and flushes then clears the session's storage data", async () => {
+            backing.set("fakeDataItem", false);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await clearData(electronSession);
+
+            expect(backing.size).toBe(0);
+            expect(electronSession.flushStorageData).toHaveBeenCalled();
+            expect(electronSession.clearStorageData).toHaveBeenCalled();
+        });
+    });
+
+    describe("prepareSafeStorage backend changed and unable to migrate", () => {
+        beforeEach(() => {
+            backing.set("safeStorageBackend", "not-a-valid-backend");
+            vi.mocked(app.relaunch).mockClear();
+            vi.mocked(app.exit).mockClear();
+        });
+
+        it("throws and leaves data untouched when the user declines", async () => {
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 0,
+            } as Electron.MessageBoxReturnValue);
+            backing.set("fakeDataItem", true);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await expect(store.prepareSafeStorage(electronSession)).rejects.toThrow(
+                "safeStorage backend changed and cannot migrate",
+            );
+
+            expect(backing.get("fakeDataItem")).toBe(true);
+            expect(electronSession.flushStorageData).not.toHaveBeenCalled();
+            expect(app.relaunch).not.toHaveBeenCalled();
+        });
+
+        it("clears data and relaunches when the user accepts", async () => {
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 1,
+            } as Electron.MessageBoxReturnValue);
+            backing.set("fakeDataItem", true);
+            const electronSession = {
+                flushStorageData: vi.fn(),
+                clearStorageData: vi.fn(),
+            } as unknown as Electron.Session;
+
+            await expect(store.prepareSafeStorage(electronSession)).resolves.toBe(false);
+
+            expect(backing.size).toBe(0);
+            expect(electronSession.flushStorageData).toHaveBeenCalled();
+            expect(electronSession.clearStorageData).toHaveBeenCalled();
+            expect(app.relaunch).toHaveBeenCalled();
+            expect(app.exit).toHaveBeenCalled();
+        });
+    });
+
+    describe("degraded mode consent", () => {
+        const consult = (backend: "plaintext" | "basic_text"): Promise<void> =>
+            (
+                store as unknown as {
+                    consultUserConsentDegradedMode(backend: string): Promise<void>;
+                }
+            ).consultUserConsentDegradedMode(backend);
+
+        beforeEach(() => {
+            vi.mocked(dialog.showMessageBox).mockClear();
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockClear();
+            // getSelectedStorageBackend is Linux-only; calling this method throws on all other platforms
+            // See https://www.electronjs.org/docs/latest/api/safe-storage#safestoragegetselectedstoragebackend-linux
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockImplementation(() => {
+                throw new Error("getSelectedStorageBackend is not available on this platform");
+            });
+        });
+
+        it.each(["darwin", "win32"] as const)("does not query the Linux-only backend on %s", async (platform) => {
+            vi.spyOn(process, "platform", "get").mockReturnValue(platform);
+
+            await consult("plaintext");
+
+            expect(safeStorage.getSelectedStorageBackend).not.toHaveBeenCalled();
+            expect(dialog.showMessageBox).toHaveBeenCalled();
+        });
+
+        it("queries the selected keyring backend on Linux", async () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("kwallet6");
+
+            await consult("plaintext");
+
+            expect(safeStorage.getSelectedStorageBackend).toHaveBeenCalled();
+        });
+
+        it("throws when the user rejects plaintext", async () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
+            vi.mocked(dialog.showMessageBox).mockResolvedValueOnce({
+                response: 0,
+            } as Electron.MessageBoxReturnValue);
+
+            await expect(consult("plaintext")).rejects.toThrow("user rejected plaintext");
         });
     });
 });

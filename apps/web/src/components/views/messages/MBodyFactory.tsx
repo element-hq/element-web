@@ -59,6 +59,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -70,6 +71,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
                 timelineRenderingType,
                 refIFrame,
                 refLink,
+                pdfViewerEnabled,
             }),
     );
 
@@ -80,8 +82,9 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
             forExport,
             showFileInfo,
             timelineRenderingType,
+            pdfViewerEnabled,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
@@ -93,7 +96,15 @@ interface PreviewFileBodyProps {
 
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper));
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const vm = useCreateAutoDisposedViewModel(
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+    );
+
+    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
+    useEffect(() => {
+        vm.setPdfViewerEnabled(pdfViewerEnabled);
+    }, [pdfViewerEnabled, vm]);
 
     return (
         <div className="mx_EventTile_content">

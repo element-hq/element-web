@@ -394,6 +394,11 @@ export enum Action {
     FocusMessageSearch = "focus_search",
 
     /**
+     * Opens the given event's PDF attachment in the right panel. Use with an OpenPdfViewerPayload.
+     */
+    OpenPdfViewer = "open_pdf_viewer",
+
+    /**
      * Open the direct message dialog
      */
     CreateChat = "view_create_chat",

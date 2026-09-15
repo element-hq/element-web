@@ -705,7 +705,10 @@ export const Commands = [
             // easter-egg for now: look up phone numbers through the thirdparty API
             // (very dumb phone number detection...)
             const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
-            if (!userId || ((!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber)) {
+            // Validate with the same helper createRoom() uses to decide whether to send an invite. A looser
+            // check here lets an argument such as "@alice:example.com hello" be written to m.direct as a user
+            // ID that is then never invited, leaving an empty DM behind.
+            if (!userId || (getAddressType(userId) !== AddressType.MatrixUserId && !isPhoneNumber)) {
                 return reject(this.getUsage());
             }
 

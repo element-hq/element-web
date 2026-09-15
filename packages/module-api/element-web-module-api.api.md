@@ -72,6 +72,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly storageHelper: StorageHelperApi;
     readonly stores: StoresApi;
     // @alpha
+    readonly urlPreviews: UrlPreviewApi;
+    // @alpha
     readonly widget: WidgetApi;
     // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
@@ -300,9 +302,7 @@ export interface DirectoryCustomisations {
 
 // @alpha
 export interface EncryptedFile {
-    hashes: {
-        [alg: string]: string;
-    };
+    hashes: { [alg: string]: string };
     iv: string;
     key: {
         alg: string;
@@ -667,6 +667,16 @@ export interface UploadedMedia {
     // (undocumented)
     type: "uploaded";
 }
+
+// @alpha
+export interface UrlPreviewApi {
+    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
+}
+
+// Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
+//
+// @alpha
+export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {

@@ -28,6 +28,7 @@ import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 import { type FileViewerApi } from "./file-viewer.ts";
 import { type CustomPreviewTileApi } from "./custom-preview-tile.ts";
+import { type UrlPreviewApi } from "./urlpreview.ts";
 
 /**
  * Module interface for modules to implement.
@@ -180,6 +181,11 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly settings: SettingsApi;
+    /**
+     * Allows modules to read application settings.
+     * @alpha Subject to change.
+     */
+    readonly urlPreviews: UrlPreviewApi;
 
     /**
      * Register new file viewer

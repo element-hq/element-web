@@ -28,6 +28,7 @@ import {
     type MessageComposerUrlPreviewViewModelProps,
 } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import SettingsStore from "../../../settings/SettingsStore";
+import { UrlPreviewApi } from "../../../modules/UrlPreviewApi";
 
 // @vitest-environment happy-dom
 
@@ -45,6 +46,7 @@ function getUrlPreviewVm(client: MatrixClient, content?: string): MessageCompose
         visible: true,
         showTooltips: false,
         urlPreviewBundle: false,
+        moduleUrlPreviewApi: new UrlPreviewApi(),
     };
 
     if (content !== undefined) {

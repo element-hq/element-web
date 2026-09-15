@@ -31,6 +31,7 @@ import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
 
 vi.mock("../../../utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
@@ -189,6 +190,7 @@ describe("<SendMessageComposer/>", () => {
             visible: false,
             showTooltips: false,
             urlPreviewBundle: false,
+            moduleUrlPreviewApi: new UrlPreviewApi(),
         });
         const defaultProps = {
             room: mockRoom,
@@ -448,6 +450,7 @@ describe("<SendMessageComposer/>", () => {
             visible: false,
             showTooltips: false,
             urlPreviewBundle: false,
+            moduleUrlPreviewApi: new UrlPreviewApi(),
         });
 
         cli.isRoomEncrypted = vi.fn().mockReturnValue(true);

@@ -83,7 +83,10 @@ function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
         // We clone the item in the dnd overlay to avoid putting a hole in the list
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
+        disabled: !item.canChangeSection,
     });
     const dndRef = useMergeRefs([draggableRef, handleRef]);
-    return <RoomListItemView {...props} ref={dndRef} isDragSource={isDragSource} />;
+    // Only wire up the draggable refs when the room can be dragged, otherwise dndkit puts incorrect
+    // and misleading a11y attributes on the item (aria-disabled=true and aria-draggable=false)
+    return <RoomListItemView {...props} ref={item.canChangeSection ? dndRef : undefined} isDragSource={isDragSource} />;
 }

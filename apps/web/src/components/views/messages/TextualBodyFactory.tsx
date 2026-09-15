@@ -13,7 +13,6 @@ import {
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
-    type UrlPreview,
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,
@@ -22,6 +21,8 @@ import {
     type MediaPreviewGroupEntryContent,
     MediaPreviewEntryButton,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -112,6 +113,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;
@@ -154,10 +156,22 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
+    /**
+     * Recover the MSC4095 bundle a preview was built from, if it was built from one.
+     * `previewFromBundle` stashes the whole bundle in `additionalBundleContent`, and `link` is
+     * its `matched_url`, which is the one key `additionalBundleContent` is not typed to carry.
+     */
+    const bundleForPreview = (preview: UrlPreview): UnstableBundledUrlPreviewSingle | undefined =>
+        preview.additionalBundleContent && {
+            ...preview.additionalBundleContent,
+            matched_url: preview.link,
+        };
+
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         // file opening buttons will only apply to links with bundles
-        const mediaHandle = preview.srcBundle && remoteMediaForBundle(preview.srcBundle);
+        const bundle = bundleForPreview(preview);
+        const mediaHandle = bundle && remoteMediaForBundle(bundle);
         const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
         const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
             ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }))

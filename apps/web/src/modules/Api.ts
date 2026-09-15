@@ -39,6 +39,7 @@ import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { FileViewerApi } from "./FileViewerApi.ts";
 import { CustomPreviewTileApi } from "./CustomPreviewTileApi.ts";
+import { UrlPreviewApi } from "./UrlPreviewApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -104,6 +105,7 @@ export class ModuleApi implements Api {
     public readonly settings = new SettingsApi();
     public readonly fileViewer = new FileViewerApi();
     public readonly customPreviewTile = new CustomPreviewTileApi();
+    public readonly urlPreviews = new UrlPreviewApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);

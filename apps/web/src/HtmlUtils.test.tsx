@@ -77,6 +77,21 @@ describe("bodyToHtml", () => {
         expect(html).toMatchInlineSnapshot(`"<span class="mx_EventTile_searchHighlight">test</span> foo bar"`);
     });
 
+    it("preserves source links when rendering composer quotes", () => {
+        const html = bodyToHtml(
+            {
+                body: "Example",
+                msgtype: "m.text",
+                formatted_body: '<a href="https://example.org" target="_self">Example</a>',
+                format: "org.matrix.custom.html",
+            },
+            [],
+            { forComposerQuote: true },
+        );
+
+        expect(html).toBe('<a href="https://example.org" target="_self">Example</a>');
+    });
+
     it("should not respect HTML tags in plaintext message highlighting", () => {
         const html = bodyToHtml(
             {
@@ -287,36 +302,39 @@ describe("bodyToNode", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it.each([[true], [false]])("should handle inline media when mediaIsVisible is %s", (mediaIsVisible) => {
-        const cli = getMockClientWithEventEmitter({
-            mxcUrlToHttp: vi.fn().mockReturnValue("https://example.org/img"),
-        });
-        const { className, formattedBody } = bodyToNode(
-            {
-                "body": "![foo](mxc://going/knowwhere) Hello there",
-                "format": "org.matrix.custom.html",
-                "formatted_body": `<img src="mxc://going/knowwhere">foo</img> Hello there`,
-                "m.relates_to": {
-                    "m.in_reply_to": {
-                        event_id: "$eventId",
+    it.each([[true], [false]])(
+        "uses the app-specific MXC image transform when mediaIsVisible is %s",
+        (mediaIsVisible) => {
+            const cli = getMockClientWithEventEmitter({
+                mxcUrlToHttp: vi.fn().mockReturnValue("https://example.org/img"),
+            });
+            const { className, formattedBody } = bodyToNode(
+                {
+                    "body": "![foo](mxc://going/knowwhere) Hello there",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": `<img src="mxc://going/knowwhere">foo</img> Hello there`,
+                    "m.relates_to": {
+                        "m.in_reply_to": {
+                            event_id: "$eventId",
+                        },
                     },
+                    "msgtype": "m.text",
                 },
-                "msgtype": "m.text",
-            },
-            [],
-            {
-                mediaIsVisible,
-            },
-        );
+                [],
+                {
+                    mediaIsVisible,
+                },
+            );
 
-        const { asFragment } = render(
-            <span className={className} dir="auto" dangerouslySetInnerHTML={{ __html: formattedBody! }} />,
-        );
-        expect(asFragment()).toMatchSnapshot();
-        // We do not want to download untrusted media.
-        // eslint-disable-next-line no-restricted-properties
-        expect(cli.mxcUrlToHttp).toHaveBeenCalledTimes(mediaIsVisible ? 1 : 0);
-    });
+            const { asFragment } = render(
+                <span className={className} dir="auto" dangerouslySetInnerHTML={{ __html: formattedBody! }} />,
+            );
+            expect(asFragment()).toMatchSnapshot();
+            // We do not want to download untrusted media.
+            // eslint-disable-next-line no-restricted-properties
+            expect(cli.mxcUrlToHttp).toHaveBeenCalledTimes(mediaIsVisible ? 1 : 0);
+        },
+    );
 
     afterEach(() => {
         vi.resetAllMocks();

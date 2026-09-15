@@ -32,6 +32,8 @@ export interface IRightPanelCardState {
     fileViewer?: RegisteredFileViewer;
     fileViewerSourceEvent?: MatrixEvent;
     fileViewerMedia?: MediaHandle;
+    // pdf viewer: the m.file event whose attachment is being read
+    pdfViewerEvent?: MatrixEvent;
 }
 
 export interface IRightPanelCardStateStored {
@@ -54,6 +56,8 @@ export interface IRightPanelCardStateStored {
     fileViewerSourceRoomId?: string;
     // only present if file viewer is viewing remote content (from a URL bundle)
     fileViewerUrl?: string;
+    // pdf viewer
+    pdfViewerEventId?: string;
 }
 
 export interface IRightPanelCard {
@@ -102,6 +106,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         fileViewerSourceEventId: state.fileViewerSourceEvent?.getId(),
         fileViewerSourceRoomId: state.fileViewerSourceEvent?.getRoomId(),
         fileViewerUrl: state.fileViewerMedia?.type === "remote" ? state.fileViewerMedia.bundle.matched_url : undefined,
+        pdfViewerEventId: state?.pdfViewerEvent?.getId(),
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -124,6 +129,7 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         fileViewer: stateStored.fileViewerId
             ? ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId)
             : undefined,
+        pdfViewerEvent: !!stateStored?.pdfViewerEventId ? room.findEventById(stateStored.pdfViewerEventId) : undefined,
     };
 
     if (stateStored.fileViewerSourceRoomId && stateStored.fileViewerSourceEventId) {

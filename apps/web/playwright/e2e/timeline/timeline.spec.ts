@@ -365,6 +365,28 @@ test.describe("Timeline", () => {
                 // 3. Alignment of expanded GELS and placeholder of deleted message
                 // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
 
+                const screenshotOptions = {
+                    hideJumpToBottomButton: true,
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                        /* Whether the unread bar shows depends on read marker timing, and it is not
+                           what this test is about */
+                        .mx_TopUnreadMessagesBar {
+                            display: none !important;
+                        }
+                    `,
+                };
+
+                // The action bar renders on whichever tile the pointer happens to be over, and the steps
+                // below leave it in a different place each time, so drop it before every screenshot
+                const captureTimeline = async (name: `${string}.png`) => {
+                    await page.mouse.move(0, 0);
+                    await expect(page.getByRole("toolbar", { name: "Message Actions" })).toHaveCount(0);
+                    await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(name, screenshotOptions);
+                };
+
                 await page.goto(`/#/room/${room.roomId}`);
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
 
@@ -388,34 +410,12 @@ test.describe("Timeline", () => {
                 ).toHaveAccessibleName("Your message was sent");
 
                 // 1. Alignment of collapsed GELS (generic event list summary) and messages
-                // Record alignment of collapsed GELS and messages on messagePanel
-                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
-                    "collapsed-gels-and-messages-irc-layout.png",
-                    {
-                        // Exclude timestamp from snapshot of mx_RoomView_timeline
-                        css: `
-                            .mx_MessageTimestamp {
-                                visibility: hidden;
-                            }
-                        `,
-                    },
-                );
+                await captureTimeline("collapsed-gels-and-messages-irc-layout.png");
 
                 // 2. Alignment of expanded GELS and messages
                 // Click "expand" link button
                 await page.locator(".mx_GenericEventListSummary").getByRole("button", { name: "Expand" }).click();
-                // Record alignment of expanded GELS and messages on messagePanel
-                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
-                    "expanded-gels-and-messages-irc-layout.png",
-                    {
-                        // Exclude timestamp from snapshot of mx_RoomView_timeline
-                        css: `
-                            .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
-                                visibility: hidden;
-                            }
-                        `,
-                    },
-                );
+                await captureTimeline("expanded-gels-and-messages-irc-layout.png");
 
                 // 3. Alignment of expanded GELS and placeholder of deleted message
                 // Delete the second (last) message
@@ -433,18 +433,7 @@ test.describe("Timeline", () => {
                 await expect(
                     page.locator(".mx_GenericEventListSummary .mx_EventTile").last().getByRole("status"),
                 ).toHaveAccessibleName("Your message was sent");
-                // Record alignment of expanded GELS and placeholder of deleted message on messagePanel
-                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
-                    "expanded-gels-redaction-placeholder.png",
-                    {
-                        // Exclude timestamp from snapshot of mx_RoomView_timeline
-                        css: `
-                            .mx_MessageTimestamp {
-                                visibility: hidden;
-                            }
-                        `,
-                    },
-                );
+                await captureTimeline("expanded-gels-redaction-placeholder.png");
 
                 // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
                 // Send a emote
@@ -459,18 +448,7 @@ test.describe("Timeline", () => {
                 const emoteTile = page.locator(".mx_EventTile").filter({ hasText: "says hello to Mr. Bot" }).last();
                 // Make sure emote was sent
                 await expect(emoteTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
-                // Record alignment of expanded GELS, placeholder of deleted message, and emote
-                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
-                    "expanded-gels-emote-irc-layout.png",
-                    {
-                        // Exclude timestamp from snapshot of mx_RoomView_timeline
-                        css: `
-                        .mx_MessageTimestamp {
-                            visibility: hidden;
-                        }
-                    `,
-                    },
-                );
+                await captureTimeline("expanded-gels-emote-irc-layout.png");
             },
         );
 
@@ -582,40 +560,46 @@ test.describe("Timeline", () => {
             "should set inline start padding to a hidden event line",
             { tag: "@screenshot" },
             async ({ page, app, room }) => {
-                await sendEvent(app.client, room.roomId);
-                await page.goto(`/#/room/${room.roomId}`);
-                await app.settings.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
-                await expect(
-                    page
-                        .locator(".mx_GenericEventListSummary_summary")
-                        .getByText(`${OLD_NAME} created and configured the room.`),
-                ).toBeVisible();
-
-                // Edit message
-                await messageEdit(page);
-
-                // Click timestamp to highlight hidden event line
-                const timestamp = page
-                    .locator(".mx_RoomView_body .mx_EventTile:has([data-testid='event-tile-slot-timestamp'])")
-                    .last()
-                    .getByTestId("event-tile-slot-timestamp");
-                // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
-                await expect(timestamp).not.toHaveAttribute("href", /~!/);
-                await timestamp.click();
-
-                await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
+                    hideJumpToBottomButton: true,
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
+                        }
+                        /* Hidden with display so that a bar appearing does not shift everything below it */
+                        .mx_TopUnreadMessagesBar {
+                            display: none !important;
                         }
                         .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
                 };
+
+                const message = await sendEvent(app.client, room.roomId);
+                // An edit is rendered as a hidden event, which is the line this test is about
+                const edit = await app.client.sendMessage(room.roomId, {
+                    "msgtype": "m.text",
+                    "body": "* MessageEdit",
+                    "m.new_content": { msgtype: "m.text", body: "MessageEdit" },
+                    "m.relates_to": { rel_type: "m.replace", event_id: message.event_id },
+                });
+
+                await app.settings.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
+                // Opening the edit as a permalink highlights its hidden event line
+                await page.goto(`/#/room/${room.roomId}/${edit.event_id}`);
+                await expect(
+                    page
+                        .locator(".mx_GenericEventListSummary_summary")
+                        .getByText(`${OLD_NAME} created and configured the room.`),
+                ).toBeVisible();
+
+                const hiddenEventTile = page.locator(`.mx_EventTile[data-event-id="${edit.event_id}"]`);
+
+                await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+                await expect(page.locator(".mx_RoomView_body[data-layout=irc]")).toBeVisible();
+                await expect(hiddenEventTile).toBeInViewport();
 
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "hidden-event-line-zero-padding-irc-layout.png",
@@ -624,6 +608,8 @@ test.describe("Timeline", () => {
 
                 // Capture hidden event line padding in modern layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+                await expect(page.locator(".mx_RoomView_body[data-layout=group]")).toBeVisible();
+                await expect(hiddenEventTile).toBeInViewport();
 
                 await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                     "hidden-event-line-padding-modern-layout.png",
