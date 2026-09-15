@@ -43,10 +43,10 @@ function attachIframeWindow(): IframeWindow {
     return iframeWindow;
 }
 
-/** Deliver a message as if `source` had posted it. */
-function receive(data: unknown, source: unknown): void {
+/** Deliver a message as if `source` had posted it. A sandboxed iframe's origin serializes as "null". */
+function receive(data: unknown, source: unknown, origin = "null"): void {
     act(() => {
-        window.dispatchEvent(new MessageEvent("message", { data, source: source as Window }));
+        window.dispatchEvent(new MessageEvent("message", { data, source: source as Window, origin }));
     });
 }
 
@@ -130,11 +130,13 @@ describe("PdfViewer", () => {
         });
 
         it("ignores messages that do not come from its own iframe", async () => {
-            await renderLoaded();
+            const { iframeWindow } = await renderLoaded();
 
             receive({ type: "page", page: 7 } satisfies PdfUsercontentMessage, window);
             receive({ type: "page", page: 8 } satisfies PdfUsercontentMessage, { postMessage: vi.fn() });
             receive({ type: "error", message: "boom" } satisfies PdfUsercontentMessage, null);
+            // The right window but not an opaque origin: the iframe has lost its sandbox somehow.
+            receive({ type: "page", page: 9 } satisfies PdfUsercontentMessage, iframeWindow, "https://app.example.org");
 
             expect(screen.getByTestId("pdf-page-input")).toHaveValue("1");
             expect(screen.queryByRole("alert")).not.toBeInTheDocument();

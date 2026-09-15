@@ -117,8 +117,8 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         };
 
         const onMessage = (event: MessageEvent): void => {
-            // Only our iframe; `event.origin` is "null" for an opaque origin, so the source is the check.
-            if (disposed || event.source !== iframe.contentWindow) return;
+            // Only our iframe, and only with the "null" origin a sandboxed iframe has.
+            if (disposed || event.source !== iframe.contentWindow || event.origin !== "null") return;
 
             const message = parsePdfUsercontentMessage(event.data);
             if (!message) return;
