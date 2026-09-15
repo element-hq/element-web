@@ -10,8 +10,8 @@ import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
-import { MediaHandle } from "@element-hq/element-web-module-api";
-import { RegisteredFileViewer, remoteMediaForEvent, uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import type { MediaHandle } from "@element-hq/element-web-module-api";
+import { type RegisteredFileViewer, remoteMediaForEvent, uploadedMediaForEvent } from "../../modules/FileViewerApi";
 import { ModuleApi } from "../../modules/Api";
 
 export interface IRightPanelCardState {

@@ -16,9 +16,9 @@ import type {
     UnstableBundledUrlPreviewSingle,
 } from "@element-hq/element-web-module-api";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
-import { RoomMessageEventContent } from "../../@types/url-preview";
+import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { MediaEventContent } from "matrix-js-sdk/src/types";
+import type { RoomMessageEventContent } from "../../@types/url-preview";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;

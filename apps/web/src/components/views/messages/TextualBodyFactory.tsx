@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -19,7 +19,7 @@ import {
     linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
-    MediaPreviewEntryButton,
+    type MediaPreviewEntryButton,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
 import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
@@ -48,6 +48,19 @@ import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
 import { CustomPreviewTileApi } from "../../../modules/CustomPreviewTileApi";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
+
+/**
+ * Recover the MSC4095 bundle a preview was built from, if it was built from one.
+ * `previewFromBundle` stashes the whole bundle in `additionalBundleContent`, and `link` is
+ * its `matched_url`, which is the one key `additionalBundleContent` is not typed to carry.
+ */
+function bundleForPreview(preview: UrlPreview): UnstableBundledUrlPreviewSingle | undefined {
+    if (!preview.additionalBundleContent) return undefined;
+    return {
+        ...preview.additionalBundleContent,
+        matched_url: preview.link,
+    };
+}
 
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
     if (msgtype === MsgType.Notice) {
@@ -156,79 +169,75 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    /**
-     * Recover the MSC4095 bundle a preview was built from, if it was built from one.
-     * `previewFromBundle` stashes the whole bundle in `additionalBundleContent`, and `link` is
-     * its `matched_url`, which is the one key `additionalBundleContent` is not typed to carry.
-     */
-    const bundleForPreview = (preview: UrlPreview): UnstableBundledUrlPreviewSingle | undefined =>
-        preview.additionalBundleContent && {
-            ...preview.additionalBundleContent,
-            matched_url: preview.link,
-        };
+    // Memoised because it feeds the media preview view model from an effect: a fresh function on
+    // every render would push new entries to the view model on every render.
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            // file opening buttons will only apply to links with bundles
+            const bundle = bundleForPreview(preview);
+            const mediaHandle = bundle && remoteMediaForBundle(bundle);
+            const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+            const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+                ? fileViewers.map((viewer) =>
+                      fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }),
+                  )
+                : [];
+            const patches = mediaHandle
+                ? ModuleApi.instance.customPreviewTile.applyPatchers(mediaHandle)
+                : CustomPreviewTileApi.emptyBatch;
 
-    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
-        let content: MediaPreviewGroupEntryContent;
-        // file opening buttons will only apply to links with bundles
-        const bundle = bundleForPreview(preview);
-        const mediaHandle = bundle && remoteMediaForBundle(bundle);
-        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
-        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
-            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }))
-            : [];
-        const patches = mediaHandle
-            ? ModuleApi.instance.customPreviewTile.applyPatchers(mediaHandle)
-            : CustomPreviewTileApi.emptyBatch;
-
-        if (preview.image === undefined) {
-            content = {
-                type: "text",
-            };
-        } else {
-            content = {
-                type: "image",
-                image: preview.image.imageFull,
-                imageAlt: preview.title,
-                imageSize: "banner",
-                imageOnClick: () => {
-                    Modal.createDialog(
-                        ImageView,
-                        {
-                            src: preview.image!.imageFull, // full-res URL
-                            name: `Thumbnail of ${preview.title}`,
-                            width: preview.image?.width,
-                            height: preview.image?.height,
-                            fileSize: preview.image?.fileSize,
-                        },
-                        "mx_Dialog_lightbox",
-                        undefined,
-                        true,
-                    );
-                },
-            };
-        }
-
-        let body: string;
-        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
-        else body = preview.description!;
-
-        return {
-            id: preview.link,
-            headerUrl: preview.link,
-            buttons: [
-                ...fileViewerButtons,
-                {
-                    label: _t("timeline|url_preview|open_link"),
-                    icon: <PopOutIcon />,
-                    onClick: async () => {
-                        window.open(preview.link, "_blank", "noreferrer");
+            if (preview.image === undefined) {
+                content = {
+                    type: "text",
+                };
+            } else {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "banner",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
                     },
-                },
-            ],
-            ...CustomPreviewTileApi.previewPatchToVmProps(patches, { header: preview.title, body, ...linkIcon() }),
-            ...content,
-        };
-    };
+                };
+            }
+
+            let body: string;
+            if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+            else body = preview.description!;
+
+            return {
+                id: preview.link,
+                headerUrl: preview.link,
+                buttons: [
+                    ...fileViewerButtons,
+                    {
+                        label: _t("timeline|url_preview|open_link"),
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                ],
+                ...CustomPreviewTileApi.previewPatchToVmProps(patches, { header: preview.title, body, ...linkIcon() }),
+                ...content,
+            };
+        },
+        [props.mxEvent],
+    );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
@@ -312,7 +321,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             entries: previews.map(previewToEntry),
             collapse,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, collapse, previewToEntry, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
