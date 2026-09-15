@@ -9,8 +9,8 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient, TestSDKContext } from "test-utils";
 
-import { stubClient, TestSDKContext } from "../../../../../../../../test/test-utils";
 import {
     getMockedMember,
     getMockedRtcDeclineEvent,
