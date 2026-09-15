@@ -5,12 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render } from "jest-matrix-react";
-import { WidgetKind } from "matrix-widget-api";
+// @vitest-environment happy-dom
 
-import { stubClient } from "../../../../test-utils";
-import WidgetOpenIDPermissionsDialog from "../../../../../src/components/views/dialogs/WidgetOpenIDPermissionsDialog.tsx";
+import React from "react";
+import { render } from "test-utils-rtl";
+import { WidgetKind } from "matrix-widget-api";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+import { stubClient } from "test-utils";
+import WidgetOpenIDPermissionsDialog from "./WidgetOpenIDPermissionsDialog";
+
+vi.mock("react-focus-lock");
 
 describe("WidgetOpenIDPermissionsDialog", () => {
     const mockWidget = {
@@ -19,7 +24,7 @@ describe("WidgetOpenIDPermissionsDialog", () => {
         templateUrl: "https://imawidget",
     } as any;
 
-    const onFinished = jest.fn();
+    const onFinished = vi.fn();
 
     beforeEach(() => {
         stubClient();

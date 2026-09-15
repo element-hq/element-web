@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
-import { mocked } from "jest-mock";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -19,36 +21,38 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "test-utils";
 
-import SpotlightDialog from "../../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
-import { Filter } from "../../../../../src/components/views/dialogs/spotlight/Filter";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../../src/models/LocalRoom";
-import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../../test-utils";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import SdkConfig from "../../../../../src/SdkConfig";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { MetaSpace } from "../../../../../src/stores/spaces";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import SpotlightDialog from "./SpotlightDialog";
+import { Filter } from "./Filter";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../models/LocalRoom";
+import { DirectoryMember, startDmOnFirstMessage } from "../../../../utils/direct-messages";
+import DMRoomMap from "../../../../utils/DMRoomMap";
+import SettingsStore from "../../../../settings/SettingsStore";
+import { SettingLevel } from "../../../../settings/SettingLevel";
+import defaultDispatcher from "../../../../dispatcher/dispatcher";
+import SdkConfig from "../../../../SdkConfig";
+import { Action } from "../../../../dispatcher/actions";
+import { MetaSpace } from "../../../../stores/spaces";
+import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 
-jest.useFakeTimers();
+vi.useFakeTimers({ shouldAdvanceTime: true });
 
-jest.mock("../../../../../src/utils/Feedback");
+vi.mock("../../../../utils/Feedback");
 
-jest.mock("../../../../../src/utils/direct-messages", () => ({
+vi.mock("../../../../utils/direct-messages", async () => ({
     // @ts-ignore
-    ...jest.requireActual("../../../../../src/utils/direct-messages"),
-    startDmOnFirstMessage: jest.fn(),
+    ...(await vi.importActual("../../../../utils/direct-messages")),
+    startDmOnFirstMessage: vi.fn(),
 }));
 
-jest.mock("../../../../../src/dispatcher/dispatcher", () => ({
-    register: jest.fn(),
-    dispatch: jest.fn(),
+vi.mock("../../../../dispatcher/dispatcher", () => ({
+    default: {
+        register: vi.fn(),
+        dispatch: vi.fn(),
+    },
 }));
 
 interface IUserChunkMember {
@@ -76,11 +80,11 @@ function mockClient({
 }: MockClientOptions = {}): MatrixClient {
     stubClient();
     const cli = MatrixClientPeg.safeGet();
-    cli.getUserId = jest.fn(() => userId);
-    cli.getDomain = jest.fn(() => homeserver);
-    cli.getHomeserverUrl = jest.fn(() => homeserver);
-    cli.getThirdpartyProtocols = jest.fn(() => Promise.resolve(thirdPartyProtocols));
-    cli.publicRooms = jest.fn((options) => {
+    cli.getUserId = vi.fn(() => userId);
+    cli.getDomain = vi.fn(() => homeserver);
+    cli.getHomeserverUrl = vi.fn(() => homeserver);
+    cli.getThirdpartyProtocols = vi.fn(() => Promise.resolve(thirdPartyProtocols));
+    cli.publicRooms = vi.fn((options) => {
         const searchTerm = options?.filter?.generic_search_term?.toLowerCase();
         const chunk = rooms.filter(
             (it) =>
@@ -98,7 +102,7 @@ function mockClient({
             total_room_count_estimate: chunk.length,
         });
     });
-    cli.searchUserDirectory = jest.fn(({ term, limit }) => {
+    cli.searchUserDirectory = vi.fn(({ term, limit }) => {
         const searchTerm = term?.toLowerCase();
         const results = users.filter(
             (it) =>
@@ -111,7 +115,7 @@ function mockClient({
             limited: !!limit && limit < results.length,
         });
     });
-    cli.getProfileInfo = jest.fn(async (userId) => {
+    cli.getProfileInfo = vi.fn(async (userId) => {
         const member = members.find((it) => it.userId === userId);
         if (member) {
             return Promise.resolve({
@@ -156,33 +160,33 @@ describe("Spotlight Dialog", () => {
         SettingsStore.reset();
         mockedClient = mockClient({ rooms: [testPublicRoom], users: [testPerson] });
         testRoom = mkRoom(mockedClient, "!test23:example.com");
-        mocked(testRoom.getMyMembership).mockReturnValue(KnownMembership.Join);
+        vi.mocked(testRoom.getMyMembership).mockReturnValue(KnownMembership.Join);
         testLocalRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test23", mockedClient, mockedClient.getUserId()!);
         testLocalRoom.updateMyMembership(KnownMembership.Join);
-        mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom]);
+        vi.mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom]);
 
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
-            getUserIdForRoomId: jest.fn(),
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: vi.fn(),
         } as unknown as DMRoomMap);
 
         testDM = mkRoom(mockedClient, testDMRoomId);
         testDM.name = "Chat with Alice";
-        mocked(testDM.getMyMembership).mockReturnValue(KnownMembership.Join);
+        vi.mocked(testDM.getMyMembership).mockReturnValue(KnownMembership.Join);
 
-        mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
+        vi.mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
             if (roomId === testDMRoomId) {
                 return testDMUserId;
             }
             return undefined;
         });
 
-        mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom, testDM]);
+        vi.mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom, testDM]);
     });
 
     it("should not fall into a filter when the query matches nothing", async () => {
         render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         expect(screen.getByText("No results found")).toBeInTheDocument();
@@ -195,7 +199,7 @@ describe("Spotlight Dialog", () => {
     it("should not offer the enter shortcut on the no results entry", async () => {
         render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         const noResults = document.querySelector("#mx_SpotlightDialog_button_noResults")!;
@@ -208,7 +212,7 @@ describe("Spotlight Dialog", () => {
     it("should expose the no results entry as an unavailable option rather than a button", async () => {
         render(<SpotlightDialog initialText="zzzznothingmatchesthis" onFinished={() => null} />);
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         const noResults = document.querySelector("#mx_SpotlightDialog_button_noResults")!;
@@ -232,7 +236,7 @@ describe("Spotlight Dialog", () => {
             render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -243,7 +247,7 @@ describe("Spotlight Dialog", () => {
                 const content = document.querySelector("#mx_SpotlightDialog_content")!;
                 const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
                 expect(options.length).toBe(1);
-                expect(options[0].innerHTML).toContain(testPublicRoom.name);
+                expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
             });
         });
 
@@ -256,7 +260,7 @@ describe("Spotlight Dialog", () => {
                 />,
             );
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -278,12 +282,12 @@ describe("Spotlight Dialog", () => {
         });
 
         afterEach(() => {
-            jest.restoreAllMocks();
+            vi.restoreAllMocks();
         });
 
         it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
             render(<SpotlightDialog onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
         });
@@ -292,13 +296,12 @@ describe("Spotlight Dialog", () => {
     describe("should apply manually selected filter", () => {
         it("with public rooms", async () => {
             render(<SpotlightDialog onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             fireEvent.click(screen.getByText("Public rooms"));
-            // wrapper.find("#mx_SpotlightDialog_button_explorePublicRooms").first().simulate("click");
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -317,13 +320,13 @@ describe("Spotlight Dialog", () => {
         });
         it("with people", async () => {
             render(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             fireEvent.click(screen.getByText("People"));
 
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -343,7 +346,7 @@ describe("Spotlight Dialog", () => {
         it("with public room filter", async () => {
             render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             let filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -351,7 +354,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip.innerHTML).toContain("Public rooms");
 
             fireEvent.click(filterChip.querySelector("div.mx_SpotlightDialog_filter--close")!);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
@@ -366,7 +369,7 @@ describe("Spotlight Dialog", () => {
                 />,
             );
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             let filterChip = document.querySelector("div.mx_SpotlightDialog_filter");
@@ -374,7 +377,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip!.innerHTML).toContain("People");
 
             fireEvent.click(filterChip!.querySelector("div.mx_SpotlightDialog_filter--close")!);
-            jest.advanceTimersByTime(1);
+            vi.advanceTimersByTime(1);
             await flushPromisesWithFakeTimers();
 
             filterChip = document.querySelector("div.mx_SpotlightDialog_filter");
@@ -388,7 +391,7 @@ describe("Spotlight Dialog", () => {
         beforeAll(async () => {
             render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
@@ -407,7 +410,7 @@ describe("Spotlight Dialog", () => {
     });
 
     it("should not filter out users sent by the server", async () => {
-        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+        vi.mocked(mockedClient.searchUserDirectory).mockResolvedValue({
             results: [
                 { user_id: "@user1:server", display_name: "User Alpha", avatar_url: "mxc://1/avatar" },
                 { user_id: "@user2:server", display_name: "User Beta", avatar_url: "mxc://2/avatar" },
@@ -417,7 +420,7 @@ describe("Spotlight Dialog", () => {
 
         render(<SpotlightDialog initialFilter={Filter.People} initialText="Alpha" onFinished={() => null} />);
         // search is debounced
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         await waitFor(() => {
@@ -432,9 +435,9 @@ describe("Spotlight Dialog", () => {
     it("should not filter out users sent by the server even if a local suggestion gets filtered out", async () => {
         const member = new RoomMember(testRoom.roomId, testPerson.user_id);
         member.name = member.rawDisplayName = testPerson.display_name!;
-        member.getMxcAvatarUrl = jest.fn().mockReturnValue("mxc://0/avatar");
-        mocked(testRoom.getJoinedMembers).mockReturnValue([member]);
-        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+        member.getMxcAvatarUrl = vi.fn().mockReturnValue("mxc://0/avatar");
+        vi.mocked(testRoom.getJoinedMembers).mockReturnValue([member]);
+        vi.mocked(mockedClient.searchUserDirectory).mockResolvedValue({
             results: [
                 { user_id: "@janedoe:matrix.org", display_name: "User Alpha", avatar_url: "mxc://1/avatar" },
                 { user_id: "@johndoe:matrix.org", display_name: "User Beta", avatar_url: "mxc://2/avatar" },
@@ -444,7 +447,7 @@ describe("Spotlight Dialog", () => {
 
         render(<SpotlightDialog initialFilter={Filter.People} initialText="Beta" onFinished={() => null} />);
         // search is debounced
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         await waitFor(() => {
@@ -457,7 +460,7 @@ describe("Spotlight Dialog", () => {
     });
 
     it("show non-matching query members with DMs if they are present in the server search results", async () => {
-        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+        vi.mocked(mockedClient.searchUserDirectory).mockResolvedValue({
             results: [
                 { user_id: testDMUserId, display_name: "Alice Wonder", avatar_url: "mxc://1/avatar" },
                 { user_id: "@bob:matrix.org", display_name: "Bob Wonder", avatar_url: "mxc://2/avatar" },
@@ -468,7 +471,7 @@ describe("Spotlight Dialog", () => {
             <SpotlightDialog initialFilter={Filter.People} initialText="Something Wonder" onFinished={() => null} />,
         );
         // search is debounced
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         await waitFor(() => {
@@ -485,14 +488,14 @@ describe("Spotlight Dialog", () => {
             { user_id: "@user2:server", display_name: "User Beta", avatar_url: "mxc://2/avatar" },
             { user_id: "@user1:server", display_name: "User Alpha", avatar_url: "mxc://1/avatar" },
         ];
-        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+        vi.mocked(mockedClient.searchUserDirectory).mockResolvedValue({
             results: serverList,
             limited: false,
         });
 
         render(<SpotlightDialog initialFilter={Filter.People} initialText="User" onFinished={() => null} />);
         // search is debounced
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         await waitFor(() => {
@@ -513,16 +516,18 @@ describe("Spotlight Dialog", () => {
             />,
         );
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
+        let options: NodeListOf<Element> | undefined;
         await waitFor(() => {
-            const options = document.querySelectorAll("li.mx_SpotlightDialog_option");
+            options = document.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBeGreaterThanOrEqual(1);
             expect(options[0]!.innerHTML).toContain(testPerson.display_name);
-            fireEvent.click(options[0]!);
-            expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
         });
+
+        fireEvent.click(options![0]!);
+        expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
     });
 
     it("should pass via of the server being explored when joining room from directory", async () => {
@@ -535,25 +540,28 @@ describe("Spotlight Dialog", () => {
 
         render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
+        let options: NodeListOf<Element> | undefined;
         await waitFor(() => {
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            options = content.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
-            expect(options[0].innerHTML).toContain(testPublicRoom.name);
-
-            fireEvent.click(options[0].querySelector("[role='button']")!);
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledTimes(1);
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    action: "view_room",
-                    room_id: testPublicRoom.room_id,
-                    via_servers: ["example.tld"],
-                }),
-            );
+            expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
         });
+
+        vi.mocked(defaultDispatcher.dispatch).mockClear();
+
+        fireEvent.click(options![0]!.querySelector("[role='button']")!);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledTimes(1);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: "view_room",
+                room_id: testPublicRoom.room_id,
+                via_servers: ["example.tld"],
+            }),
+        );
     });
 
     describe("nsfw public rooms filter", () => {
@@ -593,13 +601,13 @@ describe("Spotlight Dialog", () => {
             render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             await waitFor(() => {
                 expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
                 expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
-                expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
+                expect(screen.queryByText(nsfwNameRoom.name!)).not.toBeInTheDocument();
             });
         });
 
@@ -608,7 +616,7 @@ describe("Spotlight Dialog", () => {
             render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
             // search is debounced
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             await waitFor(() => {
@@ -620,10 +628,10 @@ describe("Spotlight Dialog", () => {
     });
 
     it("should show error if /publicRooms API failed", async () => {
-        mocked(mockedClient.publicRooms).mockRejectedValue(new ConnectionError("Failed to fetch"));
+        vi.mocked(mockedClient.publicRooms).mockRejectedValue(new ConnectionError("Failed to fetch"));
         render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         await waitFor(() => expect(screen.getByText("Failed to query public rooms")).toBeInTheDocument());
@@ -657,7 +665,7 @@ describe("Spotlight Dialog", () => {
                 render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
 
                 // search is debounced
-                jest.advanceTimersByTime(200);
+                vi.advanceTimersByTime(200);
                 await flushPromisesWithFakeTimers();
 
                 fireEvent.click(await screen.findByRole("button", { name: "View" }));
@@ -675,11 +683,12 @@ describe("Spotlight Dialog", () => {
         describe("when enabling feature", () => {
             beforeEach(async () => {
                 await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, true);
-                jest.spyOn(mockedClient, "getRoom").mockReturnValue(null);
+                vi.spyOn(mockedClient, "getRoom").mockReturnValue(null);
 
                 render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
 
-                await waitFor(() => fireEvent.click(screen.getByRole("button", { name: "Ask to join" })));
+                await waitFor(() => expect(screen.getByRole("button", { name: "Ask to join" })).toBeInTheDocument());
+                fireEvent.click(screen.getByRole("button", { name: "Ask to join" }));
             });
 
             it("should skip to auto join", async () => {
@@ -693,9 +702,9 @@ describe("Spotlight Dialog", () => {
     });
 
     it("should allow jumping into message search", async () => {
-        const onFinished = jest.fn();
+        const onFinished = vi.fn();
         render(<SpotlightDialog initialText="search term" onFinished={onFinished} />);
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
         fireEvent.click(screen.getByText("Messages"));
@@ -711,7 +720,7 @@ describe("Spotlight Dialog", () => {
     describe("keyboard prompt filter and query checks", () => {
         it("should show left and right arrow keys in keyboard hint when filter is null and no query", async () => {
             render(<SpotlightDialog onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
@@ -722,7 +731,7 @@ describe("Spotlight Dialog", () => {
 
         it("should not show left and right arrow keys in keyboard hint when filter is set", async () => {
             render(<SpotlightDialog initialFilter={Filter.People} onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
@@ -733,7 +742,7 @@ describe("Spotlight Dialog", () => {
 
         it("should not show left and right arrow keys in keyboard hint when query is present", async () => {
             render(<SpotlightDialog initialText="test query" onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
@@ -745,14 +754,15 @@ describe("Spotlight Dialog", () => {
 
     describe("metaspaces", () => {
         beforeEach(() => {
-            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
+            vi.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
                 MetaSpace.Home,
                 MetaSpace.Orphans,
             ]);
+            vi.spyOn(mockedClient, "isVersionSupported").mockImplementation(() => new Promise(() => {}));
         });
 
         it("should show Home metaspace", async () => {
-            const onFinished = jest.fn();
+            const onFinished = vi.fn();
             const { asFragment, container } = render(
                 <SpotlightDialog initialText={MetaSpace.Home.split("-")[0]} onFinished={onFinished} />,
             );

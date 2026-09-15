@@ -6,19 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "jest-matrix-react";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { render } from "test-utils-rtl";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-import AddExistingToSpaceDialog from "../../../../../src/components/views/dialogs/AddExistingToSpaceDialog";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { mkRoom, mkSpace, stubClient } from "../../../../test-utils";
+import { mkRoom, mkSpace, stubClient } from "test-utils";
+import AddExistingToSpaceDialog from "./AddExistingToSpaceDialog";
+import SettingsStore from "../../../settings/SettingsStore";
+import DMRoomMap from "../../../utils/DMRoomMap";
 
 describe("<AddExistingToSpaceDialog />", () => {
     beforeEach(() => {
-        jest.spyOn(Element.prototype, "clientHeight", "get").mockReturnValue(600);
+        vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
     });
 
     it("looks as expected", () => {
@@ -35,7 +37,7 @@ describe("<AddExistingToSpaceDialog />", () => {
 
     it("should not show 'no results' if we have results to show", () => {
         const client = stubClient();
-        mocked(client.getVisibleRooms).mockReturnValue([
+        vi.mocked(client.getVisibleRooms).mockReturnValue([
             mkSpace(client, "!space2:example.com"),
             mkRoom(client, "!room2:example.com"),
         ]);
@@ -46,12 +48,12 @@ describe("<AddExistingToSpaceDialog />", () => {
 
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
-            mocked(client.getVisibleRooms).mockClear();
+            vi.mocked(client.getVisibleRooms).mockClear();
             renderAddExistingToSpaceDialog(client);
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
@@ -60,14 +62,14 @@ describe("<AddExistingToSpaceDialog />", () => {
     describe("If the feature_dynamic_room_predecessors is enabled", () => {
         beforeEach(() => {
             // Turn on feature_dynamic_room_predecessors setting
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
-            mocked(client.getVisibleRooms).mockClear();
+            vi.mocked(client.getVisibleRooms).mockClear();
             renderAddExistingToSpaceDialog(client);
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
@@ -76,14 +78,14 @@ describe("<AddExistingToSpaceDialog />", () => {
 
 function renderAddExistingToSpaceDialog(client: MatrixClient) {
     const dmRoomMap = new DMRoomMap(client);
-    jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+    vi.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
     const space = mkSpace(client, "!spaceid:example.com");
     const dialog = render(
         <AddExistingToSpaceDialog
             space={space}
-            onCreateRoomClick={jest.fn()}
-            onAddSubspaceClick={jest.fn()}
-            onFinished={jest.fn()}
+            onCreateRoomClick={vi.fn()}
+            onAddSubspaceClick={vi.fn()}
+            onFinished={vi.fn()}
         />,
     );
     return dialog;

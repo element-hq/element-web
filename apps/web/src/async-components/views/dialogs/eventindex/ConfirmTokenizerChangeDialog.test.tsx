@@ -6,22 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "jest-matrix-react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { render, screen } from "test-utils-rtl";
+import { flushPromises } from "test-utils";
 
-import ConfirmTokenizerChangeDialog from "../../../../../src/async-components/views/dialogs/eventindex/ConfirmTokenizerChangeDialog";
-import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
-import { flushPromises } from "../../../../test-utils";
+import ConfirmTokenizerChangeDialog from "./ConfirmTokenizerChangeDialog";
+import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 
 describe("<ConfirmTokenizerChangeDialog />", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("deletes the event index and finishes when confirmed", async () => {
-        const onFinished = jest.fn();
-        jest.spyOn(EventIndexPeg, "deleteEventIndex").mockResolvedValue(undefined);
+        const onFinished = vi.fn();
+        vi.spyOn(EventIndexPeg, "deleteEventIndex").mockResolvedValue(undefined);
 
         render(<ConfirmTokenizerChangeDialog onFinished={onFinished} />);
 

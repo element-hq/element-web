@@ -5,19 +5,24 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
-import { fireEvent, render } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { IntegrationsDisabledDialog } from "../../../../../src/components/views/dialogs/IntegrationsDisabledDialog.tsx";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher.ts";
-import { Action } from "../../../../../src/dispatcher/actions.ts";
-import { UserTab } from "../../../../../src/components/views/dialogs/UserTab.ts";
+import React from "react";
+import { fireEvent, render } from "test-utils-rtl";
+import { describe, it, expect, vi, afterEach } from "vitest";
+
+import { IntegrationsDisabledDialog } from "./IntegrationsDisabledDialog";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "./UserTab";
+
+vi.mock("react-focus-lock");
 
 describe("<IntegrationsDisabledDialog />", () => {
-    const onFinished = jest.fn();
+    const onFinished = vi.fn();
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     function renderComponent() {
@@ -34,7 +39,7 @@ describe("<IntegrationsDisabledDialog />", () => {
         expect(onFinished).toHaveBeenCalled();
     });
     it("should open the correct user settings tab on clicking Settings", () => {
-        jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const { getByText } = renderComponent();
         fireEvent.click(getByText("Settings"));
         expect(onFinished).toHaveBeenCalled();

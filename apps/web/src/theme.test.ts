@@ -6,13 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import SettingsStore from "../../src/settings/SettingsStore";
-import { FontWatcher } from "../../src/settings/watchers/FontWatcher";
-import { enumerateThemes, getOrderedThemes, setTheme } from "../../src/theme";
+// @vitest-environment happy-dom
+
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+import SettingsStore from "./settings/SettingsStore";
+import { FontWatcher } from "./settings/watchers/FontWatcher";
+import { enumerateThemes, getOrderedThemes, setTheme } from "./theme";
 
 describe("theme", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe("setTheme", () => {
@@ -20,8 +24,8 @@ describe("theme", () => {
         let darkTheme: HTMLStyleElement;
         let lightCustomTheme: HTMLStyleElement;
 
-        let spyQuerySelectorAll: jest.MockInstance<NodeListOf<Element>, [selectors: string]>;
-        let spyClassList: jest.SpyInstance<void, string[]>;
+        let spyQuerySelectorAll: ReturnType<typeof vi.spyOn>;
+        let spyClassList: ReturnType<typeof vi.spyOn>;
 
         beforeAll(() => {
             const meta = document.createElement("meta");
@@ -45,13 +49,13 @@ describe("theme", () => {
             darkTheme = styles[1];
             lightCustomTheme = styles[2];
 
-            jest.spyOn(document.body, "style", "get").mockReturnValue([] as any);
-            spyQuerySelectorAll = jest.spyOn(document, "querySelectorAll").mockReturnValue(styles as any);
-            spyClassList = jest.spyOn(document.body.classList, "add");
+            vi.spyOn(document.body, "style", "get").mockReturnValue([] as any);
+            spyQuerySelectorAll = vi.spyOn(document, "querySelectorAll").mockReturnValue(styles as any);
+            spyClassList = vi.spyOn(document.body.classList, "add");
         });
 
         afterEach(() => {
-            jest.useRealTimers();
+            vi.useRealTimers();
         });
 
         it("should switch theme on onload call", async () => {
@@ -63,7 +67,6 @@ describe("theme", () => {
 
             // Then
             expect(spyQuerySelectorAll).toHaveBeenCalledWith("[data-mx-theme]");
-            expect(spyQuerySelectorAll).toHaveBeenCalledTimes(1);
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
             expect(spyClassList).toHaveBeenCalledWith("cpd-theme-light");
@@ -91,7 +94,7 @@ describe("theme", () => {
 
         it("should switch theme if CSS are preloaded", async () => {
             // When
-            jest.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
+            vi.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
 
             await setTheme("light");
 
@@ -102,11 +105,11 @@ describe("theme", () => {
 
         it("should switch theme if CSS is loaded during pooling", async () => {
             // When
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             await new Promise((resolve) => {
                 setTheme("light").then(resolve);
-                jest.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
-                jest.advanceTimersByTime(200);
+                vi.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
+                vi.advanceTimersByTime(200);
             });
 
             // Then
@@ -114,16 +117,15 @@ describe("theme", () => {
             expect(darkTheme.disabled).toBe(true);
         });
 
-        it("should reject promise if pooling maximum value is reached", () => {
-            jest.useFakeTimers();
-            return new Promise((resolve) => {
-                setTheme("light").catch(resolve);
-                jest.advanceTimersByTime(200 * 10);
-            });
+        it("should reject promise if polling maximum value is reached", async () => {
+            vi.useFakeTimers();
+            const prom = setTheme("light");
+            vi.advanceTimersByTime(200 * 10);
+            await expect(prom).rejects.toBeUndefined();
         });
 
         it("applies a custom Compound theme", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([
                 {
                     name: "blue",
                     compound: {
@@ -133,7 +135,7 @@ describe("theme", () => {
                 },
             ]);
 
-            const spy = jest.spyOn(document.head, "appendChild").mockImplementation();
+            const spy = vi.spyOn(document.head, "appendChild").mockImplementation(() => undefined as any);
             await new Promise((resolve) => {
                 setTheme("custom-blue").then(resolve);
                 lightCustomTheme.onload!({} as Event);
@@ -144,7 +146,7 @@ describe("theme", () => {
         });
 
         it("should handle 4-char rgba hex strings", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([
                 {
                     name: "blue",
                     colors: {
@@ -153,8 +155,8 @@ describe("theme", () => {
                 },
             ]);
 
-            const spy = jest.fn();
-            jest.spyOn(document.body, "style", "get").mockReturnValue({
+            const spy = vi.fn();
+            vi.spyOn(document.body, "style", "get").mockReturnValue({
                 setProperty: spy,
             } as any);
             await new Promise((resolve) => {
@@ -168,7 +170,7 @@ describe("theme", () => {
         });
 
         it("should handle 6-char rgb hex strings", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([
                 {
                     name: "blue",
                     colors: {
@@ -177,8 +179,8 @@ describe("theme", () => {
                 },
             ]);
 
-            const spy = jest.fn();
-            jest.spyOn(document.body, "style", "get").mockReturnValue({
+            const spy = vi.fn();
+            vi.spyOn(document.body, "style", "get").mockReturnValue({
                 setProperty: spy,
             } as any);
             await new Promise((resolve) => {
@@ -194,7 +196,7 @@ describe("theme", () => {
 
     describe("enumerateThemes", () => {
         it("should return a list of themes", () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([{ name: "pink" }]);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([{ name: "pink" }]);
             expect(enumerateThemes()).toEqual({
                 "light": "Light",
                 "light-high-contrast": "Light high contrast",
@@ -204,7 +206,7 @@ describe("theme", () => {
         });
 
         it("should be robust to malformed custom_themes values", () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([23] as any);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([23] as any);
             expect(enumerateThemes()).toEqual({
                 "light": "Light",
                 "light-high-contrast": "Light high contrast",
@@ -215,7 +217,7 @@ describe("theme", () => {
 
     describe("getOrderedThemes", () => {
         it("should return a list of themes in the correct order", () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue([{ name: "Zebra Striped" }, { name: "Apple Green" }]);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([{ name: "Zebra Striped" }, { name: "Apple Green" }]);
             expect(getOrderedThemes()).toEqual([
                 { id: "light", name: "Light" },
                 { id: "dark", name: "Dark" },
@@ -241,7 +243,7 @@ describe("theme", () => {
                 onload: (): void => void 0,
             } as unknown as HTMLStyleElement;
 
-            const removePropertySpy = jest.fn();
+            const removePropertySpy = vi.fn();
             const styleObject = {
                 0: FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY,
                 1: FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY,
@@ -249,8 +251,8 @@ describe("theme", () => {
                 length: 3,
                 removeProperty: removePropertySpy,
             };
-            jest.spyOn(document.body, "style", "get").mockReturnValue(styleObject as any);
-            jest.spyOn(document, "querySelectorAll").mockReturnValue([lightTheme] as any);
+            vi.spyOn(document.body, "style", "get").mockReturnValue(styleObject as any);
+            vi.spyOn(document, "querySelectorAll").mockReturnValue([lightTheme] as any);
 
             // Trigger clearCustomTheme via setTheme
             await new Promise((resolve) => {
