@@ -46,7 +46,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await submitShareLocation(page);
 
-            await page.getByRole("button", { name: "Map marker" }).click();
+            await page.getByLabel("Expand map").click();
 
             const dialog = page.getByRole("dialog");
 
