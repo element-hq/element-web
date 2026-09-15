@@ -145,6 +145,7 @@ function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
                 entryIcon: (
                     // Sites without a thumbnail fall back to their initial on a decorative
                     // background, picked by `data-color` - see the module CSS.
+                    // oxlint-disable-next-line react/hooks
                     <div className={styles.entryIcon} data-color={thumbnail ? undefined : idColorHash(hostname)}>
                         {thumbnail || hostNameFirstChar(hostname)}
                     </div>
@@ -284,6 +285,7 @@ export function MessageComposerUrlPreviewView({
                                     );
                                 } else {
                                     icon = <>{hostNameFirstChar(hostname)}</>;
+                                    // oxlint-disable-next-line react/hooks
                                     colorHash = idColorHash(hostname);
                                 }
                             }

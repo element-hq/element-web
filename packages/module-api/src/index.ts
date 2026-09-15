@@ -23,8 +23,6 @@ export type * from "./models/url-preview";
 export type * from "./api/composer";
 export type * from "./api/custom-components";
 export type * from "./api/extras";
-export type * from "./api/legacy-modules";
-export type * from "./api/legacy-customisations";
 export type * from "./api/auth";
 export type * from "./api/dialog";
 export type * from "./api/profile";
