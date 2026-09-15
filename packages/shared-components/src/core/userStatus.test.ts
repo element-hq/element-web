@@ -1,5 +1,5 @@
 /*
-Copyright 2026 Element Creations Ltd.
+Copyright 2026 Mohd Quamar Tyagi
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import { formatUserStatusTextForDisplay, limitUserStatusInputText } from "./userStatus";
+import { limitUserStatusInputText } from "./userStatus";
 
-describe("user status text limits", () => {
+describe("limitUserStatusInputText", () => {
     const family = "👨‍👩‍👧‍👦";
     const grin = "😀";
 
@@ -35,11 +35,5 @@ describe("user status text limits", () => {
         expect(limitUserStatusInputText(family.repeat(30))).toBe(family.repeat(10));
         expect(new TextEncoder().encode(family.repeat(10)).length).toBeLessThanOrEqual(256);
         expect(new TextEncoder().encode(family.repeat(11)).length).toBeGreaterThan(256);
-    });
-
-    it("adds an ellipsis only when received text exceeds 30 graphemes", () => {
-        expect(formatUserStatusTextForDisplay("a".repeat(30))).toBe("a".repeat(30));
-        expect(formatUserStatusTextForDisplay("a".repeat(31))).toBe(`${"a".repeat(30)}…`);
-        expect(formatUserStatusTextForDisplay(`${"a".repeat(29)}${family}x`)).toBe(`${"a".repeat(29)}${family}…`);
     });
 });

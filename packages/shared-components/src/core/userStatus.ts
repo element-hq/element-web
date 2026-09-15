@@ -29,54 +29,27 @@ const MAX_USER_STATUS_GRAPHEMES = 30;
 /**
  * MSC4426 protocol maximum for the `text` field, in UTF-8 bytes.
  */
-export const MAX_USER_STATUS_TEXT_BYTES = 256;
+const MAX_USER_STATUS_TEXT_BYTES = 256;
 
 const graphemeSegmenter = new Intl.Segmenter();
 const textEncoder = new TextEncoder();
-
-function truncateToGraphemes(text: string, maxGraphemes: number): { text: string; truncated: boolean } {
-    let count = 0;
-    for (const { index } of graphemeSegmenter.segment(text)) {
-        if (count === maxGraphemes) {
-            return { text: text.slice(0, index), truncated: true };
-        }
-        count++;
-    }
-    return { text, truncated: false };
-}
-
-function truncateToUtf8BytesOnGraphemeBoundary(text: string, maxBytes: number): string {
-    if (textEncoder.encode(text).length <= maxBytes) {
-        return text;
-    }
-
-    let end = 0;
-    let usedBytes = 0;
-    for (const { segment, index } of graphemeSegmenter.segment(text)) {
-        const nextBytes = usedBytes + textEncoder.encode(segment).length;
-        if (nextBytes > maxBytes) {
-            return text.slice(0, end);
-        }
-        usedBytes = nextBytes;
-        end = index + segment.length;
-    }
-    return text;
-}
 
 /**
  * Limits composed status text to the UI grapheme guideline without exceeding the
  * protocol UTF-8 byte cap. Truncation always keeps complete grapheme clusters.
  */
 export function limitUserStatusInputText(text: string): string {
-    const { text: graphemeLimited } = truncateToGraphemes(text, MAX_USER_STATUS_GRAPHEMES);
-    return truncateToUtf8BytesOnGraphemeBoundary(graphemeLimited, MAX_USER_STATUS_TEXT_BYTES);
-}
-
-/**
- * Formats received status text for display: at most 30 graphemes, with an ellipsis
- * appended when the original value was longer. An exact-length value is unchanged.
- */
-export function formatUserStatusTextForDisplay(text: string): string {
-    const { text: limited, truncated } = truncateToGraphemes(text, MAX_USER_STATUS_GRAPHEMES);
-    return truncated ? `${limited}…` : limited;
+    let graphemes = 0;
+    let usedBytes = 0;
+    let end = 0;
+    for (const { segment, index } of graphemeSegmenter.segment(text)) {
+        const nextBytes = usedBytes + textEncoder.encode(segment).length;
+        if (graphemes === MAX_USER_STATUS_GRAPHEMES || nextBytes > MAX_USER_STATUS_TEXT_BYTES) {
+            return text.slice(0, end);
+        }
+        graphemes++;
+        usedBytes = nextBytes;
+        end = index + segment.length;
+    }
+    return text;
 }

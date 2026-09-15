@@ -124,6 +124,21 @@ describe("CustomStatusView", () => {
         expect(onSave).toHaveBeenCalledWith({ emoji: "😄", text: `${"a".repeat(29)}${family}` });
     });
 
+    it("stops before exceeding the 256-byte protocol cap without splitting a grapheme", async () => {
+        const family = "👨‍👩‍👧‍👦";
+        // Each family emoji is 25 UTF-8 bytes, so 10 fit in 256 bytes and 11 do not.
+        expect(new TextEncoder().encode(family).length).toBe(25);
+
+        render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} />);
+        const input = screen.getByRole("textbox");
+        await userEvent.click(input);
+        await userEvent.paste(family.repeat(30));
+
+        expect(input).toHaveValue(family.repeat(10));
+        expect(new TextEncoder().encode(family.repeat(10)).length).toBeLessThanOrEqual(256);
+        expect(new TextEncoder().encode(family.repeat(11)).length).toBeGreaterThan(256);
+    });
+
     it("lets the user pick an emoji from the picker popover", async () => {
         const onSave = vi.fn();
         render(<CustomStatusView onSave={onSave} onCancel={vi.fn()} />);
