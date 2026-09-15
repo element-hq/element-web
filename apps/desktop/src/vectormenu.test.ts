@@ -47,6 +47,18 @@ describe("buildMenuTemplate", () => {
             expect(menu.items[0].label).toBe("ChatApp");
         });
 
+        it("should bind zooming in to the unshifted key as well as the shifted one", () => {
+            const menu = buildMenuTemplate();
+
+            const viewMenu = menu.items.find((item) => item.label === "view_menu|view")!;
+            const viewSubmenu = viewMenu.submenu as unknown as MenuItemConstructorOptions[];
+            const zoomInAccelerators = viewSubmenu
+                .filter((item) => item.role === "zoomIn")
+                .map((item) => item.accelerator);
+
+            expect(zoomInAccelerators).toContain("CmdOrCtrl+=");
+        });
+
         it("should include expected `help` menu", () => {
             const menu = buildMenuTemplate();
 
