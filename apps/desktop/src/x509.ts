@@ -259,10 +259,13 @@ async function getModuleInstance(): Promise<X509Result<Graphene.Module>> {
 }
 
 /**
- * Drops the PKCS#11 module and loads it again.
+ * Finalises the PKCS#11 module and initialises it again, so that later calls to `getModuleInstance`
+ * reflect the keys inserted since the module was loaded. The existing module instance and all open
+ * sessions are dropped, so any key that was logged in must be logged into again.
  *
- * Some modules have a habit of caching hardware keys when we call `finalize`, meaning we need to
- * completely reload them to identify newly inserted keys. Most infuriating!
+ * Some libraries only enumerate readers on initialisation (including Yubikey's libykcs11) and never
+ * refresh the list afterwards, forcing us to reload the module to see new keys. Most infuriating!
+ *
  */
 async function reloadModule(): Promise<void> {
     for (const serialNumber of Object.keys(sessions)) {
