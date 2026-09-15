@@ -30,6 +30,8 @@ import { getMockClientWithEventEmitter, mockPlatformPeg } from "test-utils";
 
 import {
     DeviceListener,
+    CurrentDeviceEvents,
+    type DeviceState,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
     RECOVERY_ACCOUNT_DATA_KEY,
@@ -373,6 +375,41 @@ describe("DeviceListener", () => {
             });
             await createAndStart();
             expect(console.error).toHaveBeenCalledTimes(1);
+        });
+
+        it("does not let an older recheck's verdict overwrite a newer one", async () => {
+            // Given the device is not verified, and the recheck that notices that is held up on its
+            // last step - waiting for our own device keys - before it writes the state, as in the app.
+            mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+            mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({ trustCrossSignedDevices: true, crossSigningVerified: false }),
+            );
+            const deviceInfo = Promise.withResolvers<Map<string, Map<string, Device>>>();
+            mockCrypto!.getUserDeviceInfo.mockReturnValue(deviceInfo.promise);
+
+            const instance = await createAndStart();
+            const states: DeviceState[] = [];
+            instance.currentDeviceChangedEmitter.on(CurrentDeviceEvents.DeviceStateChanged, (state) =>
+                states.push(state),
+            );
+
+            // When the device becomes verified while that recheck is still in flight, and something
+            // asks for another recheck
+            mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({ trustCrossSignedDevices: true, crossSigningVerified: true }),
+            );
+            mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+            mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+            instance.recheck();
+            await flushPromises();
+
+            // ... and the older recheck is finally allowed to write its now-stale verdict
+            deviceInfo.resolve(new Map());
+            await flushPromises();
+
+            // Then we end up in the state the newer recheck found, not the one the older one found
+            expect(states).toEqual(["verify_this_session", "ok"]);
+            expect(instance.getDeviceState()).toBe("ok");
         });
 
         describe("set up encryption", () => {
