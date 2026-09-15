@@ -78,20 +78,8 @@ jobs:
         environment: ${{ inputs.sign && 'Desktop eSigner' || '' }}
         env:
             SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
+            BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
         steps:
-            - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
-              id: config
-              with:
-                  key: "${{ inputs.arch }}"
-                  export_to: output
-                  map: |
-                      {
-                        "x64": {},
-                        "arm64": {
-                          "build-args": "--arm64"
-                        }
-                      }
-
             # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
             - name: Configure git line endings
               run: |
@@ -131,21 +119,6 @@ jobs:
             - name: Install Deps
               working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile --filter element-desktop"
-
-            - name: Insert config snippet
-              if: steps.config.outputs.extra_config != ''
-              working-directory: apps/desktop
-              shell: bash
-              run: |
-                  mkdir config-edit
-                  pnpm asar extract webapp.asar config-edit
-                  cd config-edit
-                  mv config.json old-config.json
-                  echo '${{ steps.config.outputs.extra_config }}' | jq -s '.[0] * .[1]' old-config.json - > config.json
-                  rm old-config.json
-                  cd ..
-                  rm webapp.asar
-                  pnpm asar pack config-edit/ webapp.asar
 
             - name: Install and configure eSigner CKA
               run: |
@@ -204,7 +177,6 @@ jobs:
                   # We just give the installer a static name, so you'll just see this in the 'about' dialog.
                   # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
-                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
                   TARGETS: ${{ inputs.targets }}
 
             - name: Trust eSigner sandbox cert

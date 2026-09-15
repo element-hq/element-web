@@ -8,13 +8,9 @@ FROM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100
 
 FROM rust:bookworm@sha256:9a73a5088750b4c95158ab26629c854c3d6fc4b173cb7bc8079ad252d8ed7bfa
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
 
-RUN apt-get -qq update && apt-get -y -qq dist-upgrade && \
-  apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
 RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
 
 ENV DEBUG_COLORS=true
