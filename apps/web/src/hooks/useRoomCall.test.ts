@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 import { renderHook, waitFor } from "test-utils-rtl";
 import {
     createStubMatrixRTC,
@@ -42,7 +42,6 @@ describe("useRoomCall", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
         matrixRTC,
-        sendStateEvent: vi.fn().mockResolvedValue({ event_id: "$event" }),
         _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,
     });
@@ -78,7 +77,6 @@ describe("useRoomCall", () => {
 
     afterEach(() => {
         vi.restoreAllMocks();
-        vi.mocked(client.sendStateEvent).mockClear();
         vi.mocked(placeCall).mockClear();
     });
 
@@ -223,151 +221,114 @@ describe("useRoomCall", () => {
             expect(result.current.videoCallDisabledReason).toBeNull();
         });
 
-        it("reopens closed slot before placing Element call if user is allowed to start", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-            vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
-            vi.mocked(matrixRTC.getRoomSession).mockReturnValue({
-                slotId: "m.call#ROOM",
-                getRtcSlot: vi.fn().mockReturnValue({ status: "closed", application: { type: "m.call" } }),
-            } as unknown as ReturnType<typeof matrixRTC.getRoomSession>);
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+        describe("ensuring the slot is open", () => {
+            let session: { ensureRtcSlotOpen: Mock };
 
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).toHaveBeenCalledWith(
-                room.roomId,
-                EventType.RTCSlot,
-                { status: "open", application: { type: "m.call" } },
-                "m.call#ROOM",
-            );
-            expect(placeCall).toHaveBeenCalled();
-        });
-
-        it("creates missing slot before placing Element call if user is allowed to start", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-            vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
-            vi.mocked(matrixRTC.getRoomSession).mockReturnValue({
-                slotId: "m.call#ROOM",
-                slotDescription: { application: "m.call", id: "ROOM" },
-                getRtcSlot: vi.fn().mockReturnValue(undefined),
-            } as unknown as ReturnType<typeof matrixRTC.getRoomSession>);
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).toHaveBeenCalledWith(
-                room.roomId,
-                EventType.RTCSlot,
-                { status: "open", application: { type: "m.call" } },
-                "m.call#ROOM",
-            );
-            expect(placeCall).toHaveBeenCalled();
-        });
-
-        it("declares per-member encryption when creating slot in encrypted room", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-            vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-            vi.mocked(matrixRTC.getRoomSession).mockReturnValue({
-                slotId: "m.call#ROOM",
-                slotDescription: { application: "m.call", id: "ROOM" },
-                getRtcSlot: vi.fn().mockReturnValue(undefined),
-            } as unknown as ReturnType<typeof matrixRTC.getRoomSession>);
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).toHaveBeenCalledWith(
-                room.roomId,
-                EventType.RTCSlot,
-                {
-                    status: "open",
-                    application: { type: "m.call" },
-                    encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
-                },
-                "m.call#ROOM",
-            );
-        });
-
-        it("does not override already-declared encryption setting when reopening closed slot", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-            vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
-            vi.mocked(matrixRTC.getRoomSession).mockReturnValue({
-                slotId: "m.call#ROOM",
-                slotDescription: { application: "m.call", id: "ROOM" },
-                getRtcSlot: vi.fn().mockReturnValue({
-                    status: "closed",
-                    application: { type: "m.call" },
-                    encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
-                }),
-            } as unknown as ReturnType<typeof matrixRTC.getRoomSession>);
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).toHaveBeenCalledWith(
-                room.roomId,
-                EventType.RTCSlot,
-                {
-                    status: "open",
-                    application: { type: "m.call" },
-                    encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
-                },
-                "m.call#ROOM",
-            );
-        });
-
-        it("does not attempt to create slot for user without permissions", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockImplementation(
-                (eventType) => eventType !== EventType.RTCSlot,
-            );
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).not.toHaveBeenCalled();
-            expect(placeCall).toHaveBeenCalled();
-        });
-
-        it("does not touch slot when placing call while slot is open", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(false);
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-            expect(client.sendStateEvent).not.toHaveBeenCalled();
-            expect(placeCall).toHaveBeenCalled();
-        });
-
-        it("shows error and does not place call if opening slot fails", async () => {
-            vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
-            vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-            vi.mocked(matrixRTC.getRoomSession).mockReturnValue({
-                slotId: "m.call#ROOM",
-                getRtcSlot: vi.fn().mockReturnValue({ status: "closed", application: { type: "m.call" } }),
-            } as unknown as ReturnType<typeof matrixRTC.getRoomSession>);
-            vi.mocked(client.sendStateEvent).mockRejectedValue(new Error("M_FORBIDDEN"));
-            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: Promise.resolve([true]),
-                close: vi.fn(),
+            beforeEach(() => {
+                session = { ensureRtcSlotOpen: vi.fn().mockResolvedValue(undefined) };
+                vi.mocked(matrixRTC.getRoomSession).mockReturnValue(
+                    session as unknown as ReturnType<typeof matrixRTC.getRoomSession>,
+                );
             });
-            const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
 
-            await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+            afterEach(() => {
+                SettingsStore.setValue("feature_disable_call_per_sender_encryption", null, SettingLevel.DEVICE, false);
+            });
 
-            expect(createDialog).toHaveBeenCalled();
-            expect(placeCall).not.toHaveBeenCalled();
+            it("reopens closed slot before placing Element call if user is allowed to start", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined });
+                expect(placeCall).toHaveBeenCalled();
+            });
+
+            it("creates missing slot before placing Element call if user is allowed to start", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined });
+                expect(placeCall).toHaveBeenCalled();
+            });
+
+            it("declares per-member encryption when opening slot in encrypted room", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({
+                    encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
+                });
+            });
+
+            it("does not declare per-member encryption when per-sender encryption is disabled", async () => {
+                SettingsStore.setValue("feature_disable_call_per_sender_encryption", null, SettingLevel.DEVICE, true);
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined });
+            });
+
+            it("does not attempt to create slot for user without permissions", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockImplementation(
+                    (eventType) => eventType !== EventType.RTCSlot,
+                );
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).not.toHaveBeenCalled();
+                expect(placeCall).toHaveBeenCalled();
+            });
+
+            it("does not touch slot when placing call while slot is open", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(false);
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(session.ensureRtcSlotOpen).not.toHaveBeenCalled();
+                expect(placeCall).toHaveBeenCalled();
+            });
+
+            it("shows error and does not place call if opening slot fails", async () => {
+                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
+                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+                session.ensureRtcSlotOpen.mockRejectedValue(new Error("M_FORBIDDEN"));
+                const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({
+                    finished: Promise.resolve([true]),
+                    close: vi.fn(),
+                });
+                const { result } = render();
+                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
+
+                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
+
+                expect(createDialog).toHaveBeenCalled();
+                expect(placeCall).not.toHaveBeenCalled();
+            });
         });
     });
 });
