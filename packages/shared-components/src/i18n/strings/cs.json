@@ -55,7 +55,6 @@
         "user_menu": {
             "create_an_account": "Vytvořit účet",
             "got_an_account": "Máte účet?",
-            "manage_account": "Spravovat účet",
             "sign_in": "Přihlásit se",
             "title": "Uživatelská nabídka"
         }

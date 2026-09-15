@@ -68,7 +68,7 @@
             "refresh": "重新下载主题",
             "url_label": "自定义主题URL"
         },
-        "toggle_event": "事件源"
+        "toggle_event": "事件源码"
     },
     "emoji": {
         "categories": "类别",
@@ -96,7 +96,6 @@
             "clear_status": "清除状态",
             "create_an_account": "创建账户",
             "got_an_account": "已有账户？",
-            "manage_account": "管理账户",
             "sign_in": "登录",
             "title": "用户菜单"
         }
@@ -108,6 +107,12 @@
         "mentions_keywords": "提及与关键词",
         "message_didnt_send": "消息未能发送。点选以获取信息。",
         "mute_room": "静默房间"
+    },
+    "pdf_viewer": {
+        "error_load": "无法加载 PDF。",
+        "loading": "正在加载 PDF…",
+        "page_label": "第 %(page)s 页，共 %(total)s 页",
+        "page_number": "页码"
     },
     "release_announcement": {
         "room_list_section_close": "确定",
