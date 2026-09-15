@@ -25,6 +25,7 @@ import {
     PushRuleKind,
     type IThreepid,
     ThreepidMedium,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import {
@@ -109,6 +110,76 @@ const bananaRule = {
     enabled: true,
 } as IPushRule;
 
+// Legacy text-matching mention rules, removed from the spec in Matrix v1.17 (MSC4210).
+// Servers may or may not still serve them.
+const containsUserNameRule = {
+    actions: [
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Sound, value: "default" },
+        { set_tweak: TweakName.Highlight },
+    ],
+    pattern: "kadev1",
+    rule_id: ".m.rule.contains_user_name",
+    default: true,
+    enabled: true,
+} as IPushRule;
+const containsDisplayNameRule = {
+    conditions: [{ kind: "contains_display_name" }],
+    actions: [
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Sound, value: "default" },
+        { set_tweak: TweakName.Highlight },
+    ],
+    rule_id: ".m.rule.contains_display_name",
+    default: true,
+    enabled: true,
+} as IPushRule;
+const roomNotifRule = {
+    conditions: [
+        { kind: ConditionKind.EventMatch, key: "content.body", pattern: "@room" },
+        { kind: "sender_notification_permission", key: "room" },
+    ],
+    actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: true }],
+    rule_id: ".m.rule.roomnotif",
+    default: true,
+    enabled: true,
+} as IPushRule;
+const legacyMentionRuleIds: string[] = [
+    containsUserNameRule.rule_id,
+    containsDisplayNameRule.rule_id,
+    roomNotifRule.rule_id,
+];
+
+// Intentional mention rules (Matrix v1.7). While the server serves the legacy rules these are
+// their synced rules; once it does not, they take the legacy rules' place in the settings.
+const isUserMentionRule = {
+    conditions: [
+        {
+            kind: ConditionKind.EventPropertyContains,
+            key: "content.m\\.mentions.user_ids",
+            value: "@kadev1:matrix.org",
+        },
+    ],
+    actions: [
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Sound, value: "default" },
+        { set_tweak: TweakName.Highlight },
+    ],
+    rule_id: ".m.rule.is_user_mention",
+    default: true,
+    enabled: true,
+} as IPushRule;
+const isRoomMentionRule = {
+    conditions: [
+        { kind: ConditionKind.EventPropertyIs, key: "content.m\\.mentions.room", value: true },
+        { kind: ConditionKind.SenderNotificationPermission, key: "room" },
+    ],
+    actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight }],
+    rule_id: ".m.rule.is_room_mention",
+    default: true,
+    enabled: true,
+} as IPushRule;
+
 const pushRules: IPushRules = {
     global: {
         underride: [
@@ -148,20 +219,7 @@ const pushRules: IPushRules = {
                 enabled: true,
             },
         ],
-        content: [
-            bananaRule,
-            {
-                actions: [
-                    PushRuleActionName.Notify,
-                    { set_tweak: TweakName.Sound, value: "default" },
-                    { set_tweak: TweakName.Highlight },
-                ],
-                pattern: "kadev1",
-                rule_id: ".m.rule.contains_user_name",
-                default: true,
-                enabled: true,
-            },
-        ],
+        content: [bananaRule, containsUserNameRule],
         override: [
             {
                 conditions: [],
@@ -199,27 +257,10 @@ const pushRules: IPushRules = {
                 default: true,
                 enabled: true,
             },
-            {
-                conditions: [{ kind: "contains_display_name" }],
-                actions: [
-                    PushRuleActionName.Notify,
-                    { set_tweak: TweakName.Sound, value: "default" },
-                    { set_tweak: TweakName.Highlight },
-                ],
-                rule_id: ".m.rule.contains_display_name",
-                default: true,
-                enabled: true,
-            },
-            {
-                conditions: [
-                    { kind: ConditionKind.EventMatch, key: "content.body", pattern: "@room" },
-                    { kind: "sender_notification_permission", key: "room" },
-                ],
-                actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: true }],
-                rule_id: ".m.rule.roomnotif",
-                default: true,
-                enabled: true,
-            },
+            isUserMentionRule,
+            containsDisplayNameRule,
+            isRoomMentionRule,
+            roomNotifRule,
             {
                 conditions: [
                     { kind: ConditionKind.EventMatch, key: "type", pattern: "m.room.tombstone" },
@@ -795,6 +836,215 @@ describe("<Notifications />", () => {
                     pollEndOneToOne.rule_id,
                     expectedActions,
                 );
+            });
+        });
+
+        describe("mention rules", () => {
+            const section = "vector_mentions";
+            const updateError =
+                "An error occurred when updating your notification preferences. Please try to toggle your option again.";
+
+            const setPushRuleMock = (rules: IPushRules): void => {
+                mockClient.getPushRules.mockClear().mockResolvedValue(rules);
+                mockClient.pushRules = rules;
+            };
+
+            /**
+             * Replace rules in the fixture by rule id, and drop the given rule ids,
+             * as a server that no longer serves the legacy rules would.
+             */
+            const withRules = (replacements: IPushRule[] = [], dropRuleIds: string[] = []): IPushRules => {
+                const apply = (rules: IPushRule[] = []): IPushRule[] =>
+                    rules
+                        .filter((rule) => !dropRuleIds.includes(rule.rule_id))
+                        .map((rule) => replacements.find((r) => r.rule_id === rule.rule_id) ?? rule);
+                return {
+                    ...pushRules,
+                    global: {
+                        ...pushRules.global,
+                        content: apply(pushRules.global.content),
+                        override: apply(pushRules.global.override),
+                    },
+                };
+            };
+
+            beforeEach(() => {
+                mockClient.setPushRuleEnabled.mockReset().mockResolvedValue({});
+            });
+
+            it("renders the legacy mention rules while the server serves them", async () => {
+                await getComponentAndWait();
+
+                const mentionsSection = screen.getByTestId(`notif-section-${section}`);
+                // user name, @room, display name and keywords
+                expect(mentionsSection.querySelectorAll("fieldset")).toHaveLength(4);
+
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                expect(within(userNameElement).getByText("@mentions and replies")).toBeInTheDocument();
+                expect(userNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
+                expect(within(roomNotifElement).getByText("@room mentions")).toBeInTheDocument();
+                expect(roomNotifElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                const displayNameElement = screen.getByTestId(section + RuleId.ContainsDisplayName);
+                expect(within(displayNameElement).getByText("Messages containing my display name")).toBeInTheDocument();
+                expect(displayNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                // the intentional rules are synced rules of the legacy rows, not rows of their own
+                expect(screen.queryByTestId(section + RuleId.IsUserMention)).not.toBeInTheDocument();
+                expect(screen.queryByTestId(section + RuleId.IsRoomMention)).not.toBeInTheDocument();
+            });
+
+            it("shows the loudest state when a legacy rule and its intentional rule disagree", async () => {
+                // legacy rules off, intentional rules still loud
+                setPushRuleMock(
+                    withRules([
+                        { ...containsUserNameRule, enabled: false },
+                        { ...roomNotifRule, enabled: false },
+                    ]),
+                );
+                await getComponentAndWait();
+
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                expect(userNameElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
+                expect(roomNotifElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+            });
+
+            it("updates the intentional rules along with the legacy ones", async () => {
+                await getComponentAndWait();
+                const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                const roomNotifElement = screen.getByTestId(section + RuleId.AtRoomNotification);
+
+                fireEvent.click(userNameElement.querySelector('input[aria-label="On"]')!);
+                await flushPromises();
+                fireEvent.click(roomNotifElement.querySelector('input[aria-label="Off"]')!);
+                await flushPromises();
+
+                // legacy rule first, then its synced intentional rule; the display name rule is separate
+                expect(mockClient.setPushRuleActions.mock.calls).toEqual([
+                    ["global", "content", RuleId.ContainsUserName, StandardActions.ACTION_NOTIFY],
+                    ["global", "override", RuleId.IsUserMention, StandardActions.ACTION_NOTIFY],
+                ]);
+                expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                    ["global", "content", RuleId.ContainsUserName, true],
+                    ["global", "override", RuleId.IsUserMention, true],
+                    ["global", "override", RuleId.AtRoomNotification, false],
+                    ["global", "override", RuleId.IsRoomMention, false],
+                ]);
+                expect(within(userNameElement).queryByText(updateError)).not.toBeInTheDocument();
+                expect(within(roomNotifElement).queryByText(updateError)).not.toBeInTheDocument();
+            });
+
+            describe("when the server stops serving the legacy rules while the page is open", () => {
+                const expectIntentionalRows = (): void => {
+                    expect(screen.getByTestId(section + RuleId.IsUserMention)).toBeInTheDocument();
+                    expect(screen.getByTestId(section + RuleId.IsRoomMention)).toBeInTheDocument();
+                    for (const ruleId of legacyMentionRuleIds) {
+                        expect(screen.queryByTestId(section + ruleId)).not.toBeInTheDocument();
+                    }
+                    expect(screen.queryByText(updateError)).not.toBeInTheDocument();
+                };
+
+                it("switches to the intentional rules after a write the server still accepts", async () => {
+                    await getComponentAndWait();
+                    const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                    // the next read comes back without the legacy rules; writes to them are still
+                    // accepted and ignored, as Synapse does today
+                    setPushRuleMock(withRules([{ ...isUserMentionRule, enabled: false }], legacyMentionRuleIds));
+
+                    fireEvent.click(userNameElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                        ["global", "override", RuleId.IsUserMention, false],
+                    ]);
+                    expectIntentionalRows();
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    expect(userMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
+                });
+
+                it("recovers when the server rejects the write to the legacy rule", async () => {
+                    await getComponentAndWait();
+                    const userNameElement = screen.getByTestId(section + RuleId.ContainsUserName);
+                    // as Synapse will once it rejects writes to rules it does not serve
+                    setPushRuleMock(withRules([], legacyMentionRuleIds));
+                    mockClient.setPushRuleEnabled.mockRejectedValueOnce(
+                        new MatrixError({ errcode: "M_NOT_FOUND", error: "Unknown rule" }, 404),
+                    );
+
+                    fireEvent.click(userNameElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    // the failed write stopped there, and the page re-read the rules
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                    ]);
+                    expectIntentionalRows();
+
+                    // the next attempt only writes the intentional rule
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    setPushRuleMock(withRules([{ ...isUserMentionRule, enabled: false }], legacyMentionRuleIds));
+                    fireEvent.click(userMentionElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "content", RuleId.ContainsUserName, false],
+                        ["global", "override", RuleId.IsUserMention, false],
+                    ]);
+                    expect(userMentionElement.querySelector('input[aria-label="Off"]')).toBeChecked();
+                    expect(within(userMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                });
+            });
+
+            describe("when the server does not serve the legacy rules", () => {
+                beforeEach(() => {
+                    setPushRuleMock(withRules([], legacyMentionRuleIds));
+                });
+
+                it("renders the intentional mention rules instead", async () => {
+                    await getComponentAndWait();
+
+                    const mentionsSection = screen.getByTestId(`notif-section-${section}`);
+                    // user mentions, @room mentions and keywords
+                    expect(mentionsSection.querySelectorAll("fieldset")).toHaveLength(3);
+
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    expect(within(userMentionElement).getByText("@mentions and replies")).toBeInTheDocument();
+                    expect(userMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                    const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
+                    expect(within(roomMentionElement).getByText("@room mentions")).toBeInTheDocument();
+                    expect(roomMentionElement.querySelector('input[aria-label="Noisy"]')).toBeChecked();
+
+                    for (const ruleId of legacyMentionRuleIds) {
+                        expect(screen.queryByTestId(section + ruleId)).not.toBeInTheDocument();
+                    }
+                    expect(screen.queryByText("Messages containing my display name")).not.toBeInTheDocument();
+                });
+
+                it("only writes the intentional rules", async () => {
+                    await getComponentAndWait();
+                    const userMentionElement = screen.getByTestId(section + RuleId.IsUserMention);
+                    const roomMentionElement = screen.getByTestId(section + RuleId.IsRoomMention);
+
+                    fireEvent.click(userMentionElement.querySelector('input[aria-label="On"]')!);
+                    await flushPromises();
+                    fireEvent.click(roomMentionElement.querySelector('input[aria-label="Off"]')!);
+                    await flushPromises();
+
+                    expect(mockClient.setPushRuleActions.mock.calls).toEqual([
+                        ["global", "override", RuleId.IsUserMention, StandardActions.ACTION_NOTIFY],
+                    ]);
+                    expect(mockClient.setPushRuleEnabled.mock.calls).toEqual([
+                        ["global", "override", RuleId.IsUserMention, true],
+                        ["global", "override", RuleId.IsRoomMention, false],
+                    ]);
+                    expect(within(userMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                    expect(within(roomMentionElement).queryByText(updateError)).not.toBeInTheDocument();
+                });
             });
         });
     });
