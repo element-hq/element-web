@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { JSX } from "react/jsx-runtime";
-import { UnstableBundledUrlPreviewSingle } from "../models/url-preview";
+import type { JSX } from "react/jsx-runtime";
+import type { UnstableBundledUrlPreviewSingle } from "../models/url-preview";
 
 /**
  * the media content given to the component for rendering
