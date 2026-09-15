@@ -64,7 +64,14 @@ function LinkTitle({
     link,
     className,
 }: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link"> & { className?: string }): JSX.Element {
-    const caption = new URL(link).toString();
+    let caption: string;
+    try {
+        caption = new URL(link).toString();
+    } catch (e) {
+        console.error("URL parsing failed in MessageComposerUrlPreview", e);
+        caption = link;
+    }
+
     const anchor = (
         <Text
             as="a"
