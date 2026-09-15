@@ -10,6 +10,7 @@ import { Field, Link, Menu, Root, TextControl } from "@vector-im/compound-web";
 
 import { _t, type UserStatus } from "..";
 import { EmojiPicker } from "../core/EmojiPicker";
+import { limitUserStatusInputText } from "../core/userStatus";
 import styles from "./CustomStatusView.module.css";
 import classNames from "classnames";
 
@@ -17,7 +18,6 @@ import classNames from "classnames";
  * The emoji shown on the picker trigger before the user has chosen one.
  */
 const DEFAULT_EMOJI = "😄";
-const MAX_STATUS_LENGTH = 30;
 
 export interface CustomStatusViewProps {
     /**
@@ -124,8 +124,7 @@ export function CustomStatusView({
             <Field name="custom-status" className={styles.textField}>
                 <TextControl
                     value={text}
-                    onChange={(ev) => setText(ev.currentTarget.value)}
-                    maxLength={MAX_STATUS_LENGTH}
+                    onChange={(ev) => setText(limitUserStatusInputText(ev.currentTarget.value))}
                     placeholder={_t("status|set_status|set_status_prompt")}
                     aria-label={_t("status|set_status|set_status_prompt")}
                     autoFocus

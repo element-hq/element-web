@@ -5,15 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td, type UserStatus } from "@element-hq/web-shared-components";
+import {
+    _td,
+    type UserStatus,
+    formatUserStatusTextForDisplay,
+    MAX_USER_STATUS_TEXT_BYTES,
+} from "@element-hq/web-shared-components";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../languageHandler";
-
-// MSC4426 defines the maximum length of a status to be 256 bytes of UTF-8,
-// so we truncate anything longer than that.
-const MAX_STATUS_TEXT_BYTES = 256;
 
 // We don't use the actual UserStatus type here as we want to translate the string at runtime,
 // so we can make the types reflect the fact it's not ready for human consumption.
@@ -33,7 +34,7 @@ const intlSegmenter = new Intl.Segmenter();
  */
 export function userStatusTextWithinMaxLength(text: string): boolean {
     const textEncoder = new TextEncoder();
-    return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
+    return textEncoder.encode(text).length <= MAX_USER_STATUS_TEXT_BYTES;
 }
 
 /**
@@ -53,9 +54,7 @@ function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
     }
     return {
         emoji: [...intlSegmenter.segment(rawUserStatus.emoji)][0]?.segment,
-        text: userStatusTextWithinMaxLength(rawUserStatus.text)
-            ? rawUserStatus.text
-            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
+        text: formatUserStatusTextForDisplay(rawUserStatus.text),
     };
 }
 

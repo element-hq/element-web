@@ -103,6 +103,49 @@ describe("userStatus utils", () => {
 
             await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toBeUndefined();
         });
+
+        it("does not alter status text that is exactly 30 characters", async () => {
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            const text = "a".repeat(30);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({
+                emoji: "🐳",
+                text,
+            });
+
+            await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toEqual({
+                emoji: "🐳",
+                text,
+            });
+        });
+
+        it("truncates received status text longer than 30 characters with an ellipsis", async () => {
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({
+                emoji: "🐳",
+                text: "a".repeat(31),
+            });
+
+            await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toEqual({
+                emoji: "🐳",
+                text: `${"a".repeat(30)}…`,
+            });
+        });
+
+        it("truncates received status text on a grapheme boundary", async () => {
+            const family = "👨‍👩‍👧‍👦";
+            expect(family.length).toBeGreaterThan(2);
+
+            vi.mocked(client.doesServerSupportExtendedProfiles).mockResolvedValue(true);
+            vi.mocked(client.getExtendedProfileProperty).mockResolvedValue({
+                emoji: "🐳",
+                text: `${"a".repeat(29)}${family}x`,
+            });
+
+            await expect(fetchUserStatus(client, "@alice:example.com")).resolves.toEqual({
+                emoji: "🐳",
+                text: `${"a".repeat(29)}${family}…`,
+            });
+        });
     });
 
     describe("clearAllUserStatus", () => {
