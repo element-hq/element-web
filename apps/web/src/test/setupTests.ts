@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { vi, beforeEach, afterEach } from "vitest";
 import { act } from "react";
 import fetchMock from "@fetch-mock/vitest";
+import { mockIntlDateTimeFormat } from "test-utils/date";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
 import { setupLanguageMock } from "./setupLanguage.ts";
-import { mockIntlDateTimeFormat } from "./intlDateTimeFormatMock";
 
 declare global {
     var IS_REACT_ACT_ENVIRONMENT: boolean;

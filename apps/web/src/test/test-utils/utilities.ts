@@ -137,33 +137,6 @@ export const flushPromisesWithFakeTimers = async (): Promise<void> => {
 };
 
 /**
- * Call fn before calling componentDidUpdate on a react component instance, inst.
- * @param {React.Component} inst an instance of a React component.
- * @param {number} updates Number of updates to wait for. (Defaults to 1.)
- * @returns {Promise} promise that resolves when componentDidUpdate is called on
- *                    given component instance.
- */
-export function waitForUpdate(inst: React.Component, updates = 1): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        const cdu = inst.componentDidUpdate;
-
-        console.log(`Waiting for ${updates} update(s)`);
-
-        inst.componentDidUpdate = (prevProps, prevState, snapshot) => {
-            updates--;
-            console.log(`Got update, ${updates} remaining`);
-
-            if (updates == 0) {
-                inst.componentDidUpdate = cdu;
-                resolve();
-            }
-
-            if (cdu) cdu(prevProps, prevState, snapshot);
-        };
-    });
-}
-
-/**
  * Advance vitest's fake timers and Date.now mock by ms
  * Useful for testing code using timeouts or intervals
  * that also checks timestamps
