@@ -68,6 +68,7 @@ function LinkTitle({
     try {
         caption = new URL(link).toString();
     } catch (e) {
+        console.error("URL parsing failed in MessageComposerUrlPreview", e);
         caption = link;
     }
 
