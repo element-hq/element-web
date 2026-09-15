@@ -6,48 +6,51 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { fireEvent, render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import ManageEventIndexDialog from "../../../../../src/async-components/views/dialogs/eventindex/ManageEventIndexDialog";
-import Modal from "../../../../../src/Modal";
-import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import SdkConfig from "../../../../../src/SdkConfig";
-import { flushPromises } from "../../../../test-utils";
+import React from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { flushPromises } from "test-utils";
+
+import ManageEventIndexDialog from "./ManageEventIndexDialog";
+import Modal from "../../../../Modal";
+import EventIndexPeg from "../../../../indexing/EventIndexPeg";
+import SettingsStore from "../../../../settings/SettingsStore";
+import { SettingLevel } from "../../../../settings/SettingLevel";
+import SdkConfig from "../../../../SdkConfig";
 
 describe("<ManageEventIndexDialog />", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const mockEventIndex = {
-        getStats: jest.fn().mockResolvedValue({ size: 1234, eventCount: 12, roomCount: 2 }),
-        crawlingRooms: jest.fn().mockReturnValue({
+        getStats: vi.fn().mockResolvedValue({ size: 1234, eventCount: 12, roomCount: 2 }),
+        crawlingRooms: vi.fn().mockReturnValue({
             crawlingRooms: new Set(["!room1:example.org"]),
             totalRooms: new Set(["!room1:example.org", "!room2:example.org"]),
         }),
-        currentRoom: jest.fn().mockReturnValue({ name: "Room A" }),
-        on: jest.fn(),
-        removeListener: jest.fn(),
+        currentRoom: vi.fn().mockReturnValue({ name: "Room A" }),
+        on: vi.fn(),
+        removeListener: vi.fn(),
     };
 
     function setUpDefaults(tokenizerMode: "ngram" | "language" = "language"): void {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({ brand: "Element" } as any);
-        jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
-        jest.spyOn(SettingsStore, "getValueAt").mockImplementation((_level, settingName): any => {
+        vi.spyOn(SdkConfig, "get").mockReturnValue({ brand: "Element" } as any);
+        vi.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+        vi.spyOn(SettingsStore, "getValueAt").mockImplementation((_level, settingName): any => {
             if (settingName === "tokenizerMode") return tokenizerMode;
             if (settingName === "crawlerSleepTime") return 3000;
             return undefined;
         });
-        jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined as any);
+        vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined as any);
     }
 
     it("closes directly when tokenizer mode is unchanged", async () => {
         setUpDefaults("language");
-        const onFinished = jest.fn();
-        const createDialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+        const onFinished = vi.fn();
+        const createDialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({} as any);
 
         render(<ManageEventIndexDialog onFinished={onFinished} />);
         await flushPromises();
@@ -61,7 +64,7 @@ describe("<ManageEventIndexDialog />", () => {
     it("shows tokenizer mode as radio options with descriptions", async () => {
         setUpDefaults("language");
 
-        render(<ManageEventIndexDialog onFinished={jest.fn()} />);
+        render(<ManageEventIndexDialog onFinished={vi.fn()} />);
         await flushPromises();
 
         expect(screen.getByRole("heading", { name: "Search tokenizer mode" })).toBeInTheDocument();
@@ -81,11 +84,11 @@ describe("<ManageEventIndexDialog />", () => {
 
     it("opens confirm dialog and saves tokenizer mode when confirmed", async () => {
         setUpDefaults("language");
-        const onFinished = jest.fn();
-        const setValueSpy = jest.spyOn(SettingsStore, "setValue");
-        const initEventIndexSpy = jest.spyOn(EventIndexPeg, "initEventIndex").mockResolvedValue(true);
+        const onFinished = vi.fn();
+        const setValueSpy = vi.spyOn(SettingsStore, "setValue");
+        const initEventIndexSpy = vi.spyOn(EventIndexPeg, "initEventIndex").mockResolvedValue(true);
 
-        jest.spyOn(Modal, "createDialog").mockReturnValue({
+        vi.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([true]),
         } as any);
 
@@ -94,19 +97,20 @@ describe("<ManageEventIndexDialog />", () => {
 
         fireEvent.click(screen.getByRole("radio", { name: "N-gram" }));
         fireEvent.click(screen.getByRole("button", { name: /done/i }));
-        await flushPromises();
 
-        expect(setValueSpy).toHaveBeenCalledWith("tokenizerMode", null, SettingLevel.DEVICE, "ngram");
+        await waitFor(() =>
+            expect(setValueSpy).toHaveBeenCalledWith("tokenizerMode", null, SettingLevel.DEVICE, "ngram"),
+        );
         expect(initEventIndexSpy).toHaveBeenCalled();
         expect(onFinished).toHaveBeenCalled();
     });
 
     it("opens confirm dialog and reverts tokenizer mode when cancelled", async () => {
         setUpDefaults("language");
-        const onFinished = jest.fn();
-        const setValueSpy = jest.spyOn(SettingsStore, "setValue");
+        const onFinished = vi.fn();
+        const setValueSpy = vi.spyOn(SettingsStore, "setValue");
 
-        jest.spyOn(Modal, "createDialog").mockReturnValue({
+        vi.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([false]),
         } as any);
 
@@ -115,9 +119,10 @@ describe("<ManageEventIndexDialog />", () => {
 
         fireEvent.click(screen.getByRole("radio", { name: "N-gram" }));
         fireEvent.click(screen.getByRole("button", { name: /done/i }));
-        await flushPromises();
 
-        expect(setValueSpy).toHaveBeenCalledWith("tokenizerMode", null, SettingLevel.DEVICE, "language");
+        await waitFor(() =>
+            expect(setValueSpy).toHaveBeenCalledWith("tokenizerMode", null, SettingLevel.DEVICE, "language"),
+        );
         expect(onFinished).toHaveBeenCalled();
     });
 });

@@ -5,17 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { describe, it, expect, vi, afterEach } from "vitest";
 
-import { RemoveSectionDialog } from "../../../../../src/components/views/dialogs/RemoveSectionDialog";
+import { RemoveSectionDialog } from "./RemoveSectionDialog";
+
+vi.mock("react-focus-lock");
 
 describe("RemoveSectionDialog", () => {
-    const onFinished: jest.Mock = jest.fn();
+    const onFinished = vi.fn();
 
-    beforeEach(() => {
-        jest.resetAllMocks();
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     it("renders the dialog when section is not empty", () => {
