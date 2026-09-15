@@ -129,18 +129,22 @@ Reference implementation: `packages/shared-components/src/room-list/RoomListSear
 
 Read [code_style.md](./code_style.md). The points most often missed:
 
-- **Every new file needs the copyright header**, enforced by oxlint (`element-call/copyright-header`). Lint fails
+- **Every new file needs a copyright header**, enforced by oxlint (`element-call/copyright-header`). Lint fails
   without it. Substitute the actual current year — check it rather than copying a year from another file — and leave
   headers on existing files alone:
 
     ```
     /*
-    Copyright <current year> Element Creations Ltd.
+    Copyright <current year> <copyright holder>
 
     SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
     Please see LICENSE in the repository root for full details.
     */
     ```
+
+    The holder is `Element Creations Ltd.` **only for contributions made as part of Element**. An external
+    contributor puts their own name or their company's there instead. Note that `oxlint --fix` inserts the Element
+    line unconditionally, so external contributors should write the header by hand and check what the autofix added.
 
 - TypeScript only, named exports only — avoid `export default`.
 - 4-space indent, 120-column limit, double quotes, semicolons.
