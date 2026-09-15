@@ -139,7 +139,7 @@ overrides:
     pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001806
+    caniuse-lite: 1.0.30001810
 
     # Make sure we only have one instance of the widget API in the build;
     # failure to do so results in (unspecified) breakage in downstream builds
