@@ -7,36 +7,77 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ClientEvent, type MatrixClient, MatrixEventEvent, type Room } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    type MatrixClient,
+    MatrixEventEvent,
+    NotificationCountType,
+    type Room,
+    RoomEvent,
+    type Thread,
+} from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
-import { doesRoomHaveUnreadThreads } from "../../../../Unread";
+import { doesTimelineHaveUnreadMessages } from "../../../../Unread";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { getThreadNotificationLevel } from "../../../../utils/notifications";
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { isRoomVisible } from "../../../../stores/room-list-v3/isRoomVisible";
+import { getRoomNotifsState, RoomNotifState } from "../../../../RoomNotifs";
 
 const MIN_UPDATE_INTERVAL_MS = 500;
 
-type Result = {
-    greatestNotificationLevel: NotificationLevel;
-    rooms: Array<{ room: Room; notificationLevel: NotificationLevel }>;
+/**
+ * An unread thread displayed in the Threads Activity Centre.
+ */
+export type ThreadData = {
+    /** The unread thread. */
+    thread: Thread;
+    /** The room the thread belongs to. */
+    room: Room;
+    /** The notification level of the thread. */
+    notificationLevel: NotificationLevel;
+    /** The server-reported total notification count, or 0 for locally-detected unreads. */
+    notificationCount: number;
+    /** Whether the thread's room is muted. */
+    muted: boolean;
 };
 
 /**
- * Return the greatest notification level of all thread, the list of rooms with unread threads, and their notification level.
- * The result is computed when the client syncs, or when forceComputation is true
- * @param forceComputation
- * @returns {Result}
+ * The unread threads to display in the Threads Activity Centre.
  */
-export function useUnreadThreadRooms(forceComputation: boolean): Result {
+export type UnreadThreadRooms = {
+    /** The highest notification level across all the displayed threads. */
+    greatestNotificationLevel: NotificationLevel;
+    /** The rooms contributing at least one displayed thread, and their notification level. */
+    rooms: Array<{ room: Room; notificationLevel: NotificationLevel }>;
+    /** The unread threads relevant to the user, shown in the "My threads" tab. */
+    participatingThreads: ThreadData[];
+    /** The other unread threads, shown in the "Other threads" tab. */
+    otherThreads: ThreadData[];
+};
+
+/**
+ * Return the unread threads split into "my threads" and "other threads", the rooms that
+ * contribute at least one displayed thread, and the greatest notification level across them.
+ * See {@link computeUnreadThreadRooms} for how threads are categorised.
+ * The result is computed when the client syncs, or when forceComputation is true.
+ * @param forceComputation
+ * @returns {UnreadThreadRooms}
+ */
+export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRooms {
     const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
     const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
-    const [result, setResult] = useState<Result>({ greatestNotificationLevel: NotificationLevel.None, rooms: [] });
+    const [result, setResult] = useState<UnreadThreadRooms>({
+        greatestNotificationLevel: NotificationLevel.None,
+        rooms: [],
+        participatingThreads: [],
+        otherThreads: [],
+    });
 
     const doUpdate = useCallback(() => {
         setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs));
@@ -56,6 +97,10 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
     // and also when events get decrypted, since this will often happen after the sync
     // event and may change notifications.
     useEventEmitter(mxClient, MatrixEventEvent.Decrypted, scheduleUpdate);
+    // Reading a thread echoes a receipt locally, well before the server sends fresh notification
+    // counts. Recompute on that instead of waiting for the next sync, so a thread the user just
+    // read leaves the list at once, as it does in the room list.
+    useEventEmitter(mxClient, RoomEvent.Receipt, scheduleUpdate);
 
     // Force the list computation
     useEffect(() => {
@@ -68,49 +113,162 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
 }
 
 /**
- * Compute the greatest notification level of all thread, the list of rooms with unread threads, and their notification level.
+ * Compute the list of unread threads, split into "my threads" (relevant to the user)
+ * and "other threads" (everything else), along with notification levels.
+ *
+ * A thread goes to "My threads" when the user participated in it or was mentioned in it,
+ * and to "Other threads" otherwise. "My threads" is always shown in full; "Other threads"
+ * skips muted rooms, and, when `settingTACOnlyNotifs` is on, threads without a
+ * server-reported notification count.
+ *
+ * `rooms` and `greatestNotificationLevel` only cover rooms contributing a displayed thread,
+ * so the indicator badge matches the popup content.
+ *
  * @param mxClient - MatrixClient
  * @param msc3946ProcessDynamicPredecessor
+ * @param settingTACOnlyNotifs
  */
 function computeUnreadThreadRooms(
     mxClient: MatrixClient,
     msc3946ProcessDynamicPredecessor: boolean,
     settingTACOnlyNotifs: boolean,
-): Result {
+): UnreadThreadRooms {
     // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
     // This will include highlights from the previous version of the room internally
     const visibleRooms = mxClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
 
     let greatestNotificationLevel = NotificationLevel.None;
-    const rooms: Result["rooms"] = [];
+    const rooms: UnreadThreadRooms["rooms"] = [];
+    const participatingThreads: ThreadData[] = [];
+    const otherThreads: ThreadData[] = [];
 
     for (const room of visibleRooms) {
-        // We only care about rooms with unread threads
-        if (isRoomVisible(room) && doesRoomHaveUnreadThreads(room)) {
-            // Get the greatest notification level of all threads
-            const notificationLevel = getThreadNotificationLevel(room);
+        if (!isRoomVisible(room)) continue;
 
-            // If the room has an activity notification or less, we ignore it
-            if (settingTACOnlyNotifs && notificationLevel <= NotificationLevel.Activity) {
-                continue;
+        const isRoomMuted = getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute;
+        let roomContributedThread = false;
+
+        for (const thread of room.getThreads()) {
+            const unread = evaluateThreadUnread(mxClient, room, thread);
+            if (!unread) continue;
+
+            const threadData: ThreadData = {
+                thread,
+                room,
+                notificationLevel: unread.notificationLevel,
+                notificationCount: unread.notificationCount,
+                muted: isRoomMuted,
+            };
+
+            if (unread.isRelevantToMe) {
+                // "My threads": always shown, even when the room is muted or settingTACOnlyNotifs is on.
+                participatingThreads.push(threadData);
+            } else {
+                // Muted rooms shouldn't surface non-relevant threads in Other threads.
+                if (isRoomMuted) continue;
+                // The setting scopes to Other threads: when on, drop activity-only entries.
+                if (settingTACOnlyNotifs && !unread.hasServerNotifs) continue;
+                otherThreads.push(threadData);
             }
+            roomContributedThread = true;
+        }
 
+        // Only surface the room in the indicator if at least one of its threads is shown.
+        if (roomContributedThread) {
+            const notificationLevel = getThreadNotificationLevel(room);
             if (notificationLevel > greatestNotificationLevel) {
                 greatestNotificationLevel = notificationLevel;
             }
-
             rooms.push({ room, notificationLevel });
         }
     }
 
+    const sortThreads = (a: ThreadData, b: ThreadData): number => {
+        if (a.notificationLevel !== b.notificationLevel) return b.notificationLevel - a.notificationLevel;
+        const tsA = a.thread.events.at(-1)?.getTs() ?? 0;
+        const tsB = b.thread.events.at(-1)?.getTs() ?? 0;
+        return tsB - tsA;
+    };
+
     const sortedRooms = rooms.sort((a, b) => sortRoom(a, b));
-    return { greatestNotificationLevel, rooms: sortedRooms };
+    participatingThreads.sort(sortThreads);
+    otherThreads.sort(sortThreads);
+
+    return { greatestNotificationLevel, rooms: sortedRooms, participatingThreads, otherThreads };
+}
+
+/**
+ * The unread state of a single thread, or `null` when the thread has nothing unread to surface.
+ */
+type ThreadUnread = {
+    /** The notification level derived from the server counts (or {@link NotificationLevel.Activity} for local-only unreads). */
+    notificationLevel: NotificationLevel;
+    /** The homeserver's total notification count for the thread; 0 for a local-only unread. */
+    notificationCount: number;
+    /** Whether the homeserver reported a notification count for the thread (as opposed to a local-only unread). */
+    hasServerNotifs: boolean;
+    /** Whether the thread belongs in "My threads": the user participated, or was mentioned/keyword-matched. */
+    isRelevantToMe: boolean;
+};
+
+/**
+ * Evaluate a single thread's unread state, preferring the homeserver's notification
+ * counts and falling back to local timeline inspection for threads the server hasn't
+ * pushed counts for.
+ *
+ * @returns the thread's unread state, or `null` when there is nothing unread to surface.
+ */
+function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread): ThreadUnread | null {
+    // Reading writes a local echo receipt straight away, but the server's `total` count only clears
+    // when the homeserver pushes fresh counts in a sync (the js-sdk deliberately doesn't recompute
+    // totals locally). Without this, a thread you just read stays listed, with its count, until the
+    // server catches up. An explicit receipt covering the thread's latest event beats a stale count.
+    if (hasReadThroughLatestEvent(client, room, thread)) return null;
+
+    // Primary signal: server-reported notification counts (authoritative).
+    const highlight = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight);
+    const total = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Total);
+    const hasServerNotifs = highlight > 0 || total > 0;
+
+    // Fallback: local timeline inspection, computed lazily (skip when the server already gave us a signal).
+    const hasUnread = hasServerNotifs || doesTimelineHaveUnreadMessages(room, thread.events);
+    if (!hasUnread) return null;
+
+    const notificationLevel =
+        highlight > 0
+            ? NotificationLevel.Highlight
+            : total > 0
+              ? NotificationLevel.Notification
+              : NotificationLevel.Activity;
+
+    return {
+        notificationLevel,
+        notificationCount: total,
+        hasServerNotifs,
+        isRelevantToMe: thread.hasCurrentUserParticipated || highlight > 0,
+    };
+}
+
+/**
+ * Whether we have read the most recent event we know of in the thread.
+ *
+ * Uses {@link Room.hasUserReadEvent}, the same receipt lookup {@link doesTimelineHaveUnreadMessages}
+ * relies on, rather than {@link Thread.hasUserReadEvent}: the latter treats a thread as read
+ * whenever the room holds no threaded receipt at all (it compares against
+ * `getOldestThreadedReceiptTs()`, which is `Infinity` until one arrives), which would hide every
+ * thread on a fresh session.
+ *
+ * @returns true if the thread has been read up to its latest known event.
+ */
+function hasReadThroughLatestEvent(client: MatrixClient, room: Room, thread: Thread): boolean {
+    const latestEventId = thread.events.at(-1)?.getId();
+    return !!latestEventId && room.hasUserReadEvent(client.getSafeUserId(), latestEventId);
 }
 
 /**
  * Store the room and its thread notification level
  */
-type RoomData = Result["rooms"][0];
+type RoomData = UnreadThreadRooms["rooms"][0];
 
 /**
  * Sort notification level by the most important notification level to the least important
