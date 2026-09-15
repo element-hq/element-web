@@ -729,3 +729,30 @@ describe("EventTileView", () => {
         expect(rootRef.current).toBe(container.firstElementChild);
     });
 });
+
+describe("EventTileView bubble layout body padding", () => {
+    const renderBubble = (rootState: Partial<EventTileViewRootState>): ReturnType<typeof render> =>
+        render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { ...renderState.state, hasReply: false, ...rootState } },
+                    slots: { body: <span data-testid="body">Body</span> },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+
+    it("insets an ordinary message body so tall glyphs are not clipped", () => {
+        const { getByTestId } = renderBubble({});
+
+        expect(getComputedStyle(getByTestId("body")).padding).toBe("1px");
+    });
+
+    it("leaves left-aligned call tiles to provide their own padding", () => {
+        // Call tiles render a structured body that sets its own padding. The shell
+        // must not pad their body root, or the tile's contents sit on its border.
+        const { getByTestId } = renderBubble({ leftAlignedBubble: true });
+
+        expect(getComputedStyle(getByTestId("body")).padding).toBe("0px");
+    });
+});
