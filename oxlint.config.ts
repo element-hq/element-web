@@ -408,7 +408,7 @@ export default defineConfig({
                             },
                             {
                                 name: "@testing-library/react",
-                                message: "Please use jest-matrix-react instead",
+                                message: "Please use test-utils-rtl instead",
                             },
                             {
                                 name: "matrix-js-sdk",
