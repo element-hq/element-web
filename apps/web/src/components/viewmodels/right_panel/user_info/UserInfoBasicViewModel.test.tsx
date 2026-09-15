@@ -18,12 +18,6 @@ import DMRoomMap from "../../../../utils/DMRoomMap";
 import Modal from "../../../../Modal";
 import QuestionDialog from "../../../views/dialogs/QuestionDialog";
 
-vi.mock("../../../../customisations/UserIdentifier", () => {
-    return {
-        getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
-    };
-});
-
 describe("useUserInfoHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
     const defaultUserId = "@user:example.com";

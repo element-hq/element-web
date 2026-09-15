@@ -103,6 +103,34 @@ describe("RoomSkipList", () => {
         }
     });
 
+    it("Inserting a room only compares it against a few rooms per level", () => {
+        const client = stubClient();
+        const sorter = new RecencySorter(client.getSafeUserId());
+        let comparisons = 0;
+        const countingSorter: Sorter = {
+            sort: (rooms) => sorter.sort(rooms),
+            comparator: (roomA, roomB) => {
+                ++comparisons;
+                return sorter.comparator(roomA, roomB);
+            },
+            type: sorter.type,
+        };
+        const skipList = new RoomSkipList(countingSorter);
+
+        // Seed small and grow, so the list has to add levels of its own.
+        const rooms = getMockedRooms(client, 2000);
+        skipList.seed(rooms.slice(0, 20));
+        for (const room of rooms.slice(20)) {
+            skipList.addNewRoom(room);
+        }
+        expect(skipList.size).toEqual(rooms.length);
+
+        // The first room has the oldest timestamp, so it sorts last: the worst case.
+        comparisons = 0;
+        skipList.reInsertRoom(rooms[0]);
+        expect(comparisons).toBeLessThan(200);
+    });
+
     it("Room is not duplicated when same room is added via addNewRoom", () => {
         const { skipList, rooms } = generateSkipList();
         const room = rooms[5];

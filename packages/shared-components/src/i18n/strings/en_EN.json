@@ -112,6 +112,12 @@
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
     },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "loading": "Loading PDF…",
+        "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number"
+    },
     "release_announcement": {
         "room_list_section_close": "Ok",
         "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
