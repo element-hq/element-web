@@ -5,10 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { Widget } from "matrix-widget-api";
 
 import type { WidgetDescriptor } from "@element-hq/element-web-module-api";
-import { WidgetLifecycleApi, toWidgetDescriptor } from "../../../src/modules/WidgetLifecycleApi";
+import { WidgetLifecycleApi, toWidgetDescriptor } from "./WidgetLifecycleApi";
 
 const mkDescriptor = (overrides: Partial<WidgetDescriptor> = {}): WidgetDescriptor => ({
     id: "test-widget",
@@ -120,7 +121,7 @@ describe("WidgetLifecycleApi", () => {
         });
 
         it("returns false and logs error when approver throws", async () => {
-            const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+            const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
             api.registerPreloadApprover(() => {
                 throw new Error("boom");
             });
@@ -153,7 +154,7 @@ describe("WidgetLifecycleApi", () => {
         });
 
         it("returns false and logs error when approver throws", async () => {
-            const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+            const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
             api.registerIdentityApprover(() => {
                 throw new Error("boom");
             });
@@ -177,7 +178,7 @@ describe("WidgetLifecycleApi", () => {
         });
 
         it("passes widget and requested capabilities to the approver", async () => {
-            const approver = jest.fn().mockReturnValue(new Set(["cap1"]));
+            const approver = vi.fn().mockReturnValue(new Set(["cap1"]));
             api.registerCapabilitiesApprover(approver);
             await api.preapproveCapabilities(widget, requested);
             expect(approver).toHaveBeenCalledWith(widget, requested);
@@ -189,7 +190,7 @@ describe("WidgetLifecycleApi", () => {
         });
 
         it("returns undefined and logs error when approver throws", async () => {
-            const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+            const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
             api.registerCapabilitiesApprover(() => {
                 throw new Error("boom");
             });
