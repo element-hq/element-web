@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.26-labs@sha256:63e440b412b6acba117974e793b7e7f702e58ee65e044bdff1b8d388ee0d853b
+# syntax=docker.io/docker/dockerfile:1.27-labs@sha256:ae9cc40df4eb5b6adcac0a49bdd8e43b6d29d81087fefae2ceb6fe248aab24c8
 # Docker image to facilitate building Element Desktop's native bits against Debian bookworm (glibc 2.36).
 # The resulting binaries are checked to require at most glibc 2.35,
 # so they run down to Ubuntu jammy (2.35) & Debian bookworm (2.36). Bookworm also still ships sqlcipher 3.4.1
