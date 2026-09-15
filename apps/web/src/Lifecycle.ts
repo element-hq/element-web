@@ -433,7 +433,19 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
     // Try to load the pickle key
     const userId = credentials.userId;
     const deviceId = credentials.deviceId;
-    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    let pickleKey: string | undefined;
+    try {
+        pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    } catch (e) {
+        logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        // Fall through and try to create a new one. This is assumed to not destroy anything because
+        // both callers of this function are fresh logins with a server-issued device ID and clear
+        // all storage around this point (onSuccessfulDelegatedAuthLogin before, setLoggedIn ->
+        // doSetLoggedIn after), so no data encrypted under a previous pickle key for this device
+        // survives.
+        // If creation also fails we end up with no pickle key and the tokens are stored unencrypted.
+    }
+
     if (!pickleKey) {
         // Create it if it did not exist
         pickleKey =
@@ -544,8 +556,8 @@ export interface IStoredSession {
  * @param storageKey key used to store the token, eg ACCESS_TOKEN_STORAGE_KEY
  * @returns Promise that resolves to token or undefined
  */
-async function getStoredToken(storageKey: string): Promise<string | undefined> {
-    let token: string | undefined;
+async function getStoredToken(storageKey: string): Promise<string | AESEncryptedSecretStoragePayload | undefined> {
+    let token: string | AESEncryptedSecretStoragePayload | undefined;
     try {
         token = await StorageAccess.idbLoad("account", storageKey);
     } catch (e) {
@@ -606,6 +618,40 @@ async function abortLogin(): Promise<void> {
     }
 }
 
+/**
+ * Process a token which was loaded from storage by {@link getStoredToken} and decrypt if needed.
+ *
+ * {@link tryDecryptToken} only handles the encrypted case, so the two situations it used to absorb
+ * are decided here instead: a token persisted while no pickle key was available is stored as a
+ * plain string and is returned as-is, and an encrypted token with no pickle key to decrypt it is
+ * unrecoverable.
+ *
+ * @param pickleKey Pickle key for this session, or undefined if none could be read.
+ * @param token The token as it came out of storage.
+ * @param tokenName Name of the token, e.g. {@link ACCESS_TOKEN_NAME}.
+ *
+ * @returns the decrypted token.
+ * @throws if the token is encrypted but cannot be decrypted.
+ */
+async function processStoredToken(
+    pickleKey: string | undefined,
+    token: string | AESEncryptedSecretStoragePayload,
+    tokenName: string,
+): Promise<string> {
+    if (typeof token === "string") {
+        // Stored unencrypted, because there was no pickle key when it was persisted.
+        return token;
+    }
+
+    if (!pickleKey) {
+        // The token is encrypted and we have no way to read it. Keep this message stable: it is the
+        // signature support uses to identify this failure in rageshake logs.
+        throw new Error(`Error decrypting secret ${tokenName}: no pickle key found.`);
+    }
+
+    return tryDecryptToken(pickleKey, token, tokenName);
+}
+
 /** Attempt to restore the session from localStorage or indexeddb.
  *
  * If the credentials are found, and the session is successfully restored,
@@ -644,15 +690,21 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
             return false;
         }
 
-        const pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        let pickleKey: string | undefined;
+        try {
+            pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        }
+
         if (pickleKey) {
             logger.log(`Got pickle key for ${userId}|${deviceId}`);
         } else {
             logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
-        const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_NAME);
+        const decryptedAccessToken = await processStoredToken(pickleKey, accessToken, ACCESS_TOKEN_NAME);
         const decryptedRefreshToken =
-            refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_NAME));
+            refreshToken && (await processStoredToken(pickleKey, refreshToken, REFRESH_TOKEN_NAME));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
@@ -752,8 +804,12 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 
     if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        credentials.pickleKey =
-            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        try {
+            credentials.pickleKey =
+                (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${credentials.userId}|${credentials.deviceId}`, e);
+        }
     }
 
     return doSetLoggedIn(credentials, overwrite, false);

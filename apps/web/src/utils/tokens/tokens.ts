@@ -63,11 +63,7 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuf
 }
 
 /**
- * Try to decrypt a token retrieved from storage
- *
- * Where token is not encrypted (plain text) returns the plain text token.
- *
- * Where token is encrypted, attempts decryption. Returns successfully decrypted token, or throws if
+ * Try to decrypt a token retrieved from storage. Returns successfully decrypted token, or throws if
  * decryption failed.
  *
  * @param pickleKey Pickle key: used to derive the encryption key, or undefined if the token is not encrypted.
@@ -79,20 +75,10 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuf
  * @returns the decrypted token, or the plain text token.
  */
 export async function tryDecryptToken(
-    pickleKey: string | undefined,
-    token: AESEncryptedSecretStoragePayload | string,
+    pickleKey: string,
+    token: AESEncryptedSecretStoragePayload,
     tokenName: string,
 ): Promise<string> {
-    if (typeof token === "string") {
-        // Looks like an unencrypted token
-        return token;
-    }
-
-    // Otherwise, it must be an encrypted token.
-    if (!pickleKey) {
-        throw new Error(`Error decrypting secret ${tokenName}: no pickle key found.`);
-    }
-
     const encrKey = await pickleKeyToAesKey(pickleKey);
     const decryptedToken = await decryptAESSecretStorageItem(token, encrKey, tokenName);
     encrKey.fill(0);
