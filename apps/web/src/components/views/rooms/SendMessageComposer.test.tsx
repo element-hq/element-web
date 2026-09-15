@@ -20,7 +20,7 @@ import SendMessageComposer, { createMessageContent, isQuickReaction } from "./Se
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType, MainSplitContentType } from "../../../contexts/RoomContext";
 import EditorModel from "../../../editor/model";
-import { createPartCreator } from "../../../../test/unit-tests/editor/mock";
+import { createPartCreator } from "../../../editor/__mocks__";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import DocumentOffset from "../../../editor/offset";

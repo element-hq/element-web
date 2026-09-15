@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`editor/deserialize html messages escapes angle brackets 1`] = `
+exports[`editor/deserialize > html messages > escapes angle brackets 1`] = `
 [
   {
     "text": "\\> \\\\<del>no formatting here\\\\</del>",
@@ -9,7 +9,7 @@ exports[`editor/deserialize html messages escapes angle brackets 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages escapes asterisks 1`] = `
+exports[`editor/deserialize > html messages > escapes asterisks 1`] = `
 [
   {
     "text": "\\*hello\\*",
@@ -18,7 +18,7 @@ exports[`editor/deserialize html messages escapes asterisks 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages escapes backslashes 1`] = `
+exports[`editor/deserialize > html messages > escapes backslashes 1`] = `
 [
   {
     "text": "C:\\\\My Documents",
@@ -27,7 +27,7 @@ exports[`editor/deserialize html messages escapes backslashes 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages escapes backticks in code blocks 1`] = `
+exports[`editor/deserialize > html messages > escapes backticks in code blocks 1`] = `
 [
   {
     "text": "\`\`this → \` is a backtick\`\`",
@@ -77,7 +77,7 @@ exports[`editor/deserialize html messages escapes backticks in code blocks 1`] =
 ]
 `;
 
-exports[`editor/deserialize html messages escapes backticks outside of code blocks 1`] = `
+exports[`editor/deserialize > html messages > escapes backticks outside of code blocks 1`] = `
 [
   {
     "text": "some \\\`backticks\\\`",
@@ -86,7 +86,7 @@ exports[`editor/deserialize html messages escapes backticks outside of code bloc
 ]
 `;
 
-exports[`editor/deserialize html messages escapes square brackets 1`] = `
+exports[`editor/deserialize > html messages > escapes square brackets 1`] = `
 [
   {
     "text": "\\[not an actual link\\](https://example.org)",
@@ -95,7 +95,7 @@ exports[`editor/deserialize html messages escapes square brackets 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages escapes underscores 1`] = `
+exports[`editor/deserialize > html messages > escapes underscores 1`] = `
 [
   {
     "text": "\\_\\_emphasis\\_\\_",
@@ -104,7 +104,7 @@ exports[`editor/deserialize html messages escapes underscores 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages preserves nested formatting 1`] = `
+exports[`editor/deserialize > html messages > preserves nested formatting 1`] = `
 [
   {
     "text": "a<sub>b_c**d<u>e</u>**_</sub>",
@@ -113,7 +113,7 @@ exports[`editor/deserialize html messages preserves nested formatting 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages preserves nested quotes 1`] = `
+exports[`editor/deserialize > html messages > preserves nested quotes 1`] = `
 [
   {
     "text": "> foo",
@@ -140,7 +140,7 @@ exports[`editor/deserialize html messages preserves nested quotes 1`] = `
 ]
 `;
 
-exports[`editor/deserialize html messages surrounds lists with newlines 1`] = `
+exports[`editor/deserialize > html messages > surrounds lists with newlines 1`] = `
 [
   {
     "text": "foo",

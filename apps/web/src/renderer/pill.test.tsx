@@ -6,8 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
-import { render, type RenderResult } from "jest-matrix-react";
+import { render, type RenderResult } from "test-utils-rtl";
 import {
     MatrixEvent,
     ConditionKind,
@@ -17,14 +20,13 @@ import {
     TweakName,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
-import { keywordPillRenderer, mentionPillRenderer, combineRenderers } from "../../../src/renderer";
-import { stubClient, withClientContextRenderOptions } from "../../test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { stubClient, withClientContextRenderOptions } from "test-utils";
+import { keywordPillRenderer, mentionPillRenderer, combineRenderers } from "./index";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import DMRoomMap from "../utils/DMRoomMap";
 
 describe("mention pills", () => {
     let cli: MatrixClient;
@@ -44,8 +46,8 @@ describe("mention pills", () => {
         // @ts-expect-error
         cli.pushProcessor = new PushProcessor(cli);
         room = new Room(roomId, cli, cli.getUserId()!);
-        room.currentState.mayTriggerNotifOfType = jest.fn().mockReturnValue(true);
-        (cli.getRoom as jest.Mock).mockReturnValue(room);
+        room.currentState.mayTriggerNotifOfType = vi.fn().mockReturnValue(true);
+        vi.mocked(cli.getRoom).mockReturnValue(room);
         cli.pushRules!.global = {
             override: [
                 {
@@ -124,7 +126,7 @@ describe("mention pills", () => {
     });
 
     it("should pillify @room in an intentional mentions world", () => {
-        mocked(MatrixClientPeg.safeGet().supportsIntentionalMentions).mockReturnValue(true);
+        vi.mocked(MatrixClientPeg.safeGet().supportsIntentionalMentions).mockReturnValue(true);
         const { container, asFragment } = renderPills(
             "<div>@room</div>",
             new MatrixEvent({

@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`keyword pills should do nothing for empty element 1`] = `
+exports[`keyword pills > should do nothing for empty element 1`] = `
 <DocumentFragment>
   <div />
 </DocumentFragment>
 `;
 
-exports[`keyword pills should pillify 1`] = `
+exports[`keyword pills > should pillify 1`] = `
 <DocumentFragment>
   <div>
     Foo 
@@ -30,13 +30,13 @@ exports[`keyword pills should pillify 1`] = `
 </DocumentFragment>
 `;
 
-exports[`mention pills should do nothing for empty element 1`] = `
+exports[`mention pills > should do nothing for empty element 1`] = `
 <DocumentFragment>
   <div />
 </DocumentFragment>
 `;
 
-exports[`mention pills should pillify @room 1`] = `
+exports[`mention pills > should pillify @room 1`] = `
 <DocumentFragment>
   <div>
     <bdi>
@@ -69,7 +69,7 @@ exports[`mention pills should pillify @room 1`] = `
 </DocumentFragment>
 `;
 
-exports[`mention pills should pillify @room in an intentional mentions world 1`] = `
+exports[`mention pills > should pillify @room in an intentional mentions world 1`] = `
 <DocumentFragment>
   <div>
     <bdi>
