@@ -311,15 +311,13 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
     const viewer = win.document.getElementById("viewer") as HTMLDivElement | null;
     if (!container || !viewer) throw new Error("PDF usercontent markup is missing");
 
-    // Only the origin this page was served by may receive anything.
-    const post = (message: PdfUsercontentMessage): void => win.parent.postMessage(message, win.location.origin);
+    // A private channel: the app gets one end, and everything after `ready` travels over it.
+    const { port1: port, port2 } = new MessageChannel();
+    const post = (message: PdfUsercontentMessage): void => port.postMessage(message);
 
     let session: PdfSession | undefined;
 
-    win.addEventListener("message", (event: MessageEvent) => {
-        // Only the embedding app, from the origin this page was served by.
-        if (event.source !== win.parent || event.origin !== win.location.origin) return;
-
+    port.onmessage = (event: MessageEvent): void => {
         const message = parsePdfHostMessage(event.data);
         if (!message) return;
 
@@ -339,7 +337,9 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
                 session?.goToPage(message.page);
                 break;
         }
-    });
+    };
 
-    post({ type: "ready" });
+    // Only the origin this page was served by may receive the port.
+    const ready: PdfUsercontentMessage = { type: "ready" };
+    win.parent.postMessage(ready, win.location.origin, [port2]);
 }

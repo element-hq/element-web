@@ -28,50 +28,79 @@ function media(name = "spec.pdf", body = "%PDF-1.7\n", uri = `mxc://example.org/
     };
 }
 
-/** The iframe's window, as far as the component can tell. */
-interface IframeWindow {
+/** The app's end of the channel the iframe hands over. Messages are delivered by calling `onmessage`. */
+interface FakePort {
     postMessage: ReturnType<typeof vi.fn>;
+    onmessage: ((event: MessageEvent) => void) | null;
+    close: ReturnType<typeof vi.fn>;
+}
+
+function fakePort(): FakePort {
+    return { postMessage: vi.fn(), onmessage: null, close: vi.fn() };
+}
+
+/** The iframe as the component sees it: a window to check messages against, and the port it hands over. */
+interface FakeIframe {
+    window: object;
+    port: FakePort;
 }
 
 /** Give the iframe a window, since nothing loads it under test. */
-function attachIframeWindow(): IframeWindow {
-    const iframeWindow: IframeWindow = { postMessage: vi.fn() };
+function attachIframe(): FakeIframe {
+    const iframe: FakeIframe = { window: {}, port: fakePort() };
     Object.defineProperty(screen.getByTestId("pdf-iframe"), "contentWindow", {
         configurable: true,
-        value: iframeWindow,
+        value: iframe.window,
     });
-    return iframeWindow;
+    return iframe;
 }
 
-/** Deliver a message as if `source` had posted it. A sandboxed iframe's origin serializes as "null". */
-function receive(data: unknown, source: unknown, origin = "null"): void {
+/**
+ * Deliver a window message as if `source` had posted it. A sandboxed iframe's origin serializes as
+ * "null".
+ */
+function receive(data: unknown, source: unknown, { origin = "null", ports = [] as unknown[] } = {}): void {
+    const event = new MessageEvent("message", { data, source: source as Window, origin });
+    Object.defineProperty(event, "ports", { value: ports });
     act(() => {
-        window.dispatchEvent(new MessageEvent("message", { data, source: source as Window, origin }));
+        window.dispatchEvent(event);
     });
 }
 
-/** Everything the app posted into the iframe. */
-function sent(iframeWindow: IframeWindow): PdfHostMessage[] {
-    return iframeWindow.postMessage.mock.calls.map(([message]) => message as PdfHostMessage);
+/** Post `ready` with the iframe's port, as the iframe does. */
+function ready(iframe: FakeIframe, source: unknown = iframe.window, origin = "null"): void {
+    receive({ type: "ready" } satisfies PdfUsercontentMessage, source, { origin, ports: [iframe.port] });
+}
+
+/** Deliver a message from the iframe over the channel. */
+function fromIframe(iframe: FakeIframe, data: unknown): void {
+    act(() => {
+        iframe.port.onmessage?.(new MessageEvent("message", { data }));
+    });
+}
+
+/** Everything the app sent into the iframe over the channel. */
+function sent(iframe: FakeIframe): PdfHostMessage[] {
+    return iframe.port.postMessage.mock.calls.map(([message]) => message as PdfHostMessage);
 }
 
 /** Say ready and wait for the document. */
-async function loadIntoIframe(iframeWindow: IframeWindow): Promise<PdfHostMessage & { type: "load" }> {
-    receive({ type: "ready" } satisfies PdfUsercontentMessage, iframeWindow);
-    await waitFor(() => expect(sent(iframeWindow).some((message) => message.type === "load")).toBe(true));
-    return sent(iframeWindow).find((message) => message.type === "load") as PdfHostMessage & { type: "load" };
+async function loadIntoIframe(iframe: FakeIframe): Promise<PdfHostMessage & { type: "load" }> {
+    ready(iframe);
+    await waitFor(() => expect(sent(iframe).some((message) => message.type === "load")).toBe(true));
+    return sent(iframe).find((message) => message.type === "load") as PdfHostMessage & { type: "load" };
 }
 
 /** Render, load and lay out. */
 async function renderLoaded(
     pdfMedia: PdfMedia = media(),
     { pageCount = 100, page = 1 } = {},
-): Promise<{ iframeWindow: IframeWindow; unmount: () => void }> {
+): Promise<{ iframe: FakeIframe; unmount: () => void }> {
     const { unmount } = render(<PdfViewer media={pdfMedia} />);
-    const iframeWindow = attachIframeWindow();
-    await loadIntoIframe(iframeWindow);
-    receive({ type: "loaded", pageCount, page } satisfies PdfUsercontentMessage, iframeWindow);
-    return { iframeWindow, unmount };
+    const iframe = attachIframe();
+    await loadIntoIframe(iframe);
+    fromIframe(iframe, { type: "loaded", pageCount, page } satisfies PdfUsercontentMessage);
+    return { iframe, unmount };
 }
 
 /** The setting write resolves a tick after unmount. */
@@ -106,50 +135,56 @@ describe("PdfViewer", () => {
             expect(iframe).toHaveAttribute("title", "spec.pdf");
         });
 
-        it("sends the document only once the iframe is listening, handing over the bytes", async () => {
+        it("sends the document over the iframe's channel once it is ready, handing over the bytes", async () => {
             const pdfMedia = media();
             render(<PdfViewer media={pdfMedia} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
 
-            const load = await loadIntoIframe(iframeWindow);
+            const load = await loadIntoIframe(iframe);
             expect(new TextDecoder().decode(new Uint8Array(load.data))).toBe("%PDF-1.7\n");
             expect(load.position).toBeUndefined();
-            // "*" is the only target for an opaque origin; the bytes are transferred.
-            expect(iframeWindow.postMessage).toHaveBeenCalledWith(load, "*", [load.data]);
+            // Over the port, so no target origin is needed; the bytes are transferred.
+            expect(iframe.port.postMessage).toHaveBeenCalledWith(load, [load.data]);
         });
 
         it("does not send the document again if the iframe says it is ready twice", async () => {
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
+            const again: FakeIframe = { window: iframe.window, port: fakePort() };
 
-            receive({ type: "ready" } satisfies PdfUsercontentMessage, iframeWindow);
+            ready(again);
             await act(async () => {});
 
-            expect(sent(iframeWindow).filter((message) => message.type === "load")).toHaveLength(1);
+            expect(sent(iframe).filter((message) => message.type === "load")).toHaveLength(1);
+            expect(again.port.postMessage).not.toHaveBeenCalled();
         });
 
-        it("ignores messages that do not come from its own iframe", async () => {
-            const { iframeWindow } = await renderLoaded();
+        it("only takes a channel from its own iframe, with the origin a sandboxed iframe has", async () => {
+            render(<PdfViewer media={media()} />);
+            const iframe = attachIframe();
 
-            receive({ type: "page", page: 7 } satisfies PdfUsercontentMessage, window);
-            receive({ type: "page", page: 8 } satisfies PdfUsercontentMessage, { postMessage: vi.fn() });
-            receive({ type: "error", message: "boom" } satisfies PdfUsercontentMessage, null);
+            ready(iframe, window);
+            ready(iframe, { postMessage: vi.fn() });
+            ready(iframe, null);
             // The right window but not an opaque origin: the iframe has lost its sandbox somehow.
-            receive({ type: "page", page: 9 } satisfies PdfUsercontentMessage, iframeWindow, "https://app.example.org");
+            ready(iframe, iframe.window, "https://app.example.org");
+            // No port to talk over.
+            receive({ type: "ready" } satisfies PdfUsercontentMessage, iframe.window);
+            await act(async () => {});
 
-            expect(screen.getByTestId("pdf-page-input")).toHaveValue("1");
-            expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
+            expect(screen.getByRole("status")).toHaveTextContent("Loading PDF");
         });
 
         it("ignores messages from its iframe that do not fit the protocol", async () => {
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
-            receive({ type: "page", page: "7" }, iframeWindow);
-            receive({ type: "page", page: -1 }, iframeWindow);
-            receive({ type: "loaded", pageCount: "lots" }, iframeWindow);
-            receive("page 7", iframeWindow);
-            receive({ type: "error" }, iframeWindow);
+            fromIframe(iframe, { type: "page", page: "7" });
+            fromIframe(iframe, { type: "page", page: -1 });
+            fromIframe(iframe, { type: "loaded", pageCount: "lots" });
+            fromIframe(iframe, "page 7");
+            fromIframe(iframe, { type: "error" });
 
             expect(screen.getByTestId("pdf-page-input")).toHaveValue("1");
             expect(screen.getByTestId("pdf-page-total")).toHaveTextContent("100");
@@ -157,22 +192,23 @@ describe("PdfViewer", () => {
         });
 
         it("shows a clear error when the iframe cannot show the document", async () => {
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
-            receive(
-                { type: "error", message: "InvalidPDFException: bad xref" } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "error",
+                message: "InvalidPDFException: bad xref",
+            } satisfies PdfUsercontentMessage);
 
             expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF.");
         });
 
-        it("stops listening to the iframe once closed", async () => {
-            const { iframeWindow, unmount } = await renderLoaded();
+        it("closes the channel and stops listening once closed", async () => {
+            const { iframe, unmount } = await renderLoaded();
             unmount();
 
+            expect(iframe.port.close).toHaveBeenCalled();
             // Must not throw or write state.
-            receive({ type: "position", position: { page: 9, scale: 100, left: 0, top: 0 } }, iframeWindow);
+            fromIframe(iframe, { type: "position", position: { page: 9, scale: 100, left: 0, top: 0 } });
             flushPdfViewerState();
             await act(async () => {});
 
@@ -184,13 +220,13 @@ describe("PdfViewer", () => {
         it("refuses a file the sender declares as too large without downloading it", async () => {
             const tooLarge = media("huge.pdf", "%PDF-1.7\n", "mxc://example.org/huge", 257 * 1024 * 1024);
             render(<PdfViewer media={tooLarge} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            receive({ type: "ready" }, iframeWindow);
+            ready(iframe);
 
             await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
             expect(tooLarge.blob).not.toHaveBeenCalled();
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
         it("refuses a file that turns out to be too large once downloaded", async () => {
@@ -200,65 +236,65 @@ describe("PdfViewer", () => {
                 arrayBuffer: vi.fn(),
             } as unknown as Blob);
             render(<PdfViewer media={claimedSmall} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            receive({ type: "ready" }, iframeWindow);
+            ready(iframe);
 
             await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
         it("shows a clear error when the attachment is empty", async () => {
             render(<PdfViewer media={media("empty.pdf", "")} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            receive({ type: "ready" }, iframeWindow);
+            ready(iframe);
 
             expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
         it("rejects an attachment with no PDF signature without handing it to the iframe", async () => {
             render(<PdfViewer media={media("not-really.pdf", "GIF89a this is not a PDF at all")} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            receive({ type: "ready" }, iframeWindow);
+            ready(iframe);
 
             expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
         it("accepts a signature that is not at the very start, as pdf.js does", async () => {
             // pdf.js searches the first 1024 bytes for the header.
             render(<PdfViewer media={media("padded.pdf", "\n\n%PDF-1.7\n")} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            const load = await loadIntoIframe(iframeWindow);
+            const load = await loadIntoIframe(iframe);
 
             expect(new TextDecoder().decode(new Uint8Array(load.data))).toBe("\n\n%PDF-1.7\n");
         });
 
         it("rejects a signature sitting beyond the range pdf.js searches", async () => {
             render(<PdfViewer media={media("late.pdf", "x".repeat(2000) + "%PDF-1.7\n")} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
-            receive({ type: "ready" }, iframeWindow);
+            ready(iframe);
 
             expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
-            expect(iframeWindow.postMessage).not.toHaveBeenCalled();
+            expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
     });
 
     describe("pages", () => {
         it("shows the current page and total once the iframe has laid the document out", async () => {
             render(<PdfViewer media={media()} />);
-            const iframeWindow = attachIframeWindow();
+            const iframe = attachIframe();
 
             expect(screen.getByRole("status")).toHaveTextContent("Loading PDF");
             expect(screen.queryByTestId("pdf-page-input")).not.toBeInTheDocument();
 
-            await loadIntoIframe(iframeWindow);
-            receive({ type: "loaded", pageCount: 100, page: 1 } satisfies PdfUsercontentMessage, iframeWindow);
+            await loadIntoIframe(iframe);
+            fromIframe(iframe, { type: "loaded", pageCount: 100, page: 1 } satisfies PdfUsercontentMessage);
 
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
             expect(screen.getByTestId("pdf-page-input")).toHaveValue("1");
@@ -266,9 +302,9 @@ describe("PdfViewer", () => {
         });
 
         it("follows the document as it is scrolled", async () => {
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
-            receive({ type: "page", page: 5 } satisfies PdfUsercontentMessage, iframeWindow);
+            fromIframe(iframe, { type: "page", page: 5 } satisfies PdfUsercontentMessage);
 
             await waitFor(() => expect(screen.getByTestId("pdf-page-input")).toHaveValue("5"));
             expect(screen.getByRole("group")).toHaveAccessibleName("Page 5 of 100");
@@ -276,21 +312,21 @@ describe("PdfViewer", () => {
 
         it("asks the iframe to jump to a page typed into the selector", async () => {
             const user = userEvent.setup();
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
             const input = screen.getByTestId("pdf-page-input");
             await user.clear(input);
             await user.type(input, "42{Enter}");
 
-            expect(iframeWindow.postMessage).toHaveBeenCalledWith({ type: "go_to_page", page: 42 }, "*");
+            expect(iframe.port.postMessage).toHaveBeenCalledWith({ type: "go_to_page", page: 42 });
         });
 
         it("reverts an out-of-range or unparseable page instead of jumping", async () => {
             const user = userEvent.setup();
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
             const input = screen.getByTestId("pdf-page-input");
-            receive({ type: "page", page: 7 } satisfies PdfUsercontentMessage, iframeWindow);
+            fromIframe(iframe, { type: "page", page: 7 } satisfies PdfUsercontentMessage);
             await waitFor(() => expect(input).toHaveValue("7"));
 
             await user.clear(input);
@@ -301,119 +337,104 @@ describe("PdfViewer", () => {
             await user.type(input, "abc{Enter}");
             await waitFor(() => expect(input).toHaveValue("7"));
 
-            expect(sent(iframeWindow).filter((message) => message.type === "go_to_page")).toEqual([]);
+            expect(sent(iframe).filter((message) => message.type === "go_to_page")).toEqual([]);
         });
 
         it("does not overwrite the box while it is being edited", async () => {
             const user = userEvent.setup();
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
             const input = screen.getByTestId("pdf-page-input");
             await user.clear(input);
             await user.type(input, "12");
 
             // Scrolling must not clobber a half-typed entry.
-            receive({ type: "page", page: 3 } satisfies PdfUsercontentMessage, iframeWindow);
+            fromIframe(iframe, { type: "page", page: 3 } satisfies PdfUsercontentMessage);
 
             expect(input).toHaveValue("12");
         });
 
         it("abandons an edit on Escape", async () => {
             const user = userEvent.setup();
-            const { iframeWindow } = await renderLoaded();
+            const { iframe } = await renderLoaded();
 
             const input = screen.getByTestId("pdf-page-input");
-            receive({ type: "page", page: 9 } satisfies PdfUsercontentMessage, iframeWindow);
+            fromIframe(iframe, { type: "page", page: 9 } satisfies PdfUsercontentMessage);
             await waitFor(() => expect(input).toHaveValue("9"));
 
             await user.clear(input);
             await user.type(input, "40{Escape}");
 
             await waitFor(() => expect(input).toHaveValue("9"));
-            expect(sent(iframeWindow).filter((message) => message.type === "go_to_page")).toEqual([]);
+            expect(sent(iframe).filter((message) => message.type === "go_to_page")).toEqual([]);
         });
     });
 
     describe("reading position", () => {
         it("restores the reading position when the same PDF is reopened", async () => {
-            const { iframeWindow, unmount } = await renderLoaded();
+            const { iframe, unmount } = await renderLoaded();
 
-            receive(
-                {
-                    type: "position",
-                    position: { page: 12, scale: 150, left: 40, top: 260 },
-                } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 12, scale: 150, left: 40, top: 260 },
+            } satisfies PdfUsercontentMessage);
             unmount();
             await waitForStateWritten();
 
             // Switching rooms rebuilds the media handle, so the position is keyed on the MXC URI.
             render(<PdfViewer media={media()} />);
-            const load = await loadIntoIframe(attachIframeWindow());
+            const load = await loadIntoIframe(attachIframe());
 
             expect(load.position).toEqual({ page: 12, scale: 150, left: 40, top: 260 });
         });
 
         it("keeps a fit-to-panel zoom by name, so the iframe recomputes it", async () => {
-            const { iframeWindow, unmount } = await renderLoaded();
+            const { iframe, unmount } = await renderLoaded();
 
-            receive(
-                {
-                    type: "position",
-                    position: { page: 3, scale: "page-width", left: 0, top: 80 },
-                } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 3, scale: "page-width", left: 0, top: 80 },
+            } satisfies PdfUsercontentMessage);
             unmount();
             await waitForStateWritten();
 
             render(<PdfViewer media={media()} />);
-            const load = await loadIntoIframe(attachIframeWindow());
+            const load = await loadIntoIframe(attachIframe());
 
             expect(load.position).toEqual({ page: 3, scale: "page-width", left: 0, top: 80 });
         });
 
         it("keeps reading positions separate for different attachments", async () => {
-            const { iframeWindow, unmount } = await renderLoaded(media("first.pdf"));
+            const { iframe, unmount } = await renderLoaded(media("first.pdf"));
 
-            receive(
-                {
-                    type: "position",
-                    position: { page: 30, scale: 100, left: 0, top: 900 },
-                } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 30, scale: 100, left: 0, top: 900 },
+            } satisfies PdfUsercontentMessage);
             unmount();
             await waitForStateWritten("first.pdf");
 
             render(<PdfViewer media={media("second.pdf")} />);
-            const load = await loadIntoIframe(attachIframeWindow());
+            const load = await loadIntoIframe(attachIframe());
 
             expect(load.position).toBeUndefined();
         });
 
         it("does not record a position the iframe reports before it has laid the document out", async () => {
             render(<PdfViewer media={media()} />);
-            const iframeWindow = attachIframeWindow();
-            await loadIntoIframe(iframeWindow);
+            const iframe = attachIframe();
+            await loadIntoIframe(iframe);
 
             // A fresh layout reports page 1 before the restore; it must not win.
-            receive(
-                {
-                    type: "position",
-                    position: { page: 1, scale: "page-width", left: 0, top: 0 },
-                } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
-            receive({ type: "loaded", pageCount: 100, page: 12 } satisfies PdfUsercontentMessage, iframeWindow);
-            receive(
-                {
-                    type: "position",
-                    position: { page: 12, scale: 150, left: 40, top: 260 },
-                } satisfies PdfUsercontentMessage,
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 1, scale: "page-width", left: 0, top: 0 },
+            } satisfies PdfUsercontentMessage);
+            fromIframe(iframe, { type: "loaded", pageCount: 100, page: 12 } satisfies PdfUsercontentMessage);
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 12, scale: 150, left: 40, top: 260 },
+            } satisfies PdfUsercontentMessage);
             flushPdfViewerState();
             await waitForStateWritten();
 
@@ -421,16 +442,13 @@ describe("PdfViewer", () => {
         });
 
         it("stores nothing but the position the iframe reported", async () => {
-            const { iframeWindow, unmount } = await renderLoaded();
+            const { iframe, unmount } = await renderLoaded();
 
-            receive(
-                {
-                    type: "position",
-                    position: { page: 2, scale: 100, left: 0, top: 0, evil: "payload" },
-                    extra: "payload",
-                },
-                iframeWindow,
-            );
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 2, scale: 100, left: 0, top: 0, evil: "payload" },
+                extra: "payload",
+            });
             unmount();
             await waitForStateWritten();
 

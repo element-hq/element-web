@@ -49,6 +49,8 @@ function hasPdfHeader(data: Uint8Array): boolean {
  */
 export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement>(null);
+    /** The app's end of the channel the iframe hands over with `ready`. */
+    const portRef = useRef<MessagePort | null>(null);
     const [status, setStatus] = useState<PdfViewerStatus>("loading");
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -73,12 +75,11 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         setPageCount(0);
 
         let disposed = false;
-        let isLoadStarted = false;
         let isLoaded = false;
+        let port: MessagePort | undefined;
 
         const send = (message: PdfHostMessage, transfer: Transferable[] = []): void => {
-            // "*": an opaque origin cannot be named. The target is still only our iframe's window.
-            iframe.contentWindow?.postMessage(message, "*", transfer);
+            port?.postMessage(message, transfer);
         };
 
         const fail = (error: unknown): void => {
@@ -116,19 +117,14 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             send({ type: "load", data: data.buffer, position }, [data.buffer]);
         };
 
-        const onMessage = (event: MessageEvent): void => {
-            // Only our iframe, and only with the "null" origin a sandboxed iframe has.
-            if (disposed || event.source !== iframe.contentWindow || event.origin !== "null") return;
+        const onPortMessage = (event: MessageEvent): void => {
+            if (disposed) return;
 
             const message = parsePdfUsercontentMessage(event.data);
             if (!message) return;
 
             switch (message.type) {
                 case "ready":
-                    // A second `ready` means the iframe reloaded itself; it does not get the document again.
-                    if (isLoadStarted) return;
-                    isLoadStarted = true;
-                    void loadDocument().catch(fail);
                     break;
                 case "loaded":
                     isLoaded = true;
@@ -150,13 +146,31 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             }
         };
 
+        // The iframe posts `ready` to this window with its end of a MessageChannel; nothing else arrives here.
+        const onWindowMessage = (event: MessageEvent): void => {
+            // Only our iframe, and only with the "null" origin a sandboxed iframe has.
+            if (disposed || event.source !== iframe.contentWindow || event.origin !== "null") return;
+
+            const received = event.ports[0];
+            if (parsePdfUsercontentMessage(event.data)?.type !== "ready" || !received) return;
+
+            // A second `ready` means the iframe reloaded itself; it does not get the document again.
+            if (port) return;
+            port = received;
+            portRef.current = received;
+            received.onmessage = onPortMessage;
+            void loadDocument().catch(fail);
+        };
+
         // Listen before setting `src` so `ready` cannot be missed.
-        window.addEventListener("message", onMessage);
+        window.addEventListener("message", onWindowMessage);
         iframe.src = PDF_USERCONTENT_URL;
 
         return () => {
             disposed = true;
-            window.removeEventListener("message", onMessage);
+            window.removeEventListener("message", onWindowMessage);
+            port?.close();
+            portRef.current = null;
 
             // Don't leave the last position sitting in the debounce.
             flushPdfViewerState();
@@ -169,7 +183,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pageCount) {
             // The iframe reports the new page back via `page`.
             const message: PdfHostMessage = { type: "go_to_page", page: requestedPage };
-            iframeRef.current?.contentWindow?.postMessage(message, "*");
+            portRef.current?.postMessage(message);
         } else {
             setPageInput(String(currentPage));
         }

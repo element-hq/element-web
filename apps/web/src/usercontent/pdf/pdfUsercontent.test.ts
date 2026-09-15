@@ -132,13 +132,37 @@ const ORIGIN = "http://localhost";
 /** Every Blob handed to `URL.createObjectURL`, in order. */
 let objectUrlBlobs: Blob[] = [];
 
-/** A stand-in for the iframe's window, with a recording parent and a message listener tests feed directly. */
+/** One end of the channel the iframe opens. Messages are delivered by calling `onmessage` directly. */
+interface FakePort {
+    postMessage: ReturnType<typeof vi.fn>;
+    onmessage: ((event: MessageEvent) => void) | null;
+    close: ReturnType<typeof vi.fn>;
+}
+
+function fakePort(): FakePort {
+    return { postMessage: vi.fn(), onmessage: null, close: vi.fn() };
+}
+
+class MockMessageChannel {
+    public static instances: MockMessageChannel[] = [];
+
+    public readonly port1 = fakePort();
+    public readonly port2 = fakePort();
+
+    public constructor() {
+        MockMessageChannel.instances.push(this);
+    }
+}
+
+/** A stand-in for the iframe's window, with a recording parent. */
 interface FakeIframe {
     win: Window;
     parent: { postMessage: ReturnType<typeof vi.fn> };
-    /** Deliver a message as if `source` posted it from `origin`. */
-    receive(data: unknown, options?: { source?: unknown; origin?: string }): void;
-    /** Everything the iframe posted to the app. */
+    /** The iframe's end of the channel it opened. */
+    channel(): MockMessageChannel;
+    /** Deliver a message from the app over the channel. */
+    receive(data: unknown): void;
+    /** Everything the iframe sent to the app over the channel. */
     posted(): PdfUsercontentMessage[];
 }
 
@@ -147,25 +171,21 @@ function fakeIframe({ embedded = true }: { embedded?: boolean } = {}): FakeIfram
     document.body.innerHTML = `<div id="container"><div id="viewer" class="pdfViewer"></div></div>`;
 
     const parent = { postMessage: vi.fn() };
-    let onMessage: ((event: MessageEvent) => void) | undefined;
-
-    const win = {
-        document,
-        location: { origin: ORIGIN },
-        parent: undefined as unknown,
-        addEventListener: (type: string, listener: (event: MessageEvent) => void) => {
-            if (type === "message") onMessage = listener;
-        },
-    };
+    const win = { document, location: { origin: ORIGIN }, parent: undefined as unknown };
     win.parent = embedded ? parent : win;
+
+    const channel = (): MockMessageChannel => {
+        const instance = MockMessageChannel.instances.at(-1);
+        if (!instance) throw new Error("No MessageChannel was opened");
+        return instance;
+    };
 
     return {
         win: win as unknown as Window,
         parent,
-        receive: (data, { source = parent, origin = ORIGIN } = {}) => {
-            onMessage?.({ data, source, origin } as unknown as MessageEvent);
-        },
-        posted: () => parent.postMessage.mock.calls.map(([message]) => message as PdfUsercontentMessage),
+        channel,
+        receive: (data) => channel().port1.onmessage?.({ data } as MessageEvent),
+        posted: () => channel().port1.postMessage.mock.calls.map(([message]) => message as PdfUsercontentMessage),
     };
 }
 
@@ -267,7 +287,9 @@ describe("PDF usercontent", () => {
         pdfjsMock.MockWorker.instances = [];
         pdfjsMock.MockPDFWorker.instances = [];
         viewerMock.MockPDFViewer.instances = [];
+        MockMessageChannel.instances = [];
         vi.stubGlobal("Worker", pdfjsMock.MockWorker);
+        vi.stubGlobal("MessageChannel", MockMessageChannel);
 
         objectUrlBlobs = [];
         Object.defineProperty(URL, "createObjectURL", {
@@ -309,9 +331,11 @@ describe("PDF usercontent", () => {
                 expect.arrayContaining(["worker-src blob:", "script-src blob:", "style-src 'unsafe-inline'"]),
             );
 
-            expect(iframe.posted()).toEqual([{ type: "ready" }]);
-            // Addressed to the app's origin, never to anyone who happens to embed the page.
-            expect(iframe.parent.postMessage).toHaveBeenCalledWith({ type: "ready" }, ORIGIN);
+            // `ready` carries the app's end of the channel, addressed to the app's origin and nobody else's.
+            expect(iframe.parent.postMessage).toHaveBeenCalledExactlyOnceWith({ type: "ready" }, ORIGIN, [
+                iframe.channel().port2,
+            ]);
+            expect(iframe.posted()).toEqual([]);
         });
 
         it("does nothing when opened directly rather than embedded", () => {
@@ -319,17 +343,17 @@ describe("PDF usercontent", () => {
 
             startPdfUsercontent({ workerSource: WORKER_SOURCE, win: iframe.win });
 
-            expect(iframe.posted()).toEqual([]);
+            expect(iframe.parent.postMessage).not.toHaveBeenCalled();
+            expect(MockMessageChannel.instances).toEqual([]);
         });
 
-        it("only listens to the window that embedded it, from the origin it was served by", () => {
+        it("ignores messages that do not fit the protocol", () => {
             const iframe = fakeIframe();
             mockDocument();
             startPdfUsercontent({ workerSource: WORKER_SOURCE, win: iframe.win });
 
-            iframe.receive(loadMessage(), { source: { postMessage: vi.fn() } });
-            iframe.receive(loadMessage(), { origin: "https://evil.example.org" });
             iframe.receive({ type: "load", data: "not bytes" });
+            iframe.receive({ type: "go_to_page", page: "2" });
             iframe.receive("load");
 
             expect(pdfjsMock.MockWorker.instances).toHaveLength(0);

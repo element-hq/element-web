@@ -6,7 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /**
- * The postMessage protocol between the app and the PDF usercontent iframe. Neither side trusts the
+ * The protocol between the app and the PDF usercontent iframe. The iframe posts `ready` to its parent
+ * with one end of a MessageChannel; everything else travels over that channel. Neither side trusts the
  * other: each message is parsed before use.
  */
 
@@ -38,7 +39,7 @@ export type PdfHostMessage =
 
 /** Messages the iframe sends to the app. */
 export type PdfUsercontentMessage =
-    /** Listening; the app may send `load`. */
+    /** Listening. Carries the app's end of the channel in `event.ports`. */
     | { type: "ready" }
     /** Laid out, saved position applied. */
     | { type: "loaded"; pageCount: number; page: number }

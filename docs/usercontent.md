@@ -45,10 +45,10 @@ the iframe over postMessage. The protocol is defined in `src/usercontent/pdf/pro
 ```
 
 and the iframe answers with `ready`, `loaded` (page count), `page` (the page now at the top), `position` (the
-reading position to remember) and `error`. Both sides validate what they receive: the iframe only accepts messages
-from the window that embedded it and from the origin it was served by, and the app only accepts messages from
-its own iframe's window, checks their shape, and never acts on them beyond moving a page number or a saved
-position around.
+reading position to remember) and `error`. The iframe posts `ready` to its parent, addressed to the origin it was
+served by, with one end of a `MessageChannel`; everything else travels over that channel, so no message needs a
+wildcard target. The app only takes the port from a `ready` posted by its own iframe's window with the `"null"`
+origin a sandboxed iframe has, and both sides check the shape of every message before acting on it.
 
 Two consequences of the opaque origin are worth knowing about:
 
