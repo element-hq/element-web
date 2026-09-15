@@ -66,6 +66,10 @@
         "png-to-ico": "^3.0.0",
         "uuid": "^14.0.0"
     },
+    "optionalDependencies": {
+        "graphene-pk11": "^2.3.6",
+        "pkcs11js": "^2.1.6"
+    },
     "devDependencies": {
         "@babel/core": "^7.18.10",
         "@babel/preset-env": "^7.18.10",
