@@ -387,6 +387,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state?.widgetId;
+            case RightPanelPhases.FileViewer:
+                if (!card.state?.fileViewer || !card.state?.fileViewerMedia || !card.state?.fileViewerSourceEvent) {
+                    logger.warn(
+                        "removed card from right panel because of missing fileViewer, fileViewerMedia and/or fileViewerSourceEvent in card state",
+                    );
+                }
+                return !(!card.state?.fileViewer || !card.state?.fileViewerMedia || !card.state?.fileViewerSourceEvent);
             case RightPanelPhases.PdfViewer:
                 // Also drop a card stored before the lab was turned off, so disabling it closes any
                 // viewer that was left open rather than restoring it on the next load.

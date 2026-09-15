@@ -9,8 +9,8 @@ import { vi, describe, it, expect, beforeAll, afterAll, type Mock } from "vitest
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -282,6 +282,8 @@ describe("UrlPreviewFetcher", () => {
                 showTooltipOnLink: false,
                 description: "Bundled description",
                 ogUrl: "https://example.org/canonical",
+                // the bundle is kept so consumers can read keys UrlPreview does not model
+                additionalBundleContent: BASIC_BUNDLE,
             });
             // eslint-disable-next-line no-restricted-properties
             expect(client.mxcUrlToHttp).not.toHaveBeenCalled();

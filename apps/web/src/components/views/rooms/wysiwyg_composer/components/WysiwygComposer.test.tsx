@@ -601,6 +601,11 @@ describe("WysiwygComposer", () => {
             if (editorState) {
                 await waitFor(() => expect(screen.getByRole("textbox").textContent).not.toBe(""));
             }
+            // Once ready, the composer puts its own caret at the end of the editor. That happens in
+            // an effect flushed after contentEditable lands in the DOM, so waiting for the attribute
+            // alone lets it run *after* a test has placed the caret, clobbering the selection the
+            // test set up. Wait for it here so the tests always get the last word on the caret.
+            await waitFor(() => expect(document.getSelection()?.anchorNode).toBe(screen.getByRole("textbox")));
             return { textbox: screen.getByRole("textbox"), spyDispatcher };
         };
 

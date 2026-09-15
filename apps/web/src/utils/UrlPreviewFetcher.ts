@@ -10,9 +10,9 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type UrlPreviewApi as ModuleUrlPreviewApi } from "../modules/UrlPreviewApi";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
@@ -274,6 +274,10 @@ export class UrlPreviewFetcher {
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
+
+            // Keep the bundle we were built from, so consumers can recover keys this type
+            // does not model (e.g. the encrypted-image info a file viewer needs).
+            additionalBundleContent: single,
         };
 
         // missing fields from the bundle because backend does provide it:

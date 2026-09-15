@@ -29,6 +29,9 @@ export enum RightPanelPhases {
     // Thread stuff
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",
+
+    // Global cards
+    FileViewer = "FileViewer",
 }
 
 export function backLabelForPhase(phase: RightPanelPhases | null): string | null {
