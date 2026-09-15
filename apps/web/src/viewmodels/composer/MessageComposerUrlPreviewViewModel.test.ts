@@ -7,13 +7,14 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
+import { vi, describe, it, expect, type Mock, beforeAll, afterAll, afterEach } from "vitest";
 
 import { MatrixEvent, MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
 import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
+import SettingsStore from "../../settings/SettingsStore";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -37,7 +38,6 @@ function getViewModel({ visible } = { visible: true }): {
         visible,
         showTooltips: false,
         moduleUrlPreviewApi: new UrlPreviewApi(),
-        urlPreviewBundle: false,
     });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }
@@ -69,6 +69,9 @@ function getMockClient(): MockClient {
 /**
  * `restoreFromMessage` starts fetching immediately, so `client` must already be set up with the
  * responses the test expects. Pass one built with {@link getMockClient}.
+ *
+ * It reads the bundle feature flag from SettingsStore rather than from props, so `urlPreviewBundle`
+ * is applied by stubbing that lookup. Mocks are restored in `afterEach`.
  */
 function restoreViewModel(
     content: RoomMessageEventContent,
@@ -77,11 +80,15 @@ function restoreViewModel(
     vm: MessageComposerUrlPreviewViewModel;
     client: MockClient;
 } {
+    const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+    vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
+        setting === "feature_msc4095_url_preview_bundle" ? urlPreviewBundle : originalGetValue(setting),
+    );
+
     const vm = MessageComposerUrlPreviewViewModel.restoreFromMessage({
         client: client as unknown as MatrixClient,
         moduleUrlPreviewApi: new UrlPreviewApi(),
         visible,
-        urlPreviewBundle,
         mxEvent: new MatrixEvent({
             type: "m.room.message",
             content,
@@ -291,6 +298,10 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         });
     });
     describe("restoreFromMessage", () => {
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
         it("should seed previews from the event's bundle without refetching them", async () => {
             const { vm, client } = restoreViewModel({
                 "msgtype": MsgType.Text,

@@ -28,14 +28,11 @@ interface IEditMessageComposerProps extends MatrixClientProps {
 }
 
 export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
-    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
-
     const vm = useCreateAutoDisposedViewModel(() =>
         MessageComposerUrlPreviewViewModel.restoreFromMessage({
             client: props.mxClient,
             moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             visible: props.showUrlPreview,
-            urlPreviewBundle: urlPreviewBundleEnabled,
             mxEvent: props.editState.getEvent(),
         }),
     );
@@ -93,9 +90,9 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     );
 
     return (
-        <>
+        <div>
             <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
             {editor}
-        </>
+        </div>
     );
 }

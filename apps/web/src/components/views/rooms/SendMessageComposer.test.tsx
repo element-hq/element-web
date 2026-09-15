@@ -198,7 +198,6 @@ describe("<SendMessageComposer/>", () => {
             visible: false,
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
-            urlPreviewBundle: false,
         });
         const defaultProps = {
             room: mockRoom,
@@ -488,7 +487,6 @@ describe("<SendMessageComposer/>", () => {
             visible: false,
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
-            urlPreviewBundle: false,
         });
 
         cli.isRoomEncrypted = vi.fn().mockReturnValue(true);
