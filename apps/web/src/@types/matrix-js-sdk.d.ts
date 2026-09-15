@@ -91,6 +91,8 @@ declare module "matrix-js-sdk/src/types" {
         // MSC4155: Invite filtering
         [INVITE_RULES_ACCOUNT_DATA_TYPE]: InviteConfigAccountData;
 
+        // Media preview configuration, stable and unstable (MSC4278) identifiers
+        "m.media_preview_config": MediaPreviewConfig;
         "io.element.msc4278.media_preview_config": MediaPreviewConfig;
 
         // Indicate whether recovery is enabled or disabled
