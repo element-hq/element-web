@@ -157,6 +157,7 @@ export default withMermaid({
                     { text: "Cider editor", link: "/ciderEditor" },
                     { text: "Iconography", link: "/icons" },
                     { text: "Local echo", link: "/local-echo-dev" },
+                    { text: "Encrypted search in the browser", link: "/web-event-index" },
                     { text: "Media", link: "/media-handling" },
                     { text: "Room List", link: "/room-list" },
                     { text: "Scrolling", link: "/scrolling" },
