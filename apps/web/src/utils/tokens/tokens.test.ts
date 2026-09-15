@@ -11,7 +11,13 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 
 import * as StorageAccess from "../StorageAccess";
-import { ACCESS_TOKEN_IV, ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_IV, persistTokens, tryDecryptToken } from "./tokens";
+import {
+    ACCESS_TOKEN_NAME,
+    ACCESS_TOKEN_STORAGE_KEY,
+    REFRESH_TOKEN_NAME,
+    persistTokens,
+    tryDecryptToken,
+} from "./tokens";
 
 const PICKLE_KEY = "aVerySecretPickleKey";
 const ACCESS_TOKEN = "syt_access_token_value";
@@ -42,7 +48,7 @@ describe("tokens", () => {
             expect(typeof stored).toBe("object");
             expect(stored.ciphertext).toBeDefined();
 
-            await expect(tryDecryptToken(PICKLE_KEY, stored, ACCESS_TOKEN_IV)).resolves.toEqual(ACCESS_TOKEN);
+            await expect(tryDecryptToken(PICKLE_KEY, stored, ACCESS_TOKEN_NAME)).resolves.toEqual(ACCESS_TOKEN);
         });
 
         it("throws 'bad MAC' when the pickle key does not match the one used to persist", async () => {
@@ -50,7 +56,7 @@ describe("tokens", () => {
 
             // This is what a pickle key which has been replaced since the token was written looks
             // like in production, so keep the failure recognisable.
-            await expect(tryDecryptToken("aDifferentPickleKey", stored, ACCESS_TOKEN_IV)).rejects.toThrow(
+            await expect(tryDecryptToken("aDifferentPickleKey", stored, ACCESS_TOKEN_NAME)).rejects.toThrow(
                 "Error decrypting secret access_token: bad MAC",
             );
         });
@@ -58,7 +64,7 @@ describe("tokens", () => {
         it("throws when the token name does not match, since it is an input to the key derivation", async () => {
             const stored = (await persistAccessToken(PICKLE_KEY)) as AESEncryptedSecretStoragePayload;
 
-            await expect(tryDecryptToken(PICKLE_KEY, stored, REFRESH_TOKEN_IV)).rejects.toThrow(
+            await expect(tryDecryptToken(PICKLE_KEY, stored, REFRESH_TOKEN_NAME)).rejects.toThrow(
                 "Error decrypting secret refresh_token: bad MAC",
             );
         });
