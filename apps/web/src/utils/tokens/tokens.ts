@@ -27,8 +27,8 @@ export const REFRESH_TOKEN_STORAGE_KEY = "mx_refresh_token";
  * Names of the tokens. Used as part of the calculation to derive AES keys during encryption in persistTokenInStorage,
  * and decryption in restoreSessionFromStorage.
  */
-export const ACCESS_TOKEN_IV = "access_token";
-export const REFRESH_TOKEN_IV = "refresh_token";
+export const ACCESS_TOKEN_NAME = "access_token";
+export const REFRESH_TOKEN_NAME = "refresh_token";
 /*
  * Keys for localstorage items which indicate whether we expect a token in indexeddb.
  */
@@ -183,14 +183,14 @@ async function persistTokenInStorage(
 export async function persistTokens(pickleKey: string | undefined, tokens: AccessTokens): Promise<void> {
     await persistTokenInStorage(
         ACCESS_TOKEN_STORAGE_KEY,
-        ACCESS_TOKEN_IV,
+        ACCESS_TOKEN_NAME,
         tokens.accessToken,
         pickleKey,
         HAS_ACCESS_TOKEN_STORAGE_KEY,
     );
     await persistTokenInStorage(
         REFRESH_TOKEN_STORAGE_KEY,
-        REFRESH_TOKEN_IV,
+        REFRESH_TOKEN_NAME,
         tokens.refreshToken,
         pickleKey,
         HAS_REFRESH_TOKEN_STORAGE_KEY,

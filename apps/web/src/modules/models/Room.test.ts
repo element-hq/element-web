@@ -5,8 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "../../../../src/modules/models/Room";
-import { mkRoom, stubClient } from "../../../test-utils";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, vi } from "vitest";
+import { mkRoom, stubClient } from "test-utils";
+
+import { Room } from "./Room";
 
 describe("Room", () => {
     it("should return id from sdk room", () => {
@@ -38,9 +42,9 @@ describe("Room", () => {
             sdkRoom.name = "Foo Name";
 
             const room = new Room(sdkRoom);
-            const fn = jest.fn();
-            const onSpy = jest.spyOn(sdkRoom, "on");
-            const offSpy = jest.spyOn(sdkRoom, "off");
+            const fn = vi.fn();
+            const onSpy = vi.spyOn(sdkRoom, "on");
+            const offSpy = vi.spyOn(sdkRoom, "off");
 
             room.name.watch(fn);
             expect(onSpy).toHaveBeenCalledTimes(1);

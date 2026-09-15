@@ -5,9 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientApi } from "../../../src/modules/ClientApi";
-import { Room } from "../../../src/modules/models/Room";
-import { stubClient } from "../../test-utils/test-utils";
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+import { stubClient } from "test-utils";
+
+import { ClientApi } from "./ClientApi";
+import { Room } from "./models/Room";
 
 describe("ClientApi", () => {
     it("should return module room from getRoom()", () => {

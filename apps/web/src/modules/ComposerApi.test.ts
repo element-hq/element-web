@@ -5,18 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { Action } from "../../../src/dispatcher/actions";
-import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
-import { type ComposerInsertPayload, ComposerType } from "../../../src/dispatcher/payloads/ComposerInsertPayload";
-import { ComposerApi, ModuleComposerApiEvents } from "../../../src/modules/ComposerApi";
-import type { ComposerInsertFilesPayload } from "../../../src/dispatcher/payloads/ComposerInsertFilePayload";
+import { describe, it, expect, vi } from "vitest";
+
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import { Action } from "../dispatcher/actions";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type ComposerInsertPayload, ComposerType } from "../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerApi, ModuleComposerApiEvents } from "./ComposerApi";
+import type { ComposerInsertFilesPayload } from "../dispatcher/payloads/ComposerInsertFilePayload";
 
 describe("ComposerApi", () => {
     describe("insertPlaintextIntoComposer()", () => {
         it("should be able to insert text", () => {
             const dispatcher = {
-                dispatch: jest.fn(),
+                dispatch: vi.fn(),
             } as unknown as MatrixDispatcher;
             const api = new ComposerApi(dispatcher);
             api.insertPlaintextIntoComposer("Hello world", { view: "room" });
@@ -37,7 +39,7 @@ describe("ComposerApi", () => {
     describe("openFileUploadConfirmation()", () => {
         it("should be able to initiate a file upload", () => {
             const dispatcher = {
-                dispatch: jest.fn(),
+                dispatch: vi.fn(),
             } as unknown as MatrixDispatcher;
             const api = new ComposerApi(dispatcher);
             const files = [new File(["test"], "test.txt")];
@@ -59,7 +61,7 @@ describe("ComposerApi", () => {
     describe("addFileUploadOption()", () => {
         it("should be able to add a file upload option", () => {
             const api = new ComposerApi(new MatrixDispatcher());
-            const eventCb = jest.fn();
+            const eventCb = vi.fn();
             api.on(ModuleComposerApiEvents.UploaderOptionsChanged, eventCb);
             const option = { type: "an_option", label: "New option", onSelected: () => {} };
             api.addFileUploadOption(option);

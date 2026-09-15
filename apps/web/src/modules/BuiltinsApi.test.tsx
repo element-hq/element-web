@@ -4,11 +4,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { ElementWebBuiltinsApi } from "../../../src/modules/BuiltinsApi.tsx";
-import { stubClient } from "../../test-utils/test-utils";
+import { describe, it, expect } from "vitest";
+import React from "react";
+import { render } from "test-utils-rtl";
+import { stubClient } from "test-utils";
+
+import { ElementWebBuiltinsApi } from "./BuiltinsApi.tsx";
 
 const Avatar: React.FC<{ room: { roomId: string }; size: string }> = ({ room, size }) => {
     return (
