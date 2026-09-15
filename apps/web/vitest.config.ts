@@ -16,8 +16,8 @@ function resolve(specifier: string): string {
 export default defineProject({
     resolve: {
         alias: [
-            { find: "test-utils-rtl", replacement: resolve("./test/test-utils/vitest-matrix-react") },
-            { find: "test-utils", replacement: resolve("./test/test-utils") },
+            { find: "test-utils-rtl", replacement: resolve("./src/test/test-utils/vitest-matrix-react") },
+            { find: "test-utils", replacement: resolve("./src/test/test-utils") },
             // Stub out workers as they do not play well under test
             {
                 find: /.*workers\/(.+)Factory/,

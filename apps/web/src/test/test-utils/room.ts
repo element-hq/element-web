@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, type MockedObject } from "vitest";
 import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { MainSplitContentType, type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";
-import { Layout } from "../../src/settings/enums/Layout";
+import { MainSplitContentType, type RoomContextType, TimelineRenderingType } from "../../contexts/RoomContext";
+import { Layout } from "../../settings/enums/Layout";
 import { mkEvent } from "./test-utils";
-import { SDKContextClass } from "../../src/contexts/SDKContextClass";
-import { vi, type MockedObject } from "../setup/adapter";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 
 export const makeMembershipEvent = (roomId: string, userId: string, membership = KnownMembership.Join) =>
     mkEvent({

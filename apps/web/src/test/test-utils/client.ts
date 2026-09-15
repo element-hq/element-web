@@ -7,14 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "node:events";
-import { type MockedObject } from "vitest";
-import { type MethodLikeKeys, type PropertyLikeKeys } from "jest-mock";
+import { vi, type MockedObject } from "vitest";
 import { type MockedObjectDeep } from "@vitest/spy";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { type MatrixClient, type Room, User } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { vi } from "../setup/adapter.ts";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { type MethodLikeKeys, type PropertyLikeKeys } from "./@types/common";
 
 /**
  * Mocked generic class with a real EventEmitter.

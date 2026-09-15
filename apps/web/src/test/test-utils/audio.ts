@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "node:events";
+import { vi } from "vitest";
 import { SimpleObservable } from "matrix-widget-api";
 
-import { vi } from "../setup/adapter.ts";
-import { type Playback, PlaybackState } from "../../src/audio/Playback";
-import { type PlaybackClock } from "../../src/audio/PlaybackClock";
-import { UPDATE_EVENT } from "../../src/stores/AsyncStore";
-import { type PublicInterface } from "../@types/common";
+import { type Playback, PlaybackState } from "../../audio/Playback";
+import { type PlaybackClock } from "../../audio/PlaybackClock";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import { type PublicInterface } from "./@types/common";
 
 export const createTestPlayback = (overrides: Partial<Playback> = {}): Playback => {
     const eventEmitter = new EventEmitter();

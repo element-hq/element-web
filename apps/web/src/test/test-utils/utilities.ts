@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, beforeEach, afterEach } from "vitest";
 import { act } from "test-utils-rtl";
 
 import type EventEmitter from "node:events";
-import { type ActionPayload } from "../../src/dispatcher/payloads";
-import defaultDispatcher from "../../src/dispatcher/dispatcher";
-import { type DispatcherAction } from "../../src/dispatcher/actions";
-import Modal from "../../src/Modal";
-import { vi, beforeEach, afterEach } from "../setup/adapter.ts";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { type DispatcherAction } from "../../dispatcher/actions";
+import Modal from "../../Modal";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
@@ -126,7 +126,7 @@ export function untilEmission(
 
 export const flushPromises = () => act(async () => await new Promise<void>((resolve) => window.setTimeout(resolve)));
 
-// with jest's modern fake timers process.nextTick is also mocked,
+// with vitest's fake timers process.nextTick is also mocked,
 // flushing promises in the normal way then waits for some advancement
 // of the fake timers
 // https://gist.github.com/apieceofbart/e6dea8d884d29cf88cdb54ef14ddbcc4?permalink_comment_id=4018174#gistcomment-4018174
@@ -164,7 +164,7 @@ export function waitForUpdate(inst: React.Component, updates = 1): Promise<void>
 }
 
 /**
- * Advance jests fake timers and Date.now mock by ms
+ * Advance vitest's fake timers and Date.now mock by ms
  * Useful for testing code using timeouts or intervals
  * that also checks timestamps
  */
@@ -183,7 +183,6 @@ export const waitEnoughCyclesForModal = async ({
 }: {
     useFakeTimers?: boolean;
 } = {}): Promise<void> => {
-    // XXX: Maybe in the future with Jest 29.5.0+, we could use `runAllTimersAsync` instead.
     const flushFunc = useFakeTimers ? flushPromisesWithFakeTimers : flushPromises;
 
     await flushFunc();

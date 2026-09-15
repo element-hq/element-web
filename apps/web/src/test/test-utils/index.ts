@@ -19,9 +19,8 @@ export * from "./call";
 export * from "./wrappers";
 export * from "./utilities";
 export * from "./date";
-export * from "./relations";
 export * from "./console";
-export * from "../unit-tests/TestSDKContext.ts";
+export * from "./TestSDKContext.ts";
 
 // wait for loading page
 export async function waitForLoadingSpinner(): Promise<void> {

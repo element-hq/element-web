@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "node:events";
-import { type MockedObject } from "vitest";
+import { vi, type MockedObject } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -43,13 +43,12 @@ import { type MapperOpts } from "matrix-js-sdk/src/event-mapper";
 import { type MatrixRTCSessionManager, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type { Membership } from "matrix-js-sdk/src/types";
-import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
-import { EnhancedMap } from "../../src/utils/maps";
-import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
-import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
-import { vi } from "../setup/adapter.ts";
-import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
+import { MatrixClientPeg as peg } from "../../MatrixClientPeg";
+import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
+import { EnhancedMap } from "../../utils/maps";
+import { type AsyncStoreWithClient } from "../../stores/AsyncStoreWithClient";
+import MatrixClientBackedSettingsHandler from "../../settings/handlers/MatrixClientBackedSettingsHandler";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to

@@ -8,4 +8,4 @@ Please see LICENSE files in the repository root for full details.
 
 export const REPEATABLE_DATE = new Date(Date.UTC(2022, 10, 17, 16, 58, 32, 517));
 
-export { mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../src/test/intlDateTimeFormatMock";
+export { mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../intlDateTimeFormatMock";

@@ -8,17 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SDKContextClass } from "../../src/contexts/SDKContextClass";
-import { type PosthogAnalytics } from "../../src/PosthogAnalytics";
-import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
-import { type RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
-import type RightPanelStore from "../../src/stores/right-panel/RightPanelStore";
-import { type RoomViewStore } from "../../src/stores/RoomViewStore";
-import type SpaceStore from "../../src/stores/spaces/SpaceStore";
-import { type WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
-import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
-import type WidgetStore from "../../src/stores/WidgetStore";
-import type LegacyCallHandler from "../../src/LegacyCallHandler.tsx";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
+import { type PosthogAnalytics } from "../../PosthogAnalytics";
+import { type SlidingSyncManager } from "../../SlidingSyncManager";
+import { type RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import type RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
+import { type WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { type WidgetPermissionStore } from "../../stores/widgets/WidgetPermissionStore";
+import type WidgetStore from "../../stores/WidgetStore";
+import type LegacyCallHandler from "../../LegacyCallHandler.tsx";
 
 /**
  * A class which provides the same API as SDKContextClass but adds additional unsafe setters which can

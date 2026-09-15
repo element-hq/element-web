@@ -6,13 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MethodLikeKeys } from "jest-mock";
-import { type MockedObject } from "vitest";
+import { vi, type MockedObject } from "vitest";
 
-import BasePlatform from "../../src/BasePlatform";
-import PlatformPeg from "../../src/PlatformPeg";
-import * as SessionLock from "../../src/utils/SessionLock";
-import { vi } from "../setup/adapter.ts";
+import BasePlatform from "../../BasePlatform";
+import PlatformPeg from "../../PlatformPeg";
+import * as SessionLock from "../../utils/SessionLock";
+import { type MethodLikeKeys } from "./@types/common";
 
 // doesn't implement abstract
 // @ts-ignore
