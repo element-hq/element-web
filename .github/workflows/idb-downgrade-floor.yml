@@ -1,0 +1,27 @@
+# Re-checks, independently of the Electron pin, whether the current Electron would introduce an
+# IndexedDB downgrade floor. The unit test only does this when the Electron major changes, so that
+# pull requests do not depend on the network; this catches the cases that assumption misses, such as
+# upstream moving one of the headers the check parses.
+# See apps/desktop/scripts/idb-downgrade-floor/README.md
+name: IndexedDB downgrade floor
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 4 * * 1" # 4am every Monday
+permissions: {} # No permissions required
+jobs:
+    check:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version: "lts/*"
+
+            # The script only uses Node's standard library, so no install step is needed.
+            - name: Check for a downgrade floor
+              working-directory: apps/desktop
+              run: node scripts/idb-downgrade-floor/update-baseline.ts --check

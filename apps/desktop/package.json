@@ -48,6 +48,7 @@
         "docker:install": "scripts/in-docker.sh pnpm install --filter=element-desktop --frozen-lockfile",
         "clean": "rimraf webapp.asar dist packages deploys lib",
         "hak": "node scripts/hak/index.ts",
+        "idb:baseline": "node scripts/idb-downgrade-floor/update-baseline.ts",
         "test:unit": "vitest",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
