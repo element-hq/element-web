@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 
 import { idbLoad } from "../utils/StorageAccess";
-import { ACCESS_TOKEN_IV, tryDecryptToken } from "../utils/tokens/tokens";
+import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
 
 const serverSupportMap: {
@@ -157,7 +157,7 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
             throw new Error("no pickle key found");
         }
 
-        const accessToken = await tryDecryptToken(pickleKey, storedAccessToken, ACCESS_TOKEN_IV);
+        const accessToken = await tryDecryptToken(pickleKey, storedAccessToken, ACCESS_TOKEN_NAME);
         return { accessToken, homeserver };
     } catch (e) {
         throw new Error("SW: Error decrypting access token.", { cause: e });

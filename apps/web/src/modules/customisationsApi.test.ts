@@ -5,8 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { CustomisationsApi } from "../../../src/modules/customisationsApi";
-import { UIComponent } from "../../../src/settings/UIFeature.ts";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+
+import { CustomisationsApi } from "./customisationsApi";
+import { UIComponent } from "../settings/UIFeature.ts";
 
 describe("CustomisationsApi", () => {
     let api: CustomisationsApi;
@@ -16,7 +18,7 @@ describe("CustomisationsApi", () => {
     });
 
     it("should register a shouldShowComponent callback", () => {
-        const shouldShowComponent = jest.fn().mockReturnValue(true);
+        const shouldShowComponent = vi.fn().mockReturnValue(true);
         api.registerShouldShowComponent(shouldShowComponent);
         expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBe(true);
         expect(shouldShowComponent).toHaveBeenCalledWith("UIComponent.roomCreation");

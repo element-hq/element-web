@@ -52,12 +52,12 @@ import { completeOAuthLogin, type CompleteOAuthLoginResponse } from "./utils/oau
 import { getOAuthErrorMessage } from "./utils/oauth/error";
 import { getStoredOAuthClientId, persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
 import {
-    ACCESS_TOKEN_IV,
+    ACCESS_TOKEN_NAME,
     ACCESS_TOKEN_STORAGE_KEY,
     HAS_ACCESS_TOKEN_STORAGE_KEY,
     HAS_REFRESH_TOKEN_STORAGE_KEY,
     persistTokens,
-    REFRESH_TOKEN_IV,
+    REFRESH_TOKEN_NAME,
     REFRESH_TOKEN_STORAGE_KEY,
     tryDecryptToken,
 } from "./utils/tokens/tokens";
@@ -628,7 +628,7 @@ async function abortLogin(): Promise<void> {
  *
  * @param pickleKey Pickle key for this session, or undefined if none could be read.
  * @param token The token as it came out of storage.
- * @param tokenName Name of the token, e.g. {@link ACCESS_TOKEN_IV}.
+ * @param tokenName Name of the token, e.g. {@link ACCESS_TOKEN_NAME}.
  *
  * @returns the decrypted token.
  * @throws if the token is encrypted but cannot be decrypted.
@@ -702,9 +702,9 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
         } else {
             logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
-        const decryptedAccessToken = await processStoredToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
+        const decryptedAccessToken = await processStoredToken(pickleKey, accessToken, ACCESS_TOKEN_NAME);
         const decryptedRefreshToken =
-            refreshToken && (await processStoredToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
+            refreshToken && (await processStoredToken(pickleKey, refreshToken, REFRESH_TOKEN_NAME));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
