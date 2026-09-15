@@ -559,8 +559,8 @@ export interface IStoredSession {
  * @param storageKey key used to store the token, eg ACCESS_TOKEN_STORAGE_KEY
  * @returns Promise that resolves to token or undefined
  */
-async function getStoredToken(storageKey: string): Promise<string | undefined> {
-    let token: string | undefined;
+async function getStoredToken(storageKey: string): Promise<string | AESEncryptedSecretStoragePayload | undefined> {
+    let token: string | AESEncryptedSecretStoragePayload | undefined;
     try {
         token = await StorageAccess.idbLoad("account", storageKey);
     } catch (e) {
@@ -621,6 +621,40 @@ async function abortLogin(): Promise<void> {
     }
 }
 
+/**
+ * Process a token which was loaded from storage by {@link getStoredToken} and decrypt if needed.
+ *
+ * {@link tryDecryptToken} only handles the encrypted case, so the two situations it used to absorb
+ * are decided here instead: a token persisted while no pickle key was available is stored as a
+ * plain string and is returned as-is, and an encrypted token with no pickle key to decrypt it is
+ * unrecoverable.
+ *
+ * @param pickleKey Pickle key for this session, or undefined if none could be read.
+ * @param token The token as it came out of storage.
+ * @param tokenName Name of the token, e.g. {@link ACCESS_TOKEN_IV}.
+ *
+ * @returns the decrypted token.
+ * @throws if the token is encrypted but cannot be decrypted.
+ */
+async function processStoredToken(
+    pickleKey: string | undefined,
+    token: string | AESEncryptedSecretStoragePayload,
+    tokenName: string,
+): Promise<string> {
+    if (typeof token === "string") {
+        // Stored unencrypted, because there was no pickle key when it was persisted.
+        return token;
+    }
+
+    if (!pickleKey) {
+        // The token is encrypted and we have no way to read it. Keep this message stable: it is the
+        // signature support uses to identify this failure in rageshake logs.
+        throw new Error(`Error decrypting secret ${tokenName}: no pickle key found.`);
+    }
+
+    return tryDecryptToken(pickleKey, token, tokenName);
+}
+
 /** Attempt to restore the session from localStorage or indexeddb.
  *
  * If the credentials are found, and the session is successfully restored,
@@ -671,9 +705,9 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
         } else {
             logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
-        const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
+        const decryptedAccessToken = await processStoredToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
         const decryptedRefreshToken =
-            refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
+            refreshToken && (await processStoredToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
