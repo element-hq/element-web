@@ -359,7 +359,7 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/967a06ba395db824c28235d6d53a8b910ad4d5c5#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/3c88d217f259710922d6ca4c6d82a0dba12a1e4f#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
@@ -482,8 +482,8 @@ importers:
         specifier: ^2.0.0
         version: 2.1.2
       electron:
-        specifier: 44.2.0
-        version: 44.2.0(supports-color@10.2.2)
+        specifier: 44.3.0
+        version: 44.3.0(supports-color@10.2.2)
       electron-builder:
         specifier: 26.16.1
         version: 26.16.1(electron-builder-squirrel-windows@26.16.1)(supports-color@10.2.2)
@@ -8742,8 +8742,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@44.2.0:
-    resolution: {integrity: sha512-oK1icjhapp3xsUZycO9WZaLmd3hJnA7ieobC4mpdtO1pEN+PPGWpA3m1Mgzzuc1wzSD2Wai4zcH4yfpGJqxFMA==}
+  electron@44.3.0:
+    resolution: {integrity: sha512-St9EV7F2VtYaYWD2qaAjBwUgKxx39eJOUsUJ5+/1113sqbVfNqv4Dbm/W1rN7qmYSPa+mWwR6yr+b7MfgjgVfQ==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -8893,8 +8893,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/967a06ba395db824c28235d6d53a8b910ad4d5c5#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-nWzOwXWE2dtOjWFUCNCnQlTHTV0i5YoG7te7ktzMj9j32ZYj9RMCqbRJK3qhMlj3qvlpiwjl6iVDcsdc5cx5yQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/967a06ba395db824c28235d6d53a8b910ad4d5c5}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3c88d217f259710922d6ca4c6d82a0dba12a1e4f#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-I3+YDBvOPZOL2sZQuHXocvCTd0FIFagEroRHjGkBKkU96Ibgv9rHwOZpI0aIZaPeCpHpd87aXMgRChQWMUVlwQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/3c88d217f259710922d6ca4c6d82a0dba12a1e4f}
     version: 0.0.0
 
   eslint-plugin-storybook@10.6.0:
@@ -22005,7 +22005,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@44.2.0(supports-color@10.2.2):
+  electron@44.3.0(supports-color@10.2.2):
     dependencies:
       '@electron-internal/extract-zip': 1.0.3
       '@electron/get': 5.0.0(supports-color@10.2.2)
@@ -22145,7 +22145,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/967a06ba395db824c28235d6d53a8b910ad4d5c5#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3c88d217f259710922d6ca4c6d82a0dba12a1e4f#path:/eslint: {}
 
   eslint-plugin-storybook@10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
     dependencies:
