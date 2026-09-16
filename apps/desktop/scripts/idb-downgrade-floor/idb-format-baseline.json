@@ -1,0 +1,18 @@
+{
+    "$comment": [
+        "Records the IndexedDB format numbers of the current Electron version, so CI can tell when",
+        "bumping Electron would introduce a downgrade floor. Regenerate with `pnpm idb:baseline`.",
+        "Any increase to a version number below means users who take that build can never roll back",
+        "past it without losing every Element database for the vector://vector origin, including the",
+        "crypto store. See ./README.md."
+    ],
+    "electron": "44.2.0",
+    "idbSchemaVersion": 5,
+    "v8SerializerVersion": 16,
+    "blinkSerializerVersion": 21,
+    "currentFloor": {
+        "$comment": "Oldest Element Desktop release the current format era can be downgraded to.",
+        "elementDesktop": "1.12.24",
+        "since": "Electron 43 / Chromium 150 raised v8SerializerVersion from 15 to 16"
+    }
+}
