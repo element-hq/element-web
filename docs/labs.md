@@ -84,6 +84,7 @@ This is useful while we experiment with encryption and to make calling compatibl
 ## MatrixRTC call slots (`feature_matrixrtc_slots`) [In Development]
 
 Only allows starting or joining Element Call calls with a valid slot state event in the room.
+Incoming call notifications are validated as per [MSC4075](https://github.com/matrix-org/matrix-spec-proposals/pull/4075), so they are only shown if the slot they invite to is open.
 
 ## Enable the notifications panel in the room header (`feature_notifications`)
 

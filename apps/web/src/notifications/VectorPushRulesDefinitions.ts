@@ -187,6 +187,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_NOTIFY_RING_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
+        syncedRuleIds: [RuleId.RtcInviteForMe, RuleId.RtcInviteForRoom],
     }),
 
     // Notifications from bots

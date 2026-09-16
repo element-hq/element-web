@@ -234,6 +234,39 @@ export const DEFAULT_PUSH_RULES: IPushRules = Object.freeze({
             {
                 conditions: [
                     {
+                        kind: "event_match",
+                        key: "type",
+                        pattern: "org.matrix.msc4075.rtc.notification"
+                    },
+                    {
+                        kind: "event_property_contains",
+                        key: "content.m\\.mentions.user_ids",
+                        value_type: "user_id",
+                    },
+                ],
+                actions: ["notify", { set_tweak: "sound", value: "ring" }],
+                rule_id: ".org.matrix.msc4075.rule.rtc.invite_for_me",
+                default: true,
+                enabled: true,
+            },
+            {
+                conditions: [
+                    {
+                        kind: "event_match",
+                        key: "type",
+                        pattern: "org.matrix.msc4075.rtc.notification"
+                    },
+                    { kind: "event_property_is", key: "content.m\\.mentions.room", value: true },
+                    { kind: "sender_notification_permission", key: "room" },
+                ],
+                actions: ["notify", { set_tweak: "sound", value: "ring" }],
+                rule_id: ".org.matrix.msc4075.rule.rtc.invite_for_room",
+                default: true,
+                enabled: true,
+            },
+            {
+                conditions: [
+                    {
                         kind: "event_property_contains",
                         key: "content.m\\.mentions.user_ids",
                         value_type: "user_id",

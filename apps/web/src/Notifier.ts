@@ -25,7 +25,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
-import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import {
+    type SessionMembershipData,
+    type IRTCNotificationContent,
+    getCallNotificationExpiry,
+    parseCallNotificationContent,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
@@ -42,7 +47,7 @@ import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { type SDKContextClass } from "./contexts/SDKContextClass.ts";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
-import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./toasts/IncomingCallToast";
+import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
@@ -608,30 +613,77 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             return;
         }
 
-        // XXX: Should use parseCallNotificationContent once the types are exported.
-        const content = ev.getContent() as IRTCNotificationContent;
         const roomId = ev.getRoomId();
-        const referencedMembershipEventId = ev.getRelation()?.event_id;
-
-        // Check maximum age of a call notification event that will trigger a ringing notification
-        if (Date.now() - getNotificationEventSendTs(ev) > content.lifetime) {
-            logger.warn("Received outdated RTCNotification event.");
-            return;
-        }
         if (!roomId) {
             logger.warn("Could not get roomId for RTCNotification event");
             return;
         }
-        if (!referencedMembershipEventId) {
-            logger.warn("Could not get referenced membership for notification");
-            return;
-        }
-        if (content["m.relates_to"].rel_type !== "m.reference") {
-            logger.warn("Ignored RTCNotification due to invalid rel_type");
+
+        // With MatrixRTC slots, notifications are validated as per MSC4075 and keyed on the slot they invite to.
+        // Without them, they are keyed on the call ID of the membership event they reference.
+        const callId = SettingsStore.getValue("feature_matrixrtc_slots")
+            ? await this.getSlotIdForNotification(ev, room)
+            : await this.getCallIdForNotification(ev, room);
+        if (callId === undefined) return;
+
+        const key = getIncomingCallToastKey(callId, roomId);
+
+        if (toaster.hasToast(key)) {
+            logger.debug(`Detected duplicate notification for call ${key}, ignoring`);
             return;
         }
 
-        let callMembership = room?.findEventById(referencedMembershipEventId);
+        toaster.addOrReplaceToast({
+            key,
+            priority: 100,
+            component: IncomingCallToast,
+            bodyClassName: "mx_IncomingCallToast",
+            props: { notificationEvent: ev },
+        });
+    }
+
+    /**
+     * Validates a notification as per MSC4075 and determines the slot it invites to.
+     * @param ev The notification event.
+     * @param room The room that contains the notification.
+     * @returns The slot ID, or `undefined` if the notification is invalid and should be ignored.
+     */
+    private async getSlotIdForNotification(ev: MatrixEvent, room: Room): Promise<string | undefined> {
+        try {
+            const content = await parseCallNotificationContent(ev, { room, userId: room.client.getSafeUserId() });
+            return content.slot_id;
+        } catch (e) {
+            logger.warn("Ignoring invalid RTCNotification event", e);
+            return undefined;
+        }
+    }
+
+    /**
+     * Determines the call ID of the membership event that a notification references.
+     * @param ev The notification event.
+     * @param room The room that contains the notification.
+     * @returns The call ID, or `undefined` if the notification is invalid and should be ignored.
+     */
+    private async getCallIdForNotification(ev: MatrixEvent, room: Room): Promise<string | undefined> {
+        const content = ev.getContent() as IRTCNotificationContent;
+        const roomId = room.roomId;
+        const referencedMembershipEventId = ev.getRelation()?.event_id;
+
+        // Check maximum age of a call notification event that will trigger a ringing notification
+        if (Date.now() >= getCallNotificationExpiry(content, ev.getTs())) {
+            logger.warn("Received outdated RTCNotification event.");
+            return undefined;
+        }
+        if (!referencedMembershipEventId) {
+            logger.warn("Could not get referenced membership for notification");
+            return undefined;
+        }
+        if (content["m.relates_to"].rel_type !== "m.reference") {
+            logger.warn("Ignored RTCNotification due to invalid rel_type");
+            return undefined;
+        }
+
+        let callMembership = room.findEventById(referencedMembershipEventId);
 
         if (!callMembership) {
             // Attempt to fetch from the homeserver, if we do not have the event locally.
@@ -649,27 +701,13 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             logger.warn(
                 `Could not find call membership (${referencedMembershipEventId} ${roomId}) for notification event.`,
             );
-            return;
+            return undefined;
         }
 
         // If we cannot determine the key, we'll accept it but assume it's empty string.
         // This means if you have malformed notifications or call memberships your notifications
         // will overwrite, but the solution to that is to use well-formed events.
-        const callId = callMembership.getContent<SessionMembershipData>().call_id ?? "";
-        const key = getIncomingCallToastKey(callId, roomId);
-
-        if (toaster.hasToast(key)) {
-            logger.debug(`Detected duplicate notification for call ${key}, ignoring`);
-            return;
-        }
-
-        toaster.addOrReplaceToast({
-            key,
-            priority: 100,
-            component: IncomingCallToast,
-            bodyClassName: "mx_IncomingCallToast",
-            props: { notificationEvent: ev },
-        });
+        return callMembership.getContent<SessionMembershipData>().call_id ?? "";
     }
 
     /**

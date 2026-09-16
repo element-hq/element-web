@@ -27,8 +27,7 @@ import {
     MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { AvatarStack, Button, Form, Heading, InlineField, Label, ToggleInput, Tooltip } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent, getCallNotificationExpiry } from "matrix-js-sdk/src/matrixrtc";
 import {
     CheckIcon,
     CloseIcon,
@@ -64,25 +63,6 @@ import { SDKContext } from "../contexts/SDKContext.ts";
  */
 export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
 
-/**
- * Get the ts when the notification event was sent.
- * This can be either the origin_server_ts or a ts the sender of this event claims as
- * the time they sent it (sender_ts).
- * The origin_server_ts is the fallback if sender_ts seems wrong.
- * @param event The RTCNotification event.
- * @returns The timestamp to use as the expect start time to apply the `lifetime` to.
- */
-export const getNotificationEventSendTs = (event: MatrixEvent): number => {
-    const content = event.getContent() as Partial<IRTCNotificationContent>;
-    const sendTs = content.sender_ts;
-    if (sendTs && Math.abs(sendTs - event.getTs()) >= 15000) {
-        logger.warn(
-            "Received RTCNotification event. With large sender_ts origin_server_ts offset -> using origin_server_ts",
-        );
-        return event.getTs();
-    }
-    return sendTs ?? event.getTs();
-};
 const MAX_RING_TIME_MS = 90 * 1000;
 
 interface JoinCallButtonWithCallProps {
@@ -236,8 +216,14 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
 
     // Dismiss on timeout.
     useEffect(() => {
-        const lifetime = notificationContent.lifetime ?? MAX_RING_TIME_MS;
-        const timeout = setTimeout(dismissToast, getNotificationEventSendTs(notificationEvent) + lifetime - Date.now());
+        const expiry = getCallNotificationExpiry(
+            {
+                sender_ts: notificationContent.sender_ts ?? notificationEvent.getTs(),
+                lifetime: notificationContent.lifetime ?? MAX_RING_TIME_MS,
+            },
+            notificationEvent.getTs(),
+        );
+        const timeout = setTimeout(dismissToast, expiry - Date.now());
         return () => clearTimeout(timeout);
     });
 

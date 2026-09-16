@@ -11,6 +11,7 @@ import {
     type MatrixClient,
     Room,
     RoomEvent,
+    EventTimeline,
     EventType,
     MsgType,
     type IContent,
@@ -668,25 +669,29 @@ describe("Notifier", () => {
             return notificationEvent;
         };
 
-        it("shows group call toast", () => {
+        it("shows group call toast", async () => {
             const notificationEvent = emitCallNotificationEvent();
 
-            expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    key: getIncomingCallToastKey(callId, roomId),
-                    priority: 100,
-                    component: IncomingCallToast,
-                    bodyClassName: "mx_IncomingCallToast",
-                    props: { notificationEvent },
-                }),
-            );
+            await waitFor(() => {
+                expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        key: getIncomingCallToastKey(callId, roomId),
+                        priority: 100,
+                        component: IncomingCallToast,
+                        bodyClassName: "mx_IncomingCallToast",
+                        props: { notificationEvent },
+                    }),
+                );
+            });
         });
 
-        it("shows group call toast once for multiple notifications to the same call", () => {
+        it("shows group call toast once for multiple notifications to the same call", async () => {
             // Call the same function twice.
             emitCallNotificationEvent();
             emitCallNotificationEvent();
-            expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledTimes(1);
+            await waitFor(() => {
+                expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledTimes(1);
+            });
         });
 
         it("shows group call toast even if the call membership is not stored locally", () => {
@@ -785,6 +790,125 @@ describe("Notifier", () => {
             emitCallNotificationEvent({ ts: Date.now() - 40000 });
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+        });
+
+        describe("with MatrixRTC slots enabled", () => {
+            const slotId = "m.call#ROOM";
+
+            const setSlotState = (status: "open" | "closed"): void => {
+                testRoom
+                    .getLiveTimeline()
+                    .getState(EventTimeline.FORWARDS)!
+                    .setStateEvents([
+                        mkEvent({
+                            event: true,
+                            type: EventType.RTCSlot,
+                            skey: slotId,
+                            user: "@alice:foo",
+                            room: roomId,
+                            content: { status, application: { type: "m.call" } },
+                        }),
+                    ]);
+            };
+
+            const emitSlotNotificationEvent = (content: Partial<IContent> = {}): MatrixEvent =>
+                emitCallNotificationEvent({
+                    content: {
+                        "slot_id": slotId,
+                        "msc4354_sticky_key": slotId,
+                        // Mention the user directly, as room mentions require power levels to be set up.
+                        "m.mentions": { user_ids: [userId] },
+                        ...content,
+                    },
+                });
+
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+                    if (key === "notificationsEnabled" || key === "feature_matrixrtc_slots") {
+                        return true;
+                    }
+                    return settingsStoreGetValue(key, ...params);
+                });
+            });
+
+            it("shows call toast keyed on the slot when the slot is open", async () => {
+                setSlotState("open");
+
+                const notificationEvent = emitSlotNotificationEvent();
+
+                await waitFor(() => {
+                    expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
+                        expect.objectContaining({
+                            key: getIncomingCallToastKey(slotId, roomId),
+                            priority: 100,
+                            component: IncomingCallToast,
+                            bodyClassName: "mx_IncomingCallToast",
+                            props: { notificationEvent },
+                        }),
+                    );
+                });
+            });
+
+            it("shows call toast once for multiple notifications to the same slot", async () => {
+                setSlotState("open");
+
+                emitSlotNotificationEvent();
+                emitSlotNotificationEvent();
+
+                await waitFor(() => {
+                    expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledTimes(1);
+                });
+            });
+
+            it("does not show call toast when the slot is closed", async () => {
+                setSlotState("closed");
+
+                emitSlotNotificationEvent();
+
+                // Give the async validation a chance to complete before asserting.
+                await new Promise((resolve) => setTimeout(resolve, 0));
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            });
+
+            it("does not show call toast when no slot exists", async () => {
+                emitSlotNotificationEvent();
+
+                await new Promise((resolve) => setTimeout(resolve, 0));
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            });
+
+            it("does not show call toast when the user is not mentioned", async () => {
+                setSlotState("open");
+
+                emitSlotNotificationEvent({ "m.mentions": { user_ids: ["@someone-else:foo"] } });
+
+                await new Promise((resolve) => setTimeout(resolve, 0));
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            });
+
+            it("does not show call toast when the user has declined the notification", async () => {
+                setSlotState("open");
+
+                const notificationEvent = emitSlotNotificationEvent();
+                testRoom.addLiveEvents(
+                    [
+                        notificationEvent,
+                        mkEvent({
+                            event: true,
+                            type: EventType.RTCDecline,
+                            user: userId,
+                            room: roomId,
+                            content: {
+                                "m.relates_to": { rel_type: "m.reference", event_id: notificationEvent.getId() },
+                            },
+                        }),
+                    ],
+                    { addToState: false },
+                );
+
+                await new Promise((resolve) => setTimeout(resolve, 0));
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            });
         });
     });
 
