@@ -59,34 +59,18 @@ Please see LICENSE files in the repository root for full details.
 /*
  * Reply previews in the new timeline (`compactPreview` in ReplyChain.tsx).
  *
- * The preview body is always two rows — who sent the message, and one line of
- * it. Every rule here gives those rows the same fixed height whether they hold
- * the real message, the skeleton shown while it loads, or an error, so the
- * preview never resizes and never shoves the messages around it. (An "In reply
- * to" header may appear above for nested replies; it usually arrives before
- * the row is on screen, and off-screen growth is corrected by the timeline.)
+ * The preview itself is the shared ReplyTileView, drawn at its natural size: a
+ * quote already in the room renders at its final height on the first pass, and
+ * growth above the viewport is compensated by the timeline. The rules here cover
+ * the two states that stand in for a preview while it is fetched, or if the
+ * fetch fails, so a row holds a sensible height instead of collapsing.
  */
 .mx_NewTimelinePanel {
-    /* Tall enough for the 16px avatar and one line of message text. */
+    /* About the height of the sender row and one line of quoted text. */
     --mx-reply-row-height: 20px;
 
-    /* The real preview's two rows. Kept in this file, next to the row height they
-       share with the skeleton below, rather than in _ReplyTile.pcss. */
-    .mx_ReplyTile .mx_ReplyTile_sender {
-        height: var(--mx-reply-row-height);
-    }
-
-    .mx_ReplyTile .mx_EventTile_content {
-        -webkit-line-clamp: 1;
-        line-height: var(--mx-reply-row-height);
-
-        .mx_EventTile_pre_container > pre {
-            -webkit-line-clamp: 1;
-        }
-    }
-
-    /* The skeleton shown while the quoted message is being fetched. The spacing
-       repeats what the real preview gets from .mx_ReplyChain and .mx_ReplyTile. */
+    /* The skeleton shown while the quoted message is being fetched: a sender row
+       and a message row, spaced like the real preview. */
     .mx_ReplyChain_placeholder {
         --username-color: $quinary-content;
         display: flex;

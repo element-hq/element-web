@@ -201,7 +201,7 @@ describe("ReplyChain", () => {
             );
 
             // Drawn on the first render, with no loading state in between.
-            expect(container.querySelector(".mx_ReplyTile")).not.toBeNull();
+            expect(container.querySelector("[data-testid='reply-tile']")).not.toBeNull();
             expect(container.querySelector(".mx_ReplyChain_placeholder")).toBeNull();
         });
 

@@ -1,5 +1,5 @@
 diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
-index 610db97bfdfb0005cf998aa7dd497951b36c27b7..bdad719b5706876e01e7428a88b4a68b90865fc0 100644
+index ce156f1..8be8514 100644
 --- a/dist/esm/index.d.ts
 +++ b/dist/esm/index.d.ts
 @@ -78,6 +78,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
@@ -16,10 +16,10 @@ index 610db97bfdfb0005cf998aa7dd497951b36c27b7..bdad719b5706876e01e7428a88b4a68b
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index 015d77d5f60a174de2ca9a3777e8a842110ee6e8..be119aff7c04c8a6f711ea0f9e174cb1df146253 100644
+index e4547ec..4875d2f 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
-@@ -295,7 +295,24 @@ class Virtualizer {
+@@ -298,7 +298,24 @@ class Virtualizer {
          const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
          if (didEdgeKeysChange) {
            edgeKeysChanged = true;
@@ -45,7 +45,7 @@ index 015d77d5f60a174de2ca9a3777e8a842110ee6e8..be119aff7c04c8a6f711ea0f9e174cb1
            if (item) {
              anchor = [item.key, this.getScrollOffset() - item.start];
            }
-@@ -848,9 +865,19 @@ class Virtualizer {
+@@ -874,9 +891,19 @@ class Virtualizer {
        const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
        const delta = size - itemSize;
        if (delta !== 0) {
@@ -67,7 +67,7 @@ index 015d77d5f60a174de2ca9a3777e8a842110ee6e8..be119aff7c04c8a6f711ea0f9e174cb1
          const isFirstMeasure = !this.itemSizeCache.has(key);
          const defaultShouldAdjust = isFirstMeasure ? (
            // First measurement: compensate any item whose top sits above the
-@@ -863,9 +890,12 @@ class Virtualizer {
+@@ -889,9 +916,12 @@ class Virtualizer {
            // below — e.g. a streaming chat message growing at its bottom)
            // changes size *below* the anchor point, so shifting scrollTop by the
            // delta would drag the viewport downward on every growth (#1218).
@@ -83,27 +83,19 @@ index 015d77d5f60a174de2ca9a3777e8a842110ee6e8..be119aff7c04c8a6f711ea0f9e174cb1
          );
          const shouldAdjustScroll = ((_b = this.scrollState) == null ? void 0 : _b.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(
            // The callback expects a VirtualItem; build one lazily only
-@@ -895,6 +925,14 @@ class Virtualizer {
-           adjustedSync = this.applyScrollAdjustment(delta);
-         }
-         this.notify(adjustedSync);
-+        if (wasAtEnd && adjustedSync && this.scrollOffset !== null) {
-+          // The re-pin write above lands before the (synchronous) re-render
-+          // grows the scroll container, so when the grown item is not the last
-+          // one the browser clamps the write to the old maximum scrollTop.
-+          // notify(true) has now flushed the new total size to the DOM, so
-+          // re-issue the write; it is a no-op when the first one stuck.
-+          this._scrollToOffset(this.scrollOffset, { adjustments: void 0, behavior: void 0 });
-+        }
-       }
-     };
-     this.getVirtualItems = memo(
-@@ -1130,12 +1168,13 @@ class Virtualizer {
+@@ -1157,16 +1187,19 @@ class Virtualizer {
        this._iosDeferredAdjustment += delta;
        return false;
      } else {
--      this._scrollToOffset(this.getScrollOffset(), {
+-      const target = this.getScrollOffset() + this.scrollAdjustments + delta;
++      // A programmatic scroll written this frame is not yet visible through
++      // getScrollOffset(); build the correction on the offset that was written.
 +      const base = this._intendedScrollOffset ?? this.getScrollOffset();
++      const target = base + this.scrollAdjustments + delta;
+       const el = this.scrollElement;
+       const maxAtWrite = el !== null && ("scrollHeight" in el || "document" in el) ? this.getMaxScrollOffset() : null;
+       this._clampedAdjustment = maxAtWrite !== null && target > maxAtWrite + 0.5 ? { target, maxAtWrite } : null;
+-      this._scrollToOffset(this.getScrollOffset(), {
 +      this._scrollToOffset(base, {
          adjustments: this.scrollAdjustments += delta,
          behavior
