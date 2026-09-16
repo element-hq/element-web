@@ -28,6 +28,7 @@ import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } fr
 import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -139,6 +140,7 @@ export async function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
     messageHasLinks: boolean,
+    encryptedImageCache: ReadonlyMap<string, EncryptedFile> = new Map(),
 ): Promise<boolean> {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
 
@@ -209,6 +211,15 @@ export async function attachUrlPreviews(
         if (!isRoomEncrypted) {
             out["og:image"] = preview.image?.mxcImageFull;
             out["matrix:image:size"] = preview.image?.fileSize;
+            return out;
+        }
+
+        // When editing, the preview image already has an EncryptedFile from the event's existing
+        // bundle: reuse it. Its mxc points at the ciphertext, so re-uploading that would encrypt
+        // the image a second time and produce an undecryptable image.
+        const alreadyEncrypted = encryptedImageCache.get(preview.link);
+        if (alreadyEncrypted !== undefined) {
+            out["beeper:image:encryption"] = alreadyEncrypted;
             return out;
         }
 
