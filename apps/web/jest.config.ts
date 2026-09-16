@@ -82,11 +82,6 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     config.reporters ??= [];
     config.reporters.push(["github-actions", { silent: false }]);
     config.reporters.push("summary");
-
-    // if we're running against the develop branch, also enable the slow test reporter
-    if (env["GITHUB_REF"] == "refs/heads/develop") {
-        config.reporters.push("<rootDir>/test/slowReporter.cjs");
-    }
 }
 
 export default config;
