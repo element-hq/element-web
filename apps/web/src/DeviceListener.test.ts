@@ -126,6 +126,7 @@ describe("DeviceListener", () => {
             getSessionBackupPrivateKey: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn(),
             getKeyBackupInfo: vi.fn().mockResolvedValue(null),
+            isDehydratedDeviceKeyMissing: vi.fn().mockResolvedValue(false),
         } as unknown as Mocked<CryptoApi>;
         mockClient = getMockClientWithEventEmitter({
             isGuest: vi.fn(),
@@ -479,6 +480,18 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
                     expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
+                });
+
+                it("shows a dehydration-key-out-of-sync toast when a dehydrated device exists but its key is missing locally", async () => {
+                    // Everything else is healthy, but a dehydrated device exists on the server whose key
+                    // we don't have (e.g. dehydration was set up on another device): prompt to recover it.
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+                    mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+                    mockCrypto!.isDehydratedDeviceKeyMissing.mockResolvedValue(true);
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("dehydration_key_out_of_sync");
                 });
 
                 it("shows an out-of-sync toast when one of the cross-signing secrets is missing locally", async () => {
