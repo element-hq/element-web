@@ -17,7 +17,9 @@ import { NewTimelinePanel } from "./NewTimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { SDKContext } from "../../contexts/SDKContext";
 import { createTestClient, mkMessage } from "../../../test/test-utils";
+import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext";
 
 const ROOM_ID = "!room:example.org";
 const USER_ID = "@alice:example.org";
@@ -97,7 +99,9 @@ describe("<NewTimelinePanel />", () => {
     const renderPanel = (props: Partial<React.ComponentProps<typeof NewTimelinePanel>> = {}) =>
         render(
             <MatrixClientContext.Provider value={client}>
-                <NewTimelinePanel room={room} {...props} />
+                <SDKContext.Provider value={new TestSDKContext()}>
+                    <NewTimelinePanel room={room} {...props} />
+                </SDKContext.Provider>
             </MatrixClientContext.Provider>,
         );
 
@@ -153,12 +157,13 @@ describe("<NewTimelinePanel />", () => {
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
-    it("shows a date separator's label", () => {
-        withItems([{ key: "$sep", kind: "date-separator", label: "Today" } as TimelineItem]);
+    it("labels a date separator the way the old timeline does", () => {
+        withItems([{ key: "$sep", kind: "date-separator", ts: Date.now() } as TimelineItem]);
 
         renderPanel();
 
-        expect(screen.getByText("Today")).toBeInTheDocument();
+        // A relative label, from the shared DateSeparatorViewModel.
+        expect(screen.getByText(/today/i)).toBeInTheDocument();
     });
 
     it("draws nothing for a gap, matching the old timeline", () => {
@@ -205,7 +210,7 @@ describe("<NewTimelinePanel />", () => {
 
         const { container } = renderPanel({ hidden: true });
 
-        expect(container.querySelector(".mx_NewTimelinePanel")).toHaveStyle({ display: "none" });
+        expect(container.querySelector(".mx_NewTimelinePanel")).toHaveClass("mx_NewTimelinePanel_hidden");
         expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
     });
 

@@ -11,6 +11,15 @@ Please see LICENSE files in the repository root for full details.
  * _ReplyChain.pcss / _ReplyTile.pcss.
  */
 .mx_NewTimelinePanel {
+    /* Fill the room view body, like the old message panel does. */
+    height: 100%;
+
+    /* Kept mounted but invisible, e.g. while search results are shown, so the
+       timeline keeps its scroll position and loaded window. */
+    &.mx_NewTimelinePanel_hidden {
+        display: none;
+    }
+
     /* The virtualized timeline renders its rows as an <ol role="list"> of <li>
        tiles (mx_TimelineView_list / mx_TimelineView_tile in TimelineView; the <ol>
        and <li> reset their own list markers inline). Inset the tile content to

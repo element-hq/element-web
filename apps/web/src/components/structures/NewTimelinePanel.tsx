@@ -11,11 +11,10 @@ import {
     useCreateAutoDisposedViewModel,
     useViewModel,
     type TimelineItem,
-    DateSeparatorView,
-    type DateSeparatorViewSnapshot,
     ReadMarker,
 } from "@element-hq/web-shared-components";
 import { InlineSpinner } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import type { EventType, MatrixClient, RelationType, Relations, Room } from "matrix-js-sdk/src/matrix";
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
@@ -27,25 +26,7 @@ import { useSettingValue } from "../../hooks/useSettings";
 import { _t } from "../../languageHandler";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
-
-/**
- * A date separator that only shows its label — no jump-to-date menu.
- *
- * It doesn't say `implements DateSeparatorViewActions`, because every member of
- * that type is optional and TypeScript rejects implementing such a type; the
- * class still satisfies what DateSeparatorView asks for.
- */
-class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot {
-    public readonly label: string;
-    public readonly jumpToEnabled = false;
-
-    public constructor(label: string) {
-        this.label = label;
-    }
-
-    public subscribe = (): (() => void) => (): void => {};
-    public getSnapshot = (): DateSeparatorViewSnapshot => this;
-}
+import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
 
 interface NewTimelinePanelProps {
     room: Room;
@@ -84,10 +65,10 @@ interface RenderItemContext {
 /** Draws one timeline row. Kept outside the component so it isn't redefined per render. */
 function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNode {
     switch (item.kind) {
-        case "date-separator": {
-            const separatorVm = new StaticDateSeparatorViewModel(item.label ?? item.key);
-            return <DateSeparatorView key={item.key} vm={separatorVm} />;
-        }
+        case "date-separator":
+            // The same view model as the old timeline, so the label and
+            // jump-to-date menu behave identically in both.
+            return <DateSeparatorWrapper key={item.key} roomId={ctx.room.roomId} ts={item.ts} />;
         case "read-marker":
             // Rendered as a div because the timeline already puts each row in
             // its own list item.
@@ -237,8 +218,9 @@ export function NewTimelinePanel({
 
     return (
         <div
-            className="mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
-            style={{ height: "100%", display: hidden ? "none" : undefined }}
+            className={classNames("mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper", {
+                mx_NewTimelinePanel_hidden: hidden,
+            })}
         >
             <TimelineView vm={vm} renderItem={renderItem} />
         </div>

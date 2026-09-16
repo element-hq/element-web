@@ -1383,12 +1383,7 @@ export class RoomTimelineViewModel
                 items.push({
                     key: `date-${dateKey}`,
                     kind: "date-separator",
-                    label: eventDate.toLocaleDateString(undefined, {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                    }),
+                    ts: event.getTs(),
                 });
                 emittedDateKeys.add(dateKey);
                 prevEvent = null; // date separator breaks continuation
