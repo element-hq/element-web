@@ -2,8 +2,6 @@
 
 API surface for extending Element Web in a safe & predictable way.
 
-This project is still in early development but aims to replace matrix-react-sdk-module-api and Element Web deprecated customisations.
-
 ## Using the API
 
 Modules are loaded by Element Web at runtime via a dynamic ecmascript import, but can be bundled into a webapp for deployment convenience.
@@ -16,7 +14,7 @@ and a `load` method which is called when the module is to be loaded.
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 
 class ExampleModule implements Module {
-    public static readonly moduleApiVersion = "^0.1.0";
+    public static readonly moduleApiVersion = "^2.0.0";
 
     public constructor(private api: Api) {}
 
