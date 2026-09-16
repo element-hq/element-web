@@ -46,7 +46,7 @@ import { CallStore } from "../stores/CallStore";
 import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import DMRoomMap from "../utils/DMRoomMap";
 import ToastStore from "../stores/ToastStore";
-import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./IncomingCallToast";
+import { getIncomingCallToastKey, IncomingCallToast } from "./IncomingCallToast";
 import { AudioID } from "../LegacyCallHandler";
 import { CallEvent } from "../models/Call";
 import { type WidgetMessaging } from "../stores/widgets/WidgetMessaging";
@@ -473,31 +473,18 @@ describe("IncomingCallToast", () => {
         );
     });
 
-    it("getNotificationEventSendTs returns the correct ts", () => {
-        const notificationEvent = makeNotificationEvent(room);
-        const eventOriginServerTs = mkEvent({
-            user: "@userId:matrix.org",
-            type: EventType.RTCNotification,
-            content: {
-                "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" },
-                "sender_ts": 222_000,
-            },
-            event: true,
-            ts: 1111,
-        });
+    it("closes toast when the notification expires", () => {
+        vi.useFakeTimers();
+        try {
+            const callId = renderToast(makeNotificationEvent(room, { lifetime: 3000 }));
 
-        const eventSendTs = mkEvent({
-            user: "@userId:matrix.org",
-            type: EventType.RTCNotification,
-            content: {
-                "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" },
-                "sender_ts": 2222,
-            },
-            event: true,
-            ts: 1111,
-        });
+            vi.advanceTimersByTime(2999);
+            expect(toastStore.dismissToast).not.toHaveBeenCalled();
 
-        expect(getNotificationEventSendTs(eventOriginServerTs)).toBe(1111);
-        expect(getNotificationEventSendTs(eventSendTs)).toBe(2222);
+            vi.advanceTimersByTime(1);
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });
