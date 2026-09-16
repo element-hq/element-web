@@ -22,11 +22,17 @@ export * from "./date";
 export * from "./console";
 export * from "./TestSDKContext.ts";
 
-// wait for loading page
+/**
+ * wait for loading page
+ * @knipignore
+ */
 export async function waitForLoadingSpinner(): Promise<void> {
     await screen.findByRole("progressbar");
 }
 
+/**
+ * @knipignore
+ */
 export async function waitForWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
     await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
 }

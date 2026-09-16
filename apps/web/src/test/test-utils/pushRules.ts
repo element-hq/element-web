@@ -6,13 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type IAnnotatedPushRule,
-    type IPushRule,
-    type IPushRules,
-    type PushRuleKind,
-    type RuleId,
-} from "matrix-js-sdk/src/matrix";
+import { type IPushRule, type IPushRules, type PushRuleKind, type RuleId } from "matrix-js-sdk/src/matrix";
 
 /**
  * Default set of push rules for a new account
@@ -328,20 +322,6 @@ export const getDefaultRuleWithKind = (ruleId: RuleId | string): { rule: IPushRu
 };
 
 /**
- * Get rule by id from default rules as an IAnnotatedPushRule
- * @param ruleId
- * @returns
- */
-export const getDefaultAnnotatedRule = (ruleId: RuleId | string): IAnnotatedPushRule => {
-    const { rule, kind } = getDefaultRuleWithKind(ruleId);
-
-    return {
-        ...rule,
-        kind,
-    };
-};
-
-/**
  * Make a push rule with default values
  * @param ruleId
  * @param ruleOverrides
@@ -353,13 +333,4 @@ export const makePushRule = (ruleId: RuleId | string, ruleOverrides: Partial<IPu
     default: false,
     ...ruleOverrides,
     rule_id: ruleId,
-});
-
-export const makeAnnotatedPushRule = (
-    kind: PushRuleKind,
-    ruleId: RuleId | string,
-    ruleOverrides: Partial<IPushRule> = {},
-): IAnnotatedPushRule => ({
-    ...makePushRule(ruleId, ruleOverrides),
-    kind,
 });
