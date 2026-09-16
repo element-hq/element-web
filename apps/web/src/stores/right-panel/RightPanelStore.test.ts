@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
-import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { vi, describe, it, expect, afterEach, beforeEach, type MockedObject } from "vitest";
+import { type MatrixClient, type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -20,13 +20,18 @@ import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveR
 import RightPanelStore from "./RightPanelStore";
 import { RightPanelPhases } from "./RightPanelStorePhases";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { pendingVerificationRequestForUser } from "../../verification.ts";
 
 vi.mock("../../verification");
 
 describe("RightPanelStore", () => {
-    // Mock out the settings store so the right panel store can't persist values between tests
-    vi.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
+    // The store persists its own phase history, which would otherwise carry across rooms and tests.
+    // Everything else is left alone so tests can write real settings, e.g. the labs flags below.
+    const realSetValue = SettingsStore.setValue.bind(SettingsStore);
+    vi.spyOn(SettingsStore, "setValue").mockImplementation((name, ...args) =>
+        name === "RightPanel.phases" ? Promise.resolve() : realSetValue(name, ...args),
+    );
 
     const store = RightPanelStore.instance;
     let cli: MockedObject<MatrixClient>;
@@ -38,6 +43,11 @@ describe("RightPanelStore", () => {
         // Make sure we start with a clean store
         store.reset();
         store.useUnitTestClient(cli);
+    });
+
+    // Stops anything the store persists, or a setting a test writes, leaking into the next one.
+    afterEach(() => {
+        SettingsStore.reset();
     });
 
     const viewRoom = async (roomId: string) => {
@@ -115,6 +125,77 @@ describe("RightPanelStore", () => {
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
+        });
+        it("reopens a closed panel when the card already at the top is given new state", async () => {
+            await viewRoom("!1:example.org");
+            const cardForEvent = (eventId: string) => ({
+                phase: RightPanelPhases.Timeline,
+                state: { initialEvent: { getId: () => eventId } as unknown as MatrixEvent },
+            });
+
+            store.setCard(cardForEvent("$one"), true, "!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+
+            store.hide("!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(false);
+
+            // Same phase, different state: the panel has to come back, not just swap state behind a
+            // hidden panel. This is what selecting a second file to view does.
+            store.setCard(cardForEvent("$two"), true, "!1:example.org");
+            expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
+        });
+        describe("PdfViewer", () => {
+            const pdfCard = {
+                phase: RightPanelPhases.PdfViewer,
+                state: { pdfViewerEvent: { getId: () => "$pdf" } as unknown as MatrixEvent },
+            };
+
+            /** The viewer sits behind a lab, so the card is only valid while that is on. */
+            const setPdfViewerLab = (enabled: boolean): Promise<void> =>
+                SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, enabled);
+
+            it("drops a card with no event to display", async () => {
+                await setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
+
+            it("opens the card for the event when the open action is dispatched", async () => {
+                await setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+                const event = {
+                    getId: () => "$pdf",
+                    getRoomId: () => "!1:example.org",
+                } as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenPdfViewer, event }, true);
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
+                expect(store.currentCardForRoom("!1:example.org").state?.pdfViewerEvent).toBe(event);
+                expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            });
+
+            it("keeps a card with an event to display", async () => {
+                await setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard(pdfCard, true, "!1:example.org");
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
+            });
+
+            it("drops an otherwise valid card while the lab is off", async () => {
+                await setPdfViewerLab(false);
+                await viewRoom("!1:example.org");
+
+                store.setCard(pdfCard, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
         });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");

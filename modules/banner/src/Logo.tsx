@@ -9,10 +9,6 @@ import { type FC } from "react";
 import styled from "styled-components";
 import { type Api } from "@element-hq/element-web-module-api";
 
-const Anchor = styled.a`
-    display: flex;
-`;
-
 const Image = styled.img<{
     height?: string;
 }>`
@@ -24,19 +20,10 @@ interface Props {
     api: Api;
     src: string;
     height?: string;
-    href?: string;
 }
 
-const Logo: FC<Props> = ({ api, src, href, height }) => {
-    const img = <Image alt={api.i18n.translate("logo_alt")} src={src} height={height} />;
-
-    if (!href) return img;
-
-    return (
-        <Anchor aria-label={api.i18n.translate("logo_link_label")} href={href}>
-            {img}
-        </Anchor>
-    );
+const Logo: FC<Props> = ({ api, src, height }) => {
+    return <Image alt={api.i18n.translate("logo_alt")} src={src} height={height} />;
 };
 
 export default Logo;

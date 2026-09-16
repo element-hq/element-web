@@ -10,7 +10,7 @@
 
 import { type IContent, type IEventRelation, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import sanitizeHtml from "sanitize-html";
-import { PERMITTED_URL_SCHEMES } from "@element-hq/web-shared-components";
+import { PERMITTED_URL_SCHEMES } from "@element-hq/element-web-shared-utils";
 
 export function getParentEventId(ev?: MatrixEvent): string | undefined {
     if (!ev || ev.isRedacted()) return;
