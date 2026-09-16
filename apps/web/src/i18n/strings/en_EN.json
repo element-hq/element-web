@@ -2652,6 +2652,7 @@
         },
         "inline_url_previews_default": "Enable previews",
         "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
+        "inline_url_previews_encrypted_bundled_only": "Only show bundled previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -3374,7 +3375,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "error_decrypting": "Error decrypting attachment"
+            "error_decrypting": "Error decrypting attachment",
+            "size_unknown": "Size unknown"
         },
         "m.image": {
             "error": "Unable to show image due to error",

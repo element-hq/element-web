@@ -72,8 +72,8 @@ $info-plinth-bg-color: $header-panel-bg-color;
 $event-selected-color: var(--cpd-color-bg-subtle-secondary);
 $topleftmenu-color: $primary-content;
 $roomtopic-color: $text-secondary-color;
-$spacePanel-bg-color: rgba(38, 39, 43, 0.82);
-$panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
+$spacePanel-bg-color: rgb(38, 39, 43, 0.82);
+$panel-gradient: rgb(34, 38, 46, 0), rgb(34, 38, 46, 1);
 $h3-color: $primary-content;
 $event-highlight-bg-color: #25271f;
 $header-panel-text-primary-color: $text-secondary-color;
@@ -112,7 +112,7 @@ $room-icon-unread-color: var(--cpd-color-icon-tertiary);
 
 /* RoomHeader */
 /* ******************** */
-$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
+$roomheader-addroom-bg-color: rgb(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $primary-content;
 /* ******************** */
 
@@ -125,7 +125,7 @@ $pill-press-bg-color: var(--cpd-color-bg-action-primary-pressed);
 
 /* Inputs */
 /* ******************** */
-$input-border-color: rgba(231, 231, 231, 0.2);
+$input-border-color: rgb(231, 231, 231, 0.2);
 $input-darker-bg-color: #181b21;
 $input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
@@ -234,21 +234,14 @@ $progressbar-bg-color: var(--cpd-color-gray-200);
 $kbd-border-color: $strong-input-border-color;
 $visual-bell-bg-color: #800;
 $event-timestamp-color: var(--cpd-color-text-secondary);
-$composer-shadow-color: rgba(0, 0, 0, 0.28);
+$composer-shadow-color: rgb(0, 0, 0, 0.28);
 $breadcrumb-placeholder-bg-color: #272c35;
 $resend-button-divider-color: var(--cpd-color-gray-700);
 $inlinecode-border-color: $quinary-content;
 $inlinecode-background-color: $system;
 $codeblock-background-color: #2a3039;
-$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+$scrollbar-thumb-color: rgb(255, 255, 255, 0.2);
 $selected-color: $room-highlight-color;
-/* ******************** */
-
-/* blur amounts for left left panel (only for element theme) */
-/* ******************** */
-:root {
-    --lp-background-blur: 45px;
-}
 /* ******************** */
 
 body {
@@ -297,8 +290,8 @@ body {
 /* Splash Page Gradient */
 .mx_SplashPage::before {
     background-image:
-        radial-gradient(53.85% 66.75% at 87.55% 0%, hsla(0deg, 0%, 11%, 0.15) 0%, hsla(250deg, 100%, 88%, 0) 100%),
-        radial-gradient(41.93% 41.93% at 0% 0%, hsla(0deg, 0%, 38%, 0.28) 0%, hsla(250deg, 100%, 88%, 0) 100%),
-        radial-gradient(100% 100% at 0% 0%, hsla(250deg, 100%, 88%, 0.3) 0%, hsla(0deg, 100%, 86%, 0) 100%),
-        radial-gradient(106.35% 96.26% at 100% 0%, hsla(25deg, 100%, 88%, 0.4) 0%, hsla(167deg, 76%, 82%, 0) 100%) !important;
+        radial-gradient(53.85% 66.75% at 87.55% 0%, hsl(0deg, 0%, 11%, 0.15) 0%, hsl(250deg, 100%, 88%, 0) 100%),
+        radial-gradient(41.93% 41.93% at 0% 0%, hsl(0deg, 0%, 38%, 0.28) 0%, hsl(250deg, 100%, 88%, 0) 100%),
+        radial-gradient(100% 100% at 0% 0%, hsl(250deg, 100%, 88%, 0.3) 0%, hsl(0deg, 100%, 86%, 0) 100%),
+        radial-gradient(106.35% 96.26% at 100% 0%, hsl(25deg, 100%, 88%, 0.4) 0%, hsl(167deg, 76%, 82%, 0) 100%) !important;
 }
