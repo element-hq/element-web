@@ -31,11 +31,32 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import Modal from "../../../Modal";
 import ImageView from "../elements/ImageView";
+import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import SettingsStore from "../../../settings/SettingsStore";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
     useMediaVisible: () => [true, vi.fn()],
 }));
+
+// Captures the props the factory builds for the preview view model, so the `urlPreviewKind`
+// it derives from the settings and the room can be asserted directly.
+const { urlPreviewGroupProps } = vi.hoisted(() => ({
+    urlPreviewGroupProps: [] as UrlPreviewGroupViewModelProps[],
+}));
+
+vi.mock("../../../viewmodels/message-body/UrlPreviewGroupViewModel", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../viewmodels/message-body/UrlPreviewGroupViewModel")>();
+    return {
+        ...actual,
+        UrlPreviewGroupViewModel: class extends actual.UrlPreviewGroupViewModel {
+            public constructor(props: UrlPreviewGroupViewModelProps) {
+                super(props);
+                urlPreviewGroupProps.push(props);
+            }
+        },
+    };
+});
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";
@@ -122,7 +143,12 @@ describe("<TextualBody />", () => {
         vi.spyOn(global.Math, "random").mockReturnValue(0.123456);
     });
 
-    const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) => {
+    const getComponent = (
+        props = {},
+        matrixClient: MatrixClient = defaultMatrixClient,
+        renderingFn?: any,
+        roomContextOverrides: Partial<ReturnType<typeof getRoomContext>> = {},
+    ) => {
         const mergedProps = { ...defaultProps, ...props };
         const room = matrixClient.getRoom(mergedProps.mxEvent.getRoomId()) ?? defaultRoom;
         const finalProps = {
@@ -131,7 +157,7 @@ describe("<TextualBody />", () => {
         };
         return (renderingFn ?? render)(
             <MatrixClientContext.Provider value={matrixClient}>
-                <RoomContext.Provider value={getRoomContext(room, {})}>
+                <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
                     <TextualBody {...finalProps} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
@@ -643,6 +669,62 @@ describe("<TextualBody />", () => {
 
             await screen.findByRole("link", { name: "Preview of https://three.example.com/" });
             expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
+        });
+    });
+
+    describe("url preview kind", () => {
+        beforeEach(() => {
+            urlPreviewGroupProps.length = 0;
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        /** Turn on the named boolean settings and leave the rest at their real values. */
+        const enableSettings = (...enabled: string[]): void => {
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                enabled.includes(setting) ? true : original(setting, ...rest),
+            );
+        };
+
+        const renderAndGetKind = (roomContextOverrides = {}): string => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+            getComponent({ mxEvent: mkRoomTextMessage("https://example.org") }, undefined, undefined, {
+                ...roomContextOverrides,
+            });
+            return urlPreviewGroupProps.at(-1)!.urlPreviewKind;
+        };
+
+        // Without the lab flag the bundle is ignored entirely and previews come from the server.
+        it("asks the server when the bundle feature is off", () => {
+            expect(renderAndGetKind()).toBe("fetchonly");
+        });
+
+        it("prefers the bundle when the bundle feature is on in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
+        });
+
+        // The user has not asked for the stricter behaviour, so an encrypted message whose bundle
+        // is missing a preview may still be filled in by the server.
+        it("prefers the bundle in an encrypted room when bundled-only is off", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("preferbundled");
+        });
+
+        // The whole point of the setting: in an encrypted room nothing about the message, not even
+        // one of its URLs, may be sent to the homeserver.
+        it("uses the bundle only in an encrypted room when bundled-only is on", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("bundledonly");
+        });
+
+        // The setting is about encrypted rooms only, so it must not restrict an unencrypted one.
+        it("ignores bundled-only in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
     });
 });

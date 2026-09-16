@@ -9,8 +9,7 @@ import { type Page } from "@playwright/test";
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { type ElementAppPage } from "../../../pages/ElementAppPage";
-import { getRoomList, getRoomOptionsMenu, getSectionHeader } from "./utils";
+import { createFillerRooms, getRoomList, getSectionHeader, sortAlphabetically } from "./utils";
 
 /**
  * The unread-activity toast ("Unread messages") appears at the bottom of the room list when a room with a
@@ -27,22 +26,6 @@ test.describe("Room list unread activity toast", () => {
     });
 
     const getToast = (page: Page) => page.getByRole("button", { name: "Unread messages" });
-
-    /**
-     * Create `count` filler rooms whose names sort alphabetically before any room named "zzz …",
-     * so that under A-Z sorting they fill the top of the list and push the "zzz …" room below the fold.
-     */
-    async function createFillerRooms(app: ElementAppPage, count: number): Promise<void> {
-        for (let i = 0; i < count; i++) {
-            await app.client.createRoom({ name: `room ${String(i).padStart(2, "0")}` });
-        }
-    }
-
-    /** Switch the room list to alphabetical sorting so room positions are deterministic. */
-    async function sortAlphabetically(page: Page): Promise<void> {
-        await getRoomOptionsMenu(page).click();
-        await page.getByRole("menuitemradio", { name: "A-Z" }).click();
-    }
 
     test.describe("flat list", () => {
         test.beforeEach(async ({ page, app, user }) => {
