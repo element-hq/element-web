@@ -38,14 +38,15 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="Team Updates"
             >
-              Team Updates
+              <span
+                data-testid="room-name"
+              >
+                Team Updates
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -168,14 +169,15 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -298,14 +300,15 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="Secret Project"
             >
-              Secret Project
+              <span
+                data-testid="room-name"
+              >
+                Secret Project
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Bob invited you"
             >
               Bob invited you
             </div>
@@ -446,10 +449,12 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
           </div>
           <div
@@ -570,14 +575,15 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -700,14 +706,15 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Failed to send message"
             >
               Failed to send message
             </div>
@@ -848,14 +855,15 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -978,14 +986,15 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -1131,14 +1140,15 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -1273,14 +1283,15 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
@@ -1421,14 +1432,15 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
           >
             <div
               class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
             >
-              General
+              <span
+                data-testid="room-name"
+              >
+                General
+              </span>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
-              title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>

@@ -120,12 +120,23 @@ export class ElementAppPage {
 
         await dismissToasts();
 
-        // We get the room list by test-id which is a listbox and matching title=name.
+        // Each room tile exposes its name via data-testid="room-name". Match the tile containing
+        // that exact name and click the tile itself.
         // Retry, closing toasts each time, as otherwise it can race and the toast can appear after we try to close them
-        const roomTile = this.page.getByTestId("room-list").locator(`[title="${name}"]`).first();
+        const roomName = this.page.getByTestId("room-name").and(this.page.getByText(name, { exact: true }));
+        const roomTile = this.page
+            .getByTestId("room-list")
+            .locator(".mx_RoomListItemView")
+            .filter({ has: roomName })
+            .first();
         for (let attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
             try {
                 await roomTile.click({ timeout: 500 });
+                // Move the pointer off the tile. It would otherwise stay parked there and, ~300ms
+                // later, open the tile's name/preview tooltip over the rows below it - and a
+                // visible Compound tooltip has no `pointer-events: none`, so it can swallow a
+                // later click aimed at the room list.
+                await this.page.mouse.move(0, 0);
                 return;
             } catch (e) {
                 if (attemptsLeft === 1) throw e;
