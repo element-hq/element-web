@@ -7,6 +7,7 @@
 import { ComponentType } from 'react';
 import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
+import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { SVGAttributes } from 'react';
@@ -45,8 +46,12 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly customComponents: CustomComponentsApi;
     // @alpha
     readonly customisations: CustomisationsApi;
+    // (undocumented)
+    readonly customPreviewTile: CustomPreviewTileApi;
     // @alpha
     readonly extras: ExtrasApi;
+    // @alpha
+    readonly fileViewer: FileViewerApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
@@ -193,6 +198,39 @@ export type CustomMessageRenderHints = {
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
 };
 
+// @public (undocumented)
+export interface CustomPreviewTileApi {
+    // (undocumented)
+    registerCustomPreviewTilePatcher(patcher: CustomPreviewTilePatcher, opts: CustomPreviewTileOptions): void;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileIcon {
+    // (undocumented)
+    color: string;
+    // (undocumented)
+    icon: JSX_2.Element;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTileOptions {
+    // (undocumented)
+    id: string;
+}
+
+// @public (undocumented)
+export interface CustomPreviewTilePatch {
+    // (undocumented)
+    header?: string;
+    // (undocumented)
+    icon?: CustomPreviewTileIcon;
+    // (undocumented)
+    subtext?: string;
+}
+
+// @public (undocumented)
+export type CustomPreviewTilePatcher = (media: MediaHandle) => CustomPreviewTilePatch | null;
+
 // @alpha
 export type CustomRoomPreviewBarComponentProps = {
     roomId?: string;
@@ -258,6 +296,34 @@ export interface ExtrasApi {
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
+// @public (undocumented)
+export interface FileViewerApi {
+    // (undocumented)
+    registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
+}
+
+// @public
+export type FileViewerMatcher = (media: MediaHandle) => boolean;
+
+// @public (undocumented)
+export interface FileViewerOptions {
+    buttonIcon: JSX_2.Element;
+    buttonText: string;
+    cardHeader: string;
+    id: string;
+}
+
+// @public (undocumented)
+export interface FileViewerProps {
+    // (undocumented)
+    media: MediaHandle;
+    // (undocumented)
+    onClose: () => void;
+}
+
+// @public (undocumented)
+export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
+
 // @public
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
@@ -287,6 +353,9 @@ export interface MatrixEvent {
 
 // @public
 export type MaybePromise<T> = T | PromiseLike<T>;
+
+// @public
+export type MediaHandle = RemoteMedia | UploadedMedia;
 
 // @public
 export interface Module {
@@ -353,6 +422,12 @@ export interface Profile {
 export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
+
+// @public
+export type RemoteMedia = {
+    type: "remote";
+    bundle: UnstableBundledUrlPreviewSingle;
+};
 
 // @public
 export interface RichVariables {
@@ -450,29 +525,32 @@ export interface UnstableBundledUrlPreviews {
 }
 
 // @alpha
-export interface UnstableBundledUrlPreviewSingle {
-    // (undocumented)
-    "beeper:image:encryption"?: EncryptedFile;
-    // (undocumented)
-    "matrix:image:size"?: number;
-    // (undocumented)
-    "og:description"?: string;
-    // (undocumented)
-    "og:image"?: string;
-    // (undocumented)
-    "og:image:height"?: number;
-    // (undocumented)
-    "og:image:type"?: string;
-    // (undocumented)
-    "og:image:width"?: number;
-    // (undocumented)
-    "og:title"?: string;
-    // (undocumented)
-    "og:url"?: string;
-    // (undocumented)
+export type UnstableBundledUrlPreviewSingle = {
     "matched_url": string;
+    "beeper:image:encryption"?: EncryptedFile;
+    "matrix:image:size"?: number;
+    "og:image"?: string;
+    "og:url"?: string;
+    "og:image:width"?: number;
+    "og:image:height"?: number;
+    "og:image:type"?: string;
+    "og:title"?: string;
+    "og:description"?: string;
+} & Record<string, any>;
+
+// @public
+export interface UploadedMedia {
+    // (undocumented)
+    blob(): Promise<Blob>;
+    // (undocumented)
+    mimetype?: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    type: "uploaded";
 }
 
+// @alpha
 export interface UrlPreviewApi {
     registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
 }
@@ -529,6 +607,10 @@ export interface WidgetLifecycleApi {
     registerIdentityApprover(approver: IdentityApprover): void;
     registerPreloadApprover(approver: PreloadApprover): void;
 }
+
+// Warnings were encountered during analysis:
+//
+// src/api/file-viewer.ts:26:5 - (ae-incompatible-release-tags) The symbol "bundle" is marked as @public, but its signature references "UnstableBundledUrlPreviewSingle" which is marked as @alpha
 
 // (No @packageDocumentation comment for this package)
 
