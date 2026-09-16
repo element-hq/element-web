@@ -11,39 +11,57 @@ import {
     type MessageComposerUrlPreviewSnapshotEntry,
     type MessageComposerUrlPreviewSnapshot,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 import { debounce } from "lodash";
 
-import type { UrlPreview } from "shared-types";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
 import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
+import PlatformPeg from "../../PlatformPeg";
 import SettingsStore from "../../settings/SettingsStore";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
-export interface MessageComposerUrlPreviewViewModelRestoreProps {
-    client: MatrixClient;
-    moduleUrlPreviewApi: UrlPreviewApi;
-    visible: boolean;
-    showTooltips: boolean;
-    /**
-     * The event being edited. Its content seeds the composer and its existing URL preview bundle.
-     */
-    event: MatrixEvent;
-}
-
+/**
+ * Props for {@link MessageComposerUrlPreviewViewModel}.
+ *
+ * Use {@link MessageComposerUrlPreviewViewModel.restoreFromMessage} instead of building these by
+ * hand when the composer is editing an existing event, so its preview bundle is restored too.
+ */
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     moduleUrlPreviewApi: UrlPreviewApi;
+    /**
+     * Whether composer URL previews should render at all.
+     */
     visible: boolean;
+    /**
+     * Whether previews should carry a tooltip showing the target URL, i.e. the platform's
+     * `needsUrlTooltips`. Only takes effect for previews whose title differs from their URL.
+     */
     showTooltips: boolean;
+    /**
+     * Initial composer plaintext content.
+     */
     content?: string;
     /**
-     * Previews to seed {@link previewCache} with, used when editing an event so its existing
-     * URL preview bundle is shown without being refetched.
+     * Set the initial cache previews, used by restoreFromMessage
      */
     cachedEntries?: Map<string, MessageComposerUrlPreviewSnapshotEntry>;
+}
+
+export interface MessageComposerUrlPreviewViewModelRestoreProps {
+    client: MatrixClient;
+    moduleUrlPreviewApi: UrlPreviewApi;
+    /**
+     * Whether composer URL previews should render at all.
+     */
+    visible: boolean;
+    /**
+     * the message to restore previews from
+     */
+    mxEvent: MatrixEvent;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
@@ -105,7 +123,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         props: MessageComposerUrlPreviewViewModelRestoreProps,
     ): MessageComposerUrlPreviewViewModel {
         const urlPreviewBundle = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
-        const content = props.event.getContent<RoomMessageEventContent>();
+        const content = props.mxEvent.getContent<RoomMessageEventContent>();
         const bundleContent = content["com.beeper.linkpreviews"];
         const linksInMessage = linksIn(content.body);
         const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
@@ -114,7 +132,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             client: props.client,
             moduleUrlPreviewApi: props.moduleUrlPreviewApi,
             visible: props.visible,
-            showTooltips: props.showTooltips,
+            showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             content: content.body,
         };
 
@@ -145,7 +163,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
         if (urlPreviewBundle && bundleContent !== undefined) {
-            urlVm.resolveBundledPreviews(bundleContent, props.event);
+            urlVm.resolveBundledPreviews(bundleContent, props.mxEvent);
         }
         return urlVm;
     }
@@ -237,11 +255,14 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * bundle carries only `matched_url` fall back to a server request inside `previewFromBundle`.
      *
      * @param bundle The event's preview bundle.
-     * @param event The event the bundle belongs to.
+     * @param mxEvent The event the bundle belongs to.
      */
-    public readonly resolveBundledPreviews = (bundle: UnstableBundledUrlPreviewSingle[], event: MatrixEvent): void => {
+    public readonly resolveBundledPreviews = (
+        bundle: UnstableBundledUrlPreviewSingle[],
+        mxEvent: MatrixEvent,
+    ): void => {
         for (const single of bundle) {
-            void this.fetcher.previewFromBundle(single, event, true).then((fetched) => {
+            void this.fetcher.previewFromBundle(single, mxEvent, true).then((fetched) => {
                 this.resolvePreview(single.matched_url, fetched);
             });
         }
