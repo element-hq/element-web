@@ -105,6 +105,10 @@ export interface MessageComposerUrlPreviewSnapshot {
     entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
+    /** The links that are in the message body, including the ones that are removed */
+    contentLinks: Set<string>;
+    /** Whether the entries have been changed by removing it */
+    isModified: boolean;
 }
 
 /** Props for MessageComposerUrlPreviewView. */
@@ -152,6 +156,7 @@ function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
                 entryIcon: (
                     // Sites without a thumbnail fall back to their initial on a decorative
                     // background, picked by `data-color` - see the module CSS.
+                    // oxlint-disable-next-line react/hooks
                     <div className={styles.entryIcon} data-color={thumbnail ? undefined : idColorHash(hostname)}>
                         {thumbnail || hostNameFirstChar(hostname)}
                     </div>
@@ -291,6 +296,7 @@ export function MessageComposerUrlPreviewView({
                                     );
                                 } else {
                                     icon = <>{hostNameFirstChar(hostname)}</>;
+                                    // oxlint-disable-next-line react/hooks
                                     colorHash = idColorHash(hostname);
                                 }
                             }

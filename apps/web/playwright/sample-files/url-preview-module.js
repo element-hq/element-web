@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 export default class UrlPreviewModule {
-    static moduleApiVersion = "^1.17.0";
+    static moduleApiVersion = "^1.17.0 || ^2";
     /**
      * Basic module for testing URL previews.
      * @param {Api} api API object
