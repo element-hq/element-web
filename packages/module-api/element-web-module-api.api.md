@@ -426,7 +426,7 @@ export interface ProfileApiExtension {
 // @public
 export type RemoteMedia = {
     type: "remote";
-    bundle: UnstableBundledUrlPreviewSingle;
+    bundle: UrlPreview;
 };
 
 // @public
@@ -555,8 +555,6 @@ export interface UrlPreviewApi {
     registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
 }
 
-// Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
-//
 // @alpha
 export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
@@ -610,7 +608,7 @@ export interface WidgetLifecycleApi {
 
 // Warnings were encountered during analysis:
 //
-// src/api/file-viewer.ts:26:5 - (ae-incompatible-release-tags) The symbol "bundle" is marked as @public, but its signature references "UnstableBundledUrlPreviewSingle" which is marked as @alpha
+// src/api/file-viewer.ts:26:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
