@@ -5,7 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type NotificationCount, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixEvent,
+    MatrixEventEvent,
+    type NotificationCount,
+    type Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type NotificationBadgeType,
@@ -152,12 +158,14 @@ export class UnreadNotificationBadgeViewModel
         for (const eventName of notificationChangeEvents) {
             room.on(eventName, this.onNotificationChanged);
         }
+        room.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
 
         this.listenerCleanups.push(() => {
             room.off(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
             for (const eventName of notificationChangeEvents) {
                 room.off(eventName, this.onNotificationChanged);
             }
+            room.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         });
     }
 
@@ -177,6 +185,16 @@ export class UnreadNotificationBadgeViewModel
     };
 
     private readonly onNotificationChanged = (): void => {
+        this.updateSnapshotFromProps();
+    };
+
+    /**
+     * An event which has not been decrypted yet has no renderer, so it does not count towards the
+     * unread state. The room key often only turns up after the event itself, so re-evaluate the
+     * unread state once an event of this room is decrypted.
+     */
+    private readonly onEventDecrypted = (event: MatrixEvent): void => {
+        if (event.getRoomId() !== this.props.room?.roomId) return;
         this.updateSnapshotFromProps();
     };
 

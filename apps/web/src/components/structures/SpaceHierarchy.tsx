@@ -182,6 +182,10 @@ const Tile: React.FC<ITileProps> = ({
                     aria-labelledby={checkboxLabelId}
                     checked={!!selected}
                     tabIndex={-1}
+                    onClick={(e) => {
+                        // Stop clicks propagating to the parent as that also causes a toggle
+                        e.stopPropagation();
+                    }}
                     onChange={(e) => {
                         e.stopPropagation();
                         onToggleClick();

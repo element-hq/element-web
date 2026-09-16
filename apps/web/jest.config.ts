@@ -51,7 +51,9 @@ const config: Config = {
         "test-utils-rtl": "<rootDir>/test/test-utils/jest-matrix-react.tsx",
     },
     transformIgnorePatterns: [
-        `${path.join(__dirname, "../..")}/node_modules/.pnpm/(?!(matrix-js-sdk|htmlparser2|mime|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n|await-lock|@element-hq/web-shared-components|react-virtuoso|lodash|domutils|domhandler|domelementtype|dom-serializer|entities)).+$`,
+        // A list of paths *not* to pass through babel. Mostly expressed as a list of npm modules which *should* be babeled.
+        // These are basically the dependencies (and transitive deps) that are ESM-only.
+        `${path.join(__dirname, "../..")}/node_modules/.pnpm/(?!(matrix-js-sdk|htmlparser2|mime|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n|await-lock|@element-hq/web-shared-components|react-virtuoso|lodash|domutils|domhandler|domelementtype|dom-serializer|entities|content-type|bs58|base-x)).+$`,
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
@@ -62,6 +64,8 @@ const config: Config = {
         "!<rootDir>/src/**/*.d.ts",
         // Ignore vitest tests
         "!<rootDir>/src/**/*.test.{ts,tsx}",
+        // ...including the browser-mode ones, whose name does not end in `.test.ts`
+        "!<rootDir>/src/**/*.test.browser.{ts,tsx}",
         "!<rootDir>/src/test/**",
         // Exclude mocks
         "!<rootDir>/src/**/*-{mock,mocks}.{ts,tsx}",
@@ -78,11 +82,6 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     config.reporters ??= [];
     config.reporters.push(["github-actions", { silent: false }]);
     config.reporters.push("summary");
-
-    // if we're running against the develop branch, also enable the slow test reporter
-    if (env["GITHUB_REF"] == "refs/heads/develop") {
-        config.reporters.push("<rootDir>/test/slowReporter.cjs");
-    }
 }
 
 export default config;

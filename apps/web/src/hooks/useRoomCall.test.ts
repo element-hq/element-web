@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderHook, waitFor } from "test-utils-rtl";
 import {
     getMockClientWithEventEmitter,
@@ -25,6 +25,8 @@ import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
 import type LegacyCallHandler from "../LegacyCallHandler";
 import { CallStore } from "../stores/CallStore";
 import { SDKContextClass } from "../contexts/SDKContextClass";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { act } from "react";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -32,9 +34,9 @@ describe("useRoomCall", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
         matrixRTC: new MockEventEmitter(),
-        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,
     });
+
     const room = mkRoom(client, "!test-room");
     // Create a stable room context for this test
     const mockRoomViewStore = {
@@ -82,7 +84,7 @@ describe("useRoomCall", () => {
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
         });
         it("Blocks Element Call if transport foci are the wrong type", async () => {
-            client._unstable_getRTCTransports.mockResolvedValue([{ type: "anything-else" }]);
+            vi.mocked(client.cachedRtcTransports.get).mockReturnValue([{ type: "anything-else" }]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
@@ -98,7 +100,7 @@ describe("useRoomCall", () => {
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
         });
         it("Allows Element Call if foci is provided via getRTCTransports", async () => {
-            client._unstable_getRTCTransports.mockResolvedValue([
+            vi.mocked(client.cachedRtcTransports.get).mockReturnValue([
                 { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
@@ -108,13 +110,13 @@ describe("useRoomCall", () => {
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
             );
         });
-        it("Allows Element Call if foci is provided via .well-known", async () => {
-            client.getClientWellKnown.mockReturnValue({
-                "org.matrix.msc4143.rtc_foci": {
+        it("Allows Element Call if transport is provided by client discovery", async () => {
+            vi.mocked(client.cachedRtcTransports.get).mockReturnValue([
+                {
                     type: "livekit",
                     livekit_service_url: "https://example.org",
                 },
-            });
+            ]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() =>
@@ -123,9 +125,7 @@ describe("useRoomCall", () => {
         });
         it("Ensure handler reacts to transport changes", async () => {
             // Clear all transports
-            client._unstable_getRTCTransports.mockResolvedValue([]);
-            client.getClientWellKnown.mockReturnValue({});
-
+            vi.mocked(client.cachedRtcTransports.get).mockReturnValue([]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
 
@@ -133,9 +133,12 @@ describe("useRoomCall", () => {
             expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]);
 
             // Now enable a transport and ensure that useRoomCall picks it up reactively.
-            client._unstable_getRTCTransports.mockResolvedValue([
-                { type: "livekit", livekit_service_url: "https://example.org" },
-            ]);
+            act(() => {
+                const transports = [{ type: "livekit", livekit_service_url: "https://example.org" }];
+                vi.mocked(client.cachedRtcTransports.get).mockReturnValue(transports);
+                client.emit(ClientEvent.RtcTransportsUpdated, transports);
+            });
+
             await setupAsyncStoreWithClient(CallStore.instance, client);
             await waitFor(() =>
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),

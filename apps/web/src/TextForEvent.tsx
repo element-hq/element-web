@@ -151,10 +151,20 @@ function textForMemberEvent(
                 } else {
                     return () => _t("timeline|m.room.member|accepted_invite", { targetName });
                 }
+            } else if (
+                prevContent.membership === KnownMembership.Knock &&
+                SettingsStore.getValue("feature_ask_to_join")
+            ) {
+                return () => _t("timeline|m.room.member|knock_accepted", { senderName, targetName });
             } else {
                 return () => _t("timeline|m.room.member|invite", { senderName, targetName });
             }
         }
+        case KnownMembership.Knock:
+            if (!SettingsStore.getValue("feature_ask_to_join")) return null;
+            return reason
+                ? () => _t("timeline|m.room.member|knock_reason", { senderName, reason })
+                : () => _t("timeline|m.room.member|knock", { senderName });
         case KnownMembership.Ban:
             if (allowJSX) {
                 return reason
@@ -234,6 +244,11 @@ function textForMemberEvent(
                         reason
                             ? _t("timeline|m.room.member|reject_invite_reason", { targetName, reason })
                             : _t("timeline|m.room.member|reject_invite", { targetName });
+                } else if (
+                    prevContent.membership === KnownMembership.Knock &&
+                    SettingsStore.getValue("feature_ask_to_join")
+                ) {
+                    return () => _t("timeline|m.room.member|knock_retracted", { targetName });
                 } else {
                     return () =>
                         reason
@@ -260,6 +275,11 @@ function textForMemberEvent(
                               reason,
                           })
                         : _t("timeline|m.room.member|kick", { senderName, targetName });
+            } else if (
+                prevContent.membership === KnownMembership.Knock &&
+                SettingsStore.getValue("feature_ask_to_join")
+            ) {
+                return () => _t("timeline|m.room.member|knock_denied", { senderName, targetName });
             } else {
                 return null;
             }

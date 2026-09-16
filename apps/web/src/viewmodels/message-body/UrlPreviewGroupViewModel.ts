@@ -6,18 +6,16 @@
  */
 
 import { MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import {
-    BaseViewModel,
-    type UrlPreview,
-    type UrlPreviewGroupViewActions,
-    type UrlPreviewGroupViewSnapshot,
-} from "@element-hq/web-shared-components";
+import { BaseViewModel } from "@element-hq/web-shared-components";
+import { type UrlPreview, type UrlPreviewGroupViewActions, type UrlPreviewGroupViewSnapshot } from "shared-types";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import SettingsStore from "../../settings/SettingsStore";
+import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -35,6 +33,14 @@ export enum PreviewVisibility {
     Visible,
 }
 
+/**
+ * where to get the URL previews from?
+ * - fetch only: get previews from homeserver only
+ * - bundle only: get previews from bundle only, don't request any content not in the bundle (except for the image file)
+ * - prefer bundled: use bundle if exists, otherwise fallback to fetched previews
+ */
+export type UrlPreviewKind = "fetchonly" | "bundledonly" | "preferbundled";
+
 export interface UrlPreviewGroupViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
@@ -42,7 +48,8 @@ export interface UrlPreviewGroupViewModelProps {
     mediaVisible: boolean;
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
-    urlPreviewBundleEnabled: boolean;
+    urlPreviewKind: UrlPreviewKind;
+    moduleUrlPreviewApi: UrlPreviewApi;
 }
 
 export class UrlPreviewGroupViewModel
@@ -134,7 +141,12 @@ export class UrlPreviewGroupViewModel
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
-        this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips);
+        this.fetcher = new UrlPreviewFetcher(
+            props.client,
+            props.mxEvent.getTs(),
+            props.showTooltips,
+            props.moduleUrlPreviewApi,
+        );
     }
 
     /**
@@ -176,24 +188,43 @@ export class UrlPreviewGroupViewModel
         }
 
         const content = this.props.mxEvent.getContent();
-        if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
+        const urlPreviewKind = this.props.urlPreviewKind;
+        if (
+            content.msgtype === MsgType.Text &&
+            (urlPreviewKind === "bundledonly" || urlPreviewKind === "preferbundled")
+        ) {
             const messageContent = content as RoomMessageEventContent;
+            const bundledPreviews = messageContent[BUNDLED_LINK_PREVIEWS];
 
-            if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
-                previews = messageContent[BUNDLED_LINK_PREVIEWS]
-                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((preview) => this.fetcher.previewFromBundle(preview));
+            if (bundledPreviews && Array.isArray(bundledPreviews)) {
+                // In "bundledonly" the user has asked that nothing about this encrypted message
+                // reaches the homeserver, so entries carrying only a matched_url are dropped
+                // rather than resolved via /preview_url.
+                const allowServerFallback = urlPreviewKind !== "bundledonly";
+                previews = (
+                    await Promise.all(
+                        bundledPreviews
+                            .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                            .map((preview) =>
+                                this.fetcher
+                                    .previewFromBundle(preview, this.props.mxEvent, loadMedia, allowServerFallback)
+                                    .catch((_) => null),
+                            ),
+                    )
+                ).filter((p) => !!p);
             }
         }
 
-        previews ??= await Promise.all(
-            this.links
-                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
-        );
+        if (urlPreviewKind === "fetchonly" || urlPreviewKind === "preferbundled") {
+            previews ??= await Promise.all(
+                this.links
+                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                    .map((link) => this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent).catch((_) => null)),
+            );
+        }
 
         this.snapshot.merge({
-            previews: previews.filter((p) => !!p),
+            previews: (previews ?? []).filter((p) => !!p),
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
@@ -205,6 +236,14 @@ export class UrlPreviewGroupViewModel
      * @param eventElement
      */
     public async updateEventElement(eventElement: HTMLDivElement | HTMLSpanElement): Promise<void> {
+        const urlPreviewBundleEnabled = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
+        const previewBundle = this.props.mxEvent.getContent<RoomMessageEventContent>()["com.beeper.linkpreviews"];
+
+        if (urlPreviewBundleEnabled && previewBundle !== undefined) {
+            this.links = previewBundle.map((entry) => entry.matched_url);
+            return this.computeSnapshot();
+        }
+
         const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
             this.links = newLinks;

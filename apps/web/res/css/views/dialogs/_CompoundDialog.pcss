@@ -58,10 +58,13 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_CompoundDialog_footer {
         padding: 20px 32px;
-        text-align: right;
 
-        .mx_AccessibleButton {
-            margin-left: 24px;
+        display: flex;
+        gap: var(--cpd-space-6x);
+        justify-content: flex-end;
+
+        .mx_AccessibleButton .mx_Spinner {
+            margin-right: var(--cpd-space-2x);
         }
     }
 }

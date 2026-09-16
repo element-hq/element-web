@@ -7,11 +7,11 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
+import { getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -36,7 +36,7 @@ test.describe("Room list filters and sort", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
@@ -168,18 +168,23 @@ test.describe("Room list filters and sort", () => {
 
             await primaryFilters.getByRole("option", { name: "Unread" }).click();
             // only one room should be visible
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "unread room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(4);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            // A pending invitation counts as unread, so the Invites section shows too, but it is
+            // collapsed so its room is not listed: 3 rooms + the Invites, People and Rooms headers.
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(6);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
-            await expect(roomList.getByRole("option", { name: "unread dm" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            // The invited dm matches the People filter, but sits in the collapsed Invites section,
+            // so only its header shows: the joined dm + the People and Invites headers = 3 buttons.
+            await expect(roomList.getByRole("button", { name: "Toggle Invites section" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room invited room" })).not.toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(3);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
-            // "Open room" prefix disambiguates the room tile from the "Toggle Chats section with
+            // "Open room" prefix disambiguates the room tile from the "Toggle Rooms section with
             // unread rooms" section header button, which also matches the "unread room" substring.
             await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
@@ -190,50 +195,92 @@ test.describe("Room list filters and sort", () => {
             // header is also a button, so 5 rooms + 3 section headers = 8 buttons.
             await expect.poll(() => roomList.locator("role=button").count()).toBe(8);
 
-            await getFilterExpandButton(page).click();
-
             await primaryFilters.getByRole("option", { name: "Mentions" }).click();
             await expect(roomList.getByRole("option", { name: "room with mention" })).toBeVisible();
             await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
-            await primaryFilters.getByRole("option", { name: "Invites" }).click();
-            await expect(roomList.getByRole("option", { name: "invited room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
-
-            await getFilterCollapseButton(page).click();
-            await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");
+            // The Invites filter is not offered while sections are enabled: invited rooms are
+            // surfaced by the Invites section instead.
+            await expect(primaryFilters.getByRole("option", { name: "Invites" })).not.toBeVisible();
         });
 
-        test(
-            "unread filter should only match unread rooms that have a count",
-            { tag: "@screenshot" },
-            async ({ page, app, bot }) => {
+        test.describe("Unread filter", () => {
+            test(
+                "unread filter should only match unread rooms that have a count when Notifications.showbold=off",
+                { tag: "@screenshot" },
+                async ({ page, app, bot }) => {
+                    const roomListView = getRoomList(page);
+                    const primaryFilters = getPrimaryFilters(page);
+
+                    // Let's configure unread dm room so that we only get notification for mentions and keywords
+                    await app.viewRoomById(unReadDmId);
+                    await app.settings.openRoomSettings("Notifications");
+                    await page.getByText("@mentions and replies").click();
+                    await app.settings.closeDialog();
+
+                    // Let's open a room other than unread room or unread dm
+                    await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
+
+                    // Let's make the bot send a new message in both rooms
+                    await bot.sendMessage(unReadDmId, "Hello!");
+                    await bot.sendMessage(unReadRoomId, "Hello!");
+
+                    // Let's activate the unread filter now
+                    await primaryFilters.getByRole("option", { name: "Unread" }).click();
+
+                    // Unread filter should only show unread room and not unread dm!
+                    const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                    await expect(unreadRoom).toBeVisible();
+                    await expect(unreadRoom).toMatchScreenshot("unread-room.png");
+                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
+                },
+            );
+
+            test("unread filter should only match unread rooms that have an activity when Notifications.activityIsUnread=true", async ({
+                page,
+                app,
+                bot,
+            }) => {
                 const roomListView = getRoomList(page);
                 const primaryFilters = getPrimaryFilters(page);
 
-                // Let's configure unread dm room so that we only get notification for mentions and keywords
+                // The unread DM room only notifies for mentions and keywords
                 await app.viewRoomById(unReadDmId);
                 await app.settings.openRoomSettings("Notifications");
                 await page.getByText("@mentions and replies").click();
                 await app.settings.closeDialog();
 
-                // Let's open a room other than unread room or unread dm
+                // (The unread non-DM room still notifies for all activity)
+
+                // Open some other room
                 await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
 
-                // Let's make the bot send a new message in both rooms
+                // Send a message in the unread DM room and the unread non-DM room
                 await bot.sendMessage(unReadDmId, "Hello!");
                 await bot.sendMessage(unReadRoomId, "Hello!");
 
-                // Let's activate the unread filter now
-                await primaryFilters.getByRole("option", { name: "Unread" }).click();
+                // Turn the "Unreads" filter on
+                await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-                // Unread filter should only show unread room and not unread dm!
-                const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
+                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
+
+                // Only the unread room is visible. The DM room is hidden.
+                await expect(unreadRoom).toBeVisible();
+                await expect(unreadDm).not.toBeVisible();
+
+                // Now set "activityIsUnread" to on
+                await app.settings.setValue("Notifications.activityIsUnread", null, SettingLevel.DEVICE, true);
+
+                // Now both unread rooms are visible
+                await expect(unreadRoom).toBeVisible();
                 await expect(unreadDm).toBeVisible();
-                await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                await expect(roomListView.getByRole("option", { name: "Open room unread dm" })).not.toBeVisible();
-            },
-        );
+
+                // Even though favourite room is read (because we have it open), it is still shown because it is
+                // the current room.
+                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
+            });
+        });
 
         test("should sort the room list alphabetically", async ({ page }) => {
             const roomListView = getRoomList(page);
@@ -241,8 +288,10 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            // Favourite + chat section headers are buttons + favourite room
-            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/empty room/);
+            // Invites + Favourites + People + Rooms section headers are buttons, and the favourite
+            // room and the dm come before the first room of the Rooms section. The invited room is
+            // not listed because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(6)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
@@ -253,12 +302,21 @@ test.describe("Room list filters and sort", () => {
 
             await bot.sendMessage(unReadDmId, "Hello!");
 
-            // Favourite + chat section headers are buttons + favourite room
-            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/unread dm/);
+            // Invites + Favourites + People section headers are buttons, and the favourite room
+            // comes before the first room of the People section. The invited room is not listed
+            // because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(4)).toHaveText(/unread dm/);
         });
     });
 
     test.describe("Empty room list", () => {
+        // Sections are turned off so that every primary filter is offered as a chip. With sections
+        // enabled, Favourites, Low Priority and Invites are surfaced as sections instead, and the
+        // remaining chips fit without an expand button.
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+        });
+
         /**
          * Get the empty state
          * @param page

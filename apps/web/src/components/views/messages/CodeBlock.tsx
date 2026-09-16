@@ -66,7 +66,7 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
         const number = innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
         // Iterate through lines starting with 1 (number of the first line is 1)
         lineNumbers = (
-            <span className="mx_EventTile_lineNumbers">
+            <span className="mx_EventTile_lineNumbers" data-event-tile-line-numbers>
                 {Array.from({ length: number }, (_, i) => i + 1).map((i) => (
                     <span key={i}>{i}</span>
                 ))}

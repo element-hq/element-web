@@ -141,7 +141,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
             submitButtonOrSpinner = (
                 <input
                     type="submit"
-                    className="mx_Dialog_primary"
+                    className="mx_LegacyDialogButton mx_Dialog_primary"
                     disabled={!this.state.password}
                     value={_t("action|continue")}
                 />
@@ -625,6 +625,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
             const submitClasses = classNames({
                 mx_InteractiveAuthEntryComponents_msisdnSubmit: true,
                 mx_GeneralButton: true,
+                mx_LegacyDialogButton: true,
             });
             let errorSection;
             if (this.state.errorText) {

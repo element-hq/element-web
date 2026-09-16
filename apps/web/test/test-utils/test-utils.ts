@@ -321,6 +321,10 @@ export function createTestClient(): MatrixClient {
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
         _unstable_getRTCTransports: vi.fn(),
+        cachedRtcTransports: {
+            wait: vi.fn().mockResolvedValue([]),
+            get: vi.fn().mockReturnValue([]),
+        } as unknown as MockedObject<typeof client.cachedRtcTransports>,
         searchUserDirectory: vi.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: vi.fn(),
         joinRoom: vi.fn(),

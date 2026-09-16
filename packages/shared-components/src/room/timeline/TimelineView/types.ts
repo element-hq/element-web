@@ -29,7 +29,7 @@ export interface EventTimelineItem {
 export interface DateSeparatorTimelineItem {
     key: string;
     kind: "date-separator";
-    label: string;
+    ts: number;
 }
 
 export interface ReadMarkerTimelineItem {

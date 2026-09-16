@@ -13,7 +13,7 @@ import {
     type Section,
     type UserStatus,
 } from "@element-hq/web-shared-components";
-import { ClientEvent, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, KnownMembership, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -43,7 +43,7 @@ import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
-import { fetchUserStatus, userStatusFromProfile } from "../../utils/userStatus";
+import { fetchUserStatus } from "../../utils/userStatus";
 
 /**
  * View section type without `isSelected` field
@@ -290,13 +290,10 @@ export class RoomListItemViewModel
     /**
      * Handler for profile updates received via sync, to keep the DM user's status up to date.
      */
-    private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = (userId, profile) => {
+    private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = async (userId) => {
         if (userId !== this.dmUserId || !SettingsStore.getValue("feature_user_status")) return;
         this.snapshot.merge({
-            userStatus: userStatusFromProfile(
-                profile?.["org.matrix.msc4426.status"],
-                profile?.["org.matrix.msc4426.call"],
-            ),
+            userStatus: await fetchUserStatus(this.props.client, this.dmUserId),
         });
     };
 
@@ -384,6 +381,10 @@ export class RoomListItemViewModel
         const sections: Section[] = RoomListItemViewModel.buildSections(roomTags, availableSections);
         const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
+        // A room with a pending invitation always sits in the Invites section, so it can't be moved
+        // to another one, by dragging it or through the menu entries that assign a section.
+        const canChangeSection = room.getMyMembership() !== KnownMembership.Invite;
+
         return {
             id: room.roomId,
             room,
@@ -406,6 +407,7 @@ export class RoomListItemViewModel
             showNotificationMenu,
             isFavourite,
             isLowPriority,
+            isDm,
             canInvite,
             canCopyRoomLink,
             canMarkAsRead,
@@ -413,6 +415,7 @@ export class RoomListItemViewModel
             roomNotifState,
             sections,
             areSectionsEnabled,
+            canChangeSection,
         };
     }
 
@@ -493,24 +496,21 @@ export class RoomListItemViewModel
     };
 
     public onCreateSection = async (): Promise<void> => {
-        const newTag = await RoomListStoreV3.instance.createSection();
+        // The room the menu was opened on is preselected in the dialog, which takes care of
+        // adding it to the new section.
+        await RoomListStoreV3.instance.createSection(this.props.room.roomId);
         PosthogTrackers.trackSectionCreation("RoomListItemOverflowMenu");
-
-        // Add the room to the section
-        if (newTag) {
-            tagRoom(this.props.room, newTag);
-        }
     };
 
     public onToggleSection = (tag: string): void => {
-        tagRoom(this.props.room, tag);
+        tagRoom(this.props.room, tag, true);
     };
 
     public onRemoveFromSection = (): void => {
         const roomTags = this.props.room.tags;
         const sectionTag = RoomListStoreV3.instance.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
         if (sectionTag) {
-            tagRoom(this.props.room, sectionTag);
+            tagRoom(this.props.room, sectionTag, true);
         }
     };
 

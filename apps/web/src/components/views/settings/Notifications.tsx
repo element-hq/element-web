@@ -90,6 +90,9 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.EncryptedMessage,
 
     // Mentions
+    RuleId.IsUserMention,
+    RuleId.IsRoomMention,
+    // Legacy mentions rules, takes priority until the server no longer serves them
     RuleId.ContainsUserName,
     RuleId.AtRoomNotification,
     RuleId.ContainsDisplayName,
@@ -100,6 +103,21 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.SuppressNotices,
     RuleId.Tombstone,
 ];
+
+/**
+ * The legacy text-matching mention rules, removed from the spec in Matrix v1.17 (MSC4210),
+ * mapped to the intentional mention rule that replaces each of them.
+ *
+ * While the server still serves a legacy rule, that rule is the row in the Mentions section
+ * and the intentional rule is only written as its synced rule (see VectorPushRulesDefinitions),
+ * so users of such servers see exactly what they always have. Once the server stops serving
+ * the legacy rule, the intentional rule takes its place.
+ */
+const LEGACY_MENTION_RULE_REPLACEMENTS: Record<string, RuleId> = {
+    [RuleId.ContainsUserName]: RuleId.IsUserMention,
+    [RuleId.ContainsDisplayName]: RuleId.IsUserMention,
+    [RuleId.AtRoomNotification]: RuleId.IsRoomMention,
+};
 
 interface IVectorPushRule {
     ruleId: RuleId | typeof KEYWORD_RULE_ID | string;
@@ -200,6 +218,11 @@ const NotificationActivitySettings = (): JSX.Element => {
             }}
         >
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+            <SettingsFlag
+                name="Notifications.activityIsUnread"
+                level={SettingLevel.DEVICE}
+                requires={["Notifications.showbold"]}
+            />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
         </Form.Root>
     );
@@ -301,6 +324,8 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             [RuleId.ContainsDisplayName]: RuleClass.VectorMentions,
             [RuleId.ContainsUserName]: RuleClass.VectorMentions,
             [RuleId.AtRoomNotification]: RuleClass.VectorMentions,
+            [RuleId.IsUserMention]: RuleClass.VectorMentions,
+            [RuleId.IsRoomMention]: RuleClass.VectorMentions,
 
             [RuleId.InviteToSelf]: RuleClass.VectorOther,
             [RuleId.IncomingCall]: RuleClass.VectorOther,
@@ -333,6 +358,25 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 }
             }
         }
+
+        // An intentional mention rule is only a row of its own when the server no longer
+        // serves the legacy rule it replaces. Otherwise it stays out of the Mentions section,
+        // but remains available as a synced rule of the legacy row.
+        const replacedByServedLegacyRules = new Set<string>(
+            defaultRules[RuleClass.VectorMentions].flatMap(
+                (rule) => LEGACY_MENTION_RULE_REPLACEMENTS[rule.rule_id] ?? [],
+            ),
+        );
+        // Keep legacy mention rules
+        const isHiddenMentionRule = (rule: IAnnotatedPushRule): boolean =>
+            replacedByServedLegacyRules.has(rule.rule_id);
+
+        // Add legacy mention rules
+        defaultRules[RuleClass.Other].push(...defaultRules[RuleClass.VectorMentions].filter(isHiddenMentionRule));
+        // Add stable mention rules
+        defaultRules[RuleClass.VectorMentions] = defaultRules[RuleClass.VectorMentions].filter(
+            (rule) => !isHiddenMentionRule(rule),
+        );
 
         const preparedNewState: Partial<IState> = {};
         if (defaultRules.master.length > 0) {
@@ -519,6 +563,9 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         } catch (e) {
             this.setSavingError(rule.ruleId);
             logger.error("Error updating push rule:", e);
+            // The rules may have changed under us, for example the server stopped serving a
+            // rule this row wrote to. Re-read them so the next attempt works on fresh rules.
+            await this.refreshFromServer();
         }
     };
 

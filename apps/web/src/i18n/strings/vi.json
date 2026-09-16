@@ -19,7 +19,7 @@
         "add_existing_room": "Thêm phòng hiện có",
         "apply": "Áp dụng",
         "approve": "Chấp thuận",
-        "ask_to_join": "Yêu cầu để tham gia",
+        "ask_to_join": "Yêu cầu được tham gia",
         "back": "Quay lại",
         "call": "Gọi",
         "cancel": "Huỷ bỏ",
@@ -100,7 +100,7 @@
         "show_advanced": "Hiện nâng cao",
         "show_all": "Hiển thị tất cả",
         "sign_in": "Đăng nhập",
-        "sign_out": "Đăng xuất",
+        "sign_out": "Xóa thiết bị này",
         "skip": "Bỏ qua",
         "start": "Bắt đầu",
         "stop": "Dừng",
@@ -116,9 +116,11 @@
         "update": "Cập nhật",
         "upgrade": "Nâng cấp",
         "upload": "Tải lên",
+        "upload_file": "Tải lên tệp",
         "verify": "Xác thực",
         "view": "Xem",
         "view_all": "Xem tất cả",
+        "view_list": "Xem danh sách",
         "view_message": "Xem tin nhăn",
         "view_source": "Xem nguồn",
         "yes": "Có",
@@ -210,11 +212,16 @@
             "error_title": "Chúng tôi không thể đăng nhập cho bạn",
             "missing_or_invalid_stored_state": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại."
         },
+        "password_field_keep_going_prompt": "Tiếp tục...",
         "password_field_label": "Nhập mật khẩu",
         "password_field_strong_label": "Mật khẩu mạnh, tốt đó!",
         "password_field_weak_label": "Mật khẩu được phép, nhưng không an toàn",
         "phone_label": "Điện thoại",
         "phone_optional_label": "Điện thoại (tùy chọn)",
+        "qr_code_login": {
+            "check_code_mismatch": "Các con số không khớp nhau",
+            "error_insecure_channel_detected_instructions": "Bây giờ thì sao?"
+        },
         "register_action": "Tạo tài khoản",
         "registration": {
             "continue_without_email_description": "Lưu ý là nếu bạn không thêm địa chỉ thư điện tử và quên mật khẩu, bạn có thể <b>vĩnh viễn mất quyền truy cập vào tài khoản của mình</b>.",
@@ -235,6 +242,7 @@
             "sign_out_other_devices": "Đăng xuất khỏi mọi thiết bị"
         },
         "reset_password_action": "Đặt lại mật khẩu",
+        "reset_password_button": "Quên mật khẩu?",
         "reset_password_email_field_description": "Sử dụng địa chỉ thư điện tử để khôi phục tài khoản của bạn",
         "reset_password_email_field_required_invalid": "Nhập địa chỉ thư điện tử (bắt buộc trên máy chủ này)",
         "reset_password_email_not_associated": "Địa chỉ thư điện tử của bạn không được liên kết với một định danh Matrix trên máy chủ này.",
@@ -288,6 +296,7 @@
             "code": "Mã",
             "email_auth_header": "Kiểm tra hòm thư để tiếp tục",
             "fallback_button": "Bắt đầu xác thực",
+            "mas_cross_signing_reset_cta": "Tiếp tục vào account",
             "msisdn": "Một tin nhắn văn bản đã được gửi tới %(msisdn)s",
             "msisdn_token_incorrect": "Mã thông báo không chính xác",
             "msisdn_token_prompt": "Vui lòng nhập mã mà nó chứa:",
@@ -369,6 +378,7 @@
         "beta": "Thử nghiệm",
         "camera": "Máy ảnh",
         "cameras": "Máy quay",
+        "cancel": "Huỷ bỏ",
         "capabilities": "Khả năng",
         "copied": "Đã sao chép!",
         "credits": "Ghi công",
@@ -443,6 +453,7 @@
         "room": "Phòng",
         "room_name": "Tên phòng",
         "rooms": "Phòng",
+        "save": "Lưu",
         "saving": "Đang lưu…",
         "secure_backup": "Sao lưu bảo mật",
         "select_all": "Chọn tất cả",
@@ -533,6 +544,7 @@
         "stop_voice_message": "Dừng ghi",
         "voice_message_button": "Tin nhắn thoại"
     },
+    "console_wait": "Khoan!",
     "create_room": {
         "action_create_room": "Tạo phòng",
         "action_create_video_room": "Tạo phòng truyền hình",
@@ -616,6 +628,9 @@
         "category_room": "Phòng",
         "caution_colon": "Thận trọng:",
         "client_versions": "Phiên bản phần mềm máy khách",
+        "crypto": {
+            "key_backup_active_version_none": "Không có gì"
+        },
         "developer_mode": "Chế độ nhà phát triển",
         "developer_tools": "Những công cụ phát triển",
         "edit_setting": "Chỉnh sửa cài đặt",
@@ -777,8 +792,8 @@
             "sas_caption_user": "Xác thực người dùng này bằng cách xác nhận số xuất hiện trên màn hình của họ.",
             "sas_description": "So sánh một bộ biểu tượng cảm xúc độc đáo nếu bạn không có camera trên một trong hai thiết bị",
             "sas_emoji_caption_user": "Xác thực người dùng này bằng cách xác nhận biểu tượng cảm xúc sau xuất hiện trên màn hình của họ.",
-            "sas_match": "Chúng phù hợp",
-            "sas_no_match": "Chúng không phù hợp",
+            "sas_match": "Chúng khớp với nhau",
+            "sas_no_match": "Chúng không khớp nhau",
             "sas_prompt": "So sánh biểu tượng cảm xúc độc đáo",
             "scan_qr": "Xác thực bằng cách quét",
             "scan_qr_explainer": "Yêu cầu %(displayName)s quét mã của bạn:",
@@ -1050,7 +1065,6 @@
         "name_mxid_share_room": "Mời ai đó thông qua tên hiển thị, tên người dùng của họ (ví dụ <userId/>) hoặc <a>chia sẻ phòng này</a>.",
         "name_mxid_share_space": "Mời ai đó sử dụng tên hiển thị, tên đăng nhập của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
         "recents_section": "Các cuộc trò chuyện gần đây",
-        "room_failed_partial": "Chúng tôi đã mời những người khác, nhưng những người dưới đây không thể được mời tham gia <RoomName/>",
         "room_failed_partial_title": "Không thể gửi một số lời mời",
         "room_failed_title": "Mời người dùng vào %(roomName)s thất bại",
         "send_link_prompt": "Hoặc gửi liên kết mời",
@@ -1145,7 +1159,6 @@
         "bridge_state_workspace": "Không gian làm việc(workspace): <networkLink/>",
         "click_for_info": "Nhấp để có thêm thông tin",
         "currently_experimental": "Hiện đang thử nghiệm.",
-        "custom_themes": "Hỗ trợ thêm các chủ đề tùy chỉnh",
         "dynamic_room_predecessors": "Tiền nhiệm động cho phòng",
         "element_call_video_rooms": "Phòng truyền hình Element Call",
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
@@ -1159,14 +1172,13 @@
         "group_profile": "Hồ sơ",
         "group_rooms": "Phòng",
         "group_spaces": "Không gian",
-        "group_themes": "Chủ đề",
         "group_threads": "Chủ đề",
         "group_voip": "Âm thanh & Hình ảnh",
         "group_widgets": "Vật dụng",
         "hidebold": "Ẩn dấu chấm thông báo (chỉ hiển thị bộ đếm)",
         "join_beta": "Tham gia phiên bản beta",
         "join_beta_reload": "Tham gia thử nghiệm sẽ tải lại %(brand)s.",
-        "jump_to_date": "Nhảy đến ngày (thêm lệnh /jumptodate và nhảy đến ngày)",
+        "jump_to_date": "Nhảy đến ngày (thêm lệnh /jumptodate và ngày cần nhảy đến)",
         "jump_to_date_msc_support": "Yêu cầu máy chủ của bạn hỗ trợ MSC3030",
         "latex_maths": "Kết xuất đồ họa toán học LaTeX trong tin nhắn",
         "leave_beta": "Rời khỏi bản beta",
@@ -1257,7 +1269,8 @@
     },
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
-        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác"
+        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
+        "no_matches": "Không tìm thấy kết quả trùng khớp"
     },
     "member_list_back_action_label": "Thành viên phòng",
     "message_edit_dialog_title": "Chỉnh sửa tin nhắn",
@@ -1455,6 +1468,7 @@
             "forget": "Quên phòng",
             "low_priority": "Ưu tiên thấp",
             "mark_read": "Đánh dấu đã đọc",
+            "mark_unread": "Đánh dấu là chưa đọc",
             "notifications_default": "Theo cài đặt mặc định",
             "notifications_mute": "Tắt tiếng phòng",
             "title": "Tùy chọn phòng",
@@ -1863,8 +1877,6 @@
             "custom_font_description": "Đặt tên phông chữ được cài đặt trên hệ thống của bạn & %(brand)s sẽ cố gắng sử dụng phông chữ đó.",
             "custom_font_name": "Tên phông chữ hệ thống",
             "custom_font_size": "Sử dụng kích thước tùy chỉnh",
-            "custom_theme_error_downloading": "Lỗi khi tải xuống thông tin chủ đề.",
-            "custom_theme_invalid": "Lược đồ chủ đề không hợp lệ.",
             "font_size": "Cỡ chữ",
             "image_size_default": "Mặc định",
             "image_size_large": "Lớn",
@@ -1951,7 +1963,7 @@
             "remove_msisdn_prompt": "Xóa %(phone)s?",
             "spell_check_locale_placeholder": "Chọn vùng miền"
         },
-        "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",
+        "inline_url_previews_default": "Bật xem trước nội dung",
         "insert_trailing_colon_mentions": "Chèn dấu hai chấm phía sau các đề cập người dùng ở đầu một tin nhắn",
         "jump_to_bottom_on_send": "Chuyển đến cuối dòng thời gian khi bạn gửi tin nhắn",
         "key_backup": {
@@ -2587,7 +2599,7 @@
             "unknown": "%(senderDisplayName)s vừa đổi chính sách tham gia của khách thành %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s đã đặt lịch sử phòng chat xem được bởi thành viên, tính từ lúc thành viên được mời.",
+            "invited": "%(senderName)s đã đặt lịch sử phòng chat mở cho tất cả thành viên, tính từ lúc được mời.",
             "joined": "%(senderName)s đã đặt lịch sử phòng chat xem được bởi thành viên, tính từ lúc thành viên tham gia phòng.",
             "shared": "%(senderName)s đã đặt nội dung mới của phòng chat xem được bởi thành viên.",
             "unknown": "%(senderName)s đã đặt lịch sử phòng chat xem được đối với đối tượng (%(visibility)s).",
@@ -2730,6 +2742,9 @@
             "changed_avatar": {
                 "other": "%(oneUser)sđã thay đổi ảnh đại diện của họ%(count)s lần"
             },
+            "changed_avatar_multiple": {
+                "other": "%(severalUsers)sđã thay đổi ảnh đại diện %(count)s lần"
+            },
             "changed_name": {
                 "one": "%(oneUser)s đã thay đổi tên của họ",
                 "other": "%(oneUser)s đã thay đổi tên của họ %(count)s lần"
@@ -2778,6 +2793,12 @@
             "joined_multiple": {
                 "one": "%(severalUsers)s đã tham gia",
                 "other": "%(severalUsers)s đã tham gia %(count)s lần"
+            },
+            "kicked": {
+                "other": "đã bị xóa %(count)s lần"
+            },
+            "kicked_multiple": {
+                "other": "đã bị xóa %(count)s lần"
             },
             "left": {
                 "one": "%(oneUser)s đã rời khỏi",

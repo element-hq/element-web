@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
-    "version": "6.0.0",
+    "version": "6.2.0",
     "license": "SEE LICENSE IN README.md",
     "repository": {
         "type": "git",
@@ -20,6 +20,11 @@
     "scripts": {
         "prepack": "nx build:playwright",
         "lint:types": "nx lint:types"
+    },
+    "publishConfig": {
+        "executableFiles": [
+            "docker-entrypoint.sh"
+        ]
     },
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",

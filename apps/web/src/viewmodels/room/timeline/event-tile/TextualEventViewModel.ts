@@ -20,7 +20,12 @@ export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapsho
     }
 
     private setTextFromEvent = (): void => {
-        const content = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
+        const client = MatrixClientPeg.safeGet();
+        // An export is a static HTML file, so any button rendered into it does nothing when clicked.
+        // Ask for the plain text equivalent instead.
+        const content = this.props.forExport
+            ? textForEvent(this.props.mxEvent, client)
+            : textForEvent(this.props.mxEvent, client, true, this.props.showHiddenEvents);
         this.snapshot.set({ content });
     };
 }

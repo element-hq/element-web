@@ -159,12 +159,17 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 </div>
                 <div className="mx_Dialog_buttons">
                     <input
-                        className="mx_Dialog_primary"
+                        className="mx_LegacyDialogButton mx_Dialog_primary"
                         type="submit"
                         value={_t("action|continue")}
                         onClick={this.onSubmit}
                     />
-                    <input type="submit" value={_t("action|skip")} onClick={this.onCancelled} />
+                    <input
+                        className="mx_LegacyDialogButton"
+                        type="submit"
+                        value={_t("action|skip")}
+                        onClick={this.onCancelled}
+                    />
                 </div>
             </BaseDialog>
         );

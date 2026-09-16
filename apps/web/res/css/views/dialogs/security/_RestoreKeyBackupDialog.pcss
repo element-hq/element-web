@@ -16,6 +16,19 @@ Please see LICENSE files in the repository root for full details.
     padding: 20px;
 }
 
+.mx_RestoreKeyBackupDialog_passPhraseInput {
+    background-color: transparent;
+    color: $primary-content;
+    padding: 9px;
+    font: var(--cpd-font-body-md-semibold);
+    font-weight: var(--cpd-font-weight-semibold);
+    min-width: 0;
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
 .mx_RestoreKeyBackupDialog_passPhraseInput,
 .mx_RestoreKeyBackupDialog_recoveryKeyInput {
     width: 300px;
