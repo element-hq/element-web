@@ -8,11 +8,12 @@
 // @vitest-environment happy-dom
 
 import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, type Mock, type MockedObject } from "vitest";
+import { vi, describe, it, expect, afterEach, type Mock, type MockedObject } from "vitest";
 
 import { BUNDLED_LINK_PREVIEWS, MAX_PREVIEWS_WHEN_LIMITED, UrlPreviewGroupViewModel } from "./UrlPreviewGroupViewModel";
 import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
+import SettingsStore from "../../settings/SettingsStore";
 import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -380,6 +381,92 @@ describe("UrlPreviewGroupViewModel", () => {
             const { previews } = vm.getSnapshot();
             expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/1", expect.anything());
             expect(previews).toMatchObject([{ title: "This is an example!" }]);
+        });
+
+        describe("with the bundle setting enabled in SettingsStore", () => {
+            afterEach(() => {
+                vi.restoreAllMocks();
+            });
+
+            /**
+             * `updateEventElement` reads the bundle feature flag from SettingsStore rather than
+             * from props, so it has to be enabled there to take the bundle-driven link path.
+             */
+            function enableBundleSetting(): void {
+                const original = SettingsStore.getValue;
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
+                );
+            }
+
+            it("should take its links from the bundle rather than from the rendered message", async () => {
+                enableBundleSetting();
+                const { vm, client } = getViewModel({
+                    urlPreviewBundleEnabled: true,
+                    content: {
+                        msgtype: MsgType.Text,
+                        body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
+                        [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                    },
+                });
+                // The rendered message carries a link that the bundle does not, so if the links came
+                // from the DOM the preview count and total would be three rather than two.
+                const msg = document.createElement("div");
+                msg.innerHTML =
+                    '<a href="https://example.org/1">Test1</a><a href="https://example.org/2">Test2</a><a href="https://example.org/3">Test3</a>';
+                await vm.updateEventElement(msg);
+
+                const snapshot = vm.getSnapshot();
+                expect(snapshot.previews).toMatchObject([
+                    { link: BUNDLE_PREVIEW_ONE.matched_url, title: "Bundled one" },
+                    { link: BUNDLE_PREVIEW_TWO.matched_url, title: "Bundled two" },
+                ]);
+                expect(snapshot.totalPreviewCount).toBe(2);
+                expect(snapshot.overPreviewLimit).toBe(false);
+                expect(client.getUrlPreview).not.toHaveBeenCalled();
+            });
+
+            it("should recompute even when the rendered links have not changed", async () => {
+                enableBundleSetting();
+                const { vm } = getViewModel({
+                    urlPreviewBundleEnabled: true,
+                    content: {
+                        msgtype: MsgType.Text,
+                        body: BUNDLE_PREVIEW_ONE.matched_url,
+                        [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                    },
+                });
+                const msg = document.createElement("div");
+                msg.innerHTML = '<a href="https://example.org/1">Test1</a>';
+
+                await vm.updateEventElement(msg);
+                expect(vm.getSnapshot().previews).toHaveLength(1);
+
+                // The bundle path bypasses the "links unchanged" short circuit, so a second call
+                // still produces the same previews rather than leaving a stale snapshot.
+                await vm.updateEventElement(msg);
+                expect(vm.getSnapshot().previews).toMatchObject([
+                    { link: BUNDLE_PREVIEW_ONE.matched_url, title: "Bundled one" },
+                ]);
+            });
+
+            it("should fall back to the rendered links when the message has no bundle", async () => {
+                enableBundleSetting();
+                const { vm, client } = getViewModel({
+                    urlPreviewBundleEnabled: true,
+                    content: {
+                        msgtype: MsgType.Text,
+                        body: "https://example.org",
+                    },
+                });
+                client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
+                const msg = document.createElement("div");
+                msg.innerHTML = '<a href="https://example.org">Test</a>';
+                await vm.updateEventElement(msg);
+
+                expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org", expect.anything());
+                expect(vm.getSnapshot().previews).toMatchObject([{ title: "This is an example!" }]);
+            });
         });
     });
 });

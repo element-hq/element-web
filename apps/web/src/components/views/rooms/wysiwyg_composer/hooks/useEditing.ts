@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { useCallback, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
@@ -18,6 +19,9 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
     initialContent?: string,
+    attachBundles?: (content: RoomMessageEventContent) => void,
+    updateUrlPreviews?: (content: string) => void,
+    isUrlPreviewsModified?: boolean,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -33,17 +37,29 @@ export function useEditing(
         (_content: string) => {
             setContent(_content);
             setIsSaveDisabled((_isSaveDisabled) => _isSaveDisabled && _content === initialContent);
+            updateUrlPreviews?.(_content);
         },
-        [initialContent],
+        [initialContent, updateUrlPreviews],
     );
 
     const editMessageMemoized = useCallback(async () => {
         if (mxClient === undefined || content === undefined) {
             return;
         }
-        return editMessage(content, { roomContext, mxClient, editorStateTransfer });
-    }, [content, roomContext, mxClient, editorStateTransfer]);
+        return editMessage(content, {
+            roomContext,
+            mxClient,
+            editorStateTransfer,
+            attachBundles,
+            isUrlPreviewsModified,
+        });
+    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified]);
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
-    return { onChange, editMessage: editMessageMemoized, endEditing: endEditingMemoized, isSaveDisabled };
+    return {
+        onChange,
+        editMessage: editMessageMemoized,
+        endEditing: endEditingMemoized,
+        isSaveDisabled: isSaveDisabled && !isUrlPreviewsModified,
+    };
 }
