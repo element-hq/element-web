@@ -5,22 +5,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { render } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog";
-import SdkConfig from "../../../../../src/SdkConfig";
-import { stubClient } from "../../../../test-utils";
+import { stubClient } from "test-utils";
+import { ReportRoomDialog } from "./ReportRoomDialog";
+import SdkConfig from "../../../SdkConfig";
+
+vi.mock("react-focus-lock");
 
 const ROOM_ID = "!foo:bar";
 const REASON = "This room is bad!";
 
 describe("ReportRoomDialog", () => {
-    const onFinished: jest.Mock = jest.fn();
-    const reportRoom: jest.Mock = jest.fn();
+    const onFinished = vi.fn();
+    const reportRoom = vi.fn();
+
     beforeEach(() => {
-        jest.resetAllMocks();
         const client = stubClient();
         client.reportRoom = reportRoom;
 
@@ -36,6 +41,7 @@ This doesn't actually go **anywhere**.`,
 
     afterEach(() => {
         SdkConfig.reset();
+        vi.resetAllMocks();
     });
 
     it("can close the dialog", async () => {

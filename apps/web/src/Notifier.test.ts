@@ -5,7 +5,21 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
+
+// @vitest-environment happy-dom
+
+import {
+    describe,
+    it,
+    expect,
+    vi,
+    beforeEach,
+    afterEach,
+    afterAll,
+    type MockedObject,
+    type MockInstance,
+} from "vitest";
+import "vitest-canvas-mock";
 import {
     ClientEvent,
     type MatrixClient,
@@ -19,45 +33,46 @@ import {
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { waitFor } from "jest-matrix-react";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-
-import type BasePlatform from "../../src/BasePlatform";
-import Notifier, { NOTIFICATION_SOUND_THROTTLE_MS } from "../../src/Notifier";
-import SettingsStore from "../../src/settings/SettingsStore";
-import ToastStore from "../../src/stores/ToastStore";
-import {
-    createLocalNotificationSettingsIfNeeded,
-    getLocalNotificationAccountDataEventType,
-} from "../../src/utils/notifications";
 import {
     getMockClientWithEventEmitter,
     mkEvent,
     mkMessage,
     mockClientMethodsUser,
     mockPlatformPeg,
-} from "../test-utils";
-import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
-import UserActivity from "../../src/UserActivity";
-import Modal from "../../src/Modal";
-import { mkThread } from "../test-utils/threads";
-import dis from "../../src/dispatcher/dispatcher";
-import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
-import { Action } from "../../src/dispatcher/actions";
-import { addReplyToMessageContent } from "../../src/utils/Reply";
-import { TestSDKContext } from "./TestSDKContext.ts";
+    TestSDKContext,
+} from "test-utils";
+import { mkThread } from "test-utils/threads";
+import { waitFor } from "test-utils-rtl";
 
-jest.mock("../../src/utils/notifications", () => ({
-    // @ts-ignore
-    ...jest.requireActual("../../src/utils/notifications"),
-    createLocalNotificationSettingsIfNeeded: jest.fn(),
+import type BasePlatform from "./BasePlatform";
+import Notifier, { NOTIFICATION_SOUND_THROTTLE_MS } from "./Notifier";
+import SettingsStore from "./settings/SettingsStore";
+import ToastStore from "./stores/ToastStore";
+import {
+    createLocalNotificationSettingsIfNeeded,
+    getLocalNotificationAccountDataEventType,
+} from "./utils/notifications";
+import type * as notificationsUtils from "./utils/notifications";
+import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
+import UserActivity from "./UserActivity";
+import Modal from "./Modal";
+import dis from "./dispatcher/dispatcher";
+import { type ThreadPayload } from "./dispatcher/payloads/ThreadPayload";
+import { Action } from "./dispatcher/actions";
+import { addReplyToMessageContent } from "./utils/Reply";
+import type * as audioCompat from "./audio/compat";
+
+vi.mock("./utils/notifications", async () => ({
+    ...(await vi.importActual<typeof notificationsUtils>("./utils/notifications")),
+    createLocalNotificationSettingsIfNeeded: vi.fn(),
 }));
 
-jest.mock("../../src/audio/compat", () => ({
-    ...jest.requireActual("../../src/audio/compat"),
-    createAudioContext: jest.fn(),
+vi.mock("./audio/compat", async () => ({
+    ...(await vi.importActual<typeof audioCompat>("./audio/compat")),
+    createAudioContext: vi.fn(),
 }));
 
 const settingsStoreGetValue = SettingsStore.getValue;
@@ -106,15 +121,15 @@ describe("Notifier", () => {
     };
 
     const mockAudioBufferSourceNode = {
-        addEventListener: jest.fn(),
-        connect: jest.fn(),
-        start: jest.fn(),
+        addEventListener: vi.fn(),
+        connect: vi.fn(),
+        start: vi.fn(),
     };
     const mockAudioContext = {
-        decodeAudioData: jest.fn(),
-        suspend: jest.fn(),
-        resume: jest.fn(),
-        createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        decodeAudioData: vi.fn(),
+        suspend: vi.fn(),
+        resume: vi.fn(),
+        createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
         currentTime: 1337,
     };
 
@@ -122,9 +137,9 @@ describe("Notifier", () => {
         accountDataStore = {};
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(userId),
-            isGuest: jest.fn().mockReturnValue(false),
-            getAccountData: jest.fn().mockImplementation((eventType) => accountDataStore[eventType]),
-            setAccountData: jest.fn().mockImplementation((eventType, content) => {
+            isGuest: vi.fn().mockReturnValue(false),
+            getAccountData: vi.fn().mockImplementation((eventType) => accountDataStore[eventType]),
+            setAccountData: vi.fn().mockImplementation((eventType, content) => {
                 accountDataStore[eventType] = content
                     ? new MatrixEvent({
                           type: eventType,
@@ -132,18 +147,18 @@ describe("Notifier", () => {
                       })
                     : undefined;
             }),
-            fetchRoomEvent: jest.fn(),
-            decryptEventIfNeeded: jest.fn(),
-            getRoom: jest.fn(),
-            getPushActionsForEvent: jest.fn(),
+            fetchRoomEvent: vi.fn(),
+            decryptEventIfNeeded: vi.fn(),
+            getRoom: vi.fn(),
+            getPushActionsForEvent: vi.fn(),
             // Mock required because TextForEvent now evaluates supportsVoip for RTCNotification to trigger OS popups.
             // The true/false value is arbitrary here, as this test only verifies the in-app toast creation, not the OS text output.
-            supportsVoip: jest.fn().mockReturnValue(true),
-            supportsThreads: jest.fn().mockReturnValue(false),
+            supportsVoip: vi.fn().mockReturnValue(true),
+            supportsThreads: vi.fn().mockReturnValue(false),
             matrixRTC: {
-                on: jest.fn(),
-                off: jest.fn(),
-                getRoomSession: jest.fn(),
+                on: vi.fn(),
+                off: vi.fn(),
+                getRoomSession: vi.fn(),
             },
         });
 
@@ -157,15 +172,15 @@ describe("Notifier", () => {
         testRoom = new Room(roomId, mockClient, mockClient.getSafeUserId());
 
         MockPlatform = mockPlatformPeg({
-            supportsNotifications: jest.fn().mockReturnValue(true),
-            maySendNotifications: jest.fn().mockReturnValue(true),
-            displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
-            loudNotification: jest.fn(),
-            requestNotificationPermission: jest.fn(),
+            supportsNotifications: vi.fn().mockReturnValue(true),
+            maySendNotifications: vi.fn().mockReturnValue(true),
+            displayNotification: vi.fn().mockReturnValue({ close: vi.fn() }),
+            loudNotification: vi.fn(),
+            requestNotificationPermission: vi.fn(),
         });
 
         notifier = new Notifier(dis, context);
-        notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
+        notifier.isBodyEnabled = vi.fn().mockReturnValue(true);
 
         mockClient.getRoom.mockImplementation((id: string | undefined): Room | null => {
             if (id === roomId) return testRoom;
@@ -213,7 +228,7 @@ describe("Notifier", () => {
             };
 
             // enable notifications by default
-            jest.spyOn(SettingsStore, "getValue")
+            vi.spyOn(SettingsStore, "getValue")
                 .mockReset()
                 .mockImplementation((settingName) => mockSettings[settingName] ?? false);
         });
@@ -413,7 +428,7 @@ describe("Notifier", () => {
         });
 
         describe("knocks", () => {
-            let getValueSpy: jest.SpyInstance;
+            let getValueSpy: MockInstance;
 
             const mkKnockEvent = (reason?: string): MatrixEvent =>
                 mkEvent({
@@ -426,7 +441,7 @@ describe("Notifier", () => {
                 });
 
             beforeEach(() => {
-                getValueSpy = jest
+                getValueSpy = vi
                     .spyOn(SettingsStore, "getValue")
                     .mockImplementation((name): any => name === "feature_ask_to_join");
             });
@@ -469,7 +484,7 @@ describe("Notifier", () => {
 
     describe("getSoundForRoom", () => {
         it("should not explode if given invalid url", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 return { url: { content_uri: "foobar" } };
             });
             expect(notifier.getSoundForRoom("!roomId:server")).toBeNull();
@@ -485,7 +500,7 @@ describe("Notifier", () => {
         it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
             // It's not ideal to only look at whether this function has been called
             // but avoids starting to look into DOM stuff
-            notifier.getSoundForRoom = jest.fn();
+            notifier.getSoundForRoom = vi.fn();
 
             mockClient.setAccountData(accountDataEventKey, event!);
             notifier.playAudioNotification(testEvent, testRoom);
@@ -500,11 +515,11 @@ describe("Notifier", () => {
     // superimpose into one loud "stacked" sound. We coalesce a burst into at
     // most one audible play within NOTIFICATION_SOUND_THROTTLE_MS.
     describe("playAudioNotification throttle (macOS wake-from-sleep stacking)", () => {
-        let playSpy: jest.SpyInstance;
+        let playSpy: MockInstance;
 
         beforeEach(() => {
-            jest.useFakeTimers();
-            jest.setSystemTime(0);
+            vi.useFakeTimers();
+            vi.setSystemTime(0);
 
             // Ensure notifications are not silenced so we exercise the throttle,
             // not the silencing gate.
@@ -512,15 +527,15 @@ describe("Notifier", () => {
             mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
 
             // Default sound path (no custom room sound).
-            jest.spyOn(notifier, "getSoundForRoom").mockReturnValue(null);
+            vi.spyOn(notifier, "getSoundForRoom").mockReturnValue(null);
 
             // @ts-ignore - backgroundAudio is private
-            playSpy = jest.spyOn(notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
+            playSpy = vi.spyOn(notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
         });
 
         afterEach(() => {
             playSpy.mockRestore();
-            jest.useRealTimers();
+            vi.useRealTimers();
         });
 
         it("plays at most one sound for a burst of notifications within the throttle window", async () => {
@@ -537,7 +552,7 @@ describe("Notifier", () => {
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // Advance the clock just past the throttle window.
-            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS + 1);
+            vi.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS + 1);
 
             await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(2);
@@ -548,12 +563,12 @@ describe("Notifier", () => {
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // One ms before the window elapses: still throttled.
-            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS - 1);
+            vi.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS - 1);
             await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // Exactly at the window boundary: plays again (the comparison is a strict `<`).
-            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS);
+            vi.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS);
             await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(2);
         });
@@ -562,11 +577,11 @@ describe("Notifier", () => {
             const soundA = { url: "sound-a.mp3", name: "A", type: "audio/mpeg", size: 1 };
             const soundB = { url: "sound-b.mp3", name: "B", type: "audio/mpeg", size: 1 };
             const otherRoom = new Room("!other:server", mockClient, mockClient.getSafeUserId());
-            jest.mocked(notifier.getSoundForRoom).mockImplementation((roomId: string) =>
+            vi.mocked(notifier.getSoundForRoom).mockImplementation((roomId: string) =>
                 roomId === testRoom.roomId ? soundA : soundB,
             );
             // @ts-ignore - backgroundAudio is private
-            const customPlaySpy = jest.spyOn(notifier.backgroundAudio, "play").mockResolvedValue({} as any);
+            const customPlaySpy = vi.spyOn(notifier.backgroundAudio, "play").mockResolvedValue({} as any);
 
             // Two different sounds back-to-back within the window: BOTH must play (only identical
             // backlogged sounds are coalesced).
@@ -599,14 +614,14 @@ describe("Notifier", () => {
     describe("group call notifications", () => {
         let callId: string;
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
                 if (key === "notificationsEnabled") {
                     return true;
                 }
                 return settingsStoreGetValue(key, ...params);
             });
-            jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-            jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
+            vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+            vi.spyOn(ToastStore.sharedInstance(), "dismissToast");
             ToastStore.sharedInstance().reset();
 
             mockClient.getPushActionsForEvent.mockReturnValue({
@@ -614,7 +629,7 @@ describe("Notifier", () => {
                 tweaks: {},
             });
             callId = randomUUID();
-            jest.spyOn(testRoom, "findEventById").mockImplementation((eventId) => {
+            vi.spyOn(testRoom, "findEventById").mockImplementation((eventId) => {
                 if (eventId === "$memberEventId") {
                     return mkEvent({
                         event: true,
@@ -630,7 +645,7 @@ describe("Notifier", () => {
         });
 
         afterEach(() => {
-            jest.restoreAllMocks();
+            vi.restoreAllMocks();
         });
 
         const emitCallNotificationEvent = (
@@ -690,8 +705,8 @@ describe("Notifier", () => {
         });
 
         it("shows group call toast even if the call membership is not stored locally", () => {
-            jest.spyOn(testRoom, "findEventById").mockReturnValue(undefined);
-            jest.spyOn(mockClient, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
+            vi.spyOn(testRoom, "findEventById").mockReturnValue(undefined);
+            vi.spyOn(mockClient, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
                 if (eventId === "$memberEventId" && roomId === testRoom.roomId) {
                     return {
                         user: "@alice:foo",
@@ -728,8 +743,8 @@ describe("Notifier", () => {
         });
 
         it("ignores a call if the membership is missing", () => {
-            jest.spyOn(testRoom, "findEventById").mockReturnValue(undefined);
-            jest.spyOn(mockClient, "fetchRoomEvent").mockImplementation(async () => {
+            vi.spyOn(testRoom, "findEventById").mockReturnValue(undefined);
+            vi.spyOn(mockClient, "fetchRoomEvent").mockImplementation(async () => {
                 throw new Error("Test mockClient.fetchRoomEvent expected not to find event");
             });
 
@@ -769,7 +784,7 @@ describe("Notifier", () => {
                 slotDescription: { application: "m.call", id: "" },
             } as unknown as MatrixRTCSession;
 
-            mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(mockRtcSession);
+            vi.mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(mockRtcSession);
 
             emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
@@ -789,7 +804,7 @@ describe("Notifier", () => {
     });
 
     describe("local notification settings", () => {
-        const createLocalNotificationSettingsIfNeededMock = mocked(createLocalNotificationSettingsIfNeeded);
+        const createLocalNotificationSettingsIfNeededMock = vi.mocked(createLocalNotificationSettingsIfNeeded);
         let hasStartedNotiferBefore = false;
         beforeEach(() => {
             // notifier defines some listener functions in start
@@ -832,14 +847,16 @@ describe("Notifier", () => {
 
     describe("evaluateEvent", () => {
         beforeEach(() => {
-            jest.spyOn(context.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+            vi.spyOn(context.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
 
-            jest.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
+            vi.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
 
-            jest.spyOn(Modal, "hasDialogs").mockReturnValue(false);
+            vi.spyOn(Modal, "hasDialogs").mockReturnValue(false);
 
-            jest.spyOn(notifier, "displayPopupNotification").mockReset();
-            jest.spyOn(notifier, "isEnabled").mockReturnValue(true);
+            vi.spyOn(notifier, "displayPopupNotification")
+                .mockReset()
+                .mockImplementation(() => {});
+            vi.spyOn(notifier, "isEnabled").mockReturnValue(true);
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
@@ -910,7 +927,7 @@ describe("Notifier", () => {
         it("should not evaluate events from the thread list fake timeline sets", async () => {
             mockClient.supportsThreads.mockReturnValue(true);
 
-            const fn = jest.spyOn(notifier, "evaluateEvent");
+            const fn = vi.spyOn(notifier, "evaluateEvent");
 
             await testRoom.createThreadsTimelineSets();
             testRoom.threadsTimelineSets[0]!.addEventToTimeline(
@@ -931,10 +948,10 @@ describe("Notifier", () => {
 
     describe("setEnabled", () => {
         it("should call fire notifier_enabled value=true when permission is granted", async () => {
-            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
             const notifier = new Notifier(dis, context);
 
-            jest.mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("granted");
+            vi.mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("granted");
 
             const resolvers = Promise.withResolvers<void>();
             notifier.setEnabled(true, resolvers.resolve);
@@ -947,7 +964,7 @@ describe("Notifier", () => {
         });
 
         it("should call fire notifier_enabled value=false when disabling", async () => {
-            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
             const notifier = new Notifier(dis, context);
 
             notifier.setEnabled(false);
