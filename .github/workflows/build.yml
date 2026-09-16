@@ -56,18 +56,22 @@ jobs:
                   node-version: "lts/*"
 
             - name: Fetch layered build
-              run: ./scripts/layered.sh
+              id: layered
+              run: |
+                  ./scripts/layered.sh
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
             - name: Copy config
               working-directory: apps/web
               run: cp element.io/develop/config.json config.json
 
             - name: Build
+              working-directory: apps/web
               env:
                   CI_PACKAGE: true
-              run: |
-                  VERSION=$(scripts/get-version-from-git.sh)
-                  pnpm -C apps/web run build
+                  VERSION: ${{ steps.layered.outputs.version }}
+              run: pnpm run build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
