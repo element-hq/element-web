@@ -30,16 +30,17 @@ import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-ti
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
-import SettingsStore from "../../../settings/SettingsStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
-import EditMessageComposer from "../rooms/EditMessageComposer";
-import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
-import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import {
+    UrlPreviewGroupViewModel,
+    type UrlPreviewKind,
+} from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
@@ -69,7 +70,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
+
+    let urlPreviewKind: UrlPreviewKind;
+
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -131,7 +140,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 },
                 visible: props.showUrlPreview ?? false,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundleEnabled,
+                urlPreviewKind,
             }),
     );
 
@@ -297,12 +306,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [props.mxEvent, previews]);
 
     if (props.editState) {
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-
-        return isWysiwygComposerEnabled ? (
-            <EditWysiwygComposer editorStateTransfer={props.editState} className="mx_EventTile_content" />
-        ) : (
-            <EditMessageComposer editState={props.editState} className="mx_EventTile_content" />
+        return (
+            <EditMessageComposerWrapper
+                editState={props.editState}
+                className="mx_EventTile_content"
+                mxClient={client}
+                showUrlPreview={props.showUrlPreview ?? false}
+            />
         );
     }
 

@@ -12,7 +12,7 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { OAuthClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
 import { type URLParams } from "../../vector/url_utils.ts";
-import { getOAuthParams, loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
+import { getRedirectUrl, loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
 
 const RESPONSE_MODE = "fragment";
 
@@ -37,7 +37,7 @@ export const startOAuthLogin = async (
     const platform = PlatformPeg.get()!;
     const state = secureRandomString(32) + platform.getOAuthClientState();
 
-    const auth = new OAuth2(authMetadata, getOAuthParams(clientId));
+    const auth = new OAuth2(authMetadata, { clientId });
     storeAuthContext({
         authContext: auth.context,
         metadata: authMetadata,
@@ -48,6 +48,7 @@ export const startOAuthLogin = async (
 
     const authorizationUrl = await auth.generateAuthorizationCodeGrantUrl(
         state,
+        getRedirectUrl(),
         RESPONSE_MODE,
         isRegistration ? "create" : undefined,
     );
@@ -115,7 +116,10 @@ export const completeOAuthLogin = async (
         throw new Error(OAuth2Error.MissingOrInvalidStoredState);
     }
 
-    const bearerToken = await new OAuth2(context.metadata, context.authContext).completeAuthorizationCodeGrant(code);
+    const bearerToken = await new OAuth2(context.metadata, context.authContext).completeAuthorizationCodeGrant(
+        code,
+        getRedirectUrl(),
+    );
 
     return {
         homeserverUrl: context.homeserverUrl,
