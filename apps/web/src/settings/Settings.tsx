@@ -783,7 +783,7 @@ export const SETTINGS: Settings = {
             true,
             true,
         ),
-        default: false,
+        default: true,
     },
     "feature_retention": {
         isFeature: true,
