@@ -288,8 +288,6 @@ export class UrlPreviewFetcher {
             description: single["og:description"],
             ogUrl: single["og:url"],
 
-            // Keep the bundle we were built from, so consumers can recover keys this type
-            // does not model (e.g. the encrypted-image info a file viewer needs).
             additionalBundleContent: single,
         };
 
