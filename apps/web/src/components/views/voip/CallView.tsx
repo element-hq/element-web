@@ -10,7 +10,7 @@ import React, { type FC, useContext, useEffect, type AriaRole, useCallback } fro
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
-import { CallAppTile } from "./CallTile";
+import { CallAppTile } from "./CallAppTile";
 import { CallStore } from "../../../stores/CallStore";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";

@@ -1,0 +1,19 @@
+name: Keep the pnpm store out of node_modules
+description: |
+    Points pnpm's store at a directory outside any node_modules, for jobs that install
+    @element-hq/element-call-component.
+
+    pnpm/action-setup makes ~/setup-pnpm/node_modules/.bin the PNPM_HOME, so pnpm's store, and with it the
+    temporary checkout in which a git dependency's `prepare` script runs, would sit under a node_modules
+    path. @element-hq/element-call-component must not be built there: its toolchain then treats Element
+    Call's own sources as a dependency's, and emits both a different, broken bundle and almost no type
+    declarations.
+
+    Use after pnpm/action-setup and before actions/setup-node, whose pnpm cache is keyed on
+    `pnpm store path`.
+runs:
+    using: composite
+    steps:
+        - name: Keep the pnpm store out of node_modules
+          run: echo "pnpm_config_store_dir=${RUNNER_TEMP}/pnpm-store" >> "$GITHUB_ENV"
+          shell: bash

@@ -663,7 +663,7 @@ export class ElementCall extends Call {
 
     /**
      * The mounted React component, for what Element Web asks of it (to hang up); null while none is
-     * mounted. The counterpart of `widgetApi` on the iframe transport, registered by the host bridge.
+     * mounted. The counterpart of `widgetApi` on the iframe embedding, registered by the host bridge.
      */
     private componentHandle: ElementCallHandle | null = null;
 
@@ -730,7 +730,7 @@ export class ElementCall extends Call {
     /**
      * What to run Element Call with for a call in a room: the user's intent and Element Web's overrides
      * on top of the defaults that intent implies. This is the single place the decisions are made for
-     * both transports: `generateWidgetUrl` serialises the result into URL parameters, and
+     * both embeddings: `generateWidgetUrl` serialises the result into URL parameters, and
      * `ElementCallAppTile` passes it to the React component as props.
      */
     private static computeCallOptions(
@@ -1054,10 +1054,13 @@ export class ElementCall extends Call {
         });
         try {
             await Promise.race([this.ready.promise, timedOut]);
+            logger.debug(`Element Call component for ${this.roomId} now ready`);
+        } catch (e) {
+            logger.debug(`Waiting for call component failed: ${e}`);
+            throw e;
         } finally {
             clearTimeout(timer);
         }
-        logger.debug(`Element Call component for ${this.roomId} now ready`);
     }
 
     /**
@@ -1111,6 +1114,7 @@ export class ElementCall extends Call {
             this.widgetApi.off(`action:${ElementWidgetActions.Close}`, this.onClose);
             this.widgetApi.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         }
+        this.ready.reject(new Error(`Element Call got closed before being ready (contentLoaded)`));
         // The UI is closing, so the React component (if any) will unmount; a later start() must wait for a new one,
         // and gets its options decided afresh.
         this.ready = Promise.withResolvers<void>();
@@ -1161,7 +1165,7 @@ export class ElementCall extends Call {
         this.participants = participants;
     }
 
-    // The control plane, shared by both transports. The widget action handlers below acknowledge the
+    // The control plane, shared by both embeddings. The widget action handlers below acknowledge the
     // widget request and then call these; the React component's HostBridge calls them directly.
 
     /** The React component has finished loading (`HostBridge.contentLoaded`). */

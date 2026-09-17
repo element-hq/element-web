@@ -1110,7 +1110,7 @@ describe("ElementCall", () => {
     });
 });
 
-describe("ElementCall with the React component transport", () => {
+describe("ElementCall with the React component embedding", () => {
     let client: ReturnType<typeof setUpClientRoomAndStores>["client"];
     let room: Room;
     let call: ElementCall;

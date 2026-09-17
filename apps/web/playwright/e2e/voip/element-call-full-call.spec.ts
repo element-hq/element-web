@@ -20,11 +20,11 @@ import { test, expect } from "../../element-web-test";
  * LiveKit + lk-jwt-service, started by the `matrixRTC` worker option). Two browser contexts, media flowing
  * both ways.
  *
- * Run once per transport: the widget in an iframe (the `widgets/element-call/` deployment webpack copies
+ * Run once per embedding: the widget in an iframe (the `widgets/element-call/` deployment webpack copies
  * out of `@element-hq/element-call-embedded`) and, behind `feature_element_call_react`, the in-process
  * React component (`@element-hq/element-call-component`). Both are the copy the build under test ships and
  * both end up talking to the same SFU, so this is where the two are held to the same standard. Everything
- * else about either transport (call parameters, persistence, PiP, room switching) is covered against
+ * else about either embedding (call parameters, persistence, PiP, room switching) is covered against
  * stand-ins in `element-call.spec.ts`; this spec exists for the one thing a stand-in cannot show, namely
  * that media arrives.
  */
@@ -44,12 +44,12 @@ async function settleNewSession(page: Page): Promise<void> {
     await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
 }
 
-for (const transport of ["widget", "react"] as const) {
-    test.describe(`Element Call full call (${transport})`, () => {
+for (const embedding of ["widget", "react"] as const) {
+    test.describe(`Element Call full call (${embedding})`, () => {
         test.use({
             config: {
                 features: {
-                    feature_element_call_react: transport === "react",
+                    feature_element_call_react: embedding === "react",
                 },
             },
         });
@@ -60,7 +60,7 @@ for (const transport of ["widget", "react"] as const) {
          * element attached to `<body>` so that it survives navigation.
          */
         const callScope = (page: Page): FrameLocator | Page =>
-            transport === "widget" ? page.frameLocator('iframe[title="Element Call"]') : page;
+            embedding === "widget" ? page.frameLocator('iframe[title="Element Call"]') : page;
 
         test(
             "two users hold a call",
@@ -72,9 +72,9 @@ for (const transport of ["widget", "react"] as const) {
 
                 // Bob: a second logged-in Element Web in its own browser context, built from the same pieces
                 // as the `user` fixture. `Developer.elementCallMockComponent` is off by default, so on the
-                // React transport both get the real component.
-                // The homeserver is worker-scoped and shared with the other transport's run of this test.
-                const bob = await homeserver.registerUser(`bob-${transport}`, "password", "Bob");
+                // React embedding both get the real component.
+                // The homeserver is worker-scoped and shared with the other embedding's run of this test.
+                const bob = await homeserver.registerUser(`bob-${embedding}`, "password", "Bob");
                 const bobContext = await browser.newContext({
                     baseURL: new URL(page.url()).origin,
                     permissions: ["microphone", "camera"],
@@ -105,7 +105,7 @@ for (const transport of ["widget", "react"] as const) {
                 await page.getByRole("button", { name: "Video call" }).click();
                 await page.getByRole("menuitem", { name: "Element Call" }).click();
                 await expect(callScope(page).getByTestId("lobby_joinCall")).toBeVisible({ timeout: 60_000 });
-                if (transport === "react") await expect(page.locator("iframe")).toHaveCount(0);
+                if (embedding === "react") await expect(page.locator("iframe")).toHaveCount(0);
                 await callScope(page).getByTestId("lobby_joinCall").click();
                 await expect(callScope(page).getByTestId("videoTile")).toHaveCount(1, { timeout: 30_000 });
 

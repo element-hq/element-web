@@ -20,7 +20,7 @@ import classNames from "classnames";
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 
-import type { CallTileProps } from "./CallTile";
+import type { CallAppTileProps } from "./CallAppTile";
 import PersistedElement, { getPersistKey } from "../elements/PersistedElement";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { isAppWidget } from "../../../stores/WidgetStore";
@@ -96,7 +96,7 @@ const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
  * takes live (`theme`, `language`, `hostBridge`) may change freely.
  */
 const HostedElementCall: FC<{ call: ElementCallModel; client: MatrixClient }> = ({ call, client }) => {
-    // Real component or mock: independent of the widget-vs-React choice CallTile makes.
+    // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
     const theme = useEffectiveTheme();
     // Not a hook: changing the language reloads Element Web, so there is no live change to follow
@@ -144,7 +144,7 @@ const Z_INDEX_MINI = 101;
  * The virtual call widget (`props.app`) stays the call's identity: its id is the persist key, the
  * `ActiveWidgetStore` key and the PiP candidate, exactly as for the iframe path.
  */
-export const ElementCallAppTile = (props: CallTileProps): JSX.Element | null => {
+export const ElementCallAppTile = (props: CallAppTileProps): JSX.Element | null => {
     const { app, room, miniMode, fullWidth, pointerEvents, overlay, movePersistedElement } = props;
     const client = useContext(MatrixClientContext);
     const sdkContext = useContext(SDKContext);

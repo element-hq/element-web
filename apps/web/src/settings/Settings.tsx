@@ -613,7 +613,7 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|feature_element_call_react"),
-        // A call that is already mounted in one transport cannot be switched to the other.
+        // A call that is already mounted with one embedding (widget/component) cannot be switched to the other.
         controller: new ReloadOnChangeController(),
         default: false,
     },

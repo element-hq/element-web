@@ -14,7 +14,7 @@ import { render, screen } from "test-utils-rtl";
 import SettingsStore from "../../../settings/SettingsStore";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { type IApp } from "../../../stores/WidgetStore";
-import { CallAppTile } from "./CallTile";
+import { CallAppTile } from "./CallAppTile";
 
 vi.mock("./ElementCallAppTile", () => ({
     ElementCallAppTile: () => <div data-testid="element-call-app-tile" />,
@@ -34,7 +34,7 @@ const mkApp = (type: string): IApp => ({
     avatar_url: undefined,
 });
 
-describe("CallTile", () => {
+describe("CallAppTile", () => {
     let reactCallEnabled: boolean;
 
     beforeEach(() => {
@@ -44,13 +44,13 @@ describe("CallTile", () => {
         );
     });
 
-    it("renders an AppTile for Element Call when the React transport is off", () => {
+    it("renders an AppTile for Element Call when the React embedding is off", () => {
         render(<CallAppTile app={mkApp(WidgetType.CALL.preferred)} />);
         expect(screen.getByTestId("app-tile")).toBeInTheDocument();
         expect(screen.queryByTestId("element-call-app-tile")).not.toBeInTheDocument();
     });
 
-    it("renders the React tile for Element Call when the React transport is on", () => {
+    it("renders the React tile for Element Call when the React embedding is on", () => {
         reactCallEnabled = true;
         render(<CallAppTile app={mkApp(WidgetType.CALL.preferred)} />);
         expect(screen.getByTestId("element-call-app-tile")).toBeInTheDocument();

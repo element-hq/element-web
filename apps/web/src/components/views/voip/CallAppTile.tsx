@@ -29,18 +29,18 @@ type DefaultedAppTileProps =
     | "threadId"
     | "showLayoutButtons";
 
-/** The props of `AppTile`, with its `defaultProps` applied, so that `CallTile` is a drop-in replacement. */
-export type CallTileProps = Omit<AppTileProps, DefaultedAppTileProps> &
+/** The props of `AppTile`, with its `defaultProps` applied, so that `CallAppTile` is a drop-in replacement. */
+export type CallAppTileProps = Omit<AppTileProps, DefaultedAppTileProps> &
     Partial<Pick<AppTileProps, DefaultedAppTileProps>>;
 
 /**
- * Renders the tile for an Element Call widget, choosing the transport: the in-process React component
+ * Renders the tile for an Element Call widget, choosing the embedding: the in-process React component
  * when `feature_element_call_react` is enabled, otherwise the usual `AppTile` iframe.
  *
  * This is the single place that decides between the two paths. Callers are responsible for only using
  * it for Element Call widgets (`WidgetType.CALL`); see `PersistentApp` for the generic case.
  */
-export const CallAppTile = (props: CallTileProps): JSX.Element => {
+export const CallAppTile = (props: CallAppTileProps): JSX.Element => {
     const reactCall = useSettingValue("feature_element_call_react");
     return reactCall ? <ElementCallAppTile {...props} /> : <AppTile {...props} />;
 };

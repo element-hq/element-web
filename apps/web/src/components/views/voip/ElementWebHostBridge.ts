@@ -20,7 +20,7 @@ export interface ElementWebHostBridgeOptions {
 /**
  * What the Element Call React component tells Element Web: the `ElementCallHostBridge` callbacks, each
  * forwarding to the `ElementCall` model or the widget stores, replacing what `WidgetMessaging` plus the
- * model's widget action handlers do for the iframe transport.
+ * model's widget action handlers do for the iframe embedding.
  *
  * Stateless, so its identity does not matter: the component forwards to whichever bridge it was most
  * recently given. What Element Web asks of the component goes the other way, through the component's
@@ -46,7 +46,7 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
 
     public readonly setAlwaysOnScreen = async (alwaysOnScreen: boolean): Promise<void> => {
         // Only one call can be on screen. Before this one becomes sticky, hang up every other connected
-        // call, as `CallView`'s stickyPromise does for the iframe transport (through WidgetMessaging's
+        // call, as `CallView`'s stickyPromise does for the iframe embedding (through WidgetMessaging's
         // UpdateAlwaysOnScreen handling).
         if (alwaysOnScreen) {
             const others = [...CallStore.instance.connectedCalls].filter((call) => call !== this.call);

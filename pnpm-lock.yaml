@@ -278,6 +278,7 @@ catalogs:
       version: 6.0.2
 
 overrides:
+  livekit-client: ^2.22.2
   pretty-format@30>react-is: 19.2.8
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
@@ -2917,7 +2918,7 @@ packages:
     resolution: {gitHosted: true, integrity: sha512-7Wto/cwHd9uT9hpXQ8viaJQ2ZmBAZKiXX1dnZ+HbCwPOdV6Dz5alMeVt97FUimPergtrVgSsDAf+O/X1+WjfqA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/5c6fa7c864bc860d2bb842a3ae09d657bbfdea2c}
     version: 0.0.0
     peerDependencies:
-      livekit-client: ^2.18.1
+      livekit-client: ^2.22.2
       matrix-js-sdk: '*'
       react: ^19
       react-dom: ^19

@@ -214,9 +214,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "matrix-js-sdk/lib": path.join(getPackageRoot("matrix-js-sdk"), "src"),
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
-                // and LiveKit, which the Element Call component expects the host to provide exactly once
-                // (exact match on the resolved entry file: the package does not expose its package.json)
-                "livekit-client$": fileURLToPath(import.meta.resolve("livekit-client")),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
 

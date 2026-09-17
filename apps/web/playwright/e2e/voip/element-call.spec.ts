@@ -125,7 +125,7 @@ test.describe("Element Call", () => {
             SettingLevel.DEVICE,
             new URL("/widget.html#", page.url()).toString(),
         );
-        // On the React transport, render the mock component: this backend has no LiveKit.
+        // On the React embedding, render the mock component: this backend has no LiveKit.
         await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, true);
 
         await rejectToast(page, "Verify this device");
@@ -489,12 +489,12 @@ test.describe("Element Call", () => {
     });
 
     /**
-     * Element Call has two transports in Element Web: the widget in an iframe (stubbed by the fake call
+     * Element Call has two embeddings in Element Web: the widget in an iframe (stubbed by the fake call
      * page above) and, behind `feature_element_call_react`, an in-process React component (currently a
      * mock with buttons that drive its HostBridge). Persistence and PiP must work the same for both.
      */
-    for (const transport of ["widget", "react"] as const) {
-        test.describe(`Switching rooms (${transport} Element Call)`, () => {
+    for (const embedding of ["widget", "react"] as const) {
+        test.describe(`Switching rooms (${embedding} Element Call)`, () => {
             let charlie: Bot;
             test.use({
                 room: async ({ page, app, user, homeserver, bot }, use) => {
@@ -512,7 +512,7 @@ test.describe("Element Call", () => {
                 lockLeftPanelWidth: false,
                 config: {
                     features: {
-                        feature_element_call_react: transport === "react",
+                        feature_element_call_react: embedding === "react",
                     },
                 },
             });
@@ -528,7 +528,7 @@ test.describe("Element Call", () => {
                     await page.getByRole("menuitem", { name: "Element Call" }).click();
                 }
 
-                if (transport === "widget") {
+                if (embedding === "widget") {
                     const iframe = page.locator("iframe");
                     await expect(iframe).toBeVisible();
                     const frameUrlStr = await page.locator("iframe").getAttribute("src");
@@ -551,7 +551,7 @@ test.describe("Element Call", () => {
 
             /** Leaves the call from wherever Element Call currently is (PiP or docked). */
             async function closeCall(page: Page) {
-                if (transport === "widget") {
+                if (embedding === "widget") {
                     const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
                     await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
                 } else {
@@ -569,7 +569,7 @@ test.describe("Element Call", () => {
                 // We should have a PiP container here.
                 await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
                 await expect(page.getByTestId("widget-pip-container")).toBeVisible();
-                if (transport === "react") {
+                if (embedding === "react") {
                     // The very same component instance keeps running in PiP: its HostBridge log is intact
                     await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
                         "→ setAlwaysOnScreen(true)",

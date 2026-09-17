@@ -20,7 +20,7 @@ import _PersistentApp from "./PersistentApp";
 vi.mock("./AppTile", () => ({
     default: () => <div data-testid="app-tile" />,
 }));
-vi.mock("../voip/CallTile", () => ({
+vi.mock("../voip/CallAppTile", () => ({
     CallAppTile: () => <div data-testid="call-tile" />,
 }));
 
@@ -79,7 +79,7 @@ describe("PersistentApp", () => {
         WidgetStore.instance.removeVirtualWidget(app.id, room.roomId);
     });
 
-    it("lets CallTile pick the transport for Element Call widgets", () => {
+    it("lets CallAppTile pick the embedding for Element Call widgets", () => {
         const app = addWidget(WidgetType.CALL.preferred);
         renderApp(app);
         expect(screen.getByTestId("call-tile")).toBeInTheDocument();
