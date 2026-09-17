@@ -6,7 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import type { JSX } from "react/jsx-runtime";
-import { UrlPreview } from "shared-types";
+import type { UrlPreview } from "shared-types";
 
 /**
  * the media content given to the component for rendering
@@ -23,7 +23,7 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
  */
 export type RemoteMedia = {
     type: "remote";
-    bundle: UrlPreview;
+    preview: UrlPreview;
 };
 
 /**

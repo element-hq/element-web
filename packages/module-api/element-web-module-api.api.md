@@ -426,7 +426,7 @@ export interface ProfileApiExtension {
 // @public
 export type RemoteMedia = {
     type: "remote";
-    bundle: UrlPreview;
+    preview: UrlPreview;
 };
 
 // @public

@@ -13,12 +13,11 @@ import type {
     MediaHandle,
     UploadedMedia,
     RemoteMedia,
-    UnstableBundledUrlPreviewSingle,
 } from "@element-hq/element-web-module-api";
+import type { UrlPreview } from "shared-types";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { MediaEventContent } from "matrix-js-sdk/src/types";
-import type { RoomMessageEventContent } from "../../@types/url-preview";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
@@ -69,21 +68,18 @@ export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventH
     };
 }
 
-export function remoteMediaForBundle(bundle: UnstableBundledUrlPreviewSingle): RemoteMedia {
-    return {
-        type: "remote",
-        bundle,
-    };
-}
-
-export function remoteMediaForEvent(mxEvent: MatrixEvent, url: string): RemoteMedia | undefined {
-    const content = mxEvent.getContent<RoomMessageEventContent>();
-    const foundBundle = (content["com.beeper.linkpreviews"] ?? []).find((bundle) => bundle.matched_url === url);
-
-    if (foundBundle === undefined) return;
+/**
+ * converts UrlPreview -> RemoteMedia
+ * The image is removed from the UrlPreview
+ */
+export function remoteMediaForPreview(preview: UrlPreview): RemoteMedia | undefined {
+    if (!preview.additionalBundleContent) return;
 
     return {
         type: "remote",
-        bundle: foundBundle,
+        preview: {
+            ...preview,
+            image: undefined
+        }
     };
 }

@@ -299,6 +299,7 @@ describe("UrlPreviewFetcher", () => {
                 showTooltipOnLink: false,
                 description: "Bundled description",
                 ogUrl: "https://example.org/canonical",
+                additionalBundleContent: BASIC_BUNDLE,
             });
             // eslint-disable-next-line no-restricted-properties
             expect(client.mxcUrlToHttp).not.toHaveBeenCalled();

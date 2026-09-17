@@ -11,8 +11,9 @@ import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 import type { MediaHandle } from "@element-hq/element-web-module-api";
-import { type RegisteredFileViewer, remoteMediaForEvent, uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import { type RegisteredFileViewer, uploadedMediaForEvent, remoteMediaForPreview } from "../../modules/FileViewerApi";
 import { ModuleApi } from "../../modules/Api";
+import { UrlPreview } from "shared-types";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -56,8 +57,8 @@ export interface IRightPanelCardStateStored {
      * where is that event from
      */
     fileViewerSourceRoomId?: string;
-    // only present if file viewer is viewing remote content (from a URL bundle)
-    fileViewerUrl?: string;
+    // only present if file viewer is viewing remote content (from a URL preview)
+    fileViewerUrlPreview?: UrlPreview;
 }
 
 export interface IRightPanelCard {
@@ -106,7 +107,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         fileViewerId: state?.fileViewer?.options.id,
         fileViewerSourceEventId: state?.fileViewerSourceEvent?.getId(),
         fileViewerSourceRoomId: state?.fileViewerSourceEvent?.getRoomId(),
-        fileViewerUrl: state?.fileViewerMedia?.type === "remote" ? state.fileViewerMedia.bundle.matched_url : undefined,
+        fileViewerUrlPreview: state?.fileViewerMedia?.type === "remote" ? state.fileViewerMedia.preview : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -138,8 +139,8 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             ?.findEventById(stateStored.fileViewerSourceEventId);
 
         if (state.fileViewerSourceEvent) {
-            if (stateStored.fileViewerUrl)
-                state.fileViewerMedia = remoteMediaForEvent(state.fileViewerSourceEvent, stateStored.fileViewerUrl);
+            if (stateStored.fileViewerUrlPreview)
+                state.fileViewerMedia = remoteMediaForPreview(stateStored.fileViewerUrlPreview);
             else state.fileViewerMedia = uploadedMediaForEvent(state.fileViewerSourceEvent);
         }
     }
