@@ -76,7 +76,6 @@
         "@typescript/native": "catalog:",
         "app-builder-lib": "26.16.1",
         "chokidar": "^5.0.0",
-        "detect-libc": "^2.0.0",
         "electron": "44.3.0",
         "electron-builder": "26.16.1",
         "electron-builder-squirrel-windows": "26.16.1",

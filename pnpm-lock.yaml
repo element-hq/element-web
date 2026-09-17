@@ -478,9 +478,6 @@ importers:
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
-      detect-libc:
-        specifier: ^2.0.0
-        version: 2.1.2
       electron:
         specifier: 44.3.0
         version: 44.3.0(supports-color@10.2.2)
