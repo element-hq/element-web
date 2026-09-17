@@ -23,7 +23,6 @@ import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
 import { ModuleApi } from "../../modules/Api";
 import { uploadedMediaForEvent } from "../../modules/FileViewerApi";
 import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
-import { CustomPreviewTileApi } from "../../modules/CustomPreviewTileApi";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -59,9 +58,6 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
             ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))
             : [];
-        const patches = mediaHandle
-            ? ModuleApi.instance.customPreviewTile.applyPatchers(mediaHandle)
-            : CustomPreviewTileApi.emptyBatch;
 
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
@@ -93,12 +89,10 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
                 {
                     id: mxEvent.getId()!,
                     type: "text",
+                    header: mediaEventHelper.fileName,
+                    body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
                     buttons,
-                    ...CustomPreviewTileApi.previewPatchToVmProps(patches, {
-                        header: mediaEventHelper.fileName,
-                        body: size === undefined ? _t("timeline|m.file|size_unknown") : fileSize(size),
-                        ...attachmentIcon(content.info?.mimetype),
-                    }),
+                    ...attachmentIcon(content.info?.mimetype),
                 },
             ],
         } satisfies MediaPreviewGroupSnapshot;

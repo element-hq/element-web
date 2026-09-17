@@ -28,7 +28,6 @@ import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { UrlPreviewApi } from "./UrlPreviewApi.ts";
 import { FileViewerApi } from "./FileViewerApi.ts";
-import { CustomPreviewTileApi } from "./CustomPreviewTileApi.ts";
 
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
@@ -65,7 +64,6 @@ export class ModuleApi implements Api {
     public readonly settings = new SettingsApi();
     public readonly urlPreviews = new UrlPreviewApi();
     public readonly fileViewer = new FileViewerApi();
-    public readonly customPreviewTile = new CustomPreviewTileApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
