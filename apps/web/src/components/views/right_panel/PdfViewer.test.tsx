@@ -85,6 +85,8 @@ const viewerMock = vi.hoisted(() => {
         public readonly update = vi.fn();
         public readonly updateScale = vi.fn();
         public readonly scrollPageIntoView = vi.fn();
+        // What pdf.js measures zoom origins against: the container's `offsetTop`/`offsetLeft`.
+        public containerTopLeft = [0, 0];
 
         public constructor(
             public readonly options: { eventBus: MockEventBus; container: HTMLElement; linkService?: unknown },
@@ -378,11 +380,24 @@ describe("PdfViewer", () => {
         render(<PdfViewer media={media()} />);
         await emitPagesInit();
 
-        fireZoomWheel(-100, { x: 120, y: 240 });
+        // The panel sits on the right of the window, so the container's box starts well away from the
+        // viewport origin, and pdf.js's own offsets for it are those of its nearest positioned ancestor.
+        const container = screen.getByTestId("pdf-container");
+        vi.spyOn(container, "getBoundingClientRect").mockReturnValue({
+            left: 800,
+            top: 100,
+            width: 400,
+            height: 600,
+        } as DOMRect);
+        activeViewer().containerTopLeft = [10, 20];
+
+        fireZoomWheel(-100, { x: 920, y: 340 });
 
         // A mouse notch is close to a 25% step; zoom is multiplicative so it is the same proportion
-        // at any scale, and pdf.js keeps the point under `origin` fixed.
-        expect(activeViewer().updateScale).toHaveBeenCalledWith(expect.objectContaining({ origin: [120, 240] }));
+        // at any scale, and pdf.js keeps the point under `origin` fixed. It measures `origin` against
+        // the container's offsets, so the pointer is translated into the container's box (120, 240) and
+        // then has those offsets added back.
+        expect(activeViewer().updateScale).toHaveBeenCalledWith(expect.objectContaining({ origin: [140, 250] }));
         expect(activeViewer().updateScale.mock.calls[0][0].scaleFactor).toBeCloseTo(1.246, 3);
 
         // A trackpad pinch arrives as small deltas and must not be quantised into a jump.
