@@ -264,6 +264,13 @@ export interface EventTileProps {
     /** Whether interactive controls inside the tile should be inhibited. */
     inhibitInteraction?: boolean;
 
+    /**
+     * Show the quoted message in a compact form that keeps the same height while it
+     * loads, standing a skeleton in until it arrives. Used by the new timeline,
+     * where a preview that grows after appearing pushes the messages around it.
+     */
+    compactReplyPreview?: boolean;
+
     /** Ref for imperative access to the unwrapped tile instance. */
     ref?: Ref<UnwrappedEventTile>;
 }
@@ -1098,6 +1105,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isQuoteExpanded={isQuoteExpanded}
                 setQuoteExpanded={this.setQuoteExpanded}
                 getRelationsForEvent={this.props.getRelationsForEvent}
+                compactPreview={this.props.compactReplyPreview}
             />
         ) : undefined;
 
