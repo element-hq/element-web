@@ -79,7 +79,7 @@ export function remoteMediaForPreview(preview: UrlPreview): RemoteMedia | undefi
         type: "remote",
         preview: {
             ...preview,
-            image: undefined
-        }
+            image: undefined,
+        },
     };
 }
