@@ -15,5 +15,7 @@ runs:
     using: composite
     steps:
         - name: Keep the pnpm store out of node_modules
-          run: echo "pnpm_config_store_dir=${RUNNER_TEMP}/pnpm-store" >> "$GITHUB_ENV"
+          # The value written is a constant built from RUNNER_TEMP, with nothing attacker-controlled in it;
+          # zizmor flags every GITHUB_ENV write in an action because it cannot see the calling trigger.
+          run: echo "pnpm_config_store_dir=${RUNNER_TEMP}/pnpm-store" >> "$GITHUB_ENV" # zizmor: ignore[github-env]
           shell: bash
