@@ -1114,6 +1114,10 @@ export class ElementCall extends Call {
             this.widgetApi.off(`action:${ElementWidgetActions.Close}`, this.onClose);
             this.widgetApi.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         }
+        // A start() still waiting on the component should learn that the call went away, rather than hang
+        // until the timeout. Usually nothing is waiting, so mark the promise as handled first: an
+        // unobserved rejection would otherwise surface as an unhandled promise rejection.
+        this.ready.promise.catch(() => {});
         this.ready.reject(new Error(`Element Call got closed before being ready (contentLoaded)`));
         // The UI is closing, so the React component (if any) will unmount; a later start() must wait for a new one,
         // and gets its options decided afresh.
