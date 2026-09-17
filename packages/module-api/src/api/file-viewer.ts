@@ -49,7 +49,7 @@ export interface FileViewerOptions {
     /**
      * top bar title of the card
      */
-    cardHeader: string;
+    cardHeader: (media: MediaHandle) => string;
     /**
      * tooltip/text for the "open" button in the file/url preview tile
      */

@@ -22,7 +22,7 @@ export interface FileViewerCardState {
 
 export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState & { onClose: () => void }): JSX.Element {
     return (
-        <BaseCard onClose={onClose} header={viewer.options.cardHeader}>
+        <BaseCard onClose={onClose} header={viewer.options.cardHeader(media)}>
             <ErrorBoundary>{viewer && viewer.render({ media, onClose })}</ErrorBoundary>
         </BaseCard>
     );

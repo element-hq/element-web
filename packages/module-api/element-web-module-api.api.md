@@ -274,7 +274,7 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
 export interface FileViewerOptions {
     buttonIcon: JSX_2.Element;
     buttonText: string;
-    cardHeader: string;
+    cardHeader: (media: MediaHandle) => string;
     id: string;
 }
 
