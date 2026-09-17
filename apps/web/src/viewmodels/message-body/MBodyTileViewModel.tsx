@@ -20,6 +20,9 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
+import { ModuleApi } from "../../modules/Api";
+import { uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -49,8 +52,16 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
+
+        const mediaHandle = uploadedMediaForEvent(mxEvent, mediaEventHelper);
+        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))
+            : [];
+
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
+            ...fileViewerButtons,
             // Behind the same lab as the legacy file body's viewer, and only for PDFs.
             ...(pdfViewerEnabled && isPdfEvent(mxEvent)
                 ? [

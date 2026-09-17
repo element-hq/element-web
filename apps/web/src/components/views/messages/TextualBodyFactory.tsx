@@ -19,6 +19,7 @@ import {
     linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
+    MediaPreviewEntryButton,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
 
@@ -42,6 +43,8 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
+import { remoteMediaForPreview } from "../../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -162,6 +165,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
+        // file opening buttons will only apply to links with bundles
+        const mediaHandle = remoteMediaForPreview(preview);
+        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }))
+            : [];
+
         if (preview.image === undefined) {
             content = {
                 type: "text",
@@ -200,6 +210,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             headerUrl: preview.link,
             body,
             buttons: [
+                ...fileViewerButtons,
                 {
                     label: _t("timeline|url_preview|open_link"),
                     icon: <PopOutIcon />,

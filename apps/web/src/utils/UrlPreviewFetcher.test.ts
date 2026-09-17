@@ -12,8 +12,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type { UrlPreview } from "shared-types";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
 import { decryptFile } from "./DecryptFile";
 
@@ -299,6 +299,7 @@ describe("UrlPreviewFetcher", () => {
                 showTooltipOnLink: false,
                 description: "Bundled description",
                 ogUrl: "https://example.org/canonical",
+                additionalBundleContent: BASIC_BUNDLE,
             });
             // eslint-disable-next-line no-restricted-properties
             expect(client.mxcUrlToHttp).not.toHaveBeenCalled();

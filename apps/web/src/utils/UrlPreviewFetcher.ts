@@ -10,9 +10,9 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
+import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { decryptFile } from "./DecryptFile";
 import { type UrlPreviewApi as ModuleUrlPreviewApi } from "../modules/UrlPreviewApi";
@@ -287,6 +287,8 @@ export class UrlPreviewFetcher {
             showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
+
+            additionalBundleContent: single,
         };
 
         const encryptedImage = single["beeper:image:encryption"];
