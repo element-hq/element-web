@@ -131,15 +131,22 @@ test.describe("EventTileView application coverage", () => {
 
             await page.goto(`/#/room/${roomId}/${event.event_id}`);
             const selectedTile = page.locator(`.mx_EventTile[data-event-id='${event.event_id}']`);
+            // Move the pointer off the tile: it is still where the earlier right-click landed, and once
+            // the permalink re-renders the tile under the cursor the hover action bar appears
+            // intermittently, flaking this screenshot.
+            await page.mouse.move(0, 0);
             await expect(selectedTile).toMatchScreenshot("event-tile-permalink-selected.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
                 hideJumpToBottomButton: true,
             });
 
-            await selectedTile.locator(".mx_EventTile_line").hover();
-            const editButton = selectedTile.getByRole("button", { name: "Edit", exact: true });
-            await expect(editButton).toBeVisible();
-            await editButton.click();
+            // The action bar is mounted only while the tile is hovered, and the timeline keeps
+            // re-rendering after the permalink navigation, so a single hover -> click can catch the
+            // Edit button mid-unmount and hang until the test times out. Retry the pair as a unit.
+            await expect(async () => {
+                await selectedTile.locator(".mx_EventTile_line").hover({ timeout: 2000 });
+                await selectedTile.getByRole("button", { name: "Edit", exact: true }).click({ timeout: 2000 });
+            }).toPass({ timeout: 15000 });
             await expect(selectedTile).toMatchScreenshot("event-tile-editing.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
                 hideJumpToBottomButton: true,

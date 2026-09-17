@@ -131,6 +131,15 @@
     outline-offset: 2px;
 }
 
+/* Some slot wrappers are display: contents so they have no box on which an
+   outline can be painted. Keep the hover marker on the slot wrapper for the
+   diagnostics, but paint it on the rendered children only when the wrapper
+   has no layout box of its own. */
+[data-story-hovered-contents="true"] > * {
+    outline: 1px dashed var(--cpd-color-border-focused, #5e7cff);
+    outline-offset: 2px;
+}
+
 .debugTooltip {
     position: fixed;
     z-index: 1000;

@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -8,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import "vitest-canvas-mock";
 import {
     type ISendEventResponse,
@@ -22,11 +23,14 @@ import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
 import { createTestClient, flushPromises, mkEvent } from "test-utils";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "./ContentMessages";
+import { clearUploadedMediaCache, queryUploadedMediaCache } from "./utils/UploadedMediaCache";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { BlurhashEncoder } from "./BlurhashEncoder";
 import Modal from "./Modal";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { _t } from "./languageHandler";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 
 vi.mock("matrix-encrypt-attachment", () => ({ default: { encryptAttachment: vi.fn().mockResolvedValue({}) } }));
 
@@ -438,6 +442,31 @@ describe("uploadFile", () => {
         expect(vi.mocked(client.uploadContent).mock.calls[0][0]).not.toBe(file);
     });
 
+    it("should keep the uploaded file so it does not have to be downloaded again", async () => {
+        clearUploadedMediaCache();
+        vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/plain" });
+        const file = new Blob(["hello"]);
+
+        await uploadFile(client, "!roomId:server", file);
+
+        expect(queryUploadedMediaCache("mxc://server/plain")).toBe(file);
+    });
+
+    it("should keep the plaintext of an encrypted upload rather than the ciphertext", async () => {
+        clearUploadedMediaCache();
+        vi.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/encrypted" });
+        vi.mocked(encrypt.encryptAttachment).mockResolvedValue({
+            data: new ArrayBuffer(123),
+            info: {} as IEncryptedFile,
+        });
+        const file = new Blob(["hello"]);
+
+        await uploadFile(client, "!roomId:server", file);
+
+        expect(queryUploadedMediaCache("mxc://server/encrypted")).toBe(file);
+    });
+
     it("should throw UploadCanceledError upon aborting the upload", async () => {
         vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://foo/bar" });
         const file = new Blob([]);
@@ -447,5 +476,87 @@ describe("uploadFile", () => {
         await expect(uploadFile(client, "!roomId:server", file, undefined, controller)).rejects.toThrow(
             UploadCanceledError,
         );
+    });
+});
+
+describe("sendContentListToRoom analytics", () => {
+    const roomId = "!roomId:server";
+    let client: MatrixClient;
+    let contentMessages: ContentMessages;
+    let trackEvent: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+        client = createTestClient();
+        vi.mocked(client.getMediaConfig).mockResolvedValue({});
+        vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+            <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+        );
+        contentMessages = new ContentMessages();
+        vi.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue(undefined);
+        trackEvent = vi.spyOn(PosthogAnalytics.instance, "trackEvent").mockImplementation(() => {});
+        // Automatically continue through the per-file confirmation dialog.
+        vi.spyOn(Modal, "createDialog").mockImplementation((component: unknown, ...rest: any[]) => {
+            if (component === UploadConfirmDialog) {
+                return { finished: Promise.resolve([true, false]) } as any;
+            }
+            // Any other dialog (e.g. the fetching-media-config spinner) never resolves on its own.
+            return { finished: new Promise(() => {}), close: vi.fn() } as any;
+        });
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    function mkFile(type: string, name = "file"): File {
+        return new File(["content"], name, { type });
+    }
+
+    it("tracks AttachmentSend with the most common file type when files are sent", async () => {
+        const files = [mkFile("image/png", "a.png"), mkFile("image/jpeg", "b.jpg"), mkFile("video/mp4", "c.mp4")];
+        await contentMessages.sendContentListToRoom(files, roomId, undefined, undefined, client);
+
+        expect(trackEvent).toHaveBeenCalledWith(
+            expect.objectContaining({
+                eventName: "AttachmentSend",
+                count: 3,
+                kind: "local",
+                type: "image",
+            }),
+        );
+    });
+
+    it("marks the attachment as a reply and in-thread when applicable", async () => {
+        const replyToEvent = { getId: () => "$event" } as any;
+        const relation = { rel_type: "m.thread" } as any;
+        await contentMessages.sendContentListToRoom([mkFile("text/plain")], roomId, relation, replyToEvent, client);
+
+        expect(trackEvent).toHaveBeenCalledWith(
+            expect.objectContaining({
+                eventName: "AttachmentSend",
+                isReply: true,
+                inThread: true,
+            }),
+        );
+    });
+
+    it("tracks AttachmentCancel when the user cancels at the confirmation dialog", async () => {
+        vi.spyOn(Modal, "createDialog").mockImplementation((component: unknown) => {
+            if (component === UploadConfirmDialog) {
+                return { finished: Promise.resolve([false, false]) } as any;
+            }
+            return { finished: new Promise(() => {}), close: vi.fn() } as any;
+        });
+
+        await contentMessages.sendContentListToRoom([mkFile("text/plain")], roomId, undefined, undefined, client);
+
+        expect(trackEvent).toHaveBeenCalledWith(
+            expect.objectContaining({
+                eventName: "AttachmentCancel",
+                kind: "local",
+                stage: "Confirmation",
+            }),
+        );
+        expect(contentMessages.sendContentToRoom).not.toHaveBeenCalled();
     });
 });

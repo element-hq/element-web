@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SettingsField /> > should render with the default label 1`] = `
+<DocumentFragment>
+  <form
+    class="_root_1o4d9_17"
+  >
+    <div
+      class="_field_1o4d9_27"
+    >
+      <label
+        class="_label_1o4d9_60"
+        for="radix-react-use-id-1"
+      >
+        Element Call URL
+      </label>
+      <div
+        class="_controls_17lij_8"
+      >
+        <input
+          class="_control_d83jn_10"
+          id="radix-react-use-id-1"
+          name="input"
+          title=""
+          value=""
+        />
+      </div>
+    </div>
+  </form>
+</DocumentFragment>
+`;

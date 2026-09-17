@@ -59,4 +59,36 @@ describe("<EmbeddedPage />", () => {
         expect(screen.queryByRole("iframe")).not.toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should leave in-app anchor links untouched", async () => {
+        fetchMock.get("/home.html", `<a href="#/register">Sign up</a>`);
+
+        render(<EmbeddedPage url="/home.html" />);
+        const link = await screen.findByText("Sign up");
+        expect(link).toHaveAttribute("href", "#/register");
+        expect(link).not.toHaveAttribute("target");
+        expect(link).not.toHaveAttribute("rel");
+    });
+
+    it("should add target=_blank and rel to non-anchor links", async () => {
+        fetchMock.get("/home.html", `<a href="https://example.com">Example</a>`);
+
+        render(<EmbeddedPage url="/home.html" />);
+        const link = await screen.findByText("Example");
+        expect(link).toHaveAttribute("href", "https://example.com");
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noreferrer noopener");
+    });
+
+    it("preserves embedded page images and inline styles", async () => {
+        fetchMock.get(
+            "/home.html",
+            '<span style="color: red">Styled</span><img src="https://example.com/image.png" alt="Example">',
+        );
+
+        const { container } = render(<EmbeddedPage url="/home.html" />);
+        const styled = await screen.findByText("Styled");
+        expect(styled).toHaveAttribute("style", "color:red");
+        expect(container.querySelector("img")).toHaveAttribute("src", "https://example.com/image.png");
+    });
 });

@@ -33,12 +33,11 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk", "printf"],
+            ignoreBinaries: ["awk"],
         },
         "packages/module-api": {},
         "apps/web": {
             entry: [
-                "src/serviceworker/index.ts!",
                 "src/workers/*.worker.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
@@ -49,7 +48,6 @@ export default {
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
-                "module_system/**!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
                 "src/hooks/useIsReleaseAnnouncementOpen.ts!",
@@ -71,8 +69,6 @@ export default {
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
             ignoreDependencies: [
-                // False positive
-                "sw.js",
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
 
@@ -81,30 +77,40 @@ export default {
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
                 "@types/sdp-transform",
+
+                // Referenced as a tsconfig `types` entry rather than imported, so knip
+                // cannot see it. It has to be a direct dependency for
+                // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
+                // See apps/web/tsconfig.browser-test.json.
+                "@vitest/browser",
+
+                // Used by Playwright to serve the built web app.
+                "serve",
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**"],
             project: ["**/*.{js,ts,pcss}"],
-            ignoreDependencies: [
-                // Brought in via hak scripts
-                "matrix-seshat",
-            ],
             ignoreBinaries: [
-                // Used to build seshat (optional)
-                "rustc",
                 // Used by the fetch-package script (optional)
                 "gpg",
-                // Used for the macOS universal builds
-                "lipo",
             ],
         },
         "modules": {
             project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!playwright/**!"],
+            ignoreDependencies: [
+                // Used by Playwright to serve the built web app.
+                "serve",
+            ],
         },
         "modules/*": {
             entry: ["src/index.ts{x,}!"],
-            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!src/tests/**!", "!e2e/**!"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
+                "!src/tests/**!",
+                "!e2e/**!",
+                "!src/setupTests.ts!",
+            ],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],

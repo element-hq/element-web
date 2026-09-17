@@ -38,6 +38,7 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
 
                     <button
                         type="button"
+                        className="mx_LegacyDialogButton"
                         onClick={() => {
                             Modal.createDialog(ManualDeviceKeyVerificationDialog);
                         }}
@@ -46,6 +47,7 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                     </button>
                     <button
                         type="button"
+                        className="mx_LegacyDialogButton"
                         onClick={() => {
                             Modal.createDialog(
                                 RestoreKeyBackupDialog,

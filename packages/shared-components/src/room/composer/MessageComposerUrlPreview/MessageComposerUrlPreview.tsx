@@ -5,17 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
+import React, { type JSX, useCallback } from "react";
+import {
+    IconButton,
+    InlineSpinner,
+    Text,
+    Tooltip,
+    // note: useIdColorHash is not used as a hook here
+    useIdColorHash as idColorHash,
+} from "@vector-im/compound-web";
 import classNames from "classnames";
-// note: useIdColorHash is not used as a hook here
-import { IconButton, InlineSpinner, useIdColorHash as idColorHash } from "@vector-im/compound-web";
 import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
-import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
+import { type UrlPreview } from "shared-types";
 import styles from "./MessageComposerUrlPreview.module.css";
-import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import { useI18n } from "../../../core/i18n/i18nContext";
 
@@ -53,12 +58,57 @@ export type MessageComposerUrlPreviewSnapshotEntry = MessageComposerUrlPreviewSn
     matched_url: string;
 };
 
+function LinkTitle({
+    title,
+    showTooltipOnLink,
+    link,
+    className,
+}: Pick<UrlPreview, "title" | "showTooltipOnLink" | "link"> & { className?: string }): JSX.Element {
+    let caption: string;
+    try {
+        caption = new URL(link).toString();
+    } catch (e) {
+        console.error("URL parsing failed in MessageComposerUrlPreview", e);
+        caption = link;
+    }
+
+    const anchor = (
+        <Text
+            as="a"
+            type="body"
+            weight="semibold"
+            size="md"
+            className={classNames(styles.title, className)}
+            href={link}
+            target="_blank"
+            rel="noreferrer noopener"
+        >
+            {title}
+        </Text>
+    );
+    return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
+}
+
+function LinkSiteName({ siteName, className }: Pick<UrlPreview, "siteName"> & { className?: string }): JSX.Element {
+    return (
+        <div className={classNames(styles.siteName, className)}>
+            <Text as="span" size="sm" weight="regular">
+                {siteName}
+            </Text>
+        </div>
+    );
+}
+
 /** Snapshot data for rendering a URL preview attached to the composer. */
 export interface MessageComposerUrlPreviewSnapshot {
     /** URL preview to render. */
     entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
+    /** The links that are in the message body, including the ones that are removed */
+    contentLinks: Set<string>;
+    /** Whether the entries have been changed by removing it */
+    isModified: boolean;
 }
 
 /** Props for MessageComposerUrlPreviewView. */
@@ -106,6 +156,7 @@ function useEntryContents(entry: MessageComposerUrlPreviewSnapshotEntry): {
                 entryIcon: (
                     // Sites without a thumbnail fall back to their initial on a decorative
                     // background, picked by `data-color` - see the module CSS.
+                    // oxlint-disable-next-line react/hooks
                     <div className={styles.entryIcon} data-color={thumbnail ? undefined : idColorHash(hostname)}>
                         {thumbnail || hostNameFirstChar(hostname)}
                     </div>
@@ -245,6 +296,7 @@ export function MessageComposerUrlPreviewView({
                                     );
                                 } else {
                                     icon = <>{hostNameFirstChar(hostname)}</>;
+                                    // oxlint-disable-next-line react/hooks
                                     colorHash = idColorHash(hostname);
                                 }
                             }

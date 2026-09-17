@@ -13,7 +13,7 @@
 .threadSummary {
     margin-top: var(--cpd-space-2x);
     min-width: 267px;
-    max-width: min(calc(100% - var(--event-tile-group-gutter, 64px)), 600px);
+    max-width: min(100%, 600px);
     width: fit-content;
     height: 40px;
     position: relative;

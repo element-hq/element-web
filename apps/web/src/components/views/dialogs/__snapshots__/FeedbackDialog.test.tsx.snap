@@ -108,7 +108,7 @@ exports[`FeedbackDialog > should respect feedback config 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
-          class="mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary"
           data-testid="dialog-primary-button"
           type="button"
         >

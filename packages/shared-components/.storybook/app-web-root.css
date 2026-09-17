@@ -69,3 +69,36 @@ Please see LICENSE files in the repository root for full details.
         color: var(--cpd-color-text-decorative-6);
     }
 }
+
+/* Match the EventTile theme variables from the Element Web _EventTile.pcss
+   application override. These rules intentionally remain unlayered and target
+   the EventTile root, whose component defaults are declared on the same node. */
+:root[data-storybook-root-css="app-web"] .storyEventTile {
+    --event-tile-state-highlight-background: var(--cpd-color-yellow-200);
+    --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary);
+    --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary);
+    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
+    --event-tile-bubble-other-background: var(--cpd-color-gray-300);
+    --event-tile-bubble-self-background: var(--cpd-color-green-300);
+    --event-tile-preview-hover-background: var(--cpd-color-bg-subtle-secondary);
+    --event-tile-preview-highlight-background: var(--cpd-color-text-critical-primary);
+    --event-tile-preview-separator-color: var(--cpd-color-gray-400);
+}
+
+/* The dark application theme uses a fixed highlight background rather than
+   Compound's light-theme yellow token. Dark high contrast follows the same
+   EventTile values. */
+:root[data-storybook-root-css="app-web"] body.cpd-theme-dark .storyEventTile,
+:root[data-storybook-root-css="app-web"] body.cpd-theme-dark-hc .storyEventTile {
+    --event-tile-state-highlight-background: #25271f;
+}
+
+/* When the Storybook theme is System, ThemeSwitcher leaves the body unclassed
+   and Compound follows prefers-color-scheme. */
+@media (prefers-color-scheme: dark) {
+    :root[data-storybook-root-css="app-web"]
+        body:not(.cpd-theme-light):not(.cpd-theme-light-hc):not(.cpd-theme-dark):not(.cpd-theme-dark-hc)
+        .storyEventTile {
+        --event-tile-state-highlight-background: #25271f;
+    }
+}
