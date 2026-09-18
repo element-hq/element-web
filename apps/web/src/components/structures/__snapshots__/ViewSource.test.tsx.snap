@@ -21,7 +21,7 @@ exports[`ViewSource > should be able to edit a message 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        View Source
+        View source
       </h1>
     </div>
     <div
@@ -213,7 +213,7 @@ exports[`ViewSource > should render 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        View Source
+        View source
       </h1>
     </div>
     <div
