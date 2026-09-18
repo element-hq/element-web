@@ -33,6 +33,8 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
     const userId = cli.getUserId()!;
 
     const [newAvatar, setNewAvatar] = useState<File | null | undefined>(null); // undefined means to remove avatar
+    // SpaceAvatar caches the chosen image internally, so cancelling has to discard that state too.
+    const [avatarResetKey, setAvatarResetKey] = useState(0);
     const canSetAvatar = space.currentState.maySendStateEvent(EventType.RoomAvatar, userId);
     const avatarChanged = newAvatar !== null;
 
@@ -47,6 +49,7 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
 
     const onCancel = (): void => {
         setNewAvatar(null);
+        setAvatarResetKey((key) => key + 1);
         setName(space.name);
         setTopic(currentTopic);
     };
@@ -97,6 +100,7 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
                     <SpaceBasicSettings
                         avatarUrl={avatarUrlForRoom(space, 80, 80, "crop") ?? undefined}
                         avatarDisabled={busy || !canSetAvatar}
+                        avatarResetKey={avatarResetKey}
                         setAvatar={setNewAvatar}
                         name={name}
                         nameDisabled={busy || !canSetName}
