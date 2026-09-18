@@ -44,10 +44,6 @@ describe("tokens", () => {
         it("round-trips a token persisted with the same pickle key", async () => {
             const stored = (await persistAccessToken(PICKLE_KEY)) as AESEncryptedSecretStoragePayload;
 
-            // Sanity check that we really did store an encrypted payload rather than the raw token.
-            expect(typeof stored).toBe("object");
-            expect(stored.ciphertext).toBeDefined();
-
             await expect(tryDecryptToken(PICKLE_KEY, stored, ACCESS_TOKEN_NAME)).resolves.toEqual(ACCESS_TOKEN);
         });
 
@@ -75,6 +71,15 @@ describe("tokens", () => {
             // `tryDecryptToken` only accepts encrypted payloads, so callers reading this back have to
             // recognise a plain string themselves rather than handing it over for decryption.
             await expect(persistAccessToken(undefined)).resolves.toEqual(ACCESS_TOKEN);
+        });
+
+        it("stores the token as an encrypted object when there is a pickle key", async () => {
+            const stored = await persistAccessToken(PICKLE_KEY);
+            expect(typeof stored).toBe("object");
+            const encryptedPayload = stored as AESEncryptedSecretStoragePayload;
+            expect(typeof encryptedPayload.ciphertext).toBe("string");
+            expect(typeof encryptedPayload.iv).toBe("string");
+            expect(typeof encryptedPayload.mac).toBe("string");
         });
     });
 });
