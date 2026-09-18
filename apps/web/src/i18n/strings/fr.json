@@ -658,8 +658,8 @@
         "join_rule_invite": "Salon privé (uniquement sur invitation)",
         "join_rule_invite_label": "Seules les personnes invitées pourront trouver et rejoindre ce salon.",
         "join_rule_knock_label": "Tout le monde peut demander à venir, mais un admin ou un modérateur doit autoriser l’accès. Vous pouvez modifier ceci plus tard.",
-        "join_rule_public_label": "Quiconque pourra trouver et rejoindre ce salon.",
-        "join_rule_public_parent_space_label": "Quiconque pourra trouver et rejoindre ce salon, pas seulement les membres de <SpaceName/>.",
+        "join_rule_public_label": "Tout le monde peut joindre, incluant les personnes hors de votre organisation",
+        "join_rule_public_parent_space_label": "Quiconque peut rejoindre ce salon, incluant des personnes hors de votre organisation, pas seulement les membres de <SpaceName/>.",
         "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Tout le monde dans <SpaceName/> pourra trouver et rejoindre ce salon.",
         "name_validation_required": "Veuillez renseigner un nom pour le salon",
@@ -714,7 +714,7 @@
         "private_personal_heading": "Avec qui travaillez-vous ?",
         "private_space": "Moi et mon équipe",
         "private_space_description": "Un espace privé pour vous et votre équipe",
-        "public_description": "Tout le monde peut rejoindre, idéal pour les communautés",
+        "public_description": "Tout le monde peut rejoindre y compris les personnes hors de votre organisation. Idéal pour les communautés",
         "public_heading": "Votre espace public",
         "search_public_button": "Rechercher des espaces publics",
         "setup_rooms_community_description": "Commençons par créer quelques salons.",
@@ -1552,10 +1552,13 @@
         "login_with_qr": "Se connecter avec un code QR",
         "mjolnir": "Nouvelles manières d’ignorer des gens",
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
+        "new_timeline": "Amélioration du défilement et de la navigation dans la discussion",
         "notification_settings": "Nouveaux paramètres de notification",
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
+        "pdf_viewer": "Ouvrir les PDF",
+        "pdf_viewer_description": "Consultez les pièces jointes PDF dans le panneau de droite.",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "sliding_sync": "Mode synchronisation progressive",
@@ -1612,12 +1615,14 @@
     "language_dropdown_label": "Sélection de la langue",
     "leave_room_dialog": {
         "last_person_warning": "Vous êtes la seule personne ici. Si vous partez, plus personne ne pourra rejoindre cette conversation, y compris vous.",
-        "leave_room_question": "Voulez-vous vraiment quitter le salon « %(roomName)s » ?",
-        "leave_space_question": "Êtes-vous sûr de vouloir quitter l’espace « %(spaceName)s » ?",
+        "leave_room_title": "Quitter '%(roomName)s' ?",
+        "leave_space_title": "Quitter « %(spaceName)s » ?",
         "room_leave_admin_warning": "Vous êtes le seul administrateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
         "room_leave_mod_warning": "Vous êtes le seul modérateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
-        "room_rejoin_warning": "Ce salon n’est pas public. Vous ne pourrez pas y revenir sans invitation.",
-        "space_rejoin_warning": "Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation."
+        "room_rejoin_warning": "Ce salon est privé et ne peut être rejoins sans invitation.",
+        "room_rejoin_warning_restricted": "L'accès à ce salon est limité et vous ne pourrez y accéder uniquement si vous être présent dans un espace autorisé ou si vous y êtes invité.",
+        "space_rejoin_warning": "Cet espace est privé et l'accès est impossible sans invitation.",
+        "space_rejoin_warning_restricted": "Cet espace est réservé et vous ne pourrez y accéder uniquement si vous êtes dans un espace autorisé ou si vous y êtes invité."
     },
     "lightbox": {
         "rotate_left": "Tourner à gauche",
@@ -1660,6 +1665,7 @@
         "loading_live_location": "Chargement de la position en direct…",
         "location_not_available": "Position non disponible",
         "map_feedback": "Remarques sur la carte",
+        "map_marker": "Repère sur la carte",
         "mapbox_logo": "Logo de Mapbox",
         "reset_bearing": "Repositionner vers le nord",
         "share_button": "Partager la position",
@@ -1732,6 +1738,10 @@
         "send_dm": "Envoyez un message privé",
         "welcome_detail": "Maintenant, laissez-nous vous aider à démarrer",
         "welcome_user": "Bienvenue %(name)s"
+    },
+    "pdf_viewer": {
+        "open": "Ouvrir le PDF",
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Message dans %(room)s",
@@ -2038,7 +2048,6 @@
         "join_button_account": "S’inscrire",
         "join_failed_needs_invite": "Pour afficher %(roomName)s, vous avez besoin d’une invitation",
         "join_the_discussion": "Rejoindre la discussion",
-        "join_title": "Rejoindre le salon pour participer",
         "join_title_account": "Rejoindre la conversation avec un compte",
         "joining": "En train de rejoindre…",
         "joining_room": "Entrée dans le salon…",
@@ -2127,6 +2136,7 @@
         "section": {
             "chats": "Discussions",
             "favourites": "Favoris",
+            "invites": "Invitations",
             "low_priority": "Priorité basse"
         },
         "show_less": "En voir moins"
@@ -2315,7 +2325,7 @@
             "join_rule_knock": "Demander à venir",
             "join_rule_knock_description": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
             "join_rule_public": "Quiconque",
-            "join_rule_public_description": "Tout le monde peut joindre",
+            "join_rule_public_description": "Tout le monde peut joindre y compris les personnes hors de votre organisation",
             "join_rule_restricted": "Membres de l’espace",
             "join_rule_restricted_description": "Toute personne se trouvant dans un espace autorisé peut rejoindre sans invitation.<a> Gérer les espaces</a>",
             "join_rule_restricted_description_active_space": "N'importe qui dans<spaceName/> peut joindre.",
@@ -2641,6 +2651,7 @@
         },
         "inline_url_previews_default": "Activer les aperçus",
         "inline_url_previews_encrypted": "Activer les aperçus dans les sallons chiffrés",
+        "inline_url_previews_encrypted_bundled_only": "Afficher les aperçus groupés uniquement dans les salons chiffrés",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
         "invite_controls": {
             "default_label": "Autoriser les utilisateurs à vous inviter dans les salons"
@@ -2832,7 +2843,13 @@
             "message_search_unsupported_web": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
             "record_session_details": "Enregistrez le nom, la version et l'URL du client afin de reconnaitre les appareils plus facilement dans le gestionnaire d\"appareils",
             "send_analytics": "Envoyer les données de télémétrie",
-            "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés"
+            "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés",
+            "tokenizer_mode": "Mode de tokenisation de la recherche",
+            "tokenizer_mode_change_warning": "Modifier le mode de tokenisation nécessite la suppression de l'index de recherche existant. L'index sera reconstruit automatiquement. Voulez-vous continuer ?",
+            "tokenizer_mode_language": "Basé sur la langue",
+            "tokenizer_mode_language_description": "Prise en charge d'une seule langue en fonction de la langue de votre interface utilisateur. Fonctionne uniquement avec certaines langues (anglais, allemand, etc.).",
+            "tokenizer_mode_ngram": "N-gramme",
+            "tokenizer_mode_ngram_description": "Prend en charge toutes les langues, y compris celles qui n'ont pas de délimitation de mots. Fonctionne avec des textes en langues mélangées."
         },
         "send_read_receipts": "Envoyer les accusés de lecture",
         "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de lecture.",
@@ -3357,7 +3374,8 @@
             "voice_call_unsupported": "%(senderName)s a passé un appel audio. (non pris en charge par ce navigateur)"
         },
         "m.file": {
-            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe"
+            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
+            "size_unknown": "Taille inconnue"
         },
         "m.image": {
             "error": "Impossible d’afficher l’image à cause d’une erreur",
@@ -3536,6 +3554,7 @@
             "label": "%(reactors)s ont réagi avec %(content)s",
             "tooltip_caption": "a réagi avec %(shortName)s"
         },
+        "read_marker_new": "Nouveau",
         "read_receipt_title": {
             "one": "Vu par %(count)s personne",
             "other": "Vu par %(count)s personnes"
@@ -3731,7 +3750,10 @@
             "one_user": "%(displayName)s est en train d'écrire…",
             "two_users": "%(names)s et %(lastPerson)s sont en train d’écrire…"
         },
-        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré"
+        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré",
+        "url_preview": {
+            "open_link": "Ouvrir le lien"
+        }
     },
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
