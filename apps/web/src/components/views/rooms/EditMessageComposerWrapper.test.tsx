@@ -12,7 +12,6 @@ import { act, render, screen, waitFor } from "test-utils-rtl";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { I18nApi } from "@element-hq/element-web-module-api";
-
 import {
     getMockClientWithEventEmitter,
     getRoomContext,
@@ -21,7 +20,8 @@ import {
     mockClientMethodsUser,
     mockPlatformPeg,
     unmockPlatformPeg,
-} from "../../../../test/test-utils";
+} from "test-utils";
+
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
