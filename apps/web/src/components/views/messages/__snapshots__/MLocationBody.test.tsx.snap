@@ -43,6 +43,7 @@ exports[`MLocationBody > <MLocationBody> > without error > renders map correctly
       >
         <span>
           <div
+            aria-label="Map marker"
             class="mx_Marker mx_Marker_defaultColor"
             id="mx_MLocationBody_$2_vY7Q4uEh-marker"
           >
@@ -85,6 +86,7 @@ exports[`MLocationBody > <MLocationBody> > without error > renders marker correc
       >
         <span>
           <div
+            aria-label="Map marker"
             class="mx_Marker mx_Marker_defaultColor"
             id="mx_MLocationBody_$3_vY7Q4uEh-marker"
           >

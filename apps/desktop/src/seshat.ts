@@ -13,7 +13,7 @@ import type {
     Seshat as SeshatType,
     SeshatRecovery as SeshatRecoveryType,
     ReindexError as ReindexErrorType,
-} from "matrix-seshat"; // Hak dependency type
+} from "@matrix-org/seshat";
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
 import Store from "./store.js";
@@ -25,7 +25,7 @@ let SeshatRecovery: typeof SeshatRecoveryType;
 let ReindexError: typeof ReindexErrorType;
 
 try {
-    const seshatModule = await import("matrix-seshat");
+    const seshatModule = await import("@matrix-org/seshat");
     Seshat = seshatModule.Seshat;
     SeshatRecovery = seshatModule.SeshatRecovery;
     ReindexError = seshatModule.ReindexError;

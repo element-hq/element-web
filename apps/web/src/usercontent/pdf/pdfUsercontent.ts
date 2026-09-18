@@ -229,8 +229,15 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
     };
     void load().catch(fail);
 
-    const zoomBy = (factor: number, origin: [number, number]): void => {
-        // pdf.js clamps the scale and keeps the point under `origin` fixed.
+    const zoomBy = (factor: number, clientPoint: [number, number]): void => {
+        // pdf.js keeps the point under `origin` fixed, measured against the container's own offsets, so
+        // translate the client point into the container's box and add those offsets back.
+        const rect = container.getBoundingClientRect();
+        const [offsetTop, offsetLeft] = pdfViewer.containerTopLeft;
+        const origin: [number, number] = [
+            clientPoint[0] - rect.left + offsetLeft,
+            clientPoint[1] - rect.top + offsetTop,
+        ];
         pdfViewer.updateScale({ scaleFactor: factor, origin, drawingDelay: ZOOM_DRAWING_DELAY });
     };
 
