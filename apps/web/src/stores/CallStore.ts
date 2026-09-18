@@ -55,7 +55,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         // Fetch transports, but don't await the result.
         this.matrixClient.cachedRtcTransports.wait().catch(() => {
             if (SdkConfig.get("enable_client_well_known_lookups")) {
-                void this.matrixClient?.waitForClientWellKnown();
+                this.matrixClient?.waitForClientWellKnown().catch(() => {});
             }
         });
 
