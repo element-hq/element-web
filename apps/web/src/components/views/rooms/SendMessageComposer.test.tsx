@@ -404,7 +404,7 @@ describe("<SendMessageComposer/>", () => {
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
             expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
+                "body": "🎉",
                 "msgtype": MsgType.Text,
                 "m.mentions": {},
             });
@@ -433,10 +433,15 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", "$yolo", {
+                "body": "🎉",
                 "msgtype": MsgType.Text,
                 "m.mentions": {},
+                "m.relates_to": {
+                    event_id: "$yolo",
+                    is_falling_back: true,
+                    rel_type: "m.thread",
+                },
             });
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
