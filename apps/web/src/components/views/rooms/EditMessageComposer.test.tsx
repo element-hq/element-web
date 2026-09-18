@@ -24,7 +24,7 @@ import {
 
 import EditMessageComposerWithMatrixClient, { createEditContent } from "./EditMessageComposer";
 import EditorModel from "../../../editor/model";
-import { createPartCreator } from "../../../../test/unit-tests/editor/mock";
+import { createPartCreator } from "../../../editor/__mocks__";
 import DocumentOffset from "../../../editor/offset";
 import SettingsStore from "../../../settings/SettingsStore";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";

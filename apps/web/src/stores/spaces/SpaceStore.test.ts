@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as testUtils from "test-utils";
-import { mkEvent, setupAsyncStoreWithClient, stubClient } from "test-utils";
+import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext } from "test-utils";
 
 import SpaceStore from "./SpaceStore";
 import {
@@ -45,7 +45,6 @@ import { RoomNotificationStateStore } from "../notifications/RoomNotificationSta
 import { type SummarizedNotificationState } from "../notifications/SummarizedNotificationState";
 import { NotificationLevel } from "../notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../RoomAliasCache.ts";
-import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext.ts";
 
 vi.useFakeTimers();
 

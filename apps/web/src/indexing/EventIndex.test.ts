@@ -26,14 +26,9 @@ import {
     ClientEvent,
     SyncState,
 } from "matrix-js-sdk/src/matrix";
+import { emitPromise, getMockClientWithEventEmitter, mockClientMethodsRooms, mockPlatformPeg } from "test-utils";
 
 import EventIndex from "./EventIndex.ts";
-import {
-    emitPromise,
-    getMockClientWithEventEmitter,
-    mockClientMethodsRooms,
-    mockPlatformPeg,
-} from "../../test/test-utils";
 import type BaseEventIndexManager from "./BaseEventIndexManager.ts";
 import { type ICrawlerCheckpoint } from "./BaseEventIndexManager.ts";
 import SettingsStore from "../settings/SettingsStore.ts";
