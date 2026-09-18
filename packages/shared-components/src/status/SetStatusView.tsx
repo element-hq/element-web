@@ -104,7 +104,7 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
     );
 }
 
-export function SetStatusView({ vm, initialCustomMode = false, flyout = false }: SetStatusViewProps): JSX.Element {
+export function SetStatusView({ vm, initialCustomMode = false, flyout = false}: SetStatusViewProps): JSX.Element {
     const { userStatus, recentEmojis, disabled } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
 
