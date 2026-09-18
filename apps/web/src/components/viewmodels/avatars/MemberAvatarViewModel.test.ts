@@ -9,8 +9,8 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { EventTimeline, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { mkEvent, mkRoom, mkRoomMember, stubClient } from "test-utils";
 
-import { mkEvent, mkRoom, mkRoomMember, stubClient } from "../../../../test/test-utils";
 import { MemberAvatarViewModel } from "./MemberAvatarViewModel";
 
 vi.mock(import("../../../customisations/Media"), () => {

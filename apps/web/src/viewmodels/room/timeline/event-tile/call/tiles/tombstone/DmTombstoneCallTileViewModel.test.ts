@@ -10,11 +10,11 @@
 import { it, describe, expect, vi } from "vitest";
 import { CallDirection, CallType } from "@element-hq/web-shared-components";
 import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
 
 import { getMockedRtcDeclineEvent, getMockedRtcNotificationEvent } from "../../call-mocks";
 import { formatTime } from "../../../../../../../DateUtils";
 import { DmTombstoneCallTileViewModel } from "./DmTombstoneCallTileViewModel";
-import { stubClient } from "../../../../../../../../test/test-utils";
 
 describe("DmTombstoneCallTileViewModel", () => {
     it("should compute correct state on decline", () => {

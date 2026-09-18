@@ -110,6 +110,7 @@
         "@vector-im/compound-web": "catalog:",
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
+        "expect": "^30.5.1",
         "oxfmt": "0.67.0",
         "storybook": "^10.0.7",
         "storybook-addon-vis": "^4.0.0",

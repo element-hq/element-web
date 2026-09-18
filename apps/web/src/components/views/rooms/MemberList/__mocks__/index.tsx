@@ -24,11 +24,11 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { vi, expect } from "vitest";
+import * as TestUtils from "test-utils";
+import { TestSDKContext } from "test-utils";
 
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as TestUtils from "../../../../../../test/test-utils";
 import { SDKContext } from "../../../../../contexts/SDKContext";
-import { TestSDKContext } from "../../../../../../test/unit-tests/TestSDKContext";
 import MemberListView from "../MemberListView";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
