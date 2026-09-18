@@ -38,6 +38,7 @@ import * as createMatrixClientModule from "./utils/createMatrixClient";
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 describe("Lifecycle", () => {
+    const realLocalStorage = localStorage;
     const homeserverUrl = "https://domain";
     const identityServerUrl = "https://is.org";
     const userId = "@alice:domain";
@@ -81,11 +82,21 @@ describe("Lifecycle", () => {
         localStorage.clear();
         sessionStorage.clear();
 
+        // Spy on the real localStorage rather than replacing it: `getItem` returns what was
+        // actually written, and `expect(localStorage.setItem).toHaveBeenCalledWith(...)` works.
+        vi.spyOn(localStorage, "getItem");
+        vi.spyOn(localStorage, "setItem");
+        vi.spyOn(localStorage, "removeItem");
+        vi.spyOn(localStorage, "clear");
+
         localStorage.setItem("mx_oidc_client_id", "test-client-id");
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
+        // undo any `vi.stubGlobal("localStorage", ...)` a test installed. Note we cannot use
+        // vi.unstubAllGlobals() here: that would also drop globals stubbed by the shared setup.
+        vi.stubGlobal("localStorage", realLocalStorage);
     });
 
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
@@ -172,8 +183,6 @@ describe("Lifecycle", () => {
     });
 
     describe("restoreSessionFromStorage()", () => {
-        const realLocalStorage = localStorage;
-
         beforeEach(() => {
             initIdbMock();
 
@@ -187,10 +196,6 @@ describe("Lifecycle", () => {
                 // @ts-ignore allow bad mock
                 { finished: Promise.resolve([true]) },
             );
-        });
-
-        afterEach(() => {
-            vi.stubGlobal("localStorage", realLocalStorage);
         });
 
         it("should return false when localStorage is not available", async () => {
@@ -558,16 +563,6 @@ describe("Lifecycle", () => {
             vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
             vi.spyOn(mockPlatform, "createPickleKey");
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         const refreshToken = "test-refresh-token";
@@ -797,16 +792,6 @@ describe("Lifecycle", () => {
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         it("should replace the current login with a new one", async () => {
