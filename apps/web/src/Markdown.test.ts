@@ -173,4 +173,43 @@ describe("Markdown parser test", () => {
             expect(md.toHTML()).toEqual(expectedResult);
         });
     });
+
+    describe("lists", () => {
+        it("keeps the paragraphs of a loose list item separate", () => {
+            const md = new Markdown(["1. a", "2. b", "", "    c"].join("\n"));
+            expect(md.toHTML()).toEqual("<ol>\n<li>\n<p>a</p>\n</li>\n<li>\n<p>b</p>\n<p>c</p>\n</li>\n</ol>\n");
+        });
+
+        it("does not wrap the items of a tight list in paragraphs", () => {
+            const md = new Markdown(["- a", "- b"].join("\n"));
+            expect(md.toHTML()).toEqual("<ul>\n<li>a</li>\n<li>b</li>\n</ul>\n");
+        });
+
+        it("still renders a single paragraph message inline", () => {
+            const md = new Markdown("hello");
+            expect(md.toHTML()).toEqual("hello");
+        });
+    });
+
+    describe("block quotes", () => {
+        it("wraps a single paragraph quote in a paragraph", () => {
+            const md = new Markdown("> hello");
+            expect(md.toHTML()).toEqual("<blockquote>\n<p>hello</p>\n</blockquote>\n");
+        });
+
+        it("keeps the paragraphs of a multi paragraph quote separate", () => {
+            const md = new Markdown(["> a", ">", "> b"].join("\n"));
+            expect(md.toHTML()).toEqual("<blockquote>\n<p>a</p>\n<p>b</p>\n</blockquote>\n");
+        });
+
+        it("still wraps a quote the message carries on after", () => {
+            const md = new Markdown(["> a", "", "b"].join("\n"));
+            expect(md.toHTML()).toEqual("<blockquote>\n<p>a</p>\n</blockquote>\n<p>b</p>\n");
+        });
+
+        it("keeps the paragraphs of a loose list item inside a quote separate", () => {
+            const md = new Markdown(["> 1. a", ">", ">     b"].join("\n"));
+            expect(md.toHTML()).toEqual("<blockquote>\n<ol>\n<li>\n<p>a</p>\n<p>b</p>\n</li>\n</ol>\n</blockquote>\n");
+        });
+    });
 });
