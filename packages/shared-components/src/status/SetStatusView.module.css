@@ -5,6 +5,70 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+.statusDropdown {
+    /*
+     * UserMenu.module.css sets `section.profile > * { margin: auto }` to
+     * center each row of the profile card. On a flex item, auto margins
+     * absorb the extra space instead of stretching to fill it, so this
+     * control (the dropdown's own root box) shrinks to hug just the
+     * trigger link's text rather than the full width of the menu. That
+     * left the flyout below anchored to the edge of the trigger text,
+     * not the edge of the menu, so it still landed inside the panel.
+     * Undo it here so this control spans the full menu width again (the
+     * trigger link is re-centered within it via .setStatusContainer
+     * below, so the visible layout is unchanged).
+     */
+    margin: 0 !important;
+
+    /*
+     * The options list is a plain absolutely-positioned dropdown (not a
+     * Radix/Compound popover with side/align props), so it opens directly
+     * below the trigger by default, covering the menu it lives in. Now that
+     * this control spans the full menu width, anchoring the list to 100% of
+     * its own width - rather than the default 0% - pushes the flyout out
+     * past the menu's true edge instead of over it.
+     */
+    [role="listbox"] {
+        /*
+         * .content (this element's parent) sits directly below the trigger
+         * row in the flex column, and that trigger row (.setStatusContainer)
+         * is a fixed 28px tall (see below), so pulling this up by that same
+         * 28px roughly re-aligns the first flyout item with the trigger
+         * text ("What's your status?") instead of the row underneath it.
+         */
+        inset-block-start: -28px !important;
+        inset-inline-start: 100% !important;
+        /*
+         * The 100% above only reaches the edge of section.profile's own
+         * content box. UserMenu.module.css puts a `margin-left`/
+         * `margin-right: var(--cpd-space-6x)` on section.profile itself
+         * (and the menu popover has no horizontal padding of its own - see
+         * FloatingMenu.module.css), so there's still a 6x gap between that
+         * content edge and the menu's actual visible edge. Add it back in
+         * here (halved, plus a small visible gap), like a native submenu.
+         */
+        margin-inline-start: calc((var(--cpd-space-6x) + var(--cpd-space-2x)) / 1.2);
+        /* The default is 100% of the (menu-width) trigger, which is much
+           wider than the flyout's own content needs. */
+        inline-size: max-content !important;
+        min-inline-size: 200px;
+    }
+
+    /*
+     * This selector only matches .setStatusContainer when it's nested inside
+     * .statusDropdown (i.e. only in flyout mode - see SetStatusView.tsx).
+     * .statusDropdown above now spans the full menu width instead of
+     * shrinking to fit this trigger, so re-center the trigger link within it
+     * to match the rest of the profile section. Outside flyout mode (e.g.
+     * the settings page), .setStatusContainer is left as a plain block, left
+     * -aligned like the fields around it.
+     */
+    .setStatusContainer {
+        display: flex;
+        justify-content: center;
+    }
+}
+
 .setStatusContainer {
     /* Floats in a 28px tall box so it doesn't visually shift when it changes to the pill */
     min-height: 28px;
@@ -33,4 +97,14 @@ Please see LICENSE files in the repository root for full details.
 
 .dropdownEmoji {
     margin-right: var(--cpd-space-1-5x);
+}
+
+.optionLabel {
+    /*
+     * The library's own dropdown <li> styling uses text-secondary (gray)
+     * unconditionally. MenuItem elsewhere in this menu (e.g. "Link new
+     * device") uses text-primary by default, so match that here for visual
+     * consistency between the two menus.
+     */
+    color: var(--cpd-color-text-primary);
 }
