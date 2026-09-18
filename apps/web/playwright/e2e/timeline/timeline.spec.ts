@@ -956,8 +956,14 @@ test.describe("Timeline", () => {
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
             const lastTile = getEventTilesWithBodies(page).last();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const status = lastTile.getByRole("status");
+            if (await status.count()) {
+                await expect(status).toHaveAccessibleName("Your message was sent");
+            }
+
             const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await page.mouse.move(0, 0);
+            await lastTile.getByTestId("event-tile-slot-body").hover();
             await expect(replyButton).toBeVisible();
             await replyButton.click();
         };
