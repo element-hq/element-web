@@ -37,7 +37,7 @@ describe("MjolnirBodyView", () => {
 
         expect(container).toMatchSnapshot();
         expect(screen.getByText(/You have ignored this user, so their message is hidden\./)).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Show anyways." })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Show anyway." })).toBeInTheDocument();
     });
 
     it("invokes the allow action", async () => {
@@ -47,7 +47,7 @@ describe("MjolnirBodyView", () => {
 
         render(<MjolnirBodyView vm={vm} />);
 
-        await user.click(screen.getByRole("button", { name: "Show anyways." }));
+        await user.click(screen.getByRole("button", { name: "Show anyway." }));
 
         expect(onAllow).toHaveBeenCalledTimes(1);
         expect(onAllow).toHaveBeenCalledWith();
