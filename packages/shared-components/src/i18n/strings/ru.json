@@ -4,7 +4,8 @@
     },
     "action": {
         "back": "Назад",
-        "click": "Нажмите",
+        "cancel": "Отменить",
+        "click": "Выбрать",
         "close": "Закрыть",
         "collapse": "Свернуть",
         "delete": "Удалить",
@@ -15,7 +16,7 @@
         "go": "Перейти",
         "hide": "Скрыть",
         "invite": "Пригласить",
-        "new_conversation": "Новый диалог",
+        "new_conversation": "Новый",
         "new_room": "Новая комната",
         "new_section": "Новый раздел",
         "new_video_room": "Новая видеокомната",
@@ -28,6 +29,7 @@
         "reply": "Ответить",
         "reply_in_thread": "Ответить в ветке обсуждения",
         "retry": "Повторить",
+        "save": "Сохранить",
         "search": "Поиск",
         "start_chat": "Начать чат",
         "unpin": "Открепить",
@@ -41,19 +43,85 @@
         "preferences": "Настройки",
         "state_encryption_enabled": "Экспериментальное шифрование включено"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Очистить все",
+            "collapse": "Свернуть предварительный просмотр URL-адресов",
+            "failed": "Не удалось загрузить предварительный просмотр",
+            "loading": "Загрузка предварительного просмотра…",
+            "n_links": {
+                "one": "%(count)s ссылка",
+                "few": "%(count)s ссылки",
+                "many": "%(count)s ссылок"
+            },
+            "remove": "Удалить предварительный просмотр URL"
+        }
+    },
+    "devtools": {
+        "custom_themes": {
+            "add": "Добавить пользовательскую тему",
+            "downloading": "Загрузка пользовательской темы…",
+            "error_already_installed": "Тема с таким названием уже установлена.",
+            "error_downloading": "Ошибка при загрузке темы",
+            "error_invalid": "Неверная схема темы.",
+            "error_save_failed": "Не удалось сохранить изменения. Возможно, процесс всё ещё завершается в фоновом режиме.",
+            "help": "Введите URL-адрес пользовательской темы, которую вы хотите применить.",
+            "installed_heading": "Установленные пользовательские темы",
+            "refresh": "Скачать тему заново",
+            "url_label": "URL пользовательской темы"
+        },
+        "toggle_event": "Источник событий"
+    },
+    "emoji": {
+        "categories": "Категории",
+        "category_activities": "Активности",
+        "category_animals_nature": "Животные и природа",
+        "category_flags": "Флаги",
+        "category_food_drink": "Еда и напитки",
+        "category_frequently_used": "Часто используемые",
+        "category_objects": "Объекты",
+        "category_smileys_people": "Эмоции и люди",
+        "category_symbols": "Символы",
+        "category_travel_places": "Путешествия и места",
+        "quick_reactions": "Быстрые реакции"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Отменить поиск",
+        "emoji_picker": "Выбор эмодзи"
+    },
+    "keyboard": {
+        "shift": "Shift"
+    },
     "left_panel": {
-        "open_dial_pad": "Открыть панель набора номера"
+        "open_dial_pad": "Открыть панель набора номера",
+        "separator_label": "Нажмите или потяните, чтобы развернуть"
     },
     "menus": {
         "user_menu": {
-            "create_an_account": "Создать учетную запись"
+            "clear_status": "Очистить статус",
+            "create_an_account": "Создать учетную запись",
+            "got_an_account": "Уже есть аккаунт?",
+            "sign_in": "Войти",
+            "title": "Меню пользователя"
         }
     },
     "notifications": {
         "all_messages": "Все сообщения",
         "default_settings": "Соответствует настройкам по умолчанию",
+        "mark_all_read": "Отметить всё как прочитанное",
         "mentions_keywords": "Упоминания и ключевые слова",
+        "message_didnt_send": "Сообщение не отправлено. Нажмите для получения информации.",
         "mute_room": "Заглушить комнату"
+    },
+    "pdf_viewer": {
+        "error_load": "Не удалось загрузить PDF-файл.",
+        "loading": "Загрузка PDF-файла…",
+        "page_label": "Страница %(page)s из %(total)s",
+        "page_number": "Номер страницы"
+    },
+    "release_announcement": {
+        "room_list_section_close": "ОК",
+        "room_list_section_description": "Сгруппируйте свои чаты на разделы, чтобы упорядочить беседы и упростить навигацию."
     },
     "room": {
         "context_menu": {
@@ -64,8 +132,10 @@
             "shared": "Новые участники видят историю",
             "world_readable": "Кто угодно может видеть историю"
         },
+        "jump_read_marker": "Перейти к первому непрочитанному сообщению.",
         "jump_to_date": "Перейти к дате",
         "jump_to_date_prompt": "Выберите дату для перехода",
+        "knock_sent": "Запрос на присоединение отправлен",
         "pinned_message_badge": "Закреплённое сообщение",
         "status_bar": {
             "delete_all": "Удалить всё",
@@ -85,6 +155,12 @@
     "room_list": {
         "a11y": {
             "default": "Открыть комнату %(roomName)s",
+            "drag_cancelled": "Перетаскивание отменено",
+            "drag_end_original": "%(source)s вернулся в исходное положение",
+            "drag_instructions": "Нажмите пробел, чтобы начать или остановить перетаскивание, клавиши со стрелками для перемещения и клавишу Escape для отмены.",
+            "drag_over": "%(source)s завершено %(target)s",
+            "drag_over_after": "%(source)s будет удален после %(target)s",
+            "drag_start": "Перетаскивание %(source)s",
             "invitation": "Открыть приглашение в комнату %(roomName)s.",
             "mention": {
                 "one": "Открыть чат %(roomName)s с 1 непрочитанным упоминанием.",
@@ -99,6 +175,7 @@
             "unsent_message": "Открыть комнату %(roomName)s с неотправленным сообщением."
         },
         "appearance": "Внешний вид",
+        "collapse_all_sections": "Свернуть все чаты",
         "collapse_filters": "Свернуть список фильтров",
         "empty": {
             "no_chats": "Пока нет чатов",
@@ -114,6 +191,7 @@
             "show_activity": "Посмотреть всю активность",
             "show_chats": "Показать все чаты"
         },
+        "expand_all_sections": "Развернуть все чаты",
         "expand_filters": "Раскрыть список фильтров",
         "filters": {
             "favourite": "Избранное",
@@ -126,12 +204,13 @@
         },
         "list_title": "Список комнат",
         "more_options": {
-            "copy_link": "Скопировать ссылку на комнату",
+            "copy_link": "Скопировать ссылку",
             "favourited": "Избранное",
             "leave_room": "Покинуть комнату",
             "low_priority": "Низкий приоритет",
             "mark_read": "Отметить как прочитанное",
-            "mark_unread": "Отметить как непрочитанное"
+            "mark_unread": "Отметить как непрочитанное",
+            "move_to_section": "Переместить в"
         },
         "notification_options": "Параметры уведомлений",
         "open_space_menu": "Открыть меню пространств",
@@ -140,6 +219,13 @@
             "more_options": "Другие параметры"
         },
         "room_options": "Настройки комнаты",
+        "section_creation": {
+            "description": "Разделы предназначены только для вас",
+            "label": "Название раздела"
+        },
+        "section_header": {
+            "more_options": "Другие параметры"
+        },
         "show_message_previews": "Показать предварительный просмотр сообщений",
         "sort": "Сортировать",
         "sort_type": {
@@ -150,10 +236,25 @@
         "space_menu": {
             "home": "Пространство — Главная",
             "space_settings": "Настройки Пространства"
+        },
+        "unread_messages": "Непрочитанные сообщения"
+    },
+    "status": {
+        "set_status": {
+            "away": "Нет на месте",
+            "be_right_back": "Скоро вернусь",
+            "choose_emoji": "Выбрать эмодзи",
+            "custom": "Пользовательский...",
+            "in_a_meeting": "На встрече",
+            "on_the_road": "На дороге",
+            "set_status_prompt": "Какой у вас статус?"
         }
     },
     "terms": {
         "tac_button": "Просмотр условий и положений"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Вы не можете начать обсуждения от этого сообщения."
     },
     "time": {
         "about_day_ago": "около суток назад",
@@ -172,6 +273,29 @@
         "n_minutes_ago": "%(num)s минут назад"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Звонок отклонён",
+                "call_declined_by_us": "Вы отклонили звонок"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s начинает звонок",
+                    "join_button": "Присоединиться"
+                },
+                "dm": {
+                    "call_started": "Звонок начат",
+                    "title": "Текущий звонок"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s присоединился",
+                        "few": "%(count)s присоединилось",
+                        "many": "%(count)s присоединилось"
+                    }
+                }
+            }
+        },
         "decryption_failure": {
             "blocked": "Отправитель заблокировал получение этого сообщения, поскольку ваше устройство не проверено.",
             "historical_event_no_key_backup": "История сообщений недоступна на этом устройстве",
@@ -186,6 +310,9 @@
             "error_downloading_audio": "Ошибка скачивания аудио",
             "unnamed_audio": "Безымянное аудио"
         },
+        "m.file": {
+            "error_invalid": "Недопустимый файл"
+        },
         "m.room.encryption": {
             "disable_attempt": "Проигнорированная попытка отключить шифрование",
             "disabled": "Шифрование не включено",
@@ -197,10 +324,30 @@
             "unsupported": "Шифрование, используемое в этой комнате, не поддерживается."
         },
         "mab": {
+            "collapse_reply_chain": "Свернуть цитаты",
+            "copy_link_thread": "Копировать ссылку на обсуждение",
+            "expand_reply_chain": "Развернуть цитаты",
+            "label": "Действия с сообщением",
             "view_in_room": "Просмотреть в чате"
         },
+        "message_shared_by": "%(displayName)s (%(userId)s) поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено.",
         "message_timestamp_received_at": "Получено в %(dateTime)s",
-        "message_timestamp_sent_at": "Отправлено в %(dateTime)s"
+        "message_timestamp_sent_at": "Отправлено в %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Вы заблокировали этого пользователя, поэтому его сообщение скрыто. <a>Показать в любом случае.</a>"
+        },
+        "pending_moderation": "Сообщение ожидает модерации",
+        "pending_moderation_reason": "Сообщение ожидает модерации: %(reason)s",
+        "url_preview": {
+            "view_image": "Просмотреть изображение"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Привязать новое устройство",
+        "open_feedback": "Обратная связь",
+        "open_home": "Главная",
+        "open_security": "Безопасность",
+        "open_settings": "Все настройки"
     },
     "widget": {
         "context_menu": {
