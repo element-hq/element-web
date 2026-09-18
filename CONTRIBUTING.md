@@ -104,7 +104,7 @@ Your PR should include tests.
 
 For new user facing features in `matrix-js-sdk` or `element-web`, you must include:
 
-1. Comprehensive unit tests written in Jest. These are located in `/test`.
+1. Comprehensive unit tests written in Vitest. These are alongside the source code in a file ending in `.test.ts`.
 2. "happy path" end-to-end tests.
    These are located in `/playwright/e2e`, and are run using `element-web`.
    Ideally, you would also include tests for edge and error cases.
@@ -120,8 +120,8 @@ For bugs in those repos, your change must include at least one unit test or
 end-to-end test; which is best depends on what sort of test most concisely
 exercises the area.
 
-Changes to must be accompanied by unit tests written in Jest.
-These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web`.
+Changes to must be accompanied by unit tests written in Vitest.
+These are located in `/spec/` in `matrix-js-sdk` or alongside the source file in `element-web`.
 
 When writing unit tests, please aim for a high level of test coverage
 for new code - 80% or greater. If you cannot achieve that, please document

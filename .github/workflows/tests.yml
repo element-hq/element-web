@@ -28,63 +28,6 @@ env:
 permissions: {}
 
 jobs:
-    jest_ew:
-        name: Jest (Element Web)
-        runs-on: ubuntu-24.04
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-              with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
-                  persist-credentials: false
-
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-            - name: pnpm cache
-              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              with:
-                  node-version: "lts/*"
-                  cache: "pnpm"
-
-            - name: Install Deps
-              run: "./scripts/layered.sh"
-              env:
-                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-
-            - name: Jest Cache
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-              with:
-                  path: /tmp/jest_cache
-                  key: ${{ hashFiles('**/pnpm-lock.yaml') }}
-
-            - name: Run tests
-              working-directory: apps/web
-              run: |
-                  pnpm test \
-                      --coverage=$ENABLE_COVERAGE \
-                      --ci \
-                      --maxWorkers="50%" \
-                      --cacheDirectory /tmp/jest_cache
-              env:
-                  # tell jest to use coloured output
-                  FORCE_COLOR: true
-                  NODE_OPTIONS: "--max_old_space_size=8192"
-
-            - name: Move coverage files into place
-              if: env.ENABLE_COVERAGE == 'true'
-              working-directory: apps/web
-              run: mv coverage/lcov.info coverage/$NODE_VERSION.lcov.info
-              env:
-                  NODE_VERSION: ${{ steps.setupNode.outputs.node-version }}
-
-            - name: Upload Artifact
-              if: env.ENABLE_COVERAGE == 'true'
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-              with:
-                  name: coverage-jest
-                  path: |
-                      apps/web/coverage
-                      !apps/web/coverage/lcov-report
-
     vitest:
         name: Vitest ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
         strategy:
@@ -162,7 +105,6 @@ jobs:
     complete:
         name: Tests
         needs:
-            - jest_ew
             - vitest
         if: always()
         runs-on: ubuntu-24.04
@@ -191,14 +133,14 @@ jobs:
 
             - name: Download coverage artifacts
               uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   pattern: coverage-*
                   path: coverage
 
             - name: Diff Coverage
               id: coverage
-              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               uses: Affanmir/diff-cover-action@a35ea05c1c458490473f6fc2233737e809678273 # v2.1.1
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}

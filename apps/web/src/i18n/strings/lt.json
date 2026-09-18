@@ -29,7 +29,7 @@
         "continue": "Tęsti",
         "copy": "Kopijuoti",
         "create": "Sukurti",
-        "create_account": "Sukurti Paskyrą",
+        "create_account": "Kurti paskyrą",
         "decline": "Atmesti",
         "delete": "Ištrinti",
         "disable": "Išjungti",
@@ -37,7 +37,7 @@
         "dismiss": "Atmesti",
         "done": "Atlikta",
         "download": "Atsisiųsti",
-        "edit": "Koreguoti",
+        "edit": "Redaguoti",
         "enable": "Įjungti",
         "expand": "Išplėsti",
         "explore_rooms": "Žvalgyti kambarius",
@@ -52,7 +52,7 @@
         "import": "Importuoti",
         "invite": "Pakviesti",
         "join": "Prisijungti",
-        "learn_more": "Sužinokite daugiau",
+        "learn_more": "Sužinoti daugiau",
         "leave": "Palikti",
         "leave_room": "Išeiti iš kambario",
         "logout": "Atsijungti",
@@ -134,8 +134,10 @@
         "change_password_empty": "Slaptažodžiai negali būti tušti",
         "change_password_mismatch": "Nauji slaptažodžiai nesutampa",
         "change_password_new_label": "Naujas slaptažodis",
-        "create_account_prompt": "Naujas vartotojas? <a>Sukurkite paskyrą</a>",
-        "create_account_title": "Sukurti paskyrą",
+        "continue_with_idp": "Tęsti su %(provider)s",
+        "continue_with_sso": "Tęsti su „%(ssoButtons)s“",
+        "create_account_prompt": "Nauji čia? <a>Kurti paskyrą</a>",
+        "create_account_title": "Kurti paskyrą",
         "email_field_label": "El. paštas",
         "email_field_label_invalid": "Neatrodo kaip tinkamas el. pašto adresas",
         "failed_connect_identity_server": "Tapatybės serveris nepasiekiamas",
@@ -145,7 +147,7 @@
         "failed_homeserver_discovery": "Nepavyko atlikti serverio radimo",
         "forgot_password_email_required": "Privalo būti įvestas su jūsų paskyra susietas el. pašto adresas.",
         "forgot_password_prompt": "Pamiršote savo slaptažodį?",
-        "identifier_label": "Prisijungti naudojant",
+        "identifier_label": "Prisijungti su",
         "incorrect_credentials": "Neteisingas vartotojo vardas ir/arba slaptažodis.",
         "incorrect_credentials_detail": "Atkreipkite dėmesį, kad jūs jungiatės prie %(hs)s serverio, o ne matrix.org.",
         "incorrect_password": "Neteisingas slaptažodis",
@@ -165,7 +167,7 @@
         },
         "password_field_strong_label": "Puiku, stiprus slaptažodis!",
         "phone_label": "Telefonas",
-        "register_action": "Sukurti Paskyrą",
+        "register_action": "Kurti paskyrą",
         "registration": {
             "continue_without_email_description": "Įspėjame, kad nepridėję el. pašto ir pamiršę slaptažodį galite <b>visam laikui prarasti prieigą prie savo paskyros</b>.",
             "continue_without_email_field_label": "El. paštas (neprivaloma)",
@@ -183,16 +185,20 @@
         },
         "reset_password_email_field_description": "Naudokite el. pašto adresą, kad prireikus galėtumėte atgauti paskyrą",
         "reset_password_email_not_found_title": "Šis el. pašto adresas buvo nerastas",
-        "server_picker_custom": "Kitas namų serveris",
+        "server_picker_custom": "Kitas paskyrų teikėjas",
+        "server_picker_description": "Galite naudoti pasirinktas serverio parinktis, kad prisijungtumėte prie kitų „Matrix“ serverių, nurodydami kitą pagrindinio serverio URL. Tai leidžia naudoti „%(brand)s“ su esama „Matrix“ paskyra kitame pagrindiniame serveryje.",
         "server_picker_description_matrix.org": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
-        "server_picker_explainer": "Naudokite pageidaujamą Matrix namų serverį, jei tokį turite, arba talpinkite savo.",
+        "server_picker_dialog_title": "Nuspręskite, kur talpinama jūsų paskyra",
+        "server_picker_explainer": "Jei turite, naudokitės savo pageidaujamą paskyros teikėją arba patys talpinkite savo „Matrix“ pagrindinį serverį.",
         "server_picker_failed_validate_homeserver": "Nepavyksta patvirtinti namų serverio",
+        "server_picker_intro": "Mes vadiname paslaugas, kuriose galite talpinti savo paskyrą, „paskyrų teikėjais“.",
         "server_picker_invalid_url": "Netinkamas URL",
-        "server_picker_learn_more": "Apie namų serverius",
+        "server_picker_learn_more": "Apie paskyrų teikėjus",
+        "server_picker_matrix.org": "Matrix.org – didžiausias viešųjų paskyrų teikėjas pasaulyje, todėl daugeliui žmonių tai yra puiki vieta.",
         "server_picker_required": "Nurodykite namų serverį",
         "server_picker_title": "Prisijunkite prie savo namų serverio",
-        "server_picker_title_default": "Serverio Parinktys",
-        "server_picker_title_registration": "Kurti paskyrą serveryje",
+        "server_picker_title_default": "Serverio parinktys",
+        "server_picker_title_registration": "Talpinkite paskyrą teikėjoje",
         "session_logged_out_description": "Saugumo sumetimais, šis seansas buvo atjungtas. Prisijunkite dar kartą.",
         "session_logged_out_title": "Atsijungta",
         "set_email": {
@@ -201,8 +207,8 @@
             "verification_pending_title": "Laukiama patvirtinimo"
         },
         "set_email_prompt": "Ar norite nustatyti el. pašto adresą?",
-        "sign_in_instead_prompt": "Jau turite paskyrą? <a>Prisijunkite čia</a>",
-        "sign_in_or_register": "Prisijungti arba Sukurti Paskyrą",
+        "sign_in_instead_prompt": "Jau turite paskyrą? <a>Prisijungti čia</a>",
+        "sign_in_or_register": "Prisijungti arba kurti paskyrą",
         "sign_in_or_register_description": "Norėdami tęsti naudokite savo paskyrą arba sukurkite naują.",
         "soft_logout": {
             "clear_data_button": "Išvalyti visus duomenis",
@@ -288,12 +294,12 @@
         "authentication": "Autentifikavimas",
         "camera": "Kamera",
         "copied": "Nukopijuota!",
-        "credits": "Padėka",
+        "credits": "Padėkos",
         "dark": "Tamsi",
         "description": "Aprašas",
         "deselect_all": "Nuimti pasirinkimą nuo visko",
         "device": "Įrenginys",
-        "edited": "pakeista",
+        "edited": "redaguota",
         "email_address": "El. pašto adresas",
         "emoji": "Jaustukai",
         "encrypted": "Užšifruota",
@@ -394,6 +400,9 @@
         "format_strikethrough": "Perbrauktas",
         "format_underline": "Pabraukimas",
         "format_unordered_list": "Suženklintasis sąrašas",
+        "link_modal": {
+            "title_edit": "Redaguoti nuorodą"
+        },
         "no_perms_notice": "Jūs neturite leidimų rašyti šiame kambaryje",
         "placeholder": "Siųsti žinutę…",
         "placeholder_encrypted": "Siųsti šifruotą žinutę…",
@@ -429,6 +438,9 @@
         "unfederated_label_default_off": "Jūs galite tai įjungti, jei kambarys bus naudojamas tik bendradarbiavimui su vidinėmis komandomis jūsų serveryje. Tai negali būti vėliau pakeista.",
         "unfederated_label_default_on": "Šią funkciją galite išjungti, jei kambarys bus naudojamas bendradarbiavimui su išorės komandomis, turinčiomis savo namų serverį. Vėliau to pakeisti negalima.",
         "unsupported_version": "Serveris nepalaiko nurodytos kambario versijos."
+    },
+    "create_section_dialog": {
+        "title_edition": "Redaguoti sekciją"
     },
     "create_space": {
         "add_details_prompt": "Pridėkite šiek tiek detalių, kad žmonės galėtų ją atpažinti.",
@@ -729,6 +741,7 @@
         "url_not_https": "Tapatybės serverio URL privalo būti HTTPS"
     },
     "incompatible_browser": {
+        "learn_more": "Sužinoti daugiau",
         "title": "Nepalaikoma naršyklė"
     },
     "integration_manager": {
@@ -895,7 +908,6 @@
         "view_rules": "Peržiūrėti taisykles"
     },
     "leave_room_dialog": {
-        "leave_room_question": "Ar tikrai norite išeiti iš kambario %(roomName)s?",
         "room_rejoin_warning": "Šis kambarys nėra viešas. Jūs negalėsite prisijungti iš naujo be pakvietimo."
     },
     "lightbox": {
@@ -950,7 +962,7 @@
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
-    "powered_by_matrix": "Veikia su Matrix",
+    "powered_by_matrix": "Veikiama su „Matrix“",
     "presence": {
         "away": "Pasitraukę",
         "busy": "Užsiėmęs",
@@ -1080,7 +1092,6 @@
         "join_button_account": "Registruotis",
         "join_failed_needs_invite": "Norint peržiūrėti %(roomName)s, turite gauti kvietimą",
         "join_the_discussion": "Prisijungti prie diskusijos",
-        "join_title": "Prisijunkite prie kambario ir dalyvaukite",
         "join_title_account": "Prisijunkite prie pokalbio su paskyra",
         "joining": "Prisijungiama…",
         "jump_read_marker": "Pereiti prie pirmos neperskaitytos žinutės.",
@@ -1357,7 +1368,7 @@
     "setting": {
         "help_about": {
             "access_token_detail": "Jūsų prieigos žetonas suteikia visišką prieigą prie paskyros. Niekam jo neduokite.",
-            "brand_version": "%(brand)s versija:",
+            "brand_version": "„%(brand)s“ versija:",
             "clear_cache_reload": "Išvalyti podėlį ir perkrauti",
             "help_link": "Norėdami gauti pagalbos naudojant %(brand)s, paspauskite <a>čia</a>.",
             "title": "Pagalba ir Apie",
@@ -2240,6 +2251,10 @@
         "video_call": "Vaizdo skambutis",
         "voice_call": "Balso skambutis",
         "you_are_presenting": "Jūs pristatote"
+    },
+    "welcome": {
+        "tagline_element": "Patobulintas spartai ir paprastumui.",
+        "title_element": "Būkite savo stichijoje"
     },
     "widget": {
         "added_by": "Valdiklį pridėjo",

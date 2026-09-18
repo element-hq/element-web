@@ -7,10 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useEffect, type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { useEventPresentation } from "@element-hq/web-shared-components";
+import { ReplyTileView, useCreateAutoDisposedViewModel, useEventPresentation } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -19,14 +19,16 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
-import ReplyTile from "../rooms/ReplyTile";
 import { Pill } from "./Pill";
 import { PillType } from "./PillType";
 import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
+import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -58,6 +60,13 @@ interface IProps {
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
+    /**
+     * Keep the preview at one height from the moment it appears, for the new
+     * timeline — where a preview that grows afterwards pushes the messages around
+     * it. It shows the quoted message right away if the room already has it, and
+     * stands a fixed-height skeleton in while fetching one it doesn't.
+     */
+    compactPreview?: boolean;
 }
 
 interface IState {
@@ -69,6 +78,47 @@ interface IState {
     loading: boolean;
     // Whether as error was encountered fetching a replied to event.
     err: boolean;
+}
+
+interface ReplyTileProps {
+    mxEvent: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    toggleExpandedQuote?: () => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+function ReplyTile({
+    mxEvent,
+    permalinkCreator,
+    toggleExpandedQuote,
+    getRelationsForEvent,
+}: ReplyTileProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ReplyTileViewModel({
+                mxEvent,
+                permalinkCreator,
+                toggleExpandedQuote,
+                getRelationsForEvent,
+                cli,
+                userStatus,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            permalinkCreator,
+            toggleExpandedQuote,
+            getRelationsForEvent,
+            cli,
+            userStatus,
+        });
+    }, [cli, getRelationsForEvent, mxEvent, permalinkCreator, toggleExpandedQuote, userStatus, vm]);
+
+    return <ReplyTileView vm={vm} />;
 }
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
@@ -85,14 +135,27 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
+
+        // Usually the quoted message is already loaded in this room, so take it
+        // now: the first render is then the finished preview, at its final height.
+        let initialEvents: MatrixEvent[] = [];
+        let loading = true;
+        if (props.compactPreview) {
+            const parentEventId = getParentEventId(props.parentEv);
+            const ev = parentEventId ? this.room?.findEventById(parentEventId) : undefined;
+            if (ev) {
+                initialEvents = [ev];
+                loading = false;
+            }
+        }
+
         this.state = {
-            events: [],
+            events: initialEvents,
             loadedEv: null,
-            loading: true,
+            loading,
             err: false,
         };
-
-        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
     }
 
     private get matrixClient(): MatrixClient {
@@ -101,8 +164,25 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        void this.initialize();
+        if (this.state.loading) {
+            void this.initialize();
+        } else if (this.state.events.length > 0) {
+            // The constructor already found the quoted message, so only the
+            // "In reply to" header above it is left to fetch.
+            void this.loadHeaderEvent(this.state.events[0]);
+        }
         this.trySetExpandableQuotes();
+    }
+
+    /**
+     * Fetches the message the quoted one was itself replying to, which puts the
+     * "In reply to" header above the preview. Usually it is already loaded and
+     * the header appears a frame after the preview, before the row is on screen.
+     */
+    private async loadHeaderEvent(quotedEvent: MatrixEvent): Promise<void> {
+        const loadedEv = await this.getNextEvent(quotedEvent);
+        if (this.unmounted || !loadedEv) return;
+        this.setState({ loadedEv });
     }
 
     public componentDidUpdate(): void {
@@ -265,7 +345,16 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 </p>
             );
         } else if (this.state.loading) {
-            header = <Spinner size={16} />;
+            header = this.props.compactPreview ? (
+                // Two rows, the same heights as the sender and message lines they
+                // stand in for, so the preview doesn't resize once it loads.
+                <blockquote className="mx_ReplyChain mx_ReplyChain_placeholder">
+                    <div className="mx_ReplyChain_placeholderRow" />
+                    <div className="mx_ReplyChain_placeholderRow" />
+                </blockquote>
+            ) : (
+                <Spinner size={16} />
+            );
         }
 
         const { isQuoteExpanded } = this.props;

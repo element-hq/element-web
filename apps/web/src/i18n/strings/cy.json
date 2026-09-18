@@ -1555,8 +1555,6 @@
     "language_dropdown_label": "Cwymplen Iaith",
     "leave_room_dialog": {
         "last_person_warning": "Chi yw'r unig berson yma. Os byddwch yn gadael, ni fydd neb yn gallu ymuno yn y dyfodol, gan gynnwys chi.",
-        "leave_room_question": "Ydych chi'n siŵr eich bod am adael ystafell '%(roomName)s'?",
-        "leave_space_question": "Ydych chi'n siŵr eich bod am adael y bwlch '%(spaceName)s'?",
         "room_leave_admin_warning": "Chi yw'r unig weinyddwr yn yr ystafell hon. Os byddwch yn gadael, ni fydd neb yn gallu newid gosodiadau ystafell na chymryd camau pwysig eraill.",
         "room_leave_mod_warning": "Chi yw'r unig gymedrolwr yn yr ystafell hon. Os byddwch yn gadael, ni fydd neb yn gallu newid gosodiadau ystafell na chymryd camau pwysig eraill.",
         "room_rejoin_warning": "Nid yw'r ystafell hon yn gyhoeddus. Fyddwch chi ddim yn gallu ailymuno heb wahoddiad.",
@@ -1973,7 +1971,6 @@
         "join_button_account": "Cofrestru",
         "join_failed_needs_invite": "I weld %(roomName)s, mae angen gwahoddiad arnoch chi",
         "join_the_discussion": "Ymunwch â'r drafodaeth",
-        "join_title": "Ymunwch â'r ystafell i gymryd rhan",
         "join_title_account": "Ymunwch â'r sgwrs gyda chyfrif",
         "joining": "Wrthi'n ymuno…",
         "joining_room": "Wrthi'n ymuno â'r ystafell…",
