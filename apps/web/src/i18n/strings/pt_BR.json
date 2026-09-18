@@ -1535,8 +1535,6 @@
     "language_dropdown_label": "Menu suspenso de idiomas",
     "leave_room_dialog": {
         "last_person_warning": "Você é a única pessoa aqui. Se você sair, ninguém poderá se juntar no futuro, inclusive você.",
-        "leave_room_question": "Tem certeza de que deseja sair da sala '%(roomName)s'?",
-        "leave_space_question": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",
         "room_leave_admin_warning": "Você é o único administrador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_leave_mod_warning": "Você é o único moderador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_rejoin_warning": "Esta sala não é pública. Você não poderá entrar novamente sem um convite.",
@@ -1939,7 +1937,6 @@
         "join_button_account": "Inscrever-se",
         "join_failed_needs_invite": "Para ver %(roomName)s, você precisa de um convite",
         "join_the_discussion": "Participar da discussão",
-        "join_title": "Entre na sala para participar",
         "join_title_account": "Participar da conversa com uma conta",
         "joining": "Juntando-se…",
         "joining_room": "Entrando na sala…",

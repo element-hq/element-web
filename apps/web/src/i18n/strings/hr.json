@@ -1611,8 +1611,6 @@
     "language_dropdown_label": "Padajući izbornik jezika",
     "leave_room_dialog": {
         "last_person_warning": "Ovdje ste jedina osoba. Ako odete, nitko se više neće moći pridružiti, uključujući i vas.",
-        "leave_room_question": "Jeste li sigurni da želite napustiti sobu %(roomName)s?",
-        "leave_space_question": "Jeste li sigurni da želite napustiti prostor %(spaceName)s?",
         "room_leave_admin_warning": "Vi ste jedini administrator u ovoj sobi. Ako odete, nitko neće moći mijenjati postavke sobe ili poduzimati druge važne radnje.",
         "room_leave_mod_warning": "Vi ste jedini moderator u ovoj sobi. Ako odete, nitko neće moći mijenjati postavke sobe ili poduzimati druge važne radnje.",
         "room_rejoin_warning": "Ova soba nije javna. Nećete se moći ponovno pridružiti bez pozivnice.",
@@ -2051,7 +2049,6 @@
         "join_button_account": "Registriraj se",
         "join_failed_needs_invite": "Za pregled sobe%(roomName)s treba vam pozivnica",
         "join_the_discussion": "Pridružite se raspravi",
-        "join_title": "Pridružite se sobi kako biste sudjelovali",
         "join_title_account": "Pridružite se razgovoru s računom",
         "joining": "U tijeku je pridruživanje…",
         "joining_room": "U tijeku je pridruživanje sobi…",

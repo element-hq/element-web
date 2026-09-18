@@ -100,7 +100,6 @@
             "clear_status": "Effacer le statut",
             "create_an_account": "Créer un compte",
             "got_an_account": "Tu as un compte ?",
-            "manage_account": "Gérer le compte",
             "sign_in": "Se connecter",
             "title": "Menu utilisateur"
         }
@@ -112,6 +111,12 @@
         "mentions_keywords": "Mentions et mots-clés",
         "message_didnt_send": "Le message n'a pas été envoyé. Cliquez pour plus d'informations",
         "mute_room": "Rendre le salon muet"
+    },
+    "pdf_viewer": {
+        "error_load": "Impossible de charger le PDF.",
+        "loading": "Chargement du PDF…",
+        "page_label": "Page %(page)s de %(total)s",
+        "page_number": "Numéro de page"
     },
     "release_announcement": {
         "room_list_section_close": "OK",
@@ -363,13 +368,14 @@
         "pending_moderation": "Message en attente de modération",
         "pending_moderation_reason": "Message en attente de modération : %(reason)s",
         "url_preview": {
-            "close": "Fermer l’aperçu",
-            "open_link": "Ouvrir le lien",
             "show_n_more": {
                 "one": "Montrer %(count)s autre preview",
                 "other": "Montrer %(count)s autres previews"
             },
-            "view_image": "Afficher l'image"
+            "view_audio": "Écouter l'audio",
+            "view_file": "Afficher le fichier",
+            "view_image": "Afficher l'image",
+            "view_video": "Visionner la vidéo"
         }
     },
     "user_menu": {

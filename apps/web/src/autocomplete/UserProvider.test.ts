@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect } from "vitest";
+import { mkRoom, mkRoomMember, stubClient } from "test-utils";
 
 import UserProvider from "./UserProvider";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
-import { mkRoom, mkRoomMember, stubClient } from "../../test/test-utils";
 
 describe("UserProvider", () => {
     it("suggests a room member whose id matches the query", async () => {

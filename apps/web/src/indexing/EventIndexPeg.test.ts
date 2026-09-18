@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, afterEach, type Mock, type Mocked } from "vitest";
+import { mockPlatformPeg } from "test-utils";
 
 import { EventIndexPeg } from "./EventIndexPeg.ts";
-import { mockPlatformPeg } from "../../test/test-utils";
 import type BaseEventIndexManager from "./BaseEventIndexManager.ts";
 import SettingsStore from "../settings/SettingsStore.ts";
 import { MatrixClientPeg } from "../MatrixClientPeg.ts";
