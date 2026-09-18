@@ -230,6 +230,7 @@ export interface Settings {
     "feature_render_reaction_images": IFeature;
     "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
+    "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
@@ -634,6 +635,15 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
+    "feature_new_timeline": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|new_timeline"),
+        description: _td("labs|currently_experimental"),
+        isFeature: true,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -773,7 +783,7 @@ export const SETTINGS: Settings = {
             true,
             true,
         ),
-        default: false,
+        default: true,
     },
     "feature_retention": {
         isFeature: true,
