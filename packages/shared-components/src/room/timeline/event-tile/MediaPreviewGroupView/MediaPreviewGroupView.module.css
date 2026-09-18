@@ -22,3 +22,8 @@
         font-weight: var(--cpd-font-weight-regular);
     }
 }
+
+/* timestamp gutter on the body that holds the previews. */
+:global(.mx_EventTile_content):has(> .container) {
+    margin-right: var(--event-tile-content-inline-end, 0);
+}
