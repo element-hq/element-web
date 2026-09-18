@@ -1964,7 +1964,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel?.jumpToLiveTimeline();
-            defaultDispatcher.fire(Action.FocusSendMessageComposer);
+            this.messagePanel?.focusLastMessage();
         }
     };
 
