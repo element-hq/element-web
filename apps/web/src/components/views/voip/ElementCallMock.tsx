@@ -196,7 +196,11 @@ export const ElementCall = ({
 
     if (rtcSession === null || room === null) {
         logger.error(`Element Call was asked to call in ${roomId}, which its host's client does not know about`);
-        return <div className="mx_ElementCallMock mx_ElementCallMock_error">Unknown room {roomId}</div>;
+        return (
+            <div className="mx_ElementCallMock ">
+                <span className="mx_ElementCallMock_error">Unknown room {roomId}</span>
+            </div>
+        );
     }
 
     const ownUserId = client.getUserId();

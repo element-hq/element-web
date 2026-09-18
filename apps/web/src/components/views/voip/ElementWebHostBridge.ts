@@ -9,6 +9,7 @@ import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
 import { type ElementCall } from "../../../models/Call";
 import { type DeviceMuteState, type ElementCallHostBridge } from "./ElementCallComponentTypes";
+import { logger } from "matrix-js-sdk/src/logger";
 
 export interface ElementWebHostBridgeOptions {
     /** The id of the (virtual) widget that is this call's identity in the widget stores. */
@@ -50,7 +51,11 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
         // UpdateAlwaysOnScreen handling).
         if (alwaysOnScreen) {
             const others = [...CallStore.instance.connectedCalls].filter((call) => call !== this.call);
-            await Promise.all(others.map((call) => call.disconnect()));
+            try {
+                await Promise.all(others.map((call) => call.disconnect()));
+            } catch (e) {
+                logger.warn(`Could not disconnect other calls before making call persstend:{e}`)
+            }
         }
         ActiveWidgetStore.instance.setWidgetPersistence(this.opts.widgetId, this.opts.widgetRoomId, alwaysOnScreen);
     };
