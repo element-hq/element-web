@@ -408,7 +408,7 @@ export default defineConfig({
                             },
                             {
                                 name: "@testing-library/react",
-                                message: "Please use jest-matrix-react instead",
+                                message: "Please use test-utils-rtl instead",
                             },
                             {
                                 name: "matrix-js-sdk",
@@ -528,7 +528,7 @@ export default defineConfig({
         {
             files: [
                 "{packages,apps,modules}/*/src/**/*.{test,stories}.{ts,tsx}",
-                "{packages,apps,modules}/*/src/{tests,test}/*.{ts,tsx}",
+                "{packages,apps,modules}/*/src/{tests,test}/**/*.{ts,tsx}",
                 "{packages,apps,modules}/*/src/**/__mocks__/*.{ts,tsx}",
                 "{packages,apps,modules}/*/{test,playwright,e2e}/**/*",
                 "{packages,apps,modules}/*/playwright.config.ts",
