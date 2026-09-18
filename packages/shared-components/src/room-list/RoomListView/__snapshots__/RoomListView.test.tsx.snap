@@ -25,7 +25,7 @@ exports[`<RoomListView /> > renders Default story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -2697,7 +2697,7 @@ exports[`<RoomListView /> > renders Empty story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -3106,7 +3106,7 @@ exports[`<RoomListView /> > renders EmptyUnreadFilter story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -3179,7 +3179,7 @@ exports[`<RoomListView /> > renders EmptyWithoutCreatePermission story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -3283,7 +3283,7 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -8175,7 +8175,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -13276,7 +13276,7 @@ exports[`<RoomListView /> > renders Loading story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -13341,7 +13341,7 @@ exports[`<RoomListView /> > renders SmallFlatList story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -13694,7 +13694,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -14232,7 +14232,7 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
@@ -16938,7 +16938,7 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
             role="option"
             tabindex="0"
           >
-            Unreads
+            Unread
           </button>
           <button
             aria-hidden="false"
