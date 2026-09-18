@@ -12,14 +12,13 @@ import { render, screen } from "test-utils-rtl";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import type { TimelineItem } from "@element-hq/web-shared-components";
+import { createTestClient, mkMessage, TestSDKContext } from "test-utils";
 
 import { NewTimelinePanel } from "./NewTimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { SDKContext } from "../../contexts/SDKContext";
-import { createTestClient, mkMessage } from "../../../test/test-utils";
-import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext";
 
 const ROOM_ID = "!room:example.org";
 const USER_ID = "@alice:example.org";
