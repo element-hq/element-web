@@ -14,7 +14,6 @@ import SdkConfig from "../../../../SdkConfig";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type Member } from "../../../views/right_panel/UserInfo";
 import { useUserTimezone } from "../../../../hooks/useUserTimezone";
-import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 
 export interface PresenceInfo {
     lastActiveAgo: number | undefined;
@@ -74,10 +73,7 @@ export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewM
 
     const timezoneInfo = useUserTimezone(cli, member.userId);
 
-    const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
-        roomId,
-        withDisplayName: true,
-    });
+    const userIdentifier = member.userId;
 
     const onMemberAvatarClick = useCallback(() => {
         const avatarUrl = (member as RoomMember).getMxcAvatarUrl

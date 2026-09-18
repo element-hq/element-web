@@ -32,6 +32,8 @@ const {
     EncryptedIframeDownload,
     DecryptionPendingDownload,
     LongFilenameDownload,
+    OpenableInfo,
+    OpenableLongFilenameInfo,
 } = composeStories(stories);
 
 const defaultSnapshot: FileBodyViewSnapshot = {
@@ -44,6 +46,7 @@ class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileB
     public onDownloadClick?: () => void;
     public onDownloadLinkClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
     public onDownloadIframeLoad?: () => void;
+    public onOpenClick?: () => void;
 
     public constructor(snapshot: FileBodyViewSnapshot, actions: FileBodyViewActions = {}) {
         super(snapshot);
@@ -51,6 +54,7 @@ class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileB
         this.onDownloadClick = actions.onDownloadClick;
         this.onDownloadLinkClick = actions.onDownloadLinkClick;
         this.onDownloadIframeLoad = actions.onDownloadIframeLoad;
+        this.onOpenClick = actions.onOpenClick;
     }
 }
 
@@ -66,6 +70,8 @@ describe("FileBodyView", () => {
         ["encrypted-iframe-download", EncryptedIframeDownload],
         ["decryption-pending-download", DecryptionPendingDownload],
         ["long-filename-download", LongFilenameDownload],
+        ["openable-info", OpenableInfo],
+        ["openable-long-filename-info", OpenableLongFilenameInfo],
     ])("matches snapshot for %s story", (_name, Story) => {
         const { container } = renderWithI18n(<Story />);
         expect(container).toMatchSnapshot();
@@ -284,5 +290,65 @@ describe("FileBodyView", () => {
 
         const { container } = renderWithI18n(<FileBodyView vm={vm} className="custom-file-body another-class" />);
         expect(container.firstElementChild).toHaveClass("custom-file-body", "another-class");
+    });
+
+    describe("info row actions", () => {
+        const openableSnapshot: FileBodyViewSnapshot = {
+            ...defaultSnapshot,
+            infoLabel: "spec.pdf",
+            showOpen: true,
+            openLabel: "Open PDF",
+            showInlineDownload: true,
+        };
+
+        it("renders no action icons by default", () => {
+            const vm = new TestViewModel(defaultSnapshot);
+
+            renderWithI18n(<FileBodyView vm={vm} />);
+
+            expect(screen.queryByRole("button", { name: "Open PDF" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Download" })).not.toBeInTheDocument();
+        });
+
+        it("renders the open and download icons inside the info row", () => {
+            const vm = new TestViewModel(openableSnapshot);
+
+            const { container } = renderWithI18n(<FileBodyView vm={vm} />);
+
+            // Both actions have to sit in the same pill as the file name, not below it.
+            const infoRow = container.querySelector('[data-type="info"]')!;
+            expect(infoRow).toContainElement(screen.getByRole("button", { name: "Open PDF" }));
+            expect(infoRow).toContainElement(screen.getByRole("button", { name: "Download" }));
+            expect(infoRow).toContainElement(screen.getByRole("button", { name: "spec.pdf" }));
+        });
+
+        it("invokes onOpenClick from the open icon", () => {
+            const onOpenClick = vi.fn();
+            const vm = new TestViewModel(openableSnapshot, { onOpenClick });
+
+            renderWithI18n(<FileBodyView vm={vm} />);
+            fireEvent.click(screen.getByRole("button", { name: "Open PDF" }));
+
+            expect(onOpenClick).toHaveBeenCalledTimes(1);
+        });
+
+        it("downloads from the download icon, as clicking the file name does", () => {
+            const onInfoClick = vi.fn();
+            const vm = new TestViewModel(openableSnapshot, { onInfoClick });
+
+            renderWithI18n(<FileBodyView vm={vm} />);
+            fireEvent.click(screen.getByRole("button", { name: "Download" }));
+
+            expect(onInfoClick).toHaveBeenCalledTimes(1);
+        });
+
+        it("omits the open icon when no label is given for it", () => {
+            const vm = new TestViewModel({ ...openableSnapshot, openLabel: undefined });
+
+            renderWithI18n(<FileBodyView vm={vm} />);
+
+            expect(screen.queryByRole("button", { name: "Open PDF" })).not.toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Download" })).toBeInTheDocument();
+        });
     });
 });

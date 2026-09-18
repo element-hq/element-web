@@ -709,11 +709,11 @@ test.describe("Timeline", () => {
 
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
+            // The timeline renders files as a preview tile, which shows the size as the tile body.
             await expect(
                 page
                     .locator(".mx_EventTile")
                     .last()
-                    .locator(".mx_MFileBody [data-type='info']")
                     .getByText(/1.12 KB/),
             ).toBeVisible();
         });
@@ -956,8 +956,14 @@ test.describe("Timeline", () => {
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
             const lastTile = getEventTilesWithBodies(page).last();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const status = lastTile.getByRole("status");
+            if (await status.count()) {
+                await expect(status).toHaveAccessibleName("Your message was sent");
+            }
+
             const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await page.mouse.move(0, 0);
+            await lastTile.getByTestId("event-tile-slot-body").hover();
             await expect(replyButton).toBeVisible();
             await replyButton.click();
         };
@@ -969,7 +975,7 @@ test.describe("Timeline", () => {
             await app.getComposerField().press("Enter");
 
             const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile").last().locator(".mx_EventTile_line");
-            await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
+            await expect(eventTileLine.getByTestId("reply-tile-body").getByText(MESSAGE)).toBeVisible();
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
         });
 
@@ -980,7 +986,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(3000);
+            await page.waitForTimeout(2000);
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody
@@ -1007,7 +1013,7 @@ test.describe("Timeline", () => {
                 .click();
 
             const lastEventTileLine = roomViewBody.locator(".mx_EventTile").last().locator(".mx_EventTile_line");
-            await expect(lastEventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
+            await expect(lastEventTileLine.getByTestId("reply-tile-body").getByText(MESSAGE)).toBeVisible();
 
             await expect(lastEventTileLine.locator(".mx_MVoiceMessageBody")).toHaveCount(1);
         });
@@ -1190,7 +1196,7 @@ test.describe("Timeline", () => {
 
                 // Make sure the reply tile is rendered
                 const eventTileLine = page.locator(".mx_EventTile").last().locator(".mx_EventTile_line");
-                await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(LONG_STRING)).toBeVisible();
+                await expect(eventTileLine.getByTestId("reply-tile-body").getByText(LONG_STRING)).toBeVisible();
 
                 await expect(eventTileLine.getByText(reply)).toHaveCount(1);
 

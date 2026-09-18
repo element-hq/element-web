@@ -48,7 +48,6 @@ export default {
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
-                "module_system/**!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
                 "src/hooks/useIsReleaseAnnouncementOpen.ts!",
@@ -90,19 +89,11 @@ export default {
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**"],
             project: ["**/*.{js,ts,pcss}"],
-            ignoreDependencies: [
-                // Brought in via hak scripts
-                "matrix-seshat",
-            ],
             ignoreBinaries: [
-                // Used to build seshat (optional)
-                "rustc",
                 // Used by the fetch-package script (optional)
                 "gpg",
-                // Used for the macOS universal builds
-                "lipo",
             ],
         },
         "modules": {
