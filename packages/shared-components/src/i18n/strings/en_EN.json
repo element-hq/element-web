@@ -112,6 +112,12 @@
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
     },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "loading": "Loading PDF…",
+        "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number"
+    },
     "release_announcement": {
         "room_list_section_close": "Ok",
         "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
@@ -362,13 +368,14 @@
         "pending_moderation": "Message pending moderation",
         "pending_moderation_reason": "Message pending moderation: %(reason)s",
         "url_preview": {
-            "close": "Close preview",
-            "open_link": "Open link",
             "show_n_more": {
                 "one": "Show %(count)s other preview",
                 "other": "Show %(count)s other previews"
             },
-            "view_image": "View image"
+            "view_audio": "View audio",
+            "view_file": "View file",
+            "view_image": "View image",
+            "view_video": "View video"
         }
     },
     "user_menu": {

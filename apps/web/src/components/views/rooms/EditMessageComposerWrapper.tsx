@@ -1,0 +1,98 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+import React, { useCallback, type JSX } from "react";
+
+import { type MatrixClientProps } from "../../../contexts/MatrixClientContext";
+import { useSettingValue } from "../../../hooks/useSettings";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import { EditWysiwygComposer } from "./wysiwyg_composer";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
+import EditMessageComposer from "./EditMessageComposer";
+import type EditorModel from "../../../editor/model";
+import { type RoomMessageEventContent } from "../../../../@types/url-preview";
+import { attachUrlPreviews } from "../../../utils/messages";
+import { linksIn } from "../../../utils/UrlUtils";
+import { ModuleApi } from "../../../modules/Api";
+
+interface IEditMessageComposerProps extends MatrixClientProps {
+    showUrlPreview: boolean;
+    editState: EditorStateTransfer;
+    className?: string;
+}
+
+export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() =>
+        MessageComposerUrlPreviewViewModel.restoreFromMessage({
+            client: props.mxClient,
+            moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
+            visible: props.showUrlPreview,
+            mxEvent: props.editState.getEvent(),
+        }),
+    );
+
+    const { isModified: isUrlPreviewsModified } = useViewModel(vm);
+
+    const onWysiwygChange = useCallback(
+        (content: string): void => {
+            vm.updateWithText({ content, debounced: true });
+        },
+        [vm],
+    );
+
+    const onChange = useCallback(
+        (model: EditorModel): void => {
+            vm.updateWithText({ content: model.contentPlainText, debounced: true });
+        },
+        [vm],
+    );
+
+    const attachBundles = useCallback(
+        async (newContent: RoomMessageEventContent): Promise<boolean> => {
+            const room = props.mxClient.getRoom(props.editState.getEvent().getRoomId());
+            if (!room) return false;
+
+            return await attachUrlPreviews(
+                props.mxClient,
+                room,
+                vm.getSnapshot(),
+                newContent,
+                linksIn(newContent.body).size !== 0,
+                vm.getEncryptedImageCache(),
+            );
+        },
+        [vm, props.mxClient, props.editState],
+    );
+
+    const isWysiwygComposerEnabled = useSettingValue("feature_wysiwyg_composer");
+    const editor = isWysiwygComposerEnabled ? (
+        <EditWysiwygComposer
+            updateUrlPreviews={onWysiwygChange}
+            attachBundles={attachBundles}
+            isUrlPreviewsModified={isUrlPreviewsModified}
+            editorStateTransfer={props.editState}
+            className={props.className}
+        />
+    ) : (
+        <EditMessageComposer
+            updateUrlPreviews={onChange}
+            attachBundles={attachBundles}
+            isUrlPreviewsModified={isUrlPreviewsModified}
+            editState={props.editState}
+            className={props.className}
+        />
+    );
+
+    return (
+        <div>
+            <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
+            {editor}
+        </div>
+    );
+}

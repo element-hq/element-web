@@ -10,8 +10,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach, type MockedObject } from "vitest";
-import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
-import { act, render, waitFor } from "test-utils-rtl";
+import {
+    type IPreviewUrlResponse,
+    type MatrixClient,
+    type MatrixEvent,
+    PushRuleKind,
+    type Room,
+} from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { setMissingEntryGenerator } from "@element-hq/web-shared-components";
 
@@ -23,11 +29,34 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import Modal from "../../../Modal";
+import ImageView from "../elements/ImageView";
+import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import SettingsStore from "../../../settings/SettingsStore";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
     useMediaVisible: () => [true, vi.fn()],
 }));
+
+// Captures the props the factory builds for the preview view model, so the `urlPreviewKind`
+// it derives from the settings and the room can be asserted directly.
+const { urlPreviewGroupProps } = vi.hoisted(() => ({
+    urlPreviewGroupProps: [] as UrlPreviewGroupViewModelProps[],
+}));
+
+vi.mock("../../../viewmodels/message-body/UrlPreviewGroupViewModel", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../viewmodels/message-body/UrlPreviewGroupViewModel")>();
+    return {
+        ...actual,
+        UrlPreviewGroupViewModel: class extends actual.UrlPreviewGroupViewModel {
+            public constructor(props: UrlPreviewGroupViewModelProps) {
+                super(props);
+                urlPreviewGroupProps.push(props);
+            }
+        },
+    };
+});
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";
@@ -114,7 +143,12 @@ describe("<TextualBody />", () => {
         vi.spyOn(global.Math, "random").mockReturnValue(0.123456);
     });
 
-    const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) => {
+    const getComponent = (
+        props = {},
+        matrixClient: MatrixClient = defaultMatrixClient,
+        renderingFn?: any,
+        roomContextOverrides: Partial<ReturnType<typeof getRoomContext>> = {},
+    ) => {
         const mergedProps = { ...defaultProps, ...props };
         const room = matrixClient.getRoom(mergedProps.mxEvent.getRoomId()) ?? defaultRoom;
         const finalProps = {
@@ -123,7 +157,7 @@ describe("<TextualBody />", () => {
         };
         return (renderingFn ?? render)(
             <MatrixClientContext.Provider value={matrixClient}>
-                <RoomContext.Provider value={getRoomContext(room, {})}>
+                <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
                     <TextualBody {...finalProps} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
@@ -525,6 +559,172 @@ describe("<TextualBody />", () => {
                 // Asynchronous check since the VM needs to recalcuate.
                 expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
             });
+        });
+    });
+    describe("url preview tiles", () => {
+        const link = "https://matrix.org/";
+        let matrixClient: MockedObject<MatrixClient>;
+
+        const ogData = (overrides: Partial<IPreviewUrlResponse> = {}): IPreviewUrlResponse => ({
+            "og:title": "Matrix",
+            "og:type": "website",
+            "og:description": "An open network for secure, decentralised communication",
+            "og:site_name": "matrix.org",
+            "og:url": link,
+            ...overrides,
+        });
+
+        const ogImage = {
+            "og:image": "mxc://example.org/preview",
+            "og:image:type": "image/png",
+            "og:image:width": 480,
+            "og:image:height": 320,
+            "matrix:image:size": 100_000,
+        };
+
+        beforeEach(() => {
+            setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: vi.fn(),
+                getUserId: vi.fn(),
+                ...mockClientPushProcessor(),
+                getAccountData: (): MatrixEvent | undefined => undefined,
+                getUrlPreview: vi.fn().mockResolvedValue(ogData()),
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+            });
+            vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        /** Render a message and wait for its previews to have been fetched and rendered. */
+        const renderPreviews = async (body = `Visit ${link}`): Promise<ReturnType<typeof render>> => {
+            const result = getComponent({ mxEvent: mkRoomTextMessage(body), showUrlPreview: true }, matrixClient);
+            await screen.findByRole("link", { name: "Matrix" });
+            return result;
+        };
+
+        it("renders a preview without an image as a text tile", async () => {
+            await renderPreviews();
+
+            expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", link);
+            expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
+
+        it("falls back to the site name when the preview has no description", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
+
+            await renderPreviews();
+
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+        });
+
+        it("renders a preview with an image and opens the lightbox when it is clicked", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
+
+            await renderPreviews();
+
+            fireEvent.click(screen.getByRole("button", { name: "View image" }));
+
+            expect(createDialog).toHaveBeenCalledWith(
+                ImageView,
+                expect.objectContaining({ src: "mxc://example.org/preview", name: "Thumbnail of Matrix" }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+        });
+
+        it("opens the previewed link in a new tab", async () => {
+            const open = vi.spyOn(window, "open").mockReturnValue(null);
+
+            await renderPreviews();
+
+            fireEvent.click(screen.getByRole("button", { name: "Open link" }));
+
+            expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("expands the group when more previews are available than are shown", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation(async (url: string) =>
+                ogData({ "og:title": `Preview of ${url}`, "og:url": url }),
+            );
+
+            const { container } = getComponent(
+                {
+                    mxEvent: mkRoomTextMessage(
+                        "Visit https://one.example.com/ and https://two.example.com/ and https://three.example.com/",
+                    ),
+                    showUrlPreview: true,
+                },
+                matrixClient,
+            );
+
+            const toggle = await screen.findByRole("button", { name: "Show 1 other preview" });
+            expect(container.querySelectorAll("a[href^='https://one']")).toHaveLength(2);
+
+            fireEvent.click(toggle);
+
+            await screen.findByRole("link", { name: "Preview of https://three.example.com/" });
+            expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
+        });
+    });
+
+    describe("url preview kind", () => {
+        beforeEach(() => {
+            urlPreviewGroupProps.length = 0;
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        /** Turn on the named boolean settings and leave the rest at their real values. */
+        const enableSettings = (...enabled: string[]): void => {
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                enabled.includes(setting) ? true : original(setting, ...rest),
+            );
+        };
+
+        const renderAndGetKind = (roomContextOverrides = {}): string => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+            getComponent({ mxEvent: mkRoomTextMessage("https://example.org") }, undefined, undefined, {
+                ...roomContextOverrides,
+            });
+            return urlPreviewGroupProps.at(-1)!.urlPreviewKind;
+        };
+
+        // Without the lab flag the bundle is ignored entirely and previews come from the server.
+        it("asks the server when the bundle feature is off", () => {
+            expect(renderAndGetKind()).toBe("fetchonly");
+        });
+
+        it("prefers the bundle when the bundle feature is on in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
+        });
+
+        // The user has not asked for the stricter behaviour, so an encrypted message whose bundle
+        // is missing a preview may still be filled in by the server.
+        it("prefers the bundle in an encrypted room when bundled-only is off", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("preferbundled");
+        });
+
+        // The whole point of the setting: in an encrypted room nothing about the message, not even
+        // one of its URLs, may be sent to the homeserver.
+        it("uses the bundle only in an encrypted room when bundled-only is on", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("bundledonly");
+        });
+
+        // The setting is about encrypted rooms only, so it must not restrict an unencrypted one.
+        it("ignores bundled-only in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
     });
 });

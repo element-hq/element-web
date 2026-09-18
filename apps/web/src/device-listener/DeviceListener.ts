@@ -174,7 +174,7 @@ export class DeviceListener {
      * we have a complete set between the two, we could be OK, but that
      * should be exceptionally rare, and is more complicated to detect.
      */
-    public async keyStorageOutOfSyncNeedsCrossSigningReset(forgotRecovery: boolean): Promise<boolean> {
+    public async keyStorageOutOfSyncNeedsCrossSigningReset(): Promise<boolean> {
         const crypto = this.client?.getCrypto();
         if (!crypto) {
             return false;
@@ -185,11 +185,7 @@ export class DeviceListener {
             crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
             crossSigningStatus.privateKeysCachedLocally.userSigningKey;
 
-        if (forgotRecovery) {
-            return !allCrossSigningSecretsCached;
-        } else {
-            return !allCrossSigningSecretsCached && !crossSigningStatus.privateKeysInSecretStorage;
-        }
+        return !allCrossSigningSecretsCached;
     }
 
     /**
@@ -213,7 +209,7 @@ export class DeviceListener {
         if (!(crypto && thisDevice)) {
             return false;
         }
-        const shouldHaveBackup = !(await thisDevice.recheckBackupDisabled());
+        const shouldHaveBackup = !(await thisDevice.isKeyBackupDisabled());
         const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
         const backupKeyStored = await this.client!.isKeyBackupKeyStored();
 
