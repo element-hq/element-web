@@ -198,6 +198,11 @@ async function persistTokenInStorage(
             localStorage.setItem(fallbackStorageKey, token);
         } else {
             localStorage.removeItem(fallbackStorageKey);
+            // The caller wants this token gone, so there is nothing to lose by also dropping any
+            // plaintext copy an older version left at the primary key. We cannot do this when we
+            // have a token to store, because that copy may be the only readable one if the write
+            // we just failed leaves IndexedDB holding something undecryptable.
+            localStorage.removeItem(storageKey);
         }
 
         // Deliberately leave whatever IndexedDB holds alone, even though it is now stale. The
