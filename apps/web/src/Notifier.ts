@@ -106,8 +106,11 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
             return e;
         }
 
-        for (const childNode of node.childNodes) {
-            node.replaceChild(replaceSpoilers(childNode), childNode);
+        for (const childNode of Array.from(node.childNodes)) {
+            const replacement = replaceSpoilers(childNode);
+            if (replacement !== childNode) {
+                node.replaceChild(replacement, childNode);
+            }
         }
 
         return node;

@@ -44,7 +44,9 @@
             "datasourceTemplate": "docker",
             "versioningTemplate": "loose",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
-            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""],
+            "matchStrings": [
+                "\\s+\"(?<depName>[^@\"\\s]+):(?<currentValue>[^@\"\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)\""
+            ],
             "depTypeTemplate": "testcontainers-docker"
         },
         {

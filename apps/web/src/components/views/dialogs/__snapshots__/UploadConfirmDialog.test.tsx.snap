@@ -34,17 +34,59 @@ exports[`<UploadConfirmDialog /> > should display image preview 1`] = `
         <div
           class="mx_UploadConfirmDialog_previewInner"
         >
-          <div>
-            <img
-              aria-labelledby="mx-uploadconfirmdialog-image.png"
-              class="mx_UploadConfirmDialog_imagePreview"
-              src="blob:null/1234-5678-9101-1121"
-            />
-          </div>
           <div
-            id="mx-uploadconfirmdialog-image.png"
+            class="_container_b6h8l_1"
           >
-            image.png (124 KB)
+            <div
+              class="_tile_1vd22_1"
+            >
+              <div
+                class="_image_13lno_85 _tallBannerImage_13lno_109"
+              >
+                <img
+                  alt="image.png"
+                  src="blob:null/1234-5678-9101-1121"
+                />
+              </div>
+              <div
+                class="_below_1vd22_9"
+              >
+                <div
+                  class="_leftGroup_13lno_11"
+                >
+                  <div
+                    class="_icon_13lno_32"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      style="color: var(--cpd-color-text-decorative-4);"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 18h6q.424 0 .713-.288A.97.97 0 0 0 16 17a.97.97 0 0 0-.287-.712A.97.97 0 0 0 15 16H9a.97.97 0 0 0-.713.288A.97.97 0 0 0 8 17q0 .424.287.712Q8.576 18 9 18m0-4h6q.424 0 .713-.287A.97.97 0 0 0 16 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 15 12H9a.97.97 0 0 0-.713.287A.97.97 0 0 0 8 13q0 .424.287.713Q8.576 14 9 14m-3 8q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V4q0-.824.588-1.412A1.93 1.93 0 0 1 6 2h7.175a1.98 1.98 0 0 1 1.4.575l4.85 4.85q.275.275.425.638.15.361.15.762V20q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zm7-14V4H6v16h12V9h-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 13 8"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="_textContent_13lno_27"
+                  >
+                    <div
+                      class="_header_13lno_1"
+                    >
+                      image.png
+                    </div>
+                    <p
+                      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
+                    >
+                      124 KB
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

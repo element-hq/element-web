@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler, useContext } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -18,13 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
-import {
-    DateSeparatorView,
-    ReadMarker,
-    TimelineSeparator,
-    useCreateAutoDisposedViewModel,
-    type EventTileRenderingMode,
-} from "@element-hq/web-shared-components";
+import { ReadMarker, TimelineSeparator, type EventTileRenderingMode } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -57,23 +51,11 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
-import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import { isEligibleForSpecialReceipt } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
-import { SDKContext } from "../../contexts/SDKContext.ts";
+import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
-
-/**
- * Creates and auto-disposes the DateSeparatorViewModel for message panel rendering.
- */
-function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
-    const sdkContext = useContext(SDKContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
-    );
-    return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
-}
 
 /**
  * Indicates which separator (if any) should be rendered between timeline events.
@@ -772,7 +754,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 const separatorRoomId = this.props.room.roomId;
                 ret.push(
                     <li key={`${separatorRoomId}-${ts1}`}>
-                        <DateSeparatorWrapper key={`${separatorRoomId}-${ts1}`} roomId={separatorRoomId} ts={ts1} />
+                        <DateSeparatorWrapper
+                            key={`${separatorRoomId}-${ts1}`}
+                            roomId={separatorRoomId}
+                            ts={ts1}
+                            className="mx_TimelineSeparator"
+                        />
                     </li>,
                 );
             } else if (wantsSeparator === SeparatorKind.LateEvent) {

@@ -46,7 +46,7 @@ catalog:
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.1.0
     # nx
-    nx: 23.2.0
+    nx: 23.2.1
 
 catalogs:
     ts6:
@@ -97,6 +97,8 @@ allowBuilds:
     workerd: true
     # Optionally builds itself from source if a specific environment variable is present, which we do not need
     "@parcel/watcher": false
+    # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
+    pkcs11js: true
 
 patchedDependencies:
     # Workaround for missing types export
