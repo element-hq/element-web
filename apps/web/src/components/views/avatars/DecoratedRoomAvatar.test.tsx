@@ -13,9 +13,9 @@ import { render, waitFor } from "test-utils-rtl";
 import { JoinRule, type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { stubClient } from "../../../../test/test-utils";
 import DecoratedRoomAvatar from "./DecoratedRoomAvatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 

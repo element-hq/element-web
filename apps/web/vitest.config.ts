@@ -16,8 +16,8 @@ function resolve(specifier: string): string {
 export default defineProject({
     resolve: {
         alias: [
-            { find: "test-utils-rtl", replacement: resolve("./test/test-utils/vitest-matrix-react") },
-            { find: "test-utils", replacement: resolve("./test/test-utils") },
+            { find: "test-utils-rtl", replacement: resolve("./src/test/test-utils/vitest-matrix-react") },
+            { find: "test-utils", replacement: resolve("./src/test/test-utils") },
             // Stub out workers as they do not play well under test
             {
                 find: /.*workers\/(.+)Factory/,
@@ -52,7 +52,7 @@ export default defineProject({
         environment: "node",
         pool: "threads",
         globals: false,
-        setupFiles: ["src/test/setupTests.ts"],
+        setupFiles: ["src/test/setupJsdomPolyfills.ts", "src/test/setupTests.ts"],
         environmentOptions: {
             happyDOM: {
                 url: "http://localhost/",
@@ -62,6 +62,9 @@ export default defineProject({
                         disableChildFrameNavigation: true,
                     },
                 },
+            },
+            jsdom: {
+                url: "http://localhost/",
             },
         },
         snapshotSerializers: [resolve("./src/test/react-use-id-serializer.ts")],

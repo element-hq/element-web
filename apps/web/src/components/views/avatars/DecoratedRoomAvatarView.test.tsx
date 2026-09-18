@@ -10,9 +10,9 @@
 import React from "react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { render, screen } from "test-utils-rtl";
+import { mkStubRoom, stubClient } from "test-utils";
 
 import { DecoratedRoomAvatarView } from "./DecoratedRoomAvatarView";
-import { mkStubRoom, stubClient } from "../../../../test/test-utils";
 import {
     AvatarBadgeDecoration,
     type RoomAvatarViewState,
