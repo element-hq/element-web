@@ -17,8 +17,12 @@
  */
 
 import type { FC, Ref } from "react";
-import type * as ElementCallComponent from "@element-hq/element-call-component";
-import type { ElementCallHandle, UrlConfiguration } from "@element-hq/element-call-component";
+import type {
+    ElementCallHandle,
+    UrlConfiguration,
+    ElementCall,
+    initializeElementCall,
+} from "@element-hq/element-call-component";
 
 export type {
     ConfigOptions,
@@ -34,7 +38,7 @@ export type {
  * whichever `@types/react` its declarations resolve to, which is a different copy when the package is
  * linked from a local checkout, and TypeScript treats the two as unrelated. Structurally identical.
  */
-export type ElementCallProps = Omit<ElementCallComponent.ElementCallProps, "ref"> & {
+export type ElementCallProps = Omit<ElementCallProps, "ref"> & {
     ref?: Ref<ElementCallHandle>;
 };
 
@@ -43,8 +47,8 @@ export type ElementCallProps = Omit<ElementCallComponent.ElementCallProps, "ref"
  * package and by `ElementCallMock`.
  */
 export interface ElementCallComponentModule {
-    ElementCall: typeof ElementCallComponent.ElementCall | FC<ElementCallProps>;
-    initializeElementCall: typeof ElementCallComponent.initializeElementCall;
+    ElementCall: typeof ElementCall | FC<ElementCallProps>;
+    initializeElementCall: typeof initializeElementCall;
 }
 
 /** Mirror of EC's `UserIntent` (`src/UrlParams.ts`). Values match EW's `ElementCallIntent`. */
