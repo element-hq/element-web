@@ -6,18 +6,201 @@
         "back": "Tillbaka",
         "cancel": "Avbryt",
         "click": "Välj",
+        "close": "Stäng",
+        "collapse": "Dölj",
         "delete": "Radera",
         "dismiss": "Avvisa",
+        "download": "Ladda ner",
+        "edit": "Ändra",
         "explore_rooms": "Utforska rum",
+        "go": "Gå",
+        "hide": "Dölj",
+        "invite": "Bjud in",
+        "new_conversation": "Ny",
+        "new_room": "Nytt rum",
         "new_section": "Nytt avsnitt",
+        "new_video_room": "Nytt videorum",
+        "open_menu": "Öppna meny",
         "pause": "Pausa",
+        "pin": "Fäst",
         "play": "Spela",
-        "search": "Sök"
+        "react": "Reagera",
+        "remove": "Ta bort",
+        "reply": "Svara",
+        "reply_in_thread": "Svara i tråd",
+        "retry": "Försök igen",
+        "save": "Spara",
+        "search": "Sök",
+        "start_chat": "Starta chatt",
+        "unpin": "Avfäst",
+        "view_source": "Visa källkod"
+    },
+    "common": {
+        "attachment": "Bilaga",
+        "encryption_enabled": "Kryptering aktiverad",
+        "loading": "Laddar ...",
+        "options": "Alternativ",
+        "preferences": "Inställningar",
+        "state_encryption_enabled": "Experimentell kryptering aktiverad"
+    },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Rensa allt",
+            "collapse": "Minimera länkförhandsvisningar",
+            "failed": "Det gick inte att hämta förhandsvisningen",
+            "loading": "Läser in förhandsgranskning…",
+            "n_links": {
+                "one": "%(count)s länk",
+                "other": "%(count)s länkar"
+            },
+            "remove": "Ta bort förhandsgranskning av länk"
+        }
+    },
+    "devtools": {
+        "custom_themes": {
+            "add": "Lägg till anpassat tema",
+            "downloading": "Laddar ned anpassat tema...",
+            "error_already_installed": "Ett tema med det namnet är redan installerat.",
+            "error_downloading": "Fel vid nedladdning av tema",
+            "error_invalid": "Ogiltigt temaschema.",
+            "error_save_failed": "Det gick inte att spara ändringen. Den kan fortfarande slutföras i bakgrunden.",
+            "help": "Ange webbadressen till ett anpassat tema som du vill använda.",
+            "installed_heading": "Installerade anpassade teman",
+            "refresh": "Ladda ner temat på nytt",
+            "url_label": "Anpassad tema weblänk"
+        },
+        "toggle_event": "Händelsekälla"
+    },
+    "emoji": {
+        "categories": "Kategorier",
+        "category_activities": "Aktiviteter",
+        "category_animals_nature": "Djur och natur",
+        "category_flags": "Flaggor",
+        "category_food_drink": "Mat och dryck",
+        "category_frequently_used": "Ofta använda",
+        "category_objects": "Föremål",
+        "category_smileys_people": "Smileys och människor",
+        "category_symbols": "Symboler",
+        "category_travel_places": "Resor och platser",
+        "quick_reactions": "Snabbreaktioner"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Avbryt sökningen",
+        "emoji_picker": "Emojiväljare"
+    },
+    "keyboard": {
+        "shift": "Skift"
     },
     "left_panel": {
-        "open_dial_pad": "Öppna knappsats"
+        "open_dial_pad": "Öppna knappsats",
+        "separator_label": "Klicka eller dra för att visa mer"
+    },
+    "menus": {
+        "user_menu": {
+            "clear_status": "Rensa status",
+            "create_an_account": "Skapa konto",
+            "got_an_account": "Har du redan ett konto?",
+            "sign_in": "Logga in",
+            "title": "Användarmeny"
+        }
+    },
+    "notifications": {
+        "all_messages": "Alla meddelanden",
+        "default_settings": "Matcha standardinställningar",
+        "mark_all_read": "Markera alla som lästa",
+        "mentions_keywords": "Omnämnanden och nyckelord",
+        "message_didnt_send": "Meddelandet skickades inte. Klicka för information.",
+        "mute_room": "Tysta rum"
+    },
+    "pdf_viewer": {
+        "error_load": "Det gick inte att ladda PDF-filen.",
+        "loading": "Laddar PDF…",
+        "page_label": "Sida %(page)s av %(total)s",
+        "page_number": "Sidnummer"
+    },
+    "release_announcement": {
+        "room_list_section_close": "OK",
+        "room_list_section_description": "Gruppera dina chattar i olika avsnitt för att hålla ordning på konversationerna och göra det enkelt att hitta rätt.",
+        "room_list_section_title": "Presentation Sektioner"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Rumsinställningar"
+        },
+        "history_visibility_badge": {
+            "private": "Nya medlemmar kan inte se historiken",
+            "shared": "Nya medlemmar kan se historiken",
+            "world_readable": "Vem som helst kan se historiken"
+        },
+        "jump_read_marker": "Hoppa till första olästa meddelandet.",
+        "jump_to_bottom_button": "Skrolla till de senaste meddelandena",
+        "jump_to_date": "Bläddra till datum",
+        "jump_to_date_beginning": "Början av rummet",
+        "jump_to_date_prompt": "Välj ett datum att bläddra till",
+        "knock_sent": "Begäran om att gå med har skickats",
+        "pinned_message_badge": "Fäst meddelande",
+        "status_bar": {
+            "delete_all": "Radera alla",
+            "exceeded_resource_limit_description": "Kontakta din kontoleverantör för att fortsätta använda tjänsten.",
+            "exceeded_resource_limit_title": "Ditt meddelande skickades inte eftersom tjänsten har överskridit en resursgräns.",
+            "failed_to_create_room_title": "Det gick inte att starta en chatt med den här användaren",
+            "homeserver_blocked_title": "Ditt meddelande skickades inte eftersom den här tjänsten har blockerats av kontoleverantören.",
+            "monthly_user_limit_reached_title": "Ditt meddelande skickades inte eftersom tjänsten har nått sin gräns för antalet aktiva användare per månad.",
+            "requires_consent_agreement_title": "Du kan inte skicka några meddelanden förrän du har läst igenom och godkänt våra användarvillkor.",
+            "retry_all": "Försök igen med alla",
+            "select_messages_to_retry": "Du kan välja alla eller individuella meddelanden att försöka igen eller radera",
+            "server_connectivity_lost_description": "Skickade meddelanden kommer att lagras tills anslutningen är tillbaka.",
+            "server_connectivity_lost_title": "Anslutningen till servern har förlorats",
+            "some_messages_not_sent": "Vissa av dina meddelanden har inte skickats"
+        }
     },
     "room_list": {
+        "a11y": {
+            "default": "Öppna rummet %(roomName)s",
+            "drag_cancelled": "Flytten avbröts",
+            "drag_end": "%(source)s placerades på %(target)s",
+            "drag_end_after": "%(source)s placerades efter %(target)s",
+            "drag_end_before": "%(source)s togs bort före %(target)s",
+            "drag_end_original": "%(source)s återgick till sin ursprungliga position",
+            "drag_instructions": "Tryck på mellanslagstangenten för att börja eller sluta dra, piltangenterna för att flytta och Escape för att avbryta.",
+            "drag_over": "%(source)s är över %(target)s",
+            "drag_over_after": "%(source)s kommer att tas bort efter %(target)s",
+            "drag_over_before": "%(source)s kommer att tas bort före %(target)s",
+            "drag_over_original": "%(source)s kommer att återgå till sin ursprungliga position",
+            "drag_start": "Dra %(source)s",
+            "invitation": "Öppna inbjudan till rummet %(roomName)s.",
+            "mention": {
+                "one": "Öppet rum %(roomName)s med 1 oläst omnämnande.",
+                "other": "Öppet rum %(roomName)s med %(count)s olästa omnämnanden."
+            },
+            "unread": {
+                "one": "Öppna rummet %(roomName)s med 1 oläst meddelande.",
+                "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden."
+            },
+            "unsent_message": "Öppna rummet %(roomName)s med ett osänt meddelande.",
+            "video_call": "Öppna rummet %(roomName)s, videosamtal pågår.",
+            "voice_call": "Öppna rummet %(roomName)s, röstsamtal pågår."
+        },
+        "appearance": "Utseende",
+        "chat_moved": "Chatten har flyttats",
+        "collapse_all_sections": "Dölj alla sektioner",
+        "collapse_filters": "Minimera filterlistan",
+        "empty": {
+            "no_chats": "Inga chattar än",
+            "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
+            "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon.",
+            "no_invites": "Du har inga olästa inbjudningar",
+            "no_mentions": "Du har inga olästa omnämnanden",
+            "no_people": "Du har inte direktchattat med någon ännu",
+            "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
+            "no_rooms": "Du är inte i något rum än",
+            "no_rooms_description": "Du kan avmarkera filter för att se dina andra chattar",
+            "no_unread": "Grattis! Du har inga olästa meddelanden",
+            "show_activity": "Visa all aktivitet",
+            "show_chats": "Visa alla chattar"
+        },
+        "expand_all_sections": "Visa alla sektioner",
+        "expand_filters": "Visa hela filterlistan",
         "filters": {
             "favourite": "Favoriter",
             "invites": "Inbjudningar",
@@ -27,6 +210,7 @@
             "rooms": "Rum",
             "unread": "Olästa"
         },
+        "list_title": "Rumslista",
         "more_options": {
             "copy_link": "Kopiera länk",
             "favourited": "Favoritmarkerad",
@@ -37,12 +221,55 @@
             "move_to_section": "Flytta till",
             "remove_from_section": "Ta bort från sektionen"
         },
+        "notification_options": "Aviseringsinställningar",
+        "open_space_menu": "Öppna utrymmesmenyn",
+        "primary_filters": "Rumslistans filter",
         "room": {
             "more_options": "Fler alternativ"
         },
+        "room_options": "Rumsinställningar",
+        "section_created": "Sektion har skapats.",
+        "section_creation": {
+            "description": "Sektionerna är bara synliga för dig",
+            "label": "Sektionsnamn"
+        },
         "section_header": {
-            "more_options": "Fler alternativ"
+            "edit_section": "Redigera sektion",
+            "more_options": "Fler alternativ",
+            "remove_section": "Ta bort sektion",
+            "toggle": "Växla mellan sektioner” %(section)s ”",
+            "toggle_unread": "Visa eller dölj sektionen %(section)s med olästa rum"
+        },
+        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
+        "sort": "Sortera",
+        "sort_type": {
+            "activity": "Senaste aktivitet",
+            "atoz": "A–Ö",
+            "unread_first": "Olästa först"
+        },
+        "space_menu": {
+            "home": "Utrymmeshem",
+            "space_settings": "Utrymmesinställningar"
+        },
+        "unread_messages": "Olästa meddelanden"
+    },
+    "status": {
+        "set_status": {
+            "away": "Borta",
+            "be_right_back": "Jag är strax tillbaka",
+            "choose_emoji": "Välj emoji",
+            "custom": "Anpassad…",
+            "focus_time": "Fokustid",
+            "in_a_meeting": "I ett möte",
+            "on_the_road": "På resande fot",
+            "set_status_prompt": "Vad är din status?"
         }
+    },
+    "terms": {
+        "tac_button": "Läs igenom villkoren"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Du kan inte starta en tråd från det här meddelandet."
     },
     "time": {
         "about_day_ago": "cirka en dag sedan",
@@ -61,10 +288,111 @@
         "n_minutes_ago": "%(num)s minuter sedan"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Samtalet avvisat",
+                "call_declined_by_us": "Du avböjde ett samtal"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s startade ett samtal",
+                    "join_button": "Gå med"
+                },
+                "dm": {
+                    "call_started": "Samtal startat",
+                    "title": "Samtal pågår"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s anslöt sig",
+                        "other": "%(count)s anslöt sig"
+                    },
+                    "title": "Gruppsamtal pågår"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Gruppsamtalet avslutades"
+                }
+            },
+            "video_call_title": "Videosamtal",
+            "voice_call_title": "Röstsamtal"
+        },
+        "decryption_failure": {
+            "blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet eftersom din enhet inte är verifierad",
+            "historical_event_no_key_backup": "Historiska meddelanden är inte tillgängliga på den här enheten",
+            "historical_event_unverified_device": "Du måste verifiera den här enheten för att få tillgång till tidigare meddelanden",
+            "historical_event_user_not_joined": "Du har inte behörighet att läsa det här meddelandet",
+            "sender_identity_previously_verified": "Avsändarens verifierade digitala identitet har återställts",
+            "sender_unsigned_device": "Skickat från en osäker enhet.",
+            "unable_to_decrypt": "Kunde inte avkryptera meddelande"
+        },
+        "download_action_decrypting": "Dekrypterar %1$s",
+        "download_action_downloading": "Laddar ner",
+        "e2e_state": "Status för end-to-end-kryptering",
         "m.audio": {
             "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "unnamed_audio": "Namnlöst ljud"
+        },
+        "m.file": {
+            "error_invalid": "Ogiltig fil"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s ändrade chattikonen till <img/>",
+            "removed": "%(senderDisplayName)s tog bort rumsikonen."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignorerade försök att inaktivera kryptering",
+            "disabled": "Kryptering är inte aktiverad",
+            "enabled": "Meddelanden i det här rummet är totalsträckskrypterade. När personer går med kan du verifiera dem i deras profil genom att klicka på deras profilbild.",
+            "enabled_dm": "Meddelanden här är totalsträckskrypterade. Verifiera %(displayName)s i deras profil — klicka på deras profilbild.",
+            "enabled_local": "Meddelanden i den här chatten kommer att vara totalsträckskrypterade.",
+            "parameters_changed": "Vissa krypteringsinställningar har ändrats.",
+            "state_enabled": "Meddelanden och statushändelser i det här rummet är totalsträckskrypterade. När personer går med kan du verifiera dem i deras profil, välj bara deras profilbild.",
+            "unsupported": "Krypteringen som används av det här rummet stöds inte."
+        },
+        "mab": {
+            "collapse_reply_chain": "Dölj citat",
+            "copy_link_thread": "Kopiera länk till tråden",
+            "expand_reply_chain": "Expandera citat",
+            "label": "Åtgärder för meddelande",
+            "view_in_room": "Visa i rum"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) delade det här meddelandet eftersom du inte var i rummet när det skickades.",
+        "message_timestamp_received_at": "Mottaget den: %(dateTime)s",
+        "message_timestamp_sent_at": "Skickat kl.: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Du har blockerat den här användaren, så hennes meddelande är dolt. <a>Visa ändå.</a>"
+        },
+        "pending_moderation": "Meddelande väntar på granskning",
+        "pending_moderation_reason": "Meddelande väntar på godkännande: %(reason)s",
+        "url_preview": {
+            "show_n_more": {
+                "one": "Visa %(count)s annan förhandsvisning",
+                "other": "Visa %(count)s andra förhandsvisningar"
+            },
+            "view_audio": "Spela upp ljudet",
+            "view_file": "Visa fil",
+            "view_image": "Visa bild",
+            "view_video": "Visa video"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Länka ny enhet",
+        "open_feedback": "Synpunkter",
+        "open_home": "Hem",
+        "open_security": "Säkerhet & sekretess",
+        "open_settings": "Alla inställningar"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Flytta till vänster",
+            "move_right": "Flytta till höger",
+            "remove": "Ta bort för alla",
+            "revoke": "Återkalla behörigheter",
+            "screenshot": "Ta en bild",
+            "start_audio_stream": "Starta ljudström"
         }
     }
 }

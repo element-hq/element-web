@@ -80,7 +80,6 @@
             "clear_status": "Eemalda olek",
             "create_an_account": "Loo kasutajakonto",
             "got_an_account": "Kas sul on kasutajakonto juba olemas?",
-            "manage_account": "Halda kasutajakontot",
             "sign_in": "Logi sisse",
             "title": "Kasutajamenüü"
         }
@@ -337,8 +336,6 @@
         "pending_moderation": "Sõnum on modereerimise ootel",
         "pending_moderation_reason": "Sõnum on modereerimise ootel: %(reason)s",
         "url_preview": {
-            "close": "Sulge eelvaade",
-            "open_link": "Ava link",
             "show_n_more": {
                 "one": "Näita veel %(count)s muud eelvaadet",
                 "other": "Näita veel %(count)s muud eelvaadet"
