@@ -45,7 +45,7 @@
     ],
     "customManagers": [
         {
-            "description": "Update pinned element-web bundled module release versions and checksums in apps/web/Dockerfile",
+            "description": "Update pinned element-web bundled module release versions in apps/web/Dockerfile",
             "customType": "regex",
             "datasourceTemplate": "github-releases",
             "depNameTemplate": "element-hq/element-web",
@@ -53,7 +53,7 @@
             "versioningTemplate": "semver",
             "managerFilePatterns": ["apps/web/Dockerfile"],
             "matchStrings": [
-                "ARG MODULE_[A-Z_]+_VERSION=(?<currentValue>v[0-9.]+)[\\s\\\\]+ADD --checksum=sha256:(?<currentDigest>[a-f0-9]{64})[\\s\\\\]+https://github\\.com/element-hq/element-web/releases/download/module%2F(?<moduleSlug>[a-z-]+)%2F"
+                "ARG MODULE_[A-Z_]+_VERSION=(?<currentValue>v[0-9.]+)[\\s\\\\]+ADD --checksum=sha256:[a-f0-9]{64}[\\s\\\\]+https://github\\.com/element-hq/element-web/releases/download/module%2F(?<moduleSlug>[a-z-]+)%2F"
             ],
             "depTypeTemplate": "dockerfile-module"
         },
