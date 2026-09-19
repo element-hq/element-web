@@ -9,6 +9,7 @@ import React, { type PropsWithChildren } from "react";
 import { render, screen, fireEvent, waitFor, act } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { userEvent as browserUserEvent } from "vitest/browser";
 
 import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "./GroupedVirtualizedList";
@@ -761,6 +762,72 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
 
             // The first item should have been virtualised out of the DOM.
             expect(container.querySelector("[data-testid='row-0']")).toBeNull();
+        });
+
+        /**
+         * Virtuoso scrolls on a later frame than the focus which asked it to, so a test claiming
+         * the list did not move has to give it those frames first or it proves nothing.
+         */
+        const settle = async (): Promise<void> => {
+            await act(async () => {
+                for (let i = 0; i < 10; i++) {
+                    await new Promise((resolve) => requestAnimationFrame(resolve));
+                }
+            });
+        };
+
+        /** Wheel the list well past the tab stop, which leaves the tab stop where it was. */
+        const scrollAwayFromTheTabStop = async (listContainer: HTMLElement, container: Element): Promise<void> => {
+            await act(async () => {
+                listContainer.scrollTop = ITEM_HEIGHT * 25;
+                fireEvent.scroll(listContainer);
+            });
+            await waitFor(() => {
+                expect(container.querySelector("[data-testid='row-0']")).toBeNull();
+            });
+        };
+
+        it("should stay where the user scrolled to when the list is focused by pointer", async () => {
+            const { container } = renderRealVirtualizedList();
+            const listContainer = screen.getByRole("grid");
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+
+            // Driven through the browser rather than synthesised, because it is the browser's own
+            // idea of how focus last arrived that tells a grabbed scrollbar from a tab.
+            await browserUserEvent.click(screen.getByTestId("row-0"));
+            await scrollAwayFromTheTabStop(listContainer, container);
+
+            // Grabbing the scrollbar lands focus on the scroller itself rather than on an item.
+            await act(async () => {
+                listContainer.focus();
+            });
+            await settle();
+
+            expect(document.activeElement).toBe(listContainer);
+            expect(container.querySelector("[data-testid='row-0']")).toBeNull();
+        });
+
+        it("should bring the tab stop back into view when the list is focused from the keyboard", async () => {
+            const { container } = renderRealVirtualizedList();
+            const listContainer = screen.getByRole("grid");
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+            await scrollAwayFromTheTabStop(listContainer, container);
+
+            // Tabbing in: the keypress is what tells the browser the focus which follows is a
+            // keyboard one, and a tab stop the user cannot see is no use to them.
+            await browserUserEvent.keyboard("{Tab}");
+            await act(async () => {
+                listContainer.focus();
+            });
+
+            expect(document.activeElement).toBe(listContainer);
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
         });
 
         it("should move focus from a focused child element to the scroller on keyboard navigation", async () => {

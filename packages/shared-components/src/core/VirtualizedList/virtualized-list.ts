@@ -409,7 +409,13 @@ export function useVirtualizedList<Item, Context>(
 
             setIsFocused(true);
             const index = keyToIndexMap.get(tabIndexKey);
+            // Grabbing the scrollbar focuses the list as well, and by grabbing it the user has said
+            // where they want to be — pulling the list back to the tab stop then fights the drag they
+            // are in the middle of. Focus arriving from the keyboard carries no scroll position of its
+            // own, so that is the case which still needs the tab stop brought into view.
+            const focusedFromKeyboard = e.target instanceof Element && e.target.matches(":focus-visible");
             if (
+                focusedFromKeyboard &&
                 index !== undefined &&
                 visibleRange &&
                 (index < visibleRange.startIndex || index > visibleRange.endIndex)
