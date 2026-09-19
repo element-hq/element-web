@@ -39,7 +39,12 @@ import { Action } from "../dispatcher/actions";
 import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { MediaPreviewValue } from "../@types/media_preview";
+import {
+    MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
+    MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE,
+    type MediaPreviewConfig,
+    MediaPreviewValue,
+} from "../@types/media_preview";
 import SettingController, { getSettingDisabled, toControllers } from "./controllers/SettingController.ts";
 
 // Convert the settings to easier to manage objects for the handlers
@@ -691,19 +696,30 @@ export default class SettingsStore {
     }
 
     /**
-     * Migrate the setting for visible images to a setting.
+     * Wait for the client to have completed its initial sync, so that account data is available.
+     */
+    private static async waitForInitialSync(): Promise<void> {
+        const client = MatrixClientPeg.safeGet();
+        while (!client.isInitialSyncComplete()) {
+            await new Promise((r) => client.once(ClientEvent.Sync, r));
+        }
+    }
+
+    /**
+     * Migrate the legacy showImages / showAvatarsOnInvites account settings to the media preview config.
      *
      * @param isFreshLogin True if the user has just logged in, false if a previous session is being restored.
      */
     private static async migrateMediaControlsToSetting(isFreshLogin: boolean): Promise<void> {
         if (isFreshLogin) return;
         const client = MatrixClientPeg.safeGet();
+        if (!client.isInitialSyncComplete()) await this.waitForInitialSync();
 
-        while (!client.isInitialSyncComplete()) {
-            await new Promise((r) => client.once(ClientEvent.Sync, r));
-        }
-        // Never migrate if the config already exists.
-        if (client.getAccountData("io.element.msc4278.media_preview_config")) {
+        // Never migrate if the config already exists, under either the stable or unstable type.
+        if (
+            client.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) ||
+            client.getAccountData(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE)
+        ) {
             return;
         }
         logger.info("Performing one-time settings migration of show images and invite avatars to account data");
@@ -720,6 +736,32 @@ export default class SettingsStore {
     }
 
     /**
+     * Migrate the global media preview config from the unstable MSC4278 account data type
+     * to the stable `m.media_preview_config` type. This only runs once: as soon as the stable
+     * account data exists (written by this or any other client), it is never touched again.
+     *
+     * Room-level account data is not migrated here; MediaPreviewConfigController falls back to
+     * the unstable room-level event when no stable one exists.
+     */
+    private static async migrateMediaPreviewConfigToStable(): Promise<void> {
+        const client = MatrixClientPeg.safeGet();
+        if (!client.isInitialSyncComplete()) await this.waitForInitialSync();
+
+        // Never migrate if the stable config already exists.
+        if (client.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)) {
+            return;
+        }
+        const unstableContent = client
+            .getAccountData(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE)
+            ?.getContent<MediaPreviewConfig>();
+        if (!unstableContent) {
+            return;
+        }
+        logger.info("Performing one-time migration of media preview config to the stable account data type");
+        await client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, unstableContent);
+    }
+
+    /**
      * Runs or queues any setting migrations needed.
      */
     public static runMigrations(isFreshLogin: boolean): void {
@@ -733,9 +775,18 @@ export default class SettingsStore {
         // this migration.
         // The consequences of missing the migration are that the previously set
         // media controls for this user will be missing
-        SettingsStore.migrateMediaControlsToSetting(isFreshLogin).catch((e) => {
-            logger.error("Failed to migrate media config settings", e);
-        });
+        // The unstable -> stable migration runs afterwards so that if the legacy migration
+        // above wrote a (stable) config, this one correctly sees it and does nothing.
+        // This can be removed once enough users have run a version of Element with this
+        // migration and the unstable type is no longer read.
+        SettingsStore.migrateMediaControlsToSetting(isFreshLogin)
+            .catch((e) => {
+                logger.error("Failed to migrate media config settings", e);
+            })
+            .then(() => SettingsStore.migrateMediaPreviewConfigToStable())
+            .catch((e) => {
+                logger.error("Failed to migrate media preview config to the stable type", e);
+            });
         // Dev notes: to add your migration, just add a new `migrateMyFeature` function, call it, and
         // add a comment to note when it can be removed.
         return;

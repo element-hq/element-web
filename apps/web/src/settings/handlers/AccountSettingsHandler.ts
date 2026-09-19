@@ -14,7 +14,7 @@ import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandl
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
-import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 import { type SettingKey, type Settings } from "../Settings.tsx";
 import { mergeEmojiData, type RecentEmojiData, translateLegacyEmojiData } from "../../emojipicker/recent.ts";
 
@@ -71,8 +71,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE || event.getType() === LEGACY_RECENT_EMOJI_EVENT_TYPE) {
             const val = this.getRecentEmoji();
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
-        } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
-            this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ROOM_ACCOUNT, event.getContent());
+        } else if (
+            event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE ||
+            event.getType() === MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE
+        ) {
+            // The resolved value is computed by MediaPreviewConfigController, so the content here is only a hint.
+            this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ACCOUNT, event.getContent());
         }
     };
 
