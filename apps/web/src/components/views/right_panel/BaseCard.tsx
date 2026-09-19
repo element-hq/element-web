@@ -24,8 +24,9 @@ interface IProps {
     footer?: ReactNode;
     className?: string;
     id?: string;
-    role?: "tabpanel";
+    role?: "tabpanel" | "region";
     ariaLabelledBy?: string;
+    ariaLabel?: string;
     withoutScrollContainer?: boolean;
     closeLabel?: string;
     onClose?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
@@ -44,6 +45,7 @@ const BaseCard: React.FC<IProps> = ({
     className,
     id,
     ariaLabelledBy,
+    ariaLabel,
     role,
     hideHeaderButtons,
     header,
@@ -113,6 +115,7 @@ const BaseCard: React.FC<IProps> = ({
             <div
                 id={id}
                 aria-labelledby={ariaLabelledBy}
+                aria-label={ariaLabel}
                 role={role}
                 className={classNames("mx_BaseCard", className)}
                 ref={ref}
