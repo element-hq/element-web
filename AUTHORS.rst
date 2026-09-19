@@ -22,3 +22,6 @@ include:
 
 * Alexander (https://github.com/ioalexander)
   Save image on CTRL + S shortcut
+
+* inblock.io (https://github.com/inblockio)
+  Browser EventIndex for encrypted-room search on Element Web
