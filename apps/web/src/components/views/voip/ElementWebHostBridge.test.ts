@@ -13,6 +13,7 @@ import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
 import { type Call, type ElementCall } from "../../../models/Call";
 import { type ElementCallHostBridge } from "@element-hq/element-call-component/api";
+import { logger } from "matrix-js-sdk/src/logger";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
 
 describe("ElementWebHostBridge", () => {
@@ -99,6 +100,26 @@ describe("ElementWebHostBridge", () => {
 
         await bridge.setAlwaysOnScreen(false);
         expect(otherCall.disconnect).toHaveBeenCalledTimes(1);
+    });
+
+    it("still becomes persistent when another call cannot be disconnected", async () => {
+        const failing = { disconnect: vi.fn(async () => Promise.reject(new Error("no hangup for you"))) };
+        const fine = { disconnect: vi.fn(async () => {}) };
+        vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(
+            new Set([call, failing, fine] as unknown as Call[]),
+        );
+        const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
+
+        // The rejection must neither escape to Element Call nor stop this call from becoming sticky:
+        // there is nothing else to do for a call that will not hang up, and the delayed event will
+        // clean its membership up eventually.
+        await expect(bridge.setAlwaysOnScreen(true)).resolves.toBeUndefined();
+        expect(fine.disconnect).toHaveBeenCalledTimes(1);
+        expect(setWidgetPersistence).toHaveBeenCalledWith(widgetId, roomId, true);
+        expect(warn).toHaveBeenCalledWith(
+            expect.any(String),
+            expect.objectContaining({ message: "no hangup for you" }),
+        );
     });
 
     it("supports reactions and vouches for the intent, as Element Web's widget host does", () => {
