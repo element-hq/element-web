@@ -92,6 +92,10 @@ To add a new translation, head to the [translating doc](docs/translating.md).
 
 For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
+For guidance on writing UI copy and how translations should relate to the English source, see the
+[UI copy and localisation guidelines](docs/ui-copy.md). Language-specific style guides live in
+`docs/translations/` (currently [German](docs/translations/de.md)).
+
 # Triaging issues
 
 Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).
