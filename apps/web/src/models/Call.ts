@@ -734,7 +734,7 @@ export class ElementCall extends Call {
      * What to run Element Call with for a call in a room: the user's intent and Element Web's overrides
      * on top of the defaults that intent implies. This is the single place the decisions are made for
      * both embeddings: `generateWidgetUrl` serialises the result into URL parameters, and
-     * `ElementCallAppTile` passes it to the React component as props.
+     * `WrappedElementCallComponent` passes it to the React component as props.
      */
     private static computeCallOptions(
         client: MatrixClient,

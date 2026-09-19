@@ -9,7 +9,7 @@
  * Mock of Element Call's public React component (`@element-hq/element-call-component`).
  *
  * Same `ElementCall` / `initializeElementCall` exports as the package, typed with the package's own
- * types (from its `api` entry point), so `HostedElementCall` can load either module interchangeably. Everything that would be a call UI is replaced by a member list, a dump of the
+ * types (from its `api` entry point), so `WrappedElementCallComponent` can load either module interchangeably. Everything that would be a call UI is replaced by a member list, a dump of the
  * configuration, buttons that exercise every host bridge callback and a log of what was said in both
  * directions: what the mock told the host, and what the host asked through the component's handle.
  *
