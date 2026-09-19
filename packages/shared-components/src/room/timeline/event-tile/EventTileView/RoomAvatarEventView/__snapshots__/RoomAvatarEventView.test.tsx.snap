@@ -8,7 +8,7 @@ exports[`RoomAvatarEventView > renders a changed room avatar event 1`] = `
     data-event-layout="group"
   >
     <span>
-      Alice changed the room avatar to
+      Alice changed the chat avatar to 
       <button
         aria-label="Alice changed the avatar for General"
         class="RoomAvatarEventView-module_avatarButton"

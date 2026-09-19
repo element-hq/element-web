@@ -86,7 +86,7 @@ describe("EncryptionEventView", () => {
         expect(screen.getByText("Encryption enabled")).toBeInTheDocument();
         expect(
             screen.getByText(
-                "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+                "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
             ),
         ).toBeInTheDocument();
     });
@@ -97,7 +97,7 @@ describe("EncryptionEventView", () => {
         expect(screen.getByText("Experimental state encryption enabled")).toBeInTheDocument();
         expect(
             screen.getByText(
-                "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+                "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
             ),
         ).toBeInTheDocument();
     });
@@ -136,7 +136,7 @@ describe("EncryptionEventView", () => {
         expect(screen.getByText("Encryption enabled")).toBeInTheDocument();
         expect(
             screen.getByText(
-                "Messages here are end-to-end encrypted. Verify Alice in their profile - tap on their profile picture.",
+                "Messages here are end-to-end encrypted. Verify Alice in their profile — select their profile picture.",
             ),
         ).toBeInTheDocument();
     });
