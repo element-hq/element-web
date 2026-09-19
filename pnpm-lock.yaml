@@ -15023,7 +15023,7 @@ snapshots:
   '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/8ebb0b5a908a5611476ff4aef1c767ab36eac763#path:/component(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.2.8)(react@19.2.8)':
     dependencies:
       livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0e84500cc1f270e07b548b94e4a9991267d76bcb
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d148830d466d6a6fbc1971f00cd2671e76dcc986
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
