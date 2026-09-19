@@ -100,11 +100,12 @@ We use [issue labels](https://github.com/element-hq/element-meta/wiki/Issue-labe
 
 ## Copyright & License
 
-Copyright (c) 2014-2017 OpenMarket Ltd
-Copyright (c) 2017 Vector Creations Ltd
-Copyright (c) 2017-2025 New Vector Ltd
+ * Copyright 2014-2017 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
+ * Copyright 2017-2025 New Vector Ltd
+ * Copyright 2025-2026 Element Creations Ltd
 
-This software is multi licensed by New Vector Ltd (Element). It can be used either:
+This software is multi licensed by Element Creations Ltd (Element). It can be used either:
 
 (1) for free under the terms of the GNU Affero General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
 
