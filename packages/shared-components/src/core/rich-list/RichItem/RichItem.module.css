@@ -17,16 +17,30 @@
 
     display: grid;
     column-gap: var(--cpd-space-3x);
-    grid-template-columns: max-content 1fr max-content;
+    grid-template-columns: max-content 1fr max-content max-content;
     grid-template-areas:
-        "avatar title time"
-        "avatar description time";
+        "avatar title time actions"
+        "avatar description time actions";
 }
 
 .richItem:hover,
 .richItem:focus {
     background-color: var(--cpd-color-bg-subtle-secondary);
     border-radius: 12px;
+}
+
+.richItem[aria-disabled="true"] {
+    cursor: not-allowed;
+
+    .title,
+    .description {
+        color: var(--cpd-color-text-disabled);
+    }
+}
+
+.actions {
+    grid-area: actions;
+    align-self: center;
 }
 
 .richItem:not(:last-child) {

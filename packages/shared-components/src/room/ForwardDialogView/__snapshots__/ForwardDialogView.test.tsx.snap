@@ -1,0 +1,980 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ForwardDialogView > Storybook snapshots > renders a truncated list 1`] = `
+<div>
+  <div
+    class="ForwardDialogView-module_container"
+    style="height: 600px;"
+  >
+    <h3
+      class="ForwardDialogView-module_heading"
+    >
+      Message preview
+    </h3>
+    <div
+      class="ForwardDialogView-module_preview"
+    >
+      <div
+        style="display: flex; gap: 12px; padding: 8px; border: 1px dashed var(--cpd-color-border-interactive-secondary); border-radius: 8px;"
+      >
+        <div
+          aria-label="Me avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          ME
+        </div>
+        <div>
+          <div
+            style="font-weight: var(--cpd-font-weight-semibold);"
+          >
+            Me
+          </div>
+          <div>
+            Hello world! This is the message being forwarded.
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="ForwardDialogView-module_separator"
+    />
+    <div
+      class="ForwardDialogView-module_search"
+    >
+      <svg
+        aria-hidden="true"
+        class="ForwardDialogView-module_searchIcon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+        />
+      </svg>
+      <input
+        aria-label="Search for rooms or people"
+        class="ForwardDialogView-module_searchInput"
+        placeholder="Search for rooms or people"
+        type="search"
+      />
+    </div>
+    <div
+      class="ForwardDialogView-module_list"
+    >
+      <div
+        class="Flex-module_flex RichList-module_richList ForwardDialogView-module_list"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="RichList-module_title"
+          id="react-use-id-1"
+        >
+          Send to
+        </span>
+        <ul
+          aria-labelledby="react-use-id-1"
+          class="RichList-module_content"
+          role="listbox"
+          tabindex="0"
+        >
+          <li
+            aria-description="Open room"
+            aria-label="Design"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Design avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                DE
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Design
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Engineering"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Engineering avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                EN
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Engineering
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-label="and 3 others..."
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <svg
+                class="ForwardDialogView-module_overflowIcon"
+                fill="currentColor"
+                height="32px"
+                viewBox="0 0 24 24"
+                width="32px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                />
+              </svg>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              and 3 others...
+            </span>
+            <span
+              class="RichItem-module_description"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ForwardDialogView > Storybook snapshots > renders every send state 1`] = `
+<div>
+  <div
+    class="ForwardDialogView-module_container"
+    style="height: 600px;"
+  >
+    <h3
+      class="ForwardDialogView-module_heading"
+    >
+      Message preview
+    </h3>
+    <div
+      class="ForwardDialogView-module_preview"
+    >
+      <div
+        style="display: flex; gap: 12px; padding: 8px; border: 1px dashed var(--cpd-color-border-interactive-secondary); border-radius: 8px;"
+      >
+        <div
+          aria-label="Me avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          ME
+        </div>
+        <div>
+          <div
+            style="font-weight: var(--cpd-font-weight-semibold);"
+          >
+            Me
+          </div>
+          <div>
+            Hello world! This is the message being forwarded.
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="ForwardDialogView-module_separator"
+    />
+    <div
+      class="ForwardDialogView-module_search"
+    >
+      <svg
+        aria-hidden="true"
+        class="ForwardDialogView-module_searchIcon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+        />
+      </svg>
+      <input
+        aria-label="Search for rooms or people"
+        class="ForwardDialogView-module_searchInput"
+        placeholder="Search for rooms or people"
+        type="search"
+      />
+    </div>
+    <div
+      class="ForwardDialogView-module_list"
+    >
+      <div
+        class="Flex-module_flex RichList-module_richList ForwardDialogView-module_list"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="RichList-module_title"
+          id="react-use-id-1"
+        >
+          Send to
+        </span>
+        <ul
+          aria-labelledby="react-use-id-1"
+          class="RichList-module_content"
+          role="listbox"
+          tabindex="0"
+        >
+          <li
+            aria-description="Open room"
+            aria-label="Design"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Design avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                DE
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Design
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Engineering"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Engineering avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                EN
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Engineering
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="true"
+                aria-label="Sending"
+                aria-labelledby="react-use-id-2"
+                class="_button_1nw83_8 _has-icon_1nw83_60"
+                data-kind="secondary"
+                data-send-state="sending"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  class="_icon_1855a_18"
+                  fill="currentColor"
+                  height="1em"
+                  style="width: 16px; height: 16px;"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Random"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Random avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                RA
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Random
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="true"
+                aria-label="Sent"
+                aria-labelledby="react-use-id-3"
+                class="_button_1nw83_8 _has-icon_1nw83_60"
+                data-kind="secondary"
+                data-send-state="sent"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  fill="currentColor"
+                  height="16px"
+                  viewBox="0 0 24 24"
+                  width="16px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                  />
+                </svg>
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Alice"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Alice avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                AL
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Alice
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="true"
+                aria-label="Failed to send"
+                aria-labelledby="react-use-id-4"
+                class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+                data-kind="secondary"
+                data-send-state="failed"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  fill="currentColor"
+                  height="16px"
+                  viewBox="0 0 24 24"
+                  width="16px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+                  />
+                </svg>
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Announcements"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Announcements avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                AN
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Announcements
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="true"
+                aria-label="You don't have permission to do this"
+                aria-labelledby="react-use-id-5"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ForwardDialogView > Storybook snapshots > renders no results 1`] = `
+<div>
+  <div
+    class="ForwardDialogView-module_container"
+    style="height: 600px;"
+  >
+    <h3
+      class="ForwardDialogView-module_heading"
+    >
+      Message preview
+    </h3>
+    <div
+      class="ForwardDialogView-module_preview"
+    >
+      <div
+        style="display: flex; gap: 12px; padding: 8px; border: 1px dashed var(--cpd-color-border-interactive-secondary); border-radius: 8px;"
+      >
+        <div
+          aria-label="Me avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          ME
+        </div>
+        <div>
+          <div
+            style="font-weight: var(--cpd-font-weight-semibold);"
+          >
+            Me
+          </div>
+          <div>
+            Hello world! This is the message being forwarded.
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="ForwardDialogView-module_separator"
+    />
+    <div
+      class="ForwardDialogView-module_search"
+    >
+      <svg
+        aria-hidden="true"
+        class="ForwardDialogView-module_searchIcon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+        />
+      </svg>
+      <input
+        aria-label="Search for rooms or people"
+        class="ForwardDialogView-module_searchInput"
+        placeholder="Search for rooms or people"
+        type="search"
+      />
+    </div>
+    <div
+      class="ForwardDialogView-module_list"
+    >
+      <div
+        class="Flex-module_flex RichList-module_richList ForwardDialogView-module_list"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="RichList-module_title"
+          id="react-use-id-1"
+        >
+          Send to
+        </span>
+        <span
+          class="RichList-module_empty"
+        >
+          No results
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ForwardDialogView > Storybook snapshots > renders the default list 1`] = `
+<div>
+  <div
+    class="ForwardDialogView-module_container"
+    style="height: 600px;"
+  >
+    <h3
+      class="ForwardDialogView-module_heading"
+    >
+      Message preview
+    </h3>
+    <div
+      class="ForwardDialogView-module_preview"
+    >
+      <div
+        style="display: flex; gap: 12px; padding: 8px; border: 1px dashed var(--cpd-color-border-interactive-secondary); border-radius: 8px;"
+      >
+        <div
+          aria-label="Me avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          ME
+        </div>
+        <div>
+          <div
+            style="font-weight: var(--cpd-font-weight-semibold);"
+          >
+            Me
+          </div>
+          <div>
+            Hello world! This is the message being forwarded.
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="ForwardDialogView-module_separator"
+    />
+    <div
+      class="ForwardDialogView-module_search"
+    >
+      <svg
+        aria-hidden="true"
+        class="ForwardDialogView-module_searchIcon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+        />
+      </svg>
+      <input
+        aria-label="Search for rooms or people"
+        class="ForwardDialogView-module_searchInput"
+        placeholder="Search for rooms or people"
+        type="search"
+      />
+    </div>
+    <div
+      class="ForwardDialogView-module_list"
+    >
+      <div
+        class="Flex-module_flex RichList-module_richList ForwardDialogView-module_list"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="RichList-module_title"
+          id="react-use-id-1"
+        >
+          Send to
+        </span>
+        <ul
+          aria-labelledby="react-use-id-1"
+          class="RichList-module_content"
+          role="listbox"
+          tabindex="0"
+        >
+          <li
+            aria-description="Open room"
+            aria-label="Design"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Design avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                DE
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Design
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Engineering"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Engineering avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                EN
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Engineering
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Random"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Random avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                RA
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Random
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Announcements"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Announcements avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                AN
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Announcements
+            </span>
+            <span
+              class="RichItem-module_description"
+            >
+              Element
+            </span>
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="true"
+                aria-label="You don't have permission to do this"
+                aria-labelledby="react-use-id-2"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+          <li
+            aria-description="Open room"
+            aria-label="Alice"
+            class="RichItem-module_richItem"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="Flex-module_flex RichItem-module_avatar"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            >
+              <div
+                aria-label="Alice avatar"
+                role="img"
+                style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+              >
+                AL
+              </div>
+            </div>
+            <span
+              class="RichItem-module_title"
+            >
+              Alice
+            </span>
+            <span
+              class="RichItem-module_description"
+            />
+            <div
+              class="Flex-module_flex RichItem-module_actions"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <button
+                aria-disabled="false"
+                class="_button_1nw83_8"
+                data-kind="secondary"
+                data-send-state="can_send"
+                data-size="md"
+                role="button"
+                tabindex="0"
+              >
+                Send
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;

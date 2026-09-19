@@ -1,0 +1,52 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ * Copyright 2021 Robin Townsend <robin@robin.town>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /* Fill whatever height a flex-column parent gives us, and allow shrinking so the list scrolls. */
+    flex: 1;
+    min-height: 0;
+    width: 600px;
+    overflow-y: hidden;
+}
+
+.heading {
+    margin: 0 0 6px;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-semibold);
+}
+
+.preview {
+    max-height: 30%;
+    flex-shrink: 0;
+    overflow-y: auto;
+}
+
+/* Ensure mx_Dialog doesn't overwrite the search styles. */
+.searchInput[type="search"] {
+    border: none;
+}
+
+.separator {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--cpd-color-border-interactive-secondary);
+    margin: 12px 0;
+}
+
+/* The list takes whatever height the preview and search input leave. */
+.list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: scroll;
+}
+
+.overflowIcon {
+    color: var(--cpd-color-icon-secondary);
+}

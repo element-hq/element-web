@@ -56,6 +56,23 @@ export const WithoutTimestamp: Story = {
     },
 };
 
+export const WithActions: Story = {
+    args: {
+        timestamp: undefined,
+        actions: (
+            <button type="button" onClick={fn()}>
+                Open
+            </button>
+        ),
+    },
+};
+
+export const Disabled: Story = {
+    args: {
+        "aria-disabled": true,
+    },
+};
+
 export const Hover: Story = {
     parameters: { pseudo: { hover: true } },
 };
