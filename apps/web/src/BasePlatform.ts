@@ -366,13 +366,20 @@ export default abstract class BasePlatform {
      * @param {string} deviceId the device ID that the pickle key is for.
      * @returns {string|null} the previously stored pickle key, or null if no
      *     pickle key has been stored.
+     * @throws if the pickle key could not be read, e.g. because the OS keychain is unavailable
+     *     or WebCrypto is not available. This is distinct from returning null: it means we do not
+     *     know whether a pickle key exists, so the caller must not create a new one (that would
+     *     destroy the existing session), and retrying may succeed.
      */
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        let data: { encrypted?: BufferSource; iv?: BufferSource; cryptoKey?: CryptoKey } | undefined;
-        try {
-            data = await idbLoad("pickleKey", [userId, deviceId]);
-        } catch (e) {
-            logger.error("idbLoad for pickleKey failed", e);
+        const data: { encrypted?: BufferSource; iv?: BufferSource; cryptoKey?: CryptoKey } | undefined = await idbLoad(
+            "pickleKey",
+            [userId, deviceId],
+        );
+
+        if (!data) {
+            // no pickle key was found in storage
+            return null;
         }
 
         return (await buildAndEncodePickleKey(data, userId, deviceId)) ?? null;
