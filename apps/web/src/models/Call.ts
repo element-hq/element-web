@@ -47,6 +47,9 @@ import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
 import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
+// From the component package's `api` entry point, which carries the types and enums without the
+// component: `BackgroundStyle` is needed as a value here, on the widget path, where the component
+// itself must not be loaded.
 import {
     BackgroundStyle,
     type ConfigOptions,
@@ -54,7 +57,7 @@ import {
     type ElementCallConfiguration,
     type ElementCallHandle,
     type UserIntent,
-} from "../components/views/voip/ElementCallComponentTypes";
+} from "@element-hq/element-call-component/api";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");

@@ -8,7 +8,7 @@
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
 import { type ElementCall } from "../../../models/Call";
-import { type DeviceMuteState, type ElementCallHostBridge } from "./ElementCallComponentTypes";
+import { type DeviceMuteState, type ElementCallHostBridge } from "@element-hq/element-call-component/api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 export interface ElementWebHostBridgeOptions {
@@ -54,7 +54,7 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
             try {
                 await Promise.all(others.map((call) => call.disconnect()));
             } catch (e) {
-                logger.warn(`Could not disconnect other calls before making call persstend:{e}`)
+                logger.warn("Could not disconnect other calls before making this one persistent", e);
             }
         }
         ActiveWidgetStore.instance.setWidgetPersistence(this.opts.widgetId, this.opts.widgetRoomId, alwaysOnScreen);

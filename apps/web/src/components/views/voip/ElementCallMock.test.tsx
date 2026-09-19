@@ -27,7 +27,7 @@ import {
     type ElementCallProps,
     UserIntent,
     configurationForIntent,
-} from "./ElementCallComponentTypes";
+} from "@element-hq/element-call-component/api";
 import { ElementCall, initializeElementCall } from "./ElementCallMock";
 
 const roomId = "!1:example.org";

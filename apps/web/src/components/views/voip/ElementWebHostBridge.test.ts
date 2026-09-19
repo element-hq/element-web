@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
 import { type Call, type ElementCall } from "../../../models/Call";
-import { type ElementCallHostBridge } from "./ElementCallComponentTypes";
+import { type ElementCallHostBridge } from "@element-hq/element-call-component/api";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
 
 describe("ElementWebHostBridge", () => {

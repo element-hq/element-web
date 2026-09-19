@@ -38,7 +38,7 @@ import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
 import SettingsStore from "../settings/SettingsStore";
-import { type ElementCallHandle } from "../components/views/voip/ElementCallComponentTypes";
+import { type ElementCallHandle } from "@element-hq/element-call-component/api";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { type SettingKey } from "../settings/Settings.tsx";
 import SdkConfig from "../SdkConfig.ts";
