@@ -1296,8 +1296,6 @@
     "language_dropdown_label": "Teny Dropdown",
     "leave_room_dialog": {
         "last_person_warning": "Ianao irery no eto. Raha miala ianao dia tsy hisy ho afaka hiditra amin'ny ho avy, anisan'izany ianao.",
-        "leave_room_question": "Tena te hiala ny efitrano ve ianao%(roomName)s ?",
-        "leave_space_question": "Tena te hiala amin'ilay toerana ve ianao%(spaceName)s ?",
         "room_rejoin_warning": "Tsy ampahibemaso ity efitrano ity. Tsy afaka miditra indray ianao raha tsy misy fanasana.",
         "space_rejoin_warning": "Tsy ampahibemaso ity habaka ity. Tsy afaka miditra indray ianao raha tsy misy fanasana."
     },
@@ -1663,7 +1661,6 @@
         "join_button_account": "Hiditra Mpikambana",
         "join_failed_needs_invite": "Hijery%(roomName)s , mila fanasana ianao",
         "join_the_discussion": "Miaraha aminy fifanakalozan-kevitra",
-        "join_title": "Midira ao amin'ny efitrano mba handray anjara",
         "join_title_account": "Midira aminy resaka miaraka amin'ny kaonty",
         "joining": "Miditra…",
         "joining_room": "Efitrano mitambatra…",

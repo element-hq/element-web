@@ -1111,8 +1111,6 @@
     "language_dropdown_label": "Selector de idioma",
     "leave_room_dialog": {
         "last_person_warning": "Es a única persoa aquí. Se saes, ninguén poderá unirse no futuro, incluíndote a ti.",
-        "leave_room_question": "Seguro que desexa saír da sala '%(roomName)s'?",
-        "leave_space_question": "Tes a certeza de querer deixar o espazo '%(spaceName)s'?",
         "room_rejoin_warning": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
         "space_rejoin_warning": "Este espazo non é público. Non poderás volver a unirte sen un convite."
     },
@@ -1412,7 +1410,6 @@
         "join_button_account": "Rexistro",
         "join_failed_needs_invite": "Para ver %(roomName)s, precisas un convite",
         "join_the_discussion": "Súmate a conversa",
-        "join_title": "Únete á sala para participar",
         "join_title_account": "Únete a conversa cunha conta",
         "joining": "Entrando…",
         "jump_read_marker": "Ir a primeira mensaxe non lida.",

@@ -1119,8 +1119,6 @@
     "language_dropdown_label": "Taalselectie",
     "leave_room_dialog": {
         "last_person_warning": "Je bent de enige persoon hier. Als je weggaat, zal niemand in de toekomst kunnen toetreden, jij ook niet.",
-        "leave_room_question": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?",
-        "leave_space_question": "Weet je zeker dat je de Space '%(spaceName)s' wilt verlaten?",
         "room_rejoin_warning": "Dit is geen publieke kamer. Slechts op uitnodiging zal je opnieuw kunnen toetreden.",
         "space_rejoin_warning": "Deze Space is niet publiek. Zonder uitnodiging zal je niet opnieuw kunnen toetreden."
     },
@@ -1419,7 +1417,6 @@
         "join_button_account": "Registreren",
         "join_failed_needs_invite": "Om %(roomName)s te bekijken, heb je een uitnodiging nodig",
         "join_the_discussion": "Neem deel aan de kamer",
-        "join_title": "Doe mee met de kamer om deel te nemen",
         "join_title_account": "Neem deel aan de kamer met een account",
         "joining": "Deelnemen…",
         "jump_read_marker": "Spring naar het eerste ongelezen bericht.",
