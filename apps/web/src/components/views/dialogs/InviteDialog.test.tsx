@@ -329,6 +329,18 @@ describe("InviteDialog", () => {
         expect(input).toHaveValue(bobbob);
     });
 
+    it("should ask for an identity server rather than inviting an email without one", async () => {
+        const onFinished = vi.fn();
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={onFinished} />);
+
+        await enterIntoSearchField(aliceEmail);
+        await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+        expect(screen.getByText(/Use an identity server to invite by email/)).toBeInTheDocument();
+        expect(mockClient.invite).not.toHaveBeenCalled();
+        expect(onFinished).not.toHaveBeenCalled();
+    });
+
     it("should allow to invite multiple emails to a room", async () => {
         render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
 
@@ -554,6 +566,9 @@ describe("InviteDialog", () => {
 
     describe("when inviting a user whose cryptographic identity we do not know", () => {
         beforeEach(() => {
+            // An email address can only be invited through an identity server, so these cases
+            // need one configured before they get as far as the identity warning.
+            mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
             vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus).mockImplementation(async (u) => {
                 return new UserVerificationStatus(false, false, false, false);
             });
