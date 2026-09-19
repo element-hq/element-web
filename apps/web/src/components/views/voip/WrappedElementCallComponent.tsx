@@ -14,7 +14,7 @@ import { ElementCall as ElementCallModel } from "../../../models/Call";
 import { CallStore } from "../../../stores/CallStore";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { getCurrentLanguage } from "../../../languageHandler";
-import { useEffectiveTheme } from "../../../hooks/useEffectiveTheme";
+import { useTheme } from "../../../hooks/useTheme";
 import Spinner from "../elements/Spinner";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
 
@@ -82,7 +82,7 @@ const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
 export const WrappedElementCallComponent: FC<{ call: ElementCallModel; client: MatrixClient }> = ({ call, client }) => {
     // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
-    const theme = useEffectiveTheme();
+    const { effectiveTheme: theme } = useTheme();
     // Not a hook: changing the language reloads Element Web, so there is no live change to follow
     const language = getCurrentLanguage().replace("_", "-");
     const bridge = useMemo(
