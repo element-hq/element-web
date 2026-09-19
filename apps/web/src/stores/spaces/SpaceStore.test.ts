@@ -70,6 +70,8 @@ const room1 = "!room1:server";
 const room2 = "!room2:server";
 const room3 = "!room3:server";
 const room4 = "!room4:server";
+/** Listed by space1 but never joined, as a room being previewed from the space's hierarchy is. */
+const previewRoom = "!preview:server";
 const videoRoomPrivate = "!videoRoomPrivate:server";
 const videoRoomPublic = "!videoRoomPublic:server";
 const space1 = "!space1:server";
@@ -1095,7 +1097,7 @@ describe("SpaceStore", () => {
     describe("space auto switching tests", () => {
         beforeEach(async () => {
             [room1, room2, room3, orphan1].forEach(mkRoom);
-            mkSpace(space1, [room1, room2, room3]);
+            mkSpace(space1, [room1, room2, room3, previewRoom]);
             mkSpace(space2, [room1, room2]);
 
             const cliRoom2 = client.getRoom(room2)!;
@@ -1133,6 +1135,14 @@ describe("SpaceStore", () => {
             viewRoom(room2);
             store.setActiveSpace(space2, false);
             viewRoom(room3);
+            expect(store.activeSpace).toBe(space1);
+        });
+
+        it("stays put when previewing a room the space lists but we have not joined", async () => {
+            viewRoom(room1);
+            store.setActiveSpace(space1, false);
+            // space1 lists this room, but it was never joined, so it is not one of the space's rooms.
+            viewRoom(previewRoom);
             expect(store.activeSpace).toBe(space1);
         });
 
