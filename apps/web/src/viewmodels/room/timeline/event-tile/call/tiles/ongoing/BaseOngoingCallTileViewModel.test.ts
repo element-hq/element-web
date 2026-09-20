@@ -9,9 +9,9 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { CallDirection, CallType } from "@element-hq/web-shared-components";
+import { mkRoom, stubClient } from "test-utils";
 
 import { BaseOngoingCallViewModel } from "./BaseOngoingCallTileViewModel";
-import { mkRoom, stubClient } from "../../../../../../../../test/test-utils";
 import { CallEvent } from "../../../../../../../models/Call";
 import type { RootCallTileViewModel } from "../../RootCallTileViewModel";
 import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "../../call-mocks";

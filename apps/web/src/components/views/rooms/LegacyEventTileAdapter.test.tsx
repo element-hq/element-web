@@ -11,11 +11,11 @@ import React from "react";
 import { render } from "test-utils-rtl";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { mkMessage, stubClient } from "test-utils";
 
 import { LegacyEventTileAdapter } from "./LegacyEventTileAdapter";
 import { Layout } from "../../../settings/enums/Layout";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
-import { mkMessage, stubClient } from "../../../../test/test-utils";
 
 // The tile itself is exercised by its own tests; here we only care about what the
 // adapter hands it, so stand in a stub that records the props it received.

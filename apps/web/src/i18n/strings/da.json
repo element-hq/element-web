@@ -1351,8 +1351,6 @@
     "language_dropdown_label": "Rullemenu for sprog",
     "leave_room_dialog": {
         "last_person_warning": "Du er den eneste person her. Hvis du forlader rummet, vil ingen kunne deltage i fremtiden, heller ikke dig.",
-        "leave_room_question": "Er du sikker på, at du vil forlade rummet '%(roomName)s'?",
-        "leave_space_question": "Er du sikker på, at du vil forlade klyngen '%(spaceName)s'?",
         "room_leave_admin_warning": "Du er den eneste administrator i dette rum. Hvis du forlader det, vil ingen være i stand til at ændre dets indstillinger eller foretage andre vigtige handlinger.",
         "room_leave_mod_warning": "Du er den eneste moderator i dette rum. Hvis du forlader det, vil ingen kunne ændre rummets indstillinger eller foretage andre vigtige handlinger.",
         "room_rejoin_warning": "Dette rum er ikke offentligt. Du kan ikke deltage igen uden en invitation.",
@@ -1709,7 +1707,6 @@
         "join_button_account": "Tilmeld dig",
         "join_failed_needs_invite": "For at se %(roomName)s skal du have en invitation.",
         "join_the_discussion": "Deltag i diskussionen",
-        "join_title": "Tilslut dig rummet, for at deltage",
         "join_title_account": "Deltag i samtalen med en konto",
         "joining": "Tilslutter...",
         "joining_room": "Tilslutter til rummet...",

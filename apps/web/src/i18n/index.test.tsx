@@ -17,10 +17,10 @@ import {
     type IVariables,
     type Tags,
 } from "@element-hq/web-shared-components";
+import { stubClient } from "test-utils";
 
 import { _t, _tDom } from ".";
 import { setLanguage } from "./settings";
-import { stubClient } from "../../test/test-utils";
 
 describe("languageHandler", function () {
     // See setupLanguage.ts for how we are stubbing out translations to provide fixture data for these tests
