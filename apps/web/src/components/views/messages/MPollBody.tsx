@@ -239,8 +239,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         if (currentSelected.includes(answerId)) {
             newSelected = currentSelected.filter((id) => id !== answerId);
-        } else if (currentSelected.length >= maxSelections) {
+        } else if (currentSelected.length === maxSelections) {
             newSelected = [...currentSelected.slice(1), answerId];
+        } else if (currentSelected.length > maxSelections) {
+            newSelected = [answerId];
         } else {
             newSelected = [...currentSelected, answerId];
         }
