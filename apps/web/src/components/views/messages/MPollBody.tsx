@@ -43,8 +43,9 @@ interface IState {
     poll?: Poll;
     // poll instance has fetched at least one page of responses
     pollInitialised: boolean;
-    selected?: string | null | undefined; // Which option was clicked by the local user
+    selected?: string[] | null; // Which options were selected by the local user
     voteRelations?: Relations; // Voting (response) events
+    isVoting: boolean; // Whether a vote is currently being sent
 }
 
 export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, eventId: string): RelatedRelations {
@@ -163,8 +164,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         super(props);
 
         this.state = {
-            selected: null,
+            selected: [],
             pollInitialised: false,
+            isVoting: false,
         };
     }
 
@@ -218,22 +220,34 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         // We hold Relations in our state, and they changed under us.
         // Check whether we should delete our selection, and then
         // re-render.
-        // Note: re-rendering is a side effect of unselectIfNewEventFromMe().
-        this.unselectIfNewEventFromMe();
+        // Note: re-rendering is a side effect of syncIfNewEventFromMe().
+        this.syncIfNewEventFromMe();
     };
 
     private selectOption(answerId: string): void {
-        if (this.state.poll?.isEnded) {
-            return;
-        }
-        const userVotes = this.collectUserVotes();
-        const userId = this.context.getSafeUserId();
-        const myVote = userVotes.get(userId)?.answers[0];
-        if (answerId === myVote) {
+        if (this.state.poll?.isEnded || this.state.isVoting) {
             return;
         }
 
-        const response = PollResponseEvent.from([answerId], this.props.mxEvent.getId()!).serialize();
+        const pollEvent = this.state.poll?.pollEvent;
+        const maxSelections = pollEvent?.maxSelections ?? 1;
+
+        let newSelected: string[];
+        const currentSelected = this.state.selected?.length
+            ? this.state.selected
+            : this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
+
+        if (currentSelected.includes(answerId)) {
+            newSelected = currentSelected.filter((id) => id !== answerId);
+        } else if (currentSelected.length >= maxSelections) {
+            newSelected = [...currentSelected.slice(1), answerId];
+        } else {
+            newSelected = [...currentSelected, answerId];
+        }
+
+        const response = PollResponseEvent.from(newSelected, this.props.mxEvent.getId()!).serialize();
+
+        this.setState({ selected: newSelected, isVoting: true });
 
         this.context
             .sendEvent(
@@ -248,9 +262,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     title: _t("poll|error_voting_title"),
                     description: _t("poll|error_voting_description"),
                 });
+            }).finally(() => {
+                this.setState({ isVoting: false });
             });
-
-        this.setState({ selected: answerId });
     }
 
     /**
@@ -266,28 +280,34 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     /**
      * If we've just received a new event that we hadn't seen
      * before, and that event is me voting (e.g. from a different
-     * device) then forget when the local user selected.
+     * device) then update the local selection from the event.
      *
      * Either way, calls setState to update our list of events we
      * have already seen.
      */
-    private unselectIfNewEventFromMe(): void {
+    private syncIfNewEventFromMe(): void {
         const relations = this.state.voteRelations?.getRelations() || [];
         const newEvents: MatrixEvent[] = relations.filter(
             (mxEvent: MatrixEvent) => !this.seenEventIds.includes(mxEvent.getId()!),
         );
-        let newSelected = this.state.selected;
 
-        if (newEvents.length > 0) {
-            for (const mxEvent of newEvents) {
-                if (mxEvent.getSender() === this.context.getUserId()) {
-                    newSelected = null;
-                }
-            }
-        }
         const newEventIds = newEvents.map((mxEvent: MatrixEvent) => mxEvent.getId()!);
         this.seenEventIds = this.seenEventIds.concat(newEventIds);
-        this.setState({ selected: newSelected });
+
+        this.setState((prevState) => {
+            let newSelected: string[] | null | undefined = prevState.selected;
+
+            for (const mxEvent of newEvents) {
+                if (mxEvent.getSender() === this.context.getUserId()) {
+                    const responseEvent = mxEvent.unstableExtensibleEvent as PollResponseEvent | undefined;
+                    newSelected = responseEvent?.answerIds ?? [];
+                }
+            }
+
+            return {
+                selected: newSelected,
+            };
+        });
     }
 
     private totalVotes(collectedVotes: Map<string, number>): number {
@@ -320,12 +340,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const totalVotes = this.totalVotes(votes);
         const winCount = Math.max(...votes.values());
         const userId = this.context.getSafeUserId();
-        const myVote = userVotes?.get(userId)?.answers[0];
+        const myVotes = userVotes?.get(userId)?.answers ?? [];
         const disclosed = M_POLL_KIND_DISCLOSED.matches(pollEvent.kind.name);
 
         // Disclosed: votes are hidden until I vote or the poll ends
         // Undisclosed: votes are hidden until poll ends
-        const showResults = isEnded || (disclosed && myVote !== undefined);
+        const showResults = isEnded || (disclosed && myVotes.length > 0);
 
         let totalText: string;
         if (showResults && poll?.undecryptableRelationsCount) {
@@ -334,7 +354,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             totalText = _t("right_panel|poll|final_result", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("poll|total_not_ended");
-        } else if (myVote === undefined) {
+        } else if (myVotes.length === 0) {
             if (totalVotes === 0) {
                 totalText = _t("poll|total_no_votes");
             } else {
@@ -367,7 +387,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 answerVotes = votes.get(answer.id) ?? 0;
                             }
 
-                            const checked = (!isEnded && myVote === answer.id) || (isEnded && answerVotes === winCount);
+                            const checked = (!isEnded && myVotes.includes(answer.id)) || (isEnded && answerVotes === winCount);
 
                             return (
                                 <PollOption
@@ -381,6 +401,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                     totalVoteCount={totalVotes}
                                     displayVoteCount={showResults}
                                     onOptionSelected={this.selectOption.bind(this)}
+                                    maxSelections={pollEvent.maxSelections}
                                 />
                             );
                         })}
@@ -389,6 +410,11 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         {totalText}
                         {isFetchingResponses && <Spinner size={16} />}
                     </div>
+                    {!isEnded && pollEvent.maxSelections > 1 && (
+                        <div className="mx_MPollBody_maxSelectionsInfo">
+                            {_t("poll|vote_for_up_to", { count: pollEvent.maxSelections })}
+                        </div>
+                    )}
                 </fieldset>
             </PollBodyPresentationAttributes>
         );
@@ -433,7 +459,7 @@ export function allVotes(voteRelations: Relations): Array<UserVote> {
 export function collectUserVotes(
     userResponses: Array<UserVote>,
     userId?: string | null,
-    selected?: string | null,
+    selected?: string[] | null | undefined,
 ): Map<string, UserVote> {
     const userVotes: Map<string, UserVote> = new Map();
 
@@ -444,8 +470,8 @@ export function collectUserVotes(
         }
     }
 
-    if (selected && userId) {
-        userVotes.set(userId, new UserVote(0, userId, [selected]));
+    if (selected && selected.length > 0 && userId) {
+        userVotes.set(userId, new UserVote(0, userId, selected));
     }
 
     return userVotes;
