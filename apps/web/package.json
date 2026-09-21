@@ -28,7 +28,7 @@
         "lint:types": "nx lint:types",
         "lint:style": "stylelint \"res/**/*.pcss\"",
         "test:unit": "nx test:unit",
-        "test:unit:screenshots": "playwright-screenshots pnpm -w exec vitest run --project web-browser --update",
+        "test:unit:screenshots": "playwright-screenshots pnpm -w exec vitest run --project 'element-web (browser)' --update",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --",
