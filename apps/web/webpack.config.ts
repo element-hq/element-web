@@ -327,7 +327,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            // `ident` names this options object, so it has to differ from the one the
+                            // .pcss rule below uses: sharing a name makes both rules run with whichever
+                            // plugin list was registered last, which sends plain CSS through
+                            // postcss-import.
+                            ident: "postcss-css",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
@@ -378,7 +382,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            ident: "postcss-pcss",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
