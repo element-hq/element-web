@@ -518,7 +518,7 @@ test.describe("Element Call", () => {
             });
 
             /** The mock Element Call React component, wherever it currently is (docked or PiP). */
-            const reactCall = (page: Page): Locator => page.locator(".mx_ElementCallMock");
+            const reactCall = (page: Page): Locator => page.getByRole("region", { name: "Element Call (mock)" });
 
             async function openAndJoinCall(page: Page, existing = false) {
                 if (existing) {
@@ -708,7 +708,7 @@ test.describe("Element Call", () => {
             // Element Call scopes its theme and portals to its own root element
             await expect(page.locator("[data-element-call-root]")).toBeAttached();
             await expect(page.locator("iframe")).toHaveCount(0);
-            await expect(page.locator(".mx_ElementCallMock")).toHaveCount(0);
+            await expect(page.getByRole("region", { name: "Element Call (mock)" })).toHaveCount(0);
         });
 
         test("follows Element Web's theme", async ({ page, user, room, app }) => {
@@ -757,7 +757,7 @@ test.describe("Element Call", () => {
 
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
-            const mock = page.locator(".mx_ElementCallMock");
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
             await expect(mock).toBeVisible();
 
             await expect(mock.getByText(/theme light/)).toBeVisible();

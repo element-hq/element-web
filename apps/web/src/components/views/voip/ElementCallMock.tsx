@@ -18,9 +18,8 @@
  */
 
 import React, { type JSX, useEffect, useImperativeHandle } from "react";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { ElementCallMockView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { ElementCallMockView } from "./ElementCallMockView";
 import { ElementCallMockViewModel } from "../../../viewmodels/voip/ElementCallMockViewModel";
 import {
     type ConfigOptions,

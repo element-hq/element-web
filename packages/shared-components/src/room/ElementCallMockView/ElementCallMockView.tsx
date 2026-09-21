@@ -7,9 +7,11 @@
 
 import React, { type JSX } from "react";
 import { Button, H2, H3, Text } from "@vector-im/compound-web";
-import { Flex, useViewModel, type ViewModel } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../languageHandler";
+import styles from "./ElementCallMockView.module.css";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
+import { Flex } from "../../core/utils/Flex";
+import { _t } from "../../core/i18n/i18n";
 
 /** One line of the log: what the mock told the host, or what the host asked of the mock. */
 export interface ElementCallMockLogEntry {
@@ -79,6 +81,7 @@ export interface ElementCallMockViewActions {
 export type ElementCallMockViewModel = ViewModel<ElementCallMockViewSnapshot, ElementCallMockViewActions>;
 
 export interface ElementCallMockViewProps {
+    /** The view model driving the mock. */
     vm: ElementCallMockViewModel;
 }
 
@@ -89,6 +92,9 @@ export interface ElementCallMockViewProps {
  *
  * Everything it renders comes from {@link ElementCallMockViewModel}; the simulated Element Call
  * behind it — memberships, joining, muting, talking to the host — is that view model's business.
+ *
+ * The root is a region named after the title, in both states, so that tests can find the mock
+ * wherever the application puts it.
  */
 export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Element => {
     const {
@@ -111,20 +117,22 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
         initializedWith,
     } = useViewModel(vm);
 
+    const title = _t("voip|element_call_mock|title");
+
     if (unknownRoom) {
         return (
-            <div className="mx_ElementCallMock">
-                <Text as="span" size="sm" className="mx_ElementCallMock_error">
+            <section className={styles.mock} aria-label={title}>
+                <Text as="span" size="sm" className={styles.error}>
                     {_t("voip|element_call_mock|unknown_room", { roomId })}
                 </Text>
-            </div>
+            </section>
         );
     }
 
     return (
-        <div className="mx_ElementCallMock" data-theme={theme}>
-            <H2 className="mx_ElementCallMock_title">{_t("voip|element_call_mock|title")}</H2>
-            <Text as="span" size="sm" className="mx_ElementCallMock_roomId">
+        <section className={styles.mock} data-theme={theme} aria-label={title}>
+            <H2>{title}</H2>
+            <Text as="span" size="sm" className={styles.secondary}>
                 {_t("voip|element_call_mock|status", {
                     roomId,
                     intent,
@@ -134,14 +142,14 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                 })}
             </Text>
 
-            <section className="mx_ElementCallMock_section">
-                <H3>{_t("voip|element_call_mock|participants")}</H3>
+            <section>
+                <H3 className={styles.sectionTitle}>{_t("voip|element_call_mock|participants")}</H3>
                 {participants.length === 0 ? (
-                    <Text as="span" size="sm" className="mx_ElementCallMock_empty">
+                    <Text as="span" size="sm" className={styles.secondary}>
                         {_t("voip|element_call_mock|no_participants")}
                     </Text>
                 ) : (
-                    <ul className="mx_ElementCallMock_members">
+                    <ul className={styles.members}>
                         {participants.map((participant) => (
                             <li key={participant.id}>{participant.label}</li>
                         ))}
@@ -149,9 +157,9 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                 )}
             </section>
 
-            <section className="mx_ElementCallMock_section">
-                <H3>HostBridge</H3>
-                <Flex className="mx_ElementCallMock_buttons" wrap="wrap" gap="var(--cpd-space-2x)">
+            <section>
+                <H3 className={styles.sectionTitle}>HostBridge</H3>
+                <Flex className={styles.buttons} wrap="wrap" gap="var(--cpd-space-2x)">
                     <Button size="md" kind="primary" onClick={() => void vm.toggleJoined()}>
                         {joined ? "notifyHungUp" : "notifyJoined"}
                     </Button>
@@ -174,29 +182,41 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                         </Button>
                     )}
                 </Flex>
-                <Text as="span" size="sm" className="mx_ElementCallMock_empty">
+                <Text as="span" size="sm" className={styles.secondary}>
                     {_t("voip|element_call_mock|host_bridge_facts", {
                         supportsReactions: String(supportsReactions),
                         allowJoinUnmutedViaIntent: String(allowJoinUnmutedViaIntent),
                         close: canClose ? _t("action|yes") : _t("action|no"),
                     })}
                 </Text>
-                <ol className="mx_ElementCallMock_log" aria-label={_t("voip|element_call_mock|log_label")}>
+                <ol
+                    className={styles.log}
+                    aria-label={_t("voip|element_call_mock|log_label")}
+                    // Scrollable, so it has to be reachable from the keyboard (axe: scrollable-region-focusable)
+                    // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                    tabIndex={0}
+                >
                     {log.map((entry) => (
                         <li key={entry.id}>{entry.text}</li>
                     ))}
                 </ol>
             </section>
 
-            <section className="mx_ElementCallMock_section">
-                <H3>{_t("voip|element_call_mock|configuration")}</H3>
-                <pre className="mx_ElementCallMock_config" aria-label={_t("voip|element_call_mock|config_label")}>
+            <section>
+                <H3 className={styles.sectionTitle}>{_t("voip|element_call_mock|configuration")}</H3>
+                <pre
+                    className={styles.config}
+                    aria-label={_t("voip|element_call_mock|config_label")}
+                    // Scrollable, so it has to be reachable from the keyboard (axe: scrollable-region-focusable)
+                    // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                    tabIndex={0}
+                >
                     {configJson}
                 </pre>
-                <Text as="span" size="sm" className="mx_ElementCallMock_empty">
+                <Text as="span" size="sm" className={styles.secondary}>
                     {_t("voip|element_call_mock|initialized_with", { value: initializedWith })}
                 </Text>
             </section>
-        </div>
+        </section>
     );
 };

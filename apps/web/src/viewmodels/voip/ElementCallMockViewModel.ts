@@ -5,16 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { BaseViewModel } from "@element-hq/web-shared-components";
+import {
+    BaseViewModel,
+    type ElementCallMockParticipant,
+    type ElementCallMockViewSnapshot,
+    type ElementCallMockViewModel as ElementCallMockViewModelInterface,
+} from "@element-hq/web-shared-components";
 import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixRTCSession, MatrixRTCSessionEvent, type SessionMembershipData } from "matrix-js-sdk/src/matrixrtc";
 
-import {
-    type ElementCallMockParticipant,
-    type ElementCallMockViewSnapshot,
-    type ElementCallMockViewModel as ElementCallMockViewModelInterface,
-} from "../../components/views/voip/ElementCallMockView";
 import { CallStore } from "../../stores/CallStore";
 import { _t } from "../../languageHandler";
 import {
