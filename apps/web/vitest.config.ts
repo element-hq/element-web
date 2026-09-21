@@ -109,50 +109,52 @@ export default defineProject({
                 test: {
                     name: "browser",
                     include: ["src/**/*.test.browser.{ts,tsx}"],
-                },
-                provide: { canCompareScreenshots },
-                browser: {
-                    enabled: true,
-                    headless: true,
-                    provider: playwright({
-                        contextOptions: {
-                            reducedMotion: "reduce",
-                            colorScheme: "light",
-                            deviceScaleFactor: 1,
-                        },
-                        launchOptions: {
-                            // Force consistent font rendering, as per packages/shared-components
-                            args: [
-                                "--font-render-hinting=none",
-                                "--disable-font-subpixel-positioning",
-                                "--disable-lcd-text",
-                            ],
-                        },
-                        connectOptions: wsEndpoint ? { wsEndpoint, exposeNetwork: "<loopback>" } : undefined,
-                    }),
-                    instances: [{ browser: "chromium" }],
-                    expect: {
-                        toMatchScreenshot: {
-                            comparatorName: "pixelmatch",
-                            comparatorOptions: {
-                                // Enough to absorb sub-pixel antialiasing noise, but far less
-                                // than a clipped or misplaced glyph moves.
-                                allowedMismatchedPixelRatio: 0.02,
+                    browser: {
+                        enabled: true,
+                        headless: true,
+                        viewport: { width: 960, height: 720 },
+                        provider: playwright({
+                            contextOptions: {
+                                reducedMotion: "reduce",
+                                colorScheme: "light",
+                                deviceScaleFactor: 1,
+                                viewport: { width: 960, height: 720 },
                             },
-                            // Baselines are grouped by platform, and only the linux ones are
-                            // committed — see apps/web/.gitignore.
-                            resolveScreenshotPath: ({
-                                root,
-                                testFileDirectory,
-                                screenshotDirectory,
-                                testFileName,
-                                arg,
-                                ext,
-                                browserName,
-                            }) =>
-                                `${root}/${testFileDirectory}/${screenshotDirectory}/${browserPlatform}/${testFileName}/${arg}-${browserName}${ext}`,
+                            launchOptions: {
+                                // Force consistent font rendering, as per packages/shared-components
+                                args: [
+                                    "--font-render-hinting=none",
+                                    "--disable-font-subpixel-positioning",
+                                    "--disable-lcd-text",
+                                ],
+                            },
+                            connectOptions: wsEndpoint ? { wsEndpoint, exposeNetwork: "<loopback>" } : undefined,
+                        }),
+                        instances: [{ browser: "chromium" }],
+                        expect: {
+                            toMatchScreenshot: {
+                                comparatorName: "pixelmatch",
+                                comparatorOptions: {
+                                    // Enough to absorb sub-pixel antialiasing noise, but far less
+                                    // than a clipped or misplaced glyph moves.
+                                    allowedMismatchedPixelRatio: 0.02,
+                                },
+                                // Baselines are grouped by platform, and only the linux ones are
+                                // committed — see apps/web/.gitignore.
+                                resolveScreenshotPath: ({
+                                    root,
+                                    testFileDirectory,
+                                    screenshotDirectory,
+                                    testFileName,
+                                    arg,
+                                    ext,
+                                    browserName,
+                                }) =>
+                                    `${root}/${testFileDirectory}/${screenshotDirectory}/${browserPlatform}/${testFileName}/${arg}-${browserName}${ext}`,
+                            },
                         },
                     },
+                    provide: { canCompareScreenshots },
                 },
             },
         ],

@@ -16,12 +16,15 @@ import path from "node:path";
 
 import rootConfig from "../../vitest.config";
 
+const viewport = { width: 960, height: 720 };
+
 const commonContextOptions: PlaywrightProviderOptions["contextOptions"] = {
     reducedMotion: "reduce",
     // Force consistent font rendering
     colorScheme: "light",
     // Disable font smoothing for consistent rendering
     deviceScaleFactor: 1,
+    viewport,
 };
 
 const commonLaunchOptions = {
@@ -84,6 +87,7 @@ export default defineConfig({
                                 : undefined,
                         }),
                         instances: [{ browser: "chromium" }],
+                        viewport,
                     },
                     setupFiles: [".storybook/vitest.setup.ts"],
                 },
