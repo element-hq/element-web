@@ -956,7 +956,6 @@
     },
     "language_dropdown_label": "תפריט שפות",
     "leave_room_dialog": {
-        "leave_room_question": "האם אתה בטוח שברצונך לעזוב את החדר '%(roomName)s'?",
         "room_rejoin_warning": "חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה."
     },
     "lightbox": {

@@ -100,7 +100,6 @@
             "clear_status": "Status entfernen",
             "create_an_account": "Konto erstellen",
             "got_an_account": "Schon ein Konto?",
-            "manage_account": "Konto verwalten",
             "sign_in": "Anmelden",
             "title": "Nutzermenü"
         }
@@ -112,6 +111,12 @@
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Wähle für Details.",
         "mute_room": "Chat stummschalten"
+    },
+    "pdf_viewer": {
+        "error_load": "PDF konnte nicht geladen werden.",
+        "loading": "PDF wird geladen …",
+        "page_label": "Seite %(page)s von %(total)s",
+        "page_number": "Seitenzahl"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -363,13 +368,14 @@
         "pending_moderation": "Nachricht wartet auf Moderation",
         "pending_moderation_reason": "Nachricht wartet auf Moderation: %(reason)s",
         "url_preview": {
-            "close": "Vorschau schließen",
-            "open_link": "Link öffnen",
             "show_n_more": {
                 "one": "%(count)s weitere Vorschau anzeigen",
                 "other": "%(count)s weitere Vorschauen anzeigen"
             },
-            "view_image": "Bild anzeigen"
+            "view_audio": "Audio abspielen",
+            "view_file": "Datei anzeigen",
+            "view_image": "Bild anzeigen",
+            "view_video": "Video ansehen"
         }
     },
     "user_menu": {

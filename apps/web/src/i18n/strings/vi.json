@@ -1239,8 +1239,6 @@
     "language_dropdown_label": "Danh sách ngôn ngữ",
     "leave_room_dialog": {
         "last_person_warning": "Bạn là người duy nhất ở đây. Nếu bạn rời, không ai có thể tham gia trong tương lai, kể cả bạn.",
-        "leave_room_question": "Bạn có chắc chắn muốn rời khỏi phòng '%(roomName)s' không?",
-        "leave_space_question": "Bạn có chắc chắn muốn để khoảng trắng '%(spaceName)s' không?",
         "room_rejoin_warning": "Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.",
         "space_rejoin_warning": "space này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời."
     },
@@ -1534,7 +1532,6 @@
         "join_button_account": "Đăng Ký",
         "join_failed_needs_invite": "Để xem %(roomName)s, bạn cần một lời mời",
         "join_the_discussion": "Tham gia thảo luận",
-        "join_title": "Tham gia phòng để tương tác",
         "join_title_account": "Tham gia cuộc trò chuyện bằng một tài khoản",
         "joining": "Đang tham gia…",
         "joining_room": "Đang tham gia phòng…",

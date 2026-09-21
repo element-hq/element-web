@@ -18,11 +18,9 @@
         "strict": true,
         "types": ["node", "modernizr"],
         "paths": {
-            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
-            "test-utils-rtl": ["./test/test-utils/jest-matrix-react"],
-            "test-utils": ["./test/test-utils"],
-            "test-utils/*": ["./test/test-utils/*"],
-            "jest-mock-vitest-adapter": ["./test/setup/adapter.ts"]
+            "test-utils-rtl": ["./src/test/test-utils/vitest-matrix-react"],
+            "test-utils": ["./src/test/test-utils"],
+            "test-utils/*": ["./src/test/test-utils/*"]
         },
         "skipLibCheck": true
     },

@@ -658,7 +658,7 @@
         "join_rule_invite": "Nur mit Einladung",
         "join_rule_invite_label": "Nur eingeladene Personen können diesen Chat finden und ihm beitreten.",
         "join_rule_knock_label": "Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren. Du kannst dies später ändern.",
-        "join_rule_public_label": "Alle können diesen Chat finden und ihm beitreten.",
+        "join_rule_public_label": "Alle können beitreten, auch Personen außerhalb deiner Organisation.",
         "join_rule_public_parent_space_label": "Alle können diesen Chat finden und ihm beitreten, nicht nur Mitglieder von <SpaceName/>.",
         "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Alle in <SpaceName/> können beitreten.",
@@ -714,7 +714,7 @@
         "private_personal_heading": "Für wen ist dieser Space gedacht?",
         "private_space": "Für mich und meine Kollegen",
         "private_space_description": "Ein privater Space für dich und deine Kollegen",
-        "public_description": "Alle können beitreten – am besten für Communitys",
+        "public_description": "Alle können beitreten, auch Personen außerhalb deiner Organisation. Am besten für Communitys",
         "public_heading": "Dein öffentlicher Space",
         "search_public_button": "Öffentliche Spaces suchen",
         "setup_rooms_community_description": "Lass uns ein paar Chats erstellen, um loszulegen.",
@@ -1354,23 +1354,24 @@
         "email_limit_one": "E-Mail-Einladungen können nur nacheinander gesendet werden",
         "email_use_default_is": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
         "email_use_is": "Verwende einen Identitäts-Server, um per E-Mail-Adresse einladen zu können. Lege einen in den <settings>Einstellungen</settings> fest.",
-        "error_already_invited_room": "Die Person wurde bereits eingeladen",
-        "error_already_invited_space": "Die Person wurde bereits eingeladen",
-        "error_already_joined_room": "Die Person ist bereits im Chat",
-        "error_already_joined_space": "Die Person ist bereits im Space",
-        "error_bad_state": "Gesperrte Nutzer können nicht eingeladen werden.",
+        "error_already_invited_room": "Bereits in den Chat eingeladen",
+        "error_already_invited_space": "Bereits in den Space eingeladen",
+        "error_already_joined_room": "Bereits im Chat",
+        "error_already_joined_space": "Bereits im Space",
+        "error_bad_state": "Die Sperre für diese Person muss aufgehoben werden, bevor sie eingeladen werden kann",
         "error_dm": "Wir konnten deine Direktnachricht nicht erstellen.",
         "error_find_room": "Beim Einladen der Nutzer lief etwas schief.",
         "error_find_user_description": "Folgende Nutzer konnten nicht eingeladen werden, da sie nicht existieren oder ungültig sind: %(csvNames)s",
         "error_find_user_title": "Folgenden Nutzer konnten nicht gefunden werden",
+        "error_forbidden": "Einladungen werden nicht angenommen",
         "error_invite": "Diese Personen konnten nicht einladen werden. Bitte überprüfe sie und versuche es erneut.",
-        "error_permissions_room": "Du hast keine Berechtigung, Personen in diesen Chat einzuladen.",
-        "error_permissions_space": "Du hast keine Berechtigung, Personen in diesen Space einzuladen.",
+        "error_permissions_room": "Du hast keine Berechtigung, Personen in diesen Chat einzuladen",
+        "error_permissions_space": "Du hast keine Berechtigung, Personen in diesen Space einzuladen",
         "error_profile_undisclosed": "Diese Person kann existieren oder auch nicht",
         "error_rate_limited": "Es wurden zu viele Einladungen gesendet. Bitte versuche es später erneut.",
         "error_transfer_multiple_target": "Ein Anruf kann nur auf einen einzelnen Nutzer übertragen werden.",
-        "error_unfederated_room": "Dieser Chat förderiert nicht. Du kannst keine Personen von externen Servern einladen.",
-        "error_unfederated_space": "Dieser Space förderiert nicht. Du kannst keine Personen von externen Servern einladen.",
+        "error_unfederated_room": "Dieser Chat ist nicht föderiert. Du kannst keine Personen von anderen Kontoanbietern einladen",
+        "error_unfederated_space": "Dieser Space ist nicht föderiert. Du kannst keine Personen von anderen Kontoanbietern einladen",
         "error_unknown": "Unbekannter Server-Fehler",
         "error_user_not_found": "Diese Person existiert nicht",
         "error_version_unsupported_room": "Der Kontoanbieter des Nutzers unterstützt diese Chatversion nicht.",
@@ -1387,7 +1388,9 @@
             "preparing": "Einladungen werden vorbereitet …"
         },
         "recents_section": "Letzte Unterhaltungen",
-        "room_failed_partial_title": "Einige Einladungen konnten nicht versendet werden",
+        "room_failed_partial_description": "Wir haben die anderen Einladungen verschickt, konnten aber die Personen unten nicht einladen.",
+        "room_failed_partial_reason": "%(reason)s:",
+        "room_failed_partial_title": "Einige Einladungen wurden nicht gesendet",
         "room_failed_title": "Fehler beim Einladen von Nutzern in %(roomName)s",
         "send_link_prompt": "Oder versende einen Einladungslink",
         "start_conversation_name_email_mxid_prompt": "Beginne eine Konversation mittels Name, E-Mail-Adresse oder Matrix-ID (wie <userId/>).",
@@ -1553,6 +1556,8 @@
         "notification_settings_beta_caption": "Wir stellen einen einfacheren Weg vor, deine Benachrichtigungseinstellungen zu ändern. Passe %(brand)s genau so an, wie du möchtest.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
+        "pdf_viewer": "PDFs öffnen",
+        "pdf_viewer_description": "PDF-Anhänge im rechten Panel lesen.",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "sliding_sync": "Sliding-Sync-Modus",
@@ -1609,12 +1614,14 @@
     "language_dropdown_label": "Sprachauswahl",
     "leave_room_dialog": {
         "last_person_warning": "Du bist die einzige Person hier. Wenn du gehst, kann in Zukunft niemand mehr eintreten, auch du nicht.",
-        "leave_room_question": "Bist du sicher, dass du den Chat „%(roomName)s“ verlassen möchtest?",
-        "leave_space_question": "Bist du sicher, dass du den Space „%(spaceName)s“ verlassen möchtest?",
+        "leave_room_title": "„%(roomName)s “ verlassen?",
+        "leave_space_title": "„%(spaceName)s “ verlassen?",
         "room_leave_admin_warning": "Du bist der einzige Admin in diesem Chat. Wenn du den Chat verlässt, wird niemand mehr in der Lage sein, die Chat-Einstellungen zu ändern oder andere wichtige Aktionen durchzuführen.",
         "room_leave_mod_warning": "Du bist der einzige Moderator in diesem Chat. Wenn du den Chat verlässt, kann niemand mehr die Chat-Einstellungen ändern oder andere wichtige Aktionen durchführen.",
-        "room_rejoin_warning": "Dieser Chat ist nicht öffentlich und du kannst ihm ohne Einladung nicht erneut beitreten.",
-        "space_rejoin_warning": "Dieser Space ist nicht öffentlich. Ohne Einladung kannst du ihm nicht erneut beitreten."
+        "room_rejoin_warning": "Dieser Chat ist privat. Ohne Einladung kannst du ihm nicht erneut beitreten.",
+        "room_rejoin_warning_restricted": "Dieser Chat ist eingeschränkt. Du kannst ihm nur erneut beitreten, wenn du Mitglied eines freigegebenen Spaces bist oder eingeladen wirst.",
+        "space_rejoin_warning": "Dieser Space ist privat und kann ohne Einladung nicht erneut betreten werden.",
+        "space_rejoin_warning_restricted": "Dieser Space ist eingeschränkt. Du kannst ihm nur erneut beitreten, wenn du Mitglied eines freigegebenen Spaces bist oder eingeladen wirst."
     },
     "lightbox": {
         "rotate_left": "Nach links drehen",
@@ -1729,6 +1736,10 @@
         "send_dm": "Direkt­­nachricht senden",
         "welcome_detail": "Los geht’s – wir helfen dir beim Einstieg",
         "welcome_user": "Willkommen %(name)s"
+    },
+    "pdf_viewer": {
+        "open": "PDF öffnen",
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Nachricht in %(room)s",
@@ -2036,7 +2047,6 @@
         "join_button_account": "Registrieren",
         "join_failed_needs_invite": "Um %(roomName)s zu betrachten, benötigst du eine Einladung",
         "join_the_discussion": "An Diskussion teilnehmen",
-        "join_title": "Tritt dem Chat bei, um teilzunehmen",
         "join_title_account": "An Unterhaltung mit einem Konto teilnehmen",
         "joining": "Trete bei …",
         "joining_room": "Trete dem Chat bei …",
@@ -2125,6 +2135,7 @@
         "section": {
             "chats": "Chats",
             "favourites": "Favoriten",
+            "invites": "Einladungen",
             "low_priority": "Niedrige Priorität"
         },
         "show_less": "Weniger anzeigen"
@@ -2313,7 +2324,7 @@
             "join_rule_knock": "Auf Anfrage",
             "join_rule_knock_description": "Personen können dem Chat nur beitreten, wenn sie Zutritt erhalten.",
             "join_rule_public": "Alle",
-            "join_rule_public_description": "Alle können beitreten.",
+            "join_rule_public_description": "Alle können beitreten, auch Personen außerhalb deiner Organisation.",
             "join_rule_restricted": "Space-Mitglieder",
             "join_rule_restricted_description": "Alle in freigegebenen Spaces können ohne Einladung beitreten. <a>Spaces verwalten</a>",
             "join_rule_restricted_description_active_space": "Alle in <spaceName/> können beitreten.",
@@ -2639,6 +2650,7 @@
         },
         "inline_url_previews_default": "Vorschau aktivieren",
         "inline_url_previews_encrypted": "Vorschau in verschlüsselten Chats aktivieren",
+        "inline_url_previews_encrypted_bundled_only": "Gebündelte Vorschauen nur in verschlüsselten Chats anzeigen",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"
@@ -2729,6 +2741,7 @@
             "invites": "In einen Chat eingeladen",
             "keywords": "Zeige einen Hinweis <badge/>, wenn Schlüsselwörter in einem Chat verwendet werden.",
             "keywords_prompt": "Schlüsselwörter, Variationen dieser oder Anzeigenamen eingeben",
+            "labs_notice_error": "Deine Benachrichtigungseinstellungen konnten nicht aktualisiert werden",
             "labs_notice_prompt": "<strong>Aktualisierung:</strong> Wir haben die Benachrichtigungseinstellungen vereinfacht, damit Optionen schneller zu finden sind. Einige benutzerdefinierte Einstellungen werden hier nicht angezeigt, sind aber dennoch aktiv. Wenn du fortfährst, könnten sich einige Einstellungen ändern. <a>Erfahre mehr</a>",
             "mentions_keywords": "Erwähnungen und Schlüsselwörter",
             "mentions_keywords_only": "Nur Erwähnungen und Schlüsselwörter",
@@ -2829,7 +2842,13 @@
             "message_search_unsupported_web": "%(brand)s kann verschlüsselte Nachrichten im Browser nicht sicher lokal zwischenspeichern. Nutze <desktopLink>%(brand)s Desktop</desktopLink>, damit verschlüsselte Nachrichten in den Suchergebnissen erscheinen.",
             "record_session_details": "Name, Version und URL der Anwendung aufzeichnen, um Geräte in der Geräteverwaltung leichter zu erkennen",
             "send_analytics": "Analysedaten senden",
-            "strict_encryption": "Nachrichten nur an verifizierte Nutzer senden"
+            "strict_encryption": "Nachrichten nur an verifizierte Nutzer senden",
+            "tokenizer_mode": "Tokenizer-Modus für die Suche",
+            "tokenizer_mode_change_warning": "Wenn du den Tokenizer-Modus änderst, muss der bestehende Suchindex gelöscht werden. Der Index wird automatisch neu aufgebaut. Möchtest du fortfahren?",
+            "tokenizer_mode_language": "Sprachbasiert",
+            "tokenizer_mode_language_description": "Unterstützung für eine Sprache, basierend auf deiner Anzeigesprache. Funktioniert nur mit bestimmten Sprachen (Englisch, Deutsch usw.).",
+            "tokenizer_mode_ngram": "N-Gramm",
+            "tokenizer_mode_ngram_description": "Unterstützt alle Sprachen, auch solche ohne Wortgrenzen. Funktioniert auch bei gemischten Sprachen."
         },
         "send_read_receipts": "Sende Lesebestätigungen",
         "send_read_receipts_unsupported": "Dein Server unterstützt das Deaktivieren von Lesebestätigungen nicht.",
@@ -2841,8 +2860,8 @@
                 "other": "Entfernen dieser Geräte bestätigen"
             },
             "confirm_sign_out_body": {
-                "one": "Bestätige unten, um dieses Gerät zu entfernen.",
-                "other": "Bestätige unten, um diese Geräte zu entfernen."
+                "one": "Wähle die Schaltfläche unten, um das Entfernen dieses Geräts zu bestätigen.",
+                "other": "Wähle die Schaltfläche unten, um das Entfernen dieser Geräte zu bestätigen."
             },
             "confirm_sign_out_continue": {
                 "one": "Gerät entfernen",
@@ -2939,6 +2958,7 @@
         "show_join_leave": "Bei-/Austrittsnachrichten (Einladung/Entfernen/Bann nicht betroffen)",
         "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_nsfw_content": "NSFW-Inhalte anzeigen",
+        "show_people_sections": "„Personen\" als Abschnitt anzeigen",
         "show_read_receipts": "Lesebestätigungen von anderen Nutzern anzeigen",
         "show_redaction_placeholder": "Platzhalter für gelöschte Nachrichten",
         "show_sections": "Abschnitte anzeigen",
@@ -3208,6 +3228,7 @@
         "join_button_text": "%(roomAddress)s beitreten",
         "keyboard_scroll_hint": "Benutze <arrows/> zum Scrollen",
         "messages_label": "Nachrichten",
+        "no_results": "Keine Ergebnisse",
         "other_rooms_in_space": "Andere Chats in %(spaceName)s",
         "public_rooms_label": "Öffentliche Chats",
         "public_spaces_label": "Öffentliche Spaces",
@@ -3352,7 +3373,8 @@
             "voice_call_unsupported": "%(senderName)s hat einen Sprachanruf getätigt. (Nicht von diesem Browser unterstützt)"
         },
         "m.file": {
-            "error_decrypting": "Fehler beim Entschlüsseln des Anhangs"
+            "error_decrypting": "Fehler beim Entschlüsseln des Anhangs",
+            "size_unknown": "Größe unbekannt"
         },
         "m.image": {
             "error": "Kann Bild aufgrund eines Fehlers nicht anzeigen",
