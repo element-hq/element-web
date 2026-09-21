@@ -46,6 +46,14 @@ $left-gutter: 64px;
         }
     }
 
+    /* EditMessageComposerWrapper sits between the body slot and the edit composer, so the
+       shared EventTileView shell's `.slotBody > * { overflow-y: hidden }` lands on it rather
+       than on the composer. Keep the autocomplete and formatting bar, which pop out above
+       the input, visible. */
+    .mx_EditMessageComposerWrapper {
+        overflow: visible;
+    }
+
     .mx_EventTile_searchHighlight {
         background-color: $accent;
         color: $accent-fg-color;
