@@ -14,7 +14,7 @@ import { fn } from "storybook/test";
 
 import * as stories from "./GenericToast.stories.tsx";
 
-const { Default, WithDetail, PrimaryOnly } = composeStories(stories);
+const { Default, Destructive, WithDetail, PrimaryOnly } = composeStories(stories);
 
 describe("GenericToast", () => {
     it("renders with primary and secondary buttons", () => {
@@ -25,6 +25,12 @@ describe("GenericToast", () => {
     it("renders detail content", () => {
         const { container, getByText } = render(<WithDetail />);
         expect(getByText("Some more detail about the toast.")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders destructive content", () => {
+        const { container, getByText } = render(<Destructive />);
+        expect(getByText("You have unverified sessions.")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 
