@@ -8,6 +8,7 @@
 import React, { useSyncExternalStore } from "react";
 import {
     BaseViewModel,
+    type ElementCallAppTileViewClassNames,
     type ElementCallAppTileViewSnapshot,
     type ElementCallAppTileViewModel as ElementCallAppTileViewModelInterface,
 } from "@element-hq/web-shared-components";
@@ -33,6 +34,24 @@ import { type ActionPayload } from "../../dispatcher/payloads";
 const Z_INDEX_DOCKED = 9;
 const Z_INDEX_MINI = 101;
 
+/**
+ * `AppTile`'s class names for the tile's elements, styled by `_AppsDrawer.pcss` through the containers
+ * the tile is dropped into (the apps drawer, the widget card, the sticker picker). One constant per
+ * layout, so that a layout update that changes nothing leaves the snapshot alone.
+ */
+const CLASS_NAMES_DOCKED: ElementCallAppTileViewClassNames = {
+    root: "mx_AppTile",
+    persistedWrapper: "mx_AppTile_persistedWrapper",
+    // We don't want mx_AppTileBody (rounded corners) for call widgets
+    body: "mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--call",
+};
+const CLASS_NAMES_FULL_WIDTH: ElementCallAppTileViewClassNames = { ...CLASS_NAMES_DOCKED, root: "mx_AppTileFullWidth" };
+const CLASS_NAMES_MINI: ElementCallAppTileViewClassNames = {
+    root: "mx_AppTile_mini",
+    persistedWrapper: "mx_AppTile_persistedWrapper",
+    body: "mx_AppTileBody mx_AppTileBody--mini mx_AppTileBody--call",
+};
+
 /** The parts of the tile's props the view model reacts to while it is mounted. */
 export interface TileLayout {
     /** Whether the tile is the small floating one (the picture-in-picture window). */
@@ -42,6 +61,17 @@ export interface TileLayout {
     /** Set while the tile is being dragged or resized, so the call does not swallow the pointer. */
     pointerEvents?: CSSProperties["pointerEvents"];
 }
+
+/** The parts of the snapshot that follow the tile's layout. */
+const layoutSnapshot = ({
+    miniMode,
+    fullWidth,
+    pointerEvents,
+}: TileLayout): Pick<ElementCallAppTileViewSnapshot, "classNames" | "zIndex" | "pointerEvents"> => ({
+    classNames: miniMode ? CLASS_NAMES_MINI : fullWidth ? CLASS_NAMES_FULL_WIDTH : CLASS_NAMES_DOCKED,
+    zIndex: miniMode ? Z_INDEX_MINI : Z_INDEX_DOCKED,
+    pointerEvents,
+});
 
 export interface Props extends TileLayout {
     /**
@@ -90,6 +120,8 @@ export class ElementCallAppTileViewModel
     private elementCall: ElementCallModel | null;
     private started = false;
     private docked = false;
+    /** Whether the tile is currently the floating one: docked tiles dock the call, floating ones do not. */
+    private miniMode: boolean;
     private readonly client: MatrixClient;
 
     public constructor(props: Props) {
@@ -98,14 +130,12 @@ export class ElementCallAppTileViewModel
         const elementCall = resolveCall(CallStore.instance.getCall(props.room?.roomId ?? ""), props.app.id);
         super(props, {
             hidden: elementCall === null || !props.room,
-            miniMode: props.miniMode,
-            fullWidth: props.fullWidth,
             persistKey: getPersistKey(WidgetUtils.getWidgetUid(props.app)),
-            zIndex: props.miniMode ? Z_INDEX_MINI : Z_INDEX_DOCKED,
-            pointerEvents: props.pointerEvents,
+            ...layoutSnapshot(props),
         });
         this.client = props.sdkContext.client;
         this.elementCall = elementCall;
+        this.miniMode = props.miniMode;
         this.widgetRoomId = isAppWidget(props.app) ? props.app.roomId : null;
     }
 
@@ -126,7 +156,7 @@ export class ElementCallAppTileViewModel
         this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
 
         // Tiles in miniMode are floating, and therefore not docked.
-        this.setDocked(!this.snapshot.current.miniMode);
+        this.setDocked(!this.miniMode);
     }
 
     /**
@@ -150,14 +180,10 @@ export class ElementCallAppTileViewModel
      * Updates the props the tile can change while it stays mounted, most importantly `miniMode`:
      * the call moving between a docked container and the floating picture-in-picture window.
      */
-    public setLayout({ miniMode, fullWidth, pointerEvents }: TileLayout): void {
-        this.snapshot.merge({
-            miniMode,
-            fullWidth,
-            pointerEvents,
-            zIndex: miniMode ? Z_INDEX_MINI : Z_INDEX_DOCKED,
-        });
-        if (this.started) this.setDocked(!miniMode);
+    public setLayout(layout: TileLayout): void {
+        this.miniMode = layout.miniMode;
+        this.snapshot.merge(layoutSnapshot(layout));
+        if (this.started) this.setDocked(!layout.miniMode);
     }
 
     /**

@@ -6,9 +6,21 @@
  */
 
 import React, { type CSSProperties, type FC, type ReactNode } from "react";
-import classNames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
+
+/**
+ * The application's CSS class names for the tile's elements. The tile has no styling of its own:
+ * the containers it is dropped into style its box through these classes.
+ */
+export interface ElementCallAppTileViewClassNames {
+    /** The tile's root element. */
+    root?: string;
+    /** The element wrapping the persisted root, which fixes the tile's height. */
+    persistedWrapper?: string;
+    /** The element wrapping Element Call inside the persisted root. */
+    body?: string;
+}
 
 export interface ElementCallAppTileViewSnapshot {
     /**
@@ -17,12 +29,10 @@ export interface ElementCallAppTileViewSnapshot {
      */
     hidden: boolean;
     /**
-     * Whether the tile is a small floating one (the picture-in-picture window) rather than
-     * one docked into a container.
+     * The application's class names for the tile's elements, which is how a floating tile (the
+     * picture-in-picture window) and a docked one come to look different.
      */
-    miniMode: boolean;
-    /** Whether a docked tile should fill the width of its container. */
-    fullWidth: boolean;
+    classNames?: ElementCallAppTileViewClassNames;
     /** Identifies the persisted root that holds the call, across every tile that shows it. */
     persistKey: string;
     /** Stacking order of the persisted root relative to other persisted apps. */
@@ -73,34 +83,19 @@ export interface ElementCallAppTileViewProps {
  * root, which every tile of the call renders alike, so moving the call between containers does not
  * disturb the component.
  *
- * The markup mirrors `AppTile`'s, and deliberately uses its global `mx_AppTile*` class names rather
- * than CSS modules: the styles live in Element Web's `_AppsDrawer.pcss` and are applied by the
- * containers the tile is dropped into (the apps drawer, the widget card, the sticker picker).
+ * The tile has no styling of its own: the application names the classes of its elements in the
+ * snapshot, and the containers the tile is dropped into style it like any other app tile through them.
  */
 export const ElementCallAppTileView: FC<ElementCallAppTileViewProps> = ({ vm, overlay }) => {
-    const { hidden, miniMode, fullWidth, persistKey, zIndex, pointerEvents } = useViewModel(vm);
+    const { hidden, classNames, persistKey, zIndex, pointerEvents } = useViewModel(vm);
     if (hidden) return null;
 
     return (
-        <div
-            className={classNames({
-                mx_AppTile_mini: miniMode,
-                mx_AppTileFullWidth: !miniMode && fullWidth,
-                mx_AppTile: !miniMode && !fullWidth,
-            })}
-        >
+        <div className={classNames?.root}>
             {/* Wrap the persisted root in a div to fix the height, otherwise the tile's border is in the wrong place */}
-            <div className="mx_AppTile_persistedWrapper">
+            <div className={classNames?.persistedWrapper}>
                 <vm.PersistedElement persistKey={persistKey} zIndex={zIndex}>
-                    <div
-                        className={classNames("mx_AppTileBody", {
-                            "mx_AppTileBody--large": !miniMode,
-                            "mx_AppTileBody--mini": miniMode,
-                            // We don't want mx_AppTileBody (rounded corners) for call widgets
-                            "mx_AppTileBody--call": true,
-                        })}
-                        style={pointerEvents ? { pointerEvents } : undefined}
-                    >
+                    <div className={classNames?.body} style={pointerEvents ? { pointerEvents } : undefined}>
                         <vm.ElementCall />
                     </div>
                     {overlay}

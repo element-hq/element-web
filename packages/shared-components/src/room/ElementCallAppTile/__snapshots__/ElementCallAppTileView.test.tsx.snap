@@ -1,15 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ElementCallAppTileView > fills the container width when asked 1`] = `
+exports[`ElementCallAppTileView > puts the application's class names on the tile's elements 1`] = `
 <div>
   <div
-    class="mx_AppTileFullWidth"
+    class="tile"
   >
     <div
-      class="mx_AppTile_persistedWrapper"
+      class="persistedWrapper"
     >
       <div
-        class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--call"
+        class="body"
       >
         <div
           style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
@@ -20,17 +20,11 @@ exports[`ElementCallAppTileView > fills the container width when asked 1`] = `
 </div>
 `;
 
-exports[`ElementCallAppTileView > renders the call in a persisted root, docked 1`] = `
+exports[`ElementCallAppTileView > renders the call in a persisted root 1`] = `
 <div>
-  <div
-    class="mx_AppTile"
-  >
-    <div
-      class="mx_AppTile_persistedWrapper"
-    >
-      <div
-        class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--call"
-      >
+  <div>
+    <div>
+      <div>
         <div
           style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
         />
@@ -42,15 +36,9 @@ exports[`ElementCallAppTileView > renders the call in a persisted root, docked 1
 
 exports[`ElementCallAppTileView > renders the overlay inside the persisted root 1`] = `
 <div>
-  <div
-    class="mx_AppTile"
-  >
-    <div
-      class="mx_AppTile_persistedWrapper"
-    >
-      <div
-        class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--call"
-      >
+  <div>
+    <div>
+      <div>
         <div
           style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
         />
@@ -59,26 +47,6 @@ exports[`ElementCallAppTileView > renders the overlay inside the persisted root 
         data-testid="overlay"
       >
         Overlay
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`ElementCallAppTileView > uses the mini classes in miniMode 1`] = `
-<div>
-  <div
-    class="mx_AppTile_mini"
-  >
-    <div
-      class="mx_AppTile_persistedWrapper"
-    >
-      <div
-        class="mx_AppTileBody mx_AppTileBody--mini mx_AppTileBody--call"
-      >
-        <div
-          style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
-        />
       </div>
     </div>
   </div>

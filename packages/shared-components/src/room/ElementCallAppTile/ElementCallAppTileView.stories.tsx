@@ -43,22 +43,20 @@ const ElementCallAppTileViewWrapperImpl = ({
 const ElementCallAppTileViewWrapper = withViewDocs(ElementCallAppTileViewWrapperImpl, ElementCallAppTileView);
 
 /**
- * Note that the tile has no styling of its own: the `mx_AppTile*` class names it renders are styled
- * by app/web's `_AppsDrawer.pcss`, which stories deliberately do not load. These stories therefore
- * show the structure and the injected components, not the tile's final box.
+ * Note that the tile has no styling of its own: the application styles it through the class names
+ * it puts in the snapshot, and stories load none of that CSS. These stories therefore show the
+ * structure and the injected components, not the tile's final box.
  */
 export default {
     title: "Room/ElementCallAppTileView",
     component: ElementCallAppTileViewWrapper,
-    // No visual snapshots: the tile's box is styled entirely by app/web's `_AppsDrawer.pcss`,
-    // which stories do not load, so a screenshot would only show the injected placeholders. The
-    // structure and class names are covered by the DOM snapshots in ElementCallAppTileView.test.tsx.
+    // No visual snapshots: the tile's box is styled entirely by the application's CSS, which stories
+    // do not load, so a screenshot would only show the injected placeholders. The structure and the
+    // placement of the class names are covered by the DOM snapshots in ElementCallAppTileView.test.tsx.
     tags: ["autodocs", "!snapshot"],
     argTypes: {},
     args: {
         hidden: false,
-        miniMode: false,
-        fullWidth: false,
         persistKey: "widget_element-call-widget",
         zIndex: 9,
         PersistedElement: PersistedElementMock,
@@ -69,22 +67,18 @@ export default {
 const Template: StoryFn<typeof ElementCallAppTileViewWrapper> = (args) => <ElementCallAppTileViewWrapper {...args} />;
 
 /**
- * The call docked into a container, sharing the width with other widgets.
+ * The call in its persisted root, with no class names: the tile's box is left entirely to the application.
  */
-export const Docked = Template.bind({});
-Docked.args = {};
+export const Default = Template.bind({});
+Default.args = {};
 
 /**
- * The call docked into a container on its own, filling its width.
+ * The application's class names on the tile's elements, for its containers to style the tile by.
  */
-export const FullWidth = Template.bind({});
-FullWidth.args = { fullWidth: true };
-
-/**
- * The floating picture-in-picture window, which draws above other persisted apps.
- */
-export const MiniMode = Template.bind({});
-MiniMode.args = { miniMode: true, fullWidth: true, zIndex: 101 };
+export const WithClassNames = Template.bind({});
+WithClassNames.args = {
+    classNames: { root: "tile", persistedWrapper: "persistedWrapper", body: "body" },
+};
 
 /**
  * An overlay rendered over the call, inside the persisted root.
