@@ -29,6 +29,7 @@ import PersistedElement from "../elements/PersistedElement";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ElementCallAppTile } from "./ElementCallAppTile";
+import { ElementCallAppTileViewModel } from "../../../viewmodels/room/ElementCallAppTileViewModel";
 
 const { enabledSettings } = enableCalls();
 enabledSettings.add("feature_element_call_react");
@@ -72,6 +73,20 @@ describe("ElementCallAppTile", () => {
         );
         await act(() => Promise.resolve()); // Let effects settle
     };
+
+    it("refuses to build a view model when the SDK context has no client", () => {
+        const noClientContext = new TestSDKContext();
+        expect(
+            () =>
+                new ElementCallAppTileViewModel({
+                    app: call.widget,
+                    room,
+                    sdkContext: noClientContext,
+                    miniMode: false,
+                    fullWidth: false,
+                }),
+        ).toThrow("without a client");
+    });
 
     it("renders the Element Call component in a persisted element with the call tile classes", async () => {
         await renderTile({ overlay: <div data-testid="overlay" /> });

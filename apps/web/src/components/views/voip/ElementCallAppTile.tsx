@@ -9,18 +9,16 @@ import React, { type JSX, useContext, useEffect } from "react";
 import { ElementCallAppTileView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { CallAppTileProps } from "./CallAppTile";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { ElementCallAppTileViewModel } from "../../../viewmodels/room/ElementCallAppTileViewModel";
 
 /**
- * A component that provides that aquires the clinet and sdkContext to create the viewModel.
+ * A component that acquires the SDK context (which carries the client) to create the view model.
  * @param props the same props the "outer" ElementCallAppTile uses.
  * @returns A component wrapping ElementCallAppTileView with vm.
  */
 const ElementCallAppTileInner = (props: CallAppTileProps): JSX.Element => {
     const { app, room, miniMode = false, fullWidth = false, pointerEvents, overlay, movePersistedElement } = props;
-    const client = useContext(MatrixClientContext);
     const sdkContext = useContext(SDKContext);
 
     const vm = useCreateAutoDisposedViewModel(
@@ -28,7 +26,6 @@ const ElementCallAppTileInner = (props: CallAppTileProps): JSX.Element => {
             new ElementCallAppTileViewModel({
                 app,
                 room,
-                client,
                 sdkContext,
                 miniMode,
                 fullWidth,

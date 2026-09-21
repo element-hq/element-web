@@ -51,7 +51,6 @@ export interface Props extends TileLayout {
     app: IWidget | IApp;
     /** The room the call is in. */
     room?: Room;
-    client: MatrixClient;
     sdkContext: SDKContextClass;
     /** Handle to manually notify the persisted element that it needs to move. */
     movePersistedElement?: RefObject<(() => void) | null>;
@@ -91,8 +90,11 @@ export class ElementCallAppTileViewModel
     private elementCall: ElementCallModel | null;
     private started = false;
     private docked = false;
+    private readonly client: MatrixClient;
 
     public constructor(props: Props) {
+        // A call tile is only ever rendered for a logged-in user, so the SDK context has the client
+        if (!props.sdkContext.client) throw new Error("Unable to create ElementCallAppTileViewModel without a client");
         const elementCall = resolveCall(CallStore.instance.getCall(props.room?.roomId ?? ""), props.app.id);
         super(props, {
             hidden: elementCall === null || !props.room,
@@ -102,6 +104,7 @@ export class ElementCallAppTileViewModel
             zIndex: props.miniMode ? Z_INDEX_MINI : Z_INDEX_DOCKED,
             pointerEvents: props.pointerEvents,
         });
+        this.client = props.sdkContext.client;
         this.elementCall = elementCall;
         this.widgetRoomId = isAppWidget(props.app) ? props.app.roomId : null;
     }
@@ -118,7 +121,7 @@ export class ElementCallAppTileViewModel
         this.started = true;
 
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
-        this.disposables.trackListener(this.props.client, RoomEvent.MyMembership, this.onMyMembership);
+        this.disposables.trackListener(this.client, RoomEvent.MyMembership, this.onMyMembership);
         const dispatcherRef = defaultDispatcher.register(this.onDispatch);
         this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
 
@@ -176,7 +179,7 @@ export class ElementCallAppTileViewModel
      * through the snapshot, which shared components cannot type.
      */
     public ElementCall: FC = () => (
-        <SubscribedElementCall subscribe={this.subscribe} getCall={this.getCall} client={this.props.client} />
+        <SubscribedElementCall subscribe={this.subscribe} getCall={this.getCall} client={this.client} />
     );
 
     private readonly getCall = (): ElementCallModel | null => this.elementCall;
