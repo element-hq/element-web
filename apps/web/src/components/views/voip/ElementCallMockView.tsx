@@ -7,7 +7,7 @@
 
 import React, { type JSX } from "react";
 import { Button, H2, H3, Text } from "@vector-im/compound-web";
-import { useViewModel, type ViewModel } from "@element-hq/web-shared-components";
+import { Flex, useViewModel, type ViewModel } from "@element-hq/web-shared-components";
 
 /** One line of the log: what the mock told the host, or what the host asked of the mock. */
 export interface ElementCallMockLogEntry {
@@ -144,7 +144,7 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
 
             <section className="mx_ElementCallMock_section">
                 <H3>HostBridge</H3>
-                <div className="mx_ElementCallMock_buttons">
+                <Flex className="mx_ElementCallMock_buttons" wrap="wrap" gap="var(--cpd-space-2x)">
                     <Button size="md" kind="primary" onClick={() => void vm.toggleJoined()}>
                         {joined ? "notifyHungUp" : "notifyJoined"}
                     </Button>
@@ -162,7 +162,7 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                             close
                         </Button>
                     )}
-                </div>
+                </Flex>
                 <Text as="span" size="sm" className="mx_ElementCallMock_empty">
                     supportsReactions: {String(supportsReactions)} · allowJoinUnmutedViaIntent:{" "}
                     {String(allowJoinUnmutedViaIntent)} · close: {canClose ? "yes" : "no"}
