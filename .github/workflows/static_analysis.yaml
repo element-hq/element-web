@@ -61,7 +61,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: $/.github/actions/setup-node-pnpm
+            - uses: ./.github/actions/setup-node-pnpm
               with:
                   # Nothing to cache for the jobs that do not install
                   cache: ${{ matrix.install != '' && 'pnpm' || '' }}
