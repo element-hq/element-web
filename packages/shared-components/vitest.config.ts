@@ -51,7 +51,6 @@ export default defineConfig({
         environment: "node",
         pool: "threads",
         globals: false,
-        isolate: false,
         projects: [
             {
                 extends: true,
