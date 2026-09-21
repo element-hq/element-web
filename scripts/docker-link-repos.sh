@@ -21,6 +21,11 @@ fi
 echo "Linking js-sdk"
 git clone --depth 1 --branch $JS_SDK_BRANCH "$JS_SDK_REPO" js-sdk
 cd js-sdk
+# The cloned js-sdk may pin a different pnpm version than element-web. Corepack
+# won't switch pnpm versions mid-process, so bypass the version check instead of
+# failing. Exported (not just a CLI flag) so it also applies to the nested
+# `pnpm build` spawned by js-sdk's `prepare` lifecycle script.
+export npm_config_pm_on_fail=ignore
 pnpm install
 cd ../
 
