@@ -77,6 +77,7 @@ export default defineProject({
         globals: false,
         environment: "node",
         pool: "threads",
+        isolate: false,
         projects: [
             {
                 extends: true,
