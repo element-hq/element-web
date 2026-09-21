@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentType, type JSX, type ReactNode } from "react";
 import { Button } from "@vector-im/compound-web";
-import classNames from "classnames";
 
 import styles from "./GenericToast.module.css";
 
@@ -105,8 +104,7 @@ export function GenericToast({
                 {description}
                 {detailContent}
             </div>
-            {/* The `mx_Toast_buttons` class is a stable hook for end-to-end tests. */}
-            <div className={classNames("mx_Toast_buttons", styles.buttons)} aria-live="off">
+            <div className={styles.buttons} aria-live="off" data-testid="toast-buttons">
                 {onSecondaryClick && secondaryLabel && (
                     <Button
                         onClick={onSecondaryClick}
