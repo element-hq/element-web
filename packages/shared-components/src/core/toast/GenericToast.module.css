@@ -12,16 +12,11 @@ Please see LICENSE files in the repository root for full details.
     margin: var(--cpd-space-1x) 0 11px 0;
     color: var(--cpd-color-text-secondary);
     font: var(--cpd-font-body-sm-regular);
-}
 
-/*
- * Links inside the description sit in a block of secondary-coloured text, so colour alone
- * does not give them 3:1 contrast against their surroundings (WCAG 1.4.1, axe
- * `link-in-text-block`). Keep them underlined so they are distinguishable without colour.
- */
-.description a {
-    color: var(--cpd-color-text-link-external);
-    text-decoration: underline;
+    a {
+        color: var(--cpd-color-text-link-external);
+        text-decoration: underline;
+    }
 }
 
 .buttons {
