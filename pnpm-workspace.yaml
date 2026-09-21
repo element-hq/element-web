@@ -22,8 +22,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.61.1
-    "playwright-core": 1.61.1
+    "@playwright/test": 1.63.0
+    "playwright-core": 1.63.0
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
@@ -44,9 +44,9 @@ catalog:
     "@vitest/browser-playwright": 4.1.11
     "@vitest/browser": 4.1.11
     "@vitejs/plugin-react": 6.1.1
-    unplugin-dts: 1.0.1
+    unplugin-dts: 1.1.0
     # nx
-    nx: 23.1.2
+    nx: 23.2.1
 
 catalogs:
     ts6:
@@ -70,9 +70,10 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
+    # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
+    "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -96,6 +97,8 @@ allowBuilds:
     workerd: true
     # Optionally builds itself from source if a specific environment variable is present, which we do not need
     "@parcel/watcher": false
+    # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
+    pkcs11js: false
 
 patchedDependencies:
     # Workaround for missing types export
@@ -104,16 +107,8 @@ patchedDependencies:
     react-blurhash: patches/react-blurhash.patch
     # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
-    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
-    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
     # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
-    # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
-    await-lock: patches/await-lock.patch
-    # Workaround for global type mismatches
-    jest-fixed-jsdom: patches/jest-fixed-jsdom.patch
-    # Workaround for jsdom being super opinionated and making it hard to tweak global properties
-    jsdom: patches/jsdom.patch
     # Workaround for missing return types
     postcss-mixins: patches/postcss-mixins.patch
     # Workaround for some babel rules being false positively flagged
@@ -140,15 +135,16 @@ overrides:
     pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001806
+    caniuse-lite: 1.0.30001810
+
+    # Make sure we only have one instance of the widget API in the build;
+    # failure to do so results in (unspecified) breakage in downstream builds
+    # cf https://github.com/element-hq/element-web/pull/31851
     matrix-widget-api: "^1.18.0"
+
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.35.0
-    # @jest/environment-jsdom-abstract pins @types/jsdom@21.1.7, which predates
-    # the Window numeric index signature added to newer TypeScript's lib.dom and
-    # fails to typecheck against it.
-    "@types/jsdom": ^30.0.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0

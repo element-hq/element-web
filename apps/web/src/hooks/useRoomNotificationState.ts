@@ -25,6 +25,7 @@ export const useNotificationState = (room: Room): [RoomNotifState | undefined, (
             setNotificationState(echoChamber.notificationVolume);
         }
     });
+    // oxlint-disable-next-line react/immutability
     const setter = useCallback((state: RoomNotifState) => (echoChamber.notificationVolume = state), [echoChamber]);
     return [notificationState, setter];
 };

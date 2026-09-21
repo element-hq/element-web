@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import React from "react";
 import { render, screen, waitFor } from "test-utils-rtl";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { stubClient, wrapInMatrixClientContext, mkRoom, wrapInSdkContext, TestSDKContext } from "test-utils";
 
 import _RightPanel from "./RightPanel";
@@ -21,6 +21,7 @@ import { Action } from "../../dispatcher/actions";
 import dis from "../../dispatcher/dispatcher";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -58,6 +59,7 @@ describe("RightPanel", () => {
 
         dis.fire(Action.OnLoggedOut, true); // Shut down the stores
         vi.restoreAllMocks();
+        SettingsStore.reset();
     });
 
     const spinUpStores = async () => {
@@ -149,5 +151,50 @@ describe("RightPanel", () => {
         // the expected room title
         expect(container.getElementsByClassName("mx_MemberListView")).toHaveLength(0);
         expect(screen.getByRole("heading", { name: "r2" })).toBeInTheDocument();
+    });
+
+    it("renders the PDF viewer card, named after the file, for the PdfViewer phase", async () => {
+        const room = mkRoom(cli, "r1");
+        cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
+
+        const pdfEvent = new MatrixEvent({
+            room_id: "r1",
+            sender: "@user:example.org",
+            event_id: "$pdf",
+            type: EventType.RoomMessage,
+            content: {
+                body: "spec.pdf",
+                msgtype: MsgType.File,
+                url: "mxc://example.org/spec",
+                info: { mimetype: "application/pdf" },
+            },
+        });
+
+        // The card is only valid while the lab is on, so the store would otherwise drop it.
+        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
+
+        await spinUpStores();
+
+        render(
+            <RightPanel
+                room={room}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+        );
+
+        const rpsUpdated = waitForRpsUpdate();
+        dis.dispatch({ action: Action.ViewRoom, room_id: "r1" });
+        await rpsUpdated;
+
+        RightPanelStore.instance.setCard(
+            { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: pdfEvent } },
+            true,
+            "r1",
+        );
+
+        // The viewer itself is code split, so the card header is what proves the phase was wired up
+        // to PdfViewerCard with the right event.
+        await waitFor(() => expect(screen.getByRole("heading", { name: "spec.pdf" })).toBeInTheDocument());
     });
 });

@@ -288,7 +288,7 @@ describe("section", () => {
 
             const newTag = await createSection(MetaSpace.Home);
 
-            expect(tagRoom).toHaveBeenCalledWith(room, newTag);
+            expect(tagRoom).toHaveBeenCalledWith(room, newTag, true);
         });
 
         it("saves section data and ordered sections at ACCOUNT level when confirmed", async () => {
@@ -399,8 +399,12 @@ describe("section", () => {
             await editSection(tag);
 
             expect(tagRoom).toHaveBeenCalledTimes(2);
-            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag);
-            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!removed:example.org" }), tag);
+            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag, true);
+            expect(tagRoom).toHaveBeenCalledWith(
+                expect.objectContaining({ roomId: "!removed:example.org" }),
+                tag,
+                true,
+            );
         });
 
         it("applies the room changes even when the name is unchanged", async () => {
@@ -413,7 +417,7 @@ describe("section", () => {
 
             await editSection(tag);
 
-            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag);
+            expect(tagRoom).toHaveBeenCalledWith(expect.objectContaining({ roomId: "!added:example.org" }), tag, true);
             expect(setValueSpy).not.toHaveBeenCalled();
         });
     });

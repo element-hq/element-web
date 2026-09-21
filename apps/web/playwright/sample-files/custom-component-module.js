@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 export default class CustomComponentModule {
-    static moduleApiVersion = "^1.2.0";
+    static moduleApiVersion = "^2.0.0";
     /**
      * Basic module for testing.
      * @param {Api} api API object

@@ -777,9 +777,10 @@
         inset-inline-end: auto;
     }
 
-    /* Text-bubble body spacing belongs to the line. Media lines and
-       structured fieldset bodies provide their own dimensions. */
-    .line:not(.lineMedia) .slotBody > *:not(fieldset) {
+    /* Text-bubble body spacing belongs to the line. Media lines, structured
+       fieldset bodies and left-aligned call tiles provide their own
+       dimensions, so the shell must not pad their body root. */
+    &:not(.stateLeftAlignedBubble) .line:not(.lineMedia) .slotBody > *:not(fieldset) {
         padding: var(--event-tile-body-padding, 1px);
     }
 

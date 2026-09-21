@@ -12,7 +12,7 @@
         "dismiss": "忽略",
         "download": "下载",
         "edit": "编辑",
-        "explore_rooms": "查找房间",
+        "explore_rooms": "浏览房间",
         "go": "转到",
         "hide": "隐藏",
         "invite": "邀请",
@@ -68,7 +68,7 @@
             "refresh": "重新下载主题",
             "url_label": "自定义主题URL"
         },
-        "toggle_event": "事件源"
+        "toggle_event": "事件源码"
     },
     "emoji": {
         "categories": "类别",
@@ -88,7 +88,7 @@
         "emoji_picker": "Emoji 选择器"
     },
     "left_panel": {
-        "open_dial_pad": "打开拨号键盘",
+        "open_dial_pad": "打开拨号盘",
         "separator_label": "点击或拖动以展开"
     },
     "menus": {
@@ -96,7 +96,6 @@
             "clear_status": "清除状态",
             "create_an_account": "创建账户",
             "got_an_account": "已有账户？",
-            "manage_account": "管理账户",
             "sign_in": "登录",
             "title": "用户菜单"
         }
@@ -108,6 +107,12 @@
         "mentions_keywords": "提及与关键词",
         "message_didnt_send": "消息未能发送。点选以获取信息。",
         "mute_room": "静默房间"
+    },
+    "pdf_viewer": {
+        "error_load": "无法加载 PDF。",
+        "loading": "正在加载 PDF…",
+        "page_label": "第 %(page)s 页，共 %(total)s 页",
+        "page_number": "页码"
     },
     "release_announcement": {
         "room_list_section_close": "确定",
@@ -123,7 +128,7 @@
             "shared": "新成员可以看到历史",
             "world_readable": "任何人都可以看到历史"
         },
-        "jump_read_marker": "滚动到首个未读消息。",
+        "jump_read_marker": "滚动到首条未读消息。",
         "jump_to_bottom_button": "滚动到最近的消息",
         "jump_to_date": "滚动到日期",
         "jump_to_date_beginning": "房间的开头",
@@ -164,7 +169,7 @@
                 "other": "打开包含 %(count)s 个未读提及的房间：%(roomName)s。"
             },
             "unread": {
-                "other": "打开包含 %(count)s 个未读消息的房间：%(roomName)s。"
+                "other": "打开包含 %(count)s 条未读消息的房间：%(roomName)s。"
             },
             "unsent_message": "打开包含尚未发送的消息的房间：%(roomName)s",
             "video_call": "打开正在进行视频通话的房间 %(roomName)s。",
@@ -261,17 +266,17 @@
         "error_start_thread_existing_relation": "你无法从此消息发起消息列"
     },
     "time": {
-        "about_day_ago": "约一天前",
-        "about_hour_ago": "约一小时前",
-        "about_minute_ago": "约一分钟前",
-        "few_seconds_ago": "数秒前",
-        "in_about_day": "从现在开始约一天",
-        "in_about_hour": "从现在开始约一小时",
-        "in_about_minute": "从现在开始约一分钟",
-        "in_few_seconds": "从现在开始数秒",
-        "in_n_days": "从现在开始%(num)s天",
-        "in_n_hours": "从现在开始%(num)s小时",
-        "in_n_minutes": "从现在开始%(num)s分钟",
+        "about_day_ago": "大约一天前",
+        "about_hour_ago": "大约一小时前",
+        "about_minute_ago": "大约一分钟前",
+        "few_seconds_ago": "几秒前",
+        "in_about_day": "即刻起大约一天后",
+        "in_about_hour": "即刻起大约一小时后",
+        "in_about_minute": "即刻起大约一分钟后",
+        "in_few_seconds": "即刻起大约几秒后",
+        "in_n_days": "从现在开始 %(num)s 天",
+        "in_n_hours": "从现在开始 %(num)s 小时",
+        "in_n_minutes": "从现在开始 %(num)s 分钟",
         "n_days_ago": "%(num)s天前",
         "n_hours_ago": "%(num)s小时前",
         "n_minutes_ago": "%(num)s分钟前"
@@ -356,13 +361,14 @@
         "pending_moderation": "消息等待审核",
         "pending_moderation_reason": "消息等待审核：%(reason)s",
         "url_preview": {
-            "close": "关闭预览",
-            "open_link": "打开链接",
             "show_n_more": {
                 "one": "显示剩余 %(count)s 个预览",
                 "other": "显示剩余 %(count)s 个预览"
             },
-            "view_image": "查看图像"
+            "view_audio": "收听音频",
+            "view_file": "查看文件",
+            "view_image": "查看图像",
+            "view_video": "观看视频"
         }
     },
     "user_menu": {

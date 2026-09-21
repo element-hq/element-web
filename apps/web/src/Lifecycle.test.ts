@@ -11,9 +11,8 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
-import { decodeBase64, encodeUnpaddedBase64, MatrixClient, OAuth2 } from "matrix-js-sdk/src/matrix";
+import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
 import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import fetchMock from "@fetch-mock/vitest";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
@@ -21,7 +20,6 @@ import {
     mockClientMethodsServer,
     mockPlatformPeg,
 } from "test-utils";
-import { makeDelegatedAuthMetadata } from "test-utils/auth";
 
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import * as Lifecycle from "./Lifecycle";
@@ -82,13 +80,21 @@ describe("Lifecycle", () => {
 
         localStorage.clear();
         sessionStorage.clear();
-        vi.spyOn(MatrixClient.prototype, "getAuthMetadata").mockResolvedValue(makeDelegatedAuthMetadata());
+
+        localStorage.setItem("mx_oidc_client_id", "test-client-id");
     });
 
     afterEach(() => {
-        vi.resetAllMocks();
+        vi.restoreAllMocks();
     });
 
+    /**
+     * Install the IndexedDB mocks, backed by `mockStore`.
+     *
+     * The mocks mutate the store, so each test must supply its own. Seed data is provided by
+     * factories (eg `idbStorageSession()`) rather than shared objects for exactly that reason:
+     * otherwise a write in one test leaks into every test that runs after it.
+     */
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
         vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
@@ -125,11 +131,13 @@ describe("Lifecycle", () => {
         mx_user_id: userId,
         mx_device_id: deviceId,
     };
-    const idbStorageSession = {
+    // A factory, not a shared object: initIdbMock takes ownership of what it is given and the
+    // mocks write into it, so every test needs its own.
+    const idbStorageSession = (): Record<string, Record<string, unknown>> => ({
         account: {
             mx_access_token: accessToken,
         },
-    };
+    });
     const credentials = {
         homeserverUrl,
         identityServerUrl,
@@ -220,7 +228,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
@@ -247,7 +255,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should persist credentials", async () => {
@@ -268,8 +276,12 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key, which takes precedence
+                    // over anything left in indexeddb
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+                    // but leave the indexeddb entry alone: the service worker can only read the
+                    // token from there, so removing it would break authenticated media
+                    await expect(StorageAccess.idbLoad("account", "mx_access_token")).resolves.toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -307,11 +319,10 @@ describe("Lifecycle", () => {
                 describe("with a refresh token", () => {
                     beforeEach(() => {
                         localStorage.setItem("mx_refresh_token", refreshToken);
-                        localStorage.setItem("mx_oidc_client_id", "test-client-id");
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
-                        initIdbMock(idbStorageSession);
+                        initIdbMock(idbStorageSession());
                     });
 
                     it("should persist credentials", async () => {
@@ -338,7 +349,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: undefined,
                             },
-                            expect.any(OAuth2),
+                            "test-client-id",
                         );
                     });
                 });
@@ -393,8 +404,9 @@ describe("Lifecycle", () => {
                         "mx_access_token",
                         encryptedTokenShapedObject,
                     );
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key. Note this is the plain
+                    // token: localStorage can only hold strings.
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -420,7 +432,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey,
                         },
-                        expect.any(OAuth2),
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStoreKey: expect.any(Uint8Array) });
@@ -459,7 +471,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: pickleKey,
                             },
-                            expect.any(OAuth2),
+                            "test-client-id",
                         );
                     });
                 });
@@ -522,7 +534,7 @@ describe("Lifecycle", () => {
                 for (const key in localStorageSession) {
                     localStorage.setItem(key, localStorageSession[key]);
                 }
-                initIdbMock(idbStorageSession);
+                initIdbMock(idbStorageSession());
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreSessionFromStorage()).toEqual(true);
@@ -546,6 +558,83 @@ describe("Lifecycle", () => {
                     "Error decrypting secret access_token: no pickle key found.",
                 );
             });
+
+            it("should keep a plaintext token in localStorage when the idb token cannot be decrypted", async () => {
+                // When the pickle key has gone missing, a plaintext copy left at the primary key by
+                // an older version is the only way back into the account, so nothing on the read
+                // path may throw it away.
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                initIdbMock({});
+
+                // Create a pickle key, and store the token encrypted with it.
+                const pickleKey = (await PlatformPeg.get()!.createPickleKey(credentials.userId, credentials.deviceId))!;
+                localStorage.setItem("mx_has_pickle_key", "true");
+                await persistTokens(pickleKey, credentials);
+
+                // Residue at the primary key, left behind by an older version's fallback.
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                // Now destroy the pickle key, making the idb token undecryptable.
+                await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
+
+                await expect(restoreSessionFromStorage()).rejects.toThrow(
+                    "Error decrypting secret access_token: no pickle key found.",
+                );
+
+                expect(localStorage.getItem("mx_access_token")).toEqual("old-plaintext-token");
+            });
+
+            it("should prefer the localStorage fallback over a stale token in idb", async () => {
+                // A previous write failed, leaving the new token in localStorage and an outdated
+                // one behind in idb. Reading must return the fallback, not the stale value:
+                // otherwise a rotated refresh token is lost and the session dies on next start.
+                initIdbMock({ account: { mx_refresh_token: "stale-refresh-token" } });
+                localStorage.setItem("mx_refresh_token_fallback", "fresh-refresh-token");
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_has_access_token", "true");
+                await idbSave("account", "mx_access_token", accessToken);
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ refreshToken: "fresh-refresh-token" }),
+                    "test-client-id",
+                );
+                // having recovered it, the fallback is migrated back into idb and cleared
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith(
+                    "account",
+                    "mx_refresh_token",
+                    "fresh-refresh-token",
+                );
+                expect(localStorage.getItem("mx_refresh_token_fallback")).toBeNull();
+            });
+
+            it("should discard an unreachable plaintext token left at the primary key by an older version", async () => {
+                // Older versions wrote their fallback to the primary key rather than the fallback
+                // key, and never cleared it on a later successful write. We cannot tell whether it
+                // is newer or older than the idb copy, so it must not be used - but it must not be
+                // left sitting in localStorage in the clear either.
+                initIdbMock(idbStorageSession());
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                // the idb token wins...
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ accessToken }),
+                    undefined,
+                );
+                // ...and the unreachable plaintext copy is swept up, once the restore has
+                // written a token of its own to idb and thereby proved the copy is spare
+                expect(localStorage.getItem("mx_access_token")).toBeNull();
+            });
         });
     });
 
@@ -553,7 +642,6 @@ describe("Lifecycle", () => {
         beforeEach(() => {
             initIdbMock();
 
-            vi.clearAllMocks();
             vi.spyOn(logger, "log").mockClear();
 
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
@@ -561,6 +649,16 @@ describe("Lifecycle", () => {
             vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
             vi.spyOn(mockPlatform, "createPickleKey");
+
+            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
+            vi.stubGlobal("localStorage", {
+                getItem: vi
+                    .fn()
+                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
+                setItem: vi.fn(),
+                removeItem: vi.fn(),
+                clear: vi.fn(),
+            });
         });
 
         const refreshToken = "test-refresh-token";
@@ -618,10 +716,10 @@ describe("Lifecycle", () => {
             it("should persist credentials", async () => {
                 await setLoggedIn(credentials);
 
-                expect(localStorage.getItem("mx_user_id")).toEqual(userId);
-                expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_is_guest")).toEqual("false");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 // dont put accessToken in localstorage when we have idb
@@ -639,7 +737,7 @@ describe("Lifecycle", () => {
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_refresh_token", refreshToken);
                 // dont put accessToken in localstorage when we have idb
-                expect(localStorage.getItem("mx_access_token")).not.toEqual(accessToken);
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -650,8 +748,10 @@ describe("Lifecycle", () => {
                     accessToken: undefined,
                 });
 
-                expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
-                expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token_fallback");
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token_fallback", expect.anything());
             });
 
             it("should clear stores", async () => {
@@ -702,12 +802,12 @@ describe("Lifecycle", () => {
             it("should persist credentials", async () => {
                 await setLoggedIn(credentials);
 
-                expect(localStorage.getItem("mx_user_id")).toEqual(userId);
-                expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_is_guest")).toEqual("false");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
-                expect(localStorage.getItem("mx_has_pickle_key")).toEqual("true");
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_pickle_key", "true");
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                     "account",
                     "mx_access_token",
@@ -715,7 +815,7 @@ describe("Lifecycle", () => {
                 );
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("pickleKey", [userId, deviceId], expect.any(Object));
                 // dont put accessToken in localstorage when we have idb
-                expect(localStorage.getItem("mx_access_token")).not.toEqual(accessToken);
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should persist token when encrypting the token fails", async () => {
@@ -735,8 +835,8 @@ describe("Lifecycle", () => {
                 });
                 await setLoggedIn(credentials);
 
-                // put plain accessToken in localstorage when we dont have idb
-                expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                // put plain accessToken in localstorage at the fallback key when we dont have idb
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_access_token_fallback", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -752,8 +852,10 @@ describe("Lifecycle", () => {
                     accessToken: undefined,
                 });
 
-                expect(localStorage.getItem("mx_has_access_token")).toBeFalsy();
-                expect(localStorage.getItem("mx_access_token")).toBeFalsy();
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token_fallback");
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token_fallback", expect.anything());
             });
 
             it("should create new matrix client with credentials", async () => {
@@ -775,131 +877,31 @@ describe("Lifecycle", () => {
                 );
             });
         });
-
-        // XXX: these tests are broken, Lifecycle.setLoggedIn does not work with OIDC and its token refreshers due to clearing storage
-        describe.skip("when authenticated via OIDC native flow", () => {
-            const clientId = "test-client-id";
-            const issuer = "https://auth.com/";
-
-            const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
-
-            beforeEach(() => {
-                // set values in local storage as they would be after a successful oidc authentication
-                localStorage.setItem("mx_oidc_client_id", clientId);
-            });
-
-            it("should not try to create a token refresher without a refresh token", async () => {
-                const cli = await setLoggedIn(credentials);
-
-                // didn't try to initialise token refresher
-                expect(cli.http.opts.tokenRefreshFunction).toBeUndefined();
-            });
-
-            it("should not try to create a token refresher without a deviceId", async () => {
-                await expect(
-                    setLoggedIn({
-                        ...credentials,
-                        refreshToken,
-                        deviceId: undefined,
-                    }),
-                ).rejects.toThrow("Expected deviceId in user credentials.");
-
-                // didn't try to initialise token refresher
-                expect(fetchMock).toHaveFetchedTimes(
-                    0,
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
-                );
-            });
-
-            it("should not try to create a token refresher without an issuer in session storage", async () => {
-                await expect(
-                    setLoggedIn({
-                        ...credentials,
-                        refreshToken,
-                    }),
-                ).rejects.toThrow("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
-
-                // didn't try to initialise token refresher
-                expect(fetchMock).toHaveFetchedTimes(
-                    0,
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
-                );
-            });
-
-            it("should create a client with a tokenRefreshFunction", async () => {
-                expect(
-                    await setLoggedIn({
-                        ...credentials,
-                        refreshToken,
-                    }),
-                ).toEqual(mockClient);
-
-                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        accessToken,
-                        refreshToken,
-                    }),
-                    expect.any(Function),
-                );
-            });
-
-            it("should create a client when creating token refresher fails", async () => {
-                // create invalid value in local storage for a malformed oidc authentication
-                localStorage.removeItem("mx_oidc_client_id");
-
-                // succeeded
-                expect(
-                    await setLoggedIn({
-                        ...credentials,
-                        refreshToken,
-                    }),
-                ).toEqual(mockClient);
-
-                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        accessToken,
-                        refreshToken,
-                    }),
-                    // no token refresh function
-                    undefined,
-                );
-            });
-        });
     });
 
     describe("logout()", () => {
-        const accessToken = "test-access-token";
-        const refreshToken = "test-refresh-token";
-
-        beforeEach(() => {
-            mockClient.getAccessToken.mockReturnValue(accessToken);
-            mockClient.getRefreshToken.mockReturnValue(refreshToken);
-            vi.spyOn(OAuth2.prototype, "revokeToken").mockResolvedValue(undefined);
-        });
-
-        it("should call logout on the client when oauth is not used", async () => {
+        it("should call logout on the client", async () => {
             logout();
 
             await flushPromises();
 
             expect(mockClient.logout).toHaveBeenCalledWith(true);
         });
-
-        it("should revoke tokens when user is authenticated with oauth2", async () => {
-            localStorage.setItem("mx_oidc_client_id", "test-client-id");
-            logout();
-
-            await flushPromises();
-
-            expect(mockClient.logout).not.toHaveBeenCalled();
-            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
-            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(refreshToken, "refresh_token");
-        });
     });
 
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+
+            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
+            vi.stubGlobal("localStorage", {
+                getItem: vi
+                    .fn()
+                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
+                setItem: vi.fn(),
+                removeItem: vi.fn(),
+                clear: vi.fn(),
+            });
         });
 
         it("should replace the current login with a new one", async () => {
