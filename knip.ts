@@ -21,6 +21,12 @@ export default {
                 "!src/**/test-*!",
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
+            ignoreDependencies: [
+                // Not imported directly, but @fetch-mock/vitest's own type declarations reference
+                // `expect`'s types without declaring it as a dependency themselves. It has to be a
+                // direct dependency here for that .d.ts to resolve under pnpm's strict node_modules.
+                "expect",
+            ],
         },
         "packages/playwright-common": {
             entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
@@ -43,7 +49,6 @@ export default {
                 "src/vector/localstorage-fix.ts!",
                 "scripts/**",
                 "playwright/**",
-                "test/**",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
