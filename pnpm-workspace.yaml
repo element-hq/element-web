@@ -27,7 +27,7 @@ catalog:
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 10.0.1
+    "@vector-im/compound-web": 10.1.0
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -99,7 +99,7 @@ allowBuilds:
     # Optionally builds itself from source if a specific environment variable is present, which we do not need
     "@parcel/watcher": false
     # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
-    pkcs11js: true
+    pkcs11js: false
 
 patchedDependencies:
     # Workaround for missing types export
