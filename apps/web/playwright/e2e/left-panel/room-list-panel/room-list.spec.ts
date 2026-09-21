@@ -114,8 +114,8 @@ test.describe("Room list", () => {
             await roomItemMenu.click();
 
             // Default settings should be selected
-            await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
-                "aria-selected",
+            await expect(page.getByRole("menuitemradio", { name: "Match default settings" })).toHaveAttribute(
+                "aria-checked",
                 "true",
             );
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options.png");
@@ -247,8 +247,8 @@ test.describe("Room list", () => {
                 // Open the menu
                 await page.keyboard.press("Enter");
                 // Wait for the menu to be open
-                await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
-                    "aria-selected",
+                await expect(page.getByRole("menuitemradio", { name: "Match default settings" })).toHaveAttribute(
+                    "aria-checked",
                     "true",
                 );
 
