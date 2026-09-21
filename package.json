@@ -37,6 +37,7 @@
         "@types/node": "25",
         "@typescript/native": "catalog:",
         "@vitest/coverage-v8": "catalog:",
+        "@vitest/ui": "catalog:",
         "cronstrue": "^3.0.0",
         "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
         "eslint-plugin-storybook": "^10.4.6",
