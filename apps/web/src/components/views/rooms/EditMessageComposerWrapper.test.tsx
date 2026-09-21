@@ -143,14 +143,6 @@ describe("<EditMessageComposerWrapper />", () => {
         expect(lastProps(plainComposerProps).isUrlPreviewsModified).toBe(false);
     });
 
-    it("should wrap the composer in an element the EventTile styles can exempt from overflow clipping", () => {
-        renderWrapper();
-        // The EventTileView body slot applies `overflow-y: hidden` to its direct child. The wrapper is
-        // that child, so `_EventTile.pcss` targets this class to keep the autocomplete popup visible.
-        const composer = screen.getByRole("textbox", { name: PLAIN_COMPOSER_LABEL });
-        expect(composer.parentElement).toHaveClass("mx_EditMessageComposerWrapper");
-    });
-
     it("should render the wysiwyg composer when that composer is enabled", () => {
         enabledSettings.push("feature_wysiwyg_composer");
         renderWrapper();

@@ -305,7 +305,7 @@ test.describe("Editing", () => {
         await expect(page.getByRole("textbox", { name: "Edit message" })).not.toBeVisible();
     });
 
-    test("should show the autocomplete above the edit composer", async ({ page, app, room }) => {
+    test("should show the emoji autocomplete above the edit composer", async ({ page, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
 
         await sendEvent(app, room.roomId);
@@ -320,10 +320,6 @@ test.describe("Editing", () => {
         await editComposer.press("End");
         await editComposer.pressSequentially(" :+1");
 
-        // The autocomplete is absolutely positioned above the input, so an ancestor with
-        // `overflow: hidden` clips it down to a sliver of its border. `toBeVisible()` ignores
-        // ancestor clipping, but clicking does a hit-target check, so a clipped completion
-        // fails the click rather than inserting the emoji.
         const autocomplete = page.locator("#mx_Autocomplete");
         await expect(autocomplete).toBeVisible();
         await autocomplete.locator(".mx_Autocomplete_Completion_title", { hasText: ":+1:" }).click();
