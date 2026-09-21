@@ -295,7 +295,7 @@ describe("PollCreateDialog", () => {
     });
 
     it("renders max selections UI and sends max_selections in event", () => {
-        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
         expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelections")).toBeTruthy();
         expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("1");
 
@@ -313,7 +313,7 @@ describe("PollCreateDialog", () => {
     });
 
     it("decrements max selections", () => {
-        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
         changeValue(dialog, "Question or topic", "Q");
         changeValue(dialog, "Option 1", "A1");
         changeValue(dialog, "Option 2", "A2");
@@ -326,7 +326,7 @@ describe("PollCreateDialog", () => {
     });
 
     it("disables decrement button when max selections is 1", () => {
-        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
         const decrementButton = dialog.container.querySelectorAll(
             ".mx_PollCreateDialog_maxSelectionsButton",
         )[0] as HTMLButtonElement;
@@ -334,7 +334,7 @@ describe("PollCreateDialog", () => {
     });
 
     it("disables increment button when max selections equals number of options", () => {
-        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
         changeValue(dialog, "Question or topic", "Q");
         changeValue(dialog, "Option 1", "A1");
         changeValue(dialog, "Option 2", "A2");
@@ -354,14 +354,14 @@ describe("PollCreateDialog", () => {
         );
 
         const dialog = render(
-            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} editingMxEvent={previousEvent} />,
+            <PollCreateDialog room={createRoom()} onFinished={vi.fn()} editingMxEvent={previousEvent} />,
         );
 
         expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("2");
     });
 
     it("adjusts max selections when options are removed", () => {
-        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={vi.fn()} />);
         changeValue(dialog, "Question or topic", "Q");
         changeValue(dialog, "Option 1", "A1");
         changeValue(dialog, "Option 2", "A2");
