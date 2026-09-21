@@ -119,7 +119,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         const newOptions = arrayFastClone(this.state.options);
         newOptions.splice(i, 1);
         const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
-        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions);
+        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions || 1);
         this.setState({ options: newOptions, maxSelections: newMaxSelections }, () => this.checkCanSubmit());
     };
 
@@ -127,7 +127,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         const newOptions = arrayFastClone(this.state.options);
         newOptions.push("");
         const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
-        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions);
+        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions || 1);
         this.setState(
             { options: newOptions, maxSelections: newMaxSelections, autoFocusTarget: FocusTarget.NewOption },
             () => {
