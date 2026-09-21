@@ -12,7 +12,7 @@ import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import dis from "../dispatcher/dispatcher";
 import AccessibleButton from "../components/views/elements/AccessibleButton";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import {
     ButtonClicked,
