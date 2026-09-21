@@ -88,6 +88,16 @@ describe("ElementCallAppTile", () => {
         ).toThrow("without a client");
     });
 
+    it("hands every tile of a call the same Element Call component", () => {
+        const layout = { app: call.widget, room, sdkContext };
+        const docked = new ElementCallAppTileViewModel({ ...layout, miniMode: false, fullWidth: false });
+        const floating = new ElementCallAppTileViewModel({ ...layout, miniMode: true, fullWidth: true });
+        // Both render into the same persisted root; a different component type there would remount the call
+        expect(floating.ElementCall).toBe(docked.ElementCall);
+        docked.dispose();
+        floating.dispose();
+    });
+
     it("renders the Element Call component in a persisted element with the call tile classes", async () => {
         await renderTile({ overlay: <div data-testid="overlay" /> });
         expect(await screen.findByText("Element Call (mock)")).toBeInTheDocument();

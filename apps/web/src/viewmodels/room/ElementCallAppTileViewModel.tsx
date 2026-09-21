@@ -90,17 +90,41 @@ export interface Props extends TileLayout {
 const resolveCall = (call: Call | null, widgetId: string): ElementCallModel | null =>
     call instanceof ElementCallModel && call.widget.id === widgetId ? call : null;
 
+const subscribeToCalls = (listener: () => void): (() => void) => {
+    CallStore.instance.on(CallStoreEvent.Call, listener);
+    return () => CallStore.instance.off(CallStoreEvent.Call, listener);
+};
+
 /**
- * Element Call, re-rendered when the view model's call changes. A separate component so that the
- * subscription is a hook in a function component rather than in a view model class property.
+ * Element Call for one widget, re-rendered when the room's call changes. Reads the call from the
+ * `CallStore` rather than from a tile's view model, so that it belongs to no tile in particular.
  */
-const SubscribedElementCall: FC<{
-    subscribe: (listener: () => void) => () => void;
-    getCall: () => ElementCallModel | null;
-    client: MatrixClient;
-}> = ({ subscribe, getCall, client }) => {
-    const call = useSyncExternalStore(subscribe, getCall);
+const PersistedElementCall: FC<{ roomId: string; widgetId: string; client: MatrixClient }> = ({
+    roomId,
+    widgetId,
+    client,
+}) => {
+    const call = useSyncExternalStore(subscribeToCalls, () =>
+        resolveCall(CallStore.instance.getCall(roomId), widgetId),
+    );
     return call === null ? null : <WrappedElementCallComponent call={call} client={client} />;
+};
+
+/**
+ * One `ElementCall` component per persisted call, by persist key. Every tile of a call (docked, or
+ * the floating picture-in-picture window) renders into the same persisted root, so they must hand
+ * it the same component: a component created per view model is a new element type to React, which
+ * would remount Element Call each time the call moves between containers, and Element Call leaving
+ * the session on unmount would end the call.
+ */
+const elementCallComponents = new Map<string, FC>();
+const elementCallComponentFor = (persistKey: string, roomId: string, widgetId: string, client: MatrixClient): FC => {
+    let component = elementCallComponents.get(persistKey);
+    if (!component) {
+        component = () => <PersistedElementCall roomId={roomId} widgetId={widgetId} client={client} />;
+        elementCallComponents.set(persistKey, component);
+    }
+    return component;
 };
 
 /**
@@ -127,13 +151,16 @@ export class ElementCallAppTileViewModel
     public constructor(props: Props) {
         // A call tile is only ever rendered for a logged-in user, so the SDK context has the client
         if (!props.sdkContext.client) throw new Error("Unable to create ElementCallAppTileViewModel without a client");
-        const elementCall = resolveCall(CallStore.instance.getCall(props.room?.roomId ?? ""), props.app.id);
+        const roomId = props.room?.roomId ?? "";
+        const elementCall = resolveCall(CallStore.instance.getCall(roomId), props.app.id);
+        const persistKey = getPersistKey(WidgetUtils.getWidgetUid(props.app));
         super(props, {
             hidden: elementCall === null || !props.room,
-            persistKey: getPersistKey(WidgetUtils.getWidgetUid(props.app)),
+            persistKey,
             ...layoutSnapshot(props),
         });
         this.client = props.sdkContext.client;
+        this.ElementCall = elementCallComponentFor(persistKey, roomId, props.app.id, this.client);
         this.elementCall = elementCall;
         this.miniMode = props.miniMode;
         this.widgetRoomId = isAppWidget(props.app) ? props.app.roomId : null;
@@ -201,14 +228,10 @@ export class ElementCallAppTileViewModel
     );
 
     /**
-     * Element Call itself. Subscribes to this view model directly rather than taking the call
-     * through the snapshot, which shared components cannot type.
+     * Element Call itself: the one component for this call, shared with every other tile showing
+     * it (see `elementCallComponentFor`). Not part of the snapshot, which shared components cannot type.
      */
-    public ElementCall: FC = () => (
-        <SubscribedElementCall subscribe={this.subscribe} getCall={this.getCall} client={this.client} />
-    );
-
-    private readonly getCall = (): ElementCallModel | null => this.elementCall;
+    public readonly ElementCall: FC;
 
     private setDocked(docked: boolean): void {
         if (docked === this.docked) return;
@@ -222,6 +245,8 @@ export class ElementCallAppTileViewModel
     private endCall(): void {
         // XXX: As in AppTile, this removes the persistent element from the DOM entirely.
         PersistedElement.destroyElement(this.snapshot.current.persistKey);
+        // The next tile for this widget gets a fresh component, like a fresh persisted root.
+        elementCallComponents.delete(this.snapshot.current.persistKey);
         ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id, this.widgetRoomId);
         // Nothing will tell us about a hangup any more; treat it as one (as AppTile does when the widget dies).
         if (this.elementCall?.connected) this.elementCall.handleClose();
@@ -232,8 +257,6 @@ export class ElementCallAppTileViewModel
         if (forRoomId !== (this.props.room?.roomId ?? "")) return;
         this.elementCall = resolveCall(call, this.props.app.id);
         this.snapshot.merge({ hidden: this.elementCall === null || !this.props.room });
-        // The call itself is not part of the snapshot, so tell `ElementCall` about it either way.
-        this.subs.emit();
     };
 
     private readonly onMyMembership = (...args: unknown[]): void => {
