@@ -129,6 +129,8 @@ jobs:
                       path: "apps/desktop"
                     - name: Shared Components
                       path: "packages/shared-components"
+                      allowed-hardcoded-keys: |
+                          voip|element_call_mock|title
         name: "i18n Check (${{ matrix.name }})"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
