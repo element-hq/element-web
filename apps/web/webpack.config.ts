@@ -109,10 +109,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
     // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
     // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
-    // and is only loaded when a call renders on the React path. Real path, as webpack resolves symlinks.
-    const elementCallComponentStylesheet = fs.realpathSync(
-        fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css")),
-    );
+    // and is only loaded when a call renders on the React path. That holds for both the stylesheet itself
+    // (real path, as webpack resolves symlinks) and the wrapper that puts it in the `element-call` layer.
+    const elementCallComponentStylesheets = [
+        fs.realpathSync(fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css"))),
+        path.resolve(__dirname, "src/components/views/voip/ElementCallComponent.css"),
+    ];
 
     return {
         ...development,
@@ -145,7 +147,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         name: "styles",
                         test: (module: webpack.Module): boolean => {
                             const name = module.nameForCondition?.();
-                            return !!name && name.endsWith(".css") && name !== elementCallComponentStylesheet;
+                            return !!name && name.endsWith(".css") && !elementCallComponentStylesheets.includes(name);
                         },
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.

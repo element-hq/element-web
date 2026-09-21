@@ -38,13 +38,14 @@ const loadElementCall = async (
 
 /**
  * The real component: `@element-hq/element-call-component`, a large ES module (LiveKit, EC's UI) plus
- * its stylesheet. Code-split so it is only fetched when a call is rendered on the React path.
+ * its stylesheet (imported into the `element-call` cascade layer by `ElementCallComponent.css`).
+ * Code-split so it is only fetched when a call is rendered on the React path.
  */
 const RealElementCall = lazy(() =>
     loadElementCall(
         Promise.all([
             import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component"),
-            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component/style.css"),
+            import(/* webpackChunkName: "element-call-component" */ "./ElementCallComponent.css"),
         ]).then(([m]) => m),
     ),
 );
