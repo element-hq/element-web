@@ -20,7 +20,7 @@ import { DeviceListener, type DeviceState } from "../device-listener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import Spinner from "../components/views/elements/Spinner";
 import { type OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
