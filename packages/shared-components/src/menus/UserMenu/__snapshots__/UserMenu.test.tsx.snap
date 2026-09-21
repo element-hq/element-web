@@ -295,7 +295,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         </span>
         <div
           aria-invalid="false"
-          class="_container_1xtut_8"
+          class="_container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -333,10 +333,10 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
             </a>
           </div>
           <div
-            class="_content_1xtut_62"
+            class="_content_1dsjc_73"
           >
             <ul
-              class="_content_1xtut_62"
+              class="_content_1dsjc_73"
               id="react-use-id-3"
               role="listbox"
             >
@@ -758,7 +758,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         </span>
         <div
           aria-invalid="false"
-          class="_container_1xtut_8"
+          class="_container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -796,10 +796,10 @@ exports[`UserMenu > renders an open menu 1`] = `
             </a>
           </div>
           <div
-            class="_content_1xtut_62"
+            class="_content_1dsjc_73"
           >
             <ul
-              class="_content_1xtut_62"
+              class="_content_1dsjc_73"
               id="react-use-id-3"
               role="listbox"
             >
