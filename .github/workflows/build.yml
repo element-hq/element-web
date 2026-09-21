@@ -47,7 +47,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: $/.github/actions/setup-node-pnpm
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975

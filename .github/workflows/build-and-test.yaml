@@ -73,7 +73,7 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: $/.github/actions/setup-node-pnpm
 
             - name: Fetch layered build
               id: layered
