@@ -10,6 +10,7 @@
 import React from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, act, waitFor } from "test-utils-rtl";
+import { stubClient } from "test-utils";
 import userEvent from "@testing-library/user-event";
 import { EventType, TypedEventEmitter, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import {
@@ -18,8 +19,6 @@ import {
     MatrixRTCSessionEvent,
     type MatrixRTCSessionEventHandlerMap,
 } from "matrix-js-sdk/src/matrixrtc";
-
-import { stubClient } from "../../../../test/test-utils";
 
 import {
     type ElementCallHandle,
