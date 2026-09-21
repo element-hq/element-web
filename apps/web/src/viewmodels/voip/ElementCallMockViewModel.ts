@@ -16,6 +16,7 @@ import {
     type ElementCallMockViewModel as ElementCallMockViewModelInterface,
 } from "../../components/views/voip/ElementCallMockView";
 import { CallStore } from "../../stores/CallStore";
+import { _t } from "../../languageHandler";
 import {
     type ConfigOptions,
     configurationForIntent,
@@ -87,8 +88,8 @@ const presentationOf = ({
     language,
 }: LiveProps): Pick<ElementCallMockViewSnapshot, "theme" | "themeLabel" | "languageLabel"> => ({
     theme,
-    themeLabel: theme ?? "default",
-    languageLabel: language ?? "default",
+    themeLabel: theme ?? _t("voip|element_call_mock|default"),
+    languageLabel: language ?? _t("voip|element_call_mock|default"),
 });
 
 /** What the host bridge says about itself, with the defaults Element Call reads into it. */
@@ -106,9 +107,10 @@ const participantsOf = (rtcSession: MatrixRTCSession | null, client: MatrixClien
     const ownDeviceId = client.getDeviceId();
     return (rtcSession?.memberships ?? []).map((membership) => {
         const isOwnDevice = membership.sender === ownUserId && membership.deviceId === ownDeviceId;
+        const participant = `${membership.sender} (${membership.deviceId})`;
         return {
             id: membership.membershipID,
-            label: `${membership.sender} (${membership.deviceId})${isOwnDevice ? " – you" : ""}`,
+            label: isOwnDevice ? _t("voip|element_call_mock|participant_you", { participant }) : participant,
         };
     });
 };
@@ -155,7 +157,9 @@ export class ElementCallMockViewModel
             ...factsOf(props.hostBridge),
             log: [],
             configJson: configJsonOf(props),
-            initializedWith: props.initializedWith ? JSON.stringify(props.initializedWith) : "not called",
+            initializedWith: props.initializedWith
+                ? JSON.stringify(props.initializedWith)
+                : _t("voip|element_call_mock|not_called"),
         });
         this.rtcSession = rtcSession;
         this.membershipStateKey = `_${props.client.getUserId()}_${props.client.getDeviceId()}_m.call`;

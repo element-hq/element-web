@@ -159,10 +159,10 @@ describe("ElementCallMock", () => {
         await user.click(screen.getByRole("button", { name: "setAlwaysOnScreen(false)" }));
         expect(bridge.setAlwaysOnScreen).toHaveBeenCalledWith(false);
 
-        await user.click(screen.getByRole("button", { name: "mute audio" }));
+        await user.click(screen.getByRole("button", { name: "Mute audio" }));
         expect(bridge.notifyDeviceMute).toHaveBeenCalledWith({ audio_enabled: false, video_enabled: true });
 
-        await user.click(screen.getByRole("button", { name: "close" }));
+        await user.click(screen.getByRole("button", { name: "Close" }));
         expect(bridge.close).toHaveBeenCalled();
     });
 
@@ -203,7 +203,7 @@ describe("ElementCallMock", () => {
 
         await user.click(screen.getByRole("button", { name: "notifyJoined" }));
         await user.click(screen.getByRole("button", { name: "setAlwaysOnScreen(true)" }));
-        await user.click(screen.getByRole("button", { name: "close" }));
+        await user.click(screen.getByRole("button", { name: "Close" }));
 
         expect(order).toEqual(["setAlwaysOnScreen(true)", "notifyHungUp", "setAlwaysOnScreen(false)", "close"]);
         expect(screen.getByText(/in lobby/)).toBeInTheDocument();
@@ -212,18 +212,18 @@ describe("ElementCallMock", () => {
     it("shows what the host bridge says about itself", () => {
         renderCall({ hostBridge: { ...bridge, allowJoinUnmutedViaIntent: true } });
         expect(
-            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: true · close: yes/),
+            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: true · close: Yes/),
         ).toBeInTheDocument();
         // Defaults, as Element Call reads them
         renderCall({ hostBridge: {} });
         expect(
-            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: false · close: no/),
+            screen.getByText(/supportsReactions: true · allowJoinUnmutedViaIntent: false · close: No/),
         ).toBeInTheDocument();
     });
 
     it("hides the close button when the host does not offer to be closed", () => {
         renderCall({ hostBridge: { ...bridge, close: undefined } });
-        expect(screen.queryByRole("button", { name: "close" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Close" })).not.toBeInTheDocument();
     });
 
     it("carries out the host's requests through its handle, and says so", async () => {
@@ -238,7 +238,7 @@ describe("ElementCallMock", () => {
             muteState = await handle.current!.setDeviceMute({ audio_enabled: false });
         });
         expect(muteState).toEqual({ audio_enabled: false, video_enabled: true });
-        expect(screen.getByRole("button", { name: "unmute audio" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Unmute audio" })).toBeInTheDocument();
 
         // Nothing to hang up while in the lobby, as with the real component
         await expect(handle.current!.hangUp()).rejects.toThrow("Nothing in Element Call can hang up right now");

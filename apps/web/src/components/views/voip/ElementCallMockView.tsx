@@ -9,6 +9,8 @@ import React, { type JSX } from "react";
 import { Button, H2, H3, Text } from "@vector-im/compound-web";
 import { Flex, useViewModel, type ViewModel } from "@element-hq/web-shared-components";
 
+import { _t } from "../../../languageHandler";
+
 /** One line of the log: what the mock told the host, or what the host asked of the mock. */
 export interface ElementCallMockLogEntry {
     id: number;
@@ -113,7 +115,7 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
         return (
             <div className="mx_ElementCallMock">
                 <Text as="span" size="sm" className="mx_ElementCallMock_error">
-                    Unknown room {roomId}
+                    {_t("voip|element_call_mock|unknown_room", { roomId })}
                 </Text>
             </div>
         );
@@ -121,17 +123,22 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
 
     return (
         <div className="mx_ElementCallMock" data-theme={theme}>
-            <H2 className="mx_ElementCallMock_title">Element Call (mock)</H2>
+            <H2 className="mx_ElementCallMock_title">{_t("voip|element_call_mock|title")}</H2>
             <Text as="span" size="sm" className="mx_ElementCallMock_roomId">
-                {roomId} · intent {intent} · {joined ? "in call" : "in lobby"} · theme {themeLabel} · language{" "}
-                {languageLabel}
+                {_t("voip|element_call_mock|status", {
+                    roomId,
+                    intent,
+                    state: joined ? _t("voip|element_call_mock|in_call") : _t("voip|element_call_mock|in_lobby"),
+                    theme: themeLabel,
+                    language: languageLabel,
+                })}
             </Text>
 
             <section className="mx_ElementCallMock_section">
-                <H3>Participants</H3>
+                <H3>{_t("voip|element_call_mock|participants")}</H3>
                 {participants.length === 0 ? (
                     <Text as="span" size="sm" className="mx_ElementCallMock_empty">
-                        No one is in this call
+                        {_t("voip|element_call_mock|no_participants")}
                     </Text>
                 ) : (
                     <ul className="mx_ElementCallMock_members">
@@ -152,22 +159,29 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                         setAlwaysOnScreen({String(!alwaysOnScreen)})
                     </Button>
                     <Button size="md" kind="secondary" onClick={() => void vm.toggleAudio()}>
-                        {audioEnabled ? "mute audio" : "unmute audio"}
+                        {audioEnabled
+                            ? _t("voip|element_call_mock|mute_audio")
+                            : _t("voip|element_call_mock|unmute_audio")}
                     </Button>
                     <Button size="md" kind="secondary" onClick={() => void vm.toggleVideo()}>
-                        {videoEnabled ? "mute video" : "unmute video"}
+                        {videoEnabled
+                            ? _t("voip|element_call_mock|mute_video")
+                            : _t("voip|element_call_mock|unmute_video")}
                     </Button>
                     {canClose && (
                         <Button size="md" kind="tertiary" onClick={() => void vm.close()}>
-                            close
+                            {_t("action|close")}
                         </Button>
                     )}
                 </Flex>
                 <Text as="span" size="sm" className="mx_ElementCallMock_empty">
-                    supportsReactions: {String(supportsReactions)} · allowJoinUnmutedViaIntent:{" "}
-                    {String(allowJoinUnmutedViaIntent)} · close: {canClose ? "yes" : "no"}
+                    {_t("voip|element_call_mock|host_bridge_facts", {
+                        supportsReactions: String(supportsReactions),
+                        allowJoinUnmutedViaIntent: String(allowJoinUnmutedViaIntent),
+                        close: canClose ? _t("action|yes") : _t("action|no"),
+                    })}
                 </Text>
-                <ol className="mx_ElementCallMock_log" aria-label="HostBridge log">
+                <ol className="mx_ElementCallMock_log" aria-label={_t("voip|element_call_mock|log_label")}>
                     {log.map((entry) => (
                         <li key={entry.id}>{entry.text}</li>
                     ))}
@@ -175,12 +189,12 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
             </section>
 
             <section className="mx_ElementCallMock_section">
-                <H3>Configuration</H3>
-                <pre className="mx_ElementCallMock_config" aria-label="Effective configuration">
+                <H3>{_t("voip|element_call_mock|configuration")}</H3>
+                <pre className="mx_ElementCallMock_config" aria-label={_t("voip|element_call_mock|config_label")}>
                     {configJson}
                 </pre>
                 <Text as="span" size="sm" className="mx_ElementCallMock_empty">
-                    initializeElementCall: {initializedWith}
+                    {_t("voip|element_call_mock|initialized_with", { value: initializedWith })}
                 </Text>
             </section>
         </div>

@@ -555,7 +555,7 @@ test.describe("Element Call", () => {
                     const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
                     await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
                 } else {
-                    await reactCall(page).getByRole("button", { name: "close", exact: true }).click();
+                    await reactCall(page).getByRole("button", { name: "Close", exact: true }).click();
                 }
             }
 
