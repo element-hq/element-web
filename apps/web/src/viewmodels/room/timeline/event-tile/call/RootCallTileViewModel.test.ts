@@ -10,15 +10,8 @@
 import { it, describe, expect, vi } from "vitest";
 import { type EventTimeline, EventType, type MatrixEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:stream";
+import { mkEvent, mkMessage, mkRoomMember, mkStubRoom, stubClient, TestSDKContext } from "test-utils";
 
-import {
-    mkEvent,
-    mkMessage,
-    mkRoomMember,
-    mkStubRoom,
-    stubClient,
-    TestSDKContext,
-} from "../../../../../../test/test-utils";
 import { getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "./call-mocks";
 import { RootCallTileViewModel } from "./RootCallTileViewModel";
 import {

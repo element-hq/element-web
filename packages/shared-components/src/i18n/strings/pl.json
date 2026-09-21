@@ -101,7 +101,6 @@
             "clear_status": "Wyczyść status",
             "create_an_account": "Utwórz konto",
             "got_an_account": "Masz już konto?",
-            "manage_account": "Zarządzaj kontem",
             "sign_in": "Zaloguj się",
             "title": "Menu użytkownika"
         }
@@ -113,6 +112,12 @@
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "message_didnt_send": "Wiadomość nie została wysłana. Kliknij po więcej informacji.",
         "mute_room": "Wycisz pokój"
+    },
+    "pdf_viewer": {
+        "error_load": "Nie można wczytać pliku PDF.",
+        "loading": "Ładowanie pliku PDF…",
+        "page_label": "Strona %(page)s z %(total)s",
+        "page_number": "Numer strony"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -260,7 +265,7 @@
             "focus_time": "W trakcie skupienia",
             "in_a_meeting": "Na spotkaniu",
             "on_the_road": "W trasie",
-            "set_status_prompt": "Jaki jest twój status?"
+            "set_status_prompt": "Jaki jest Twój status?"
         }
     },
     "terms": {
@@ -302,7 +307,7 @@
                 },
                 "room": {
                     "join_count": {
-                        "one": "%(count)s dołączył",
+                        "one": "%(count)s dołączyła",
                         "few": "%(count)s dołączyło",
                         "many": "%(count)s dołączyło"
                     },
@@ -367,8 +372,6 @@
         "pending_moderation": "Wiadomość oczekuje na moderację",
         "pending_moderation_reason": "Wiadomość oczekuje na moderację: %(reason)s",
         "url_preview": {
-            "close": "Zamknij podgląd",
-            "open_link": "Otwórz link",
             "show_n_more": {
                 "one": "Pokaż %(count)s inny podgląd",
                 "few": "Pokaż %(count)s inne podglądy",

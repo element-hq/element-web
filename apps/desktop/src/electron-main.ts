@@ -31,6 +31,7 @@ import "./ipc.js";
 import "./seshat.js";
 import "./settings.js";
 import "./badge.js";
+import "./x509.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { buildMenuTemplate } from "./vectormenu.js";

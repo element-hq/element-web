@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { ipcRenderer, contextBridge, type IpcRendererEvent } from "electron";
 import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
+import type { X509IpcCommand, X509Result } from "shared-types" with { "resolution-mode": "import" };
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid
 // handing out generalised messaging access.
@@ -76,5 +77,9 @@ contextBridge.exposeInMainWorld("electron", {
     },
     async getSettingValue(settingName: string): Promise<any> {
         return ipcRenderer.invoke("getSettingValue", settingName);
+    },
+
+    async x509(name: X509IpcCommand, ...args: unknown[]): Promise<X509Result<unknown>> {
+        return ipcRenderer.invoke("x509", name, ...args);
     },
 });
