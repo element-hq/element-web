@@ -66,7 +66,7 @@ jobs:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 
             - name: Run tests
-              run: pnpm test:unit --coverage=$ENABLE_COVERAGE --shard "$SHARD" --reporter=blob --reporter=github --reporter=dot
+              run: pnpm test:unit --coverage=$ENABLE_COVERAGE --shard "$SHARD" --reporter=blob --reporter=github-actions --reporter=dot
               env:
                   SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
 
