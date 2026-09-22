@@ -96,6 +96,11 @@ $left-gutter: 64px;
     }
 }
 
+/* Theads do not set a background on mentioned events as they use an indicator dot */
+.mx_ThreadPanel .mx_EventTile {
+    --event-tile-preview-highlight-background: none;
+}
+
 .mx_GenericEventListSummary {
     &[data-layout="irc"],
     &[data-layout="group"] {
