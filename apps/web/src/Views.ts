@@ -85,6 +85,15 @@ Please see LICENSE files in the repository root for full details.
  *       │  LOCK_STOLEN    │
  *       │                 │
  *       └─────────────────┘
+ *
+ *       (from LOADING)
+ *                │
+ *                │ Un-migratable legacy crypto store found
+ *                ▼
+ *       ┌──────────────────────────┐
+ *       │ LEGACY_CRYPTO_           │
+ *       │             UNSUPPORTED  │
+ *       └──────────────────────────┘
  */
 enum Views {
     // a special initial state which is only used at startup, while we are
@@ -128,6 +137,13 @@ enum Views {
 
     // Another instance of the application has started up. We just show an error page.
     LOCK_STOLEN,
+
+    /**
+     * We found a crypto store created by the legacy (libolm) crypto stack which was never migrated
+     * to the rust stack, and which we can no longer migrate. We just show an error page inviting
+     * the user to sign out and back in.
+     */
+    LEGACY_CRYPTO_UNSUPPORTED,
 }
 
 export default Views;

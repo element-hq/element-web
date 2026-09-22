@@ -1114,6 +1114,11 @@
         "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
         "invalid_json_detail": "The message from the parser is: %(message)s",
         "invalid_json_generic": "Invalid JSON",
+        "legacy_crypto_unsupported": {
+            "actions": "Please either downgrade to <b>%(version)s</b> first or remove this device.",
+            "description": "%(brand)s was updated from an unsupported version and cannot migrate your session to a new format.",
+            "title": "This session cannot be used"
+        },
         "mau": "This homeserver has hit its Monthly Active User limit.",
         "misconfigured": "Your Element is misconfigured",
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
@@ -1693,7 +1698,6 @@
     },
     "member_list_back_action_label": "Room members",
     "message_edit_dialog_title": "Message edits",
-    "migrating_crypto": "Hang tight. We are updating %(brand)s to make encryption faster and more reliable.",
     "mobile_guide": {
         "toast_accept": "Use app",
         "toast_description": "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.",

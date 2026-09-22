@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ErrorInfo, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Button, Heading, Text } from "@vector-im/compound-web";
+import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -15,6 +17,8 @@ import PlatformPeg from "../../../PlatformPeg";
 import SdkConfig from "../../../SdkConfig";
 import AccessibleButton from "./AccessibleButton";
 import { BugReportDialogButton } from "./BugReportDialogButton";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { LegacyCryptoStoreError } from "../../../utils/LegacyCryptoStoreError.ts";
 
 interface Props {
     children: ReactNode;
@@ -59,7 +63,28 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             });
     };
 
+    private onSignOutClick = (): void => {
+        defaultDispatcher.dispatch({ action: "logout" });
+    };
+
     public render(): ReactNode {
+        if (this.state.error instanceof LegacyCryptoStoreError) {
+            // This session predates the current crypto stack and cannot be migrated: signing out
+            // and back in is the only way forward, so we don't offer the usual crash affordances.
+            return (
+                <div className="mx_ErrorBoundary">
+                    <div className="mx_ErrorBoundary_body">
+                        <Heading Text size="lg">{_t("error|legacy_crypto_unsupported|title")}</Heading>
+                        <Text size="lg">{_t("error|legacy_crypto_unsupported|description", { brand: SdkConfig.get().brand })}</Text>
+                        <Text size="lg">{_t("error|legacy_crypto_unsupported|actions", { version: "v1.12.29" }, { b: (t) => <strong>{t}</strong>})}</Text>
+                        <Button onClick={this.onSignOutClick} kind="destructive" Icon={SignOutIcon}>
+                            {_t("action|sign_out")}
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
         if (this.state.error) {
             const newIssueUrl = SdkConfig.get().feedback.new_issue_url;
 
