@@ -87,6 +87,18 @@ function editingInitialState(editingMxEvent: MatrixEvent): IState {
     };
 }
 
+/**
+ * @returns A number greater than 0 and not greater than:
+ * - the count of the non-empty option fields
+ * - the current maxSelections
+ * @param options - The values of the option fields
+ * @param maxSelections - The current maxSelections
+ */
+function validateMaxSelections(options: string[], maxSelections: number): number {
+    const validOptions = options.filter((option) => option.trim().length > 0).length;
+    return Math.max(1, Math.min(maxSelections, validOptions));
+}
+
 export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState> {
     private addOptionRef = createRef<HTMLDivElement>();
 
@@ -112,22 +124,21 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     private onOptionChange = (i: number, e: ChangeEvent<HTMLInputElement>): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions[i] = e.target.value;
-        this.setState({ options: newOptions }, () => this.checkCanSubmit());
+        const newMaxSelections = validateMaxSelections(newOptions, this.state.maxSelections);
+        this.setState({ options: newOptions, maxSelections: newMaxSelections }, () => this.checkCanSubmit());
     };
 
     private onOptionRemove = (i: number): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.splice(i, 1);
-        const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
-        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions || 1);
+        const newMaxSelections = validateMaxSelections(newOptions, this.state.maxSelections);
         this.setState({ options: newOptions, maxSelections: newMaxSelections }, () => this.checkCanSubmit());
     };
 
     private onOptionAdd = (): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.push("");
-        const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
-        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions || 1);
+        const newMaxSelections = validateMaxSelections(newOptions, this.state.maxSelections);
         this.setState(
             { options: newOptions, maxSelections: newMaxSelections, autoFocusTarget: FocusTarget.NewOption },
             () => {
@@ -138,12 +149,14 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         );
     };
 
+    /**
+     * Gets called when the user changes the maxSelections-value
+     * @param delta - The difference the user requests
+     * Changes to minimum 1 and maximum the number of non-empty option fields
+     */
     private readonly onMaxSelectionsChange = (delta: number): void => {
-        const maxOptions = this.state.options.filter((op) => op.trim().length > 0).length;
-        const newValue = this.state.maxSelections + delta;
-        if (newValue >= 1 && newValue <= maxOptions) {
-            this.setState({ maxSelections: newValue });
-        }
+        const newValue = validateMaxSelections(this.state.options, this.state.maxSelections + delta);
+        this.setState({ maxSelections: newValue });
     };
 
     private createEvent(): IPartialEvent<object> {
