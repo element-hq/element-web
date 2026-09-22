@@ -129,6 +129,7 @@ import { Filter } from "../views/dialogs/spotlight/Filter";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
+import { LegacyCryptoStoreError } from "../../utils/LegacyCryptoStoreError.ts";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
@@ -149,6 +150,17 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, Action.CreateRoom];
+
+/**
+ * A component which does nothing but throw the given error during render, so that it is caught by
+ * the application-level {@link ErrorBoundary} which wraps the current view.
+ *
+ * Needed because `render` calls `getView` outside the boundary, so errors raised there would escape
+ * the app entirely.
+ */
+const ThrowError: React.FC<{ error: Error }> = ({ error }) => {
+    throw error;
+};
 
 interface IProps {
     config: ConfigOptions;
@@ -292,8 +304,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const initProm = this.initSession();
 
         initProm.catch((err) => {
-            // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
+
+            if (err instanceof LegacyCryptoStoreError) {
+                this.setState({ view: Views.LEGACY_CRYPTO_UNSUPPORTED });
+            }
         });
     };
 
@@ -2220,13 +2235,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
             case Views.PENDING_CLIENT_START:
                 // we think we are logged in, but are still waiting for the /sync to complete
-                return (
-                    <LoginSplashView
-                        matrixClient={MatrixClientPeg.safeGet()}
-                        onLogoutClick={this.onLogoutClick}
-                        syncError={this.state.syncError}
-                    />
-                );
+                return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
             case Views.LOGGED_IN:
                 // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
                 // latter is set via the dispatcher). If we don't yet have a `page_type`,
@@ -2248,13 +2257,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     );
                 } else {
                     // we think we are logged in, but are still waiting for the /sync to complete
-                    return (
-                        <LoginSplashView
-                            matrixClient={MatrixClientPeg.safeGet()}
-                            onLogoutClick={this.onLogoutClick}
-                            syncError={this.state.syncError}
-                        />
-                    );
+                    return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
                 }
             case Views.WELCOME:
                 return <Welcome {...this.getServerProperties()} />;
@@ -2310,6 +2313,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             case Views.LOCK_STOLEN:
                 return <SessionLockStolenView />;
+            case Views.LEGACY_CRYPTO_UNSUPPORTED:
+                // `render` wraps the view in an ErrorBoundary, which special-cases this error to
+                // explain that the session is too old to be usable.
+                return <ThrowError error={new LegacyCryptoStoreError()} />;
         }
     }
 

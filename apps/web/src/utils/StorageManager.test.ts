@@ -12,7 +12,6 @@ import "fake-indexeddb/auto";
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
-import { IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import * as StorageManager from "./StorageManager";
@@ -40,20 +39,6 @@ describe("StorageManager", () => {
                 reject(event);
             };
         });
-    }
-
-    async function populateLegacyStore(migrationState: number | undefined) {
-        const db = await createDB(LEGACY_CRYPTO_STORE_NAME, [IndexedDBCryptoStore.STORE_ACCOUNT]);
-
-        if (migrationState) {
-            const transaction = db.transaction([IndexedDBCryptoStore.STORE_ACCOUNT], "readwrite");
-            const store = transaction.objectStore(IndexedDBCryptoStore.STORE_ACCOUNT);
-            store.put(migrationState, "migrationState");
-            await new Promise((resolve, reject) => {
-                transaction.oncomplete = resolve;
-                transaction.onerror = reject;
-            });
-        }
     }
 
     beforeEach(() => {
@@ -85,39 +70,60 @@ describe("StorageManager", () => {
             expect(result.dataInCryptoStore).toBe(true);
         });
 
-        describe("without rust store", () => {
-            it("should be ok if there is non migrated legacy crypto store", async () => {
-                await populateLegacyStore(undefined);
+        it("should not be ok if a legacy crypto store is the only crypto store", async () => {
+            await createDB(LEGACY_CRYPTO_STORE_NAME);
 
-                const result = await StorageManager.checkConsistency();
-                expect(result.healthy).toBe(true);
-                expect(result.dataInCryptoStore).toBe(true);
-            });
+            const result = await StorageManager.checkConsistency();
+            expect(result.healthy).toBe(true);
+            expect(result.dataInCryptoStore).toBe(false);
+        });
 
-            it("should be ok if legacy store in MigrationState `NOT_STARTED`", async () => {
-                await populateLegacyStore(0 /* MigrationState.NOT_STARTED*/);
+        it("should not be healthy if no indexeddb", async () => {
+            indexedDB = {} as IDBFactory;
 
-                const result = await StorageManager.checkConsistency();
-                expect(result.healthy).toBe(true);
-                expect(result.dataInCryptoStore).toBe(true);
-            });
+            const result = await StorageManager.checkConsistency();
+            expect(result.healthy).toBe(false);
 
-            it("should not be ok if MigrationState greater than `NOT_STARTED`", async () => {
-                await populateLegacyStore(1 /*INITIAL_DATA_MIGRATED*/);
+            indexedDB = new IDBFactory();
+        });
+    });
 
-                const result = await StorageManager.checkConsistency();
-                expect(result.healthy).toBe(true);
-                expect(result.dataInCryptoStore).toBe(false);
-            });
+    describe("hasUnmigratedLegacyCryptoStore", () => {
+        beforeEach(() => {
+            indexedDB = new IDBFactory();
+        });
 
-            it("should not be healthy if no indexeddb", async () => {
-                indexedDB = {} as IDBFactory;
+        it("should be false when there are no crypto stores", async () => {
+            await expect(StorageManager.hasUnmigratedLegacyCryptoStore()).resolves.toBe(false);
+        });
 
-                const result = await StorageManager.checkConsistency();
-                expect(result.healthy).toBe(false);
+        it("should be false when there is only a rust crypto store", async () => {
+            await createDB(RUST_CRYPTO_STORE_NAME);
 
-                indexedDB = new IDBFactory();
-            });
+            await expect(StorageManager.hasUnmigratedLegacyCryptoStore()).resolves.toBe(false);
+        });
+
+        it("should be true when there is only a legacy crypto store", async () => {
+            await createDB(LEGACY_CRYPTO_STORE_NAME);
+
+            await expect(StorageManager.hasUnmigratedLegacyCryptoStore()).resolves.toBe(true);
+        });
+
+        it("should be false when a migrated session has both stores", async () => {
+            await createDB(LEGACY_CRYPTO_STORE_NAME);
+            await createDB(RUST_CRYPTO_STORE_NAME);
+
+            await expect(StorageManager.hasUnmigratedLegacyCryptoStore()).resolves.toBe(false);
+        });
+
+        it("should be false if indexeddb is inaccessible", async () => {
+            vi.spyOn(logger, "error").mockImplementation(() => {});
+            indexedDB = {} as IDBFactory;
+
+            await expect(StorageManager.hasUnmigratedLegacyCryptoStore()).resolves.toBe(false);
+
+            indexedDB = new IDBFactory();
+            vi.restoreAllMocks();
         });
     });
 

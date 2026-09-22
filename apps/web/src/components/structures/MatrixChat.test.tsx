@@ -62,6 +62,7 @@ import PlatformPeg from "../../PlatformPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
 import * as Lifecycle from "../../Lifecycle";
+import { LegacyCryptoStoreError } from "../../utils/LegacyCryptoStoreError.ts";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../BasePlatform";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
@@ -353,6 +354,19 @@ describe("<MatrixChat />", () => {
         const { container } = getComponent();
 
         expect(container).toMatchSnapshot();
+    });
+
+    it("should show the 'This session cannot be used' screen if the session was never migrated off legacy crypto", async () => {
+        // Starting the client is what runs crypto init; make it fail the way MatrixClientPeg does
+        // for a session which still holds an un-migrated legacy crypto store.
+        vi.spyOn(Lifecycle, "loadSession").mockRejectedValue(new LegacyCryptoStoreError());
+        vi.spyOn(logger, "error").mockImplementation(() => {});
+
+        getComponent();
+
+        await waitFor(() => {
+            expect(screen.getByRole("heading", { name: "This session cannot be used" })).toBeInTheDocument();
+        });
     });
 
     it("should fire to focus the message composer", async () => {
