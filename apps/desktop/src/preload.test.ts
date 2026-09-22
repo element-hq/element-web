@@ -25,6 +25,7 @@ describe("preload x509 ipc", () => {
     let x509: X509Api;
 
     beforeAll(async () => {
+        // @ts-ignore `tsc` complains about needing to enable `allowImportingTsExtensions`, but vitest is happy to import this.
         await import("./preload.cts");
         x509 = (exposed.get("electron") as { x509: X509Api }).x509;
     });
