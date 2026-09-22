@@ -148,6 +148,8 @@ interface OpenDocumentOptions {
 
 interface PdfSession {
     goToPage(page: number): void;
+    /** Stop the worker and remove the listeners. */
+    dispose(): void;
 }
 
 function openDocument({ container, viewer, workerSource, post, data, position }: OpenDocumentOptions): PdfSession {
@@ -158,8 +160,14 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
         post({ type: "error", message: error instanceof Error ? `${error.name}: ${error.message}` : String(error) });
     };
 
+    // Every listener below is removed together when the session is disposed.
+    const listeners = new AbortController();
+    const { signal } = listeners;
+
     const { worker, ready } = createPdfWorker(workerSource);
-    worker.addEventListener("error", (event) => fail(event.error ?? new Error(event.message || "PDF worker failed")));
+    worker.addEventListener("error", (event) => fail(event.error ?? new Error(event.message || "PDF worker failed")), {
+        signal,
+    });
 
     const eventBus = new EventBus();
     const linkService = new ElementPdfLinkService({ eventBus });
@@ -252,42 +260,52 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
             event.preventDefault();
             zoomBy(getWheelZoomFactor(delta, event.deltaMode), [event.clientX, event.clientY]);
         },
-        { passive: false },
+        { passive: false, signal },
     );
 
     // Safari reports trackpad pinches as gesture events rather than ctrl+wheel.
     if ("ongesturechange" in window) {
         let lastGestureScale = 1;
 
-        container.addEventListener("gesturestart", (event: Event) => {
-            event.preventDefault();
-            lastGestureScale = (event as GestureEvent).scale || 1;
-        });
-        container.addEventListener("gesturechange", (event: Event) => {
-            event.preventDefault();
-            const gestureEvent = event as GestureEvent;
-            const scale = gestureEvent.scale || 1;
-            if (lastGestureScale <= 0) {
-                lastGestureScale = scale;
-                return;
-            }
+        container.addEventListener(
+            "gesturestart",
+            (event: Event) => {
+                event.preventDefault();
+                lastGestureScale = (event as GestureEvent).scale || 1;
+            },
+            { signal },
+        );
+        container.addEventListener(
+            "gesturechange",
+            (event: Event) => {
+                event.preventDefault();
+                const gestureEvent = event as GestureEvent;
+                const scale = gestureEvent.scale || 1;
+                if (lastGestureScale <= 0) {
+                    lastGestureScale = scale;
+                    return;
+                }
 
-            const factor = scale / lastGestureScale;
-            lastGestureScale = scale;
-            zoomBy(factor, [gestureEvent.clientX, gestureEvent.clientY]);
-        });
-        container.addEventListener("gestureend", (event: Event) => event.preventDefault());
+                const factor = scale / lastGestureScale;
+                lastGestureScale = scale;
+                zoomBy(factor, [gestureEvent.clientX, gestureEvent.clientY]);
+            },
+            { signal },
+        );
+        container.addEventListener("gestureend", (event: Event) => event.preventDefault(), { signal });
     }
 
+    let resizeObserver: ResizeObserver | undefined;
     if (typeof ResizeObserver !== "undefined") {
-        new ResizeObserver(() => {
+        resizeObserver = new ResizeObserver(() => {
             // Re-applying a fit scale recomputes it for the new width.
             const scaleValue = pdfViewer.currentScaleValue;
             if (RESPONSIVE_SCALE_VALUES.has(scaleValue)) {
                 pdfViewer.currentScaleValue = scaleValue;
             }
             pdfViewer.update();
-        }).observe(container);
+        });
+        resizeObserver.observe(container);
     }
 
     return {
@@ -296,6 +314,11 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
 
             // Scrolls the page into view; pdf.js reports it back via `pagechanging`.
             pdfViewer.currentPageNumber = page;
+        },
+        dispose(): void {
+            listeners.abort();
+            resizeObserver?.disconnect();
+            worker.terminate();
         },
     };
 }
@@ -345,6 +368,9 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
                 break;
         }
     };
+
+    // The app tears the iframe down when it is done; release everything as the page goes.
+    win.addEventListener("pagehide", () => session?.dispose());
 
     // Only the origin this page was served by may receive the port.
     const ready: PdfUsercontentMessage = { type: "ready" };

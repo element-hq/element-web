@@ -166,6 +166,8 @@ interface FakeIframe {
     receive(data: unknown): void;
     /** Everything the iframe sent to the app over the channel. */
     posted(): PdfUsercontentMessage[];
+    /** Unload the page, as closing the iframe does. */
+    hide(): void;
 }
 
 function fakeIframe({ embedded = true }: { embedded?: boolean } = {}): FakeIframe {
@@ -173,7 +175,13 @@ function fakeIframe({ embedded = true }: { embedded?: boolean } = {}): FakeIfram
     document.body.innerHTML = `<div id="container"><div id="viewer" class="pdfViewer"></div></div>`;
 
     const parent = { postMessage: vi.fn() };
-    const win = { document, location: { origin: ORIGIN }, parent: undefined as unknown };
+    const windowListeners = new Map<string, () => void>();
+    const win = {
+        document,
+        location: { origin: ORIGIN },
+        parent: undefined as unknown,
+        addEventListener: (type: string, listener: () => void) => windowListeners.set(type, listener),
+    };
     win.parent = embedded ? parent : win;
 
     const channel = (): MockMessageChannel => {
@@ -188,6 +196,7 @@ function fakeIframe({ embedded = true }: { embedded?: boolean } = {}): FakeIfram
         channel,
         receive: (data) => channel().port1.onmessage?.({ data } as MessageEvent),
         posted: () => channel().port1.postMessage.mock.calls.map(([message]) => message as PdfUsercontentMessage),
+        hide: () => windowListeners.get("pagehide")?.(),
     };
 }
 
@@ -628,6 +637,21 @@ describe("PDF usercontent", () => {
             resize.trigger(container);
             expect(activeViewer().currentScaleValue).toBe("1.75");
             expect(activeViewer().update).toHaveBeenCalledTimes(2);
+        });
+
+        it("releases its listeners, observer and worker when the page is hidden", async () => {
+            const resize = mockResizeObserver();
+            const iframe = fakeIframe();
+            await openDocument(iframe);
+            const container = document.getElementById("container")!;
+
+            iframe.hide();
+
+            fireZoomWheel(-100);
+            resize.trigger(container);
+            expect(activeViewer().updateScale).not.toHaveBeenCalled();
+            expect(activeViewer().update).not.toHaveBeenCalled();
+            expect(activeWorker().terminate).toHaveBeenCalled();
         });
     });
 });
