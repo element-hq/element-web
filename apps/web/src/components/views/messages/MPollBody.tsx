@@ -155,6 +155,9 @@ function PollBodyPresentationAttributes({
     });
 }
 
+/**
+ * Renders a poll and processes the event when somebody votes
+ */
 export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
@@ -224,6 +227,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.syncIfNewEventFromMe();
     };
 
+
+    /**
+     * Runs when the local user selects an option
+     */
     private selectOption(answerId: string): void {
         if (this.state.poll?.isEnded || this.state.isVoting) {
             return;
