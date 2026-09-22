@@ -10,11 +10,8 @@ import {
     type MatrixClient,
     createClient,
     type ICreateClientOpts,
-    MemoryCryptoStore,
     MemoryStore,
-    IndexedDBCryptoStore,
     IndexedDBStore,
-    LocalStorageCryptoStore,
     RoomNameType,
     type RoomNameState,
     EventTimelineSet,
@@ -134,7 +131,6 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauthClientId?:
         oauthClientId,
         userId: creds.userId,
         deviceId: creds.deviceId,
-        pickleKey: creds.pickleKey,
         timelineSupport: true,
         forceTURN: !SettingsStore.getValue("webRtcAllowPeerToPeer"),
         fallbackICEServerAllowed: !!SettingsStore.getValue("fallbackICEServerAllowed"),
@@ -189,14 +185,6 @@ export function createMatrixClient(opts: ICreateClientOpts): MatrixClient {
         });
     } else if (localStorage) {
         storeOpts.store = new MemoryStore({ localStorage });
-    }
-
-    if (indexedDB) {
-        storeOpts.cryptoStore = new IndexedDBCryptoStore(indexedDB, "matrix-js-sdk:crypto");
-    } else if (localStorage) {
-        storeOpts.cryptoStore = new LocalStorageCryptoStore(localStorage);
-    } else {
-        storeOpts.cryptoStore = new MemoryCryptoStore();
     }
 
     return createClient({
