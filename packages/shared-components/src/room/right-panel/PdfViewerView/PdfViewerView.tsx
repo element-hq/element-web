@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 import classNames from "classnames";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
@@ -24,8 +24,6 @@ export interface PdfViewerViewProps {
     pageCount: number;
     /** The controlled value of the page-number input. */
     pageInput: string;
-    /** The document surface, stretched to fill the space below the toolbar. */
-    children?: ReactNode;
     /** Called with each new value typed into the controlled page-number input. */
     onPageInputChange: (value: string) => void;
     /** Called when the page-number input enters its editing state. */
@@ -40,7 +38,7 @@ export interface PdfViewerViewProps {
     className?: string;
 }
 
-/** The shell around a PDF viewer: toolbar and status overlays. The host renders the document into `children`. */
+/** The shell around a PDF viewer: toolbar and status overlays. `children` is the document surface. */
 export function PdfViewerView({
     status,
     currentPage,
@@ -53,7 +51,7 @@ export function PdfViewerView({
     onPageInputCancel,
     onPageSubmit,
     className,
-}: Readonly<PdfViewerViewProps>): JSX.Element {
+}: Readonly<PropsWithChildren<PdfViewerViewProps>>): JSX.Element {
     const { translate: _t } = useI18n();
 
     return (

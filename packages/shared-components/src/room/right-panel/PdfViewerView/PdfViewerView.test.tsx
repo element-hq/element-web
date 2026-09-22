@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
@@ -27,7 +27,7 @@ const defaultProps: PdfViewerViewProps = {
     onPageSubmit: vi.fn(),
 };
 
-const renderView = (props: Partial<PdfViewerViewProps> = {}): ReturnType<typeof render> =>
+const renderView = (props: Partial<PropsWithChildren<PdfViewerViewProps>> = {}): ReturnType<typeof render> =>
     render(<PdfViewerView {...defaultProps} {...props} />, {
         wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
     });

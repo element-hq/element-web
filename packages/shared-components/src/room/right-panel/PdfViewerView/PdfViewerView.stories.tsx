@@ -12,10 +12,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PdfViewerView, type PdfViewerViewProps } from "./PdfViewerView";
 import samplePage from "../../../../static/pdf-viewer/sample-page.png";
 
-type PdfViewerStoryProps = Omit<PdfViewerViewProps, "children">;
-
 /** Adapts Storybook controls to the shell's API. The ready state shows a rasterized page as the surface. */
-function PdfViewerStory({ status, ...props }: PdfViewerStoryProps): JSX.Element {
+function PdfViewerStory({ status, ...props }: PdfViewerViewProps): JSX.Element {
     return (
         <div style={{ width: 420, height: 560 }}>
             <PdfViewerView {...props} status={status}>
