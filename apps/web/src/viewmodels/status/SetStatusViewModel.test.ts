@@ -47,6 +47,7 @@ describe("SetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         vi.mocked(recent.get).mockReturnValue([]);
@@ -206,6 +207,7 @@ describe("UserMenuSetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
