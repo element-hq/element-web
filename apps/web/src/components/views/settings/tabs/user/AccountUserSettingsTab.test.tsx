@@ -78,6 +78,7 @@ describe("<AccountUserSettingsTab />", () => {
             deleteThreePid: vi.fn(),
             getMediaConfig: vi.fn(),
             getAuthMetadata: vi.fn().mockRejectedValue(new Error("not implemented")),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
 
         mockClient.getCapabilities.mockResolvedValue({});

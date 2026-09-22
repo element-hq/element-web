@@ -36,6 +36,10 @@
             },
             "dependsOn": ["build", "typedoc"]
         },
+        "test:unit:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["typedoc", "^build:playwright"]
+        },
         "test:unit": {
             "command": "vitest --project=unit",
             "options": { "cwd": "packages/shared-components" }

@@ -1296,8 +1296,6 @@
     "language_dropdown_label": "語言下拉式選單",
     "leave_room_dialog": {
         "last_person_warning": "您是這裡唯一的人。如果您離開，包含您在內的任何人都無法加入。",
-        "leave_room_question": "您確定要離開聊天室「%(roomName)s」嗎？",
-        "leave_space_question": "您確定您要離開聊天空間「%(spaceName)s」？",
         "room_rejoin_warning": "這個聊天室不是公開聊天。沒有再次收到邀請的情況下將無法重新加入。",
         "space_rejoin_warning": "此聊天空間並非公開。在無邀請的情況下，您將無法重新加入。"
     },
@@ -1651,7 +1649,6 @@
         "join_button_account": "註冊",
         "join_failed_needs_invite": "要檢視 %(roomName)s，您需要邀請",
         "join_the_discussion": "加入此討論",
-        "join_title": "加入聊天室以參與",
         "join_title_account": "加入與某個帳號的對話",
         "joining": "正在加入…",
         "joining_room": "正在加入聊天室…",

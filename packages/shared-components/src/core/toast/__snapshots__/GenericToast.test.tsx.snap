@@ -1,0 +1,112 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GenericToast > renders destructive content 1`] = `
+<div>
+  <div>
+    <div
+      class="GenericToast-module_description"
+    >
+      You have unverified sessions.
+    </div>
+    <div
+      aria-live="off"
+      class="GenericToast-module_buttons"
+      data-testid="toast-buttons"
+    >
+      <button
+        class="_button_1nw83_8 _destructive_1nw83_110"
+        data-kind="secondary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Reject
+      </button>
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GenericToast > renders detail content 1`] = `
+<div>
+  <div>
+    <div
+      class="GenericToast-module_description"
+    >
+      You have unverified sessions.
+      <div>
+        Some more detail about the toast.
+      </div>
+    </div>
+    <div
+      aria-live="off"
+      class="GenericToast-module_buttons"
+      data-testid="toast-buttons"
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="secondary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Reject
+      </button>
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GenericToast > renders with primary and secondary buttons 1`] = `
+<div>
+  <div>
+    <div
+      class="GenericToast-module_description"
+    >
+      You have unverified sessions.
+    </div>
+    <div
+      aria-live="off"
+      class="GenericToast-module_buttons"
+      data-testid="toast-buttons"
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="secondary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Reject
+      </button>
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="md"
+        role="button"
+        tabindex="0"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</div>
+`;
