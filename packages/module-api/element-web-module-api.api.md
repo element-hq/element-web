@@ -532,15 +532,10 @@ export interface WidgetLifecycleApi {
 
 // @alpha
 export interface X509Api {
-    // (undocumented)
     getKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>>;
-    // (undocumented)
     getUserCertificate(): Promise<X509Result<UserCertificate>>;
-    // (undocumented)
     listHardwareKeys(): Promise<X509Result<HardwareKey[]>>;
-    // (undocumented)
     logIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult>;
-    // (undocumented)
     signData(serialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>>;
 }
 

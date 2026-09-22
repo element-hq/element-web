@@ -148,9 +148,43 @@ export interface UserCertificate {
  * @alpha
  */
 export interface X509Api {
+    /**
+     * Read the user's own certificate and chain from disk, as provisioned by the administrator.
+     *
+     * Operates outside the signing sequence and needs no hardware key. Fails with `CERTIFICATE_NOT_FOUND`
+     * when no certificate is configured or the file cannot be read.
+     */
     getUserCertificate(): Promise<X509Result<UserCertificate>>;
+    /**
+     * List the hardware keys currently attached.
+     *
+     * Fails with `MODULE_NOT_LOADED` when no PKCS#11 library is configured or it could not be loaded.
+     */
     listHardwareKeys(): Promise<X509Result<HardwareKey[]>>;
+    /**
+     * Report how far along the signing sequence the given hardware key is.
+     *
+     * @param serialNumber - the key's serial number, as reported by {@link X509Api.listHardwareKeys}.
+     */
     getKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>>;
+    /**
+     * Log in to the given hardware key so that {@link X509Api.signData} can use its private key.
+     *
+     * On an incorrect PIN the error additionally carries a `triesRemaining` field. If the key has
+     * locked itself, this reports zero.
+     *
+     * @param serialNumber - the key's serial number, as reported by {@link X509Api.listHardwareKeys}.
+     * @param pin - the user-provided PIN to attempt login with.
+     */
     logIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult>;
+    /**
+     * Sign the given data with the private key belonging to the configured certificate.
+     *
+     * Requires {@link X509Api.logIntoKey} to have succeeded first; otherwise fails with `LOGIN_REQUIRED`.
+     *
+     * @param serialNumber - the key's serial number, as reported by {@link X509Api.listHardwareKeys}.
+     * @param data - the bytes to sign.
+     * @returns the raw signature bytes.
+     */
     signData(serialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>>;
 }
