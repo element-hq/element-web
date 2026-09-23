@@ -363,7 +363,7 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/cf7c275fb72afbe21d9106253e46e29fa27592eb#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
@@ -662,7 +662,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9ba30b7550a7628268be0cf059600358605598be
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/37186eb0b00326b42cc7da009ab5e2e811509398
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.19.0
@@ -1319,7 +1319,7 @@ importers:
     dependencies:
       '@axe-core/playwright':
         specifier: ^4.10.1
-        version: 4.12.1(playwright-core@1.63.0)
+        version: 4.13.0(playwright-core@1.63.0)
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.63.0
@@ -1691,8 +1691,8 @@ packages:
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
 
-  '@axe-core/playwright@4.12.1':
-    resolution: {integrity: sha512-rMd7xriptqKpP+w5265i4Hdkv2X5kbu6uiBi/B2I7uf3hieRBM3qDCfaKPtxfiYb2mKXfF+yLODJwIx+Jv1GDw==}
+  '@axe-core/playwright@4.13.0':
+    resolution: {integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
 
@@ -6901,8 +6901,8 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
-  axe-core@4.12.1:
-    resolution: {integrity: sha512-s7iGf5GaVMxEG0ENN9x+xTr7GFZCb1ZP/1uATUpCEK2X78nDB3RwbtFCo9pGAf9ru+VwoQ464DkaLEeRM08wJA==}
+  axe-core@4.13.0:
+    resolution: {integrity: sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A==}
     engines: {node: '>=4'}
 
   axios@1.18.1:
@@ -8369,8 +8369,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/cf7c275fb72afbe21d9106253e46e29fa27592eb#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-+AtzLZuq32xkcqTpAP43za0+HgQ41dllweiaY1+zlWm1gUb+OgewE2l96U0ZMtZF2ooCBCpKfuLgKnjbexDSqA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/cf7c275fb72afbe21d9106253e46e29fa27592eb}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-RXdh6RHKmjmU7OT8PtWgwTWbyEZK+sRVqY6yf2Z4OjyazH/lsIoE/pO53YMyJCvng5HLJlRkWlcqDMyeHzHGQg==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174}
     version: 0.0.0
 
   eslint-plugin-storybook@10.6.0:
@@ -9737,8 +9737,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9ba30b7550a7628268be0cf059600358605598be:
-    resolution: {gitHosted: true, integrity: sha512-X4XebYlv9a1vPNNRgKULMYRBVXbge0nFvD+B53R+WBQJvIZiuxSx4F5CLQDkJjdP5fEYmpp+4eR+3sjisip7Zg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9ba30b7550a7628268be0cf059600358605598be}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/37186eb0b00326b42cc7da009ab5e2e811509398:
+    resolution: {gitHosted: true, integrity: sha512-vdqdNsm+40h7hd3tFuqjH8YVm7b775JI9YiTfB5r/cdUTiTn8oAGGkJzmgjE3MFTcqeV5wfZNsVDzH1LWLG3vQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/37186eb0b00326b42cc7da009ab5e2e811509398}
     version: 42.3.0
     engines: {node: '>=22.0.0'}
 
@@ -13204,9 +13204,9 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
 
-  '@axe-core/playwright@4.12.1(playwright-core@1.63.0)':
+  '@axe-core/playwright@4.13.0(playwright-core@1.63.0)':
     dependencies:
-      axe-core: 4.12.1
+      axe-core: 4.13.0
       playwright-core: 1.63.0
 
   '@babel/code-frame@7.29.7':
@@ -17333,7 +17333,7 @@ snapshots:
   '@storybook/addon-a11y@10.5.5(storybook@10.5.8)':
     dependencies:
       '@storybook/global': 5.0.0
-      axe-core: 4.12.1
+      axe-core: 4.13.0
       storybook: 10.5.8(@types/react@19.2.18)(prettier@2.8.8)(react@19.2.8)
 
   '@storybook/addon-designs@11.1.4(@storybook/addon-docs@10.5.5)(@types/react@19.2.18)(react-dom@19.2.8)(react@19.2.8)(storybook@10.5.8)':
@@ -18922,7 +18922,7 @@ snapshots:
 
   aws4@1.13.2: {}
 
-  axe-core@4.12.1: {}
+  axe-core@4.13.0: {}
 
   axios@1.18.1(debug@4.4.3)(supports-color@7.2.0):
     dependencies:
@@ -20594,7 +20594,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/cf7c275fb72afbe21d9106253e46e29fa27592eb#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint: {}
 
   eslint-plugin-storybook@10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
     dependencies:
@@ -22113,7 +22113,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9ba30b7550a7628268be0cf059600358605598be:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/37186eb0b00326b42cc7da009ab5e2e811509398:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
