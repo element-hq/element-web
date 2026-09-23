@@ -115,7 +115,7 @@ export function PdfViewerView({
                             </span>
                         </fieldset>
                     </form>
-                    <div className={styles.zoomControls} role="group" aria-label={_t("pdf_viewer|zoom")}>
+                    <fieldset className={styles.zoomControls} aria-label={_t("pdf_viewer|zoom")}>
                         <IconButton
                             size="28px"
                             aria-label={_t("pdf_viewer|zoom_out")}
@@ -134,7 +134,7 @@ export function PdfViewerView({
                         >
                             <PlusIcon />
                         </IconButton>
-                    </div>
+                    </fieldset>
                 </div>
             ) : null}
             <div className={styles.body}>
