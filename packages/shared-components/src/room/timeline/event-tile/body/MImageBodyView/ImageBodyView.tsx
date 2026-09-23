@@ -254,8 +254,13 @@ export function ImageBodyView({
     const resolvedImageClassName = classNames(imageClassName, styles.image);
 
     if (state === ImageBodyViewState.ERROR) {
+        // Expose the height of the media box this error replaces so stylesheets
+        // can hold the row at the same height (an inert custom property unless
+        // a host stylesheet consumes it).
+        const errorStyle =
+            maxHeight === undefined ? undefined : ({ "--mx-image-reserved-height": `${maxHeight}px` } as CSSProperties);
         return (
-            <span className={classNames(rootClassName, styles.error)}>
+            <span className={classNames(rootClassName, styles.error)} style={errorStyle}>
                 <ImageErrorIcon className={styles.errorIcon} width="16" height="16" />
                 {errorLabel}
             </span>
@@ -267,17 +272,25 @@ export function ImageBodyView({
 
     // Reserve the media box on the container itself so the timeline doesn't jump
     // while the image element or loading state is still settling.
-    const resolvedWidth = maxWidth === undefined ? undefined : `min(100%, ${maxWidth}px)`;
+    //
+    // The width must be a definite length, not `min(100%, Wpx)`: the link
+    // wrapper is `width: fit-content`, and a percentage inside a fit-content
+    // parent is cyclic, so the whole min() degrades to content width — zero
+    // for a not-yet-loaded image, collapsing the reserved box. A definite
+    // width gives fit-content a real contribution; `maxWidth: 100%` then
+    // clamps to the available space in narrow panes.
+    const resolvedWidth = maxWidth === undefined ? undefined : `${maxWidth}px`;
+    const resolvedMaxWidth = maxWidth === undefined ? undefined : "100%";
     const containerStyle: CSSProperties = {
         width: resolvedWidth,
-        maxWidth,
+        maxWidth: resolvedMaxWidth,
         maxHeight,
         aspectRatio,
     };
     const mediaStyle: CSSProperties | undefined = isSvg
         ? {
               width: resolvedWidth,
-              maxWidth,
+              maxWidth: resolvedMaxWidth,
               maxHeight,
           }
         : undefined;

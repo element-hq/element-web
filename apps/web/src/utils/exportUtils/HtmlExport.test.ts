@@ -392,6 +392,35 @@ describe("HTMLExport", () => {
         expect(await file.text()).toBe(avatarContent);
     });
 
+    it("should escape the user ID in avatar file paths", async () => {
+        const userId = '@alice"><img src=x onerror=alert(1)/>:example.com';
+        mockMessages({ ...EVENT_MESSAGE, sender: userId });
+
+        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar.bmp");
+        mockMxc("mxc://example.org/avatar.bmp", "an avatar");
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const path = `users/${userId.replace(/:/g, "-").replace(/\//g, "-")}.png`;
+        expect(Object.keys(getFiles(exporter))).toContain(escapeHtml(path));
+
+        // Unescaped, the `"` would close the `src` attribute and the `<img>` would become a real element.
+        const html = await getMessageFile(exporter).text();
+        expect(html).toContain(escapeHtml(path));
+        expect(html).not.toContain(path);
+    });
+
     it("should handle when an event has no sender", async () => {
         const EVENT_MESSAGE_NO_SENDER: IRoomEvent = {
             event_id: "$1",
@@ -471,6 +500,29 @@ describe("HTMLExport", () => {
         // Ensure that the attachment has the expected content
         const text = await file.text();
         expect(text).toBe(attachmentBody);
+    });
+
+    it("should escape HTML in attachment filenames", async () => {
+        const filename = 'hello.txt"><img src=x onerror=alert(1)/>';
+        mockMessages({ ...EVENT_ATTACHMENT, content: { ...EVENT_ATTACHMENT.content, filename } });
+        mockMxc("mxc://example.org/test-id", "Lorem ipsum dolor sit amet");
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: true,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const path = `files/2${filename.slice(filename.lastIndexOf("."))}`;
+        expect(Object.keys(getFiles(exporter))).toContain(escapeHtml(path));
+        expect(await getMessageFile(exporter).text()).not.toContain(path);
     });
 
     it("should handle attachments with identical names and dates", async () => {

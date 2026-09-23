@@ -103,15 +103,13 @@ jobs:
     linux:
         if: github.event_name != 'workflow_dispatch' || inputs.linux
         needs: prepare
-        name: Linux ${{ matrix.arch }} (sqlcipher ${{ matrix.sqlcipher }})
+        name: Linux ${{ matrix.arch }}
         strategy:
             matrix:
                 arch: [amd64, arm64]
-                sqlcipher: [static]
         uses: ./.github/workflows/build_desktop_linux.yaml
         with:
             arch: ${{ matrix.arch }}
-            sqlcipher: ${{ matrix.sqlcipher }}
             version: ${{ needs.prepare.outputs.nightly-version }}
 
     deploy:
@@ -152,13 +150,13 @@ jobs:
                   fi
 
                   # Linux
-                  if [ -d linux-amd64-sqlcipher-static ]; then
+                  if [ -d linux-amd64 ]; then
                       mkdir -p packages.element.io/install/linux/glibc-x86-64
-                      mv linux-amd64-sqlcipher-static/*.tar.gz packages.element.io/install/linux/glibc-x86-64
+                      mv linux-amd64/*.tar.gz packages.element.io/install/linux/glibc-x86-64
                   fi
-                  if [ -d linux-arm64-sqlcipher-static ]; then
+                  if [ -d linux-arm64 ]; then
                       mkdir -p packages.element.io/install/linux/glibc-aarch64
-                      mv linux-arm64-sqlcipher-static/*.tar.gz packages.element.io/install/linux/glibc-aarch64
+                      mv linux-arm64/*.tar.gz packages.element.io/install/linux/glibc-aarch64
                   fi
 
             # We don't wish to store the installer for every nightly ever, so we only keep the latest
@@ -177,8 +175,8 @@ jobs:
                   if [ -d macos ]; then mv packages.element.io/install/macos/{*,"Element Nightly"}.dmg; fi
 
                   # Linux
-                  if [ -d linux-amd64-sqlcipher-static ]; then mv packages.element.io/install/linux/glibc-x86-64/{*,element-desktop-nightly}.tar.gz; fi
-                  if [ -d linux-arm64-sqlcipher-static ]; then mv packages.element.io/install/linux/glibc-aarch64/{*,element-desktop-nightly}.tar.gz; fi
+                  if [ -d linux-amd64 ]; then mv packages.element.io/install/linux/glibc-x86-64/{*,element-desktop-nightly}.tar.gz; fi
+                  if [ -d linux-arm64 ]; then mv packages.element.io/install/linux/glibc-aarch64/{*,element-desktop-nightly}.tar.gz; fi
 
             - name: "[Release] Prepare release latest symlink"
               if: needs.prepare.outputs.nightly-version == ''
@@ -203,12 +201,12 @@ jobs:
                   fi
 
                   # Linux
-                  if [ -d linux-amd64-sqlcipher-static ]; then
+                  if [ -d linux-amd64 ]; then
                       pushd packages.element.io/install/linux/glibc-x86-64
                       ln -s "$(find . -type f -iname "*.tar.gz" | xargs -0 -n1 -- basename)" "element-desktop.tar.gz"
                       popd
                   fi
-                  if [ -d linux-arm64-sqlcipher-static ]; then
+                  if [ -d linux-arm64 ]; then
                       pushd packages.element.io/install/linux/glibc-aarch64
                       ln -s "$(find . -type f -iname "*.tar.gz" | xargs -0 -n1 -- basename)" "element-desktop.tar.gz"
                       popd
@@ -249,7 +247,7 @@ jobs:
 
                   for arch in amd64 arm64
                   do
-                      echo "$arch=$(ls linux-$arch-sqlcipher-static/*.deb | tail -n1)" >> $GITHUB_OUTPUT
+                      echo "$arch=$(ls linux-$arch/*.deb | tail -n1)" >> $GITHUB_OUTPUT
                   done
 
             - name: Stash debs

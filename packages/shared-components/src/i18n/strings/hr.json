@@ -56,7 +56,6 @@
             "clear_status": "Očisti",
             "create_an_account": "Izradi račun",
             "got_an_account": "Imate li račun?",
-            "manage_account": "Upravljanje računom",
             "sign_in": "Prijava",
             "title": "Korisnički izbornik"
         }
@@ -311,8 +310,6 @@
         "pending_moderation": "Poruka čeka moderiranje",
         "pending_moderation_reason": "Poruka čeka moderiranje: %(reason)s",
         "url_preview": {
-            "close": "Zatvori pretpregled",
-            "open_link": "Otvori poveznicu",
             "show_n_more": {
                 "one": "Prikaži %(count)s drugi pregled",
                 "few": "Prikaži %(count)s druga pregleda",

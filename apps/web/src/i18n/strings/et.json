@@ -1598,8 +1598,6 @@
     "language_dropdown_label": "Keelevalik",
     "leave_room_dialog": {
         "last_person_warning": "Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.",
-        "leave_room_question": "Kas oled kindel, et soovid lahkuda jututoast „%(roomName)s“?",
-        "leave_space_question": "Kas oled kindel, et soovid lahkuda kogukonnast „%(spaceName)s“?",
         "room_leave_admin_warning": "Sa oled ainus selle jututoa haldaja. Kui sa siit lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_leave_mod_warning": "Sa oled ainus moderaator selles jututoas. Kui sa siis lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_rejoin_warning": "See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.",
@@ -2024,7 +2022,6 @@
         "join_button_account": "Registreeru",
         "join_failed_needs_invite": "%(roomName)s jututoaga tutvumiseks vajad sa kutset",
         "join_the_discussion": "Liitu vestlusega",
-        "join_title": "Osalemiseks liitu jututoaga",
         "join_title_account": "Liitu vestlusega kasutades oma kontot",
         "joining": "Liitun…",
         "joining_room": "Liitun jututoaga…",

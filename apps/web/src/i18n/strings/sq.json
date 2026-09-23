@@ -1229,8 +1229,6 @@
     "language_dropdown_label": "Menu Hapmbyll Gjuhësh",
     "leave_room_dialog": {
         "last_person_warning": "Jeni i vetmi person këtu. Nëse e braktisni, askush s’do të jetë në gjendje të hyjë në të ardhmen, përfshi ju.",
-        "leave_room_question": "Jeni i sigurt se doni të dilni nga dhoma '%(roomName)s'?",
-        "leave_space_question": "Jeni i sigurt se doni të dilni nga hapësira '%(spaceName)s'?",
         "room_rejoin_warning": "Kjo dhomë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë.",
         "space_rejoin_warning": "Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë."
     },
@@ -1575,7 +1573,6 @@
         "join_button_account": "Regjistrohuni",
         "join_failed_needs_invite": "Që të shihni %(roomName)s, ju duhet një ftesë",
         "join_the_discussion": "Merrni pjesë në diskutim",
-        "join_title": "Që të merrni pjesë, hyni në dhomë",
         "join_title_account": "Merrni pjesë në bisedë me një llogari",
         "joining": "Po hyhet…",
         "joining_room": "Po hyhet në dhomë…",

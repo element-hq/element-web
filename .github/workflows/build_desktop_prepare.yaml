@@ -98,17 +98,6 @@ jobs:
               env:
                   CONFIG_DIR: ${{ inputs.config }}
 
-            # We split this out to save the build_* scripts having to do it to make use of `hashFiles` in the cache action
-            - name: Generate cache hash files
-              working-directory: apps/desktop
-              run: |
-                  set -ex
-                  # Add --no-sandbox as otherwise it fails because the helper isn't setuid root. It's only getting the version.
-                  pnpm --silent electron --no-sandbox --version > electronVersion
-                  cat package.json | jq -c .hakDependencies | sha1sum > hakHash
-                  find hak -type f -print0 | xargs -0 sha1sum >> hakHash
-                  find scripts/hak -type f -print0 | xargs -0 sha1sum >> hakHash
-
             - name: "[Nightly] Calculate version"
               id: versions
               if: inputs.nightly
@@ -191,7 +180,5 @@ jobs:
                   retention-days: 1
                   path: |
                       apps/desktop/webapp.asar
-                      apps/desktop/electronVersion
-                      apps/desktop/hakHash
                       apps/desktop/changelog.Debian
                       apps/desktop/variant.json

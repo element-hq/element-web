@@ -709,11 +709,11 @@ test.describe("Timeline", () => {
 
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
+            // The timeline renders files as a preview tile, which shows the size as the tile body.
             await expect(
                 page
                     .locator(".mx_EventTile")
                     .last()
-                    .locator(".mx_MFileBody [data-type='info']")
                     .getByText(/1.12 KB/),
             ).toBeVisible();
         });
@@ -956,8 +956,14 @@ test.describe("Timeline", () => {
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
             const lastTile = getEventTilesWithBodies(page).last();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const status = lastTile.getByRole("status");
+            if (await status.count()) {
+                await expect(status).toHaveAccessibleName("Your message was sent");
+            }
+
             const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await page.mouse.move(0, 0);
+            await lastTile.getByTestId("event-tile-slot-body").hover();
             await expect(replyButton).toBeVisible();
             await replyButton.click();
         };

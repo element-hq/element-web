@@ -11,7 +11,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { useMockedViewModel } from "../../../../core/viewmodel";
+import { MockViewModel, useMockedViewModel } from "../../../../core/viewmodel";
 import { MemberAvatarView, type MemberAvatarViewSnapshot } from "../../../../core/MemberAvatar/MemberAvatarView";
 import {
     EventPresentationProvider,
@@ -57,6 +57,8 @@ import bodyStyles from "../body/EventContentBodyView/EventContentBody.module.css
 import { RoomAvatarView, type RoomAvatarViewSnapshot } from "../../../avatar/RoomAvatar/RoomAvatarView";
 import styles from "./EventTileView.stories.module.css";
 import storyMediaSrc from "../../../../../static/image-body/install-spinner.png";
+import { CallDirection, RoomOngoingCallTileView, type RoomOngoingCallTileViewSnapshot } from "../call";
+import { MockFacePileViewModel, MockMemberAvatarViewModel } from "../call/ongoing/call-mocks";
 
 type StoryBoundary = HTMLElement;
 const eventTileSlotTestIdPrefix = "event-tile-slot-";
@@ -449,6 +451,37 @@ const StoryStickerBody = (): React.ReactElement => (
         🌈
     </div>
 );
+/* Held at module scope so the call tile renders identically on every snapshot run.
+   The members deliberately carry no avatar URL: Compound renders lazily-loaded
+   <img> avatars, which do not reliably paint before the snapshot is taken and
+   made this story flaky. Initials are laid out identically and are stable. */
+const storyCallDuration = new MockViewModel({ duration: 100 });
+const storyCallMembers = [
+    { id: "@bob:example.org", name: "Bob" },
+    { id: "@riley:example.org", name: "Riley" },
+    { id: "@andi:example.org", name: "Andi" },
+];
+
+/**
+ * An ongoing room call rendered through the real call tile rather than a
+ * placeholder body, so that a story covers the tile inside the event shell.
+ * The tile supplies its own padding and the shell must leave it alone.
+ */
+const StoryOngoingCallBody = (): React.ReactElement => {
+    const snapshot: RoomOngoingCallTileViewSnapshot = {
+        callDirection: CallDirection.Incoming,
+        startedByDisplayName: "Bob",
+        durationViewModel: storyCallDuration,
+        totalParticipants: 3,
+        callHasOtherParticipants: true,
+        isJoinable: true,
+        isJoined: false,
+        memberAvatarViewModel: new MockMemberAvatarViewModel(storyCallMembers[0]),
+        facePileViewModel: new MockFacePileViewModel(storyCallMembers),
+    };
+    const vm = useMockedViewModel(snapshot, { join: fn() });
+    return <RoomOngoingCallTileView vm={vm} />;
+};
 const StoryDecryptionFailureBody = (): React.ReactElement => {
     const snapshot: DecryptionFailureBodyViewSnapshot = {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
@@ -847,6 +880,11 @@ type EventTileStoryProps = Omit<EventTileViewProps, "root"> & {
     containerWidth?: number;
     /** Whether the story should render the EventTileView-level sender and avatar slots. */
     showSenderAndAvatar?: boolean;
+    /**
+     * Suppress the timestamp slot, as the application does for tiles that
+     * carry no timestamp of their own (RTC notification call tiles).
+     */
+    hideTimestamp?: boolean;
     state?: Partial<EventTileViewProps["root"]["state"]>;
     roomMessages?: "boundaries" | "alice" | "bob" | "media" | "threeEach" | "informational" | "alignedBetween" | "rich";
     searchMessages?: "result";
@@ -1039,6 +1077,7 @@ function EventTileViewStoryContent({
     shape,
     containerWidth,
     showSenderAndAvatar: showSenderAndAvatarStoryOverride,
+    hideTimestamp: hideTimestampStoryOverride,
     state,
     roomMessages = "boundaries",
     searchMessages,
@@ -1079,7 +1118,7 @@ function EventTileViewStoryContent({
         const interaction = tileInteractions[suffix] ?? { hovered: false, focused: false };
         const showActionBar =
             shape === "ThreadsList" || tileState.actionBarFocused || interaction.hovered || interaction.focused;
-        const timestamp = createStoryTimestamp(layout, isLast, showActionBar);
+        const timestamp = hideTimestampStoryOverride ? undefined : createStoryTimestamp(layout, isLast, showActionBar);
         const showSenderAndAvatar =
             showSenderAndAvatarOverride ??
             showSenderAndAvatarStoryOverride ??
@@ -1445,6 +1484,7 @@ const storyHelpers = {
     StoryPadlock,
     StoryMediaBody,
     StoryNotificationBadge,
+    StoryOngoingCallBody,
     StoryPreviewBody,
     StoryShortBody,
     StoryReplyChain,
@@ -1467,6 +1507,7 @@ const meta = {
             table: { disable: true },
         },
         showSenderAndAvatar: { table: { disable: true } },
+        hideTimestamp: { table: { disable: true } },
         classNames: { table: { disable: true } },
         state: { table: { disable: true } },
         roomMessages: { table: { disable: true } },
