@@ -15,7 +15,7 @@ import {
     RoomTombstoneCallTileViewModel,
     type RoomTombstoneCallTileViewModelProps,
 } from "./RoomTombstoneCallTileViewModel";
-import { getDeclinedEvents, getIntentFromEvent } from "../../common";
+import { getDeclinedEvents, getFailureReason, getIntentFromEvent } from "../../common";
 
 export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTileViewModelProps {
     /**
@@ -43,9 +43,13 @@ function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
     const callDirection = cli.getUserId() === startedUserId ? CallDirection.Outgoing : CallDirection.Incoming;
 
     const declineEvent = getDeclinedEvents(mxEvent, getRelationsForEvent)?.[0] ?? null;
+    const failureReason = getFailureReason(mxEvent, getRelationsForEvent);
     const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
     const timestamp = getTimeFromEvent(declineEvent ?? mxEvent, showTwelveHour);
-    return { snapshot: { timestamp, type, callDirection, isCallDeclined: !!declineEvent }, declineEvent };
+    return {
+        snapshot: { timestamp, type, callDirection, isCallDeclined: !!declineEvent, failureReason },
+        declineEvent,
+    };
 }
 
 /**
