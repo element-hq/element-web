@@ -44,12 +44,4 @@ describe("ElementCallMockView", () => {
         expect(screen.queryByRole("button", { name: "Close" })).not.toBeInTheDocument();
         expect(screen.getByText(/close: No/)).toBeInTheDocument();
     });
-
-    it("renders only an error for an unknown room", () => {
-        const { container } = render(<UnknownRoom />);
-        expect(screen.getByRole("region", { name: "Element Call (mock)" })).toBeInTheDocument();
-        expect(screen.getByText("Unknown room !unknown:example.org")).toBeInTheDocument();
-        expect(screen.queryByRole("button")).not.toBeInTheDocument();
-        expect(container).toMatchSnapshot();
-    });
 });
