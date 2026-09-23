@@ -167,7 +167,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         super(props);
 
         this.state = {
-            selected: [],
+            selected: null,
             pollInitialised: false,
             isVoting: false,
         };
@@ -240,7 +240,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const maxSelections = pollEvent?.maxSelections ?? 1;
 
         let newSelected: string[];
-        const currentSelected = this.state.selected?.length
+        const currentSelected = this.state.selected??
             ? this.state.selected
             : this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
 
