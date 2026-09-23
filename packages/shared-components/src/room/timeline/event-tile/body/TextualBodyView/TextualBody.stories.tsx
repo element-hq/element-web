@@ -131,6 +131,36 @@ export const Edited: Story = {
     },
 };
 
+/**
+ * An edited message whose code block is wider than the timeline, as when the right panel is open.
+ * The text must wrap within the container and only the code block may scroll horizontally.
+ */
+export const EditedWithWideCodeBlock: Story = {
+    args: {
+        showEditedMarker: true,
+        body: (
+            <div>
+                <p>Text before the code block should wrap within the timeline instead of being cut off.</p>
+                {/* The host app gives code blocks horizontal scrolling; mirror that here. Focusable so keyboard users can scroll it. */}
+                <pre style={{ overflowX: "auto" }} tabIndex={0}>
+                    <code>
+                        {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n"}
+                        {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip"}
+                    </code>
+                </pre>
+                <p>Text after the code block should wrap too.</p>
+            </div>
+        ),
+    },
+    decorators: [
+        (Story): JSX.Element => (
+            <div style={{ width: 320 }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
 export const PendingModeration: Story = {
     args: {
         showPendingModerationMarker: true,
