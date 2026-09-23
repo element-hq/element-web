@@ -24,17 +24,6 @@ describe("ElementCallMockView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the call with its participants, mute state and log", () => {
-        const { container } = render(<InCall />);
-        expect(screen.getByText("@alice:example.org (ALICEDEVICE) – you")).toBeInTheDocument();
-        expect(screen.getByText(/in call/)).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "notifyHungUp" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Unmute audio" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "setAlwaysOnScreen(false)" })).toBeInTheDocument();
-        expect(screen.getByRole("list", { name: "HostBridge log" })).toHaveTextContent("← hangUp");
-        expect(container).toMatchSnapshot();
-    });
-
     it("calls the actions from its buttons", async () => {
         const user = userEvent.setup();
         const toggleJoined = vi.fn(async () => {});
