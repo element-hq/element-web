@@ -35,15 +35,15 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.2.2
+    vite: 8.3.0
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 5.0.0
-    "@vitest/coverage-v8": 5.0.0
-    "@vitest/browser-playwright": 5.0.0
-    "@vitest/browser": 5.0.0
+    vitest: 5.0.1
+    "@vitest/coverage-v8": 5.0.1
+    "@vitest/browser-playwright": 5.0.1
+    "@vitest/browser": 5.0.1
     "@vitest/spy": 5.0.1
-    "@vitest/ui": 5.0.0
+    "@vitest/ui": 5.0.1
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.1.0
     # nx
