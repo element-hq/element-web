@@ -202,9 +202,11 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
 
     const moduleCallOptions = useModuleRoomCallOptions(ModuleApi.instance.extras, room.roomId, memberCount);
 
-    // Element Web's own ways of calling, dropped while they are disabled, plus the modules'
+    // Element Web's own ways of calling, dropped while they are disabled or a module's option
+    // says it is the only way to reach the room's members, plus the modules'
+    const ownCallsHidden = moduleCallOptions.some((option) => option.exclusive);
     const videoCallItems: CallMenuItem[] = [
-        ...(videoCallDisabledReason
+        ...(videoCallDisabledReason || ownCallsHidden
             ? []
             : callOptions.map((option) => ({
                   key: String(option),
@@ -218,7 +220,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         })),
     ];
     const voiceCallItems: CallMenuItem[] = [
-        ...(voiceCallDisabledReason
+        ...(voiceCallDisabledReason || ownCallsHidden
             ? []
             : callOptions.map((option) => ({
                   key: String(option),

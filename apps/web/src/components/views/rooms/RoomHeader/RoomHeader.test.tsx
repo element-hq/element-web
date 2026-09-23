@@ -259,6 +259,23 @@ describe("RoomHeader", () => {
         }
     });
 
+    it("calls straight through an exclusive module option, without the room's own", async () => {
+        const user = userEvent.setup();
+        mockRoomMembers(room, 2);
+        const onSelect = vi.fn();
+        ModuleApi.instance.extras.addRoomCallOptionsCallback(() => [{ label: "SIP: 123", onSelect, exclusive: true }]);
+        try {
+            render(<RoomHeader room={room} />, getWrapper());
+            // The options arrive asynchronously; nothing in the DOM changes when they do
+            await act(async () => {});
+            await user.click(screen.getByRole("button", { name: "Voice call" }));
+            expect(onSelect).toHaveBeenCalledWith(false);
+            expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+        } finally {
+            ModuleApi.instance.extras.roomCallOptionsCallbacks.length = 0;
+        }
+    });
+
     it("should not show voice call button in managed hybrid environments", async () => {
         mockRoomMembers(room, 2);
         vi.spyOn(SdkConfig, "get").mockReturnValue({ widget_build_url: "https://widget.build.url" });

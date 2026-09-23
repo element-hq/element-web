@@ -68,6 +68,14 @@ export interface RoomCallOption {
      * @param video - Whether the video (rather than voice) call button was used.
      */
     onSelect: (video: boolean) => void;
+
+    /**
+     * Whether this is the only way to reach the room's members (e.g. they are all
+     * virtual users of a bridge), in which case Element Web's own call options are
+     * left out. With a single option left, the buttons call directly rather than
+     * opening a menu.
+     */
+    exclusive?: boolean;
 }
 
 /**

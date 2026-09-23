@@ -394,6 +394,7 @@ export interface Room {
 
 // @alpha
 export interface RoomCallOption {
+    exclusive?: boolean;
     label: string;
     onSelect: (video: boolean) => void;
 }
