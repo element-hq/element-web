@@ -91,7 +91,6 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
                 checked={isChecked}
                 disabled={isEnded}
                 aria-label={ariaLabel}
-                onChange={() => onOptionSelected?.(answer.id)}
                 icon={isChecked ? <CheckIcon /> : undefined}
             >
                 <div aria-hidden="true">{children}</div>
@@ -107,7 +106,6 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
             checked={isChecked}
             disabled={isEnded}
             aria-label={ariaLabel}
-            onChange={() => onOptionSelected?.(answer.id)}
             icon={isChecked ? <CheckIcon /> : undefined}
         >
             <div aria-hidden="true">{children}</div>
