@@ -342,7 +342,7 @@ importers:
         version: 0.6.0
       '@nx-tools/nx-container':
         specifier: ^7.2.1
-        version: 7.3.0(@nx/devkit@22.6.5)(@nx/js@22.6.5)(dotenv@17.4.2)(nx@23.2.1)(tslib@2.8.1)
+        version: 7.3.0(@nx/devkit@22.6.5)(@nx/js@22.6.5)(dotenv@18.0.3)(nx@23.2.1)(tslib@2.8.1)
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.63.0
@@ -911,8 +911,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0(clean-css@5.3.3)(csso@5.0.5)(esbuild@0.27.4)(lightningcss@1.33.0)(webpack@5.110.3)
       dotenv:
-        specifier: ^17.0.0
-        version: 17.4.2
+        specifier: ^18.0.0
+        version: 18.0.3
       express:
         specifier: ^5.0.0
         version: 5.2.1(supports-color@10.2.2)
@@ -8155,6 +8155,11 @@ packages:
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
+
+  dotenv@18.0.3:
+    resolution: {integrity: sha512-/8CJTyL817qPnfbQrJgOEcrU3fDrJkRIoXBE566wHuvIXKOCHUZhPqGPbCPi9SogjdGnreF0TlvnTgK6J/8zpA==}
+    engines: {node: '>=12'}
+    hasBin: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -15789,14 +15794,14 @@ snapshots:
       tinyrainbow: 3.1.0
       tslib: 2.8.1
 
-  '@nx-tools/nx-container@7.3.0(@nx/devkit@22.6.5)(@nx/js@22.6.5)(dotenv@17.4.2)(nx@23.2.1)(tslib@2.8.1)':
+  '@nx-tools/nx-container@7.3.0(@nx/devkit@22.6.5)(@nx/js@22.6.5)(dotenv@18.0.3)(nx@23.2.1)(tslib@2.8.1)':
     dependencies:
       '@nx-tools/container-metadata': 7.3.0(@nx/devkit@22.6.5)(tslib@2.8.1)
       '@nx-tools/core': 7.3.0(@nx/devkit@22.6.5)(tslib@2.8.1)
       '@nx/devkit': 22.6.5(nx@23.2.1)
       '@nx/js': 22.6.5(@babel/traverse@7.29.8)(nx@23.2.1)(supports-color@7.2.0)
       csv-parse: 5.6.0
-      dotenv: 17.4.2
+      dotenv: 18.0.3
       handlebars: 4.7.9
       nx: 23.2.1
       semver: 7.8.5
@@ -20357,6 +20362,8 @@ snapshots:
   dotenv@16.6.1: {}
 
   dotenv@17.4.2: {}
+
+  dotenv@18.0.3: {}
 
   dunder-proto@1.0.1:
     dependencies:
