@@ -145,36 +145,12 @@ function computeUnreadThreadRooms(
     for (const room of visibleRooms) {
         if (!isRoomVisible(room)) continue;
 
-        const isRoomMuted = getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute;
-        let roomContributedThread = false;
-
-        for (const thread of room.getThreads()) {
-            const unread = evaluateThreadUnread(mxClient, room, thread);
-            if (!unread) continue;
-
-            const threadData: ThreadData = {
-                thread,
-                room,
-                notificationLevel: unread.notificationLevel,
-                notificationCount: unread.notificationCount,
-                muted: isRoomMuted,
-            };
-
-            if (unread.isRelevantToMe) {
-                // "My threads": always shown, even when the room is muted or settingTACOnlyNotifs is on.
-                participatingThreads.push(threadData);
-            } else {
-                // Muted rooms shouldn't surface non-relevant threads in Other threads.
-                if (isRoomMuted) continue;
-                // The setting scopes to Other threads: when on, drop activity-only entries.
-                if (settingTACOnlyNotifs && !unread.hasServerNotifs) continue;
-                otherThreads.push(threadData);
-            }
-            roomContributedThread = true;
-        }
+        const roomThreads = collectRoomThreads(mxClient, room, settingTACOnlyNotifs);
+        participatingThreads.push(...roomThreads.participatingThreads);
+        otherThreads.push(...roomThreads.otherThreads);
 
         // Only surface the room in the indicator if at least one of its threads is shown.
-        if (roomContributedThread) {
+        if (roomThreads.participatingThreads.length + roomThreads.otherThreads.length > 0) {
             const notificationLevel = getThreadNotificationLevel(room);
             if (notificationLevel > greatestNotificationLevel) {
                 greatestNotificationLevel = notificationLevel;
@@ -195,6 +171,48 @@ function computeUnreadThreadRooms(
     otherThreads.sort(sortThreads);
 
     return { greatestNotificationLevel, rooms: sortedRooms, participatingThreads, otherThreads };
+}
+
+/**
+ * Collect the unread threads of a single room to display, split into "my threads" and "other threads".
+ * See {@link computeUnreadThreadRooms} for how threads are categorised.
+ *
+ * @param mxClient - MatrixClient
+ * @param room - the room whose threads to collect
+ * @param settingTACOnlyNotifs - whether "Other threads" should only include threads with server notifications
+ */
+function collectRoomThreads(
+    mxClient: MatrixClient,
+    room: Room,
+    settingTACOnlyNotifs: boolean,
+): Pick<UnreadThreadRooms, "participatingThreads" | "otherThreads"> {
+    const isRoomMuted = getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute;
+    const participatingThreads: ThreadData[] = [];
+    const otherThreads: ThreadData[] = [];
+
+    for (const thread of room.getThreads()) {
+        const unread = evaluateThreadUnread(mxClient, room, thread);
+        if (!unread) continue;
+
+        const threadData: ThreadData = {
+            thread,
+            room,
+            notificationLevel: unread.notificationLevel,
+            notificationCount: unread.notificationCount,
+            muted: isRoomMuted,
+        };
+
+        if (unread.isRelevantToMe) {
+            // "My threads": always shown, even when the room is muted or settingTACOnlyNotifs is on.
+            participatingThreads.push(threadData);
+        } else if (!isRoomMuted && (!settingTACOnlyNotifs || unread.hasServerNotifs)) {
+            // Muted rooms shouldn't surface non-relevant threads in Other threads, and the
+            // setting scopes to Other threads: when on, drop activity-only entries.
+            otherThreads.push(threadData);
+        }
+    }
+
+    return { participatingThreads, otherThreads };
 }
 
 /**
@@ -234,12 +252,9 @@ function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread):
     const hasUnread = hasServerNotifs || doesTimelineHaveUnreadMessages(room, thread.events);
     if (!hasUnread) return null;
 
-    const notificationLevel =
-        highlight > 0
-            ? NotificationLevel.Highlight
-            : total > 0
-              ? NotificationLevel.Notification
-              : NotificationLevel.Activity;
+    let notificationLevel = NotificationLevel.Activity;
+    if (highlight > 0) notificationLevel = NotificationLevel.Highlight;
+    else if (total > 0) notificationLevel = NotificationLevel.Notification;
 
     return {
         notificationLevel,

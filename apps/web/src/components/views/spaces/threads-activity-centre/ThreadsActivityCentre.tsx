@@ -203,14 +203,28 @@ function notificationLevelMarker(level: NotificationLevel): "highlight" | "notif
 }
 
 /**
- * Describe a thread's unread state for screen readers. The row sets its own `aria-label`, which
- * overrides its content, so the visible counter would otherwise go unannounced.
- * Mirrors `roomAriaUnreadLabel` in `SpotlightDialog`.
+ * Build a thread row's accessible name from its room, root message and unread state. The row sets
+ * its own `aria-label`, which overrides its content, so the visible counter would otherwise go
+ * unannounced. Each state is a single translated sentence, as word order depends on the language.
+ * Mirrors `getA11yLabel` in the room list.
  */
-function threadAriaUnreadLabel(level: NotificationLevel, count: number): string {
-    if (level === NotificationLevel.Highlight) return _t("a11y|n_unread_messages_mentions", { count });
-    if (count > 0) return _t("a11y|n_unread_messages", { count });
-    return _t("a11y|unread_messages");
+function getThreadA11yLabel(
+    roomName: string,
+    sender: string,
+    preview: string,
+    level: NotificationLevel,
+    count: number,
+): string {
+    const isMention = level === NotificationLevel.Highlight && count > 0;
+    // Without a root event there is no sender nor preview to announce, only the room.
+    if (!sender) {
+        if (isMention) return _t("threads_activity_centre|a11y|mention_no_sender", { roomName, count });
+        if (count > 0) return _t("threads_activity_centre|a11y|unread_no_sender", { roomName, count });
+        return _t("threads_activity_centre|a11y|default_no_sender", { roomName });
+    }
+    if (isMention) return _t("threads_activity_centre|a11y|mention", { roomName, sender, preview, count });
+    if (count > 0) return _t("threads_activity_centre|a11y|unread", { roomName, sender, preview, count });
+    return _t("threads_activity_centre|a11y|default", { roomName, sender, preview });
 }
 
 /**
@@ -226,8 +240,6 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
     // emotes, HTML and non-message event types consistently with the room list.
     const previewText = rootEvent ? MessagePreviewStore.instance.generatePreviewForEvent(rootEvent) : "";
 
-    const description = senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name;
-
     return (
         <MenuItem
             className="mx_ThreadsActivityCentreThreadRow"
@@ -235,7 +247,7 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
             label={null}
             // The design uses the notification decoration as the only trailing affordance.
             hideChevron
-            aria-label={`${description} ${threadAriaUnreadLabel(notificationLevel, notificationCount)}`}
+            aria-label={getThreadA11yLabel(room.name, senderName, previewText, notificationLevel, notificationCount)}
             Icon={<DecoratedRoomAvatar room={room} size="40px" />}
             onSelect={(event: Event) => {
                 onClick();

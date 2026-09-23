@@ -269,7 +269,9 @@ describe("ThreadsActivityCentre", () => {
         await userEvent.click(getTACButton());
 
         // The row overrides its own content with aria-label, so the count has to be spelled out
-        expect(screen.getAllByRole("menuitem")[0]).toHaveAccessibleName(/3 unread messages\./);
+        expect(screen.getAllByRole("menuitem")[0]).toHaveAccessibleName(
+            /^Open thread in .+, with 3 unread messages\.$/,
+        );
     });
 
     it("should show other threads in the Other threads tab", async () => {

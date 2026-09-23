@@ -3290,6 +3290,26 @@
         "show_thread_filter": "Show:"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with unread messages.",
+            "default_no_sender": "Open thread in %(roomName)s with unread messages.",
+            "mention": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread mention.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages including mentions."
+            },
+            "mention_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread mention.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages including mentions."
+            },
+            "unread": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread message.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages."
+            },
+            "unread_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread message.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages."
+            }
+        },
         "header": "Threads activity",
         "my_threads_tab": "My threads",
         "no_other_unread_threads": "No unread threads from other people.",
