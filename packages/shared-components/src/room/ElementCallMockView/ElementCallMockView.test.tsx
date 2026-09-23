@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./ElementCallMockView.stories.tsx";
 
-const { Lobby, InCall, WithoutClose, UnknownRoom } = composeStories(stories);
+const { Lobby, WithoutClose } = composeStories(stories);
 
 describe("ElementCallMockView", () => {
     it("renders the lobby", () => {
