@@ -27,6 +27,8 @@ const defaultProps: PdfViewerViewProps = {
     onPageInputBlur: vi.fn(),
     onPageInputCancel: vi.fn(),
     onPageSubmit: vi.fn(),
+    onZoomIn: vi.fn(),
+    onZoomOut: vi.fn(),
 };
 
 const renderView = (props: Partial<PdfViewerViewProps> = {}): ReturnType<typeof render> =>
@@ -128,7 +130,7 @@ describe("PdfViewerView", () => {
     it("shows the current page and page count when pages are available", () => {
         renderView({ status: "ready", currentPage: 5, pageCount: 42, pageInput: "5" });
 
-        expect(screen.getByRole("group")).toHaveAccessibleName("Page 5 of 42");
+        expect(screen.getByRole("group", { name: "Page 5 of 42" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Page number" })).toHaveValue("5");
         expect(screen.getByTestId("pdf-page-total")).toHaveTextContent("42");
     });

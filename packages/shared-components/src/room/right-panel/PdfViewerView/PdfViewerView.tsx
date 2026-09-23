@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type Ref } from "react";
 import classNames from "classnames";
+import { IconButton } from "@vector-im/compound-web";
+import { MinusIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
 import styles from "./PdfViewerView.module.css";
@@ -38,6 +40,10 @@ export interface PdfViewerViewProps {
     onPageInputCancel: () => void;
     /** Called when the user submits the page-number form. */
     onPageSubmit: () => void;
+    /** Called when the user presses the zoom-in button. */
+    onZoomIn: () => void;
+    /** Called when the user presses the zoom-out button. */
+    onZoomOut: () => void;
     /**
      * Optional CSS class for host-level styling. Applied to the outer element, so a host can scope
      * styling for its own renderer's markup without that markup being known here.
@@ -63,6 +69,8 @@ export function PdfViewerView({
     onPageInputBlur,
     onPageInputCancel,
     onPageSubmit,
+    onZoomIn,
+    onZoomOut,
     className,
 }: Readonly<PdfViewerViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
@@ -70,43 +78,64 @@ export function PdfViewerView({
     return (
         <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
             {pageCount > 0 ? (
-                <form
-                    className={styles.toolbar}
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        onPageSubmit();
-                    }}
-                >
-                    {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
-                    <fieldset
-                        className={styles.pageForm}
-                        aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                <div className={styles.toolbar}>
+                    <form
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            onPageSubmit();
+                        }}
                     >
-                        <input
-                            aria-label={_t("pdf_viewer|page_number")}
-                            className={styles.pageInput}
-                            data-testid="pdf-page-input"
-                            inputMode="numeric"
-                            onBlur={onPageInputBlur}
-                            onChange={(event) => onPageInputChange(event.target.value)}
-                            onFocus={onPageInputFocus}
-                            onKeyDown={(event) => {
-                                if (event.key !== "Escape") return;
+                        {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
+                        <fieldset
+                            className={styles.pageFields}
+                            aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                        >
+                            <input
+                                aria-label={_t("pdf_viewer|page_number")}
+                                className={styles.pageInput}
+                                data-testid="pdf-page-input"
+                                inputMode="numeric"
+                                onBlur={onPageInputBlur}
+                                onChange={(event) => onPageInputChange(event.target.value)}
+                                onFocus={onPageInputFocus}
+                                onKeyDown={(event) => {
+                                    if (event.key !== "Escape") return;
 
-                                onPageInputCancel();
-                                // Blurring completes the same editing lifecycle as clicking away from the input.
-                                event.currentTarget.blur();
-                            }}
-                            value={pageInput}
-                        />
-                        <span aria-hidden="true" className={styles.pageSeparator}>
-                            |
-                        </span>
-                        <span className={styles.pageTotal} data-testid="pdf-page-total">
-                            {pageCount}
-                        </span>
-                    </fieldset>
-                </form>
+                                    onPageInputCancel();
+                                    // Blurring completes the same editing lifecycle as clicking away from the input.
+                                    event.currentTarget.blur();
+                                }}
+                                value={pageInput}
+                            />
+                            <span aria-hidden="true" className={styles.pageSeparator}>
+                                |
+                            </span>
+                            <span className={styles.pageTotal} data-testid="pdf-page-total">
+                                {pageCount}
+                            </span>
+                        </fieldset>
+                    </form>
+                    <div className={styles.zoomControls} role="group" aria-label={_t("pdf_viewer|zoom")}>
+                        <IconButton
+                            size="28px"
+                            aria-label={_t("pdf_viewer|zoom_out")}
+                            tooltip={_t("pdf_viewer|zoom_out")}
+                            data-testid="pdf-zoom-out"
+                            onClick={onZoomOut}
+                        >
+                            <MinusIcon />
+                        </IconButton>
+                        <IconButton
+                            size="28px"
+                            aria-label={_t("pdf_viewer|zoom_in")}
+                            tooltip={_t("pdf_viewer|zoom_in")}
+                            data-testid="pdf-zoom-in"
+                            onClick={onZoomIn}
+                        >
+                            <PlusIcon />
+                        </IconButton>
+                    </div>
+                </div>
             ) : null}
             <div className={styles.body}>
                 <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
