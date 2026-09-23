@@ -79,6 +79,7 @@ describe("<UserSettingsDialog />", () => {
             getProfileInfo: vi.fn().mockResolvedValue({}),
             getMediaConfig: vi.fn(),
             getAuthMetadata: vi.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;
