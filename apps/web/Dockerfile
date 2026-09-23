@@ -58,7 +58,7 @@ HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB
 
 # Modules are consumed as prebuilt release artifacts rather than built from source.
 # Each module is pinned to a version and the sha256 of its release archive.
-FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS modules
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS modules
 
 ARG MODULE_BANNER_VERSION=v2.1.0
 ADD --checksum=sha256:c8498112c460af25f8733c57058251b657495a24300b59f4a36d17b7521246c1 \
