@@ -1094,7 +1094,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "Soon, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -1473,6 +1473,11 @@
         "room_list_expand_section": "Expand room list section",
         "room_list_navigate_down": "Navigate down in the room list",
         "room_list_navigate_up": "Navigate up in the room list",
+        "room_list_panel_collapse": "Hide the room list (with the resize handle focused)",
+        "room_list_panel_expand": "Show the room list at full width (with the resize handle focused)",
+        "room_list_panel_grow": "Make the room list wider (with the resize handle focused)",
+        "room_list_panel_shrink": "Make the room list narrower (with the resize handle focused)",
+        "room_list_panel_toggle": "Hide or show the room list (with the resize handle focused)",
         "room_list_select_room": "Select room from the room list",
         "save": "Save",
         "scroll_down_timeline": "Scroll down in the timeline",
@@ -1552,6 +1557,7 @@
         "login_with_qr": "Log in with QR code",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
+        "new_timeline": "Improved timeline scrolling and navigation",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
@@ -1664,6 +1670,7 @@
         "loading_live_location": "Loading live location…",
         "location_not_available": "Location not available",
         "map_feedback": "Map feedback",
+        "map_marker": "Map marker",
         "mapbox_logo": "Mapbox logo",
         "reset_bearing": "Reset bearing to north",
         "share_button": "Share location",
@@ -2650,6 +2657,7 @@
         },
         "inline_url_previews_default": "Enable previews",
         "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
+        "inline_url_previews_encrypted_bundled_only": "Only show bundled previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -3372,7 +3380,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "error_decrypting": "Error decrypting attachment"
+            "error_decrypting": "Error decrypting attachment",
+            "size_unknown": "Size unknown"
         },
         "m.image": {
             "error": "Unable to show image due to error",
@@ -3551,6 +3560,7 @@
             "label": "%(reactors)s reacted with %(content)s",
             "tooltip_caption": "reacted with %(shortName)s"
         },
+        "read_marker_new": "New",
         "read_receipt_title": {
             "one": "Seen by %(count)s person",
             "other": "Seen by %(count)s people"
@@ -3746,7 +3756,10 @@
             "one_user": "%(displayName)s is typing …",
             "two_users": "%(names)s and %(lastPerson)s are typing …"
         },
-        "undecryptable_tooltip": "This message could not be decrypted"
+        "undecryptable_tooltip": "This message could not be decrypted",
+        "url_preview": {
+            "open_link": "Open link"
+        }
     },
     "truncated_list_n_more": {
         "other": "And %(count)s more..."

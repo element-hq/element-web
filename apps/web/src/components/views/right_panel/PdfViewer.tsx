@@ -323,10 +323,25 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         };
     }, [media]);
 
-    const zoomBy = useCallback((factor: number, origin: [number, number]): void => {
+    const zoomBy = useCallback((factor: number, clientPoint: [number, number]): void => {
+        const pdfViewer = pdfViewerRef.current;
+        const container = containerRef.current;
+        if (!pdfViewer || !container) return;
+
         // pdf.js clamps to its own scale bounds, coalesces the gesture, and keeps the point under
-        // `origin` fixed while it re-anchors the scroll position.
-        pdfViewerRef.current?.updateScale({ scaleFactor: factor, origin, drawingDelay: ZOOM_DRAWING_DELAY });
+        // `origin` fixed while it re-anchors the scroll position. It measures `origin` against the
+        // container's `offsetTop`/`offsetLeft`, which only equals a client coordinate when the container
+        // is offset from the document body, as in pdf.js's own viewer. Here it sits inside the right
+        // panel, so those offsets are zero and a raw client coordinate would anchor the zoom far to the
+        // right of the pointer. Take the point relative to the container's box instead, and add pdf.js's
+        // offsets back so its subtraction nets out to that point.
+        const rect = container.getBoundingClientRect();
+        const [offsetTop, offsetLeft] = pdfViewer.containerTopLeft;
+        const origin: [number, number] = [
+            clientPoint[0] - rect.left + offsetLeft,
+            clientPoint[1] - rect.top + offsetTop,
+        ];
+        pdfViewer.updateScale({ scaleFactor: factor, origin, drawingDelay: ZOOM_DRAWING_DELAY });
     }, []);
 
     const commitPageInput = useCallback((): void => {

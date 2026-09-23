@@ -13,7 +13,7 @@ import memoizeOne from "memoize-one";
 
 import { DeviceType, parseUserAgent } from "./utils/device/parseUserAgent";
 import ToastStore from "./stores/ToastStore";
-import GenericToast from "./components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import { _t } from "./languageHandler";
 import SdkConfig from "./SdkConfig";
 
