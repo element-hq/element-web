@@ -1013,6 +1013,9 @@ export class ElementCall extends Call {
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected(); // Just in case the widget forgot to emit a hangup action (maybe it's in an error state)
         this.close(); // User is done with the call; tell the UI to close it
+        // A voice call in PiP has no CallView to stop presenting it on close,
+        // so the call would linger (and its timeline tile stay "in progress")
+        if (this.presented) this.presented = false;
     };
 
     public clean(): Promise<void> {
