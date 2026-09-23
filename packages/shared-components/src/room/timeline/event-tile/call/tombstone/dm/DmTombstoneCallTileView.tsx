@@ -36,6 +36,11 @@ export interface DmTombstoneCallTileViewSnapshot extends RoomTombstoneCallTileVi
      * Whether this call was declined.
      */
     isCallDeclined: boolean;
+    /**
+     * Why the call never connected, when the callee side reported it
+     * (MSC4075 invite progress), e.g. "unreachable (SIP 404)".
+     */
+    failureReason?: string | null;
 }
 
 export type DmTombstoneCallTileViewModel = ViewModel<DmTombstoneCallTileViewSnapshot>;
@@ -65,13 +70,19 @@ function getIcon(type: CallType, isCallDeclined: boolean): React.ReactNode {
  */
 export function DmTombstoneCallTileView({ vm, className }: DmTombstoneCallTileViewProps): React.ReactNode {
     const snapshot = useViewModel(vm);
-    const { type, timestamp, isCallDeclined } = snapshot;
+    const { type, timestamp, isCallDeclined, failureReason } = snapshot;
     const classNames = classnames(className, styles.container);
     return (
         <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
-            {getIcon(type, isCallDeclined)}
+            {getIcon(type, isCallDeclined || !!failureReason)}
             <div className={styles.title}>
-                {isCallDeclined ? <DeclinedContent snapshot={snapshot} /> : <NormalContent snapshot={snapshot} />}
+                {isCallDeclined ? (
+                    <DeclinedContent snapshot={snapshot} />
+                ) : failureReason ? (
+                    <FailedContent reason={failureReason} />
+                ) : (
+                    <NormalContent snapshot={snapshot} />
+                )}
             </div>
 
             <div className={styles.time}>{timestamp}</div>
@@ -85,6 +96,11 @@ function NormalContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): Re
     return type === CallType.Voice
         ? _t("timeline|call_tile|voice_call_title")
         : _t("timeline|call_tile|video_call_title");
+}
+
+function FailedContent(props: { reason: string }): React.ReactNode {
+    const { translate: _t } = useI18n();
+    return _t("timeline|call_tile|call_failed", { reason: props.reason });
 }
 
 function DeclinedContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): React.ReactNode {
