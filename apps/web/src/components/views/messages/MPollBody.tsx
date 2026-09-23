@@ -45,7 +45,7 @@ interface IState {
     pollInitialised: boolean;
     selected?: string[] | null; // Which options were selected by the local user
     voteRelations?: Relations; // Voting (response) events
-    isVoting: boolean; // Whether a vote is currently being sent
+    isSubmittingVote: boolean; // Whether a vote is currently being sent
 }
 
 export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, eventId: string): RelatedRelations {
@@ -169,7 +169,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.state = {
             selected: null,
             pollInitialised: false,
-            isVoting: false,
+            isSubmittingVote: false,
         };
     }
 
@@ -229,10 +229,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
 
     /**
-     * Runs when the local user selects an option
+     * Runs when the local user clicks on an option
      */
     private selectOption(answerId: string): void {
-        if (this.state.poll?.isEnded || this.state.isVoting) {
+        if (this.state.poll?.isEnded || this.state.isSubmittingVote) {
             return;
         }
 
@@ -256,7 +256,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         const response = PollResponseEvent.from(newSelected, this.props.mxEvent.getId()!).serialize();
 
-        this.setState({ selected: newSelected, isVoting: true });
+        this.setState({ selected: newSelected, isSubmittingVote: true });
 
         this.context
             .sendEvent(
@@ -272,7 +272,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     description: _t("poll|error_voting_description"),
                 });
             }).finally(() => {
-                this.setState({ isVoting: false });
+                this.setState({ isSubmittingVote: false });
             });
     }
 
@@ -328,7 +328,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     }
 
     public render(): ReactNode {
-        const { poll, pollInitialised } = this.state;
+        const { poll, pollInitialised, isSubmittingVote } = this.state;
 
         // A poll's question and answers are in the event we already have; only the
         // votes are fetched separately. Render the question and options straight
@@ -343,7 +343,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         const isEnded = !!poll?.isEnded;
         const pollId = this.props.mxEvent.getId()!;
-        const isFetchingResponses = !poll || !pollInitialised || poll.isFetchingResponses;
+        const isBusy = !poll || !pollInitialised || poll.isFetchingResponses || isSubmittingVote;
         const userVotes = this.collectUserVotes();
         const votes = countVotes(userVotes, pollEvent);
         const totalVotes = this.totalVotes(votes);
@@ -406,6 +406,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                     optionNumber={index + 1}
                                     isChecked={checked}
                                     isEnded={isEnded}
+                                    isBusy={isBusy}
                                     voteCount={answerVotes}
                                     totalVoteCount={totalVotes}
                                     displayVoteCount={showResults}
@@ -417,7 +418,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     </div>
                     <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
                         {totalText}
-                        {isFetchingResponses && <Spinner size={16} />}
+                        {isBusy && <Spinner size={16} />}
                     </div>
                     {!isEnded && pollEvent.maxSelections > 1 && (
                         <div className="mx_MPollBody_maxSelectionsInfo">
