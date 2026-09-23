@@ -41,6 +41,7 @@ import userEvent from "@testing-library/user-event";
 import { filterConsole, setupAsyncStoreWithClient, stubClient } from "test-utils";
 
 import RoomHeader from "./RoomHeader";
+import { ModuleApi } from "../../../../modules/Api.ts";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../contexts/ScopedRoomContext";
@@ -240,6 +241,22 @@ describe("RoomHeader", () => {
         const videoButton = screen.getByRole("button", { name: "Video call" });
         expect(videoButton).toBeInTheDocument();
         expect(voiceButton).toBeInTheDocument();
+    });
+
+    it("offers a module's call option in a menu alongside the room's own", async () => {
+        const user = userEvent.setup();
+        mockRoomMembers(room, 2);
+        const onSelect = vi.fn();
+        ModuleApi.instance.extras.addRoomCallOptionsCallback(async () => [{ label: "SIP: 123", onSelect }]);
+        try {
+            render(<RoomHeader room={room} />, getWrapper());
+            // Once the options have arrived the button becomes a menu trigger (aria-expanded)
+            await user.click(await screen.findByRole("button", { name: "Voice call", expanded: false }));
+            await user.click(screen.getByRole("menuitem", { name: "SIP: 123" }));
+            expect(onSelect).toHaveBeenCalledWith(false);
+        } finally {
+            ModuleApi.instance.extras.roomCallOptionsCallbacks.length = 0;
+        }
     });
 
     it("should not show voice call button in managed hybrid environments", async () => {
