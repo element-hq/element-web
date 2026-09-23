@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
 import { fireEvent, render, waitFor } from "test-utils-rtl";
 import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
@@ -33,6 +33,7 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
 import { attachUrlPreviews } from "../../../utils/messages";
+import SettingsStore from "../../../settings/SettingsStore";
 
 vi.mock("../../../utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
@@ -449,6 +450,81 @@ describe("<SendMessageComposer/>", () => {
             );
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
+        });
+
+        describe("MSC4306 subscribe-on-send", () => {
+            const threadRelation = { rel_type: "m.thread", event_id: "$thread_root", is_falling_back: true };
+
+            const sendMessage = (text: string, props = {}): void => {
+                const { container } = getComponent(props);
+                addTextToComposer(container, text);
+                fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+            };
+
+            let featureEnabled: boolean;
+            let settingsSpy: MockInstance<typeof SettingsStore.getValue>;
+
+            beforeEach(() => {
+                featureEnabled = false;
+                const getValue = SettingsStore.getValue.bind(SettingsStore);
+                settingsSpy = vi
+                    .spyOn(SettingsStore, "getValue")
+                    .mockImplementation((name, ...args) =>
+                        name === "feature_msc4306_thread_subscriptions" ? featureEnabled : getValue(name, ...args),
+                    );
+                vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                    <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                        return fn(roomId);
+                    },
+                );
+                mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
+                vi.mocked(mockClient.subscribeToThread).mockClear();
+            });
+
+            afterEach(() => {
+                settingsSpy.mockRestore();
+            });
+
+            it("subscribes manually to the thread when sending in it", async () => {
+                featureEnabled = true;
+                sendMessage("thread reply", { relation: threadRelation });
+
+                await waitFor(() =>
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                        "myfakeroom",
+                        "$thread_root",
+                        expect.objectContaining({ body: "thread reply" }),
+                    ),
+                );
+                expect(mockClient.subscribeToThread).toHaveBeenCalledWith("myfakeroom", "$thread_root");
+            });
+
+            it("does not subscribe when the labs flag is disabled", async () => {
+                sendMessage("unflagged thread reply", { relation: threadRelation });
+
+                await waitFor(() =>
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                        "myfakeroom",
+                        "$thread_root",
+                        expect.objectContaining({ body: "unflagged thread reply" }),
+                    ),
+                );
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe when sending outside a thread", async () => {
+                featureEnabled = true;
+                sendMessage("main timeline message");
+
+                await waitFor(() =>
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                        "myfakeroom",
+                        null,
+                        expect.objectContaining({ body: "main timeline message" }),
+                    ),
+                );
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
         });
     });
 

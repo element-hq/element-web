@@ -481,7 +481,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 (actualRoomId: string) => this.props.mxClient.sendMessage(actualRoomId, threadId ?? null, content!),
                 this.props.mxClient,
             );
-            if (threadId) {
+            if (threadId && SettingsStore.getValue("feature_msc4306_thread_subscriptions")) {
                 // MSC4306: subscribe-on-send. Manual subscription (no `automatic` field).
                 // Fire-and-forget: the subscription must not block the message send.
                 this.props.mxClient

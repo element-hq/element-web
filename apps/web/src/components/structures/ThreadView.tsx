@@ -52,7 +52,7 @@ import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
-import ThreadSubscriptionButton from "../views/elements/ThreadSubscriptionButton";
+import { ThreadSubscriptionButton } from "../views/elements/ThreadSubscriptionButton";
 
 interface IProps {
     room: Room;

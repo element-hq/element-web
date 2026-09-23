@@ -22,9 +22,7 @@ import {
     M_LOCATION,
     EventType,
     TypedEventEmitter,
-    MatrixError,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
@@ -161,10 +159,9 @@ export type NotificationSound = {
 export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
-    /** MSC4306: threads we've already issued an automatic subscription PUT for in this session,
-     *  keyed by `${roomId}|${rootEventId}`. Avoids spamming PUTs when a subscribed thread
-     *  receives multiple mention events. */
-    private autoSubscribedThreads = new Set<string>();
+    /** MSC4306: threads with an automatic subscription in progress, keyed by `${roomId}|${rootEventId}`,
+     *  so that a burst of mentions only results in one request. */
+    private pendingThreadSubscriptions = new Set<string>();
 
     // A list of event IDs that we've received but need to wait until
     // they're decrypted until we decide whether to notify for them
@@ -370,6 +367,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         this.sdkContext.client?.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.sdkContext.client?.removeListener(ClientEvent.Sync, this.onSyncStateChange);
         this.pendingInviteRoomIds = new Set();
+        this.pendingThreadSubscriptions = new Set();
         this.isSyncing = false;
     }
 
@@ -615,31 +613,42 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
     /**
      * MSC4306 subscribe-on-mention: when push-rule evaluation produces a `notify`
      * action for a thread event, automatically subscribe the user to that thread,
-     * unless the sender is ignored/banned or we already auto-subscribed this session.
+     * unless the sender is ignored/banned or we are already subscribed.
      */
-    private maybeAutoSubscribeToThread(ev: MatrixEvent, room: Room, threadId: string | undefined): void {
+    private async maybeAutoSubscribeToThread(ev: MatrixEvent, room: Room, threadId: string | undefined): Promise<void> {
         if (!threadId) return;
+        if (!SettingsStore.getValue("feature_msc4306_thread_subscriptions")) return;
 
+        const cli = this.sdkContext.client;
         const senderId = ev.getSender();
-        if (!senderId) return;
+        const eventId = ev.getId();
+        if (!cli || !senderId || !eventId) return;
 
-        const cli = MatrixClientPeg.safeGet();
         if (cli.isUserIgnored(senderId)) return;
         if (room.getMember(senderId)?.membership === KnownMembership.Ban) return;
 
         const cacheKey = `${room.roomId}|${threadId}`;
-        if (this.autoSubscribedThreads.has(cacheKey)) return;
-        if (cli.getCachedThreadSubscription(room.roomId, threadId) === true) return;
+        if (this.pendingThreadSubscriptions.has(cacheKey)) return;
+        this.pendingThreadSubscriptions.add(cacheKey);
 
-        this.autoSubscribedThreads.add(cacheKey);
-        cli.subscribeToThread(room.roomId, threadId, ev.getId()!).catch((e) => {
-            // 409 M_CONFLICTING_UNSUBSCRIPTION: the user explicitly unsubscribed
-            // earlier — that's expected, don't retry.
-            if ((e as MatrixError)?.httpStatus !== 409) {
-                this.autoSubscribedThreads.delete(cacheKey);
+        try {
+            if (cli.getCachedThreadSubscription(room.roomId, threadId) === undefined) {
+                // The push rules only tell mentions apart from other messages once the subscription
+                // state is known: without it, a room set to "All messages" would make every thread
+                // event notify, and so subscribe us to every thread in the room.
+                await cli.getThreadSubscription(room.roomId, threadId);
+                if (!cli.getPushActionsForEvent(ev, true)?.notify) return;
             }
+            if (cli.getCachedThreadSubscription(room.roomId, threadId)) return;
+
+            // If we unsubscribed after this event, the server skips the subscription and the SDK resolves
+            // without changing the cached state, so a later mention can still subscribe us again.
+            await cli.subscribeToThread(room.roomId, threadId, eventId);
+        } catch (e) {
             logger.warn("MSC4306 subscribe-on-mention failed", e);
-        });
+        } finally {
+            this.pendingThreadSubscriptions.delete(cacheKey);
+        }
     }
 
     // XXX: exported for tests
@@ -663,7 +672,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             const threadId: string | undefined = ev.getId() !== ev.threadRootId ? ev.threadRootId : undefined;
             const isViewingThread = store.getThreadId() === threadId;
 
-            this.maybeAutoSubscribeToThread(ev, room, threadId);
+            void this.maybeAutoSubscribeToThread(ev, room, threadId);
 
             const isViewingEventTimeline = isViewingRoom && (!threadId || isViewingThread);
 

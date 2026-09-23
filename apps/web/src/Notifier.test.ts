@@ -338,6 +338,167 @@ describe("Notifier", () => {
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
         });
 
+        describe("MSC4306 subscribe-on-mention", () => {
+            const threadRootId = "$root:server.org";
+            const mkThreadEvent = (id: string, sender = "@alice:server.org"): MatrixEvent =>
+                new MatrixEvent({
+                    event_id: id,
+                    sender,
+                    type: "m.room.message",
+                    room_id: roomId,
+                    content: {
+                        "body": "hey @bob",
+                        "m.relates_to": { rel_type: "m.thread", event_id: threadRootId },
+                    },
+                });
+            /** Let the async auto-subscription logic run to completion. */
+            const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+            beforeEach(() => {
+                mockSettings["feature_msc4306_thread_subscriptions"] = true;
+                mockClient.isUserIgnored = vi.fn().mockReturnValue(false);
+                mockClient.getCachedThreadSubscription = vi.fn().mockReturnValue(false);
+                mockClient.getThreadSubscription = vi.fn().mockResolvedValue(null);
+                mockClient.subscribeToThread = vi.fn().mockResolvedValue({});
+                mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            });
+
+            it("automatically subscribes with the cause event when mentioned in a thread", async () => {
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).toHaveBeenCalledWith(roomId, threadRootId, "$mention");
+            });
+
+            it("does not subscribe when the labs flag is disabled", async () => {
+                mockSettings["feature_msc4306_thread_subscriptions"] = false;
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe for events outside a thread", async () => {
+                emitLiveEvent(event);
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe when the event does not notify", async () => {
+                mockClient.getPushActionsForEvent.mockReturnValue({ notify: false, tweaks: {} });
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe when the sender is ignored", async () => {
+                mockClient.isUserIgnored = vi.fn().mockReturnValue(true);
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe when the sender is banned", async () => {
+                vi.spyOn(testRoom, "getMember").mockReturnValue({ membership: KnownMembership.Ban } as any);
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            it("does not subscribe when already subscribed", async () => {
+                mockClient.getCachedThreadSubscription = vi.fn().mockReturnValue(true);
+                emitLiveEvent(mkThreadEvent("$mention"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+            });
+
+            describe("when the subscription state is not known yet", () => {
+                let cached: boolean | undefined;
+
+                beforeEach(() => {
+                    cached = undefined;
+                    mockClient.getCachedThreadSubscription = vi.fn().mockImplementation(() => cached);
+                });
+
+                it("fetches it and subscribes if the event still notifies", async () => {
+                    mockClient.getThreadSubscription = vi.fn().mockImplementation(async () => {
+                        cached = false;
+                        return null;
+                    });
+                    emitLiveEvent(mkThreadEvent("$mention"));
+                    await flush();
+
+                    expect(mockClient.getThreadSubscription).toHaveBeenCalledWith(roomId, threadRootId);
+                    expect(mockClient.getPushActionsForEvent).toHaveBeenLastCalledWith(
+                        expect.objectContaining({ event: expect.objectContaining({ event_id: "$mention" }) }),
+                        true,
+                    );
+                    expect(mockClient.subscribeToThread).toHaveBeenCalledWith(roomId, threadRootId, "$mention");
+                });
+
+                it("does not subscribe if the event no longer notifies once the state is known", async () => {
+                    // e.g. a room set to "All messages": only the unsubscribed-thread rule stops it notifying
+                    mockClient.getThreadSubscription = vi.fn().mockImplementation(async () => {
+                        cached = false;
+                        mockClient.getPushActionsForEvent.mockReturnValue({ notify: false, tweaks: {} });
+                        return null;
+                    });
+                    emitLiveEvent(mkThreadEvent("$message"));
+                    await flush();
+
+                    expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+                });
+
+                it("does not subscribe if it turns out we are already subscribed", async () => {
+                    mockClient.getThreadSubscription = vi.fn().mockImplementation(async () => {
+                        cached = true;
+                        return { automatic: false };
+                    });
+                    emitLiveEvent(mkThreadEvent("$mention"));
+                    await flush();
+
+                    expect(mockClient.subscribeToThread).not.toHaveBeenCalled();
+                });
+            });
+
+            it("only sends one request for a burst of mentions", async () => {
+                emitLiveEvent(mkThreadEvent("$mention1"));
+                emitLiveEvent(mkThreadEvent("$mention2"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).toHaveBeenCalledTimes(1);
+            });
+
+            it("tries again on a later mention if the server skipped the subscription", async () => {
+                // The SDK resolves without updating the cache when the server answers 409.
+                emitLiveEvent(mkThreadEvent("$mention1"));
+                await flush();
+                emitLiveEvent(mkThreadEvent("$mention2"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).toHaveBeenCalledTimes(2);
+                expect(mockClient.subscribeToThread).toHaveBeenLastCalledWith(roomId, threadRootId, "$mention2");
+            });
+
+            it("tries again on a later mention after a failure", async () => {
+                mockClient.subscribeToThread = vi
+                    .fn()
+                    .mockResolvedValue({})
+                    .mockRejectedValueOnce(new Error("network"));
+                emitLiveEvent(mkThreadEvent("$mention1"));
+                await flush();
+                emitLiveEvent(mkThreadEvent("$mention2"));
+                await flush();
+
+                expect(mockClient.subscribeToThread).toHaveBeenCalledTimes(2);
+            });
+        });
+
         describe("room invites", () => {
             // An invite arrives as stripped state rather than as a timeline event, so it reaches the
             // room's state without ever passing through the live timeline.
