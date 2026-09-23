@@ -112,6 +112,7 @@ describe("VideoBodyView", () => {
         );
 
         const video = screen.getByLabelText("Product demo video") as HTMLVideoElement;
+        expect(video).toHaveStyle({ position: "relative" });
         expect(video).toHaveAttribute("src", "https://example.org/demo.mp4");
         expect(video).toHaveAttribute("poster", "https://example.org/demo-poster.jpg");
         expect(video).toHaveAttribute("preload", "none");

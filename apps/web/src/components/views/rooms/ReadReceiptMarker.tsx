@@ -14,7 +14,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
+
+export const READ_AVATAR_SIZE = 16;
 
 // The top & right from the bounding client rect of each read receipt
 export interface IReadReceiptPosition {
@@ -46,12 +47,6 @@ interface IProps {
     // unmounted, to avoid unnecessary work. Should return true if we
     // are being unmounted.
     checkUnmounting?: () => boolean;
-
-    // Timestamp when the receipt was read
-    timestamp?: number;
-
-    // True to show twelve hour format, false otherwise
-    showTwelveHour?: boolean;
 }
 
 interface IState {

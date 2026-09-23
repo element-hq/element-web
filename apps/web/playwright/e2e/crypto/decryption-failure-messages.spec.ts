@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import type { Preset, RoomMemberEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
 import {
@@ -46,15 +48,19 @@ test.describe("Cryptography", function () {
                 // Log in again, and see how the message looks.
                 await logIntoElement(page, credentials);
                 // Dismiss the "Back up your chats" toast, otherwise it gets in the way of clicking the room list
-                await page.getByRole("button", { name: "Dismiss" }).click();
+                await page
+                    .getByRole("alert")
+                    .filter({ hasText: "Back up your chats" })
+                    .getByRole("button", { name: "Dismiss" })
+                    .click();
                 await app.viewRoomByName("Test room");
                 const lastTile = page.locator(".mx_EventTile").last();
                 await expect(lastTile).toContainText("Historical messages are not available on this device");
-                await expect(lastTile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                await expect(lastTile.getByTestId("e2e-padlock")).toHaveAccessibleName(
                     "This message could not be decrypted",
                 );
                 await expect(lastTile).toMatchScreenshot("history-not-available.png", {
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    mask: [lastTile.getByTestId("event-tile-slot-timestamp")],
                 });
 
                 // Now, we set up key backup, and then send another message.
@@ -84,7 +90,7 @@ test.describe("Cryptography", function () {
                     await expect(tile).toContainText(
                         "You need to verify this device for access to historical messages",
                     );
-                    await expect(tile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    await expect(tile.getByTestId("e2e-padlock")).toHaveAccessibleName(
                         "This message could not be decrypted",
                     );
                 }
@@ -95,13 +101,13 @@ test.describe("Cryptography", function () {
 
                 // The first message still cannot be decrypted, because it was never backed up. It's now a regular UTD though.
                 await expect(tilesAfterVerify[0]).toContainText("Unable to decrypt message");
-                await expect(tilesAfterVerify[0].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                await expect(tilesAfterVerify[0].getByTestId("e2e-padlock")).toHaveAccessibleName(
                     "This message could not be decrypted",
                 );
 
                 // The second message should now be decrypted, with a grey shield
                 await expect(tilesAfterVerify[1]).toContainText("test2 test2");
-                await expect(tilesAfterVerify[1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                await expect(tilesAfterVerify[1].getByTestId("e2e-padlock")).toHaveAccessibleName(
                     "The authenticity of this encrypted message can't be guaranteed on this device.",
                 );
             },
@@ -118,6 +124,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await rejectToastIfExists(page, "Verify this device");
+                await rejectToastIfExists(page, "Notifications");
+
                 // Bob creates an encrypted room and sends a message to it. He then invites Alice
                 const roomId = await bob.evaluate(
                     async (client, { alice }) => {
@@ -156,8 +165,7 @@ test.describe("Cryptography", function () {
                 );
 
                 // Alice accepts the invite
-                await page.getByRole("option", { name: "Test room" }).click();
-                await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+                await app.acceptInvitedRoomByName("Test room");
 
                 // Bob sends an encrypted event and an undecryptable event
                 await bob.evaluate(
@@ -199,7 +207,7 @@ test.describe("Cryptography", function () {
                 // The first message from Bob was sent before Alice was in the room, so should
                 // be different from the standard UTD message
                 await expect(tiles[tiles.length - 5]).toContainText("You don't have access to this message");
-                await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                await expect(tiles[tiles.length - 5].getByTestId("e2e-padlock")).toHaveAccessibleName(
                     "This message could not be decrypted",
                 );
 
@@ -211,7 +219,7 @@ test.describe("Cryptography", function () {
                 // in the room and is expected to be decryptable, so this should have the
                 // standard UTD message
                 await expect(tiles[tiles.length - 1]).toContainText("Unable to decrypt message");
-                await expect(tiles[tiles.length - 1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                await expect(tiles[tiles.length - 1].getByTestId("e2e-padlock")).toHaveAccessibleName(
                     "This message could not be decrypted",
                 );
             });
@@ -224,6 +232,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await rejectToastIfExists(page, "Verify this device");
+                await rejectToastIfExists(page, "Notifications");
+
                 // Bob:
                 // - creates an encrypted room,
                 // - invites Alice,

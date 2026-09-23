@@ -16,6 +16,7 @@ import {
     RelationType,
     EventTimeline,
     type MatrixClient,
+    type IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -25,6 +26,7 @@ import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useAsyncMemo } from "./useAsyncMemo";
 import PinningUtils from "../utils/PinningUtils";
 import { batch } from "../utils/promise.ts";
+import { filterBoolean } from "../utils/arrays.ts";
 
 /**
  * Get the pinned event IDs from a room.
@@ -176,18 +178,56 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
  * @param room
  * @param pinnedEventIds
  */
-export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> | null {
+export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const cli = useMatrixClientContext();
 
-    return useAsyncMemo(
+    // Editing a pinned message leaves the pinned ids untouched, and a pinned event fetched from
+    // the server only carries the edits that existed when it was fetched, so a later edit would go
+    // unnoticed. Collect the edits landing on a pinned event, keyed by the event they replace.
+    const [edits, setEdits] = useState(new Map<string, MatrixEvent>());
+    useTypedEventEmitter(
+        room,
+        RoomEvent.Timeline,
+        (
+            event: MatrixEvent,
+            _room: Room | undefined,
+            _toStartOfTimeline: boolean | undefined,
+            removed: boolean,
+            data: IRoomTimelineData,
+        ): void => {
+            // A backfilled edit can be older than the one already applied, so only live ones count.
+            if (removed || !data.liveEvent) return;
+
+            const relation = event.getRelation();
+            if (relation?.rel_type !== RelationType.Replace) return;
+
+            const editedEventId = relation.event_id;
+            if (!editedEventId || !pinnedEventIds.includes(editedEventId)) return;
+            setEdits((edits) => new Map(edits).set(editedEventId, event));
+        },
+    );
+
+    const fetchedEvents = useAsyncMemo(
         () => {
             const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
             // Fetch the pinned events in batches of 10
             return batch(fetchPromises, 10);
         },
         [cli, room, pinnedEventIds],
-        null,
+        [],
     );
+    const events = useMemo(() => filterBoolean(fetchedEvents), [fetchedEvents]);
+
+    // Replacing an event notifies whatever is rendering it, which is what refreshes the banner and
+    // the pinned messages card, so it has to happen after the render rather than during it.
+    useEffect(() => {
+        for (const event of events) {
+            const edit = edits.get(event.getId()!);
+            if (edit) event.makeReplaced(edit);
+        }
+    }, [events, edits]);
+
+    return events;
 }
 
 /**
@@ -196,15 +236,7 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
  * @param room
  * @param pinnedEventIds
  */
-export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> {
+export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const pinnedEvents = useFetchedPinnedEvents(room, pinnedEventIds);
-    return useMemo(() => {
-        if (!pinnedEvents) return [];
-
-        return pinnedEvents.sort((a, b) => {
-            if (!a) return -1;
-            if (!b) return 1;
-            return a.getTs() - b.getTs();
-        });
-    }, [pinnedEvents]);
+    return useMemo(() => pinnedEvents.sort((a, b) => a.getTs() - b.getTs()), [pinnedEvents]);
 }

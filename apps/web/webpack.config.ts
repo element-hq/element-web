@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import dotenv from "dotenv";
 import path from "node:path";
-import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import webpack from "webpack";
 import "webpack-dev-server"; // for types
@@ -25,10 +24,8 @@ import postcssPresetEnv from "postcss-preset-env";
 import postcssImport from "postcss-import";
 import postcssMixins from "postcss-mixins";
 import postcssNested from "postcss-nested";
-import postcssEasings from "postcss-easings";
 
 import pkgJson from "./package.json" with { type: "json" };
-import componentsJson from "./components.json" with { type: "json" };
 import { I18nWebpackPlugin } from "./I18nWebpackPlugin.ts";
 import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
@@ -65,61 +62,11 @@ const cssThemes = {
     "theme-dark-custom": "./res/themes/dark-custom/css/dark-custom.pcss",
 };
 
-// See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
-try {
-    const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
-    fileOverrides = JSON.parse(customisationsFile);
-
-    // stringify the output so it appears in logs correctly, as large files can sometimes get
-    // represented as `<Object>` which is less than helpful.
-    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
-
-    process.on("exit", () => {
-        console.log(""); // blank line
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
-        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log(""); // blank line
-    });
-} catch {
-    // ignore - not important
-}
-
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
     const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
     return path.dirname(fileURLToPath(targetPath));
 }
-
-function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
-    return Object.entries(overrides).map(([oldPath, newPath]) => {
-        return new webpack.NormalModuleReplacementPlugin(
-            // because the input is effectively defined by the person running the build, we don't
-            // need to do anything special to protect against regex overrunning, etc.
-            new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            function (resource) {
-                resource.request = path.resolve(__dirname, newPath);
-                resource.createData.resource = path.resolve(__dirname, newPath);
-                // Starting with Webpack 5 we also need to set the context as otherwise replacing
-                // files in e.g. matrix-js-sdk with files from element-web will try to resolve
-                // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
-                resource.context = path.dirname(resource.request);
-                resource.createData.context = path.dirname(resource.createData.resource);
-            },
-        );
-    });
-}
-
-const moduleReplacementPlugins = [
-    ...parseOverridesToReplacements(componentsJson),
-
-    // Allow customisations to override the default components too
-    ...parseOverridesToReplacements(fileOverrides),
-];
 
 export default (env: string, argv: Record<string, any>): webpack.Configuration => {
     // Establish settings based on the environment and args.
@@ -249,16 +196,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
 
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
-                "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
-                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
-
-                // Define a variable so the i18n stuff can load
-                "$webapp": path.resolve(__dirname, "webapp"),
 
                 // Make shared-components imports resolve to EW deps
-                "counterpart": getPackageRoot("counterpart"),
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
             fallback: {
@@ -267,6 +208,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "net": false,
                 "tls": false,
                 "crypto": false,
+                "events": import.meta.resolve("events/"),
 
                 // Polyfill needed by counterpart
                 "util": import.meta.resolve("util/"),
@@ -300,6 +242,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    // Match imports containing the ?raw query string
+                    resourceQuery: /raw/,
+                    // Instruct Webpack to emit the file source as a string
+                    type: "asset/source",
+                },
                 {
                     test: /\.js$/,
                     enforce: "pre" as const,
@@ -337,6 +285,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 },
                 {
                     test: /\.css$/,
+                    resourceQuery: { not: [/raw/] },
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
@@ -410,7 +359,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                                         postcssMixins(),
                                         postcssSimpleVars(),
                                         postcssNested(),
-                                        postcssEasings(),
                                         postcssHexrgba(),
 
                                         // It's important that this plugin is last otherwise we end
@@ -505,61 +453,54 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 {
                     test: /\.svg$/,
                     issuer: /\.(js|ts|jsx|tsx|html)$/,
-                    use: [
-                        {
-                            loader: "@svgr/webpack",
-                            options: {
-                                namedExport: "Icon",
-                                svgProps: {
-                                    "role": "presentation",
-                                    "aria-hidden": true,
-                                },
-                                // props set on the svg will override defaults
-                                expandProps: "end",
-                                svgoConfig: {
-                                    plugins: [
-                                        {
-                                            name: "preset-default",
-                                            params: {
-                                                overrides: {
-                                                    removeViewBox: false,
-                                                },
-                                            },
+                    resourceQuery: /react/,
+                    loader: "@svgr/webpack",
+                    options: {
+                        svgProps: {
+                            "role": "presentation",
+                            "aria-hidden": true,
+                        },
+                        // props set on the svg will override defaults
+                        expandProps: "end",
+                        svgoConfig: {
+                            plugins: [
+                                {
+                                    name: "preset-default",
+                                    params: {
+                                        overrides: {
+                                            removeViewBox: false,
                                         },
-                                        // generates a viewbox if missing
-                                        { name: "removeDimensions" },
-                                        // https://github.com/facebook/docusaurus/issues/8297
-                                        { name: "prefixIds" },
-                                    ],
+                                    },
                                 },
-                                /**
-                                 * Forwards the React ref to the root SVG element
-                                 * Useful when using things like `asChild` in
-                                 * radix-ui
-                                 */
-                                ref: true,
-                                esModule: false,
-                                name: "[name].[hash:7].[ext]",
-                                outputPath: getAssetOutputPath,
-                                publicPath: function (url: string, resourcePath: string) {
-                                    const outputPath = getAssetOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
-                                },
-                            },
+                                // generates a viewbox if missing
+                                { name: "removeDimensions" },
+                                // https://github.com/facebook/docusaurus/issues/8297
+                                { name: "prefixIds" },
+                            ],
                         },
-                        {
-                            loader: "file-loader",
-                            options: {
-                                esModule: false,
-                                name: "[name].[hash:7].[ext]",
-                                outputPath: getAssetOutputPath,
-                                publicPath: function (url: string, resourcePath: string) {
-                                    const outputPath = getAssetOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
-                                },
-                            },
+                        /**
+                         * Forwards the React ref to the root SVG element
+                         * Useful when using things like `asChild` in
+                         * radix-ui
+                         */
+                        ref: true,
+                        esModule: false,
+                    },
+                },
+                {
+                    test: /\.svg$/,
+                    issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    resourceQuery: { not: [/raw/, /react/] },
+                    loader: "file-loader",
+                    options: {
+                        esModule: false,
+                        name: "[name].[hash:7].[ext]",
+                        outputPath: getAssetOutputPath,
+                        publicPath: function (url: string, resourcePath: string) {
+                            const outputPath = getAssetOutputPath(url, resourcePath);
+                            return toPublicPath(outputPath);
                         },
-                    ],
+                    },
                 },
                 {
                     test: /\.svg$/,
@@ -619,12 +560,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                     ],
                 },
-            ].filter(Boolean),
+            ],
         },
 
         plugins: [
-            ...moduleReplacementPlugins,
-
             new I18nWebpackPlugin({
                 stringsPath: "src/i18n/strings/",
                 additionalStringsPaths: ["../../packages/shared-components/src/i18n/strings/"],
@@ -758,7 +697,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 retryDelay: 500,
                 maxRetries: 3,
             }),
-        ].filter(Boolean),
+        ],
 
         output: {
             path: path.join(__dirname, "webapp"),
@@ -797,6 +736,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",
+                watch: true,
             },
 
             devMiddleware: {
@@ -822,7 +762,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
  *
  * @param url The adjusted name of the file, such as `warning.1234567.svg`.
  * @param resourcePath The absolute path to the source file with unmodified name.
- * @return The returned paths will look like `img/warning.1234567.svg`.
+ * @returns The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url: string, resourcePath: string): string {
     const isKaTeX = resourcePath.includes("KaTeX");

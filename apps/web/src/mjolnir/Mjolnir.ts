@@ -24,8 +24,8 @@ import { Action } from "../dispatcher/actions";
 export class Mjolnir {
     private static instance?: Mjolnir;
 
-    private _lists: BanList[] = []; // eslint-disable-line @typescript-eslint/naming-convention
-    private _roomIds: string[] = []; // eslint-disable-line @typescript-eslint/naming-convention
+    private _lists: BanList[] = [];
+    private _roomIds: string[] = [];
     private mjolnirWatchRef?: string;
     private dispatcherRef?: string;
 

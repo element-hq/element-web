@@ -30,12 +30,12 @@ export async function registerAccountMas(
     await page.getByRole("textbox", { name: "Confirm Password" }).fill(password);
     await page.getByRole("button", { name: "Continue" }).click();
 
-    let code: string;
+    let code!: string;
     await expect(async () => {
         const messages = await mailpit.listMessages();
         expect(messages.messages[0].To[0].Address).toEqual(email);
         const text = await mailpit.renderMessageText(messages.messages[0].ID);
-        [, code] = text.match(/Your verification code to confirm this email address is: (\d{6})/);
+        [, code] = text.match(/Your verification code to confirm this email address is: (\d{6})/)!;
     }).toPass();
 
     await page.getByRole("textbox", { name: "6-digit code" }).fill(code);

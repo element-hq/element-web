@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { useRef, useEffect, useState, useCallback, type DependencyList } from "react";
 import { type ListenerMap, type TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
+// oxlint-disable-next-line no-restricted-imports
 import type { EventEmitter } from "events";
 
 type Handler = (...args: any[]) => void;
@@ -160,11 +161,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 rerunArgs.push(args);
                 return;
             }
-            running = true; // eslint-disable-line react-hooks/exhaustive-deps
+            // oxlint-disable-next-line react/immutability
+            running = true;
             // Note: We need to use .then notation instead of async/await,
             // because async/await would cause this function to return a
             // promise, which `useEffect` doesn't like.
-            fn(...args)
+            void fn(...args)
                 .then((v) => {
                     if (!(v instanceof NoChange)) {
                         setValue(v);
@@ -173,11 +175,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 .finally(() => {
                     running = false;
                     if (rerunArgs.length != 0) {
+                        // oxlint-disable-next-line react/immutability
                         handler(...rerunArgs.shift());
                     }
                 });
         },
-        [fn, ...deps], // eslint-disable-line react-compiler/react-compiler
+        [fn, ...deps], // oxlint-disable-line react-hooks/exhaustive-deps react/use-memo
     );
 
     // re-run when the emitter changes
@@ -189,4 +192,5 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
 /**
  * Indicates that the callback for `useEventEmitterAsyncState` is not changing the value of the state.
  */
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class NoChange {}

@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import Recorder from "opus-recorder/dist/recorder.min.js";
 import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 import { clamp } from "@element-hq/web-shared-components";
@@ -191,8 +192,8 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             if (this.recorderSource) this.recorderSource.disconnect();
             if (this.recorder) this.recorder.close();
             if (this.recorderContext) {
-                // noinspection ES6MissingAwait - not important that we wait
-                this.recorderContext.close();
+                // not important that we wait
+                void this.recorderContext.close();
             }
 
             throw e; // rethrow so upstream can handle it
@@ -243,8 +244,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         const secondsLeft = TARGET_MAX_LENGTH - this.recorderSeconds!;
         if (secondsLeft < 0) {
             // go over to make sure we definitely capture that last frame
-            // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
-            this.stop();
+            void this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
             Singleflight.for(this, "ending_soon").do(() => {
                 this.emit(RecordingState.EndingSoon, { secondsLeft });
@@ -299,18 +299,16 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
             // Finally do our post-processing and clean up
             this.recording = false;
-            await this.recorder!.close();
+            this.recorder!.close();
             this.emit(RecordingState.Ended);
         });
     }
 
     public destroy(): void {
-        // noinspection JSIgnoredPromiseFromCall - not concerned about stop() being called async here
-        this.stop();
+        void this.stop();
         this.removeAllListeners();
         this.onDataAvailable = undefined;
         Singleflight.forgetAllFor(this);
-        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
         this.observable?.close();
     }
 }

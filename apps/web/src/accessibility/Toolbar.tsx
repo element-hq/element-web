@@ -51,6 +51,8 @@ const Toolbar = ({ children, ref, ...props }: IProps): JSX.Element => {
     return (
         <RovingTabIndexProvider handleHomeEnd handleLeftRight handleUpDown onKeyDown={onKeyDown}>
             {({ onKeyDownHandler }) => (
+                // This may be wrong but seems to work, this is a roving-toolbar, so the focus follows one of the children
+                // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
                 <div {...props} onKeyDown={onKeyDownHandler} role="toolbar" ref={ref}>
                     {children}
                 </div>

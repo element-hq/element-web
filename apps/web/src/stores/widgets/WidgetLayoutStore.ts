@@ -60,7 +60,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     public static get instance(): WidgetLayoutStore {
         if (!this.internalInstance) {
             this.internalInstance = new WidgetLayoutStore();
-            this.internalInstance.start();
+            void this.internalInstance.start();
         }
         return this.internalInstance;
     }
@@ -472,7 +472,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 };
             }
         }
-        this.matrixClient?.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
+        void this.matrixClient?.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
     }
 
     private getAllWidgets(room: Room): [IApp, Container][] {
@@ -483,7 +483,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         for (const [container, containerValue] of containers) {
             const widgets = containerValue.ordered;
             for (const widget of widgets) {
-                ret.push([widget, container as Container]);
+                ret.push([widget, container]);
             }
         }
         return ret;
@@ -514,5 +514,3 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.recalculateRoom(room); // call to try local echo on changes (the catch above undoes any errors)
     }
 }
-
-window.mxWidgetLayoutStore = WidgetLayoutStore.instance;

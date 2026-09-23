@@ -13,7 +13,7 @@ import {
     type RoomListItemViewModel,
     type RoomListItemViewSnapshot,
     RoomNotifState,
-} from "./VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+} from "./VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
 import { MockViewModel } from "../core/viewmodel";
 
@@ -46,7 +46,6 @@ export const mockAvatar = (name: string): React.ReactElement => (
  */
 export const renderAvatar = (room: Room): React.ReactElement => {
     // Cast to any to access properties - in real usage, the room object from the SDK will have these
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return mockAvatar((room as any)?.name || "Room");
 };
 
@@ -79,7 +78,12 @@ const roomNames = [
 /**
  * Create a mock room item snapshot for stories
  */
-export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemViewSnapshot => ({
+export const createMockRoomSnapshot = (
+    id: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewSnapshot => ({
     id,
     room: { name },
     name,
@@ -100,17 +104,24 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     showNotificationMenu: true,
     isFavourite: false,
     isLowPriority: false,
+    isDm,
     canInvite: true,
     canCopyRoomLink: true,
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
-    canMoveToSection: true,
     sections: [],
+    areSectionsEnabled: true,
+    canChangeSection: true,
 });
 
-export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
-    const snapshot = createMockRoomSnapshot(roomId, name, index);
+export function createMockRoomItemViewModel(
+    roomId: string,
+    name: string,
+    index: number,
+    isDm = false,
+): RoomListItemViewModel {
+    const snapshot = createMockRoomSnapshot(roomId, name, index, isDm);
     return {
         getSnapshot: () => snapshot,
         subscribe: fn(),
@@ -125,17 +136,23 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
         onSetRoomNotifState: fn(),
         onCreateSection: fn(),
         onToggleSection: fn(),
+        onRemoveFromSection: fn(),
     };
 }
 
 /**
  * Create a mock getRoomItemViewModel function for stories
+ * @param dmRoomIds The rooms to mark as direct messages
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomListItemViewModel) => {
+export const createGetRoomItemViewModel = (
+    roomIds: string[],
+    dmRoomIds: string[] = [],
+): ((roomId: string) => RoomListItemViewModel) => {
+    const dmRoomIdSet = new Set(dmRoomIds);
     const viewModels = new Map<string, RoomListItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
-        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index));
+        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index, dmRoomIdSet.has(roomId)));
     });
 
     return (roomId: string) => viewModels.get(roomId)!;
@@ -150,6 +167,10 @@ export const createGetSectionHeaderViewModel = (
             id: sectionId,
             title: sectionId[0].toUpperCase() + sectionId.slice(1),
             isExpanded: true,
+            isUnread: false,
+            displaySectionMenu: false,
+            canBeReordered: true,
+            acceptedRoomKind: "any",
         };
         const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
         Object.assign(vm, {

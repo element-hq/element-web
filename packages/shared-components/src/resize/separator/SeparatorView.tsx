@@ -18,19 +18,26 @@ import { useI18n } from "../../core/i18n/i18nContext";
 
 export interface SeparatorViewActions {
     /**
-     * onClick handler for the separator.
+     * onPointerUp handler for separator.
      */
-    onSeparatorClick: () => void;
+    onPointerUp: () => void;
 
     /**
-     * onFocus handler for the separator.
+     * onPointerMove handler for separator. Takes the event so that how far the pointer has travelled
+     * since it went down can be measured.
      */
-    onFocus: () => void;
+    onPointerMove: (event: React.PointerEvent) => void;
 
     /**
-     * onBlur handler for the separator.
+     * onPointerDown handler for separator. Takes the event so that where the pointer went down can be
+     * measured from.
      */
-    onBlur: () => void;
+    onPointerDown: (event: React.PointerEvent) => void;
+
+    /**
+     * onDoubleClick handler for the separator.
+     */
+    onDoubleClick: () => void;
 }
 
 interface Props {
@@ -43,22 +50,20 @@ interface Props {
  */
 export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
+    const { isCollapsed } = useViewModel(vm);
 
-    const classes = classNames(styles.separator, className, {
-        [styles.visible]: isCollapsed || isFocusedViaKeyboard,
-    });
+    /**
+     * There are two types of separator:
+     * - bar: This shows a thick bar separator with a resize icon in the middle; shown when the panel is collapsed.
+     * - border: This is just a thin separator; shown when the panel is expanded.
+     */
+    const type = isCollapsed ? "bar" : "border";
 
-    return (
-        <Separator
-            className={classes}
-            onClick={vm.onSeparatorClick}
-            onFocus={vm.onFocus}
-            onBlur={vm.onBlur}
-            aria-label={_t("left_panel|separator_label")}
-        >
-            <Tooltip description={_t("left_panel|separator_label")} placement="right">
+    const barContent = (
+        <Tooltip description={_t("left_panel|separator_label")} placement="right" disabled={type === "border"}>
+            <div className={styles.content}>
                 <DragIcon
+                    className={styles.dragIcon}
                     width="20px"
                     height="12px"
                     // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.
@@ -66,7 +71,33 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
                     viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
                     transform="rotate(90)"
                 />
-            </Tooltip>
+            </div>
+        </Tooltip>
+    );
+
+    /**
+     * This border is:
+     * - a 1px border that separates the left panel and main content.
+     * - a 2px border when the panel is expanded and the user is interacting with the separator.
+     */
+    const border = (
+        <div className={styles.activeSeparatorContainer}>
+            <div className={styles.activeSeparator} />
+        </div>
+    );
+
+    return (
+        <Separator
+            className={classNames(styles.separator, className)}
+            onPointerUp={vm.onPointerUp}
+            onPointerMove={vm.onPointerMove}
+            onPointerDown={vm.onPointerDown}
+            aria-label={_t("left_panel|separator_label")}
+            data-separator-type={type}
+            onDoubleClick={vm.onDoubleClick}
+            disableDoubleClick
+        >
+            {type === "bar" ? barContent : border}
         </Separator>
     );
 }

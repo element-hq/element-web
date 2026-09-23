@@ -10,7 +10,8 @@ import React, { type ReactElement } from "react";
 
 import { COUNTRIES, getEmojiFlag, type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import Dropdown from "../elements/Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
 

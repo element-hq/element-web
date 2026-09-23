@@ -8,4 +8,5 @@
 export { VirtualizedRoomListView } from "./VirtualizedRoomListView";
 export type { VirtualizedRoomListViewProps, RoomListViewState, FilterKey } from "./VirtualizedRoomListView";
 export * from "./RoomListSectionHeaderView";
-export * from "./RoomListItemAccessibilityWrapper";
+export * from "./RoomListItemWrapper";
+export * from "./RoomListItemDragOverlayView";

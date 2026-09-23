@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RoomEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
-import type { NotificationCount, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, NotificationCount, Room } from "matrix-js-sdk/src/matrix";
 import { determineUnreadState } from "../RoomNotifs";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { useEventEmitter } from "./useEventEmitter";
@@ -26,6 +26,13 @@ export const useUnreadNotifications = (
     const [count, setCount] = useState<number>(0);
     const [level, setLevel] = useState<NotificationLevel>(NotificationLevel.None);
 
+    const updateNotificationState = useCallback(() => {
+        const { symbol, count, level } = determineUnreadState(room, threadId, false);
+        setSymbol(symbol);
+        setCount(count);
+        setLevel(level);
+    }, [room, threadId]);
+
     useEventEmitter(
         room,
         RoomEvent.UnreadNotifications,
@@ -40,13 +47,13 @@ export const useUnreadNotifications = (
     useEventEmitter(room, RoomEvent.Redaction, () => updateNotificationState());
     useEventEmitter(room, RoomEvent.LocalEchoUpdated, () => updateNotificationState());
     useEventEmitter(room, RoomEvent.MyMembership, () => updateNotificationState());
-
-    const updateNotificationState = useCallback(() => {
-        const { symbol, count, level } = determineUnreadState(room, threadId, false);
-        setSymbol(symbol);
-        setCount(count);
-        setLevel(level);
-    }, [room, threadId]);
+    // An event which has not been decrypted yet has no renderer, so it does not count towards the
+    // unread state. The room key often only turns up after the event itself, so re-evaluate the
+    // unread state once an event of this room is decrypted.
+    useEventEmitter(room?.client, MatrixEventEvent.Decrypted, (event: MatrixEvent) => {
+        if (event.getRoomId() !== room?.roomId) return;
+        updateNotificationState();
+    });
 
     useEffect(() => {
         updateNotificationState();

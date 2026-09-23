@@ -31,7 +31,7 @@ export function downloadLabelForFile(content: MediaEventContent, withSize = true
  * @param {string} fallbackText The fallback text
  * @param {boolean} withSize Whether to include size information. Default true.
  * @param {boolean} shortened Ensure the extension of the file name is visible. Default false.
- * @return {string} the human-readable link text for the attachment.
+ * @returns {string} the human-readable link text for the attachment.
  */
 export function presentableTextForFile(
     content: MediaEventContent,

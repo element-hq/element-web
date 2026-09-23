@@ -13,6 +13,8 @@ import { CollapseIcon, CopyIcon, ExpandIcon } from "@vector-im/compound-design-t
 
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { CopyTextButton } from "../elements/CopyableText.tsx";
+import AccessibleButton from "../elements/AccessibleButton.tsx";
+import { _t } from "../../../i18n";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 const MAX_LINES_BEFORE_COLLAPSE = 5;
@@ -26,9 +28,14 @@ const ExpandCollapseButton: React.FC<{
     onClick(this: void): void;
 }> = ({ expanded, onClick }) => {
     return (
-        <span className="mx_EventTile_button" onClick={onClick}>
+        <AccessibleButton
+            element="button"
+            title={expanded ? _t("action|collapse") : _t("action|expand")}
+            onClick={onClick}
+            className="mx_EventTile_button"
+        >
             {expanded ? <CollapseIcon /> : <ExpandIcon />}
-        </span>
+        </AccessibleButton>
     );
 };
 
@@ -59,7 +66,7 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
         const number = innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
         // Iterate through lines starting with 1 (number of the first line is 1)
         lineNumbers = (
-            <span className="mx_EventTile_lineNumbers">
+            <span className="mx_EventTile_lineNumbers" data-event-tile-line-numbers>
                 {Array.from({ length: number }, (_, i) => i + 1).map((i) => (
                     <span key={i}>{i}</span>
                 ))}
@@ -107,7 +114,7 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
     }
 
     function highlightCodeRef(div: HTMLElement | null): void {
-        highlightCode(div);
+        void highlightCode(div);
     }
 
     let content = domToReact(preNode.children as DOMNode[]);

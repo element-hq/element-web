@@ -32,8 +32,8 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_MBeaconBody_withoutMapInfoLastUpdated {
     /* 48px lines up with icon in BeaconStatus */
-    margin-top: -$spacing-8;
-    padding: 0 $spacing-8 $spacing-8 48px;
+    margin-top: calc(-1 * var(--cpd-space-2x));
+    padding: 0 var(--cpd-space-2x) var(--cpd-space-2x) 48px;
 
     color: $tertiary-content;
     font-size: $font-10px;
@@ -73,9 +73,4 @@ Please see LICENSE files in the repository root for full details.
 .mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MBeaconBody {
     max-width: 100%;
     width: 450px;
-}
-
-.mx_ReplyTile .mx_MBeaconBody {
-    /* Prevent clicking a beacon within a reply */
-    pointer-events: none;
 }

@@ -1,0 +1,34 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React from "react";
+import { describe, it, expect, beforeEach } from "vitest";
+import { render } from "test-utils-rtl";
+
+import SdkConfig from "../../SdkConfig";
+import { ErrorView, UnsupportedBrowserView } from "./ErrorView";
+
+describe("<ErrorView />", () => {
+    it("should match snapshot", () => {
+        const { asFragment } = render(<ErrorView title="TITLE" messages={["MSG1", "MSG2"]} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe("<UnsupportedBrowserView />", () => {
+    beforeEach(() => {
+        SdkConfig.put({});
+    });
+
+    it("should match snapshot", () => {
+        const { asFragment } = render(<UnsupportedBrowserView />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+});

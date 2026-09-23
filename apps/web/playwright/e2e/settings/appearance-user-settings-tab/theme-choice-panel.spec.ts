@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { expect, test } from ".";
 
 test.describe("Appearance user settings tab", () => {
@@ -14,10 +16,10 @@ test.describe("Appearance user settings tab", () => {
     });
 
     test.describe("Theme Choice Panel", () => {
-        test.beforeEach(async ({ app, user, util }) => {
+        test.beforeEach(async ({ app, page, user, util }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
             await util.disableSystemTheme();
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
 
             await util.openAppearanceTab();
         });
@@ -71,24 +73,28 @@ test.describe("Appearance user settings tab", () => {
         });
 
         test.describe("custom theme", () => {
-            test.use({
-                labsFlags: ["feature_custom_themes"],
-            });
-
-            test("should render the custom theme section", { tag: "@screenshot" }, async ({ page, app, util }) => {
-                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
+            test.beforeEach(async ({ util }) => {
+                // Adding/removing a custom theme now happens through the devtools "Custom themes"
+                // tool, which requires an open room rather than the appearance tab, so close the
+                // tab opened by the parent describe's beforeEach and switch to a room instead.
+                await util.closeAppearanceTab();
+                await util.createAndDisplayRoom();
             });
 
             test(
-                "should be able to add and remove a custom theme",
+                "should be able to add and remove a custom theme via devtools",
                 { tag: "@screenshot" },
                 async ({ page, app, util }) => {
                     await util.addCustomTheme();
 
+                    await util.openAppearanceTab();
                     await expect(util.getCustomTheme()).not.toBeChecked();
                     await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
+                    await util.closeAppearanceTab();
 
                     await util.removeCustomTheme();
+
+                    await util.openAppearanceTab();
                     await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
                 },
             );
@@ -98,13 +104,15 @@ test.describe("Appearance user settings tab", () => {
                 { tag: "@screenshot" },
                 async ({ page, app, user, util }) => {
                     await util.addCustomTheme();
+
+                    await util.openAppearanceTab();
                     await util.getCustomTheme().click();
                     await util.closeAppearanceTab();
 
                     await expect(page).toMatchScreenshot("window-custom-theme.png");
 
                     await page.reload();
-                    await app.closeVerifyToast();
+                    await rejectToast(page, "Verify this device");
 
                     await util.openAppearanceTab();
                     // Assert that the custom theme is still selected after reloading the page

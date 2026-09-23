@@ -13,6 +13,5 @@ import { type ActionPayload } from "../payloads";
 
 export interface AfterLeaveRoomPayload extends ActionPayload {
     action: Action.AfterLeaveRoom;
-    // eslint-disable-next-line camelcase
     room_id?: Room["roomId"];
 }

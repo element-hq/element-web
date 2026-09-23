@@ -11,19 +11,22 @@
         "target": "es2022",
         "noUnusedLocals": true,
         "sourceMap": false,
-        "outDir": "./lib",
+        "noEmit": true,
         "declaration": true,
         "jsx": "react",
-        "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
+        "lib": ["es2022", "es2024.promise", "dom", "dom.iterable", "ESNext.Collection"],
         "strict": true,
         "types": ["node", "modernizr"],
         "paths": {
-            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
-            "rollup/parseAst": ["../../node_modules/rollup/dist/parseAst"]
-        }
+            "test-utils-rtl": ["./src/test/test-utils/vitest-matrix-react"],
+            "test-utils": ["./src/test/test-utils"],
+            "test-utils/*": ["./src/test/test-utils/*"]
+        },
+        "skipLibCheck": true
     },
+    "exclude": ["./src/**/*.test.browser.ts", "./src/@types/vitest-browser.d.ts"],
     "include": [
-        "../../node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",

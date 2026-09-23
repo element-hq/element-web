@@ -4,6 +4,7 @@
         "module": "nodenext",
         "moduleResolution": "NodeNext",
         "target": "es2022",
+        "lib": ["es2024"],
         "sourceMap": false,
         "typeRoots": [],
         "types": [],

@@ -9,16 +9,13 @@
             "one": "未読のメンション1件。",
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
-        "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
+        "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
         "accept": "同意",
         "add": "追加",
         "add_existing_room": "既存のルームを追加",
-        "add_people": "連絡先を追加",
         "apply": "適用",
         "approve": "同意",
         "back": "戻る",
@@ -49,7 +46,6 @@
         "enter_fullscreen": "フルスクリーンにする",
         "exit_fullscreeen": "フルスクリーンを解除",
         "expand": "展開",
-        "explore_public_rooms": "公開ルームを探す",
         "explore_rooms": "ルームを探す",
         "export": "エクスポート",
         "forward": "転送",
@@ -61,8 +57,6 @@
         "ignore": "無視",
         "import": "インポート",
         "invite": "招待",
-        "invite_to_space": "スペースに招待",
-        "invites_list": "招待",
         "join": "参加",
         "learn_more": "詳細を表示",
         "leave": "退出",
@@ -86,7 +80,6 @@
         "rename": "表示名を変更",
         "reply": "返信",
         "reply_in_thread": "スレッドで返信",
-        "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
         "resume": "再開",
@@ -104,8 +97,6 @@
         "sign_out": "サインアウト",
         "skip": "スキップ",
         "start": "開始",
-        "start_chat": "チャットを開始",
-        "start_new_chat": "チャットを開始",
         "stop": "停止",
         "submit": "送信",
         "subscribe": "購読",
@@ -201,10 +192,7 @@
         "log_in_new_account": "新しいアカウントに<a>ログイン</a>しましょう。",
         "logout_dialog": {
             "description": "サインアウトしてよろしいですか？",
-            "megolm_export": "手動で鍵をエクスポート",
             "setup_key_backup_title": "暗号化されたメッセージにアクセスできなくなります",
-            "setup_secure_backup_description_1": "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。",
-            "setup_secure_backup_description_2": "サインアウトすると、これらの鍵はこの端末から削除されます。使用できる鍵が他の端末にあったり、サーバーにバックアップされたりしているのでない限り、暗号化されたメッセージは読むことができなくなります。",
             "skip_key_backup": "暗号化されたメッセージは不要です"
         },
         "misconfigured_body": "<a>設定</a>が間違っているか重複しているか確認するよう、%(brand)sの管理者に問い合わせてください。",
@@ -290,7 +278,6 @@
         "sign_in_instead_prompt": "サインイン",
         "sign_in_or_register": "サインインするか、アカウントを作成してください",
         "sign_in_or_register_description": "続行するには、作成済のアカウントを使用するか、新しいアカウントを作成してください。",
-        "sign_in_prompt": "アカウントがありますか？<a>サインインしてください</a>",
         "sign_in_with_sso": "シングルサインオンを使用してサインイン",
         "signing_in": "サインインしています…",
         "soft_logout": {
@@ -414,7 +401,6 @@
         "encrypted": "暗号化",
         "error": "エラー",
         "faq": "よくある質問",
-        "favourites": "お気に入り",
         "feedback": "フィードバック",
         "filter_results": "結果を絞り込む",
         "forward_message": "メッセージを転送",
@@ -422,7 +408,6 @@
         "go_to_settings": "設定を開く",
         "guest": "ゲスト",
         "help": "ヘルプ",
-        "historical": "履歴",
         "home": "ホーム",
         "homeserver": "ホームサーバー",
         "identity_server": "IDサーバー",
@@ -434,11 +419,9 @@
         "light": "ライト",
         "loading": "読み込んでいます…",
         "location": "位置情報",
-        "low_priority": "低優先度",
         "message": "メッセージ",
         "message_layout": "メッセージのレイアウト",
         "microphone": "マイク",
-        "model": "形式",
         "modern": "モダン",
         "mute": "ミュート",
         "n_members": {
@@ -493,7 +476,6 @@
         "success": "成功",
         "suggestions": "提案",
         "support": "サポート",
-        "system_alerts": "システムアラート",
         "theme": "テーマ",
         "thread": "スレッド",
         "threads": "スレッド",
@@ -507,7 +489,6 @@
         "username": "ユーザー名",
         "verified": "認証済",
         "version": "バージョン",
-        "video": "動画",
         "video_room": "ビデオ通話ルーム",
         "view_message": "メッセージを表示",
         "warning": "警告"
@@ -708,7 +689,6 @@
         "state_key": "ステートキー",
         "threads_timeline": "スレッドのタイムライン",
         "title": "開発者ツール",
-        "toggle_event": "イベントを切り替える",
         "toolbox": "ツールボックス",
         "use_at_own_risk": "このユーザーインターフェースは、値の種類を確認しません。自己責任で使用してください。",
         "user_read_up_to": "ユーザーの既読状況： ",
@@ -727,22 +707,6 @@
     },
     "dialog_close_label": "ダイアログを閉じる",
     "download_completed": "ダウンロードが完了しました",
-    "emoji": {
-        "categories": "カテゴリー",
-        "category_activities": "アクティビティー",
-        "category_animals_nature": "動物と自然",
-        "category_flags": "旗",
-        "category_food_drink": "食べ物と飲み物",
-        "category_frequently_used": "使用頻度の高いリアクション",
-        "category_objects": "物体",
-        "category_smileys_people": "表情と人々",
-        "category_symbols": "シンボル",
-        "category_travel_places": "旅行と場所",
-        "quick_reactions": "一般的なリアクション"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "検索をキャンセル"
-    },
     "empty_room": "空のルーム",
     "empty_room_was_name": "空のルーム（以前の名前は%(oldName)s）",
     "encryption": {
@@ -788,17 +752,6 @@
             "warning": "復元方法を削除しなかった場合、攻撃者があなたのアカウントにアクセスしようとしている可能性があります。設定画面でアカウントのパスワードを至急変更し、新しい復元方法を設定してください。"
         },
         "set_up_toast_title": "セキュアバックアップを設定",
-        "setup_secure_backup": {
-            "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。"
-        },
-        "udd": {
-            "interactive_verification_button": "絵文字で認証",
-            "other_ask_verify_text": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
-            "other_new_session_text": "%(name)s（%(userId)s）は未認証のセッションにサインインしました：",
-            "own_ask_verify_text": "以下のどれか一つを使って他のセッションを認証します。",
-            "own_new_session_text": "あなたのこのセッションはまだ認証されていません：",
-            "title": "信頼されていません"
-        },
         "unable_to_setup_keys_error": "鍵を設定できません",
         "verification": {
             "accepting": "承認しています…",
@@ -1090,7 +1043,6 @@
         "name_mxid_share_room": "このルームに誰かを招待したい場合は、招待したいユーザーの名前、またはユーザー名（<userId/>の形式）を指定するか、<a>このルームを共有</a>してください。",
         "name_mxid_share_space": "このスペースに誰かを招待したい場合は、招待したいユーザーの名前、またはユーザー名（<userId/>の形式）を指定するか、<a>このスペースを共有</a>してください。",
         "recents_section": "最近会話したユーザー",
-        "room_failed_partial": "以下の人たちを<RoomName/>に招待できませんでした",
         "room_failed_partial_title": "いくつかの招待を送信できませんでした",
         "room_failed_title": "ユーザーを%(roomName)sに招待するのに失敗しました",
         "send_link_prompt": "もしくはリンクを送信",
@@ -1192,13 +1144,11 @@
         "bridge_state_workspace": "ワークスペース：<networkLink/>",
         "click_for_info": "クリックすると詳細を表示",
         "currently_experimental": "現在実験中。",
-        "custom_themes": "ユーザー定義のテーマの追加をサポート",
         "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
         "element_call_video_rooms": "Element Callのビデオ通話ルーム",
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
         "experimental_section": "早期プレビュー",
         "feature_wysiwyg_composer_description": "メッセージ入力欄でマークダウンの代わりにリッチテキストを使用。",
-        "group_calls": "グループ通話の新しい経験",
         "group_developer": "開発者",
         "group_encryption": "暗号化",
         "group_experimental": "実験的",
@@ -1207,12 +1157,10 @@
         "group_profile": "プロフィール",
         "group_rooms": "ルーム",
         "group_spaces": "スペース",
-        "group_themes": "テーマ",
         "group_threads": "スレッド",
         "group_voip": "音声とビデオ",
         "group_widgets": "ウィジェット",
         "hidebold": "通知のドットを非表示にする（カウンターのバッジのみを表示）",
-        "html_topic": "ルームのトピックをHTML形式で表示",
         "join_beta": "ベータ版に参加",
         "join_beta_reload": "ベータ版に参加すると%(brand)sをリロードします。",
         "jump_to_date": "日付に移動（/jumptodateを追加すると、日付のヘッダーに移動します）",
@@ -1223,12 +1171,9 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "report_to_moderators": "モデレーターに報告",
-        "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
-        "under_active_development": "開発中。",
         "video_rooms": "ビデオ通話ルーム",
         "video_rooms_a_new_way_to_chat": "%(brand)sで音声と動画により会話する新しい方法です。",
         "video_rooms_always_on_voip_channels": "ビデオ通話ルームは、%(brand)sのルームに埋め込まれている、VoIPが常時有効のチャンネルです。",
@@ -1275,13 +1220,8 @@
     "language_dropdown_label": "言語一覧",
     "leave_room_dialog": {
         "last_person_warning": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
-        "leave_room_question": "このルーム「%(roomName)s」から退出してよろしいですか？",
-        "leave_space_question": "このスペース「%(spaceName)s」から退出してよろしいですか？",
         "room_rejoin_warning": "このルームは公開されていません。再度参加するには、招待が必要です。",
         "space_rejoin_warning": "このスペースは公開されていません。再度参加するには、招待が必要です。"
-    },
-    "left_panel": {
-        "open_dial_pad": "ダイヤルパッドを開く"
     },
     "lightbox": {
         "rotate_left": "左に回転",
@@ -1366,7 +1306,6 @@
         "mentions_and_keywords": "メンションとキーワード",
         "mentions_and_keywords_description": "メンションと、<a>設定</a>したキーワードのみを通知",
         "mentions_keywords": "メンションとキーワード",
-        "message_didnt_send": "メッセージが送信されませんでした。クリックすると詳細を表示します。",
         "mute_description": "通知を送信しません"
     },
     "notifier": {
@@ -1445,7 +1384,6 @@
     },
     "quick_settings": {
         "all_settings": "全ての設定",
-        "metaspace_section": "サイドバーに固定",
         "sidebar_settings": "他のオプション",
         "title": "クイック設定"
     },
@@ -1461,20 +1399,10 @@
     },
     "report_content": {
         "description": "このメッセージを報告すると、このメッセージの一意の「イベントID」があなたのホームサーバーの管理者に送信されます。このルーム内のメッセージが暗号化されている場合、ホームサーバーの管理者はメッセージのテキストを読んだり、ファイルや画像を表示したりすることはできません。",
-        "disagree": "同意しない",
         "hide_messages_from_user": "このユーザーのメッセージを非表示にするかどうか確認してください。",
         "ignore_user": "ユーザーを無視",
-        "illegal_content": "不法なコンテンツ",
         "missing_reason": "報告する理由を記入してください。",
-        "nature": "特徴を選び、このメッセージを報告する理由を記入してください。",
-        "nature_disagreement": "ユーザーの投稿内容が正しくない。\nこのユーザーをルームのモデレーターに報告します。",
-        "nature_other": "その他の理由。問題を記入してください。\nルームのモデレーターに報告します。",
-        "nature_spam": "ユーザーが広告や、広告・プロパガンダへのリンクのスパムを行っている。\nこのユーザーをルームのモデレーターに報告します。",
-        "other_label": "その他",
-        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告",
-        "report_entire_room": "ルーム全体を報告",
-        "spam_or_propaganda": "スパム、プロパガンダ",
-        "toxic_behaviour": "危害を加える振る舞い"
+        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s個のセッションの復号化に失敗しました！",
@@ -1604,7 +1532,6 @@
         "join_button_account": "サインアップ",
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "join_the_discussion": "ルームに参加",
-        "join_title": "ルームに参加",
         "join_title_account": "アカウントで会話に参加",
         "joining": "参加しています…",
         "joining_room": "ルームに参加しています…",
@@ -1648,37 +1575,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "ルームを追加",
         "add_space_label": "スペースを追加",
-        "breadcrumbs_empty": "最近訪れたルームはありません",
-        "breadcrumbs_label": "最近訪れたルーム",
         "failed_add_tag": "ルームにタグ %(tagName)s を追加できませんでした",
         "failed_remove_tag": "ルームからタグ %(tagName)s を削除できませんでした",
         "failed_set_dm_tag": "ダイレクトメッセージのタグの設定に失敗しました",
-        "home_menu_label": "ホームのオプション",
-        "join_public_room_label": "公開ルームに参加",
-        "joining_rooms_status": {
-            "one": "現在%(count)s個のルームに参加しています",
-            "other": "現在%(count)s個のルームに参加しています"
-        },
         "notification_options": "通知設定",
-        "redacting_messages_status": {
-            "one": "現在%(count)s個のルームのメッセージを削除しています",
-            "other": "現在%(count)s個のルームのメッセージを削除しています"
-        },
-        "show_less": "詳細を非表示",
-        "show_n_more": {
-            "other": "さらに%(count)s件を表示",
-            "one": "さらに%(count)s件を表示"
-        },
-        "show_previews": "メッセージのプレビューを表示",
-        "sort_by": "並び替え",
-        "sort_by_activity": "アクティビティー順",
-        "sort_by_alphabet": "アルファベット順",
-        "sort_unread_first": "未読メッセージのあるルームを最初に表示",
-        "space_menu_label": "%(spaceName)sのメニュー",
-        "sublist_options": "オプションの一覧を表示",
-        "suggested_rooms_heading": "おすすめのルーム"
+        "show_less": "詳細を非表示"
     },
     "room_settings": {
         "access": {
@@ -1959,8 +1861,6 @@
             "custom_font_description": "システムにインストールされているフォントの名前を設定すると、%(brand)sはそれを使用します。",
             "custom_font_name": "システムフォントの名前",
             "custom_font_size": "ユーザー定義のサイズを使用",
-            "custom_theme_error_downloading": "テーマの情報をダウンロードする際にエラーが発生しました。",
-            "custom_theme_invalid": "テーマスキーマが無効です。",
             "font_size": "フォントの大きさ",
             "image_size_default": "既定値",
             "image_size_large": "大",
@@ -2172,7 +2072,6 @@
         "send_read_receipts_unsupported": "あなたのサーバーは開封確認メッセージの送信防止をサポートしていません。",
         "send_typing_notifications": "入力中通知を送信",
         "sessions": {
-            "browser": "ブラウザー",
             "confirm_sign_out": {
                 "other": "端末からのサインアウトを承認",
                 "one": "端末からのサインアウトを承認"
@@ -2220,7 +2119,6 @@
             "no_sessions": "セッションが見つかりません。",
             "no_unverified_sessions": "未認証のセッションはありません。",
             "no_verified_sessions": "認証済のセッションはありません。",
-            "os": "オペレーティングシステム",
             "other_sessions_heading": "その他のセッション",
             "push_heading": "プッシュ通知",
             "push_subheading": "このセッションでプッシュ通知を受信。",
@@ -2274,13 +2172,11 @@
         "show_stickers_button": "ステッカーボタンを表示",
         "show_typing_notifications": "入力中通知を表示",
         "sidebar": {
-            "metaspaces_favourites_description": "お気に入りのルームと連絡先をまとめる。",
             "metaspaces_home_all_rooms": "全てのルームを表示",
             "metaspaces_home_all_rooms_description": "他のスペースに存在するルームを含めて、全てのルームをホームに表示。",
             "metaspaces_home_description": "ホームは全体を把握するのに便利です。",
             "metaspaces_orphans": "スペース外のルーム",
             "metaspaces_orphans_description": "スペースに含まれない全てのルームを一箇所にまとめる。",
-            "metaspaces_people_description": "全ての連絡先を一箇所にまとめる。",
             "metaspaces_subsection": "表示するスペース",
             "title": "サイドバー"
         },
@@ -2296,7 +2192,6 @@
             "audio_output": "音声出力",
             "audio_output_empty": "音声出力が検出されません",
             "auto_gain_control": "自動音量調整",
-            "connection_section": "接続",
             "echo_cancellation": "エコーキャンセル",
             "enable_fallback_ice_server_description": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。",
             "mirror_local_feed": "ビデオ映像のミラー効果（反転）を有効にする",
@@ -2461,12 +2356,6 @@
     },
     "space_settings": {
         "title": "設定 - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "このスペースにルームを追加する権限がありません",
-        "error_no_permission_add_space": "このスペースに別のスペースを追加する権限がありません",
-        "error_no_permission_create_room": "このスペースに新しいルームを作成する権限がありません",
-        "error_no_permission_invite": "このスペースにユーザーを招待する権限がありません"
     },
     "spotlight": {
         "public_rooms": {
@@ -2655,9 +2544,7 @@
         "m.poll.start": "%(senderName)sがアンケートを開始しました - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)sがルームのアバターを変更しました。",
-            "changed_img": "%(senderDisplayName)sはルームのアバターを<img/>に変更しました",
-            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました",
-            "removed": "%(senderDisplayName)sがルームのアバターを削除しました。"
+            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2772,7 +2659,6 @@
             "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-            "message_hidden": "このユーザーを無視しているのでメッセージは隠されます。<a>表示する。</a>",
             "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
             "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
             "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
@@ -3049,11 +2935,6 @@
         "verify_button": "ユーザーの認証",
         "verify_explainer": "セキュリティー強化のため、両者の端末でワンタイムコードを確認し、このユーザーを認証してください。"
     },
-    "user_menu": {
-        "settings": "全ての設定",
-        "switch_theme_dark": "ダークテーマに切り替える",
-        "switch_theme_light": "ライトテーマに切り替える"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3216,13 +3097,7 @@
         "close_to_view_right_panel": "ウィジェットを閉じて、このパネルに表示",
         "context_menu": {
             "delete": "ウィジェットを削除",
-            "delete_warning": "ウィジェットを削除すると、このルームの全てのユーザーから削除されます。削除してよろしいですか？",
-            "move_left": "左に移動",
-            "move_right": "右に移動",
-            "remove": "全員から削除",
-            "revoke": "権限を取り消す",
-            "screenshot": "画像を撮影",
-            "start_audio_stream": "音声ストリーミングを開始"
+            "delete_warning": "ウィジェットを削除すると、このルームの全てのユーザーから削除されます。削除してよろしいですか？"
         },
         "cookie_warning": "このウィジェットはクッキーを使用する可能性があります。",
         "error_hangup_description": "通話から切断されました。（エラー：%(message)s）",

@@ -1,8 +1,14 @@
-# syntax=docker.io/docker/dockerfile:1.23-labs@sha256:7eca9451d94f9b8ad22e44988b92d595d3e4d65163794237949a8c3413fbed5d
+# syntax=docker.io/docker/dockerfile:1.27-labs@sha256:ae9cc40df4eb5b6adcac0a49bdd8e43b6d29d81087fefae2ceb6fe248aab24c8
 # Context must be the root of the monorepo
 
+# PNPM source
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
+
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:d2059a9c157c9f70739736979fa3635008bf3ca74560b30930dc181228bc427f AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:25f3016fcdae6b5d65bd9bcb4064b7e4198ec8d49493fa40d73f9b463d04fb15 AS builder
+
+COPY --from=pnpm /opt/pnpm /opt/pnpm
+RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
@@ -13,9 +19,8 @@ WORKDIR /src
 
 # Install dependencies
 COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
-RUN corepack enable
-RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 RUN pnpm install --frozen-lockfile
+RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 
 # Build
 COPY --link --exclude=.git --exclude=apps/web/docker . /src
@@ -25,7 +30,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:360465db60105a4cbf5215cd9e5a2ba40ef956978dd94f99707e9674050e38ea
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:123fb7283ffb4788e260d4e980005a978995fefedcdbb04d268077a19b84576d AS element_web
 
 # Need root user to install packages & manipulate the usr directory
 USER root
@@ -50,3 +55,39 @@ USER nginx
 ENV ELEMENT_WEB_PORT=80
 
 HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB_PORT/config.json
+
+# Modules are consumed as prebuilt release artifacts rather than built from source.
+# Each module is pinned to a version and the sha256 of its release archive.
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS modules
+
+ARG MODULE_BANNER_VERSION=v2.1.0
+ADD --checksum=sha256:c8498112c460af25f8733c57058251b657495a24300b59f4a36d17b7521246c1 \
+    https://github.com/element-hq/element-web/releases/download/module%2Fbanner%2F${MODULE_BANNER_VERSION}/banner-${MODULE_BANNER_VERSION}.zip \
+    /tmp/modules/banner.zip
+
+ARG MODULE_RESTRICTED_GUESTS_VERSION=v1.1.0
+ADD --checksum=sha256:7669d230bc4a72a9cc76e85c66b88b9b7d209c732484116fbcfd111fa49ce512 \
+    https://github.com/element-hq/element-web/releases/download/module%2Frestricted-guests%2F${MODULE_RESTRICTED_GUESTS_VERSION}/restricted-guests-${MODULE_RESTRICTED_GUESTS_VERSION}.zip \
+    /tmp/modules/restricted-guests.zip
+
+ARG MODULE_WIDGET_LIFECYCLE_VERSION=v1.1.0
+ADD --checksum=sha256:2363fdd6bd67e08ac4ca777d11c942559409482c41021e39ff51d5567cc7b76f \
+    https://github.com/element-hq/element-web/releases/download/module%2Fwidget-lifecycle%2F${MODULE_WIDGET_LIFECYCLE_VERSION}/widget-lifecycle-${MODULE_WIDGET_LIFECYCLE_VERSION}.zip \
+    /tmp/modules/widget-lifecycle.zip
+
+ARG MODULE_WIDGET_TOGGLES_VERSION=v1.1.0
+ADD --checksum=sha256:04155cf6885f41643fdecd61559de326d14d5ddf9143ee02041ba1216cbf263d \
+    https://github.com/element-hq/element-web/releases/download/module%2Fwidget-toggles%2F${MODULE_WIDGET_TOGGLES_VERSION}/widget-toggles-${MODULE_WIDGET_TOGGLES_VERSION}.zip \
+    /tmp/modules/widget-toggles.zip
+
+# Unpack the modules
+RUN apk add --no-cache unzip && \
+    for archive in /tmp/modules/*.zip; do \
+        name=$(basename "$archive" .zip); \
+        mkdir -p "/modules/$name" && unzip -q "$archive" -d "/modules/$name"; \
+    done
+
+# Target with element_web + `/modules` copied in
+FROM element_web AS element_web_modules
+
+COPY --from=modules /modules /modules

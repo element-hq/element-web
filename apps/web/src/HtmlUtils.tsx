@@ -10,14 +10,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
-import sanitizeHtml, { type IOptions } from "sanitize-html";
+import { sanitizeHtml, type HtmlSanitizeOptions } from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
-import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
+import { LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
@@ -25,6 +25,7 @@ import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { linkifyAndSanitizeHtml } from "./Linkify";
+export { isUrlPermitted, sanitizeHtmlText } from "@element-hq/element-web-shared-utils";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -79,7 +80,7 @@ function mightContainEmoji(str?: string): boolean {
  * Returns the shortcode for an emoji character.
  *
  * @param {String} char The emoji character
- * @return {String} The shortcode (such as :thumbup:)
+ * @returns {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
     const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
@@ -89,51 +90,35 @@ export function unicodeToShortcode(char: string): string {
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
+ * @param insaneHtml - the input to sanitize
+ * @param className - an optional class name to apply to the element
+ * @param sanitizeParams - the params to use for sanitization
  */
-export function sanitizedHtmlNode(insaneHtml: string): ReactNode {
-    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+export function sanitizedHtmlNode(
+    insaneHtml: string,
+    className?: string,
+    sanitizeParams: HtmlSanitizeOptions = sanitizeHtmlParams,
+): ReactNode {
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeParams);
 
-    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
-}
-
-export function getHtmlText(insaneHtml: string): string {
-    return sanitizeHtml(insaneHtml, {
-        allowedTags: [],
-        allowedAttributes: {},
-        selfClosing: [],
-        allowedSchemes: [],
-        disallowedTagsMode: "discard",
-    });
-}
-
-/**
- * Tests if a URL from an untrusted source may be safely put into the DOM
- * The biggest threat here is javascript: URIs.
- * Note that the HTML sanitiser library has its own internal logic for
- * doing this, to which we pass the same list of schemes. This is used in
- * other places we need to sanitise URLs.
- * @return true if permitted, otherwise false
- */
-export function isUrlPermitted(inputUrl: string): boolean {
-    try {
-        // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
-    } catch {
-        return false;
-    }
+    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: IOptions = {
+const composerSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
+        // Composer quotes intentionally preserve the source link/media
+        // presentation while shared URL validation still runs.
+        "a": (tagName, attribs) => ({ tagName, attribs }),
+        "img": (tagName, attribs) => ({ tagName, attribs }),
         "code": transformTags["code"],
         "*": transformTags["*"],
     },
 };
 
 // reduced set of allowed tags to avoid turning topics into Myspace
-const topicSanitizeHtmlParams: IOptions = {
+const topicSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
         "font", // custom to matrix for IRC-style font coloring
@@ -301,9 +286,15 @@ export interface EventRenderOpts {
 }
 
 function analyseEvent(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): EventAnalysis {
-    let sanitizeParams = sanitizeHtmlParams;
+    let sanitizeParams: HtmlSanitizeOptions = {
+        ...sanitizeHtmlParams,
+        transformTags: { ...sanitizeHtmlParams.transformTags },
+    };
     if (opts.forComposerQuote) {
-        sanitizeParams = composerSanitizeHtmlParams;
+        sanitizeParams = {
+            ...composerSanitizeHtmlParams,
+            transformTags: { ...composerSanitizeHtmlParams.transformTags },
+        };
     }
 
     if (opts.mediaIsVisible === false && sanitizeParams.transformTags?.["img"]) {
@@ -322,13 +313,14 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
 
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
-        sanitizeParams = { ...sanitizeParams };
-        if (typeof sanitizeParams.allowedAttributes === "object") {
-            const attribs = { ...sanitizeParams.allowedAttributes };
-            // We allow data-linkified because TextualBody uses it to passthrough links.
-            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], `data-${LINKIFIED_DATA_ATTRIBUTE}`];
-            sanitizeParams.allowedAttributes = attribs;
-        } // else: No attibutes are are allowed for "a"
+        sanitizeParams = {
+            ...sanitizeParams,
+            additionalAllowedAttributes: {
+                ...sanitizeParams.additionalAllowedAttributes,
+                // We allow data-linkified because TextualBody uses it to passthrough links.
+                a: [...(sanitizeParams.additionalAllowedAttributes?.a ?? []), `data-${LINKIFIED_DATA_ATTRIBUTE}`],
+            },
+        };
     }
 
     try {
@@ -452,7 +444,7 @@ export function bodyToNode(content: IContent, highlights?: string[], opts: Event
             // This has to be done after the emojiBody check as to not break big emoji on replies
             formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
         } else {
-            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false);
         }
     }
 
@@ -490,7 +482,7 @@ export function bodyToHtml(content: IContent, highlights?: string[], opts: Event
  * @param htmlTopic optional html topic
  * @param ref React ref to attach to any React components returned
  * @param allowExtendedHtml whether to allow extended HTML tags such as headings and lists
- * @return The HTML-ified node.
+ * @returns The HTML-ified node.
  */
 export function topicToHtml(
     topic?: string,
@@ -506,7 +498,7 @@ export function topicToHtml(
         topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic! : topic);
 
         if (isFormattedTopic) {
-            safeTopic = sanitizeHtml(htmlTopic!, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
+            safeTopic = sanitizeHtml(htmlTopic, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
             if (topicHasEmoji) {
                 safeTopic = formatEmojis(safeTopic, true).join("");
             }

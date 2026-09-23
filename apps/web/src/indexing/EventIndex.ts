@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 import {
     RoomMember,
@@ -74,6 +75,8 @@ export default class EventIndex extends EventEmitter {
      * The current checkpoint that the crawler is working on.
      */
     private currentCheckpoint: ICrawlerCheckpoint | null = null;
+    // Flag to force adding initial checkpoints (e.g., after database recreation)
+    private forceAddInitialCheckpoints = false;
 
     /**
      * True if we need to add the initial checkpoints for encrypted rooms, once we've completed a sync.
@@ -104,6 +107,14 @@ export default class EventIndex extends EventEmitter {
         this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
 
         this.registerListeners();
+    }
+
+    /**
+     * Mark that initial checkpoints should be added on next sync.
+     * This is used when the database is recreated (e.g., schema change).
+     */
+    public setForceAddInitialCheckpoints(force: boolean): void {
+        this.forceAddInitialCheckpoints = force;
     }
 
     /**
@@ -204,8 +215,10 @@ export default class EventIndex extends EventEmitter {
             if (!indexManager) return;
 
             // If the index was empty when we first started up, add the initial checkpoints, to back-populate the index.
-            if (this.needsInitialCheckpoints) {
+            // Also check forceAddInitialCheckpoints flag (used when database is recreated, e.g., schema change)
+            if (this.needsInitialCheckpoints || this.forceAddInitialCheckpoints) {
                 await this.addInitialCheckpoints();
+                this.forceAddInitialCheckpoints = false;
             }
 
             // Start the crawler if it's not already running.
@@ -261,7 +274,7 @@ export default class EventIndex extends EventEmitter {
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
-            this.addRoomCheckpoint(state.roomId, true);
+            await this.addRoomCheckpoint(state.roomId, true);
         }
     };
 
@@ -295,7 +308,7 @@ export default class EventIndex extends EventEmitter {
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
-        this.addRoomCheckpoint(room.roomId, false);
+        await this.addRoomCheckpoint(room.roomId, false);
     };
 
     /**
@@ -458,6 +471,7 @@ export default class EventIndex extends EventEmitter {
 
         let idle = false;
 
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!cancelled) {
             let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime");
 
@@ -711,7 +725,7 @@ export default class EventIndex extends EventEmitter {
      * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
+     * @returns {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
     public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents | undefined> {
@@ -949,7 +963,7 @@ export default class EventIndex extends EventEmitter {
     /**
      * Get statistical information of the index.
      *
-     * @return {Promise<IIndexStats>} A promise that will resolve to the index
+     * @returns {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
     public async getStats(): Promise<IIndexStats | undefined> {
@@ -963,7 +977,7 @@ export default class EventIndex extends EventEmitter {
      * @param {string} roomId The ID of the room which we want to check if it
      * has been already indexed.
      *
-     * @return {Promise<boolean>} Returns true if the index contains events for
+     * @returns {Promise<boolean>} Returns true if the index contains events for
      * the given room, false otherwise.
      */
     public async isRoomIndexed(roomId: string): Promise<boolean | undefined> {
@@ -992,7 +1006,10 @@ export default class EventIndex extends EventEmitter {
     }
 
     public crawlingRooms(): {
-        /** The rooms that we are currently crawling. */
+        /**
+         * The rooms with an outstanding crawler checkpoint: the one being crawled right now, and
+         * those still queued behind it.
+         */
         crawlingRooms: Set<string>;
 
         /** All the encrypted rooms known by the MatrixClient. */
@@ -1017,7 +1034,7 @@ export default class EventIndex extends EventEmitter {
         };
 
         const encryptedRooms = rooms.filter(isRoomEncrypted);
-        encryptedRooms.forEach((room, index) => {
+        encryptedRooms.forEach((room) => {
             totalRooms.add(room.roomId);
         });
 

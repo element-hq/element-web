@@ -14,11 +14,11 @@ import dis from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { DeviceListener } from "../device-listener";
 import ToastStore from "../stores/ToastStore";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import { Action } from "../dispatcher/actions";
 import { isDeviceVerified } from "../utils/device/isDeviceVerified";
-import { DeviceType } from "../utils/device/parseUserAgent";
 import { DeviceMetaData } from "../components/views/settings/devices/DeviceMetaData";
+import type { ExtendedDevice } from "../components/views/settings/devices/types.ts";
 
 function toastKey(deviceId: string): string {
     return "unverified_session_" + deviceId;
@@ -39,10 +39,9 @@ export const showToast = async (deviceId: string): Promise<void> => {
     };
 
     const device = await cli.getDevice(deviceId);
-    const extendedDevice = {
+    const extendedDevice: ExtendedDevice = {
         ...device,
         isVerified: await isDeviceVerified(cli, deviceId),
-        deviceType: DeviceType.Unknown,
     };
 
     ToastStore.sharedInstance().addOrReplaceToast({

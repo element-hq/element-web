@@ -6,21 +6,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type ReactNode, useCallback, useEffect, useMemo, useState, useId } from "react";
+import React, { type ChangeEvent, type ReactNode, useCallback, useEffect, useState, useId } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
-import { Flex } from "@element-hq/web-shared-components";
+import {
+    Flex,
+    SetStatusView,
+    useCreateAutoDisposedViewModel,
+    useToastContext,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import AvatarSetting from "./AvatarSetting";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { formatBytes } from "../../../utils/FormattingUtils";
-import { useToastContext } from "../../../contexts/ToastContext";
 import InlineSpinner from "../elements/InlineSpinner";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import CopyableText from "../elements/CopyableText";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -28,6 +31,8 @@ import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { SettingsSection } from "./shared/SettingsSection.tsx";
+import { SetStatusViewModel } from "../../../viewmodels/status/SetStatusViewModel.ts";
+import SettingsStore from "../../../settings/SettingsStore.ts";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -63,10 +68,12 @@ const ManageAccountButton: React.FC<ManageAccountButtonProps> = ({ externalAccou
         onClick={null}
         element="a"
         kind="primary"
+        data-kind="primary"
         target="_blank"
         rel="noreferrer noopener"
         href={externalAccountManagementUrl}
         data-testid="external-account-management-link"
+        style={{ textDecoration: "none" }}
     >
         <PopOutIcon className="mx_UserProfileSettings_accountmanageIcon" width="24" height="24" />
         {_t("settings|general|oidc_manage_button")}
@@ -99,6 +106,8 @@ interface UserProfileSettingsProps {
     canSetDisplayName: boolean;
     // Whether the homeserver allows the user to set their avatar.
     canSetAvatar: boolean;
+    // If true, the status control starts in custom status mode, ready for the user to enter a custom status.
+    startCustomStatus?: boolean;
 }
 
 /**
@@ -108,6 +117,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
     externalAccountManagementUrl,
     canSetDisplayName,
     canSetAvatar,
+    startCustomStatus,
 }) => {
     const [avatarURL, setAvatarURL] = useState(OwnProfileStore.instance.avatarMxc);
     const [displayName, setDisplayName] = useState(OwnProfileStore.instance.displayName ?? "");
@@ -129,6 +139,11 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
             }
         })();
     }, [client]);
+
+    const userStatusEnabled = SettingsStore.getValue("feature_user_status");
+    const setStatusVM = useCreateAutoDisposedViewModel(
+        () => new SetStatusViewModel({ client, ownProfileStore: OwnProfileStore.instance }),
+    );
 
     const onAvatarRemove = useCallback(async () => {
         const removeToast = toastRack.displayToast(
@@ -183,14 +198,6 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
         }
     }, [displayName, client]);
 
-    const userIdentifier = useMemo(
-        () =>
-            UserIdentifierCustomisations.getDisplayUserIdentifier(client.getSafeUserId(), {
-                withDisplayName: true,
-            }),
-        [client],
-    );
-
     const someFieldsDisabled = !canSetDisplayName || !canSetAvatar;
 
     return (
@@ -211,21 +218,27 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                         placeholderId={client.getUserId() ?? ""}
                         disabled={!canSetAvatar}
                     />
-                    <EditInPlace
-                        className="mx_UserProfileSettings_profile_displayName"
-                        label={_t("settings|general|display_name")}
-                        value={displayName}
-                        saveButtonLabel={_t("common|save")}
-                        cancelButtonLabel={_t("common|cancel")}
-                        savedLabel={_t("common|saved")}
-                        savingLabel={_t("common|updating")}
-                        onChange={onDisplayNameChanged}
-                        onCancel={onDisplayNameCancel}
-                        onSave={onDisplayNameSave}
-                        disabled={!canSetDisplayName}
-                    >
-                        {displayNameError && <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>}
-                    </EditInPlace>
+
+                    <Flex direction="column" className="mx_UserProfileSettings_profile_nameAndStatus">
+                        <EditInPlace
+                            className="mx_UserProfileSettings_profile_displayName"
+                            label={_t("settings|general|display_name")}
+                            value={displayName}
+                            saveButtonLabel={_t("common|save")}
+                            cancelButtonLabel={_t("common|cancel")}
+                            savedLabel={_t("common|saved")}
+                            savingLabel={_t("common|updating")}
+                            onChange={onDisplayNameChanged}
+                            onCancel={onDisplayNameCancel}
+                            onSave={onDisplayNameSave}
+                            disabled={!canSetDisplayName}
+                        >
+                            {displayNameError && (
+                                <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>
+                            )}
+                        </EditInPlace>
+                        {userStatusEnabled && <SetStatusView vm={setStatusVM} initialCustomMode={startCustomStatus} />}
+                    </Flex>
                 </div>
                 {avatarError && (
                     <Alert title={_t("settings|general|avatar_upload_error_title")} type="critical">
@@ -234,7 +247,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                             : _t("settings|general|avatar_upload_error_text", { size: formatBytes(maxUploadSize) })}
                     </Alert>
                 )}
-                {userIdentifier && <UsernameBox username={userIdentifier} />}
+                <UsernameBox username={client.getSafeUserId()} />
                 <Flex gap="var(--cpd-space-4x)" className="mx_UserProfileSettings_profile_buttons">
                     {externalAccountManagementUrl && (
                         <ManageAccountButton externalAccountManagementUrl={externalAccountManagementUrl} />

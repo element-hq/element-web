@@ -26,6 +26,7 @@ import {
     MatrixRTCSessionManagerEvents,
 } from "matrix-js-sdk/src/matrixrtc";
 
+// oxlint-disable-next-line no-restricted-imports
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
@@ -226,6 +227,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         // The widget might still be initializing, so wait for it in an async
         // event loop. We need the messaging to be both present and started
         // (have a connected widget API), so register listeners for both cases.
+        // oxlint-disable-next-line no-unmodified-loop-condition
         while (!messaging?.widgetApi) {
             if (messaging) logger.debug(`Messaging present but not yet started for ${this.widgetUid}`);
             else logger.debug(`No messaging yet for ${this.widgetUid}`);
@@ -335,6 +337,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     };
 }
 
+/** @knipignore - exported for tests */
 export type { JitsiCallMemberContent };
 
 /**
@@ -430,7 +433,7 @@ export class JitsiCall extends Call {
         const event = this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, this.client.getUserId()!);
         const content = event?.getContent<JitsiCallMemberContent>();
         const expiresAt = typeof content?.expires_ts === "number" ? content.expires_ts : -Infinity;
-        const devices = expiresAt > Date.now() && Array.isArray(content?.devices) ? content!.devices : [];
+        const devices = expiresAt > Date.now() && Array.isArray(content?.devices) ? content.devices : [];
         const newDevices = fn(devices);
 
         if (newDevices !== null) {
@@ -707,7 +710,11 @@ export class ElementCall extends Call {
      */
     private static appendAnalyticsParams(params: URLSearchParams, client: MatrixClient): void {
         const posthogConfig = SdkConfig.get("posthog");
-        if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
+        if (
+            !posthogConfig?.project_api_key ||
+            !posthogConfig?.api_host ||
+            PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled
+        ) {
             return;
         }
 
@@ -725,7 +732,7 @@ export class ElementCall extends Call {
         // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
         // unlike EW where data is shared upon an intentional user action (rageshake).
         const sentryConfig = SdkConfig.get("sentry");
-        if (sentryConfig) {
+        if (sentryConfig?.dsn) {
             params.append("sentryDsn", sentryConfig.dsn);
             params.append("sentryEnvironment", sentryConfig.environment ?? "");
         }
@@ -744,8 +751,11 @@ export class ElementCall extends Call {
         const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
         const url = elementCallUrlOverride
             ? new URL(elementCallUrlOverride)
-            : // this strips hash fragment from baseUrl
-              new URL("./widgets/element-call/index.html#", window.location.href);
+            : // this strips hash fragment from baseUrl. The bundled copy is addressed by directory rather
+              // than by its `index.html`: it references its chunks relatively, and a static host that
+              // strips `.html` (Netlify, and the `serve` our Playwright suite runs against) would redirect
+              // to the extensionless path, against which those chunks resolve a directory too high.
+              new URL("./widgets/element-call/", window.location.href);
 
         // Splice together the Element Call URL for this call
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
@@ -759,6 +769,8 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
+            // on EW we do not want the gradient EC background.
+            background: "solid",
         });
 
         if (typeof opts.skipLobby === "boolean") {

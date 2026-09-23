@@ -13,7 +13,6 @@ import { type Fixtures } from "../../../element-web-test.ts";
 
 export const legacyOAuthHomeserver: Fixtures = {
     oAuthServer: [
-        // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
             const server = new OAuthServer();
             await use(server);
@@ -23,12 +22,12 @@ export const legacyOAuthHomeserver: Fixtures = {
     ],
     context: async ({ homeserverType, context, oAuthServer }, use, testInfo) => {
         testInfo.skip(homeserverType !== "synapse", "does not yet support OIDC");
-        oAuthServer.onTestStarted(testInfo);
+        oAuthServer!.onTestStarted(testInfo);
         await use(context);
     },
     _homeserver: [
         async ({ oAuthServer, _homeserver: homeserver }, use) => {
-            const port = oAuthServer.start();
+            const port = oAuthServer!.start();
             await TestContainers.exposeHostPorts(port);
             homeserver.withConfig({
                 oidc_providers: [

@@ -112,6 +112,38 @@ describe("ImageBodyView", () => {
         expect(onLinkClick).toHaveBeenCalledTimes(1);
     });
 
+    it("merges supplied class names with module classes", () => {
+        const vm = new TestImageBodyViewModel({
+            state: ImageBodyViewState.READY,
+            alt: "Custom class image",
+            src: "https://example.org/full.png",
+            thumbnailSrc: "https://example.org/thumb.png",
+            maxWidth: 320,
+            maxHeight: 240,
+            aspectRatio: "4 / 3",
+        });
+
+        const { container } = render(
+            <ImageBodyView
+                vm={vm}
+                className="customRoot"
+                containerClassName="customContainer"
+                imageClassName="customImage"
+            />,
+        );
+
+        const rootClassName = container.querySelector(".customRoot")?.className;
+        const containerClassName = container.querySelector(".customContainer")?.className;
+        const imageClassName = screen.getByRole("img", { name: "Custom class image" }).className;
+
+        expect(rootClassName).toContain("customRoot");
+        expect(rootClassName).not.toBe("customRoot");
+        expect(containerClassName).toContain("customContainer");
+        expect(containerClassName).not.toBe("customContainer");
+        expect(imageClassName).toContain("customImage");
+        expect(imageClassName).not.toBe("customImage");
+    });
+
     it("swaps to the full source on hover for animated previews", async () => {
         const user = userEvent.setup();
         const vm = new TestImageBodyViewModel({

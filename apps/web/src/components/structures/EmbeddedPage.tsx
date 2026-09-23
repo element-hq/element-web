@@ -8,17 +8,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import sanitizeHtml from "sanitize-html";
 import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { sanitizeHtml, type HtmlSanitizeAttributes } from "@element-hq/element-web-shared-utils";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../languageHandler";
 import dis from "../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions.ts";
+import { sanitizedHtmlNode } from "../../HtmlUtils.tsx";
+import { sanitizeHtmlParams, transformTags } from "../../Linkify.ts";
 
 interface IProps {
     // URL to request embedded page content from
@@ -98,7 +100,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         // We use fetch to inline the page into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
-        this.fetchEmbed();
+        void this.fetchEmbed();
 
         this.dispatcherRef = dis.register(this.onAction);
     }
@@ -121,11 +123,28 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames(className, {
+            mx_AutoHideScrollbar: this.props.scrollbar,
             [`${className}_guest`]: isGuest,
             [`${className}_loggedIn`]: !!client,
         });
 
-        const content = <div className={`${className}_body`} dangerouslySetInnerHTML={{ __html: this.state.page }} />;
+        const content = sanitizedHtmlNode(this.state.page, `${className}_body`, {
+            ...sanitizeHtmlParams,
+            transformTags: {
+                ...transformTags,
+                // The shared sanitizer supplies restrictive defaults when these handlers are
+                // omitted, so embedded pages use identity transforms to preserve their image
+                // URLs and inline styles.
+                "img": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "*": (tagName: string, attribs: HtmlSanitizeAttributes) => ({ tagName, attribs }),
+                "a": (tagName: string, attribs: HtmlSanitizeAttributes) => {
+                    if (attribs.href?.startsWith("#/")) {
+                        return { tagName, attribs };
+                    }
+                    return transformTags.a(tagName, attribs);
+                },
+            },
+        });
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>{content}</AutoHideScrollbar>;

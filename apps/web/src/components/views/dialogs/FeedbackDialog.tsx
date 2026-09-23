@@ -46,7 +46,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         if (hasFeedback && sendFeedback) {
             const label = props.feature ? `${props.feature}-feedback` : "feedback";
             // TODO: Handle rejection.
-            submitFeedback(label, comment, canContact);
+            void submitFeedback(label, comment, canContact);
 
             Modal.createDialog(InfoDialog, {
                 title: _t("feedback|sent"),

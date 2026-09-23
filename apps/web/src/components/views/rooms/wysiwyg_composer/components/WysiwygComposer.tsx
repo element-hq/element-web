@@ -60,7 +60,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     const { room } = useScopedRoomContext("room");
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
-    const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
+    const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent);
 
     const isAutoReplaceEmojiEnabled = useSettingValue("MessageComposerInput.autoReplaceEmoji");
     const emojiSuggestions = useMemo(() => getEmojiSuggestions(isAutoReplaceEmojiEnabled), [isAutoReplaceEmojiEnabled]);

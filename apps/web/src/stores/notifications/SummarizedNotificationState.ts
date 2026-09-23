@@ -30,6 +30,14 @@ export class SummarizedNotificationState extends NotificationState {
     }
 
     /**
+     * Matches {@link SpaceNotificationState.symbol}: a failure to send is reported as "!" rather
+     * than as a count, so the summarized badge does not present it as a notification count.
+     */
+    public get symbol(): string | null {
+        return this._level === NotificationLevel.Unsent ? "!" : this._symbol;
+    }
+
+    /**
      * Append a notification state to this snapshot, taking the loudest NotificationColor
      * of the two. By default this will not adopt the symbol of the other notification
      * state to prevent the count from being lost in typical usage.

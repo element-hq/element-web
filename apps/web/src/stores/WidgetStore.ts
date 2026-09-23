@@ -37,7 +37,7 @@ interface IRoomWidgets {
 export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetStore();
-        instance.start();
+        void instance.start();
         return instance;
     })();
 
@@ -202,5 +202,3 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(UPDATE_EVENT, roomId);
     }
 }
-
-window.mxWidgetStore = WidgetStore.instance;

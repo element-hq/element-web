@@ -17,6 +17,15 @@ export interface ActionPayload {
 }
 
 /**
+ * Type guard to check if a payload is of a specific action type.
+ * @param payload - the incoming payload to check
+ * @param action - the action to return true for
+ */
+export function isAction<P extends ActionPayload>(payload: ActionPayload, action: P["action"]): payload is P {
+    return payload.action === action;
+}
+
+/**
  * The function the dispatcher calls when ready for an AsyncActionPayload. The
  * single argument is used to start a dispatch. First the dispatcher calls the
  * outer function, then when the called function is ready it calls the cb

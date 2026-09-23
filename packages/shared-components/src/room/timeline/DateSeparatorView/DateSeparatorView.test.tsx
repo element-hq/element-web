@@ -5,11 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "@test-utils";
+import { render, screen, waitFor } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import React, { createRef } from "react";
 import { describe, it, expect } from "vitest";
-import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { BaseViewModel } from "../../../core/viewmodel/BaseViewModel";

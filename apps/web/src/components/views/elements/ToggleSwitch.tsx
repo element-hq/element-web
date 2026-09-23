@@ -50,6 +50,7 @@ export default ({ checked, disabled = false, onChange, title, tooltip, ...props 
             className={classes}
             onClick={_onClick}
             role="switch"
+            tabIndex={0}
             aria-label={title}
             aria-checked={checked}
             aria-disabled={disabled}

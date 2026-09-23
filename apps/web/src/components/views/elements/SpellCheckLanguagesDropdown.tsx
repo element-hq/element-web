@@ -10,7 +10,8 @@ import React, { type ReactElement } from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import Spinner from "./Spinner";
 import { type NonEmptyArray } from "../../../@types/common";
 

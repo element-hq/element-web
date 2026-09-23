@@ -83,9 +83,9 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
         currentNode = isFirst ? lineContainer.firstChild : currentNode!.nextSibling;
 
         if (needsCaretNodeBefore(part, prevPart)) {
-            if (isCaretNode(currentNode as Element)) {
-                updateCaretNode(currentNode!);
-                currentNode = currentNode!.nextSibling;
+            if (isCaretNode(currentNode)) {
+                updateCaretNode(currentNode);
+                currentNode = currentNode.nextSibling;
             } else {
                 lineContainer.insertBefore(createCaretNode(), currentNode);
             }
@@ -106,9 +106,9 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
         }
 
         if (needsCaretNodeAfter(part, part === lastPart)) {
-            if (isCaretNode(currentNode?.nextSibling as Element)) {
-                currentNode = currentNode!.nextSibling;
-                updateCaretNode(currentNode as HTMLElement);
+            if (isCaretNode(currentNode?.nextSibling)) {
+                currentNode = currentNode.nextSibling;
+                updateCaretNode(currentNode);
             } else {
                 const caretNode = createCaretNode();
                 insertAfter(currentNode as HTMLElement, caretNode);

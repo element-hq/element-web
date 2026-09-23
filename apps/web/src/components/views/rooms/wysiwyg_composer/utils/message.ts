@@ -15,6 +15,7 @@ import {
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -33,19 +34,21 @@ import { CommandCategories, getCommand } from "../../../../../slash-commands/Sla
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
-import { attachRelation } from "../../../../../utils/messages";
+import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
+import { linksIn } from "../../../../../utils/UrlUtils";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: Pick<IRoomState, "timelineRenderingType" | "room">;
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
 }
 
 export async function sendMessage(
     message: string,
     isHTML: boolean,
-    { roomContext, mxClient, ...params }: SendMessageParams,
+    { roomContext, mxClient, urlPreviewSnapshot, ...params }: SendMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
@@ -112,6 +115,9 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
+    if (await attachUrlPreviews(mxClient, room, urlPreviewSnapshot, content, linksIn(message).size !== 0)) {
+        return;
+    }
 
     // TODO replace emotion end of message ?
 
@@ -130,7 +136,7 @@ export async function sendMessage(
 
     const prom = doMaybeLocalRoomAction(
         roomId,
-        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content!),
+        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
 
@@ -156,7 +162,7 @@ export async function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then((resp) => {
+        void prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }
@@ -179,11 +185,19 @@ interface EditMessageParams {
     mxClient: MatrixClient;
     roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
+    /**
+     * Function to attach bundles of current URL previews
+     */
+    attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>;
+    /**
+     * whether the list of previews to attach has changed even if the text body is unchanged
+     */
+    isUrlPreviewsModified?: boolean;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
+    { roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -223,7 +237,8 @@ export async function editMessage(
     const roomId = editedEvent.getRoomId();
 
     // If content is modified then send an updated event into the room
-    if (isContentModified(newContent, editorStateTransfer) && roomId) {
+    // either text content or list of URL previews modified counts
+    if ((isContentModified(newContent, editorStateTransfer) || isUrlPreviewsModified) && roomId) {
         // TODO Slash Commands
 
         if (shouldSend) {
@@ -232,8 +247,17 @@ export async function editMessage(
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
 
+            // the previews are read synchronously, so the editor can be closed straight away
+            // rather than making the user wait for any preview images to upload
+            const attaching = attachBundles?.(newContent);
+            endEditing(roomContext);
+
+            // the edit was cancelled while its preview images were uploading
+            if (await attaching) return;
+
             response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });
+            return response;
         }
     }
 

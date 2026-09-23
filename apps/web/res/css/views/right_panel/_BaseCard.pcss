@@ -50,6 +50,7 @@ Please see LICENSE files in the repository root for full details.
             justify-content: space-between;
             height: 24px;
             flex: 1;
+            min-width: 0;
 
             .mx_BaseCard_header_title_heading {
                 overflow: hidden;
@@ -87,7 +88,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_BaseCard_footer {
-        padding-top: $spacing-4;
+        padding-top: var(--cpd-space-1x);
         text-align: center;
         display: flex;
         justify-content: space-around;

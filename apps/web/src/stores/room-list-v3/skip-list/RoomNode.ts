@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter, FilterKey } from "./filters";
-import SpaceStore from "../../spaces/SpaceStore";
+import type { AnyFilter, FilterKey } from "./filters";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
  * Room skip list stores room nodes.
@@ -34,7 +34,7 @@ export class RoomNode {
     /**
      * Whether the room associated with this room node belongs to
      * the currently active space.
-     * @see {@link SpaceStoreClass#activeSpace} to understand what active
+     * @see {@link SpaceStore#activeSpace} to understand what active
      * space means.
      */
     public get isInActiveSpace(): boolean {
@@ -46,8 +46,8 @@ export class RoomNode {
      * in {@link RoomNode#isInActiveSpace}.
      */
     public checkIfRoomBelongsToActiveSpace(): void {
-        const activeSpace = SpaceStore.instance.activeSpace;
-        this._isInActiveSpace = SpaceStore.instance.isRoomInSpace(activeSpace, this.room.roomId);
+        const activeSpace = SDKContextClass.instance.spaceStore.activeSpace;
+        this._isInActiveSpace = SDKContextClass.instance.spaceStore.isRoomInSpace(activeSpace, this.room.roomId);
     }
 
     /**
@@ -62,18 +62,27 @@ export class RoomNode {
      * @param filterKeys An array of filter keys to check against.
      */
     public doesRoomMatchFilters(filterKeys: FilterKey[]): boolean {
-        return !filterKeys.some((key) => !this.filterKeysSet.has(key));
+        for (const key of filterKeys) {
+            if (!this.filterKeysSet.has(key)) return false;
+        }
+        return true;
     }
 
     /**
      * Populates {@link RoomNode#filterKeysSet} by checking if the associated room
-     * satisfies the given filters.
+     * satisfies the given filters. A {@link MultiKeyFilter} contributes the single
+     * key it picks for this room, if any.
      * @param filters A list of filters
      */
-    public applyFilters(filters: Filter[]): void {
-        this.filterKeysSet = new Set();
+    public applyFilters(filters: AnyFilter[]): void {
+        this.filterKeysSet.clear();
         for (const filter of filters) {
-            if (filter.matches(this.room)) this.filterKeysSet.add(filter.key);
+            if ("keyFor" in filter) {
+                const key = filter.keyFor(this.room);
+                if (key !== undefined) this.filterKeysSet.add(key);
+            } else if (filter.matches(this.room)) {
+                this.filterKeysSet.add(filter.key);
+            }
         }
     }
 }

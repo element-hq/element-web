@@ -7,4 +7,3 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export { getForwardableEvent } from "./forward/getForwardableEvent";
-export { getShareableLocationEvent } from "./location/getShareableLocationEvent";

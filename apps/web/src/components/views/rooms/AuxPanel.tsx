@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import AppsDrawer from "./AppsDrawer";
 import SettingsStore from "../../../settings/SettingsStore";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
 import LegacyCallViewForRoom from "../voip/LegacyCallViewForRoom";
 import { objectHasDiff } from "../../../utils/objects";
@@ -44,7 +44,7 @@ export default class AuxPanel extends React.Component<IProps> {
         }
 
         return (
-            <AutoHideScrollbar role="region" className="mx_AuxPanel">
+            <AutoHideScrollbar role="region" className="mx_AutoHideScrollbar mx_AuxPanel">
                 {this.props.children}
                 {appsDrawer}
                 {callView}

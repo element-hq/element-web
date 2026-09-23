@@ -11,7 +11,6 @@ import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
 
-/* eslint-disable camelcase */
 export interface JoinRoomReadyPayload extends Pick<ActionPayload, "action"> {
     action: Action.JoinRoomReady;
     roomId: string;
@@ -19,4 +18,3 @@ export interface JoinRoomReadyPayload extends Pick<ActionPayload, "action"> {
     // additional parameters for the purpose of metrics & instrumentation
     metricsTrigger: JoinedRoomEvent["trigger"];
 }
-/* eslint-enable camelcase */

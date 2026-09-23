@@ -58,7 +58,7 @@ const ScopedRoomContext = createContext<EfficientContext<ContextValue> | undefin
 // Uses react memo and leverages splatting the value to ensure that the context is only updated when the state changes (shallow compare)
 export const ScopedRoomContextProvider = memo(
     ({ children, ...state }: { children: ReactNode } & ContextValue): JSX.Element => {
-        // eslint-disable-next-line react-compiler/react-compiler,react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         const context = useMemo(() => new EfficientContext<ContextValue>(state), []);
         useEffect(() => {
             context.setState(state);

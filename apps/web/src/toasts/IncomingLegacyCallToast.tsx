@@ -19,12 +19,12 @@ import {
     VolumeOnSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { getCallStateIcon } from "../components/views/messages/LegacyCallEvent.tsx";
+import { SDKContext } from "../contexts/SDKContext.ts";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
@@ -37,64 +37,67 @@ interface IState {
 }
 
 export default class IncomingLegacyCallToast extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private readonly roomId: string;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
-        const roomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
+        const roomId = context.legacyCallHandler.roomIdForCall(this.props.call);
         if (!roomId) {
             throw new Error("Unable to find room for incoming call");
         }
         this.roomId = roomId;
 
         this.state = {
-            silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId),
+            silenced: context.legacyCallHandler.isCallSilenced(this.props.call.callId),
         };
     }
 
     public componentDidMount = (): void => {
-        LegacyCallHandler.instance.addListener(
+        this.context.legacyCallHandler.addListener(
             LegacyCallHandlerEvent.SilencedCallsChanged,
             this.onSilencedCallsChanged,
         );
     };
 
     public componentWillUnmount(): void {
-        LegacyCallHandler.instance.removeListener(
+        this.context.legacyCallHandler.removeListener(
             LegacyCallHandlerEvent.SilencedCallsChanged,
             this.onSilencedCallsChanged,
         );
     }
 
     private onSilencedCallsChanged = (): void => {
-        this.setState({ silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId) });
+        this.setState({ silenced: this.context.legacyCallHandler.isCallSilenced(this.props.call.callId) });
     };
 
     private onAnswerClick = (e: ButtonEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.answerCall(this.roomId);
+        this.context.legacyCallHandler.answerCall(this.roomId);
     };
 
     private onRejectClick = (e: ButtonEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.hangupOrReject(this.roomId, true);
+        this.context.legacyCallHandler.hangupOrReject(this.roomId, true);
     };
 
     private onSilenceClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         const callId = this.props.call.callId;
         if (this.state.silenced) {
-            LegacyCallHandler.instance.unSilenceCall(callId);
+            this.context.legacyCallHandler.unSilenceCall(callId);
         } else {
-            LegacyCallHandler.instance.silenceCall(callId);
+            this.context.legacyCallHandler.silenceCall(callId);
         }
     };
 
     public render(): React.ReactNode {
-        const room = MatrixClientPeg.safeGet().getRoom(this.roomId);
+        const room = this.context.client?.getRoom(this.roomId);
         const isVoice = this.props.call.type === CallType.Voice;
-        const callForcedSilent = LegacyCallHandler.instance.isForcedSilent();
+        const callForcedSilent = this.context.legacyCallHandler.isForcedSilent();
 
         let silenceButtonTooltip = this.state.silenced ? _t("voip|unsilence") : _t("voip|silence");
         if (callForcedSilent) {
@@ -105,7 +108,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
             <React.Fragment>
                 <RoomAvatar room={room ?? undefined} size="32px" />
                 <div className="mx_IncomingLegacyCallToast_content">
-                    <span className="mx_LegacyCallEvent_caller">{room ? room.name : _t("voip|unknown_caller")}</span>
+                    <span className="mx_LegacyCallEvent_caller">{room?.name ?? _t("voip|unknown_caller")}</span>
                     <div className="mx_LegacyCallEvent_type">
                         {getCallStateIcon(isVoice, undefined)}
                         {isVoice ? _t("voip|voice_call") : _t("voip|video_call")}

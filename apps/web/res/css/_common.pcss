@@ -11,19 +11,18 @@ Please see LICENSE files in the repository root for full details.
 
 @import "./_font-sizes.pcss";
 @import "./_animations.pcss";
-@import "./_spacing.pcss";
-@import url("maplibre-gl/dist/maplibre-gl.css");
 
 :root {
     --container-border-width: 8px;
     --container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
     --transition-short: 0.1s;
     --transition-standard: 0.3s;
-    --buttons-dialog-gap-row: $spacing-8;
-    --buttons-dialog-gap-column: $spacing-8;
+    --buttons-dialog-gap-row: var(--cpd-space-2x);
+    --buttons-dialog-gap-column: var(--cpd-space-2x);
     --MBody-border-radius: 8px;
     --EventTileBubble_margin-block: 10px;
     --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
+    --MediaPreview-width: 478px; /* keep in sync with PREVIEW_WIDTH_PX in src/utils/UrlPreviewFetcher.ts */
 
     /* Expected z-indexes for dialogs:
         4000 - Default wrapper index
@@ -163,16 +162,15 @@ b {
     font-weight: bold;
 }
 
-/* Keep the legacy link colour without overriding Compound anchors. */
-a:where(:not([data-kind])):hover,
-a:where(:not([data-kind])):link,
-a:where(:not([data-kind])):visited {
+/* Keep the legacy link colour without overriding Compound anchors or shared timestamp styling. */
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):hover,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):link,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):visited {
     color: $accent-alt;
 }
 
 :not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="text"],
-:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"],
-:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="password"] {
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"] {
     padding: 9px;
     font: var(--cpd-font-body-md-semibold);
     font-weight: var(--cpd-font-weight-semibold);
@@ -208,7 +206,6 @@ textarea::placeholder {
 }
 
 input[type="text"],
-input[type="password"],
 textarea {
     background-color: transparent;
     color: $primary-content;
@@ -220,7 +217,6 @@ textarea {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus,
 textarea:focus {
     outline: none;
     box-shadow: none;
@@ -234,23 +230,8 @@ textarea:focus {
     outline: none;
 }
 
-/* override defaults */
-fieldset {
-    display: inline-block;
-    margin-inline: unset;
-    padding-block: unset;
-    padding-inline: unset;
-    min-inline-size: unset;
-    border: none;
-}
-
 summary {
     cursor: pointer;
-}
-
-legend {
-    padding-inline: unset;
-    border: none;
 }
 
 /* .mx_textinput is a container for a text input */
@@ -533,7 +514,7 @@ legend {
 }
 
 .mx_Dialog_buttons {
-    margin-top: $spacing-20;
+    margin-top: var(--cpd-space-5x);
     margin-inline-start: auto;
     text-align: right;
 
@@ -579,32 +560,15 @@ legend {
     }
 }
 
-/* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
- * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
- * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
- * We should go through and have one consistent set of styles for buttons throughout the app.
- * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
+/* XXX: Our button styles are a mess; this is opt-in styling for legacy raw <button>s and
+ * <input type="submit">s in dialogs. Search `mx_LegacyDialogButton` in the JSX for the elements
+ * still relying on it.
+ * Keep the `.mx_Dialog`/`.mx_Dialog_buttons` ancestor + `button`/`input[type="submit"]` type
+ * selector alongside the marker class: they preserve the specificity of the old selectors, which
+ * some per-dialog CSS overrides (e.g. width tweaks) rely on losing to.
  */
-.mx_Dialog
-    button:not(
-        .mx_EncryptionUserSettingsTab button,
-        .mx_EncryptionCard button,
-        .mx_UserProfileSettings button,
-        .mx_ShareDialog button,
-        .mx_UnpinAllDialog button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .mx_IdentityServerPicker button,
-        .mx_AccessSecretStorageDialog button,
-        .mx_InviteDialog_section button,
-        .mx_InviteDialog_editor button,
-        .mx_UnknownIdentityUsersWarningDialog button,
-        [class|="maplibregl"]
-    ),
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton),
-.mx_Dialog input[type="submit"],
-.mx_Dialog_buttons input[type="submit"] {
+.mx_Dialog button.mx_LegacyDialogButton,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: var(--buttons-dialog-gap-column);
@@ -618,101 +582,50 @@ legend {
     font-family: inherit;
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ):last-child {
+.mx_Dialog button.mx_LegacyDialogButton:last-child {
     margin-right: 0px;
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_InviteDialog_section button,
-        .mx_InviteDialog_editor button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ):focus,
-.mx_Dialog input[type="submit"]:focus,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):focus,
-.mx_Dialog_buttons input[type="submit"]:focus {
+.mx_Dialog button.mx_LegacyDialogButton:focus,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
-.mx_Dialog input[type="submit"].mx_Dialog_primary,
-.mx_Dialog_buttons
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ),
-.mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
+/* Default (non-cancel) buttons inside a DialogButtons footer get filled in as the primary action,
+ * even without the mx_Dialog_primary class - .danger/.warning override the colours below via a
+ * same-specificity, later-in-source rule; disabled overrides everyone the same way.
+ */
+.mx_Dialog button.mx_LegacyDialogButton.mx_Dialog_primary,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].mx_Dialog_primary,
+.mx_Dialog_buttons button.mx_LegacyDialogButton:not(.cancel) {
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-bg-action-primary-rest);
     border-color: var(--cpd-color-bg-action-primary-rest);
     min-width: 156px;
 }
 
-.mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
-.mx_Dialog input[type="submit"].danger,
-.mx_Dialog_buttons
-    button.danger:not(
-        .mx_Dialog_nonDialogButton,
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ),
-.mx_Dialog_buttons input[type="submit"].danger {
+.mx_Dialog button.mx_LegacyDialogButton.danger,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
     color: var(--cpd-color-text-on-solid-primary);
 }
 
-.mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
-.mx_Dialog input[type="submit"].warning {
+.mx_Dialog button.mx_LegacyDialogButton.warning,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"].warning {
     border: solid 1px var(--cpd-color-border-critical-subtle);
     color: var(--cpd-color-text-critical-primary);
 }
 
-.mx_Dialog
-    button:not(
-        .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
-        .mx_AccessibleButton,
-        .mx_UserProfileSettings button,
-        .mx_ThemeChoicePanel_CustomTheme button,
-        .mx_UnpinAllDialog button,
-        .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
-    ):disabled,
-.mx_Dialog input[type="submit"]:disabled,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):disabled,
-.mx_Dialog_buttons input[type="submit"]:disabled {
+.mx_Dialog_buttons button.mx_LegacyDialogButton.cancel {
+    color: var(--cpd-color-text-primary);
+    background-color: var(--cpd-color-bg-action-secondary-rest);
+    border-color: var(--cpd-color-border-interactive-secondary);
+    min-width: 156px;
+}
+
+.mx_Dialog button.mx_LegacyDialogButton:disabled,
+.mx_Dialog input.mx_LegacyDialogButton[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
@@ -866,7 +779,7 @@ legend {
     font-weight: var(--cpd-font-weight-semibold);
     white-space: nowrap;
     position: relative;
-    padding: 0 $spacing-12 0 $spacing-8;
+    padding: 0 var(--cpd-space-3x) 0 var(--cpd-space-2x);
 }
 
 @define-mixin ThreadSummaryIcon {
@@ -907,16 +820,14 @@ legend {
     overflow: hidden;
 }
 
-/* This class is used extensively in element-web and are included here for compatibility with the existing timeline and layout.
-/* TODO: Review mx_MessageTimestamp usage after finishing migration of timeline tiles to shared components. */
-/* https://github.com/element-hq/element-web/issues/31651 */
+/* Layout compatibility hook for timestamp placement in existing app/web timeline surfaces. */
 .mx_MessageTimestamp {
-    color: var(--cpd-color-text-secondary) !important; /* override anchor color */
-    font-size: $font-10px;
-    font-variant-numeric: tabular-nums;
-    display: block; /* enable the width setting below */
-    width: var(--MessageTimestamp-width);
-    white-space: nowrap;
-    user-select: none;
-    text-decoration: none;
+    display: block;
+}
+
+.mx_MessageTimestamp_lateIcon {
+    position: absolute;
+    inset-block-start: var(--cpd-space-1x);
+    inset-inline-end: 100%;
+    color: var(--cpd-color-text-secondary);
 }

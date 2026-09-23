@@ -6,10 +6,9 @@
  */
 
 import React, { type MouseEvent } from "react";
-import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    LINKIFIED_DATA_ATTRIBUTE,
     TextualBodyViewBodyWrapperKind,
     TextualBodyViewKind,
     type TextualBodyViewModel as TextualBodyViewModelInterface,
@@ -60,6 +59,8 @@ export class TextualBodyViewModel
     extends BaseViewModel<TextualBodyViewSnapshot, TextualBodyViewModelProps>
     implements TextualBodyViewModelInterface
 {
+    private watchedEvent?: MatrixEvent;
+
     private static readonly getKind = (mxEvent: MatrixEvent): TextualBodyViewKind => {
         const msgtype = mxEvent.getContent().msgtype as MsgType | undefined;
 
@@ -120,7 +121,8 @@ export class TextualBodyViewModel
         | "editedMarkerTooltip"
         | "editedMarkerCaption"
     > => {
-        if (!props.replacingEventId) {
+        const replacingEventId = props.replacingEventId ?? props.mxEvent.replacingEventId();
+        if (!replacingEventId) {
             return {
                 showEditedMarker: false,
                 editedMarkerText: undefined,
@@ -197,7 +199,25 @@ export class TextualBodyViewModel
 
     public constructor(props: TextualBodyViewModelProps) {
         super(props, TextualBodyViewModel.computeSnapshot(props));
+        this.watchEvent(props.mxEvent);
+        this.disposables.track(this.unwatchEvent);
     }
+
+    private readonly onEventContentChanged = (): void => {
+        this.snapshot.merge(TextualBodyViewModel.computeEventSnapshot(this.props));
+    };
+
+    private watchEvent(mxEvent: MatrixEvent): void {
+        if (this.watchedEvent === mxEvent) return;
+        this.unwatchEvent();
+        this.watchedEvent = mxEvent;
+        this.watchedEvent.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
+    }
+
+    private readonly unwatchEvent = (): void => {
+        this.watchedEvent?.off(MatrixEventEvent.Replaced, this.onEventContentChanged);
+        this.watchedEvent = undefined;
+    };
 
     public setId(id: string | undefined): void {
         this.props = {
@@ -213,6 +233,7 @@ export class TextualBodyViewModel
             ...this.props,
             mxEvent,
         };
+        this.watchEvent(mxEvent);
 
         this.snapshot.merge(TextualBodyViewModel.computeEventSnapshot(this.props));
     }
@@ -256,10 +277,6 @@ export class TextualBodyViewModel
     public onRootClick = (event: MouseEvent<HTMLDivElement>): void => {
         let target: HTMLLinkElement | null = event.target as HTMLLinkElement;
 
-        if (target.dataset?.[LINKIFIED_DATA_ATTRIBUTE]) {
-            return;
-        }
-
         if (target.nodeName !== "A") {
             target = target.closest<HTMLLinkElement>("a");
         }
@@ -291,7 +308,7 @@ export class TextualBodyViewModel
 
         const integrationManager = managers.getPrimaryManager();
         const scalarClient = integrationManager?.getScalarClient();
-        scalarClient?.connect().then(() => {
+        void scalarClient?.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const integrationsUrl = integrationManager!.uiUrl;
             const { finished } = Modal.createDialog(QuestionDialog, {
@@ -300,7 +317,7 @@ export class TextualBodyViewModel
                 button: _t("action|continue"),
             });
 
-            finished.then(([confirmed]) => {
+            return finished.then(([confirmed]) => {
                 if (!confirmed) {
                     return;
                 }

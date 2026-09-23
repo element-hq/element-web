@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 /* See readme.md for tips on writing these tests. */
 
-import { customEvent, many, test } from ".";
+import { many, test } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
@@ -20,6 +20,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             roomAlpha: room1,
             roomBeta: room2,
             util,
+            msg,
         }) => {
             await util.goTo(room1);
             await util.assertRead(room2);
@@ -29,13 +30,14 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.markAsRead(room2);
             await util.assertRead(room2);
 
-            await util.receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
+            await util.receiveMessages(room2, [msg.customEvent("org.custom.event", { body: "foobar" })]);
             await util.assertRead(room2);
         });
         test("Sending an important event after unimportant ones makes the room unread", async ({
             roomAlpha: room1,
             roomBeta: room2,
             util,
+            msg,
         }) => {
             // Given We have read the important messages
             await util.goTo(room1);
@@ -47,7 +49,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.goTo(room1);
 
             // When we receive unimportant messages
-            await util.receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
+            await util.receiveMessages(room2, [msg.customEvent("org.custom.event", { body: "foobar" })]);
 
             // Then the room is still read
             await util.assertStillRead(room2);
@@ -62,6 +64,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             roomAlpha: room1,
             roomBeta: room2,
             util,
+            msg,
         }) => {
             // Display room 1
             await util.goTo(room1);
@@ -71,9 +74,9 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
 
             // We received 3 unimportant messages to room2
             await util.receiveMessages(room2, [
-                customEvent("org.custom.event", { body: "foobar1" }),
-                customEvent("org.custom.event", { body: "foobar2" }),
-                customEvent("org.custom.event", { body: "foobar3" }),
+                msg.customEvent("org.custom.event", { body: "foobar1" }),
+                msg.customEvent("org.custom.event", { body: "foobar2" }),
+                msg.customEvent("org.custom.event", { body: "foobar3" }),
             ]);
 
             // The room 2 is still read

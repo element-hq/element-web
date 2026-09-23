@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { type RendererMap } from "./utils.tsx";
+import { type RendererMap } from "./utils.ts";
 import CodeBlock from "../components/views/messages/CodeBlock.tsx";
 
 /**

@@ -15,7 +15,7 @@ const PHONE_NUMBER_REGEXP = /^[0-9 -.]+$/;
  * @param {String} phoneNumber The string to validate. This could be
  *     either an international format number (MSISDN or e.164) or
  *     a national-format number.
- * @return True if the number could be a valid phone number, otherwise false.
+ * @returns True if the number could be a valid phone number, otherwise false.
  */
 export function looksValid(phoneNumber: string): boolean {
     return PHONE_NUMBER_REGEXP.test(phoneNumber);

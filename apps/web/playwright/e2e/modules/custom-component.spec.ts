@@ -52,7 +52,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Simple message");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile.png",
                     screenshotOptions(page),
                 );
@@ -64,7 +64,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Fall through here");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-fall-through.png",
                     screenshotOptions(page),
                 );
@@ -76,7 +76,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Do not replace me");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-original.png",
                     screenshotOptions(page),
                 );
@@ -87,7 +87,7 @@ test.describe("Custom Component API", () => {
             await app.client.sendMessage(room.roomId, "Do not show edits");
             await page.getByText("Do not show edits").hover();
             await expect(
-                await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }),
+                page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }),
             ).not.toBeVisible();
         });
         test("should disallow downloading media when the allowDownloading hint is set to false", async ({
@@ -105,12 +105,16 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "bad.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).not.toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).not.toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).not.toBeVisible();
         });
         test("should allow downloading media when the allowDownloading hint is set to true", async ({
             page,
@@ -127,12 +131,16 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "good.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).toBeVisible();
         });
         test(
             "should render the next registered component if the filter function throws",
@@ -140,7 +148,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the filter!");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-filter.png",
                     screenshotOptions(page),
                 );
@@ -152,7 +160,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the renderer!");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-renderer.png",
                     screenshotOptions(page),
                 );

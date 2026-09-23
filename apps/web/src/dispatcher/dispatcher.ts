@@ -80,7 +80,7 @@ export class MatrixDispatcher {
     /**
      * Dispatches a payload to all registered callbacks.
      */
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     private _dispatch = (payload: ActionPayload): void => {
         invariant(!this.isDispatching(), "Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.");
         this.startDispatching(payload);

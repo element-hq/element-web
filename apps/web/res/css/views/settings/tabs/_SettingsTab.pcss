@@ -22,8 +22,8 @@ Please see LICENSE files in the repository root for full details.
         flex-grow: 1;
     }
 
-    // never want full width buttons
-    // event when other content is 100% width
+    /* never want full width buttons
+    event when other content is 100% width */
     .mx_AccessibleButton {
         align-self: flex-start;
         justify-self: flex-start;
@@ -52,7 +52,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_SettingsTab_section {
     $end-gutter: 80px;
 
-    margin-bottom: $spacing-24;
+    margin-bottom: var(--cpd-space-6x);
 
     .mx_SettingsFlag {
         margin-inline-end: $end-gutter;
@@ -82,7 +82,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_SettingsTab_sections {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $spacing-32;
+    gap: var(--cpd-space-8x);
 
-    padding-bottom: $spacing-16;
+    padding-bottom: var(--cpd-space-4x);
 }

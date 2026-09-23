@@ -6,7 +6,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu with all options
   data-aria-hidden="true"
 >
   <button
-    aria-controls="radix-_r_1_"
+    aria-controls="radix-react-use-id-1"
     aria-disabled="false"
     aria-expanded="true"
     aria-haspopup="menu"
@@ -14,7 +14,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu with all options
     class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="open"
-    id="radix-_r_0_"
+    id="radix-react-use-id-2"
     inert=""
     role="button"
     style="--cpd-icon-button-size: 24px;"
@@ -47,7 +47,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu without only bas
   data-aria-hidden="true"
 >
   <button
-    aria-controls="radix-_r_b_"
+    aria-controls="radix-react-use-id-1"
     aria-disabled="false"
     aria-expanded="true"
     aria-haspopup="menu"
@@ -55,7 +55,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu without only bas
     class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="open"
-    id="radix-_r_a_"
+    id="radix-react-use-id-2"
     inert=""
     role="button"
     style="--cpd-icon-button-size: 24px;"

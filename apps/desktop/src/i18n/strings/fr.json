@@ -27,6 +27,10 @@
         "yes": "Oui"
     },
     "confirm_quit": "Êtes-vous sûr de vouloir quitter ?",
+    "download": {
+        "unable_to_open_description": "Impossible d'ouvrir le fichier. Il a peut-être été déplacé ou supprimé.",
+        "unable_to_open_title": "Impossible d'ouvrir le fichier"
+    },
     "edit_menu": {
         "speech": "Dictée",
         "speech_start_speaking": "Commencer la dictée",
@@ -53,6 +57,11 @@
         "services": "Services",
         "unhide": "Dé-masquer"
     },
+    "renderer_crash": {
+        "detail": "Redémarrer l'application pour continuer. Si le problème persiste, redémarrer votre ordinateur ou vider le cache de l'application peut résoudre le problème.",
+        "message": "%(brand)s s'est remis d'un problème à plusieurs reprises, mais celui-ci continue de se produire, il a donc cessé d'essayer.",
+        "title": "%(brand)s s'arrête brutalement de façon répétée"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Ajouter au dictionnaire",
         "copy_email": "Copier l’adresse e-mail",
@@ -62,6 +71,10 @@
         "save_image_as": "Enregistrer l’image sous…",
         "save_image_as_error_description": "L’image n’a pas pu être enregistrée",
         "save_image_as_error_title": "Échec de la sauvegarde de l’image"
+    },
+    "save_dialog": {
+        "all_files": "Tous les fichiers",
+        "named_file_type": "Fichier %(extension)s"
     },
     "store": {
         "error": {

@@ -21,6 +21,7 @@ export enum VectorState {
     Loud = "loud",
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class PushRuleVectorState {
     // Backwards compatibility (things should probably be using the enum above instead)
     public static OFF = VectorState.Off;
@@ -37,7 +38,7 @@ export class PushRuleVectorState {
     /**
      * Convert a PushRuleVectorState to a list of actions
      *
-     * @return [object] list of push-rule actions
+     * @returns [object] list of push-rule actions
      */
     public static actionsFor(pushRuleVectorState?: VectorState): PushRuleAction[] {
         if (pushRuleVectorState === VectorState.On) {

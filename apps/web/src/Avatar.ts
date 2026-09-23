@@ -137,7 +137,7 @@ export function defaultAvatarUrlForString(s: string): string {
  * returns the first (non-sigil) character of 'name',
  * converted to uppercase
  * @param {string} name
- * @return {string} the first letter
+ * @returns {string} the first letter
  */
 export function getInitialLetter(name: string): string | undefined {
     if (!name) {

@@ -53,6 +53,7 @@ import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
 import { onSubmitPreventDefault } from "../../../utils/form.ts";
+import { keywordRuleId } from "../../../models/notificationsettings/keywordRuleId.ts";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -89,9 +90,12 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.EncryptedMessage,
 
     // Mentions
-    RuleId.ContainsDisplayName,
+    RuleId.IsUserMention,
+    RuleId.IsRoomMention,
+    // Legacy mentions rules, takes priority until the server no longer serves them
     RuleId.ContainsUserName,
     RuleId.AtRoomNotification,
+    RuleId.ContainsDisplayName,
 
     // Other
     RuleId.InviteToSelf,
@@ -99,6 +103,21 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.SuppressNotices,
     RuleId.Tombstone,
 ];
+
+/**
+ * The legacy text-matching mention rules, removed from the spec in Matrix v1.17 (MSC4210),
+ * mapped to the intentional mention rule that replaces each of them.
+ *
+ * While the server still serves a legacy rule, that rule is the row in the Mentions section
+ * and the intentional rule is only written as its synced rule (see VectorPushRulesDefinitions),
+ * so users of such servers see exactly what they always have. Once the server stops serving
+ * the legacy rule, the intentional rule takes its place.
+ */
+const LEGACY_MENTION_RULE_REPLACEMENTS: Record<string, RuleId> = {
+    [RuleId.ContainsUserName]: RuleId.IsUserMention,
+    [RuleId.ContainsDisplayName]: RuleId.IsUserMention,
+    [RuleId.AtRoomNotification]: RuleId.IsRoomMention,
+};
 
 interface IVectorPushRule {
     ruleId: RuleId | typeof KEYWORD_RULE_ID | string;
@@ -199,6 +218,11 @@ const NotificationActivitySettings = (): JSX.Element => {
             }}
         >
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+            <SettingsFlag
+                name="Notifications.activityIsUnread"
+                level={SettingLevel.DEVICE}
+                requires={["Notifications.showbold"]}
+            />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
         </Form.Root>
     );
@@ -232,13 +256,12 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     public componentDidMount(): void {
         this.settingWatchers = [
             SettingsStore.watchSetting("deviceNotificationsEnabled", null, (...[, , , , value]) => {
-                this.setState({ deviceNotificationsEnabled: value as boolean });
+                this.setState({ deviceNotificationsEnabled: value! });
             }),
         ];
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.refreshFromServer();
-        this.refreshFromAccountData();
+        void this.refreshFromServer();
+        void this.refreshFromAccountData();
     }
 
     public componentWillUnmount(): void {
@@ -247,7 +270,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
     public componentDidUpdate(prevProps: Readonly<EmptyObject>, prevState: Readonly<IState>): void {
         if (this.state.deviceNotificationsEnabled !== prevState.deviceNotificationsEnabled) {
-            this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
+            void this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
         }
     }
 
@@ -289,7 +312,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
     }
 
     private async refreshRules(): Promise<Partial<IState>> {
-        const ruleSets = await MatrixClientPeg.safeGet().getPushRules()!;
+        const ruleSets = await MatrixClientPeg.safeGet().getPushRules();
         const categories: Record<string, RuleClass> = {
             [RuleId.Master]: RuleClass.Master,
 
@@ -301,6 +324,8 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             [RuleId.ContainsDisplayName]: RuleClass.VectorMentions,
             [RuleId.ContainsUserName]: RuleClass.VectorMentions,
             [RuleId.AtRoomNotification]: RuleClass.VectorMentions,
+            [RuleId.IsUserMention]: RuleClass.VectorMentions,
+            [RuleId.IsRoomMention]: RuleClass.VectorMentions,
 
             [RuleId.InviteToSelf]: RuleClass.VectorOther,
             [RuleId.IncomingCall]: RuleClass.VectorOther,
@@ -334,6 +359,25 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             }
         }
 
+        // An intentional mention rule is only a row of its own when the server no longer
+        // serves the legacy rule it replaces. Otherwise it stays out of the Mentions section,
+        // but remains available as a synced rule of the legacy row.
+        const replacedByServedLegacyRules = new Set<string>(
+            defaultRules[RuleClass.VectorMentions].flatMap(
+                (rule) => LEGACY_MENTION_RULE_REPLACEMENTS[rule.rule_id] ?? [],
+            ),
+        );
+        // Keep legacy mention rules
+        const isHiddenMentionRule = (rule: IAnnotatedPushRule): boolean =>
+            replacedByServedLegacyRules.has(rule.rule_id);
+
+        // Add legacy mention rules
+        defaultRules[RuleClass.Other].push(...defaultRules[RuleClass.VectorMentions].filter(isHiddenMentionRule));
+        // Add stable mention rules
+        defaultRules[RuleClass.VectorMentions] = defaultRules[RuleClass.VectorMentions].filter(
+            (rule) => !isHiddenMentionRule(rule),
+        );
+
         const preparedNewState: Partial<IState> = {};
         if (defaultRules.master.length > 0) {
             preparedNewState.masterPushRule = defaultRules.master[0];
@@ -353,7 +397,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             for (const rule of defaultRules[category]) {
                 const definition: VectorPushRuleDefinition = VectorPushRulesDefinitions[rule.rule_id];
                 const vectorState = definition.ruleToVectorState(rule)!;
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: rule.rule_id,
                     rule,
                     vectorState,
@@ -363,7 +407,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             }
 
             // Quickly sort the rules for display purposes
-            preparedNewState.vectorPushRules[category]!.sort((a, b) => {
+            preparedNewState.vectorPushRules[category].sort((a, b) => {
                 let idxA = RULE_DISPLAY_ORDER.indexOf(a.ruleId);
                 let idxB = RULE_DISPLAY_ORDER.indexOf(b.ruleId);
 
@@ -375,7 +419,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             });
 
             if (category === KEYWORD_RULE_CATEGORY) {
-                preparedNewState.vectorPushRules[category]!.push({
+                preparedNewState.vectorPushRules[category].push({
                     ruleId: KEYWORD_RULE_ID,
                     description: _t("settings|notifications|messages_containing_keywords"),
                     vectorState: preparedNewState.vectorKeywordRuleInfo.vectorState,
@@ -519,6 +563,9 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         } catch (e) {
             this.setSavingError(rule.ruleId);
             logger.error("Error updating push rule:", e);
+            // The rules may have changed under us, for example the server stopped serving a
+            // rule this row wrote to. Re-read them so the next attempt works on fresh rules.
+            await this.refreshFromServer();
         }
     };
 
@@ -565,13 +612,16 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 ruleVectorState = existingRuleVectorState ?? VectorState.On; //default
             }
             const kind = PushRuleKind.ContentSpecific;
+            const ruleIds = new Set(originalRules.map((r) => r.rule_id));
             for (const word of diff.added) {
-                await MatrixClientPeg.safeGet().addPushRule("global", kind, word, {
+                const ruleId = keywordRuleId(word, ruleIds);
+                ruleIds.add(ruleId);
+                await MatrixClientPeg.safeGet().addPushRule("global", kind, ruleId, {
                     actions: PushRuleVectorState.actionsFor(ruleVectorState),
                     pattern: word,
                 });
                 if (ruleVectorState === VectorState.Off) {
-                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, word, false);
+                    await MatrixClientPeg.safeGet().setPushRuleEnabled("global", kind, ruleId, false);
                 }
             }
 

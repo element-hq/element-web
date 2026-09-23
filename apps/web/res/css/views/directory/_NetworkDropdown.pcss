@@ -9,14 +9,14 @@ Please see LICENSE files in the repository root for full details.
 .mx_NetworkDropdown_wrapper .mx_ContextualMenu {
     .mx_GenericDropdownMenu_Option {
         &.mx_GenericDropdownMenu_Option--header {
-            padding-top: $spacing-12;
-            padding-bottom: $spacing-4;
+            padding-top: var(--cpd-space-3x);
+            padding-bottom: var(--cpd-space-1x);
             min-width: 160px;
         }
 
         &.mx_GenericDropdownMenu_Option--item {
-            padding-top: $spacing-4;
-            padding-bottom: $spacing-4;
+            padding-top: var(--cpd-space-1x);
+            padding-bottom: var(--cpd-space-1x);
 
             > .mx_GenericDropdownMenu_Option--label span:first-child {
                 font-weight: normal;
@@ -30,15 +30,15 @@ Please see LICENSE files in the repository root for full details.
             color: $primary-content;
 
             span:not(:first-child) {
-                margin-left: $spacing-4;
+                margin-left: var(--cpd-space-1x);
                 color: $secondary-content;
             }
         }
     }
 
     .mx_GenericDropdownMenu_divider {
-        margin-top: $spacing-4;
-        margin-bottom: $spacing-4;
+        margin-top: var(--cpd-space-1x);
+        margin-bottom: var(--cpd-space-1x);
 
         & + .mx_GenericDropdownMenu_Option .mx_GenericDropdownMenu_Option--label {
             font-size: $font-15px;

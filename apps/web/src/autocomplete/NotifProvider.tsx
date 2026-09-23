@@ -40,7 +40,7 @@ export default class NotifProvider extends AutocompleteProvider {
         if (
             command?.[0] &&
             command[0].length > 1 &&
-            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command![0]))
+            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command[0]))
         ) {
             return [
                 {
@@ -68,7 +68,6 @@ export default class NotifProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
-                role="presentation"
                 aria-label={_t("composer|autocomplete|notification_a11y")}
             >
                 {completions}

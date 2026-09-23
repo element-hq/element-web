@@ -6,6 +6,7 @@
  */
 
 import React, { type HTMLAttributes, type JSX, type MouseEventHandler } from "react";
+import classNames from "classnames";
 import { IconButton } from "@vector-im/compound-web";
 import Play from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 import Pause from "@vector-im/compound-design-tokens/assets/web/icons/pause-solid";
@@ -44,6 +45,7 @@ export function PlayPauseButton({
     disabled = false,
     playing = false,
     togglePlay,
+    className,
     ...rest
 }: Readonly<PlayPauseButtonProps>): JSX.Element {
     const { translate: _t } = useI18n();
@@ -56,7 +58,7 @@ export function PlayPauseButton({
             aria-label={label}
             tooltip={label}
             onClick={togglePlay}
-            className={styles.button}
+            className={classNames(styles.button, className)}
             disabled={disabled}
             {...rest}
         >

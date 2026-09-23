@@ -18,7 +18,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal from "./Modal";
 import TermsDialog from "./components/views/dialogs/TermsDialog";
-import { pickBestLanguage } from "./languageHandler.tsx";
+import { pickBestLanguage } from "./i18n/utils";
 
 export class TermsNotSignedError extends Error {}
 

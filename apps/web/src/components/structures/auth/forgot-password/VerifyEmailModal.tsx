@@ -12,7 +12,7 @@ import { CloseIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../../views/elements/AccessibleButton";
-import { Icon as EmailPromptIcon } from "../../../../../res/img/element-icons/email-prompt.svg";
+import EmailPromptIcon from "../../../../../res/img/element-icons/email-prompt.svg?react";
 import { useTimeoutToggle } from "../../../../hooks/useTimeoutToggle";
 import { ErrorMessage } from "../../ErrorMessage";
 

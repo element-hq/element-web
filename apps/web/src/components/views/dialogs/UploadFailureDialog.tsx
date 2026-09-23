@@ -36,7 +36,6 @@ export default class UploadFailureDialog extends React.Component<IProps> {
 
     public render(): React.ReactNode {
         let message;
-        let preview;
         let buttons;
         if (this.props.totalFiles === 1 && this.props.badFiles.length === 1) {
             message = _t(
@@ -105,10 +104,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
                 title={_t("upload_file|error_title")}
                 contentId="mx_Dialog_content"
             >
-                <div id="mx_Dialog_content">
-                    {message}
-                    {preview}
-                </div>
+                <div id="mx_Dialog_content">{message}</div>
 
                 {buttons}
             </BaseDialog>

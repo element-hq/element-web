@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_LoginWithQRSection p {
     margin-top: 0;
-    margin-bottom: $spacing-16;
+    margin-bottom: var(--cpd-space-4x);
 }
 
 .mx_LoginWithQRSection {
@@ -19,54 +19,35 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_LoginWithQRSection .mx_AccessibleButton svg {
-    margin-right: $spacing-12;
+    margin-right: var(--cpd-space-3x);
 }
 
-.mx_AuthPage .mx_LoginWithQR {
-    .mx_AccessibleButton {
-        display: block !important;
-    }
+.mx_LoginWithQR_dialog .mx_Dialog {
+    padding: var(--cpd-space-12x) var(--cpd-space-12x) var(--cpd-space-10x);
 
-    .mx_AccessibleButton + .mx_AccessibleButton {
-        margin-top: $spacing-8;
+    .mx_LoginWithQR {
+        width: 500px;
     }
-
-    font-size: $font-15px;
 }
 
 .mx_LoginWithQR {
-    min-height: 350px;
     display: flex;
     flex-direction: column;
+    min-height: 500px;
     font: var(--cpd-font-body-md-regular);
 
     h1 {
         font-size: $font-24px;
         margin-bottom: 0;
-
-        svg {
-            &.normal {
-                color: $secondary-content;
-            }
-            &.error {
-                color: $alert;
-            }
-            &.success {
-                color: $accent;
-            }
-            height: 1.3em;
-            margin-right: $spacing-8;
-            vertical-align: middle;
-        }
     }
 
     h2 {
-        margin-top: $spacing-24;
+        margin-top: var(--cpd-space-6x);
     }
 
     .mx_LoginWithQR_qrWrapper {
         display: flex;
-        padding: $spacing-28 0;
+        padding: var(--cpd-space-7x) 0;
 
         .mx_Spinner {
             /* Match the size of the QR code to prevent jumps */
@@ -77,7 +58,7 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_LoginWithQR_confirmationDigits {
         text-align: center;
-        margin: $spacing-48 auto;
+        margin: var(--cpd-space-12x) auto;
         font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-24px;
         color: $primary-content;
@@ -85,8 +66,8 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_LoginWithQR_confirmationAlert {
         border: 1px solid $quaternary-content;
-        border-radius: $spacing-8;
-        padding: $spacing-8;
+        border-radius: var(--cpd-space-2x);
+        padding: var(--cpd-space-2x);
         line-height: 1.5em;
         display: flex;
 
@@ -134,34 +115,6 @@ Please see LICENSE files in the repository root for full details.
         margin-bottom: var(--cpd-space-1x);
     }
 
-    .mx_LoginWithQR_icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 8px;
-        box-sizing: border-box;
-        padding: var(--cpd-space-3x);
-        gap: 10px;
-
-        background-color: var(--cpd-color-bg-subtle-secondary);
-        svg {
-            color: var(--cpd-color-icon-secondary);
-        }
-
-        &.mx_LoginWithQR_icon--success {
-            background-color: var(--cpd-color-bg-success-subtle);
-            svg {
-                color: var(--cpd-color-icon-success-primary);
-            }
-        }
-
-        &.mx_LoginWithQR_icon--critical {
-            background-color: var(--cpd-color-bg-critical-subtle);
-            svg {
-                color: var(--cpd-color-icon-critical-primary);
-            }
-        }
-    }
-
     .mx_LoginWithQR_checkCode_input {
         margin-bottom: var(--cpd-space-1x);
         text-align: initial;
@@ -175,14 +128,14 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_LoginWithQR_heading {
         display: flex;
-        gap: $spacing-12;
+        gap: var(--cpd-space-3x);
         align-items: center;
     }
 
     .mx_LoginWithQR_BackButton {
-        height: $spacing-28;
-        border-radius: $spacing-28;
-        padding: $spacing-4;
+        height: var(--cpd-space-7x);
+        border-radius: var(--cpd-space-7x);
+        padding: var(--cpd-space-1x);
         box-sizing: border-box;
         background-color: var(--cpd-color-bg-subtle-secondary);
         svg {
@@ -205,19 +158,15 @@ Please see LICENSE files in the repository root for full details.
 
         p {
             color: $secondary-content;
+            margin-bottom: var(--cpd-space-8x);
         }
-    }
-
-    &.mx_LoginWithQR_error .mx_LoginWithQR_main {
-        max-width: 400px;
-        margin: 0 auto;
     }
 
     .mx_LoginWithQR_buttons {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $spacing-16;
+        gap: var(--cpd-space-4x);
         margin-top: var(--cpd-space-6x);
 
         .mx_AccessibleButton {
@@ -228,7 +177,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_QRCode {
-        border-radius: $spacing-8;
+        border-radius: var(--cpd-space-2x);
         display: flex;
         justify-content: center;
     }

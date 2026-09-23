@@ -14,18 +14,11 @@ import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/asset
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { usePermalink } from "../../../hooks/usePermalink";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
-
-export enum PillType {
-    UserMention = "TYPE_USER_MENTION",
-    RoomMention = "TYPE_ROOM_MENTION",
-    AtRoomMention = "TYPE_AT_ROOM_MENTION", // '@room' mention
-    EventInSameRoom = "TYPE_EVENT_IN_SAME_ROOM",
-    EventInOtherRoom = "TYPE_EVENT_IN_OTHER_ROOM",
-    Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
-}
+import { PillType } from "./PillType";
 
 const linkIcon = <LinkIcon className="mx_Pill_LinkIcon mx_BaseAvatar" />;
 
@@ -38,7 +31,7 @@ const PillRoomAvatar: React.FC<{
     }
 
     if (room) {
-        return <RoomAvatar room={room} size="16px" aria-hidden="true" />;
+        return <RoomAvatar room={room} size="16px" aria-hidden={true} />;
     }
     return linkIcon;
 };
@@ -95,6 +88,8 @@ export const Pill: React.FC<PillProps> = ({
         url,
     });
     const text = customPillText ?? linkText;
+    // Only user pills show a status
+    const userStatus = useUserStatus(type === PillType.UserMention && resourceId !== null ? resourceId : undefined);
 
     if (!type || !text) {
         return null;
@@ -108,6 +103,7 @@ export const Pill: React.FC<PillProps> = ({
         mx_UserPill_me: resourceId === cli.getUserId(),
         mx_EventPill: type === PillType.EventInOtherRoom || type === PillType.EventInSameRoom,
         mx_KeywordPill: type === PillType.Keyword,
+        mx_Pill_withStatus: !!userStatus,
     });
 
     let avatar: ReactElement | null = null;
@@ -149,6 +145,14 @@ export const Pill: React.FC<PillProps> = ({
             return null;
     }
 
+    const pillContent = (
+        <>
+            {avatar}
+            <span className="mx_Pill_text">{pillText}</span>
+            {userStatus && <span className="mx_Pill_userStatus">{userStatus.emoji}</span>}
+        </>
+    );
+
     const isAnchor = !!inMessage && !!url;
     return (
         <bdi>
@@ -160,14 +164,10 @@ export const Pill: React.FC<PillProps> = ({
             >
                 {isAnchor ? (
                     <a className={classes} href={url} onClick={onClick}>
-                        {avatar}
-                        <span className="mx_Pill_text">{pillText}</span>
+                        {pillContent}
                     </a>
                 ) : (
-                    <span className={classes}>
-                        {avatar}
-                        <span className="mx_Pill_text">{pillText}</span>
-                    </span>
+                    <span className={classes}>{pillContent}</span>
                 )}
             </Tooltip>
         </bdi>

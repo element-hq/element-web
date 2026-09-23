@@ -1,14 +1,21 @@
-FROM mcr.microsoft.com/playwright:v1.59.1-jammy@sha256:8a0360d39d1973be506dd59002904a774f6d697d4946c94063b3fd006461c8ff
+# syntax=docker.io/docker/dockerfile:1.27-labs@sha256:ae9cc40df4eb5b6adcac0a49bdd8e43b6d29d81087fefae2ceb6fe248aab24c8
+
+# PNPM source
+FROM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
+
+FROM mcr.microsoft.com/playwright:v1.63.0-jammy@sha256:167d0506cfbe3c294fb214b2d11737326eeee028aa611fa1ba538e5057675847
 
 WORKDIR /work
+
+COPY --from=pnpm /opt/pnpm /opt/pnpm
+RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
 
 RUN apt-get update && \
     apt-get -y install xvfb dbus-x11 && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/* && \
-    corepack enable
+    npm install -g pnpm@latest-11
 
-ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 ENV GITHUB_ACTIONS=1
 ENV DEBUG=pw:browser
 

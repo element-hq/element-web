@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./RoomListToast.stories";
 
-const { SectionCreated, ChatMoved } = composeStories(stories);
+const { SectionCreated, ChatMoved, UnreadActivity } = composeStories(stories);
 
 describe("<RoomListToast />", () => {
     it("renders SectionCreated story", () => {
@@ -26,11 +26,23 @@ describe("<RoomListToast />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("renders UnreadActivity story", () => {
+        const { container } = render(<UnreadActivity />);
+        expect(container).toMatchSnapshot();
+    });
+
     it("calls onClose when the close button is clicked", async () => {
         const user = userEvent.setup();
         render(<SectionCreated />);
         const closeButton = screen.getByRole("button", { name: "Close" });
         await user.click(closeButton);
         expect(SectionCreated.args.onClose).toHaveBeenCalled();
+    });
+
+    it("calls onClick when the unread-activity toast is clicked", async () => {
+        const user = userEvent.setup();
+        render(<UnreadActivity />);
+        await user.click(screen.getByRole("button", { name: "Unread messages" }));
+        expect(UnreadActivity.args.onClick).toHaveBeenCalled();
     });
 });

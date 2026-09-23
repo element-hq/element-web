@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
 
 export interface ValidatedServerConfig {
     hsUrl: string;
@@ -24,8 +24,8 @@ export interface ValidatedServerConfig {
     /**
      * Config related to delegated authentication
      * Included when delegated auth is configured and valid, otherwise undefined.
-     * From issuer's .well-known/openid-configuration.
+     * From {@link MatrixClient.getAuthMetadata}.
      * Used for OIDC native flow authentication.
      */
-    delegatedAuthentication?: OidcClientConfig;
+    delegatedAuthentication?: ValidatedAuthMetadata;
 }

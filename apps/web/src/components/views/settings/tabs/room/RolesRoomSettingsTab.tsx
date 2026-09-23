@@ -18,7 +18,6 @@ import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from "../../SettingsFieldset";
-import SettingsStore from "../../../../../settings/SettingsStore";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
 import SettingsTab from "../SettingsTab";
@@ -174,16 +173,25 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         { leading: true, trailing: true },
     );
 
-    private populateDefaultPlEvents(
+    /**
+     * Returns a copy of the given event power levels with an entry added for every event type we
+     * want to show a selector for, defaulting to the state or event level as appropriate.
+     *
+     * The copy matters: the levels we are given come from the state event content, which is shared
+     * with the js-sdk, so writing to it would change the room state we only meant to read.
+     */
+    private eventLevelsWithDefaults(
         eventsSection: Record<string, number>,
         stateLevel: number,
         eventsLevel: number,
-    ): void {
+    ): Record<string, number> {
+        const eventLevels = { ...eventsSection };
         for (const desiredEvent of Object.keys(plEventsToShow)) {
-            if (!(desiredEvent in eventsSection)) {
-                eventsSection[desiredEvent] = plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel;
+            if (!(desiredEvent in eventLevels)) {
+                eventLevels[desiredEvent] = plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel;
             }
         }
+        return eventLevels;
     }
 
     private onPowerLevelsChanged = async (value: number, powerLevelKey: string): Promise<void> => {
@@ -192,8 +200,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         let plContent = plEvent?.getContent<RoomPowerLevelsEventContent>() ?? {};
 
-        // Clone the power levels just in case
-        plContent = Object.assign({}, plContent);
+        // Clone the power levels so we can modify it without clobbering the js-sdk
+        plContent = objectClone(plContent);
 
         if (powerLevelKey.startsWith(EVENTS_LEVEL_PREFIX)) {
             set(plContent, ["events", powerLevelKey.slice(EVENTS_LEVEL_PREFIX.length)], value);
@@ -270,17 +278,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             [EventType.Reaction]: _td("room_settings|permissions|m.reaction"),
             [EventType.RoomRedaction]: _td("room_settings|permissions|m.room.redaction"),
             [EventType.RoomPinnedEvents]: _td("room_settings|permissions|m.room.pinned_events"),
-
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
         };
-
         // MSC3401: Native Group VoIP signaling
-        if (SettingsStore.getValue("feature_group_calls")) {
+        if (!SdkConfig.get("element_call").disable) {
             plEventsToLabels[ElementCallEventType.name] = _td("room_settings|permissions|m.call");
             plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }
-
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
                 desc: _t("room_settings|permissions|users_default"),
@@ -319,7 +324,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             },
         };
 
-        const eventsLevels = plContent.events || {};
+        const eventsLevels = this.eventLevelsWithDefaults(
+            plContent.events ?? {},
+            parseIntWithDefault(plContent.state_default, powerLevelDescriptors.state_default.defaultValue),
+            parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
+        );
         const userLevels = plContent.users || {};
         const banLevel = parseIntWithDefault(plContent.ban, powerLevelDescriptors.ban.defaultValue);
         const defaultUserLevel = parseIntWithDefault(
@@ -328,12 +337,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         );
 
         const currentUserLevel = room.getMember(client.getSafeUserId())?.powerLevel ?? defaultUserLevel;
-
-        this.populateDefaultPlEvents(
-            eventsLevels,
-            parseIntWithDefault(plContent.state_default, powerLevelDescriptors.state_default.defaultValue),
-            parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
-        );
 
         let privilegedUsersSection = <div>{_t("room_settings|permissions|no_privileged_users")}</div>;
         let mutedUsersSection;
@@ -391,7 +394,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         }
 
         const powerSelectors = Object.keys(powerLevelDescriptors)
-            .map((key, index) => {
+            .map((key) => {
                 const descriptor = powerLevelDescriptors[key];
                 if (isSpaceRoom && descriptor.hideForSpace) {
                     return null;
@@ -399,11 +402,12 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
 
                 const value = parseIntWithDefault(get(plContent, key), descriptor.defaultValue);
                 return (
-                    <div key={index} className="">
+                    <div key={key}>
                         <PowerSelector
                             label={descriptor.desc}
                             value={value}
                             usersDefault={defaultUserLevel}
+                            maxValue={currentUserLevel}
                             disabled={!canChangeLevels || currentUserLevel < value}
                             powerLevelKey={key} // Will be sent as the second parameter to `onChange`
                             onChange={this.onPowerLevelsChanged}
@@ -440,6 +444,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                             label={label}
                             value={eventsLevels[eventType]}
                             usersDefault={defaultUserLevel}
+                            maxValue={currentUserLevel}
                             disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                             powerLevelKey={EVENTS_LEVEL_PREFIX + eventType}
                             onChange={this.onPowerLevelsChanged}

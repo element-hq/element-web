@@ -9,16 +9,14 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useContext, useEffect } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
-import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
 import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     room: Room;
@@ -27,20 +25,20 @@ interface IProps {
 }
 
 const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
 
     const apps = useWidgets(room);
     const app = apps.find((a) => a.id === widgetId);
-    const isRight = app && WidgetLayoutStore.instance.isInContainer(room, app, "right");
+    const isRight = app && sdkContext.widgetLayoutStore.isInContainer(room, app, "right");
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     useEffect(() => {
         if (!app || !isRight) {
             // stop showing this card
-            RightPanelStore.instance.popCard();
+            sdkContext.rightPanelStore.popCard();
         }
-    }, [app, isRight]);
+    }, [app, isRight, sdkContext.rightPanelStore]);
 
     // Don't render anything as we are about to transition
     if (!app || !isRight) return null;
@@ -78,7 +76,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
                 fullWidth
                 showMenubar={false}
                 room={room}
-                userId={cli.getSafeUserId()}
+                userId={sdkContext.client?.getUserId() ?? undefined}
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}

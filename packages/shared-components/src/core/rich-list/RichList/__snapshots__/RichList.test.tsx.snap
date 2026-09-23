@@ -11,12 +11,12 @@ exports[`RichItem > renders the list 1`] = `
     >
       <span
         class="RichList-module_title"
-        id="_r_0_"
+        id="react-use-id-1"
       >
         Rich List Title
       </span>
       <ul
-        aria-labelledby="_r_0_"
+        aria-labelledby="react-use-id-1"
         class="RichList-module_content"
         role="listbox"
         tabindex="0"
@@ -174,7 +174,7 @@ exports[`RichItem > renders the list with isEmpty=true 1`] = `
     >
       <span
         class="RichList-module_title"
-        id="_r_1_"
+        id="react-use-id-1"
       >
         Rich List Title
       </span>

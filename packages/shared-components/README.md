@@ -40,6 +40,21 @@ or in CSS file:
 @import url("@element-hq/web-shared-components");
 ```
 
+### Sub-path Imports
+
+Callers running outside the browser DOM (e.g. inside an `AudioWorkletGlobalScope`
+or a worker) can pull in the small standalone `numbers` utility bundle without
+loading the rest of the package bundle, which transitively imports React,
+dnd-kit, and other code that touches `window` / `document`:
+
+```javascript
+import { percentageOf, percentageWithin } from "@element-hq/web-shared-components/numbers";
+```
+
+The sub-path exposes the same functions listed under [Formatting](#formatting)
+and ships as its own ES/CJS bundle in `dist/numbers.{js,umd.cjs}`. Prefer the
+main package entry for everything else.
+
 ### Using Components
 
 There are two kinds of components in this library:
@@ -364,7 +379,4 @@ pnpm i18n
 
 ## Publish a new version
 
-Two steps are required to publish a new version of this package:
-
-1. Bump the version in `package.json` following semver rules and open a PR.
-2. Once merged run the [github workflow](https://github.com/element-hq/element-web/actions/workflows/npm-publish.yaml)
+To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).

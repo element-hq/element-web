@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { assertNoToasts, rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
@@ -46,7 +48,7 @@ function spaceChildInitialState(
     serverName: string,
     roomId: string,
     order?: string,
-): ICreateRoomOpts["initial_state"]["0"] {
+): NonNullable<ICreateRoomOpts["initial_state"]>[number] {
     return {
         type: "m.space.child",
         state_key: roomId,
@@ -68,7 +70,7 @@ test.describe("Spaces", () => {
         "should allow user to create public space",
         { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, user }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
             const contextMenu = await openSpaceCreateMenu(page);
             await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
@@ -105,7 +107,7 @@ test.describe("Spaces", () => {
     );
 
     test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -152,7 +154,7 @@ test.describe("Spaces", () => {
             name: "Sample Room",
         });
 
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -187,7 +189,7 @@ test.describe("Spaces", () => {
                 name: "A Room that will not be selected",
             });
 
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu.getByRole("button", { name: "Private" }).click();
 
@@ -238,7 +240,7 @@ test.describe("Spaces", () => {
         await shareDialog.getByRole("button", { name: "Invite people" }).click();
 
         const otherSection = page.locator(".mx_InviteDialog_other");
-        await otherSection.getByRole("textbox").fill(bot.credentials.userId);
+        await otherSection.getByRole("textbox").fill(bot.credentials!.userId);
         await otherSection.getByRole("button", { name: "Invite" }).click();
 
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
@@ -258,6 +260,66 @@ test.describe("Spaces", () => {
         await expect(buttons.nth(1)).toHaveAttribute("aria-label", "Space Space");
         await expect(buttons.nth(2)).toHaveAttribute("aria-label", "My Space");
     });
+
+    test(
+        "should render readable notification badges in the space panel",
+        { tag: "@screenshot" },
+        async ({ app, user, bot }) => {
+            const roomId = await app.client.createRoom({
+                name: "Unread Room",
+            });
+            await app.client.createSpace({
+                name: "Unread Space",
+                initial_state: [spaceChildInitialState(user.homeServer, roomId)],
+            });
+            const spaceButton = await app.getSpacePanelButton("Unread Space");
+            await expect(spaceButton).toBeVisible();
+
+            await bot.prepareClient();
+            const botUserId = await bot.evaluate((client) => client.getSafeUserId());
+            await app.client.evaluate(
+                async (client, { botUserId, roomId }) => {
+                    await client.invite(roomId, botUserId);
+                },
+                { botUserId, roomId },
+            );
+            await bot.joinRoom(roomId);
+
+            for (let i = 0; i < 10; i++) {
+                await bot.sendMessage(roomId, `${user.displayName} unread message ${i}`);
+            }
+
+            const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");
+            await expect(badge).toHaveText("10");
+
+            await expect(spaceButton).toMatchScreenshot("space-panel-notification-badge.png", {
+                css: `
+                    /* Mask the unstable anti-aliased badge edge at the screenshot crop boundary. */
+                    .mx_SpacePanel .mx_SpaceButton {
+                        position: relative !important;
+                    }
+
+                    .mx_SpacePanel .mx_SpaceButton::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 3px;
+                        background: var(--cpd-color-bg-canvas-default);
+                        z-index: 1;
+                        pointer-events: none;
+                    }
+
+                    /* Avatar initials can render differently in CI; keep this snapshot focused on the badge. */
+                    .mx_SpacePanel [role="img"][data-color],
+                    .mx_SpacePanel .mx_BaseAvatar {
+                        color: transparent !important;
+                    }
+                `,
+            });
+        },
+    );
 
     test("should include rooms in space home", async ({ page, app, user }) => {
         const roomId1 = await app.client.createRoom({
@@ -287,7 +349,7 @@ test.describe("Spaces", () => {
         "should render subspaces in the space panel only when expanded",
         { tag: "@screenshot" },
         async ({ page, app, user, axe }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
 
             axe.disableRules([
                 // Disable this check as it triggers on nested roving tab index elements which are in practice fine
@@ -317,6 +379,9 @@ test.describe("Spaces", () => {
             // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
             await spaceTree.getByRole("button", { name: "Expand" }).click();
             await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
+
+            // focus the quick settings button to ensure the spaces aren't being hovered over for consistent screenshots
+            await page.getByRole("button", { name: "Quick settings" }).focus();
 
             const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
             await expect(item).toBeVisible();
@@ -400,6 +465,26 @@ test.describe("Spaces", () => {
         );
     });
 
+    test("should render render tooltip on focus of metaspace", { tag: "@screenshot" }, async ({ page, user }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+        // Wait for toasts to clear otherwise they will mess with our screenshot
+        await assertNoToasts(page);
+
+        await page.getByRole("tree", { name: "Spaces" }).getByRole("button", { name: "Home" }).hover();
+        await expect(page.getByRole("tooltip", { name: "Home" })).toBeVisible();
+
+        await expect(page).toMatchScreenshot("space-panel-home-tooltip.png", {
+            showTooltips: true,
+            clip: {
+                x: 0,
+                y: 60,
+                width: 140,
+                height: 60,
+            },
+        });
+    });
+
     test.describe("Should hide public spaces option if not allowed", () => {
         test.use({
             config: {
@@ -410,7 +495,7 @@ test.describe("Spaces", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')

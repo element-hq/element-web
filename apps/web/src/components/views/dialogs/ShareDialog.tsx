@@ -21,36 +21,39 @@ import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import { type XOR } from "../../../@types/common";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
+import FacebookIcon from "../../../../res/img/social/facebook.png";
+import TwitterIcon from "../../../../res/img/social/twitter-2.png";
+import LinkedInIcon from "../../../../res/img/social/linkedin.png";
+import RedditIcon from "../../../../res/img/social/reddit.png";
+import EmailIcon from "../../../../res/img/social/email-1.png";
 
-/* eslint-disable @typescript-eslint/no-require-imports */
 const SOCIALS = [
     {
         name: "Facebook",
-        img: require("../../../../res/img/social/facebook.png"),
+        img: FacebookIcon,
         url: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     },
     {
         name: "Twitter",
-        img: require("../../../../res/img/social/twitter-2.png"),
+        img: TwitterIcon,
         url: (url: string) => `https://twitter.com/home?status=${url}`,
     },
     {
         name: "LinkedIn",
-        img: require("../../../../res/img/social/linkedin.png"),
+        img: LinkedInIcon,
         url: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
     },
     {
         name: "Reddit",
-        img: require("../../../../res/img/social/reddit.png"),
+        img: RedditIcon,
         url: (url: string) => `https://www.reddit.com/submit?url=${url}`,
     },
     {
         name: "email",
-        img: require("../../../../res/img/social/email-1.png"),
+        img: EmailIcon,
         url: (url: string) => `mailto:?body=${url}`,
     },
 ];
-/* eslint-enable @typescript-eslint/no-require-imports */
 
 interface BaseProps {
     /**

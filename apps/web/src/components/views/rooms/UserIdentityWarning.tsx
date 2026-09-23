@@ -15,7 +15,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import {
     useUserIdentityWarningViewModel,
     type ViolationPrompt,
-} from "../../viewmodels/rooms/UserIdentityWarningViewModel.tsx";
+} from "../../viewmodels/rooms/UserIdentityWarningViewModel";
 import { type ButtonEvent } from "../elements/AccessibleButton.tsx";
 
 interface UserIdentityWarningProps {

@@ -1,4 +1,11 @@
 /*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+/*
  * Quick-n-dirty algebraic datatypes.
  *
  * These let us handle the possibility of failure without having to constantly write code to check for it.
@@ -51,56 +58,3 @@ class Some extends Optional {
     }
 }
 const None = new Optional();
-
-class FetchStatus {
-    constructor(opt = {}) {
-        this.opt = { at: Date.now(), ...opt };
-    }
-    map(f) {
-        return this;
-    }
-    flatMap(f) {
-        return this;
-    }
-}
-class Success extends FetchStatus {
-    static of(value) {
-        return new Success(value);
-    }
-    constructor(value, opt) {
-        super(opt);
-        this.value = value;
-    }
-    map(f) {
-        return new Success(f(this.value), this.opt);
-    }
-    flatMap(f) {
-        return f(this.value, this.opt);
-    }
-    fold({ success }) {
-        return success instanceof Function ? success(this.value, this.opt) : undefined;
-    }
-}
-class Pending extends FetchStatus {
-    static of(opt) {
-        return new Pending(opt);
-    }
-    constructor(opt) {
-        super(opt);
-    }
-    fold({ pending }) {
-        return pending instanceof Function ? pending(this.opt) : undefined;
-    }
-}
-class FetchError extends FetchStatus {
-    static of(reason, opt) {
-        return new FetchError(reason, opt);
-    }
-    constructor(reason, opt) {
-        super(opt);
-        this.reason = reason;
-    }
-    fold({ error }) {
-        return error instanceof Function ? error(this.reason, this.opt) : undefined;
-    }
-}

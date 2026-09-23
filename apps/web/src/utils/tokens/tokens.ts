@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { type AccessTokens } from "matrix-js-sdk/src/matrix";
 import decryptAESSecretStorageItem from "matrix-js-sdk/src/utils/decryptAESSecretStorageItem";
 import encryptAESSecretStorageItem from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
@@ -26,13 +27,29 @@ export const REFRESH_TOKEN_STORAGE_KEY = "mx_refresh_token";
  * Names of the tokens. Used as part of the calculation to derive AES keys during encryption in persistTokenInStorage,
  * and decryption in restoreSessionFromStorage.
  */
-export const ACCESS_TOKEN_IV = "access_token";
-export const REFRESH_TOKEN_IV = "refresh_token";
+export const ACCESS_TOKEN_NAME = "access_token";
+export const REFRESH_TOKEN_NAME = "refresh_token";
 /*
  * Keys for localstorage items which indicate whether we expect a token in indexeddb.
  */
 export const HAS_ACCESS_TOKEN_STORAGE_KEY = "mx_has_access_token";
 export const HAS_REFRESH_TOKEN_STORAGE_KEY = "mx_has_refresh_token";
+
+/**
+ * Derive the localStorage key used to hold a token when writing it to IndexedDB fails.
+ *
+ * This is deliberately distinct from `storageKey` itself. Very old sessions may still have a
+ * plain token sitting at `storageKey` in localStorage, from before tokens were moved into
+ * IndexedDB, and those are *not* authoritative — IndexedDB may well hold a newer value. A token
+ * at the fallback key, by contrast, is only ever written by {@link persistTokenInStorage} when
+ * the IndexedDB write failed, and is cleared again as soon as one succeeds, so it is always at
+ * least as new as anything in IndexedDB.
+ *
+ * @param storageKey - the primary storage key, eg {@link ACCESS_TOKEN_STORAGE_KEY}
+ */
+export function getFallbackStorageKey(storageKey: string): string {
+    return `${storageKey}_fallback`;
+}
 
 /**
  * The pickle key is a string of unspecified length and format.  For AES, we need a 256-bit Uint8Array. So we HKDF the pickle key to generate the AES key.  The AES key should be zeroed after it is used.
@@ -51,7 +68,6 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuf
             {
                 name: "HKDF",
                 hash: "SHA-256",
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore: https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/879
                 salt: new Uint8Array(32),
                 info: new Uint8Array(0),
@@ -116,7 +132,7 @@ export async function tryDecryptToken(
  * @param hasTokenStorageKey Localstorage key for an item which stores whether we expect to have a token in indexeddb,
  *    eg "mx_has_access_token".
  */
-export async function persistTokenInStorage(
+async function persistTokenInStorage(
     storageKey: string,
     tokenName: string,
     token: string | undefined,
@@ -131,83 +147,95 @@ export async function persistTokenInStorage(
         localStorage.removeItem(hasTokenStorageKey);
     }
 
-    if (pickleKey) {
-        let encryptedToken: AESEncryptedSecretStoragePayload | undefined;
+    let valueToStore: AESEncryptedSecretStoragePayload | string | undefined = token;
+    if (pickleKey && token) {
+        try {
+            // try to encrypt the access token using the pickle key
+            const encrKey = await pickleKeyToAesKey(pickleKey);
+            valueToStore = await encryptAESSecretStorageItem(token, encrKey, tokenName);
+            encrKey.fill(0);
+        } catch (e) {
+            // This is likely due to the browser not having WebCrypto or somesuch.
+            // Warn about it, but fall back to storing the unencrypted token.
+            logger.warn(`Could not encrypt token for ${tokenName}`, e);
+        }
+    }
+
+    const fallbackStorageKey = getFallbackStorageKey(storageKey);
+
+    try {
+        // Save either the encrypted token, or the plain token if there is no token or we were
+        // unable to encrypt (e.g. if the browser doesn't have WebCrypto).
+        await StorageAccess.idbSave("account", storageKey, valueToStore);
+        // IndexedDB is now authoritative, so drop any fallback left behind by an earlier failed
+        // write. If we left it in place, getStoredToken would keep preferring it over the value
+        // we have just written.
+        localStorage.removeItem(fallbackStorageKey);
+
+        // An older version of this function wrote its fallback to the primary key rather than to
+        // the fallback key. Nothing reads that any more, so it is just a plaintext token sitting
+        // in localStorage — exactly what the pickle key exists to avoid. Sweep it up.
+        //
+        // This has to happen here rather than on the read path: only a successful write proves we
+        // have a good token in IndexedDB, so only here can we be sure we are discarding a spare
+        // copy rather than the last recoverable one.
+        if (localStorage.getItem(storageKey) !== null) {
+            logger.warn(`Discarding unreachable plaintext ${tokenName} from localStorage`);
+            localStorage.removeItem(storageKey);
+        }
+    } catch (e) {
+        // We could not save to IndexedDB, so fall back to localStorage. We store the token
+        // unencrypted since localStorage only saves strings.
+        logger.error(
+            `Failed to write ${tokenName} to IndexedDB; falling back to localStorage. ` +
+                `If this token is rotated and the fallback is not read back, the session will be lost.`,
+            e,
+        );
+
+        // Mirror the requested state at the fallback key: the token to fall back to, or nothing
+        // at all if the caller asked for it to be cleared.
         if (token) {
-            try {
-                // try to encrypt the access token using the pickle key
-                const encrKey = await pickleKeyToAesKey(pickleKey);
-                encryptedToken = await encryptAESSecretStorageItem(token, encrKey, tokenName);
-                encrKey.fill(0);
-            } catch (e) {
-                // This is likely due to the browser not having WebCrypto or somesuch.
-                // Warn about it, but fall back to storing the unencrypted token.
-                logger.warn(`Could not encrypt token for ${tokenName}`, e);
-            }
+            localStorage.setItem(fallbackStorageKey, token);
+        } else {
+            localStorage.removeItem(fallbackStorageKey);
+            // The caller wants this token gone, so there is nothing to lose by also dropping any
+            // plaintext copy an older version left at the primary key. We cannot do this when we
+            // have a token to store, because that copy may be the only readable one if the write
+            // we just failed leaves IndexedDB holding something undecryptable.
+            localStorage.removeItem(storageKey);
         }
-        try {
-            // Save either the encrypted access token, or the plain access
-            // token if there is no token or we were unable to encrypt (e.g. if the browser doesn't
-            // have WebCrypto).
-            await StorageAccess.idbSave("account", storageKey, encryptedToken || token);
-        } catch {
-            // if we couldn't save to indexedDB, fall back to localStorage.  We
-            // store the access token unencrypted since localStorage only saves
-            // strings.
-            if (!!token) {
-                localStorage.setItem(storageKey, token);
-            } else {
-                localStorage.removeItem(storageKey);
-            }
-        }
-    } else {
-        try {
-            await StorageAccess.idbSave("account", storageKey, token);
-        } catch {
-            if (!!token) {
-                localStorage.setItem(storageKey, token);
-            } else {
-                localStorage.removeItem(storageKey);
-            }
-        }
+
+        // Deliberately leave whatever IndexedDB holds alone, even though it is now stale. The
+        // service worker reads the access token from IndexedDB *only* — it cannot reach
+        // localStorage, see apps/web/src/serviceworker/index.ts — so removing it would leave that
+        // reader with no token at all and send every media request out unauthenticated for the
+        // rest of the session. A stale token is no worse than none for it, and after a failure
+        // like this it is usually the very token we were trying to write.
+        //
+        // This client is unaffected either way: getStoredToken prefers the fallback key, and the
+        // next write to succeed overwrites IndexedDB and clears the fallback again.
     }
 }
 
 /**
- * Wraps {@link persistTokenInStorage} with accessToken storage keys
+ * Wraps {@link persistTokenInStorage} with accessToken & refreshToken storage keys
  *
- * @param token - The token to store. When undefined, any existing accessToken is removed from storage.
- * @param pickleKey - Pickle key: used to derive the key used to encrypt token. If `undefined`, the token will be stored
- *    unencrypted.
+ * @param tokens - The tokens to persist
+ * @param pickleKey - Pickle key: used to derive the key used to encrypt token.
+ *     If `undefined`, the token will be stored unencrypted.
  */
-export async function persistAccessTokenInStorage(
-    token: string | undefined,
-    pickleKey: string | undefined,
-): Promise<void> {
-    return persistTokenInStorage(
+export async function persistTokens(pickleKey: string | undefined, tokens: AccessTokens): Promise<void> {
+    await persistTokenInStorage(
         ACCESS_TOKEN_STORAGE_KEY,
-        ACCESS_TOKEN_IV,
-        token,
+        ACCESS_TOKEN_NAME,
+        tokens.accessToken,
         pickleKey,
         HAS_ACCESS_TOKEN_STORAGE_KEY,
     );
-}
-
-/**
- * Wraps {@link persistTokenInStorage} with refreshToken storage keys.
- *
- * @param token - The token to store. When undefined, any existing refreshToken is removed from storage.
- * @param pickleKey - Pickle key: used to derive the key used to encrypt token. If `undefined`, the token will be stored
- *    unencrypted.
- */
-export async function persistRefreshTokenInStorage(
-    token: string | undefined,
-    pickleKey: string | undefined,
-): Promise<void> {
-    return persistTokenInStorage(
+    await persistTokenInStorage(
         REFRESH_TOKEN_STORAGE_KEY,
-        REFRESH_TOKEN_IV,
-        token,
+        REFRESH_TOKEN_NAME,
+        tokens.refreshToken,
         pickleKey,
         HAS_REFRESH_TOKEN_STORAGE_KEY,
     );

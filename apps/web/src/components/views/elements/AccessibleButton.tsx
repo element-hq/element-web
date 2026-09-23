@@ -20,7 +20,7 @@ import { Tooltip } from "@vector-im/compound-web";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
+export type ButtonEvent = React.MouseEvent | React.KeyboardEvent | React.FormEvent;
 
 /**
  * The kind of button, similar to how Bootstrap works.

@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 export async function timeout<T, Y>(promise: Promise<T>, timeoutValue: Y, ms: number): Promise<T | Y> {
     const timeoutPromise = new Promise<T | Y>((resolve) => {
         const timeoutId = window.setTimeout(resolve, ms, timeoutValue);
-        promise.then(() => {
+        void promise.then(() => {
             clearTimeout(timeoutId);
         });
     });

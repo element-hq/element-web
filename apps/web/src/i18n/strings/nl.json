@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji kiezer",
         "jump_first_invite": "Ga naar de eerste uitnodiging.",
         "message_composer": "Bericht opsteller",
         "n_unread_messages": {
@@ -11,19 +10,15 @@
             "other": "%(count)s ongelezen berichten, inclusief vermeldingen.",
             "one": "1 ongelezen vermelding."
         },
-        "recent_rooms": "Recente kamers",
-        "room_name": "Kamer %(name)s",
         "room_status_bar": "Kamerstatus balk",
         "seek_bar_label": "Audio zoekbalk",
-        "unread_messages": "Ongelezen berichten.",
-        "user_menu": "Gebruikersmenu"
+        "unread_messages": "Ongelezen berichten."
     },
     "a11y_jump_first_unread_room": "Ga naar de eerste ongelezen kamer",
     "action": {
         "accept": "Accepteren",
         "add": "Toevoegen",
         "add_existing_room": "Voeg bestaande kamer toeroom",
-        "add_people": "Personen toevoegen",
         "apply": "Toepassen",
         "approve": "Keur goed",
         "ask_to_join": "Vraag om toe te treden",
@@ -56,7 +51,6 @@
         "enter_fullscreen": "Volledig scherm openen",
         "exit_fullscreeen": "Volledig scherm verlaten",
         "expand": "Uitvouwen",
-        "explore_public_rooms": "Publieke kamers ontdekken",
         "explore_rooms": "Kamers ontdekken",
         "export": "Wegschrijven",
         "forward": "Doorsturen",
@@ -68,8 +62,6 @@
         "ignore": "Negeren",
         "import": "Inlezen",
         "invite": "Uitnodigen",
-        "invite_to_space": "Voor Space uitnodigen",
-        "invites_list": "Uitnodigingen",
         "join": "Deelnemen",
         "learn_more": "Lees verder",
         "leave": "Verlaten",
@@ -96,7 +88,6 @@
         "rename": "Hernoemen",
         "reply": "Beantwoorden",
         "reply_in_thread": "Reageer in draad",
-        "report_content": "Inhoud melden",
         "resend": "Opnieuw versturen",
         "reset": "Opnieuw instellen",
         "resume": "Hervatten",
@@ -114,8 +105,6 @@
         "sign_out": "Uitloggen",
         "skip": "Overslaan",
         "start": "Starten",
-        "start_chat": "Gesprek beginnen",
-        "start_new_chat": "Nieuwe chat beginnen",
         "stop": "Stop",
         "submit": "Bevestigen",
         "subscribe": "Abonneren",
@@ -202,10 +191,7 @@
         "log_in_new_account": "<a>Login</a> met je nieuwe account.",
         "logout_dialog": {
             "description": "Weet je zeker dat je wilt uitloggen?",
-            "megolm_export": "Sleutels handmatig wegschrijven",
             "setup_key_backup_title": "Je zal de toegang tot je versleutelde berichten verliezen",
-            "setup_secure_backup_description_1": "Versleutelde berichten zijn beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en jij hebben de sleutels om deze berichten te lezen.",
-            "setup_secure_backup_description_2": "Wanneer je jezelf afmeldt, worden deze sleutels van dit apparaat verwijderd, wat betekent dat je geen versleutelde berichten kunt lezen, tenzij je de sleutels ervoor op je andere apparaten hebt of er een back-up van hebt gemaakt op de server.",
             "skip_key_backup": "Ik wil mijn versleutelde berichten niet"
         },
         "misconfigured_body": "Vraag jouw %(brand)s-beheerder <a>je configuratie</a> na te kijken op onjuiste of dubbele items.",
@@ -279,7 +265,6 @@
         "sign_in_instead_prompt": "Heb je al een account? <a>Inloggen</a>",
         "sign_in_or_register": "Meld je aan of maak een account aan",
         "sign_in_or_register_description": "Gebruik je bestaande account of maak een nieuwe aan om verder te gaan.",
-        "sign_in_prompt": "Heb je een account? <a>Inloggen</a>",
         "sign_in_with_sso": "Inloggen met eenmalig inloggen",
         "soft_logout": {
             "clear_data_button": "Alle gegevens wissen",
@@ -396,14 +381,12 @@
         "encrypted": "Versleuteld",
         "error": "Fout",
         "faq": "FAQ",
-        "favourites": "Favorieten",
         "filter_results": "Resultaten filteren",
         "forward_message": "Bericht doorsturen",
         "general": "Algemeen",
         "go_to_settings": "Ga naar instellingen",
         "guest": "Gast",
         "help": "Hulp",
-        "historical": "Historisch",
         "home": "Thuis",
         "homeserver": "Homeserver",
         "identity_server": "Identiteitsserver",
@@ -415,12 +398,10 @@
         "light": "Helder",
         "loading": "Laden...",
         "location": "Locatie",
-        "low_priority": "Lage prioriteit",
         "matrix": "Matrix",
         "message": "Bericht",
         "message_layout": "Berichtlayout",
         "microphone": "Microfoon",
-        "model": "Model",
         "modern": "Modern",
         "mute": "Dempen",
         "n_members": {
@@ -473,7 +454,6 @@
         "success": "Klaar",
         "suggestions": "Suggesties",
         "support": "Ondersteuning",
-        "system_alerts": "Systeemmeldingen",
         "theme": "Thema",
         "thread": "Draad",
         "threads": "Onderwerpen",
@@ -488,7 +468,6 @@
         "username": "Inlognaam",
         "verified": "Geverifieerd",
         "version": "Versie",
-        "video": "Video",
         "video_room": "Video kamer",
         "view_message": "Bericht bekijken",
         "warning": "Let op"
@@ -649,7 +628,6 @@
         "show_hidden_events": "Verborgen gebeurtenissen op de tijdslijn weergeven",
         "state_key": "Toestandssleutel",
         "title": "Ontwikkelaarstools",
-        "toggle_event": "wissel gebeurtenis",
         "toolbox": "Gereedschap",
         "use_at_own_risk": "De UI heeft GEEN controle op het type van de waardes. Gebruik op eigen risico.",
         "value": "Waarde",
@@ -666,22 +644,6 @@
     },
     "dialog_close_label": "Dialoog sluiten",
     "download_completed": "Download voltooid",
-    "emoji": {
-        "categories": "Categorieën",
-        "category_activities": "Activiteiten",
-        "category_animals_nature": "Dieren en natuur",
-        "category_flags": "Vlaggen",
-        "category_food_drink": "Eten en drinken",
-        "category_frequently_used": "Vaak gebruikt",
-        "category_objects": "Objecten",
-        "category_smileys_people": "Smileys & Personen",
-        "category_symbols": "Symbolen",
-        "category_travel_places": "Reizen en plaatsen",
-        "quick_reactions": "Snelle reacties"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Zoeken annuleren"
-    },
     "empty_room": "Lege kamer",
     "empty_room_was_name": "Lege ruimte (was %(oldName)s)",
     "encryption": {
@@ -727,17 +689,6 @@
             "warning": "Als je de herstelmethode niet hebt verwijderd, is het mogelijk dat er een aanvaller toegang tot jouw account probeert te verkrijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
         "set_up_toast_title": "Beveiligde back-up instellen",
-        "setup_secure_backup": {
-            "explainer": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen."
-        },
-        "udd": {
-            "interactive_verification_button": "Interactief verifiëren door emoji",
-            "other_ask_verify_text": "Vraag deze persoon de sessie te verifiëren, of verifieer het handmatig hieronder.",
-            "other_new_session_text": "%(name)s%(userId)s heeft zich aangemeld bij een nieuwe sessie zonder deze te verifiëren:",
-            "own_ask_verify_text": "Verifieer je andere sessie op een van onderstaande wijzen.",
-            "own_new_session_text": "Je hebt je bij een nog niet geverifieerde sessie aangemeld:",
-            "title": "Niet vertrouwd"
-        },
         "unable_to_setup_keys_error": "Kan geen sleutels instellen",
         "verification": {
             "accepting": "Toestaan…",
@@ -1014,7 +965,6 @@
         "name_mxid_share_room": "Nodig iemand uit door gebruik te maken van hun naam, inlognaam (zoals <userId/>) of <a>deel deze kamer</a>.",
         "name_mxid_share_space": "Nodig iemand uit per naam, inlognaam (zoals <userId/>) of <a>deel deze Space</a>.",
         "recents_section": "Recente gesprekken",
-        "room_failed_partial": "De anderen zijn verstuurd, maar de volgende personen konden niet worden uitgenodigd voor <RoomName/>",
         "room_failed_partial_title": "Sommige uitnodigingen konden niet verstuurd worden",
         "room_failed_title": "Kan personen niet uitnodigen voor %(roomName)s",
         "send_link_prompt": "Of verstuur je uitnodigingslink",
@@ -1109,18 +1059,14 @@
         "bridge_state_manager": "Brug onderhouden door <user />.",
         "bridge_state_workspace": "Werkplaats: <networkLink/>",
         "click_for_info": "Klik voor meer info",
-        "custom_themes": "Maatwerkthema's ondersteuning",
         "element_call_video_rooms": "Element Call videokamers",
-        "group_calls": "Nieuwe ervaring voor groepsgesprekken",
         "group_developer": "Ontwikkelaar",
         "group_encryption": "Versleuteling",
         "group_experimental": "Experimenteel",
         "group_moderation": "Moderatie",
         "group_profile": "Profiel",
         "group_rooms": "Kamers",
-        "group_themes": "Thema's",
         "group_voip": "Spraak & video",
-        "html_topic": "HTML-weergave van kamer onderwerpen weergeven",
         "join_beta": "Beta inschakelen",
         "join_beta_reload": "Door deel te nemen aan de bèta wordt %(brand)s opnieuw geladen.",
         "jump_to_date": "Ga naar datum (voegt /jumptodate en spring naar datum headers toe)",
@@ -1173,13 +1119,8 @@
     "language_dropdown_label": "Taalselectie",
     "leave_room_dialog": {
         "last_person_warning": "Je bent de enige persoon hier. Als je weggaat, zal niemand in de toekomst kunnen toetreden, jij ook niet.",
-        "leave_room_question": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?",
-        "leave_space_question": "Weet je zeker dat je de Space '%(spaceName)s' wilt verlaten?",
         "room_rejoin_warning": "Dit is geen publieke kamer. Slechts op uitnodiging zal je opnieuw kunnen toetreden.",
         "space_rejoin_warning": "Deze Space is niet publiek. Zonder uitnodiging zal je niet opnieuw kunnen toetreden."
-    },
-    "left_panel": {
-        "open_dial_pad": "Kiestoetsen openen"
     },
     "lightbox": {
         "rotate_left": "Links draaien",
@@ -1261,7 +1202,6 @@
         "mentions_and_keywords": "@vermeldingen & trefwoorden",
         "mentions_and_keywords_description": "Krijg alleen meldingen met vermeldingen en trefwoorden zoals ingesteld in je <a>instellingen</a>",
         "mentions_keywords": "Vermeldingen & trefwoorden",
-        "message_didnt_send": "Bericht is niet verstuur. Klik voor meer info.",
         "mute_description": "Je krijgt geen meldingen"
     },
     "notifier": {
@@ -1336,7 +1276,6 @@
     },
     "quick_settings": {
         "all_settings": "Instellingen",
-        "metaspace_section": "Vastprikken aan zijbalk",
         "sidebar_settings": "Meer opties",
         "title": "Snelle instellingen"
     },
@@ -1352,21 +1291,10 @@
     },
     "report_content": {
         "description": "Dit bericht melden zal zijn unieke ‘gebeurtenis-ID’ versturen naar de beheerder van jouw homeserver. Als de berichten in deze kamer versleuteld zijn, zal de beheerder van jouw homeserver het bericht niet kunnen lezen, noch enige bestanden of afbeeldingen zien.",
-        "disagree": "Niet mee eens",
         "hide_messages_from_user": "Vink aan als je alle huidige en toekomstige berichten van deze persoon wilt verbergen.",
         "ignore_user": "Negeer persoon",
-        "illegal_content": "Illegale Inhoud",
         "missing_reason": "Geef aan waarom je deze melding indient.",
-        "nature": "Kies een reden en beschrijf wat dit bericht kwetsend maakt.",
-        "nature_disagreement": "Wat deze persoon schrijft is verkeerd.\nDit zal worden gerapporteerd aan de kamermoderators.",
-        "nature_illegal": "Deze persoon vertoont illegaal gedrag, bijvoorbeeld door doxing van personen of te dreigen met geweld.\nDit zal gerapporteerd worden aan de moderators van deze kamer die dit kunnen doorzetten naar de gerechtelijke autoriteiten.",
-        "nature_other": "Een andere reden. Beschrijf alstublieft het probleem.\nDit zal gerapporteerd worden aan de kamermoderators.",
-        "nature_spam": "Deze persoon spamt de kamer met advertenties, links naar advertenties of propaganda.\nDit zal gerapporteerd worden aan de moderators van deze kamer.",
-        "other_label": "Overige",
-        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver",
-        "report_entire_room": "Rapporteer het hele kamer",
-        "spam_or_propaganda": "Spam of propaganda",
-        "toxic_behaviour": "Giftig Gedrag"
+        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Ontsleutelen van %(failedCount)s sessies is mislukt!",
@@ -1489,7 +1417,6 @@
         "join_button_account": "Registreren",
         "join_failed_needs_invite": "Om %(roomName)s te bekijken, heb je een uitnodiging nodig",
         "join_the_discussion": "Neem deel aan de kamer",
-        "join_title": "Doe mee met de kamer om deel te nemen",
         "join_title_account": "Neem deel aan de kamer met een account",
         "joining": "Deelnemen…",
         "jump_read_marker": "Spring naar het eerste ongelezen bericht.",
@@ -1530,36 +1457,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Kamer toevoegen",
         "add_space_label": "Space toevoegen",
-        "breadcrumbs_empty": "Geen onlangs bezochte kamers",
-        "breadcrumbs_label": "Onlangs geopende kamers",
         "failed_add_tag": "Toevoegen van %(tagName)s-label aan kamer is mislukt",
         "failed_remove_tag": "Verwijderen van %(tagName)s-label van kamer is mislukt",
         "failed_set_dm_tag": "Kan tag voor direct bericht niet instellen",
-        "home_menu_label": "Home-opties",
-        "join_public_room_label": "Publieke kamer toetreden",
-        "joining_rooms_status": {
-            "one": "Momenteel aan het toetreden tot %(count)s kamer",
-            "other": "Momenteel aan het toetreden tot %(count)s kamers"
-        },
         "notification_options": "Meldingsinstellingen",
-        "redacting_messages_status": {
-            "one": "Momenteel berichten in %(count)s kamer aan het verwijderen",
-            "other": "Momenteel berichten in %(count)s kamers aan het verwijderen"
-        },
-        "show_less": "Minder tonen",
-        "show_n_more": {
-            "one": "Toon %(count)s meer",
-            "other": "Toon %(count)s meer"
-        },
-        "show_previews": "Voorvertoning van berichten inschakelen",
-        "sort_by": "Sorteer op",
-        "sort_by_activity": "Activiteit",
-        "sort_unread_first": "Kamers met ongelezen berichten als eerste tonen",
-        "space_menu_label": "%(spaceName)s-menu",
-        "sublist_options": "Lijstopties",
-        "suggested_rooms_heading": "Kamersuggesties"
+        "show_less": "Minder tonen"
     },
     "room_settings": {
         "access": {
@@ -1838,8 +1741,6 @@
             "custom_font_description": "Stel de naam in van een lettertype dat op uw systeem is geïnstalleerd en %(brand)s zal proberen het te gebruiken.",
             "custom_font_name": "Systeemlettertypenaam",
             "custom_font_size": "Aangepaste lettergrootte gebruiken",
-            "custom_theme_error_downloading": "Fout bij het downloaden van de thema-informatie.",
-            "custom_theme_invalid": "Ongeldig themaschema.",
             "font_size": "Lettergrootte",
             "image_size_default": "Standaard",
             "image_size_large": "Groot",
@@ -2084,7 +1985,6 @@
             "no_sessions": "Geen sessies gevonden.",
             "no_unverified_sessions": "Geen niet-geverifieerde sessies gevonden.",
             "no_verified_sessions": "Geen geverifieerde sessies gevonden.",
-            "os": "Besturingssysteem",
             "other_sessions_heading": "Andere sessies",
             "push_heading": "Pushmeldingen",
             "push_subheading": "Ontvang pushmeldingen voor deze sessie.",
@@ -2126,13 +2026,11 @@
         "show_stickers_button": "Stickers-knop tonen",
         "show_typing_notifications": "Typmeldingen weergeven",
         "sidebar": {
-            "metaspaces_favourites_description": "Groepeer al je favoriete kamers en mensen op één plek.",
             "metaspaces_home_all_rooms": "Alle kamers tonen",
             "metaspaces_home_all_rooms_description": "Toon al je kamers in Home, zelfs als ze al in een space zitten.",
             "metaspaces_home_description": "Home is handig om een overzicht van alles te krijgen.",
             "metaspaces_orphans": "Kamers buiten een space",
             "metaspaces_orphans_description": "Groepeer al je kamers die geen deel uitmaken van een space op één plaats.",
-            "metaspaces_people_description": "Groepeer al je mensen op één plek.",
             "metaspaces_subsection": "Spaces om te tonen",
             "title": "Zijbalk"
         },
@@ -2300,12 +2198,6 @@
     },
     "space_settings": {
         "title": "Instellingen - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Je hebt geen toestemming om kamers toe te voegen in deze Space",
-        "error_no_permission_add_space": "Je bent niet gemachtigd om spaces aan deze space toe te voegen",
-        "error_no_permission_create_room": "Je hebt geen toestemming om kamers te maken in deze Space",
-        "error_no_permission_invite": "Je hebt geen toestemming om personen in deze Space uit te nodigen"
     },
     "spotlight": {
         "public_rooms": {
@@ -2487,9 +2379,7 @@
         "m.poll.start": "%(senderName)s is een poll gestart - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s veranderde de kamerafbeelding.",
-            "changed_img": "%(senderDisplayName)s heeft de kamerafbeelding aangepast naar <img/>",
-            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd",
-            "removed": "%(senderDisplayName)s heeft de kamerafbeelding verwijderd."
+            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2604,7 +2494,6 @@
             "created_rule_rooms": "%(senderName)s heeft geregeld dat kamers met %(glob)s verbannen worden vanwege %(reason)s",
             "created_rule_servers": "%(senderName)s heeft geregeld dat servers die met %(glob)s sporen verbannen worden vanwege %(reason)s",
             "created_rule_users": "%(senderName)s heeft geregeld dat personen die met %(glob)s sporen verbannen worden vanwege %(reason)s",
-            "message_hidden": "Je hebt deze persoon genegeerd, dus de berichten worden verborgen. <a>Toch tonen?</a>",
             "removed_rule": "%(senderName)s heeft een banregel die met %(glob)s strookt verwijderd",
             "removed_rule_rooms": "%(senderName)s heeft de banregel voor kamers met %(glob)s verwijderd",
             "removed_rule_servers": "%(senderName)s heeft de banregel voor servers die met %(glob)s stroken verwijderd",
@@ -2873,11 +2762,6 @@
         "verify_button": "Persoon verifiëren",
         "verify_explainer": "Als extra beveiliging kan je deze persoon verifiëren door een eenmalige code op jullie toestellen te controleren."
     },
-    "user_menu": {
-        "settings": "Instellingen",
-        "switch_theme_dark": "Naar donkere modus wisselen",
-        "switch_theme_light": "Naar lichte modus wisselen"
-    },
     "voip": {
         "already_in_call": "Al in de oproep",
         "already_in_call_person": "Je bent al in gesprek met deze persoon.",
@@ -3040,13 +2924,7 @@
         "close_to_view_right_panel": "Sluit deze widget om het in dit paneel weer te geven",
         "context_menu": {
             "delete": "Widget verwijderen",
-            "delete_warning": "Widgets verwijderen geldt voor alle deelnemers aan deze kamer. Weet je zeker dat je deze widget wilt verwijderen?",
-            "move_left": "Ga naar links",
-            "move_right": "Ga naar rechts",
-            "remove": "Verwijderen voor iedereen",
-            "revoke": "Machtigingen intrekken",
-            "screenshot": "Neem een foto",
-            "start_audio_stream": "Audiostream starten"
+            "delete_warning": "Widgets verwijderen geldt voor alle deelnemers aan deze kamer. Weet je zeker dat je deze widget wilt verwijderen?"
         },
         "cookie_warning": "Deze widget kan cookies gebruiken.",
         "error_hangup_description": "De verbinding is verbroken van uw oproep. (Error: %(message)s)",

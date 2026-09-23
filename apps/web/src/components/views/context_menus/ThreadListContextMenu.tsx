@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LinkIcon, OverflowHorizontalIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -18,9 +18,8 @@ import { copyPlaintext } from "../../../utils/strings";
 import { ChevronFace, ContextMenuTooltipButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
-import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface ThreadListContextMenuProps {
     mxEvent: MatrixEvent;
@@ -42,6 +41,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
     onMenuToggle,
     ...props
 }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, button, openMenu, closeThreadOptions] = useContextMenu();
 
     const viewInRoom = useCallback(
@@ -77,8 +77,8 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
         onMenuToggle?.(menuDisplayed);
     }, [menuDisplayed, onMenuToggle]);
 
-    const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-    const isMainSplitTimelineShown = !!room && !WidgetLayoutStore.instance.hasMaximisedWidget(room);
+    const room = sdkContext.client?.getRoom(mxEvent.getRoomId());
+    const isMainSplitTimelineShown = !!room && !sdkContext.widgetLayoutStore.hasMaximisedWidget(room);
     return (
         <React.Fragment>
             <ContextMenuTooltipButton

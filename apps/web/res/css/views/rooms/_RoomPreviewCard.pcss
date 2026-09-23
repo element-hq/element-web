@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_RoomPreviewCard {
-    padding: $spacing-32 $spacing-24 !important; /* Override SpaceRoomView's default padding */
+    padding: var(--cpd-space-8x) var(--cpd-space-6x) !important; /* Override SpaceRoomView's default padding */
     margin: auto;
     flex-grow: 1;
     max-width: 480px;
@@ -21,12 +21,12 @@ Please see LICENSE files in the repository root for full details.
         font-weight: var(--cpd-font-weight-semibold);
         line-height: $font-24px;
         color: $primary-content;
-        margin-top: $spacing-24;
+        margin-top: var(--cpd-space-6x);
 
         svg {
             height: 1em;
             width: 1em;
-            margin-right: $spacing-8;
+            margin-right: var(--cpd-space-2x);
             color: $secondary-content;
             vertical-align: -2px;
         }
@@ -35,11 +35,11 @@ Please see LICENSE files in the repository root for full details.
     .mx_RoomPreviewCard_inviter {
         display: flex;
         align-items: center;
-        margin-bottom: $spacing-20;
+        margin-bottom: var(--cpd-space-5x);
         font-size: $font-15px;
 
         > div {
-            margin-left: $spacing-8;
+            margin-left: var(--cpd-space-2x);
 
             .mx_RoomPreviewCard_inviter_name {
                 line-height: $font-18px;
@@ -75,18 +75,18 @@ Please see LICENSE files in the repository root for full details.
         /* XXX Remove this when video rooms leave beta */
         .mx_BetaCard_betaPill {
             position: absolute;
-            inset-block-start: $spacing-32;
-            inset-inline-end: $spacing-24;
+            inset-block-start: var(--cpd-space-8x);
+            inset-inline-end: var(--cpd-space-6x);
         }
     }
 
     h1.mx_RoomPreviewCard_name {
-        margin: $spacing-16 0 !important; /* Override SpaceRoomView's default margins */
+        margin: var(--cpd-space-4x) 0 !important; /* Override SpaceRoomView's default margins */
     }
 
     .mx_RoomPreviewCard_topic {
         line-height: $font-22px;
-        margin-top: $spacing-16;
+        margin-top: var(--cpd-space-4x);
         max-height: 160px;
         overflow-y: auto;
     }
@@ -94,7 +94,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_FacePile {
         display: flex;
         align-items: center;
-        margin-top: $spacing-16;
+        margin-top: var(--cpd-space-4x);
         /* For enhanced visibility under contrast control */
         outline: 1px solid transparent;
 
@@ -104,9 +104,9 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_RoomPreviewCard_joinButtons {
-        margin-top: $spacing-20;
+        margin-top: var(--cpd-space-5x);
         display: flex;
-        gap: $spacing-20;
+        gap: var(--cpd-space-5x);
 
         .mx_AccessibleButton {
             max-width: 200px;

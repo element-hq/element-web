@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { percentageOf } from "@element-hq/web-shared-components";
+import { percentageOf } from "@element-hq/web-shared-components/numbers";
 
 import { type IAmplitudePayload, type ITimingPayload, PayloadEvent, WORKLET_NAME } from "./consts";
 
@@ -62,16 +62,16 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
             const maxVal = Math.max(...monoChan);
             const amplitude = percentageOf(maxVal, -1, 1) - percentageOf(minVal, -1, 1);
 
-            this.port.postMessage(<IAmplitudePayload>{
+            this.port.postMessage({
                 ev: PayloadEvent.AmplitudeMark,
                 amplitude: amplitude,
                 forIndex: this.amplitudeIndex++,
-            });
+            } satisfies IAmplitudePayload);
             this.nextAmplitudeSecond = nextTimeForTargetFreq(currentSecond);
         }
 
         // We mostly use this worklet to fire regular clock updates through to components
-        this.port.postMessage(<ITimingPayload>{ ev: PayloadEvent.Timekeep, timeSeconds: currentTime });
+        this.port.postMessage({ ev: PayloadEvent.Timekeep, timeSeconds: currentTime } satisfies ITimingPayload);
 
         // We're supposed to return false when we're "done" with the audio clip, but seeing as
         // we are acting as a passive processor we are never truly "done". The browser will clean

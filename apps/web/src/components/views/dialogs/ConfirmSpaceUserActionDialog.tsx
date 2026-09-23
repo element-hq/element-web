@@ -11,8 +11,8 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 type BaseProps = ComponentProps<typeof ConfirmUserActionDialog>;
 interface IProps extends Omit<BaseProps, "matrixClient" | "children" | "onFinished"> {
@@ -36,7 +36,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
     ...props
 }) => {
     const spaceChildren = useMemo(() => {
-        const children = SpaceStore.instance.getChildren(space.roomId);
+        const children = SDKContextClass.instance.spaceStore.getChildren(space.roomId);
         if (spaceChildFilter) {
             return children.filter(spaceChildFilter);
         }

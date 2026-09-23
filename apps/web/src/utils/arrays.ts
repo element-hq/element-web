@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { percentageOf, percentageWithin } from "@element-hq/web-shared-components";
+import { percentageOf, percentageWithin } from "@element-hq/web-shared-components/numbers";
 
 /**
  * Quickly resample an array to have less/more data points. If an input which is larger
@@ -135,7 +135,7 @@ export function arrayTrimFill<T>(a: T[], len: number, seed: T[]): T[] {
  * @returns A copy of the array.
  */
 export function arrayFastClone<T>(a: T[]): T[] {
-    return a.slice(0, a.length);
+    return a.slice(0);
 }
 
 /**

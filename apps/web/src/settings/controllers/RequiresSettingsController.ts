@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type { Capabilities } from "matrix-js-sdk/src/matrix";
-import SettingsStore from "../SettingsStore";
 import type { BooleanSettingKey } from "../Settings.tsx";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
@@ -60,7 +59,7 @@ export default class RequiresSettingsController extends MatrixClientBackedContro
     }
 
     public get settingDisabled(): boolean | string {
-        if (this.settingNames.some((s) => !SettingsStore.getValue(s))) {
+        if (this.settingNames.some((s) => !this.settingsStore.getValue(s))) {
             return true;
         }
         return this.isBlockedByCapabilites;

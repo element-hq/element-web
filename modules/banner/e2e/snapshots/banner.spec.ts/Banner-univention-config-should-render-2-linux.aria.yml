@@ -1,0 +1,28 @@
+- dialog "Portal logo Close menu":
+      - heading "Portal logo Close menu" [level=2]:
+            - img "Portal logo"
+            - button "Close menu":
+                  - img
+      - heading "Anwendungen" [level=2]
+      - link "Portal":
+            - /url: https://example.com/app1
+      - link "Aufgaben":
+            - /url: https://example.com/app2
+      - link "Chat":
+            - /url: https://example.com/app3
+      - link "Dateien":
+            - /url: https://example.com/ap4
+      - link "E-Mail":
+            - /url: https://example.com/email
+      - link "Kelender":
+            - /url: https://example.com/app6
+      - link "Kontakte":
+            - /url: https://example.com/app7
+      - link "Notizen":
+            - /url: https://example.com/app8
+      - link "Projekte":
+            - /url: https://example.com/app9
+      - link "Videokonferenz":
+            - /url: https://example.com/app10
+      - link "Wiki":
+            - /url: https://example.com/app11

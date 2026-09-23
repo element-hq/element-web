@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -54,7 +55,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * (https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API)
      * is ready for primetime, it might help make this simpler.
      *
-     * @return Promise<IMediaDevices> The available media devices
+     * @returns Promise<IMediaDevices> The available media devices
      */
     public static async getDevices(): Promise<IMediaDevices | undefined> {
         try {
@@ -106,7 +107,7 @@ export default class MediaDeviceHandler extends EventEmitter {
     }
 
     public setAudioOutput(deviceId: string): void {
-        SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
@@ -116,7 +117,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setAudioInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         return MatrixClientPeg.safeGet().getMediaHandler().setAudioInput(deviceId);
     }
 
@@ -126,7 +127,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setVideoInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         return MatrixClientPeg.safeGet().getMediaHandler().setVideoInput(deviceId);
     }
 
@@ -203,13 +204,13 @@ export default class MediaDeviceHandler extends EventEmitter {
         return SettingsStore.getValue("audioInputMuted");
     }
     public static set startWithAudioMuted(value: boolean) {
-        SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
+        void SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
     }
 
     public static get startWithVideoMuted(): boolean {
         return SettingsStore.getValue("videoInputMuted");
     }
     public static set startWithVideoMuted(value: boolean) {
-        SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
+        void SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
     }
 }

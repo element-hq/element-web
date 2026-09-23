@@ -9,18 +9,17 @@ import {
     type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
+    type UserStatus,
 } from "@element-hq/web-shared-components";
 import { type MouseEvent } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
-import UserIdentifier from "../../../../customisations/UserIdentifier";
-import type { UserStatus } from "../../../../hooks/useUserStatus";
 
 /**
  * Information about a member for disambiguation purposes.
  */
-interface MemberInfo {
+export interface MemberInfo {
     /**
      * The user's Matrix ID.
      */
@@ -102,22 +101,16 @@ export class DisambiguatedProfileViewModel
         let title: string | undefined;
 
         if (mxid) {
-            const identifier =
-                UserIdentifier.getDisplayUserIdentifier?.(mxid, {
-                    withDisplayName: true,
-                    roomId: member?.roomId,
-                }) ?? mxid;
-
             // Only show identifier if disambiguation is needed
             if (member?.disambiguate) {
-                displayIdentifier = identifier;
+                displayIdentifier = mxid;
             }
 
             // Compute tooltip title if enabled
             if (withTooltip) {
                 title = _t("timeline|disambiguated_profile", {
                     displayName,
-                    matrixId: identifier,
+                    matrixId: mxid,
                 });
             }
         }

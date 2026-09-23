@@ -20,7 +20,7 @@ export { findNextSiblingElement, RovingTabIndexContext } from "@element-hq/web-s
 export { checkInputableElement } from "@element-hq/web-shared-components";
 export { RovingStateActionType } from "@element-hq/web-shared-components";
 export { useRovingTabIndex } from "@element-hq/web-shared-components";
-export type { IAction, IState } from "@element-hq/web-shared-components";
+export type { IState } from "@element-hq/web-shared-components";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
@@ -35,7 +35,7 @@ export type { IAction, IState } from "@element-hq/web-shared-components";
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#Technique_1_Roving_tabindex
  */
 
-const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined => {
+export const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined => {
     switch (getKeyBindingsManager().getAccessibilityAction(ev)) {
         case KeyBindingAction.Home:
             return RovingAction.Home;
@@ -56,12 +56,11 @@ const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined =
     }
 };
 
-type IProps = Omit<RovingTabIndexProviderProps, "getAction">;
+type IRovingTabIndexProps = Omit<RovingTabIndexProviderProps, "getAction">;
 
-export const RovingTabIndexProvider: React.FC<IProps> = (props) => {
+export const RovingTabIndexProvider: React.FC<IRovingTabIndexProps> = (props) => {
     return <SharedRovingTabIndexProvider {...props} getAction={getWebRovingAction} />;
 };
 
 // re-export the semantic helper components for simplicity
-export { RovingTabIndexWrapper } from "./roving/RovingTabIndexWrapper";
 export { RovingAccessibleButton } from "./roving/RovingAccessibleButton";

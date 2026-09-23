@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
 // copies resources into the lib directory.
 
 import parseArgs from "minimist";
 import * as chokidar from "chokidar";
-import * as path from "node:path";
+import path from "node:path";
 import * as fs from "node:fs";
 
 const argv = parseArgs(process.argv.slice(2), {});

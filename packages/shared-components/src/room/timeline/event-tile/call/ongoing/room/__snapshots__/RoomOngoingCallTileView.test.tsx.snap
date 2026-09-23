@@ -1,0 +1,385 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RoomOngoingCallTileView > renders the tile > RoomCallIgnored 1`] = `
+<div>
+  <div
+    class="Flex-module_flex TileContainer-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="Flex-module_flex common-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CallIcon-module_container"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <svg
+          class="CallIcon-module_icon"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+          />
+        </svg>
+      </div>
+      <div
+        class="Flex-module_flex common-module_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="common-module_title"
+        >
+          Group call in progress
+        </div>
+        <div
+          class="Flex-module_flex RoomOngoingCallTileView-module_subContainer"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 6px; --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="_stacked-avatars_va14e_109 common-module_facepile"
+          >
+            <span
+              aria-label="@bob:m.org"
+              class="_avatar_va14e_8"
+              data-color="1"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile1.png"
+                width="20px"
+              />
+            </span>
+            <span
+              aria-label="@riley:m.org"
+              class="_avatar_va14e_8"
+              data-color="3"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile2.png"
+                width="20px"
+              />
+            </span>
+            <span
+              aria-label="@andi:m.org"
+              class="_avatar_va14e_8"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile3.png"
+                width="20px"
+              />
+            </span>
+          </div>
+          8 joined
+        </div>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: wrap-reverse;"
+      >
+        <div
+          class="DurationView-module_container duration"
+        >
+          (
+          <time
+            class="mx_Clock DurationView-module_container duration"
+            datetime="PT1M40S"
+          >
+            1:40
+          </time>
+          )
+        </div>
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8 _has-icon_1nw83_60"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+            />
+          </svg>
+          Join
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomOngoingCallTileView > renders the tile > RoomCallJoined 1`] = `
+<div>
+  <div
+    class="Flex-module_flex TileContainer-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="Flex-module_flex common-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CallIcon-module_container"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <svg
+          class="CallIcon-module_icon"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+          />
+        </svg>
+      </div>
+      <div
+        class="Flex-module_flex common-module_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="common-module_title"
+        >
+          Group call in progress
+        </div>
+        <div
+          class="Flex-module_flex RoomOngoingCallTileView-module_subContainer"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 6px; --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="_stacked-avatars_va14e_109 common-module_facepile"
+          >
+            <span
+              aria-label="@bob:m.org"
+              class="_avatar_va14e_8"
+              data-color="1"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile1.png"
+                width="20px"
+              />
+            </span>
+            <span
+              aria-label="@riley:m.org"
+              class="_avatar_va14e_8"
+              data-color="3"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile2.png"
+                width="20px"
+              />
+            </span>
+            <span
+              aria-label="@andi:m.org"
+              class="_avatar_va14e_8"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 20px;"
+            >
+              <img
+                alt=""
+                class="_image_va14e_43"
+                data-type="round"
+                height="20px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="/static/profile-pics/profile3.png"
+                width="20px"
+              />
+            </span>
+          </div>
+          8 joined
+        </div>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: wrap-reverse;"
+      >
+        <div
+          class="DurationView-module_container duration"
+        >
+          (
+          <time
+            class="mx_Clock DurationView-module_container duration"
+            datetime="PT1M40S"
+          >
+            1:40
+          </time>
+          )
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomOngoingCallTileView > renders the tile > RoomCallWithoutOtherParticipants 1`] = `
+<div>
+  <div
+    class="Flex-module_flex TileContainer-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="Flex-module_flex common-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CallIcon-module_container"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <svg
+          class="CallIcon-module_icon"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+          />
+        </svg>
+      </div>
+      <div
+        class="Flex-module_flex common-module_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="common-module_title"
+        >
+          Group call in progress
+        </div>
+        <div
+          class="Flex-module_flex RoomOngoingCallTileView-module_subContainer"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 6px; --mx-flex-wrap: nowrap;"
+        >
+          <span
+            aria-label="@bob:m.org"
+            class="_avatar_va14e_8 common-module_avatar"
+            data-color="1"
+            data-type="round"
+            role="img"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_va14e_43"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="/static/profile-pics/profile1.png"
+              width="20px"
+            />
+          </span>
+          <div
+            class="RoomOngoingCallTileView-module_startedTextContainer"
+          >
+            Bob started a call
+          </div>
+        </div>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: wrap-reverse;"
+      >
+        <div
+          class="DurationView-module_container duration"
+        >
+          (
+          <time
+            class="mx_Clock DurationView-module_container duration"
+            datetime="PT1M40S"
+          >
+            1:40
+          </time>
+          )
+        </div>
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8 _has-icon_1nw83_60"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+            />
+          </svg>
+          Join
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

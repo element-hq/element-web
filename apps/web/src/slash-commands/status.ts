@@ -5,14 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td } from "@element-hq/web-shared-components";
+import { _td, limitUserStatusInputText } from "@element-hq/web-shared-components";
 
-import { Command, CommandCategories, splitAtFirstSpace } from "./SlashCommands";
+import { Command } from "./command";
+import { CommandCategories } from "./interface";
 import SettingsStore from "../settings/SettingsStore";
-import { reject, success } from "./utils";
+import { reject, success, splitAtFirstSpace } from "./utils";
 import { UserFriendlyError } from "../languageHandler";
-import { userStatusTextWithinMaxLength } from "../hooks/useUserStatus";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import { setUserStatus } from "../utils/userStatus";
 
 export const statusCommand = new Command({
     command: "status",
@@ -36,11 +37,11 @@ export const statusCommand = new Command({
             // that it's "not an emoji".
             return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
         }
-        if (!userStatusTextWithinMaxLength(text)) {
+        if (limitUserStatusInputText(text) !== text) {
             return reject(new UserFriendlyError("slash_command|status|too_long_text"));
         }
         return success(
-            cli.setExtendedProfileProperty("org.matrix.msc4426.status", {
+            setUserStatus(cli, {
                 emoji: emoji.segment,
                 text,
             }),

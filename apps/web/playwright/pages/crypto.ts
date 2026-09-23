@@ -22,8 +22,8 @@ export class Crypto {
      */
     public async assertDeviceIsCrossSigned(): Promise<void> {
         const { userId, deviceId, accessToken } = await this.page.evaluate(() => ({
-            userId: window.mxMatrixClientPeg.get().getUserId(),
-            deviceId: window.mxMatrixClientPeg.get().getDeviceId(),
+            userId: window.mxMatrixClientPeg.get().getSafeUserId(),
+            deviceId: window.mxMatrixClientPeg.get().getDeviceId()!,
             accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
         }));
 

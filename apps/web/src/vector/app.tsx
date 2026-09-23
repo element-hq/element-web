@@ -15,7 +15,6 @@ import "matrix-js-sdk/src/browser-index";
 import React, { type ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
-import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
@@ -25,7 +24,6 @@ import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
 import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
@@ -34,8 +32,9 @@ import { RoomView } from "../components/structures/RoomView";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
 import Login from "../Login.ts";
-import { startOidcLogin } from "../utils/oidc/authorize.ts";
+import { startOAuthLogin } from "../utils/oauth/authorize.ts";
 
+// oxlint-disable-next-line node/no-process-env
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
@@ -44,7 +43,7 @@ function onTokenLoginCompleted(urlParams: URLParams, fragmentAfterLogin: string)
     const url = new URL(window.location.href);
 
     // if we did a token login, we're now left with the login token as query param in the url; clear it out
-    for (const param in { ...urlParams.legacy_sso, ...urlParams.oidc_query }) {
+    for (const param in { ...urlParams.legacy_sso }) {
         url.searchParams.delete(param);
     }
 
@@ -68,9 +67,9 @@ async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
         });
         const flows = await login.getFlows();
 
-        const nativeOidcFlow = flows.find((flow) => "clientId" in flow);
-        if (nativeOidcFlow && config.delegatedAuthentication) {
-            await startOidcLogin(config.delegatedAuthentication, nativeOidcFlow.clientId, config.hsUrl, config.isUrl);
+        const nativeOAuthFlow = flows.find((flow) => "clientId" in flow);
+        if (nativeOAuthFlow && config.delegatedAuthentication) {
+            await startOAuthLogin(config.delegatedAuthentication, nativeOAuthFlow.clientId, config.hsUrl, config.isUrl);
             return true;
         }
 
@@ -112,7 +111,7 @@ export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<Mat
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oidc_fragment || !!urlParams.oidc_query;
+    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oauth2;
     const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
@@ -144,24 +143,19 @@ export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<Mat
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
-    const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
-    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
-
     return (
-        <wrapperOpts.Wrapper>
-            <StrictMode>
-                <MatrixChat
-                    ref={matrixChatRef}
-                    onNewScreen={onNewScreen}
-                    config={config}
-                    urlParams={urlParams}
-                    enableGuest={!config.disable_guests}
-                    onTokenLoginCompleted={onTokenLoginCompleted}
-                    initialScreenAfterLogin={initialScreenAfterLogin}
-                    defaultDeviceDisplayName={defaultDeviceName}
-                />
-            </StrictMode>
-        </wrapperOpts.Wrapper>
+        <StrictMode>
+            <MatrixChat
+                ref={matrixChatRef}
+                onNewScreen={onNewScreen}
+                config={config}
+                urlParams={urlParams}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={initialScreenAfterLogin}
+                defaultDeviceDisplayName={defaultDeviceName}
+            />
+        </StrictMode>
     );
 }
 

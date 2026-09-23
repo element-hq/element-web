@@ -9,7 +9,12 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import afs from "node:fs/promises";
+import { type JsonDocument } from "shared-types";
 
+/**
+ * Returns a random array of a specified size in unpadded base64
+ * @param size - the size of the underlying random array
+ */
 export async function randomArray(size: number): Promise<string> {
     return new Promise((resolve, reject) => {
         crypto.randomBytes(size, (err, buf) => {
@@ -22,19 +27,12 @@ export async function randomArray(size: number): Promise<string> {
     });
 }
 
-type JsonValue = null | string | number;
-type JsonArray = Array<JsonValue | JsonObject | JsonArray>;
-export interface JsonObject {
-    [key: string]: JsonObject | JsonArray | JsonValue;
-}
-export type Json = JsonArray | JsonObject;
-
 /**
  * Synchronously load a JSON file from the local filesystem.
  * Unlike `require`, will never execute any javascript in a loaded file.
  * @param paths - An array of path segments which will be joined using the system's path delimiter.
  */
-export function loadJsonFile<T extends Json>(...paths: string[]): T {
+export function loadJsonFile<T extends JsonDocument>(...paths: string[]): T {
     const joinedPaths = path.join(...paths);
 
     if (!fs.existsSync(joinedPaths)) {
@@ -42,7 +40,8 @@ export function loadJsonFile<T extends Json>(...paths: string[]): T {
         return {} as T;
     }
 
-    const file = fs.readFileSync(joinedPaths, { encoding: "utf-8" });
+    // Editors on Windows commonly save UTF-8 files with a byte order mark, which JSON.parse rejects.
+    const file = fs.readFileSync(joinedPaths, { encoding: "utf-8" }).replace(/^\uFEFF/, "");
     return JSON.parse(file);
 }
 
@@ -62,9 +61,9 @@ export async function tryPaths(name: string, root: string, rawPaths: string[]): 
             return p + "/";
         } catch {}
     }
-    console.log(`Couldn't find ${name} files in any of: `);
+    console.log(`Couldn't find '${name}' in any of: `);
     for (const p of paths) {
         console.log("\t" + path.resolve(p));
     }
-    throw new Error(`Failed to find ${name} files`);
+    throw new Error(`Failed to find ${name} path`);
 }

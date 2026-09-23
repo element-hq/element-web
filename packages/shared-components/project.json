@@ -17,15 +17,15 @@
             "continuous": true
         },
         "typedoc": {
-            "cache": "true",
+            "cache": true,
             "command": "typedoc",
-            "inputs": ["src"],
+            "inputs": ["src", "{projectRoot}/typedoc.json"],
             "outputs": ["{projectRoot}/typedoc"],
             "options": { "cwd": "packages/shared-components" },
             "dependsOn": ["^build"]
         },
         "storybook": {
-            "cache": "true",
+            "cache": true,
             "inputs": ["src", "{projectRoot}/.storybook", "{projectRoot}/typedoc"],
             "outputs": ["{projectRoot}/storybook-static"],
             "executor": "nx:run-commands",
@@ -35,6 +35,10 @@
                 "cwd": "packages/shared-components"
             },
             "dependsOn": ["build", "typedoc"]
+        },
+        "test:unit:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["typedoc", "^build:playwright"]
         },
         "test:unit": {
             "command": "vitest --project=unit",

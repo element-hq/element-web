@@ -227,7 +227,7 @@ export default class ScalarAuthClient {
      * This can be useful to temporarily prevent purchased assets from being displayed.
      * @param  {WidgetType} widgetType The Widget Type to disable assets for
      * @param  {string} widgetId   The widget ID to disable assets for
-     * @return {Promise}           Resolves on completion
+     * @returns {Promise}           Resolves on completion
      */
     public async disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
         const url = new URL(this.getStarterLink(this.apiUrl + "/widgets/set_assets_state"));

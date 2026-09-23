@@ -22,8 +22,8 @@ export const useLiveBeacons = (roomId: Room["roomId"], matrixClient: MatrixClien
         room?.currentState,
         RoomStateEvent.BeaconLiveness,
         () =>
-            room?.currentState?.liveBeaconIds.map(
-                (beaconIdentifier) => room.currentState.beacons.get(beaconIdentifier)!,
+            room?.currentState?.liveBeaconIds.map((beaconIdentifier) =>
+                room.currentState.beacons.get(beaconIdentifier)!,
             ) || [],
     );
 

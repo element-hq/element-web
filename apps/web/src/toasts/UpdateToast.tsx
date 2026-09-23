@@ -10,7 +10,7 @@ import React from "react";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
 import ChangelogDialog, { checkVersion } from "../components/views/dialogs/ChangelogDialog";
@@ -37,7 +37,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 description: <pre>{releaseNotes}</pre>,
                 button: _t("action|update"),
             });
-            finished.then(([update]) => {
+            void finished.then(([update]) => {
                 if (update && PlatformPeg.get()) {
                     PlatformPeg.get()!.installUpdate();
                 }
@@ -49,7 +49,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 version,
                 newVersion,
             });
-            finished.then(([update]) => {
+            void finished.then(([update]) => {
                 if (update && PlatformPeg.get()) {
                     PlatformPeg.get()!.installUpdate();
                 }

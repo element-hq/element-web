@@ -29,7 +29,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     }, testInfo) => {
         await page.clock.install();
 
-        const tokenUri = `${mas.baseUrl}/oauth2/token`;
+        const tokenUri = `${mas!.baseUrl}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
         );
@@ -66,7 +66,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await newPage.close();
 
         // Assert logging out revokes both tokens
-        const revokeUri = `${mas.baseUrl}/oauth2/revoke`;
+        const revokeUri = `${mas!.baseUrl}/oauth2/revoke`;
         const revokeAccessTokenPromise = page.waitForRequest(
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "access_token",
         );
@@ -74,7 +74,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "refresh_token",
         );
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Remove this device", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -93,17 +95,16 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(page.getByText("Welcome")).toBeVisible();
             await page.goto("about:blank");
 
-            const result = await mas.manage("kill-sessions", userId);
+            const result = await mas!.manage("kill-sessions", userId);
             expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
 
             await page.goto("http://localhost:8080");
             await expect(
                 page.getByText("For security, this session has been removed. Please sign in again."),
             ).toBeVisible();
-            //await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
+            await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
 
-            const localStorageKeys = await page.evaluate(() => Object.keys(localStorage));
-            expect(localStorageKeys).toHaveLength(0);
+            await expect.poll(() => page.evaluate(() => Object.keys(localStorage))).toHaveLength(0);
         },
     );
 
@@ -122,7 +123,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
-        await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
+        await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+        await page.getByRole("button", { name: "Remove this device" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await expect(page).toHaveURL(/\/#\/welcome$/);
 
         // Log in again
@@ -155,10 +158,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(userId, { exact: true })).toBeVisible();
             await page.waitForTimeout(2000);
-            await page
-                .locator(".mx_UserMenu_contextMenu")
-                .getByRole("menuitem", { name: "Remove this device" })
-                .click();
+            await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+            await page.getByRole("button", { name: "Remove this device" }).click();
+            await page.getByRole("button", { name: "Remove this device anyway" }).click();
             await expect(page).toHaveURL(/\/#\/welcome$/);
 
             // Log in again
@@ -206,9 +208,16 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await expect(page.getByText(userId, { exact: true })).toBeVisible();
                 await page.waitForTimeout(2000);
                 await page
-                    .locator(".mx_UserMenu_contextMenu")
-                    .getByRole("menuitem", { name: "Remove this device" })
+                    .getByRole("menu", { name: "User menu" })
+                    .getByRole("menuitem", { name: "All settings" })
                     .click();
+                await page.getByRole("button", { name: "Remove this device" }).click();
+                // Since we have another device, it only shows a normal logout
+                // confirmation dialog, rather than prompting the user to set up
+                // recovery. Use the test ID to find this button to avoid
+                // ambiguity between the dialog button and the one in Settings.
+                await page.getByTestId("dialog-primary-button").click();
+
                 await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again

@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "rootDir": "./lib",
+        "target": "esnext",
+        "lib": ["es2024"],
+        "strict": true,
+        "types": [],
+        "allowImportingTsExtensions": true,
+        "noEmit": true
+    },
+    "include": ["lib"]
+}

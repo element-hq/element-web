@@ -9,4 +9,3 @@ ARCH="${archMap["$TARGETARCH"]}"
 NODE_VERSION=$(cat /.node-version | sed -e 's/^v//')
 curl --proto "=https" -L "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-$TARGETOS-$ARCH.tar.gz" | tar xz -C /usr/local --strip-components=1 && \
   unlink /usr/local/CHANGELOG.md && unlink /usr/local/LICENSE && unlink /usr/local/README.md
-corepack enable

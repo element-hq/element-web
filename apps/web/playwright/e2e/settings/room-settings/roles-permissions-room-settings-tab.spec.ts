@@ -20,7 +20,7 @@ test.describe("Roles & Permissions room settings tab", () => {
     let settings: Locator;
 
     test.beforeEach(async ({ user, app }) => {
-        await app.client.createRoom({ name: roomName });
+        await app.client.createRoom({ name: roomName, room_version: "11" });
         await app.viewRoomByName(roomName);
         settings = await app.settings.openRoomSettings("Roles & Permissions");
     });
@@ -38,7 +38,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         await combobox.selectOption("Moderator");
 
         // Should display a modal to warn that we are demoting the only admin user
-        const modal = await page.locator(".mx_Dialog", {
+        const modal = page.locator(".mx_Dialog", {
             hasText: "Warning",
         });
         await expect(modal).toBeVisible();

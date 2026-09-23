@@ -19,7 +19,7 @@ export default class Sizer {
 
     /**
         @param {Element} item the dom element being resized
-        @return {number} how far the edge of the item is from the edge of the container
+        @returns {number} how far the edge of the item is from the edge of the container
     */
     public getItemOffset(item: HTMLElement): number {
         const offset = (this.vertical ? item.offsetTop : item.offsetLeft) - this.getOffset();
@@ -32,23 +32,23 @@ export default class Sizer {
 
     /**
         @param {Element} item the dom element being resized
-        @return {number} the width/height of an item in the container
+        @returns {number} the width/height of an item in the container
     */
     public getItemSize(item: HTMLElement): number {
         return this.vertical ? item.offsetHeight : item.offsetWidth;
     }
 
-    /** @return {number} the width/height of the container */
+    /** @returns {number} the width/height of the container */
     public getTotalSize(): number {
         return this.vertical ? this.container.offsetHeight : this.container.offsetWidth;
     }
 
-    /** @return {number} container offset to offsetParent */
+    /** @returns {number} container offset to offsetParent */
     private getOffset(): number {
         return this.vertical ? this.container.offsetTop : this.container.offsetLeft;
     }
 
-    /** @return {number} container offset to document */
+    /** @returns {number} container offset to document */
     private getPageOffset(): number {
         let element = this.container;
         let offset = 0;
@@ -90,7 +90,7 @@ export default class Sizer {
 
     /**
         @param {MouseEvent} event the mouse event
-        @return {number} the distance between the cursor and the edge of the container,
+        @returns {number} the distance between the cursor and the edge of the container,
             along the applicable axis (vertical or horizontal)
     */
     public offsetFromEvent(event: MouseEvent): number {

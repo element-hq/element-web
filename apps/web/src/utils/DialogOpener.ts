@@ -24,7 +24,7 @@ import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToS
 import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import PosthogTrackers from "../PosthogTrackers";
 import { showAddExistingSubspace, showCreateNewRoom } from "./space";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -55,9 +55,9 @@ export class DialogOpener {
                 Modal.createDialog(
                     RoomSettingsDialog,
                     {
-                        roomId: payload.room_id || SdkContextClass.instance.roomViewStore.getRoomId(),
+                        roomId: payload.room_id || SDKContextClass.instance.roomViewStore.getRoomId(),
                         initialTabId: payload.initial_tab_id,
-                        sdkContext: SdkContextClass.instance,
+                        sdkContext: SDKContextClass.instance,
                     },
                     /*className=*/ undefined,
                     /*isPriority=*/ false,
@@ -104,7 +104,7 @@ export class DialogOpener {
                 );
                 break;
             case Action.OpenInviteDialog:
-                Modal.createDialog(
+                void Modal.createDialog(
                     InviteDialog,
                     {
                         kind: payload.kind,
@@ -124,7 +124,7 @@ export class DialogOpener {
                     AddExistingToSpaceDialog,
                     {
                         onCreateRoomClick: (ev: ButtonEvent) => {
-                            showCreateNewRoom(space);
+                            void showCreateNewRoom(space);
                             PosthogTrackers.trackInteraction("WebAddExistingToSpaceDialogCreateRoomButton", ev);
                         },
                         onAddSubspaceClick: () => showAddExistingSubspace(space),
@@ -132,8 +132,8 @@ export class DialogOpener {
                     },
                     "mx_AddExistingToSpaceDialog_wrapper",
                 );
-                finished.then(([added]) => {
-                    if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+                void finished.then(([added]) => {
+                    if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
                         defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                     }
                 });

@@ -16,7 +16,6 @@ import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
-    pending?: boolean;
     displayName?: string; // required if pending is true
 
     /** Details of the other device involved in the verification, if known */
@@ -26,7 +25,6 @@ interface IProps {
     onCancel: () => void;
     sas: GeneratedSas;
     isSelf?: boolean;
-    inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
 }
 
 interface IState {
@@ -67,8 +65,13 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 ? _t("encryption|verification|confirm_the_emojis")
                 : _t("encryption|verification|sas_emoji_caption_user");
         } else if (this.props.sas.decimal) {
-            const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);
-            sasDisplay = <div className="mx_VerificationShowSas_decimalSas">{numberBlocks}</div>;
+            sasDisplay = (
+                <div className="mx_VerificationShowSas_decimalSas">
+                    <span>{this.props.sas.decimal[0]}</span>
+                    <span>{this.props.sas.decimal[1]}</span>
+                    <span>{this.props.sas.decimal[2]}</span>
+                </div>
+            );
             sasCaption = this.props.isSelf
                 ? _t("encryption|verification|sas_caption_self")
                 : _t("encryption|verification|sas_caption_user");

@@ -10,7 +10,7 @@
         "module": "es2022",
         "moduleResolution": "bundler",
         "types": [],
-        "outDir": "lib",
+        "noEmit": true,
         "jsx": "react-jsx",
         "declarationMap": true,
         "allowImportingTsExtensions": true

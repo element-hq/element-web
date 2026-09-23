@@ -8,16 +8,18 @@
 .mx_CreateSectionDialog {
     color: var(--cpd-color-text-primary);
 
+    .mx_CreateSectionDialog_title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
     &.mx_Dialog_fixedWidth {
         /* 576px coming from Figma and remove external padding */
         max-width: calc(576px - var(--cpd-space-20x));
     }
 
-    .mx_CreateSectionDialog_content {
-        min-height: 346px;
-    }
-
-    .mx_CreateSectionDialog_form {
-        width: 100%;
+    .mx_Dialog_header {
+        margin-bottom: var(--cpd-space-6x);
     }
 }

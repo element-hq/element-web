@@ -60,7 +60,7 @@ export function createRedactEventDialog({
     if (!roomId) throw new Error(`cannot redact event ${mxEvent.getId()} without room ID`);
     const { finished } = Modal.createDialog(ConfirmRedactDialog, { event: mxEvent }, "mx_Dialog_confirmredact");
 
-    finished.then(async ([proceed, reason]) => {
+    void finished.then(async ([proceed, reason]) => {
         if (!proceed) return;
 
         const cli = MatrixClientPeg.safeGet();

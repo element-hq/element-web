@@ -8,45 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { arrayDiff, arrayUnion, arrayIntersection } from "./arrays";
 
-type ObjectExcluding<O extends object, P extends (keyof O)[]> = { [k in Exclude<keyof O, P[number]>]: O[k] };
-
-/**
- * Gets a new object which represents the provided object, excluding some properties.
- * @param a The object to strip properties of. Must be defined.
- * @param props The property names to remove.
- * @returns The new object without the provided properties.
- */
-export function objectExcluding<O extends object, P extends Array<keyof O>>(a: O, props: P): ObjectExcluding<O, P> {
-    // We use a Map to avoid hammering the `delete` keyword, which is slow and painful.
-    const tempMap = new Map<keyof O, any>(Object.entries(a) as [keyof O, any][]);
-    for (const prop of props) {
-        tempMap.delete(prop);
-    }
-
-    // Convert the map to an object again
-    return Array.from(tempMap.entries()).reduce((c, [k, v]) => {
-        c[k] = v;
-        return c;
-    }, {} as O);
-}
-
-/**
- * Gets a new object which represents the provided object, with only some properties
- * included.
- * @param a The object to clone properties of. Must be defined.
- * @param props The property names to keep.
- * @returns The new object with only the provided properties.
- */
-export function objectWithOnly<O extends object, P extends Array<keyof O>>(a: O, props: P): { [k in P[number]]: O[k] } {
-    const existingProps = Object.keys(a) as (keyof O)[];
-    const diff = arrayDiff(existingProps, props);
-    if (diff.removed.length === 0) {
-        return objectShallowClone(a);
-    } else {
-        return objectExcluding(a, diff.removed) as { [k in P[number]]: O[k] };
-    }
-}
-
 /**
  * Clones an object to a caller-controlled depth. When a propertyCloner is supplied, the
  * object's properties will be passed through it with the return value used as the new

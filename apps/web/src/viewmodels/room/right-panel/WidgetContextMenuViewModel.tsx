@@ -15,7 +15,6 @@ import {
     WidgetContextMenuView,
     type WidgetContextMenuViewModel as WidgetContextMenuViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
 import QuestionDialog from "../../../components/views/dialogs/QuestionDialog";
@@ -30,8 +29,7 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { isAppWidget } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import dis from "../../../dispatcher/dispatcher";
 
 const checkRevokeButtonState = (
@@ -40,19 +38,14 @@ const checkRevokeButtonState = (
     app: IWidget,
     userWidget: boolean | undefined,
 ): boolean => {
-    const opts: ApprovalOpts = { approved: undefined };
-    ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
-    if (!opts.approved) {
-        const isAllowedWidget =
-            (isAppWidget(app) &&
-                app.eventId !== undefined &&
-                (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
-            app.creatorUserId === cli?.getUserId();
+    const isAllowedWidget =
+        (isAppWidget(app) &&
+            app.eventId !== undefined &&
+            (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
+        app.creatorUserId === cli?.getUserId();
 
-        const isLocalWidget = WidgetType.JITSI.matches(app.type);
-        return !userWidget && !isLocalWidget && isAllowedWidget;
-    }
-    return false;
+    const isLocalWidget = WidgetType.JITSI.matches(app.type);
+    return !userWidget && !isLocalWidget && isAllowedWidget;
 };
 
 export class WidgetContextMenuViewModel
@@ -132,7 +125,7 @@ export class WidgetContextMenuViewModel
     };
 
     public get onFinished(): () => void {
-        return () => this.props.onFinished!();
+        return () => this.props.onFinished();
     }
 
     public get onRevokeClick(): () => void {
@@ -147,7 +140,7 @@ export class WidgetContextMenuViewModel
                 logger.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -163,13 +156,13 @@ export class WidgetContextMenuViewModel
                     button: _t("widget|context_menu|delete"),
                 });
 
-                finished.then(([confirmed]) => {
+                void finished.then(([confirmed]) => {
                     if (!confirmed) return;
-                    WidgetUtils.setRoomWidget(this._cli, this._roomId!, this._app.id);
+                    void WidgetUtils.setRoomWidget(this._cli, this._roomId!, this._app.id);
                 });
             }
 
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -186,7 +179,7 @@ export class WidgetContextMenuViewModel
                 .catch((err) => {
                     logger.error("Failed to take screenshot: ", err);
                 });
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -194,7 +187,7 @@ export class WidgetContextMenuViewModel
         return async () => {
             try {
                 if (this._roomId) {
-                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!.widgetApi!, this._roomId!);
+                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!.widgetApi!, this._roomId);
                 }
             } catch (err: any) {
                 logger.error("Failed to start livestream", err);
@@ -206,7 +199,7 @@ export class WidgetContextMenuViewModel
                     description: message,
                 });
             }
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -217,7 +210,7 @@ export class WidgetContextMenuViewModel
             } else if (this._room) {
                 WidgetUtils.editWidget(this._room, this._app);
             }
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 
@@ -225,7 +218,7 @@ export class WidgetContextMenuViewModel
         return (direction: number) => {
             if (!this._room) throw new Error("room must be defined");
             WidgetLayoutStore.instance.moveWithinContainer(this._room, "top", this._app, direction);
-            this.props.onFinished!();
+            this.props.onFinished();
         };
     }
 }

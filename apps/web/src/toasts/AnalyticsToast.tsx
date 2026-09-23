@@ -12,7 +12,7 @@ import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import dis from "../dispatcher/dispatcher";
 import AccessibleButton from "../components/views/elements/AccessibleButton";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import {
     ButtonClicked,
@@ -38,7 +38,7 @@ const onLearnMoreNoOptIn = (): void => {
         primaryButton: _t("action|enable"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "Enable"
             onAccept();
@@ -54,7 +54,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
         cancelButton: _t("action|stop"),
     });
 
-    finished.then(([buttonClicked]) => {
+    void finished.then(([buttonClicked]) => {
         if (buttonClicked === ButtonClicked.Primary) {
             // user clicked "That's fine"
             onAccept();
@@ -67,10 +67,6 @@ const onLearnMorePreviouslyOptedIn = (): void => {
 };
 
 const TOAST_KEY = "analytics";
-
-export function getPolicyUrl(): string | undefined {
-    return SdkConfig.get("privacy_policy_url");
-}
 
 export const showToast = (): void => {
     const legacyAnalyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);

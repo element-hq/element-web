@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import SpaceStore from "../stores/spaces/SpaceStore";
 import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
 import { formatList } from "./FormattingUtils";
+import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 export interface RoomContextDetails {
     details: string | null;
@@ -26,7 +26,7 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         return { details: dmPartner };
     }
 
-    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);
+    const [parent, secondParent, ...otherParents] = SDKContextClass.instance.spaceStore.getKnownParents(room.roomId);
     if (secondParent && !otherParents?.length) {
         // exactly 2 edge case for improved i18n
         const space1Name = room.client.getRoom(parent)?.name;

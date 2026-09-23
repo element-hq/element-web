@@ -14,7 +14,7 @@ import { type Member } from "../../../../utils/direct-messages.ts";
 import BaseDialog from "../BaseDialog.tsx";
 import { type ScreenName } from "../../../../PosthogTrackers.ts";
 import { DMRoomTile } from "./DMRoomTile.tsx";
-import { _t } from "../../../../languageHandler.tsx";
+import { _t } from "../../../../languageHandler";
 
 interface Props {
     /** Callback that will be called when the 'Continue' or 'Invite' button is clicked. */

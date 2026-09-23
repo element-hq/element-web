@@ -10,26 +10,29 @@ import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { type IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";
-import LegacyCallHandler from "../../../LegacyCallHandler";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     public onHoldClick = (): void => {
         this.props.call.setRemoteOnHold(true);
         this.props.onFinished();
     };
 
     public onUnholdClick = (): void => {
-        LegacyCallHandler.instance.setActiveCallRoomId(this.props.call.roomId);
+        this.context.legacyCallHandler.setActiveCallRoomId(this.props.call.roomId);
 
         this.props.onFinished();
     };
 
     public onTransferClick = (): void => {
-        LegacyCallHandler.instance.showTransferDialog(this.props.call);
+        this.context.legacyCallHandler.showTransferDialog(this.props.call);
         this.props.onFinished();
     };
 

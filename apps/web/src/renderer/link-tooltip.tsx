@@ -10,7 +10,7 @@ import React from "react";
 import { domToReact } from "html-react-parser";
 
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
-import { getSingleTextContentNode, type RendererMap } from "./utils.tsx";
+import { getSingleTextContentNode, type RendererMap } from "./utils.ts";
 
 /**
  * Wraps ambiguous links in a tooltip trigger that shows the full URL.
@@ -22,7 +22,7 @@ export const ambiguousLinkTooltipRenderer: RendererMap = {
 
         const href = anchor.attribs["href"];
         if (href && href !== getSingleTextContentNode(anchor)) {
-            let tooltip = href as string;
+            let tooltip = href;
             try {
                 tooltip = new URL(href, window.location.href).toString();
             } catch {

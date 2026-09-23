@@ -31,6 +31,8 @@ import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
+import type { AttachmentSend } from "@matrix-org/analytics-events/types/typescript/AttachmentSend";
+import type { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
 
 import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
@@ -56,6 +58,8 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
+import { PosthogAnalytics } from "./PosthogAnalytics.ts";
+import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -77,7 +81,7 @@ interface IMediaConfig {
  * Load a file into a newly created image element.
  *
  * @param {File} imageFile The file to load in an image element.
- * @return {Promise} A promise that resolves with the html image element.
+ * @returns {Promise} A promise that resolves with the html image element.
  */
 async function loadImageElement(imageFile: File): Promise<{
     width: number;
@@ -148,7 +152,7 @@ const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp", "image/svg+xml"];
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the image will be uploaded in.
  * @param {File} imageFile The image to read and thumbnail.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imageFile: File): Promise<ImageInfo> {
     let thumbnailType = "image/png";
@@ -196,7 +200,7 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
  * Load a file into a newly created audio element and load the metadata
  *
  * @param {File} audioFile The file to load in an audio element.
- * @return {Promise} A promise that resolves with the audio element.
+ * @returns {Promise} A promise that resolves with the audio element.
  */
 function loadAudioElement(audioFile: File): Promise<HTMLAudioElement> {
     return new Promise((resolve, reject) => {
@@ -228,7 +232,7 @@ function loadAudioElement(audioFile: File): Promise<HTMLAudioElement> {
  * Read the metadata for an audio file.
  *
  * @param {File} audioFile The audio to read.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 async function infoForAudioFile(audioFile: File): Promise<AudioInfo> {
     const audio = await loadAudioElement(audioFile);
@@ -240,7 +244,7 @@ async function infoForAudioFile(audioFile: File): Promise<AudioInfo> {
  * in an attempt to guarantee the first frame will be showing.
  *
  * @param {File} videoFile The file to load in a video element.
- * @return {Promise} A promise that resolves with the video element.
+ * @returns {Promise} A promise that resolves with the video element.
  */
 function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
     return new Promise((resolve, reject) => {
@@ -271,7 +275,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
 
             video.src = dataUrl;
             video.load();
-            video.play();
+            void video.play();
         };
         reader.onerror = function (e): void {
             reject(e);
@@ -286,7 +290,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the video will be uploaded to.
  * @param {File} videoFile The video to read and thumbnail.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 function infoForVideoFile(matrixClient: MatrixClient, roomId: string, videoFile: File): Promise<VideoInfo> {
     const thumbnailType = "image/jpeg";
@@ -311,7 +315,7 @@ function infoForVideoFile(matrixClient: MatrixClient, roomId: string, videoFile:
 /**
  * Read the file as an ArrayBuffer.
  * @param {File} file The file to read
- * @return {Promise} A promise that resolves with an ArrayBuffer when the file
+ * @returns {Promise} A promise that resolves with an ArrayBuffer when the file
  *   is read.
  */
 function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
@@ -337,7 +341,7 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  * @param {Function?} progressHandler optional callback to be called when a chunk of
  *    data is uploaded.
  * @param {AbortController?} controller optional abortController to use for this upload.
- * @return {Promise} A promise that resolves with an object.
+ * @returns {Promise} A promise that resolves with an object.
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
@@ -378,6 +382,8 @@ export async function uploadFile(
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
 
+        cacheUploadedMedia(url, file);
+
         // If the attachment is encrypted then bundle the URL along with the information
         // needed to decrypt the attachment and add it under a file key.
         return {
@@ -396,6 +402,7 @@ export async function uploadFile(
             throw new UploadFailedError(e);
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
+        cacheUploadedMedia(url, file);
         // If the attachment isn't encrypted then include the URL directly.
         return { url };
     }
@@ -487,6 +494,7 @@ export default class ContentMessages {
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
+        const sentFileTypes: string[] = [];
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             const loopPromiseBefore = promBefore;
@@ -503,6 +511,7 @@ export default class ContentMessages {
                     uploadAll = true;
                 }
             }
+            sentFileTypes.push(file.type.split("/")[0]);
 
             promBefore = doMaybeLocalRoomAction(
                 roomId,
@@ -517,6 +526,28 @@ export default class ContentMessages {
                     ),
                 matrixClient,
             );
+        }
+        if (sentFileTypes.length) {
+            // Find the most common type.
+            const [type] = sentFileTypes.sort(
+                (a, b) => sentFileTypes.filter((v) => v === b).length - sentFileTypes.filter((v) => v === a).length,
+            );
+            PosthogAnalytics.instance.trackEvent<AttachmentSend>({
+                eventName: "AttachmentSend",
+                isReply: !!replyToEvent,
+                inThread: relation?.rel_type === "m.thread",
+                count: okFiles.length,
+                kind: "local",
+                type,
+            });
+        } else {
+            PosthogAnalytics.instance.trackEvent<AttachmentCancel>({
+                eventName: "AttachmentCancel",
+                isReply: !!replyToEvent,
+                inThread: relation?.rel_type === "m.thread",
+                kind: "local",
+                stage: "Confirmation",
+            });
         }
 
         if (replyToEvent) {
@@ -607,7 +638,7 @@ export default class ContentMessages {
                         throw e;
                     }
                     // Otherwise we failed to thumbnail, fall back to uploading an m.file
-                    logger.error(e);
+                    logger.error(`Expected file of type "${file.type}" to be an image, but got`, e);
                     content.msgtype = MsgType.File;
                 }
             } else if (file.type.startsWith("audio/")) {

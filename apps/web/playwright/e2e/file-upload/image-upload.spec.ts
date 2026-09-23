@@ -37,7 +37,7 @@ test.describe("Image Upload", () => {
     test("should allow upload via drag and drop", { tag: "@screenshot" }, async ({ page, app }) => {
         await app.composerDragAndUploadFiles("room", getSampleFilePath("riot.png"), "image/png");
         await app.timeline.scrollToBottom();
-        const imgTile = page.locator(".mx_MImageBody").first();
+        const imgTile = page.locator(".mx_ImageBody").first();
         await expect(imgTile).toBeVisible();
     });
 });

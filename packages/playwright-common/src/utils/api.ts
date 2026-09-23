@@ -74,6 +74,9 @@ export interface Credentials {
     /** The domain part of the user's matrix ID. */
     homeServer: string;
 
+    /** The OAuth2 Client ID used by this client for native OAuth2 sessions **/
+    oauthClientId?: string;
+
     password: string | null; // null for password-less users
     displayName?: string;
     username: string; // the localpart of the userId

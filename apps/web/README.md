@@ -126,5 +126,5 @@ Element Web supports a module system that allows you to extend or modify functio
 
 Modules are extensions that can add or modify Element Web's functionality. They are:
 
-- Built using the [`@element-hq/element-web-module-api`](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api)
+- Built using the [`@element-hq/element-web-module-api`](https://github.com/element-hq/element-web/tree/develop/packages/module-api)
 - Loaded in EW via [config.json](../../docs/config.md#modules)

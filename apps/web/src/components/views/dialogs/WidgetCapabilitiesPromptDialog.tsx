@@ -7,13 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler } from "react";
-import {
-    type Capability,
-    isTimelineCapability,
-    type Widget,
-    WidgetEventCapability,
-    type WidgetKind,
-} from "matrix-widget-api";
+import { type Capability, isTimelineCapability, WidgetEventCapability, type WidgetKind } from "matrix-widget-api";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
@@ -26,7 +20,6 @@ import { CapabilityText } from "../../../widgets/CapabilityText";
 
 interface IProps {
     requestedCapabilities: Set<Capability>;
-    widget: Widget;
     widgetKind: WidgetKind; // TODO: Refactor into the Widget class
     onFinished(result?: { approved: Capability[]; remember: boolean }): void;
 }
@@ -99,11 +92,11 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             // Both are the same type (both timeline or both non-timeline), sort lexicographically
             return lexicographicCompare(capA, capB);
         });
-        const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
+        const checkboxRows = orderedCapabilities.map(([cap, isChecked]) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
 
             return (
-                <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
+                <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap}>
                     <StyledCheckbox
                         checked={isChecked}
                         onChange={() => this.onToggle(cap)}

@@ -30,7 +30,7 @@ export type DialogHandle<M> = {
     /**
      * Method to close the dialog.
      */
-    close(): void;
+    close(this: void): void;
 };
 
 /**
@@ -42,11 +42,11 @@ export type DialogProps<M> = {
      * Callback to submit the dialog.
      * @param model - The model to submit with the dialog. This is typically the data collected.
      */
-    onSubmit(model: M): void;
+    onSubmit(this: void, model: M): void;
     /**
      * Cancel the dialog programmatically.
      */
-    onCancel(): void;
+    onCancel(this: void): void;
 };
 
 /**

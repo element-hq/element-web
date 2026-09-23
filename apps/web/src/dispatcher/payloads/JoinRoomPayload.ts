@@ -12,7 +12,6 @@ import { type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
 
-/* eslint-disable camelcase */
 export interface JoinRoomPayload extends Pick<ActionPayload, "action"> {
     action: Action.JoinRoom;
 
@@ -24,4 +23,3 @@ export interface JoinRoomPayload extends Pick<ActionPayload, "action"> {
 
     canAskToJoin?: boolean;
 }
-/* eslint-enable camelcase */

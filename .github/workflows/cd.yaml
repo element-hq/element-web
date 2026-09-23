@@ -26,22 +26,22 @@ jobs:
             contents: read
             actions: read
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
+              uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4
+              uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
 
             - name: Set up Docker Buildx
               id: builder
-              uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+              uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: package.json
                   cache: "pnpm"
@@ -50,11 +50,18 @@ jobs:
               run: "pnpm install --frozen-lockfile"
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
               with:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+
+            # Fudge and run this separately rather than relying on the dependency,
+            # otherwise nx does not appear to pick up the .env file that playwright
+            # common's prebuild step creates.
+            - run: pnpm nx run-many --nxBail -t docker:prebuild
+              env:
+                  INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
             - run: pnpm nx run-many --nxBail -t docker:build
               id: build

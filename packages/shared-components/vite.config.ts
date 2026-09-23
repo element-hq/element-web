@@ -6,33 +6,41 @@
  *
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
 import dts from "unplugin-dts/vite";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
 const sharedComponentsLayer = "shared-components";
+
+const cssAssetFileName = "element-web-shared-components.css";
 
 function layerCssAssets(): Plugin {
     return {
         name: "element-web-shared-components-css-layer",
-        writeBundle(_options, bundle): void {
-            for (const asset of Object.values(bundle)) {
-                if (asset.type !== "asset" || asset.fileName !== "element-web-shared-components.css") {
-                    continue;
-                }
+        // Rename + layer-wrap the emitted CSS file. With multi-entry lib mode,
+        // vite/rolldown derives CSS filenames from the unscoped package name (dropping
+        // the `element-` prefix), so we rename on disk to keep the path stable for
+        // consumers importing `@element-hq/web-shared-components/.../*.css`.
+        writeBundle(options): void {
+            const outDir = options.dir ?? fileURLToPath(import.meta.resolve("./dist"));
+            const expectedPath = path.resolve(outDir, cssAssetFileName);
+            const renamedFromPath = path.resolve(outDir, "web-shared-components.css");
 
-                const cssPath = resolve(__dirname, "dist", asset.fileName);
-                const source = readFileSync(cssPath, "utf-8");
-                if (source.startsWith(cssLayerOrder)) {
-                    continue;
-                }
-
-                writeFileSync(cssPath, `${cssLayerOrder}\n@layer ${sharedComponentsLayer} {\n${source}\n}\n`);
+            if (existsSync(renamedFromPath)) {
+                renameSync(renamedFromPath, expectedPath);
             }
+
+            // No CSS emitted in this build (e.g. storybook's vite build doesn't produce
+            // the library CSS bundle), or already renamed and layered on a prior pass.
+            if (!existsSync(expectedPath)) return;
+
+            const source = readFileSync(expectedPath, "utf-8");
+            if (source.startsWith(cssLayerOrder)) return;
+            writeFileSync(expectedPath, `${cssLayerOrder}\n@layer ${sharedComponentsLayer} {\n${source}\n}\n`);
         },
     };
 }
@@ -40,16 +48,27 @@ function layerCssAssets(): Plugin {
 export default defineConfig({
     build: {
         lib: {
-            entry: resolve(__dirname, "src/index.ts"),
+            // Two entries: the main bundle and a standalone `numbers` utility that callers
+            // running outside the browser DOM (e.g. AudioWorkletGlobalScope) can import without
+            // pulling in the rest of the package — which transitively loads dnd-kit and
+            // other window/document-dependent code.
+            entry: {
+                "element-web-shared-components": fileURLToPath(import.meta.resolve("./src/index.ts")),
+                "numbers": fileURLToPath(import.meta.resolve("./src/core/utils/numbers.ts")),
+            },
             name: "Element Web Shared Components",
-            // the proper extensions will be added
-            fileName: "element-web-shared-components",
+            // Multi-entry mode needs both formats explicit; UMD doesn't support multi-entry
+            // (single global), so we ship ES + CJS and use the `.umd.cjs` extension for CJS
+            // to keep the existing package.json `require` paths working.
+            formats: ["es", "cjs"],
+            fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "umd.cjs"}`,
         },
         outDir: "dist",
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
             external: [
+                "@matrix-org/emojibase-bindings",
                 "@vector-im/compound-design-tokens",
                 "@vector-im/compound-web",
                 "react-virtuoso",
@@ -65,6 +84,7 @@ export default defineConfig({
                 // for externalized deps
                 globals: {
                     "react": "react",
+                    "@matrix-org/emojibase-bindings": "matrixEmojibaseBindings",
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",
@@ -74,9 +94,16 @@ export default defineConfig({
         },
     },
     plugins: [
+        react(),
         layerCssAssets(),
         dts({
-            bundleTypes: true,
+            bundleTypes: {
+                invokeOptions: {
+                    localBuild: !!process.env.CI,
+                    // oxlint-disable-next-line unicorn/prefer-module
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: false,

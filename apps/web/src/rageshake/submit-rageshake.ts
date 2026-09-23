@@ -320,8 +320,8 @@ async function collectLogs(
         let buf = new TextEncoder().encode(entry.lines);
 
         // compress
-        if (gzipLogs) {
-            buf = pako!.gzip(buf);
+        if (pako) {
+            buf = pako.gzip(buf).slice();
         }
 
         body.append("compressed-log", new Blob([buf]), entry.id);
@@ -340,7 +340,7 @@ async function collectLogs(
  *
  * @param {function(string)} opts.progressCallback Callback to call with progress updates
  *
- * @return {Promise<string>} URL returned by the rageshake server
+ * @returns {Promise<string>} URL returned by the rageshake server
  *
  * @throws A RageshakeError when the rageshake server responds with an error. This will be `RS_UNKNOWN` if the
  *         the server does not respond with an expected body format.
@@ -361,7 +361,7 @@ export default async function sendBugReport(bugReportEndpoint?: string, opts: IO
  * Loads a bug report into a tarball.
  *
  * @param opts optional dictionary of options
- * @return Resolves with a Tarball object.
+ * @returns Resolves with a Tarball object.
  */
 export async function loadBugReport(opts: IOpts = {}): Promise<Tar> {
     const Tar = (await import("tar-js")).default;
@@ -395,7 +395,7 @@ export async function loadBugReport(opts: IOpts = {}): Promise<Tar> {
  * but instead causes the browser to download the files locally.
  *
  * @param opts optional dictionary of options
- * @return Resolved when the bug report is downloaded (or started).
+ * @returns Resolved when the bug report is downloaded (or started).
  */
 export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
     const tape = await loadBugReport(opts);

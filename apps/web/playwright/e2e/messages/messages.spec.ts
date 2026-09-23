@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { type Locator, type Page } from "@playwright/test";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { readSampleFileSync } from "../../sample-files";
@@ -23,7 +24,7 @@ async function sendMessage(page: Page, message: string): Promise<Locator> {
     await page.getByRole("textbox", { name: "Send an unencrypted message…" }).fill(message);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
@@ -37,7 +38,7 @@ async function sendMultilineMessages(page: Page, messages: string[]) {
 
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
@@ -50,7 +51,7 @@ async function replyMessage(page: Page, message: Locator, replyMessage: string):
     await page.getByRole("textbox", { name: "Send an unencrypted reply…" }).fill(replyMessage);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile").last();
     await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
@@ -85,10 +86,10 @@ test.describe("Message rendering", () => {
         test.describe(`with ${direction} display name`, { tag: "@screenshot" }, () => {
             test.use({
                 displayName,
-                room: async ({ user, app }, use) => {
+                room: async ({ user, app, page }, use) => {
                     const roomId = await app.client.createRoom({ name: "Test room" });
                     await use({ roomId });
-                    await app.closeVerifyToast();
+                    await rejectToast(page, "Verify this device");
                 },
             });
 
@@ -216,10 +217,10 @@ test.describe("Message rendering", () => {
 test.describe("Message url previews", () => {
     test.use({
         displayName: "Alice",
-        room: async ({ user, app }, use) => {
+        room: async ({ user, app, page }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
-            await app.closeVerifyToast();
+            await rejectToast(page, "Verify this device");
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {

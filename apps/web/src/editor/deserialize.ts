@@ -64,7 +64,10 @@ function parseAtRoomMentions(text: string, pc: PartCreator, opts: IParseOptions)
 }
 
 function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
-    const { href } = n as HTMLAnchorElement;
+    // Read the attribute rather than the `href` property: the property is the resolved, serialised
+    // URL, so it appends a trailing slash to an origin-only link and absolutises a relative one.
+    // The composer should show the author what they wrote.
+    const href = (n as HTMLAnchorElement).getAttribute("href") ?? "";
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {

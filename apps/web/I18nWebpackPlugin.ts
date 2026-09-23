@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import webpack from "webpack";
 import * as fs from "node:fs/promises";
-import * as path from "node:path";
+import path from "node:path";
 import _ from "lodash";
 import { type Translations } from "matrix-web-i18n";
 
@@ -62,7 +62,7 @@ export class I18nWebpackPlugin {
                     }
 
                     const primaryPath = paths[0];
-                    const includeLangs = [...new Set([...(await fs.readdir(primaryPath))])]
+                    const includeLangs = [...new Set(await fs.readdir(primaryPath))]
                         .filter((fn) => fn.endsWith(".json"))
                         .map((f) => f.slice(0, -5));
 

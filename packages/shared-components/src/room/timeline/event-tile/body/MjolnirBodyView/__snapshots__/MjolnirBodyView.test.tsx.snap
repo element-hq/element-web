@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MjolnirBodyView > renders the default story 1`] = `
+<div>
+  <div
+    class="MjolnirBodyView-module_content"
+  >
+    <i>
+      <span>
+        You have ignored this user, so their message is hidden.
+        <button
+          class="MjolnirBodyView-module_allowButton"
+          type="button"
+        >
+           Show anyways.
+        </button>
+      </span>
+    </i>
+  </div>
+</div>
+`;

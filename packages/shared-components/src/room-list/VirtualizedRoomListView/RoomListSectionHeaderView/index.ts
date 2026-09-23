@@ -6,8 +6,13 @@
  */
 
 export { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+export { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
+export type { RoomListSectionHeaderContentProps } from "./RoomListSectionHeaderContent";
 export type {
     RoomListSectionHeaderViewModel,
     RoomListSectionHeaderViewSnapshot,
     RoomListSectionHeaderActions,
 } from "./RoomListSectionHeaderView";
+export type { AcceptedRoomKind } from "../dragAndDrop";
+export { RoomListStickySectionHeaderView } from "./RoomListStickySectionHeaderView";
+export type { RoomListStickySectionHeaderViewProps } from "./RoomListStickySectionHeaderView";

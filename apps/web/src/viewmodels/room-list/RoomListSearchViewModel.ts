@@ -21,7 +21,8 @@ import { MetaSpace } from "../../stores/spaces";
 import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import type LegacyCallHandler from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 
 export interface Props {
     /**
@@ -29,6 +30,11 @@ export interface Props {
      * The explore button is only displayed in the Home meta space
      */
     activeSpace: string;
+
+    /**
+     * Reference to the LegacyCallHandler instance
+     */
+    legacyCallHandler: LegacyCallHandler;
 }
 
 /**
@@ -58,13 +64,13 @@ export class RoomListSearchViewModel
     };
 
     public constructor(props: Props) {
-        const supportsPstn = LegacyCallHandler.instance.getSupportsPstnProtocol();
+        const supportsPstn = props.legacyCallHandler.getSupportsPstnProtocol();
         super(props, RoomListSearchViewModel.computeSnapshot(props.activeSpace, supportsPstn));
         this.displayDialButton = supportsPstn;
 
         // Listen for changes in PSTN protocol support
         this.disposables.trackListener(
-            LegacyCallHandler.instance,
+            props.legacyCallHandler,
             LegacyCallHandlerEvent.ProtocolSupport,
             this.onProtocolSupportChange,
         );
@@ -74,7 +80,7 @@ export class RoomListSearchViewModel
      * Handles changes in protocol support (PSTN).
      */
     private readonly onProtocolSupportChange = (): void => {
-        const supportsPstn = LegacyCallHandler.instance.getSupportsPstnProtocol();
+        const supportsPstn = this.props.legacyCallHandler.getSupportsPstnProtocol();
         this.displayDialButton = supportsPstn;
         this.snapshot.set(RoomListSearchViewModel.computeSnapshot(this.props.activeSpace, supportsPstn));
     };

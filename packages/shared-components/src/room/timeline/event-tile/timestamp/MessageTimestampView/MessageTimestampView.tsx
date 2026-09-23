@@ -53,7 +53,7 @@ export interface MessageTimestampViewActions {
  * The view model for the message timestamp.
  *
  * Snapshot data describes timestamp content and rendering behavior, while
- * container styling is supplied via component props.
+ * host layout and placement styling is supplied via component props.
  */
 export type MessageTimestampViewModel = ViewModel<MessageTimestampViewSnapshot> & MessageTimestampViewActions;
 
@@ -74,11 +74,11 @@ interface MessageTimestampViewProps {
  * The view model provides the timestamp values and display options. The component
  * can render as a link when `href` is set, and can show both sent-at and received-at
  * times in the tooltip when `tsReceivedAt` is provided. Use `className` for
- * host-level styling.
+ * host-level layout and placement styling.
  *
  * @example
  * ```tsx
- * <MessageTimestampView vm={messageTimestampViewModel} className="mx_MessageTimestamp" />
+ * <MessageTimestampView vm={messageTimestampViewModel} />
  * ```
  */
 export function MessageTimestampView({ vm, className }: Readonly<MessageTimestampViewProps>): JSX.Element {

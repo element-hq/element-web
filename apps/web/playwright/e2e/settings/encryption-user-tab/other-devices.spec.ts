@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { createNewInstance } from "@element-hq/element-web-playwright-common";
+import { createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
 import { type StartedHomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 import { type Page, type Browser, type TestInfo } from "@playwright/test";
 
@@ -29,10 +29,10 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await prepForEncryption(aliceElementApp, aliceCredentials);
 
         // Create a second browser instance.
-        const { bobCredentials, bobPage } = await newBrowser(homeserver, testInfo, browser);
+        const { bobCredentials, bobPage, bobElementApp } = await newBrowser(homeserver, testInfo, browser);
 
         // Create the room and invite bob
-        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
+        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobElementApp);
 
         // Alice sends a message, which Bob should be able to decrypt
         await sendMessageInCurrentRoom(alicePage, "Decryptable");
@@ -60,10 +60,10 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.settings.closeDialog();
 
         // Create a second browser instance.
-        const { bobCredentials, bobPage } = await newBrowser(homeserver, testInfo, browser);
+        const { bobCredentials, bobPage, bobElementApp } = await newBrowser(homeserver, testInfo, browser);
 
         // Create the room and invite bob
-        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
+        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobElementApp);
 
         // Alice sends a message, which Bob should not be able to decrypt
         await sendMessageInCurrentRoom(alicePage, "Undecryptable");
@@ -98,8 +98,8 @@ test.describe("Other people's devices section in Encryption tab", () => {
         const { bobCredentials, bobPage, bobElementApp } = await newBrowser(homeserver, testInfo, browser);
 
         // Create the room and invite bob
-        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
-        await bobElementApp.closeNotificationToast();
+        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobElementApp);
+        await rejectToast(alicePage, "Notifications");
 
         // Perform verification.
         await verifyApp("alice", aliceElementApp, "bob", bobElementApp);
@@ -119,10 +119,10 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await prepForEncryption(aliceElementApp, aliceCredentials);
 
         // Create a second browser instance.
-        const { bobCredentials, bobPage } = await newBrowser(homeserver, testInfo, browser);
+        const { bobCredentials, bobPage, bobElementApp } = await newBrowser(homeserver, testInfo, browser);
 
         // Alice creates the room and invites Bob.
-        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
+        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobElementApp);
 
         // Alice configures her client to blacklist unverified users in this room.
         const dialog = await aliceElementApp.settings.openRoomSettings("Security & Privacy");
@@ -143,8 +143,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
 
         // Bob accepts the invite.
-        await bobPage.getByRole("option", { name: "TestRoom2" }).click();
-        await bobPage.getByRole("button", { name: "Accept" }).click();
+        await bobElementApp.acceptInvitedRoomByName("TestRoom2");
 
         // Alice sends a message in the new room, which Bob should be able to decrypt.
         await sendMessageInCurrentRoom(alicePage, "Decryptable");
@@ -172,10 +171,10 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.settings.closeDialog();
 
         // Create a second browser instance.
-        const { bobCredentials, bobPage } = await newBrowser(homeserver, testInfo, browser);
+        const { bobCredentials, bobPage, bobElementApp } = await newBrowser(homeserver, testInfo, browser);
 
         // Alice creates the room and invites Bob.
-        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobPage);
+        await inviteBobToNewRoom(alicePage, aliceElementApp, bobCredentials, bobElementApp);
 
         // Alice configures her client to allow sending to unverified users in this room.
         dialog = await aliceElementApp.settings.openRoomSettings("Security & Privacy");
@@ -192,8 +191,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
 
         // Bob accepts the invite.
-        await bobPage.getByRole("option", { name: "TestRoom2" }).click();
-        await bobPage.getByRole("button", { name: "Accept" }).click();
+        await bobElementApp.acceptInvitedRoomByName("TestRoom2");
 
         // Alice sends a message in the new room, which Bob should not be able to decrypt.
         await sendMessageInCurrentRoom(alicePage, "Undecryptable");
@@ -209,12 +207,11 @@ async function inviteBobToNewRoom(
     alicePage: Page,
     aliceElementApp: ElementAppPage,
     bobCredentials: CredentialsOptionalAccessToken,
-    bobPage: Page,
+    bobElementApp: ElementAppPage,
 ) {
     await createRoom(alicePage, "TestRoom", true);
     await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
-    await bobPage.getByRole("option", { name: "TestRoom" }).click();
-    await bobPage.getByRole("button", { name: "Accept" }).click();
+    await bobElementApp.acceptInvitedRoomByName("TestRoom");
 }
 
 async function newBrowser(

@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import PlatformPeg from "../../PlatformPeg";
-import SettingsStore from "../SettingsStore";
 import { _t } from "../../languageHandler";
 import { SlidingSyncManager } from "../../SlidingSyncManager";
 
@@ -20,7 +19,7 @@ export default class SlidingSyncController extends SettingController {
 
     public get settingDisabled(): boolean | string {
         // Cannot be disabled once enabled, user has been warned and must log out and back in.
-        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
+        if (this.settingsStore.getValue("feature_simplified_sliding_sync")) {
             return _t("labs|sliding_sync_disabled_notice");
         }
         if (!SlidingSyncManager.serverSupportsSlidingSync) {

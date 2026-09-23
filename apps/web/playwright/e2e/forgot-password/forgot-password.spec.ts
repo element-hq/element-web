@@ -14,7 +14,6 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 const email = "user@nowhere.dummy";
 
 const test = base.extend({
-    // eslint-disable-next-line no-empty-pattern
     credentials: async ({}, use, testInfo) => {
         await use({
             username: `user_${testInfo.testId}`,
@@ -57,7 +56,7 @@ test.describe("Forgot Password", () => {
         "renders email verification dialog properly",
         { tag: "@screenshot" },
         async ({ page, homeserver, credentials }) => {
-            const user = await homeserver.registerUser(credentials.username, credentials.password);
+            const user = await homeserver.registerUser(credentials.username, credentials.password!);
 
             await homeserver.setThreepid(user.userId, "email", email);
 
@@ -74,8 +73,8 @@ test.describe("Forgot Password", () => {
 
             await page.getByRole("button", { name: "Next" }).click();
 
-            await page.getByRole("textbox", { name: "New Password", exact: true }).fill(credentials.password);
-            await page.getByRole("textbox", { name: "Confirm new password", exact: true }).fill(credentials.password);
+            await page.getByRole("textbox", { name: "New Password", exact: true }).fill(credentials.password!);
+            await page.getByRole("textbox", { name: "Confirm new password", exact: true }).fill(credentials.password!);
 
             await page.getByRole("button", { name: "Reset password" }).click();
 

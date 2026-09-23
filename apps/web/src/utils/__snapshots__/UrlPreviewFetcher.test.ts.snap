@@ -1,0 +1,105 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { …(3) } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "Basic title",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { …(4) } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "Site name",
+  "title": "Site name",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { …(4) } 2`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "A description",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { …(4) } 3`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "Cool site",
+  "title": "Cool blog",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { …(7) } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": {
+    "alt": undefined,
+    "fileSize": 10000,
+    "height": 478,
+    "imageFull": "https://example.org/image/src",
+    "imageThumb": "https://example.org/image/thumb",
+    "imageType": undefined,
+    "mxcImageFull": "mxc://example.org/abc",
+    "playable": false,
+    "width": 478,
+  },
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "Media test",
+}
+`;
+
+exports[`UrlPreviewFetcher > should preview a URL with media 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": {
+    "alt": undefined,
+    "fileSize": 10000,
+    "height": 128,
+    "imageFull": "https://example.org/image/src",
+    "imageThumb": "https://example.org/image/thumb",
+    "imageType": undefined,
+    "mxcImageFull": "mxc://example.org/abc",
+    "playable": false,
+    "width": 128,
+  },
+  "link": "https://example.org",
+  "ogUrl": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "This is an example!",
+}
+`;

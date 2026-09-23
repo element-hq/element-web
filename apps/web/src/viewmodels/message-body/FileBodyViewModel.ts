@@ -16,6 +16,8 @@ import {
     type FileBodyViewSnapshot,
     type FileBodyViewModel as FileBodyViewModelInterface,
 } from "@element-hq/web-shared-components";
+// eslint-disable-next-line no-restricted-imports
+import DownloadSvg from "@vector-im/compound-design-tokens/icons/download.svg";
 
 import Modal from "../../Modal";
 import { _t } from "../../languageHandler";
@@ -25,6 +27,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -34,6 +37,8 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
+    /** Whether the PDF viewer lab is on. Read by the view, so this model needs no settings access. */
+    pdfViewerEnabled: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -41,17 +46,13 @@ const downloadIconCache = { url: "" };
 
 async function cacheDownloadIcon(): Promise<string> {
     if (downloadIconCache.url) return downloadIconCache.url;
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const svg = await fetch(require("@vector-im/compound-design-tokens/icons/download.svg").default).then((r) =>
-        r.text(),
-    );
+    const svg = await fetch(DownloadSvg).then((r) => r.text());
     downloadIconCache.url = "data:image/svg+xml;base64," + window.btoa(svg);
     return downloadIconCache.url;
 }
 
 // Cache the asset immediately
-// noinspection JSIgnoredPromiseFromCall
-cacheDownloadIcon();
+void cacheDownloadIcon();
 
 // User supplied content can contain scripts, we have to be careful that
 // we don't accidentally run those script within the same origin as the
@@ -86,7 +87,7 @@ cacheDownloadIcon();
 /**
  * Get the current CSS style for a DOMElement.
  * @param {HTMLElement} element The element to get the current style of.
- * @return {string} The CSS style encoded as a string.
+ * @returns {string} The CSS style encoded as a string.
  */
 function computedStyle(element: HTMLElement | null): string {
     if (!element) {
@@ -155,6 +156,18 @@ export class FileBodyViewModel
             : undefined;
         const fileInfoIcon = showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined;
         const downloadLabel = showDownload ? downloadLabelForFile(content, true) : undefined;
+        // Offer the viewer wherever the file is presented as a file, i.e. not in an export and not in
+        // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
+        const showOpen =
+            showFileInfo &&
+            !props.forExport &&
+            !!props.mediaEventHelper &&
+            props.pdfViewerEnabled &&
+            isPdfEvent(props.mxEvent);
+        const openLabel = showOpen ? _t("pdf_viewer|open") : undefined;
+        // Once the row carries an action for opening, downloading needs to be an action too rather than
+        // staying hidden behind a click on the file name.
+        const showInlineDownload = showOpen;
         const downloadTitle = showDownload
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
             : undefined;
@@ -182,6 +195,9 @@ export class FileBodyViewModel
                 showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
+                showOpen,
+                openLabel,
+                showInlineDownload,
             };
         }
 
@@ -196,6 +212,9 @@ export class FileBodyViewModel
                 downloadLabel,
                 downloadTitle: downloadTitle,
                 downloadHref: media.srcHttp,
+                showOpen,
+                openLabel,
+                showInlineDownload,
             };
         }
 
@@ -224,7 +243,7 @@ export class FileBodyViewModel
     private downloadFile(fileName: string, text: string): void {
         if (!this.decryptedBlob) return;
 
-        this.fileDownloader.download({
+        void this.fileDownloader.download({
             blob: this.decryptedBlob,
             name: fileName,
             autoDownload: this.userDidClick,
@@ -265,11 +284,13 @@ export class FileBodyViewModel
             return;
         }
 
-        this.fileDownloader.download({
+        await this.fileDownloader.download({
             blob: await this.props.mediaEventHelper.sourceBlob.value,
             name: this.fileName,
         });
     };
+
+    public onOpenClick = (): void => openPdfViewer(this.props.mxEvent);
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 
@@ -282,7 +303,7 @@ export class FileBodyViewModel
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
         logger.log(`Downloading ${fileType} as blob (unencrypted)`);
 
-        this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
+        void this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
             const blobUrl = URL.createObjectURL(blob);
             const tempAnchor = document.createElement("a");
             tempAnchor.download = this.fileName;

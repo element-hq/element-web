@@ -34,6 +34,7 @@ import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     roomId: string;
@@ -74,7 +75,7 @@ class FilePanel extends React.Component<IProps, IState> {
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
         const client = MatrixClientPeg.safeGet();
-        client.decryptEventIfNeeded(ev);
+        void client.decryptEventIfNeeded(ev);
 
         if (ev.isBeingDecrypted()) {
             this.decryptingEvents.add(ev.getId()!);
@@ -286,15 +287,17 @@ class FilePanel extends React.Component<IProps, IState> {
                     >
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        <TimelinePanel
-                            manageReadReceipts={false}
-                            manageReadMarkers={false}
-                            timelineSet={this.state.timelineSet}
-                            showUrlPreview={false}
-                            onPaginationRequest={this.onPaginationRequest}
-                            empty={emptyState}
-                            layout={Layout.Group}
-                        />
+                        <EventPresentationContextProvider layout={Layout.Group}>
+                            <TimelinePanel
+                                manageReadReceipts={false}
+                                manageReadMarkers={false}
+                                timelineSet={this.state.timelineSet}
+                                showUrlPreview={false}
+                                onPaginationRequest={this.onPaginationRequest}
+                                empty={emptyState}
+                                layout={Layout.Group}
+                            />
+                        </EventPresentationContextProvider>
                     </BaseCard>
                 </ScopedRoomContextProvider>
             );

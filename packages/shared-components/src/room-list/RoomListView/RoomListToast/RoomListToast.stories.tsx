@@ -18,11 +18,12 @@ const meta = {
     args: {
         type: "section_created",
         onClose: fn(),
+        onClick: fn(),
     },
     argTypes: {
         type: {
             control: "select",
-            options: ["section_created"],
+            options: ["section_created", "chat_moved", "unread_activity"],
         },
     },
     decorators: [
@@ -32,6 +33,12 @@ const meta = {
             </div>
         ),
     ],
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/qurBlLqjf3mRNpyZ1ffamm/ER-213---Sections?node-id=1233-22137&t=ftTEpAma7PgRaaqB-4",
+        },
+    },
 } satisfies Meta<typeof RoomListToast>;
 
 export default meta;
@@ -42,5 +49,11 @@ export const SectionCreated: Story = {};
 export const ChatMoved: Story = {
     args: {
         type: "chat_moved",
+    },
+};
+
+export const UnreadActivity: Story = {
+    args: {
+        type: "unread_activity",
     },
 };

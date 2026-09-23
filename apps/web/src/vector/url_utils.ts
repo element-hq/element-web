@@ -54,15 +54,10 @@ const urlParameterConfig = {
         keys: ["loginToken"],
         location: "query",
     },
-    // Fragment params for OIDC login, added by the Identity Provider
-    oidc_fragment: {
+    // Fragment params for OAuth2 login, added by the Identity Provider
+    oauth2: {
         keys: ["code", "state"],
         location: "fragment",
-    },
-    // Query params for OIDC login, added by the Identity Provider, used as fallback when fragment is unsupported
-    oidc_query: {
-        keys: ["code", "state"],
-        location: "query",
     },
     // Fragment params relating to 3pid (email) invites, added in url within the invite email itself
     threepid: {
@@ -99,7 +94,7 @@ export type URLParams = Partial<{
  * Utility to parse parameters held in the app's URL.
  * Currently focusing only on at-load URL parameters.
  * @param url - the URL to parse.
- * @return an object keyed by the groups defined in {@link urlParameterConfig} with values for each key listed,
+ * @returns an object keyed by the groups defined in {@link urlParameterConfig} with values for each key listed,
  *     sourced from the location (query/fragment/either) specified. If no parameters in a group are found the entire group
  *     will be omitted from the returned object to simplify presence checking.
  */
@@ -120,9 +115,7 @@ export function parseAppUrl(url: Location | URL): {
         if (!params) continue; // no params
 
         const target: Record<string, string> = {};
-        for (const k of groupConfig.keys) {
-            const key = k as (typeof groupConfig)["keys"][number];
-
+        for (const key of groupConfig.keys) {
             const value = params.get(key);
             if (value !== null) {
                 target[key] = value;
@@ -134,5 +127,5 @@ export function parseAppUrl(url: Location | URL): {
         }
     }
 
-    return { params: urlParams as URLParams, location: parsedFragment.location };
+    return { params: urlParams, location: parsedFragment.location };
 }

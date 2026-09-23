@@ -6,10 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { useMemo } from "react";
+import classNames from "classnames";
 import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { Tooltip } from "@vector-im/compound-web";
+import { useEventPresentation } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -53,7 +55,6 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         Modal.createDialog(
             LocationViewDialog,
             {
-                matrixClient: this.context,
                 mxEvent: this.props.mxEvent,
             },
             "mx_LocationViewDialog_wrapper",
@@ -132,6 +133,11 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     onError,
     onClick,
 }) => {
+    const { layout } = useEventPresentation();
+
+    // Find the message panel boundary so the tooltip hides when it would overlap the composer
+    const boundaryEl = useMemo(() => document.querySelector<HTMLElement>(".mx_RoomView_messagePanel") ?? undefined, []);
+
     // only pass member to marker when should render avatar marker
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const geoUri = locationEventGeoUri(mxEvent);
@@ -150,8 +156,8 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     );
 
     return (
-        <div className="mx_MLocationBody">
-            <Tooltip label={tooltip}>
+        <div className={classNames("mx_MLocationBody", { mx_MLocationBody_bubble: layout === "bubble" })}>
+            <Tooltip label={tooltip} boundary={boundaryEl}>
                 <div className="mx_MLocationBody_map">{mapElement}</div>
             </Tooltip>
         </div>

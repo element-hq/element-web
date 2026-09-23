@@ -11,19 +11,19 @@ Please see LICENSE files in the repository root for full details.
     flex-direction: column;
     box-sizing: border-box;
 
-    margin-top: $spacing-16;
-    padding: $spacing-24;
+    margin-top: var(--cpd-space-4x);
+    padding: var(--cpd-space-6x);
     border-radius: 8px;
     border: 1px solid $quinary-content;
 }
 
 .mx_DeviceDetails_section {
-    padding-bottom: $spacing-20;
-    margin-bottom: $spacing-20;
+    padding-bottom: var(--cpd-space-5x);
+    margin-bottom: var(--cpd-space-5x);
     border-bottom: 1px solid $quinary-content;
 
     display: grid;
-    gap: $spacing-24;
+    gap: var(--cpd-space-6x);
     justify-content: left;
     grid-template-columns: 100%;
 
@@ -42,7 +42,7 @@ Please see LICENSE files in the repository root for full details.
         font-size: $font-12px;
         color: $secondary-content;
         line-height: $font-14px;
-        margin-top: $spacing-4;
+        margin-top: var(--cpd-space-1x);
     }
 }
 
@@ -61,7 +61,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     td {
-        padding-top: $spacing-8;
+        padding-top: var(--cpd-space-2x);
     }
 
     .mxDeviceDetails_metadataLabel {
@@ -77,7 +77,7 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: $spacing-4;
+    gap: var(--cpd-space-1x);
 }
 
 .mx_DeviceDetails_pushNotifications {

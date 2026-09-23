@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import { type SettingLevel } from "../SettingLevel";
-import SettingsStore from "../SettingsStore";
 import { type SettingKey } from "../Settings.tsx";
 
 /**
@@ -40,6 +39,6 @@ export default class UIFeatureController extends SettingController {
     }
 
     public get settingDisabled(): boolean {
-        return !SettingsStore.getValue(this.uiFeatureName);
+        return !this.settingsStore.getValue(this.uiFeatureName);
     }
 }

@@ -14,7 +14,7 @@ import {
     type IClientWellKnown,
     MatrixClient,
     MatrixError,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -64,6 +64,7 @@ const mapAutoDiscoveryErrorTranslation = (err: AutoDiscoveryError): TranslationK
     }
 };
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class AutoDiscoveryUtils {
     /**
      * Checks if a given error or error message is considered an error
@@ -288,7 +289,7 @@ export default class AutoDiscoveryUtils {
 
         // This isn't inherently auto-discovery but used to be in an earlier incarnation of the MSC,
         // and shuttling the data together makes a lot of sense
-        let delegatedAuthentication: OidcClientConfig | undefined;
+        let delegatedAuthentication: ValidatedAuthMetadata | undefined;
         let delegatedAuthenticationError: Error | undefined;
         try {
             const tempClient = new MatrixClient({ baseUrl: preferredHomeserverUrl });

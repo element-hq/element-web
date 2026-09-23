@@ -141,7 +141,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                             kind="link_inline"
                                             onClick={() => {
                                                 dialog.close();
-                                                this.createNewRoom(false, true);
+                                                void this.createNewRoom(false, true);
                                             }}
                                         >
                                             {" "}
@@ -170,7 +170,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 },
             ),
         });
-        finished.then(([confirm]) => {
+        await finished.then(([confirm]) => {
             if (!confirm) {
                 this.setState({ encrypted: false });
                 return;
@@ -249,8 +249,13 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private async hasAliases(): Promise<boolean> {
+        // The published addresses can live on any server, so a room can be linkable without this
+        // server holding a local alias for it.
+        const room = this.props.room;
+        if (room.getCanonicalAlias() || room.getAltAliases().length > 0) return true;
+
         const cli = this.context;
-        const response = await cli.getLocalAliases(this.props.room.roomId);
+        const response = await cli.getLocalAliases(room.roomId);
         const localAliases = response.aliases;
         return Array.isArray(localAliases) && localAliases.length !== 0;
     }
@@ -339,7 +344,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                         kind="link_inline"
                                         onClick={(): void => {
                                             dialog.close();
-                                            this.createNewRoom(true, false);
+                                            void this.createNewRoom(true, false);
                                         }}
                                     >
                                         {" "}

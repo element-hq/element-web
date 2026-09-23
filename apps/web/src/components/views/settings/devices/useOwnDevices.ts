@@ -16,7 +16,6 @@ import {
     type MatrixEvent,
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
-    UNSTABLE_MSC3852_LAST_SEEN_UA,
     type MatrixError,
     type LocalNotificationSettings,
 } from "matrix-js-sdk/src/matrix";
@@ -27,7 +26,6 @@ import { _t } from "../../../../languageHandler";
 import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";
 import { type DevicesDictionary, type ExtendedDevice, type ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
-import { parseUserAgent } from "../../../../utils/device/parseUserAgent";
 import { isDeviceVerified } from "../../../../utils/device/isDeviceVerified";
 import { SDKContext } from "../../../../contexts/SDKContext";
 
@@ -56,7 +54,6 @@ export async function fetchExtendedDeviceInformation(matrixClient: MatrixClient)
             ...device,
             isVerified: await isDeviceVerified(matrixClient, device.device_id),
             ...parseDeviceExtendedInformation(matrixClient, device),
-            ...parseUserAgent(device[UNSTABLE_MSC3852_LAST_SEEN_UA.name]),
         };
     }
     return devicesDict;
@@ -100,7 +97,7 @@ export const useOwnDevices = (): DevicesState => {
     const [error, setError] = useState<OwnDevicesError>();
 
     useEffect(() => {
-        matrixClient.doesServerSupportUnstableFeature("org.matrix.msc3881").then((hasSupport) => {
+        void matrixClient.doesServerSupportUnstableFeature("org.matrix.msc3881").then((hasSupport) => {
             setSupportsMSC3881(hasSupport);
         });
     }, [matrixClient]);
@@ -153,7 +150,7 @@ export const useOwnDevices = (): DevicesState => {
     }, [matrixClient]);
 
     useEffect(() => {
-        refreshDevices();
+        void refreshDevices();
     }, [refreshDevices]);
 
     useEffect(() => {
@@ -167,7 +164,7 @@ export const useOwnDevices = (): DevicesState => {
 
     useEventEmitter(matrixClient, CryptoEvent.DevicesUpdated, (users: string[]): void => {
         if (users.includes(userId)) {
-            refreshDevices();
+            void refreshDevices();
         }
     });
 

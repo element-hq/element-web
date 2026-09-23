@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_BetaCard {
-    padding: $spacing-24;
+    padding: var(--cpd-space-6x);
     background-color: $panels;
     border-radius: 8px;
     box-sizing: border-box;
@@ -16,7 +16,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_BetaCard_columns {
         display: flex;
         flex-flow: wrap;
-        gap: $spacing-20;
+        gap: var(--cpd-space-5x);
         justify-content: center;
 
         .mx_BetaCard_columns_description {
@@ -27,11 +27,11 @@ Please see LICENSE files in the repository root for full details.
                 font-size: $font-18px;
                 line-height: $font-22px;
                 color: $primary-content;
-                margin: $spacing-4 0 14px;
+                margin: var(--cpd-space-1x) 0 14px;
 
                 display: flex;
                 align-items: center;
-                column-gap: $spacing-12;
+                column-gap: var(--cpd-space-3x);
             }
 
             .mx_BetaCard_caption {
@@ -42,8 +42,8 @@ Please see LICENSE files in the repository root for full details.
             .mx_BetaCard_buttons {
                 display: flex;
                 flex-wrap: wrap-reverse;
-                gap: $spacing-12;
-                margin: $spacing-20 auto 0;
+                gap: var(--cpd-space-3x);
+                margin: var(--cpd-space-5x) auto 0;
 
                 .mx_AccessibleButton {
                     padding: 7px 40px;
@@ -58,17 +58,17 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_BetaCard_refreshWarning {
-                margin-top: $spacing-8;
+                margin-top: var(--cpd-space-2x);
                 font-size: $font-10px;
                 text-align: center;
             }
 
             .mx_BetaCard_faq {
-                margin-top: $spacing-20;
+                margin-top: var(--cpd-space-5x);
                 font: var(--cpd-font-body-xs-regular);
 
                 > h4 {
-                    margin: $spacing-12 0 0;
+                    margin: var(--cpd-space-3x) 0 0;
                 }
 
                 > p {
@@ -92,13 +92,13 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_BetaCard_relatedSettings {
         .mx_SettingsFlag {
-            margin: $spacing-16 0 0;
+            margin: var(--cpd-space-4x) 0 0;
             font-size: $font-15px;
             line-height: $font-24px;
             color: $primary-content;
 
             .mx_SettingsFlag_microcopy {
-                margin-top: $spacing-4;
+                margin-top: var(--cpd-space-1x);
                 font: var(--cpd-font-body-sm-regular);
             }
         }
@@ -107,7 +107,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_BetaCard_betaPill {
     background-color: $accent-alt;
-    padding: $spacing-4 10px;
+    padding: var(--cpd-space-1x) 10px;
     border-radius: 8px;
     text-transform: uppercase;
     font-size: $font-12px;

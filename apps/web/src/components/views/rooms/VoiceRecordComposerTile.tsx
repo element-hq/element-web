@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { MediaBody } from "@element-hq/web-shared-components";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { DeleteIcon, StopSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -22,7 +23,7 @@ import RecordingPlayback, { PlaybackLayout } from "../audio_messages/RecordingPl
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
-import NotificationBadge from "./NotificationBadge";
+import { NotificationBadge } from "./NotificationBadge/NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -108,7 +109,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         try {
-            // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
             const content = createVoiceMessageContent(
                 upload.mxc,
                 this.state.recorder.contentType,
@@ -132,7 +132,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 });
             }
 
-            doMaybeLocalRoomAction(
+            // we don't care if it fails, it'll get queued.
+            void doMaybeLocalRoomAction(
                 this.props.room.roomId,
                 (actualRoomId: string) => MatrixClientPeg.safeGet().sendMessage(actualRoomId, content),
                 this.props.room.client,
@@ -168,11 +169,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const accessError = (): void => {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|unable_to_access_audio_input_title"),
-                description: (
-                    <>
-                        <p>{_t("voip|unable_to_access_audio_input_description")}</p>
-                    </>
-                ),
+                description: <p>{_t("voip|unable_to_access_audio_input_description")}</p>,
             });
         };
 
@@ -183,11 +180,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("voip|no_audio_input_title"),
-                    description: (
-                        <>
-                            <p>{_t("voip|no_audio_input_description")}</p>
-                        </>
-                    ),
+                    description: <p>{_t("voip|no_audio_input_description")}</p>,
                 });
                 return;
             }
@@ -211,8 +204,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             logger.error("Error starting recording: ", e);
             accessError();
 
-            // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
-            VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
+            // if this goes wrong we don't want it to affect the call stack
+            void VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
         }
     };
 
@@ -239,10 +232,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         // only other UI is the recording-in-progress UI
         return (
-            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+            <MediaBody className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
                 <LiveRecordingClock recorder={this.state.recorder} />
                 <LiveRecordingWaveform recorder={this.state.recorder} />
-            </div>
+            </MediaBody>
         );
     }
 
@@ -287,7 +280,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (this.state.recordingPhase === RecordingState.Uploading) {
             uploadIndicator = (
                 <span className="mx_VoiceRecordComposerTile_uploadingState">
-                    <InlineSpinner w={16} h={16} />
+                    <InlineSpinner size={16} />
                 </span>
             );
         } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {

@@ -84,7 +84,6 @@ export interface Services {
 
 export const test = base.extend<TestFixtures, WorkerOptions & Services>({
     logger: [
-        // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
             const logger = new Logger();
             await use(logger);
@@ -92,7 +91,6 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
         { scope: "worker" },
     ],
     network: [
-        // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
             const network = await new Network().start();
             await use(network);
@@ -152,7 +150,6 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
         { scope: "worker" },
     ],
     mas: [
-        // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
             // we stub the mas fixture to allow `homeserver` to depend on it to ensure
             // when it is specified by `masHomeserver` it is started before the homeserver

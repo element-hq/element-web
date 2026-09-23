@@ -18,13 +18,11 @@ import WidgetStore, { type IApp } from "../stores/WidgetStore";
 import SdkConfig from "../SdkConfig";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 
-/* eslint-disable camelcase */
 interface IManagedHybridWidgetData {
     widget_id: string;
     widget: IWidget;
     layout: IStoredLayout;
 }
-/* eslint-enable camelcase */
 
 function getWidgetBuildUrl(room: Room): string | undefined {
     const functionalMembers = getJoinedNonFunctionalMembers(room);
@@ -40,7 +38,6 @@ function getWidgetBuildUrl(room: Room): string | undefined {
     if (isDm && wellKnown?.ignore_dm) {
         return undefined;
     }
-    /* eslint-disable-next-line camelcase */
     return wellKnown?.widget_build_url;
 }
 
@@ -56,7 +53,6 @@ export async function addManagedHybridWidget(room: Room): Promise<void> {
     }
 
     // Get widget data
-    /* eslint-disable-next-line camelcase */
     const widgetBuildUrl = getWidgetBuildUrl(room);
     if (!widgetBuildUrl) {
         return;

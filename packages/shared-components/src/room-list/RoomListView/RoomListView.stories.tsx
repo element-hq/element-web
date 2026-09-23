@@ -6,12 +6,12 @@
  */
 
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListViewSnapshot, type RoomListViewActions } from "./RoomListView";
-import type { Room } from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import type { Room } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
@@ -28,7 +28,7 @@ import {
 type RoomListViewProps = RoomListViewSnapshot &
     RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
-const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
+const mockFilterIds: FilterId[] = ["unread", "people", "rooms"];
 
 // Wrapper component that creates a mocked ViewModel
 const RoomListViewWrapperImpl = ({
@@ -38,8 +38,15 @@ const RoomListViewWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    updateVisibleFold,
     renderAvatar: renderAvatarProp,
     closeToast,
+    scrollToUnreadActivity,
+    setScrollToIndex,
+    changeRoomSection,
+    changeSectionOrder,
+    onSectionOrRoomDragStart,
+    onSectionOrRoomDragEnd,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -49,7 +56,14 @@ const RoomListViewWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        updateVisibleFold,
         closeToast,
+        scrollToUnreadActivity,
+        setScrollToIndex,
+        changeRoomSection,
+        changeSectionOrder,
+        onSectionOrRoomDragStart,
+        onSectionOrRoomDragEnd,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -98,10 +112,17 @@ const meta = {
         getRoomItemViewModel: createGetRoomItemViewModel(mockRoomIds),
         getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
+        updateVisibleFold: fn(),
         renderAvatar,
         isFlatList: true,
         toast: undefined,
         closeToast: fn(),
+        scrollToUnreadActivity: fn(),
+        setScrollToIndex: fn(),
+        changeRoomSection: fn(),
+        changeSectionOrder: fn(),
+        onSectionOrRoomDragStart: fn(),
+        onSectionOrRoomDragEnd: fn(),
     },
     parameters: {
         design: {
@@ -143,12 +164,12 @@ export const EmptyWithoutCreatePermission: Story = {
 
 export const WithActiveFilter: Story = {
     args: {
-        filterIds: ["unread", "people", "rooms", "favourite"],
-        activeFilterId: "favourite",
+        filterIds: ["unread", "people", "rooms"],
+        activeFilterId: "people",
         roomListState: {
             activeRoomIndex: undefined,
             spaceId: "!space:server",
-            filterKeys: ["favourites"],
+            filterKeys: ["people"],
         },
     },
 };
@@ -160,14 +181,6 @@ export const WithSelection: Story = {
             spaceId: "!space:server",
             filterKeys: undefined,
         },
-    },
-};
-
-export const EmptyFavouriteFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["favourite", "people"],
-        activeFilterId: "favourite",
     },
 };
 
@@ -212,14 +225,6 @@ export const EmptyMentionsFilter: Story = {
     },
 };
 
-export const EmptyLowPriorityFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["low_priority", "people"],
-        activeFilterId: "low_priority",
-    },
-};
-
 export const SmallFlatList: Story = {
     args: {
         sections: mockSmallListSections,
@@ -253,5 +258,41 @@ export const LargeSectionList: Story = {
 export const Toast: Story = {
     args: {
         toast: "section_created",
+    },
+};
+
+export const UnreadActivityBelow: Story = {
+    args: {
+        toast: "unread_activity",
+    },
+};
+
+export const ToastOverStickySection: Story = {
+    tags: ["autodocs", "!snapshot"],
+    args: {
+        isFlatList: false,
+        toast: "unread_activity",
+    },
+    play: async ({ canvas, canvasElement }) => {
+        // Wait for the virtualized list to mount its rows before scrolling.
+        await canvas.findByRole("button", { name: "Toggle Favourites section" });
+        const scroller = canvasElement.querySelector<HTMLElement>('[role="treegrid"]')!;
+
+        // Scroll to the end of the list so the last section header ("Low-priority") gets mounted.
+        scroller.scrollTop = scroller.scrollHeight;
+        await canvas.findByRole("button", { name: "Toggle Low-priority section" });
+
+        // Scroll until the header row sits just above the bottom edge of the viewport, overlapping the toast.
+        const bottomOffset = 28;
+        await waitFor(() => {
+            const header = canvas.getByRole("button", { name: "Toggle Low-priority section" });
+            const gap = scroller.getBoundingClientRect().bottom - header.getBoundingClientRect().bottom;
+            if (Math.abs(gap - bottomOffset) > 1) {
+                scroller.scrollTop -= gap - bottomOffset;
+                throw new Error(`Header is not parked over the toast yet (gap: ${gap}px)`);
+            }
+        });
+
+        await expect(canvasElement).toMatchImageSnapshot();
     },
 };
