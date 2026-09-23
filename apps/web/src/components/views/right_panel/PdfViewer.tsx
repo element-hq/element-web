@@ -344,6 +344,15 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         pdfViewer.updateScale({ scaleFactor: factor, origin, drawingDelay: ZOOM_DRAWING_DELAY });
     }, []);
 
+    // pdf.js steps the scale by its own fixed ratio and clamps to its scale bounds.
+    const zoomIn = useCallback((): void => {
+        pdfViewerRef.current?.increaseScale({ drawingDelay: ZOOM_DRAWING_DELAY });
+    }, []);
+
+    const zoomOut = useCallback((): void => {
+        pdfViewerRef.current?.decreaseScale({ drawingDelay: ZOOM_DRAWING_DELAY });
+    }, []);
+
     const commitPageInput = useCallback((): void => {
         const pdfViewer = pdfViewerRef.current;
         const requestedPage = Number.parseInt(pageInput, 10);
@@ -476,6 +485,8 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             onPageInputBlur={onPageInputBlur}
             onPageInputCancel={onPageInputCancel}
             onPageSubmit={commitPageInput}
+            onZoomIn={zoomIn}
+            onZoomOut={zoomOut}
         />
     );
 }
