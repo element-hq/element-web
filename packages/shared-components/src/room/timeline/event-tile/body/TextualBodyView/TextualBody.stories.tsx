@@ -141,8 +141,8 @@ export const EditedWithWideCodeBlock: Story = {
         body: (
             <div>
                 <p>Text before the code block should wrap within the timeline instead of being cut off.</p>
-                {/* The host app gives code blocks horizontal scrolling; mirror that here. Focusable so keyboard users can scroll it. */}
-                <pre style={{ overflowX: "auto" }} tabIndex={0}>
+                {/* The host app gives code blocks horizontal scrolling; mirror that here. */}
+                <pre style={{ overflowX: "auto" }}>
                     <code>
                         {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n"}
                         {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip"}
@@ -151,6 +151,20 @@ export const EditedWithWideCodeBlock: Story = {
                 <p>Text after the code block should wrap too.</p>
             </div>
         ),
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // Browsers make overflowing scroll containers keyboard-focusable themselves, but axe
+                        // only accepts an explicit tabindex, which the no-noninteractive-tabindex lint rule forbids.
+                        id: "scrollable-region-focusable",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
     },
     decorators: [
         (Story): JSX.Element => (
