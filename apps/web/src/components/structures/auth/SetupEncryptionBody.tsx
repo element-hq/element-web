@@ -94,7 +94,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     private onUsePassphraseClick = async (): Promise<void> => {
         const store = SetupEncryptionStore.sharedInstance();
-        store.usePassPhrase();
+        await store.usePassPhrase();
     };
 
     private onVerifyClick = (): void => {
@@ -110,9 +110,9 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             member: cli.getUser(userId) ?? undefined,
         });
 
-        verificationFinished.then(async () => {
+        void verificationFinished.then(async () => {
             const request = await requestPromise;
-            request.cancel();
+            void request.cancel();
             this.props.onFinished();
         });
     };

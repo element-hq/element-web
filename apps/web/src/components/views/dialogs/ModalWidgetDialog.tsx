@@ -92,7 +92,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
         // Theme may have changed while messaging was starting
         this.onThemeChange(this.themeWatcher.getEffectiveTheme());
-        this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
+        void this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
     };
 
     private onLoad = (): void => {
@@ -103,7 +103,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     };
 
     private onThemeChange = (theme: string): void => {
-        this.state.messaging?.updateTheme({ name: theme });
+        void this.state.messaging?.updateTheme({ name: theme });
     };
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>): void => {
@@ -177,7 +177,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     }
 
                     const onClick = (): void => {
-                        this.state.messaging?.notifyModalWidgetButtonClicked(def.id);
+                        void this.state.messaging?.notifyModalWidgetButtonClicked(def.id);
                     };
 
                     const isDisabled = this.state.disabledButtonIds.includes(def.id);

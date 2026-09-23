@@ -32,7 +32,7 @@ export const useSpaceResults = (space: Room | undefined, query: string): [Hierar
             // oxlint-disable-next-line no-unmodified-loop-condition
             while (hierarchy?.canLoadMore && !unmounted && space === hierarchy.root) {
                 await hierarchy.load();
-                if (hierarchy.canLoadMore) hierarchy.load(); // start next load so that the loading attribute is right
+                if (hierarchy.canLoadMore) void hierarchy.load(); // start next load so that the loading attribute is right
                 setRooms(hierarchy.rooms!);
             }
         })();

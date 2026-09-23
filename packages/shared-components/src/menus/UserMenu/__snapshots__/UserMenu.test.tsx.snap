@@ -289,13 +289,13 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profilePrimary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson
         </span>
         <div
           aria-invalid="false"
-          class="_container_1xtut_8"
+          class="_container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -333,10 +333,10 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
             </a>
           </div>
           <div
-            class="_content_1xtut_62"
+            class="_content_1dsjc_73"
           >
             <ul
-              class="_content_1xtut_62"
+              class="_content_1dsjc_73"
               id="react-use-id-3"
               role="listbox"
             >
@@ -345,13 +345,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💬
-                </span>
                 <span>
-                  In a meeting
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
                 </span>
                  
               </li>
@@ -360,13 +362,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💡
-                </span>
                 <span>
-                  Focus Time
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
                 </span>
                  
               </li>
@@ -375,13 +379,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🚙
-                </span>
                 <span>
-                  On the road
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
                 </span>
                  
               </li>
@@ -390,13 +396,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ☕️
-                </span>
                 <span>
-                  Be right back
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
                 </span>
                  
               </li>
@@ -405,13 +413,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🌴
-                </span>
                 <span>
-                  Away
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
                 </span>
                  
               </li>
@@ -420,13 +430,15 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ✍️
-                </span>
                 <span>
-                  Custom…
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
                 </span>
                  
               </li>
@@ -438,36 +450,11 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
         </span>
-        <a
-          class="_button_1nw83_8 _has-icon_1nw83_60"
-          data-kind="tertiary"
-          data-size="md"
-          href="#"
-          role="link"
-          tabindex="0"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="20"
-            viewBox="0 0 24 24"
-            width="20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
-            />
-            <path
-              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
-            />
-          </svg>
-          Manage account
-        </a>
       </section>
       <div
         class="_separator_13qwf_8"
@@ -765,13 +752,13 @@ exports[`UserMenu > renders an open menu 1`] = `
           />
         </span>
         <span
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname UserMenu-module_constrainedText"
         >
           Sally Sanderson with a longer name
         </span>
         <div
           aria-invalid="false"
-          class="_container_1xtut_8"
+          class="_container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -809,10 +796,10 @@ exports[`UserMenu > renders an open menu 1`] = `
             </a>
           </div>
           <div
-            class="_content_1xtut_62"
+            class="_content_1dsjc_73"
           >
             <ul
-              class="_content_1xtut_62"
+              class="_content_1dsjc_73"
               id="react-use-id-3"
               role="listbox"
             >
@@ -821,13 +808,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💬
-                </span>
                 <span>
-                  In a meeting
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💬
+                  </span>
+                  <span>
+                    In a meeting
+                  </span>
                 </span>
                  
               </li>
@@ -836,13 +825,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  💡
-                </span>
                 <span>
-                  Focus Time
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    💡
+                  </span>
+                  <span>
+                    Focus Time
+                  </span>
                 </span>
                  
               </li>
@@ -851,13 +842,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🚙
-                </span>
                 <span>
-                  On the road
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🚙
+                  </span>
+                  <span>
+                    On the road
+                  </span>
                 </span>
                  
               </li>
@@ -866,13 +859,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ☕️
-                </span>
                 <span>
-                  Be right back
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ☕️
+                  </span>
+                  <span>
+                    Be right back
+                  </span>
                 </span>
                  
               </li>
@@ -881,13 +876,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  🌴
-                </span>
                 <span>
-                  Away
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    🌴
+                  </span>
+                  <span>
+                    Away
+                  </span>
                 </span>
                  
               </li>
@@ -896,13 +893,15 @@ exports[`UserMenu > renders an open menu 1`] = `
                 role="option"
                 tabindex="0"
               >
-                <span
-                  class="SetStatusView-module_dropdownEmoji"
-                >
-                  ✍️
-                </span>
                 <span>
-                  Custom…
+                  <span
+                    class="SetStatusView-module_dropdownEmoji"
+                  >
+                    ✍️
+                  </span>
+                  <span>
+                    Custom…
+                  </span>
                 </span>
                  
               </li>
@@ -914,36 +913,11 @@ exports[`UserMenu > renders an open menu 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId UserMenu-module_constrainedText"
           data-testid="userId"
         >
           @person-name:homeserver.com
         </span>
-        <a
-          class="_button_1nw83_8 _has-icon_1nw83_60"
-          data-kind="tertiary"
-          data-size="md"
-          href="#"
-          role="link"
-          tabindex="0"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="20"
-            viewBox="0 0 24 24"
-            width="20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
-            />
-            <path
-              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
-            />
-          </svg>
-          Manage account
-        </a>
       </section>
       <div
         class="_separator_13qwf_8"

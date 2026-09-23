@@ -31,6 +31,7 @@ import TimelineCard from "../views/right_panel/TimelineCard";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { type IRightPanelCard, type IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
+import { PdfViewerCard } from "../views/right_panel/PdfViewerCard";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
@@ -139,7 +140,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             this.state.cardState?.verificationRequest?.pending
         ) {
             // When the user clicks close on the encryption panel cancel the pending request first if any
-            this.state.cardState.verificationRequest.cancel();
+            void this.state.cardState.verificationRequest.cancel();
         } else {
             RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
         }
@@ -275,6 +276,12 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.Widget:
                 if (!!this.props.room && !!cardState?.widgetId) {
                     card = <WidgetCard room={this.props.room} widgetId={cardState.widgetId} onClose={this.onClose} />;
+                }
+                break;
+
+            case RightPanelPhases.PdfViewer:
+                if (!!cardState?.pdfViewerEvent) {
+                    card = <PdfViewerCard mxEvent={cardState.pdfViewerEvent} onClose={this.onClose} />;
                 }
                 break;
         }

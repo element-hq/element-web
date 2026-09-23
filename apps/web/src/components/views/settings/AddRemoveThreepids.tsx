@@ -120,7 +120,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: false,
                 label: "revoke",
                 errorTitle:
@@ -136,7 +136,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: true,
                 label: "share",
                 errorTitle:

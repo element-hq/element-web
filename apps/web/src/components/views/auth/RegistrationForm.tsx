@@ -124,7 +124,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (this.state.email === "") {
             if (this.showEmail()) {
                 const { finished } = Modal.createDialog(RegistrationEmailPromptDialog);
-                finished.then(async ([confirmed, email]) => {
+                await finished.then(async ([confirmed, email]) => {
                     if (confirmed && email !== undefined) {
                         this.setState({ email }, () => this.doSubmit(ev));
                     }
@@ -156,7 +156,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         if (promise) {
             ev.target.disabled = true;
-            promise.finally(function () {
+            void promise.finally(function () {
                 ev.target.disabled = false;
             });
         }
@@ -209,7 +209,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         // Focus the first invalid field and show feedback in the stricter mode
         // that no longer allows empty values for required fields.
         invalidField.focus();
-        invalidField.validate({ allowEmpty: false, focused: true });
+        await invalidField.validate({ allowEmpty: false, focused: true });
         return false;
     }
 

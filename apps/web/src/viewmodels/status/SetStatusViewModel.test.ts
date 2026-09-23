@@ -10,20 +10,26 @@
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockInstance, type MockedObject } from "vitest";
-
-import { SetStatusViewModel, UserMenuSetStatusViewModel } from "./SetStatusViewModel";
 import {
     getMockClientWithEventEmitter,
     MockEventEmitter,
     mockClientMethodsServer,
     mockClientMethodsUser,
-} from "../../../test/test-utils";
+} from "test-utils";
 import type { UserStatus as MatrixUserStatus } from "@element-hq/web-shared-components";
+
+import { SetStatusViewModel, UserMenuSetStatusViewModel } from "./SetStatusViewModel";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../../components/views/dialogs/UserTab";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import * as recent from "../../emojipicker/recent";
+
+vi.mock("../../emojipicker/recent", () => ({
+    add: vi.fn(),
+    get: vi.fn(),
+}));
 
 const STATUS: MatrixUserStatus = { emoji: "🧪", text: "Testing" };
 
@@ -41,8 +47,10 @@ describe("SetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
+        vi.mocked(recent.get).mockReturnValue([]);
     });
 
     afterEach(() => {
@@ -58,6 +66,12 @@ describe("SetStatusViewModel", () => {
     it("initialises snapshot with undefined when no status is set", () => {
         const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
         expect(vm.getSnapshot().userStatus).toBeUndefined();
+    });
+
+    it("initialises snapshot from the recently used emojis", () => {
+        vi.mocked(recent.get).mockReturnValue(["🧪", "🦎"]);
+        const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+        expect(vm.getSnapshot().recentEmojis).toEqual(["🧪", "🦎"]);
     });
 
     it("updates the snapshot when OwnProfileStore emits an update", () => {
@@ -119,6 +133,25 @@ describe("SetStatusViewModel", () => {
         });
     });
 
+    describe("recordRecentEmoji", () => {
+        it("records the emoji as recently used", () => {
+            const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+            vm.recordRecentEmoji("🎉");
+            expect(recent.add).toHaveBeenCalledWith("🎉");
+        });
+
+        it("updates the snapshot with the new list of recent emojis", () => {
+            vi.mocked(recent.get).mockReturnValue(["🧪"]);
+            const vm = new SetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
+            expect(vm.getSnapshot().recentEmojis).toEqual(["🧪"]);
+
+            vi.mocked(recent.get).mockReturnValue(["🎉", "🧪"]);
+            vm.recordRecentEmoji("🎉");
+
+            expect(vm.getSnapshot().recentEmojis).toEqual(["🎉", "🧪"]);
+        });
+    });
+
     describe("clearStatus", () => {
         it("optimistically clears the snapshot", () => {
             vi.mocked(mockOwnProfileStoreInstance).userStatus = STATUS;
@@ -174,6 +207,7 @@ describe("UserMenuSetStatusViewModel", () => {
             ...mockClientMethodsServer(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
@@ -183,14 +217,15 @@ describe("UserMenuSetStatusViewModel", () => {
         vi.restoreAllMocks();
     });
 
-    it("dispatches ToggleUserMenu and ViewUserSettings on onSetStatusClick", async () => {
+    it("dispatches ToggleUserMenu and ViewUserSettings on onSetCustomStatusClick", async () => {
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
-        vm.onSetStatusClick();
+        vm.onSetCustomStatusClick();
         await waitFor(() => {
             expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.ToggleUserMenu });
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Account,
+                props: { startCustomStatus: true },
             });
         });
     });

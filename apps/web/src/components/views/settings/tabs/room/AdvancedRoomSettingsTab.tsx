@@ -61,7 +61,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
 
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = this.props.room;
-        room.getRecommendedVersion().then((v) => {
+        void room.getRecommendedVersion().then((v) => {
             const tombstone = room.currentState.getStateEvents(EventType.RoomTombstone, "");
 
             const additionalStateChanges: Partial<IState> = {};

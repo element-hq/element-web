@@ -60,7 +60,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
 
     public componentDidMount(): void {
         this.updateFeed(null, this.props.feed);
-        this.playMedia();
+        void this.playMedia();
     }
 
     public componentWillUnmount(): void {
@@ -71,7 +71,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         this.updateFeed(prevProps.feed, this.props.feed);
         // If the mutes state has changed, we try to playMedia()
         if (prevState.videoMuted !== this.state.videoMuted || prevProps.feed.stream !== this.props.feed.stream) {
-            this.playMedia();
+            void this.playMedia();
         }
     }
 
@@ -109,7 +109,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             if (this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia) {
                 this.props.feed.measureVolumeActivity(true);
             }
-            this.playMedia();
+            void this.playMedia();
         }
     }
 
@@ -158,7 +158,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playMedia();
+        void this.playMedia();
     };
 
     private onMuteStateChanged = (): void => {

@@ -196,7 +196,7 @@ export default class UserActivity {
         dis.dispatch({ action: Action.UserActivity });
         if (!this.activeNowTimeout.isRunning()) {
             this.activeNowTimeout.start();
-            UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
+            void UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
         } else {
             this.activeNowTimeout.restart();
         }
@@ -204,7 +204,7 @@ export default class UserActivity {
         if (!this.activeRecentlyTimeout.isRunning()) {
             this.activeRecentlyTimeout.start();
 
-            UserActivity.runTimersUntilTimeout(this.attachedActiveRecentlyTimers, this.activeRecentlyTimeout);
+            void UserActivity.runTimersUntilTimeout(this.attachedActiveRecentlyTimers, this.activeRecentlyTimeout);
         } else {
             this.activeRecentlyTimeout.restart();
         }

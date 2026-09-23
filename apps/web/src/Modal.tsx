@@ -214,7 +214,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         this.modals = [];
         this.staticModal = null;
         this.priorityModal = null;
-        this.reRender();
+        void this.reRender();
     }
 
     /**
@@ -289,7 +289,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                     this.modals = [];
                 }
 
-                this.reRender();
+                void this.reRender();
                 this.emitClosed();
             },
             modal.deferred.promise,
@@ -355,7 +355,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             this.modals.unshift(modal);
         }
 
-        this.reRender();
+        void this.reRender();
         this.emitIfChanged(beforeModal);
 
         return {
@@ -374,7 +374,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
         this.modals.push(modal);
 
-        this.reRender();
+        void this.reRender();
         this.emitIfChanged(beforeModal);
 
         return {

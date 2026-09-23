@@ -107,7 +107,7 @@ export default class MediaDeviceHandler extends EventEmitter {
     }
 
     public setAudioOutput(deviceId: string): void {
-        SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
@@ -117,7 +117,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setAudioInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         return MatrixClientPeg.safeGet().getMediaHandler().setAudioInput(deviceId);
     }
 
@@ -127,7 +127,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setVideoInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
+        void SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         return MatrixClientPeg.safeGet().getMediaHandler().setVideoInput(deviceId);
     }
 
@@ -204,13 +204,13 @@ export default class MediaDeviceHandler extends EventEmitter {
         return SettingsStore.getValue("audioInputMuted");
     }
     public static set startWithAudioMuted(value: boolean) {
-        SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
+        void SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
     }
 
     public static get startWithVideoMuted(): boolean {
         return SettingsStore.getValue("videoInputMuted");
     }
     public static set startWithVideoMuted(value: boolean) {
-        SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
+        void SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
     }
 }

@@ -155,7 +155,7 @@ export class RoomListHeaderViewModel
     };
 
     public createRoom = (e: Event): void => {
-        createRoom(this.activeSpace);
+        void createRoom(this.activeSpace);
         PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
     };
 
@@ -164,7 +164,7 @@ export class RoomListHeaderViewModel
             ? RoomType.UnstableCall
             : RoomType.ElementVideo;
         if (this.activeSpace) {
-            showCreateNewRoom(this.activeSpace, type);
+            void showCreateNewRoom(this.activeSpace, type);
         } else {
             defaultDispatcher.dispatch({
                 action: Action.CreateRoom,
@@ -224,12 +224,12 @@ export class RoomListHeaderViewModel
         PosthogTrackers.trackInteraction("WebRoomListMessagePreviewToggle");
 
         const isMessagePreviewEnabled = !SettingsStore.getValue("RoomList.showMessagePreview");
-        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
+        void SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
 
     public createSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+        void RoomListStoreV3.instance.createSection();
         PosthogTrackers.trackSectionCreation("RoomListHeader");
     };
 
@@ -254,7 +254,7 @@ export class RoomListHeaderViewModel
     };
 
     public closeSectionReleaseAnnouncement = (): void => {
-        ReleaseAnnouncementStore.instance.nextReleaseAnnouncement();
+        void ReleaseAnnouncementStore.instance.nextReleaseAnnouncement();
         this.snapshot.merge({ displaySectionReleaseAnnouncement: false });
     };
 

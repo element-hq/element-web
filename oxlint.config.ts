@@ -198,6 +198,15 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
+        // Require explicit handling of promises
+        "typescript/no-floating-promises": [
+            "error",
+            {
+                checkThenables: true,
+                ignoreIIFE: true,
+                ignoreVoid: true,
+            },
+        ],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
@@ -236,7 +245,6 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",
@@ -254,6 +262,16 @@ export default defineConfig({
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
+        "react/set-state-in-effect": "off",
+        "react/no-deriving-state-in-effects": "off",
+        "react/refs": "off",
+        "react/todo": "off",
+        "react/preserve-manual-memoization": "off",
+        "react/exhaustive-effect-dependencies": "off",
+        "react/memo-dependencies": "off",
+        "react/invariant": "off",
+        "react/rule-suppression": "off",
+        "react/incompatible-library": "off",
 
         // Rules within `suspicious` we do not yet comply with but probably should
         "typescript/no-unsafe-type-assertion": "off",
@@ -390,7 +408,7 @@ export default defineConfig({
                             },
                             {
                                 name: "@testing-library/react",
-                                message: "Please use jest-matrix-react instead",
+                                message: "Please use test-utils-rtl instead",
                             },
                             {
                                 name: "matrix-js-sdk",
@@ -510,7 +528,7 @@ export default defineConfig({
         {
             files: [
                 "{packages,apps,modules}/*/src/**/*.{test,stories}.{ts,tsx}",
-                "{packages,apps,modules}/*/src/{tests,test}/*.{ts,tsx}",
+                "{packages,apps,modules}/*/src/{tests,test}/**/*.{ts,tsx}",
                 "{packages,apps,modules}/*/src/**/__mocks__/*.{ts,tsx}",
                 "{packages,apps,modules}/*/{test,playwright,e2e}/**/*",
                 "{packages,apps,modules}/*/playwright.config.ts",
@@ -549,6 +567,9 @@ export default defineConfig({
                 "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
                 "no-proto": "off",
+                "no-restricted-globals": "off",
+                "typescript/consistent-type-imports": "off",
+                "node/no-top-level-await": "off",
 
                 // Disable a11y rules for components in tests
                 "jsx-a11y/role-has-required-aria-props": "off",
@@ -568,6 +589,7 @@ export default defineConfig({
                 "no-new": "off",
                 "react/iframe-missing-sandbox": "off",
                 "promise/no-promise-in-callback": "off",
+                "react/globals": "off",
 
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
@@ -599,6 +621,7 @@ export default defineConfig({
             files: ["**/*.{cjs,js}"],
             rules: {
                 "typescript/no-require-imports": "off",
+                "typescript/no-var-requires": "off",
                 "import/no-commonjs": "off",
                 "unicorn/prefer-module": "off",
             },

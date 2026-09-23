@@ -1,0 +1,730 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React, { type ComponentProps } from "react";
+import { describe, it, expect, vi, beforeEach, afterEach, type MockedObject } from "vitest";
+import {
+    type IPreviewUrlResponse,
+    type MatrixClient,
+    type MatrixEvent,
+    PushRuleKind,
+    type Room,
+} from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { setMissingEntryGenerator } from "@element-hq/web-shared-components";
+
+import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom, mockClientPushProcessor } from "test-utils";
+import { getRoomContext } from "test-utils/room";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { TextualBodyFactory as TextualBody } from "./TextualBodyFactory";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import RoomContext from "../../../contexts/RoomContext";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import Modal from "../../../Modal";
+import ImageView from "../elements/ImageView";
+import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import SettingsStore from "../../../settings/SettingsStore";
+
+vi.mock("../../../hooks/useMediaVisible", () => ({
+    __esModule: true,
+    useMediaVisible: () => [true, vi.fn()],
+}));
+
+// Captures the props the factory builds for the preview view model, so the `urlPreviewKind`
+// it derives from the settings and the room can be asserted directly.
+const { urlPreviewGroupProps } = vi.hoisted(() => ({
+    urlPreviewGroupProps: [] as UrlPreviewGroupViewModelProps[],
+}));
+
+vi.mock("../../../viewmodels/message-body/UrlPreviewGroupViewModel", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../viewmodels/message-body/UrlPreviewGroupViewModel")>();
+    return {
+        ...actual,
+        UrlPreviewGroupViewModel: class extends actual.UrlPreviewGroupViewModel {
+            public constructor(props: UrlPreviewGroupViewModelProps) {
+                super(props);
+                urlPreviewGroupProps.push(props);
+            }
+        },
+    };
+});
+
+const room1Id = "!room1:example.com";
+const room2Id = "!room2:example.com";
+const room2Name = "Room 2";
+
+interface MkRoomTextMessageOpts {
+    roomId?: string;
+}
+
+const mkRoomTextMessage = (body: string, mkRoomTextMessageOpts?: MkRoomTextMessageOpts): MatrixEvent => {
+    return mkMessage({
+        msg: body,
+        room: mkRoomTextMessageOpts?.roomId ?? room1Id,
+        user: "sender",
+        event: true,
+    });
+};
+
+const mkFormattedMessage = (body: string, formattedBody: string): MatrixEvent => {
+    return mkMessage({
+        msg: body,
+        formattedMsg: formattedBody,
+        format: "org.matrix.custom.html",
+        room: room1Id,
+        user: "sender",
+        event: true,
+    });
+};
+
+describe("<TextualBody />", () => {
+    afterEach(() => {
+        vi.spyOn(global.Math, "random").mockRestore();
+    });
+
+    let defaultRoom: Room;
+    let otherRoom: Room;
+    let defaultMatrixClient: MockedObject<MatrixClient>;
+
+    const defaultEvent = mkEvent({
+        type: "m.room.message",
+        room: room1Id,
+        user: "sender",
+        content: {
+            body: "winks",
+            msgtype: "m.emote",
+        },
+        event: true,
+    });
+
+    const defaultProps: ComponentProps<typeof TextualBody> = {
+        mxEvent: defaultEvent,
+        highlights: [] as string[],
+        highlightLink: "",
+        onMessageAllowed: vi.fn(),
+        mediaEventHelper: {} as MediaEventHelper,
+    };
+
+    beforeEach(() => {
+        defaultMatrixClient = getMockClientWithEventEmitter({
+            getRoom: (roomId: string | undefined) => {
+                if (roomId === room1Id) return defaultRoom;
+                if (roomId === room2Id) return otherRoom;
+                return null;
+            },
+            getRooms: () => [defaultRoom, otherRoom],
+            getAccountData: (): MatrixEvent | undefined => undefined,
+            isGuest: () => false,
+            mxcUrlToHttp: (s: string) => s,
+            getUserId: () => "@user:example.com",
+            fetchRoomEvent: () => {
+                throw new Error("MockClient event not found");
+            },
+        });
+        // @ts-expect-error
+        defaultMatrixClient.pushProcessor = new PushProcessor(defaultMatrixClient);
+
+        defaultRoom = mkStubRoom(room1Id, "test room", defaultMatrixClient);
+        otherRoom = mkStubRoom(room2Id, room2Name, defaultMatrixClient);
+
+        vi.mocked(defaultRoom).findEventById.mockImplementation((eventId: string) => {
+            if (eventId === defaultEvent.getId()) return defaultEvent;
+            return undefined;
+        });
+        vi.spyOn(global.Math, "random").mockReturnValue(0.123456);
+    });
+
+    const getComponent = (
+        props = {},
+        matrixClient: MatrixClient = defaultMatrixClient,
+        renderingFn?: any,
+        roomContextOverrides: Partial<ReturnType<typeof getRoomContext>> = {},
+    ) => {
+        const mergedProps = { ...defaultProps, ...props };
+        const room = matrixClient.getRoom(mergedProps.mxEvent.getRoomId()) ?? defaultRoom;
+        const finalProps = {
+            ...mergedProps,
+            permalinkCreator: mergedProps.permalinkCreator ?? new RoomPermalinkCreator(room),
+        };
+        return (renderingFn ?? render)(
+            <MatrixClientContext.Provider value={matrixClient}>
+                <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
+                    <TextualBody {...finalProps} />
+                </RoomContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+    };
+
+    it("renders m.emote correctly", () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "winks",
+                msgtype: "m.emote",
+            },
+            event: true,
+        });
+
+        const { container } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent("* sender winks");
+        const content = container.querySelector(".mx_EventTile_body");
+        expect(content).toMatchSnapshot();
+    });
+
+    it("keeps edited emote bodies inline with the sender", () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "winks",
+                msgtype: "m.emote",
+            },
+            event: true,
+        });
+        vi.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
+
+        const { container } = getComponent({ mxEvent: ev, replacingEventId: ev.getId() });
+
+        expect(container).toHaveTextContent("* sender winks(edited)");
+    });
+
+    it("updates the body kind when an edit changes msgtype to m.emote", async () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "hello",
+                msgtype: "m.text",
+            },
+            event: true,
+        });
+
+        const { container } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent("hello");
+
+        const edit = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                "body": "* waves",
+                "msgtype": "m.emote",
+                "m.new_content": {
+                    body: "waves",
+                    msgtype: "m.emote",
+                },
+            },
+            event: true,
+        });
+        act(() => {
+            ev.makeReplaced(edit);
+        });
+
+        await waitFor(() => expect(container).toHaveTextContent("* sender waves(edited)"));
+    });
+
+    it("renders m.notice correctly", () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "bot_sender",
+            content: {
+                body: "this is a notice, probably from a bot",
+                msgtype: "m.notice",
+            },
+            event: true,
+        });
+
+        const { container } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent(ev.getContent().body);
+        const content = container.querySelector(".mx_EventTile_body");
+        expect(content).toMatchSnapshot();
+    });
+
+    describe("renders plain-text m.text correctly", () => {
+        beforeEach(() => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        it("simple message renders as expected", () => {
+            const ev = mkRoomTextMessage("this is a plaintext message");
+            const { container } = getComponent({ mxEvent: ev });
+            expect(container).toHaveTextContent(ev.getContent().body);
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
+        it("linkification get applied correctly into the DOM", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const { container } = getComponent({ mxEvent: ev });
+            expect(container).toHaveTextContent(ev.getContent().body);
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("should not pillify MXIDs", () => {
+            const ev = mkRoomTextMessage("Chat with @user:example.com");
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchSnapshot();
+        });
+
+        it("should pillify an MXID permalink", () => {
+            const ev = mkRoomTextMessage("Chat with https://matrix.to/#/@user:example.com");
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchSnapshot();
+        });
+
+        it("should not pillify room aliases", () => {
+            const ev = mkRoomTextMessage("Visit #room:example.com");
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchSnapshot();
+        });
+
+        it("should pillify a room alias permalink", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.to/#/#room:example.com");
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchSnapshot();
+        });
+
+        it("should pillify a permalink to a message in the same room with the label »Message from Member«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room1Id}/${defaultEvent.getId()}`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
+        });
+
+        it("should pillify a permalink to an unknown message in the same room with the label »Message«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room1Id}/!abc123`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("should pillify a permalink to an event in another room with the label »Message in Room 2«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room2Id}/${defaultEvent.getId()}`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
+        });
+
+        it("should pillify a keyword responsible for triggering a notification", () => {
+            const ev = mkRoomTextMessage("foo bar baz");
+            ev.setPushDetails(undefined, {
+                actions: [],
+                pattern: "bar",
+                rule_id: "bar",
+                default: false,
+                enabled: true,
+                kind: PushRuleKind.ContentSpecific,
+            });
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchSnapshot();
+        });
+    });
+
+    describe("renders formatted m.text correctly", () => {
+        let matrixClient: MatrixClient;
+        beforeEach(() => {
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: vi.fn(),
+                ...mockClientPushProcessor(),
+                getAccountData: (): MatrixEvent | undefined => undefined,
+                getUserId: () => "@me:my_server",
+                getHomeserverUrl: () => "https://my_server/",
+                on: (): void => undefined,
+                removeListener: (): void => undefined,
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+            });
+            vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom(room1Id, "room name", matrixClient));
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        it("italics, bold, underline and strikethrough render as expected", () => {
+            const ev = mkFormattedMessage(
+                "foo *baz* __bar__ <del>del</del> <u>u</u>",
+                "foo <em>baz</em> <strong>bar</strong> <del>del</del> <u>u</u>",
+            );
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("foo baz bar del u");
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("spoilers get injected properly into the DOM", () => {
+            const ev = mkFormattedMessage(
+                "Hey [Spoiler for movie](mxc://someserver/somefile)",
+                'Hey <span data-mx-spoiler="movie">the movie was awesome</span>',
+            );
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("Hey (movie) the movie was awesome");
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("linkification is not applied to code blocks", () => {
+            const ev = mkFormattedMessage(
+                "Visit `https://matrix.org/`\n```\nhttps://matrix.org/\n```",
+                "<p>Visit <code>https://matrix.org/</code></p>\n<pre>https://matrix.org/\n</pre>\n",
+            );
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("Visit https://matrix.org/ 1https://matrix.org/");
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("should syntax highlight code blocks", async () => {
+            const ev = mkFormattedMessage(
+                "```py\n# Python Program to calculate the square root\n\n# Note: change this value for a different result\nnum = 8 \n\n# To take the input from the user\n#num = float(input('Enter a number: '))\n\nnum_sqrt = num ** 0.5\nprint('The square root of %0.3f is %0.3f'%(num ,num_sqrt))",
+                "<pre><code class=\"language-py\"># Python Program to calculate the square root\n\n# Note: change this value for a different result\nnum = 8 \n\n# To take the input from the user\n#num = float(input('Enter a number: '))\n\nnum_sqrt = num ** 0.5\nprint('The square root of %0.3f is %0.3f'%(num ,num_sqrt))\n</code></pre>\n",
+            );
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            await waitFor(() => expect(container.querySelector(".hljs-built_in")).toBeInTheDocument());
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
+        it("pills get injected correctly into the DOM", () => {
+            const ev = mkFormattedMessage("Hey User", 'Hey <a href="https://matrix.to/#/@user:server">Member</a>');
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("Hey Member");
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("pills do not appear in code blocks", () => {
+            const ev = mkFormattedMessage(
+                "`@room`\n```\n@room\n```",
+                "<p><code>@room</code></p>\n<pre><code>@room\n</code></pre>\n",
+            );
+            const { container } = getComponent({ mxEvent: ev });
+            expect(container).toHaveTextContent("@room 1@room");
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("pills do not appear for event permalinks with a custom label", () => {
+            const ev = mkFormattedMessage(
+                "An [event link](https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
+                    "$16085560162aNpaH:example.com?via=example.com) with text",
+                'An <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/' +
+                    '$16085560162aNpaH:example.com?via=example.com">event link</a> with text',
+            );
+            const { asFragment, container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("An event link with text");
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("pills appear for event permalinks without a custom label", () => {
+            const ev = mkFormattedMessage(
+                "See this message https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com",
+                'See this message <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com">' +
+                    "https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com</a>",
+            );
+            const { asFragment } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("pills appear for room links with vias", () => {
+            const ev = mkFormattedMessage(
+                "A [room link](https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com" +
+                    "?via=example.com&via=bob.com) with vias",
+                'A <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
+                    '?via=example.com&amp;via=bob.com">room link</a> with vias',
+            );
+            const { asFragment, container } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(container).toHaveTextContent("A room name with vias");
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("pills appear for an MXID permalink", () => {
+            const ev = mkFormattedMessage(
+                "Chat with [@user:example.com](https://matrix.to/#/@user:example.com)",
+                'Chat with <a href="https://matrix.to/#/@user:example.com">@user:example.com</a>',
+            );
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("renders formatted body without html correctly", () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    body: "escaped \\*markdown\\*",
+                    msgtype: "m.text",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "escaped *markdown*",
+                },
+                event: true,
+            });
+
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+    });
+
+    describe("url preview", () => {
+        let matrixClient: MatrixClient;
+
+        beforeEach(() => {
+            setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: vi.fn(),
+                getUserId: vi.fn(),
+                ...mockClientPushProcessor(),
+                getAccountData: (): MatrixClient | undefined => undefined,
+                getUrlPreview: (url: string) => new Promise(() => {}),
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+            });
+            vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        it("renders url previews correctly", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient);
+
+            expect(container).toHaveTextContent(ev.getContent().body);
+            expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
+
+            // simulate an event edit and check the transition from the old URL preview to the new one
+            const ev2 = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    "m.new_content": {
+                        body: "Visit https://vector.im/ and https://riot.im/",
+                        msgtype: "m.text",
+                    },
+                },
+                event: true,
+            });
+            vi.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
+            ev.makeReplaced(ev2);
+
+            getComponent({ mxEvent: ev, showUrlPreview: true, replacingEventId: ev.getId() }, matrixClient, rerender);
+
+            expect(container).toHaveTextContent(ev2.getContent()["m.new_content"].body + "(edited)");
+
+            const links = ["https://vector.im/", "https://riot.im/"];
+            const anchorNodes = container.querySelectorAll("a");
+            Array.from(anchorNodes).forEach((node, index) => {
+                expect(node).toHaveAttribute("href", links[index]);
+            });
+        });
+
+        it("should listen to showUrlPreview change", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
+            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
+
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
+            waitFor(() => {
+                // Asynchronous check since the VM needs to recalcuate.
+                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
+            });
+        });
+    });
+    describe("url preview tiles", () => {
+        const link = "https://matrix.org/";
+        let matrixClient: MockedObject<MatrixClient>;
+
+        const ogData = (overrides: Partial<IPreviewUrlResponse> = {}): IPreviewUrlResponse => ({
+            "og:title": "Matrix",
+            "og:type": "website",
+            "og:description": "An open network for secure, decentralised communication",
+            "og:site_name": "matrix.org",
+            "og:url": link,
+            ...overrides,
+        });
+
+        const ogImage = {
+            "og:image": "mxc://example.org/preview",
+            "og:image:type": "image/png",
+            "og:image:width": 480,
+            "og:image:height": 320,
+            "matrix:image:size": 100_000,
+        };
+
+        beforeEach(() => {
+            setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: vi.fn(),
+                getUserId: vi.fn(),
+                ...mockClientPushProcessor(),
+                getAccountData: (): MatrixEvent | undefined => undefined,
+                getUrlPreview: vi.fn().mockResolvedValue(ogData()),
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+            });
+            vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        /** Render a message and wait for its previews to have been fetched and rendered. */
+        const renderPreviews = async (body = `Visit ${link}`): Promise<ReturnType<typeof render>> => {
+            const result = getComponent({ mxEvent: mkRoomTextMessage(body), showUrlPreview: true }, matrixClient);
+            await screen.findByRole("link", { name: "Matrix" });
+            return result;
+        };
+
+        it("renders a preview without an image as a text tile", async () => {
+            await renderPreviews();
+
+            expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", link);
+            expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
+
+        it("falls back to the site name when the preview has no description", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
+
+            await renderPreviews();
+
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+        });
+
+        it("renders a preview with an image and opens the lightbox when it is clicked", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
+
+            await renderPreviews();
+
+            fireEvent.click(screen.getByRole("button", { name: "View image" }));
+
+            expect(createDialog).toHaveBeenCalledWith(
+                ImageView,
+                expect.objectContaining({ src: "mxc://example.org/preview", name: "Thumbnail of Matrix" }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+        });
+
+        it("opens the previewed link in a new tab", async () => {
+            const open = vi.spyOn(window, "open").mockReturnValue(null);
+
+            await renderPreviews();
+
+            fireEvent.click(screen.getByRole("button", { name: "Open link" }));
+
+            expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("expands the group when more previews are available than are shown", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation(async (url: string) =>
+                ogData({ "og:title": `Preview of ${url}`, "og:url": url }),
+            );
+
+            const { container } = getComponent(
+                {
+                    mxEvent: mkRoomTextMessage(
+                        "Visit https://one.example.com/ and https://two.example.com/ and https://three.example.com/",
+                    ),
+                    showUrlPreview: true,
+                },
+                matrixClient,
+            );
+
+            const toggle = await screen.findByRole("button", { name: "Show 1 other preview" });
+            expect(container.querySelectorAll("a[href^='https://one']")).toHaveLength(2);
+
+            fireEvent.click(toggle);
+
+            await screen.findByRole("link", { name: "Preview of https://three.example.com/" });
+            expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
+        });
+    });
+
+    describe("url preview kind", () => {
+        beforeEach(() => {
+            urlPreviewGroupProps.length = 0;
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        /** Turn on the named boolean settings and leave the rest at their real values. */
+        const enableSettings = (...enabled: string[]): void => {
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                enabled.includes(setting) ? true : original(setting, ...rest),
+            );
+        };
+
+        const renderAndGetKind = (roomContextOverrides = {}): string => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+            getComponent({ mxEvent: mkRoomTextMessage("https://example.org") }, undefined, undefined, {
+                ...roomContextOverrides,
+            });
+            return urlPreviewGroupProps.at(-1)!.urlPreviewKind;
+        };
+
+        // Without the lab flag the bundle is ignored entirely and previews come from the server.
+        it("asks the server when the bundle feature is off", () => {
+            expect(renderAndGetKind()).toBe("fetchonly");
+        });
+
+        it("prefers the bundle when the bundle feature is on in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
+        });
+
+        // The user has not asked for the stricter behaviour, so an encrypted message whose bundle
+        // is missing a preview may still be filled in by the server.
+        it("prefers the bundle in an encrypted room when bundled-only is off", () => {
+            enableSettings("feature_msc4095_url_preview_bundle");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("preferbundled");
+        });
+
+        // The whole point of the setting: in an encrypted room nothing about the message, not even
+        // one of its URLs, may be sent to the homeserver.
+        it("uses the bundle only in an encrypted room when bundled-only is on", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("bundledonly");
+        });
+
+        // The setting is about encrypted rooms only, so it must not restrict an unencrypted one.
+        it("ignores bundled-only in an unencrypted room", () => {
+            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
+        });
+    });
+});

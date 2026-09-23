@@ -34,7 +34,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         MediaDeviceHandler.instance.addListener(MediaDeviceHandlerEvent.AudioOutputChanged, this.onAudioOutputChanged);
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.playMedia();
+        void this.playMedia();
     }
 
     public componentWillUnmount(): void {
@@ -54,7 +54,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
                 // it fails.
                 // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
                 // back to the default after the call is over - Dave
-                element!.setSinkId(audioOutput);
+                void element!.setSinkId(audioOutput);
             } catch (e) {
                 logger.error("Couldn't set requested audio output device: using default", e);
                 logger.warn("Couldn't set requested audio output device: using default", e);
@@ -107,7 +107,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
         });
-        this.playMedia();
+        void this.playMedia();
     };
 
     public render(): React.ReactNode {

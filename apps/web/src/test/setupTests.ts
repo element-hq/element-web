@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, beforeEach, afterEach } from "vitest";
 import { act } from "react";
 import fetchMock from "@fetch-mock/vitest";
+import { mockIntlDateTimeFormat } from "test-utils/date";
 
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
@@ -30,6 +31,7 @@ const realSetImmediate = globalThis.setImmediate;
 
 beforeEach(() => {
     vi.stubEnv("TZ", "UTC");
+    mockIntlDateTimeFormat();
 
     // set up fetch API mock. Unmatched requests 404 rather than reaching the network.
     fetchMock.hardReset();
@@ -49,3 +51,28 @@ afterEach(async () => {
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults
 SdkConfig.put(DEFAULTS);
+
+// Utility to check for React errors during the tests
+// Fails tests on errors like the following:
+// In HTML, <div> cannot be a descendant of <p>.
+// In HTML, <form> cannot be a descendant of <form>.
+// In HTML, text nodes cannot be a child of <thead>.
+// This will cause a hydration error.
+// You provided a `checked` prop to a form field without an `onChange` handler.
+let errors: any[] = [];
+beforeEach(() => {
+    errors = [];
+    const originalError = console.error;
+    vi.spyOn(console, "error").mockImplementation((...args) => {
+        if (/validateDOMNesting|Hydration failed|hydration error|prop to a form field without an/i.test(args[0])) {
+            errors.push(args[0]);
+        }
+        originalError.call(console, ...args);
+    });
+});
+afterEach(() => {
+    vi.mocked(console.error).mockRestore?.();
+    if (errors.length > 0) {
+        throw new Error("Test failed due to React hydration errors in the console.");
+    }
+});

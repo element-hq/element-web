@@ -31,7 +31,7 @@ test.describe("Security user settings tab", () => {
             // Dismiss toasts
             await rejectToast(page, "Verify this device");
             await rejectToast(page, "Notifications");
-            await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
+            await page.getByTestId("toast-buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {

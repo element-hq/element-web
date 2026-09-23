@@ -161,11 +161,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 rerunArgs.push(args);
                 return;
             }
+            // oxlint-disable-next-line react/immutability
             running = true;
             // Note: We need to use .then notation instead of async/await,
             // because async/await would cause this function to return a
             // promise, which `useEffect` doesn't like.
-            fn(...args)
+            void fn(...args)
                 .then((v) => {
                     if (!(v instanceof NoChange)) {
                         setValue(v);
@@ -174,11 +175,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 .finally(() => {
                     running = false;
                     if (rerunArgs.length != 0) {
+                        // oxlint-disable-next-line react/immutability
                         handler(...rerunArgs.shift());
                     }
                 });
         },
-        [fn, ...deps], // eslint-disable-line react-hooks/exhaustive-deps
+        [fn, ...deps], // oxlint-disable-line react-hooks/exhaustive-deps react/use-memo
     );
 
     // re-run when the emitter changes

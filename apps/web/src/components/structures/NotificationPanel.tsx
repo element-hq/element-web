@@ -20,6 +20,7 @@ import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     onClose(): void;
@@ -64,15 +65,17 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         if (timelineSet) {
             // wrap a TimelinePanel with the jump-to-event bits turned off.
             content = (
-                <TimelinePanel
-                    manageReadReceipts={false}
-                    manageReadMarkers={false}
-                    timelineSet={timelineSet}
-                    showUrlPreview={false}
-                    empty={emptyState}
-                    alwaysShowTimestamps={true}
-                    layout={Layout.Group}
-                />
+                <EventPresentationContextProvider layout={Layout.Group}>
+                    <TimelinePanel
+                        manageReadReceipts={false}
+                        manageReadMarkers={false}
+                        timelineSet={timelineSet}
+                        showUrlPreview={false}
+                        empty={emptyState}
+                        alwaysShowTimestamps={true}
+                        layout={Layout.Group}
+                    />
+                </EventPresentationContextProvider>
             );
         } else {
             logger.error("No notifTimelineSet available!");

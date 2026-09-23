@@ -1,0 +1,108 @@
+diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
+index ce156f1..8be8514 100644
+--- a/dist/esm/index.d.ts
++++ b/dist/esm/index.d.ts
+@@ -78,6 +78,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
+     initialMeasurementsCache?: Array<VirtualItem>;
+     lanes?: number;
+     anchorTo?: ScrollAnchor;
++    /**
++     * With `anchorTo: "end"`, reject an item as the scroll anchor (e.g. a transient
++     * placeholder/sentinel row whose key does not survive the update); anchoring
++     * steps inward to the nearest accepted item. Element-web patch, pending upstream.
++     */
++    isValidAnchorItem?: (item: VirtualItem) => boolean;
+     followOnAppend?: FollowOnAppend;
+     scrollEndThreshold?: number;
+     isScrollingResetDelay?: number;
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index e4547ec..4875d2f 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -298,7 +298,24 @@ class Virtualizer {
+         const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
+         if (didEdgeKeysChange) {
+           edgeKeysChanged = true;
+-          const item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          let item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          // With anchorTo: "end" the scroll is re-pinned by the key of the item
++          // under the current offset. If the consumer rejects that item as an
++          // anchor via isValidAnchorItem — e.g. a transient placeholder/sentinel
++          // row (loading spinner, "load more", skeleton) whose key does not
++          // survive the update — re-pinning by its key would fail and the
++          // prepend would go uncompensated (the list jumps to the edge). Such
++          // rows only sit at the extreme edges, so step one index inward to the
++          // nearest accepted item, whose key persists across the update.
++          const isValidAnchorItem = merged.isValidAnchorItem;
++          if (item && isValidAnchorItem && !isValidAnchorItem(item)) {
++            const step = item.index === 0 ? 1 : -1;
++            let i = item.index;
++            while (i >= 0 && i < measurements.length && measurements[i] && !isValidAnchorItem(measurements[i])) {
++              i += step;
++            }
++            item = measurements[i] ?? item;
++          }
+           if (item) {
+             anchor = [item.key, this.getScrollOffset() - item.start];
+           }
+@@ -874,9 +891,19 @@ class Virtualizer {
+       const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
+       const delta = size - itemSize;
+       if (delta !== 0) {
+-        const wasAtEnd = this.options.anchorTo === "end" && ((_a = this.scrollState) == null ? void 0 : _a.behavior) !== "smooth" && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
++        // `this.scrollOffset` only updates when the async scroll event fires, so
++        // within a frame it can be stale in two ways: (a) an earlier resize in the
++        // same ResizeObserver batch already queued `scrollAdjustments`, and (b) a
++        // programmatic scroll (scrollToOffset / the reconcile loop) wrote scrollTop
++        // this frame — recorded synchronously in `_intendedScrollOffset` but not yet
++        // reflected by getScrollOffset(). Evaluating "was the view at the end?" (or
++        // "is this item above the fold?") against the stale offset makes resizes
++        // during a scroll-to-end land uncompensated, stranding the view above the
++        // bottom. Use the synchronous truth when a write is pending.
++        const effectiveScrollOffset = this._intendedScrollOffset ?? (this.getScrollOffset() + this.scrollAdjustments);
++        const wasAtEnd = this.options.anchorTo === "end" && ((_a = this.scrollState) == null ? void 0 : _a.behavior) !== "smooth" && this.getTotalSize() - this.getSize() - effectiveScrollOffset <= this.options.scrollEndThreshold;
+         const prevTotalSize = wasAtEnd ? this.getTotalSize() : 0;
+-        const scrollOffsetWithAdj = this.getScrollOffset() + this.scrollAdjustments;
++        const scrollOffsetWithAdj = effectiveScrollOffset;
+         const isFirstMeasure = !this.itemSizeCache.has(key);
+         const defaultShouldAdjust = isFirstMeasure ? (
+           // First measurement: compensate any item whose top sits above the
+@@ -889,9 +916,12 @@ class Virtualizer {
+           // below — e.g. a streaming chat message growing at its bottom)
+           // changes size *below* the anchor point, so shifting scrollTop by the
+           // delta would drag the viewport downward on every growth (#1218).
+-          // Also skip during backward scroll to avoid the "items jump while
+-          // scrolling up" cascade.
+-          itemStart + itemSize <= scrollOffsetWithAdj && this.scrollDirection !== "backward"
++          // Upstream also skips this while scrolling backwards, a guard against
++          // corrections firing from a stale scroll offset. The effective-offset
++          // fix above removes the staleness, and keeping the guard meant every
++          // image or link preview that finished loading above the viewport
++          // shoved the view while scrolling up — so the guard is dropped.
++          itemStart + itemSize <= scrollOffsetWithAdj
+         );
+         const shouldAdjustScroll = ((_b = this.scrollState) == null ? void 0 : _b.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(
+           // The callback expects a VirtualItem; build one lazily only
+@@ -1157,16 +1187,19 @@ class Virtualizer {
+       this._iosDeferredAdjustment += delta;
+       return false;
+     } else {
+-      const target = this.getScrollOffset() + this.scrollAdjustments + delta;
++      // A programmatic scroll written this frame is not yet visible through
++      // getScrollOffset(); build the correction on the offset that was written.
++      const base = this._intendedScrollOffset ?? this.getScrollOffset();
++      const target = base + this.scrollAdjustments + delta;
+       const el = this.scrollElement;
+       const maxAtWrite = el !== null && ("scrollHeight" in el || "document" in el) ? this.getMaxScrollOffset() : null;
+       this._clampedAdjustment = maxAtWrite !== null && target > maxAtWrite + 0.5 ? { target, maxAtWrite } : null;
+-      this._scrollToOffset(this.getScrollOffset(), {
++      this._scrollToOffset(base, {
+         adjustments: this.scrollAdjustments += delta,
+         behavior
+       });
+       if (this.scrollOffset !== null) {
+-        this.scrollOffset += this.scrollAdjustments;
++        this.scrollOffset = base + this.scrollAdjustments;
+         if (this.scrollOffset < 0) this.scrollOffset = 0;
+         this.scrollAdjustments = 0;
+       }
