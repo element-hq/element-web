@@ -19,30 +19,30 @@ describe("/spoiler", () => {
         expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
     });
 
-    it("should wrap plain text in a spoiler span", () => {
+    it("should wrap plain text in a spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
         const result = command.run(client, roomId, null, "plain text");
         expect(result.error).toBeUndefined();
-        const content = result.value;
+        const content = await result.promise;
         expect(content?.formatted_body).toContain("<span data-mx-spoiler>");
         expect(content?.formatted_body).toContain("plain text");
     });
 
-    it("should convert markdown bold to HTML inside the spoiler span", () => {
+    it("should convert markdown bold to HTML inside the spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
         const result = command.run(client, roomId, null, "**secret** message");
         expect(result.error).toBeUndefined();
-        const content = result.value;
+        const content = await result.promise;
         // Markdown should be serialized to HTML — raw ** chars must not appear
         expect(content?.formatted_body).not.toContain("**secret**");
         expect(content?.formatted_body).toContain("<strong>");
         expect(content?.formatted_body).toContain("<span data-mx-spoiler>");
     });
 
-    it("should not double-escape plain text (no markdown)", () => {
+    it("should not double-escape plain text body", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
         const result = command.run(client, roomId, null, "just text");
-        const content = result.value;
+        const content = await result.promise;
         expect(content?.body).toBe("just text");
         expect(content?.formatted_body).toContain("just text");
     });
