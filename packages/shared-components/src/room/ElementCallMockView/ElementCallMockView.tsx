@@ -151,7 +151,9 @@ export const ElementCallMockView = ({ vm }: ElementCallMockViewProps): JSX.Eleme
                 ) : (
                     <ul className={styles.members}>
                         {participants.map((participant) => (
-                            <Text as="li" key={participant.id}>{participant.label}</Text>
+                            <Text as="li" key={participant.id}>
+                                {participant.label}
+                            </Text>
                         ))}
                     </ul>
                 )}
