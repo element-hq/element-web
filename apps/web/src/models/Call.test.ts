@@ -926,6 +926,19 @@ describe("ElementCall", () => {
             expect(onDestroy).toHaveBeenCalledTimes(1);
         });
 
+        it("stops presenting the call when its widget's messaging stops", async () => {
+            // The widget drops always_on_screen before it sends close, which
+            // ends its messaging first: the close action never arrives
+            await connect(call, widgetApi);
+            call.presented = true;
+            const onDestroy = vi.fn();
+            call.on(CallEvent.Destroy, onDestroy);
+
+            WidgetMessagingStore.instance.stopMessaging(call.widget, call.roomId);
+            await waitFor(() => expect(call.presented).toBe(false), { interval: 5 });
+            expect(onDestroy).toHaveBeenCalledTimes(1);
+        });
+
         it("disconnects", async () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
             await connect(call, widgetApi);

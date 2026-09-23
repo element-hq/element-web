@@ -943,9 +943,18 @@ export class ElementCall extends Call {
         this.widgetApi!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.widgetApi!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         super.close();
+        // A voice call in PiP has no CallView to stop presenting it on close
+        // (whether the widget asked to close or its messaging just stopped),
+        // so the call would linger and its timeline tile stay "in progress"
+        if (this.presented) this.presented = false;
     }
 
+    private destroyed = false;
+
     public destroy(): void {
+        // close() above may re-enter here via checkDestroy while destroying
+        if (this.destroyed) return;
+        this.destroyed = true;
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
@@ -1013,9 +1022,6 @@ export class ElementCall extends Call {
         this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected(); // Just in case the widget forgot to emit a hangup action (maybe it's in an error state)
         this.close(); // User is done with the call; tell the UI to close it
-        // A voice call in PiP has no CallView to stop presenting it on close,
-        // so the call would linger (and its timeline tile stay "in progress")
-        if (this.presented) this.presented = false;
     };
 
     public clean(): Promise<void> {
