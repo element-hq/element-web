@@ -12,6 +12,8 @@ import {
     PDFWorker,
     RenderingCancelledException,
     VerbosityLevel,
+    type PDFDocumentLoadingTask,
+    type PDFDocumentProxy,
 } from "pdfjs-dist";
 import { EventBus, PDFViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
 
@@ -114,12 +116,16 @@ export function createPdfWorker(workerSource: string): UsercontentWorker {
         `() => self.postMessage(${JSON.stringify(WORKER_READY)}), ` +
         // Rethrow from a task so the failure surfaces as a worker error event.
         `(error) => setTimeout(() => { throw error; }));`;
-    const worker = new Worker(URL.createObjectURL(new Blob([bootstrap], { type: "text/javascript" })));
+    const bootstrapUrl = URL.createObjectURL(new Blob([bootstrap], { type: "text/javascript" }));
+    const worker = new Worker(bootstrapUrl);
 
     const ready = new Promise<void>((resolve, reject) => {
         const cleanup = (): void => {
             worker.removeEventListener("message", onMessage);
             worker.removeEventListener("error", onError);
+            // Loaded (or failed) by now; the blobs need not stay alive until the page unloads.
+            URL.revokeObjectURL(bootstrapUrl);
+            URL.revokeObjectURL(moduleUrl);
         };
         const onMessage = (event: MessageEvent): void => {
             if (event.data !== WORKER_READY) return;
@@ -160,7 +166,7 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
         post({ type: "error", message: error instanceof Error ? `${error.name}: ${error.message}` : String(error) });
     };
 
-    // Every listener below is removed together when the session is disposed.
+    // Every listener below is registered with this signal, so `dispose` removes them all at once.
     const listeners = new AbortController();
     const { signal } = listeners;
 
@@ -217,12 +223,15 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
         });
     });
 
+    let pdfWorker: PDFWorker | undefined;
+    let loadingTask: PDFDocumentLoadingTask | undefined;
+
     const load = async (): Promise<void> => {
         await ready;
 
         // pdf.js types `port` as `null` but accepts a Worker. With a port it never falls back to the main thread.
-        const pdfWorker = new PDFWorker({ port: worker } as unknown as ConstructorParameters<typeof PDFWorker>[0]);
-        const loadingTask = getDocument({
+        pdfWorker = new PDFWorker({ port: worker } as unknown as ConstructorParameters<typeof PDFWorker>[0]);
+        loadingTask = getDocument({
             data: new Uint8Array(data),
             worker: pdfWorker,
             stopAtErrors: true,
@@ -318,6 +327,11 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
         dispose(): void {
             listeners.abort();
             resizeObserver?.disconnect();
+            pdfViewer.cleanup();
+            pdfViewer.setDocument(null as unknown as PDFDocumentProxy);
+            linkService.setDocument(null);
+            loadingTask?.destroy().catch(() => {});
+            pdfWorker?.destroy();
             worker.terminate();
         },
     };
@@ -370,7 +384,10 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
     };
 
     // The app tears the iframe down when it is done; release everything as the page goes.
-    win.addEventListener("pagehide", () => session?.dispose());
+    win.addEventListener("pagehide", () => {
+        session?.dispose();
+        port.close();
+    });
 
     // Only the origin this page was served by may receive the port.
     const ready: PdfUsercontentMessage = { type: "ready" };

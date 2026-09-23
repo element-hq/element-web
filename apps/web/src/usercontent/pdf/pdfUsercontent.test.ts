@@ -78,6 +78,7 @@ const viewerMock = vi.hoisted(() => {
         public readonly update = vi.fn();
         public readonly updateScale = vi.fn();
         public readonly scrollPageIntoView = vi.fn();
+        public readonly cleanup = vi.fn();
         // What pdf.js measures zoom origins against: the container's `offsetTop`/`offsetLeft`.
         public containerTopLeft = [0, 0];
 
@@ -303,6 +304,7 @@ describe("PDF usercontent", () => {
         vi.stubGlobal("MessageChannel", MockMessageChannel);
 
         objectUrlBlobs = [];
+        Object.defineProperty(URL, "revokeObjectURL", { configurable: true, writable: true, value: vi.fn() });
         Object.defineProperty(URL, "createObjectURL", {
             configurable: true,
             writable: true,
@@ -391,6 +393,9 @@ describe("PDF usercontent", () => {
 
             emitWorkerReady();
             await expect(ready).resolves.toBeUndefined();
+            // Both blobs are released once the worker has loaded.
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:null/1");
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:null/2");
         });
 
         it("rejects if the worker fails to start", async () => {
@@ -639,19 +644,27 @@ describe("PDF usercontent", () => {
             expect(activeViewer().update).toHaveBeenCalledTimes(2);
         });
 
-        it("releases its listeners, observer and worker when the page is hidden", async () => {
+        it("releases everything when the page is hidden", async () => {
             const resize = mockResizeObserver();
             const iframe = fakeIframe();
             await openDocument(iframe);
             const container = document.getElementById("container")!;
+            const loadingTask = pdfjsMock.getDocument.mock.results[0].value as PDFDocumentLoadingTask;
 
             iframe.hide();
 
+            // Listeners and observer are gone.
             fireZoomWheel(-100);
             resize.trigger(container);
             expect(activeViewer().updateScale).not.toHaveBeenCalled();
             expect(activeViewer().update).not.toHaveBeenCalled();
+            // pdf.js is torn down, the worker stopped and the channel closed.
+            expect(activeViewer().cleanup).toHaveBeenCalled();
+            expect(activeViewer().setDocument).toHaveBeenLastCalledWith(null);
+            expect(loadingTask.destroy).toHaveBeenCalled();
+            expect(pdfjsMock.MockPDFWorker.instances.at(-1)?.destroy).toHaveBeenCalled();
             expect(activeWorker().terminate).toHaveBeenCalled();
+            expect(iframe.channel().port1.close).toHaveBeenCalled();
         });
     });
 });
