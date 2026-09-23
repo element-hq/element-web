@@ -6,6 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import classNames from "classnames";
 import { Button } from "@vector-im/compound-web";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import { useI18n } from "../../../../core/i18n/i18nContext";
@@ -163,6 +164,10 @@ export type MediaPreviewGroupViewModel = ViewModel<MediaPreviewGroupSnapshot>;
 
 export interface MediaPreviewGroupPreviewProps {
     vm: MediaPreviewGroupViewModel;
+    /**
+     * Optional host-level class names applied to the group container.
+     */
+    className?: string;
 }
 
 function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupCollapse): JSX.Element {
@@ -175,13 +180,13 @@ function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupC
     );
 }
 
-export function MediaPreviewGroupPreview({ vm }: MediaPreviewGroupPreviewProps): JSX.Element | null {
+export function MediaPreviewGroupPreview({ vm, className }: MediaPreviewGroupPreviewProps): JSX.Element | null {
     const { entries, collapse } = useViewModel(vm);
 
     if (entries.length === 0) return null;
 
     return (
-        <div className={styles.container}>
+        <div className={classNames(className, styles.container)}>
             {entries.map((entry) => {
                 switch (entry.type) {
                     case "text":

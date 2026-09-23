@@ -24,6 +24,7 @@ export type * from "./api/custom-components";
 export type * from "./api/extras";
 export type * from "./api/auth";
 export type * from "./api/dialog";
+export type * from "./api/x509";
 export type * from "./api/profile";
 export type * from "./api/navigation";
 export type * from "./api/builtins";
