@@ -25,9 +25,7 @@ interface ThemeState {
     effectiveTheme: string;
 }
 
-/**
- * Hook to fetch the current theme and whether system theme matching is enabled.
- */
+/** Hook to fetch the current theme state. */
 export function useTheme(): ThemeState {
     // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
     // show the right values for things.
