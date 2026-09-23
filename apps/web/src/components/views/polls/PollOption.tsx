@@ -89,7 +89,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
                 name={`poll_answer_select-${pollId}`}
                 value={answer.id}
                 checked={isChecked}
-                disabled={isEnded}
+                disabled={isEnded || isBusy}
                 aria-label={ariaLabel}
                 icon={isChecked ? <CheckIcon /> : undefined}
             >
@@ -104,7 +104,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
             name={`poll_answer_select-${pollId}`}
             value={answer.id}
             checked={isChecked}
-            disabled={isEnded}
+            disabled={isEnded || isBusy}
             aria-label={ariaLabel}
             icon={isChecked ? <CheckIcon /> : undefined}
         >
@@ -122,6 +122,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
     displayVoteCount,
     isEnded,
     isChecked,
+    isBusy,
     onOptionSelected,
     maxSelections,
 }) => {
@@ -129,6 +130,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
         mx_PollOption: true,
         mx_PollOption_checked: isChecked,
         mx_PollOption_ended: isEnded,
+        mx_PollOption_busy: isBusy,
     });
     const isWinner = isEnded && isChecked;
     const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount) / totalVoteCount);
