@@ -207,6 +207,32 @@ export class ElementWidgetDriver extends WidgetDriver {
             for (const eventType of sendRecvRoomEvents)
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
 
+            // Element Call's bot features (recording, captions, SIP dial-in and
+            // floor control, see element-call's docs/*_msc.md): the bot is
+            // invited and instructed through room state, the transcript is a
+            // thread of messages, and stream/layout negotiation is to-device
+            const sendRecvState = [
+                "org.matrix.rtc.floor_control",
+                "org.matrix.rtc.recording",
+                "org.matrix.rtc.transcription",
+                EventType.RoomPowerLevels,
+            ];
+            for (const eventType of sendRecvState) {
+                this.allowedCapabilities.add(WidgetEventCapability.forStateEvent(EventDirection.Send, eventType).raw);
+                this.allowedCapabilities.add(
+                    WidgetEventCapability.forStateEvent(EventDirection.Receive, eventType).raw,
+                );
+            }
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Send, EventType.RoomMember).raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Send, EventType.RoomMessage).raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Receive, EventType.RoomMessage).raw,
+            );
+
             const sendRecvToDevice = [
                 EventType.CallInvite,
                 EventType.CallCandidates,
@@ -219,6 +245,13 @@ export class ElementWidgetDriver extends WidgetDriver {
                 EventType.CallSDPStreamMetadataChangedPrefix,
                 EventType.CallReplaces,
                 EventType.CallEncryptionKeysPrefix,
+                "org.matrix.rtc.bridge_info.request",
+                "org.matrix.rtc.bridge_info",
+                "org.matrix.rtc.transcription.subscribe",
+                "org.matrix.rtc.transcription.status",
+                "org.matrix.msc4471.stream.update",
+                "org.matrix.msc4471.stream.encrypted",
+                "io.element.call.layout",
             ];
             for (const eventType of sendRecvToDevice) {
                 this.allowedCapabilities.add(
