@@ -41,6 +41,7 @@ interface PollOptionProps extends PollOptionContentProps {
     optionNumber: number;
     isEnded?: boolean;
     isChecked?: boolean;
+    isBusy?: boolean;
     onOptionSelected?: (id: string) => void;
     children?: ReactNode;
     maxSelections?: number;
@@ -50,6 +51,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
     pollId,
     isChecked,
     isEnded,
+    isBusy,
     optionNumber,
     isWinner,
     voteCount,
@@ -91,6 +93,8 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
                 checked={isChecked}
                 disabled={isEnded || isBusy}
                 aria-label={ariaLabel}
+                onChange={() => onOptionSelected?.(answer.id)}
+                onClick={(event) => event.stopPropagation()}
                 icon={isChecked ? <CheckIcon /> : undefined}
             >
                 <div aria-hidden="true">{children}</div>
@@ -106,6 +110,8 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
             checked={isChecked}
             disabled={isEnded || isBusy}
             aria-label={ariaLabel}
+            onChange={() => onOptionSelected?.(answer.id)}
+            onClick={(event) => event.stopPropagation()}
             icon={isChecked ? <CheckIcon /> : undefined}
         >
             <div aria-hidden="true">{children}</div>
@@ -144,6 +150,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
                 optionNumber={optionNumber}
                 isChecked={isChecked}
                 isEnded={isEnded}
+                isBusy={isBusy}
                 isWinner={isWinner}
                 voteCount={voteCount}
                 displayVoteCount={displayVoteCount}
