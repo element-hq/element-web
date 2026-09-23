@@ -40,10 +40,14 @@ exports[`ElementCallMockView > renders the call with its participants, mute stat
       <ul
         class="ElementCallMockView-module_members"
       >
-        <li>
+        <li
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           @alice:example.org (ALICEDEVICE) – you
         </li>
-        <li>
+        <li
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           @bob:example.org (BOBDEVICE)
         </li>
       </ul>
