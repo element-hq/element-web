@@ -184,6 +184,29 @@ describe("PdfViewerView", () => {
         expect(onPageInputCancel).toHaveBeenCalledOnce();
     });
 
+    it("hides the zoom buttons until pages are available", () => {
+        renderView({ status: "loading", pageCount: 0 });
+
+        expect(screen.queryByRole("button", { name: "Zoom in" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Zoom out" })).not.toBeInTheDocument();
+    });
+
+    it("forwards zoom button presses", async () => {
+        const user = userEvent.setup();
+        const onZoomIn = vi.fn();
+        const onZoomOut = vi.fn();
+        renderView({ status: "ready", pageCount: 42, onZoomIn, onZoomOut });
+
+        expect(screen.getByRole("group", { name: "Zoom" })).toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        expect(onZoomIn).toHaveBeenCalledOnce();
+        expect(onZoomOut).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole("button", { name: "Zoom out" }));
+        expect(onZoomOut).toHaveBeenCalledOnce();
+    });
+
     describe("pdf.js page layers", () => {
         it("lays the selection layer over exactly the text layer's box", () => {
             const { selection, textLayer } = renderPdfJsPage();
