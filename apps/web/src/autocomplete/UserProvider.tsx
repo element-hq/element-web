@@ -136,6 +136,7 @@ export default class UserProvider extends AutocompleteProvider {
                     type: "user",
                     suffix: selection.beginning && range!.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
+                    getUserStatus: () => this.getStatusViewModel(user.userId).getSnapshot().status,
                     component: (
                         <PillCompletion
                             title={displayName}
