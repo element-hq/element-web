@@ -84,6 +84,8 @@ const viewerMock = vi.hoisted(() => {
         public readonly cleanup = vi.fn();
         public readonly update = vi.fn();
         public readonly updateScale = vi.fn();
+        public readonly increaseScale = vi.fn();
+        public readonly decreaseScale = vi.fn();
         public readonly scrollPageIntoView = vi.fn();
         // What pdf.js measures zoom origins against: the container's `offsetTop`/`offsetLeft`.
         public containerTopLeft = [0, 0];
@@ -405,6 +407,21 @@ describe("PdfViewer", () => {
         expect(activeViewer().updateScale.mock.calls[1][0].scaleFactor).toBeCloseTo(1.022, 3);
     });
 
+    it("steps the zoom from the toolbar buttons", async () => {
+        const user = userEvent.setup();
+        mockDocument();
+
+        render(<PdfViewer media={media()} />);
+        await emitPagesInit();
+
+        await user.click(screen.getByRole("button", { name: "Zoom in" }));
+        expect(activeViewer().increaseScale).toHaveBeenCalledWith({ drawingDelay: 400 });
+        expect(activeViewer().decreaseScale).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole("button", { name: "Zoom out" }));
+        expect(activeViewer().decreaseScale).toHaveBeenCalledWith({ drawingDelay: 400 });
+    });
+
     it("ignores wheel events that are not a zoom gesture", async () => {
         mockDocument();
 
@@ -465,7 +482,7 @@ describe("PdfViewer", () => {
         emitPageChanging(5);
 
         await waitFor(() => expect(screen.getByTestId("pdf-page-input")).toHaveValue("5"));
-        expect(screen.getByRole("group")).toHaveAccessibleName("Page 5 of 100");
+        expect(screen.getByRole("group", { name: "Page 5 of 100" })).toBeInTheDocument();
     });
 
     it("hides the page selector until the document is ready", () => {
