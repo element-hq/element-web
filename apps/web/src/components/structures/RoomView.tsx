@@ -2728,10 +2728,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             if (b) extraButtons.push(b);
         }
 
+        // Element Call draws its own banners (e.g. the call's security label) at
+        // the top of the call, so the room's are left out while it fills the view
         const roomBanners: JSX.Element[] = [];
-        for (const cb of ModuleApi.instance.extras.roomBannerCallbacks) {
-            const b = cb(this.state.room.roomId);
-            if (b) roomBanners.push(b);
+        if (this.state.mainSplitContentType !== MainSplitContentType.Call) {
+            for (const cb of ModuleApi.instance.extras.roomBannerCallbacks) {
+                const b = cb(this.state.room.roomId);
+                if (b) roomBanners.push(b);
+            }
         }
 
         return (

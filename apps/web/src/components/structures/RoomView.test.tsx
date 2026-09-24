@@ -634,6 +634,14 @@ describe("RoomView", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
+        it("leaves out module room banners, as Element Call draws its own", async () => {
+            vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            ModuleApi.instance.extras.addRoomBannerCallback(() => <div data-testid="module-banner" />);
+            const { queryByTestId } = await mountRoomView();
+            expect(queryByTestId("module-banner")).toBeNull();
+            ModuleApi.instance.extras.roomBannerCallbacks.length = 0;
+        });
+
         it("should open timeline card when navigating to permalink", async () => {
             vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
             await mountRoomView();
