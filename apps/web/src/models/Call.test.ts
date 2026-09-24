@@ -934,7 +934,7 @@ describe("ElementCall", () => {
             const onDestroy = vi.fn();
             call.on(CallEvent.Destroy, onDestroy);
 
-            WidgetMessagingStore.instance.stopMessaging(call.widget, call.roomId);
+            WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
             await waitFor(() => expect(call.presented).toBe(false), { interval: 5 });
             expect(onDestroy).toHaveBeenCalledTimes(1);
         });
