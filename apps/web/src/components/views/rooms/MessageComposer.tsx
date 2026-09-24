@@ -764,5 +764,12 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
         urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
+    const renderer = ModuleApi.instance.customComponents.messageComposerRenderer;
+    if (renderer) {
+        return renderer({ ...props, roomId: props.room.roomId }, (props) => (
+            <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />
+        ));
+    }
+
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
 }

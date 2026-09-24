@@ -32,5 +32,7 @@ export function getModuleMatrixEvent(mxEvent: MatrixEvent): ModuleMatrixEvent | 
         stateKey: mxEvent.getStateKey(),
         type: mxEvent.getType(),
         unsigned: mxEvent.getUnsigned(),
+        wireContent: mxEvent.getWireContent(),
+        isEncrypted: mxEvent.isEncrypted(),
     };
 }

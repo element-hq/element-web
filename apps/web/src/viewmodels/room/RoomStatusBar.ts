@@ -98,6 +98,17 @@ export class RoomStatusBarViewModel
                 adminContactHref: resourceLimitError.data.admin_contact,
             };
         }
+
+        // Check if any of the unsent messages are because the server rejected them.
+        const serverRejectedEvent = unsentMessages.find((event) => event.error?.errcode === "M_FORBIDDEN");
+        const errorMessage = serverRejectedEvent?.error?.error;
+        if (errorMessage) {
+            return {
+                state: RoomStatusBarState.MessageRejected,
+                errorMessage,
+            };
+        }
+
         // Otherwise, we know there are unsent messages but the error is not special.
         return {
             state: RoomStatusBarState.UnsentMessages,
@@ -151,6 +162,8 @@ export class RoomStatusBarViewModel
 
     private readonly client: MatrixClient;
 
+    private isMessageRejectedByServer: boolean = false;
+
     public constructor(props: Props) {
         const client = MatrixClientPeg.safeGet();
         super(props, RoomStatusBarViewModel.computeSnapshot(props.room, client, false, false));
@@ -164,21 +177,40 @@ export class RoomStatusBarViewModel
     };
 
     private readonly onRoomLocalEchoUpdated = (): void => {
-        this.setSnapshot();
+        const newSnapshot = RoomStatusBarViewModel.computeSnapshot(
+            this.props.room,
+            this.client,
+            this.isResending,
+            this.hasClickedTermsAndConditions,
+        );
+        this.setSnapshot(newSnapshot);
+        if (newSnapshot.state === RoomStatusBarState.MessageRejected) {
+            // When a message is rejected, there's not much to do except
+            // cancel the message. So why bother waiting until the user
+            // clicks the button?
+            this.isMessageRejectedByServer = true;
+            setTimeout(() => {
+                Resend.cancelUnsentEvents(this.props.room);
+            }, 1000);
+        }
     };
 
     private isResending = false;
     private hasClickedTermsAndConditions = false;
 
-    private setSnapshot(): void {
-        this.snapshot.set(
+    private setSnapshot(newSnapshot?: RoomStatusBarViewSnapshot): void {
+        if (this.isMessageRejectedByServer) {
+            return;
+        }
+        const snapshot =
+            newSnapshot ??
             RoomStatusBarViewModel.computeSnapshot(
                 this.props.room,
                 this.client,
                 this.isResending,
                 this.hasClickedTermsAndConditions,
-            ),
-        );
+            );
+        this.snapshot.set(snapshot);
         // Reset `hasClickedTermsAndConditions` once the state has cleared.
         if (this.hasClickedTermsAndConditions && !this.snapshot.current.state) {
             this.hasClickedTermsAndConditions = false;
@@ -219,5 +251,10 @@ export class RoomStatusBarViewModel
             action: "local_room_event",
             roomId: this.props.room.roomId,
         });
+    };
+
+    public onDismissClick = (): void => {
+        this.isMessageRejectedByServer = false;
+        this.setSnapshot();
     };
 }

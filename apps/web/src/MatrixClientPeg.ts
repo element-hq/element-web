@@ -126,6 +126,12 @@ export interface IMatrixClientPeg {
      * returns a boolean of whether it was after a given timestamp.
      */
     userRegisteredAfter(date: Date): boolean;
+
+    /**
+     * Returns a promise that resolve with MatrixClient is available.
+     * Useful when you want to access the matrix client early on the app lifecycle.
+     */
+    clientReadyPromise: Promise<void>;
 }
 
 /**
@@ -146,6 +152,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     private matrixClient: MatrixClient | null = null;
     private justRegisteredUserId: string | null = null;
 
+    private matrixClientReady = Promise.withResolvers<void>();
+
     public get(): MatrixClient | null {
         return this.matrixClient;
     }
@@ -159,6 +167,10 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
     public set(client: MatrixClient): void {
         this.matrixClient = client;
+    }
+
+    public get clientReadyPromise(): Promise<void> {
+        return this.matrixClientReady.promise;
     }
 
     public unset(): void {
@@ -349,6 +361,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         logger.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.matrixClient!.startClient(opts);
         logger.log(`MatrixClientPeg: MatrixClient started`);
+
+        console.log("Resolving client ready promise");
+        this.matrixClientReady.resolve();
     }
 }
 

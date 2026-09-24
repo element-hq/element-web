@@ -34,6 +34,7 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
+import { ModuleApi } from "../../../../../modules/Api";
 
 interface IIgnoredUserProps {
     userId: string;
@@ -369,6 +370,17 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
             );
         }
 
+        const additionalSettings: React.ReactNode[] = [];
+        for (const cb of ModuleApi.instance.extras.appSettingsSecurityCallbacks) {
+            const b = cb();
+            additionalSettings.push(b);
+        }
+
+        const moduleSettings =
+            additionalSettings.length > 0 ? (
+                <SettingsSection heading="Modules">{additionalSettings}</SettingsSection>
+            ) : null;
+
         return (
             <SettingsTab>
                 {warning}
@@ -377,6 +389,7 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
                     {secureBackup}
                     {eventIndex}
                 </SettingsSection>
+                {moduleSettings}
                 {privacySection}
                 {advancedSection}
             </SettingsTab>

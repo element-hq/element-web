@@ -13,6 +13,10 @@ import {
     type RoomHeaderButtonsCallback,
     type RoomCallOption,
     type RoomCallOptionsCallback,
+    type RoomBannerCallback,
+    type EventContentTransformCallback,
+    type RoomSettingsSecurityCallback,
+    AppSettingsSecurityCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
@@ -49,6 +53,11 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
         this.dialPadHandler = cb;
         this.emit(ExtrasApiEvent.DialPadHandlerChanged);
     }
+    public roomBannerCallbacks: RoomBannerCallback[] = [];
+    public eventContentTransformCallbacks: EventContentTransformCallback[] = [];
+    public encryptedEnvelopeTransformCallbacks: EventContentTransformCallback[] = [];
+    public roomSettingsSecurityCallbacks: RoomSettingsSecurityCallback[] = [];
+    public appSettingsSecurityCallbacks: AppSettingsSecurityCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -61,6 +70,26 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
         this.roomHeaderButtonsCallbacks.push(cb);
+    }
+
+    public addRoomBannerCallback(cb: RoomBannerCallback): void {
+        this.roomBannerCallbacks.push(cb);
+    }
+
+    public addEventContentTransformCallback(cb: EventContentTransformCallback): void {
+        this.eventContentTransformCallbacks.push(cb);
+    }
+
+    public addEncryptedEnvelopeTransformCallback(cb: EventContentTransformCallback): void {
+        this.encryptedEnvelopeTransformCallbacks.push(cb);
+    }
+
+    public addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void {
+        this.roomSettingsSecurityCallbacks.push(cb);
+    }
+
+    public addAppSettingsSecurityCallback(cb: AppSettingsSecurityCallback): void {
+        this.appSettingsSecurityCallbacks.push(cb);
     }
 
     public addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void {
