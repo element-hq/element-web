@@ -140,6 +140,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { getModuleMatrixEvent } from "../../modules/models/Event.ts";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
@@ -1606,20 +1607,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // module-provided UI (banners, composer components) updates.
         const listeners = ModuleApi.instance.client.stateEventListeners;
         if (listeners.length) {
-            const eventId = ev.getId();
-            const roomId = ev.getRoomId();
-            const sender = ev.getSender();
-            if (eventId && roomId && sender) {
-                const moduleEvent = {
-                    content: ev.getContent(),
-                    eventId,
-                    originServerTs: ev.getTs(),
-                    roomId,
-                    sender,
-                    stateKey: ev.getStateKey(),
-                    type: ev.getType(),
-                    unsigned: ev.getUnsigned(),
-                };
+            const moduleEvent = getModuleMatrixEvent(ev);
+            if (moduleEvent) {
                 for (const cb of listeners) cb(moduleEvent);
                 this.forceUpdate();
             }

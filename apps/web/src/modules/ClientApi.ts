@@ -14,6 +14,7 @@ import type {
 import { Room as ModuleRoom } from "./models/Room";
 import { AccountDataApi } from "./AccountDataApi";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import type { StateEvents } from "matrix-js-sdk/src/matrix";
 import { ClientCreationManagementApi } from "./ClientCreationManagementApi.ts";
 
 export class ClientApi implements IClientApi {
@@ -42,7 +43,7 @@ export class ClientApi implements IClientApi {
         stateKey: string = "",
     ): Promise<void> {
         const client = MatrixClientPeg.safeGet();
-        await client.sendStateEvent(roomId, eventType, content, stateKey);
+        await client.sendStateEvent(roomId, eventType as keyof StateEvents, content as any, stateKey);
     }
 
     public stateEventListeners: Array<(event: ModuleMatrixEvent) => void> = [];
@@ -59,6 +60,7 @@ export class ClientApi implements IClientApi {
         const client = MatrixClientPeg.safeGet();
         // useAuthentication=true (7th param) produces /_matrix/client/v1/media/download
         // which is required for servers that enforce authenticated media.
+        // eslint-disable-next-line no-restricted-properties
         const httpUrl = client.mxcUrlToHttp(mxcUrl, undefined, undefined, undefined, false, true, true);
         if (!httpUrl) throw new Error(`Cannot resolve mxc URL: ${mxcUrl}`);
         const accessToken = client.getAccessToken();

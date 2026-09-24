@@ -11,7 +11,7 @@ import {
     type SettingsLevel as ISettingsLevel,
     type Room,
     Watchable,
-    Setting,
+    type Setting,
 } from "@element-hq/element-web-module-api";
 
 import type { RoomListStoreV3Class, RoomListStoreV3Event } from "../stores/room-list-v3/RoomListStoreV3";

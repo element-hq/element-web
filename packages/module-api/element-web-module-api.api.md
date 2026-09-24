@@ -65,6 +65,9 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly x509?: X509Api;
 }
 
+// @public
+export type AppSettingsSecurityCallback = () => React.ReactNode;
+
 // @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
@@ -96,7 +99,16 @@ export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
+    downloadMxc: (mxcUrl: string) => Promise<string>;
+    getCapabilities(): Promise<Record<string, unknown>>;
     getRoom: (id: string) => Room | null;
+    // Warning: (ae-incompatible-release-tags) The symbol "registerEncryptedEventContentTransform" is marked as @public, but its signature references "EventContentTransformCallback" which is marked as @alpha
+    registerEncryptedEventContentTransform(transform: EventContentTransformCallback): UnregisterTransformCallback;
+    // Warning: (ae-incompatible-release-tags) The symbol "registerEventContentTransform" is marked as @public, but its signature references "EventContentTransformCallback" which is marked as @alpha
+    registerEventContentTransform(transform: EventContentTransformCallback): UnregisterTransformCallback;
+    sendStateEvent: (roomId: string, eventType: string, content: Record<string, unknown>, stateKey?: string) => Promise<void>;
+    uploadContent: (content: Blob | File, contentType?: string) => Promise<string>;
+    waitForClient(): Promise<void>;
 }
 
 // @public
@@ -156,6 +168,8 @@ export type Container = "top" | "right" | "center";
 export interface CustomComponentsApi {
     registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): void;
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
+    // (undocumented)
+    registerMessageComposerComponent(renderer: CustomMessageComposerRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
@@ -200,7 +214,18 @@ export type CustomLoginRenderFunction = ExtendablePropsRenderFunction<CustomLogi
 // @alpha
 export type CustomMessageComponentProps = {
     mxEvent: MatrixEvent;
+    isReplyTile?: boolean;
 };
+
+// @public (undocumented)
+export type CustomMessageComposerComponentProps = React.PropsWithChildren<{
+    roomId: string;
+}>;
+
+// Warning: (ae-incompatible-release-tags) The symbol "CustomMessageComposerRenderFunction" is marked as @public, but its signature references "ExtendablePropsRenderFunction" which is marked as @alpha
+//
+// @public (undocumented)
+export type CustomMessageComposerRenderFunction = ExtendablePropsRenderFunction<CustomMessageComposerComponentProps>;
 
 // @alpha
 export type CustomMessageRenderFunction = (
@@ -250,14 +275,20 @@ export type DialogProps<M> = {
 };
 
 // @alpha
+export type EventContentTransformCallback = (roomId: string, content: Record<string, unknown>) => Record<string, unknown>;
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addAppSettingsSecurityCallback(cb: AppSettingsSecurityCallback): void;
+    addRoomBannerCallback(cb: RoomBannerCallback): void;
     addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void;
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
@@ -300,12 +331,14 @@ export type LocationRenderFunction = () => JSX.Element;
 export interface MatrixEvent {
     content: Record<string, unknown>;
     eventId: string;
+    isEncrypted: boolean;
     originServerTs: number;
     roomId: string;
     sender: string;
     stateKey?: string;
     type: string;
     unsigned: Record<string, unknown>;
+    wireContent?: Record<string, unknown>;
 }
 
 // @public
@@ -387,10 +420,18 @@ export interface RichVariables {
 
 // @public
 export interface Room {
+    // Warning: (ae-incompatible-release-tags) The symbol "findEventById" is marked as @public, but its signature references "MatrixEvent" which is marked as @alpha
+    findEventById(eventId: string): MatrixEvent | null;
     getLastActiveTimestamp: () => number;
+    // Warning: (ae-incompatible-release-tags) The symbol "getStateEvent" is marked as @public, but its signature references "MatrixEvent" which is marked as @alpha
+    getStateEvent: (eventType: string, stateKey?: string) => Watchable<MatrixEvent | null>;
     id: string;
+    isEncrypted: () => boolean;
     name: Watchable<string>;
 }
+
+// @alpha
+export type RoomBannerCallback = (roomId: string) => JSX.Element | undefined;
 
 // @alpha
 export interface RoomCallOption {
@@ -412,6 +453,9 @@ export interface RoomListStoreApi {
 }
 
 // @alpha
+export type RoomSettingsSecurityCallback = (roomId: string) => JSX.Element | undefined;
+
+// @alpha
 export interface RoomViewProps {
     enableReadReceiptsAndMarkersOnActivity?: boolean;
     hideComposer?: boolean;
@@ -421,9 +465,32 @@ export interface RoomViewProps {
     hideWidgets?: boolean;
 }
 
+// @public (undocumented)
+export interface Setting<T> {
+    // (undocumented)
+    info: {
+        default: T;
+    };
+    // (undocumented)
+    name: string;
+}
+
 // @alpha
 export interface SettingsApi {
     getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+}
+
+// @public
+export enum SettingsLevel {
+    // (undocumented)
+    DEVICE = "device"
+}
+
+// @public
+export interface SettingsStoreApi {
+    getValue(settingName: string): Watchable<unknown>;
+    registerSettings(settings: Setting<unknown>[]): void;
+    setValue(settingName: string, level: SettingsLevel, value: unknown): Promise<void>;
 }
 
 // @alpha
@@ -444,6 +511,7 @@ export interface StorageHelperApi {
 // @public
 export interface StoresApi {
     roomListStore: RoomListStoreApi;
+    settingsStore: SettingsStoreApi;
 }
 
 // @public
@@ -475,6 +543,9 @@ export const enum UIComponent {
     InviteUsers = "UIComponent.sendInvites",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
+
+// @public
+export type UnregisterTransformCallback = () => void;
 
 // @alpha
 export interface UrlPreviewApi {

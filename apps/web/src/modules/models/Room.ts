@@ -106,4 +106,3 @@ class WatchableStateEvent extends Watchable<ModuleMatrixEvent | null> {
         }
     };
 }
-

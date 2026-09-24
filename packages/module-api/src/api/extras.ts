@@ -87,6 +87,8 @@ export interface RoomCallOption {
  * @returns The options to offer, possibly none.
  */
 export type RoomCallOptionsCallback = (roomId: string) => Promise<RoomCallOption[]> | RoomCallOption[];
+
+/**
  * A callback that returns a JSX element representing a banner to display below the room header.
  *
  * @alpha
@@ -149,6 +151,8 @@ export interface ExtrasApi {
      * @param cb - A callback that returns the options (see {@link RoomCallOptionsCallback}).
      */
     addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void;
+
+    /**
      * Adds a callback to get a banner element to display below the room header in the room view.
      *
      * @param cb - A callback that returns a JSX element representing the banner (see {@link RoomBannerCallback}).

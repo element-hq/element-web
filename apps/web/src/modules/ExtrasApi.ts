@@ -16,7 +16,7 @@ import {
     type RoomBannerCallback,
     type EventContentTransformCallback,
     type RoomSettingsSecurityCallback,
-    AppSettingsSecurityCallback,
+    type AppSettingsSecurityCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
