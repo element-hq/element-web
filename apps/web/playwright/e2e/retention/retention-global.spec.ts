@@ -46,7 +46,7 @@ test.describe("global retention rules", () => {
     test("should apply", async ({ app, bot, page }) => {
         const roomId = await app.client.createRoom({
             name: "Test",
-            invite: [bot.credentials.userId],
+            invite: [bot.credentials!.userId],
         });
         await checkRetentionInRoom({ app, bot, page }, roomId);
     });

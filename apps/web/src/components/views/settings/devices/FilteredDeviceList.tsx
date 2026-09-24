@@ -299,7 +299,7 @@ export const FilteredDeviceList = ({
     ];
 
     const onFilterOptionChange = (filterId: DeviceFilterKey): void => {
-        onFilterChange(filterId === ALL_FILTER_ID ? undefined : (filterId as FilterVariation));
+        onFilterChange(filterId === ALL_FILTER_ID ? undefined : filterId);
     };
 
     const isAllSelected = selectedDeviceIds.length >= sortedDevices.length;

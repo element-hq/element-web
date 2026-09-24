@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, type FC } from "react";
 import { Text } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import { type UserStatus } from "..";
 import styles from "./StatusTextView.module.css";
@@ -14,14 +15,14 @@ import styles from "./StatusTextView.module.css";
 /**
  * Displays a user's status message and emoji in simple text format
  */
-export const StatusTextView = React.forwardRef<
-    HTMLDivElement,
+export const StatusTextView: FC<
     {
         status: UserStatus;
+        ref?: React.Ref<HTMLDivElement>;
     } & React.HTMLAttributes<HTMLDivElement>
->(function StatusTextView({ status, ...props }, ref): JSX.Element {
+> = function StatusTextView({ status, ref, className, ...props }): JSX.Element {
     return (
-        <div ref={ref} {...props} className={styles.statusText}>
+        <div ref={ref} {...props} className={classNames(styles.statusText, className)}>
             <Text as="span" className={styles.menuStatusEmoji}>
                 {status.emoji}
             </Text>
@@ -30,4 +31,4 @@ export const StatusTextView = React.forwardRef<
             </Text>
         </div>
     );
-});
+};

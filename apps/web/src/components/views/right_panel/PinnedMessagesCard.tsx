@@ -58,7 +58,7 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
         const newlyRead = pinnedEventIds.filter((id) => !readPinnedEvents.has(id));
         if (newlyRead.length > 0) {
             // clear out any read pinned events which no longer are pinned
-            cli.setRoomAccountData(room.roomId, ReadPinsEventId, {
+            void cli.setRoomAccountData(room.roomId, ReadPinsEventId, {
                 event_ids: pinnedEventIds,
             });
         }

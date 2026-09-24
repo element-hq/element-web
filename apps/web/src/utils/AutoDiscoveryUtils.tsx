@@ -64,6 +64,7 @@ const mapAutoDiscoveryErrorTranslation = (err: AutoDiscoveryError): TranslationK
     }
 };
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class AutoDiscoveryUtils {
     /**
      * Checks if a given error or error message is considered an error

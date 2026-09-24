@@ -92,7 +92,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
         // Theme may have changed while messaging was starting
         this.onThemeChange(this.themeWatcher.getEffectiveTheme());
-        this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
+        void this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
     };
 
     private onLoad = (): void => {
@@ -103,7 +103,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     };
 
     private onThemeChange = (theme: string): void => {
-        this.state.messaging?.updateTheme({ name: theme });
+        void this.state.messaging?.updateTheme({ name: theme });
     };
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>): void => {
@@ -116,7 +116,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
             return this.state.messaging?.transport.reply(ev.detail, {
                 error: { message: "Invalid button" },
-            } as IWidgetApiErrorResponseData);
+            } satisfies IWidgetApiErrorResponseData);
         }
 
         let buttonIds: ModalButtonID[];
@@ -129,7 +129,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             buttonIds = Array.from(tempSet);
         }
         this.setState({ disabledButtonIds: buttonIds });
-        this.state.messaging?.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+        this.state.messaging?.transport.reply(ev.detail, {} satisfies IWidgetApiAcknowledgeResponseData);
     };
 
     public render(): React.ReactNode {
@@ -177,7 +177,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     }
 
                     const onClick = (): void => {
-                        this.state.messaging?.notifyModalWidgetButtonClicked(def.id);
+                        void this.state.messaging?.notifyModalWidgetButtonClicked(def.id);
                     };
 
                     const isDisabled = this.state.disabledButtonIds.includes(def.id);
@@ -207,6 +207,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     <iframe
                         title={this.widget.name ?? undefined}
                         ref={this.appFrame}
+                        // oxlint-disable-next-line react/iframe-missing-sandbox
                         sandbox="allow-forms allow-scripts allow-same-origin"
                         src={widgetUrl}
                         onLoad={this.onLoad}

@@ -29,7 +29,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     }, testInfo) => {
         await page.clock.install();
 
-        const tokenUri = `${mas.baseUrl}/oauth2/token`;
+        const tokenUri = `${mas!.baseUrl}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
         );
@@ -66,7 +66,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await newPage.close();
 
         // Assert logging out revokes both tokens
-        const revokeUri = `${mas.baseUrl}/oauth2/revoke`;
+        const revokeUri = `${mas!.baseUrl}/oauth2/revoke`;
         const revokeAccessTokenPromise = page.waitForRequest(
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "access_token",
         );
@@ -95,7 +95,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(page.getByText("Welcome")).toBeVisible();
             await page.goto("about:blank");
 
-            const result = await mas.manage("kill-sessions", userId);
+            const result = await mas!.manage("kill-sessions", userId);
             expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
 
             await page.goto("http://localhost:8080");

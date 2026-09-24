@@ -17,7 +17,13 @@ import styles from "./RoomListSectionHeaderView.module.css";
 import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
 import { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
-import { isSectionDragData, type RoomListDragData, type SectionDragData } from "../dragAndDrop";
+import {
+    type AcceptedRoomKind,
+    isSectionDragData,
+    rejectsDraggedRoom,
+    type RoomListDragData,
+    type SectionDragData,
+} from "../dragAndDrop";
 import { type NotificationDecorationData } from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
 
 /**
@@ -38,6 +44,12 @@ export interface RoomListSectionHeaderViewSnapshot {
     displaySectionMenu: boolean;
     /** Whether the section can be reordered via drag-and-drop  */
     canBeReordered: boolean;
+    /**
+     * The kind of room this section accepts when a room is dropped on it.
+     * "none" for the sections that take no room at all, such as Invites where the membership of the
+     * room decides rather than a drop.
+     */
+    acceptedRoomKind: AcceptedRoomKind;
 }
 
 /**
@@ -106,7 +118,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded, isUnread, canBeReordered } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread, canBeReordered, acceptedRoomKind } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
     const {
@@ -125,13 +137,15 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const draggedData = source?.data;
     const isDraggingSectionSource = isSectionDragData(draggedData);
 
-    // Keep the droppable enabled so rooms can still be dropped on default sections
-    // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
-    // headers so they can't be used as reorder targets.
+    // The two kinds of drag are gated separately. A section drag can only target a reorderable
+    // header, so Favourite and Low Priority are excluded. A room drag can only target a header that
+    // takes the kind of room being dragged.
     const { ref: droppableRef, isDropTarget } = useDroppable<SectionDragData>({
         id,
         data: { type: "section", index: sectionIndex },
-        disabled: isDragSource || (isDraggingSectionSource && !canBeReordered),
+        disabled:
+            isDragSource ||
+            (isDraggingSectionSource ? !canBeReordered : rejectsDraggedRoom(acceptedRoomKind, draggedData)),
     });
 
     const isDraggingRoom = isDropTarget && draggedData?.type === "room";
@@ -174,7 +188,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
 
     const onHeaderFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
         onFocus(id, e);
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null) && e.currentTarget.matches(":focus-visible")) {
+        if (!e.currentTarget.contains(e.relatedTarget) && e.currentTarget.matches(":focus-visible")) {
             setKeyboardActive(true);
         }
     };
@@ -183,10 +197,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         // Keep it revealed while focus is on the menu button, and while the menu is open (focus is
         // then in the portaled popover, outside the header). That way closing with Escape restores
         // focus to the still-revealed trigger instead of dropping to <body>. Clear once focus leaves.
-        if (
-            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
-            !e.currentTarget.querySelector('[data-state="open"]')
-        ) {
+        if (!e.currentTarget.contains(e.relatedTarget) && !e.currentTarget.querySelector('[data-state="open"]')) {
             setKeyboardActive(false);
         }
     };

@@ -24,7 +24,7 @@ export const useRecentSearches = (): [Room[], () => void] => {
     return [
         rooms,
         () => {
-            SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
+            void SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
             setRooms([]);
         },
     ];

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
-import { getToast } from "@element-hq/element-web-playwright-common";
+import { getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { doTwoWaySasVerification, awaitVerifier, waitForDevices } from "./utils";
@@ -26,10 +26,15 @@ test.describe("User verification", () => {
             const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
 
             // accept the DM
-            await app.viewRoomByName("Bob");
+            await app.viewInvitedRoomByName("Bob");
             await page.getByRole("button", { name: "Start chatting" }).click();
             await use({ roomId: dmRoomId });
         },
+    });
+
+    test.beforeEach(async ({ page, user, app }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
     });
 
     test("can receive a verification request when there is no existing DM", async ({
@@ -39,7 +44,7 @@ test.describe("User verification", () => {
         user: aliceCredentials,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDevices(app, bob.credentials.userId, 1);
+        await waitForDevices(app, bob.credentials!.userId, 1);
         await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
         const avatar = page.getByRole("button", { name: "Avatar" });
         await avatar.click();
@@ -47,14 +52,14 @@ test.describe("User verification", () => {
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
+                const room = client.getRoom(dmRoomId)!;
                 while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto()!.requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
         );
@@ -62,7 +67,7 @@ test.describe("User verification", () => {
         // there should also be a toast
         const toast = await getToast(page, "Verification requested");
         // it should contain the details of the requesting user
-        await expect(toast.getByText(`Bob (${bob.credentials.userId})`)).toBeVisible();
+        await expect(toast.getByText(`Bob (${bob.credentials!.userId})`)).toBeVisible();
         // Accept
         await toast.getByRole("button", { name: "Verify User" }).click();
 
@@ -93,7 +98,7 @@ test.describe("User verification", () => {
         user: aliceCredentials,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDevices(app, bob.credentials.userId, 1);
+        await waitForDevices(app, bob.credentials!.userId, 1);
         await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
         const avatar = page.getByRole("button", { name: "Avatar" });
         await avatar.click();
@@ -101,14 +106,14 @@ test.describe("User verification", () => {
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
+                const room = client.getRoom(dmRoomId)!;
                 while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto()!.requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
         );

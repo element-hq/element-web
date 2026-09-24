@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import webpack from "webpack";
 import * as fs from "node:fs/promises";
-import * as path from "node:path";
+import path from "node:path";
 import _ from "lodash";
 import { type Translations } from "matrix-web-i18n";
 

@@ -228,7 +228,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         }
 
         // When an <input> is focused, only handle the Escape key
-        if (checkInputableElement(ev.target as HTMLElement) && action !== KeyBindingAction.Escape) {
+        if (checkInputableElement(ev.target) && action !== KeyBindingAction.Escape) {
             return;
         }
 

@@ -6,17 +6,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig } from "vitest/config";
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, type PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
 import rootConfig from "../../vitest.config";
-import react from "@vitejs/plugin-react";
 
-const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const viewport = { width: 960, height: 720 };
 
 const commonContextOptions: PlaywrightProviderOptions["contextOptions"] = {
     reducedMotion: "reduce",
@@ -24,12 +24,15 @@ const commonContextOptions: PlaywrightProviderOptions["contextOptions"] = {
     colorScheme: "light",
     // Disable font smoothing for consistent rendering
     deviceScaleFactor: 1,
+    viewport,
 };
 
 const commonLaunchOptions = {
     // Options to try to make font rendering more consistent
     args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
 };
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
     test: {
@@ -55,7 +58,7 @@ export default defineConfig({
                     // The plugin will run tests for the stories defined in your Storybook config
                     // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
                     storybookTest({
-                        configDir: path.join(dirname, ".storybook"),
+                        configDir: path.resolve(__dirname, "./.storybook"),
                         storybookScript: "storybook --ci",
                         tags: {
                             exclude: ["skip-test"],
@@ -84,6 +87,7 @@ export default defineConfig({
                                 : undefined,
                         }),
                         instances: [{ browser: "chromium" }],
+                        viewport,
                     },
                     setupFiles: [".storybook/vitest.setup.ts"],
                 },
@@ -135,7 +139,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
+            "@test-utils": fileURLToPath(import.meta.resolve("./src/test/utils/index.tsx")),
         },
     },
     plugins: [react()],

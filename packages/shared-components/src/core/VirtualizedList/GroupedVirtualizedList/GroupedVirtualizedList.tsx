@@ -27,6 +27,7 @@ import styles from "./GroupedVirtualizedList.module.css";
  * scrolled out of its render window, a tall section's header eventually unmounts and stops sticking;
  * the pinned overlay (rendered outside the list) backstops that gap.
  */
+// oxlint-disable-next-line no-restricted-properties
 const StickyRowItem: Components["Item"] = React.forwardRef(function StickyRowItem(
     // `item` and `context` are Virtuoso-injected props, not DOM attributes — pull them out so they
     // aren't spread onto the div (`context` would otherwise render as `context="[object Object]"`).

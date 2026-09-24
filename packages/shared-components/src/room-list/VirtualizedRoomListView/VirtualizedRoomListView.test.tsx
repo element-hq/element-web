@@ -13,7 +13,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
-import { KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
+import { getScrollTargetEntryIndex, KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
 
 const { Default, Sections } = composeStories(stories);
 
@@ -67,6 +67,26 @@ describe("<VirtualizedRoomListView />", () => {
         expect(Default.args.updateVisibleRooms).toHaveBeenCalled();
     });
 
+    describe("getScrollTargetEntryIndex", () => {
+        // Entry space: [hdr(0), a(1), b(2), c(3), hdr(4), d(5), hdr(6), e(7), f(8)]
+        const sections = [{ roomIds: ["a", "b", "c"] }, { roomIds: ["d"] }, { roomIds: ["e", "f"] }];
+
+        it.each([
+            [sections, 1, 2],
+            [sections, 2, 3],
+            [sections, 5, 8],
+            // Rooms 0, 3 and 4 come first in their section, so their header is targeted instead.
+            [sections, 0, 0],
+            [sections, 3, 4],
+            [sections, 4, 6],
+            // Past the last room, and no sections at all.
+            [sections, 99, 8],
+            [[], 0, 0],
+        ])("maps room index %#", (input, roomIndex, entryIndex) => {
+            expect(getScrollTargetEntryIndex(input, roomIndex)).toBe(entryIndex);
+        });
+    });
+
     describe("updateVisibleRooms range reporting", () => {
         beforeEach(() => {
             (Default.args.updateVisibleRooms as any).mockClear?.();
@@ -94,8 +114,8 @@ describe("<VirtualizedRoomListView />", () => {
             // reach them, so explicitly reset call history for the spies under test.
             (Sections.args.changeRoomSection as any).mockClear?.();
             (Sections.args.changeSectionOrder as any).mockClear?.();
-            (Sections.args.onSectionDragStart as any).mockClear?.();
-            (Sections.args.onSectionDragEnd as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragStart as any).mockClear?.();
+            (Sections.args.onSectionOrRoomDragEnd as any).mockClear?.();
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
@@ -192,8 +212,56 @@ describe("<VirtualizedRoomListView />", () => {
             await waitFor(() => {
                 expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
             });
-            expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
-            expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragStart).toHaveBeenCalled();
+            expect(Sections.args.onSectionOrRoomDragEnd).toHaveBeenCalled();
+        });
+    });
+
+    describe("pointer drag activation", () => {
+        beforeEach(() => {
+            (Sections.args.changeRoomSection as any).mockClear?.();
+        });
+
+        it("does not start a drag when a finger moves (touch scrolling the list)", async () => {
+            // For touch, dragging only activates after a 250ms hold; moving the finger first aborts
+            // it so the list scrolls instead of dragging a room. Simulate a finger press that moves
+            // immediately (as when scrolling) and assert no drag ever starts.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[TouchA>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { pointerName: "TouchA", coords: { x: 20, y: 140 } },
+                { keys: "[/TouchA]" },
+            ]);
+
+            expect(status).toHaveTextContent("");
+            expect(Sections.args.changeRoomSection).not.toHaveBeenCalled();
+        });
+
+        it("starts a drag when the mouse moves past the activation distance", async () => {
+            // For mouse, dragging activates as soon as the pointer moves past 5px, so the same
+            // press-and-move gesture that scrolls on touch drags the room into another section.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+
+            await user.pointer([
+                { keys: "[MouseLeft>]", target: roomButton, coords: { x: 20, y: 20 } },
+                { coords: { x: 20, y: 140 } },
+            ]);
+
+            // The drag has activated: the live region reflects the ongoing drag.
+            await waitFor(() => expect(status).toHaveTextContent("General is over Favourites"));
+
+            await user.pointer({ keys: "[/MouseLeft]" }); // release to drop
+
+            await waitFor(() => expect(Sections.args.changeRoomSection).toHaveBeenCalled());
         });
     });
 

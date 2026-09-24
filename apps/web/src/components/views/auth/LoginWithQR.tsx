@@ -286,9 +286,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         } catch (e: RendezvousError | unknown) {
             if (abortController.signal.aborted) return;
             logger.error("Error whilst approving login", e);
-            await rendezvous.cancel(
-                e instanceof RendezvousError ? (e.code as MSC4108FailureReason) : ClientRendezvousFailureReason.Unknown,
-            );
+            await rendezvous.cancel(e instanceof RendezvousError ? e.code : ClientRendezvousFailureReason.Unknown);
         }
     };
 

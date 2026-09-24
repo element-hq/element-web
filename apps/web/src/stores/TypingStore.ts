@@ -77,7 +77,7 @@ export default class TypingStore {
 
         if (isTyping) {
             if (!currentTyping.serverTimer.isRunning()) {
-                currentTyping.serverTimer
+                void currentTyping.serverTimer
                     .restart()
                     .finished()
                     .then(() => {
@@ -90,7 +90,7 @@ export default class TypingStore {
             } else currentTyping.serverTimer.restart();
 
             if (!currentTyping.userTimer.isRunning()) {
-                currentTyping.userTimer
+                void currentTyping.userTimer
                     .restart()
                     .finished()
                     .then(() => {
@@ -99,6 +99,6 @@ export default class TypingStore {
             } else currentTyping.userTimer.restart();
         }
 
-        this.context.client?.sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
+        void this.context.client?.sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
     }
 }

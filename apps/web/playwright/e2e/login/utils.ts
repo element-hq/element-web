@@ -52,13 +52,13 @@ export async function doTokenRegistration(
 
     return page.evaluate(() => ({
         homeserverBaseUrl: window.mxMatrixClientPeg.get().getHomeserverUrl(),
-        accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
-        userId: window.mxMatrixClientPeg.get().getUserId(),
-        deviceId: window.mxMatrixClientPeg.get().getDeviceId(),
+        accessToken: window.mxMatrixClientPeg.get().getAccessToken()!,
+        userId: window.mxMatrixClientPeg.get().getSafeUserId(),
+        deviceId: window.mxMatrixClientPeg.get().getDeviceId()!,
         homeServer: window.mxMatrixClientPeg.get().getHomeserverUrl(),
         password: null,
         displayName: "Alice",
-        username: window.mxMatrixClientPeg.get().getUserIdLocalpart(),
+        username: window.mxMatrixClientPeg.get().getUserIdLocalpart()!,
     }));
 }
 

@@ -46,9 +46,9 @@ export const getBeaconBounds = (beacons: Beacon[]): Bounds | undefined => {
     if (sortedByLat.length < 1 || sortedByLong.length < 1) return;
 
     return {
-        north: sortedByLat[0]!.latitude,
-        south: sortedByLat[sortedByLat.length - 1]!.latitude,
-        east: sortedByLong[0]!.longitude,
-        west: sortedByLong[sortedByLong.length - 1]!.longitude,
+        north: sortedByLat[0].latitude,
+        south: sortedByLat[sortedByLat.length - 1].latitude,
+        east: sortedByLong[0].longitude,
+        west: sortedByLong[sortedByLong.length - 1].longitude,
     };
 };

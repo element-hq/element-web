@@ -14,13 +14,13 @@ Please see LICENSE files in the repository root for full details.
 // This tool is a helpful substitute to `pnpm link` as that modifies the package.json & pnpm-lock.yaml files.
 
 import * as fs from "node:fs/promises";
-import { join, dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const configPath = join(__dirname, "..", ".link-config");
-const nodeModulesPath = join(__dirname, "..", "node_modules");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const configPath = path.join(__dirname, "..", ".link-config");
+const nodeModulesPath = path.join(__dirname, "..", "node_modules");
 
 try {
     if (process.env.PLAYWRIGHT_COMMON_DOCKER) process.exit(0); // Skip in docker env
@@ -28,9 +28,9 @@ try {
     const configFile = await fs.readFile(configPath, "utf-8");
     for (const line of configFile.trim().split("\n")) {
         if (!line || line.startsWith("#")) continue;
-        const [dependency, path, dir] = line.split("=");
-        const nodeModules = dir ? join(dir, "node_modules") : nodeModulesPath;
-        const dependencyPath = join(nodeModules, dependency);
+        const [dependency, targetPath, dir] = line.split("=");
+        const nodeModules = dir ? path.join(dir, "node_modules") : nodeModulesPath;
+        const dependencyPath = path.join(nodeModules, dependency);
 
         try {
             try {
@@ -38,7 +38,7 @@ try {
                 console.log(`Existing is ${stat.isSymbolicLink() ? "symlink" : "directory"}`);
                 if (stat.isSymbolicLink()) {
                     const linkPath = await fs.readlink(dependencyPath);
-                    if (linkPath === path) {
+                    if (linkPath === targetPath) {
                         // already done
                         continue;
                     } else {
@@ -56,10 +56,10 @@ try {
                 }
             }
 
-            console.log(`Linking ${dependency} to ${path}`);
-            await fs.symlink(path, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
+            console.log(`Linking ${dependency} to ${targetPath}`);
+            await fs.symlink(targetPath, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
 
-            const pkgJson = JSON.parse(await fs.readFile(join(path, "package.json"), "utf-8"));
+            const pkgJson = JSON.parse(await fs.readFile(path.join(targetPath, "package.json"), "utf-8"));
             const pkgManager =
                 pkgJson.devEngines?.packageManager?.name ?? pkgJson.packageManager?.split("@").at(0) ?? "yarn";
             // pnpm install may have wiped out the `node_modules` dir so we have to restore it

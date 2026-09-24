@@ -11,6 +11,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class Resend {
     public static resendUnsentEvents(room: Room): Promise<void[]> {
         return Promise.all(

@@ -63,7 +63,7 @@ export async function createThumbnail(
     let context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
     try {
         canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
-        context = canvas.getContext("2d") as OffscreenCanvasRenderingContext2D;
+        context = canvas.getContext("2d")!;
     } catch {
         // Fallback support for other browsers (Safari and Firefox for now)
         canvas = document.createElement("canvas");

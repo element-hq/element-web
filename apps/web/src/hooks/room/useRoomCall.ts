@@ -214,6 +214,8 @@ export const useRoomCall = (
     } else {
         widget = groupCall?.widget ?? jitsiWidget;
     }
+    const [canPinWidget, setCanPinWidget] = useState(false);
+    const [widgetPinned, setWidgetPinned] = useState(false);
     const updateWidgetState = useCallback((): void => {
         setCanPinWidget(sdkContext.widgetLayoutStore.canAddToContainer(room, "top"));
         setWidgetPinned(!!widget && sdkContext.widgetLayoutStore.isInContainer(room, widget, "top"));
@@ -222,8 +224,6 @@ export const useRoomCall = (
     useEffect(() => {
         updateWidgetState();
     }, [room, jitsiWidget, groupCall, updateWidgetState]);
-    const [canPinWidget, setCanPinWidget] = useState(false);
-    const [widgetPinned, setWidgetPinned] = useState(false);
     // We only want to prompt to pin the widget if it's not element call based.
     const isECWidget = WidgetType.CALL.matches(widget?.type ?? "");
     const promptPinWidget = !isECWidget && canPinWidget && !widgetPinned;
@@ -269,7 +269,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
-                placeCall(
+                void placeCall(
                     sdkContext.legacyCallHandler,
                     room,
                     CallType.Voice,
@@ -289,7 +289,7 @@ export const useRoomCall = (
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(
+                void placeCall(
                     sdkContext.legacyCallHandler,
                     room,
                     CallType.Video,

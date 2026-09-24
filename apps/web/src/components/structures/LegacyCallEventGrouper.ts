@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallEvent, CallState, CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -157,7 +158,10 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     public callBack = (): void => {
         const roomId = this.roomId;
         if (!roomId) return;
-        SDKContextClass.instance.legacyCallHandler.placeCall(roomId, this.isVoice ? CallType.Voice : CallType.Video);
+        void SDKContextClass.instance.legacyCallHandler.placeCall(
+            roomId,
+            this.isVoice ? CallType.Voice : CallType.Video,
+        );
     };
 
     public toggleSilenced = (): void => {

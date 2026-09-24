@@ -44,8 +44,8 @@ export interface TestFixtures extends BaseTestFixtures {
     app: ElementAppPage;
 
     crypto: Crypto;
-    room?: { roomId: string };
-    uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
+    room: { roomId: string };
+    uut: Locator; // Unit Under Test, useful place to refer a prepared locator
     botCreateOpts: CreateBotOpts;
     bot: Bot;
     webserver: Webserver;

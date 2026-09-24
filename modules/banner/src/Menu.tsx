@@ -49,7 +49,7 @@ const Trigger = styled.button`
     width: ${({ theme }): string => theme.triggerWidth};
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.triggerBackgroundColorHover};
         color: ${({ theme }): string => theme.triggerColorContrast};
     }
@@ -79,7 +79,7 @@ const CloseButton = styled.button`
     border-radius: 8px;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -100,7 +100,7 @@ const CategoryHeading = styled.h2`
 
 const LinkButton = styled.a`
     font-size: 14px;
-    color: var(--cpd-color-text-action-primary);
+    color: ${({ theme }): string => theme.menuButtonColor};
     font-weight: var(--cpd-font-weight-medium);
     display: flex;
     border-radius: 8px;
@@ -108,11 +108,11 @@ const LinkButton = styled.a`
     align-items: center;
 
     &:link {
-        color: var(--cpd-color-text-action-primary);
+        color: inherit;
     }
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -179,7 +179,8 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    let logoUrl = fallbackLogoUrl;
+    let logoJsx: JSX.Element = <Logo src={fallbackLogoUrl} api={api} />;
+
     if (config instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
     } else if (config) {
@@ -190,8 +191,15 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                 ))}
             </>
         );
-        if (config.logo_url) {
-            logoUrl = config.logo_url;
+        logoJsx = (
+            <Logo
+                src={config.logo_url ?? fallbackLogoUrl}
+                height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
+                api={api}
+            />
+        );
+        if (config.logo_href) {
+            logoJsx = <a href={config.logo_href}>{logoJsx}</a>;
         }
     } else {
         content = (
@@ -231,7 +239,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
-                                        <Logo api={api} src={logoUrl} />
+                                        {logoJsx}
                                         <Dialog.Close asChild>
                                             <CloseButton
                                                 aria-label={api.i18n.translate("close_label")}

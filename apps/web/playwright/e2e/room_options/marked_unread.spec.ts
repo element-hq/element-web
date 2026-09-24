@@ -31,7 +31,7 @@ test.describe("Mark as Unread", () => {
         const dummyRoomId = await app.client.createRoom({
             name: "Room of no consequence",
         });
-        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
         await bot.joinRoom(roomId);
         await bot.sendMessage(roomId, "I am a robot. Beep.");
 

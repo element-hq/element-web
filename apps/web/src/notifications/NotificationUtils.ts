@@ -19,6 +19,7 @@ export interface PushRuleActions {
     highlight?: boolean;
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export class NotificationUtils {
     // Encodes a dictionary of {
     //   "notify": true/false,

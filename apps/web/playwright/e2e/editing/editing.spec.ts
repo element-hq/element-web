@@ -36,7 +36,7 @@ test.describe("Editing", () => {
 
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {
-        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
+        const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile").last();
         await eventTile.hover();
         await eventTile.getByRole("button", { name: "Edit", exact: true }).click();
 
@@ -122,7 +122,7 @@ test.describe("Editing", () => {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
                 // Assert that the edited message body consists of both deleted character and inserted character
                 // Above the first "e" of "Message" was replaced with "a"
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
 
                 const body = tile.locator(".mx_EventTile_content .mx_EventTile_body");
                 await expect(body.locator(".mx_EditHistoryMessage_deletion").getByText("e")).toBeVisible();
@@ -147,7 +147,7 @@ test.describe("Editing", () => {
 
             {
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -158,7 +158,7 @@ test.describe("Editing", () => {
             {
                 // Assert that the message edit history dialog is rendered again after it was closed
                 const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                await expect(tile.locator(".mx_EventTile_content")).toHaveText("Meassage");
                 // Click the "Remove" button again
                 await clickButtonRemove(tile);
             }
@@ -193,7 +193,9 @@ test.describe("Editing", () => {
             await expect(
                 page
                     .locator(".mx_RoomView_MessageList")
-                    .locator(".mx_EventTile_last .mx_RedactedBody", { hasText: "Message deleted" }),
+                    .locator(".mx_EventTile", { has: page.locator(".mx_RedactedBody") })
+                    .last()
+                    .locator(".mx_RedactedBody", { hasText: "Message deleted" }),
             ).toBeVisible();
         },
     );
@@ -303,6 +305,28 @@ test.describe("Editing", () => {
         await expect(page.getByRole("textbox", { name: "Edit message" })).not.toBeVisible();
     });
 
+    test("should show the emoji autocomplete above the edit composer", async ({ page, app, room }) => {
+        await page.goto(`#/room/${room.roomId}`);
+
+        await sendEvent(app, room.roomId);
+
+        const tile = page.locator(".mx_RoomView_body .mx_EventTile").last();
+        await expect(tile.getByText("Message", { exact: true })).toBeVisible();
+        const line = tile.locator(".mx_EventTile_line");
+        await line.hover();
+        await line.getByRole("button", { name: "Edit", exact: true }).click();
+
+        const editComposer = page.getByRole("textbox", { name: "Edit message" });
+        await editComposer.press("End");
+        await editComposer.pressSequentially(" :+1");
+
+        const autocomplete = page.locator("#mx_Autocomplete");
+        await expect(autocomplete).toBeVisible();
+        await autocomplete.locator(".mx_Autocomplete_Completion_title", { hasText: ":+1:" }).click();
+        // The inserted emoji may carry a trailing variation selector, so match on the emoji alone.
+        await expect(editComposer).toContainText("Message 👍");
+    });
+
     test("should correctly display events which are edited, where we lack the edit event", async ({
         page,
         user,
@@ -356,19 +380,29 @@ test.describe("Editing", () => {
 
         // now have the cypress user join the room, jump to the original event, and wait for the event to be visible
         await app.client.joinRoom(testRoomId);
-        await app.viewRoomByName("TestRoom");
+        // joinRoom is a bare API call, so wait for the join to arrive over sync before the client can
+        // know the room (getRoom() below is null until then). Do not open the room in the UI to achieve
+        // this: that starts a scroll-to-bottom which races the permalink's scroll-to-event and can
+        // unmount the target tile from the virtualised timeline. See element-hq/element-web#30579.
+        await app.client.awaitRoomMembership(testRoomId);
         await page.goto(`#/room/${testRoomId}/${originalEventId}`);
 
         const messageTile = page.locator(`[data-event-id="${originalEventId}"]`);
-        // at this point, the edit event should still be unknown
+        // At this point the edit event should still be unknown to the client: it sits ten padding
+        // events before the end of the timeline, outside the window this permalink loaded. That is the
+        // premise of the test - the edited text below has to come from the server's bundled aggregation.
         const timeline = await app.client.evaluate(
-            (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId).getTimelineForEvent(editEventId),
+            (cli, { testRoomId, editEventId }) => cli.getRoom(testRoomId)!.getTimelineForEvent(editEventId),
             { testRoomId, editEventId },
         );
         expect(timeline).toBeNull();
 
         // nevertheless, the event should be updated
-        await expect(messageTile.locator(".mx_EventTile_body")).toHaveText("Edited body");
+        await expect(
+            messageTile
+                .getByTestId("event-tile-slot-body")
+                .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > :first-child"),
+        ).toHaveText("Edited body");
         await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
     });
 });

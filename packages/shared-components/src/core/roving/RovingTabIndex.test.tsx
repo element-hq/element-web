@@ -7,7 +7,7 @@
 
 import React, { type HTMLAttributes } from "react";
 import userEvent from "@testing-library/user-event";
-import { act, fireEvent, render } from "@test-utils";
+import { act, fireEvent, render, type RenderResult } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -38,7 +38,7 @@ const createButtonElement = (text: string): HTMLButtonElement => {
 const renderToolbar = (
     ui: React.ReactNode,
     props: Partial<React.ComponentProps<typeof RovingTabIndexProvider>> = {},
-): ReturnType<typeof render> => {
+): RenderResult => {
     return render(
         <RovingTabIndexProvider {...props}>
             {({ onKeyDownHandler }) => (
@@ -583,7 +583,7 @@ describe("RovingTabIndex", () => {
 
             act(() => container.querySelectorAll("button")[0].focus());
             const input = getByRole("textbox", { name: "Search input" });
-            act(() => (input as HTMLElement).focus());
+            act(() => input.focus());
 
             fireEvent.keyDown(input, { key: "Tab" });
             expectTabIndexes(container.querySelectorAll("button"), [-1, 0]);

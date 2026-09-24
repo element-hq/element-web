@@ -16,7 +16,7 @@ const slowTestReporter: Reporter = {
         const tests = testModules
             .flatMap((m) => Array.from(m.children.allTests()))
             .filter((test) => test.diagnostic()?.slow);
-        tests.sort((x, y) => x.diagnostic()!.duration! - y.diagnostic()!.duration!);
+        tests.sort((x, y) => x.diagnostic()!.duration - y.diagnostic()!.duration);
         tests.reverse();
 
         if (tests.length > 0) {
@@ -44,18 +44,14 @@ export default defineConfig({
         include: /\.[cm]?tsx?$/,
     },
     test: {
-        projects: [
-            "{apps,modules,packages}/*/vitest.config.ts",
-            // We run shared-components separately for now as vitest lacks support for nested projects
-            // https://github.com/vitest-dev/vitest/issues/8544
-            "!packages/shared-components",
-        ],
+        projects: ["{apps,modules,packages}/*/vitest.config.ts"],
         coverage: {
             provider: "v8",
             include: ["{apps,modules,packages}/*/src/**/*.{cts,ts,tsx}"],
             exclude: [
                 // Exclude test files
                 "**/*.{stories,test}.{ts,tsx}",
+                "**/*.test.browser.{ts,tsx}",
                 // Exclude test utilities
                 "**/src/test/**",
                 // Exclude mocks

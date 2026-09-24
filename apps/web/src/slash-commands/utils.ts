@@ -55,7 +55,7 @@ export const singleMxcUpload = async (cli: MatrixClient): Promise<string | null>
             if (!file) return;
 
             const { finished } = Modal.createDialog(UploadConfirmDialog, { file });
-            finished.then(async ([shouldContinue]) => {
+            void finished.then(async ([shouldContinue]) => {
                 if (shouldContinue) {
                     const { content_uri: uri } = await cli.uploadContent(file);
                     resolve(uri);

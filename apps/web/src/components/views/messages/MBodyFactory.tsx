@@ -6,12 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
+    MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
     useCreateAutoDisposedViewModel,
@@ -21,24 +22,44 @@ import { type IBodyProps } from "./IBodyProps";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
 import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
-export function FileBodyFactory({
-    mxEvent,
-    mediaEventHelper,
-    forExport,
-    showFileInfo,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
+
+export function FileBodyFactory(props: FileBodyProps): JSX.Element {
+    // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
+    // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
+    // in the panels which don't render the media, e.g. the files and notification panels — and those,
+    // like exports, keep the classic file body.
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    // preview file body can't handle this, let the legacy file body handle it
+    if (props.mediaEventHelper === undefined) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper} mxEvent={props.mxEvent} />;
+}
+
+/// the old look for files, still used for images, videos, audio, voice messages
+function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -50,6 +71,7 @@ export function FileBodyFactory({
                 timelineRenderingType,
                 refIFrame,
                 refLink,
+                pdfViewerEnabled,
             }),
     );
 
@@ -60,10 +82,35 @@ export function FileBodyFactory({
             forExport,
             showFileInfo,
             timelineRenderingType,
+            pdfViewerEnabled,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+}
+
+interface PreviewFileBodyProps {
+    mxEvent: MatrixEvent;
+    mediaEventHelper: MediaEventHelper;
+}
+
+/// the new preview file tile
+function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const vm = useCreateAutoDisposedViewModel(
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+    );
+
+    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
+    useEffect(() => {
+        vm.setPdfViewerEnabled(pdfViewerEnabled);
+    }, [pdfViewerEnabled, vm]);
+
+    return (
+        <div className="mx_EventTile_content">
+            <MediaPreviewGroupPreview vm={vm} />
+        </div>
+    );
 }
 
 export function VideoBodyFactory({
@@ -255,11 +302,13 @@ export function ImageBodyFactory({
 }
 
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
+    const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
+    const props = getRedactedBodyViewModelProps(mxEvent, showTwelveHour);
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel(props));
 
     useEffect(() => {
-        vm.setEvent(mxEvent);
-    }, [mxEvent, vm]);
+        vm.setProps(getRedactedBodyViewModelProps(mxEvent, showTwelveHour));
+    }, [mxEvent, showTwelveHour, vm]);
 
     return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
 }
@@ -292,7 +341,7 @@ const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
 // Render a body using the picked factory.
 // Falls back to the provided factory when msgtype has no specific handler.
 export function renderMBody(props: IBodyProps, fallbackFactory?: MBodyComponent): JSX.Element | null {
-    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype as string) ?? fallbackFactory;
+    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype!) ?? fallbackFactory;
     if (!BodyType) {
         return null;
     }

@@ -10,6 +10,18 @@
     overflow-x: hidden;
 }
 
+.root[data-event-layout="irc"] {
+    /* Keep the emoji line clear of the line box, as in the legacy IRC tile. */
+    padding-block: 1px;
+    display: inline-block;
+    line-height: 1.125rem;
+}
+
+.root[data-event-layout="bubble"] {
+    max-width: 100%;
+    padding: 1px;
+}
+
 .text,
 .caption {
     white-space: pre-wrap;
@@ -27,6 +39,11 @@
 
 .annotated {
     display: flex;
+}
+
+.annotated > :first-child {
+    /* Let the body shrink below its min-content (e.g. a wide <pre>) so code blocks scroll instead of the text being clipped. */
+    min-width: 0;
 }
 
 .annotatedInline {

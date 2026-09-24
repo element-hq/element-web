@@ -15,11 +15,8 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
+// oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
-import {
-    RoomViewLifecycle,
-    type ViewRoomOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -47,7 +44,6 @@ import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -112,8 +108,6 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
-
-    viewRoomOpts: ViewRoomOpts;
 }
 
 const INITIAL_STATE: State = {
@@ -135,7 +129,6 @@ const INITIAL_STATE: State = {
     wasContextSwitch: false,
     viewingCall: false,
     promptAskToJoin: false,
-    viewRoomOpts: { buttons: [] },
 };
 
 type Listener = (isActive: boolean) => void;
@@ -148,7 +141,8 @@ export class RoomViewStore extends EventEmitter {
     // another RVS via INITIAL_STATE as they share the same underlying object. Mostly relevant for tests.
     private state = utils.deepCopy(INITIAL_STATE);
 
-    private dis?: MatrixDispatcher;
+    // this is defacto always assigned as `resetDispatcher` is called in the constructor.
+    private dis!: MatrixDispatcher;
     private dispatchToken?: string;
 
     public constructor(
@@ -195,7 +189,7 @@ export class RoomViewStore extends EventEmitter {
 
             // Fired so we can reduce dependency on event emitters to this store, which is relatively
             // central to the application and can easily cause import cycles.
-            this.dis?.dispatch<ActiveRoomChangedPayload>({
+            this.dis.dispatch<ActiveRoomChangedPayload>({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: lastRoomId,
                 newRoomId: this.state.roomId,
@@ -218,7 +212,7 @@ export class RoomViewStore extends EventEmitter {
             //      - event_offset: 100
             //      - highlighted:  true
             case Action.ViewRoom:
-                this.viewRoom(payload as ViewRoomPayload);
+                void this.viewRoom(payload as ViewRoomPayload);
                 break;
             case Action.ViewThread:
                 this.viewThread(payload as ThreadPayload);
@@ -250,7 +244,7 @@ export class RoomViewStore extends EventEmitter {
             // join_room:
             //      - opts: options for joinRoom
             case Action.JoinRoom:
-                this.joinRoom(payload as JoinRoomPayload);
+                void this.joinRoom(payload as JoinRoomPayload);
                 break;
             case Action.JoinRoomError:
                 this.joinRoomError(payload as JoinRoomErrorPayload);
@@ -260,7 +254,7 @@ export class RoomViewStore extends EventEmitter {
                     this.setState({ shouldPeek: false });
                 }
 
-                awaitRoomDownSync(MatrixClientPeg.safeGet(), payload.roomId).then((room) => {
+                void awaitRoomDownSync(MatrixClientPeg.safeGet(), payload.roomId).then((room) => {
                     const numMembers = room.getJoinedMemberCount();
                     const roomSize =
                         numMembers > 1000
@@ -302,7 +296,7 @@ export class RoomViewStore extends EventEmitter {
                         // if the room is displayed in a module, we don't want to change the room view
                         if (roomId && this.isRoomDisplayedInModule(roomId)) return;
 
-                        this.dis?.dispatch<ViewRoomPayload>({
+                        this.dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
                             replyingToEvent: payload.event,
@@ -325,10 +319,6 @@ export class RoomViewStore extends EventEmitter {
             }
             case Action.CancelAskToJoin: {
                 this.cancelAskToJoin(payload as CancelAskToJoinPayload);
-                break;
-            }
-            case Action.RoomLoaded: {
-                this.setViewRoomOpts();
                 break;
             }
         }
@@ -388,7 +378,7 @@ export class RoomViewStore extends EventEmitter {
                 // Immediately start the call. This will connect to all required widget events
                 // and allow the widget to show the lobby.
                 if (call.connectionState === ConnectionState.Disconnected) {
-                    call.start({ skipLobby: payload.skipLobby, voiceOnly: payload.voiceOnly });
+                    void call.start({ skipLobby: payload.skipLobby, voiceOnly: payload.voiceOnly });
                 }
             }
             // If we switch to a different room from the call, we are no longer presenting it
@@ -415,7 +405,7 @@ export class RoomViewStore extends EventEmitter {
                 await this.stores.slidingSyncManager.setRoomVisible(payload.room_id);
 
                 // Re-fire the payload: we won't re-process it because the prev room ID == payload room ID now
-                this.dis?.dispatch({
+                this.dis.dispatch({
                     ...payload,
                 });
                 return;
@@ -466,7 +456,7 @@ export class RoomViewStore extends EventEmitter {
                         viaServers: payload.via_servers,
                     };
                 }
-                this.dis?.dispatch<JoinRoomPayload>(joinPayload);
+                this.dis.dispatch<JoinRoomPayload>(joinPayload);
             }
 
             if (room) {
@@ -505,7 +495,7 @@ export class RoomViewStore extends EventEmitter {
                     viaServers = result.servers;
                 } catch (err) {
                     logger.error("RVS failed to get room id for alias: ", err);
-                    this.dis?.dispatch<ViewRoomErrorPayload>({
+                    this.dis.dispatch<ViewRoomErrorPayload>({
                         action: Action.ViewRoomError,
                         room_id: null,
                         room_alias: payload.room_alias,
@@ -516,7 +506,7 @@ export class RoomViewStore extends EventEmitter {
             }
 
             // Re-fire the payload with the newly found room_id
-            this.dis?.dispatch({
+            this.dis.dispatch({
                 ...payload,
                 room_id: roomId,
                 via_servers: viaServers,
@@ -545,9 +535,24 @@ export class RoomViewStore extends EventEmitter {
         });
 
         // take a copy of roomAlias, roomId & viaServers as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId, viaServers = [] } = this.state;
+        const { roomAlias, viaServers = [] } = this.state;
+        // fall back to the payload's roomId explicitly since it is always the room we were asked to join
+        const roomId = this.state.roomId ?? payload.roomId;
         // prefer the room alias if we have one as it allows joining over federation even with no viaServers
-        const address = roomAlias || roomId!;
+        const address = roomAlias || roomId;
+
+        if (!address) {
+            logger.error("Cannot join room: no room ID or alias to join", payload);
+            this.dis.dispatch<JoinRoomErrorPayload>({
+                action: Action.JoinRoomError,
+                roomId,
+                err: new UserFriendlyError("room|error_join_unknown", {
+                    cause: new Error("Cannot join room: no room ID or alias to join"),
+                }),
+                canAskToJoin: payload.canAskToJoin,
+            });
+            return;
+        }
 
         const joinOpts: IJoinRoomOpts = {
             viaServers,
@@ -568,14 +573,14 @@ export class RoomViewStore extends EventEmitter {
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
             // room.
-            this.dis?.dispatch<JoinRoomReadyPayload>({
+            this.dis.dispatch<JoinRoomReadyPayload>({
                 action: Action.JoinRoomReady,
-                roomId: roomId!,
+                roomId,
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
             logger.error("Error thrown while handling joinRoom", err);
-            this.dis?.dispatch<JoinRoomErrorPayload>({
+            this.dis.dispatch<JoinRoomErrorPayload>({
                 action: Action.JoinRoomError,
                 roomId,
                 err: err instanceof Error ? err : new UserFriendlyError("room|error_join_unknown", { cause: err }),
@@ -583,7 +588,7 @@ export class RoomViewStore extends EventEmitter {
             });
 
             if (payload.canAskToJoin && err instanceof MatrixError && err.httpStatus === 403) {
-                this.dis?.dispatch({ action: Action.PromptAskToJoin });
+                this.dis.dispatch({ action: Action.PromptAskToJoin });
             }
         }
     }
@@ -665,7 +670,7 @@ export class RoomViewStore extends EventEmitter {
      */
     public resetDispatcher(dis: MatrixDispatcher): void {
         if (this.dispatchToken) {
-            this.dis?.unregister(this.dispatchToken);
+            this.dis.unregister(this.dispatchToken);
         }
         this.dis = dis;
         if (dis) {
@@ -806,26 +811,6 @@ export class RoomViewStore extends EventEmitter {
                     description: err.message,
                 }),
             );
-    }
-
-    /**
-     * Gets the current state of the 'viewRoomOpts' property.
-     *
-     * @returns {ViewRoomOpts} The value of the 'viewRoomOpts' property.
-     */
-    public getViewRoomOpts(): ViewRoomOpts {
-        return this.state.viewRoomOpts;
-    }
-
-    /**
-     * Invokes the view room lifecycle to set the view room options.
-     *
-     * @returns {void}
-     */
-    private setViewRoomOpts(): void {
-        const viewRoomOpts: ViewRoomOpts = { buttons: [] };
-        ModuleRunner.instance.invoke(RoomViewLifecycle.ViewRoom, viewRoomOpts, this.getRoomId());
-        this.setState({ viewRoomOpts });
     }
 
     /**

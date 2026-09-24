@@ -21,6 +21,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
 import { FileBodyFactory, renderMBody } from "./MBodyFactory";
+import { presentableTextForFile } from "../../../utils/FileUtils";
 
 interface IState {
     error?: boolean;
@@ -110,7 +111,14 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // At this point we should have a playable state
         return (
             <span className="mx_MAudioBody">
-                <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
+                <AudioPlayer
+                    playback={this.state.playback}
+                    mediaName={presentableTextForFile(
+                        this.props.mxEvent.getContent<MediaEventContent>(),
+                        undefined,
+                        false,
+                    )}
+                />
                 {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory)}
             </span>
         );

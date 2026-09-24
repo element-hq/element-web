@@ -60,7 +60,7 @@ test.describe("Event List Summary", () => {
             await app.client.sendMessage(roomId, "Saying something");
 
             // When we ban the bot
-            await app.client.ban(roomId, bot.credentials.userId);
+            await app.client.ban(roomId, bot.credentials!.userId);
 
             // Then we say that, but the name is hidden
             await expect(
@@ -92,8 +92,8 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             // When we perform multiple actions on it
-            await app.client.kick(roomId, bot.credentials.userId);
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.kick(roomId, bot.credentials!.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             // Then those actions are gathered into a single summary
@@ -126,9 +126,9 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             // When we perform multiple actions on it, including a ban
-            await app.client.ban(roomId, bot.credentials.userId);
-            await app.client.unban(roomId, bot.credentials.userId);
-            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.ban(roomId, bot.credentials!.userId);
+            await app.client.unban(roomId, bot.credentials!.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
             await bot.joinRoom(roomId);
 
             // Then those actions are gathered into a single summary, with the name hidden
@@ -158,7 +158,7 @@ test.describe("Event List Summary", () => {
                 autoAcceptInvites: false,
             });
             await bot2.prepareClient();
-            await app.client.inviteUser(roomId, bot2.credentials.userId);
+            await app.client.inviteUser(roomId, bot2.credentials!.userId);
             await app.client.sendMessage(roomId, "I invited MyBot2...");
             await bot.joinRoom(roomId);
             await bot2.joinRoom(roomId);
@@ -169,10 +169,10 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             // When we perform multiple actions on both bots
-            await app.client.kick(roomId, bot.credentials.userId);
-            await app.client.kick(roomId, bot2.credentials.userId);
-            await app.client.inviteUser(roomId, bot.credentials.userId);
-            await app.client.inviteUser(roomId, bot2.credentials.userId);
+            await app.client.kick(roomId, bot.credentials!.userId);
+            await app.client.kick(roomId, bot2.credentials!.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
+            await app.client.inviteUser(roomId, bot2.credentials!.userId);
             await bot.joinRoom(roomId);
             await bot2.joinRoom(roomId);
 
@@ -195,7 +195,7 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(3).click();
+            await page.getByRole("button", { name: "expand" }).nth(2).click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();
@@ -227,7 +227,7 @@ test.describe("Event List Summary", () => {
                 autoAcceptInvites: false,
             });
             await bot2.prepareClient();
-            await app.client.inviteUser(roomId, bot2.credentials.userId);
+            await app.client.inviteUser(roomId, bot2.credentials!.userId);
             await app.client.sendMessage(roomId, "I invited MyBot2...");
             await bot.joinRoom(roomId);
             await bot2.joinRoom(roomId);
@@ -238,11 +238,11 @@ test.describe("Event List Summary", () => {
             ).toBeVisible();
 
             // When we ban bot1 but not bot2
-            await app.client.ban(roomId, bot.credentials.userId);
-            await app.client.unban(roomId, bot.credentials.userId);
-            await app.client.kick(roomId, bot2.credentials.userId);
-            await app.client.inviteUser(roomId, bot.credentials.userId);
-            await app.client.inviteUser(roomId, bot2.credentials.userId);
+            await app.client.ban(roomId, bot.credentials!.userId);
+            await app.client.unban(roomId, bot.credentials!.userId);
+            await app.client.kick(roomId, bot2.credentials!.userId);
+            await app.client.inviteUser(roomId, bot.credentials!.userId);
+            await app.client.inviteUser(roomId, bot2.credentials!.userId);
             await bot.joinRoom(roomId);
             await bot2.joinRoom(roomId);
 
@@ -265,7 +265,7 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(3).click();
+            await page.getByRole("button", { name: "expand" }).nth(2).click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();
@@ -318,7 +318,7 @@ async function setupRoom(app: ElementAppPage, homeserver: StartedHomeserverConta
         autoAcceptInvites: false,
     });
     await bot.prepareClient();
-    await app.client.inviteUser(roomId, bot.credentials.userId);
+    await app.client.inviteUser(roomId, bot.credentials!.userId);
     await app.client.sendMessage(roomId, "I invited MyBot...");
 
     return { bot, roomId };
@@ -336,11 +336,11 @@ async function replaceBotIds(page: Page, bot: Bot, bot2?: Bot) {
                 const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
                 while (walker.nextNode()) {
                     const node = walker.currentNode;
-                    node.textContent = node.textContent.replaceAll(bot1UserId, "<<replaced_bot1_id>>");
+                    node.textContent = node.textContent!.replaceAll(bot1UserId, "<<replaced_bot1_id>>");
                     node.textContent = node.textContent.replaceAll(bot2UserId, "<<replaced_bot2_id>>");
                 }
             }
         },
-        [bot.credentials.userId, bot2?.credentials?.userId ?? "no_bot_2_to_replace"],
+        [bot.credentials!.userId, bot2?.credentials?.userId ?? "no_bot_2_to_replace"],
     );
 }

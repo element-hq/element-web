@@ -1,6 +1,5 @@
 {
     "a11y": {
-        "emoji_picker": "Emoji seçici",
         "jump_first_invite": "İlk davete git.",
         "message_composer": "Mesaj oluşturucu",
         "n_unread_messages": {
@@ -484,7 +483,6 @@
         "message_layout": "Mesaj düzeni",
         "message_timestamp_invalid": "Geçersiz zaman damgası",
         "microphone": "Mikrofon",
-        "model": "Model",
         "modern": "Modern",
         "mute": "Sessiz",
         "n_members": {
@@ -834,22 +832,6 @@
     },
     "dialog_close_label": "Kutucuğu kapat",
     "download_completed": "İndirme Tamamlandı",
-    "emoji": {
-        "categories": "Kategoriler",
-        "category_activities": "Aktiviteler",
-        "category_animals_nature": "Hayvanlar & Doğa",
-        "category_flags": "Bayraklar",
-        "category_food_drink": "Yiyecek & İçecek",
-        "category_frequently_used": "Sıklıkla Kullanılan",
-        "category_objects": "Nesneler",
-        "category_smileys_people": "İfadeler ve İnsanlar",
-        "category_symbols": "Semboller",
-        "category_travel_places": "Seyahat & Yerler",
-        "quick_reactions": "Hızlı Tepkiler"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Aramayı iptal et"
-    },
     "empty_room": "Boş oda",
     "empty_room_was_name": "Boş oda (%(oldName)s idi)",
     "encryption": {
@@ -1251,7 +1233,6 @@
         "name_mxid_share_room": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu odayı paylaş</a> kullanarak davet edin.",
         "name_mxid_share_space": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu alanı paylaş</a> kullanarak davet edin.",
         "recents_section": "Güncel Sohbetler",
-        "room_failed_partial": "Başkalarına davetler iletilmekle beraber, aşağıdakiler <RoomName/> odasına davet edilemedi",
         "room_failed_partial_title": "Bazı davetler gönderilemiyor",
         "room_failed_title": "Kullanıcılar %(roomName)s adresine davet edilemedi",
         "send_link_prompt": "Veya davet bağlantısı gönder",
@@ -1365,7 +1346,6 @@
         "bridge_state_workspace": "Çalışma alanı: <networkLink/>",
         "click_for_info": "Daha fazla bilgi için tıklayın",
         "currently_experimental": "Şu anda deneysel.",
-        "custom_themes": "Özel temaların eklenmesini destekleyin",
         "dynamic_room_predecessors": "Dinamik oda öncülleri",
         "dynamic_room_predecessors_description": "MSC3946 etkinleştir (geç gelen oda arşivlerini desteklemek için)",
         "element_call_video_rooms": "Element Çağrısı video odaları",
@@ -1384,7 +1364,6 @@
         "group_profile": "Profil",
         "group_rooms": "Odalar",
         "group_spaces": "Alanlar",
-        "group_themes": "Temalar",
         "group_threads": "Mesaj dizileri",
         "group_ui": "Kullanıcı arayüzü",
         "group_voip": "Ses & Video",
@@ -1459,8 +1438,6 @@
     "language_dropdown_label": "Dil Açılır Listesi",
     "leave_room_dialog": {
         "last_person_warning": "Buradaki tek kişi sensin. Ayrılırsanız, gelecekte siz de dahil olmak üzere hiç kimse katılamaz.",
-        "leave_room_question": "'%(roomName)s' odasından ayrılmak istediğinize emin misiniz ?",
-        "leave_space_question": "'%(spaceName)s' alanından ayrılmak istediğinizden emin misiniz?",
         "room_leave_admin_warning": "Bu odadaki tek yönetici sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_leave_mod_warning": "Bu odadaki tek moderatör sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_rejoin_warning": "Bu oda herkese açık değildir. Davetiye olmadan tekrar katılamazsınız.",
@@ -1563,7 +1540,6 @@
         "mentions_and_keywords": "@bahsetmeler ve anahtar kelimeler",
         "mentions_and_keywords_description": "Yalnızca <a>settings</a> ayarlarınızda ayarlanan bahsetmeler ve anahtar kelimelerle bildirim alın",
         "mentions_keywords": "Bahsetmeler ve anahtar kelimeler",
-        "message_didnt_send": "Mesaj gönderilmedi. Bilgi için tıklayınız.",
         "mute_description": "Hiçbir bildirim almayacaksınız"
     },
     "notifier": {
@@ -1856,7 +1832,6 @@
         "join_button_account": "Kayıt Ol",
         "join_failed_needs_invite": "%(roomName)s görüntülemek için bir davetiyeye ihtiyacınız var",
         "join_the_discussion": "Tartışmaya katılın",
-        "join_title": "Sohbete başlamak için odaya katılın",
         "join_title_account": "Konuşmaya bir hesapla katıl",
         "joining": "Katılınıyor…",
         "joining_room": "Odaya katılıyor…",
@@ -2246,11 +2221,6 @@
             "custom_font_description": "Sisteminizde yüklü bir yazı tipinin adını ayarlayın &%(brand)s onu kullanmaya çalışacaktır.",
             "custom_font_name": "Sistem yazı tipi adı",
             "custom_font_size": "Özel boyut kullan",
-            "custom_theme_add": "Özel tema ekle",
-            "custom_theme_downloading": "Özel tema indiriliyor…",
-            "custom_theme_error_downloading": "Tema indirilirken hata oluştu",
-            "custom_theme_help": "Uygulamak istediğiniz özel temanın URL'sini girin.",
-            "custom_theme_invalid": "Geçersiz tema taslağı.",
             "dialog_title": "<strong>Ayarlar:</strong> Görünüm",
             "font_size": "Yazı boyutu",
             "font_size_default": "%(fontSize)s (varsayılan)",
@@ -2599,7 +2569,6 @@
         "send_typing_notifications": "Yazma bildirimlerini gönder",
         "sessions": {
             "best_security_note": "Güvenlik için oturumlarınızı doğrulayın ve tanımadığınız veya artık kullanmadığınız oturumlardan çıkış yapın.",
-            "browser": "Tarayıcı",
             "confirm_sign_out": {
                 "one": "Bu cihazın oturumunu kapatmayı onayla",
                 "other": "Şu cihazlardan oturumu kapatmayı onayla"
@@ -2650,7 +2619,6 @@
             "no_sessions": "Oturum bulunamadı.",
             "no_unverified_sessions": "Doğrulanmamış oturum bulunamadı.",
             "no_verified_sessions": "Doğrulanmış oturum bulunamadı.",
-            "os": "İşletim Sistemi",
             "other_sessions_heading": "Diğer oturumlar",
             "push_heading": "Anlık bildirimler",
             "push_subheading": "Bu oturumda anlık bildirimler alın.",

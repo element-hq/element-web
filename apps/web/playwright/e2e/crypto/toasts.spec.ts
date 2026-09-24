@@ -30,7 +30,7 @@ test.describe("Key storage out of sync toast", () => {
         recoveryKey = res.recoveryKey;
 
         await logIntoElement(page, credentials);
-        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey);
+        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey!);
 
         await deleteCachedSecrets(page);
     });
@@ -43,7 +43,7 @@ test.describe("Key storage out of sync toast", () => {
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 
-        await page.getByRole("textbox", { name: "Recovery Key" }).fill(recoveryKey.encodedPrivateKey);
+        await page.getByRole("textbox", { name: "Recovery Key" }).fill(recoveryKey.encodedPrivateKey!);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(page.getByRole("button", { name: "Enter recovery key" })).not.toBeVisible();
@@ -63,7 +63,7 @@ test.describe("Key storage out of sync toast", () => {
 });
 
 test.describe("'Turn on key storage' toast", () => {
-    let botClient: Bot | undefined;
+    let botClient: Bot;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         // Set up all crypto stuff. Key storage defaults to on.
@@ -73,7 +73,7 @@ test.describe("'Turn on key storage' toast", () => {
         botClient = res.botClient;
 
         await logIntoElement(page, credentials);
-        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey);
+        await verifyAfterLogin(page, recoveryKey.encodedPrivateKey!);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page

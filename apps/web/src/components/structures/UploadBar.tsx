@@ -63,7 +63,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount(): void {
         this.unmounted = true;
-        dis.unregister(this.dispatcherRef!);
+        dis.unregister(this.dispatcherRef);
     }
 
     private getUploadsInRoom(): RoomUpload[] {

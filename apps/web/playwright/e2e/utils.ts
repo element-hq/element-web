@@ -40,7 +40,7 @@ export async function waitForRoom(
     await client.evaluateHandle(
         (matrixClient, { roomId, predicateId }) => {
             return new Promise<Room>((resolve) => {
-                const room = matrixClient.getRoom(roomId);
+                const room = matrixClient.getRoom(roomId)!;
 
                 if ((<any>window)[predicateId](room)) {
                     resolve(room);

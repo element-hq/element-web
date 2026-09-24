@@ -101,7 +101,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
 
         if (!valid) {
             contentField.current?.focus();
-            contentField.current?.validate({ focused: true });
+            void contentField.current?.validate({ focused: true });
             return;
         }
 

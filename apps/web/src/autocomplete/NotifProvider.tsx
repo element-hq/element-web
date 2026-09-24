@@ -40,7 +40,7 @@ export default class NotifProvider extends AutocompleteProvider {
         if (
             command?.[0] &&
             command[0].length > 1 &&
-            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command![0]))
+            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command[0]))
         ) {
             return [
                 {

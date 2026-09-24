@@ -182,7 +182,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             },
         );
 
-        sendSentryReport(this.state.text, this.state.issueUrl, this.props.error);
+        void sendSentryReport(this.state.text, this.state.issueUrl, this.props.error);
     };
 
     private onDownload = async (): Promise<void> => {
@@ -205,7 +205,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 this.setState({
                     downloadBusy: false,
                     downloadProgress:
-                        _t("bug_reporting|failed_download_logs") + `${err instanceof Error ? err.message : ""}`,
+                        _t("bug_reporting|failed_download_logs") + (err instanceof Error ? err.message : ""),
                 });
             }
         }

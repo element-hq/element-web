@@ -10,10 +10,6 @@ import React, { type JSX, type ChangeEvent, type ReactNode } from "react";
 import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
-import {
-    type RoomPreviewOpts,
-    RoomViewLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Button } from "@vector-im/compound-web";
 import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -29,7 +25,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 import Field from "../elements/Field";
 import { ModuleApi } from "../../../modules/Api.ts";
 
@@ -127,12 +122,12 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.checkInvitedEmail();
+        void this.checkInvitedEmail();
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
-            this.checkInvitedEmail();
+            void this.checkInvitedEmail();
         }
     }
 
@@ -218,7 +213,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             return MessageCase.Invite;
         } else if (this.props.error) {
-            if ((this.props.error as MatrixError).errcode == "M_NOT_FOUND") {
+            if (this.props.error.errcode === "M_NOT_FOUND") {
                 return MessageCase.RoomNotFound;
             } else {
                 return MessageCase.OtherError;
@@ -341,25 +336,14 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.NotLoggedIn: {
-                const opts: RoomPreviewOpts = { canJoin: false };
-                if (this.props.roomId) {
-                    ModuleRunner.instance.invoke(RoomViewLifecycle.PreviewRoomNotLoggedIn, opts, this.props.roomId);
+                title = _t("room|join_title_account");
+                if (SettingsStore.getValue(UIFeature.Registration)) {
+                    primaryActionLabel = _t("room|join_button_account");
+                    primaryActionHandler = this.onRegisterClick;
                 }
-                if (opts.canJoin) {
-                    title = _t("room|join_title");
-                    primaryActionLabel = _t("action|join");
-                    primaryActionHandler = () => {
-                        ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.roomId);
-                    };
-                } else {
-                    title = _t("room|join_title_account");
-                    if (SettingsStore.getValue(UIFeature.Registration)) {
-                        primaryActionLabel = _t("room|join_button_account");
-                        primaryActionHandler = this.onRegisterClick;
-                    }
-                    secondaryActionLabel = _t("action|sign_in");
-                    secondaryActionHandler = this.onLoginClick;
-                }
+                secondaryActionLabel = _t("action|sign_in");
+                secondaryActionHandler = this.onLoginClick;
+
                 if (this.props.previewLoading) {
                     footer = (
                         <div>
@@ -655,6 +639,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             if (!Array.isArray(subTitle)) {
                 subTitle = [subTitle];
             }
+            // oxlint-disable-next-line react/no-array-index-key
             subTitleElements = subTitle.map((t, i) => <p key={`subTitle${i}`}>{t}</p>);
         }
 

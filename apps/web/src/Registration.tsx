@@ -56,13 +56,15 @@ export async function startAnyRegistrationFlow(
                           modal.close();
                           dis.dispatch({ action: "start_registration", screenAfterLogin: options.screen_after });
                       }}
+                      className="mx_LegacyDialogButton"
+                      type="button"
                   >
                       {_t("auth|register_action")}
                   </button>,
               ]
             : [],
     });
-    modal.finished.then(([proceed]) => {
+    return modal.finished.then(([proceed]) => {
         if (proceed) {
             dis.dispatch({ action: "start_login", screenAfterLogin: options.screen_after });
         } else if (options.go_home_on_cancel) {

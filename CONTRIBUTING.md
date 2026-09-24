@@ -5,7 +5,8 @@ Everyone is welcome to contribute code to Element Web, provided that they are wi
 If you're contributing, or thinking about contributing, please come & chat to
 us in our development room, [#element-dev](https://matrix.to/#/#element-dev:matrix.org).
 This is the best place to ask questions about the code, how to work on the project
-or whether a change is likely to be accepted.
+or whether a change is likely to be accepted. Enhancement requests won't be
+merged without an issue where it's been decided to add that feature to the product.
 
 ## How to contribute
 
@@ -23,10 +24,12 @@ cows had five legs" and, "Add support for miniature horses" are examples of good
 titles. Don't include an issue number here: that belongs in the description.
 Definitely don't use the GitHub default of "Update file.ts".
 
-As for your PR description, it should include these things:
+Your PR description needs to include these things:
 
-- References to any bugs fixed by the change (in GitHub's `Fixes` notation)
-- Describe the why and what is changing in the PR description so it's easy for
+- A references to the bug(s) fixed by the change (in GitHub's `Fixes` notation).
+  It's the issue's job to describe why a change is necessary: the issue template
+  gives detail on what to include. All but trivial PRs require a linked issue.
+- A description of what is changing from the user's point of view so it's easy for
   onlookers and reviewers to onboard and context switch. This information is
   also helpful when we come back to look at this in 6 months and ask "why did
   we do it like that?" we have a chance of finding out.
@@ -49,6 +52,11 @@ As for your PR description, it should include these things:
 Please **_do not use force push_** in your PRs. Doing so means we can't see what
 has changed. We use squash merge to get a "clean" git history.
 
+Your PR may have the `X-Needs-Iteration` label applied to it if the reviewers feel that it needs more work before it can be merged.
+This is not a negative reflection on your work, but rather a way to ensure that the PR is in a good state before it is merged.
+If no updates occur within 2 weeks a PR with this label will be automatically marked as draft.
+Draft PRs which haven't been updated in 2 months will be automatically closed.
+
 ### Adding a new feature or enhancement
 
 To make a great product with a great user experience, all the small efforts need to go in the same direction and be aligned and consistent with each other.
@@ -69,34 +77,12 @@ Only once all of the above is met should you open a PR with your proposed change
 There's no need to manually add Changelog entries: we use information in the
 pull request to populate the information that goes into the changelogs our
 users see, both for Element Web itself and other projects on which it is based.
-This is picked up from both labels on the pull request and the `Notes:`
-annotation in the description. By default, the PR title will be used for the
-changelog entry, but you can specify more options, as follows.
-
-To add a longer, more detailed description of the change for the changelog:
-
-_Fix llama herding bug_
-
-```
-Notes: Fix a bug (https://github.com/matrix-org/notaproject/issues/123) where the 'Herd' button would not herd more than 8 Llamas if the moon was in the waxing gibbous phase
-```
+The PR title will be used for the changelog entry.
 
 For some PRs, it's not useful to have an entry in the user-facing changelog (this is
 the default for PRs labelled with `T-Task`):
 
 _Remove outdated comment from `Ungulates.ts`_
-
-If your PR introduces a breaking change, use the `Notes` section in the same
-way, additionally adding the `X-Breaking-Change` label (see below). There's no need
-to specify in the notes that it's a breaking change - this will be added
-automatically based on the label - but remember to tell the developer how to
-migrate:
-
-_Remove legacy class_
-
-```
-Notes: Remove legacy `Camelopard` class. `Giraffe` should be used instead.
-```
 
 Other metadata can be added using labels.
 
@@ -118,7 +104,7 @@ Your PR should include tests.
 
 For new user facing features in `matrix-js-sdk` or `element-web`, you must include:
 
-1. Comprehensive unit tests written in Jest. These are located in `/test`.
+1. Comprehensive unit tests written in Vitest. These are alongside the source code in a file ending in `.test.ts`.
 2. "happy path" end-to-end tests.
    These are located in `/playwright/e2e`, and are run using `element-web`.
    Ideally, you would also include tests for edge and error cases.
@@ -134,8 +120,8 @@ For bugs in those repos, your change must include at least one unit test or
 end-to-end test; which is best depends on what sort of test most concisely
 exercises the area.
 
-Changes to must be accompanied by unit tests written in Jest.
-These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web`.
+Changes to must be accompanied by unit tests written in Vitest.
+These are located in `/spec/` in `matrix-js-sdk` or alongside the source file in `element-web`.
 
 When writing unit tests, please aim for a high level of test coverage
 for new code - 80% or greater. If you cannot achieve that, please document

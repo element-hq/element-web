@@ -5,11 +5,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { type Page } from "@playwright/test";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
+import {
+    assertRoomInSection,
+    assertSectionsOrder,
+    dragRoomToSection,
+    dragSectionToSection,
+    getFilterCollapseButton,
+    getPrimaryFilters,
+    getRoomList,
+    getSectionHeader,
+} from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
@@ -54,7 +64,7 @@ test.describe("Room list sections", () => {
 
             // All three section headers should be visible
             await expect(getSectionHeader(page, "Favourites")).toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(getSectionHeader(page, "Low Priority")).toBeVisible();
 
             // Ensure all rooms are visible
@@ -72,16 +82,18 @@ test.describe("Room list sections", () => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
 
-            // Chats and Favourites sections should still be visible
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            // Rooms and Favourites sections should still be visible
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(getSectionHeader(page, "Favourites")).toBeVisible();
             // Low Priority sections should not be visible
             await expect(getSectionHeader(page, "Low Priority")).not.toBeVisible();
+            // No direct message was created, so the People section stays empty and hidden
+            await expect(getSectionHeader(page, "People")).not.toBeVisible();
         });
 
-        test("should render a flat list when there is only rooms in Chats section", async ({ page, app }) => {
+        test("should render a flat list when there is only rooms in Rooms section", async ({ page, app }) => {
             // All sections should not be visible
-            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).not.toBeVisible();
             await expect(getSectionHeader(page, "Favourites")).not.toBeVisible();
             await expect(getSectionHeader(page, "Low Priority")).not.toBeVisible();
             // It should be a flat list (using listbox a11y role)
@@ -93,7 +105,7 @@ test.describe("Room list sections", () => {
     test.describe("Show sections setting", () => {
         test.beforeEach(async ({ app }) => {
             // A favourite room and a regular room so that, when sections are enabled, we get
-            // two meaningful sections (Favourites + Chats).
+            // two meaningful sections (Favourites + Rooms).
             const favouriteId = await app.client.createRoom({ name: "favourite room" });
             await app.client.evaluate(async (client, roomId) => {
                 await client.setRoomTag(roomId, "m.favourite");
@@ -106,7 +118,7 @@ test.describe("Room list sections", () => {
 
             // Sections are enabled by default: section headers are visible and rooms render as treegrid rows.
             await expect(getSectionHeader(page, "Favourites")).toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
 
             // Disable sections
@@ -114,7 +126,7 @@ test.describe("Room list sections", () => {
 
             // The list becomes flat: no section headers, rooms render as listbox options.
             await expect(getSectionHeader(page, "Favourites")).not.toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).not.toBeVisible();
             await expect(page.getByRole("listbox", { name: "Room list", exact: true })).toBeVisible();
             await expect(roomList.getByRole("option", { name: "Open room favourite room" })).toBeVisible();
             await expect(roomList.getByRole("option", { name: "Open room regular room" })).toBeVisible();
@@ -124,8 +136,75 @@ test.describe("Room list sections", () => {
 
             // The sections reappear.
             await expect(getSectionHeader(page, "Favourites")).toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+        });
+    });
+
+    test.describe("Show people section setting", () => {
+        test.beforeEach(async ({ app, bot, user }) => {
+            const dmId = await bot.createRoom({ name: "my dm", invite: [user.userId], is_direct: true });
+            await app.client.joinRoom(dmId);
+            await app.client.createRoom({ name: "regular room" });
+            // A favourite room so there is always more than one section and the list never goes flat,
+            // which is what makes the section headers render.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+        });
+
+        test("puts the direct messages in their own section by default", async ({ page }) => {
+            // The direct messages have their own section, so the catch-all section is named after
+            // the rooms it is left with
+            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await assertRoomInSection(page, "People", "my dm");
+            await assertRoomInSection(page, "Rooms", "regular room");
+            // People sits above the other sections by default
+            await assertSectionsOrder(page, ["People", "Rooms"]);
+        });
+
+        test("merges the direct messages back into the Chats section when disabled", async ({ page, app }) => {
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, false);
+
+            // Without a People section, the catch-all section takes its broader name and holds the
+            // direct messages too
+            await expect(getSectionHeader(page, "People")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).not.toBeVisible();
+            await assertRoomInSection(page, "Chats", "my dm");
+            await assertRoomInSection(page, "Chats", "regular room");
+
+            // Enabling the setting again moves the direct messages back out
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, true);
+
+            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await assertRoomInSection(page, "People", "my dm");
+            await assertRoomInSection(page, "Rooms", "regular room");
+        });
+
+        test("only accepts direct messages in the People section", async ({ page, app }) => {
+            await app.settings.setValue("RoomList.showPeopleSection", null, SettingLevel.ACCOUNT, true);
+            await assertRoomInSection(page, "People", "my dm");
+            await assertRoomInSection(page, "Rooms", "regular room");
+
+            // A room is in the People section because it is a direct message, not because it carries
+            // a tag, so neither section accepts the other's rooms.
+            await dragRoomToSection(page, "regular room", "People");
+            await assertRoomInSection(page, "Rooms", "regular room");
+
+            await dragRoomToSection(page, "my dm", "Rooms");
+            await assertRoomInSection(page, "People", "my dm");
+
+            // A section that takes any room still accepts the direct message
+            await dragRoomToSection(page, "my dm", "Favourites");
+            await assertRoomInSection(page, "Favourites", "my dm");
+        });
+
+        test("can move the People section below the Rooms section", async ({ page }) => {
+            await assertSectionsOrder(page, ["People", "Rooms"]);
+
+            await dragSectionToSection(page, "People", "Rooms");
+            await assertSectionsOrder(page, ["Rooms", "People"]);
         });
     });
 
@@ -166,6 +245,10 @@ test.describe("Room list sections", () => {
             await primaryFilters.getByRole("option", { name: "Low priority" }).click();
             await expect(roomList.getByRole("option", { name: "Open room low prio room" })).toBeVisible();
             await expect(roomList.getByRole("option", { name: "Open room favourite room" })).not.toBeVisible();
+
+            // Collapsing the filter list hoists the active filter to the front
+            await getFilterCollapseButton(page).click();
+            await expect(primaryFilters.getByRole("option").first()).toHaveText("Low priority");
         });
     });
 
@@ -229,13 +312,70 @@ test.describe("Room list sections", () => {
         });
     });
 
+    test.describe("Section collapse state persistence", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room (so we get a Favourites section) and a regular room in Rooms,
+            // giving us two independent sections whose expansion state we can assert.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("persists the collapsed/expanded state across reloads", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const roomsHeader = getSectionHeader(page, "Rooms");
+            const favRoom = roomList.getByRole("row", { name: "Open room favourite room" });
+            const regularRoom = roomList.getByRole("row", { name: "Open room regular room" });
+
+            // Collapse both the Favourites and Rooms sections
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+            await favouritesHeader.click();
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(favRoom).not.toBeVisible();
+
+            await expect(roomsHeader).toHaveAttribute("aria-expanded", "true");
+            await roomsHeader.click();
+            await expect(roomsHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(regularRoom).not.toBeVisible();
+
+            // Reload the page: the collapsed state is persisted at the device level and should survive
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            // Both sections are still collapsed and their rooms stay hidden
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).not.toBeVisible();
+
+            // Expand them again and reload: the expanded state is likewise persisted
+            await getSectionHeader(page, "Favourites").click();
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await getSectionHeader(page, "Rooms").click();
+            await expect(getSectionHeader(page, "Rooms")).toHaveAttribute("aria-expanded", "true");
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).toBeVisible();
+        });
+    });
+
     test.describe("Rooms placement in sections", () => {
         test("should move a room between sections when tags change", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
 
             const roomList = getRoomList(page);
 
-            // Flat list because there is only rooms in the Chats section
+            // Flat list because there is only rooms in the Rooms section
             let roomItem = roomList.getByRole("option", { name: "Open room my room" });
             await expect(roomItem).toBeVisible();
 
@@ -264,7 +404,7 @@ test.describe("Room list sections", () => {
             await expect(roomItem).toBeVisible();
         });
 
-        test("should move a room from Chats to Favourites when using dnd", async ({ page, app }) => {
+        test("should move a room from Rooms to Favourites when using dnd", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
 
             const favouriteId = await app.client.createRoom({ name: "favourite room" });
@@ -276,7 +416,7 @@ test.describe("Room list sections", () => {
             await assertRoomInSection(page, "Favourites", "my room");
         });
 
-        test("should move a room from Favourites to Chats when using dnd", async ({ page, app }) => {
+        test("should move a room from Favourites to Rooms when using dnd", async ({ page, app }) => {
             const favouriteId = await app.client.createRoom({ name: "my room" });
             await app.client.evaluate(async (client, roomId) => {
                 await client.setRoomTag(roomId, "m.favourite");
@@ -288,11 +428,181 @@ test.describe("Room list sections", () => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId2);
 
-            // Ensure the Chats section is visible by creating a room in it
-            await app.client.createRoom({ name: "room in chats" });
+            // Ensure the Rooms section is visible by creating a room in it
+            await app.client.createRoom({ name: "room in rooms" });
 
-            await dragRoomToSection(page, "my room", "Chats");
-            await assertRoomInSection(page, "Chats", "my room");
+            await dragRoomToSection(page, "my room", "Rooms");
+            await assertRoomInSection(page, "Rooms", "my room");
+        });
+    });
+
+    test.describe("Invites section", () => {
+        // The section starts collapsed, so its rooms are only rendered once it is expanded
+        async function expandInvitesSection(page: Page): Promise<void> {
+            const header = getSectionHeader(page, "Invites");
+            await expect(header).toBeVisible();
+            await header.click();
+        }
+
+        test("should show invited rooms in a pinned Invites section", async ({ page, app, user, bot }) => {
+            // A favourite room so that the Invites section has a section below it to be pinned above
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+
+            await expandInvitesSection(page);
+            await assertRoomInSection(page, "Invites", "invited room");
+            // Invites sits above Favourites
+            await assertSectionsOrder(page, ["Invites", "Favourites"]);
+        });
+
+        test("should start collapsed and report the number of invitations", async ({ page, app, user, bot }) => {
+            // A favourite room keeps the list sectioned
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await bot.createRoom({ name: "first invited room", invite: [user.userId] });
+            await bot.createRoom({ name: "second invited room", invite: [user.userId] });
+
+            const invitesHeader = getSectionHeader(page, "Invites");
+            await expect(invitesHeader).toBeVisible();
+
+            // The section is collapsed by default, so the invitations are not listed
+            const roomList = getRoomList(page);
+            await expect(roomList.getByRole("row", { name: /first invited room/ })).not.toBeVisible();
+            await expect(roomList.getByRole("row", { name: /second invited room/ })).not.toBeVisible();
+
+            // The header hides its decoration while hovered/focused, so move the pointer away
+            await page.mouse.move(0, 0);
+
+            // The count is the number of invitations, not a message count, and it is shown on its
+            // own: the invitation icon is not aggregated onto the header
+            const decoration = invitesHeader.getByTestId("notification-decoration");
+            await expect(decoration).toBeVisible();
+            await expect(decoration).toHaveText("2");
+            await expect(decoration.locator("svg")).not.toBeAttached();
+        });
+
+        test("should be collapsed again after a reload", async ({ page, app, user, bot }) => {
+            // A favourite room keeps the list sectioned throughout
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+            await expandInvitesSection(page);
+            await assertRoomInSection(page, "Invites", "invited room");
+
+            // Expanding only lasts while the section is on screen, so it is not remembered
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(getSectionHeader(page, "Invites")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room invited room" })).not.toBeVisible();
+        });
+
+        test("should be collapsed when the section reappears", async ({ page, app, user, bot }) => {
+            // A favourite room keeps the list sectioned throughout
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            const roomId = await bot.createRoom({ name: "first invited room", invite: [user.userId] });
+            await expandInvitesSection(page);
+            await assertRoomInSection(page, "Invites", "first invited room");
+
+            // Accepting the last invitation removes the section
+            await app.client.joinRoom(roomId);
+            await expect(getSectionHeader(page, "Invites")).not.toBeVisible();
+
+            // A new invitation brings it back, closed rather than as the user left it
+            await bot.createRoom({ name: "second invited room", invite: [user.userId] });
+            await expect(getSectionHeader(page, "Invites")).toHaveAttribute("aria-expanded", "false");
+            await expect(
+                getRoomList(page).getByRole("row", { name: "Open room second invited room" }),
+            ).not.toBeVisible();
+        });
+
+        test("should not offer to edit or remove the Invites section", async ({ page, user, bot }) => {
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+
+            const header = getSectionHeader(page, "Invites");
+            await expect(header).toBeVisible();
+            await header.hover();
+            await expect(header.getByRole("button", { name: "More options" })).not.toBeVisible();
+        });
+
+        test("should not offer the section entries in an invited room's context menu", async ({ page, user, bot }) => {
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+            await expandInvitesSection(page);
+
+            const roomItem = getRoomList(page).getByRole("row", { name: "Open room invited room" });
+            await expect(roomItem).toBeVisible();
+            await roomItem.click({ button: "right" });
+
+            await expect(page.getByRole("menu")).toBeVisible();
+            // Assigning a section does nothing while the invitation is pending
+            await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).not.toBeVisible();
+            await expect(page.getByRole("menuitemcheckbox", { name: "Low priority" })).not.toBeVisible();
+            await expect(page.getByRole("menuitem", { name: "Move to" })).not.toBeVisible();
+            // The remaining entries are unaffected
+            await expect(page.getByRole("menuitem", { name: "Leave room" })).toBeVisible();
+        });
+
+        test("should hide the section once the invitation is accepted", async ({ page, app, user, bot }) => {
+            // A favourite room keeps the list sectioned after the invite is gone
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            const roomId = await bot.createRoom({ name: "invited room", invite: [user.userId] });
+            await expect(getSectionHeader(page, "Invites")).toBeVisible();
+
+            await app.client.joinRoom(roomId);
+
+            await expect(getSectionHeader(page, "Invites")).not.toBeVisible();
+            await assertRoomInSection(page, "Rooms", "invited room");
+        });
+
+        test("should not let a room be dragged into the Invites section", async ({ page, app, user, bot }) => {
+            await app.client.createRoom({ name: "my room" });
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+
+            await expandInvitesSection(page);
+            await dragRoomToSection(page, "my room", "Invites");
+
+            // The room stays where it was
+            await assertRoomInSection(page, "Rooms", "my room");
+            await assertRoomInSection(page, "Invites", "invited room");
+        });
+
+        test("should not let an invited room be dragged out of the Invites section", async ({
+            page,
+            app,
+            user,
+            bot,
+        }) => {
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await bot.createRoom({ name: "invited room", invite: [user.userId] });
+            await expandInvitesSection(page);
+
+            await dragRoomToSection(page, "invited room", "Favourites");
+
+            // The invited room stays in the Invites section
+            await assertRoomInSection(page, "Invites", "invited room");
         });
     });
 
@@ -307,7 +617,7 @@ test.describe("Room list sections", () => {
             const roomList = getRoomList(page);
 
             // Invite the bot and have it send a message to generate an unread
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from bot!");
 
@@ -332,9 +642,9 @@ test.describe("Room list sections", () => {
                     await client.setRoomTag(roomId, "m.favourite");
                 }, favouriteId);
 
-                // A room with a mention, landing in the Chats section
+                // A room with a mention, landing in the Rooms section
                 const mentionId = await app.client.createRoom({ name: "mention room" });
-                await app.client.inviteUser(mentionId, bot.credentials.userId);
+                await app.client.inviteUser(mentionId, bot.credentials!.userId);
                 await bot.joinRoom(mentionId);
                 const clientBot = await bot.prepareClient();
                 await clientBot.evaluate(
@@ -353,13 +663,6 @@ test.describe("Room list sections", () => {
                     { roomId: mentionId, userId: user.userId },
                 );
 
-                // A room we are invited to, landing in the Chats section
-                await bot.createRoom({
-                    name: "invited room",
-                    invite: [user.userId],
-                    is_direct: true,
-                });
-
                 const roomList = getRoomList(page);
 
                 // Wait for the mention decoration to sync onto the mention room before collapsing, so the
@@ -368,32 +671,36 @@ test.describe("Room list sections", () => {
                     roomList.getByRole("row", { name: /mention room/ }).getByTestId("notification-decoration"),
                 ).toBeVisible();
 
-                // Collapse the Chats section so the aggregated decoration is displayed on its header
-                const chatsHeader = getSectionHeader(page, "Chats", true);
-                await expect(chatsHeader).toBeVisible();
-                await chatsHeader.click();
+                // Collapse the Rooms section so the aggregated decoration is displayed on its header
+                const roomsHeader = getSectionHeader(page, "Rooms", true);
+                await expect(roomsHeader).toBeVisible();
+                await roomsHeader.click();
 
                 // The header hides its decoration while hovered/focused, so move the pointer away
                 await page.mouse.move(0, 0);
 
-                // The collapsed header aggregates the mention and the invitation
-                await expect(chatsHeader.getByTestId("notification-decoration")).toBeVisible();
+                // The collapsed header carries the decoration of the mention it hides
+                await expect(roomsHeader.getByTestId("notification-decoration")).toBeVisible();
 
-                await expect(chatsHeader).toMatchScreenshot("room-list-section-header-notification.png");
+                await expect(roomsHeader).toMatchScreenshot("room-list-section-header-notification.png");
             },
         );
     });
 
     test.describe("Sections and filters interaction", () => {
-        test("should not show Favourite and Low Priority filters when sections are enabled", async ({ page, app }) => {
+        test("should not show Favourite, Low Priority and Invites filters when sections are enabled", async ({
+            page,
+            app,
+        }) => {
             const primaryFilters = getPrimaryFilters(page);
 
-            // Expand the filter list to see all filters
-            const expandButton = primaryFilters.getByRole("button", { name: "Expand filter list" });
-            await expandButton.click();
+            // The four remaining filters fit without overflowing, so there is nothing to expand
+            await expect(primaryFilters.getByRole("button", { name: "Expand filter list" })).not.toBeVisible();
 
-            // Favourite and Low Priority filters should NOT be visible since sections handle them
+            // Favourite, Low Priority and Invites filters should NOT be visible since sections handle them
             await expect(primaryFilters.getByRole("option", { name: "Favourite" })).not.toBeVisible();
+            await expect(primaryFilters.getByRole("option", { name: "Low priority" })).not.toBeVisible();
+            await expect(primaryFilters.getByRole("option", { name: "Invites" })).not.toBeVisible();
 
             // Other filters should still be present
             await expect(primaryFilters.getByRole("option", { name: "People" })).toBeVisible();
@@ -407,13 +714,13 @@ test.describe("Room list sections", () => {
             await app.client.evaluate(async (client, roomId) => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
-            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await app.client.inviteUser(favouriteId, bot.credentials!.userId);
             await bot.joinRoom(favouriteId);
             await bot.sendMessage(favouriteId, "Hello from favourite!");
 
             // Create a regular room with unread messages
             const regularId = await app.client.createRoom({ name: "regular with unread" });
-            await app.client.inviteUser(regularId, bot.credentials.userId);
+            await app.client.inviteUser(regularId, bot.credentials!.userId);
             await bot.joinRoom(regularId);
             await bot.sendMessage(regularId, "Hello from regular!");
 
@@ -441,7 +748,7 @@ test.describe("Room list sections", () => {
                 await client.setRoomTag(roomId, "m.favourite");
             }, favouriteId);
 
-            // A chats-section room so we have a second section to navigate to.
+            // A rooms-section room so we have a second section to navigate to.
             await app.client.createRoom({ name: "chat room" });
         });
 
@@ -451,11 +758,11 @@ test.describe("Room list sections", () => {
             // In treegrid mode, a room renders as <div role="row"><div role="gridcell"><button …></button></div></div>.
             // Only the inner <button> is focusable, so target it by role for focus assertions.
             const favRoomButton = roomList.getByRole("button", { name: "Open room favourite room" });
-            const chatsHeader = getSectionHeader(page, "Chats");
+            const roomsHeader = getSectionHeader(page, "Rooms");
 
             await expect(favouritesHeader).toBeVisible();
             await expect(favRoomButton).toBeVisible();
-            await expect(chatsHeader).toBeVisible();
+            await expect(roomsHeader).toBeVisible();
 
             await favouritesHeader.focus();
             await expect(favouritesHeader).toBeFocused();
@@ -466,7 +773,7 @@ test.describe("Room list sections", () => {
 
             // Down again jumps to the next section header.
             await page.keyboard.press("ArrowDown");
-            await expect(chatsHeader).toBeFocused();
+            await expect(roomsHeader).toBeFocused();
 
             // Up reverses the traversal.
             await page.keyboard.press("ArrowUp");

@@ -25,7 +25,7 @@ test.describe("User Menu", () => {
         await page.getByRole("button", { name: "User menu", exact: true }).click();
         const menu = page.getByRole("menu");
 
-        await expect(menu.getByText(user.displayName)).toBeVisible();
+        await expect(menu.getByText(user.displayName!)).toBeVisible();
         await expect(menu.getByText(user.userId)).toBeVisible();
         await expect(menu).toMatchScreenshot("user-menu.png", screenshotOptions(page));
     });

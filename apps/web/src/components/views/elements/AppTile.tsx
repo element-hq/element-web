@@ -22,7 +22,6 @@ import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-w
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import {
     OverflowHorizontalIcon,
     MinusIcon,
@@ -53,7 +52,6 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
@@ -203,11 +201,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.usingLocalWidget()) return true;
         if (!props.room) return true; // user widgets always have permissions
 
-        // Legacy module API (synchronous)
-        const opts: ApprovalOpts = { approved: undefined };
-        ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(this.props.app));
-        if (opts.approved) return true;
-
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
         const allowed =
             isAppWidget(props.app) &&
@@ -319,7 +312,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onAllowedWidgetsChange = (): void => {
-        this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+        void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
             if (this.unmounted) return;
 
             if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
@@ -378,7 +371,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Sync check already approved — start immediately, no need to re-check.
             this.startWidget();
         } else {
-            this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+            void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
                 if (this.unmounted) return;
                 this.setState({ hasPermissionToLoad });
                 if (hasPermissionToLoad) {
@@ -469,7 +462,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private startWidget(): void {
-        this.messaging?.prepare().then(() => {
+        void this.messaging?.prepare().then(() => {
             if (this.unmounted) return;
             this.setState({ initialising: false });
         });

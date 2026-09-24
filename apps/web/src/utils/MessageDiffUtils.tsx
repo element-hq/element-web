@@ -68,7 +68,7 @@ function findRefNodes(
     const end = isAddition ? route.length - 1 : route.length;
     for (let i = 0; i < end; ++i) {
         refParentNode = refNode;
-        refNode = refNode?.childNodes[route[i]!];
+        refNode = refNode?.childNodes[route[i]];
     }
     return { refNode, refParentNode };
 }
@@ -117,7 +117,7 @@ function isRouteOfNextSibling(route1: number[], route2: number[]): boolean {
     // last element of route1 being larger
     // (e.g. coming behind route1 at that level)
     const lastD1Idx = route1.length - 1;
-    return route2[lastD1Idx]! >= route1[lastD1Idx]!;
+    return route2[lastD1Idx] >= route1[lastD1Idx];
 }
 
 function adjustRoutes(diff: IDiff, remainingDiffs: IDiff[]): void {
@@ -261,9 +261,9 @@ export function editBodyDiffToHtml(originalContent: IContent, editContent: ICont
     const diffMathPatch = new DiffMatchPatch();
     // parse the base html message as a DOM tree, to which we'll apply the differences found.
     // fish out the div in which we wrapped the messages above with children[0].
-    const originalRootNode = new DOMParser().parseFromString(originalBody, "text/html").body.children[0]!;
+    const originalRootNode = new DOMParser().parseFromString(originalBody, "text/html").body.children[0];
     for (let i = 0; i < diffActions.length; ++i) {
-        const diff = diffActions[i]!;
+        const diff = diffActions[i];
         renderDifferenceInDOM(originalRootNode, diff, diffMathPatch);
         // DiffDOM assumes in subsequent diffs route path that
         // the action was applied (e.g. that a removeElement action removed the element).

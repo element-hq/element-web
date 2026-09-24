@@ -13,7 +13,7 @@ export class ConfigApi implements IConfigApi {
     public get<K extends keyof Config>(key: K): Config[K];
     public get<K extends keyof Config = never>(key?: K): Config | Config[K] {
         if (key === undefined) {
-            return SdkConfig.get() as Config;
+            return SdkConfig.get();
         }
         return SdkConfig.get(key);
     }

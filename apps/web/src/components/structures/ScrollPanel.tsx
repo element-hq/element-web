@@ -158,7 +158,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             return Promise.resolve(false);
         },
         onUnfillRequest: function (backwards: boolean, scrollToken: string) {},
-        onScroll: function () {},
+        onScroll: function (): void {},
     };
 
     private readonly pendingFillRequests: Record<"b" | "f", boolean | null> = {
@@ -229,8 +229,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         this.saveScrollState();
         this.updatePreventShrinking();
         this.props.onScroll?.(ev);
-        // noinspection JSIgnoredPromiseFromCall
-        this.checkFillState();
+        void this.checkFillState();
     };
 
     private onResize = (): void => {
@@ -249,10 +248,8 @@ export default class ScrollPanel extends React.Component<IProps> {
             return;
         }
         // We don't care if these two conditions race - they're different trees.
-        // noinspection JSIgnoredPromiseFromCall
-        this.restoreSavedScrollState();
-        // noinspection JSIgnoredPromiseFromCall
-        this.checkFillState(0, isFromPropsUpdate);
+        void this.restoreSavedScrollState();
+        void this.checkFillState(0, isFromPropsUpdate);
     };
 
     // return true if the content is fully scrolled down right now; else false.
@@ -408,8 +405,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             const refillDueToPropsUpdate = this.pendingFillDueToPropsUpdate;
             this.fillRequestWhileRunning = false;
             this.pendingFillDueToPropsUpdate = false;
-            // noinspection ES6MissingAwait
-            this.checkFillState(0, refillDueToPropsUpdate);
+            void this.checkFillState(0, refillDueToPropsUpdate);
         }
     };
 
@@ -457,7 +453,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             this.unfillDebouncer = window.setTimeout(() => {
                 this.unfillDebouncer = null;
                 debuglog("unfilling now", { backwards, origExcessHeight });
-                this.props.onUnfillRequest?.(backwards, markerScrollToken!);
+                this.props.onUnfillRequest?.(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
     }
@@ -666,7 +662,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-        const scrollToken = node!.dataset.scrollTokens?.split(",")[0];
+        const scrollToken = node.dataset.scrollTokens?.split(",")[0];
         debuglog("saving anchored scroll state to message", scrollToken);
         const bottomOffset = this.topFromBottom(node);
         this.scrollState = {
@@ -788,7 +784,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                 const m = messages[i] as HTMLElement;
                 // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
                 // There might only be one scroll token
-                if (scrollToken && m.dataset.scrollTokens?.split(",").includes(scrollToken!)) {
+                if (scrollToken && m.dataset.scrollTokens?.split(",").includes(scrollToken)) {
                     node = m;
                     break;
                 }

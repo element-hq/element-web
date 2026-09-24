@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { useI18n } from "../../core/i18n/i18nContext";
 import styles from "./NotificationBadgeView.module.css";
 
 export type NotificationBadgeType = "dot" | "badge_2char" | "badge_3char";
@@ -44,26 +46,58 @@ export interface NotificationBadgeViewSnapshot {
      */
     symbol: string | null;
     /**
-     * Accessible label for the knock icon.
+     * Whether to render the badge as an interactive control.
      */
-    knockLabel?: string;
+    isClickable: boolean;
+    /**
+     * Accessible label for clickable badges.
+     */
+    ariaLabel?: string;
+    /**
+     * Tab index for clickable badges.
+     */
+    tabIndex?: number;
+    /**
+     * Whether to show the unsent-message tooltip.
+     */
+    showUnsentTooltip: boolean;
 }
 
-export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot>;
+export interface NotificationBadgeViewActions {
+    /**
+     * Called when an interactive badge is activated.
+     */
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot> & NotificationBadgeViewActions;
 
 interface NotificationBadgeViewProps {
     vm: NotificationBadgeViewModel;
+    className?: string;
 }
 
-export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProps>): JSX.Element {
-    const { shouldRender, isVisible, isNotification, isHighlight, isKnocked, badgeType, symbol, knockLabel } =
-        useViewModel(vm);
+export function NotificationBadgeView({ vm, className }: Readonly<NotificationBadgeViewProps>): JSX.Element {
+    const { translate: _t } = useI18n();
+    const {
+        shouldRender,
+        isVisible,
+        isNotification,
+        isHighlight,
+        isKnocked,
+        badgeType,
+        symbol,
+        isClickable,
+        ariaLabel,
+        tabIndex,
+        showUnsentTooltip,
+    } = useViewModel(vm);
 
     if (!shouldRender) {
         return <></>;
     }
 
-    const classes = classNames(styles.notificationBadge, {
+    const classes = classNames(className, styles.notificationBadge, {
         [styles.visible]: isVisible,
         [styles.notification]: isNotification,
         [styles.highlight]: isHighlight,
@@ -75,14 +109,26 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
     });
     const notificationLevel = isHighlight ? "highlight" : isNotification ? "notification" : undefined;
 
-    const content =
-        isKnocked && knockLabel ? (
-            <AskToJoinIcon aria-label={knockLabel} />
-        ) : (
-            <span className={styles.count}>{symbol}</span>
-        );
+    const content = isKnocked ? (
+        <AskToJoinIcon aria-label={_t("room|knock_sent")} />
+    ) : (
+        <span className={styles.count}>{symbol}</span>
+    );
 
-    return (
+    const badge = isClickable ? (
+        <button
+            type="button"
+            data-testid="notification-badge"
+            data-badge-type={badgeType}
+            data-notification-level={notificationLevel}
+            className={classes}
+            aria-label={ariaLabel}
+            tabIndex={tabIndex}
+            onClick={vm.onClick}
+        >
+            {content}
+        </button>
+    ) : (
         <div
             data-testid="notification-badge"
             data-badge-type={badgeType}
@@ -92,4 +138,14 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
             {content}
         </div>
     );
+
+    if (showUnsentTooltip) {
+        return (
+            <Tooltip label={_t("notifications|message_didnt_send")} placement="right">
+                {badge}
+            </Tooltip>
+        );
+    }
+
+    return badge;
 }

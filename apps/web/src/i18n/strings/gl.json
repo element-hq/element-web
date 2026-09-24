@@ -624,22 +624,6 @@
     },
     "dialog_close_label": "Pechar diálogo",
     "download_completed": "Descarga realizada",
-    "emoji": {
-        "categories": "Categorías",
-        "category_activities": "Actividades",
-        "category_animals_nature": "Animais e Natureza",
-        "category_flags": "Bandeiras",
-        "category_food_drink": "Comida e Bebida",
-        "category_frequently_used": "Utilizado con frecuencia",
-        "category_objects": "Obxectos",
-        "category_smileys_people": "Sorrisos e Persoas",
-        "category_symbols": "Símbolos",
-        "category_travel_places": "Viaxes e Lugares",
-        "quick_reactions": "Reaccións rápidas"
-    },
-    "emoji_picker": {
-        "cancel_search_label": "Cancelar busca"
-    },
     "empty_room": "Sala baleira",
     "empty_room_was_name": "Sala baleira (era %(oldName)s)",
     "encryption": {
@@ -962,7 +946,6 @@
         "name_mxid_share_room": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
         "name_mxid_share_space": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte este espazo</a>.",
         "recents_section": "Conversas recentes",
-        "room_failed_partial": "Convidamos as outras, pero as persoas de aquí embaixo non foron convidadas a <RoomName/>",
         "room_failed_partial_title": "Non se puideron enviar algúns convites",
         "room_failed_title": "Fallou o convite das usuarias para %(roomName)s",
         "send_link_prompt": "Ou envía ligazón de convite",
@@ -1066,7 +1049,6 @@
         "bridge_state_manager": "Esta ponte está xestionada por <user />.",
         "bridge_state_workspace": "Espazo de traballo: <networkLink/>",
         "click_for_info": "Preme para máis info",
-        "custom_themes": "Permitir engadir decorados personalizados",
         "element_call_video_rooms": "Salas de chamadas de vídeo Element",
         "group_developer": "Desenvolvemento",
         "group_encryption": "Cifrado",
@@ -1075,7 +1057,6 @@
         "group_profile": "Perfil",
         "group_rooms": "Salas",
         "group_spaces": "Espazos",
-        "group_themes": "Decorados",
         "group_threads": "Conversas",
         "group_voip": "Voz e Vídeo",
         "join_beta": "Unirse á beta",
@@ -1130,8 +1111,6 @@
     "language_dropdown_label": "Selector de idioma",
     "leave_room_dialog": {
         "last_person_warning": "Es a única persoa aquí. Se saes, ninguén poderá unirse no futuro, incluíndote a ti.",
-        "leave_room_question": "Seguro que desexa saír da sala '%(roomName)s'?",
-        "leave_space_question": "Tes a certeza de querer deixar o espazo '%(spaceName)s'?",
         "room_rejoin_warning": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
         "space_rejoin_warning": "Este espazo non é público. Non poderás volver a unirte sen un convite."
     },
@@ -1215,7 +1194,6 @@
         "mentions_and_keywords": "@mencións & palabras chave",
         "mentions_and_keywords_description": "Ter notificacións só cando te mencionan e con palabras chave que indiques nos <a>axustes</a>",
         "mentions_keywords": "Mencións e palabras chave",
-        "message_didnt_send": "Non se enviou a mensaxe. Click para info.",
         "mute_description": "Non recibirás ningunha notificación"
     },
     "notifier": {
@@ -1432,7 +1410,6 @@
         "join_button_account": "Rexistro",
         "join_failed_needs_invite": "Para ver %(roomName)s, precisas un convite",
         "join_the_discussion": "Súmate a conversa",
-        "join_title": "Únete á sala para participar",
         "join_title_account": "Únete a conversa cunha conta",
         "joining": "Entrando…",
         "jump_read_marker": "Ir a primeira mensaxe non lida.",
@@ -1751,8 +1728,6 @@
             "custom_font_description": "Escolle unha das tipografías instaladas no teu sistema e %(brand)s intentará utilizalas.",
             "custom_font_name": "Nome da letra do sistema",
             "custom_font_size": "Usar tamaño personalizado",
-            "custom_theme_error_downloading": "Erro ao descargar información do decorado.",
-            "custom_theme_invalid": "Esquema do decorado incorrecto.",
             "font_size": "Tamaño da letra",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",

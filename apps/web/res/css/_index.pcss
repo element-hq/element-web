@@ -10,4 +10,5 @@ Please see LICENSE files in the repository root for full details.
 @import url("maplibre-gl/dist/maplibre-gl.css") layer(app-web);
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound-tokens);
 @import url("@vector-im/compound-web/dist/style.css") layer(compound-web);
-@import url("@element-hq/web-shared-components/dist/element-web-shared-components.css") layer(shared-components);
+/** Shared components is layer-aware and will fit itself into the correct layer */
+@import url("@element-hq/web-shared-components/dist/element-web-shared-components.css");

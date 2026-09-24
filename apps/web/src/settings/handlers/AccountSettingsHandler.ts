@@ -128,7 +128,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 // Write true as it is the default. This will give us the option
                 // of making this opt-in in the future, without affecting old
                 // users
-                this.setValue(settingName, roomId, true);
+                void this.setValue(settingName, roomId, true);
                 return true;
             }
             return value;

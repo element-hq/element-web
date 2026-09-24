@@ -1,0 +1,114 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<EmbeddedPage /> > should render nothing if no url given 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should sanitise input 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      <h1>
+        Foo
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should show error if unable to load 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      Couldn't load page
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should translate _t strings ["] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should translate _t strings [&#27;] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should translate _t strings [&#34;] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> > should translate _t strings ['] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+      dir="auto"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;

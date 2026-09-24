@@ -114,7 +114,7 @@ describe("WidgetToggleModule", () => {
 
             const result = callback(roomId);
             expect(result).toBeDefined();
-            return render(result!);
+            return render(result);
         };
 
         test("returns undefined when there are no widgets in the room", async () => {

@@ -60,7 +60,7 @@ test.describe("Banner", () => {
     const configs: input<ConfigSchema>[] = [
         {
             logo_url: "http://localhost:8080/logo.svg",
-            logo_link_url: "https://example.com/portal",
+            heading_href: "https://example.com/portal",
             menu: {
                 type: "static",
                 categories: [
@@ -96,7 +96,7 @@ test.describe("Banner", () => {
         },
         {
             logo_url: "http://localhost:8080/opendesk/logomark.svg",
-            logo_link_url: "https://example.com/portal",
+            heading_href: "https://example.com/portal",
             menu: {
                 type: "univention",
                 logo_url: "http://localhost:8080/opendesk/logofull.svg",
@@ -202,7 +202,7 @@ test.describe("Banner", () => {
             config: {
                 "io.element.element-web-modules.banner": {
                     logo_url: "http://localhost:8080/opendesk/logomark.svg",
-                    logo_link_url: "https://example.com/portal",
+                    heading_href: "https://example.com/portal",
                     menu: {
                         type: "univention",
                         logo_url: "http://localhost:8080/opendesk/logofull.svg",
@@ -232,6 +232,48 @@ test.describe("Banner", () => {
             await expect(sidebar.getByText("Failed to load")).toBeVisible();
             await expect(sidebar).toMatchScreenshot("univention_error.png");
             await expect(axe).toHaveNoViolations();
+        });
+    });
+
+    test.describe("static config", () => {
+        test.use({
+            config: {
+                "io.element.element-web-modules.banner": {
+                    logo_url: "https://domain/logo1.png",
+                    heading_href: "https://domain",
+                    title: "Title",
+                    menu: {
+                        type: "static",
+                        logo_url: "https://domain/logo2.png",
+                        logo_href: "https://domain/menu-link",
+                        categories: [
+                            {
+                                name: "Category 1",
+                                links: [
+                                    {
+                                        icon_uri: "https://domain/app1/logo.png",
+                                        name: "App 1",
+                                        link_url: "https://domain/app1",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+        });
+
+        test("should show a href on the menu logo if one is specified", async ({ page }) => {
+            await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://domain");
+
+            const trigger = page.getByLabel("Show menu");
+            await trigger.click();
+
+            const sidebar = page.getByRole("dialog");
+            await expect(sidebar.getByRole("link", { name: "Portal logo" })).toHaveAttribute(
+                "href",
+                "https://domain/menu-link",
+            );
         });
     });
 });

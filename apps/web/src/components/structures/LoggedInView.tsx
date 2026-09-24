@@ -143,7 +143,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
-        MediaDeviceHandler.loadDevices();
+        void MediaDeviceHandler.loadDevices();
 
         this._roomView = React.createRef();
     }
@@ -152,11 +152,11 @@ class LoggedInView extends React.Component<IProps, IState> {
         document.addEventListener("keydown", this.onNativeKeyDown, false);
         this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallState, this.onCallState);
 
-        this.updateServerNoticeEvents();
+        void this.updateServerNoticeEvents();
 
         this._matrixClient.on(ClientEvent.AccountData, this.onAccountData);
         // check push rules on start up as well
-        monitorSyncedPushRules(this._matrixClient.getAccountData(EventType.PushRules), this._matrixClient);
+        void monitorSyncedPushRules(this._matrixClient.getAccountData(EventType.PushRules), this._matrixClient);
         this._matrixClient.on(ClientEvent.Sync, this.onSync);
         // Call `onSync` with the current state as well
         this.onSync(this._matrixClient.getSyncState(), null, this._matrixClient.getSyncStateData() ?? undefined);
@@ -183,12 +183,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         void this.onTimezoneUpdate();
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
-        this.refreshBackgroundImage();
+        void this.refreshBackgroundImage();
     }
 
     private getResizerViewModel(): ResizerViewModel {
         if (!this.resizerViewModel) {
-            this.resizerViewModel = new ResizerViewModel();
+            this.resizerViewModel = new ResizerViewModel(this.context.callStore);
         }
         return this.resizerViewModel;
     }
@@ -237,7 +237,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
-        this.resizerViewModel?.dispose();
+        this.disposeResizerViewModel();
     }
 
     private onCallState = (): void => {
@@ -268,7 +268,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (event.getType() === "m.ignored_user_list") {
             dis.dispatch({ action: "ignore_state_changed" });
         }
-        monitorSyncedPushRules(event, this._matrixClient);
+        void monitorSyncedPushRules(event, this._matrixClient);
     };
 
     private onCompactLayoutChanged = (): void => {
@@ -288,7 +288,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
 
         if (oldSyncState === SyncState.Prepared && syncState === SyncState.Syncing) {
-            this.updateServerNoticeEvents();
+            void this.updateServerNoticeEvents();
         } else {
             this.calculateServerLimitToast(syncErrorData, this.state.usageLimitEventContent);
         }
@@ -297,7 +297,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     private onRoomStateEvents = (ev: MatrixEvent): void => {
         const serverNoticeList = RoomListStoreV3.instance.getServerNoticeRooms();
         if (serverNoticeList.some((r) => r.roomId === ev.getRoomId())) {
-            this.updateServerNoticeEvents();
+            void this.updateServerNoticeEvents();
         }
     };
 
@@ -548,7 +548,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                         undefined,
                         false,
                     );
-                    SettingsStore.setValue(
+                    void SettingsStore.setValue(
                         "showHiddenEventsInTimeline",
                         null,
                         SettingLevel.DEVICE,

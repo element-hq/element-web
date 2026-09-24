@@ -197,10 +197,19 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
         Sentry.breadcrumbsIntegration(),
         Sentry.httpContextIntegration(),
         Sentry.dedupeIntegration(),
+        // Element Desktop serves the app from the custom `vector://vector/webapp` origin rather
+        // than a normal web origin, so its stack frames don't match Element Web's and end up
+        // ungrouped and unsymbolicated. Normalize both to the same relative form so desktop
+        // crashes group with, and source-map against, the same release as the web app.
+        Sentry.rewriteFramesIntegration({
+            root: "vector://vector/webapp",
+            prefix: "app://",
+        }),
     ];
 
     Sentry.init({
         dsn: sentryConfig.dsn,
+        // oxlint-disable-next-line node/no-process-env
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
