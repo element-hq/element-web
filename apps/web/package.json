@@ -172,7 +172,7 @@
         "file-loader": "^6.0.0",
         "happy-dom": "^20.10.2",
         "html-webpack-plugin": "^5.5.3",
-        "jsdom": "^26.1.0",
+        "jsdom": "^30.0.0",
         "jsqr": "^1.4.0",
         "matrix-web-i18n": "catalog:",
         "mini-css-extract-plugin": "2.10.2",
