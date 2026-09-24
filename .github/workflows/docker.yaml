@@ -12,7 +12,7 @@ permissions: {}
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token

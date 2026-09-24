@@ -55,7 +55,7 @@ jobs:
                       install: normal
                       command: "lint:unused-settings"
         name: ${{ matrix.name }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -95,7 +95,7 @@ jobs:
 
     zizmor:
         name: Zizmor Github Actions lint
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             security-events: write
         steps:
@@ -144,7 +144,7 @@ jobs:
         name: Static Analysis
         needs: [lint, i18n, zizmor]
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
