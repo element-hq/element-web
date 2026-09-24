@@ -10,6 +10,7 @@
 import EventEmitter from "node:events";
 
 import { type CallStore, CallStoreEvent } from "../../../../stores/CallStore";
+import { ElementCall } from "../../../../models/Call";
 import { CollapseOnCallResizeBehaviour } from "./CollapseOnCallResizeBehaviour";
 import { CollapseHandler } from "../CollapseHandler";
 import { describe, it, expect, vi } from "vitest";
@@ -36,6 +37,23 @@ describe("CollapseOnCallResizeBehaviour", () => {
         // When the call is over
         mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([]));
         expect(expandPanel).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should leave the panel alone for a voice-only call", () => {
+        const mockCallStore = new EventEmitter() as unknown as CallStore;
+
+        const expandPanel = vi.fn();
+        const collapsePanel = vi.fn();
+        const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
+        new CollapseOnCallResizeBehaviour(collapseHandler, mockCallStore);
+
+        const voiceCall = Object.create(ElementCall.prototype);
+        voiceCall.widgetGenerationParameters = { voiceOnly: true };
+        mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([voiceCall]));
+        expect(collapsePanel).not.toHaveBeenCalled();
+
+        mockCallStore.emit(CallStoreEvent.ConnectedCalls, new Set([]));
+        expect(expandPanel).not.toHaveBeenCalled();
     });
 
     it("should set shouldIgnoreResize to true on call", () => {
