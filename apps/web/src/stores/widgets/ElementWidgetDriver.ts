@@ -232,6 +232,9 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(
                 WidgetEventCapability.forRoomEvent(EventDirection.Receive, EventType.RoomMessage).raw,
             );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rtc.recording.status").raw,
+            );
 
             const sendRecvToDevice = [
                 EventType.CallInvite,
@@ -252,6 +255,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 "org.matrix.msc4471.stream.update",
                 "org.matrix.msc4471.stream.encrypted",
                 "io.element.call.layout",
+                "io.element.call.shared_key",
             ];
             for (const eventType of sendRecvToDevice) {
                 this.allowedCapabilities.add(
