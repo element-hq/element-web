@@ -37,7 +37,9 @@
     margin-inline: var(--cpd-space-1x);
     border-radius: var(--cpd-space-1x);
     color: var(--cpd-color-icon-secondary);
-    visibility: hidden;
+    /* Hidden until the host says the event is hovered. Standalone hosts that
+       set nothing keep the row-scoped fallback below. */
+    visibility: var(--event-tile-add-reaction-visibility, hidden);
     cursor: pointer;
 }
 
