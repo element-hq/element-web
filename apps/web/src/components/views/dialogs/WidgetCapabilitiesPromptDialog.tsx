@@ -92,11 +92,11 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             // Both are the same type (both timeline or both non-timeline), sort lexicographically
             return lexicographicCompare(capA, capB);
         });
-        const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
+        const checkboxRows = orderedCapabilities.map(([cap, isChecked]) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
 
             return (
-                <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
+                <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap}>
                     <StyledCheckbox
                         checked={isChecked}
                         onChange={() => this.onToggle(cap)}

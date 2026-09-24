@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page, type Request } from "@playwright/test";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -59,10 +59,6 @@ test.describe("Sliding Sync", () => {
         return page.getByRole("button", { name: "Room Options" });
     }
 
-    function getFilterExpandButton(page: Page): Locator {
-        return getPrimaryFilters(page).getByRole("button", { name: "Expand filter list" });
-    }
-
     test.use({
         config: {
             features: {
@@ -75,6 +71,7 @@ test.describe("Sliding Sync", () => {
     test.beforeEach(async ({ app, page, user }) => {
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
@@ -246,29 +243,30 @@ test.describe("Sliding Sync", () => {
             { roomNames, clientUserId },
         );
 
-        await getFilterExpandButton(page).click();
-        const primaryFilters = getPrimaryFilters(page);
-        await primaryFilters.getByRole("option", { name: "Invites" }).click();
-
-        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(3);
+        // Expand the Invites section inline rather than via `viewInvitedRoomByName`, because the count below
+        // must be asserted before a room tile is opened: an open tile renders extra hover menu buttons.
+        await page.getByRole("button", { name: "Toggle Invites section" }).click();
+        // Invite + chats section headers + 3 invites + Test Room = 6
+        await expect(page.getByTestId("room-list").getByRole("button")).toHaveCount(6);
 
         // Select the room to join
-        await page.getByRole("option", { name: "Open room Room to Join" }).click();
+        await page.getByRole("button", { name: "Open room Room to Join" }).click();
 
         // Accept the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await checkOrder(["Room to Rescind", "Room to Reject"], page);
+        await checkOrder(["Room to Rescind", "Room to Reject", "Room to Join", "Test Room"], page);
 
         // Select the room to reject
-        await page.getByRole("option", { name: "Open room Room to Reject" }).click();
+        await page.getByRole("button", { name: "Open room Room to Reject" }).click();
 
         // Decline the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Decline", exact: true }).click();
 
-        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(1);
+        // Invite + chats section headers + 1 invites + Test Room + Room to Join = 5
+        await expect(page.getByTestId("room-list").getByRole("button")).toHaveCount(5);
 
-        await expect(page.getByRole("option", { name: "Open room Room to Rescind" })).toBeVisible();
+        await expect(page.getByRole("button", { name: "Open room Room to Rescind" })).toBeVisible();
 
         // now rescind the invite
         await bot.evaluate(
@@ -278,10 +276,7 @@ test.describe("Sliding Sync", () => {
             { roomRescind, clientUserId },
         );
 
-        // toggle the invites filter off again so we see all the rooms again
-        await primaryFilters.getByRole("option", { name: "Invites" }).click();
-
-        await page.getByRole("option", { name: "Open room Room to Rescind" }).click();
+        await page.getByRole("button", { name: "Open room Room to Rescind" }).click();
 
         await page.locator(".mx_RoomView").getByRole("button", { name: "Forget this room", exact: true }).click();
 
@@ -321,7 +316,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
         // click reply-to on the Hello World message
-        const locator = page.locator(".mx_EventTile_last");
+        const locator = page.locator(".mx_EventTile").last();
         await locator.getByText("Hello world").hover();
         await locator.getByRole("button", { name: "Reply", exact: true }).click({});
 
@@ -365,8 +360,11 @@ test.describe("Sliding Sync", () => {
         await tile.hover();
         await tile.locator("a").dispatchEvent("click");
 
-        // make sure it is now selected with the little green |
-        await expect(page.locator(".mx_EventTile_selected").filter({ hasText: "Permalink me" })).toBeVisible();
+        // make sure it is now selected with the little green marker
+        await expect(tile).toBeVisible();
+        await expect
+            .poll(() => tile.locator(".mx_EventTile_line").evaluate((line) => getComputedStyle(line).boxShadow))
+            .not.toBe("none");
 
         // ensure the reply-to does not disappear
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();

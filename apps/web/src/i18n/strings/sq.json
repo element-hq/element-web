@@ -1053,7 +1053,6 @@
         "name_mxid_share_room": "Ftoni dikë duke përdorur emrin e tij, emrin e tij të përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë dhomë</a>.",
         "name_mxid_share_space": "Ftoni dikë duke përdorur emrin e tij, emrin e tij të përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë hapësirë</a>.",
         "recents_section": "Biseda Së Fundi",
-        "room_failed_partial": "I dërguam të tjerat, por personat më poshtë s’u ftuan dot te <RoomName/>",
         "room_failed_partial_title": "S’u dërguan dot disa nga ftesat",
         "room_failed_title": "S’u arrit të ftoheshin përdoruesit te %(roomName)s",
         "send_link_prompt": "Ose dërgoni një lidhje ftese",
@@ -1154,7 +1153,6 @@
         "bridge_state_workspace": "Hapësirë pune: <networkLink/>",
         "click_for_info": "Klikoni për më tepër hollësi",
         "currently_experimental": "Aktualisht eksperimental.",
-        "custom_themes": "Mbulim shtimi temash vetjake",
         "element_call_video_rooms": "Dhoma Thirrje Element me video",
         "experimental_description": "Ndiheni eksperimentues? Provoni idetë tona më të reja në zhvillim. Këto veçori s’janë të përfunduara; mund të jenë të paqëndrueshme, mund të ndryshojnë, ose mund të braktisen faqe. <a>Mësoni më tepër</a>.",
         "experimental_section": "Paraparje të hershme",
@@ -1167,7 +1165,6 @@
         "group_profile": "Profil",
         "group_rooms": "Dhoma",
         "group_spaces": "Hapësira",
-        "group_themes": "Tema",
         "group_threads": "Rrjedha",
         "group_voip": "Zë & Video",
         "group_widgets": "Widget-e",
@@ -1232,8 +1229,6 @@
     "language_dropdown_label": "Menu Hapmbyll Gjuhësh",
     "leave_room_dialog": {
         "last_person_warning": "Jeni i vetmi person këtu. Nëse e braktisni, askush s’do të jetë në gjendje të hyjë në të ardhmen, përfshi ju.",
-        "leave_room_question": "Jeni i sigurt se doni të dilni nga dhoma '%(roomName)s'?",
-        "leave_space_question": "Jeni i sigurt se doni të dilni nga hapësira '%(spaceName)s'?",
         "room_rejoin_warning": "Kjo dhomë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë.",
         "space_rejoin_warning": "Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë."
     },
@@ -1319,7 +1314,6 @@
         "mentions_and_keywords": "@përmendje & fjalëkyçe",
         "mentions_and_keywords_description": "Merrni njoftime vetëm për përmendje dhe fjalëkyçe që keni ujdisur te <a>rregullimet</a> tuaja",
         "mentions_keywords": "Përmendje & fjalëkyçe",
-        "message_didnt_send": "Mesazhi s’u dërgua. Klikoni për hollësi.",
         "mute_description": "S’do të merrni ndonjë njoftim"
     },
     "notifier": {
@@ -1579,7 +1573,6 @@
         "join_button_account": "Regjistrohuni",
         "join_failed_needs_invite": "Që të shihni %(roomName)s, ju duhet një ftesë",
         "join_the_discussion": "Merrni pjesë në diskutim",
-        "join_title": "Që të merrni pjesë, hyni në dhomë",
         "join_title_account": "Merrni pjesë në bisedë me një llogari",
         "joining": "Po hyhet…",
         "joining_room": "Po hyhet në dhomë…",
@@ -1923,8 +1916,6 @@
             "custom_font_description": "Caktoni emrin e një palë shkronjash të instaluara në sistemin tuaj & %(brand)s do të provojë t’i përdorë.",
             "custom_font_name": "Emër shkronjash sistemi",
             "custom_font_size": "Përdor madhësi vetjake",
-            "custom_theme_error_downloading": "Gabim në shkarkim të dhënash teme.",
-            "custom_theme_invalid": "Skemë e pavlefshme teme.",
             "font_size": "Madhësi shkronjash",
             "image_size_default": "Parazgjedhje",
             "image_size_large": "E madhe",

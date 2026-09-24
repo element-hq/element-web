@@ -13,7 +13,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 
 import ToastStore from "../stores/ToastStore.ts";
 import { showToast } from "./MobileGuideToast.ts";
-import type GenericToast from "../components/views/toasts/GenericToast.tsx";
+import type { GenericToast } from "@element-hq/web-shared-components";
 
 describe("showToast", () => {
     const addOrReplaceToastSpy = vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");

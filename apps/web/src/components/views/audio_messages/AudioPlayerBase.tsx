@@ -61,7 +61,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
 
         switch (action) {
             case KeyBindingAction.Space:
-                this.playPauseRef.current?.toggleState();
+                void this.playPauseRef.current?.toggleState();
                 break;
             case KeyBindingAction.ArrowLeft:
                 this.seekRef.current?.left();

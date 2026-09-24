@@ -72,6 +72,10 @@
         "save_image_as_error_description": "The image failed to save",
         "save_image_as_error_title": "Failed to save image"
     },
+    "save_dialog": {
+        "all_files": "All Files",
+        "named_file_type": "%(extension)s File"
+    },
     "store": {
         "error": {
             "backend_changed": "Clear data and reload?",

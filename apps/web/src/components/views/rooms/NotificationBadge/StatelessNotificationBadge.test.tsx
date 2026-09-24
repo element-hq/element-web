@@ -1,0 +1,59 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+import React from "react";
+import { render } from "test-utils-rtl";
+
+import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
+import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+
+describe("StatelessNotificationBadge", () => {
+    it("is highlighted when unsent", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Unsent} />,
+        );
+        expect(container.querySelector('[data-notification-level="highlight"]')).toBeInTheDocument();
+    });
+
+    it("has knock style", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Highlight} knocked={true} />,
+        );
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
+        expect(container.querySelector("svg")).toHaveAccessibleName("Request to join sent");
+    });
+
+    it("has dot style for activity", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Activity} />,
+        );
+        expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
+    });
+
+    it("has badge style for notification", () => {
+        const { container } = render(
+            <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Notification} />,
+        );
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
+    });
+
+    it("has dot style for notification when forced", () => {
+        const { container } = render(
+            <StatelessNotificationBadge
+                symbol={null}
+                count={3}
+                level={NotificationLevel.Notification}
+                forceDot={true}
+            />,
+        );
+        expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
+    });
+});

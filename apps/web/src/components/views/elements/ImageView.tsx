@@ -315,7 +315,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 ev.stopPropagation();
                 if (this.downloadFunction) {
-                    this.downloadFunction();
+                    void this.downloadFunction();
                 }
                 break;
         }

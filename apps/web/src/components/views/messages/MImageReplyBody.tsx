@@ -495,6 +495,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
             <div
                 className="mx_MImageBody_thumbnail_container"
                 style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}
+                // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex={tooltipProps ? 0 : undefined}
             >
                 {placeholder}

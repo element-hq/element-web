@@ -45,6 +45,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
         if (avatar) {
             avatarSection = (
                 <React.Fragment>
+                    {/* oxlint-disable-next-line jsx-a11y/control-has-associated-label */}
                     <AccessibleButton
                         className="mx_SpaceBasicSettings_avatar"
                         onClick={() => avatarUploadRef.current?.click()}

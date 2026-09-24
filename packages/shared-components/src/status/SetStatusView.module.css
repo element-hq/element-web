@@ -23,10 +23,18 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+.disabledTrigger {
+    color: var(--cpd-color-text-disabled);
+}
+
 .menuItem {
     place-items: start;
     gap: var(--cpd-space-1x);
     color: var(--cpd-color-text-secondary);
     font-weight: var(--cpd-font-weight-medium);
     font-size: var(--cpd-font-size-body-md);
+}
+
+.dropdownEmoji {
+    margin-right: var(--cpd-space-1-5x);
 }

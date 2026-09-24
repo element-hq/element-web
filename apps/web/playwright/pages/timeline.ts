@@ -36,7 +36,7 @@ export class Timeline {
             if (await displayName.count()) {
                 latestSender = await displayName.innerText();
             }
-            if (latestSender === sender && (await locator.locator(".mx_EventTile_body").innerText()) === body) {
+            if (latestSender === sender && (await locator.getByTestId("event-tile-slot-body").innerText()) === body) {
                 return locator;
             }
         }

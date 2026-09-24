@@ -751,8 +751,11 @@ export class ElementCall extends Call {
         const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
         const url = elementCallUrlOverride
             ? new URL(elementCallUrlOverride)
-            : // this strips hash fragment from baseUrl
-              new URL("./widgets/element-call/index.html#", window.location.href);
+            : // this strips hash fragment from baseUrl. The bundled copy is addressed by directory rather
+              // than by its `index.html`: it references its chunks relatively, and a static host that
+              // strips `.html` (Netlify, and the `serve` our Playwright suite runs against) would redirect
+              // to the extensionless path, against which those chunks resolve a directory too high.
+              new URL("./widgets/element-call/", window.location.href);
 
         // Splice together the Element Call URL for this call
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
@@ -940,9 +943,18 @@ export class ElementCall extends Call {
         this.widgetApi!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.widgetApi!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         super.close();
+        // A voice call in PiP has no CallView to stop presenting it on close
+        // (whether the widget asked to close or its messaging just stopped),
+        // so the call would linger and its timeline tile stay "in progress"
+        if (this.presented) this.presented = false;
     }
 
+    private destroyed = false;
+
     public destroy(): void {
+        // close() above may re-enter here via checkDestroy while destroying
+        if (this.destroyed) return;
+        this.destroyed = true;
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);

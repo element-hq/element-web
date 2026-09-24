@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
@@ -21,7 +21,6 @@ import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -31,6 +30,25 @@ import { ModuleApi } from "../modules/Api.ts";
 import { type URLParams } from "./url_utils.ts";
 
 export const rageshakePromise = initRageshake();
+
+let root: Root | undefined;
+let rootContainer: Element | undefined;
+
+/**
+ * Get the React root for the `#matrixchat` container.
+ *
+ * These views replace one another (`showError` may be called after `loadApp`, for instance), so they share a
+ * single root: calling `createRoot` again for the same container leaves the previous tree mounted and running
+ * against a detached DOM node, with both copies still subscribed to the dispatcher and the client peg.
+ */
+function getRoot(): Root {
+    const container = document.getElementById("matrixchat")!;
+    if (root && rootContainer === container) return root;
+    root?.unmount();
+    rootContainer = container;
+    root = createRoot(container);
+    return root;
+}
 
 export function preparePlatform(): void {
     if (window.electron) {
@@ -42,6 +60,23 @@ export function preparePlatform(): void {
     } else {
         logger.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
+    }
+
+    // Deliberately not awaited: the version is only wanted for the logs, so it must not hold up startup.
+    void logAppVersion();
+}
+
+/**
+ * Log the version of the app, so that each rageshake log file starts with the version that produced it.
+ *
+ * The rageshake store keeps one log file per app instance, so logging this at startup means an upgrade or
+ * downgrade between sessions is visible when reading a report.
+ */
+export async function logAppVersion(): Promise<void> {
+    try {
+        logger.info(`App version: ${await PlatformPeg.get()!.getAppVersion()}`);
+    } catch (e) {
+        logger.warn("Unable to determine app version for logging", e);
     }
 }
 
@@ -98,8 +133,7 @@ export async function loadApp(urlParams: URLParams): Promise<void> {
         window.matrixChat = matrixChat;
     }
     const app = await module.loadApp(urlParams, setWindowMatrixChat);
-    const root = createRoot(document.getElementById("matrixchat")!);
-    root.render(app);
+    getRoot().render(app);
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
@@ -107,8 +141,7 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    const root = createRoot(document.getElementById("matrixchat")!);
-    root.render(
+    getRoot().render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
         </StrictMode>,
@@ -120,22 +153,11 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    const root = createRoot(document.getElementById("matrixchat")!);
-    root.render(
+    getRoot().render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
     );
-}
-
-/**
- * @deprecated in favour of the plugin system
- */
-export async function loadModules(): Promise<void> {
-    const { INSTALLED_MODULES } = await import("../modules.js");
-    for (const InstalledModule of INSTALLED_MODULES) {
-        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
-    }
 }
 
 export async function loadPlugins(): Promise<void> {

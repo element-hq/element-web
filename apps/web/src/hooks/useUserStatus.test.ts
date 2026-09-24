@@ -136,6 +136,7 @@ describe("useUserStatus", () => {
         await waitFor(() => expect(result.current).toEqual({ emoji: "🐎", text: "on a horse" }));
 
         // Simulate a profile update event
+        client.getExtendedProfileProperty.mockResolvedValue({ emoji: "😵", text: "off a horse" });
         client.emit(ClientEvent.UserProfileUpdate, userId, {
             "org.matrix.msc4426.status": { emoji: "😵", text: "off a horse" },
         });

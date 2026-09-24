@@ -28,8 +28,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import {
     act,
-    createEvent,
-    fireEvent,
     getAllByLabelText,
     getByLabelText,
     getByText,
@@ -39,7 +37,6 @@ import {
     screen,
     waitFor,
 } from "test-utils-rtl";
-import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import userEvent from "@testing-library/user-event";
 import { filterConsole, setupAsyncStoreWithClient, stubClient } from "test-utils";
 
@@ -123,6 +120,7 @@ describe("RoomHeader", () => {
         // Mock CallStore.instance.getCall to return null by default
         // Individual tests can override this when they need a specific Call object
         vi.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
+        vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([]);
 
         // Reset the mock RoomViewStore
         mockRoomViewStore.isViewingCall.mockReturnValue(false);
@@ -419,9 +417,9 @@ describe("RoomHeader", () => {
         beforeEach(async () => {
             SdkConfig.put({});
             // Enable Element Call
-            client._unstable_getRTCTransports = vi
-                .fn()
-                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
             // And ensure the CallStore has the transports configured.
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
@@ -810,6 +808,9 @@ describe("RoomHeader", () => {
                     getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                 },
             ]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
         });
 
         afterEach(() => {
@@ -919,41 +920,6 @@ describe("RoomHeader", () => {
             });
             await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
         });
-    });
-
-    it("renders legacy additionalButtons", async () => {
-        const additionalButtons: ViewRoomOpts["buttons"] = [
-            {
-                icon: () => <>test-icon</>,
-                id: "test-id",
-                label: () => "test-label",
-                onClick: () => {},
-            },
-        ];
-        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
-        expect(screen.getByRole("button", { name: "test-label" })).toBeInTheDocument();
-    });
-
-    it("calls onClick-callback on legacyAdditionalButtons", () => {
-        const callback = vi.fn();
-        const additionalButtons: ViewRoomOpts["buttons"] = [
-            {
-                icon: () => <>test-icon</>,
-                id: "test-id",
-                label: () => "test-label",
-                onClick: callback,
-            },
-        ];
-
-        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
-
-        const button = screen.getByRole("button", { name: "test-label" });
-        const event = createEvent.click(button);
-        event.stopPropagation = vi.fn();
-        fireEvent(button, event);
-
-        expect(callback).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
     });
 
     describe("ask to join disabled", () => {

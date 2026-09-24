@@ -1106,7 +1106,6 @@
         "name_mxid_share_room": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
         "name_mxid_share_space": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",
         "recents_section": "最近的對話",
-        "room_failed_partial": "我們已將邀請傳送給其他人，但以下的人無法邀請加入 <RoomName/>",
         "room_failed_partial_title": "部份邀請無法傳送",
         "room_failed_title": "邀請使用者加入 %(roomName)s 失敗",
         "send_link_prompt": "或傳送邀請連結",
@@ -1215,7 +1214,6 @@
         "bridge_state_workspace": "工作區：<networkLink/>",
         "click_for_info": "點擊以取得更多資訊",
         "currently_experimental": "目前為實驗性。",
-        "custom_themes": "支援新增自訂佈景主題",
         "dynamic_room_predecessors": "動態聊天室前身",
         "dynamic_room_predecessors_description": "請啟用 MSC3946（為了支援遲到聊天室存檔）",
         "element_call_video_rooms": "Element Call 視訊聊天室",
@@ -1230,7 +1228,6 @@
         "group_profile": "基本資料",
         "group_rooms": "聊天室",
         "group_spaces": "聊天空間",
-        "group_themes": "主題",
         "group_threads": "討論串",
         "group_voip": "語音與視訊",
         "group_widgets": "小工具",
@@ -1299,8 +1296,6 @@
     "language_dropdown_label": "語言下拉式選單",
     "leave_room_dialog": {
         "last_person_warning": "您是這裡唯一的人。如果您離開，包含您在內的任何人都無法加入。",
-        "leave_room_question": "您確定要離開聊天室「%(roomName)s」嗎？",
-        "leave_space_question": "您確定您要離開聊天空間「%(spaceName)s」？",
         "room_rejoin_warning": "這個聊天室不是公開聊天。沒有再次收到邀請的情況下將無法重新加入。",
         "space_rejoin_warning": "此聊天空間並非公開。在無邀請的情況下，您將無法重新加入。"
     },
@@ -1390,7 +1385,6 @@
         "mentions_and_keywords": "@提及與關鍵字",
         "mentions_and_keywords_description": "僅在提及您與您在<a>設定</a>中列出的關鍵字時收到通知",
         "mentions_keywords": "提及與關鍵字",
-        "message_didnt_send": "訊息未傳送。點擊以取得更多資訊。",
         "mute_description": "不會收到任何通知"
     },
     "notifier": {
@@ -1655,7 +1649,6 @@
         "join_button_account": "註冊",
         "join_failed_needs_invite": "要檢視 %(roomName)s，您需要邀請",
         "join_the_discussion": "加入此討論",
-        "join_title": "加入聊天室以參與",
         "join_title_account": "加入與某個帳號的對話",
         "joining": "正在加入…",
         "joining_room": "正在加入聊天室…",
@@ -2018,8 +2011,6 @@
             "custom_font_description": "設定您系統上安裝的字型名稱，%(brand)s 將會嘗試使用它。",
             "custom_font_name": "系統字型名稱",
             "custom_font_size": "使用自訂大小",
-            "custom_theme_error_downloading": "下載佈景主題資訊時發生錯誤。",
-            "custom_theme_invalid": "無效的佈景主題架構。",
             "dialog_title": "<strong>設定：</strong>外觀",
             "font_size": "字型大小",
             "high_contrast": "高對比",

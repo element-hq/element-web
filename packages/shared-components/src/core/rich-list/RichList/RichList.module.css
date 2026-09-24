@@ -6,7 +6,7 @@
  */
 
 .richList {
-    height: inherit;
+    min-height: 0;
 }
 
 .title {

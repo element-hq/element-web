@@ -16,20 +16,44 @@ import { type OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite";
 import { type HomeserverType } from "./plugins/homeserver";
 import { SynapseContainer } from "./testcontainers/synapse";
+import { startMatrixRTCBackend, type StartedMatrixRTCBackend } from "./testcontainers/matrix-rtc";
 
 export interface Services extends BaseServices {
     // Set in legacyOAuthHomeserver only
     oAuthServer?: OAuthServer;
+    /**
+     * The started MatrixRTC backend (LiveKit SFU + lk-jwt-service) for the worker.
+     * Only set when the `matrixRTC` option is on.
+     */
+    matrixRTCBackend?: StartedMatrixRTCBackend;
 }
 
 export interface WorkerOptions extends BaseWorkerOptions {
     homeserverType: HomeserverType;
+    /**
+     * Start a real MatrixRTC backend (LiveKit SFU + lk-jwt-service) and configure Synapse to announce it,
+     * so that Element Call can hold real calls with media. Synapse only.
+     */
+    matrixRTC: boolean;
 }
 
 export const test = base.extend<{}, Services & WorkerOptions>({
     homeserverType: ["synapse", { option: true, scope: "worker" }],
+    matrixRTC: [false, { option: true, scope: "worker" }],
+    matrixRTCBackend: [
+        async ({ matrixRTC, network, logger }, use) => {
+            if (!matrixRTC) {
+                await use(undefined);
+                return;
+            }
+            const backend = await startMatrixRTCBackend(network, logger);
+            await use(backend);
+            await backend.stop();
+        },
+        { scope: "worker" },
+    ],
     _homeserver: [
-        async ({ homeserverType }, use) => {
+        async ({ homeserverType, matrixRTCBackend }, use) => {
             let container: HomeserverContainer<unknown>;
             switch (homeserverType) {
                 case "synapse":
@@ -41,6 +65,15 @@ export const test = base.extend<{}, Services & WorkerOptions>({
                 case "pinecone":
                     container = new PineconeContainer();
                     break;
+            }
+
+            if (matrixRTCBackend) {
+                if (!(container instanceof SynapseContainer)) {
+                    throw new Error(`The matrixRTC option is only supported with Synapse, not ${homeserverType}`);
+                }
+                container
+                    .withConfig(matrixRTCBackend.synapseConfig)
+                    .withCopyFilesToContainer(matrixRTCBackend.synapseFiles);
             }
 
             await use(container);

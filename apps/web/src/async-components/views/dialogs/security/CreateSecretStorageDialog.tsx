@@ -25,7 +25,6 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -92,8 +91,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public constructor(props: IProps) {
         super(props);
 
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
+        const phase = Phase.ChooseKeyPassphrase;
 
         this.state = {
             phase,
@@ -105,19 +103,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             setPassphrase: false,
             passPhraseKeySelected: SecureBackupSetupMethod.Key,
         };
-    }
-
-    public componentDidMount(): void {
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
-    }
-
-    private initExtension(keyFromCustomisations: Uint8Array<ArrayBuffer>): void {
-        logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
-        this.recoveryKey = {
-            privateKey: keyFromCustomisations,
-        };
-        this.bootstrapSecretStorage();
     }
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -268,11 +253,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private onLoadRetryClick = (): void => {
-        this.bootstrapSecretStorage();
+        void this.bootstrapSecretStorage();
     };
 
     private onShowKeyContinueClick = (): void => {
-        this.bootstrapSecretStorage();
+        void this.bootstrapSecretStorage();
     };
 
     private onCancelClick = (): void => {
@@ -290,7 +275,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         await this.passphraseField.current.validate({ allowEmpty: false });
         if (!this.passphraseField.current.state.valid) {
             this.passphraseField.current.focus();
-            this.passphraseField.current.validate({ allowEmpty: false, focused: true });
+            void this.passphraseField.current.validate({ allowEmpty: false, focused: true });
             return;
         }
 
@@ -426,7 +411,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     hasCancel={false}
                     disabled={!this.state.passPhraseValid}
                 >
-                    <button type="button" onClick={this.onCancelClick} className="danger">
+                    <button type="button" onClick={this.onCancelClick} className="mx_LegacyDialogButton danger">
                         {_t("action|cancel")}
                     </button>
                 </DialogButtons>
@@ -486,7 +471,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     hasCancel={false}
                     disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
                 >
-                    <button type="button" onClick={this.onCancelClick} className="danger">
+                    <button type="button" onClick={this.onCancelClick} className="mx_LegacyDialogButton danger">
                         {_t("action|skip")}
                     </button>
                 </DialogButtons>
@@ -600,7 +585,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     onPrimaryButtonClick={this.onGoBackClick}
                     hasCancel={false}
                 >
-                    <button type="button" className="danger" onClick={this.onCancel}>
+                    <button type="button" className="mx_LegacyDialogButton danger" onClick={this.onCancel}>
                         {_t("action|cancel")}
                     </button>
                 </DialogButtons>

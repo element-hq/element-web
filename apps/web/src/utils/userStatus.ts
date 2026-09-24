@@ -78,7 +78,7 @@ function validateMCallStatus(rawCallStatus: unknown): UserStatus | undefined {
  * Takes both MSC4426 user status fields (m.status and m.call) and returns a UserStatus
  * object that reflects the information they represent.
  */
-export function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
+function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
     const validatedUserStatus = validateUserStatus(userStatus);
     if (validatedUserStatus) return validatedUserStatus;
 
@@ -139,12 +139,22 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
 }
 
 /**
- * Clears the MSC4426 user status for the given user.
+ * Clears all MSC4426 user status for the given user, including their m.status and m.call status,
+ * if anything is set in those fields.
  *
  * @param client The Matrix client to use.
+ * @throws If either request fails, in which case the other may also not have been cleared.
  */
-export function clearUserStatus(client: MatrixClient): Promise<void> {
-    return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
+export async function clearAllUserStatus(client: MatrixClient): Promise<void> {
+    const rawUserStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.status");
+    if (rawUserStatus) {
+        await client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
+    }
+
+    const rawCallStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.call");
+    if (rawCallStatus) {
+        await setUserOnCall(client, false);
+    }
 }
 
 /**

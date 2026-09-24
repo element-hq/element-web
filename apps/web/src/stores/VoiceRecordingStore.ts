@@ -29,7 +29,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     public static get instance(): VoiceRecordingStore {
         if (!this.internalInstance) {
             this.internalInstance = new VoiceRecordingStore();
-            this.internalInstance.start();
+            void this.internalInstance.start();
         }
         return this.internalInstance;
     }
@@ -70,8 +70,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
 
         const recording = createVoiceMessageRecording(this.matrixClient);
 
-        // noinspection JSIgnoredPromiseFromCall - we can safely run this async
-        this.updateState({ ...this.state, [voiceRecordingId]: recording });
+        void this.updateState({ ...this.state, [voiceRecordingId]: recording });
 
         return recording;
     }

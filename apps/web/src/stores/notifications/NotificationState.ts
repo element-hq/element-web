@@ -150,22 +150,23 @@ export class NotificationStateSnapshot {
         this.isInvitation = state.invited;
     }
 
+    /**
+     * Whether the given state differs from the one captured by this snapshot.
+     *
+     * @param other - the state to compare this snapshot against
+     * @returns true if any of the snapshotted fields has changed
+     */
     public isDifferentFrom(other: INotificationStateSnapshotParams): boolean {
-        const before = {
-            count: this.count,
-            symbol: this.symbol,
-            level: this.level,
-            muted: this.muted,
-            knocked: this.knocked,
-            is: this.isInvitation,
-        };
-        const after = {
-            count: other.count,
-            symbol: other.symbol,
-            level: other.level,
-            muted: other.muted,
-            knocked: other.knocked,
-        };
-        return JSON.stringify(before) !== JSON.stringify(after);
+        // Compare the fields directly rather than serialising two object literals. Keeping those
+        // literals in step by hand is what let the invited flag be captured on one side only, and
+        // an unpaired key makes the two serialisations differ for every possible input.
+        return (
+            this.count !== other.count ||
+            this.symbol !== other.symbol ||
+            this.level !== other.level ||
+            this.muted !== other.muted ||
+            this.knocked !== other.knocked ||
+            this.isInvitation !== other.invited
+        );
     }
 }

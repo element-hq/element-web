@@ -13,6 +13,8 @@ import {
     type Direction,
 } from "matrix-js-sdk/src/matrix";
 
+import { type TokenizerMode } from "../settings/enums/TokenizerMode";
+
 // The following interfaces take their names and member names from seshat and the spec
 
 /** A record of a place to resume crawling events in a given room. */
@@ -86,11 +88,16 @@ export default abstract class BaseEventIndexManager {
      *
      * @param {string} userId The event that should be added to the index.
      * @param {string} deviceId The profile of the event sender at the
+     * @param {string} tokenizerMode The tokenizer mode to use ("ngram" or "language")
      *
      * @returns {Promise} A promise that will resolve when the event index is
-     * initialized.
+     * initialized. Returns { wasRecreated: true } if the database was recreated.
      */
-    public async initEventIndex(userId: string, deviceId: string): Promise<void> {
+    public async initEventIndex(
+        userId: string,
+        deviceId: string,
+        tokenizerMode?: TokenizerMode,
+    ): Promise<{ wasRecreated?: boolean } | void> {
         throw new Error("Unimplemented");
     }
 

@@ -59,7 +59,9 @@ export function useWysiwygSendActionHandler(
                     } else if (payload.event) {
                         // TODO insert quote message - see SendMessageComposer
                     } else if (payload.text) {
-                        setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
+                        void setSelection(composerContext.selection).then(() =>
+                            composerFunctions.insertText(payload.text),
+                        );
                     }
                     break;
             }

@@ -11,6 +11,7 @@ import React, { type CSSProperties, memo, type RefObject, type ReactNode } from 
 
 import { useIsExpanded } from "../hooks/useIsExpanded";
 import { useSelection } from "../hooks/useSelection";
+import { _t } from "../../../../../i18n";
 
 const HEIGHT_BREAKING_POINT = 24;
 
@@ -38,6 +39,7 @@ export const Editor = memo(function Editor({ disabled, placeholder, leftComponen
                     ref={ref}
                     contentEditable={!disabled}
                     role="textbox"
+                    aria-label={_t("a11y|message_composer")}
                     aria-multiline="true"
                     aria-autocomplete="list"
                     aria-haspopup="listbox"
