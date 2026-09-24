@@ -256,7 +256,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         };
         render(<TestComponent />);
 
-        const favouriteItem = screen.getByRole("menuitem", { name: "Favourites" });
+        const favouriteItem = screen.getByRole("menuitemradio", { name: "Favourites" });
         expect(favouriteItem).toBeInTheDocument();
         expect(favouriteItem).toHaveAttribute("aria-checked", "false");
 
@@ -264,7 +264,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         expect(workItem).toBeInTheDocument();
         expect(workItem).toHaveAttribute("aria-checked", "true");
 
-        const personalItem = screen.getByRole("menuitem", { name: "Personal" });
+        const personalItem = screen.getByRole("menuitemradio", { name: "Personal" });
         expect(personalItem).toBeInTheDocument();
         expect(personalItem).toHaveAttribute("aria-checked", "false");
     });
