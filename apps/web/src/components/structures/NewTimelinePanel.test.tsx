@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "test-utils-rtl";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import type { TimelineItem } from "@element-hq/web-shared-components";
 import { createTestClient, mkMessage, TestSDKContext } from "test-utils";
 
@@ -138,6 +138,29 @@ describe("<NewTimelinePanel />", () => {
         // The row is simply absent; rendering the rest of the timeline still succeeded.
         expect(screen.queryByTestId("event-row")).toBeNull();
         expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
+    });
+
+    it("draws a message that is still being sent, with its send state", () => {
+        // Until the server echoes it back, the room holds the message apart from the timeline.
+        const pending = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "on its way", event: true });
+        pending.setTxnId("txn1");
+        pending.setStatus(EventStatus.SENDING);
+        room.addPendingEvent(pending, "txn1");
+        expect(room.findEventById(pending.getId()!)).toBeUndefined();
+        withItems([{ key: pending.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].mxEvent).toBe(pending);
+        expect(tileProps.current[0].eventSendStatus).toBe(EventStatus.SENDING);
+    });
+
+    it("gives a delivered message no send state", () => {
+        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].eventSendStatus).toBeUndefined();
     });
 
     it('labels the read marker "New"', () => {

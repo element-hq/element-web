@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { EventStatus, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EventTile, { type GetRelationsForEvent, type IReadReceiptProps } from "./EventTile";
 import type { Layout } from "../../../settings/enums/Layout";
 import type { IReadReceiptPosition } from "./ReadReceiptMarker";
@@ -53,6 +53,12 @@ export interface LegacyEventTileAdapterProps {
 
     /** Set only on the message being edited; that tile shows the edit box. */
     editState?: EditorStateTransfer;
+
+    /**
+     * Sending / sent / failed, for a message of ours still on its way. Passed as a prop rather
+     * than read from the event so a change of state re-renders the tile.
+     */
+    eventSendStatus?: EventStatus;
 }
 
 /**
@@ -89,6 +95,7 @@ export function LegacyEventTileAdapter(props: Readonly<LegacyEventTileAdapterPro
             permalinkCreator={props.permalinkCreator}
             callEventGrouper={props.callEventGrouper}
             editState={props.editState}
+            eventSendStatus={props.eventSendStatus}
             compactReplyPreview={true}
         />
     );

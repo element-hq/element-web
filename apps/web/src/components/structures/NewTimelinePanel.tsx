@@ -96,7 +96,10 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
             // gappy sync can trigger a timeline reset, which drops every loaded event.
             // Rendering a tile without its event crashes, replacing the whole timeline
             // with an error, so leave the row empty until the next snapshot.
-            const mxEvent = ctx.room.findEventById(item.key);
+            //
+            // A message we are still sending is not in the timeline yet; the room holds it
+            // separately until the server echoes it back.
+            const mxEvent = ctx.room.findEventById(item.key) ?? ctx.room.getPendingEvent(item.key);
             if (!mxEvent) return null;
 
             // For now, all events go through the legacy adapter.
@@ -113,6 +116,9 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
                     // A tile treats any edit state it is given as its own, so
                     // only the message being edited may receive it.
                     editState={ctx.editState?.getEvent().getId() === item.key ? ctx.editState : undefined}
+                    // Sending / sent / failed, for a message of ours that is still on its way. The
+                    // view model publishes fresh rows on every change, so the tile keeps up.
+                    eventSendStatus={mxEvent.getAssociatedStatus() ?? undefined}
                     getRelationsForEvent={ctx.getRelationsForEvent}
                     permalinkCreator={ctx.permalinkCreator}
                     showUrlPreview={ctx.showUrlPreview}
