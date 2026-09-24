@@ -274,6 +274,28 @@ describe("WidgetMessaging", () => {
             expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent());
         });
 
+        it("feeds thread replies, which the room's timeline never holds", async () => {
+            // The root is known, so this is not a relation to an unknown event
+            client.getRoom("!1:example.org")!.findEventById = (id: string) =>
+                id === event1.getId() ? event1 : undefined;
+            client.emit(ClientEvent.Event, event2);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(1);
+            const reply = mkEvent({
+                event: true,
+                id: "$reply",
+                type: "m.room.message",
+                user: "@alice:example.org",
+                content: {
+                    "body": "in a thread",
+                    "m.relates_to": { rel_type: "m.thread", event_id: event1.getId() },
+                },
+                room: "!1:example.org",
+            });
+            client.emit(ClientEvent.Event, reply);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(reply.getEffectiveEvent());
+        });
+
         it("feeds decrypted events asynchronously", async () => {
             const event1Encrypted = new MatrixEvent({
                 event_id: event1.getId(),
