@@ -564,7 +564,15 @@ export class ElementWidgetDriver extends WidgetDriver {
                     const content = userContentMap[deviceId];
                     const stringifiedContent = JSON.stringify(content);
                     invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
-                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    // "*" means every device, which the server expands for plaintext sends
+                    // but we have to for encrypted ones
+                    const deviceIds =
+                        deviceId === "*"
+                            ? [...((await crypto.getUserDeviceInfo([userId], true)).get(userId)?.keys() ?? [])]
+                            : [deviceId];
+                    for (const deviceId of deviceIds) {
+                        invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    }
                 }
             }
 
