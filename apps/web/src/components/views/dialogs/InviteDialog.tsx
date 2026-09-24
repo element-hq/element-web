@@ -585,8 +585,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         // debounce, once the new config has been committed to state).
         this.setState({ dirConfig: config, serverResultsMixin: [] }, () => {
             if (this.state.filterText) {
-                this.updateSuggestions(this.state.filterText);
-                this.updateSuggestions.flush();
+                void this.updateSuggestions(this.state.filterText);
+                void this.updateSuggestions.flush();
             }
         });
     };
