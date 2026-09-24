@@ -230,6 +230,7 @@ export interface Settings {
     "feature_render_reaction_images": IFeature;
     "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
+    "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
@@ -313,6 +314,7 @@ export interface Settings {
     "blacklistUnverifiedDevices": IBaseSetting<boolean>;
     "urlPreviewsEnabled": IBaseSetting<boolean>;
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
+    "urlPreviewsEnabled_e2ee_bundled_only": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
     "notificationSound": IBaseSetting<NotificationSound | false>;
@@ -633,6 +635,15 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
+    "feature_new_timeline": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|new_timeline"),
+        description: _td("labs|currently_experimental"),
+        isFeature: true,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -772,7 +783,7 @@ export const SETTINGS: Settings = {
             true,
             true,
         ),
-        default: false,
+        default: true,
     },
     "feature_retention": {
         isFeature: true,
@@ -1148,6 +1159,19 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|inline_url_previews_encrypted"),
         default: false,
         controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
+    },
+    "urlPreviewsEnabled_e2ee_bundled_only": {
+        // Can only be enabled per-device to ensure neither the homeserver nor client config
+        // can impact the user's choices.
+        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_encrypted_bundled_only"),
+        default: true,
+        controller: new RequiresSettingsController([
+            UIFeature.URLPreviews,
+            "feature_msc4095_url_preview_bundle",
+            "urlPreviewsEnabled_e2ee",
+        ]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

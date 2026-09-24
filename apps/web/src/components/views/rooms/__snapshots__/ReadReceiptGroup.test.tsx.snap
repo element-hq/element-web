@@ -2,16 +2,16 @@
 
 exports[`ReadReceiptGroup > <ReadReceiptPerson /> > should display a tooltip 1`] = `
 <div
-  class="_tooltip_1nqnq_8"
+  class="_tooltip_6bwuf_8"
   data-floating-ui-focusable=""
   id="react-use-id-1"
   role="tooltip"
-  style="position: absolute; left: 0px; top: 0px; transform: translate(5px, -6px);"
+  style="position: absolute; left: 0px; top: 0px; max-width: 580px; transform: translate(5px, -6px);"
   tabindex="-1"
 >
   <svg
     aria-hidden="true"
-    class="_arrow_1nqnq_33"
+    class="_arrow_6bwuf_41"
     height="10"
     style="position: absolute; pointer-events: none; top: 100%; left: -1px;"
     viewBox="0 0 10 10"
@@ -33,12 +33,14 @@ exports[`ReadReceiptGroup > <ReadReceiptPerson /> > should display a tooltip 1`]
     </clippath>
   </svg>
   <span
+    class="_clamp_6bwuf_28"
     id="react-use-id-3"
+    style="--cpd-tooltip-max-lines: 2;"
   >
     Alice
   </span>
   <span
-    class="_caption_1nqnq_28 cpd-theme-dark"
+    class="_caption_6bwuf_36 cpd-theme-dark"
     id="react-use-id-4"
   >
     @alice:example.org

@@ -1,3 +1,48 @@
+Changes in [1.12.29](https://github.com/element-hq/element-web/releases/tag/v1.12.29) (2026-09-22)
+==================================================================================================
+Update modules in element-web modules Docker image
+
+Changes in [1.12.28](https://github.com/element-hq/element-web/releases/tag/v1.12.28) (2026-09-16)
+==================================================================================================
+## ⚠️ Important
+
+Desktop releases now require glibc 2.34, ie. Debian bookworm or Ubuntu 22.04. Support for Debian bullseye and Ubuntu earlier than 22.04 has been dropped since Debian bullseye's LTS support period has now ended. If you are running a version of these OSes for which support has been dropped (or another distribution using glibc earlier than 2.34) you will need to upgrade your OS to continue using Element Desktop.
+
+## Security
+
++ Fix GHSA-wqmv-r2qj-2j9p
+
+## ✨ Features
+
+* Add analytics for uploads ([#33846](https://github.com/element-hq/element-web/pull/33846)). Contributed by @Half-Shot.
+* Module API for overriding URL Preview results ([#34877](https://github.com/element-hq/element-web/pull/34877)). Contributed by @Half-Shot.
+* Room list: add an Invites section ([#34736](https://github.com/element-hq/element-web/pull/34736)). Contributed by @florianduros.
+* Room list: collapse sections when a room is dragged ([#34290](https://github.com/element-hq/element-web/pull/34290)). Contributed by @florianduros.
+* Show an image you just uploaded without downloading it again ([#34753](https://github.com/element-hq/element-web/pull/34753)). Contributed by @hayaksi1.
+* Add warning the public rooms are open for users outside the organisation ([#34876](https://github.com/element-hq/element-web/pull/34876)). Contributed by @mxandreas.
+* Room list: add a default people section ([#34713](https://github.com/element-hq/element-web/pull/34713)). Contributed by @florianduros.
+* Handle home \& welcome page anchor links in-tab ([#34873](https://github.com/element-hq/element-web/pull/34873)). Contributed by @t3chguy.
+* Add user status in timeline pills ([#34832](https://github.com/element-hq/element-web/pull/34832)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Don't restart the app when clearing data ([#34972](https://github.com/element-hq/element-web/pull/34972)). Contributed by @dbkr.
+* Remove the "Manage account" button from the user menu ([#34966](https://github.com/element-hq/element-web/pull/34966)). Contributed by @langleyd.
+* Bump minimum glibc level to 2.35 ([#34964](https://github.com/element-hq/element-web/pull/34964)). Contributed by @Half-Shot.
+* Validate that the /query argument is a Matrix user ID ([#34473](https://github.com/element-hq/element-web/pull/34473)). Contributed by @hayaksi1.
+* Load room list sections only when matrix client is ready ([#34937](https://github.com/element-hq/element-web/pull/34937)). Contributed by @florianduros.
+* Fix module composer upload options appearing twice ([#34920](https://github.com/element-hq/element-web/pull/34920)). Contributed by @Half-Shot.
+* Respect reduced motion preference for read marker transition ([#34927](https://github.com/element-hq/element-web/pull/34927)). Contributed by @t3chguy.
+* Test that disabled client well-known lookups make no network request ([#34923](https://github.com/element-hq/element-web/pull/34923)). Contributed by @langleyd.
+* Add a wait for first sync before showing the Home screen ([#34874](https://github.com/element-hq/element-web/pull/34874)). Contributed by @Half-Shot.
+* Add multi-digit support for overlay badges and tests ([#33637](https://github.com/element-hq/element-web/pull/33637)). Contributed by @langleyd.
+* Fix space hierarchy checkboxes not working on click ([#34860](https://github.com/element-hq/element-web/pull/34860)). Contributed by @t3chguy.
+* Exporter: replace naming logic with eventId + MIME-based extensions ([#33699](https://github.com/element-hq/element-web/pull/33699)). Contributed by @Marcool04.
+* Say when a spotlight search found nothing instead of selecting a filter ([#34641](https://github.com/element-hq/element-web/pull/34641)). Contributed by @hayaksi1.
+* Report a failure to update notification settings to the user ([#34521](https://github.com/element-hq/element-web/pull/34521)). Contributed by @hayaksi1.
+* Stop blaming permissions when the homeserver refuses an invite ([#34590](https://github.com/element-hq/element-web/pull/34590)). Contributed by @hayaksi1.
+
+
 Changes in [1.12.27](https://github.com/element-hq/element-web/releases/tag/v1.12.27) (2026-09-01)
 ==================================================================================================
 ## ✨ Features

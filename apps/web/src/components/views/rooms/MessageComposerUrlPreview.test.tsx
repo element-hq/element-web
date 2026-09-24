@@ -8,15 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, waitFor } from "test-utils-rtl";
 import { test, describe, beforeEach, expect, vi, afterEach } from "vitest";
+import { getMockClientWithEventEmitter, getRoomContext, mkRoom, mockClientMethodsUser } from "test-utils";
+import type { I18nApi } from "@element-hq/element-web-module-api";
 
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
-import {
-    getMockClientWithEventEmitter,
-    getRoomContext,
-    mkRoom,
-    mockClientMethodsUser,
-} from "../../../../test/test-utils";
-import type { I18nApi } from "@element-hq/element-web-module-api";
 import type { ModuleApi } from "../../../modules/Api";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext";
@@ -45,7 +40,6 @@ function getUrlPreviewVm(client: MatrixClient, content?: string): MessageCompose
         client,
         visible: true,
         showTooltips: false,
-        urlPreviewBundle: false,
         moduleUrlPreviewApi: new UrlPreviewApi(),
     };
 
