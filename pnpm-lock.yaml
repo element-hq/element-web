@@ -261,8 +261,8 @@ catalogs:
       specifier: 7.0.2
       version: 7.0.2
     unplugin-dts:
-      specifier: 1.1.0
-      version: 1.1.0
+      specifier: 1.1.1
+      version: 1.1.1
     vite:
       specifier: 8.3.0
       version: 8.3.0
@@ -363,7 +363,7 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/b7bd7d18b2530c54dd3dc4aa4fd62d44193ddafe#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
@@ -662,7 +662,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8f2f6d6a24a9b8e71b00892fe82dd52ea24e413
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c0cf1015980b48a6f1332701cd731740d3f58272
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.19.0
@@ -1307,7 +1307,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
+        version: 1.1.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
       vite:
         specifier: 'catalog:'
         version: 8.3.0(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -1534,7 +1534,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
+        version: 1.1.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
       vite:
         specifier: 'catalog:'
         version: 8.3.0(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -1574,7 +1574,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       unplugin-dts:
         specifier: 'catalog:'
-        version: 1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
+        version: 1.1.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1)
       vite:
         specifier: 'catalog:'
         version: 8.3.0(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1)(terser@5.51.2)(yaml@2.9.0)
@@ -8345,8 +8345,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-RXdh6RHKmjmU7OT8PtWgwTWbyEZK+sRVqY6yf2Z4OjyazH/lsIoE/pO53YMyJCvng5HLJlRkWlcqDMyeHzHGQg==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b7bd7d18b2530c54dd3dc4aa4fd62d44193ddafe#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-fonV8VYQ9cUh/ewDljb6cc+zmZM3I7a8bzhg40jVJ4Q6O9cthD2otW7M1Mwp8dKHYDR/XS11BtryukpZKzae4A==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/b7bd7d18b2530c54dd3dc4aa4fd62d44193ddafe}
     version: 0.0.0
 
   eslint-plugin-storybook@10.6.0:
@@ -9713,8 +9713,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8f2f6d6a24a9b8e71b00892fe82dd52ea24e413:
-    resolution: {gitHosted: true, integrity: sha512-sYTBts/2mZ1/WeT3FbJQSlg2gl9p/E13ysJ2/VEwfEXaiB15SVGUqivBdM47YKw0/JMSIWZsGkhZupa67ohLqA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8f2f6d6a24a9b8e71b00892fe82dd52ea24e413}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c0cf1015980b48a6f1332701cd731740d3f58272:
+    resolution: {gitHosted: true, integrity: sha512-lufazr4HEXzQQiQDSbA1LWoiil50E8FRxrE5NMW9x/UeFpo+88x/ixiGdJvXw9FAoaarRx9gozNx4pxb2cNxjA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c0cf1015980b48a6f1332701cd731740d3f58272}
     version: 42.3.0
     engines: {node: '>=22.0.0'}
 
@@ -12388,8 +12388,8 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unplugin-dts@1.1.0:
-    resolution: {integrity: sha512-KZJ+qk+lmd9dJY/PJvDRFL9BUtVubKDiX7Ai/X6mlkCArcQNzwmupKjVqHbRA42uqO5ZfFRFc+o8/OCbQ1GonQ==}
+  unplugin-dts@1.1.1:
+    resolution: {integrity: sha512-Z2VcabC0hjYuzF62oWmZXVoxagkM8bUWgqUy+dotoJTPnooR5mNaxbpv63JCmcaxdGCW2Bb75omK6FOryOYCRg==}
     peerDependencies:
       '@microsoft/api-extractor': '>=7'
       '@rspack/core': ^1
@@ -20543,7 +20543,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ac1f5e2c8c6e0bef955317246bab453ef6205174#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b7bd7d18b2530c54dd3dc4aa4fd62d44193ddafe#path:/eslint: {}
 
   eslint-plugin-storybook@10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
     dependencies:
@@ -22018,7 +22018,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8f2f6d6a24a9b8e71b00892fe82dd52ea24e413:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c0cf1015980b48a6f1332701cd731740d3f58272:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.7.0
@@ -25156,7 +25156,7 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-dts@1.1.0(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1):
+  unplugin-dts@1.1.1(@microsoft/api-extractor@7.59.0)(@typescript/typescript6@6.0.2)(esbuild@0.27.4)(rolldown@1.2.9)(rollup@4.60.1)(supports-color@10.2.2)(vite@8.3.0)(webpack@5.111.1):
     dependencies:
       '@rollup/pluginutils': 5.4.0(rollup@4.60.1)
       '@volar/typescript': 2.4.28(@typescript/typescript6@6.0.2)
