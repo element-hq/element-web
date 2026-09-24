@@ -941,6 +941,12 @@
 
     &.stateOwnEvent .slotFooter {
         justify-content: flex-end;
+
+        /* The footer is right-aligned, so the reactions row must put its
+           add-reaction control at the start. Left at the end it reserves space
+           between the reactions and the bubble edge even while hidden, and the
+           reactions stop short of the bubble. */
+        --event-tile-reactions-add-button-order: -1;
     }
 
     &.stateOwnEvent .slotThreadInfo {
