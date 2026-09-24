@@ -914,30 +914,28 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             let content: JSX.Element | JSX.Element[];
             const locationOptions =
                 selectedInstance && thirdPartyLocations.length
-                    ? thirdPartyLocations.map(
-                          (location): JSX.Element => (
-                              <Option
-                                  id={`mx_SpotlightDialog_button_result_${location.alias}`}
-                                  key={location.alias}
-                                  onClick={(ev) => {
-                                      defaultDispatcher.dispatch<ViewRoomPayload>({
-                                          action: Action.ViewRoom,
-                                          room_alias: location.alias,
-                                          auto_join: true,
-                                          via_servers: config ? [config.roomServer] : undefined,
-                                          metricsTrigger: "WebUnifiedSearch",
-                                          metricsViaKeyboard: ev?.type !== "click",
-                                      });
-                                      onFinished();
-                                  }}
-                              >
-                                  <RoomIcon />
-                                  {_t("spotlight_dialog|join_button_text", {
-                                      roomAddress: location.alias,
-                                  })}
-                              </Option>
-                          ),
-                      )
+                    ? thirdPartyLocations.map((location): JSX.Element => (
+                          <Option
+                              id={`mx_SpotlightDialog_button_result_${location.alias}`}
+                              key={location.alias}
+                              onClick={(ev) => {
+                                  defaultDispatcher.dispatch<ViewRoomPayload>({
+                                      action: Action.ViewRoom,
+                                      room_alias: location.alias,
+                                      auto_join: true,
+                                      via_servers: config ? [config.roomServer] : undefined,
+                                      metricsTrigger: "WebUnifiedSearch",
+                                      metricsViaKeyboard: ev?.type !== "click",
+                                  });
+                                  onFinished();
+                              }}
+                          >
+                              <RoomIcon />
+                              {_t("spotlight_dialog|join_button_text", {
+                                  roomAddress: location.alias,
+                              })}
+                          </Option>
+                      ))
                     : [];
             if (publicRoomsError) {
                 // A third-party location hit is independent of the room list; keep
