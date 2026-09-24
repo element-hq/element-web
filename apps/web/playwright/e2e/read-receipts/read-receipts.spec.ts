@@ -310,7 +310,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             new RegExp(`http://localhost:\\d+/_matrix/client/v3/rooms/${uriEncodedOtherRoomId}/read_markers`),
         );
 
-        await page.getByRole("button", { name: "Jump to first unread message." }).click();
+        await page.getByRole("button", { name: "Scroll to first unread message." }).click();
 
         const readMarkersRequest = await readMarkersRequestPromise;
         // since this is not pixel perfect,
