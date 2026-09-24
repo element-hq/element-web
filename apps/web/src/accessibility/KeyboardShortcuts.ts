@@ -77,6 +77,19 @@ export enum KeyBindingAction {
     /** Expand room list section, if already expanded, jump to first room in the selection */
     ExpandRoomListSection = "KeyBinding.expandSectionInRoomList",
 
+    // The following five are handled by react-resizable-panels inside SeparatorView, not by
+    // KeyBindingsManager. They only act while the resize handle itself has focus.
+    /** Hide or show the room list panel */
+    ToggleRoomListPanel = "KeyBinding.toggleRoomListPanel",
+    /** Make the room list panel narrower */
+    ShrinkRoomListPanel = "KeyBinding.shrinkRoomListPanel",
+    /** Make the room list panel wider */
+    GrowRoomListPanel = "KeyBinding.growRoomListPanel",
+    /** Hide the room list panel */
+    CollapseRoomListPanel = "KeyBinding.collapseRoomListPanel",
+    /** Show the room list panel at its full width */
+    ExpandRoomListPanel = "KeyBinding.expandRoomListPanel",
+
     /** Scroll up in the timeline */
     ScrollUp = "KeyBinding.scrollUpInTimeline",
     /** Scroll down in the timeline */
@@ -254,6 +267,11 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ExpandRoomListSection,
             KeyBindingAction.NextRoom,
             KeyBindingAction.PrevRoom,
+            KeyBindingAction.ToggleRoomListPanel,
+            KeyBindingAction.ShrinkRoomListPanel,
+            KeyBindingAction.GrowRoomListPanel,
+            KeyBindingAction.CollapseRoomListPanel,
+            KeyBindingAction.ExpandRoomListPanel,
         ],
     },
     [CategoryName.ACCESSIBILITY]: {
