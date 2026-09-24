@@ -24,7 +24,7 @@ describe("RoomTombstoneCallTileViewModel", () => {
 
     it("falls back to origin_server_ts when the notification has no sender_ts", () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
-        mxEvent.getContent = () => ({});
+        mxEvent.getContent = <T>(): T => ({}) as T;
         const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
     });
