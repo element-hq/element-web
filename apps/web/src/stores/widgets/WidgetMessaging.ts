@@ -550,6 +550,14 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     /**
+     * Thread replies live in the thread's timeline, not the room's, so the
+     * "read up to" marker below can never place them and would drop them.
+     */
+    private isThreadReply(ev: MatrixEvent): boolean {
+        return ev.threadRootId !== undefined && ev.threadRootId !== ev.getId();
+    }
+
+    /**
      * Determines whether the event comes from a room that we've been invited to
      * (in which case we likely don't have the full timeline).
      */
@@ -612,6 +620,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // events are not added to the timeline here and will be ignored otherwise:
             // https://github.com/matrix-org/matrix-js-sdk/blob/d3dfcd924201d71b434af3d77343b5229b6ed75e/src/models/room.ts#L2207-L2213
             this.relatesToUnknown(ev) ||
+            this.isThreadReply(ev) ||
             // Skip marker timeline check for rooms where membership is
             // 'invite', otherwise the membership event from the invitation room
             // will advance the marker and new state events will not be
