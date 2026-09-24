@@ -770,7 +770,7 @@ describe("Spotlight Dialog", () => {
                 rooms: [],
                 thirdPartyProtocols: xmppProtocols,
             });
-            mockedClient.getThirdpartyLocation = jest
+            mockedClient.getThirdpartyLocation = vi
                 .fn()
                 .mockResolvedValue([{ alias: "#_xmpp_room:example.tld", protocol: "xmpp", fields: {} }]);
 
@@ -781,14 +781,14 @@ describe("Spotlight Dialog", () => {
                     onFinished={() => null}
                 />,
             );
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             // Pick the XMPP network from the directory dropdown
             fireEvent.click(screen.getByText(/^Show: Matrix rooms/));
             await flushPromisesWithFakeTimers();
             fireEvent.click(screen.getByText("XMPP"));
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
             expect(mockedClient.getThirdpartyLocation).toHaveBeenCalledWith("xmpp", {
