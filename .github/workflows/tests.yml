@@ -128,6 +128,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
                   fetch-depth: 0 # Full history, fastest for diff-cover
 

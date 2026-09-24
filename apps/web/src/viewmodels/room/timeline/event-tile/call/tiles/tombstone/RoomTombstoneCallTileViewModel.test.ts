@@ -22,6 +22,13 @@ describe("RoomTombstoneCallTileViewModel", () => {
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
     });
 
+    it("falls back to origin_server_ts when the notification has no sender_ts", () => {
+        const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
+        mxEvent.getContent = () => ({});
+        const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
+        expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
+    });
+
     it("should calculate time string correctly when configured to use 12 hour format", async () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
         await SettingsStore.setValue("showTwelveHourTimestamps", null, SettingLevel.DEVICE, true);
