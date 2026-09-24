@@ -235,6 +235,10 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(
                 WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rtc.recording.status").raw,
             );
+            // The room's security label policy, for the call's classification banner
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, "io.element.security_labels").raw,
+            );
 
             const sendRecvToDevice = [
                 EventType.CallInvite,
