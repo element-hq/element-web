@@ -42,6 +42,10 @@ import styles from "./TimelineView.module.css";
  *  - **New messages arrive at the bottom.** `followOnAppend` scrolls down to keep them in
  *    view, but only when we are already at the live end and not jumping somewhere else.
  *
+ *  - **The viewport changes height** while the reader is at the bottom (the composer grows, a
+ *    banner appears, the window resizes). The browser keeps `scrollTop`, not the distance from
+ *    the bottom, so the newest message would be cut off; `stayAtBottomOnResize` keeps it in view.
+ *
  *  - **Reaching either end**, which is the cue to load more, is worked out from which rows
  *    are currently rendered. TanStack has no "you reached the top/bottom" callback.
  *
@@ -143,6 +147,8 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // hold the last values we sent and repeats are skipped.
     const lastVisibleRangeRef = useRef<{ start: number; end: number } | null>(null);
     const lastAtBottomRef = useRef<boolean | null>(null);
+    // Viewport height at the last at-bottom check, to spot a resize.
+    const lastViewportHeightRef = useRef<number | null>(null);
     // For the "reached the top/bottom" reports we remember a short description of the
     // situation we last reported, in the form "<number of rows>:<row index>", and clear it
     // whenever we move away from that end. This stops us reporting over and over while
@@ -182,8 +188,15 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             const scrollOffset = v.scrollOffset ?? 0;
             const viewportHeight = v.scrollRect?.height ?? 0;
             const totalSize = v.getTotalSize();
+            // Just after a resize, TanStack still has the old scroll offset, so it would briefly
+            // report "not at the bottom" while the resize handler below scrolls back down. Skip
+            // that one.
+            const viewportResized =
+                lastViewportHeightRef.current !== null && lastViewportHeightRef.current !== viewportHeight;
+            lastViewportHeightRef.current = viewportHeight;
             const atBottom = viewportHeight > 0 && scrollOffset + viewportHeight >= totalSize - AT_BOTTOM_THRESHOLD_PX;
-            if (atBottom !== lastAtBottomRef.current) {
+            const returningToBottom = viewportResized && lastAtBottomRef.current === true && !atBottom;
+            if (!returningToBottom && atBottom !== lastAtBottomRef.current) {
                 lastAtBottomRef.current = atBottom;
                 vm.onAtBottomStateChange(atBottom);
             }
@@ -343,6 +356,33 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             }
         }
     });
+
+    // ─── Stay at the bottom when the viewport changes height ───────────────────
+    // The old ScrollPanel scrolled back to the bottom on every resize; this does the same.
+    // Whether the reader was at the bottom is judged with the height from *before* the change,
+    // since a resize leaves `scrollTop` and `scrollHeight` alone. Rows changing size are
+    // TanStack's job (see `scrollEndThreshold` above).
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller || typeof ResizeObserver === "undefined") return;
+        let lastHeight = scroller.clientHeight;
+        const stayAtBottomOnResize = (): void => {
+            const height = scroller.clientHeight;
+            const previousHeight = lastHeight;
+            lastHeight = height;
+            if (height === previousHeight) return;
+            // The first load and any jump own the scroll position until they finish.
+            if (phaseRef.current !== "live" || snapshotRef.current.pendingAnchor !== null) return;
+            const wasAtBottom = scroller.scrollHeight - scroller.scrollTop - previousHeight <= AT_BOTTOM_THRESHOLD_PX;
+            if (!wasAtBottom) return;
+            // Assigning scrollHeight lands flush even with a fractional height; TanStack picks
+            // the move up from the scroll event.
+            scroller.scrollTop = scroller.scrollHeight;
+        };
+        const observer = new ResizeObserver(stayAtBottomOnResize);
+        observer.observe(scroller);
+        return () => observer.disconnect();
+    }, []);
 
     // Handed to the overlay buttons, and through them to the view model, so it can scroll
     // us straight away when the message it wants is already loaded — no fetch needed, and
