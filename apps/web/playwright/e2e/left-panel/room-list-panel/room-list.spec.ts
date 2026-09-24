@@ -121,7 +121,7 @@ test.describe("Room list", () => {
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options.png");
 
             // It should make the room muted
-            await page.getByRole("menuitem", { name: "Mute room" }).click();
+            await page.getByRole("menuitemradio", { name: "Mute room" }).click();
 
             // Put focus on the room list
             await roomListView.getByRole("option", { name: "Open room room28" }).click();
@@ -142,7 +142,10 @@ test.describe("Room list", () => {
             await roomItemMenu.click();
 
             // The Mute room option should be selected
-            await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
+            await expect(page.getByRole("menuitemradio", { name: "Mute room" })).toHaveAttribute(
+                "aria-selected",
+                "true",
+            );
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
         });
 

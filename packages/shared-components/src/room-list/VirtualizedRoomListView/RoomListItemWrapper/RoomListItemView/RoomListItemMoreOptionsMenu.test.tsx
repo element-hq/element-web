@@ -260,7 +260,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         expect(favouriteItem).toBeInTheDocument();
         expect(favouriteItem).toHaveAttribute("aria-checked", "false");
 
-        const workItem = screen.getByRole("menuitem", { name: "Work" });
+        const workItem = screen.getByRole("menuitemradio", { name: "Work" });
         expect(workItem).toBeInTheDocument();
         expect(workItem).toHaveAttribute("aria-checked", "true");
 
@@ -282,7 +282,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         };
         render(<TestComponent />);
 
-        const workItem = screen.getByRole("menuitem", { name: "Work" });
+        const workItem = screen.getByRole("menuitemradio", { name: "Work" });
         await user.click(workItem);
 
         expect(mockCallbacks.onToggleSection).toHaveBeenCalledWith("element.io.section.custom1");
