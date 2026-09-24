@@ -6,14 +6,15 @@
  */
 
 import { BaseCollapseBehaviour } from "./BaseCollapseBehaviour";
-import type { Call } from "../../../../models/Call";
+import { type Call, ElementCall } from "../../../../models/Call";
 import { type CallStore, CallStoreEvent } from "../../../../stores/CallStore";
 import type { CollapseHandler } from "../CollapseHandler";
 
 /**
  * This behaviour:
- * - Collapses the left-panel when the user joins a call.
+ * - Collapses the left-panel when the user joins a video call.
  * - Expands the left-panel when the user leaves that call.
+ * A voice call has no video to make room for, so it leaves the panel alone.
  */
 export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
     private callJustStarted: boolean = false;
@@ -29,6 +30,7 @@ export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
 
     private onCallConnected = (calls: Set<Call>): void => {
         if (calls.size > 0) {
+            if ([...calls].every(isVoiceOnly)) return;
             this.setCallJustStarted();
             this.collapseHandler.collapse();
         } else if (calls.size === 0) this.collapseHandler.expand();
@@ -56,4 +58,8 @@ export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
     public dispose = (): void => {
         this.callStore.off(CallStoreEvent.ConnectedCalls, this.onCallConnected);
     };
+}
+
+function isVoiceOnly(call: Call): boolean {
+    return call instanceof ElementCall && !!call.widgetGenerationParameters.voiceOnly;
 }
