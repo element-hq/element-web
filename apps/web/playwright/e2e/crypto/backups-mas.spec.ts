@@ -51,7 +51,8 @@ test.describe("Encryption state after registration", () => {
 
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
@@ -83,7 +84,8 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("test room");

@@ -21,7 +21,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders Default story 
         role="option"
         tabindex="0"
       >
-        Unreads
+        Unread
       </button>
       <button
         aria-hidden="false"
@@ -67,7 +67,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders Default story 
 exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContainer story 1`] = `
 <div>
   <div
-    style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
+    style="width: 170px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
   >
     <div
       class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
@@ -133,7 +133,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContaine
           role="option"
           tabindex="0"
         >
-          Unreads
+          Unread
         </button>
       </div>
     </div>
@@ -144,7 +144,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContaine
 exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActiveWrappingFilter story 1`] = `
 <div>
   <div
-    style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
+    style="width: 170px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
   >
     <div
       class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
@@ -191,7 +191,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActi
           role="option"
           tabindex="0"
         >
-          Unreads
+          Unread
         </button>
         <button
           aria-selected="false"
@@ -254,7 +254,7 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders PeopleSelected
         role="option"
         tabindex="0"
       >
-        Unreads
+        Unread
       </button>
       <button
         aria-hidden="false"

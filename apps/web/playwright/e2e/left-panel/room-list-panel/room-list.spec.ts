@@ -355,7 +355,8 @@ test.describe("Room list", () => {
         test("should be a video room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
                 .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("video room");
