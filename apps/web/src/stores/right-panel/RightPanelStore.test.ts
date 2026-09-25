@@ -153,7 +153,7 @@ describe("RightPanelStore", () => {
 
             /** The viewer sits behind a lab, so the card is only valid while that is on. */
             const setPdfViewerLab = (enabled: boolean): Promise<void> =>
-                SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, enabled);
+                SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, enabled);
 
             it("drops a card with no event to display", async () => {
                 await setPdfViewerLab(true);
@@ -205,7 +205,7 @@ describe("RightPanelStore", () => {
 
             /** The viewer sits behind a lab, so the card is only valid while that is on. */
             const setMarkdownViewerLab = (enabled: boolean): Promise<void> =>
-                SettingsStore.setValue("feature_markdown_viewer", null, SettingLevel.DEVICE, enabled);
+                SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, enabled);
 
             it("drops a card with no event to display", async () => {
                 await setMarkdownViewerLab(true);

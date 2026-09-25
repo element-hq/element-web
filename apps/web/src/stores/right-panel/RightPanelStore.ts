@@ -401,14 +401,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
             case RightPanelPhases.PdfViewer:
                 // Also drop a card stored before the lab was turned off, so disabling it closes any
                 // viewer that was left open rather than restoring it on the next load.
-                if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
+                if (!SettingsStore.getValue("feature_document_previews")) return false;
                 if (!card.state?.pdfViewerEvent) {
                     logger.warn("removed card from right panel because of missing pdfViewerEvent in card state");
                 }
                 return !!card.state?.pdfViewerEvent;
             case RightPanelPhases.MarkdownViewer:
                 // As for the PDF viewer: turning the lab off closes any viewer that was left open.
-                if (!SettingsStore.getValue("feature_markdown_viewer")) return false;
+                if (!SettingsStore.getValue("feature_document_previews")) return false;
                 if (!card.state?.markdownViewerEvent) {
                     logger.warn("removed card from right panel because of missing markdownViewerEvent in card state");
                 }

@@ -171,7 +171,7 @@ describe("RightPanel", () => {
         });
 
         // The card is only valid while the lab is on, so the store would otherwise drop it.
-        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, true);
 
         await spinUpStores();
 
@@ -216,7 +216,7 @@ describe("RightPanel", () => {
         });
 
         // The card is only valid while the lab is on, so the store would otherwise drop it.
-        await SettingsStore.setValue("feature_markdown_viewer", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, true);
 
         await spinUpStores();
 

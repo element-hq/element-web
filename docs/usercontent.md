@@ -28,7 +28,7 @@ It is expected that this target be available at `usercontent/` relative to the r
 
 ## PDF viewer
 
-The PDF viewer (behind the `feature_pdf_viewer` lab) renders documents with [pdf.js](https://mozilla.github.io/pdf.js/),
+The PDF viewer (behind the `feature_document_previews` lab) renders documents with [pdf.js](https://mozilla.github.io/pdf.js/),
 using the same technique: the document is drawn inside a second usercontent target, expected at `usercontent/pdf/`
 relative to the root of the app, embedded as an iframe with `sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"`.
 Without `allow-same-origin` the iframe gets an opaque origin, so everything pdf.js builds from the untrusted
