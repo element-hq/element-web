@@ -308,8 +308,8 @@
                 "room": {
                     "join_count": {
                         "one": "%(count)s dołączyła",
-                        "few": "%(count)s dołączyło",
-                        "many": "%(count)s dołączyło"
+                        "few": "%(count)s dołączyły",
+                        "many": "%(count)s dołączyły"
                     },
                     "title": "Trwa połączenie grupowe"
                 }
@@ -377,7 +377,10 @@
                 "few": "Pokaż %(count)s inne podglądy",
                 "many": "Pokaż %(count)s innych podglądów"
             },
-            "view_image": "Wyświetl obraz"
+            "view_audio": "Wyświetl dźwięk",
+            "view_file": "Wyświetl plik",
+            "view_image": "Wyświetl obraz",
+            "view_video": "Wyświetl wideo"
         }
     },
     "user_menu": {

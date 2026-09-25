@@ -6,7 +6,7 @@
             "other": "%(count)s 条未读消息。"
         },
         "n_unread_messages_mentions": {
-            "other": "%(count)s 条包含提及在内的未读消息"
+            "other": "%(count)s 条未读消息（含提及）"
         },
         "room_status_bar": "房间状态栏",
         "seek_bar_label": "音频搜索栏",
@@ -94,7 +94,7 @@
         "resume": "恢复",
         "retry": "重试",
         "review": "审阅",
-        "revoke": "撤消",
+        "revoke": "撤销",
         "save": "保存",
         "search": "搜索",
         "send_report": "发送举报",
@@ -136,10 +136,10 @@
         "accept_button": "良好",
         "bullet_1": "我们<Bold>不</Bold>记录或分析任何个人数据",
         "bullet_2": "我们<Bold>不</Bold>分享数据给第三方",
-        "consent_migration": "你已于之前同意我们分享匿名使用情况数据。我们正在更新其运作方式。",
+        "consent_migration": "你此前已同意与我们共享匿名使用数据。我们正在更新相关机制。",
         "disable_prompt": "你可以随时在设置中关闭此选项。",
         "enable_prompt": "帮助改进 %(analyticsOwner)s",
-        "learn_more": "分享匿名数据已帮助我们识别问题。不涉及个人隐私及第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
+        "learn_more": "共享匿名数据以帮助我们发现问题。不涉及个人隐私及第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
         "privacy_policy": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们的所有条款",
         "pseudonymous_usage_data": "通过分享匿名使用数据，帮助我们发现问题并改进 %(analyticsOwner)s。为了解用户如何使用多台设备，我们将生成一个由你的设备共享的随机标识符。",
         "shared_data_heading": "以下任何数据都可能被分享："
@@ -163,7 +163,7 @@
         "autodiscovery_unexpected_error_is": "解析身份服务器配置时出现未知错误",
         "captcha_description": "你的账户提供者需要确认你是否为机器人。",
         "change_password_action": "更改密码",
-        "change_password_confirm_invalid": "两次输入的密码不匹配",
+        "change_password_confirm_invalid": "密码不一致",
         "change_password_confirm_label": "确认密码",
         "change_password_current_label": "当前密码",
         "change_password_empty": "密码不能为空",
@@ -202,13 +202,13 @@
         "forgot_password_send_email": "发送邮件",
         "identifier_label": "登录选项",
         "incorrect_credentials": "用户名或密码错误。",
-        "incorrect_credentials_detail": "请留意你登录的服务器为 %(hs)s 而不是 matrix.org",
+        "incorrect_credentials_detail": "请注意，您正在登录的是 %(hs)s 服务器，而非 matrix.org。",
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
             "description": "你确定要移除此设备？",
             "setup_key_backup_title": "你即将失去加密聊天的访问权",
-            "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时你需要使用恢复密钥验证数字身份并恢复加密聊天。",
+            "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
         },
         "misconfigured_body": "请 %(brand)s 的管理员检查<a>你的配置</a>中是否存在错误或重复的条目。",
@@ -1090,9 +1090,9 @@
         "verification_requested_toast_title": "请求验证",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
-        "verify_toast_description": "自 2026 年 10 月起，未经验证的设备将无法发送与接收消息。<a>了解更多</a>",
+        "verify_toast_description": "未经验证的设备即将无法发送与接收消息。<a>了解更多</a>",
         "verify_toast_title": "验证此设备",
-        "withdraw_verification_action": "撤消验证"
+        "withdraw_verification_action": "撤销验证"
     },
     "error": {
         "admin_contact": "请<a>联系你的账户提供者</a>以继续使用此服务。",
@@ -1132,7 +1132,7 @@
         "unknown": "未知错误",
         "unknown_error_code": "未知错误代码",
         "update_history_visibility": "历史可见性更改失败",
-        "update_power_level": "权力值更改失败"
+        "update_power_level": "权力级别更改失败"
     },
     "error_app_open_in_another_tab": "切换到其它标签页以连接到 %(brand)s。现在可以关闭此标签页。",
     "error_app_open_in_another_tab_title": "%(brand)s 已在其它标签页中打开",
@@ -1324,7 +1324,7 @@
         "connecting": "正在连接到集成管理器…",
         "error_connecting": "集成管理器处于离线状态或其无法连接到你的主服务器。",
         "error_connecting_heading": "无法连接到集成管理器",
-        "explainer": "集成管理器可接收配置数据， 并可以代表你修改小部件、发送房间邀请与设置权力值。",
+        "explainer": "集成管理器可接收配置数据， 并可以代表你修改小部件、发送房间邀请与设置权力级别。",
         "manage_title": "管理集成",
         "toggle_label": "启用集成管理器",
         "use_im": "使用集成管理器管理机器人、小部件与贴纸包。",
@@ -1435,7 +1435,7 @@
         "composer_toggle_italics": "斜体",
         "composer_toggle_link": "超链接",
         "composer_toggle_quote": "引用",
-        "composer_undo": "撤消编辑",
+        "composer_undo": "撤销编辑",
         "control": "",
         "dismiss_read_marker_and_jump_bottom": "忽略已读标记并跳转到底部",
         "end": "",
@@ -1466,6 +1466,11 @@
         "room_list_expand_section": "展开房间列表部分",
         "room_list_navigate_down": "向下导航到房间列表",
         "room_list_navigate_up": "向上导航到房间列表",
+        "room_list_panel_collapse": "隐藏房间列表（当聚焦于调整控件时）",
+        "room_list_panel_expand": "全宽显示房间列表（当聚焦于调整控件时）",
+        "room_list_panel_grow": "使房间列表加宽（当聚焦于调整控件时）",
+        "room_list_panel_shrink": "使房间列表缩窄（当聚焦于调整控件时）",
+        "room_list_panel_toggle": "隐藏或显示房间列表（当聚焦于调整控件时）",
         "room_list_select_room": "从房间列表中选择房间",
         "save": "保存",
         "scroll_down_timeline": "向下滚动时间线",
@@ -1794,9 +1799,9 @@
         "admin": "管理员",
         "creator": "所有者",
         "custom": "自定义（%(level)s）",
-        "custom_level": "自定义权力值",
+        "custom_level": "自定义权力级别",
         "default": "默认",
-        "label": "权力值",
+        "label": "权力级别",
         "moderator": "协管员",
         "restricted": "已受限"
     },
@@ -1891,7 +1896,7 @@
             "reply_thread": "回复 <link>消息列中的消息</link>",
             "unpin_all": {
                 "button": "取消置顶所有消息",
-                "content": "确实要移除所有已置顶的消息？此操作无法撤消。",
+                "content": "确实要移除所有已置顶的消息？此操作无法撤销。",
                 "title": "取消置顶所有消息？"
             },
             "view": "在时间线中查看"
@@ -2245,10 +2250,10 @@
             "ban_reason": "理由",
             "banned_by": "已被 %(displayName)s 封禁",
             "banned_users_section": "已被封禁的用户",
-            "error_changing_pl_description": "更改用户权力值时出错。请确保你拥有足够的权限并重试。",
-            "error_changing_pl_reqs_description": "更改房间权力值要求时出错。请确保你拥有足够的权限并重试。",
-            "error_changing_pl_reqs_title": "更改权力值要求时出错",
-            "error_changing_pl_title": "更改权力值时出错",
+            "error_changing_pl_description": "更改用户权力级别时出错。请确保你拥有足够的权限并重试。",
+            "error_changing_pl_reqs_description": "更改房间权力级别要求时出错。请确保你拥有足够的权限并重试。",
+            "error_changing_pl_reqs_title": "更改权力级别要求时出错",
+            "error_changing_pl_title": "更改权力级别时出错",
             "error_unbanning": "解封失败",
             "events_default": "发送消息",
             "invite": "邀请用户",
@@ -2389,7 +2394,7 @@
         "error_missing_room_id_request": "请求中缺少“room_id”",
         "error_missing_user_id_request": "请求中缺少“user_id”",
         "error_permission": "你无权在此房间内执行此操作。",
-        "error_power_level_invalid": "权力值必须为正整数。",
+        "error_power_level_invalid": "权力级别必须为正整数。",
         "error_room_not_visible": "房间 %(roomId)s 不可见",
         "error_room_unknown": "无法识别此房间。",
         "error_send_request": "请求发送失败。",
@@ -2496,7 +2501,7 @@
                 "do_not_close_warning": "在重置完成之前请勿关闭此窗口",
                 "export_keys": "导出密钥",
                 "import_keys": "导入密钥",
-                "other_people_device_description": "警告：未向你明确验证（例如使用 Emoji）的用户、已验证用户的未验证设备都将不会收到你的加密消息。要使此更改生效需要重新启动应用程序。",
+                "other_people_device_description": "警告：未向你通过 Emoji 等方法明确验证的用户、已验证用户的未验证设备都将不会收到你的加密消息。此更改需要重启应用以生效。",
                 "other_people_device_label": "在加密房间中仅发送消息到已验证的用户",
                 "other_people_device_title": "其他人的设备",
                 "reset_identity": "重置数字身份",
@@ -2612,7 +2617,7 @@
             "error_password_change_title": "更改密码时出错",
             "error_password_change_unknown": "更改密码时出现未知错误 （%(stringifiedError)s）",
             "error_remove_3pid": "无法移除联系人信息",
-            "error_revoke_email_discovery": "无法撤消分享的邮件地址",
+            "error_revoke_email_discovery": "无法撤销分享的邮件地址",
             "error_revoke_msisdn_discovery": "无法找到与此电话号码对应的分享",
             "error_share_email_discovery": "无法分享邮件地址",
             "error_share_msisdn_discovery": "无法分享电话号码",
@@ -3068,7 +3073,7 @@
         "myroomnick": "仅更改我在当前房间内的显示名称",
         "nick": "更改显示名称",
         "no_active_call": "此房间没有活跃的通话",
-        "op": "设置用户的权力值",
+        "op": "设置用户的权力级别",
         "part_unknown_alias": "无法识别的房间地址：%(roomAlias)s",
         "plain": "作为纯文本发送消息，而不是将其解释为 Markdown",
         "query": "打开与指定用户的聊天",
@@ -3143,7 +3148,7 @@
         },
         "failed_load_rooms": "载入房间列表失败。",
         "failed_remove_rooms": "某些房间移除失败。请稍后再试。",
-        "incompatible_server_hierarchy": "你的账户提供者者不支持显示空间层级。",
+        "incompatible_server_hierarchy": "你的账户提供者不支持显示空间层级。",
         "invite": "邀请人员",
         "invite_description": "通过电话号码或邮件地址邀请",
         "invite_link": "分享邀请链接",
@@ -3460,8 +3465,8 @@
             "set_avatar": "%(senderName)s 已设置头像",
             "set_name": "%(senderName)s 已设置其显示名称为 %(displayName)s",
             "unban": "%(senderName)s 解封了 %(targetName)s",
-            "withdrew_invite": "%(senderName)s 撤消了 %(targetName)s 的邀请",
-            "withdrew_invite_reason": "%(senderName)s 已撤消对 %(targetName)s 的邀请：%(reason)s"
+            "withdrew_invite": "%(senderName)s 已撤销对 %(targetName)s 的邀请",
+            "withdrew_invite_reason": "%(senderName)s 已撤销对 %(targetName)s 的邀请：%(reason)s"
         },
         "m.room.name": {
             "change": "%(senderDisplayName)s 已更改房间名称从 %(oldRoomName)s 到 %(newRoomName)s。",
@@ -3478,10 +3483,10 @@
         },
         "m.room.power_levels": {
             "changed": "%(senderName)s 已更改 %(powerLevelDiffText)s。",
-            "user_from_to": "%(userId)s 的权力值从 %(fromPowerLevel)s 到 %(toPowerLevel)s"
+            "user_from_to": "%(userId)s 的权力级别从 %(fromPowerLevel)s 到 %(toPowerLevel)s"
         },
         "m.room.third_party_invite": {
-            "revoked": "%(senderName)s 已撤消 %(targetDisplayName)s 加入房间的邀请。",
+            "revoked": "%(senderName)s 已撤销 %(targetDisplayName)s 加入房间的邀请。",
             "sent": "%(senderName)s 已向 %(targetDisplayName)s 发送了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 已升级此房间。",
@@ -3592,12 +3597,10 @@
                 "other": "%(severalUsers)s 发送了 %(count)s 条隐藏消息"
             },
             "invite_withdrawn": {
-                "one": "%(oneUser)s 已撤消其邀请",
-                "other": "%(oneUser)s 已撤消其邀请 %(count)s 次"
+                "other": "%(oneUser)s 已撤销其邀请 %(count)s 次"
             },
             "invite_withdrawn_multiple": {
-                "one": "已撤消 %(severalUsers)s 的邀请",
-                "other": "%(severalUsers)s 已撤消其邀请 %(count)s 次"
+                "other": "%(severalUsers)s 已撤销其邀请 %(count)s 次"
             },
             "invited": {
                 "one": "被邀请",
@@ -3775,21 +3778,21 @@
         "ban_space_everything": "禁止他们访问我所能访问的一切",
         "ban_space_specific": "禁止这些人做某些我有权决定的事",
         "deactivate_confirm_action": "停用用户",
-        "deactivate_confirm_description": "停用此用户将移除其设备并阻止重新登录。其所有聊天也江北移除。此操作无法撤消。",
+        "deactivate_confirm_description": "停用此用户将移除其设备并阻止重新登录。其所有聊天也将被移除。此操作无法撤销。",
         "deactivate_confirm_title": "停用用户？",
         "demote_button": "降权",
-        "demote_self_confirm_description_space": "由于你正在降级自身，因此无法撤消此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
-        "demote_self_confirm_room": "由于你正在降级自身，因此无法撤消此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
+        "demote_self_confirm_description_space": "由于你正在降级自身，因此无法撤销此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
+        "demote_self_confirm_room": "由于你正在降级自身，因此无法撤销此更改。如果你是空间中最后一个拥有特权的用户，则无法重新获得特权。",
         "demote_self_confirm_title": "降级自身？",
-        "disinvite_button_room": "撤消邀请",
+        "disinvite_button_room": "撤销邀请",
         "disinvite_button_room_name": "从 %(roomName)s 取消邀请",
         "disinvite_button_space": "从空间取消邀请",
         "error_ban_user": "封禁用户失败",
         "error_deactivate": "用户停用失败",
         "error_kicking_user": "用户移除失败",
         "error_mute_user": "静默用户失败",
-        "error_revoke_3pid_invite_description": "无法撤消邀请。服务器可能出现临时问题，或者你没有足够的权限撤消邀请。",
-        "error_revoke_3pid_invite_title": "邀请撤消失败",
+        "error_revoke_3pid_invite_description": "无法撤销邀请。服务器可能出现临时问题，或者你没有足够的权限撤销邀请。",
+        "error_revoke_3pid_invite_title": "邀请撤销失败",
         "ignore_button": "忽略",
         "ignore_confirm_description": "来自此用户的所有消息与邀请都将被隐藏。你确定要忽略？",
         "ignore_confirm_title": "忽略 %(user)s",
@@ -3801,7 +3804,7 @@
         "kick_button_space_everything": "从我所能及的一切中将它们移除",
         "kick_space_specific": "将它们从我能够处理的特定事物中移除",
         "kick_space_warning": "他们仍然可以访问任何你不是管理员的空间。",
-        "promote_warning": "由于你正在将该用户提升为与你相同的权力值，因此你将无法撤消此更改。",
+        "promote_warning": "由于你正在将该用户提升为与你相同的权力级别，因此你将无法撤销此更改。",
         "redact": {
             "confirm_button": {
                 "other": "移除 %(count)s 条消息"
@@ -3817,7 +3820,7 @@
             "no_recent_messages_title": "未找到 %(user)s 的最近消息"
         },
         "redact_button": "移除消息",
-        "revoke_invite": "撤消申请",
+        "revoke_invite": "撤销邀请",
         "room_encrypted": "此处的消息是端到端加密的。",
         "room_encrypted_detail": "你的消息是安全的，只有你与对方拥有解锁它们的唯一密钥。",
         "room_unencrypted": "在此房间中的消息非端到端加密。",
