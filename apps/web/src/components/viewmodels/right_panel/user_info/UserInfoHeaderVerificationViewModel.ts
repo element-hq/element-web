@@ -31,7 +31,7 @@ export interface UserInfoVerificationSectionState {
 
 const useHasCrossSigningKeys = (cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined => {
     return useAsyncMemo(async () => {
-        if (!canVerify) return undefined;
+        if (!canVerify) return false;
         return cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
     }, [cli, member, canVerify]);
 };

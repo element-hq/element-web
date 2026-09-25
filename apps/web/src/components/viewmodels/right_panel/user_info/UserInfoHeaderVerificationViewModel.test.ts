@@ -115,8 +115,9 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // when we can't verify the user, hasCrossSigningKeys should be false (not undefined)
+            // so the spinner is not shown indefinitely
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
@@ -144,8 +145,9 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // when we can't verify the user, hasCrossSigningKeys should be false (not undefined)
+            // so the spinner is not shown indefinitely
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
@@ -166,8 +168,9 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // when we can't verify the user, hasCrossSigningKeys should be false (not undefined)
+            // so the spinner is not shown indefinitely
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
