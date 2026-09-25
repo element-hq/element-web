@@ -10,3 +10,4 @@ export type * from "./utils.d.ts";
 export type * from "./matrix.d.ts";
 export type * from "./json.d.ts";
 export type * from "./urlpreview.d.ts";
+export type * from "./x509.d.ts";

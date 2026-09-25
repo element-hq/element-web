@@ -64,6 +64,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly widget: WidgetApi;
     // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
+    // @alpha
+    readonly x509?: X509Api;
 }
 
 // @alpha
@@ -76,6 +78,22 @@ export interface BuiltinsApi {
 // @alpha
 export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilities: Set<string>) => MaybePromise<Set<string> | undefined>;
 
+// @alpha
+export interface CertificateInfo {
+    // (undocumented)
+    issuer: string;
+    // (undocumented)
+    serialNumber: string;
+    // (undocumented)
+    subject: string;
+    // (undocumented)
+    subjectAltName?: string;
+    // (undocumented)
+    validFrom: Date;
+    // (undocumented)
+    validTo: Date;
+}
+
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
@@ -86,7 +104,9 @@ export interface ClientApi {
 
 // @public
 export interface ClientCreationManagementApi {
+    // @deprecated
     setUserVerificationCaCertsPem(pem: string | null): void;
+    setX509ClientInitOpts(opts: X509ClientInitOpts): void;
 }
 
 // @alpha
@@ -288,6 +308,24 @@ export interface FileViewerProps {
 
 // @public (undocumented)
 export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
+// @alpha
+export interface HardwareKey {
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    manufacturerID: string;
+    // (undocumented)
+    maxPinLength: number;
+    // (undocumented)
+    minPinLength: number;
+    // (undocumented)
+    model: string;
+    // (undocumented)
+    serialNumber: string;
+}
+
+// @alpha
+export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
 // @public
 export interface I18nApi {
@@ -523,6 +561,13 @@ export interface UrlPreviewApi {
 // @alpha
 export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
+// @alpha
+export interface UserCertificate {
+    // (undocumented)
+    certificate: CertificateInfo;
+    chain: string;
+}
+
 // @public
 export function useWatchable<T>(watchable: Watchable<T>): T;
 
@@ -571,9 +616,64 @@ export interface WidgetLifecycleApi {
     registerPreloadApprover(approver: PreloadApprover): void;
 }
 
-// Warnings were encountered during analysis:
-//
-// src/api/file-viewer.ts:26:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
+// @alpha
+export interface X509Api {
+    getKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>>;
+    getUserCertificate(): Promise<X509Result<UserCertificate>>;
+    listHardwareKeys(): Promise<X509Result<HardwareKey[]>>;
+    logIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult>;
+    signData(serialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>>;
+}
+
+// @public
+export interface X509ClientInitOpts {
+    signer?: (item: Uint8Array) => Promise<{
+        signature_bytes: Uint8Array;
+        certificate_chain: string;
+        signature_scheme: "RsaPssSha512";
+    }>;
+    userVerificationCaCertsPem?: string;
+    validity?: () => number;
+}
+
+// @alpha
+export interface X509IpcError {
+    // (undocumented)
+    code: X509IpcErrorCode;
+    // (undocumented)
+    message?: string;
+    pkcs11Code?: number;
+}
+
+// @alpha
+export type X509IpcErrorCode =
+/**
+* No PKCS#11 library is configured or it could not be loaded.
+*/
+| "MODULE_NOT_LOADED"
+| "KEY_NOT_FOUND"
+| "CERTIFICATE_NOT_FOUND"
+| "PRIVATE_KEY_NOT_FOUND"
+/**
+* `signData` was called before `logIntoKey`, or the session was invalidated since.
+*/
+| "LOGIN_REQUIRED"
+/**
+* An upstream error from the PKCS#11 library. Carries a `CKR_*` code.
+*/
+| "UPSTREAM_PKCS11"
+| "UNKNOWN";
+
+// @alpha
+export interface X509LoginError extends X509IpcError {
+    triesRemaining?: number;
+}
+
+// @alpha
+export type X509LoginResult = X509Result<void, X509LoginError>;
+
+// @alpha
+export type X509Result<T, E extends X509IpcError = X509IpcError> = { ok: true; data: T } | { ok: false; error: E };
 
 // (No @packageDocumentation comment for this package)
 

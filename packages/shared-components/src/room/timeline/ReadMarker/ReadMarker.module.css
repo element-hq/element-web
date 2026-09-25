@@ -12,6 +12,27 @@
     border: 0;
 }
 
+/* With a label this has to be a row of its own, not the zero-height line above. */
+.labelledMarker {
+    height: auto;
+    list-style: none;
+}
+
+/* The line is this box's bottom border, so the label sits on it rather than breaking
+   it in two. */
+.labelledLine {
+    display: flex;
+    justify-content: flex-end;
+    padding-block: var(--cpd-space-1x);
+    border-bottom: 1px solid var(--cpd-color-border-accent-primary);
+}
+
+.label {
+    font: var(--cpd-font-body-md-medium);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    color: var(--cpd-color-text-action-accent);
+}
+
 .line {
     margin-top: 0;
     position: relative;

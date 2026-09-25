@@ -20,7 +20,7 @@ import SendMessageComposer, { createMessageContent, isQuickReaction } from "./Se
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType, MainSplitContentType } from "../../../contexts/RoomContext";
 import EditorModel from "../../../editor/model";
-import { createPartCreator } from "../../../../test/unit-tests/editor/mock";
+import { createPartCreator } from "../../../editor/__mocks__";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import DocumentOffset from "../../../editor/offset";
@@ -403,18 +403,20 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
 
             await waitFor(() =>
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` }),
             );
         });
 
-        it("not to send chat effects on message sending for threads", () => {
+        it("not to send chat effects on message sending for threads", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -433,11 +435,18 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", "$yolo", {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                    "m.relates_to": {
+                        event_id: "$yolo",
+                        is_falling_back: true,
+                        rel_type: "m.thread",
+                    },
+                }),
+            );
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
         });

@@ -1094,7 +1094,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "Soon, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -1473,6 +1473,11 @@
         "room_list_expand_section": "Expand room list section",
         "room_list_navigate_down": "Navigate down in the room list",
         "room_list_navigate_up": "Navigate up in the room list",
+        "room_list_panel_collapse": "Hide the room list (with the resize handle focused)",
+        "room_list_panel_expand": "Show the room list at full width (with the resize handle focused)",
+        "room_list_panel_grow": "Make the room list wider (with the resize handle focused)",
+        "room_list_panel_shrink": "Make the room list narrower (with the resize handle focused)",
+        "room_list_panel_toggle": "Hide or show the room list (with the resize handle focused)",
         "room_list_select_room": "Select room from the room list",
         "save": "Save",
         "scroll_down_timeline": "Scroll down in the timeline",
@@ -1552,6 +1557,7 @@
         "login_with_qr": "Log in with QR code",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
+        "new_timeline": "Improved timeline scrolling and navigation",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
@@ -2986,7 +2992,7 @@
             "label": "Open %(brand)s when you log in to your computer",
             "minimised": "Minimised"
         },
-        "tac_only_notifications": "Only show notifications in the thread activity centre",
+        "tac_only_notifications": "In the Other threads tab, only show notifications",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
         "use_command_f_search": "Use Command + F to search timeline",
@@ -3284,9 +3290,31 @@
         "show_thread_filter": "Show:"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with unread messages.",
+            "default_no_sender": "Open thread in %(roomName)s with unread messages.",
+            "mention": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread mention.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages including mentions."
+            },
+            "mention_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread mention.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages including mentions."
+            },
+            "unread": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread message.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages."
+            },
+            "unread_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread message.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages."
+            }
+        },
         "header": "Threads activity",
-        "no_rooms_with_threads_notifs": "You don't have rooms with thread notifications yet.",
-        "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
+        "my_threads_tab": "My threads",
+        "no_other_unread_threads": "No unread threads from other people.",
+        "no_participating_threads_unread": "You don't have unread threads you've participated in.",
+        "other_threads_tab": "Other threads"
     },
     "time": {
         "date_at_time": "%(date)s at %(time)s",
@@ -3554,6 +3582,7 @@
             "label": "%(reactors)s reacted with %(content)s",
             "tooltip_caption": "reacted with %(shortName)s"
         },
+        "read_marker_new": "New",
         "read_receipt_title": {
             "one": "Seen by %(count)s person",
             "other": "Seen by %(count)s people"

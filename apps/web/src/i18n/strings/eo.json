@@ -995,8 +995,6 @@
     "language_dropdown_label": "Lingva falmenuo",
     "leave_room_dialog": {
         "last_person_warning": "Vi estas la nura persono tie ĉi. Se vi foriros, neniu alia plu povos aliĝi, inkluzive vin mem.",
-        "leave_room_question": "Ĉu vi certe volas forlasi la ĉambron '%(roomName)s'?",
-        "leave_space_question": "Ĉu vi certe volas forlasi la aron «%(spaceName)s»?",
         "room_rejoin_warning": "Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.",
         "space_rejoin_warning": "Ĉi tiu aro ne estas publika. Vi ne povos re-aliĝi sen invito."
     },

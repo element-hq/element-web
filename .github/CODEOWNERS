@@ -3,33 +3,30 @@
 **/package.json           @element-hq/element-web-team
 /pnpm-lock.yaml           @element-hq/element-web-team
 
-/apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/SecurityManager-test.ts                                @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/__fixtures__/x509/                                             @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/x509.ts                                                        @element-hq/element-crypto-web-reviewers
+/apps/desktop/src/x509.test.ts                                                   @element-hq/element-crypto-web-reviewers
+/apps/web/src/SecurityManager*                                                   @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/async-components/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/components/views/dialogs/security/                     @element-hq/element-crypto-web-reviewers
-/apps/web/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/stores/SetupEncryptionStore-test.ts                    @element-hq/element-crypto-web-reviewers
+/apps/web/src/stores/SetupEncryptionStore*                                       @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/devtools/Crypto.tsx                       @element-hq/element-crypto-web-reviewers
 /apps/web/playwright/e2e/crypto/                                                 @element-hq/element-crypto-web-reviewers
 /apps/web/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
 /packages/shared-components/src/crypto/                                          @element-hq/element-crypto-web-reviewers
+/packages/shared-types/lib/x509.d.ts                                             @element-hq/element-crypto-web-reviewers
 
 
-/apps/web/src/models/Call.ts                             @element-hq/element-call-reviewers
-/apps/web/test/unit-tests/models/Call-test.ts            @element-hq/element-call-reviewers
-/apps/web/src/stores/CallStore.ts                        @element-hq/element-call-reviewers
-/apps/web/test/unit-tests/stores/CallStore-test.ts       @element-hq/element-call-reviewers
+/apps/web/src/models/Call*                               @element-hq/element-call-reviewers
+/apps/web/src/stores/CallStore*                          @element-hq/element-call-reviewers
 /apps/web/src/call-types.ts                              @element-hq/element-call-reviewers
 /apps/web/src/components/views/voip                      @element-hq/element-call-reviewers
 /apps/web/res/css/views/voip                             @element-hq/element-call-reviewers
 /apps/web/playwright/e2e/voip                            @element-hq/element-call-reviewers
 /apps/web/playwright/snapshots/voip                      @element-hq/element-call-reviewers
-/apps/web/test/test-utils/call.ts                        @element-hq/element-call-reviewers
+/apps/web/src/test/test-utils/call.ts                    @element-hq/element-call-reviewers
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /apps/web/src/i18n/strings
@@ -42,4 +39,3 @@
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating
 /apps/web/playwright/testcontainers/synapse.ts
 /apps/web/playwright/testcontainers/mas.ts
-

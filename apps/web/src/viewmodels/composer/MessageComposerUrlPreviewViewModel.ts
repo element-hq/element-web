@@ -19,6 +19,7 @@ import { linksIn } from "../../utils/UrlUtils";
 import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import PlatformPeg from "../../PlatformPeg";
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -90,6 +91,15 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     private content: string;
 
     /**
+     * Maps `matched_url` to the {@link EncryptedFile} carrying its preview image, for previews
+     * seeded from an event's existing bundle.
+     *
+     * Editing must resend the file as-is: its mxc points at the ciphertext, so re-uploading it
+     * would encrypt the image a second time.
+     */
+    private readonly encryptedImageCache: Map<string, EncryptedFile> = new Map();
+
+    /**
      * The list of all previews that are currently loading, loaded or failed to load
      * - loading entries are immediately added when computeSnapshot detects new link in the composer
      * - loaded/failed to load entries replaces the loading entry when it resolves
@@ -111,6 +121,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips, props.moduleUrlPreviewApi);
         this.content = this.snapshot.current.content;
         this.previewCache = props.cachedEntries ?? new Map();
+        this.disposables.track(() => this.fetcher.dispose());
 
         // set state with initial content
         if (props.content) {
@@ -263,6 +274,11 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         mxEvent: MatrixEvent,
     ): void => {
         for (const single of bundle) {
+            const encryptedImage = single["beeper:image:encryption"];
+            if (encryptedImage !== undefined) {
+                this.encryptedImageCache.set(single.matched_url, encryptedImage);
+            }
+
             void this.fetcher.previewFromBundle(single, mxEvent, true).then((fetched) => {
                 this.resolvePreview(single.matched_url, fetched);
             });
@@ -280,6 +296,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         if (content === "") {
             this.previewCache.clear();
+            this.encryptedImageCache.clear();
             this.computeSnapshotDebounced.cancel();
             return this.computeSnapshot("");
         }
@@ -327,4 +344,12 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             isModified: true,
         });
     };
+
+    /**
+     * The {@link EncryptedFile}s of preview images seeded from an event's existing bundle, keyed by
+     * `matched_url`, so that editing can resend them rather than re-uploading the image.
+     */
+    public getEncryptedImageCache(): ReadonlyMap<string, EncryptedFile> {
+        return this.encryptedImageCache;
+    }
 }
