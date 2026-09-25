@@ -3018,6 +3018,8 @@
             "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
             "permissions": "Allow microphone and camera access",
             "request_permissions": "Request",
+            "ringtone_output": "Ringtone output",
+            "ringtone_section": "Ringtone",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
             "video_section": "Video settings",

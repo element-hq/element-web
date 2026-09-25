@@ -10,13 +10,16 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { createAudioContext } from "./compat";
 
+// AudioContext.setSinkId is not in every version of the DOM typings yet.
+type AudioContextWithSinkId = AudioContext & { setSinkId?: (sinkId: string) => Promise<void> };
+
 const formatMap = {
     mp3: "audio/mpeg",
     ogg: "audio/ogg",
 };
 
 export class BackgroundAudio {
-    private audioContext = createAudioContext();
+    private audioContext: AudioContextWithSinkId = createAudioContext();
     private sounds: Record<string, AudioBuffer> = {};
     /** How many sounds started here are still going. */
     private playing = 0;
@@ -25,6 +28,7 @@ export class BackgroundAudio {
         urlPrefix: string,
         formats: F,
         loop = false,
+        sinkId?: string,
     ): Promise<AudioBufferSourceNode> {
         const format = this.pickFormat(...formats);
         if (!format) {
@@ -32,10 +36,10 @@ export class BackgroundAudio {
             // Will probably never happen. If happened, format="" and will fail to load audio. Who cares...
         }
 
-        return this.play(`${urlPrefix}.${format}`, loop);
+        return this.play(`${urlPrefix}.${format}`, loop, sinkId);
     }
 
-    public async play(url: string, loop = false): Promise<AudioBufferSourceNode> {
+    public async play(url: string, loop = false, sinkId?: string): Promise<AudioBufferSourceNode> {
         if (!this.sounds.hasOwnProperty(url)) {
             // No cache, fetch it
             const response = await fetch(url);
@@ -46,6 +50,10 @@ export class BackgroundAudio {
             const sound = await this.audioContext.decodeAudioData(buffer);
             this.sounds[url] = sound;
         }
+        if (sinkId !== undefined) {
+            await this.setSinkId(sinkId);
+        }
+
         const source = this.audioContext.createBufferSource();
         source.buffer = this.sounds[url];
         source.loop = loop;
@@ -66,6 +74,36 @@ export class BackgroundAudio {
 
         source.start();
         return source;
+    }
+
+    /**
+     * Whether the browser can route an AudioContext to a specific output device.
+     * AudioContext.setSinkId is currently only available in Chromium based browsers (and so Electron).
+     */
+    public static supportsSinkId(): boolean {
+        return typeof AudioContext !== "undefined" && "setSinkId" in AudioContext.prototype;
+    }
+
+    private async setSinkId(sinkId: string): Promise<void> {
+        if (!BackgroundAudio.supportsSinkId()) return;
+
+        // The empty string is the spec's way of asking for the system default device. Chromium also
+        // lists a device with the ID "default", but that is not guaranteed elsewhere.
+        const targetSinkId = sinkId === "default" ? "" : sinkId;
+        try {
+            await this.audioContext.setSinkId!(targetSinkId);
+        } catch (error) {
+            // Most likely the chosen device has been unplugged: fall back to the default device
+            // rather than staying on whatever device was used last time.
+            logger.warn(`Failed to set background audio output device to ${targetSinkId}`, error);
+            if (targetSinkId !== "") {
+                try {
+                    await this.audioContext.setSinkId!("");
+                } catch (fallbackError) {
+                    logger.warn("Failed to reset background audio output device to the default", fallbackError);
+                }
+            }
+        }
     }
 
     private pickFormat<F extends Array<keyof typeof formatMap>>(...formats: F): F[number] | null {
