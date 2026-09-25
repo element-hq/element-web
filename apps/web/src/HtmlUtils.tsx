@@ -283,6 +283,11 @@ export interface EventRenderOpts {
      */
     mediaIsVisible?: boolean;
     linkify?: boolean;
+    /**
+     * When true, strip IRC-style colour attributes (`color`, `data-mx-color`,
+     * `data-mx-bg-color`) from message HTML so they are not rendered.
+     */
+    stripColors?: boolean;
 }
 
 function analyseEvent(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): EventAnalysis {
@@ -319,6 +324,26 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
                 ...sanitizeParams.additionalAllowedAttributes,
                 // We allow data-linkified because TextualBody uses it to passthrough links.
                 a: [...(sanitizeParams.additionalAllowedAttributes?.a ?? []), `data-${LINKIFIED_DATA_ATTRIBUTE}`],
+            },
+        };
+    }
+
+    if (opts.stripColors) {
+        // Replace the default formatting transform with one that strips colour
+        // attributes rather than converting them to inline styles.
+        sanitizeParams = {
+            ...sanitizeParams,
+            transformTags: {
+                ...sanitizeParams.transformTags,
+                "*": (tagName, attribs) => {
+                    // Replicate the style-removal that transformFormatting normally does,
+                    // but skip converting data-mx-color / data-mx-bg-color / color to CSS.
+                    if (tagName !== "img") delete attribs.style;
+                    delete attribs["color"];
+                    delete attribs["data-mx-color"];
+                    delete attribs["data-mx-bg-color"];
+                    return { tagName, attribs };
+                },
             },
         };
     }

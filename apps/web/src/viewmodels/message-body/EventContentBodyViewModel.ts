@@ -110,6 +110,12 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      */
     enableBigEmoji?: boolean;
     /**
+     * Whether to render IRC-style colour attributes in messages.
+     * When false, colour attributes are stripped before rendering.
+     * @default true
+     */
+    showMessageColors?: boolean;
+    /**
      * Whether media is visible in the event.
      * @default true
      */
@@ -181,13 +187,14 @@ export class EventContentBodyViewModel
     private static readonly computeBodySnapshot = (
         props: EventContentBodyViewModelProps,
     ): Pick<EventContentBodyViewSnapshot, "body" | "formattedBody" | "className"> => {
-        const { content, stripReply, highlights, linkify, enableBigEmoji, mediaIsVisible } = props;
+        const { content, stripReply, highlights, linkify, enableBigEmoji, mediaIsVisible, showMessageColors } = props;
         const isEmote = content.msgtype === MsgType.Emote;
         const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, {
             disableBigEmoji: isEmote || !enableBigEmoji,
             stripReplyFallback: stripReply,
             mediaIsVisible,
             linkify,
+            stripColors: showMessageColors === false,
         });
 
         return {
@@ -232,6 +239,7 @@ export class EventContentBodyViewModel
             renderTooltipsForAmbiguousLinks: props.renderTooltipsForAmbiguousLinks ?? false,
             enableBigEmoji: props.enableBigEmoji ?? SettingsStore.getValue("TextualBody.enableBigEmoji"),
             shouldShowPillAvatar: props.shouldShowPillAvatar ?? SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+            showMessageColors: props.showMessageColors ?? SettingsStore.getValue("showMessageColors"),
         };
 
         super(propsWithSettingDefaults, EventContentBodyViewModel.computeSnapshot(propsWithSettingDefaults));
@@ -255,6 +263,15 @@ export class EventContentBodyViewModel
             },
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(shouldShowPillAvatarWatcherRef));
+
+        const showMessageColorsWatcherRef = SettingsStore.watchSetting(
+            "showMessageColors",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.setShowMessageColors(!!newVal);
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(showMessageColorsWatcherRef));
     }
 
     private readonly onEventContentChanged = (): void => {
@@ -308,6 +325,13 @@ export class EventContentBodyViewModel
 
     public setEnableBigEmoji = (enableBigEmoji?: boolean): void => {
         this.props.enableBigEmoji = enableBigEmoji;
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
+
+        this.snapshot.merge({ body, formattedBody, className });
+    };
+
+    public setShowMessageColors = (showMessageColors?: boolean): void => {
+        this.props.showMessageColors = showMessageColors;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });

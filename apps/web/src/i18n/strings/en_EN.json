@@ -2492,6 +2492,7 @@
         "autoplay_gifs": "Autoplay GIFs",
         "autoplay_videos": "Autoplay videos",
         "big_emoji": "Enable big emoji in chat",
+        "show_message_colors": "Show colors in messages",
         "code_block_expand_default": "Expand code blocks by default",
         "code_block_line_numbers": "Show line numbers in code blocks",
         "disable_historical_profile": "Show current profile picture and name for users in message history",

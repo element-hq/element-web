@@ -273,6 +273,7 @@ export interface Settings {
     "scrollToBottomOnMessageSent": IBaseSetting<boolean>;
     "Pill.shouldShowPillAvatar": IBaseSetting<boolean>;
     "TextualBody.enableBigEmoji": IBaseSetting<boolean>;
+    "showMessageColors": IBaseSetting<boolean>;
     "sendTypingNotifications": IBaseSetting<boolean>;
     "showTypingNotifications": IBaseSetting<boolean>;
     "ctrlFForSearch": IBaseSetting<boolean>;
@@ -920,6 +921,11 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|big_emoji"),
         default: true,
         invertedSettingName: "TextualBody.disableBigEmoji",
+    },
+    "showMessageColors": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        displayName: _td("settings|show_message_colors"),
+        default: true,
     },
     "sendTypingNotifications": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

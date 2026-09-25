@@ -153,6 +153,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
         "showAvatarChanges",
         "Pill.shouldShowPillAvatar",
         "TextualBody.enableBigEmoji",
+        "showMessageColors",
         "scrollToBottomOnMessageSent",
         "useOnlyCurrentProfiles",
     ];
