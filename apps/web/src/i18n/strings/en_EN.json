@@ -1555,6 +1555,8 @@
         "location_share_live": "Live Location Sharing",
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
         "login_with_qr": "Log in with QR code",
+        "markdown_viewer": "Open Markdown files",
+        "markdown_viewer_description": "Read Markdown attachments in the right panel.",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
         "new_timeline": "Improved timeline scrolling and navigation",

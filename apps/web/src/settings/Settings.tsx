@@ -229,6 +229,7 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_pdf_viewer": IFeature;
+    "feature_markdown_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
@@ -649,6 +650,15 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|pdf_viewer"),
         description: _td("labs|pdf_viewer_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_markdown_viewer": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|markdown_viewer"),
+        description: _td("labs|markdown_viewer_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
