@@ -113,7 +113,7 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_MTextBody mx_EventTile_content _root_5gwiw_8 _text_5gwiw_25"
+                      class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
                       data-event-density="default"
                       data-event-layout="group"
                     >
@@ -221,7 +221,7 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_MTextBody mx_EventTile_content _root_5gwiw_8 _text_5gwiw_25"
+                      class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
                       data-event-density="default"
                       data-event-layout="bubble"
                     >
@@ -337,7 +337,7 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     data-testid="event-tile-slot-body"
                   >
                     <div
-                      class="mx_MTextBody mx_EventTile_content _root_5gwiw_8 _text_5gwiw_25"
+                      class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
                       data-event-density="default"
                       data-event-layout="irc"
                     >
