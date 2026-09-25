@@ -116,7 +116,10 @@
         "error_load": "Unable to load PDF.",
         "loading": "Loading PDF…",
         "page_label": "Page %(page)s of %(total)s",
-        "page_number": "Page number"
+        "page_number": "Page number",
+        "zoom": "Zoom",
+        "zoom_in": "Zoom in",
+        "zoom_out": "Zoom out"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
