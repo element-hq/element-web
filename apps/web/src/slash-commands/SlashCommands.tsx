@@ -72,8 +72,12 @@ export const Commands = [
         command: "spoiler",
         args: "<message>",
         description: _td("slash_command|spoiler"),
-        runFn: function (cli, roomId, threadId, message = "") {
-            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
+        runFn: function (cli, roomId, threadId, message) {
+            if (!message?.trim()) {
+                return reject(this.getUsage());
+            }
+            const htmlMessage = htmlSerializeFromMdIfNeeded(message, { forceHTML: true });
+            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${htmlMessage}</span>`));
         },
         category: CommandCategories.messages,
     }),
