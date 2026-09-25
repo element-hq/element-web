@@ -90,10 +90,10 @@ Please see LICENSE files in the repository root for full details.
  *                │
  *                │ Un-migratable legacy crypto store found
  *                ▼
- *       ┌──────────────────────────┐
- *       │ LEGACY_CRYPTO_           │
- *       │             UNSUPPORTED  │
- *       └──────────────────────────┘
+ *       ┌───────────────────────────┐
+ *       │ LEGACY_CRYPTO_UNSUPPORTED │
+ *       │                           │
+ *       └───────────────────────────┘
  */
 enum Views {
     // a special initial state which is only used at startup, while we are

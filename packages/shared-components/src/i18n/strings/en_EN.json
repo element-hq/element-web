@@ -31,6 +31,7 @@
         "retry": "Retry",
         "save": "Save",
         "search": "Search",
+        "remove_this_device": "Remove this device",
         "start_chat": "Start chat",
         "unpin": "Unpin",
         "view_source": "View Source"
@@ -87,6 +88,13 @@
     "emoji_picker": {
         "cancel_search_label": "Cancel search",
         "emoji_picker": "Emoji picker"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Please either downgrade to <b>%(version)s</b> first or remove this device.",
+            "description": "%(brand)s was updated from an unsupported version and cannot migrate your session to a new format.",
+            "title": "This session cannot be used"
+        }
     },
     "keyboard": {
         "shift": "Shift"

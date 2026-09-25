@@ -30,7 +30,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { I18nContext, LinkedTextContext, LinkedText, GenericToast } from "@element-hq/web-shared-components";
+import { I18nContext, LinkedTextContext, LinkedText, GenericToast, LegacyCryptoUnsupportedView } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -143,6 +143,7 @@ import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
+import { LegacyCryptoUnsupportedViewModel } from "../../viewmodels/crypto/legacyCryptoUnsupportedViewModel.ts";
 
 const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
@@ -150,17 +151,6 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, Action.CreateRoom];
-
-/**
- * A component which does nothing but throw the given error during render, so that it is caught by
- * the application-level {@link ErrorBoundary} which wraps the current view.
- *
- * Needed because `render` calls `getView` outside the boundary, so errors raised there would escape
- * the app entirely.
- */
-const ThrowError: React.FC<{ error: Error }> = ({ error }) => {
-    throw error;
-};
 
 interface IProps {
     config: ConfigOptions;
@@ -2314,9 +2304,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Views.LOCK_STOLEN:
                 return <SessionLockStolenView />;
             case Views.LEGACY_CRYPTO_UNSUPPORTED:
-                // `render` wraps the view in an ErrorBoundary, which special-cases this error to
-                // explain that the session is too old to be usable.
-                return <ThrowError error={new LegacyCryptoStoreError()} />;
+                return <LegacyCryptoUnsupportedView vm={new LegacyCryptoUnsupportedViewModel({
+                    dispatcher: dis
+                })} />;
         }
     }
 
