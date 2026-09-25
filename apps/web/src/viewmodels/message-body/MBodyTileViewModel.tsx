@@ -22,7 +22,7 @@ import { fileSize } from "../../utils/FileUtils";
 import { attachmentViewerForEvent, type AttachmentViewerLabs } from "../../utils/attachmentViewer";
 
 /** No viewer labs on, for callers that do not read the settings. */
-const NO_VIEWER_LABS: AttachmentViewerLabs = { pdfViewerEnabled: false };
+const NO_VIEWER_LABS: AttachmentViewerLabs = { pdfViewerEnabled: false, markdownViewerEnabled: false };
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;

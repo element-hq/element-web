@@ -19,6 +19,7 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { openPdfViewer } from "../../utils/pdfViewer";
+import { openMarkdownViewer } from "../../utils/markdownViewer";
 
 const mockDownload = vi.fn();
 
@@ -33,6 +34,11 @@ vi.mock("../../utils/FileDownloader", () => ({
 vi.mock("../../utils/pdfViewer", async (importOriginal) => ({
     ...(await importOriginal<typeof import("../../utils/pdfViewer")>()),
     openPdfViewer: vi.fn(),
+}));
+
+vi.mock("../../utils/markdownViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../utils/markdownViewer")>()),
+    openMarkdownViewer: vi.fn(),
 }));
 
 vi.mock("../../customisations/Media", () => ({
@@ -89,6 +95,7 @@ describe("FileBodyViewModel", () => {
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
             pdfViewerEnabled: false,
+            markdownViewerEnabled: false,
             ...overrides,
         });
 
@@ -405,6 +412,47 @@ describe("FileBodyViewModel", () => {
             vm.onOpenClick();
 
             expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+        });
+
+        describe("for Markdown", () => {
+            const markdown = { body: "README.md", info: { mimetype: "text/markdown" } };
+
+            it("offers the Markdown viewer while its lab is on", () => {
+                const vm = createVm({
+                    markdownViewerEnabled: true,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open Markdown" });
+            });
+
+            it("does not offer the Markdown viewer while its lab is off, even with the PDF lab on", () => {
+                const vm = createVm({
+                    pdfViewerEnabled: true,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot().showOpen).toBe(false);
+            });
+
+            it("opens the Markdown viewer for its own event on click", () => {
+                const mxEvent = mkMediaEvent(markdown);
+                const vm = createVm({
+                    markdownViewerEnabled: true,
+                    mxEvent,
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                vm.onOpenClick();
+
+                expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
+                expect(openPdfViewer).not.toHaveBeenCalled();
+            });
         });
     });
 });

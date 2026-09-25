@@ -9,11 +9,14 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 import { isPdfEvent, openPdfViewer } from "./pdfViewer";
+import { isMarkdownEvent, openMarkdownViewer } from "./markdownViewer";
 
 /** Which attachment viewer labs are on. Read by the views, so the view models need no settings access. */
 export interface AttachmentViewerLabs {
     /** Whether the PDF viewer lab is on. */
     pdfViewerEnabled: boolean;
+    /** Whether the Markdown viewer lab is on. */
+    markdownViewerEnabled: boolean;
 }
 
 /** A way of opening an attachment in the right panel, offered on its timeline tile. */
@@ -34,6 +37,9 @@ export function attachmentViewerForEvent(
 ): AttachmentViewer | undefined {
     if (labs.pdfViewerEnabled && isPdfEvent(mxEvent)) {
         return { openLabel: _t("pdf_viewer|open"), open: () => openPdfViewer(mxEvent) };
+    }
+    if (labs.markdownViewerEnabled && isMarkdownEvent(mxEvent)) {
+        return { openLabel: _t("markdown_viewer|open"), open: () => openMarkdownViewer(mxEvent) };
     }
 
     return undefined;

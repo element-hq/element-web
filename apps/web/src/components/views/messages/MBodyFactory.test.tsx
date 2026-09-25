@@ -205,6 +205,29 @@ describe("MBodyFactory", () => {
         });
     });
 
+    describe("FileBodyFactory and the Markdown viewer lab", () => {
+        afterEach(() => {
+            SettingsStore.reset();
+        });
+
+        it("offers the viewer only once the lab is turned on, without a remount", async () => {
+            const mediaEvent = mkEvent("m.file", { body: "README.md", info: { mimetype: "text/markdown" } });
+
+            renderInRoomContext(
+                renderMBody(
+                    { ...props, mxEvent: mediaEvent, mediaEventHelper: new MediaEventHelper(mediaEvent) },
+                    FileBodyFactory,
+                ),
+                TimelineRenderingType.Room,
+            );
+            expect(screen.queryByRole("button", { name: "Open Markdown" })).not.toBeInTheDocument();
+
+            await act(() => SettingsStore.setValue("feature_markdown_viewer", null, SettingLevel.DEVICE, true));
+
+            expect(screen.getByRole("button", { name: "Open Markdown" })).toBeInTheDocument();
+        });
+    });
+
     it("renderMBody fallback shows m.audio generic placeholder when showFileInfo is true", async () => {
         const mediaEvent = new MatrixEvent({
             room_id: "!room:server",

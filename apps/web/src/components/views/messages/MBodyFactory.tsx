@@ -60,6 +60,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
     const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const markdownViewerEnabled = useSettingValue("feature_markdown_viewer");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -72,6 +73,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
                 refIFrame,
                 refLink,
                 pdfViewerEnabled,
+                markdownViewerEnabled,
             }),
     );
 
@@ -83,8 +85,18 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
             showFileInfo,
             timelineRenderingType,
             pdfViewerEnabled,
+            markdownViewerEnabled,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
+    }, [
+        mxEvent,
+        mediaEventHelper,
+        forExport,
+        showFileInfo,
+        timelineRenderingType,
+        pdfViewerEnabled,
+        markdownViewerEnabled,
+        vm,
+    ]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
@@ -97,7 +109,11 @@ interface PreviewFileBodyProps {
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
     const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
-    const viewerLabs = useMemo(() => ({ pdfViewerEnabled }), [pdfViewerEnabled]);
+    const markdownViewerEnabled = useSettingValue("feature_markdown_viewer");
+    const viewerLabs = useMemo(
+        () => ({ pdfViewerEnabled, markdownViewerEnabled }),
+        [pdfViewerEnabled, markdownViewerEnabled],
+    );
     const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper, viewerLabs));
 
     // The view model is built once, so turning a lab on has to reach an already-rendered tile.
