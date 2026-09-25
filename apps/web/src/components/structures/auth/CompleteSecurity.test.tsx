@@ -85,10 +85,13 @@ describe("CompleteSecurity", () => {
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
-        // No recovery methods are available, so only the "Can't confirm?" button should be visible
+        // No recovery methods are available, but the "Can't confirm?" button
+        // should still be visible
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Use another device" })).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Use recovery key" })).not.toBeInTheDocument();
+
+        // The snapshot should have a "Can't confirm?" button, but
+        // "Use another device" and "Use recovery key" shoud be disabled.
+        expect(panel.asFragment()).toMatchSnapshot();
 
         // When we hit reset
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
@@ -110,7 +113,7 @@ describe("CompleteSecurity", () => {
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
         // The snapshot should have "Use another device" and "Can't confirm?"
-        // buttons, but no "Use recovery key".
+        // buttons, but "Use recovery key" should be disabled.
         expect(panel.asFragment()).toMatchSnapshot();
 
         // When we hit reset
@@ -135,7 +138,7 @@ describe("CompleteSecurity", () => {
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
         // The snapshot should have "Use recovery key" and "Can't confirm?"
-        // buttons, but no "Use another device".
+        // buttons, but "Use another device" shoud be disabled.
         expect(panel.asFragment()).toMatchSnapshot();
 
         // When we hit reset
