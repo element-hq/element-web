@@ -16,7 +16,13 @@ import type { MediaPreviewEntryButton } from "@element-hq/web-shared-components"
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 export interface FileViewerCardState {
+    /**
+     * Viewer in use of viewing
+     */
     viewer: RegisteredFileViewer;
+    /**
+     * The media that is being viewed
+     */
     media: MediaHandle;
 }
 
@@ -28,6 +34,9 @@ export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState &
     );
 }
 
+/**
+ * Creates a MediaPreviewEntryButton for opening the file viewer
+ */
 export function fileViewerOpenButton({
     viewer,
     media,

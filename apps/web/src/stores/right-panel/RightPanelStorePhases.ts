@@ -30,7 +30,7 @@ export enum RightPanelPhases {
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",
 
-    // Global cards
+    // FileViewer module API
     FileViewer = "FileViewer",
 }
 

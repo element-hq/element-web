@@ -21,7 +21,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
 import { ModuleApi } from "../../modules/Api";
-import { uploadedMediaForEvent } from "../../modules/FileViewerApi";
+import { uploadedMediaOfEvent } from "../../modules/FileViewerApi";
 import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
@@ -53,7 +53,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
 
-        const mediaHandle = uploadedMediaForEvent(mxEvent, mediaEventHelper);
+        const mediaHandle = uploadedMediaOfEvent(mxEvent, mediaEventHelper);
         const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
         const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
             ? fileViewers.map((viewer) => fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent }))

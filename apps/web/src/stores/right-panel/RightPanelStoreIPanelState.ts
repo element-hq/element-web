@@ -11,7 +11,7 @@ import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 import type { MediaHandle } from "@element-hq/element-web-module-api";
-import { type RegisteredFileViewer, uploadedMediaForEvent, remoteMediaForPreview } from "../../modules/FileViewerApi";
+import { type RegisteredFileViewer, uploadedMediaOfEvent, remoteMediaOfPreview } from "../../modules/FileViewerApi";
 import { ModuleApi } from "../../modules/Api";
 import { UrlPreview } from "shared-types";
 
@@ -53,9 +53,7 @@ export interface IRightPanelCardStateStored {
     // file viewer
     fileViewerId?: string;
     fileViewerSourceEventId?: string;
-    /**
-     * where is that event from
-     */
+    // what room is the event from?
     fileViewerSourceRoomId?: string;
     // only present if file viewer is viewing remote content (from a URL preview)
     fileViewerUrlPreview?: UrlPreview;
@@ -138,11 +136,10 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             .getRoom(stateStored.fileViewerSourceRoomId)
             ?.findEventById(stateStored.fileViewerSourceEventId);
 
-        if (state.fileViewerSourceEvent) {
-            if (stateStored.fileViewerUrlPreview)
-                state.fileViewerMedia = remoteMediaForPreview(stateStored.fileViewerUrlPreview);
-            else state.fileViewerMedia = uploadedMediaForEvent(state.fileViewerSourceEvent);
-        }
+        if (state.fileViewerSourceEvent)
+            state.fileViewerMedia = stateStored.fileViewerUrlPreview
+                ? remoteMediaOfPreview(stateStored.fileViewerUrlPreview)
+                : uploadedMediaOfEvent(state.fileViewerSourceEvent);
     }
 
     return { state: state, phase: panelStateStore.phase };

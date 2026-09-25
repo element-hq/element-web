@@ -27,6 +27,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
+import { registerDemoFileViewers } from "../modules/DemoFileViewers.tsx";
 import { type URLParams } from "./url_utils.ts";
 
 export const rageshakePromise = initRageshake();
@@ -165,6 +166,9 @@ export async function loadPlugins(): Promise<void> {
     // every single module to ship its own copy of React. This also makes it easier to access via the console
     // and incidentally means we can forget our React imports in JSX files without penalty.
     window.React = React;
+
+    // Demo file viewers, registered through the same module API surface a real module would use.
+    registerDemoFileViewers(ModuleApi.instance.fileViewer);
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;

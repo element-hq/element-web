@@ -53,7 +53,7 @@ export class FileViewerApi implements IFileViewerApi {
     }
 }
 
-export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): UploadedMedia | undefined {
+export function uploadedMediaOfEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): UploadedMedia | undefined {
     if (!helper) {
         if (!MediaEventHelper.isEligible(mxEvent)) return;
 
@@ -63,18 +63,21 @@ export function uploadedMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventH
     return {
         type: "uploaded",
         mimetype: mxEvent.getContent<MediaEventContent>().info?.mimetype,
+        byteSize: mxEvent.getContent<MediaEventContent>().info?.size,
         name: helper.fileName,
         blob: () => helper.sourceBlob.value,
     };
 }
 
 /**
- * converts UrlPreview -> RemoteMedia
- * The image is removed from the UrlPreview
+ *
+ * The image URL is removed from the UrlPreview, but if
+ * an image is in the bundle, it will still be in the preview.additionalBundleContent
  */
-export function remoteMediaForPreview(preview: UrlPreview): RemoteMedia | undefined {
-    if (!preview.additionalBundleContent) return;
-
+// This is because an encrypted image cannot be restored
+// immediately without making any requests, for uniform behaviour
+// in encrypted and unencrypted rooms, remove image for both of them
+export function remoteMediaOfPreview(preview: UrlPreview): RemoteMedia | undefined {
     return {
         type: "remote",
         preview: {
