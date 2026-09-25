@@ -92,6 +92,9 @@ describe("CompleteSecurity", () => {
         // The "Can't confirm?" button is visible and enabled.
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
 
+        // And you also have the option to sign out
+        expect(screen.queryByRole("button", { name: "Sign out" })).toBeInTheDocument();
+
         // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 

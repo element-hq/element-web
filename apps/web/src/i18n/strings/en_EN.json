@@ -107,6 +107,7 @@
         "show_all": "Show all",
         "sign_in": "Sign in",
         "sign_out": "Remove this device",
+        "sign_out_before_verify": "Sign out",
         "skip": "Skip",
         "start": "Start",
         "stop": "Stop",
