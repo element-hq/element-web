@@ -52,6 +52,7 @@ import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { ThreadSubscriptionButton } from "../views/elements/ThreadSubscriptionButton";
 
 interface IProps {
     room: Room;
@@ -352,6 +353,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 <Heading size="4" className="mx_BaseCard_header_title_heading">
                     {_t("common|thread")}
                 </Heading>
+                <ThreadSubscriptionButton roomId={this.props.room.roomId} threadId={this.eventId} />
                 <ThreadListContextMenu mxEvent={this.props.mxEvent} permalinkCreator={this.props.permalinkCreator} />
             </div>
         );

@@ -235,6 +235,7 @@ export interface Settings {
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
+    "feature_msc4306_thread_subscriptions": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
@@ -784,6 +785,22 @@ export const SETTINGS: Settings = {
             true,
         ),
         default: true,
+    },
+    "feature_msc4306_thread_subscriptions": {
+        isFeature: true,
+        labsGroup: LabGroup.Threads,
+        displayName: _td("labs|feature_msc4306_thread_subscriptions|display_name"),
+        description: _td("labs|feature_msc4306_thread_subscriptions|description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_msc4306_thread_subscriptions",
+            defaultWatchManager,
+            [["org.matrix.msc4306"]],
+            undefined,
+            _td("labs|feature_msc4306_thread_subscriptions|required_msc_support"),
+        ),
+        default: false,
     },
     "feature_retention": {
         isFeature: true,

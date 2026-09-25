@@ -1521,6 +1521,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_msc4306_thread_subscriptions": {
+            "description": "Follow or unfollow individual threads. Threads are followed automatically when you reply or are mentioned in them.",
+            "display_name": "Thread subscriptions (MSC4306)",
+            "required_msc_support": "Requires your server to support MSC4306"
+        },
         "feature_retention": {
             "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
             "disabled_sliding_sync": "Retention cannot be enabled when Sliding Sync is enabled.",
@@ -3287,7 +3292,9 @@
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
         "open_thread": "Open thread",
-        "show_thread_filter": "Show:"
+        "show_thread_filter": "Show:",
+        "subscribe": "Follow",
+        "subscribed": "Following"
     },
     "threads_activity_centre": {
         "a11y": {
