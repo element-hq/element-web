@@ -11,7 +11,7 @@ import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/
 import { logger } from "matrix-js-sdk/src/logger";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
-import { Button } from "@vector-im/compound-web";
+import { Button, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -177,6 +177,14 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <DevicesIcon /> {_t("encryption|verification|use_another_device")}
                     </Button>
                 );
+            } else {
+                verifyButton = (
+                    <Tooltip label={_t("encryption|verification|no_other_devices")}>
+                        <Button kind="primary" disabled={true}>
+                            <DevicesIcon /> {_t("encryption|verification|use_another_device")}
+                        </Button>
+                    </Tooltip>
+                );
             }
 
             let useRecoveryKeyButton;
@@ -186,7 +194,20 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         {_t("encryption|verification|use_recovery_key")}
                     </Button>
                 );
+            } else {
+                useRecoveryKeyButton = (
+                    <Tooltip label={_t("encryption|verification|no_recovery_key")}>
+                        <Button disabled={true}>{_t("encryption|verification|use_recovery_key")}</Button>
+                    </Tooltip>
+                );
             }
+
+            const cantConfirmKind = store.keyInfo ? "secondary" : "primary";
+            const cantConfirmButton = (
+                <Button kind={cantConfirmKind} onClick={this.onCantConfirmClick}>
+                    {_t("encryption|verification|cant_confirm")}
+                </Button>
+            );
 
             let signOutButton;
             if (this.props.allowLogout) {
@@ -214,9 +235,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     <EncryptionCardButtons>
                         {verifyButton}
                         {useRecoveryKeyButton}
-                        <Button kind="secondary" onClick={this.onCantConfirmClick}>
-                            {_t("encryption|verification|cant_confirm")}
-                        </Button>
+                        {cantConfirmButton}
                         {signOutButton}
                     </EncryptionCardButtons>
                 </EncryptionCard>
