@@ -657,6 +657,9 @@ importers:
       maplibre-gl:
         specifier: ^6.0.0
         version: 6.10.0
+      marked:
+        specifier: ^18.0.14
+        version: 18.0.14
       matrix-encrypt-attachment:
         specifier: ^1.0.3
         version: 1.0.3
@@ -9695,6 +9698,11 @@ packages:
     engines: {node: '>= 20'}
     hasBin: true
 
+  marked@18.0.14:
+    resolution: {integrity: sha512-mBHK6FBHuBAlhgRe88w9F0O1AbwwXJUcQibUbC/QcdTbVGAD7aWza+xt3N6oT/jCZx3/OMeS+8rnuiHZcQ9s7A==}
+    engines: {node: '>= 20'}
+    hasBin: true
+
   matcher@3.0.0:
     resolution: {integrity: sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==}
     engines: {node: '>=10'}
@@ -13567,7 +13575,7 @@ snapshots:
 
   '@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7)':
     dependencies:
-      '@babel/core': 7.29.7(supports-color@7.2.0)
+      '@babel/core': 7.29.7(supports-color@10.2.2)
       '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-unicode-sets-regex@7.18.6(@babel/core@7.29.7)':
@@ -22004,6 +22012,8 @@ snapshots:
       uc.micro: 2.1.0
 
   marked@16.4.2: {}
+
+  marked@18.0.14: {}
 
   matcher@3.0.0:
     dependencies:
