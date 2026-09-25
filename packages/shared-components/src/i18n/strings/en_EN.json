@@ -71,6 +71,10 @@
         },
         "toggle_event": "toggle event"
     },
+    "document_viewer": {
+        "error_load": "Unable to load this file.",
+        "loading": "Loading document…"
+    },
     "emoji": {
         "categories": "Categories",
         "category_activities": "Activities",
