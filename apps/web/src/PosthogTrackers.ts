@@ -25,7 +25,9 @@ import { LruCache } from "./utils/LruCache";
 export type ScreenName = ScreenEvent["$current_url"];
 export type InteractionName = InteractionEvent["name"];
 
-const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
+// `Views.LEGACY_CRYPTO_UNSUPPORTED` is omitted: the analytics schema has no screen name for it,
+// and analytics are not initialised for a session we refuse to start anyway.
+const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN | Views.LEGACY_CRYPTO_UNSUPPORTED>, ScreenName> = {
     [Views.LOADING]: "Loading",
     [Views.CONFIRM_LOCK_THEFT]: "ConfirmStartup",
     [Views.WELCOME]: "Welcome",
@@ -75,6 +77,8 @@ export default class PosthogTrackers {
     }
 
     private trackPage(durationMs?: number): void {
+        if (this.view === Views.LEGACY_CRYPTO_UNSUPPORTED) return;
+
         const screenName =
             this.view === Views.LOGGED_IN ? loggedInPageTypeMap[this.pageType!] : notLoggedInMap[this.view];
         PosthogAnalytics.instance.trackEvent<ScreenEvent>({

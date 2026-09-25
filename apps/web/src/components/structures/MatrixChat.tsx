@@ -30,7 +30,13 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { I18nContext, LinkedTextContext, LinkedText, GenericToast } from "@element-hq/web-shared-components";
+import {
+    I18nContext,
+    LinkedTextContext,
+    LinkedText,
+    GenericToast,
+    LegacyCryptoUnsupportedView,
+} from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -129,6 +135,7 @@ import { Filter } from "../views/dialogs/spotlight/Filter";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
+import { LegacyCryptoStoreError } from "../../utils/LegacyCryptoStoreError.ts";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
@@ -142,6 +149,7 @@ import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
+import { LegacyCryptoUnsupportedViewModel } from "../../viewmodels/crypto/legacyCryptoUnsupportedViewModel.ts";
 
 const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
@@ -292,8 +300,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const initProm = this.initSession();
 
         initProm.catch((err) => {
-            // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
+
+            if (err instanceof LegacyCryptoStoreError) {
+                this.setState({ view: Views.LEGACY_CRYPTO_UNSUPPORTED });
+            }
         });
     };
 
@@ -2220,13 +2231,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
             case Views.PENDING_CLIENT_START:
                 // we think we are logged in, but are still waiting for the /sync to complete
-                return (
-                    <LoginSplashView
-                        matrixClient={MatrixClientPeg.safeGet()}
-                        onLogoutClick={this.onLogoutClick}
-                        syncError={this.state.syncError}
-                    />
-                );
+                return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
             case Views.LOGGED_IN:
                 // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
                 // latter is set via the dispatcher). If we don't yet have a `page_type`,
@@ -2248,13 +2253,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     );
                 } else {
                     // we think we are logged in, but are still waiting for the /sync to complete
-                    return (
-                        <LoginSplashView
-                            matrixClient={MatrixClientPeg.safeGet()}
-                            onLogoutClick={this.onLogoutClick}
-                            syncError={this.state.syncError}
-                        />
-                    );
+                    return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
                 }
             case Views.WELCOME:
                 return <Welcome {...this.getServerProperties()} />;
@@ -2310,6 +2309,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             case Views.LOCK_STOLEN:
                 return <SessionLockStolenView />;
+            case Views.LEGACY_CRYPTO_UNSUPPORTED:
+                return (
+                    <LegacyCryptoUnsupportedView
+                        vm={
+                            new LegacyCryptoUnsupportedViewModel({
+                                dispatcher: dis,
+                            })
+                        }
+                    />
+                );
         }
     }
 
