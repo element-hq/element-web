@@ -10,8 +10,8 @@ import type { MediaHandle } from "@element-hq/element-web-module-api";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import type { RegisteredFileViewer } from "../../../modules/FileViewerApi";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import type RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import type { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
@@ -41,16 +41,18 @@ export function fileViewerOpenButton({
     viewer,
     media,
     mxEvent,
+    rightPanelStore,
 }: {
     viewer: RegisteredFileViewer;
     media: MediaHandle;
     mxEvent: MatrixEvent;
+    rightPanelStore: RightPanelStore;
 }): MediaPreviewEntryButton {
     return {
         label: viewer.options.buttonText,
         icon: viewer.options.buttonIcon,
         onClick: () =>
-            RightPanelStore.instance.setCard({
+            rightPanelStore.setCard({
                 phase: RightPanelPhases.FileViewer,
                 state: {
                     fileViewer: viewer,

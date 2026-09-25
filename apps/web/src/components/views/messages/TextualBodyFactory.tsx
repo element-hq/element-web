@@ -25,6 +25,7 @@ import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
+import { SDKContext } from "../../../contexts/SDKContext";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/TextualBodyViewModel";
@@ -66,6 +67,7 @@ function getTextualBodyClassName(msgtype: MsgType | undefined): string {
 
 export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
+    const sdkContext = useContext(SDKContext);
     const client = useMatrixClientContext();
     const [mediaVisible] = useMediaVisible(props.mxEvent);
     const content = props.mxEvent.getContent();
@@ -171,7 +173,12 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
             const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
                 ? fileViewers.map((viewer) =>
-                      fileViewerOpenButton({ viewer, media: mediaHandle, mxEvent: props.mxEvent }),
+                      fileViewerOpenButton({
+                          viewer,
+                          media: mediaHandle,
+                          mxEvent: props.mxEvent,
+                          rightPanelStore: sdkContext.rightPanelStore,
+                      }),
                   )
                 : [];
 
@@ -226,7 +233,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 ...content,
             };
         },
-        [props.mxEvent],
+        [props.mxEvent, sdkContext],
     );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(

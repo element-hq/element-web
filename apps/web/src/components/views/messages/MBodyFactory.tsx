@@ -21,6 +21,7 @@ import {
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { SDKContext } from "../../../contexts/SDKContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
@@ -97,8 +98,9 @@ interface PreviewFileBodyProps {
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
     const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const sdkContext = useContext(SDKContext);
     const vm = useCreateAutoDisposedViewModel(
-        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, sdkContext.rightPanelStore, pdfViewerEnabled),
     );
 
     // The view model is built once, so turning the lab on has to reach an already-rendered tile.
