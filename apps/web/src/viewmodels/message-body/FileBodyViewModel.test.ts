@@ -94,8 +94,7 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
-            pdfViewerEnabled: false,
-            markdownViewerEnabled: false,
+            documentPreviewsEnabled: false,
             ...overrides,
         });
 
@@ -336,11 +335,11 @@ describe("FileBodyViewModel", () => {
         /** The lab flag is read by the view and handed in, so a test just sets it directly. */
         const createPdfVm = (
             overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
-        ): FileBodyViewModel => createVm({ pdfViewerEnabled: true, ...overrides });
+        ): FileBodyViewModel => createVm({ documentPreviewsEnabled: true, ...overrides });
 
         it("does not offer the viewer while the lab is off", () => {
             const vm = createPdfVm({
-                pdfViewerEnabled: false,
+                documentPreviewsEnabled: false,
                 mxEvent: mkMediaEvent(pdf),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -417,9 +416,9 @@ describe("FileBodyViewModel", () => {
         describe("for Markdown", () => {
             const markdown = { body: "README.md", info: { mimetype: "text/markdown" } };
 
-            it("offers the Markdown viewer while its lab is on", () => {
+            it("offers the Markdown viewer while the lab is on", () => {
                 const vm = createVm({
-                    markdownViewerEnabled: true,
+                    documentPreviewsEnabled: true,
                     mxEvent: mkMediaEvent(markdown),
                     showFileInfo: true,
                     timelineRenderingType: TimelineRenderingType.Room,
@@ -428,9 +427,9 @@ describe("FileBodyViewModel", () => {
                 expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open Markdown" });
             });
 
-            it("does not offer the Markdown viewer while its lab is off, even with the PDF lab on", () => {
+            it("does not offer the Markdown viewer while the lab is off", () => {
                 const vm = createVm({
-                    pdfViewerEnabled: true,
+                    documentPreviewsEnabled: false,
                     mxEvent: mkMediaEvent(markdown),
                     showFileInfo: true,
                     timelineRenderingType: TimelineRenderingType.Room,
@@ -442,7 +441,7 @@ describe("FileBodyViewModel", () => {
             it("opens the Markdown viewer for its own event on click", () => {
                 const mxEvent = mkMediaEvent(markdown);
                 const vm = createVm({
-                    markdownViewerEnabled: true,
+                    documentPreviewsEnabled: true,
                     mxEvent,
                     showFileInfo: true,
                     timelineRenderingType: TimelineRenderingType.Room,

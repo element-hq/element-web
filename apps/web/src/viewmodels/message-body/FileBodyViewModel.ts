@@ -27,9 +27,9 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { attachmentViewerForEvent, type AttachmentViewerLabs } from "../../utils/attachmentViewer";
+import { attachmentViewerForEvent } from "../../utils/attachmentViewer";
 
-export interface FileBodyViewModelProps extends AttachmentViewerLabs {
+export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
     mediaEventHelper?: MediaEventHelper;
     forExport?: boolean;
@@ -37,6 +37,8 @@ export interface FileBodyViewModelProps extends AttachmentViewerLabs {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
+    /** Whether the document previews lab is on. Read by the view, so this model needs no settings access. */
+    documentPreviewsEnabled: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -157,8 +159,8 @@ export class FileBodyViewModel
         // Offer a viewer wherever the file is presented as a file, i.e. not in an export and not in
         // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
         const viewer =
-            showFileInfo && !props.forExport && !!props.mediaEventHelper
-                ? attachmentViewerForEvent(props.mxEvent, props)
+            showFileInfo && !props.forExport && !!props.mediaEventHelper && props.documentPreviewsEnabled
+                ? attachmentViewerForEvent(props.mxEvent)
                 : undefined;
         const showOpen = !!viewer;
         const openLabel = viewer?.openLabel;
@@ -287,7 +289,7 @@ export class FileBodyViewModel
         });
     };
 
-    public onOpenClick = (): void => attachmentViewerForEvent(this.props.mxEvent, this.props)?.open();
+    public onOpenClick = (): void => attachmentViewerForEvent(this.props.mxEvent)?.open();
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 

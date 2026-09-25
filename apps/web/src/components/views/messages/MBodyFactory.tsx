@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type RefObject, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
@@ -59,10 +59,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
-    // One lab covers every document viewer.
     const documentPreviewsEnabled = useSettingValue("feature_document_previews");
-    const pdfViewerEnabled = documentPreviewsEnabled;
-    const markdownViewerEnabled = documentPreviewsEnabled;
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -74,8 +71,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
                 timelineRenderingType,
                 refIFrame,
                 refLink,
-                pdfViewerEnabled,
-                markdownViewerEnabled,
+                documentPreviewsEnabled,
             }),
     );
 
@@ -86,19 +82,9 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
             forExport,
             showFileInfo,
             timelineRenderingType,
-            pdfViewerEnabled,
-            markdownViewerEnabled,
+            documentPreviewsEnabled,
         });
-    }, [
-        mxEvent,
-        mediaEventHelper,
-        forExport,
-        showFileInfo,
-        timelineRenderingType,
-        pdfViewerEnabled,
-        markdownViewerEnabled,
-        vm,
-    ]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, documentPreviewsEnabled, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
@@ -111,16 +97,14 @@ interface PreviewFileBodyProps {
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
     const documentPreviewsEnabled = useSettingValue("feature_document_previews");
-    const viewerLabs = useMemo(
-        () => ({ pdfViewerEnabled: documentPreviewsEnabled, markdownViewerEnabled: documentPreviewsEnabled }),
-        [documentPreviewsEnabled],
+    const vm = useCreateAutoDisposedViewModel(
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, documentPreviewsEnabled),
     );
-    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper, viewerLabs));
 
-    // The view model is built once, so turning a lab on has to reach an already-rendered tile.
+    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
     useEffect(() => {
-        vm.setViewerLabs(viewerLabs);
-    }, [viewerLabs, vm]);
+        vm.setDocumentPreviewsEnabled(documentPreviewsEnabled);
+    }, [documentPreviewsEnabled, vm]);
 
     return (
         <div className="mx_EventTile_content">

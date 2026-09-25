@@ -33,46 +33,30 @@ function mkFileEvent(body: string, mimetype?: string): MatrixEvent {
     });
 }
 
-const allLabsOff = { pdfViewerEnabled: false, markdownViewerEnabled: false };
-const allLabsOn = { pdfViewerEnabled: true, markdownViewerEnabled: true };
-
 describe("attachmentViewerForEvent", () => {
     it("offers nothing for a file no viewer can open", () => {
-        expect(attachmentViewerForEvent(mkFileEvent("notes.txt", "text/plain"), allLabsOn)).toBeUndefined();
+        expect(attachmentViewerForEvent(mkFileEvent("notes.txt", "text/plain"))).toBeUndefined();
     });
 
-    it("offers the PDF viewer for a PDF while its lab is on", () => {
+    it("offers the PDF viewer for a PDF", () => {
         const mxEvent = mkFileEvent("spec.pdf", "application/pdf");
 
-        const viewer = attachmentViewerForEvent(mxEvent, allLabsOn);
+        const viewer = attachmentViewerForEvent(mxEvent);
 
         expect(viewer?.openLabel).toBe("Open PDF");
         viewer?.open();
         expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+        expect(openMarkdownViewer).not.toHaveBeenCalled();
     });
 
-    it("does not offer the PDF viewer while its lab is off", () => {
-        expect(attachmentViewerForEvent(mkFileEvent("spec.pdf", "application/pdf"), allLabsOff)).toBeUndefined();
-    });
-
-    it("offers the Markdown viewer for a Markdown file while its lab is on", () => {
+    it("offers the Markdown viewer for a Markdown file", () => {
         const mxEvent = mkFileEvent("README.md", "text/markdown");
 
-        const viewer = attachmentViewerForEvent(mxEvent, allLabsOn);
+        const viewer = attachmentViewerForEvent(mxEvent);
 
         expect(viewer?.openLabel).toBe("Open Markdown");
         viewer?.open();
         expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
-    });
-
-    it("does not offer the Markdown viewer while its lab is off", () => {
-        expect(attachmentViewerForEvent(mkFileEvent("README.md", "text/markdown"), allLabsOff)).toBeUndefined();
-    });
-
-    it("keeps the labs independent", () => {
-        const pdfOnly = { pdfViewerEnabled: true, markdownViewerEnabled: false };
-
-        expect(attachmentViewerForEvent(mkFileEvent("README.md", "text/markdown"), pdfOnly)).toBeUndefined();
-        expect(attachmentViewerForEvent(mkFileEvent("spec.pdf", "application/pdf"), pdfOnly)).toBeDefined();
+        expect(openPdfViewer).not.toHaveBeenCalled();
     });
 });

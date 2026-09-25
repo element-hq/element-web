@@ -19,41 +19,38 @@ import { DownloadIcon, ExpandIcon } from "@vector-im/compound-design-tokens/asse
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
-import { attachmentViewerForEvent, type AttachmentViewerLabs } from "../../utils/attachmentViewer";
-
-/** No viewer labs on, for callers that do not read the settings. */
-const NO_VIEWER_LABS: AttachmentViewerLabs = { pdfViewerEnabled: false, markdownViewerEnabled: false };
+import { attachmentViewerForEvent } from "../../utils/attachmentViewer";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
     private readonly mediaEventHelper: MediaEventHelper;
 
-    public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper, labs = NO_VIEWER_LABS) {
-        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, labs));
+    public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper, documentPreviewsEnabled = false) {
+        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, documentPreviewsEnabled));
         this.mxEvent = mxEvent;
         this.mediaEventHelper = mediaEventHelper;
     }
 
     /**
-     * Re-derive the tile for new values of the viewer labs. A setting can be toggled while the tile is
-     * already on screen, so the entry has to be rebuilt rather than only built on construction.
+     * Re-derive the tile for a new value of the document previews lab. The setting can be toggled while
+     * the tile is already on screen, so the entry has to be rebuilt rather than only built on construction.
      *
-     * @param labs Which viewer labs are currently enabled.
+     * @param documentPreviewsEnabled Whether the document previews lab is currently enabled.
      */
-    public setViewerLabs(labs: AttachmentViewerLabs): void {
-        this.setProps(MBodyTileViewModel.buildSnapshot(this.mxEvent, this.mediaEventHelper, labs));
+    public setDocumentPreviewsEnabled(documentPreviewsEnabled: boolean): void {
+        this.setProps(MBodyTileViewModel.buildSnapshot(this.mxEvent, this.mediaEventHelper, documentPreviewsEnabled));
     }
 
     private static buildSnapshot(
         mxEvent: MatrixEvent,
         mediaEventHelper: MediaEventHelper,
-        labs: AttachmentViewerLabs,
+        documentPreviewsEnabled: boolean,
     ): MediaPreviewGroupSnapshot {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
-        // Behind the same labs as the legacy file body's viewers.
-        const viewer = attachmentViewerForEvent(mxEvent, labs);
+        // Behind the same lab as the legacy file body's viewers.
+        const viewer = documentPreviewsEnabled ? attachmentViewerForEvent(mxEvent) : undefined;
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
             ...(viewer ? [{ label: viewer.openLabel, icon: <ExpandIcon />, onClick: viewer.open }] : []),
