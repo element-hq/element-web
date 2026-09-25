@@ -30,7 +30,13 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { I18nContext, LinkedTextContext, LinkedText, GenericToast, LegacyCryptoUnsupportedView } from "@element-hq/web-shared-components";
+import {
+    I18nContext,
+    LinkedTextContext,
+    LinkedText,
+    GenericToast,
+    LegacyCryptoUnsupportedView,
+} from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -2304,9 +2310,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Views.LOCK_STOLEN:
                 return <SessionLockStolenView />;
             case Views.LEGACY_CRYPTO_UNSUPPORTED:
-                return <LegacyCryptoUnsupportedView vm={new LegacyCryptoUnsupportedViewModel({
-                    dispatcher: dis
-                })} />;
+                return (
+                    <LegacyCryptoUnsupportedView
+                        vm={
+                            new LegacyCryptoUnsupportedViewModel({
+                                dispatcher: dis,
+                            })
+                        }
+                    />
+                );
         }
     }
 

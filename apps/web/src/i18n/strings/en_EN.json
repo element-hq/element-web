@@ -1114,11 +1114,6 @@
         "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
         "invalid_json_detail": "The message from the parser is: %(message)s",
         "invalid_json_generic": "Invalid JSON",
-        "legacy_crypto_unsupported": {
-            "actions": "Please either downgrade to <b>%(version)s</b> first or remove this device.",
-            "description": "%(brand)s was updated from an unsupported version and cannot migrate your session to a new format.",
-            "title": "This session cannot be used"
-        },
         "mau": "This homeserver has hit its Monthly Active User limit.",
         "misconfigured": "Your Element is misconfigured",
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
