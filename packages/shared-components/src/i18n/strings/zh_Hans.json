@@ -383,7 +383,7 @@
             "move_left": "向左移动",
             "move_right": "向右移动",
             "remove": "为所有人移除",
-            "revoke": "撤消权限",
+            "revoke": "撤销权限",
             "screenshot": "拍摄照片",
             "start_audio_stream": "开始音频串流"
         }

@@ -996,7 +996,7 @@
             "warning": "Jeśli nie usunąłeś metody odzyskiwania, atakujący może próbować dostać się na Twoje konto. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "set_up_recovery": "Utwórz kopię zapasową swoich czatów",
-        "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić, a stracisz dostęp do wszystkich swoich urządzeń.",
+        "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
@@ -1101,7 +1101,7 @@
         "verification_requested_toast_title": "Zażądano weryfikacji",
         "verified_identity_changed": "Cyfrowa tożsamość %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
         "verified_identity_changed_no_displayname": "Cyfrowa tożsamość <b>%(userId)s</b> została zresetowana. <a>Dowiedz się więcej</a>",
-        "verify_toast_description": "Z końcem października 2026r. urządzenia niezweryfikowane utracą możliwość wysyłania oraz odbierania wiadomości. <a>Dowiedz się więcej</a>",
+        "verify_toast_description": "Za niedługo urządzenia niezweryfikowane utracą możliwość wysyłania oraz odbierania wiadomości. <a>Dowiedz się więcej</a>",
         "verify_toast_title": "Zweryfikuj to urządzenie",
         "withdraw_verification_action": "Wycofaj weryfikację"
     },
@@ -1487,6 +1487,11 @@
         "room_list_expand_section": "Rozwiń sekcję listy pokojów",
         "room_list_navigate_down": "Przejdź w dół listy pokoi",
         "room_list_navigate_up": "Przejdź w górę listy pokoi",
+        "room_list_panel_collapse": "Ukryj listę pomieszczeń (z aktywnym uchwytem zmiany rozmiaru)",
+        "room_list_panel_expand": "Pokaż listę pokoi na całej szerokości (z aktywnym uchwytem zmiany rozmiaru)",
+        "room_list_panel_grow": "Poszerz listę pokoi (z aktywnym uchwytem zmiany rozmiaru)",
+        "room_list_panel_shrink": "Zwęż listę pokoi (z aktywnym uchwytem zmiany rozmiaru)",
+        "room_list_panel_toggle": "Ukryj lub pokaż listę pokoi (z aktywnym uchwytem zmiany rozmiaru)",
         "room_list_select_room": "Wybierz pokój z listy pokojów",
         "save": "Zapisz",
         "scroll_down_timeline": "Przewiń w dół na osi czasu",
@@ -1566,6 +1571,7 @@
         "login_with_qr": "Zaloguj się kodem QR",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
+        "new_timeline": "Ulepszone przewijanie i nawigacja na osi czasu",
         "notification_settings": "Ustawienia nowych powiadomień",
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
@@ -1678,6 +1684,7 @@
         "loading_live_location": "Wczytywanie lokalizacji na żywo…",
         "location_not_available": "Lokalizacja niedostępna",
         "map_feedback": "Opinia o mapie",
+        "map_marker": "Znacznik na mapie",
         "mapbox_logo": "Logo Mapbox",
         "reset_bearing": "Resetuj kierunek na północ",
         "share_button": "Udostępnij lokalizację",
@@ -2048,7 +2055,7 @@
         "inaccessible_subtitle_2": "Wystąpił błąd %(errcode)s podczas próby dostępu do pokoju lub przestrzeni. Jeśli widzisz tą wiadomość w błędzie, <issueLink>zgłoś ten błąd</issueLink>.",
         "intro": {
             "display_topic": "Temat: <topic/>",
-            "dm_caption": "Tylko Wy jesteście w tej konwersacji, dopóki ktoś z Was nie zaprosi tu innej osoby.",
+            "dm_caption": "Tylko Wy znajdujecie się w tej rozmowie, dopóki któryś nie zaprosi tu innej osoby.",
             "edit_topic": "Temat: <topic/> (<a>edytuj</a>)",
             "enable_encryption_prompt": "Włącz szyfrowanie w ustawieniach.",
             "encrypted_3pid_dm_pending_join": "Kiedy wszyscy dołączą, będziesz mógł rozmawiać",
@@ -2574,7 +2581,7 @@
                 "change_recovery_key": "Zmień klucz przywracania",
                 "change_recovery_key_description": "Zapisz nowy klucz przywracania w bezpiecznym miejscu. Następnie kliknij Kontynuuj, aby zastosować zmiany.",
                 "change_recovery_key_title": "Zmienić klucz przywracania?",
-                "description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić, a stracisz dostęp do wszystkich swoich urządzeń.",
+                "description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
                 "enter_key_error": "Wprowadzony klucz przywracania nie jest poprawny.",
                 "enter_recovery_key": "Wprowadź klucz przywracania",
                 "forgot_recovery_key": "Zapomniałeś klucza przywracania?",
@@ -2684,6 +2691,7 @@
         },
         "inline_url_previews_default": "Włącz podgląd",
         "inline_url_previews_encrypted": "Włącz podgląd w pokojach szyfrowanych",
+        "inline_url_previews_encrypted_bundled_only": "Pokazuj zawarty podgląd tylko w pokojach szyfrowanych",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
         "invite_controls": {
             "default_label": "Zezwól użytkownikom na zapraszanie Cię do pokojów"
@@ -3318,7 +3326,7 @@
             "few": "%(count)s odpowiedzi",
             "many": "%(count)s odpowiedzi"
         },
-        "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
+        "empty_description": "Użyj „%(replyInThread)s” po najechaniu kursorem na wiadomość.",
         "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
@@ -3417,7 +3425,8 @@
             "voice_call_unsupported": "%(senderName)s wykonał połączenie głosowe. (nie wspierane przez tę przeglądarkę)"
         },
         "m.file": {
-            "error_decrypting": "Błąd odszyfrowywania załącznika"
+            "error_decrypting": "Błąd odszyfrowywania załącznika",
+            "size_unknown": "Rozmiar nieznany"
         },
         "m.image": {
             "error": "Nie można pokazać zdjęcia z powodu błędu",
@@ -3599,6 +3608,7 @@
             "label": "%(reactors)s zareagował z %(content)s",
             "tooltip_caption": "zareagował z %(shortName)s"
         },
+        "read_marker_new": "Nowy",
         "read_receipt_title": {
             "one": "Odczytane przez %(count)s osobę",
             "few": "Odczytane przez %(count)s osoby",
@@ -3686,9 +3696,9 @@
                 "many": "zostało zaproszonych %(count)s razy"
             },
             "joined": {
-                "one": "%(oneUser)s dołączyła",
-                "few": "%(oneUser)s dołączyła %(count)s raz",
-                "many": "%(oneUser)s dołączyła %(count)s razy"
+                "one": "%(oneUser)s dołączył",
+                "few": "%(oneUser)s dołączył %(count)s razy",
+                "many": "%(oneUser)s dołączył %(count)s razy"
             },
             "joined_and_left": {
                 "one": "%(oneUser)s dołączył i wyszedł",
@@ -3836,7 +3846,10 @@
             "one_user": "%(displayName)s pisze…",
             "two_users": "%(names)s i %(lastPerson)s piszą…"
         },
-        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana"
+        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana",
+        "url_preview": {
+            "open_link": "Otwórz link"
+        }
     },
     "truncated_list_n_more": {
         "one": "",
