@@ -295,7 +295,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         </span>
         <div
           aria-invalid="false"
-          class="_container_1dsjc_8"
+          class="SetStatusView-module_statusDropdown _container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -351,7 +351,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     💬
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     In a meeting
                   </span>
                 </span>
@@ -368,7 +370,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     💡
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Focus Time
                   </span>
                 </span>
@@ -385,7 +389,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     🚙
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     On the road
                   </span>
                 </span>
@@ -402,7 +408,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     ☕️
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Be right back
                   </span>
                 </span>
@@ -419,7 +427,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     🌴
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Away
                   </span>
                 </span>
@@ -436,7 +446,9 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   >
                     ✍️
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Custom…
                   </span>
                 </span>
@@ -758,7 +770,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         </span>
         <div
           aria-invalid="false"
-          class="_container_1dsjc_8"
+          class="SetStatusView-module_statusDropdown _container_1dsjc_8"
         >
           <div
             class="SetStatusView-module_setStatusContainer"
@@ -814,7 +826,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     💬
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     In a meeting
                   </span>
                 </span>
@@ -831,7 +845,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     💡
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Focus Time
                   </span>
                 </span>
@@ -848,7 +864,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     🚙
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     On the road
                   </span>
                 </span>
@@ -865,7 +883,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     ☕️
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Be right back
                   </span>
                 </span>
@@ -882,7 +902,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     🌴
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Away
                   </span>
                 </span>
@@ -899,7 +921,9 @@ exports[`UserMenu > renders an open menu 1`] = `
                   >
                     ✍️
                   </span>
-                  <span>
+                  <span
+                    class="SetStatusView-module_optionLabel"
+                  >
                     Custom…
                   </span>
                 </span>

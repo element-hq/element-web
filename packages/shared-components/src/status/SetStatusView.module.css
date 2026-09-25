@@ -5,6 +5,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+.statusDropdown {
+    margin: 0 !important;
+    [role="listbox"] {
+        inset-block-start: -28px !important;
+        inset-inline-start: 100% !important;
+        margin-inline-start: calc((var(--cpd-space-6x) + var(--cpd-space-2x)) / 1.2);
+        inline-size: max-content !important;
+        min-inline-size: 200px;
+    }
+
+    .setStatusContainer {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}
+
+.optionLabel {
+    color: var(--cpd-color-text-primary);
+}
+
 .setStatusContainer {
     /* Floats in a 28px tall box so it doesn't visually shift when it changes to the pill */
     min-height: 28px;
