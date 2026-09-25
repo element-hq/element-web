@@ -177,7 +177,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <DevicesIcon /> {_t("encryption|verification|use_another_device")}
                     </Button>
                 );
-
             } else {
                 verifyButton = (
                     <Tooltip label={_t("encryption|verification|no_other_devices")}>
@@ -198,9 +197,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             } else {
                 useRecoveryKeyButton = (
                     <Tooltip label={_t("encryption|verification|no_recovery_key")}>
-                        <Button disabled={true}>
-                            {_t("encryption|verification|use_recovery_key")}
-                        </Button>
+                        <Button disabled={true}>{_t("encryption|verification|use_recovery_key")}</Button>
                     </Tooltip>
                 );
             }
