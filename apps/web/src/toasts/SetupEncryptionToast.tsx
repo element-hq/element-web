@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { KeyIcon, ErrorSolidIcon, SettingsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Link } from "@vector-im/compound-web";
 import { type ComponentType } from "react";
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -20,7 +21,7 @@ import { DeviceListener, type DeviceState } from "../device-listener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import Spinner from "../components/views/elements/Spinner";
 import { type OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
@@ -130,13 +131,13 @@ const getDescription = (state: DeviceStateForToast): string | React.ReactNode =>
         case "verify_this_session":
             return _t("encryption|verify_toast_description", undefined, {
                 a: (sub) => (
-                    <a
+                    <Link
                         href="https://docs.element.io/latest/element-support/device-verification/how-to-verify-devices/"
                         target="_blank"
-                        rel="noreferrer noopener"
+                        size="sm"
                     >
                         {sub}
-                    </a>
+                    </Link>
                 ),
             });
         case "key_storage_out_of_sync":

@@ -877,6 +877,7 @@
         "setting_definition": "Setting definition:",
         "setting_id": "Setting ID",
         "settings": {
+            "elementCallMockComponent": "Use the mock Element Call component (React transport, no media)",
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Settings explorer",
@@ -1035,6 +1036,8 @@
                 "text": "Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!",
                 "wrong_fingerprint": "Unable to verify device '%(deviceId)s' - the supplied fingerprint '%(fingerprint)s' does not match the device fingerprint, '%(fprint)s'"
             },
+            "no_other_devices": "This option is not available because you do not have any other devices",
+            "no_recovery_key": "This option is not available because you have not set up a recovery key",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "now_you_can": "Now you can read or send messages securely, and anyone you chat with can also trust this device.",
             "once_accepted_can_continue": "Once accepted you'll be able to continue with the verification.",
@@ -1094,7 +1097,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "Soon, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -1473,6 +1476,11 @@
         "room_list_expand_section": "Expand room list section",
         "room_list_navigate_down": "Navigate down in the room list",
         "room_list_navigate_up": "Navigate up in the room list",
+        "room_list_panel_collapse": "Hide the room list (with the resize handle focused)",
+        "room_list_panel_expand": "Show the room list at full width (with the resize handle focused)",
+        "room_list_panel_grow": "Make the room list wider (with the resize handle focused)",
+        "room_list_panel_shrink": "Make the room list narrower (with the resize handle focused)",
+        "room_list_panel_toggle": "Hide or show the room list (with the resize handle focused)",
         "room_list_select_room": "Select room from the room list",
         "save": "Save",
         "scroll_down_timeline": "Scroll down in the timeline",
@@ -1516,6 +1524,7 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_element_call_react": "Render Element Call as a React component instead of a widget",
         "feature_retention": {
             "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
             "disabled_sliding_sync": "Retention cannot be enabled when Sliding Sync is enabled.",
@@ -2988,7 +2997,7 @@
             "label": "Open %(brand)s when you log in to your computer",
             "minimised": "Minimised"
         },
-        "tac_only_notifications": "Only show notifications in the thread activity centre",
+        "tac_only_notifications": "In the Other threads tab, only show notifications",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
         "use_command_f_search": "Use Command + F to search timeline",
@@ -3286,9 +3295,31 @@
         "show_thread_filter": "Show:"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with unread messages.",
+            "default_no_sender": "Open thread in %(roomName)s with unread messages.",
+            "mention": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread mention.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages including mentions."
+            },
+            "mention_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread mention.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages including mentions."
+            },
+            "unread": {
+                "one": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with 1 unread message.",
+                "other": "Open thread in %(roomName)s from %(sender)s: %(preview)s, with %(count)s unread messages."
+            },
+            "unread_no_sender": {
+                "one": "Open thread in %(roomName)s with 1 unread message.",
+                "other": "Open thread in %(roomName)s with %(count)s unread messages."
+            }
+        },
         "header": "Threads activity",
-        "no_rooms_with_threads_notifs": "You don't have rooms with thread notifications yet.",
-        "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
+        "my_threads_tab": "My threads",
+        "no_other_unread_threads": "No unread threads from other people.",
+        "no_participating_threads_unread": "You don't have unread threads you've participated in.",
+        "other_threads_tab": "Other threads"
     },
     "time": {
         "date_at_time": "%(date)s at %(time)s",
@@ -3922,6 +3953,11 @@
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
         "disabled_ongoing_call": "Ongoing call",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "default",
+            "not_called": "not called",
+            "participant_you": "%(participant)s – you"
+        },
         "enable_camera": "Turn on camera",
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",

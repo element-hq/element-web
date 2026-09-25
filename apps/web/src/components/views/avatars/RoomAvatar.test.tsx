@@ -12,7 +12,7 @@ import React from "react";
 import { vi, describe, it, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { render } from "test-utils-rtl";
 import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { filterConsole, stubClient } from "../../../../test/test-utils";
+import { filterConsole, stubClient } from "test-utils";
 
 import RoomAvatar from "./RoomAvatar";
 import DMRoomMap from "../../../utils/DMRoomMap";

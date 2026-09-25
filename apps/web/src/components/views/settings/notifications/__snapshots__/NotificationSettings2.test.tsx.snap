@@ -970,7 +970,7 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     class="_label_1o4d9_60"
                     for="mx_SettingsFlag_OEPN1su1JYVt"
                   >
-                    Only show notifications in the thread activity centre
+                    In the Other threads tab, only show notifications
                   </label>
                 </div>
               </div>
@@ -2230,7 +2230,7 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     class="_label_1o4d9_60"
                     for="mx_SettingsFlag_OEPN1su1JYVt"
                   >
-                    Only show notifications in the thread activity centre
+                    In the Other threads tab, only show notifications
                   </label>
                 </div>
               </div>

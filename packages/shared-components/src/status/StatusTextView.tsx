@@ -7,6 +7,7 @@
 
 import React, { type JSX, type FC } from "react";
 import { Text } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import { type UserStatus } from "..";
 import styles from "./StatusTextView.module.css";
@@ -19,9 +20,9 @@ export const StatusTextView: FC<
         status: UserStatus;
         ref?: React.Ref<HTMLDivElement>;
     } & React.HTMLAttributes<HTMLDivElement>
-> = function StatusTextView({ status, ref, ...props }): JSX.Element {
+> = function StatusTextView({ status, ref, className, ...props }): JSX.Element {
     return (
-        <div ref={ref} {...props} className={styles.statusText}>
+        <div ref={ref} {...props} className={classNames(styles.statusText, className)}>
             <Text as="span" className={styles.menuStatusEmoji}>
                 {status.emoji}
             </Text>
