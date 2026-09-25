@@ -5,54 +5,35 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useRef } from "react";
+import React, { type JSX } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PdfViewerView, type PdfViewerViewProps } from "./PdfViewerView";
 import samplePage from "../../../../static/pdf-viewer/sample-page.png";
 
-type PdfViewerStoryProps = Omit<PdfViewerViewProps, "containerRef" | "viewerRef">;
-
-/**
- * Adapts Storybook controls to the shell's ref-based host API.
- *
- * The ready state installs a rasterized page from the app-owned PDF fixture into the same mount point
- * that the app gives to pdf.js. This keeps the example realistic without moving the renderer here.
- */
-function PdfViewerStory({ status, ...props }: PdfViewerStoryProps): JSX.Element {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const viewerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const viewer = viewerRef.current;
-        if (!viewer) return;
-
-        viewer.replaceChildren();
-        if (status !== "ready") return;
-
-        const page = document.createElement("div");
-        page.className = "page";
-        page.dataset.pageNumber = "1";
-        // pdf.js also writes the rendered page geometry inline after fitting it to the container.
-        page.style.width = "320px";
-        page.style.height = "453px";
-
-        const preview = document.createElement("img");
-        preview.alt = "";
-        preview.dataset.testid = "pdf-story-page";
-        preview.src = samplePage;
-        preview.style.display = "block";
-        preview.style.width = "100%";
-        preview.style.height = "100%";
-
-        page.append(preview);
-        viewer.append(page);
-    }, [status]);
-
+/** Adapts Storybook controls to the shell's API. The ready state shows a rasterized page as the surface. */
+function PdfViewerStory({ status, ...props }: PdfViewerViewProps): JSX.Element {
     return (
         <div style={{ width: 420, height: 560 }}>
-            <PdfViewerView {...props} status={status} containerRef={containerRef} viewerRef={viewerRef} />
+            <PdfViewerView {...props} status={status}>
+                {status === "ready" ? (
+                    <div style={{ display: "flex", justifyContent: "center", padding: 16, boxSizing: "border-box" }}>
+                        <img
+                            alt=""
+                            data-testid="pdf-story-page"
+                            src={samplePage}
+                            style={{
+                                display: "block",
+                                width: 320,
+                                height: 453,
+                                background: "white",
+                                boxShadow: "0 2px 8px rgb(0 0 0 / 0.18)",
+                            }}
+                        />
+                    </div>
+                ) : null}
+            </PdfViewerView>
         </div>
     );
 }
