@@ -23,22 +23,22 @@ exports[`<SetIdServer /> > renders expected fields 1`] = `
       class="mx_SettingsFieldset_content"
     >
       <form
-        class="_root_1o4d9_17 mx_IdentityServerPicker"
+        class="_root mx_IdentityServerPicker"
       >
         <div
-          class="_field_1o4d9_27"
+          class="_field"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="radix-react-use-id-1"
           >
             Enter a new identity server
           </label>
           <div
-            class="_controls_17lij_8"
+            class="_controls"
           >
             <input
-              class="_control_d83jn_10"
+              class="_control"
               id="radix-react-use-id-1"
               name="input"
               placeholder=""

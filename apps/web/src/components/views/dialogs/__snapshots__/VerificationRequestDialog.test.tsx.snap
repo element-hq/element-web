@@ -197,7 +197,7 @@ exports[`VerificationRequestDialog > Initially, asks how you would like to verif
             >
               <svg
                 aria-label="Loading…"
-                class="_icon_1855a_18"
+                class="_icon"
                 data-testid="spinner"
                 fill="currentColor"
                 height="1em"
@@ -456,34 +456,34 @@ exports[`VerificationRequestDialog > When other device accepted emoji, displays 
           Confirm that the emojis below match those shown on your other device.
         </p>
         <div
-          class="_container_1lqqy_8 mx_VerificationShowSas_emojiSas"
+          class="_container mx_VerificationShowSas_emojiSas"
         >
           <div
-            class="_segment_1lqqy_15"
+            class="_segment"
           >
             <div
               aria-hidden="true"
-              class="_emoji_1lqqy_23"
+              class="_emoji"
             >
               🐶
             </div>
             <div
-              class="_label_1lqqy_29"
+              class="_label"
             >
               Dog
             </div>
           </div>
           <div
-            class="_segment_1lqqy_15"
+            class="_segment"
           >
             <div
               aria-hidden="true"
-              class="_emoji_1lqqy_23"
+              class="_emoji"
             >
               🐱
             </div>
             <div
-              class="_label_1lqqy_29"
+              class="_label"
             >
               Cat
             </div>

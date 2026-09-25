@@ -10,7 +10,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders authorizatio
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -27,7 +27,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders authorizatio
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         The sign in was not completed in time
       </h1>
@@ -41,7 +41,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders authorizatio
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -64,7 +64,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders check_code_m
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -81,7 +81,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders check_code_m
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -95,7 +95,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders check_code_m
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -118,7 +118,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_alrea
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -135,7 +135,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_alrea
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -149,7 +149,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_alrea
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -172,7 +172,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_not_f
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -189,7 +189,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_not_f
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -203,7 +203,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders device_not_f
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -226,7 +226,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders etag_missing
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -243,7 +243,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders etag_missing
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -257,7 +257,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders etag_missing
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -280,7 +280,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders expired 1`] 
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -297,7 +297,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders expired 1`] 
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         The sign in was not completed in time
       </h1>
@@ -311,7 +311,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders expired 1`] 
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -364,7 +364,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders homeserver_l
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -389,7 +389,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders homeserver_l
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         QR code not supported
       </h1>
@@ -403,7 +403,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders homeserver_l
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -426,7 +426,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders insecure_cha
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -443,13 +443,13 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders insecure_cha
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Connection not secure
       </h1>
       A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
       <h2
-        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+        class="_typography _font-body-lg-semibold"
         data-testid="cancellation-message"
       >
         Now what?
@@ -470,7 +470,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders insecure_cha
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -493,7 +493,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders invalid_code
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -510,7 +510,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders invalid_code
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -524,7 +524,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders invalid_code
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -547,7 +547,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="success"
         data-size="lg"
       >
@@ -564,7 +564,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Your other device is already signed in
       </h1>
@@ -578,7 +578,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -601,7 +601,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -618,7 +618,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -632,7 +632,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders other_device
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -655,7 +655,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders rate_limited
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -672,7 +672,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders rate_limited
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -686,7 +686,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders rate_limited
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -709,7 +709,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unexpected_m
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -726,7 +726,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unexpected_m
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -740,7 +740,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unexpected_m
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -763,7 +763,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unknown 1`] 
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -780,7 +780,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unknown 1`] 
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -794,7 +794,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unknown 1`] 
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -817,7 +817,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unsupported_
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -834,7 +834,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unsupported_
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Other device not compatible
       </h1>
@@ -848,7 +848,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders unsupported_
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -871,7 +871,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_cancell
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -888,7 +888,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_cancell
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Sign in request cancelled
       </h1>
@@ -902,7 +902,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_cancell
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -925,7 +925,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_decline
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -942,7 +942,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_decline
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Sign in declined
       </h1>
@@ -956,7 +956,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > errors > renders user_decline
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1009,7 +1009,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders QR code 1`] = `
       class="mx_LoginWithQR_main"
     >
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Scan the QR code with another device
       </h1>
@@ -1064,12 +1064,12 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmati
       class="mx_LoginWithQR_main"
     >
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Enter the number shown on your other device
       </h1>
       <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        class="_typography _font-body-md-regular"
       >
         This will verify that the connection to your other device is secure.
       </p>
@@ -1079,11 +1079,11 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmati
         2-digit code
       </label>
       <div
-        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+        class="_container mx_LoginWithQR_checkCode_input mx_no_textinput"
       >
         <input
           autocomplete="one-time-code"
-          class="_control_17qhw_25"
+          class="_control"
           id="mx_LoginWithQR_checkCode"
           inputmode="numeric"
           maxlength="2"
@@ -1093,11 +1093,11 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmati
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
       </div>
       <div
@@ -1108,7 +1108,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmati
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="approve-login-button"
@@ -1118,7 +1118,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders check code confirmati
         Continue
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="tertiary"
         data-size="lg"
         data-testid="decline-login-button"
@@ -1180,7 +1180,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while loading
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1255,7 +1255,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while signing
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1282,7 +1282,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while signing
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="cancel-button"
@@ -1344,7 +1344,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner while verifyi
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1414,7 +1414,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner whilst QR gen
       class="mx_LoginWithQR_main"
     >
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Scan the QR code with another device
       </h1>
@@ -1426,7 +1426,7 @@ exports[`<LoginWithQRFlow /> > login.reciprocate > renders spinner whilst QR gen
         >
           <svg
             aria-label="Loading…"
-            class="_icon_1855a_18"
+            class="_icon"
             data-testid="spinner"
             fill="currentColor"
             height="1em"
@@ -1482,7 +1482,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders authorization_expi
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1499,7 +1499,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders authorization_expi
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         The sign in was not completed in time
       </h1>
@@ -1513,7 +1513,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders authorization_expi
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1536,7 +1536,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders check_code_mismatc
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1553,7 +1553,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders check_code_mismatc
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -1567,7 +1567,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders check_code_mismatc
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1590,7 +1590,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_already_exi
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1607,7 +1607,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_already_exi
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -1621,7 +1621,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_already_exi
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1644,7 +1644,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_not_found 1
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1661,7 +1661,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_not_found 1
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -1675,7 +1675,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders device_not_found 1
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1698,7 +1698,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders etag_missing 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1715,7 +1715,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders etag_missing 1`] =
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -1729,7 +1729,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders etag_missing 1`] =
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1752,7 +1752,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders expired 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1769,7 +1769,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders expired 1`] = `
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         The sign in was not completed in time
       </h1>
@@ -1783,7 +1783,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders expired 1`] = `
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1806,7 +1806,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders homeserver_lacks_s
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1831,7 +1831,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders homeserver_lacks_s
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         QR code not supported
       </h1>
@@ -1845,7 +1845,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders homeserver_lacks_s
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="cancel-button"
@@ -1869,7 +1869,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders insecure_channel_d
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1886,13 +1886,13 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders insecure_channel_d
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Connection not secure
       </h1>
       A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
       <h2
-        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+        class="_typography _font-body-lg-semibold"
         data-testid="cancellation-message"
       >
         Now what?
@@ -1913,7 +1913,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders insecure_channel_d
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1936,7 +1936,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders invalid_code 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -1953,7 +1953,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders invalid_code 1`] =
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -1967,7 +1967,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders invalid_code 1`] =
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -1990,7 +1990,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_alrea
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="success"
         data-size="lg"
       >
@@ -2007,7 +2007,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_alrea
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Your other device is already signed in
       </h1>
@@ -2021,7 +2021,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_alrea
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2044,7 +2044,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_not_s
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2061,7 +2061,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_not_s
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -2075,7 +2075,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders other_device_not_s
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2098,7 +2098,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders rate_limited 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2115,7 +2115,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders rate_limited 1`] =
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -2129,7 +2129,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders rate_limited 1`] =
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2152,7 +2152,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unexpected_message
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2169,7 +2169,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unexpected_message
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -2183,7 +2183,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unexpected_message
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2206,7 +2206,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unknown 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2223,7 +2223,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unknown 1`] = `
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Something went wrong!
       </h1>
@@ -2237,7 +2237,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unknown 1`] = `
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2260,7 +2260,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unsupported_protoc
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2277,7 +2277,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unsupported_protoc
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Other device not compatible
       </h1>
@@ -2291,7 +2291,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders unsupported_protoc
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -2314,7 +2314,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_cancelled 1`]
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2331,7 +2331,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_cancelled 1`]
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Sign in request cancelled
       </h1>
@@ -2345,7 +2345,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_cancelled 1`]
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="cancel-button"
@@ -2369,7 +2369,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_declined 1`] 
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -2386,7 +2386,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_declined 1`] 
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Sign in declined
       </h1>
@@ -2400,7 +2400,7 @@ exports[`<LoginWithQRFlow /> > login.start > errors > renders user_declined 1`] 
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="cancel-button"
@@ -2424,7 +2424,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders QR code 1`] = `
       class="mx_LoginWithQR_main"
     >
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Scan the QR code
       </h1>
@@ -2494,7 +2494,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="primary"
         data-size="lg"
       >
@@ -2511,12 +2511,12 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Enter the number shown on your other device
       </h1>
       <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        class="_typography _font-body-md-regular"
       >
         This will verify that the connection to your other device is secure.
       </p>
@@ -2526,11 +2526,11 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
         2-digit code
       </label>
       <div
-        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+        class="_container mx_LoginWithQR_checkCode_input mx_no_textinput"
       >
         <input
           autocomplete="one-time-code"
-          class="_control_17qhw_25"
+          class="_control"
           id="mx_LoginWithQR_checkCode"
           inputmode="numeric"
           maxlength="2"
@@ -2540,11 +2540,11 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
       </div>
       <div
@@ -2555,7 +2555,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="approve-login-button"
@@ -2565,7 +2565,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders check code confirmation 1`]
         Continue
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="tertiary"
         data-size="lg"
         data-testid="decline-login-button"
@@ -2597,7 +2597,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while loading 1`] =
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -2634,7 +2634,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`
       class="mx_LoginWithQR_main"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="primary"
         data-size="lg"
       >
@@ -2651,21 +2651,21 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`
         </svg>
       </div>
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Your verification code
       </h1>
       <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        class="_typography _font-body-md-regular"
       >
         Your account provider may ask for the following code to verify the sign in.
       </p>
       <div
-        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+        class="_container mx_LoginWithQR_checkCode_input mx_no_textinput"
       >
         <input
           autocomplete="one-time-code"
-          class="_control_17qhw_25"
+          class="_control"
           disabled=""
           inputmode="numeric"
           maxlength="6"
@@ -2675,27 +2675,27 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
         <div
           aria-hidden="true"
-          class="_digit_17qhw_49"
+          class="_digit"
         />
       </div>
       <div
@@ -2707,7 +2707,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -2734,7 +2734,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while signing in 1`
       class="mx_LoginWithQR_buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="lg"
         data-testid="cancel-button"
@@ -2766,7 +2766,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner while verifying 1`]
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -2806,7 +2806,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner whilst QR generatin
       class="mx_LoginWithQR_main"
     >
       <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Scan the QR code
       </h1>
@@ -2818,7 +2818,7 @@ exports[`<LoginWithQRFlow /> > login.start > renders spinner whilst QR generatin
         >
           <svg
             aria-label="Loading…"
-            class="_icon_1855a_18"
+            class="_icon"
             data-testid="spinner"
             fill="currentColor"
             height="1em"

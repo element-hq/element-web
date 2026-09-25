@@ -3,7 +3,7 @@
 exports[`<SelectableDeviceTile /> > renders selected tile 1`] = `
 <input
   checked=""
-  class="_input_153f2_18"
+  class="_input"
   data-testid="device-tile-checkbox-my-device"
   id="device-tile-checkbox-my-device"
   type="checkbox"
@@ -16,25 +16,25 @@ exports[`<SelectableDeviceTile /> > renders unselected device tile with checkbox
     class="mx_SelectableDeviceTile"
   >
     <form
-      class="_root_1o4d9_17"
+      class="_root"
     >
       <div
-        class="_inline-field_1o4d9_33 mx_SelectableDeviceTile_checkbox"
+        class="_inline-field mx_SelectableDeviceTile_checkbox"
       >
         <div
-          class="_inline-field-control_1o4d9_45"
+          class="_inline-field-control"
         >
           <div
-            class="_container_153f2_10"
+            class="_container"
           >
             <input
-              class="_input_153f2_18"
+              class="_input"
               data-testid="device-tile-checkbox-my-device"
               id="device-tile-checkbox-my-device"
               type="checkbox"
             />
             <div
-              class="_ui_153f2_19"
+              class="_ui"
             >
               <svg
                 aria-hidden="true"
@@ -52,10 +52,10 @@ exports[`<SelectableDeviceTile /> > renders unselected device tile with checkbox
           </div>
         </div>
         <div
-          class="_inline-field-body_1o4d9_39"
+          class="_inline-field-body"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="device-tile-checkbox-my-device"
           >
             <div

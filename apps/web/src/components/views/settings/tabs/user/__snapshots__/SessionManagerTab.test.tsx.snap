@@ -445,27 +445,27 @@ exports[`<SessionManagerTab /> > goes to filtered list from security recommendat
     tabindex="0"
   >
     <form
-      class="_root_1o4d9_17"
+      class="_root"
     >
       <div
-        class="_inline-field_1o4d9_33"
+        class="_inline-field"
       >
         <div
-          class="_inline-field-control_1o4d9_45"
+          class="_inline-field-control"
         >
           <div
-            class="_container_153f2_10"
+            class="_container"
           >
             <input
               aria-label="Select all"
               aria-labelledby="react-use-id-1"
-              class="_input_153f2_18"
+              class="_input"
               data-testid="device-select-all-checkbox"
               id="device-select-all-checkbox"
               type="checkbox"
             />
             <div
-              class="_ui_153f2_19"
+              class="_ui"
             >
               <svg
                 aria-hidden="true"
@@ -483,7 +483,7 @@ exports[`<SessionManagerTab /> > goes to filtered list from security recommendat
           </div>
         </div>
         <div
-          class="_inline-field-body_1o4d9_39"
+          class="_inline-field-body"
         />
       </div>
     </form>

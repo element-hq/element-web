@@ -13,7 +13,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Profile
@@ -21,7 +21,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -29,7 +29,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -47,26 +47,26 @@ exports[`<ThirdPartyMemberInfo /> > should render invite 1`] = `
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
-        class="_flex_4dswl_9 mx_ThirdPartyMemberInfo"
+        class="_flex mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="_flex_4dswl_9"
+          class="_flex"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             aria-level="2"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+            class="_typography _font-body-lg-semibold"
             role="heading"
           >
             bob@bob.com
           </span>
           <span
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+            class="_typography _font-body-md-regular"
           >
             Invited by Alice DisplayName
           </span>
@@ -90,7 +90,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite when room in not availa
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Profile
@@ -98,7 +98,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite when room in not availa
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -106,7 +106,7 @@ exports[`<ThirdPartyMemberInfo /> > should render invite when room in not availa
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -124,26 +124,26 @@ exports[`<ThirdPartyMemberInfo /> > should render invite when room in not availa
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
-        class="_flex_4dswl_9 mx_ThirdPartyMemberInfo"
+        class="_flex mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="_flex_4dswl_9"
+          class="_flex"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             aria-level="2"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+            class="_typography _font-body-lg-semibold"
             role="heading"
           >
             bob@bob.com
           </span>
           <span
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+            class="_typography _font-body-md-regular"
           >
             Invited by Alice DisplayName
           </span>

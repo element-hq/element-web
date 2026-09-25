@@ -9,7 +9,7 @@ exports[`<EncryptionCard /> > should render 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="primary"
         data-size="lg"
       >
@@ -26,7 +26,7 @@ exports[`<EncryptionCard /> > should render 1`] = `
         </svg>
       </div>
       <h2
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         My title
       </h2>

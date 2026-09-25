@@ -35,14 +35,14 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
       Room ID: !id
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+        class="_icon-button mx_CopyableText_copyButton"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 28px; padding: 4px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -161,7 +161,7 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
         </button>
       </div>
       <form
-        class="_root_1o4d9_17 mx_DevTools_toggleForm"
+        class="_root mx_DevTools_toggleForm"
       >
         <h2
           class="mx_DevTools_toolHeading"
@@ -169,30 +169,30 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           Options
         </h2>
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="mx_SettingsFlag_vY7Q4uEh9K38"
                 role="switch"
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="mx_SettingsFlag_vY7Q4uEh9K38"
             >
               Developer mode
@@ -200,30 +200,30 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="mx_SettingsFlag_QgU2PomxwKpa"
                 role="switch"
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="mx_SettingsFlag_QgU2PomxwKpa"
             >
               Show hidden events in timeline
@@ -231,30 +231,30 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="mx_SettingsFlag_6hpi3YEetmBG"
                 role="switch"
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="mx_SettingsFlag_6hpi3YEetmBG"
             >
               Enable widget screenshots on supported widgets
@@ -262,36 +262,36 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="mx_SettingsFlag_4yVCeEefiPqp"
                 role="switch"
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="mx_SettingsFlag_4yVCeEefiPqp"
             >
               Disable bandwidth-heavy features
             </label>
             <span
-              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              class="_message _help-message"
               id="radix-react-use-id-2"
             >
               <span>
@@ -307,22 +307,22 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
         </div>
       </form>
       <form
-        class="_root_1o4d9_17"
+        class="_root"
       >
         <div
-          class="_field_1o4d9_27"
+          class="_field"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="radix-react-use-id-3"
           >
             Element Call URL
           </label>
           <div
-            class="_controls_17lij_8"
+            class="_controls"
           >
             <input
-              class="_control_d83jn_10"
+              class="_control"
               id="radix-react-use-id-3"
               name="input"
               title=""

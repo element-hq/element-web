@@ -6,25 +6,25 @@ exports[`<LabelledCheckbox /> > should render with byline of %p 1`] = `
     class="mx_LabelledCheckbox"
   >
     <form
-      class="_root_1o4d9_17"
+      class="_root"
     >
       <div
-        class="_inline-field_1o4d9_33"
+        class="_inline-field"
       >
         <div
-          class="_inline-field-control_1o4d9_45"
+          class="_inline-field-control"
         >
           <div
-            class="_container_153f2_10"
+            class="_container"
           >
             <input
               checked=""
-              class="_input_153f2_18"
+              class="_input"
               id="checkbox_vY7Q4uEh9K"
               type="checkbox"
             />
             <div
-              class="_ui_153f2_19"
+              class="_ui"
             >
               <svg
                 aria-hidden="true"
@@ -42,10 +42,10 @@ exports[`<LabelledCheckbox /> > should render with byline of %p 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_1o4d9_39"
+          class="_inline-field-body"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="checkbox_vY7Q4uEh9K"
           >
             <span
@@ -67,26 +67,26 @@ exports[`<LabelledCheckbox /> > should render with byline of %p 2`] = `
     class="mx_LabelledCheckbox"
   >
     <form
-      class="_root_1o4d9_17"
+      class="_root"
     >
       <div
-        class="_inline-field_1o4d9_33"
+        class="_inline-field"
       >
         <div
-          class="_inline-field-control_1o4d9_45"
+          class="_inline-field-control"
         >
           <div
-            class="_container_153f2_10"
+            class="_container"
           >
             <input
               aria-describedby="react-use-id-1"
               checked=""
-              class="_input_153f2_18"
+              class="_input"
               id="checkbox_vY7Q4uEh9K"
               type="checkbox"
             />
             <div
-              class="_ui_153f2_19"
+              class="_ui"
             >
               <svg
                 aria-hidden="true"
@@ -104,10 +104,10 @@ exports[`<LabelledCheckbox /> > should render with byline of %p 2`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_1o4d9_39"
+          class="_inline-field-body"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="checkbox_vY7Q4uEh9K"
           >
             <span
@@ -117,7 +117,7 @@ exports[`<LabelledCheckbox /> > should render with byline of %p 2`] = `
             </span>
           </label>
           <span
-            class="_message_1o4d9_86 _help-message_1o4d9_92"
+            class="_message _help-message"
             id="react-use-id-1"
           >
             this is a byline

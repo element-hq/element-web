@@ -98,7 +98,10 @@ export default defineProject({
                             url: "http://localhost/",
                         },
                     },
-                    snapshotSerializers: [resolve("./src/test/react-use-id-serializer.ts")],
+                    snapshotSerializers: [
+                        resolve("./src/test/react-use-id-serializer.ts"),
+                        resolve("./src/test/css-module-class-serializer.ts"),
+                    ],
                 },
                 plugins: [
                     svgr({
