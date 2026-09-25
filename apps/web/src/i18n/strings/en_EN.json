@@ -1682,6 +1682,9 @@
         "share_type_prompt": "What location type do you want to share?",
         "toggle_attribution": "Toggle attribution"
     },
+    "markdown_viewer": {
+        "title": "Markdown"
+    },
     "member_list": {
         "count": {
             "one": "%(count)s Member",

@@ -197,6 +197,58 @@ describe("RightPanelStore", () => {
                 expect(store.roomPhaseHistory).toEqual([]);
             });
         });
+        describe("MarkdownViewer", () => {
+            const markdownCard = {
+                phase: RightPanelPhases.MarkdownViewer,
+                state: { markdownViewerEvent: { getId: () => "$markdown" } as unknown as MatrixEvent },
+            };
+
+            /** The viewer sits behind a lab, so the card is only valid while that is on. */
+            const setMarkdownViewerLab = (enabled: boolean): Promise<void> =>
+                SettingsStore.setValue("feature_markdown_viewer", null, SettingLevel.DEVICE, enabled);
+
+            it("drops a card with no event to display", async () => {
+                await setMarkdownViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard({ phase: RightPanelPhases.MarkdownViewer }, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
+
+            it("opens the card for the event when the open action is dispatched", async () => {
+                await setMarkdownViewerLab(true);
+                await viewRoom("!1:example.org");
+                const event = {
+                    getId: () => "$markdown",
+                    getRoomId: () => "!1:example.org",
+                } as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenMarkdownViewer, event }, true);
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MarkdownViewer);
+                expect(store.currentCardForRoom("!1:example.org").state?.markdownViewerEvent).toBe(event);
+                expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            });
+
+            it("keeps a card with an event to display", async () => {
+                await setMarkdownViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                store.setCard(markdownCard, true, "!1:example.org");
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MarkdownViewer);
+            });
+
+            it("drops an otherwise valid card while the lab is off", async () => {
+                await setMarkdownViewerLab(false);
+                await viewRoom("!1:example.org");
+
+                store.setCard(markdownCard, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
+        });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
             // Setting the memberlist card should also generate a history with room summary card

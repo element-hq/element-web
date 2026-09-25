@@ -197,4 +197,49 @@ describe("RightPanel", () => {
         // to PdfViewerCard with the right event.
         await waitFor(() => expect(screen.getByRole("heading", { name: "spec.pdf" })).toBeInTheDocument());
     });
+
+    it("renders the Markdown viewer card, named after the file, for the MarkdownViewer phase", async () => {
+        const room = mkRoom(cli, "r1");
+        cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
+
+        const markdownEvent = new MatrixEvent({
+            room_id: "r1",
+            sender: "@user:example.org",
+            event_id: "$markdown",
+            type: EventType.RoomMessage,
+            content: {
+                body: "README.md",
+                msgtype: MsgType.File,
+                url: "mxc://example.org/readme",
+                info: { mimetype: "text/markdown" },
+            },
+        });
+
+        // The card is only valid while the lab is on, so the store would otherwise drop it.
+        await SettingsStore.setValue("feature_markdown_viewer", null, SettingLevel.DEVICE, true);
+
+        await spinUpStores();
+
+        render(
+            <RightPanel
+                room={room}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+        );
+
+        const rpsUpdated = waitForRpsUpdate();
+        dis.dispatch({ action: Action.ViewRoom, room_id: "r1" });
+        await rpsUpdated;
+
+        RightPanelStore.instance.setCard(
+            { phase: RightPanelPhases.MarkdownViewer, state: { markdownViewerEvent: markdownEvent } },
+            true,
+            "r1",
+        );
+
+        // The viewer itself is code split, so the card header is what proves the phase was wired up
+        // to MarkdownViewerCard with the right event.
+        await waitFor(() => expect(screen.getByRole("heading", { name: "README.md" })).toBeInTheDocument());
+    });
 });
