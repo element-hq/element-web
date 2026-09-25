@@ -33,14 +33,14 @@ exports[`ViewSource > should be able to edit a message 1`] = `
         Room ID: !roomId:example.org
         <button
           aria-labelledby="react-use-id-1"
-          class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+          class="_icon-button mx_CopyableText_copyButton"
           data-kind="primary"
           role="button"
           style="--cpd-icon-button-size: 28px; padding: 4px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -66,14 +66,14 @@ exports[`ViewSource > should be able to edit a message 1`] = `
         Event ID: $event2:example.org
         <button
           aria-labelledby="react-use-id-2"
-          class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+          class="_icon-button mx_CopyableText_copyButton"
           data-kind="primary"
           role="button"
           style="--cpd-icon-button-size: 28px; padding: 4px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -225,14 +225,14 @@ exports[`ViewSource > should render 1`] = `
         Room ID: !roomId:example.org
         <button
           aria-labelledby="react-use-id-1"
-          class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+          class="_icon-button mx_CopyableText_copyButton"
           data-kind="primary"
           role="button"
           style="--cpd-icon-button-size: 28px; padding: 4px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -258,14 +258,14 @@ exports[`ViewSource > should render 1`] = `
         Event ID: $event1:example.org
         <button
           aria-labelledby="react-use-id-2"
-          class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+          class="_icon-button mx_CopyableText_copyButton"
           data-kind="primary"
           role="button"
           style="--cpd-icon-button-size: 28px; padding: 4px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -312,14 +312,14 @@ exports[`ViewSource > should render 1`] = `
       </pre>
       <button
         aria-labelledby="react-use-id-3"
-        class="_icon-button_1215g_8 mx_CopyableText_copyButton"
+        class="_icon-button mx_CopyableText_copyButton"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 28px; padding: 4px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg

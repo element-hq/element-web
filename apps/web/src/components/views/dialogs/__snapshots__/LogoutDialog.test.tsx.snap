@@ -25,7 +25,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
         class="mx_EncryptionCard_header"
       >
         <div
-          class="_big-icon_1ssbv_8"
+          class="_big-icon"
           data-kind="critical"
           data-size="lg"
         >
@@ -42,22 +42,22 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
           </svg>
         </div>
         <h2
-          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          class="_typography _font-heading-sm-semibold"
         >
           You're about to lose access to your encrypted chats
         </h2>
       </div>
       <div
-        class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+        class="_flex mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
         <a
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
           href="https://element.io/en/help#encryption16"
           target="_blank"
         >
@@ -83,7 +83,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
         class="mx_EncryptionCard_buttons"
       >
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60"
+          class="_button _has-icon"
           data-kind="primary"
           data-size="lg"
           role="button"
@@ -104,7 +104,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
           Get recovery key
         </button>
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          class="_button _has-icon _destructive"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -178,7 +178,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
         class="mx_EncryptionCard_header"
       >
         <div
-          class="_big-icon_1ssbv_8"
+          class="_big-icon"
           data-kind="critical"
           data-size="lg"
         >
@@ -195,22 +195,22 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
           </svg>
         </div>
         <h2
-          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          class="_typography _font-heading-sm-semibold"
         >
           You're about to lose access to your encrypted chats
         </h2>
       </div>
       <div
-        class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+        class="_flex mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
         <a
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
           href="https://element.io/en/help#encryption16"
           target="_blank"
         >
@@ -236,7 +236,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
         class="mx_EncryptionCard_buttons"
       >
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60"
+          class="_button _has-icon"
           data-kind="primary"
           data-size="lg"
           role="button"
@@ -257,7 +257,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
           Get recovery key
         </button>
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          class="_button _has-icon _destructive"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -331,7 +331,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
         class="mx_EncryptionCard_header"
       >
         <div
-          class="_big-icon_1ssbv_8"
+          class="_big-icon"
           data-kind="critical"
           data-size="lg"
         >
@@ -348,22 +348,22 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
           </svg>
         </div>
         <h2
-          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          class="_typography _font-heading-sm-semibold"
         >
           You're about to lose access to your encrypted chats
         </h2>
       </div>
       <div
-        class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+        class="_flex mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
         <a
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
           href="https://element.io/en/help#encryption16"
           target="_blank"
         >
@@ -389,7 +389,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
         class="mx_EncryptionCard_buttons"
       >
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60"
+          class="_button _has-icon"
           data-kind="primary"
           data-size="lg"
           role="button"
@@ -410,7 +410,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
           Get recovery key
         </button>
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          class="_button _has-icon _destructive"
           data-kind="tertiary"
           data-size="lg"
           role="button"

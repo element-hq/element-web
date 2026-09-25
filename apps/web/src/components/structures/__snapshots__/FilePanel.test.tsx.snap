@@ -13,7 +13,7 @@ exports[`FilePanel > renders empty state 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Files
@@ -21,7 +21,7 @@ exports[`FilePanel > renders empty state 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -29,7 +29,7 @@ exports[`FilePanel > renders empty state 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -53,7 +53,7 @@ exports[`FilePanel > renders empty state 1`] = `
         class="mx_RoomView_empty"
       >
         <div
-          class="_flex_4dswl_9 mx_EmptyState"
+          class="_flex mx_EmptyState"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
         >
           <svg
@@ -68,12 +68,12 @@ exports[`FilePanel > renders empty state 1`] = `
             />
           </svg>
           <p
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+            class="_typography _font-body-lg-semibold"
           >
             No files visible in this room
           </p>
           <p
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+            class="_typography _font-body-md-regular"
           >
             Attach files from chat or just drag and drop them anywhere in a room.
           </p>

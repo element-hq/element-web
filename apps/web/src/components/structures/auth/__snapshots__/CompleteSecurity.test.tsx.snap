@@ -17,7 +17,7 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
         tabindex="-1"
       >
         <div
-          class="mx_Dialog_border _glass_sepwu_8"
+          class="mx_Dialog_border _glass"
         >
           <div
             class="mx_CompleteSecurityBody"
@@ -54,7 +54,7 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_big-icon_1ssbv_8"
+                    class="_big-icon"
                     data-kind="primary"
                     data-size="lg"
                   >
@@ -71,13 +71,13 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
                     </svg>
                   </div>
                   <h2
-                    class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+                    class="_typography _font-heading-sm-semibold"
                   >
                     Confirm your digital identity
                   </h2>
                 </div>
                 <div
-                  class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+                  class="_flex mx_EncryptionCard_emphasisedContent"
                   style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <span>
@@ -113,7 +113,7 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -133,7 +133,7 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
                      Use another device
                   </button>
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -142,7 +142,7 @@ exports[`CompleteSecurity > Allows verifying with another device if one is avail
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"
@@ -211,7 +211,7 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
         tabindex="-1"
       >
         <div
-          class="mx_Dialog_border _glass_sepwu_8"
+          class="mx_Dialog_border _glass"
         >
           <div
             class="mx_CompleteSecurityBody"
@@ -248,7 +248,7 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_big-icon_1ssbv_8"
+                    class="_big-icon"
                     data-kind="primary"
                     data-size="lg"
                   >
@@ -265,13 +265,13 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
                     </svg>
                   </div>
                   <h2
-                    class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+                    class="_typography _font-heading-sm-semibold"
                   >
                     Confirm your digital identity
                   </h2>
                 </div>
                 <div
-                  class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+                  class="_flex mx_EncryptionCard_emphasisedContent"
                   style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <span>
@@ -307,7 +307,7 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -316,7 +316,7 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
                     Use recovery key
                   </button>
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -325,7 +325,7 @@ exports[`CompleteSecurity > Allows verifying with recovery key if one is availab
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_1nw83_8"
+                    class="_button"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"

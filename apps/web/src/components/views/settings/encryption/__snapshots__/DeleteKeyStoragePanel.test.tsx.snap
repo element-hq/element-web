@@ -3,19 +3,19 @@
 exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_t96w3_8"
+    class="_breadcrumb"
   >
     <button
       aria-disabled="false"
       aria-label="Back"
-      class="_icon-button_1215g_8"
+      class="_icon-button"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -32,11 +32,11 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
       </div>
     </button>
     <ol
-      class="_pages_t96w3_17"
+      class="_pages"
     >
       <li>
         <a
-          class="_link_13esb_8"
+          class="_link"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -49,7 +49,7 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
       <li>
         <span
           aria-current="page"
-          class="_last-page_t96w3_30"
+          class="_last-page"
         >
           Delete key storage
         </span>
@@ -63,7 +63,7 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_big-icon_1ssbv_8"
+        class="_big-icon"
         data-kind="critical"
         data-size="lg"
       >
@@ -80,25 +80,25 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
         </svg>
       </div>
       <h2
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography _font-heading-sm-semibold"
       >
         Are you sure you want to turn off key storage and delete it?
       </h2>
     </div>
     <div
-      class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+      class="_flex mx_EncryptionCard_emphasisedContent"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
       <ul
-        class="_visual-list_6zpfn_8"
+        class="_visual-list"
       >
         <li
-          class="_visual-list-item_1nc1y_8"
+          class="_visual-list-item"
         >
           <svg
             aria-hidden="true"
-            class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-destructive_1nc1y_26"
+            class="_visual-list-item-icon _visual-list-item-icon-destructive"
             fill="currentColor"
             height="24px"
             viewBox="0 0 24 24"
@@ -112,11 +112,11 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
           You will not have encrypted message history on new devices
         </li>
         <li
-          class="_visual-list-item_1nc1y_8"
+          class="_visual-list-item"
         >
           <svg
             aria-hidden="true"
-            class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-destructive_1nc1y_26"
+            class="_visual-list-item-icon _visual-list-item-icon-destructive"
             fill="currentColor"
             height="24px"
             viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_1nw83_8 _destructive_1nw83_110"
+        class="_button _destructive"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -145,7 +145,7 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
         Delete key storage
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="tertiary"
         data-size="lg"
         role="button"
