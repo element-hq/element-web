@@ -105,6 +105,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /** The room that was open the last time the filters were applied to every room. */
     private lastFilteredRoomId?: string | null;
 
+    /**
+     * The room that is in the skip list only because it is open, e.g. a room the user can knock on but has not
+     * joined yet. It is removed when the user opens another room without knocking or joining.
+     */
+    private previewRoomId?: string;
+
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
     /**
@@ -369,17 +375,68 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     }
                 }
 
-                this.addRoomAndEmit(payload.room, oldMembership === EffectiveMembership.Leave);
+                // The open room may already be in the list even though the user was not a member of it (display a knock room)
+                const isNewRoom =
+                    oldMembership === EffectiveMembership.Leave && !this.roomSkipList.hasRoom(payload.room.roomId);
+                this.addRoomAndEmit(payload.room, isNewRoom);
                 break;
             }
 
             case Action.AfterForgetRoom: {
                 const room = payload.room;
+                if (room.roomId === this.previewRoomId) this.previewRoomId = undefined;
                 this.roomSkipList.removeRoom(room);
                 this.scheduleEmit();
                 break;
             }
+
+            case Action.ActiveRoomChanged: {
+                this.updatePreviewRoom(payload.newRoomId);
+                break;
+            }
+
+            case "MatrixActions.Room": {
+                // A peek has finished and the client now has the room, which may be the open one.
+                const roomId = payload.room.roomId;
+                if (roomId === SDKContextClass.instance.roomViewStore.getRoomId()) this.updatePreviewRoom(roomId);
+                break;
+            }
         }
+    }
+
+    /**
+     * Show the open room in the list when the user is not a member of it, and remove the previously open one
+     * if the user did not knock on or join it.
+     * @param roomId The id of the room that is now open.
+     */
+    private updatePreviewRoom(roomId: string | null): void {
+        if (!this.roomSkipList || !this.matrixClient) return;
+
+        // If the user has opened a different room, remove the previous one from the skip list if they have not joined it.
+        if (this.previewRoomId && this.previewRoomId !== roomId) {
+            const previousRoom = this.matrixClient.getRoom(this.previewRoomId);
+            if (previousRoom && getEffectiveMembership(previousRoom.getMyMembership()) === EffectiveMembership.Leave) {
+                this.roomSkipList.removeRoom(previousRoom);
+            }
+            this.previewRoomId = undefined;
+            this.scheduleEmit();
+        }
+
+        if (!roomId) return;
+        const room = this.matrixClient.getRoom(roomId);
+        // If the room is not visible, the user has left it, or it is already in the skip list, do nothing.
+        if (
+            !room ||
+            !isRoomVisible(room) ||
+            this.roomSkipList.hasRoom(roomId) ||
+            getEffectiveMembership(room.getMyMembership()) !== EffectiveMembership.Leave
+        ) {
+            return;
+        }
+
+        this.roomSkipList.addNewRoom(room);
+        this.previewRoomId = roomId;
+        this.scheduleEmit();
     }
 
     /**
