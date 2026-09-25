@@ -6,10 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
- * Styles for the DOM that pdf.js's PDFViewer builds. This is the subset of the library's own
- * `web/pdf_viewer.css` that a read-only viewer needs, scoped under our container rather than imported
- * globally: the library's stylesheet declares `color-scheme` and its page metrics on `:root`, which
- * would override Element's theming for the whole app.
+ * The page toolbar, and styles for the DOM that pdf.js's PDFViewer builds. The frame around them comes
+ * from DocumentViewerView. The pdf.js part is the subset of the library's own `web/pdf_viewer.css`
+ * that a read-only viewer needs, scoped under our container rather than imported globally: the
+ * library's stylesheet declares `color-scheme` and its page metrics on `:root`, which would override
+ * Element's theming for the whole app.
  *
  * The annotation layer is styled only as far as links go (see below). XFA and editor layers are
  * deliberately absent — the viewer is constructed with those modes disabled, so none of that markup is
@@ -18,26 +19,6 @@ Please see LICENSE files in the repository root for full details.
  * because pdf.js draws text selection itself, in the draw layer over the canvas, rather than leaving it
  * to the browser.
  */
-
-.viewer {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
-    color: var(--cpd-color-text-primary);
-    background: var(--cpd-color-bg-subtle-secondary);
-}
-
-.toolbar {
-    flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
-    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
-    background: var(--cpd-color-bg-canvas-default);
-}
 
 .pageForm {
     display: flex;
@@ -73,14 +54,10 @@ Please see LICENSE files in the repository root for full details.
     font: var(--cpd-font-body-sm-medium);
 }
 
-/* Positioning context for the scroll area and the loading/error overlays. */
-.body {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-}
-
-/* pdf.js measures scrolling against this element and requires it to be absolutely positioned. */
+/*
+ * pdf.js measures scrolling against this element and requires it to be absolutely positioned. It fills
+ * the shell's document surface, which is the positioning context.
+ */
 .container {
     position: absolute;
     inset: 0;
@@ -303,21 +280,4 @@ Please see LICENSE files in the repository root for full details.
 
 .container :global(.annotationLayer .hasBorder) {
     background-size: 100% 100%;
-}
-
-.message {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--cpd-space-6x) var(--cpd-space-4x);
-    text-align: center;
-    color: var(--cpd-color-text-secondary);
-    background: var(--cpd-color-bg-subtle-secondary);
-    font: var(--cpd-font-body-md-regular);
-}
-
-.error {
-    color: var(--cpd-color-text-critical-primary);
 }

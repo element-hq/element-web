@@ -117,8 +117,6 @@
         "mute_room": "Mute room"
     },
     "pdf_viewer": {
-        "error_load": "Unable to load PDF.",
-        "loading": "Loading PDF…",
         "page_label": "Page %(page)s of %(total)s",
         "page_number": "Page number"
     },

@@ -12,6 +12,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { PdfViewerView, type PdfViewerViewProps } from "./PdfViewerView";
 import styles from "./PdfViewerView.module.css";
+import shellStyles from "../DocumentViewerView/DocumentViewerView.module.css";
 import { I18nApi } from "../../../core/i18n/I18nApi";
 import { I18nContext } from "../../../core/i18n/i18nContext";
 
@@ -95,34 +96,40 @@ describe("PdfViewerView", () => {
         expect(viewerRef.current).toHaveClass("pdfViewer");
     });
 
-    it("uses locally scoped shell classes", () => {
+    it("builds on the shared document viewer shell", () => {
         renderView({ status: "loading" });
 
-        expect(screen.getByTestId("pdf-viewer")).toHaveClass(styles.viewer);
+        expect(screen.getByTestId("document-viewer")).toHaveClass(shellStyles.viewer);
         expect(screen.getByTestId("pdf-container")).toHaveClass(styles.container);
-        expect(screen.getByRole("status")).toHaveClass(styles.message);
+        expect(screen.getByRole("status")).toHaveClass(shellStyles.message);
     });
 
     it("adds a host class to the shell without replacing its own", () => {
         renderView({ className: "mx_HostViewer" });
 
-        const viewer = screen.getByTestId("pdf-viewer");
+        const viewer = screen.getByTestId("document-viewer");
         expect(viewer).toHaveClass("mx_HostViewer");
-        expect(viewer).toHaveClass(styles.viewer);
+        expect(viewer).toHaveClass(shellStyles.viewer);
     });
 
     it("announces that the PDF is loading", () => {
         renderView({ status: "loading" });
 
-        expect(screen.getByRole("status")).toHaveTextContent("Loading PDF…");
+        expect(screen.getByRole("status")).toHaveTextContent("Loading document…");
         expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
 
     it("alerts when the PDF cannot be loaded", () => {
         renderView({ status: "error" });
 
-        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file.");
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    it("puts the page controls in the shell's toolbar", () => {
+        renderView({ status: "ready", pageCount: 3 });
+
+        expect(screen.getByRole("group").closest(`.${shellStyles.toolbar}`)).not.toBeNull();
     });
 
     it("shows the current page and page count when pages are available", () => {

@@ -299,7 +299,7 @@ describe("PdfViewer", () => {
         const onError = activeWorker().addEventListener.mock.calls.find(([name]) => name === "error")![1];
         act(() => onError({ message: "worker failed to load" }));
 
-        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF");
+        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file");
     });
 
     it("stops its worker when the document is closed", async () => {
@@ -321,7 +321,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={tooLarge} />);
 
-        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file"));
         expect(tooLarge.blob).not.toHaveBeenCalled();
         expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
     });
@@ -336,7 +336,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={claimedSmall} />);
 
-        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+        await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file"));
         expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
     });
 
@@ -345,7 +345,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={media()} />);
 
-        expect(screen.getByRole("status")).toHaveTextContent("Loading PDF");
+        expect(screen.getByRole("status")).toHaveTextContent("Loading document");
 
         await emitPagesInit();
 
@@ -666,7 +666,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={media("broken.pdf")} />);
 
-        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
     });
 
     it("shows a clear error when the attachment is empty", async () => {
@@ -674,7 +674,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={media("empty.pdf", "")} />);
 
-        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
     });
 
     it("rejects an attachment with no PDF signature without handing it to pdf.js", async () => {
@@ -682,7 +682,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={media("not-really.pdf", "GIF89a this is not a PDF at all")} />);
 
-        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
         expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
     });
 
@@ -701,7 +701,7 @@ describe("PdfViewer", () => {
 
         render(<PdfViewer media={media("late.pdf", "x".repeat(2000) + "%PDF-1.7\n")} />);
 
-        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+        expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
         expect(pdfjsMock.getDocument).not.toHaveBeenCalled();
     });
 });

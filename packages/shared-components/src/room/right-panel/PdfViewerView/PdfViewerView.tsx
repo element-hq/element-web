@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Ref } from "react";
-import classNames from "classnames";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
+import { DocumentViewerView, type DocumentViewerStatus } from "../DocumentViewerView";
 import styles from "./PdfViewerView.module.css";
 
-/** The document lifecycle state presented by the PDF viewer shell. */
-export type PdfViewerStatus = "loading" | "ready" | "error";
+/** The document lifecycle state presented by the PDF viewer. */
+export type PdfViewerStatus = DocumentViewerStatus;
 
 /** Controlled state and host integration points for {@link PdfViewerView}. */
 export interface PdfViewerViewProps {
@@ -46,10 +46,10 @@ export interface PdfViewerViewProps {
 }
 
 /**
- * Renders the reusable presentation shell for a PDF document viewer.
+ * Renders a PDF document viewer on the shared {@link DocumentViewerView} shell.
  *
  * The host owns document loading and rendering. It receives both required DOM elements through refs,
- * while this View owns the toolbar, status overlays, accessibility labels, and pdf.js-compatible page styling.
+ * while this View owns the page toolbar, accessibility labels, and pdf.js-compatible page styling.
  */
 export function PdfViewerView({
     status,
@@ -67,62 +67,51 @@ export function PdfViewerView({
 }: Readonly<PdfViewerViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
 
-    return (
-        <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
-            {pageCount > 0 ? (
-                <form
-                    className={styles.toolbar}
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        onPageSubmit();
-                    }}
+    const toolbar =
+        pageCount > 0 ? (
+            <form
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    onPageSubmit();
+                }}
+            >
+                {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
+                <fieldset
+                    className={styles.pageForm}
+                    aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
                 >
-                    {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
-                    <fieldset
-                        className={styles.pageForm}
-                        aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
-                    >
-                        <input
-                            aria-label={_t("pdf_viewer|page_number")}
-                            className={styles.pageInput}
-                            data-testid="pdf-page-input"
-                            inputMode="numeric"
-                            onBlur={onPageInputBlur}
-                            onChange={(event) => onPageInputChange(event.target.value)}
-                            onFocus={onPageInputFocus}
-                            onKeyDown={(event) => {
-                                if (event.key !== "Escape") return;
+                    <input
+                        aria-label={_t("pdf_viewer|page_number")}
+                        className={styles.pageInput}
+                        data-testid="pdf-page-input"
+                        inputMode="numeric"
+                        onBlur={onPageInputBlur}
+                        onChange={(event) => onPageInputChange(event.target.value)}
+                        onFocus={onPageInputFocus}
+                        onKeyDown={(event) => {
+                            if (event.key !== "Escape") return;
 
-                                onPageInputCancel();
-                                // Blurring completes the same editing lifecycle as clicking away from the input.
-                                event.currentTarget.blur();
-                            }}
-                            value={pageInput}
-                        />
-                        <span aria-hidden="true" className={styles.pageSeparator}>
-                            |
-                        </span>
-                        <span className={styles.pageTotal} data-testid="pdf-page-total">
-                            {pageCount}
-                        </span>
-                    </fieldset>
-                </form>
-            ) : null}
-            <div className={styles.body}>
-                <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
-                    <div className="pdfViewer" ref={viewerRef} />
-                </div>
-                {status === "loading" ? (
-                    <div className={styles.message} role="status" aria-live="polite">
-                        {_t("pdf_viewer|loading")}
-                    </div>
-                ) : null}
-                {status === "error" ? (
-                    <div className={classNames(styles.message, styles.error)} role="alert">
-                        {_t("pdf_viewer|error_load")}
-                    </div>
-                ) : null}
+                            onPageInputCancel();
+                            // Blurring completes the same editing lifecycle as clicking away from the input.
+                            event.currentTarget.blur();
+                        }}
+                        value={pageInput}
+                    />
+                    <span aria-hidden="true" className={styles.pageSeparator}>
+                        |
+                    </span>
+                    <span className={styles.pageTotal} data-testid="pdf-page-total">
+                        {pageCount}
+                    </span>
+                </fieldset>
+            </form>
+        ) : undefined;
+
+    return (
+        <DocumentViewerView status={status} toolbar={toolbar} className={className}>
+            <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
+                <div className="pdfViewer" ref={viewerRef} />
             </div>
-        </div>
+        </DocumentViewerView>
     );
 }
