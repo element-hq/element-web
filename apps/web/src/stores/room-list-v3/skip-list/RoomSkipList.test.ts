@@ -140,6 +140,14 @@ describe("RoomSkipList", () => {
         expect(skipList.size).toEqual(sizeBefore);
     });
 
+    it("hasRoom tells whether a room is in the skip list", () => {
+        const { skipList, rooms } = generateSkipList();
+        expect(skipList.hasRoom(rooms[5].roomId)).toBe(true);
+
+        skipList.removeRoom(rooms[5]);
+        expect(skipList.hasRoom(rooms[5].roomId)).toBe(false);
+    });
+
     it("Filters are applied to existing nodes when useNewFilters is called", () => {
         const { skipList, rooms } = generateSkipList(10);
 

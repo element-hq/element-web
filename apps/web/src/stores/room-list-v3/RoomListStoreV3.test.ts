@@ -418,6 +418,94 @@ describe("RoomListStoreV3", () => {
             expect(fn).not.toHaveBeenCalled();
         });
 
+        describe("Preview room", () => {
+            async function setup() {
+                const result = await getRoomListStore();
+                const { client, rooms } = result;
+                const room = new Room("!preview:matrix.org", client, client.getSafeUserId(), {});
+                room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Leave);
+                vi.spyOn(client, "getRoom").mockImplementation(
+                    (roomId) => [room, ...rooms].find((r) => r.roomId === roomId) ?? null,
+                );
+                return { ...result, room };
+            }
+
+            function openRoom(roomId: string | null) {
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
+                dispatcher.dispatch({ action: Action.ActiveRoomChanged, oldRoomId: null, newRoomId: roomId }, true);
+            }
+
+            function getRoomIds(store: RoomListStoreV3Class) {
+                return store
+                    .getSortedRoomsInActiveSpace()
+                    .sections.flatMap((s) => s.rooms)
+                    .map((r) => r.roomId);
+            }
+
+            it("adds the open room and removes it when another room is opened", async () => {
+                const { store, rooms, room } = await setup();
+                const fn = vi.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+
+                openRoom(room.roomId);
+                expect(fn).toHaveBeenCalled();
+                expect(getRoomIds(store)).toContain(room.roomId);
+
+                openRoom(rooms[3].roomId);
+                expect(getRoomIds(store)).not.toContain(room.roomId);
+                expect(getRoomIds(store)).toContain(rooms[3].roomId);
+            });
+
+            it("keeps the room once the user knocks on it", async () => {
+                await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, true);
+                const { store, rooms, room } = await setup();
+                const errorSpy = vi.spyOn(logger, "error");
+
+                openRoom(room.roomId);
+                room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Knock);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.myMembership",
+                        oldMembership: KnownMembership.Leave,
+                        membership: KnownMembership.Knock,
+                        room,
+                    },
+                    true,
+                );
+                openRoom(rooms[3].roomId);
+
+                expect(getRoomIds(store)).toContain(room.roomId);
+                expect(errorSpy).not.toHaveBeenCalled();
+                await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, false);
+            });
+
+            it("does nothing for an unknown room or a space", async () => {
+                const { store, room } = await setup();
+                vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
+                const fn = vi.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+
+                openRoom("!unknown:matrix.org");
+                openRoom(room.roomId);
+
+                expect(fn).not.toHaveBeenCalled();
+                expect(getRoomIds(store)).not.toContain(room.roomId);
+                expect(getRoomIds(store)).not.toContain("!unknown:matrix.org");
+            });
+
+            it("adds the open room once its peek has finished", async () => {
+                const { store, room } = await setup();
+
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!other:matrix.org");
+                dispatcher.dispatch({ action: "MatrixActions.Room", room }, true);
+                expect(getRoomIds(store)).not.toContain(room.roomId);
+
+                vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
+                dispatcher.dispatch({ action: "MatrixActions.Room", room }, true);
+                expect(getRoomIds(store)).toContain(room.roomId);
+            });
+        });
+
         describe("Update from read receipt", () => {
             function getReadReceiptEvent(userId: string) {
                 const content = {

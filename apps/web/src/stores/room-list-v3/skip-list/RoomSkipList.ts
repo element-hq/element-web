@@ -102,6 +102,14 @@ export class RoomSkipList implements Iterable<Room> {
     }
 
     /**
+     * Whether the given room is in the skiplist.
+     * @param roomId the id of the room to look for
+     */
+    public hasRoom(roomId: string): boolean {
+        return this.roomNodeMap.has(roomId);
+    }
+
+    /**
      * Re-inserts a room that is already in the skiplist.
      * This method does nothing if the room isn't already in the skiplist.
      * @param room the room to add

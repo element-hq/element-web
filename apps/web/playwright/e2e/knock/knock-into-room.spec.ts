@@ -229,6 +229,7 @@ test.describe("Knock Into Room", () => {
     });
 
     test("should knock into the room and knock is cancelled by user himself", async ({ page, app, bot, room }) => {
+        await app.client.createRoom({ name: "Other" });
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
@@ -248,6 +249,60 @@ test.describe("Knock Into Room", () => {
         await expect(
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).not.toBeVisible();
+
+        // The client still knows the room, so it shows in the room list again when it is opened
+        await app.viewRoomByName("Other");
+        // Wait for Other to be open, otherwise viewing the room by id may happen before the URL has changed
+        await expect(page.getByRole("banner").getByRole("heading", { name: "Other" })).toBeVisible();
+        await app.viewRoomById(room.roomId);
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+    });
+
+    test("should show a knock room in the room list while it is open", async ({ page, app, bot }) => {
+        const libraryId = await bot.createRoom({
+            name: "Library",
+            initial_state: [
+                {
+                    type: "m.room.join_rules",
+                    content: {
+                        join_rule: "knock",
+                    },
+                    state_key: "",
+                },
+                {
+                    type: "m.room.history_visibility",
+                    content: {
+                        history_visibility: "world_readable",
+                    },
+                    state_key: "",
+                },
+            ],
+        });
+        await app.client.createRoom({ name: "Other" });
+
+        const roomList = page.getByTestId("room-list");
+        const libraryOption = roomList.getByRole("option", { name: "Open room Library" });
+
+        // The peeked room shows while it is open
+        await app.viewRoomById(libraryId);
+        await expect(libraryOption).toBeVisible();
+
+        // and goes away when another room is opened
+        await app.viewRoomByName("Other");
+        await expect(libraryOption).not.toBeVisible();
+
+        // Once the user has knocked, the room stays in the list
+        await app.viewRoomById(libraryId);
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        // The client already knows the room, so the preview goes straight to the knock form
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Library?" })).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        await app.viewRoomByName("Other");
+        await expect(libraryOption).toBeVisible();
     });
 
     test("should knock into the room then knock is cancelled by another user and room is forgotten", async ({
