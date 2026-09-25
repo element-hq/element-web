@@ -143,7 +143,7 @@ overrides:
     # Only one instance of LiveKit in the build: the Element Call component and
     # Element Web must share it, E2EE workers included.
     livekit-client: "^2.22.2"
-    pretty-format@30>react-is: 19.2.8
+    pretty-format@30>react-is: 19.3.0
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001810
