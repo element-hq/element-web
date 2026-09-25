@@ -13,7 +13,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
 import ToastStore from "./stores/ToastStore";
-import GenericToast from "./components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 vi.mock("matrix-js-sdk/src/logger");
 

@@ -305,6 +305,28 @@ test.describe("Editing", () => {
         await expect(page.getByRole("textbox", { name: "Edit message" })).not.toBeVisible();
     });
 
+    test("should show the emoji autocomplete above the edit composer", async ({ page, app, room }) => {
+        await page.goto(`#/room/${room.roomId}`);
+
+        await sendEvent(app, room.roomId);
+
+        const tile = page.locator(".mx_RoomView_body .mx_EventTile").last();
+        await expect(tile.getByText("Message", { exact: true })).toBeVisible();
+        const line = tile.locator(".mx_EventTile_line");
+        await line.hover();
+        await line.getByRole("button", { name: "Edit", exact: true }).click();
+
+        const editComposer = page.getByRole("textbox", { name: "Edit message" });
+        await editComposer.press("End");
+        await editComposer.pressSequentially(" :+1");
+
+        const autocomplete = page.locator("#mx_Autocomplete");
+        await expect(autocomplete).toBeVisible();
+        await autocomplete.locator(".mx_Autocomplete_Completion_title", { hasText: ":+1:" }).click();
+        // The inserted emoji may carry a trailing variation selector, so match on the emoji alone.
+        await expect(editComposer).toContainText("Message 👍");
+    });
+
     test("should correctly display events which are edited, where we lack the edit event", async ({
         page,
         user,

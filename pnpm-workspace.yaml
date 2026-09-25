@@ -27,7 +27,7 @@ catalog:
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 10.0.1
+    "@vector-im/compound-web": 10.1.0
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -35,16 +35,17 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.2.2
+    vite: 8.3.0
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.11
-    "@vitest/spy": 4.1.11
-    "@vitest/coverage-v8": 4.1.11
-    "@vitest/browser-playwright": 4.1.11
-    "@vitest/browser": 4.1.11
+    vitest: 5.0.1
+    "@vitest/coverage-v8": 5.0.1
+    "@vitest/browser-playwright": 5.0.1
+    "@vitest/browser": 5.0.1
+    "@vitest/spy": 5.0.1
+    "@vitest/ui": 5.0.1
     "@vitejs/plugin-react": 6.1.1
-    unplugin-dts: 1.1.0
+    unplugin-dts: 1.1.1
     # nx
     nx: 23.2.1
 
@@ -74,6 +75,10 @@ allowBuilds:
     # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
     "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
+    # Element Call's React component is a git dependency on the `component` directory of the
+    # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
+    # pnpm matches git-hosted packages by repository URL, not by bare name.
+    "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -119,6 +124,9 @@ patchedDependencies:
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
     # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
+    # Tweaks to record screenshot diffs as vitest artifacts
+    vitest-plugin-vis@5.1.1: patches/vitest-plugin-vis@5.1.1.patch
+    storybook-addon-vis@4.2.3: patches/storybook-addon-vis@4.2.3.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -132,6 +140,9 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
+    # Only one instance of LiveKit in the build: the Element Call component and
+    # Element Web must share it, E2EE workers included.
+    livekit-client: "^2.22.2"
     pretty-format@30>react-is: 19.2.8
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"

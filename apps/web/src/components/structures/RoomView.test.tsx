@@ -865,6 +865,77 @@ describe("RoomView", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    describe("rooms the client does not know about", () => {
+        beforeEach(() => {
+            // All we know about the room is what its summary tells us
+            rooms.delete(room.roomId);
+        });
+
+        it("peeks into a world readable room", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                world_readable: true,
+                guest_can_join: true,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockResolvedValue(room);
+
+            const instance = await getRoomViewInstance();
+
+            expect(cli.peekInRoom).toHaveBeenCalledWith(room.roomId);
+            expect(instance.state.room).toBe(room);
+            expect(instance.state.isPeeking).toBe(true);
+            expect(instance.state.peekAndSummaryLoading).toBe(false);
+        });
+
+        it("shows the join prompt when peeking fails", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                world_readable: true,
+                guest_can_join: true,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockRejectedValue(new MatrixError({ errcode: "M_FORBIDDEN" }));
+
+            const instance = await getRoomViewInstance();
+
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(instance.state.isPeeking).toBe(false);
+        });
+
+        it("does not peek into a room which is not world readable", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                membership: KnownMembership.Leave,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+
+            await mountRoomView();
+
+            expect(cli.peekInRoom).not.toHaveBeenCalled();
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+        });
+
+        it("peeks into a room we have already joined", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                membership: KnownMembership.Join,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockResolvedValue(room);
+
+            const instance = await getRoomViewInstance();
+
+            expect(cli.peekInRoom).toHaveBeenCalledWith(room.roomId);
+            expect(instance.state.room).toBe(room);
+            expect(instance.state.peekAndSummaryLoading).toBe(false);
+        });
+    });
+
     describe("knock rooms", () => {
         const client = createTestClient();
 
@@ -887,6 +958,31 @@ describe("RoomView", () => {
                 roomId: room.roomId,
                 opts: { reason: undefined },
             });
+        });
+
+        it("allows to request to join a room we don't know about yet", async () => {
+            rooms.delete(room.roomId);
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                join_rule: JoinRule.Knock,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+
+            await mountRoomView();
+
+            expect(screen.getByRole("heading", { name: "Ask to join?" })).toBeInTheDocument();
+            expect(cli.peekInRoom).not.toHaveBeenCalled();
+        });
+
+        it("shows the join prompt when the room summary cannot be fetched", async () => {
+            rooms.delete(room.roomId);
+            cli.getRoomSummary.mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" }));
+
+            await mountRoomView();
+
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
         });
 
         it("allows to cancel a join request", async () => {

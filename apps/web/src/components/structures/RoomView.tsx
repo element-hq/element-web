@@ -38,6 +38,7 @@ import {
     type ISearchResults,
     THREAD_RELATION_TYPE,
     type MatrixClient,
+    type RoomSummary,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -210,7 +211,8 @@ export interface IRoomState {
     roomId?: string;
     roomAlias?: string;
     roomLoading: boolean;
-    peekLoading: boolean;
+    /** Fetching room summary and peeking */
+    peekAndSummaryLoading: boolean;
     shouldPeek: boolean;
     // used to trigger a rerender in TimelinePanel once the members are loaded,
     // so RR are rendered again (now with the members available), ...
@@ -288,7 +290,11 @@ export interface IRoomState {
      */
     isRoomEncrypted: boolean | null;
 
-    canAskToJoin: boolean;
+    /**
+     * Room summary for the room
+     * See https://spec.matrix.org/latest/client-server-api/#room-summaries
+     */
+    roomSummary?: RoomSummary;
     promptAskToJoin: boolean;
 }
 
@@ -465,7 +471,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.state = {
             roomId: undefined,
             roomLoading: true,
-            peekLoading: false,
+            peekAndSummaryLoading: false,
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
@@ -502,9 +508,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             liveTimeline: undefined,
             narrow: false,
             msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
-            canAskToJoin: this.askToJoinEnabled,
-            promptAskToJoin: false,
             isRoomEncrypted: null,
+            roomSummary: undefined,
+            promptAskToJoin: false,
         };
     }
 
@@ -796,8 +802,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // observe the new state but we don't want to put it in the setState
         // callback because this would prevent the setStates from being batched,
         // ie. cause it to render RoomView twice rather than the once that is necessary.
-        if (initial) {
-            this.setupRoom(newState.room, newState.roomId, !!newState.joining, !!newState.shouldPeek);
+        if (initial && !newState.joining) {
+            await this.setupRoom(newState.room, newState.roomId, !!newState.shouldPeek);
         }
 
         // We don't block the initial setup but we want to make it early to not block the timeline rendering
@@ -866,73 +872,84 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     }
 
-    private setupRoom(room: Room | undefined, roomId: string | undefined, joining: boolean, shouldPeek: boolean): void {
-        // if this is an unknown room then we're in one of three states:
-        // - This is a room we can peek into (search engine) (we can /peek)
+    private async setupRoom(room: Room | undefined, roomId: string | undefined, shouldPeek: boolean): Promise<void> {
+        const client = this.context.client;
+        if (!client) return;
+
+        if (room) {
+            // We already know about this room, so there is nothing to set up.
+            // Stop peeking in case we were peeking into it before.
+            client.stopPeeking();
+            this.setState({ isPeeking: false });
+            return;
+        }
+        // We don't have a roomId to set up a room for, so we can't do anything
+        if (!roomId) return;
+
+        // if this is an unknown room then we're in one of these states:
+        // - We are already joined, but sync has not caught up with the room yet. (we can /peek)
+        // - This is a room whose history is world readable. (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
         // - This is a room we cannot join at all. (no action can help us)
         // We can't try to /join because this may implicitly accept invites (!)
-        // We can /peek though. If it fails then we present the join UI. If it
-        // succeeds then great, show the preview (but we still may be able to /join!).
+        // The room summary tells us which one we are in. If we can't get it, or it says we cannot
+        // peek, we present the join UI. If we can peek then great, show the preview (but we still
+        // may be able to /join!).
         // Note that peeking works by room ID and room ID only, as opposed to joining
         // which must be by alias or invite wherever possible (peeking currently does
         // not work over federation).
 
-        // NB. We peek if we have never seen the room before (i.e. js-sdk does not know
-        // about it). We don't peek in the historical case where we were joined but are
-        // now not joined because the js-sdk peeking API will clobber our historical room,
-        // making it impossible to indicate a newly joined room.
-        if (!joining && roomId) {
-            if (!room && shouldPeek) {
-                logger.info(`Attempting to peek into room ${roomId}`);
-                this.setState({
-                    peekLoading: true,
-                    isPeeking: true, // this will change to false if peeking fails
-                });
-                this.context.client
-                    ?.peekInRoom(roomId)
-                    .then((room) => {
-                        if (this.unmounted) {
-                            return;
-                        }
-                        this.setState({
-                            room: room,
-                            peekLoading: false,
-                            canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
-                        });
-                        this.onRoomLoaded(room);
-                    })
-                    .catch((err) => {
-                        if (this.unmounted) {
-                            return;
-                        }
+        // NB. We only reach here when the js-sdk does not know about the room. We don't peek in the
+        // historical case where we were joined but are now not joined - the early return above
+        // covers it - because the js-sdk peeking API will clobber our historical room, making it
+        // impossible to indicate a newly joined room.
 
-                        // Stop peeking if anything went wrong
-                        this.setState({
-                            isPeeking: false,
-                        });
+        this.setState({ peekAndSummaryLoading: true });
 
-                        // This won't necessarily be a MatrixError, but we duck-type
-                        // here and say if it's got an 'errcode' key with the right value,
-                        // it means we can't peek.
-                        if (err.errcode === "M_GUEST_ACCESS_FORBIDDEN" || err.errcode === "M_FORBIDDEN") {
-                            // This is fine: the room just isn't peekable (we assume).
-                            this.setState({
-                                peekLoading: false,
-                            });
-                        } else {
-                            throw err;
-                        }
-                    });
-            } else if (room) {
-                // Stop peeking because we have joined this room previously
-                this.context.client?.stopPeeking();
-                this.setState({
-                    isPeeking: false,
-                    canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
-                });
-            }
+        let roomSummary: RoomSummary | undefined;
+        try {
+            logger.info(`Attempting to get the room summary of ${roomId}`);
+            roomSummary = await client.getRoomSummary(roomId, this.roomViewStore.getViaServers());
+        } catch (err) {
+            logger.warn(`Failed to get the room summary of ${roomId}`, err);
         }
+
+        // Room changed while we were fetching the summary, so ignore it.
+        if (this.unmounted || this.state.roomId !== roomId) return;
+
+        const alreadyJoined = roomSummary?.membership === KnownMembership.Join;
+        if (!shouldPeek || !(roomSummary?.world_readable || alreadyJoined)) {
+            this.setState({ roomSummary, peekAndSummaryLoading: false, isPeeking: false });
+            return;
+        }
+
+        this.setState({ roomSummary, isPeeking: true }); // this will change to false if peeking fails
+
+        try {
+            logger.info(`Attempting to peek into room ${roomId}`);
+            const peekedRoom = await client.peekInRoom(roomId);
+            if (this.unmounted || this.state.roomId !== roomId) return;
+
+            this.setState({ room: peekedRoom, peekAndSummaryLoading: false });
+            this.onRoomLoaded(peekedRoom);
+        } catch (err) {
+            if (this.unmounted) return;
+            // Stop peeking if anything went wrong and show the join UI instead.
+            logger.warn(`Failed to peek into room ${roomId}`, err);
+            this.setState({ peekAndSummaryLoading: false, isPeeking: false });
+        }
+    }
+
+    /**
+     * Whether the user can ask to join the room. This is true if the room is knockable and the feature is enabled.
+     * Look first at the room object, then the room summary if the room is not available.
+     */
+    private get canAskToJoin(): boolean {
+        if (!this.askToJoinEnabled) return false;
+
+        const room = this.state.room;
+        const joinRule = room ? room.getJoinRule() : this.state.roomSummary?.join_rule;
+        return joinRule === JoinRule.Knock;
     }
 
     private shouldShowApps(room: Room): boolean {
@@ -1718,7 +1735,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         opts: { inviteSignUrl: signUrl },
                         metricsTrigger:
                             this.state.room?.getMyMembership() === KnownMembership.Invite ? "Invite" : "RoomPreview",
-                        canAskToJoin: this.state.canAskToJoin,
+                        canAskToJoin: this.canAskToJoin,
                     });
                 }
 
@@ -2218,10 +2235,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (!this.state.room) {
-            const loading = !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekLoading;
+            const loading =
+                !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekAndSummaryLoading;
             if (loading) {
                 // Assume preview loading if we don't have a ready client or a room ID (still resolving the alias)
-                const previewLoading = !this.state.matrixClientIsReady || !this.state.roomId || this.state.peekLoading;
+                const previewLoading =
+                    !this.state.matrixClientIsReady || !this.state.roomId || this.state.peekAndSummaryLoading;
                 return (
                     <div className="mx_RoomView">
                         <ErrorBoundary>
@@ -2263,7 +2282,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 oobData={this.props.oobData}
                                 signUrl={this.props.threepidInvite?.signUrl}
                                 roomId={this.state.roomId}
-                                promptAskToJoin={this.state.promptAskToJoin}
+                                promptAskToJoin={this.canAskToJoin || this.state.promptAskToJoin}
                                 onSubmitAskToJoin={this.onSubmitAskToJoin}
                                 onCancelAskToJoin={this.onCancelAskToJoin}
                             />
@@ -2338,7 +2357,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (
-            this.state.canAskToJoin &&
+            this.canAskToJoin &&
             ([KnownMembership.Knock, KnownMembership.Leave] as Array<string>).includes(myMembership)
         ) {
             return (
