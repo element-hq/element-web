@@ -272,7 +272,7 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
         { passive: false, signal },
     );
 
-    // Safari reports trackpad pinches as gesture events rather than ctrl+wheel.
+    // Safari reports trackpad pinches as gesture events. Removed by `dispose()` via `signal`.
     if ("ongesturechange" in window) {
         let lastGestureScale = 1;
 
