@@ -42,6 +42,7 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
+import { Key } from "../../../../Keyboard";
 import {
     findNextSiblingElement,
     RovingStateActionType,
@@ -1239,6 +1240,15 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     );
                 }
                 break;
+        }
+
+        if (!node && (ev.key === Key.PAGE_UP || ev.key === Key.PAGE_DOWN) && rovingContext.state.activeNode) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            const nodes = rovingContext.state.nodes.filter((ref) => !nodeIsForRecentlyViewed(ref));
+            const idx = nodes.indexOf(rovingContext.state.activeNode);
+            const PAGE_SIZE = 10;
+            node = findNextSiblingElement(nodes, idx + (ev.key === Key.PAGE_UP ? -PAGE_SIZE : PAGE_SIZE));
         }
 
         if (node) {
