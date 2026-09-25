@@ -80,20 +80,19 @@ describe("CompleteSecurity", () => {
     });
 
     it("Renders a warning if user hits Reset", async () => {
-        // Given a store and a dialog based on it
+        // Given there is no recovery key and no other devices
         const store = new SetupEncryptionStore();
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
-        // No recovery methods are available, but the "Can't confirm?" button
-        // should still be visible
+        // No recovery methods are available, so their buttons are disabled.
+        expect(screen.getByText("Use recovery key")).toHaveAttribute("aria-disabled", "true");
+        expect(screen.getByText("Use another device")).toHaveAttribute("aria-disabled", "true");
+
+        // The "Can't confirm?" button is visible and enabled.
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
 
-        // The snapshot should have a "Can't confirm?" button, but
-        // "Use another device" and "Use recovery key" shoud be disabled.
-        expect(panel.asFragment()).toMatchSnapshot();
-
-        // When we hit reset
+        // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears
@@ -102,7 +101,7 @@ describe("CompleteSecurity", () => {
     });
 
     it("Allows verifying with another device if one is available", async () => {
-        // Given a store and a dialog based on it
+        // Given there is no recovery key but there are other devices
         const store = new SetupEncryptionStore();
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.hasDevicesToVerifyAgainst = true;
@@ -112,11 +111,14 @@ describe("CompleteSecurity", () => {
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
-        // The snapshot should have "Use another device" and "Can't confirm?"
-        // buttons, but "Use recovery key" should be disabled.
-        expect(panel.asFragment()).toMatchSnapshot();
+        // "Use recovery key" should be disabled
+        expect(screen.getByText("Use recovery key")).toHaveAttribute("aria-disabled", "true");
 
-        // When we hit reset
+        // But "Use another device" and "Can't confirm?" are visible and enabled.
+        expect(screen.queryByRole("button", { name: "Use another device" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
+
+        // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears, and should have a different
@@ -127,7 +129,7 @@ describe("CompleteSecurity", () => {
     });
 
     it("Allows verifying with recovery key if one is available", async () => {
-        // Given a store and a dialog based on it
+        // Given there are no other devices but there is a recovery key
         const store = new SetupEncryptionStore();
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.keyInfo = {} as any;
@@ -137,11 +139,14 @@ describe("CompleteSecurity", () => {
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
-        // The snapshot should have "Use recovery key" and "Can't confirm?"
-        // buttons, but "Use another device" shoud be disabled.
-        expect(panel.asFragment()).toMatchSnapshot();
+        // "Use another device" should be disabled
+        expect(screen.getByText("Use another device")).toHaveAttribute("aria-disabled", "true");
 
-        // When we hit reset
+        // But "Use recovery key" and "Can't confirm?" are visible and enabled.
+        expect(screen.queryByRole("button", { name: "Use recovery key" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
+
+        // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears, and should have a different
