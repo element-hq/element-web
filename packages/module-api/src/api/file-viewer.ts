@@ -88,6 +88,7 @@ export interface FileViewerApi {
      * @param match whether the registered file viewer supports this media type
      * @param renderer renders the file viewer after the matcher returns true
      * @param opts properties of the file viewer
+     * @alpha Subject to change.
      */
     registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
 }

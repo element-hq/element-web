@@ -13,7 +13,7 @@ import { type RightPanelPhases } from "./RightPanelStorePhases";
 import type { MediaHandle } from "@element-hq/element-web-module-api";
 import { type RegisteredFileViewer, uploadedMediaOfEvent, remoteMediaOfPreview } from "../../modules/FileViewerApi";
 import { ModuleApi } from "../../modules/Api";
-import { UrlPreview } from "shared-types";
+import { type UrlPreview } from "shared-types";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
