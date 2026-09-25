@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
@@ -20,8 +20,6 @@ const defaultProps: PdfViewerViewProps = {
     currentPage: 1,
     pageCount: 0,
     pageInput: "1",
-    containerRef: React.createRef<HTMLDivElement>(),
-    viewerRef: React.createRef<HTMLDivElement>(),
     onPageInputChange: vi.fn(),
     onPageInputFocus: vi.fn(),
     onPageInputBlur: vi.fn(),
@@ -29,77 +27,52 @@ const defaultProps: PdfViewerViewProps = {
     onPageSubmit: vi.fn(),
 };
 
-const renderView = (props: Partial<PdfViewerViewProps> = {}): ReturnType<typeof render> =>
+const renderView = (props: Partial<PropsWithChildren<PdfViewerViewProps>> = {}): ReturnType<typeof render> =>
     render(<PdfViewerView {...defaultProps} {...props} />, {
         wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
     });
 
-/** The page size pdf.js would write inline after fitting a page to the panel. */
-const PAGE_WIDTH = 320;
-const PAGE_HEIGHT = 453;
-
-/**
- * Builds the layers pdf.js creates for a page into the element the host hands it, so the geometry the
- * stylesheet is responsible for can be measured the way a real page lays it out.
- */
-function renderPdfJsPage(): {
-    selection: HTMLElement;
-    textLayer: HTMLElement;
-    endOfContent: HTMLElement;
-} {
-    const viewerRef = React.createRef<HTMLDivElement>();
-    renderView({ status: "ready", pageCount: 1, viewerRef });
-
-    const page = document.createElement("div");
-    page.className = "page";
-    // pdf.js writes the fitted page geometry inline.
-    page.style.width = `${PAGE_WIDTH}px`;
-    page.style.height = `${PAGE_HEIGHT}px`;
-
-    const canvasWrapper = document.createElement("div");
-    canvasWrapper.className = "canvasWrapper";
-    canvasWrapper.append(document.createElement("canvas"));
-
-    // pdf.js clips this to the selected glyphs with an SVG path in `objectBoundingBox` units, measured
-    // against the text layer. The SVG it puts inside is what the element collapses to if the stylesheet
-    // does not size it.
-    const selection = document.createElement("div");
-    selection.className = "selection";
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 1 1");
-    svg.setAttribute("width", "100%");
-    svg.setAttribute("height", "100%");
-    selection.append(svg);
-    canvasWrapper.append(selection);
-
-    const textLayer = document.createElement("div");
-    textLayer.className = "textLayer";
-    const endOfContent = document.createElement("div");
-    endOfContent.className = "endOfContent";
-    textLayer.append(endOfContent);
-
-    page.append(canvasWrapper, textLayer);
-    viewerRef.current!.append(page);
-
-    return { selection, textLayer, endOfContent };
-}
-
 describe("PdfViewerView", () => {
-    it("exposes the pdf.js container and viewer elements", () => {
-        const containerRef = React.createRef<HTMLDivElement>();
-        const viewerRef = React.createRef<HTMLDivElement>();
+    it("renders the host's document surface under the toolbar", () => {
+        renderView({
+            status: "ready",
+            pageCount: 3,
+            children: <div data-testid="host-surface" />,
+        });
 
-        renderView({ containerRef, viewerRef });
+        const surface = screen.getByTestId("pdf-surface");
+        expect(surface).toContainElement(screen.getByTestId("host-surface"));
+        expect(surface).toHaveClass(styles.surface);
+    });
 
-        expect(containerRef.current).toBe(screen.getByTestId("pdf-container"));
-        expect(viewerRef.current).toHaveClass("pdfViewer");
+    it("stretches the document surface over the whole body", () => {
+        renderView({
+            status: "ready",
+            pageCount: 3,
+            children: <div data-testid="host-surface" />,
+        });
+
+        const body = screen.getByTestId("pdf-surface").parentElement!;
+        const hostSurface = screen.getByTestId("host-surface");
+
+        // Element passes an iframe here; it must fill the space the shell leaves.
+        expect(hostSurface.getBoundingClientRect().toJSON()).toEqual(body.getBoundingClientRect().toJSON());
+    });
+
+    it("draws the status overlays over the document surface", () => {
+        renderView({ status: "loading", children: <div data-testid="host-surface" /> });
+
+        const overlay = screen.getByRole("status");
+        const hostSurface = screen.getByTestId("host-surface");
+
+        expect(overlay.getBoundingClientRect().toJSON()).toEqual(hostSurface.getBoundingClientRect().toJSON());
+        expect(overlay.compareDocumentPosition(hostSurface) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy();
     });
 
     it("uses locally scoped shell classes", () => {
         renderView({ status: "loading" });
 
         expect(screen.getByTestId("pdf-viewer")).toHaveClass(styles.viewer);
-        expect(screen.getByTestId("pdf-container")).toHaveClass(styles.container);
         expect(screen.getByRole("status")).toHaveClass(styles.message);
     });
 
@@ -180,26 +153,5 @@ describe("PdfViewerView", () => {
 
         await user.keyboard("{Escape}");
         expect(onPageInputCancel).toHaveBeenCalledOnce();
-    });
-
-    describe("pdf.js page layers", () => {
-        it("lays the selection layer over exactly the text layer's box", () => {
-            const { selection, textLayer } = renderPdfJsPage();
-
-            // pdf.js clips the selection in units of the text layer's box, so any difference here
-            // displaces every highlight it draws.
-            expect(selection.getBoundingClientRect().toJSON()).toEqual(textLayer.getBoundingClientRect().toJSON());
-        });
-
-        it("parks the end-of-content marker below the text until a selection is dragged", () => {
-            const { textLayer, endOfContent } = renderPdfJsPage();
-
-            expect(endOfContent.getBoundingClientRect().top).toBe(textLayer.getBoundingClientRect().bottom);
-
-            // pdf.js marks the layer while a selection is being dragged, which grows the marker over the
-            // page so that dragging past the end of a line keeps extending the selection.
-            textLayer.classList.add("selecting");
-            expect(endOfContent.getBoundingClientRect().top).toBe(textLayer.getBoundingClientRect().top);
-        });
     });
 });
