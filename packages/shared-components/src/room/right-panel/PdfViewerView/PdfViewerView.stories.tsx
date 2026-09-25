@@ -61,6 +61,8 @@ const meta = {
         onPageInputBlur: fn(),
         onPageInputCancel: fn(),
         onPageSubmit: fn(),
+        onZoomIn: fn(),
+        onZoomOut: fn(),
     },
 } satisfies Meta<typeof PdfViewerStory>;
 

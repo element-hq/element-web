@@ -58,6 +58,13 @@ describe("parsePdfHostMessage", () => {
         expect(parsePdfHostMessage({ type: "go_to_page", page: "7" })).toBeUndefined();
     });
 
+    it("accepts a zoom step in either direction, and nothing else", () => {
+        expect(parsePdfHostMessage({ type: "zoom", direction: "in" })).toEqual({ type: "zoom", direction: "in" });
+        expect(parsePdfHostMessage({ type: "zoom", direction: "out" })).toEqual({ type: "zoom", direction: "out" });
+        expect(parsePdfHostMessage({ type: "zoom", direction: "sideways" })).toBeUndefined();
+        expect(parsePdfHostMessage({ type: "zoom" })).toBeUndefined();
+    });
+
     it.each([undefined, null, 42, "load", {}, { type: "ready" }, { type: "explode" }])("rejects %j", (value) => {
         expect(parsePdfHostMessage(value)).toBeUndefined();
     });

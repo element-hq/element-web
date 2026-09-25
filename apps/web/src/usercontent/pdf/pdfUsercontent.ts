@@ -18,7 +18,7 @@ import {
 import { EventBus, PDFViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
 
 import { ElementPdfLinkService } from "./linkService";
-import { type PdfPosition, type PdfUsercontentMessage, parsePdfHostMessage } from "./protocol";
+import { type PdfPosition, type PdfUsercontentMessage, type PdfZoomDirection, parsePdfHostMessage } from "./protocol";
 
 /**
  * Runs pdf.js inside the usercontent iframe. The app sends the document over postMessage and gets page
@@ -154,6 +154,8 @@ interface OpenDocumentOptions {
 
 interface PdfSession {
     goToPage(page: number): void;
+    /** Step the zoom one notch in or out. */
+    zoom(direction: PdfZoomDirection): void;
     /** Stop the worker and remove the listeners. */
     dispose(): void;
 }
@@ -324,6 +326,14 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
             // Scrolls the page into view; pdf.js reports it back via `pagechanging`.
             pdfViewer.currentPageNumber = page;
         },
+        zoom(direction: PdfZoomDirection): void {
+            // pdf.js steps by its own fixed ratio and clamps to its scale bounds.
+            if (direction === "in") {
+                pdfViewer.increaseScale({ drawingDelay: ZOOM_DRAWING_DELAY });
+            } else {
+                pdfViewer.decreaseScale({ drawingDelay: ZOOM_DRAWING_DELAY });
+            }
+        },
         dispose(): void {
             listeners.abort();
             resizeObserver?.disconnect();
@@ -379,6 +389,9 @@ export function startPdfUsercontent({ workerSource, win = window }: PdfUserconte
                 break;
             case "go_to_page":
                 session?.goToPage(message.page);
+                break;
+            case "zoom":
+                session?.zoom(message.direction);
                 break;
         }
     };
