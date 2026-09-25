@@ -1768,6 +1768,7 @@
         "error_voting_title": "Vote not registered",
         "failed_send_poll_description": "Sorry, the poll you tried to create was not posted.",
         "failed_send_poll_title": "Failed to post poll",
+        "max_selections_heading": "Votes allowed per person",
         "notes": "Results are only revealed when you end the poll",
         "option_label": "Option %(number)s, %(answer)s",
         "option_label_winning_with_total": {
@@ -1801,7 +1802,11 @@
         "type_heading": "Poll type",
         "type_open": "Open poll",
         "unable_edit_description": "Sorry, you can't edit a poll after votes have been cast.",
-        "unable_edit_title": "Can't edit poll"
+        "unable_edit_title": "Can't edit poll",
+        "vote_for_up_to": {
+            "one": "Vote for up to %(count)s option",
+            "other": "Vote for up to %(count)s options"
+        }
     },
     "power_level": {
         "admin": "Admin",
