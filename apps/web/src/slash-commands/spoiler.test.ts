@@ -8,6 +8,7 @@
 // @vitest-environment happy-dom
 
 import { describe, it, expect } from "vitest";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 
 import { setUpCommandTest } from "./__mocks__";
 
@@ -21,29 +22,24 @@ describe("/spoiler", () => {
 
     it("should wrap plain text in a spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        const result = command.run(client, roomId, null, "plain text");
-        expect(result.error).toBeUndefined();
-        const content = await result.promise;
-        expect(content?.formatted_body).toContain("<span data-mx-spoiler>");
-        expect(content?.formatted_body).toContain("plain text");
+        const content = (await command.run(client, roomId, null, "plain text").promise) as IContent;
+        expect(content.formatted_body).toContain("<span data-mx-spoiler>");
+        expect(content.formatted_body).toContain("plain text");
     });
 
     it("should convert markdown bold to HTML inside the spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        const result = command.run(client, roomId, null, "**secret** message");
-        expect(result.error).toBeUndefined();
-        const content = await result.promise;
+        const content = (await command.run(client, roomId, null, "**secret** message").promise) as IContent;
         // Markdown should be serialized to HTML — raw ** chars must not appear
-        expect(content?.formatted_body).not.toContain("**secret**");
-        expect(content?.formatted_body).toContain("<strong>");
-        expect(content?.formatted_body).toContain("<span data-mx-spoiler>");
+        expect(content.formatted_body).not.toContain("**secret**");
+        expect(content.formatted_body).toContain("<strong>");
+        expect(content.formatted_body).toContain("<span data-mx-spoiler>");
     });
 
-    it("should not double-escape plain text body", async () => {
+    it("should preserve plain text in the message body", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        const result = command.run(client, roomId, null, "just text");
-        const content = await result.promise;
-        expect(content?.body).toBe("just text");
-        expect(content?.formatted_body).toContain("just text");
+        const content = (await command.run(client, roomId, null, "just text").promise) as IContent;
+        expect(content.body).toBe("just text");
+        expect(content.formatted_body).toContain("just text");
     });
 });
