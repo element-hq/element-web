@@ -16,8 +16,7 @@ import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
-import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
-import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import PlatformPeg from "../../PlatformPeg";

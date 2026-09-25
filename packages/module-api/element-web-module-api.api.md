@@ -253,23 +253,6 @@ export type DialogProps<M> = {
 };
 
 // @alpha
-export interface EncryptedFile {
-    hashes: {
-        [alg: string]: string;
-    };
-    iv: string;
-    key: {
-        alg: string;
-        key_ops: string[];
-        kty: string;
-        k: string;
-        ext: boolean;
-    };
-    url: string;
-    v: string;
-}
-
-// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -281,16 +264,15 @@ export interface ExtrasApi {
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
-// @public (undocumented)
+// @alpha
 export interface FileViewerApi {
-    // (undocumented)
     registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
 }
 
-// @public
+// @alpha
 export type FileViewerMatcher = (media: MediaHandle) => boolean;
 
-// @public (undocumented)
+// @alpha
 export interface FileViewerOptions {
     buttonIcon: JSX_2.Element;
     buttonText: string;
@@ -298,7 +280,7 @@ export interface FileViewerOptions {
     id: string;
 }
 
-// @public (undocumented)
+// @alpha
 export interface FileViewerProps {
     // (undocumented)
     media: MediaHandle;
@@ -306,8 +288,9 @@ export interface FileViewerProps {
     onClose: () => void;
 }
 
-// @public (undocumented)
+// @alpha
 export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
+
 // @alpha
 export interface HardwareKey {
     // (undocumented)
@@ -357,7 +340,7 @@ export interface MatrixEvent {
 // @public
 export type MaybePromise<T> = T | PromiseLike<T>;
 
-// @public
+// @alpha
 export type MediaHandle = RemoteMedia | UploadedMedia;
 
 // @public
@@ -426,7 +409,7 @@ export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
 
-// @public
+// @alpha
 export type RemoteMedia = {
     type: "remote";
     preview: UrlPreview;
@@ -522,29 +505,10 @@ export const enum UIComponent {
 }
 
 // @alpha
-export interface UnstableBundledUrlPreviews {
-    // (undocumented)
-    "com.beeper.linkpreviews"?: UnstableBundledUrlPreviewSingle[];
-}
-
-// @alpha
-export type UnstableBundledUrlPreviewSingle = {
-    "matched_url": string;
-    "beeper:image:encryption"?: EncryptedFile;
-    "matrix:image:size"?: number;
-    "og:image"?: string;
-    "og:url"?: string;
-    "og:image:width"?: number;
-    "og:image:height"?: number;
-    "og:image:type"?: string;
-    "og:title"?: string;
-    "og:description"?: string;
-} & Record<string, any>;
-
-// @public
 export interface UploadedMedia {
-    // (undocumented)
     blob(): Promise<Blob>;
+    // (undocumented)
+    byteSize?: number;
     // (undocumented)
     mimetype?: string;
     // (undocumented)
@@ -674,6 +638,10 @@ export type X509LoginResult = X509Result<void, X509LoginError>;
 
 // @alpha
 export type X509Result<T, E extends X509IpcError = X509IpcError> = { ok: true; data: T } | { ok: false; error: E };
+
+// Warnings were encountered during analysis:
+//
+// src/api/file-viewer.ts:29:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

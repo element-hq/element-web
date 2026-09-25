@@ -12,7 +12,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type { UrlPreview } from "shared-types";
-import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
+import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
 import { decryptFile } from "./DecryptFile";

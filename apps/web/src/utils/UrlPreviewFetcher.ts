@@ -10,7 +10,7 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
-import { type UnstableBundledUrlPreviewSingle } from "@element-hq/element-web-module-api";
+import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
