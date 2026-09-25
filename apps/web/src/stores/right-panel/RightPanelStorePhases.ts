@@ -25,6 +25,7 @@ export enum RightPanelPhases {
     Timeline = "Timeline",
     Extensions = "Extensions",
     PdfViewer = "PdfViewer",
+    MarkdownViewer = "MarkdownViewer",
 
     // Thread stuff
     ThreadView = "ThreadView",

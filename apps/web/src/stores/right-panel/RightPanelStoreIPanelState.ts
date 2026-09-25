@@ -27,6 +27,8 @@ export interface IRightPanelCardState {
     focusRoomSearch?: boolean;
     // pdf viewer: the m.file event whose attachment is being read
     pdfViewerEvent?: MatrixEvent;
+    // markdown viewer: the m.file event whose attachment is being read
+    markdownViewerEvent?: MatrixEvent;
 }
 
 export interface IRightPanelCardStateStored {
@@ -42,6 +44,8 @@ export interface IRightPanelCardStateStored {
     initialEventScrollIntoView?: boolean;
     // pdf viewer
     pdfViewerEventId?: string;
+    // markdown viewer
+    markdownViewerEventId?: string;
 }
 
 export interface IRightPanelCard {
@@ -87,6 +91,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
         pdfViewerEventId: state?.pdfViewerEvent?.getId(),
+        markdownViewerEventId: state?.markdownViewerEvent?.getId(),
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -107,6 +112,9 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
         pdfViewerEvent: !!stateStored?.pdfViewerEventId ? room.findEventById(stateStored.pdfViewerEventId) : undefined,
+        markdownViewerEvent: !!stateStored?.markdownViewerEventId
+            ? room.findEventById(stateStored.markdownViewerEventId)
+            : undefined,
     };
 
     return { state: state, phase: panelStateStore.phase };
