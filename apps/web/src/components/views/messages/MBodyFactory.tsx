@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
+import React, { type JSX, type RefObject, useContext, useEffect, useMemo, useRef } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
@@ -97,14 +97,13 @@ interface PreviewFileBodyProps {
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
     const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
-    const vm = useCreateAutoDisposedViewModel(
-        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
-    );
+    const viewerLabs = useMemo(() => ({ pdfViewerEnabled }), [pdfViewerEnabled]);
+    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper, viewerLabs));
 
-    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
+    // The view model is built once, so turning a lab on has to reach an already-rendered tile.
     useEffect(() => {
-        vm.setPdfViewerEnabled(pdfViewerEnabled);
-    }, [pdfViewerEnabled, vm]);
+        vm.setViewerLabs(viewerLabs);
+    }, [viewerLabs, vm]);
 
     return (
         <div className="mx_EventTile_content">
