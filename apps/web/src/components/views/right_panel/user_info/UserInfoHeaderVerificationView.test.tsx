@@ -95,4 +95,20 @@ describe("<UserInfoHeaderVerificationView />", () => {
         await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
         expect(container).toMatchSnapshot();
     });
+
+    it("renders verification unavailable message when user has no devices", async () => {
+        const notMeId = "@notMe";
+        const notMeMember = new RoomMember(defaultRoomId, notMeId);
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+
+        render(
+            <UserInfoHeaderVerificationView member={notMeMember} devices={[]} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
+        );
+        // Should show "verification unavailable" instead of spinning indefinitely
+        await waitFor(() =>
+            expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument(),
+        );
+    });
 });
