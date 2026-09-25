@@ -18,7 +18,7 @@ import { useI18n } from "../../core/i18n/i18nContext";
 export interface LegacyCryptoUnsupportedViewSnapshot {
     /** The application brand name, for example "Element". */
     brand: string;
-    /** The last application version that still supports migrating this session, for example "v1.12.29". */
+    /** The last application version that still supports migrating this session, for example "v1.12.30". */
     version: string;
 }
 

@@ -34,7 +34,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         brand: "Element",
-        version: "v1.12.29",
+        version: "v1.12.30",
         onSignOutClick: fn(),
     },
     parameters: {

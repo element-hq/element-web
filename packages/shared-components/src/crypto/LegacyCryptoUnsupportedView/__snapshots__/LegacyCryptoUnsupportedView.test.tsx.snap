@@ -27,7 +27,7 @@ exports[`LegacyCryptoUnsupportedView > Storybook snapshots > renders the default
         <span>
           Please either downgrade to 
           <strong>
-            v1.12.29
+            v1.12.30
           </strong>
            first or remove this device.
         </span>

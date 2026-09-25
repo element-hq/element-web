@@ -55,7 +55,7 @@ describe("LegacyCryptoUnsupportedView", () => {
 
         it("should call onSignOutClick when the remove device button is clicked", async () => {
             const user = userEvent.setup();
-            const vm = new TestViewModel({ brand: "Element", version: "v1.12.29" });
+            const vm = new TestViewModel({ brand: "Element", version: "v1.12.30" });
 
             render(<LegacyCryptoUnsupportedView vm={vm} />);
 

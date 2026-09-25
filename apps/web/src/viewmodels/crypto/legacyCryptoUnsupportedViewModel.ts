@@ -18,7 +18,7 @@ import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
  * The last release that could still migrate a libolm crypto store. Users on an older session must
  * downgrade to this version to migrate, or remove the device and sign in again.
  */
-export const LAST_LEGACY_CRYPTO_VERSION = "v1.12.29";
+export const LAST_LEGACY_CRYPTO_VERSION = "v1.12.30";
 
 interface LegacyCryptoUnsupportedViewModelProps {
     /**
