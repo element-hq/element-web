@@ -1127,9 +1127,19 @@ export class ElementCall extends Call {
         this.ready = Promise.withResolvers<void>();
         this.frozenComponentOptions = null;
         super.close();
+        // A voice call in PiP has no CallView to stop presenting it on close
+        // (whether the widget asked to close or its messaging just stopped),
+        // so the call would linger and its timeline tile stay "in progress"
+        if (this.presented) this.presented = false;
     }
 
+    private destroyed = false;
+
     public destroy(): void {
+        // close() above may re-enter here via checkDestroy while destroying
+        if (this.destroyed) return;
+        this.destroyed = true;
+
         this.componentHandle = null;
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);

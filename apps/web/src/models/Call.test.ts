@@ -914,6 +914,32 @@ describe("ElementCall", () => {
             await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Disconnected), { interval: 5 });
         });
 
+        it("stops presenting the call when the widget closes it", async () => {
+            // A voice call in PiP: presented, but no CallView to un-present it
+            await connect(call, widgetApi);
+            call.presented = true;
+            const onDestroy = vi.fn();
+            call.on(CallEvent.Destroy, onDestroy);
+
+            widgetApi.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            widgetApi.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
+            await waitFor(() => expect(call.presented).toBe(false), { interval: 5 });
+            expect(onDestroy).toHaveBeenCalledTimes(1);
+        });
+
+        it("stops presenting the call when its widget's messaging stops", async () => {
+            // The widget drops always_on_screen before it sends close, which
+            // ends its messaging first: the close action never arrives
+            await connect(call, widgetApi);
+            call.presented = true;
+            const onDestroy = vi.fn();
+            call.on(CallEvent.Destroy, onDestroy);
+
+            WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+            await waitFor(() => expect(call.presented).toBe(false), { interval: 5 });
+            expect(onDestroy).toHaveBeenCalledTimes(1);
+        });
+
         it("disconnects", async () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
             await connect(call, widgetApi);
