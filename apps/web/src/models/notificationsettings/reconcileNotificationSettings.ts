@@ -14,12 +14,13 @@ import { StandardActions } from "../../notifications/StandardActions";
 import { RoomNotifState } from "../../RoomNotifs";
 import { type NotificationSettings } from "./NotificationSettings";
 import { type PushRuleDiff, type PushRuleUpdate } from "./PushRuleDiff";
-import { buildPushRuleMap } from "./PushRuleMap";
+import { buildPushRuleMap, type PushRuleMap } from "./PushRuleMap";
 import { keywordRuleId } from "./keywordRuleId";
 
 function toStandardRules(
     model: NotificationSettings,
     supportsIntentionalMentions: boolean,
+    existingRules: PushRuleMap,
 ): Map<RuleId | string, PushRuleUpdate> {
     const standardRules = new Map<RuleId | string, PushRuleUpdate>();
 
@@ -105,18 +106,25 @@ function toStandardRules(
             actions: userMentionActions,
         });
     }
-    standardRules.set(RuleId.ContainsDisplayName, {
-        rule_id: RuleId.ContainsDisplayName,
-        kind: PushRuleKind.Override,
-        enabled: true,
-        actions: userMentionActions,
-    });
-    standardRules.set(RuleId.ContainsUserName, {
-        rule_id: RuleId.ContainsUserName,
-        kind: PushRuleKind.ContentSpecific,
-        enabled: true,
-        actions: userMentionActions,
-    });
+    // The legacy text-matching mention rules were removed from the spec in Matrix
+    // v1.17 (MSC4210). Servers that no longer serve them answer 404 to updates, so
+    // only write them when the server returned them.
+    if (existingRules.has(RuleId.ContainsDisplayName)) {
+        standardRules.set(RuleId.ContainsDisplayName, {
+            rule_id: RuleId.ContainsDisplayName,
+            kind: PushRuleKind.Override,
+            enabled: true,
+            actions: userMentionActions,
+        });
+    }
+    if (existingRules.has(RuleId.ContainsUserName)) {
+        standardRules.set(RuleId.ContainsUserName, {
+            rule_id: RuleId.ContainsUserName,
+            kind: PushRuleKind.ContentSpecific,
+            enabled: true,
+            actions: userMentionActions,
+        });
+    }
 
     const roomMentionActions = model.mentions.room ? StandardActions.ACTION_NOTIFY : StandardActions.ACTION_DONT_NOTIFY;
     if (supportsIntentionalMentions) {
@@ -127,12 +135,14 @@ function toStandardRules(
             actions: roomMentionActions,
         });
     }
-    standardRules.set(RuleId.AtRoomNotification, {
-        rule_id: RuleId.AtRoomNotification,
-        kind: PushRuleKind.Override,
-        enabled: true,
-        actions: roomMentionActions,
-    });
+    if (existingRules.has(RuleId.AtRoomNotification)) {
+        standardRules.set(RuleId.AtRoomNotification, {
+            rule_id: RuleId.AtRoomNotification,
+            kind: PushRuleKind.Override,
+            enabled: true,
+            actions: roomMentionActions,
+        });
+    }
 
     standardRules.set(RuleId.Tombstone, {
         rule_id: RuleId.Tombstone,
@@ -166,7 +176,7 @@ export function reconcileNotificationSettings(
     };
 
     const oldRules = buildPushRuleMap(pushRules);
-    const newRules = toStandardRules(model, supportsIntentionalMentions);
+    const newRules = toStandardRules(model, supportsIntentionalMentions, oldRules);
 
     for (const rule of newRules.values()) {
         const original = oldRules.get(rule.rule_id);
