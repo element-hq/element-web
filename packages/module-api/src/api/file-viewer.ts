@@ -46,7 +46,9 @@ export interface UploadedMedia {
  * @alpha Subject to change.
  */
 export interface FileViewerProps {
+    /** media to preview */
     media: MediaHandle;
+    /** function to close its own card */
     onClose: () => void;
 }
 

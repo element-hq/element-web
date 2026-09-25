@@ -282,9 +282,7 @@ export interface FileViewerOptions {
 
 // @alpha
 export interface FileViewerProps {
-    // (undocumented)
     media: MediaHandle;
-    // (undocumented)
     onClose: () => void;
 }
 

@@ -26,7 +26,12 @@ export interface FileViewerCardState {
     media: MediaHandle;
 }
 
-export function FileViewerCard({ viewer, media, onClose }: FileViewerCardState & { onClose: () => void }): JSX.Element {
+export interface FileViewerCardProps extends FileViewerCardState {
+    /** called when the card is closed */
+    onClose: () => void;
+}
+
+export function FileViewerCard({ viewer, media, onClose }: FileViewerCardProps): JSX.Element {
     return (
         <BaseCard onClose={onClose} header={viewer.options.cardHeader(media)}>
             <ErrorBoundary>{viewer && viewer.render({ media, onClose })}</ErrorBoundary>
@@ -43,9 +48,13 @@ export function fileViewerOpenButton({
     mxEvent,
     rightPanelStore,
 }: {
+    /** the viewer the button opens */
     viewer: RegisteredFileViewer;
+    /** media to open when clicked */
     media: MediaHandle;
+    /** source event */
     mxEvent: MatrixEvent;
+    /** which RightPanelStore to open the file in */
     rightPanelStore: RightPanelStore;
 }): MediaPreviewEntryButton {
     return {
