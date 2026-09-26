@@ -5,28 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-/* The shell around a PDF document: toolbar, status overlays and the host's document surface. */
-
-.viewer {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
-    color: var(--cpd-color-text-primary);
-    background: var(--cpd-color-bg-subtle-secondary);
-}
-
-.toolbar {
-    flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--cpd-space-4x);
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
-    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
-    background: var(--cpd-color-bg-canvas-default);
-}
+/* The page and zoom controls and the host's document surface. The frame around them comes from DocumentViewerView. */
 
 .pageForm,
 .zoomControls {
@@ -70,14 +49,7 @@ Please see LICENSE files in the repository root for full details.
     font: var(--cpd-font-body-sm-medium);
 }
 
-/* Positioning context for the surface and overlays. */
-.body {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-}
-
-/* The host's document surface. */
+/* The host's document surface. Fills the shell's body, which is the positioning context. */
 .surface {
     position: absolute;
     inset: 0;
@@ -87,21 +59,4 @@ Please see LICENSE files in the repository root for full details.
 .surface > * {
     width: 100%;
     height: 100%;
-}
-
-.message {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--cpd-space-6x) var(--cpd-space-4x);
-    text-align: center;
-    color: var(--cpd-color-text-secondary);
-    background: var(--cpd-color-bg-subtle-secondary);
-    font: var(--cpd-font-body-md-regular);
-}
-
-.error {
-    color: var(--cpd-color-text-critical-primary);
 }

@@ -73,6 +73,10 @@
         },
         "toggle_event": "toggle event"
     },
+    "document_viewer": {
+        "error_load": "Unable to load this file.",
+        "loading": "Loading document…"
+    },
     "emoji": {
         "categories": "Categories",
         "category_activities": "Activities",
@@ -115,8 +119,6 @@
         "mute_room": "Mute room"
     },
     "pdf_viewer": {
-        "error_load": "Unable to load PDF.",
-        "loading": "Loading PDF…",
         "page_label": "Page %(page)s of %(total)s",
         "page_number": "Page number",
         "zoom": "Zoom",

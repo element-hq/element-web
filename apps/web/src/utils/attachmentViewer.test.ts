@@ -1,0 +1,62 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { describe, expect, it, vi } from "vitest";
+import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+
+import { attachmentViewerForEvent } from "./attachmentViewer";
+import { openPdfViewer } from "./pdfViewer";
+import { openMarkdownViewer } from "./markdownViewer";
+
+vi.mock("./pdfViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("./pdfViewer")>()),
+    openPdfViewer: vi.fn(),
+}));
+
+vi.mock("./markdownViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("./markdownViewer")>()),
+    openMarkdownViewer: vi.fn(),
+}));
+
+function mkFileEvent(body: string, mimetype?: string): MatrixEvent {
+    return new MatrixEvent({
+        room_id: "!room:example.org",
+        sender: "@user:example.org",
+        type: EventType.RoomMessage,
+        content: { body, msgtype: MsgType.File, url: "mxc://example.org/file", info: { mimetype } },
+    });
+}
+
+describe("attachmentViewerForEvent", () => {
+    it("offers nothing for a file no viewer can open", () => {
+        expect(attachmentViewerForEvent(mkFileEvent("notes.txt", "text/plain"))).toBeUndefined();
+    });
+
+    it("offers the PDF viewer for a PDF", () => {
+        const mxEvent = mkFileEvent("spec.pdf", "application/pdf");
+
+        const viewer = attachmentViewerForEvent(mxEvent);
+
+        expect(viewer?.openLabel).toBe("Open PDF");
+        viewer?.open();
+        expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+        expect(openMarkdownViewer).not.toHaveBeenCalled();
+    });
+
+    it("offers the Markdown viewer for a Markdown file", () => {
+        const mxEvent = mkFileEvent("README.md", "text/markdown");
+
+        const viewer = attachmentViewerForEvent(mxEvent);
+
+        expect(viewer?.openLabel).toBe("Open Markdown");
+        viewer?.open();
+        expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
+        expect(openPdfViewer).not.toHaveBeenCalled();
+    });
+});

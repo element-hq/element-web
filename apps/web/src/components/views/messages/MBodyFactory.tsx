@@ -59,7 +59,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
-    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const documentPreviewsEnabled = useSettingValue("feature_document_previews");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -71,7 +71,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
                 timelineRenderingType,
                 refIFrame,
                 refLink,
-                pdfViewerEnabled,
+                documentPreviewsEnabled,
             }),
     );
 
@@ -82,9 +82,9 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
             forExport,
             showFileInfo,
             timelineRenderingType,
-            pdfViewerEnabled,
+            documentPreviewsEnabled,
         });
-    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, documentPreviewsEnabled, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
@@ -96,15 +96,15 @@ interface PreviewFileBodyProps {
 
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
-    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const documentPreviewsEnabled = useSettingValue("feature_document_previews");
     const vm = useCreateAutoDisposedViewModel(
-        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, documentPreviewsEnabled),
     );
 
     // The view model is built once, so turning the lab on has to reach an already-rendered tile.
     useEffect(() => {
-        vm.setPdfViewerEnabled(pdfViewerEnabled);
-    }, [pdfViewerEnabled, vm]);
+        vm.setDocumentPreviewsEnabled(documentPreviewsEnabled);
+    }, [documentPreviewsEnabled, vm]);
 
     return (
         <div className="mx_EventTile_content">

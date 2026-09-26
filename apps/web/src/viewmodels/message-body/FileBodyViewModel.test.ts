@@ -19,6 +19,7 @@ import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { openPdfViewer } from "../../utils/pdfViewer";
+import { openMarkdownViewer } from "../../utils/markdownViewer";
 
 const mockDownload = vi.fn();
 
@@ -33,6 +34,11 @@ vi.mock("../../utils/FileDownloader", () => ({
 vi.mock("../../utils/pdfViewer", async (importOriginal) => ({
     ...(await importOriginal<typeof import("../../utils/pdfViewer")>()),
     openPdfViewer: vi.fn(),
+}));
+
+vi.mock("../../utils/markdownViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../utils/markdownViewer")>()),
+    openMarkdownViewer: vi.fn(),
 }));
 
 vi.mock("../../customisations/Media", () => ({
@@ -88,7 +94,7 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
-            pdfViewerEnabled: false,
+            documentPreviewsEnabled: false,
             ...overrides,
         });
 
@@ -329,11 +335,11 @@ describe("FileBodyViewModel", () => {
         /** The lab flag is read by the view and handed in, so a test just sets it directly. */
         const createPdfVm = (
             overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
-        ): FileBodyViewModel => createVm({ pdfViewerEnabled: true, ...overrides });
+        ): FileBodyViewModel => createVm({ documentPreviewsEnabled: true, ...overrides });
 
         it("does not offer the viewer while the lab is off", () => {
             const vm = createPdfVm({
-                pdfViewerEnabled: false,
+                documentPreviewsEnabled: false,
                 mxEvent: mkMediaEvent(pdf),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -405,6 +411,47 @@ describe("FileBodyViewModel", () => {
             vm.onOpenClick();
 
             expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+        });
+
+        describe("for Markdown", () => {
+            const markdown = { body: "README.md", info: { mimetype: "text/markdown" } };
+
+            it("offers the Markdown viewer while the lab is on", () => {
+                const vm = createVm({
+                    documentPreviewsEnabled: true,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open Markdown" });
+            });
+
+            it("does not offer the Markdown viewer while the lab is off", () => {
+                const vm = createVm({
+                    documentPreviewsEnabled: false,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot().showOpen).toBe(false);
+            });
+
+            it("opens the Markdown viewer for its own event on click", () => {
+                const mxEvent = mkMediaEvent(markdown);
+                const vm = createVm({
+                    documentPreviewsEnabled: true,
+                    mxEvent,
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                vm.onOpenClick();
+
+                expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
+                expect(openPdfViewer).not.toHaveBeenCalled();
+            });
         });
     });
 });

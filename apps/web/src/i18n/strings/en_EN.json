@@ -1513,6 +1513,8 @@
         "click_for_info": "Click for more info",
         "config_only": "Can only be enabled via config.json.",
         "currently_experimental": "Currently experimental.",
+        "document_previews": "Experimental document previews",
+        "document_previews_description": "Open PDF and Markdown attachments in the right panel.",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -1566,8 +1568,6 @@
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
-        "pdf_viewer": "Open PDFs",
-        "pdf_viewer_description": "Read PDF attachments in the right panel.",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "sliding_sync": "Sliding Sync mode",
@@ -1683,6 +1683,10 @@
         "share_type_pin": "Drop a Pin",
         "share_type_prompt": "What location type do you want to share?",
         "toggle_attribution": "Toggle attribution"
+    },
+    "markdown_viewer": {
+        "open": "Open Markdown",
+        "title": "Markdown"
     },
     "member_list": {
         "count": {

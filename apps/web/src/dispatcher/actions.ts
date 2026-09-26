@@ -394,6 +394,11 @@ export enum Action {
     OpenPdfViewer = "open_pdf_viewer",
 
     /**
+     * Opens the given event's Markdown attachment in the right panel. Use with an OpenMarkdownViewerPayload.
+     */
+    OpenMarkdownViewer = "open_markdown_viewer",
+
+    /**
      * Open the direct message dialog
      */
     CreateChat = "view_create_chat",

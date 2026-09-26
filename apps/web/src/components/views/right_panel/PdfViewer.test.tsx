@@ -174,7 +174,7 @@ describe("PdfViewer", () => {
             await act(async () => {});
 
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
-            expect(screen.getByRole("status")).toHaveTextContent("Loading PDF");
+            expect(screen.getByRole("status")).toHaveTextContent("Loading document");
         });
 
         it("ignores messages from its iframe that do not fit the protocol", async () => {
@@ -199,7 +199,7 @@ describe("PdfViewer", () => {
                 message: "InvalidPDFException: bad xref",
             } satisfies PdfUsercontentMessage);
 
-            expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF.");
+            expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file.");
         });
 
         it("closes the channel and stops listening once closed", async () => {
@@ -224,7 +224,7 @@ describe("PdfViewer", () => {
 
             ready(iframe);
 
-            await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+            await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file"));
             expect(tooLarge.blob).not.toHaveBeenCalled();
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
@@ -240,7 +240,7 @@ describe("PdfViewer", () => {
 
             ready(iframe);
 
-            await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load PDF"));
+            await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file"));
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
@@ -250,7 +250,7 @@ describe("PdfViewer", () => {
 
             ready(iframe);
 
-            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
@@ -260,7 +260,7 @@ describe("PdfViewer", () => {
 
             ready(iframe);
 
-            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
 
@@ -280,7 +280,7 @@ describe("PdfViewer", () => {
 
             ready(iframe);
 
-            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load PDF.");
+            expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load this file.");
             expect(iframe.port.postMessage).not.toHaveBeenCalled();
         });
     });
@@ -290,7 +290,7 @@ describe("PdfViewer", () => {
             render(<PdfViewer media={media()} />);
             const iframe = attachIframe();
 
-            expect(screen.getByRole("status")).toHaveTextContent("Loading PDF");
+            expect(screen.getByRole("status")).toHaveTextContent("Loading document");
             expect(screen.queryByTestId("pdf-page-input")).not.toBeInTheDocument();
 
             await loadIntoIframe(iframe);

@@ -177,8 +177,10 @@ describe("MBodyFactory", () => {
         });
     });
 
-    describe("FileBodyFactory and the PDF viewer lab", () => {
-        afterEach(() => {
+    describe("FileBodyFactory and the document previews lab, for a PDF", () => {
+        afterEach(async () => {
+            // Both viewers share the lab, so a value left on the device would leak into the next test.
+            await SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, false);
             SettingsStore.reset();
         });
 
@@ -199,9 +201,34 @@ describe("MBodyFactory", () => {
             expect(screen.queryByRole("button", { name: "Open PDF" })).not.toBeInTheDocument();
 
             // The view reads the setting, so turning the lab on has to reach an already-rendered tile.
-            await act(() => SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true));
+            await act(() => SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, true));
 
             expect(screen.getByRole("button", { name: "Open PDF" })).toBeInTheDocument();
+        });
+    });
+
+    describe("FileBodyFactory and the document previews lab, for Markdown", () => {
+        afterEach(async () => {
+            // Both viewers share the lab, so a value left on the device would leak into the next test.
+            await SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, false);
+            SettingsStore.reset();
+        });
+
+        it("offers the viewer only once the lab is turned on, without a remount", async () => {
+            const mediaEvent = mkEvent("m.file", { body: "README.md", info: { mimetype: "text/markdown" } });
+
+            renderInRoomContext(
+                renderMBody(
+                    { ...props, mxEvent: mediaEvent, mediaEventHelper: new MediaEventHelper(mediaEvent) },
+                    FileBodyFactory,
+                ),
+                TimelineRenderingType.Room,
+            );
+            expect(screen.queryByRole("button", { name: "Open Markdown" })).not.toBeInTheDocument();
+
+            await act(() => SettingsStore.setValue("feature_document_previews", null, SettingLevel.DEVICE, true));
+
+            expect(screen.getByRole("button", { name: "Open Markdown" })).toBeInTheDocument();
         });
     });
 

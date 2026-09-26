@@ -229,7 +229,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_pdf_viewer": IFeature;
+    "feature_document_previews": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
@@ -656,11 +656,11 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
-    "feature_pdf_viewer": {
+    "feature_document_previews": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pdf_viewer"),
-        description: _td("labs|pdf_viewer_description"),
+        displayName: _td("labs|document_previews"),
+        description: _td("labs|document_previews_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
