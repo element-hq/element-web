@@ -80,7 +80,6 @@
         "katex": "^0.18.0",
         "lodash": "npm:lodash-es@4.18.1",
         "maplibre-gl": "^6.0.0",
-        "marked": "^18.0.14",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-widget-api": "^1.18.0",

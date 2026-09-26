@@ -657,9 +657,6 @@ importers:
       maplibre-gl:
         specifier: ^6.0.0
         version: 6.10.0
-      marked:
-        specifier: ^18.0.14
-        version: 18.0.14
       matrix-encrypt-attachment:
         specifier: ^1.0.3
         version: 1.0.3
@@ -9695,11 +9692,6 @@ packages:
 
   marked@16.4.2:
     resolution: {integrity: sha512-TI3V8YYWvkVf3KJe1dRkpnjs68JUPyEa5vjKrp1XEEJUAOaQc+Qj+L1qWbPd0SJuAdQkFU0h73sXXqwDYxsiDA==}
-    engines: {node: '>= 20'}
-    hasBin: true
-
-  marked@18.0.14:
-    resolution: {integrity: sha512-mBHK6FBHuBAlhgRe88w9F0O1AbwwXJUcQibUbC/QcdTbVGAD7aWza+xt3N6oT/jCZx3/OMeS+8rnuiHZcQ9s7A==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -22012,8 +22004,6 @@ snapshots:
       uc.micro: 2.1.0
 
   marked@16.4.2: {}
-
-  marked@18.0.14: {}
 
   matcher@3.0.0:
     dependencies:
