@@ -29,6 +29,9 @@ export enum RightPanelPhases {
     // Thread stuff
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",
+
+    // FileViewer module API
+    FileViewer = "FileViewer",
 }
 
 export function backLabelForPhase(phase: RightPanelPhases | null): string | null {

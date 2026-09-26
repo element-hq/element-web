@@ -22,9 +22,11 @@ interface UnstableBundledUrlPreviews {
 /**
  * Single item in bundled URL previews in MSC4095
  *
+ * A type alias rather than an interface so it stays assignable to `UrlPreview.additionalBundleContent`.
+ *
  * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
  */
-export interface UnstableBundledUrlPreviewSingle {
+export type UnstableBundledUrlPreviewSingle = {
     "matched_url": string;
     "beeper:image:encryption"?: EncryptedFile;
     "matrix:image:size"?: number;
@@ -35,6 +37,6 @@ export interface UnstableBundledUrlPreviewSingle {
     "og:image:type"?: string;
     "og:title"?: string;
     "og:description"?: string;
-}
+};
 
 export type RoomMessageEventContent = SdkRoomMessageEventContent & UnstableBundledUrlPreviews;

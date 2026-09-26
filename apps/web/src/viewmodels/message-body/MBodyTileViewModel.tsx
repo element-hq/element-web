@@ -20,15 +20,26 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
+import { ModuleApi } from "../../modules/Api";
+import { uploadedMediaOfEvent } from "../../modules/FileViewerApi";
+import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
+import type RightPanelStore from "../../stores/right-panel/RightPanelStore";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
     private readonly mediaEventHelper: MediaEventHelper;
+    private readonly rightPanelStore: RightPanelStore;
 
-    public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper, pdfViewerEnabled = false) {
-        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, pdfViewerEnabled));
+    public constructor(
+        mxEvent: MatrixEvent,
+        mediaEventHelper: MediaEventHelper,
+        rightPanelStore: RightPanelStore,
+        pdfViewerEnabled = false,
+    ) {
+        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, rightPanelStore, pdfViewerEnabled));
         this.mxEvent = mxEvent;
         this.mediaEventHelper = mediaEventHelper;
+        this.rightPanelStore = rightPanelStore;
     }
 
     /**
@@ -38,19 +49,42 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
      * @param pdfViewerEnabled Whether the PDF viewer lab is currently enabled.
      */
     public setPdfViewerEnabled(pdfViewerEnabled: boolean): void {
-        this.setProps(MBodyTileViewModel.buildSnapshot(this.mxEvent, this.mediaEventHelper, pdfViewerEnabled));
+        this.setProps(
+            MBodyTileViewModel.buildSnapshot(
+                this.mxEvent,
+                this.mediaEventHelper,
+                this.rightPanelStore,
+                pdfViewerEnabled,
+            ),
+        );
     }
 
     private static buildSnapshot(
         mxEvent: MatrixEvent,
         mediaEventHelper: MediaEventHelper,
+        rightPanelStore: RightPanelStore,
         pdfViewerEnabled: boolean,
     ): MediaPreviewGroupSnapshot {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
+
+        const mediaHandle = uploadedMediaOfEvent(mxEvent, mediaEventHelper);
+        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
+        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
+            ? fileViewers.map((viewer) =>
+                  fileViewerOpenButton({
+                      viewer,
+                      media: mediaHandle,
+                      mxEvent,
+                      rightPanelStore,
+                  }),
+              )
+            : [];
+
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
+            ...fileViewerButtons,
             // Behind the same lab as the legacy file body's viewer, and only for PDFs.
             ...(pdfViewerEnabled && isPdfEvent(mxEvent)
                 ? [
