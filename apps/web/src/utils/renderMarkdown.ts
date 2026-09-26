@@ -5,21 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { Marked } from "marked";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 
+import Markdown from "../Markdown";
 import { sanitizeHtmlParams } from "../Linkify";
-
-// One parser, configured once. GitHub-flavoured Markdown is what most .md files are written in.
-const marked = new Marked({ gfm: true });
 
 /**
  * Render a Markdown document to HTML that is safe to put in the DOM.
  *
- * marked passes raw HTML in the source straight through, so its output goes through the same sanitizer
- * as message bodies: scripts, event handlers and unknown tags are dropped, links open in a new tab, and
- * images are limited to the homeserver's media so a document cannot phone home.
+ * This is the parser messages are composed with, so a document renders the way the same text would
+ * in a message: raw HTML in the source is escaped rather than passed through, and links open in a
+ * new tab. Soft breaks are kept, since documents are often wrapped at a fixed column. The result then
+ * goes through the same sanitizer as message bodies, which limits images to the homeserver's media
+ * so a document cannot phone home.
  */
 export function renderMarkdown(source: string): string {
-    return sanitizeHtml(marked.parse(source, { async: false }), sanitizeHtmlParams);
+    const html = new Markdown(source).toHTML({ externalLinks: true, hardSoftBreaks: false });
+
+    return sanitizeHtml(html, sanitizeHtmlParams);
 }

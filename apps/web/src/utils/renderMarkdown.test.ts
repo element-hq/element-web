@@ -32,12 +32,11 @@ describe("renderMarkdown", () => {
         expect(html).toContain('<pre><code class="language-ts">const x = 1;\n</code></pre>');
     });
 
-    it("renders GitHub-flavoured tables", () => {
-        const html = renderMarkdown("| a | b |\n| - | - |\n| 1 | 2 |\n");
+    it("keeps a wrapped paragraph as one paragraph", () => {
+        const html = renderMarkdown("# Title\n\nThis sentence is wrapped\nat a fixed column.\n");
 
-        expect(html).toContain("<table>");
-        expect(html).toContain("<th>a</th>");
-        expect(html).toContain("<td>2</td>");
+        expect(html).toContain("<p>This sentence is wrapped\nat a fixed column.</p>");
+        expect(html).not.toContain("<br");
     });
 
     it("opens links in a new tab without leaking the referrer", () => {
@@ -48,15 +47,23 @@ describe("renderMarkdown", () => {
         expect(html).toContain('rel="noreferrer noopener"');
     });
 
-    it("drops scripts and inline event handlers written as raw HTML", () => {
+    it("shows raw HTML as text rather than markup", () => {
         const html = renderMarkdown(
             '<script>alert(1)</script>\n\n<a href="https://example.org" onclick="alert(1)">x</a>',
         );
 
+        // The message parser escapes anything outside its small allow-list of inline tags, so the
+        // source is visible but inert.
         expect(html).not.toContain("<script");
-        expect(html).not.toContain("alert(1)");
-        expect(html).not.toContain("onclick");
-        expect(html).toContain('href="https://example.org"');
+        expect(html).not.toMatch(/<a /);
+        expect(html).toContain("&lt;script&gt;alert(1)&lt;/script&gt;");
+    });
+
+    it("allows the few inline tags messages allow", () => {
+        const html = renderMarkdown("H<sub>2</sub>O and <del>this</del>");
+
+        expect(html).toContain("<sub>2</sub>");
+        expect(html).toContain("<del>this</del>");
     });
 
     it("drops javascript: links", () => {

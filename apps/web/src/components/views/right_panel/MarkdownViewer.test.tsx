@@ -41,13 +41,13 @@ describe("MarkdownViewer", () => {
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
-    it("strips scripts before the document reaches the DOM", async () => {
+    it("renders raw HTML in the document as inert text", async () => {
         render(<MarkdownViewer media={media("# Safe\n\n<script>window.pwned = true</script>\n")} />);
 
         await screen.findByRole("heading", { name: "Safe" });
 
-        expect(screen.getByTestId("markdown-content").innerHTML).not.toContain("<script");
-        expect(screen.getByTestId("markdown-content").innerHTML).not.toContain("pwned");
+        expect(screen.getByTestId("markdown-content").querySelector("script")).toBeNull();
+        expect(screen.getByText("<script>window.pwned = true</script>")).toBeInTheDocument();
     });
 
     it("refuses a file the sender declares as too large without downloading it", async () => {
