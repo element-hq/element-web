@@ -77,6 +77,8 @@ const viewerMock = vi.hoisted(() => {
         public readonly setDocument = vi.fn();
         public readonly update = vi.fn();
         public readonly updateScale = vi.fn();
+        public readonly increaseScale = vi.fn();
+        public readonly decreaseScale = vi.fn();
         public readonly scrollPageIntoView = vi.fn();
         public readonly cleanup = vi.fn();
         // What pdf.js measures zoom origins against: the container's `offsetTop`/`offsetLeft`.
@@ -609,6 +611,18 @@ describe("PDF usercontent", () => {
             // A trackpad pinch arrives as small deltas.
             fireZoomWheel(-10);
             expect(activeViewer().updateScale.mock.calls[1][0].scaleFactor).toBeCloseTo(1.022, 3);
+        });
+
+        it("steps the zoom when the app asks", async () => {
+            const iframe = fakeIframe();
+            await openDocument(iframe);
+
+            iframe.receive({ type: "zoom", direction: "in" });
+            expect(activeViewer().increaseScale).toHaveBeenCalledWith({ drawingDelay: 400 });
+            expect(activeViewer().decreaseScale).not.toHaveBeenCalled();
+
+            iframe.receive({ type: "zoom", direction: "out" });
+            expect(activeViewer().decreaseScale).toHaveBeenCalledWith({ drawingDelay: 400 });
         });
 
         it("ignores wheel events that are not a zoom gesture", async () => {

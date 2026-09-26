@@ -32,10 +32,17 @@ export const PDF_NAMED_SCALES: ReadonlySet<string> = new Set([
     "page-height",
 ]);
 
-/** Messages the app sends to the iframe: the document (transferred) and where to open it, or a page to go to. */
+/** Which way a zoom step goes. */
+export type PdfZoomDirection = "in" | "out";
+
+/**
+ * Messages the app sends to the iframe: the document (transferred) and where to open it, a page to go
+ * to, or a zoom step.
+ */
 export type PdfHostMessage =
     | { type: "load"; data: ArrayBuffer; position?: PdfPosition }
-    | { type: "go_to_page"; page: number };
+    | { type: "go_to_page"; page: number }
+    | { type: "zoom"; direction: PdfZoomDirection };
 
 /** Messages the iframe sends to the app. */
 export type PdfUsercontentMessage =
@@ -87,6 +94,9 @@ export function parsePdfHostMessage(data: unknown): PdfHostMessage | undefined {
         case "go_to_page":
             if (!isPositiveInteger(data.page)) return;
             return { type: "go_to_page", page: data.page };
+        case "zoom":
+            if (data.direction !== "in" && data.direction !== "out") return;
+            return { type: "zoom", direction: data.direction };
     }
 }
 

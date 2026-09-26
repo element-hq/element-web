@@ -307,7 +307,7 @@ describe("PdfViewer", () => {
             fromIframe(iframe, { type: "page", page: 5 } satisfies PdfUsercontentMessage);
 
             await waitFor(() => expect(screen.getByTestId("pdf-page-input")).toHaveValue("5"));
-            expect(screen.getByRole("group")).toHaveAccessibleName("Page 5 of 100");
+            expect(screen.getByRole("group", { name: "Page 5 of 100" })).toBeInTheDocument();
         });
 
         it("asks the iframe to jump to a page typed into the selector", async () => {
@@ -367,6 +367,25 @@ describe("PdfViewer", () => {
 
             await waitFor(() => expect(input).toHaveValue("9"));
             expect(sent(iframe).filter((message) => message.type === "go_to_page")).toEqual([]);
+        });
+    });
+
+    describe("zoom", () => {
+        it("asks the iframe to step the zoom from the toolbar buttons", async () => {
+            const user = userEvent.setup();
+            const { iframe } = await renderLoaded();
+
+            await user.click(screen.getByRole("button", { name: "Zoom in" }));
+            expect(iframe.port.postMessage).toHaveBeenCalledWith({ type: "zoom", direction: "in" });
+
+            await user.click(screen.getByRole("button", { name: "Zoom out" }));
+            expect(iframe.port.postMessage).toHaveBeenCalledWith({ type: "zoom", direction: "out" });
+        });
+
+        it("hides the zoom buttons until the document is laid out", () => {
+            render(<PdfViewer media={media()} />);
+
+            expect(screen.queryByRole("button", { name: "Zoom in" })).not.toBeInTheDocument();
         });
     });
 

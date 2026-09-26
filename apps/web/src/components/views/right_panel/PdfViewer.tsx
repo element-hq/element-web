@@ -11,7 +11,11 @@ import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-comp
 
 import { type PdfMedia } from "../../../@types/pdf-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
-import { type PdfHostMessage, parsePdfUsercontentMessage } from "../../../usercontent/pdf/protocol";
+import {
+    type PdfHostMessage,
+    type PdfZoomDirection,
+    parsePdfUsercontentMessage,
+} from "../../../usercontent/pdf/protocol";
 import { _t } from "../../../languageHandler";
 
 const loggerPdf = logger.getChild("PdfViewer");
@@ -189,6 +193,14 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         }
     }, [currentPage, pageCount, pageInput]);
 
+    const zoom = useCallback((direction: PdfZoomDirection): void => {
+        const message: PdfHostMessage = { type: "zoom", direction };
+        portRef.current?.postMessage(message);
+    }, []);
+
+    const zoomIn = useCallback((): void => zoom("in"), [zoom]);
+    const zoomOut = useCallback((): void => zoom("out"), [zoom]);
+
     const onPageInputChange = useCallback((value: string): void => {
         setPageInput(value);
     }, []);
@@ -227,6 +239,8 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             onPageInputBlur={onPageInputBlur}
             onPageInputCancel={onPageInputCancel}
             onPageSubmit={commitPageInput}
+            onZoomIn={zoomIn}
+            onZoomOut={zoomOut}
         >
             {/* Keyed on the file so a new document gets a fresh iframe. `src` is set by the effect above. */}
             <iframe

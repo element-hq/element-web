@@ -20,6 +20,7 @@ Please see LICENSE in the repository root for full details.
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: var(--cpd-space-4x);
     padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
     background: var(--cpd-color-bg-canvas-default);

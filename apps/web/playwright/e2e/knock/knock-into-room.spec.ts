@@ -50,7 +50,6 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await roomPreviewBar.getByRole("button", { name: "Join the discussion" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
@@ -141,7 +140,6 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await roomPreviewBar.getByRole("button", { name: "Join the discussion" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
@@ -232,7 +230,6 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await roomPreviewBar.getByRole("button", { name: "Join the discussion" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
@@ -260,7 +257,6 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await roomPreviewBar.getByRole("button", { name: "Join the discussion" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
