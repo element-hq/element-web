@@ -652,7 +652,10 @@
         "encrypted_warning": "You can't disable this later. Bridges & most bots won't work yet.",
         "encryption_forced": "Your server requires encryption to be enabled in private rooms.",
         "encryption_label": "Enable end-to-end encryption",
-        "error_title": "Failure to create room",
+        "error_title": {
+            "room": "Failure to create room",
+            "space": "Failure to create space"
+        },
         "generic_error": "Server may be unavailable, overloaded, or you hit a bug.",
         "join_rule_change_notice": "You can change this at any time from room settings.",
         "join_rule_invite": "Private room (invite only)",
