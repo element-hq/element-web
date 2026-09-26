@@ -212,6 +212,46 @@ describe("ElementWidgetDriver", () => {
             });
         });
 
+        it("sends encrypted messages to every device for a wildcard", async () => {
+            const encryptToDeviceMessages = vi
+                .fn()
+                .mockImplementation((eventType, recipients: { userId: string; deviceId: string }[], content) => ({
+                    eventType: "m.room.encrypted",
+                    batch: recipients.map(({ userId, deviceId }) => ({
+                        userId,
+                        deviceId,
+                        payload: { eventType, content },
+                    })),
+                }));
+            const crypto = MatrixClientPeg.safeGet().getCrypto()!;
+            crypto.encryptToDeviceMessages = encryptToDeviceMessages;
+            crypto.getUserDeviceInfo = vi.fn().mockResolvedValue(
+                new Map([
+                    [
+                        "@alice:example.org",
+                        new Map([
+                            ["aliceMobile", {}],
+                            ["aliceDesktop", {}],
+                        ]),
+                    ],
+                ]),
+            );
+
+            await driver.sendToDevice("org.example.foo", true, {
+                "@alice:example.org": { "*": { hello: "alice" } },
+            });
+
+            expect(crypto.getUserDeviceInfo).toHaveBeenCalledWith(["@alice:example.org"], true);
+            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+                "org.example.foo",
+                [
+                    { deviceId: "aliceMobile", userId: "@alice:example.org" },
+                    { deviceId: "aliceDesktop", userId: "@alice:example.org" },
+                ],
+                { hello: "alice" },
+            );
+        });
+
         it("sends encrypted messages", async () => {
             const encryptToDeviceMessages = vi
                 .fn()
