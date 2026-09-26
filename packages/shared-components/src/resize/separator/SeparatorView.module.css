@@ -53,14 +53,17 @@
     border-right: 1px solid var(--cpd-color-bg-subtle-primary);
 }
 
-.separator[data-separator-type="bar"][data-separator="hover"],
+/* Use :hover conjunction so the style clears when the cursor leaves the window.
+   The library keeps data-separator="hover" set until the next pointermove, which
+   never fires once the cursor exits the viewport, causing a stuck hover state. */
+.separator[data-separator-type="bar"][data-separator="hover"]:hover,
 .separator:focus-visible {
     background: var(--cpd-color-bg-action-tertiary-hovered);
 }
 
 /* When type=border and the user hovers/focuses the separator, we make the separator thicker */
 .separator[data-separator-type="border"]:is(
-        [data-separator="hover"],
+        [data-separator="hover"]:hover,
         [data-separator="active"],
         [data-separator="focus"]
     ),
