@@ -68,6 +68,22 @@ describe("useThirdPartyProtocols", () => {
         const { result } = renderHook(() => useThirdPartyProtocols(["remote3.example.com"]));
         await waitFor(() => expect(result.current["remote3.example.com"]).toEqual({}));
     });
+
+    it("retries a failed lookup next time rather than caching the miss", async () => {
+        cli.doesServerSupportUnstableFeature = vi.fn().mockResolvedValue(true);
+        cli.getThirdpartyProtocols = vi
+            .fn()
+            .mockRejectedValueOnce(new Error("flaky"))
+            .mockResolvedValue(XMPP_PROTOCOLS);
+
+        const first = renderHook(() => useThirdPartyProtocols(["remote4.example.com"]));
+        await waitFor(() => expect(first.result.current["remote4.example.com"]).toEqual({}));
+        first.unmount();
+
+        const second = renderHook(() => useThirdPartyProtocols(["remote4.example.com"]));
+        await waitFor(() => expect(second.result.current["remote4.example.com"]).toEqual(XMPP_PROTOCOLS));
+        expect(cli.getThirdpartyProtocols).toHaveBeenCalledTimes(2);
+    });
 });
 
 describe("findProtocolForInstance", () => {

@@ -57,10 +57,11 @@ export function useThirdPartyProtocols(servers: string[]): Record<string, Protoc
                     merge(server, response);
                 },
                 () => {
-                    // No bridges, or the server doesn't support the lookup: cache
-                    // the miss so we don't hammer it on every render.
-                    protocolsCache.set(server, {});
-                    merge(server, protocolsCache.get(server)!);
+                    // No bridges, the server doesn't support the lookup, or a
+                    // passing failure: show nothing for now but don't cache the
+                    // miss, so the next dialog tries again rather than hiding a
+                    // bridge for the rest of the session.
+                    merge(server, {});
                 },
             );
         }
