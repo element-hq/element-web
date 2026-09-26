@@ -112,6 +112,42 @@ describe("mention pills", () => {
         );
     }
 
+    it.each(["", "ignored"])("renders explicit links as ordinary anchors (value %j)", (value) => {
+        for (const href of [
+            "https://matrix.to/#/@alice:example.org",
+            "https://matrix.to/#/#support:example.org",
+            "https://matrix.to/#/!room:example.org/$event",
+            "matrix:u/alice:example.org",
+            "matrix:r/support:example.org",
+        ]) {
+            const { container, unmount } = renderPills(
+                `<a data-org.matrix.msc4550.link="${value}" href="${href}">${href}</a>`,
+            );
+            expect(container.querySelector(".mx_Pill")).toBeNull();
+            expect(container.querySelector("a")?.textContent).toBe(href);
+            unmount();
+        }
+    });
+
+    it.each(["Ask @room for help", "Ask <strong>@room</strong> for help"])(
+        "keeps @room text inside explicit link labels (%s)",
+        (label) => {
+            const { container } = renderPills(
+                `<a href="https://example.org" data-org.matrix.msc4550.link>${label}</a>`,
+            );
+            expect(container.querySelector(".mx_Pill")).toBeNull();
+            expect(container.querySelector("a")?.textContent).toBe("Ask @room for help");
+        },
+    );
+
+    it("still renders room mentions outside explicit links", () => {
+        const { container } = renderPills(
+            '<a href="https://example.org" data-org.matrix.msc4550.link>Ask @room for help</a> @room',
+        );
+        expect(container.querySelector("a .mx_Pill")).toBeNull();
+        expect(container.querySelectorAll(".mx_AtRoomPill")).toHaveLength(1);
+    });
+
     it("should do nothing for empty element", () => {
         const input = "<div></div>";
         const { asFragment } = renderPills(input);

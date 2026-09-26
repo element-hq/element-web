@@ -18,6 +18,44 @@ import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
 beforeAll(initOnce, 10000);
 
 describe("createMessageContent", () => {
+    it("marks authored Markdown links in the rich-text composer", async () => {
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+        if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
+        expect(content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
+    });
+
+    it("retains explicit links in replacement content", async () => {
+        const editedEvent = mkEvent({
+            type: "m.room.message",
+            room: "!room:example.org",
+            user: "@sender:example.org",
+            content: { msgtype: "m.text", body: "Original message" },
+            event: true,
+        });
+        const content = await createMessageContent(
+            '<a href="matrix:u/alice:example.org" data-org.matrix.msc4550.link>DM me</a>',
+            true,
+            { editedEvent },
+        );
+        if (!("m.new_content" in content)) throw new Error("Expected a replacement message");
+        expect(content["m.new_content"]).toHaveProperty(
+            "formatted_body",
+            '<a href="matrix:u/alice:example.org" data-org.matrix.msc4550.link="">DM me</a>',
+        );
+    });
+    it("marks authored rich-text links while retaining mentions", async () => {
+        const content = await createMessageContent(
+            '<a href="https://matrix.to/#/@alice:example.org">DM me</a> ' +
+                '<a href="https://matrix.to/#/@bob:example.org" data-mention-type="user">Bob</a>',
+            true,
+            {},
+        );
+        if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
+        const document = new DOMParser().parseFromString(content.formatted_body!, "text/html");
+        const anchors = document.querySelectorAll("a");
+        expect(anchors[0].hasAttribute("data-org.matrix.msc4550.link")).toBe(true);
+        expect(anchors[1].hasAttribute("data-org.matrix.msc4550.link")).toBe(false);
+    });
     const message = "<em><b>hello</b> world</em>";
 
     afterEach(() => {

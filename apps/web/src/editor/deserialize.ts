@@ -62,6 +62,9 @@ function isListChild(n: Node): boolean {
 }
 
 function parseAtRoomMentions(text: string, pc: PartCreator, opts: IParseOptions): Part[] {
+    if (opts.allowRoomMentions === false) {
+        return pc.plainWithEmoji(opts.shouldEscape ? escape(text) : text);
+    }
     const ATROOM = "@room";
     const parts: Part[] = [];
     text.split(ATROOM).forEach((textPart, i, arr) => {
@@ -84,7 +87,8 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     // URL, so it appends a trailing slash to an origin-only link and absolutises a relative one.
     // The composer should show the author what they wrote.
     const href = (n as HTMLAnchorElement).getAttribute("href") ?? "";
-    const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
+    const explicitLink = (n as Element).hasAttribute("data-org.matrix.msc4550.link");
+    const resourceId = explicitLink ? null : getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {
         case "@":
@@ -94,10 +98,11 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     }
 
     const children = Array.from(n.childNodes);
-    if (href === n.textContent && children.every((c) => c.nodeType === Node.TEXT_NODE)) {
+    if (!explicitLink && href === n.textContent && children.every((c) => c.nodeType === Node.TEXT_NODE)) {
         return parseAtRoomMentions(n.textContent, pc, opts);
     } else {
-        return [pc.plain("["), ...parseChildren(n, pc, opts), pc.plain(`](${href})`)];
+        const labelOpts = explicitLink ? { ...opts, allowRoomMentions: false } : opts;
+        return [pc.plain("["), ...parseChildren(n, pc, labelOpts), pc.plain(`](${href})`)];
     }
 }
 
@@ -275,6 +280,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
 interface IParseOptions {
     isQuotedMessage?: boolean;
     shouldEscape?: boolean;
+    allowRoomMentions?: boolean;
 }
 
 function parseHtmlMessage(html: string, pc: PartCreator, opts: IParseOptions): Part[] {

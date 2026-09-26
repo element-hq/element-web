@@ -21,6 +21,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType, MainSplitContentType } from "../../../contexts/RoomContext";
 import EditorModel from "../../../editor/model";
 import { createPartCreator } from "../../../editor/__mocks__";
+import { parseEvent } from "../../../editor/deserialize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import DocumentOffset from "../../../editor/offset";
@@ -46,6 +47,32 @@ vi.mock("../../../utils/messages", async (importOriginal) => {
 });
 
 describe("<SendMessageComposer/>", () => {
+    it("does not notify the room when saving an explicit link labelled @room", () => {
+        const pc = createPartCreator();
+        const event = mkEvent({
+            type: "m.room.message",
+            room: "!room:example.org",
+            user: "@sender:example.org",
+            content: {
+                msgtype: "m.text",
+                body: "@room",
+                format: "org.matrix.custom.html",
+                formatted_body: '<a href="https://example.org" data-org.matrix.msc4550.link><strong>@room</strong></a>',
+            },
+            event: true,
+        });
+        const model = new EditorModel(parseEvent(event, pc), pc);
+        const content = createMessageContent("@sender:example.org", model, undefined, undefined);
+        expect(content["m.mentions"]).toEqual({});
+        expect("formatted_body" in content && content.formatted_body).toContain("<strong>@room</strong>");
+    });
+    it("does not mention a user just because an authored link points to them", () => {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.plain("[DM me](https://matrix.to/#/@alice:example.org)")], pc);
+        const content = createMessageContent("@sender:example.org", model, undefined, undefined);
+        expect(content["m.mentions"]).toEqual({});
+        expect("formatted_body" in content && content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
+    });
     const defaultRoomContext: RoomContextType = {
         roomViewStore: SDKContextClass.instance.roomViewStore,
         roomLoading: true,

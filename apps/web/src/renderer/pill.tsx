@@ -23,6 +23,7 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
 
 /**
  * A node here is an A element with a href attribute tag.
+ * Explicit links remain ordinary links.
  *
  * It should be pillified if the permalink parser returns a result and one of the following conditions match:
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
@@ -30,8 +31,7 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
  *   Composer completions already create an A tag.
  */
 const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null, isHtml: boolean): boolean => {
-    // permalink parser didn't return any parts
-    if (!parts) return false;
+    if (!parts || Object.hasOwn(node.attribs, "data-org.matrix.msc4550.link")) return false;
 
     const text = textContent(node);
 
@@ -45,7 +45,7 @@ const isPreCode = (domNode: ParentNode | null): boolean =>
     (domNode as Element)?.tagName === "PRE" || (domNode as Element)?.tagName === "CODE";
 
 /**
- * Marks the text that activated a push-notification mention pattern.
+ * Render Matrix links and notified @room mentions as pills, leaving explicit links unchanged.
  */
 export const mentionPillRenderer: RendererMap = {
     a: (anchor, { room, shouldShowPillAvatar, isHtml }) => {
@@ -63,6 +63,15 @@ export const mentionPillRenderer: RendererMap = {
 
     [Node.TEXT_NODE]: (text, { room, mxEvent, shouldShowPillAvatar }) => {
         if (!room || !mxEvent) return;
+        for (let parent = text.parent; parent; parent = parent.parent) {
+            if (
+                parent.type === "tag" &&
+                parent.name === "a" &&
+                Object.hasOwn(parent.attribs, "data-org.matrix.msc4550.link")
+            ) {
+                return;
+            }
+        }
 
         const atRoomRule = room.client.pushProcessor.getPushRuleById(
             mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,

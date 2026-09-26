@@ -74,6 +74,34 @@ function normalize(parts: Part[]) {
 }
 
 describe("editor/deserialize", function () {
+    it.each([
+        ["@room", "@room"],
+        ["Ask <strong>@room</strong> for help", "Ask **@room** for help"],
+    ])("keeps @room text inside explicit link labels when editing (%s)", (label, markdown) => {
+        const parts = normalize(
+            parseEvent(
+                htmlMessage(
+                    `<a href="https://matrix.to/#/#support:example.org" data-org.matrix.msc4550.link>${label}</a>`,
+                ),
+                createPartCreator(),
+            ),
+        );
+        expect(parts).toEqual([
+            {
+                type: "plain",
+                text: `[${markdown}](https://matrix.to/#/#support:example.org)`,
+            },
+        ]);
+    });
+    it("keeps explicit user links as Markdown when editing", () => {
+        const parts = normalize(
+            parseEvent(
+                htmlMessage('<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link>DM me</a>'),
+                createPartCreator(),
+            ),
+        );
+        expect(parts).toEqual([{ type: "plain", text: "[DM me](https://matrix.to/#/@alice:example.org)" }]);
+    });
     describe("text messages", function () {
         it("test with newlines", function () {
             const parts = normalize(parseEvent(textMessage("hello\nworld"), createPartCreator()));
