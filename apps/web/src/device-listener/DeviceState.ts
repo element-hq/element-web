@@ -32,6 +32,11 @@ export type DeviceState =
      */
     | "turn_on_key_storage"
     /**
+     * There is a dehydrated device on the server (set up on another device) for which we don't have the
+     * dehydration key, so we can't access it. The user can enter their recovery key to recover the key.
+     */
+    | "dehydration_key_out_of_sync"
+    /**
      * The user's identity needs resetting, due to missing keys.
      */
     | "identity_needs_reset";
