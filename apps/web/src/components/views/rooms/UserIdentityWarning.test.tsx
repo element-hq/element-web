@@ -27,6 +27,15 @@ import { stubClient } from "test-utils";
 import { UserIdentityWarning } from "./UserIdentityWarning";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
+// UserIdentityWarningViewModel throttles loadViolations via lodash.throttle, causing flakiness
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    throttle: vi.fn((fn) => {
+        fn.cancel = vi.fn();
+        return fn;
+    }),
+}));
+
 const ROOM_ID = "!room:id";
 
 function mockRoom(): Room {
