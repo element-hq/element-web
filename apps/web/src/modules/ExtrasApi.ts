@@ -6,15 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     type SpacePanelItemProps,
     type ExtrasApi,
     type RoomHeaderButtonsCallback,
+    type RoomCallOption,
+    type RoomCallOptionsCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
+import { logger } from "matrix-js-sdk/src/logger";
 
 export interface ModuleSpacePanelItem extends SpacePanelItemProps {
     spaceKey: string;
@@ -32,6 +35,7 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
     public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
+    public roomCallOptionsCallbacks: RoomCallOptionsCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -45,6 +49,35 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
         this.roomHeaderButtonsCallbacks.push(cb);
     }
+
+    public addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void {
+        this.roomCallOptionsCallbacks.push(cb);
+    }
+}
+
+/**
+ * The extra call options modules offer for a room, re-fetched when `memberCount` changes.
+ */
+export function useModuleRoomCallOptions(
+    api: ElementWebExtrasApi,
+    roomId: string,
+    memberCount: number,
+): RoomCallOption[] {
+    const [options, setOptions] = useState<RoomCallOption[]>([]);
+    useEffect(() => {
+        if (api.roomCallOptionsCallbacks.length === 0) return;
+        let cancelled = false;
+        Promise.all(api.roomCallOptionsCallbacks.map(async (cb) => cb(roomId))).then(
+            (results) => {
+                if (!cancelled) setOptions(results.flat());
+            },
+            (e) => logger.warn("Module room call options callback failed", e),
+        );
+        return () => {
+            cancelled = true;
+        };
+    }, [api, roomId, memberCount]);
+    return options;
 }
 
 export function useModuleSpacePanelItems(api: ElementWebExtrasApi): ModuleSpacePanelItem[] {
