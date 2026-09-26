@@ -216,6 +216,7 @@ if (IS_MAC) {
     KEY_ICON[Key.META] = "⌘";
     KEY_ICON[Key.ALT] = "⌥";
     KEY_ICON[Key.SHIFT] = "⇧";
+    KEY_ICON[Key.CONTROL] = "⌃";
 }
 
 export const CATEGORIES: Record<CategoryName, ICategory> = {
