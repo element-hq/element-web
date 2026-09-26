@@ -55,7 +55,7 @@ permissions: {} # No permissions required
 jobs:
     prepare:
         name: "Build Element Web"
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: inputs.skip != true
         outputs:
             num-runners: ${{ env.NUM_RUNNERS }}
@@ -116,7 +116,7 @@ jobs:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.prepare.outputs.num-runners }}"
         needs: prepare
         if: needs.prepare.outputs.skip == 'false'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             actions: read
             issues: read
@@ -196,7 +196,7 @@ jobs:
         name: Modules Playwright tests
         needs: prepare
         if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
-        runs-on: ubuntu-24.04-arm
+        runs-on: ubuntu-26.04-arm
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -303,7 +303,7 @@ jobs:
             - build_ed_linux
             - build_ed_macos
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
