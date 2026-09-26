@@ -31,6 +31,26 @@ export function getIntentFromEvent(event: MatrixEvent): CallType {
  * Get all declined events that is related to the given rtc notification event.
  * @param event rtc notification event
  */
+/**
+ * MSC4075 invite progress: the callee's side reporting what became of
+ * the invite (a bridge relaying it to SIP, for instance).
+ */
+const RTC_INVITE_PROGRESS = "org.matrix.msc4075.rtc.invite_progress";
+
+/**
+ * Why the call never connected, from the invite progress relation with a
+ * terminal state (`busy` or `unreachable`), e.g. "SIP 404".
+ */
+export function getFailureReason(event: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): string | null {
+    const eventId = event.getId();
+    if (!eventId || !getRelationsForEvent) return null;
+    const relations = getRelationsForEvent(eventId, RelationType.Reference, RTC_INVITE_PROGRESS)?.getRelations();
+    const failed = relations?.find((e) => ["busy", "unreachable"].includes(e.getContent().state));
+    if (!failed) return null;
+    const { state, reason } = failed.getContent<{ state: string; reason?: string }>();
+    return reason ? `${state} (${reason})` : state;
+}
+
 export function getDeclinedEvents(
     event: MatrixEvent,
     getRelationsForEvent?: GetRelationsForEvent,
