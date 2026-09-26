@@ -247,7 +247,7 @@ exports[`<UserInfoBasic /> > should display the defaut values 1`] = `
     <button
       class="_item_bym9p_8 _interactive_bym9p_26"
       data-kind="critical"
-      role="button"
+      role="menuitem"
     >
       <svg
         aria-hidden="true"
@@ -288,7 +288,7 @@ exports[`<UserInfoBasic /> > should display the defaut values 1`] = `
     <button
       class="_item_bym9p_8 _interactive_bym9p_26"
       data-kind="critical"
-      role="button"
+      role="menuitem"
     >
       <svg
         aria-hidden="true"

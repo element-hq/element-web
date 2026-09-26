@@ -154,7 +154,7 @@ exports[`<UserInfo /> > with crypto enabled > renders <BasicUserInfo /> 1`] = `
         <button
           class="_item_bym9p_8 _interactive_bym9p_26"
           data-kind="primary"
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"
@@ -192,7 +192,7 @@ exports[`<UserInfo /> > with crypto enabled > renders <BasicUserInfo /> 1`] = `
           class="_item_bym9p_8 _interactive_bym9p_26 _disabled_bym9p_140"
           data-kind="primary"
           disabled=""
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"
@@ -229,7 +229,7 @@ exports[`<UserInfo /> > with crypto enabled > renders <BasicUserInfo /> 1`] = `
         <button
           class="_item_bym9p_8 _interactive_bym9p_26"
           data-kind="primary"
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"
@@ -270,7 +270,7 @@ exports[`<UserInfo /> > with crypto enabled > renders <BasicUserInfo /> 1`] = `
         <button
           class="_item_bym9p_8 _interactive_bym9p_26"
           data-kind="critical"
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"
@@ -580,7 +580,7 @@ exports[`<UserInfo /> > with crypto enabled > should render a deactivate button 
         <button
           class="_item_bym9p_8 _interactive_bym9p_26"
           data-kind="critical"
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"
@@ -621,7 +621,7 @@ exports[`<UserInfo /> > with crypto enabled > should render a deactivate button 
         <button
           class="_item_bym9p_8 _interactive_bym9p_26"
           data-kind="critical"
-          role="button"
+          role="menuitem"
         >
           <svg
             aria-hidden="true"

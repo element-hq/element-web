@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<SettingsSubsectionHeading /> > renders with children 1`] = `
+exports[`<SettingsSubsectionHeading /> > renders with contextMenu 1`] = `
 {
   "container": <div>
     <div
@@ -21,7 +21,7 @@ exports[`<SettingsSubsectionHeading /> > renders with children 1`] = `
 }
 `;
 
-exports[`<SettingsSubsectionHeading /> > renders without children 1`] = `
+exports[`<SettingsSubsectionHeading /> > renders without contextMenu 1`] = `
 {
   "container": <div>
     <div
