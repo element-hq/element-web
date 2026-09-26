@@ -134,14 +134,37 @@ class MediaImplementation {
 
     /**
      * Downloads the source media.
+     *
+     * `srcHttp` deliberately yields an unauthenticated media URL: the service
+     * worker rewrites it to the authenticated endpoint and attaches the access
+     * token. When the page is not controlled by that worker there is nothing to
+     * do the rewriting, the request goes out unauthenticated, and a homeserver
+     * with authenticated media enabled answers 404 — with no indication that the
+     * worker is the missing piece.
+     *
+     * A page can be uncontrolled for reasons a user cannot see or influence: a
+     * hard reload bypasses the worker by design, registration may have failed,
+     * and the first load after registration is uncontrolled until the next
+     * navigation. This is a `fetch` we own, so unlike an `<img src>` we can
+     * simply send the header ourselves rather than depend on the rewrite.
+     *
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
     public async downloadSource(): Promise<Response> {
-        const src = this.srcHttp;
+        const controlled = !!globalThis.navigator?.serviceWorker?.controller;
+
+        // Only diverge when the worker is absent, so the ordinary path keeps
+        // exactly the behaviour — and the caching — it has today.
+        const src = controlled
+            ? this.srcHttp
+            : // eslint-disable-next-line no-restricted-properties
+              this.client.mxcUrlToHttp(this.srcMxc, undefined, undefined, undefined, false, true, true);
         if (!src) {
             throw new UserFriendlyError("error|download_media");
         }
-        const res = await fetch(src);
+
+        const accessToken = controlled ? undefined : this.client.getAccessToken();
+        const res = await fetch(src, accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined);
         if (!res.ok) {
             throw parseErrorResponse(res, await res.text());
         }
