@@ -4,7 +4,7 @@ exports[`PictureInPictureDragger > when rendering the dragger with PiP content 1
 <div>
   <aside
     class="mx_PictureInPictureDragger"
-    style="transform: translateX(672px) translateY(80px);"
+    style="transform: translateX(704px) translateY(80px);"
   >
     <div>
       content 2
@@ -19,7 +19,7 @@ exports[`PictureInPictureDragger > when rendering the dragger with PiP content 1
 <div>
   <aside
     class="mx_PictureInPictureDragger"
-    style="transform: translateX(672px) translateY(80px);"
+    style="transform: translateX(704px) translateY(80px);"
   >
     <div>
       content 1
@@ -32,7 +32,7 @@ exports[`PictureInPictureDragger > when rendering the dragger with PiP content 1
 <div>
   <aside
     class="mx_PictureInPictureDragger"
-    style="transform: translateX(672px) translateY(80px);"
+    style="transform: translateX(704px) translateY(80px);"
   >
     <div>
       content 1
@@ -45,7 +45,7 @@ exports[`PictureInPictureDragger > when rendering the dragger with PiP content 1
 <div>
   <aside
     class="mx_PictureInPictureDragger"
-    style="transform: translateX(672px) translateY(80px);"
+    style="transform: translateX(704px) translateY(80px);"
   >
     <div>
       content 1
