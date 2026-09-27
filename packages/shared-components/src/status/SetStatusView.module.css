@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
     [role="listbox"] {
         inset-block-start: -28px !important;
         inset-inline-start: 100% !important;
-        margin-inline-start: calc((var(--cpd-space-6x) + var(--cpd-space-2x)) / 1.2);
+        margin-inline-start: var(--cpd-space-7x);
         inline-size: max-content !important;
         min-inline-size: 200px;
     }
