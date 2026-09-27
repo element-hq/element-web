@@ -64,6 +64,13 @@ export default defineProject({
                 find: "../modules.js",
                 replacement: resolve("./__mocks__/empty.js"),
             },
+            // The Element Call component leaves its js-sdk imports external and extensionless
+            // (`matrix-js-sdk/lib/logger`), which a bundler resolves but Node's ESM loader does not.
+            // Point them at the sources Element Web itself imports, so both share one js-sdk.
+            {
+                find: /^matrix-js-sdk\/lib\/((?!.*\.js$).+)$/,
+                replacement: "matrix-js-sdk/src/$1",
+            },
         ],
     },
     test: {
@@ -77,6 +84,8 @@ export default defineProject({
         globals: false,
         environment: "node",
         pool: "threads",
+        // Processed by Vite rather than loaded by Node, so that the alias above applies to it
+        server: { deps: { inline: [/@element-hq\/element-call-component/] } },
         projects: [
             {
                 extends: true,

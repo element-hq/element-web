@@ -6,14 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject, type ReactNode, useRef, useEffect } from "react";
+import React, { type RefObject, type ReactNode, useEffect } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
-import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPictureDragger";
+import PictureInPictureDragger, { type PipSlot, pipRowsPerColumn } from "./PictureInPictureDragger";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
@@ -33,9 +34,7 @@ const SHOW_CALL_IN_STATES = [
     CallState.WaitLocalMedia,
 ];
 
-interface IProps {
-    movePersistedElement: RefObject<(() => void) | null>;
-}
+type IProps = EmptyObject;
 
 interface IState {
     viewedRoomId?: string;
@@ -143,7 +142,21 @@ class PipContainerInner extends React.Component<IProps, IState> {
         return [primary, secondaries];
     }
 
-    private onMove = (): void => this.props.movePersistedElement.current?.();
+    /**
+     * How each widget PiP repositions its persisted content when the PiP moves, by PiP key. One per PiP:
+     * a `PersistedElement` takes over the ref it is given on mount, so a shared ref would only follow the
+     * newest PiP and leave the others' content stranded where they were.
+     */
+    private readonly movePersistedElements = new Map<string, RefObject<(() => void) | null>>();
+
+    private movePersistedElement(key: string): RefObject<(() => void) | null> {
+        let ref = this.movePersistedElements.get(key);
+        if (!ref) {
+            ref = { current: null };
+            this.movePersistedElements.set(key, ref);
+        }
+        return ref;
+    }
 
     private onRoomViewStoreUpdate = (): void => {
         const newRoomId = this.context.roomViewStore.getRoomId();
@@ -199,16 +212,42 @@ class PipContainerInner extends React.Component<IProps, IState> {
         });
     };
 
-    private onDoubleClick = (): void => {
-        const callRoomId = this.state.primaryCall?.roomId ?? this.state.pipWidgets[0]?.roomId;
-        if (callRoomId) {
+    private viewRoom(roomId: string | null): void {
+        if (roomId) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: callRoomId,
+                room_id: roomId,
                 metricsTrigger: "WebFloatingCallWindow",
             });
         }
-    };
+    }
+
+    /**
+     * Which slot each PiP occupies, by PiP key. A new PiP takes the lowest free slot, so it appears as
+     * near the top-right corner as the PiPs already there allow: below them while there is room down
+     * the edge, then in the next column to the left. Slots are kept while the PiP lives and freed when
+     * it goes.
+     *
+     * ponytail: slots are by index, not by where the PiPs actually are; a PiP the user dragged to
+     * another corner still counts as filling its slot. Compare the draggers' positions if that grates.
+     */
+    private readonly slots = new Map<string, number>();
+
+    private slot(key: string): PipSlot {
+        let index = this.slots.get(key);
+        if (index === undefined) {
+            const taken = new Set(this.slots.values());
+            index = 0;
+            while (taken.has(index)) index++;
+            this.slots.set(key, index);
+        }
+        const rows = pipRowsPerColumn();
+        return { column: Math.floor(index / rows), row: index % rows };
+    }
+
+    private freeSlots(liveKeys: Set<string>): void {
+        for (const key of this.slots.keys()) if (!liveKeys.has(key)) this.slots.delete(key);
+    }
 
     public updateShowWidgetInPip(): void {
         // A widget is shown as a persistent app (in a floating pip container) only
@@ -229,54 +268,74 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
     public render(): ReactNode {
         const pipMode = true;
-        const pipContent: Array<CreatePipChildren> = [];
+        // One dragger per PiP, so that each call can be moved on its own
+        const pips: ReactNode[] = [];
+        const liveKeys = new Set<string>();
 
         if (this.state.primaryCall) {
             // get a ref to call inside the current scope
             const call = this.state.primaryCall;
-            pipContent.push(({ onStartMoving, onResize }) => (
-                <LegacyCallView
-                    key="call-view"
-                    onMouseDownOnHeader={onStartMoving}
-                    call={call}
-                    secondaryCall={this.state.secondaryCall}
-                    pipMode={pipMode}
-                    onResize={onResize}
-                    sidebarShown={false}
-                />
-            ));
-        }
-
-        for (const { widgetId, roomId } of this.state.pipWidgets) {
-            pipContent.push(({ onStartMoving }) => (
-                <WidgetPipWrappedView
-                    key={`widget-pip-${widgetId}-${roomId}`}
-                    widgetId={widgetId}
-                    room={this.context.client!.getRoom(roomId ?? undefined)!}
-                    viewingRoom={this.state.viewedRoomId === roomId}
-                    onStartMoving={onStartMoving}
-                    movePersistedElement={this.props.movePersistedElement}
-                />
-            ));
-        }
-
-        if (pipContent.length) {
-            return (
-                <PictureInPictureDragger onDoubleClick={this.onDoubleClick} onMove={this.onMove}>
-                    {pipContent}
-                </PictureInPictureDragger>
+            const key = "call-view";
+            liveKeys.add(key);
+            pips.push(
+                <PictureInPictureDragger
+                    key={key}
+                    slot={this.slot(key)}
+                    onDoubleClick={() => this.viewRoom(call.roomId ?? null)}
+                >
+                    {[
+                        ({ onStartMoving, onResize }) => (
+                            <LegacyCallView
+                                key={key}
+                                onMouseDownOnHeader={onStartMoving}
+                                call={call}
+                                secondaryCall={this.state.secondaryCall}
+                                pipMode={pipMode}
+                                onResize={onResize}
+                                sidebarShown={false}
+                            />
+                        ),
+                    ]}
+                </PictureInPictureDragger>,
             );
         }
 
-        return null;
+        for (const { widgetId, roomId } of this.state.pipWidgets) {
+            const key = `widget-pip-${widgetId}-${roomId}`;
+            liveKeys.add(key);
+            const moveRef = this.movePersistedElement(key);
+            pips.push(
+                <PictureInPictureDragger
+                    key={key}
+                    slot={this.slot(key)}
+                    onDoubleClick={() => this.viewRoom(roomId)}
+                    onMove={() => moveRef.current?.()}
+                >
+                    {[
+                        ({ onStartMoving }) => (
+                            <WidgetPipWrappedView
+                                key={key}
+                                widgetId={widgetId}
+                                room={this.context.client!.getRoom(roomId ?? undefined)!}
+                                viewingRoom={this.state.viewedRoomId === roomId}
+                                onStartMoving={onStartMoving}
+                                movePersistedElement={moveRef}
+                            />
+                        ),
+                    ]}
+                </PictureInPictureDragger>,
+            );
+        }
+
+        this.freeSlots(liveKeys);
+        for (const key of this.movePersistedElements.keys())
+            if (!liveKeys.has(key)) this.movePersistedElements.delete(key);
+
+        return pips.length ? <>{pips}</> : null;
     }
 }
 
-export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>(null);
-
-    return <PipContainerInner movePersistedElement={movePersistedElement} />;
-};
+export const PipContainer: React.FC = () => <PipContainerInner />;
 
 type Props = { viewingRoom: boolean } & WidgetPipViewModelProps;
 
