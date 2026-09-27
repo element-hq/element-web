@@ -17,6 +17,9 @@ export const PIP_VIEW_HEIGHT = 278;
 /** Between PiPs stacked in slots */
 export const PIP_GAP = 16;
 
+/** How close to an edge a dropped PiP has to be for the edge to pull it in */
+const SNAP_DISTANCE = 64;
+
 const MOVING_AMT = 0.2;
 const SNAPPING_AMT = 0.1;
 
@@ -183,9 +186,9 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     };
 
     /**
-     * Pulls the PiP to the nearest edge of the padded area (so into a corner when dropped near one),
-     * leaving it where it is along that edge. The first snap places it in its slot instead: top right,
-     * offset by the PiPs already there.
+     * Pulls the PiP onto any edge of the padded area it was dropped near (so into a corner when near
+     * two), and otherwise leaves it where it was dropped. The first snap places it in its slot instead:
+     * top right, offset by the PiPs already there.
      */
     private snap = (animate = false): void => {
         const minX = PADDING.left;
@@ -200,10 +203,9 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         } else {
             const x = Math.min(Math.max(this.desiredTranslationX, minX), maxX);
             const y = Math.min(Math.max(this.desiredTranslationY, minY), maxY);
-            const toX = Math.min(x - minX, maxX - x);
-            const toY = Math.min(y - minY, maxY - y);
-            this.desiredTranslationX = toX <= toY ? (x - minX <= maxX - x ? minX : maxX) : x;
-            this.desiredTranslationY = toX <= toY ? y : y - minY <= maxY - y ? minY : maxY;
+            // Only an edge within reach pulls; elsewhere the PiP stays put
+            this.desiredTranslationX = x - minX <= SNAP_DISTANCE ? minX : maxX - x <= SNAP_DISTANCE ? maxX : x;
+            this.desiredTranslationY = y - minY <= SNAP_DISTANCE ? minY : maxY - y <= SNAP_DISTANCE ? maxY : y;
         }
 
         if (!animate) {
