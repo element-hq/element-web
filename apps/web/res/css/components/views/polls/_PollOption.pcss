@@ -63,7 +63,7 @@ Please see LICENSE files in the repository root for full details.
             background-color: var(--cpd-color-icon-primary);
 
             div {
-                background: none;
+                background: none; // override the inner circle
 
                 svg {
                     color: var(--cpd-color-icon-on-solid-primary);
@@ -72,6 +72,11 @@ Please see LICENSE files in the repository root for full details.
                     margin: -2px;
                     display: block;
                 }
+            }
+        }
+        input[type="radio"]:checked:disabled + div {
+            div {
+                background: none; // override the inner circle
             }
         }
     }
@@ -91,7 +96,7 @@ Please see LICENSE files in the repository root for full details.
             background-color: var(--cpd-color-icon-accent-tertiary);
 
             div {
-                background: var(--cpd-color-icon-accent-tertiary);
+                background: none; // override the inner circle
             }
         }
     }
