@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, beforeEach } from "vitest";
-import { render } from "test-utils-rtl";
+import { render, within } from "test-utils-rtl";
 import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
@@ -64,6 +64,33 @@ describe("ViewSource", () => {
         expect(redactedMessageEvent.clearEvent).toBe(undefined);
 
         expect(() => render(<ViewSource mxEvent={redactedMessageEvent} onFinished={() => {}} />)).not.toThrow();
+    });
+
+    it("shows full event envelope in decrypted source for own-device events", () => {
+        // Simulate an encrypted event whose clearEvent only has type+content,
+        // the shape produced for events sent from the current device.
+        const encryptedEvent = new MatrixEvent({
+            type: EventType.RoomMessageEncrypted,
+            room_id: ROOM_ID,
+            sender: SENDER,
+            event_id: "$enc1:example.org",
+            origin_server_ts: 1000,
+            content: { algorithm: "m.megolm.v1.aes-sha2" },
+        });
+        // @ts-ignore clearEvent is private
+        encryptedEvent.clearEvent = { type: "m.room.message", content: { msgtype: "m.text", body: "secret" } };
+
+        const { getByText } = render(<ViewSource mxEvent={encryptedEvent} onFinished={() => {}} />);
+
+        // Find the open <details> element (the decrypted event source section)
+        const decryptedHeading = getByText("Decrypted event source");
+        const decryptedSection = decryptedHeading.closest("details")!;
+
+        // Envelope fields from the wire event must be present in the decrypted section
+        expect(within(decryptedSection).getByText("$enc1:example.org", { exact: false })).toBeInTheDocument();
+        expect(within(decryptedSection).getByText(SENDER, { exact: false })).toBeInTheDocument();
+        // Decrypted content must also be present
+        expect(within(decryptedSection).getByText("secret", { exact: false })).toBeInTheDocument();
     });
 
     it("should be able to edit a message", async () => {
