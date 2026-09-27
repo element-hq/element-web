@@ -56,8 +56,12 @@ import {
     type DeviceMuteState,
     type ElementCallConfiguration,
     type ElementCallHandle,
+    type HoldRequest,
+    type HoldState,
     type UserIntent,
 } from "@element-hq/element-call-component/api";
+
+export const NOT_HELD: HoldState = { audio_held: false, video_held: false };
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -97,6 +101,8 @@ export const isConnected = (state: ConnectionState): boolean =>
 
 export enum CallEvent {
     ConnectionState = "connection_state",
+    // The user put the call on hold, or took it off
+    Held = "held",
     Participants = "participants",
     Close = "close",
     Destroy = "destroy",
@@ -105,6 +111,7 @@ export enum CallEvent {
 
 interface CallEventHandlerMap {
     [CallEvent.ConnectionState]: (state: ConnectionState, prevState: ConnectionState) => void;
+    [CallEvent.Held]: (held: HoldState) => void;
     [CallEvent.Participants]: (
         participants: Map<RoomMember, Set<string>>,
         prevParticipants: Map<RoomMember, Set<string>>,
@@ -164,6 +171,28 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     public get connected(): boolean {
         return isConnected(this.connectionState);
+    }
+
+    private _held: HoldState = NOT_HELD;
+    /**
+     * Which of the user's media is on hold in this call: held audio is neither sent nor heard, held
+     * video is not sent. A call on another line is held, at least for audio.
+     */
+    public get held(): HoldState {
+        return this._held;
+    }
+
+    protected set held(value: HoldState) {
+        this._held = value;
+        this.emit(CallEvent.Held, value);
+    }
+
+    /**
+     * Puts the call on hold, or takes it off, for whichever of audio and video is given. Only the
+     * Element Call React component supports this; a widget-based call rejects.
+     */
+    public async setHold(_request: HoldRequest): Promise<void> {
+        throw new Error("This call cannot be put on hold");
     }
 
     private _participants = new Map<RoomMember, Set<string>>();
@@ -297,6 +326,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         this.room.off(RoomEvent.MyMembership, this.onMyMembership);
         window.removeEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Disconnected;
+        if (this._held !== NOT_HELD) this.held = NOT_HELD;
     }
 
     /**
@@ -1088,6 +1118,14 @@ export class ElementCall extends Call {
         } finally {
             clearTimeout(timer);
         }
+    }
+
+    public override async setHold(request: HoldRequest): Promise<void> {
+        if (!ElementCall.usesReactComponent) return super.setHold(request);
+        if (this.componentHandle === null) {
+            throw new Error(`Failed to hold call in room ${this.roomId}: no Element Call component is mounted`);
+        }
+        this.held = await this.componentHandle.setHold(request);
     }
 
     protected async performDisconnection(): Promise<void> {

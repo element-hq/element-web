@@ -26,6 +26,8 @@ describe("ElementWebHostBridge", () => {
         handleHangup: ReturnType<typeof vi.fn>;
         handleClose: ReturnType<typeof vi.fn>;
         handleDeviceMute: ReturnType<typeof vi.fn>;
+        held: { audio_held: boolean; video_held: boolean };
+        widget: { id: string; roomId: string };
     };
     let setWidgetPersistence: ReturnType<typeof vi.spyOn>;
     let bridge: ElementWebHostBridge;
@@ -38,6 +40,8 @@ describe("ElementWebHostBridge", () => {
             handleHangup: vi.fn(),
             handleClose: vi.fn(),
             handleDeviceMute: vi.fn(),
+            held: { audio_held: false, video_held: false },
+            widget: { id: widgetId, roomId },
         };
         setWidgetPersistence = vi
             .spyOn(ActiveWidgetStore.instance, "setWidgetPersistence")
@@ -78,15 +82,18 @@ describe("ElementWebHostBridge", () => {
         expect(setWidgetPersistence).toHaveBeenCalledWith(widgetId, roomId, false);
     });
 
-    it("hangs up every other connected call before becoming persistent, but not when leaving the screen", async () => {
+    it("puts every other connected call on hold before becoming persistent, but not when leaving the screen", async () => {
         const order: string[] = [];
+        const notHeld = { audio_held: false, video_held: false };
         const otherCall = {
-            disconnect: vi.fn(async () => {
-                order.push("disconnect other");
+            held: notHeld,
+            setHold: vi.fn(async () => {
+                order.push("hold other");
             }),
+            widget: { id: "other", roomId: "!other:example.org" },
         };
-        const ownDisconnect = vi.fn(async () => {});
-        (call as unknown as { disconnect: unknown }).disconnect = ownDisconnect;
+        const ownHold = vi.fn(async () => {});
+        (call as unknown as { setHold: unknown }).setHold = ownHold;
         vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(
             new Set([call, otherCall] as unknown as Call[]),
         );
@@ -95,31 +102,29 @@ describe("ElementWebHostBridge", () => {
         });
 
         await bridge.setAlwaysOnScreen(true);
-        expect(order).toEqual(["disconnect other", "persist"]);
-        expect(ownDisconnect).not.toHaveBeenCalled();
+        expect(order).toEqual(["hold other", "persist"]);
+        // Only audio goes on hold: the other call's video keeps showing
+        expect(otherCall.setHold).toHaveBeenCalledWith({ audio_held: true });
+        expect(ownHold).not.toHaveBeenCalled();
 
         await bridge.setAlwaysOnScreen(false);
-        expect(otherCall.disconnect).toHaveBeenCalledTimes(1);
+        expect(otherCall.setHold).toHaveBeenCalledTimes(1);
     });
 
-    it("still becomes persistent when another call cannot be disconnected", async () => {
-        const failing = { disconnect: vi.fn(async () => Promise.reject(new Error("no hangup for you"))) };
-        const fine = { disconnect: vi.fn(async () => {}) };
+    it("still becomes persistent when another call cannot be held", async () => {
+        const notHeld = { audio_held: false, video_held: false };
+        const failing = { held: notHeld, setHold: vi.fn(async () => Promise.reject(new Error("no hold for you"))) };
+        const fine = { held: notHeld, setHold: vi.fn(async () => {}) };
         vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(
             new Set([call, failing, fine] as unknown as Call[]),
         );
         const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
 
-        // The rejection must neither escape to Element Call nor stop this call from becoming sticky:
-        // there is nothing else to do for a call that will not hang up, and the delayed event will
-        // clean its membership up eventually.
+        // The rejection must neither escape to Element Call nor stop this call from becoming sticky
         await expect(bridge.setAlwaysOnScreen(true)).resolves.toBeUndefined();
-        expect(fine.disconnect).toHaveBeenCalledTimes(1);
+        expect(fine.setHold).toHaveBeenCalledTimes(1);
         expect(setWidgetPersistence).toHaveBeenCalledWith(widgetId, roomId, true);
-        expect(warn).toHaveBeenCalledWith(
-            expect.any(String),
-            expect.objectContaining({ message: "no hangup for you" }),
-        );
+        expect(warn).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ message: "no hold for you" }));
     });
 
     it("supports reactions and vouches for the intent, as Element Web's widget host does", () => {

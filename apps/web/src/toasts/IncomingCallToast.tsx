@@ -48,7 +48,7 @@ import { useCall, useParticipatingMembers } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
-import { type Call, CallEvent } from "../models/Call";
+import { type Call, CallEvent, ElementCall } from "../models/Call";
 import { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
@@ -169,7 +169,8 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     useEventEmitter(CallStore.instance, CallStoreEvent.ConnectedCalls, () => {
         setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
     });
-    const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
+    // With the React embedding the other call goes on hold instead
+    const otherCallIsOngoing = !ElementCall.usesReactComponent && connectedCalls.find((call) => call.roomId !== roomId);
     const soundHasStarted = useRef<boolean>(false);
     useEffect(() => {
         // This section can race, so we use a ref to keep track of whether we have started trying to play.

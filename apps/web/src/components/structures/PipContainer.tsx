@@ -17,7 +17,7 @@ import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPict
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
-import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWidgetStore";
+import ActiveWidgetStore, { ActiveWidgetStoreEvent, type PersistentWidget } from "../../stores/ActiveWidgetStore";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomAvatar from "../views/avatars/RoomAvatar";
@@ -47,10 +47,9 @@ interface IState {
     // they belong to
     secondaryCall: MatrixCall;
 
-    // Widget candidate to be displayed in the PiP view.
-    persistentWidgetId: string | null;
-    persistentRoomId: string | null;
-    showWidgetInPip: boolean;
+    // The persistent widgets to show as PiPs: every call not visible in the room view, the foreground
+    // one first, the others on hold
+    pipWidgets: PersistentWidget[];
 }
 
 /**
@@ -74,13 +73,12 @@ class PipContainerInner extends React.Component<IProps, IState> {
             viewedRoomId: roomId || undefined,
             primaryCall: primaryCall || null,
             secondaryCall: secondaryCalls[0],
-            persistentWidgetId: ActiveWidgetStore.instance.getPersistentWidgetId(),
-            persistentRoomId: ActiveWidgetStore.instance.getPersistentRoomId(),
-            showWidgetInPip: false,
+            pipWidgets: [],
         };
     }
 
     public componentDidMount(): void {
+        this.updateShowWidgetInPip();
         this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
@@ -202,36 +200,31 @@ class PipContainerInner extends React.Component<IProps, IState> {
     };
 
     private onDoubleClick = (): void => {
-        const callRoomId = this.state.primaryCall?.roomId;
-        if (callRoomId ?? this.state.persistentRoomId) {
+        const callRoomId = this.state.primaryCall?.roomId ?? this.state.pipWidgets[0]?.roomId;
+        if (callRoomId) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: callRoomId ?? this.state.persistentRoomId ?? undefined,
+                room_id: callRoomId,
                 metricsTrigger: "WebFloatingCallWindow",
             });
         }
     };
 
     public updateShowWidgetInPip(): void {
-        const persistentWidgetId = ActiveWidgetStore.instance.getPersistentWidgetId();
-        const persistentRoomId = ActiveWidgetStore.instance.getPersistentRoomId();
-
-        let fromAnotherRoom = false;
-        let notDocked = false;
-        // Sanity check the room - the widget may have been destroyed between render cycles, and
-        // thus no room is associated anymore.
-        if (persistentWidgetId && persistentRoomId && this.context.client?.getRoom(persistentRoomId)) {
-            notDocked = !ActiveWidgetStore.instance.isDocked(persistentWidgetId, persistentRoomId);
-            fromAnotherRoom = this.state.viewedRoomId !== persistentRoomId;
-        }
-
-        // The widget should only be shown as a persistent app (in a floating
-        // pip container) if it is not visible on screen: either because we are
-        // viewing a different room OR because it is in none of the possible
-        // containers of the room view.
-        const showWidgetInPip = fromAnotherRoom || notDocked;
-
-        this.setState({ showWidgetInPip, persistentWidgetId, persistentRoomId });
+        // A widget is shown as a persistent app (in a floating pip container) only
+        // if it is not visible on screen: either because we are viewing a
+        // different room OR because it is in none of the possible containers of
+        // the room view. Sanity check the room - the widget may have been
+        // destroyed between render cycles, and thus no room is associated anymore.
+        const pipWidgets = ActiveWidgetStore.instance
+            .getPersistentWidgets()
+            .filter(
+                ({ widgetId, roomId }) =>
+                    roomId !== null &&
+                    this.context.client?.getRoom(roomId) &&
+                    (this.state.viewedRoomId !== roomId || !ActiveWidgetStore.instance.isDocked(widgetId, roomId)),
+            );
+        this.setState({ pipWidgets });
     }
 
     public render(): ReactNode {
@@ -254,13 +247,13 @@ class PipContainerInner extends React.Component<IProps, IState> {
             ));
         }
 
-        if (this.state.showWidgetInPip && this.state.persistentWidgetId) {
+        for (const { widgetId, roomId } of this.state.pipWidgets) {
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPipWrappedView
-                    key="widget-pip"
-                    widgetId={this.state.persistentWidgetId!}
-                    room={this.context.client!.getRoom(this.state.persistentRoomId ?? undefined)!}
-                    viewingRoom={this.state.viewedRoomId === this.state.persistentRoomId}
+                    key={`widget-pip-${widgetId}-${roomId}`}
+                    widgetId={widgetId}
+                    room={this.context.client!.getRoom(roomId ?? undefined)!}
+                    viewingRoom={this.state.viewedRoomId === roomId}
                     onStartMoving={onStartMoving}
                     movePersistedElement={this.props.movePersistedElement}
                 />

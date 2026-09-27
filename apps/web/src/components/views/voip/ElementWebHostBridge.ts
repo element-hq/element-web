@@ -46,15 +46,14 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
     ) {}
 
     public readonly setAlwaysOnScreen = async (alwaysOnScreen: boolean): Promise<void> => {
-        // Only one call can be on screen. Before this one becomes sticky, hang up every other connected
-        // call, as `CallView`'s stickyPromise does for the iframe embedding (through WidgetMessaging's
-        // UpdateAlwaysOnScreen handling).
+        // Only one call is heard at a time. A call becoming sticky is the one just joined, so it comes to
+        // the foreground and every other connected call goes on hold (the iframe embedding, whose
+        // `CallView` stickyPromise hangs the others up, has no hold).
         if (alwaysOnScreen) {
-            const others = [...CallStore.instance.connectedCalls].filter((call) => call !== this.call);
             try {
-                await Promise.all(others.map((call) => call.disconnect()));
+                await CallStore.instance.setForeground(this.call);
             } catch (e) {
-                logger.warn("Could not disconnect other calls before making this one persistent", e);
+                logger.warn("Could not hold other calls before making this one persistent", e);
             }
         }
         ActiveWidgetStore.instance.setWidgetPersistence(this.opts.widgetId, this.opts.widgetRoomId, alwaysOnScreen);
