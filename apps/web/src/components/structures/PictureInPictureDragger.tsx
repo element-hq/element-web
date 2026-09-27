@@ -61,6 +61,9 @@ interface IProps {
     onDoubleClick?: () => void;
     onMove?: () => void;
     slot?: PipSlot;
+    zIndex?: number;
+    /** The user has grabbed the PiP: bring it to the top */
+    onRaise?: () => void;
 }
 
 /**
@@ -222,6 +225,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.mouseHeld = true;
         this.startingPositionX = event.clientX;
         this.startingPositionY = event.clientY;
+        this.props.onRaise?.();
     };
 
     private onMoving = (event: MouseEvent): void => {
@@ -271,6 +275,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     public render(): React.ReactNode {
         const style = {
             transform: `translateX(${this.translationX}px) translateY(${this.translationY}px)`,
+            zIndex: this.props.zIndex,
         };
 
         const children = this.props.children.map((create: CreatePipChildren) => {

@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type RefObject, type ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -24,6 +25,11 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPipViewModel";
 import { SDKContext } from "../../contexts/SDKContext.ts";
+import { getOrCreateMasterContainer, getPersistKey } from "../views/elements/PersistedElement";
+import WidgetUtils from "../../utils/WidgetUtils";
+
+/** Above the persisted elements that are not PiPs (101) */
+const PIP_Z_BASE = 200;
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -91,6 +97,10 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
     }
 
+    public componentDidUpdate(): void {
+        this.stackPersistedContent();
+    }
+
     public componentWillUnmount(): void {
         this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
@@ -156,6 +166,33 @@ class PipContainerInner extends React.Component<IProps, IState> {
             this.movePersistedElements.set(key, ref);
         }
         return ref;
+    }
+
+    /**
+     * PiP keys from bottom to top. A PiP's frame and its persisted content are separate DOM trees, so
+     * both get a z-index from this order (content just above its own frame) inside the persisted
+     * elements' stacking context, which the frames are rendered into; dragging a PiP raises it.
+     */
+    private raised: string[] = [];
+
+    private zIndex(key: string): number {
+        if (!this.raised.includes(key)) this.raised.push(key);
+        return PIP_Z_BASE + 2 * this.raised.indexOf(key);
+    }
+
+    private raise(key: string): void {
+        this.raised = [...this.raised.filter((k) => k !== key), key];
+        this.forceUpdate();
+    }
+
+    /** The persisted content is in its own container: stack that as a whole, over its frame. */
+    private stackPersistedContent(): void {
+        for (const { widgetId, roomId } of this.state.pipWidgets) {
+            const key = `widget-pip-${widgetId}-${roomId}`;
+            const persistKey = getPersistKey(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
+            const container = document.getElementById(`mx_persistedElement_${persistKey}`);
+            if (container) Object.assign(container.style, { position: "relative", zIndex: `${this.zIndex(key) + 1}` });
+        }
     }
 
     private onRoomViewStoreUpdate = (): void => {
@@ -281,6 +318,8 @@ class PipContainerInner extends React.Component<IProps, IState> {
                 <PictureInPictureDragger
                     key={key}
                     slot={this.slot(key)}
+                    zIndex={this.zIndex(key)}
+                    onRaise={() => this.raise(key)}
                     onDoubleClick={() => this.viewRoom(call.roomId ?? null)}
                 >
                     {[
@@ -308,6 +347,8 @@ class PipContainerInner extends React.Component<IProps, IState> {
                 <PictureInPictureDragger
                     key={key}
                     slot={this.slot(key)}
+                    zIndex={this.zIndex(key)}
+                    onRaise={() => this.raise(key)}
                     onDoubleClick={() => this.viewRoom(roomId)}
                     onMove={() => moveRef.current?.()}
                 >
@@ -331,7 +372,8 @@ class PipContainerInner extends React.Component<IProps, IState> {
         for (const key of this.movePersistedElements.keys())
             if (!liveKeys.has(key)) this.movePersistedElements.delete(key);
 
-        return pips.length ? <>{pips}</> : null;
+        // Into the persisted elements' stacking context, so a PiP's frame and its content stack together
+        return pips.length ? createPortal(<>{pips}</>, getOrCreateMasterContainer()) : null;
     }
 }
 
