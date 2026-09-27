@@ -12,7 +12,7 @@ import { describe, expect, it } from "vitest";
 import "pdfjs-dist";
 import { EventBus } from "pdfjs-dist/web/pdf_viewer.mjs";
 
-import { ElementPdfLinkService, isPdfLinkPermitted } from "./pdfLinkService";
+import { ElementPdfLinkService, isPdfLinkPermitted } from "./linkService";
 
 function linkFor(url: string, newWindow?: boolean): HTMLAnchorElement {
     const service = new ElementPdfLinkService({ eventBus: new EventBus() });

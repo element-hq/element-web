@@ -14,24 +14,26 @@ import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
 export enum ActiveWidgetStoreEvent {
-    // Indicates a change in the currently persistent widget
+    // Indicates a change in the persistent widgets, or in which of them is the foreground one
     Persistence = "persistence",
     // Indicate changes in the currently docked widgets
     Dock = "dock",
     Undock = "undock",
 }
 
-/**
- * Stores information about the widgets active in the app right now:
- *  * What widget is set to remain always-on-screen, if any
- *    Only one widget may be 'always on screen' at any one time.
- *  * Reference counts to keep track of whether a widget is kept docked or alive
- *    by any components
- */
+export interface PersistentWidget {
+    widgetId: string;
+    roomId: string | null;
+}
+
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
-    private persistentWidgetId: string | null = null;
-    private persistentRoomId: string | null = null;
+    /**
+     * Every widget being kept alive off screen, by widget UID. Several calls may be persistent at once
+     * (one per line, the others on hold); the foreground one is the widget the user is attending to.
+     */
+    private persistentWidgets = new Map<string, PersistentWidget>();
+    private foregroundUid: string | null = null;
     private dockedWidgetsByUid = new Map<string, number>();
 
     public static get instance(): ActiveWidgetStore {
@@ -70,29 +72,55 @@ export default class ActiveWidgetStore extends EventEmitter {
         WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
     }
 
+    /**
+     * Keeps the widget alive off screen (or stops doing so). A widget made persistent becomes the
+     * foreground one; when the foreground widget goes, whichever other persistent widget remains takes
+     * its place.
+     */
     public setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void {
-        const isPersisted = this.getWidgetPersistence(widgetId, roomId);
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined);
+        const isPersisted = this.persistentWidgets.has(uid);
 
         if (isPersisted && !val) {
-            this.persistentWidgetId = null;
-            this.persistentRoomId = null;
+            this.persistentWidgets.delete(uid);
+            if (this.foregroundUid === uid) this.foregroundUid = this.persistentWidgets.keys().next().value ?? null;
         } else if (!isPersisted && val) {
-            this.persistentWidgetId = widgetId;
-            this.persistentRoomId = roomId;
+            this.persistentWidgets.set(uid, { widgetId, roomId });
+            this.foregroundUid = uid;
+        } else if (val) {
+            this.foregroundUid = uid;
         }
         this.emit(ActiveWidgetStoreEvent.Persistence);
     }
 
-    public getWidgetPersistence(widgetId: string, roomId: string | null): boolean {
-        return this.persistentWidgetId === widgetId && this.persistentRoomId === roomId;
+    /** Makes an already persistent widget the foreground one. */
+    public setForegroundWidget(widgetId: string, roomId: string | null): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined);
+        if (!this.persistentWidgets.has(uid) || this.foregroundUid === uid) return;
+        this.foregroundUid = uid;
+        this.emit(ActiveWidgetStoreEvent.Persistence);
     }
 
+    public getWidgetPersistence(widgetId: string, roomId: string | null): boolean {
+        return this.persistentWidgets.has(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
+    }
+
+    /** Every persistent widget, the foreground one first. */
+    public getPersistentWidgets(): PersistentWidget[] {
+        const foreground = this.foregroundUid === null ? undefined : this.persistentWidgets.get(this.foregroundUid);
+        return [
+            ...(foreground ? [foreground] : []),
+            ...[...this.persistentWidgets.entries()].filter(([uid]) => uid !== this.foregroundUid).map(([, w]) => w),
+        ];
+    }
+
+    /** The foreground persistent widget's id, if any. */
     public getPersistentWidgetId(): string | null {
-        return this.persistentWidgetId;
+        return (this.foregroundUid && this.persistentWidgets.get(this.foregroundUid)?.widgetId) ?? null;
     }
 
     public getPersistentRoomId(): string | null {
-        return this.persistentRoomId;
+        return (this.foregroundUid && this.persistentWidgets.get(this.foregroundUid)?.roomId) ?? null;
     }
 
     // Registers the given widget as being docked somewhere in the UI (not a PiP),

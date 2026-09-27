@@ -379,6 +379,10 @@ export class RoomViewStore extends EventEmitter {
                 // and allow the widget to show the lobby.
                 if (call.connectionState === ConnectionState.Disconnected) {
                     void call.start({ skipLobby: payload.skipLobby, voiceOnly: payload.voiceOnly });
+                } else if (call.connected && CallStore.instance.getForegroundCall() !== call) {
+                    // Opening a call we are already in is picking that line: it comes off hold, the
+                    // others go on
+                    CallStore.instance.setForeground(call).catch((e) => logger.warn("Could not switch calls", e));
                 }
             }
             // If we switch to a different room from the call, we are no longer presenting it
@@ -759,6 +763,15 @@ export class RoomViewStore extends EventEmitter {
 
     public shouldPeek(): boolean {
         return this.state.shouldPeek;
+    }
+
+    /**
+     * Servers which are known to know about the room currently being viewed.
+     *
+     * @returns the via servers, which may be empty if we reached the room without any.
+     */
+    public getViaServers(): string[] {
+        return this.state.viaServers;
     }
 
     public getWasContextSwitch(): boolean {

@@ -7,6 +7,8 @@
 
 // @vitest-environment happy-dom
 
+// oxlint-disable-next-line no-restricted-imports
+import EventEmitter from "events";
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { createRef } from "react";
@@ -80,7 +82,10 @@ describe("WidgetPipViewModel", () => {
         });
         dispatchSpy.mockClear();
 
-        const call = { widget: { id: widgetId } } as unknown as Call;
+        const call = Object.assign(new EventEmitter(), {
+            widget: { id: widgetId },
+            held: {},
+        }) as unknown as Call;
         CallStore.instance.emit(CallStoreEvent.Call, call, room.roomId);
 
         vm.onBackClick(createBackClickEvent());

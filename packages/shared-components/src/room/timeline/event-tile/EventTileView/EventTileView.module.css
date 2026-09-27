@@ -1240,6 +1240,11 @@
             z-index: auto;
         }
 
+        /* Positioned so the hover background above cannot paint over it, as in Card. */
+        .slotFooter {
+            position: relative;
+        }
+
         &.stateOwnEvent {
             align-items: flex-end;
         }

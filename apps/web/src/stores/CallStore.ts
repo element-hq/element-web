@@ -14,9 +14,11 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import WidgetStore from "./WidgetStore";
+import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "./ActiveWidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import { isHeld, releaseHold } from "@element-hq/element-call-component/api";
 import SdkConfig from "../SdkConfig.ts";
 
 export enum CallStoreEvent {
@@ -29,6 +31,10 @@ export enum CallStoreEvent {
     ConnectedCalls = "connected_calls",
     // Signals a change in the configured RTC transports.
     TransportsUpdated = "transports_updated",
+    // Signals a change in the foreground call: the one the user is attending to, the others being on hold
+    // Parameters:
+    // - Call | null The foreground call
+    Foreground = "foreground",
 }
 
 export class CallStore extends AsyncStoreWithClient<EmptyObject> {
@@ -69,6 +75,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
 
         this.matrixClient.on(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
+        ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Persistence, this.onPersistence);
 
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
@@ -99,6 +106,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
 
         this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         this.matrixClient?.off(ClientEvent.RtcTransportsUpdated, this.onRTCTransportsUpdated);
+        ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Persistence, this.onPersistence);
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
@@ -114,6 +122,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         const prevValue = this._connectedCalls;
         this._connectedCalls = value;
         this.emit(CallStoreEvent.ConnectedCalls, value, prevValue);
+        this.onPersistence(); // a call joining or leaving can change which one is foreground
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         void SettingsStore.setValue(
@@ -171,6 +180,39 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             this.inUpdateRoom = false;
         }
     }
+
+    /**
+     * The call the user is attending to: the foreground persistent widget's. Every other connected
+     * call is on hold (or about to be).
+     */
+    public getForegroundCall(): Call | null {
+        const roomId = ActiveWidgetStore.instance.getPersistentRoomId();
+        return roomId === null ? null : this.getActiveCall(roomId);
+    }
+
+    /**
+     * Brings a call to the foreground: takes it off hold, puts every other connected call on hold
+     * (audio only, so a video call keeps showing while parked) and makes its widget the foreground
+     * persistent one. What a phone's line buttons do.
+     */
+    public async setForeground(call: Call): Promise<void> {
+        const others = [...this.connectedCalls].filter((c) => c !== call && c.held.audio !== true);
+        await Promise.all(
+            others.map((c) =>
+                c.setHold({ audio: true }).catch((e) => logger.warn(`Could not hold call in ${c.roomId}`, e)),
+            ),
+        );
+        if (isHeld(call.held)) await call.setHold(releaseHold(call.held));
+        ActiveWidgetStore.instance.setForegroundWidget(call.widget.id, call.widget.roomId);
+    }
+
+    private readonly onPersistence = (): void => {
+        const foreground = this.getForegroundCall();
+        if (foreground === this.lastForeground) return;
+        this.lastForeground = foreground;
+        this.emit(CallStoreEvent.Foreground, foreground);
+    };
+    private lastForeground: Call | null = null;
 
     /**
      * Gets the call associated with the given room, if any.
@@ -238,6 +280,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 }
 
-// Modules end calls they placed through here (Call.disconnect). Lazy:
-// the singleton starts on first access and must not do so at import time.
+// Modules that manage calls (a dialler: place, end, switch lines) go through here, having no module
+// API for it yet. Lazy: the singleton starts on first access and must not do so at import time.
 Object.defineProperty(window, "mxCallStore", { get: () => CallStore.instance });

@@ -19,7 +19,7 @@ import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";
-import { ConnectionState } from "../../models/Call";
+import { ConnectionState, ElementCall } from "../../models/Call";
 import { placeCall } from "../../utils/room/placeCall";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
@@ -232,7 +232,9 @@ export const useRoomCall = (
     );
 
     const state = useMemo((): State => {
-        if (connectedCalls.find((call) => call.roomId != room.roomId)) {
+        // The React embedding of Element Call can hold one call while another is placed; the iframe
+        // one cannot
+        if (!ElementCall.usesReactComponent && connectedCalls.find((call) => call.roomId != room.roomId)) {
             return State.Ongoing;
         }
         if (hasGroupCall && (hasJitsiWidget || hasManagedHybridWidget)) {
