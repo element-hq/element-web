@@ -11,8 +11,9 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import { lerp } from "../../utils/AnimationUtils";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 
-export const PIP_VIEW_WIDTH = 336;
-export const PIP_VIEW_HEIGHT = 232;
+// The widget PiP's size (WidgetPipView.module.css); a mounted PiP is measured instead
+export const PIP_VIEW_WIDTH = 304;
+export const PIP_VIEW_HEIGHT = 278;
 /** Between PiPs stacked in slots */
 export const PIP_GAP = 16;
 
@@ -81,12 +82,23 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private startingPositionX = 0;
     private startingPositionY = 0;
 
+    /** Once placed in its slot, a PiP goes wherever the user drags it; only the edges pull. */
+    private placed = false;
+
+    private get width(): number {
+        return this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
+    }
+
+    private get height(): number {
+        return this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT;
+    }
+
     private get slotOffsetX(): number {
-        return (this.props.slot?.column ?? 0) * (PIP_VIEW_WIDTH + PIP_GAP);
+        return (this.props.slot?.column ?? 0) * (this.width + PIP_GAP);
     }
 
     private get slotOffsetY(): number {
-        return (this.props.slot?.row ?? 0) * (PIP_VIEW_HEIGHT + PIP_GAP);
+        return (this.props.slot?.row ?? 0) * (this.height + PIP_GAP);
     }
 
     private _moving = false;
@@ -170,31 +182,28 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.snap(false);
     };
 
+    /**
+     * Pulls the PiP to the nearest edge of the padded area (so into a corner when dropped near one),
+     * leaving it where it is along that edge. The first snap places it in its slot instead: top right,
+     * offset by the PiPs already there.
+     */
     private snap = (animate = false): void => {
-        const translationX = this.desiredTranslationX;
-        const translationY = this.desiredTranslationY;
-        // We subtract the PiP size from the window size in order to calculate
-        // the position to snap to from the PiP center and not its top-left
-        // corner
-        const windowWidth =
-            UIStore.instance.windowWidth - (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH);
-        const windowHeight =
-            UIStore.instance.windowHeight - (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT);
+        const minX = PADDING.left;
+        const maxX = UIStore.instance.windowWidth - PADDING.right - this.width;
+        const minY = PADDING.top;
+        const maxY = UIStore.instance.windowHeight - PADDING.bottom - this.height;
 
-        // The slot moves the PiP inwards from whichever corner it snaps to
-        const { slotOffsetX, slotOffsetY } = this;
-        if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.desiredTranslationX = windowWidth - PADDING.right - slotOffsetX;
-            this.desiredTranslationY = windowHeight - PADDING.bottom - slotOffsetY;
-        } else if (translationX >= windowWidth / 2 && translationY <= windowHeight / 2) {
-            this.desiredTranslationX = windowWidth - PADDING.right - slotOffsetX;
-            this.desiredTranslationY = PADDING.top + slotOffsetY;
-        } else if (translationX <= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.desiredTranslationX = PADDING.left + slotOffsetX;
-            this.desiredTranslationY = windowHeight - PADDING.bottom - slotOffsetY;
+        if (!this.placed) {
+            this.placed = true;
+            this.desiredTranslationX = maxX - this.slotOffsetX;
+            this.desiredTranslationY = minY + this.slotOffsetY;
         } else {
-            this.desiredTranslationX = PADDING.left + slotOffsetX;
-            this.desiredTranslationY = PADDING.top + slotOffsetY;
+            const x = Math.min(Math.max(this.desiredTranslationX, minX), maxX);
+            const y = Math.min(Math.max(this.desiredTranslationY, minY), maxY);
+            const toX = Math.min(x - minX, maxX - x);
+            const toY = Math.min(y - minY, maxY - y);
+            this.desiredTranslationX = toX <= toY ? (x - minX <= maxX - x ? minX : maxX) : x;
+            this.desiredTranslationY = toX <= toY ? y : y - minY <= maxY - y ? minY : maxY;
         }
 
         if (!animate) {

@@ -1128,6 +1128,11 @@ export class ElementCall extends Call {
         this.held = await this.componentHandle.setHold(request);
     }
 
+    /** Element Call reports that the user held or resumed the call with its own button. */
+    public handleHold(held: HoldState): void {
+        this.held = held;
+    }
+
     protected async performDisconnection(): Promise<void> {
         if (ElementCall.usesReactComponent) return this.requestHangUpFromReactComponent();
 

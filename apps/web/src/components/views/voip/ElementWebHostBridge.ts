@@ -8,7 +8,12 @@
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { CallStore } from "../../../stores/CallStore";
 import { type ElementCall } from "../../../models/Call";
-import { type DeviceMuteState, type ElementCallHostBridge } from "@element-hq/element-call-component/api";
+import {
+    type DeviceMuteState,
+    type ElementCallHostBridge,
+    type HoldState,
+    isHeld,
+} from "@element-hq/element-call-component/api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 export interface ElementWebHostBridgeOptions {
@@ -73,6 +78,12 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
 
     public readonly notifyDeviceMute = async (state: DeviceMuteState): Promise<void> => {
         this.call.handleDeviceMute(state);
+    };
+
+    public readonly notifyHold = async (held: HoldState): Promise<void> => {
+        this.call.handleHold(held);
+        // Resuming from Element Call's own button picks this line: the others go on hold
+        if (!isHeld(held)) await CallStore.instance.setForeground(this.call);
     };
 
     public readonly close = async (): Promise<void> => {

@@ -3993,7 +3993,6 @@
         "no_permission_conference": "Permission Required",
         "no_permission_conference_description": "You do not have permission to start a conference call in this room",
         "on_hold": "%(name)s on hold",
-        "on_hold_name": "%(name)s (on hold)",
         "output_devices": "Output devices",
         "screenshare_monitor": "Share entire screen",
         "screenshare_title": "Share content",

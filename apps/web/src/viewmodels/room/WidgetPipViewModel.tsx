@@ -17,8 +17,7 @@ import type { RefObject, FC } from "react";
 import { Action } from "../../dispatcher/actions";
 import WidgetStore, { type IApp } from "../../stores/WidgetStore";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
-import { type Call, CallEvent } from "../../models/Call";
-import { _t } from "../../languageHandler";
+import { type Call } from "../../models/Call";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
@@ -62,33 +61,12 @@ export class WidgetPipViewModel
 
     public constructor(props: Props) {
         super(props, { widgetId: props.widgetId, roomName: props.room.name, roomId: props.room.roomId });
-        // Renamed below once the call is known (`watchHold`)
         this.widget = WidgetStore.instance.getApps(props.room.roomId).find((app) => app.id === this.props.widgetId)!;
         this.call = CallStore.instance.getCall(props.room.roomId) ?? null;
         this.onStartMoving = props.onStartMoving;
 
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomName);
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
-        this.watchHold();
-    }
-
-    /** The PiP says when its call is on hold, so the user can tell the lines apart. */
-    private watchHold(): void {
-        this.unwatchHold?.();
-        const call = this.call;
-        if (call === null) return;
-        call.on(CallEvent.Held, this.onRoomName);
-        this.unwatchHold = (): void => {
-            call.off(CallEvent.Held, this.onRoomName);
-        };
-        this.disposables.track(this.unwatchHold);
-        this.onRoomName();
-    }
-    private unwatchHold?: () => void;
-
-    private roomName(): string {
-        const name = this.props.room.name;
-        return this.call?.held.audio ? _t("voip|on_hold_name", { name }) : name;
     }
 
     public onStartMoving: (ev: React.MouseEvent) => void;
@@ -141,14 +119,13 @@ export class WidgetPipViewModel
     };
 
     private readonly onRoomName = (): void => {
-        this.snapshot.merge({ roomName: this.roomName() });
+        this.snapshot.merge({ roomName: this.props.room.name });
     };
 
     private readonly onCallChange = (...args: unknown[]): void => {
         const [call, forRoomId] = args as [Call | null, string];
         if (forRoomId === this.props.room.roomId) {
             this.call = call?.widget.id === this.props.widgetId ? call : null;
-            this.watchHold();
         }
     };
 }
