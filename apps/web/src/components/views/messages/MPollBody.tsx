@@ -240,9 +240,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const maxSelections = pollEvent?.maxSelections ?? 1;
 
         let newSelected: string[];
-        const currentSelected = this.state.selected??
-            ? this.state.selected
-            : this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
+        const currentSelected = this.state.selected ??
+            this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
 
         if (currentSelected.includes(answerId)) {
             newSelected = currentSelected.filter((id) => id !== answerId);
