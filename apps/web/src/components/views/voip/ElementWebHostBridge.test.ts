@@ -26,7 +26,7 @@ describe("ElementWebHostBridge", () => {
         handleHangup: ReturnType<typeof vi.fn>;
         handleClose: ReturnType<typeof vi.fn>;
         handleDeviceMute: ReturnType<typeof vi.fn>;
-        held: { audio_held: boolean; video_held: boolean };
+        held: { audio?: boolean };
         widget: { id: string; roomId: string };
     };
     let setWidgetPersistence: ReturnType<typeof vi.spyOn>;
@@ -40,7 +40,7 @@ describe("ElementWebHostBridge", () => {
             handleHangup: vi.fn(),
             handleClose: vi.fn(),
             handleDeviceMute: vi.fn(),
-            held: { audio_held: false, video_held: false },
+            held: {},
             widget: { id: widgetId, roomId },
         };
         setWidgetPersistence = vi
@@ -84,7 +84,7 @@ describe("ElementWebHostBridge", () => {
 
     it("puts every other connected call on hold before becoming persistent, but not when leaving the screen", async () => {
         const order: string[] = [];
-        const notHeld = { audio_held: false, video_held: false };
+        const notHeld = {};
         const otherCall = {
             held: notHeld,
             setHold: vi.fn(async () => {
@@ -104,7 +104,7 @@ describe("ElementWebHostBridge", () => {
         await bridge.setAlwaysOnScreen(true);
         expect(order).toEqual(["hold other", "persist"]);
         // Only audio goes on hold: the other call's video keeps showing
-        expect(otherCall.setHold).toHaveBeenCalledWith({ audio_held: true });
+        expect(otherCall.setHold).toHaveBeenCalledWith({ audio: true });
         expect(ownHold).not.toHaveBeenCalled();
 
         await bridge.setAlwaysOnScreen(false);
@@ -112,7 +112,7 @@ describe("ElementWebHostBridge", () => {
     });
 
     it("still becomes persistent when another call cannot be held", async () => {
-        const notHeld = { audio_held: false, video_held: false };
+        const notHeld = {};
         const failing = { held: notHeld, setHold: vi.fn(async () => Promise.reject(new Error("no hold for you"))) };
         const fine = { held: notHeld, setHold: vi.fn(async () => {}) };
         vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(

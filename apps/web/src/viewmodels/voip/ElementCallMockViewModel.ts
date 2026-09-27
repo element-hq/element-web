@@ -23,6 +23,9 @@ import {
     type ElementCallHandle,
     type ElementCallHostBridge,
     type ElementCallProps,
+    type HoldState,
+    mergeHold,
+    NOT_HELD,
     type UserIntent,
 } from "@element-hq/element-call-component/api";
 
@@ -238,15 +241,12 @@ export class ElementCallMockViewModel
         },
         setHold: async (request) => {
             this.append(`← setHold ${JSON.stringify(request)}`);
-            this.held = {
-                audio_held: request.audio_held ?? this.held.audio_held,
-                video_held: request.video_held ?? this.held.video_held,
-            };
+            this.held = mergeHold(this.held, request);
             return this.held;
         },
     };
     /** The mock has no media to hold; it only remembers what it was asked. */
-    private held = { audio_held: false, video_held: false };
+    private held: HoldState = NOT_HELD;
 
     public toggleJoined = async (): Promise<void> => {
         if (this.snapshot.current.joined) await this.leaveCall();

@@ -58,10 +58,9 @@ import {
     type ElementCallHandle,
     type HoldRequest,
     type HoldState,
+    NOT_HELD,
     type UserIntent,
 } from "@element-hq/element-call-component/api";
-
-export const NOT_HELD: HoldState = { audio_held: false, video_held: false };
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -175,8 +174,9 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     private _held: HoldState = NOT_HELD;
     /**
-     * Which of the user's media is on hold in this call: held audio is neither sent nor heard, held
-     * video is not sent. A call on another line is held, at least for audio.
+     * Which of the user's media is on hold in this call, per stream purpose as in floor control: held
+     * audio is neither sent nor heard, held video is not sent. A call on another line has at least
+     * its microphone held.
      */
     public get held(): HoldState {
         return this._held;

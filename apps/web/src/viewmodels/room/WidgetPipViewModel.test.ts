@@ -84,7 +84,7 @@ describe("WidgetPipViewModel", () => {
 
         const call = Object.assign(new EventEmitter(), {
             widget: { id: widgetId },
-            held: { audio_held: false, video_held: false },
+            held: {},
         }) as unknown as Call;
         CallStore.instance.emit(CallStoreEvent.Call, call, room.roomId);
 

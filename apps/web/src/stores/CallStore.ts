@@ -18,6 +18,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "./ActiveWidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import { isHeld, releaseHold } from "@element-hq/element-call-component/api";
 import SdkConfig from "../SdkConfig.ts";
 
 export enum CallStoreEvent {
@@ -195,15 +196,13 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
      * persistent one. What a phone's line buttons do.
      */
     public async setForeground(call: Call): Promise<void> {
-        const others = [...this.connectedCalls].filter((c) => c !== call && !c.held.audio_held);
+        const others = [...this.connectedCalls].filter((c) => c !== call && c.held.audio !== true);
         await Promise.all(
             others.map((c) =>
-                c.setHold({ audio_held: true }).catch((e) => logger.warn(`Could not hold call in ${c.roomId}`, e)),
+                c.setHold({ audio: true }).catch((e) => logger.warn(`Could not hold call in ${c.roomId}`, e)),
             ),
         );
-        if (call.held.audio_held || call.held.video_held) {
-            await call.setHold({ audio_held: false, video_held: false });
-        }
+        if (isHeld(call.held)) await call.setHold(releaseHold(call.held));
         ActiveWidgetStore.instance.setForegroundWidget(call.widget.id, call.widget.roomId);
     }
 

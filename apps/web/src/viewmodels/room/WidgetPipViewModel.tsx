@@ -88,7 +88,7 @@ export class WidgetPipViewModel
 
     private roomName(): string {
         const name = this.props.room.name;
-        return this.call?.held.audio_held ? _t("voip|on_hold_name", { name }) : name;
+        return this.call?.held.audio ? _t("voip|on_hold_name", { name }) : name;
     }
 
     public onStartMoving: (ev: React.MouseEvent) => void;
