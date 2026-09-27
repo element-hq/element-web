@@ -125,6 +125,9 @@ export interface WebConfigJson {
         brand?: string;
         use_exclusively?: boolean;
         disable?: boolean;
+        // Element Call's own deployment config (its config.json: sip_bridge, recording_bot, ...) for the
+        // in-process React component, which has no config.json of its own to fetch
+        component_config?: Record<string, unknown>;
     };
 
     logout_redirect_url?: string;

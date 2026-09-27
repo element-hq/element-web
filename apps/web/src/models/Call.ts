@@ -858,7 +858,9 @@ export class ElementCall extends Call {
                 options.sentry = { DSN: sentryConfig.dsn, environment: sentryConfig.environment ?? "" };
             }
         }
-        return options;
+        // What the iframe embedding reads from its own config.json (sip_bridge, recording_bot, ...) the
+        // deployment states here instead; it wins over what was derived above.
+        return { ...options, ...SdkConfig.get("element_call").component_config };
     }
 
     /**
