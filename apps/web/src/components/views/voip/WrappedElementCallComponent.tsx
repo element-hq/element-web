@@ -51,7 +51,9 @@ const RealElementCall = lazy(() =>
             import(
                 /* webpackChunkName: "element-call-component", webpackPrefetch: true */ "@element-hq/element-call-component"
             ),
-            import(/* webpackChunkName: "element-call-component", webpackPrefetch: true */ "./ElementCallComponent.css"),
+            import(
+                /* webpackChunkName: "element-call-component", webpackPrefetch: true */ "./ElementCallComponent.css"
+            ),
         ]).then(([m]) => m),
     ),
 );

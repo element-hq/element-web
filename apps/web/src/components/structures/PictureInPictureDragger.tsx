@@ -11,8 +11,10 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import { lerp } from "../../utils/AnimationUtils";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 
-const PIP_VIEW_WIDTH = 336;
-const PIP_VIEW_HEIGHT = 232;
+export const PIP_VIEW_WIDTH = 336;
+export const PIP_VIEW_HEIGHT = 232;
+/** Between PiPs stacked in slots */
+export const PIP_GAP = 16;
 
 const MOVING_AMT = 0.2;
 const SNAPPING_AMT = 0.1;
@@ -36,10 +38,26 @@ interface IChildrenOptions {
     onResize: (event: Event) => void;
 }
 
+/**
+ * Where a PiP sits relative to the corner it snaps to, when several are shown: `row` PiPs further
+ * from the top/bottom edge, `column` PiPs further from the left/right edge. Slot (0, 0) is the corner.
+ */
+export interface PipSlot {
+    column: number;
+    row: number;
+}
+
+/** How many PiPs fit down one edge of the window, given the padding; at least one. */
+export function pipRowsPerColumn(): number {
+    const usable = UIStore.instance.windowHeight - PADDING.top - PADDING.bottom;
+    return Math.max(1, Math.floor((usable + PIP_GAP) / (PIP_VIEW_HEIGHT + PIP_GAP)));
+}
+
 interface IProps {
     children: Array<CreatePipChildren>;
     onDoubleClick?: () => void;
     onMove?: () => void;
+    slot?: PipSlot;
 }
 
 /**
@@ -50,8 +68,9 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private callViewWrapper = createRef<HTMLDivElement>();
     private initX = 0;
     private initY = 0;
-    private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
-    private desiredTranslationY = PADDING.top;
+    // Top right, offset by the slot
+    private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH - this.slotOffsetX;
+    private desiredTranslationY = PADDING.top + this.slotOffsetY;
     private translationX = this.desiredTranslationX;
     private translationY = this.desiredTranslationY;
     private mouseHeld = false;
@@ -61,6 +80,14 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     );
     private startingPositionX = 0;
     private startingPositionY = 0;
+
+    private get slotOffsetX(): number {
+        return (this.props.slot?.column ?? 0) * (PIP_VIEW_WIDTH + PIP_GAP);
+    }
+
+    private get slotOffsetY(): number {
+        return (this.props.slot?.row ?? 0) * (PIP_VIEW_HEIGHT + PIP_GAP);
+    }
 
     private _moving = false;
     public get moving(): boolean {
@@ -154,18 +181,20 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         const windowHeight =
             UIStore.instance.windowHeight - (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT);
 
+        // The slot moves the PiP inwards from whichever corner it snaps to
+        const { slotOffsetX, slotOffsetY } = this;
         if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.desiredTranslationX = windowWidth - PADDING.right;
-            this.desiredTranslationY = windowHeight - PADDING.bottom;
+            this.desiredTranslationX = windowWidth - PADDING.right - slotOffsetX;
+            this.desiredTranslationY = windowHeight - PADDING.bottom - slotOffsetY;
         } else if (translationX >= windowWidth / 2 && translationY <= windowHeight / 2) {
-            this.desiredTranslationX = windowWidth - PADDING.right;
-            this.desiredTranslationY = PADDING.top;
+            this.desiredTranslationX = windowWidth - PADDING.right - slotOffsetX;
+            this.desiredTranslationY = PADDING.top + slotOffsetY;
         } else if (translationX <= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.desiredTranslationX = PADDING.left;
-            this.desiredTranslationY = windowHeight - PADDING.bottom;
+            this.desiredTranslationX = PADDING.left + slotOffsetX;
+            this.desiredTranslationY = windowHeight - PADDING.bottom - slotOffsetY;
         } else {
-            this.desiredTranslationX = PADDING.left;
-            this.desiredTranslationY = PADDING.top;
+            this.desiredTranslationX = PADDING.left + slotOffsetX;
+            this.desiredTranslationY = PADDING.top + slotOffsetY;
         }
 
         if (!animate) {
