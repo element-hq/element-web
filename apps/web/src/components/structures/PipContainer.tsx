@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject, type ReactNode, useRef, useEffect } from "react";
+import React, { type RefObject, type ReactNode, useEffect } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
@@ -33,9 +34,7 @@ const SHOW_CALL_IN_STATES = [
     CallState.WaitLocalMedia,
 ];
 
-interface IProps {
-    movePersistedElement: RefObject<(() => void) | null>;
-}
+type IProps = EmptyObject;
 
 interface IState {
     viewedRoomId?: string;
@@ -143,7 +142,25 @@ class PipContainerInner extends React.Component<IProps, IState> {
         return [primary, secondaries];
     }
 
-    private onMove = (): void => this.props.movePersistedElement.current?.();
+    /**
+     * How each widget PiP repositions its persisted content when the PiP moves, by PiP key. One per PiP:
+     * a `PersistedElement` takes over the ref it is given on mount, so a shared ref would only follow the
+     * newest PiP and leave the others' content stranded where they were.
+     */
+    private readonly movePersistedElements = new Map<string, RefObject<(() => void) | null>>();
+
+    private movePersistedElement(key: string): RefObject<(() => void) | null> {
+        let ref = this.movePersistedElements.get(key);
+        if (!ref) {
+            ref = { current: null };
+            this.movePersistedElements.set(key, ref);
+        }
+        return ref;
+    }
+
+    private onMove = (): void => {
+        for (const ref of this.movePersistedElements.values()) ref.current?.();
+    };
 
     private onRoomViewStoreUpdate = (): void => {
         const newRoomId = this.context.roomViewStore.getRoomId();
@@ -248,14 +265,15 @@ class PipContainerInner extends React.Component<IProps, IState> {
         }
 
         for (const { widgetId, roomId } of this.state.pipWidgets) {
+            const key = `widget-pip-${widgetId}-${roomId}`;
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPipWrappedView
-                    key={`widget-pip-${widgetId}-${roomId}`}
+                    key={key}
                     widgetId={widgetId}
                     room={this.context.client!.getRoom(roomId ?? undefined)!}
                     viewingRoom={this.state.viewedRoomId === roomId}
                     onStartMoving={onStartMoving}
-                    movePersistedElement={this.props.movePersistedElement}
+                    movePersistedElement={this.movePersistedElement(key)}
                 />
             ));
         }
@@ -272,11 +290,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
     }
 }
 
-export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>(null);
-
-    return <PipContainerInner movePersistedElement={movePersistedElement} />;
-};
+export const PipContainer: React.FC = () => <PipContainerInner />;
 
 type Props = { viewingRoom: boolean } & WidgetPipViewModelProps;
 

@@ -46,6 +46,7 @@ import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJ
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
+import { isHeld } from "@element-hq/element-call-component/api";
 import { isVideoRoom } from "../utils/video-rooms";
 import { ModuleApi } from "../modules/Api";
 import ActiveWidgetStore from "./ActiveWidgetStore";
@@ -379,9 +380,9 @@ export class RoomViewStore extends EventEmitter {
                 // and allow the widget to show the lobby.
                 if (call.connectionState === ConnectionState.Disconnected) {
                     void call.start({ skipLobby: payload.skipLobby, voiceOnly: payload.voiceOnly });
-                } else if (call.connected && CallStore.instance.getForegroundCall() !== call) {
-                    // Opening a call we are already in is picking that line: it comes off hold, the
-                    // others go on
+                } else if (call.connected && isHeld(call.held)) {
+                    // Opening a held call we are already in (from its PiP, say) is picking that line: it
+                    // comes off hold, the others go on
                     CallStore.instance.setForeground(call).catch((e) => logger.warn("Could not switch calls", e));
                 }
             }

@@ -5,10 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type FC, lazy, Suspense, useEffect, useMemo } from "react";
+import React, { type FC, lazy, Suspense, useCallback, useEffect, useMemo } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 // Type-only: the component itself is loaded lazily below
 import type * as ElementCallComponent from "@element-hq/element-call-component";
+import { isHeld } from "@element-hq/element-call-component/api";
 
 import { ElementCall as ElementCallModel } from "../../../models/Call";
 import { CallStore } from "../../../stores/CallStore";
@@ -39,13 +41,17 @@ const loadElementCall = async (
 /**
  * The real component: `@element-hq/element-call-component`, a large ES module (LiveKit, EC's UI) plus
  * its stylesheet (imported into the `element-call` cascade layer by `ElementCallComponent.css`).
- * Code-split so it is only fetched when a call is rendered on the React path.
+ * Code-split so it is not on the critical path, and prefetched so that it is already cached by the time
+ * a call is rendered on the React path (the chunk is many megabytes; fetched on demand it would keep
+ * the first call of a session on a spinner).
  */
 const RealElementCall = lazy(() =>
     loadElementCall(
         Promise.all([
-            import(/* webpackChunkName: "element-call-component" */ "@element-hq/element-call-component"),
-            import(/* webpackChunkName: "element-call-component" */ "./ElementCallComponent.css"),
+            import(
+                /* webpackChunkName: "element-call-component", webpackPrefetch: true */ "@element-hq/element-call-component"
+            ),
+            import(/* webpackChunkName: "element-call-component", webpackPrefetch: true */ "./ElementCallComponent.css"),
         ]).then(([m]) => m),
     ),
 );
@@ -92,19 +98,30 @@ export const WrappedElementCallComponent: FC<{ call: ElementCallModel; client: M
     );
     const { intent, config } = call.componentOptions;
 
+    // Interacting with a held call picks that line: it comes off hold and the others go on, as when
+    // pressing a line button on a desk phone. Captured here, in the persisted tree, because clicks on
+    // Element Call never reach the tile (docked or PiP) that is showing it.
+    const onPointerDownCapture = useCallback((): void => {
+        if (isHeld(call.held)) {
+            CallStore.instance.setForeground(call).catch((e) => logger.warn("Could not switch calls", e));
+        }
+    }, [call]);
+
     return (
-        <Suspense fallback={<Spinner />}>
-            <ElementCall
-                client={client}
-                roomId={call.roomId}
-                intent={intent}
-                config={config}
-                hostBridge={bridge}
-                ref={call.setComponentHandle}
-                theme={theme}
-                language={language}
-            />
-            <MarkReadyOnMount call={call} />
-        </Suspense>
+        <div style={{ display: "contents" }} onPointerDownCapture={onPointerDownCapture}>
+            <Suspense fallback={<Spinner />}>
+                <ElementCall
+                    client={client}
+                    roomId={call.roomId}
+                    intent={intent}
+                    config={config}
+                    hostBridge={bridge}
+                    ref={call.setComponentHandle}
+                    theme={theme}
+                    language={language}
+                />
+                <MarkReadyOnMount call={call} />
+            </Suspense>
+        </div>
     );
 };
