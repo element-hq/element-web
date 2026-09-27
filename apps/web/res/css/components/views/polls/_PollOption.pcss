@@ -62,10 +62,10 @@ Please see LICENSE files in the repository root for full details.
             border-color: var(--cpd-color-icon-primary);
             background-color: var(--cpd-color-icon-primary);
 
-            div {
-                background: none; // override the inner circle
+            & div {
+                background: none; /* override the inner circle */
 
-                svg {
+                & svg {
                     color: var(--cpd-color-icon-on-solid-primary);
                     width: 12px;
                     height: 12px;
@@ -74,9 +74,9 @@ Please see LICENSE files in the repository root for full details.
                 }
             }
         }
-        input[type="radio"]:checked:disabled + div {
+        & input[type="radio"]:checked:disabled + div {
             div {
-                background: none; // override the inner circle
+                background: none; /* override the inner circle */
             }
         }
     }
@@ -95,8 +95,8 @@ Please see LICENSE files in the repository root for full details.
             border-color: var(--cpd-color-icon-accent-tertiary);
             background-color: var(--cpd-color-icon-accent-tertiary);
 
-            div {
-                background: none; // override the inner circle
+            & div {
+                background: none; /* override the inner circle */
             }
         }
     }

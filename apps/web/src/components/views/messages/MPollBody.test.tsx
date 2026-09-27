@@ -1042,7 +1042,12 @@ function endedVotesCount(renderResult: RenderResult, value: string): string {
     return votesCount(renderResult, value);
 }
 
-function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true, maxSelections = 1): PollStartEventContent {
+function newPollStart(
+    answers?: PollAnswer[],
+    question?: string,
+    disclosed = true,
+    maxSelections = 1,
+): PollStartEventContent {
     if (!answers) {
         answers = [
             { id: "pizza", [M_TEXT.name]: "Pizza" },

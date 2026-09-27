@@ -227,7 +227,6 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.syncIfNewEventFromMe();
     };
 
-
     /**
      * Runs when the local user clicks on an option
      */
@@ -240,8 +239,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const maxSelections = pollEvent?.maxSelections ?? 1;
 
         let newSelected: string[];
-        const currentSelected = this.state.selected ??
-            this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
+        const currentSelected =
+            this.state.selected ?? this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
 
         if (currentSelected.includes(answerId)) {
             newSelected = currentSelected.filter((id) => id !== answerId);
@@ -270,7 +269,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     title: _t("poll|error_voting_title"),
                     description: _t("poll|error_voting_description"),
                 });
-            }).finally(() => {
+            })
+            .finally(() => {
                 this.setState({ isSubmittingVote: false });
             });
     }
@@ -395,7 +395,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 answerVotes = votes.get(answer.id) ?? 0;
                             }
 
-                            const checked = (!isEnded && myVotes.includes(answer.id)) || (isEnded && answerVotes === winCount);
+                            const checked =
+                                (!isEnded && myVotes.includes(answer.id)) || (isEnded && answerVotes === winCount);
 
                             return (
                                 <PollOption
