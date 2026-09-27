@@ -81,11 +81,11 @@ export function htmlSerializeIfNeeded(
     const html = htmlSerializeFromMdIfNeeded(md, { forceHTML });
     if (!html || !pillUrls.size) return html;
     const document = new DOMParser().parseFromString(html, "text/html");
-    for (const anchor of document.querySelectorAll("a[href]")) {
+    for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
         const url = pillUrls.get(anchor.getAttribute("href")!);
         if (url) {
             anchor.setAttribute("href", url);
-            anchor.removeAttribute("data-org.matrix.msc4550.link");
+            delete anchor.dataset["org.matrix.msc4550.link"];
         }
     }
     // Restore pill URLs inside code too.
@@ -176,7 +176,7 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
         // feed Markdown output to HTML parser
         const phtml = new DOMParser().parseFromString(parser.toHTML(), "text/html");
         for (const anchor of phtml.querySelectorAll("a")) {
-            anchor.setAttribute("data-org.matrix.msc4550.link", "");
+            anchor.dataset["org.matrix.msc4550.link"] = "";
         }
 
         if (SettingsStore.getValue("feature_latex_maths")) {

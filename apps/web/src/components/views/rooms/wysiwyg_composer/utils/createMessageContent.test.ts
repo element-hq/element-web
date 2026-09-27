@@ -14,14 +14,30 @@ import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { filterConsole, mkEvent } from "test-utils";
 import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 beforeAll(initOnce, 10000);
 
 describe("createMessageContent", () => {
+    afterEach(() => {
+        vi.resetAllMocks();
+    });
+
     it("marks authored Markdown links in the rich-text composer", async () => {
         const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
         if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
         expect(content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
+    });
+
+    it("should leave Markdown unformatted when Markdown is disabled", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+
+        expect(content).toEqual({
+            msgtype: MsgType.Text,
+            body: "[DM me](https://matrix.to/#/@alice:example.org)",
+        });
     });
 
     it("retains explicit links in replacement content", async () => {
@@ -57,10 +73,6 @@ describe("createMessageContent", () => {
         expect(anchors[1].hasAttribute("data-org.matrix.msc4550.link")).toBe(false);
     });
     const message = "<em><b>hello</b> world</em>";
-
-    afterEach(() => {
-        vi.resetAllMocks();
-    });
 
     describe("Richtext composer input", () => {
         filterConsole(

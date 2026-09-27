@@ -87,7 +87,7 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     // URL, so it appends a trailing slash to an origin-only link and absolutises a relative one.
     // The composer should show the author what they wrote.
     const href = (n as HTMLAnchorElement).getAttribute("href") ?? "";
-    const explicitLink = (n as Element).hasAttribute("data-org.matrix.msc4550.link");
+    const explicitLink = (n as HTMLAnchorElement).dataset["org.matrix.msc4550.link"] !== undefined;
     const resourceId = explicitLink ? null : getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {

@@ -76,12 +76,17 @@ export async function createMessageContent(
     } as RoomMessageTextEventContent & ReplacementEvent<RoomMessageTextEventContent>;
 
     const isMarkdownEnabled = SettingsStore.getValue("MessageComposerInput.useMarkdown");
-    let formattedBody = isHTML ? message : isMarkdownEnabled ? await plainToRich(message, true) : null;
+    let formattedBody: string | null = null;
+    if (isHTML) {
+        formattedBody = message;
+    } else if (isMarkdownEnabled) {
+        formattedBody = await plainToRich(message, true);
+    }
     if (formattedBody) {
         const document = new DOMParser().parseFromString(formattedBody, "text/html");
         let hasLinks = false;
-        for (const anchor of document.querySelectorAll("a:not([data-mention-type])")) {
-            anchor.setAttribute("data-org.matrix.msc4550.link", "");
+        for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a:not([data-mention-type])")) {
+            anchor.dataset["org.matrix.msc4550.link"] = "";
             hasLinks = true;
         }
         if (hasLinks) formattedBody = document.body.innerHTML;

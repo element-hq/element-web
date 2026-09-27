@@ -93,10 +93,12 @@ describe("editor/deserialize", function () {
             },
         ]);
     });
-    it("keeps explicit user links as Markdown when editing", () => {
+    it.each(["", "true"])("keeps explicit user links as Markdown when editing (marker: %s)", (marker) => {
         const parts = normalize(
             parseEvent(
-                htmlMessage('<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link>DM me</a>'),
+                htmlMessage(
+                    `<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link="${marker}">DM me</a>`,
+                ),
                 createPartCreator(),
             ),
         );
