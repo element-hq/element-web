@@ -20,7 +20,6 @@ export const PIP_GAP = 16;
 /** How close to an edge a dropped PiP has to be for the edge to pull it in */
 const SNAP_DISTANCE = 64;
 
-const MOVING_AMT = 0.2;
 const SNAPPING_AMT = 0.1;
 
 const PADDING = {
@@ -141,7 +140,8 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
             this.translationY = this.desiredTranslationY;
             this.setStyle();
         } else {
-            const amt = this.moving ? MOVING_AMT : SNAPPING_AMT;
+            // Under the pointer while dragged; eased only when an edge pulls it after the drop
+            const amt = this.moving ? 1 : SNAPPING_AMT;
             this.translationX = lerp(this.translationX, this.desiredTranslationX, amt);
             this.translationY = lerp(this.translationY, this.desiredTranslationY, amt);
 
