@@ -192,14 +192,16 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
 
     /**
      * Brings a call to the foreground: takes it off hold, puts every other connected call on hold
-     * (audio only, so a video call keeps showing while parked) and makes its widget the foreground
-     * persistent one. What a phone's line buttons do.
+     * (microphone and camera) and makes its widget the foreground persistent one. What a phone's
+     * line buttons do.
      */
     public async setForeground(call: Call): Promise<void> {
         const others = [...this.connectedCalls].filter((c) => c !== call && c.held.audio !== true);
         await Promise.all(
             others.map((c) =>
-                c.setHold({ audio: true }).catch((e) => logger.warn(`Could not hold call in ${c.roomId}`, e)),
+                c
+                    .setHold({ audio: true, video: true })
+                    .catch((e) => logger.warn(`Could not hold call in ${c.roomId}`, e)),
             ),
         );
         if (isHeld(call.held)) await call.setHold(releaseHold(call.held));

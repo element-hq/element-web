@@ -104,7 +104,7 @@ describe("ElementWebHostBridge", () => {
         await bridge.setAlwaysOnScreen(true);
         expect(order).toEqual(["hold other", "persist"]);
         // Only audio goes on hold: the other call's video keeps showing
-        expect(otherCall.setHold).toHaveBeenCalledWith({ audio: true });
+        expect(otherCall.setHold).toHaveBeenCalledWith({ audio: true, video: true });
         expect(ownHold).not.toHaveBeenCalled();
 
         await bridge.setAlwaysOnScreen(false);
