@@ -11,9 +11,9 @@ Please see LICENSE files in the repository root for full details.
     position: absolute;
     top: 12px;
     left: 62px;
-    /* Above the picture-in-picture dragger (102): the foreground call is docked in it and would
-       otherwise cover a ringing toast */
-    z-index: 103;
+    /* Portalled into the persisted elements' container: above every call, docked (9) or
+       picture-in-picture (PIP_Z_BASE 200 upwards) */
+    z-index: 1000;
     /* A column: several ringing calls are shown at once */
     display: flex;
     flex-direction: column;

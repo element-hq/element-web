@@ -185,8 +185,12 @@ class PipContainerInner extends React.Component<IProps, IState> {
         this.forceUpdate();
     }
 
+    /** Persisted containers this has stacked, so the style comes off again once a call docks. */
+    private stacked = new Set<string>();
+
     /** The persisted content is in its own container: stack that as a whole, over its frame. */
     private stackPersistedContent(): void {
+        const live = new Set<string>();
         for (const { widgetId, roomId } of this.state.pipWidgets) {
             const key = `widget-pip-${widgetId}-${roomId}`;
             const persistKey = getPersistKey(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
@@ -194,6 +198,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
             // Positioned so the z-index takes, at the page origin so the content (absolute, placed
             // by a transform from there) keeps its place: the master container is below #matrixchat
             if (container) {
+                live.add(persistKey);
                 Object.assign(container.style, {
                     position: "absolute",
                     top: "0",
@@ -202,6 +207,13 @@ class PipContainerInner extends React.Component<IProps, IState> {
                 });
             }
         }
+        // A docked call keeps its container: unstack it, or it sits over every PiP and toast
+        for (const persistKey of this.stacked) {
+            if (!live.has(persistKey)) {
+                document.getElementById(`mx_persistedElement_${persistKey}`)?.removeAttribute("style");
+            }
+        }
+        this.stacked = live;
     }
 
     private onRoomViewStoreUpdate = (): void => {

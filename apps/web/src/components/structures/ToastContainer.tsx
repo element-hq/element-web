@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { createPortal } from "react-dom";
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
@@ -14,6 +15,7 @@ import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ToastStore, { type IToast } from "../../stores/ToastStore";
 import { _t } from "../../languageHandler";
+import { getOrCreateMasterContainer } from "../views/elements/PersistedElement";
 
 interface IState {
     toasts: IToast<any>[];
@@ -95,10 +97,13 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
         const containerClasses = classNames("mx_ToastContainer", {
             mx_ToastContainer_stacked: shown.length < this.state.toasts.length,
         });
-        return (
+        // #matrixchat is its own stacking context (contain: strict) painted under the persisted
+        // elements, so a toast can only sit above a call by living in the calls' context
+        return createPortal(
             <div className={containerClasses} role="alert">
                 {shown.map((t) => this.renderToast(t))}
-            </div>
+            </div>,
+            getOrCreateMasterContainer(),
         );
     }
 }
