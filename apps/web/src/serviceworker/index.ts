@@ -102,12 +102,25 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
         return; // up to date
     }
 
-    const config = fetchConfigForToken(accessToken);
-    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
+    const response = await fetch(`${clientApiUrl}/_matrix/client/versions`, fetchConfigForToken(accessToken));
+
+    let versions;
+    if (response.ok) {
+        versions = await response.json();
+    } else {
+        discardBody(response);
+    }
+    if (!Array.isArray(versions?.versions)) {
+        // Never cache a failed check: an error response has no `versions`, which would read as "no authenticated
+        // media" and send every media request to the legacy endpoints (which fail on servers that enforce
+        // authenticated media) until the cache expires. Throwing leaves the map untouched, so the next media request
+        // checks again.
+        throw new Error(`SW: /versions for '${clientApiUrl}' returned ${response.status}; not caching server support`);
+    }
     console.log(`[ServiceWorker] /versions response for '${clientApiUrl}': ${JSON.stringify(versions)}`);
 
     serverSupportMap[clientApiUrl] = {
-        supportsAuthedMedia: Boolean(versions?.versions?.includes("v1.11")),
+        supportsAuthedMedia: versions.versions.includes("v1.11"),
         cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
     console.log(
@@ -176,6 +189,11 @@ async function askClientForUserIdParams(
         // Ask the tab for the information we need. This is handled by WebPlatform.
         (client as Window).postMessage({ responseKey, type: "userinfo" });
     });
+}
+
+// Release the connection behind a response whose body we are not going to read.
+function discardBody(response: Response): void {
+    response.body?.cancel().catch(() => {});
 }
 
 function fetchConfigForToken(accessToken?: string): RequestInit | undefined {
