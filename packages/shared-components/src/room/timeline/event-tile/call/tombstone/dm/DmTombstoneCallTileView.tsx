@@ -109,7 +109,7 @@ export function DmTombstoneCallTileView({ vm, className }: DmTombstoneCallTileVi
                 {isCallDeclined ? (
                     <DeclinedContent snapshot={snapshot} />
                 ) : failureReason ? (
-                    <FailedContent reason={failureReason} />
+                    <FailedContent snapshot={snapshot} reason={failureReason} />
                 ) : (
                     <NormalContent snapshot={snapshot} />
                 )}
@@ -134,15 +134,16 @@ function NormalContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): Re
     return voice ? _t("timeline|call_tile|missed|voice") : _t("timeline|call_tile|missed|video");
 }
 
-function FailedContent(props: { reason: string }): React.ReactNode {
+function FailedContent(props: { snapshot: DmTombstoneCallTileViewSnapshot; reason: string }): React.ReactNode {
     const { translate: _t } = useI18n();
-    return _t("timeline|call_tile|call_failed", { reason: props.reason });
+    return props.snapshot.callDirection === CallDirection.Incoming
+        ? _t("timeline|call_tile|failed|inbound", { reason: props.reason })
+        : _t("timeline|call_tile|failed|outbound", { reason: props.reason });
 }
 
 function DeclinedContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): React.ReactNode {
-    const { callDirection } = props.snapshot;
     const { translate: _t } = useI18n();
-    return callDirection === CallDirection.Incoming
-        ? _t("timeline|call_tile|declined|call_declined_by_us")
-        : _t("timeline|call_tile|declined|call_declined");
+    return props.snapshot.callDirection === CallDirection.Incoming
+        ? _t("timeline|call_tile|declined|inbound")
+        : _t("timeline|call_tile|declined|outbound");
 }
