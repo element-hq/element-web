@@ -21,7 +21,7 @@ exports[`DmTombstoneCallTileView > renders the tile > IncomingVideoDeclined 1`] 
     <div
       class="common-module_title"
     >
-      You declined a call
+      Inbound call declined
     </div>
     <div
       class="common-module_time"
@@ -117,7 +117,7 @@ exports[`DmTombstoneCallTileView > renders the tile > OutgoingVideoDeclined 1`] 
     <div
       class="common-module_title"
     >
-      Call declined
+      Outbound call declined
     </div>
     <div
       class="common-module_time"
