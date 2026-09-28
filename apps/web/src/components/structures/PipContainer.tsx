@@ -238,7 +238,9 @@ class PipContainerInner extends React.Component<IProps, IState> {
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
         });
-        this.updateShowWidgetInPip();
+        // Against the new room: the state has not caught up yet, and a docked call would otherwise get a
+        // PiP too (or a call left behind none) until something else prompted a recount
+        this.updateShowWidgetInPip(newRoomId);
     };
 
     private onWidgetPersistence = (): void => {
@@ -307,7 +309,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         for (const key of this.slots.keys()) if (!liveKeys.has(key)) this.slots.delete(key);
     }
 
-    public updateShowWidgetInPip(): void {
+    public updateShowWidgetInPip(viewedRoomId = this.state.viewedRoomId): void {
         // A widget is shown as a persistent app (in a floating pip container) only
         // if it is not visible on screen: either because we are viewing a
         // different room OR because it is in none of the possible containers of
@@ -319,7 +321,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
                 ({ widgetId, roomId }) =>
                     roomId !== null &&
                     this.context.client?.getRoom(roomId) &&
-                    (this.state.viewedRoomId !== roomId || !ActiveWidgetStore.instance.isDocked(widgetId, roomId)),
+                    (viewedRoomId !== roomId || !ActiveWidgetStore.instance.isDocked(widgetId, roomId)),
             );
         this.setState({ pipWidgets });
     }
