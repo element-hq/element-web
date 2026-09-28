@@ -227,7 +227,7 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
         tabindex="0"
         target="_blank"
       >
-        Contact admin
+        Contact account provider
       </a>
     </div>
   </div>
