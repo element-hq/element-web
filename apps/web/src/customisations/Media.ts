@@ -13,6 +13,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
 import { type PublicInterface } from "../test/test-utils/@types/common.ts";
+import { fetchAuthenticatedMedia } from "../utils/authenticatedMedia.ts";
 
 // Populate this class with the details of your customisations when copying it.
 
@@ -135,40 +136,41 @@ class MediaImplementation {
     /**
      * Downloads the source media.
      *
-     * `srcHttp` deliberately yields an unauthenticated media URL: the service
-     * worker rewrites it to the authenticated endpoint and attaches the access
-     * token. When the page is not controlled by that worker there is nothing to
-     * do the rewriting, the request goes out unauthenticated, and a homeserver
-     * with authenticated media enabled answers 404 — with no indication that the
-     * worker is the missing piece.
-     *
-     * A page can be uncontrolled for reasons a user cannot see or influence: a
-     * hard reload bypasses the worker by design, registration may have failed,
-     * and the first load after registration is uncontrolled until the next
-     * navigation. This is a `fetch` we own, so unlike an `<img src>` we can
-     * simply send the header ourselves rather than depend on the rewrite.
+     * Authenticates the request itself when no service worker controls the page; see
+     * {@link fetchAuthenticatedMedia}.
      *
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
     public async downloadSource(): Promise<Response> {
-        const controlled = !!globalThis.navigator?.serviceWorker?.controller;
-
-        // Only diverge when the worker is absent, so the ordinary path keeps
-        // exactly the behaviour — and the caching — it has today.
-        const src = controlled
-            ? this.srcHttp
-            : // eslint-disable-next-line no-restricted-properties
-              this.client.mxcUrlToHttp(this.srcMxc, undefined, undefined, undefined, false, true, true);
+        const src = this.srcHttp;
         if (!src) {
             throw new UserFriendlyError("error|download_media");
         }
 
-        const accessToken = controlled ? undefined : this.client.getAccessToken();
-        const res = await fetch(src, accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined);
+        const res = await fetchAuthenticatedMedia(src, this.client);
         if (!res.ok) {
             throw parseErrorResponse(res, await res.text());
         }
         return res;
+    }
+
+    /**
+     * Downloads the thumbnail media, if a thumbnail is recorded.
+     *
+     * Authenticates the request itself when no service worker controls the page; see
+     * {@link fetchAuthenticatedMedia}.
+     *
+     * Unlike {@link downloadSource} this does not throw on a non-ok response: the caller
+     * treats an unusable thumbnail as simply absent, which is the behaviour it had before.
+     *
+     * @returns {Promise<Response | null>} Resolves to the server's response, or null if no
+     *     thumbnail is recorded.
+     */
+    public async downloadThumbnail(): Promise<Response | null> {
+        // Neither an absent thumbnail nor an MXC that yields no URL is an error here.
+        const thumbnail = this.thumbnailHttp;
+        if (!thumbnail) return null;
+        return fetchAuthenticatedMedia(thumbnail, this.client);
     }
 }
 

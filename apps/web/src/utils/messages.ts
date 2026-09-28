@@ -28,6 +28,7 @@ import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } fr
 import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
+import { fetchAuthenticatedMedia } from "./authenticatedMedia.ts";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 /**
@@ -227,7 +228,8 @@ export async function attachUrlPreviews(
         try {
             // image url from homeserver assumed to not be malformed
             const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
-            const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
+            const res = await fetchAuthenticatedMedia(httpUrl, client, { signal: abortController.signal });
+            const blob = await res.blob();
             const { file } = await uploadFile(client, room.roomId, blob, undefined, abortController);
 
             if (!file) {

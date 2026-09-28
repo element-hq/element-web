@@ -124,17 +124,16 @@ export class MediaEventHelper implements IDestroyable {
             }
         }
 
-        const thumbnailHttp = this.media.thumbnailHttp;
-        if (!thumbnailHttp) return Promise.resolve(null);
-
-        return (
-            fetch(thumbnailHttp)
-                .then((r) => r.blob())
-                // Set the mime type from the event info on the blob
-                .then((blob) =>
-                    blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.thumbnail_info?.mimetype ?? blob.type)),
-                )
-        );
+        // Not a plain fetch of `thumbnailHttp`: that URL is unauthenticated and relies on
+        // the service worker rewriting it, so on an uncontrolled page it 404s against a
+        // homeserver with authenticated media enabled. downloadThumbnail sends the header
+        // itself when no worker is in control.
+        return this.media.downloadThumbnail().then(async (res) => {
+            if (!res) return null;
+            const blob = await res.blob();
+            // Set the mime type from the event info on the blob
+            return blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.thumbnail_info?.mimetype ?? blob.type));
+        });
     };
 
     public static isEligible(event: MatrixEvent): boolean {
