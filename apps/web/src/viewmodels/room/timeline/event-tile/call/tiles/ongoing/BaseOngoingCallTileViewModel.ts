@@ -17,6 +17,7 @@ import {
     type RoomMember,
     type MatrixEvent,
     type MatrixClient,
+    MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
@@ -27,7 +28,7 @@ import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
-import { getIntentFromEvent } from "../../common";
+import { getConnectedTs, getIntentFromEvent, getInviteProgress } from "../../common";
 import { DurationViewModel } from "./components/DurationViewModel";
 import type LegacyCallHandler from "../../../../../../../LegacyCallHandler.tsx";
 
@@ -74,14 +75,19 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
 }
 
 /**
- * When the call's timer starts: with the first membership, or, for a DM, with
- * the first from someone other than the caller (the other side picking up), so
- * that it does not run while ringing. Not simply the second membership: a SIP
- * bridge joins twice (its user and its widget) before anyone has answered.
+ * When the call's timer starts: with the first membership, or, for a DM, when
+ * the other side picks up, so that it does not run while ringing. That is when
+ * it reports the call `connected` if it reports invite progress at all (a SIP
+ * bridge, which has memberships in the call before anyone has answered), else
+ * its first membership.
  */
-function callStartTs(call: ElementCall, mxEvent: MatrixEvent, fromAnswer: boolean): number | undefined {
+function callStartTs(call: ElementCall, props: Props, fromAnswer: boolean): number | undefined {
     if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
-    const answers = call.session.memberships.filter((m) => m.sender !== mxEvent.getSender()).map((m) => m.createdTs());
+    const progress = getInviteProgress(props.mxEvent, props.getRelationsForEvent);
+    if (progress.length) return getConnectedTs(progress);
+    const answers = call.session.memberships
+        .filter((m) => m.sender !== props.mxEvent.getSender())
+        .map((m) => m.createdTs());
     return answers.length ? Math.min(...answers) : undefined;
 }
 
@@ -133,7 +139,7 @@ function computeSnapshot(props: Props, timerFromAnswer: boolean): CommonOngoingC
         .getState(EventTimeline.FORWARDS)
         ?.mayClientSendStateEvent(EventType.GroupCallMemberPrefix, room.client);
 
-    const startTs = callStartTs(call, mxEvent, timerFromAnswer);
+    const startTs = callStartTs(call, props, timerFromAnswer);
     const durationViewModel = startTs ? new DurationViewModel({ callStartTs: startTs }) : undefined;
 
     return {
@@ -172,6 +178,10 @@ export class BaseOngoingCallViewModel<
         this.disposables.trackListener(call, CallEvent.Participants, ((participants: Map<RoomMember, Set<string>>) => {
             this.onParticipantsChange(participants);
         }) as (...args: unknown[]) => void);
+        // The other side reporting the call connected starts the timer too
+        this.disposables.trackListener(this.props.mxEvent, MatrixEventEvent.RelationsCreated, () => {
+            this.onParticipantsChange(getCallOrThrow(this.props.callStore, this.props.roomId).participants);
+        });
     }
 
     /**
@@ -207,11 +217,7 @@ export class BaseOngoingCallViewModel<
         (this.getSnapshot().facePileViewModel as FacePileViewModel).updateMembers(members);
         // The timer may only be able to start now (the other side just picked up)
         let { durationViewModel } = this.getSnapshot();
-        const startTs = callStartTs(
-            getCallOrThrow(this.props.callStore, roomId),
-            this.props.mxEvent,
-            this.timerFromAnswer,
-        );
+        const startTs = callStartTs(getCallOrThrow(this.props.callStore, roomId), this.props, this.timerFromAnswer);
         if (!durationViewModel && startTs) {
             durationViewModel = new DurationViewModel({ callStartTs: startTs });
             this.disposables.track(durationViewModel as DurationViewModel);
