@@ -32,8 +32,27 @@ describe("css-module-class-serializer", () => {
         expect(html).toMatchInlineSnapshot(`"<li class="_root mx_EventTile"><div class="_flex">hi</div></li>"`);
     });
 
-    it("leaves other strings and class names alone", () => {
-        expect(serializer.test("mx_EventTile_line _r_1a_ react-use-id-1")).toBe(false);
+    it("only touches class attributes", () => {
+        const html = '<p title="_layoutGroup_19o20_194">_layoutGroup_19o20_194</p><p class="mx_EventTile_line">hi</p>';
+
+        expect(html).toMatchInlineSnapshot(
+            `"<p title="_layoutGroup_19o20_194">_layoutGroup_19o20_194</p><p class="mx_EventTile_line">hi</p>"`,
+        );
+    });
+
+    it("leaves class names that are not CSS module names alone", () => {
+        const div = document.createElement("div");
+        div.className = "mx_EventTile_line _layoutGroup _layoutGroup_19o20";
+
+        expect(div).toMatchInlineSnapshot(`
+          <div
+            class="mx_EventTile_line _layoutGroup _layoutGroup_19o20"
+          />
+        `);
+    });
+
+    it("only handles elements and strings containing a class attribute", () => {
+        expect(serializer.test("_layoutGroup_19o20_194")).toBe(false);
         expect(serializer.test(42)).toBe(false);
     });
 });

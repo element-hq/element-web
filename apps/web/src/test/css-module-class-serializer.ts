@@ -10,15 +10,14 @@ import { type SnapshotSerializer } from "vitest";
 // CSS module class names from shared-components (and compound-web) are built with postcss-modules'
 // default `_<class>_<hash of the stylesheet>_<line>`, so any edit to a stylesheet renames every class
 // in it and churns every snapshot that renders it. Strip the hash and line, keeping `_<class>`.
-const CSS_MODULE_CLASS = /(?<=^|[\s"'>])_([A-Za-z][\w-]*)_[a-z0-9]{1,5}_\d+(?=$|[\s"'<\\])/g;
+const CSS_MODULE_CLASS = /^_([A-Za-z][\w-]*)_[a-z0-9]{1,5}_\d+$/;
+const CLASS_ATTRIBUTE = /class="([^"]*)"/g;
 
 function normaliseCssModuleClasses(snapshot: string): string {
-    return snapshot.replace(CSS_MODULE_CLASS, "_$1");
-}
-
-function hasCssModuleClass(value: string): boolean {
-    CSS_MODULE_CLASS.lastIndex = 0;
-    return CSS_MODULE_CLASS.test(value);
+    return snapshot.replace(CLASS_ATTRIBUTE, (_attribute, classList: string) => {
+        const classes = classList.split(/(\s+)/).map((name) => name.replace(CSS_MODULE_CLASS, "_$1"));
+        return `class="${classes.join("")}"`;
+    });
 }
 
 // Prevent this serializer from recursively matching the same value when it calls serialize().
@@ -28,7 +27,7 @@ const plugin = {
     test: (value: unknown): boolean => {
         if (isSerializing) return false;
         // String snapshots, e.g. exported HTML
-        if (typeof value === "string") return hasCssModuleClass(value);
+        if (typeof value === "string") return value.includes('class="');
         return !!globalThis.Element && (value instanceof Element || value instanceof DocumentFragment);
     },
     print: (value: unknown, serialize: (value: unknown) => string): string => {
