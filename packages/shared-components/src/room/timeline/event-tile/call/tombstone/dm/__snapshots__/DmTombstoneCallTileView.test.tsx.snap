@@ -32,6 +32,73 @@ exports[`DmTombstoneCallTileView > renders the tile > IncomingVideoDeclined 1`] 
 </div>
 `;
 
+exports[`DmTombstoneCallTileView > renders the tile > MissedVideo 1`] = `
+<div>
+  <div
+    class="Flex-module_flex common-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      class="common-module_icon"
+      fill="currentColor"
+      height="20"
+      viewBox="0 0 24 24"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2 8a4 4 0 0 1 4-4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4zm8.7 5.15L8.5 11H9q.424 0 .713-.287A.97.97 0 0 0 10 10a.97.97 0 0 0-.287-.713A.97.97 0 0 0 9 9H6a.97.97 0 0 0-.713.287A.97.97 0 0 0 5 10v3q0 .424.287.713Q5.576 14 6 14t.713-.287A.97.97 0 0 0 7 13v-.7l3 3q.125.125.313.2a1.03 1.03 0 0 0 .774 0 .8.8 0 0 0 .313-.225l3.125-3.15a.92.92 0 0 0 .275-.675q0-.4-.3-.7a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275z"
+      />
+    </svg>
+    <div
+      class="common-module_title"
+    >
+      Missed video call
+    </div>
+    <div
+      class="common-module_time"
+    >
+      12:36
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DmTombstoneCallTileView > renders the tile > MissedVoice 1`] = `
+<div>
+  <div
+    class="Flex-module_flex common-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      class="common-module_icon"
+      fill="currentColor"
+      height="20"
+      viewBox="0 0 24 24"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.623 3.04a1.07 1.07 0 0 1 1.086.929l.542 3.954q.039.27-.038.504a1.1 1.1 0 0 1-.272.427l-1.64 1.64Q7.806 11.5 8.456 12.4c.433.601 1.444 1.697 1.444 1.697.013.012 1.098 1.014 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.194-.194.426-.27a1.1 1.1 0 0 1 .504-.04l3.953.543q.407.058.67.358.26.301.26.728l.04 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.116-6.56q0-.426.329-.756Q3.67 3 4.095 3z"
+      />
+      <path
+        d="M16 5q.425 0 .713.287Q17 5.575 17 6a.97.97 0 0 1-.287.713A.97.97 0 0 1 16 7h-.5l2.2 2.15 2.4-2.4a.95.95 0 0 1 .7-.275.95.95 0 0 1 .7.275q.3.3.3.7a.92.92 0 0 1-.275.675l-3.125 3.15a.8.8 0 0 1-.312.225 1.04 1.04 0 0 1-.776 0 .9.9 0 0 1-.312-.2l-3-3V9a.97.97 0 0 1-.287.713A.97.97 0 0 1 13 10a.97.97 0 0 1-.713-.287A.97.97 0 0 1 12 9V6q0-.425.287-.713A.97.97 0 0 1 13 5z"
+      />
+    </svg>
+    <div
+      class="common-module_title"
+    >
+      Missed voice call
+    </div>
+    <div
+      class="common-module_time"
+    >
+      12:36
+    </div>
+  </div>
+</div>
+`;
+
 exports[`DmTombstoneCallTileView > renders the tile > OutgoingVideoDeclined 1`] = `
 <div>
   <div
@@ -64,6 +131,41 @@ exports[`DmTombstoneCallTileView > renders the tile > OutgoingVideoDeclined 1`] 
 </div>
 `;
 
+exports[`DmTombstoneCallTileView > renders the tile > OutgoingVoice 1`] = `
+<div>
+  <div
+    class="Flex-module_flex common-module_container"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      class="common-module_icon"
+      fill="currentColor"
+      height="20"
+      viewBox="0 0 24 24"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.623 3.04a1.07 1.07 0 0 1 1.086.929l.542 3.954q.039.27-.038.504a1.1 1.1 0 0 1-.272.427l-1.64 1.64Q7.806 11.5 8.456 12.4c.433.601 1.444 1.697 1.444 1.697.013.012 1.098 1.014 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.194-.194.426-.27a1.1 1.1 0 0 1 .504-.04l3.953.543q.407.058.67.358.26.301.26.728l.04 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.116-6.56q0-.426.329-.756Q3.67 3 4.095 3z"
+      />
+      <path
+        d="M19.964 3a1 1 0 0 1 .995.897l.005.103v3l-.005.103a1 1 0 0 1-1.99 0L18.964 7v-.605l-4.05 4.02A1 1 0 0 1 13.5 9l4.03-4h-.566l-.103-.005a1 1 0 0 1 0-1.99L16.964 3z"
+      />
+    </svg>
+    <div
+      class="common-module_title"
+    >
+      Outgoing voice call
+    </div>
+    <div
+      class="common-module_time"
+    >
+      12:36
+    </div>
+  </div>
+</div>
+`;
+
 exports[`DmTombstoneCallTileView > renders the tile > VideoEnded 1`] = `
 <div>
   <div
@@ -85,7 +187,7 @@ exports[`DmTombstoneCallTileView > renders the tile > VideoEnded 1`] = `
     <div
       class="common-module_title"
     >
-      Video call
+      Incoming video call
     </div>
     <div
       class="common-module_time"
@@ -117,7 +219,7 @@ exports[`DmTombstoneCallTileView > renders the tile > VoiceEnded 1`] = `
     <div
       class="common-module_title"
     >
-      Voice call
+      Incoming voice call
     </div>
     <div
       class="common-module_time"

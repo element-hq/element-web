@@ -12,7 +12,15 @@ import { render } from "@test-utils";
 
 import * as Stories from "./DmTombstoneCallTileView.stories";
 
-const { IncomingVideoDeclined, OutgoingVideoDeclined, VideoEnded, VoiceEnded } = composeStories(Stories);
+const {
+    IncomingVideoDeclined,
+    OutgoingVideoDeclined,
+    VideoEnded,
+    VoiceEnded,
+    OutgoingVoice,
+    MissedVoice,
+    MissedVideo,
+} = composeStories(Stories);
 
 describe("DmTombstoneCallTileView", () => {
     describe("renders the tile", () => {
@@ -33,6 +41,21 @@ describe("DmTombstoneCallTileView", () => {
 
         it("VoiceEnded", () => {
             const { container } = render(<VoiceEnded />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("OutgoingVoice", () => {
+            const { container } = render(<OutgoingVoice />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MissedVoice", () => {
+            const { container } = render(<MissedVoice />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MissedVideo", () => {
+            const { container } = render(<MissedVideo />);
             expect(container).toMatchSnapshot();
         });
     });
