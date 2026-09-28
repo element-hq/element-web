@@ -139,6 +139,20 @@ describe("DmTombstoneCallTileViewModel", () => {
             expect(vm.getSnapshot().durationSeconds).toStrictEqual(30);
         });
 
+        it("no, when our membership comes after the ring ended (we placed the next call)", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            const roomId = mxEvent.getRoomId()!;
+            const ts = mxEvent.getTs();
+            timelineWith(cli, mxEvent, [
+                member("@bob:m.org", roomId, {}, ts + 60_000),
+                member("@alice:m.org", roomId, { application: "m.call" }, ts + 600_000),
+            ]);
+            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
+            expect(vm.getSnapshot()).toMatchObject({ answered: false, durationSeconds: undefined });
+        });
+
         it("no, when only the caller's membership follows, or ours is for a later ring", () => {
             const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
             const later = getMockedRtcNotificationEvent("audio", 1752583230365, 1752583230365, "@bob:m.org");
