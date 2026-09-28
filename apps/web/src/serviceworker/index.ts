@@ -96,12 +96,25 @@ global.addEventListener("fetch", (event: FetchEvent) => {
     );
 });
 
+// One in-flight `/versions` check per server, shared by concurrent media requests: a room full of thumbnails would
+// otherwise send one `/versions` request each while the cache is empty.
+const serverSupportChecks: { [serverUrl: string]: Promise<void> | undefined } = {};
+
 async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: string): Promise<void> {
     // only update if we don't know about it, or if the data is stale
     if (serverSupportMap[clientApiUrl]?.cacheExpiryTimeMs > new Date().getTime()) {
         return; // up to date
     }
 
+    if (!serverSupportChecks[clientApiUrl]) {
+        serverSupportChecks[clientApiUrl] = checkServerSupport(clientApiUrl, accessToken).finally(() => {
+            serverSupportChecks[clientApiUrl] = undefined;
+        });
+    }
+    return serverSupportChecks[clientApiUrl];
+}
+
+async function checkServerSupport(clientApiUrl: string, accessToken?: string): Promise<void> {
     const versionsUrl = `${clientApiUrl}/_matrix/client/versions`;
     let response = await fetch(versionsUrl, fetchConfigForToken(accessToken));
     if (!response.ok && accessToken) {

@@ -200,4 +200,41 @@ describe("serviceworker authenticated media support check", () => {
             `${homeserver}/_matrix/media/v3/download/example.com/abc123`,
         ]);
     });
+
+    it("sends one /versions request for concurrent media requests", async () => {
+        let answer!: (response: Response) => void;
+        versionsResponse = () => new Promise<Response>((resolve) => (answer = resolve));
+
+        const responses = Array.from({ length: 5 }, () => interceptMediaRequest());
+        await vi.waitFor(() => expect(versionsRequests()).toHaveLength(1));
+        answer(supportsAuthenticatedMedia());
+        await Promise.all(responses);
+
+        expect(versionsRequests()).toHaveLength(1);
+        expect(mediaRequests()).toHaveLength(5);
+        for (const request of mediaRequests()) {
+            expect(request.url).toEqual(`${homeserver}/_matrix/client/v1/media/download/example.com/abc123`);
+        }
+    });
+
+    it("clears the shared check once it has failed", async () => {
+        let fail!: () => void;
+        versionsResponse = (authenticated) =>
+            authenticated
+                ? new Promise<Response>((resolve) => (fail = () => resolve(new Response("", { status: 503 }))))
+                : new Response("", { status: 503 });
+
+        const responses = Array.from({ length: 3 }, () => interceptMediaRequest());
+        await vi.waitFor(() => expect(versionsRequests()).toHaveLength(1));
+        fail();
+        await Promise.all(responses);
+
+        // One check (with and without the token) shared by all three requests.
+        expect(versionsRequests()).toHaveLength(2);
+
+        versionsResponse = supportsAuthenticatedMedia;
+        await interceptMediaRequest();
+        expect(versionsRequests()).toHaveLength(3);
+        expect(mediaRequests()[3].url).toEqual(`${homeserver}/_matrix/client/v1/media/download/example.com/abc123`);
+    });
 });
