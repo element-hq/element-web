@@ -3,39 +3,39 @@
 exports[`<Notifications /> > main notification switches > renders only enable notifications switch when notifications are disabled 1`] = `
 <div>
   <form
-    class="_root_1o4d9_17"
+    class="_root"
   >
     <div
-      class="_inline-field_1o4d9_33"
+      class="_inline-field"
     >
       <div
-        class="_inline-field-control_1o4d9_45"
+        class="_inline-field-control"
       >
         <div
-          class="_container_udcm8_10"
+          class="_container"
         >
           <input
-            class="_input_udcm8_24"
+            class="_input"
             id="react-use-id-1"
             role="switch"
             type="checkbox"
           />
           <div
-            class="_ui_udcm8_34"
+            class="_ui"
           />
         </div>
       </div>
       <div
-        class="_inline-field-body_1o4d9_39"
+        class="_inline-field-body"
       >
         <label
-          class="_label_1o4d9_60"
+          class="_label"
           for="react-use-id-1"
         >
           Enable notifications for this account
         </label>
         <span
-          class="_message_1o4d9_86 _help-message_1o4d9_92"
+          class="_message _help-message"
           id="radix-react-use-id-2"
         >
           Turn off to disable notifications on all your devices and sessions
@@ -44,34 +44,34 @@ exports[`<Notifications /> > main notification switches > renders only enable no
     </div>
   </form>
   <form
-    class="_root_1o4d9_17"
+    class="_root"
   >
     <div
-      class="_inline-field_1o4d9_33"
+      class="_inline-field"
     >
       <div
-        class="_inline-field-control_1o4d9_45"
+        class="_inline-field-control"
       >
         <div
-          class="_container_udcm8_10"
+          class="_container"
         >
           <input
             checked=""
-            class="_input_udcm8_24"
+            class="_input"
             id="mx_SettingsFlag_testid_0"
             role="switch"
             type="checkbox"
           />
           <div
-            class="_ui_udcm8_34"
+            class="_ui"
           />
         </div>
       </div>
       <div
-        class="_inline-field-body_1o4d9_39"
+        class="_inline-field-body"
       >
         <label
-          class="_label_1o4d9_60"
+          class="_label"
           for="mx_SettingsFlag_testid_0"
         >
           Show all activity in the room list (dots or number of unread messages)
@@ -79,30 +79,30 @@ exports[`<Notifications /> > main notification switches > renders only enable no
       </div>
     </div>
     <div
-      class="_inline-field_1o4d9_33"
+      class="_inline-field"
     >
       <div
-        class="_inline-field-control_1o4d9_45"
+        class="_inline-field-control"
       >
         <div
-          class="_container_udcm8_10"
+          class="_container"
         >
           <input
-            class="_input_udcm8_24"
+            class="_input"
             id="mx_SettingsFlag_testid_1"
             role="switch"
             type="checkbox"
           />
           <div
-            class="_ui_udcm8_34"
+            class="_ui"
           />
         </div>
       </div>
       <div
-        class="_inline-field-body_1o4d9_39"
+        class="_inline-field-body"
       >
         <label
-          class="_label_1o4d9_60"
+          class="_label"
           for="mx_SettingsFlag_testid_1"
         >
           Consider all new activity as an unread message
@@ -110,31 +110,31 @@ exports[`<Notifications /> > main notification switches > renders only enable no
       </div>
     </div>
     <div
-      class="_inline-field_1o4d9_33"
+      class="_inline-field"
     >
       <div
-        class="_inline-field-control_1o4d9_45"
+        class="_inline-field-control"
       >
         <div
-          class="_container_udcm8_10"
+          class="_container"
         >
           <input
             checked=""
-            class="_input_udcm8_24"
+            class="_input"
             id="mx_SettingsFlag_testid_2"
             role="switch"
             type="checkbox"
           />
           <div
-            class="_ui_udcm8_34"
+            class="_ui"
           />
         </div>
       </div>
       <div
-        class="_inline-field-body_1o4d9_39"
+        class="_inline-field-body"
       >
         <label
-          class="_label_1o4d9_60"
+          class="_label"
           for="mx_SettingsFlag_testid_2"
         >
           In the Other threads tab, only show notifications

@@ -63,7 +63,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should list spaces which are not p
       </div>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content"
+      class="_scrollbar mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content"
       tabindex="-1"
     >
       <div
@@ -76,25 +76,25 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should list spaces which are not p
           class="mx_ManageRestrictedJoinRuleDialog_entry"
         >
           <form
-            class="_root_1o4d9_17"
+            class="_root"
           >
             <div
-              class="_inline-field_1o4d9_33"
+              class="_inline-field"
             >
               <div
-                class="_inline-field-control_1o4d9_45"
+                class="_inline-field-control"
               >
                 <div
-                  class="_container_153f2_10"
+                  class="_container"
                 >
                   <input
                     aria-describedby="react-use-id-1"
-                    class="_input_153f2_18"
+                    class="_input"
                     id="checkbox_vY7Q4uEh9K"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_153f2_19"
+                    class="_ui"
                   >
                     <svg
                       aria-hidden="true"
@@ -112,16 +112,16 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should list spaces which are not p
                 </div>
               </div>
               <div
-                class="_inline-field-body_1o4d9_39"
+                class="_inline-field-body"
               >
                 <label
-                  class="_label_1o4d9_60"
+                  class="_label"
                   for="checkbox_vY7Q4uEh9K"
                 >
                   <div>
                     <span
                       aria-label="Avatar"
-                      class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                      class="_avatar mx_BaseAvatar _avatar-imageless"
                       data-color="1"
                       data-testid="avatar-img"
                       data-type="round"
@@ -138,7 +138,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should list spaces which are not p
                   </div>
                 </label>
                 <span
-                  class="_message_1o4d9_86 _help-message_1o4d9_92"
+                  class="_message _help-message"
                   id="react-use-id-1"
                 >
                   0 members
@@ -277,7 +277,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should render empty state 1`] = `
       </div>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content"
+      class="_scrollbar mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content"
       tabindex="-1"
     >
       <span
