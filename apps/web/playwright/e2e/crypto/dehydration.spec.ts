@@ -90,7 +90,7 @@ test.describe("Dehydration", () => {
         // Oh no, we forgot our recovery key - reset our identity
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Can't confirm" }).click();
         await expect(
-            page.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            page.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeVisible();
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         await page.getByPlaceholder("Password").fill(credentials.password!);

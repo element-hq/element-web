@@ -570,7 +570,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
             role="button"
             tabindex="0"
           >
-            Cancel
+            Go back
           </button>
         </div>
       </div>
