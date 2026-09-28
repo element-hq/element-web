@@ -189,6 +189,7 @@ export function createTestClient(): MatrixClient {
         isRoomEncrypted: vi.fn().mockReturnValue(false),
         peekInRoom: vi.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
         stopPeeking: vi.fn(),
+        getRoomSummary: vi.fn().mockResolvedValue({ room_id: "!stub_room:matrix.org" }),
 
         getEventTimeline: vi.fn().mockResolvedValue([]),
         paginateEventTimeline: vi.fn().mockResolvedValue(undefined),

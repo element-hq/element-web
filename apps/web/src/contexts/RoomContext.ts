@@ -37,7 +37,7 @@ export interface RoomContextType extends IRoomState {
 
 const RoomContext = createContext<RoomContextType>({
     roomLoading: true,
-    peekLoading: false,
+    peekAndSummaryLoading: false,
     shouldPeek: true,
     membersLoaded: false,
     numUnreadMessages: 0,
@@ -73,7 +73,6 @@ const RoomContext = createContext<RoomContextType>({
     liveTimeline: undefined,
     narrow: false,
     msc3946ProcessDynamicPredecessor: false,
-    canAskToJoin: false,
     promptAskToJoin: false,
     isRoomEncrypted: null,
     // roomViewStore should always be present as it is passed to RoomView constructor.
