@@ -28,7 +28,7 @@ import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
-import { getConnectedTs, getIntentFromEvent, getInviteProgress } from "../../common";
+import { getConnectedTs, getIntentFromEvent, getInviteProgress, isRingTimeDevice } from "../../common";
 import { DurationViewModel } from "./components/DurationViewModel";
 import type LegacyCallHandler from "../../../../../../../LegacyCallHandler.tsx";
 
@@ -76,17 +76,16 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
 
 /**
  * When the call's timer starts: with the first membership, or, for a DM, when
- * the other side picks up, so that it does not run while ringing. That is when
- * it reports the call `connected` if it reports invite progress at all (a SIP
- * bridge, which has memberships in the call before anyone has answered), else
- * its first membership.
+ * the other side picks up, so that it does not run while ringing: when it
+ * reports the call `connected`, else its first membership that is not a
+ * ring-time device's (a SIP bridge publishes into the call as it dials).
  */
 function callStartTs(call: ElementCall, props: Props, fromAnswer: boolean): number | undefined {
     if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
-    const progress = getInviteProgress(props.mxEvent, props.getRelationsForEvent);
-    if (progress.length) return getConnectedTs(progress);
+    const connectedTs = getConnectedTs(getInviteProgress(props.mxEvent, props.getRelationsForEvent));
+    if (connectedTs !== undefined) return connectedTs;
     const answers = call.session.memberships
-        .filter((m) => m.sender !== props.mxEvent.getSender())
+        .filter((m) => m.sender !== props.mxEvent.getSender() && !isRingTimeDevice(m.deviceId))
         .map((m) => m.createdTs());
     return answers.length ? Math.min(...answers) : undefined;
 }

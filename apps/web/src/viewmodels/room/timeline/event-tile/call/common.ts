@@ -47,12 +47,21 @@ export function getInviteProgress(event: MatrixEvent, getRelationsForEvent?: Get
 }
 
 /**
- * When the callee's side reported the call answered (`connected`), if it did.
- * A side that reports progress (a SIP bridge) has memberships in the call
- * before anyone has answered, so its report is what to go by, not those.
+ * When the callee's side reported the call answered (`connected`), if it did:
+ * more exact than its first membership.
  */
 export function getConnectedTs(progress: MatrixEvent[]): number | undefined {
     return progress.find((e) => e.getContent().state === "connected")?.getTs();
+}
+
+/**
+ * Whether a call membership's device is one that joins while the call is
+ * still ringing, so that its membership is not the answer: the SIP bridge's
+ * shared media publisher (`<device>+publish`) joins as soon as it dials.
+ */
+export function isRingTimeDevice(deviceId: unknown): boolean {
+    // ponytail: naming convention of one bridge; an explicit membership flag if a second such client appears
+    return typeof deviceId === "string" && deviceId.endsWith("+publish");
 }
 
 /**
