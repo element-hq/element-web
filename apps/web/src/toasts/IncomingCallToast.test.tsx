@@ -192,7 +192,7 @@ describe("IncomingCallToast", () => {
             expect(screen.getByLabelText(callType === "voice" ? "Voice call" : "Video call")).toBeVisible();
             expect(screen.getByLabelText("@alice:example.org")).toBeVisible();
 
-            expect(screen.getByRole("button", { name: "Join" })).toBeVisible();
+            expect(screen.getByRole("button", { name: "Accept" })).toBeVisible();
             expect(screen.getByRole("button", { name: "Decline" })).toBeVisible();
             expect(screen.getByRole("button", { name: "Expand" })).toBeVisible();
         } finally {
@@ -451,6 +451,13 @@ describe("IncomingCallToast", () => {
         await waitFor(() =>
             expect(toastStore.dismissToast).not.toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId)),
         );
+    });
+
+    it("ignores the call: dismisses without declining", () => {
+        const callId = renderToast();
+        fireEvent.click(screen.getByRole("button", { name: "Ignore" }));
+        expect(client.sendRtcDecline).not.toHaveBeenCalled();
+        expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
     });
 
     it("sends a decline event when clicking the ignore button and only dismiss after sending", async () => {
