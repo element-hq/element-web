@@ -903,19 +903,21 @@ describe("RoomView", () => {
             expect(instance.state.isPeeking).toBe(false);
         });
 
-        it("does not peek into a room which is not world readable", async () => {
-            cli.getRoomSummary.mockResolvedValue({
+        it("does not peek into a room which is not world readable and hands the summary to the store", async () => {
+            const summary = {
                 room_id: room.roomId,
                 membership: KnownMembership.Leave,
                 world_readable: false,
                 guest_can_join: false,
                 num_joined_members: 1,
-            });
+            };
+            cli.getRoomSummary.mockResolvedValue(summary);
 
             await mountRoomView();
 
             expect(cli.peekInRoom).not.toHaveBeenCalled();
             expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(stores.roomViewStore.getRoomSummary()).toEqual(summary);
         });
 
         it("peeks into a room we have already joined", async () => {

@@ -8,7 +8,7 @@
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import {
     createTestClient,
@@ -26,6 +26,9 @@ import { Action } from "../../dispatcher/actions";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { RoomListViewModel } from "./RoomListViewModel";
+import { PreviewRoomListItemViewModel } from "./PreviewRoomListItemViewModel";
+import { type RoomViewStore } from "../../stores/RoomViewStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { hasCreateRoomRights } from "./utils";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../settings/SettingsStore";
@@ -325,6 +328,146 @@ describe("RoomListViewModel", () => {
             // Use setTimeout to allow the dispatcher callback to run
             await flushPromises();
             expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBeUndefined();
+        });
+
+        describe("Preview item", () => {
+            const previewRoomId = "!preview:server";
+            const roomViewStore = (): RoomViewStore => SDKContextClass.instance.roomViewStore;
+
+            function createViewModel(): RoomListViewModel {
+                return new RoomListViewModel({
+                    client: matrixClient,
+                    spaceStore: SDKContextClass.instance.spaceStore,
+                    roomViewStore: roomViewStore(),
+                });
+            }
+
+            async function openRoom(roomId: string): Promise<void> {
+                vi.spyOn(roomViewStore(), "getRoomId").mockReturnValue(roomId);
+                dispatcher.dispatch({ action: Action.ActiveRoomChanged, oldRoomId: null, newRoomId: roomId });
+                await flushPromises();
+            }
+
+            it("shows a room the user left first until another room is opened", async () => {
+                const leftRoom = mkStubRoom(previewRoomId, "Left room", matrixClient);
+                vi.mocked(leftRoom.getMyMembership).mockReturnValue(KnownMembership.Leave);
+                vi.mocked(matrixClient.getRoom).mockImplementation((roomId) =>
+                    roomId === previewRoomId ? leftRoom : null,
+                );
+                viewModel = createViewModel();
+
+                await openRoom(previewRoomId);
+                expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                    previewRoomId,
+                    "!room1:server",
+                    "!room2:server",
+                    "!room3:server",
+                ]);
+                expect(viewModel.roomIds[0]).toBe(previewRoomId);
+                expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+                const item = viewModel.getRoomItemViewModel(previewRoomId);
+                expect(item).toBeInstanceOf(PreviewRoomListItemViewModel);
+                expect(item?.getSnapshot().name).toBe("Left room");
+
+                await openRoom("!room2:server");
+                expect(viewModel.getSnapshot().sections[0].roomIds).not.toContain(previewRoomId);
+                expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(1);
+            });
+
+            it("counts the preview item when scrolling to a room and to unread activity", async () => {
+                stubClient();
+                const leftRoom = mkStubRoom(previewRoomId, "Left room", matrixClient);
+                vi.mocked(leftRoom.getMyMembership).mockReturnValue(KnownMembership.Leave);
+                vi.mocked(matrixClient.getRoom).mockImplementation((roomId) =>
+                    roomId === previewRoomId ? leftRoom : null,
+                );
+                viewModel = createViewModel();
+                const scrollSpy = vi.fn();
+                viewModel.setScrollToIndex(scrollSpy);
+                await openRoom(previewRoomId);
+
+                // Entry space: [preview(0), room1(1), room2(2), room3(3)]
+                dispatcher.dispatch({
+                    action: Action.ViewRoom,
+                    room_id: "!room2:server",
+                    show_room_tile: true,
+                    metricsTrigger: undefined,
+                });
+                await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(2));
+
+                // room3 is the first row below the fold
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(
+                    (room) => ({ hasUnreadCount: room === room3 }) as unknown as RoomNotificationState,
+                );
+                viewModel.updateVisibleFold(2);
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+                viewModel.scrollToUnreadActivity();
+                expect(scrollSpy).toHaveBeenLastCalledWith(3);
+
+                // Alt+ArrowDown moves from the preview room to the next room
+                const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+                dispatcher.dispatch({ action: Action.ViewRoomDelta, delta: 1, unread: false });
+                dispatchSpy.mockImplementation(() => {});
+                await flushPromises();
+                expect(dispatchSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({ action: Action.ViewRoom, room_id: "!room1:server" }),
+                );
+            });
+
+            it("shows a room from its summary until it enters the room list", async () => {
+                // The client doesn't know the room, so RoomView gets its summary
+                vi.mocked(matrixClient.getRoom).mockReturnValue(null);
+                viewModel = createViewModel();
+                await openRoom(previewRoomId);
+                expect(viewModel.getSnapshot().sections[0].roomIds).not.toContain(previewRoomId);
+
+                // The summary arrives after the room has been opened
+                vi.spyOn(roomViewStore(), "getRoomSummary").mockReturnValue({
+                    room_id: previewRoomId,
+                    name: "Knock room",
+                    membership: KnownMembership.Leave,
+                    num_joined_members: 1,
+                    world_readable: false,
+                    guest_can_join: false,
+                });
+                roomViewStore().emit(UPDATE_EVENT);
+                expect(viewModel.getSnapshot().sections[0].roomIds[0]).toBe(previewRoomId);
+                expect(viewModel.getRoomItemViewModel(previewRoomId)?.getSnapshot().name).toBe("Knock room");
+
+                // The user has knocked, so the room is now in the room list
+                const knockRoom = mkStubRoom(previewRoomId, "Knock room", matrixClient);
+                vi.mocked(knockRoom.getMyMembership).mockReturnValue(KnownMembership.Knock);
+                vi.mocked(matrixClient.getRoom).mockReturnValue(knockRoom);
+                vi.mocked(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).mockReturnValue({
+                    spaceId: "home",
+                    sections: [{ tag: CHATS_TAG, rooms: [knockRoom, room1, room2, room3] }],
+                });
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+                expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                    previewRoomId,
+                    "!room1:server",
+                    "!room2:server",
+                    "!room3:server",
+                ]);
+                expect(viewModel.getRoomItemViewModel(previewRoomId)).not.toBeInstanceOf(PreviewRoomListItemViewModel);
+            });
+
+            it("doesn't show a joined room", async () => {
+                const joinedRoom = mkStubRoom(previewRoomId, "Joined room", matrixClient);
+                vi.mocked(matrixClient.getRoom).mockReturnValue(joinedRoom);
+                vi.spyOn(roomViewStore(), "getRoomSummary").mockReturnValue({
+                    room_id: previewRoomId,
+                    membership: KnownMembership.Join,
+                    num_joined_members: 1,
+                    world_readable: false,
+                    guest_can_join: false,
+                });
+                viewModel = createViewModel();
+
+                await openRoom(previewRoomId);
+                expect(viewModel.getSnapshot().sections[0].roomIds).not.toContain(previewRoomId);
+                expect(viewModel.getRoomItemViewModel(previewRoomId)).toBeUndefined();
+            });
         });
     });
 
