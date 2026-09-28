@@ -89,7 +89,7 @@ export class MockedCallStore extends EventEmitter {
 
 interface MockCallType extends ElementCall {
     withOldestMembershipTs(ts: number): this;
-    withMembershipTs(...ts: number[]): this;
+    withMemberships(...memberships: [sender: string, createdTs: number][]): this;
     withParticipants(participants: RoomMember[]): this;
 }
 
@@ -106,11 +106,11 @@ export class MockedCall extends EventEmitter {
         return this;
     }
 
-    /** Every membership's creation time; the oldest is `createdTs` unless set here. */
-    public membershipTs: number[] | null = null;
+    /** Every membership (sender, creation time); just one at `createdTs` unless set here. */
+    public memberships: [sender: string, createdTs: number][] | null = null;
 
-    public withMembershipTs(...ts: number[]): this {
-        this.membershipTs = ts;
+    public withMemberships(...memberships: [sender: string, createdTs: number][]): this {
+        this.memberships = memberships;
         return this;
     }
 
@@ -126,8 +126,8 @@ export class MockedCall extends EventEmitter {
     }
 
     public get session(): MatrixRTCSession {
-        const memberships = (this.membershipTs ?? [this.createdTs]).map(
-            (ts) => ({ createdTs: () => ts }) as CallMembership,
+        const memberships = (this.memberships ?? [["@caller:m.org", this.createdTs]]).map(
+            ([sender, ts]) => ({ sender, createdTs: () => ts }) as CallMembership,
         );
         return {
             memberships,

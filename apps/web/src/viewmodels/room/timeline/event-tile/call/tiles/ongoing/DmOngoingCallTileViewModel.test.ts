@@ -24,18 +24,25 @@ describe("DmOngoingCallTileViewModel", () => {
     describe("should compute the correct snapshot", () => {
         it("starts the timer when the other side picks up, not while ringing", () => {
             const cli = stubClient();
-            const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100);
+            const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100, "@alice:m.org");
             mxEvent.sender = getMockedMember(roomId, "@alice:m.org", "Alice");
             const bob = getMockedMember(roomId, "@bob:m.org", "Bob");
 
-            const call = MockedCall.create().withParticipants([mxEvent.sender]).withMembershipTs(1000);
+            // The caller joins twice (a SIP bridge's user and its widget do): still ringing
+            const call = MockedCall.create()
+                .withParticipants([mxEvent.sender])
+                .withMemberships(["@alice:m.org", 1000], ["@alice:m.org", 2000]);
             const callStore = MockedCallStore.create(call);
             const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm.getSnapshot().durationViewModel).toBeUndefined();
 
             vi.useFakeTimers();
             vi.setSystemTime(12_000);
-            call.withParticipants([bob]).withMembershipTs(1000, 5000);
+            call.withParticipants([bob]).withMemberships(
+                ["@alice:m.org", 1000],
+                ["@alice:m.org", 2000],
+                ["@bob:m.org", 5000],
+            );
             call.emit(CallEvent.Participants, call.participants, new Map());
             // Counted from Bob's join at 5 s, not Alice's at 1 s
             expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);

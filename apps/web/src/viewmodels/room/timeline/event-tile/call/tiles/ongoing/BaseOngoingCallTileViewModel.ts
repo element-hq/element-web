@@ -75,15 +75,17 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
 
 /**
  * When the call's timer starts: with the first membership, or, for a DM, with
- * the second (the other side picking up), so that it does not run while ringing.
+ * the first from someone other than the caller (the other side picking up), so
+ * that it does not run while ringing. Not simply the second membership: a SIP
+ * bridge joins twice (its user and its widget) before anyone has answered.
  */
-function callStartTs(call: ElementCall, fromSecondJoin: boolean): number | undefined {
-    if (!fromSecondJoin) return call.session.getOldestMembership()?.createdTs();
-    const [, second] = [...call.session.memberships].sort((a, b) => a.createdTs() - b.createdTs());
-    return second?.createdTs();
+function callStartTs(call: ElementCall, mxEvent: MatrixEvent, fromAnswer: boolean): number | undefined {
+    if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
+    const answers = call.session.memberships.filter((m) => m.sender !== mxEvent.getSender()).map((m) => m.createdTs());
+    return answers.length ? Math.min(...answers) : undefined;
 }
 
-function computeSnapshot(props: Props, timerFromSecondJoin: boolean): CommonOngoingCallTileViewSnapshot {
+function computeSnapshot(props: Props, timerFromAnswer: boolean): CommonOngoingCallTileViewSnapshot {
     const mxEvent = props.mxEvent;
     const callStore = props.callStore;
     const cli = props.cli;
@@ -131,7 +133,7 @@ function computeSnapshot(props: Props, timerFromSecondJoin: boolean): CommonOngo
         .getState(EventTimeline.FORWARDS)
         ?.mayClientSendStateEvent(EventType.GroupCallMemberPrefix, room.client);
 
-    const startTs = callStartTs(call, timerFromSecondJoin);
+    const startTs = callStartTs(call, mxEvent, timerFromAnswer);
     const durationViewModel = startTs ? new DurationViewModel({ callStartTs: startTs }) : undefined;
 
     return {
@@ -155,9 +157,9 @@ export class BaseOngoingCallViewModel<
     public constructor(
         props: Props,
         extraSnapshot: Partial<T> = {},
-        private readonly timerFromSecondJoin = false,
+        private readonly timerFromAnswer = false,
     ) {
-        const snapshot = { ...computeSnapshot(props, timerFromSecondJoin), ...extraSnapshot };
+        const snapshot = { ...computeSnapshot(props, timerFromAnswer), ...extraSnapshot };
         super(props, snapshot as T);
         this.disposables.track(snapshot.facePileViewModel as BaseViewModel<unknown, unknown>);
         this.disposables.track(snapshot.memberAvatarViewModel as BaseViewModel<unknown, unknown>);
@@ -205,7 +207,11 @@ export class BaseOngoingCallViewModel<
         (this.getSnapshot().facePileViewModel as FacePileViewModel).updateMembers(members);
         // The timer may only be able to start now (the other side just picked up)
         let { durationViewModel } = this.getSnapshot();
-        const startTs = callStartTs(getCallOrThrow(this.props.callStore, roomId), this.timerFromSecondJoin);
+        const startTs = callStartTs(
+            getCallOrThrow(this.props.callStore, roomId),
+            this.props.mxEvent,
+            this.timerFromAnswer,
+        );
         if (!durationViewModel && startTs) {
             durationViewModel = new DurationViewModel({ callStartTs: startTs });
             this.disposables.track(durationViewModel as DurationViewModel);
