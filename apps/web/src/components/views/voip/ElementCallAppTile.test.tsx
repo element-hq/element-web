@@ -172,6 +172,22 @@ describe("ElementCallAppTile", () => {
         expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(true);
     });
 
+    it("does not re-dock the call from a layout update after disposal", () => {
+        const vm = new ElementCallAppTileViewModel({
+            app: call.widget,
+            room,
+            sdkContext,
+            miniMode: false,
+            fullWidth: false,
+        });
+        vm.start();
+        vm.dispose();
+        // A stale effect firing after the tile went away must not leak a dock ref, or the
+        // call would count as live forever and never be torn down
+        vm.setLayout({ miniMode: false, fullWidth: false });
+        expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(false);
+    });
+
     it("keeps the call alive on unmount while it is persistent", async () => {
         const destroyElement = vi.spyOn(PersistedElement, "destroyElement");
         await renderTile();
