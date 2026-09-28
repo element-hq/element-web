@@ -191,7 +191,16 @@ class PipContainerInner extends React.Component<IProps, IState> {
             const key = `widget-pip-${widgetId}-${roomId}`;
             const persistKey = getPersistKey(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
             const container = document.getElementById(`mx_persistedElement_${persistKey}`);
-            if (container) Object.assign(container.style, { position: "relative", zIndex: `${this.zIndex(key) + 1}` });
+            // Positioned so the z-index takes, at the page origin so the content (absolute, placed
+            // by a transform from there) keeps its place: the master container is below #matrixchat
+            if (container) {
+                Object.assign(container.style, {
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    zIndex: `${this.zIndex(key) + 1}`,
+                });
+            }
         }
     }
 
