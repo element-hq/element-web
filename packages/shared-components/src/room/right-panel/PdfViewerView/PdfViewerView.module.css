@@ -21,7 +21,7 @@ Please see LICENSE files in the repository root for full details.
     flex: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: var(--cpd-space-4x);
     padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
@@ -68,6 +68,14 @@ Please see LICENSE files in the repository root for full details.
 .pageTotal {
     color: var(--cpd-color-text-secondary);
     font: var(--cpd-font-body-sm-medium);
+}
+
+.zoomLevel {
+    /* Wide enough for "100%" so the buttons stay put as the level changes. */
+    min-width: 5ch;
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-sm-semibold);
 }
 
 /* Positioning context for the surface and overlays. */
