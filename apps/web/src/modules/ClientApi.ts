@@ -74,11 +74,9 @@ export class ClientApi implements IClientApi {
     }
 
     public async waitForClient(): Promise<void> {
-        const clientPromise = MatrixClientPeg.clientReadyPromise;
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error("ClientApi.waitForClient timed out.")), 10000);
-        });
-        await Promise.race([clientPromise, timeoutPromise]);
+        // No timeout: initialising the Rust crypto WASM alone can take 10 s on a cold start, and
+        // a module waiting for the client has nothing useful to do without it
+        await MatrixClientPeg.clientReadyPromise;
     }
 
     public registerEncryptedEventContentTransform(
