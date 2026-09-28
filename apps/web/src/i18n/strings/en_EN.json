@@ -1009,7 +1009,7 @@
             "complete_action": "Got It",
             "complete_description": "You've successfully verified this user.",
             "complete_title": "Verified!",
-            "confirm_identity_description": "Verify this device to set up secure messaging",
+            "confirm_identity_description": "Choose how to verify to set up secure messaging.",
             "confirm_identity_title": "Confirm your digital identity",
             "confirm_the_emojis": "Confirm that the emojis below match those shown on your other device.",
             "error_starting_description": "We were unable to start a chat with the other user.",
