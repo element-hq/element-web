@@ -109,6 +109,36 @@ describe("DmTombstoneCallTileViewModel", () => {
             expect(vm.getSnapshot()).toMatchObject({ answered: true, durationSeconds: 85 });
         });
 
+        it("timing the call from when the other side reported it connected, if it reports progress", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@alice:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            const roomId = mxEvent.getRoomId()!;
+            const progress = (state: string, ts: number) =>
+                new MatrixEvent({
+                    type: "org.matrix.msc4075.rtc.invite_progress",
+                    content: { state },
+                    sender: "@_sip_bob:m.org",
+                    room_id: roomId,
+                    origin_server_ts: ts,
+                });
+            const getRelationsForEvent = vi
+                .fn()
+                .mockImplementation((_id, _rel, type) =>
+                    type === "org.matrix.msc4075.rtc.invite_progress"
+                        ? { getRelations: () => [progress("ringing", 1_000), progress("connected", 20_000)] }
+                        : undefined,
+                );
+            // The bridge joins while still ringing; that is not the answer
+            timelineWith(cli, mxEvent, [
+                member("@_sip_bob:m.org", roomId, { application: "m.call" }, 1_000),
+                member("@_sip_bob:m.org", roomId, { application: "m.call" }, 20_500),
+                member("@_sip_bob:m.org", roomId, {}, 50_000),
+            ]);
+            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
+            expect(vm.getSnapshot().durationSeconds).toStrictEqual(30);
+        });
+
         it("no, when only the caller's membership follows, or ours is for a later ring", () => {
             const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
             const later = getMockedRtcNotificationEvent("audio", 1752583230365, 1752583230365, "@bob:m.org");

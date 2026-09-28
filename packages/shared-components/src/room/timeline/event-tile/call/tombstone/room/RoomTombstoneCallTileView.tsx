@@ -14,12 +14,9 @@ import { Flex } from "../../../../../../core/utils/Flex";
 import styles from "../common.module.css";
 import { useI18n } from "../../../../../../core/i18n/i18nContext";
 
-export type RoomTombstoneCallTileViewSnapshot = {
-    /**
-     * Time when this call was started.
-     */
-    timestamp: string;
-};
+// The tile has nothing to say beyond that a call took place; the timestamp is in the margin like any event's
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface RoomTombstoneCallTileViewSnapshot {}
 
 export type RoomTombstoneCallTileViewModel = ViewModel<RoomTombstoneCallTileViewSnapshot>;
 

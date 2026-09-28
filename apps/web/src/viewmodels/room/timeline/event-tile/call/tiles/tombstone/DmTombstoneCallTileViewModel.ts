@@ -13,7 +13,13 @@ import {
     RoomTombstoneCallTileViewModel,
     type RoomTombstoneCallTileViewModelProps,
 } from "./RoomTombstoneCallTileViewModel";
-import { getDeclinedEvents, getFailureReason, getIntentFromEvent } from "../../common";
+import {
+    getConnectedTs,
+    getDeclinedEvents,
+    getFailureReason,
+    getIntentFromEvent,
+    getInviteProgress,
+} from "../../common";
 
 export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTileViewModelProps {
     /**
@@ -31,22 +37,29 @@ export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTile
  * call memberships after it, before the next ring. A join follows the ring
  * within seconds, so it is loaded alongside; the leave may not be.
  */
-function callOutcome(cli: MatrixClient, mxEvent: MatrixEvent): { answered: boolean; durationSeconds?: number } {
+function callOutcome(
+    cli: MatrixClient,
+    mxEvent: MatrixEvent,
+    getRelationsForEvent?: GetRelationsForEvent,
+): { answered: boolean; durationSeconds?: number } {
     const eventId = mxEvent.getId();
     const events = eventId && cli.getRoom(mxEvent.getRoomId())?.getTimelineForEvent?.(eventId)?.getEvents();
     if (!events) return { answered: false };
     const after = events.slice(events.findIndex((e) => e.getId() === eventId) + 1);
     let answered = false;
-    // Connected once someone other than the caller joins; over when anyone leaves
-    let connectedTs: number | undefined;
+    // Connected when the other side reports it, or else once someone other than the caller joins; over when
+    // anyone leaves
+    const progress = getInviteProgress(mxEvent, getRelationsForEvent);
+    let connectedTs = getConnectedTs(progress);
     for (const e of after) {
         if (e.getType() === EventType.RTCNotification) break;
         if (e.getType() !== EventType.GroupCallMemberPrefix) continue;
         const joined = Object.keys(e.getContent()).length > 0;
         if (joined && e.getSender() === cli.getUserId()) answered = true;
-        if (joined && connectedTs === undefined && e.getSender() !== mxEvent.getSender()) connectedTs = e.getTs();
-        else if (!joined && connectedTs !== undefined)
-            return { answered, durationSeconds: Math.max(0, Math.round((e.getTs() - connectedTs) / 1000)) };
+        if (joined && connectedTs === undefined && !progress.length && e.getSender() !== mxEvent.getSender())
+            connectedTs = e.getTs();
+        else if (!joined && connectedTs !== undefined && e.getTs() >= connectedTs)
+            return { answered, durationSeconds: Math.round((e.getTs() - connectedTs) / 1000) };
     }
     return { answered };
 }
@@ -67,7 +80,7 @@ function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
 
     const declineEvent = getDeclinedEvents(mxEvent, getRelationsForEvent)?.[0] ?? null;
     const failureReason = getFailureReason(mxEvent, getRelationsForEvent);
-    const { answered, durationSeconds } = callOutcome(cli, mxEvent);
+    const { answered, durationSeconds } = callOutcome(cli, mxEvent, getRelationsForEvent);
     return {
         snapshot: { type, callDirection, isCallDeclined: !!declineEvent, failureReason, answered, durationSeconds },
         declineEvent,
