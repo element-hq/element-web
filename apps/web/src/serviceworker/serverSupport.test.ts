@@ -132,6 +132,24 @@ describe("serviceworker authenticated media support check", () => {
         ]);
     });
 
+    it("asks /versions again without the token when the server rejects it", async () => {
+        const rejected = new Response(JSON.stringify({ errcode: "M_UNKNOWN_TOKEN" }), { status: 401 });
+        const cancel = vi.spyOn(rejected.body!, "cancel");
+        versionsResponse = (authenticated) => (authenticated ? rejected : supportsAuthenticatedMedia());
+
+        await interceptMediaRequest();
+
+        expect(versionsRequests().map((r) => r.token)).toEqual([ACCESS_TOKEN, undefined]);
+        expect(cancel).toHaveBeenCalled();
+        expect(mediaRequests()).toEqual([
+            { url: `${homeserver}/_matrix/client/v1/media/download/example.com/abc123`, token: ACCESS_TOKEN },
+        ]);
+
+        // The anonymous answer was cached like any other.
+        await interceptMediaRequest();
+        expect(versionsRequests()).toHaveLength(2);
+    });
+
     it("does not cache a server error, and checks again on the next request", async () => {
         versionsResponse = () => new Response("Bad gateway", { status: 502 });
 
@@ -149,7 +167,8 @@ describe("serviceworker authenticated media support check", () => {
         versionsResponse = supportsAuthenticatedMedia;
         await interceptMediaRequest();
 
-        expect(versionsRequests()).toHaveLength(2);
+        // Two for the failed check (with and without the token), one for the successful one.
+        expect(versionsRequests()).toHaveLength(3);
         expect(mediaRequests()[1]).toEqual({
             url: `${homeserver}/_matrix/client/v1/media/download/example.com/abc123`,
             token: ACCESS_TOKEN,

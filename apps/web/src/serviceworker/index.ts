@@ -102,7 +102,18 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
         return; // up to date
     }
 
-    const response = await fetch(`${clientApiUrl}/_matrix/client/versions`, fetchConfigForToken(accessToken));
+    const versionsUrl = `${clientApiUrl}/_matrix/client/versions`;
+    let response = await fetch(versionsUrl, fetchConfigForToken(accessToken));
+    if (!response.ok && accessToken) {
+        // `/versions` does not require authentication, and authenticated media support is a property of the server,
+        // not of the user. A token the server rejects (typically an expired access token read from storage before the
+        // app has refreshed it) must not decide the answer, so ask again without it.
+        console.warn(
+            `[ServiceWorker] /versions for '${clientApiUrl}' returned ${response.status} with a token; retrying without one`,
+        );
+        discardBody(response);
+        response = await fetch(versionsUrl);
+    }
 
     let versions;
     if (response.ok) {
