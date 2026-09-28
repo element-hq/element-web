@@ -42,64 +42,63 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
         });
     };
 
-    public render(): React.ReactNode {
-        const totalCount = this.state.toasts.length;
-        const isStacked = totalCount > 1;
-        let toast;
-        let containerClasses;
-        if (totalCount !== 0) {
-            const topToast = this.state.toasts[0];
-            const { title, icon, key, component, className, bodyClassName, onCloseButtonClicked, props } = topToast;
-            const bodyClasses = classNames("mx_Toast_body", bodyClassName);
-            const toastClasses = classNames("mx_Toast_toast", className, {
-                mx_Toast_hasIcon: !!icon,
-            });
-            const toastProps = Object.assign({}, props, {
-                key,
-                toastKey: key,
-            });
-            const content = React.createElement(component, toastProps);
+    private renderToast(toast: IToast<any>): React.ReactNode {
+        const { title, icon, key, component, className, bodyClassName, onCloseButtonClicked, props } = toast;
+        const bodyClasses = classNames("mx_Toast_body", bodyClassName);
+        const toastClasses = classNames("mx_Toast_toast", className, {
+            mx_Toast_hasIcon: !!icon,
+        });
+        const toastProps = Object.assign({}, props, {
+            key,
+            toastKey: key,
+        });
+        const content = React.createElement(component, toastProps);
 
-            let titleElement;
-            if (title) {
-                titleElement = (
-                    <>
-                        <div className="mx_Toast_title">
-                            <Text size="lg" weight="semibold" as="h2">
-                                {title}
-                            </Text>
-                        </div>
-                        {onCloseButtonClicked && (
-                            <IconButton
-                                className="mx_Toast_closebutton"
-                                size="28px"
-                                onClick={onCloseButtonClicked}
-                                tooltip={_t("action|close")}
-                                kind="secondary"
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        )}
-                    </>
-                );
-            }
-
-            toast = (
-                <div className={toastClasses}>
-                    {icon}
-                    {titleElement}
-                    <div className={bodyClasses}>{content}</div>
-                </div>
+        let titleElement;
+        if (title) {
+            titleElement = (
+                <>
+                    <div className="mx_Toast_title">
+                        <Text size="lg" weight="semibold" as="h2">
+                            {title}
+                        </Text>
+                    </div>
+                    {onCloseButtonClicked && (
+                        <IconButton
+                            className="mx_Toast_closebutton"
+                            size="28px"
+                            onClick={onCloseButtonClicked}
+                            tooltip={_t("action|close")}
+                            kind="secondary"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    )}
+                </>
             );
-
-            containerClasses = classNames("mx_ToastContainer", {
-                mx_ToastContainer_stacked: isStacked,
-            });
         }
-        return toast ? (
-            <div className={containerClasses} role="alert">
-                {toast}
+
+        return (
+            <div className={toastClasses} key={key}>
+                {icon}
+                {titleElement}
+                <div className={bodyClasses}>{content}</div>
             </div>
-        ) : null;
+        );
+    }
+
+    public render(): React.ReactNode {
+        if (this.state.toasts.length === 0) return null;
+        // The top toast, and every ringing call: a second caller must not hide behind the first
+        const [top, ...rest] = this.state.toasts;
+        const shown = [top, ...rest.filter((t) => t.bodyClassName === "mx_IncomingCallToast")];
+        const containerClasses = classNames("mx_ToastContainer", {
+            mx_ToastContainer_stacked: shown.length < this.state.toasts.length,
+        });
+        return (
+            <div className={containerClasses} role="alert">
+                {shown.map((t) => this.renderToast(t))}
+            </div>
+        );
     }
 }

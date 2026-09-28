@@ -12,22 +12,24 @@ Please see LICENSE files in the repository root for full details.
     top: 12px;
     left: 62px;
     z-index: 101;
-    display: grid;
-    grid-template-rows: 1fr 28px 8px;
+    /* A column: several ringing calls are shown at once */
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-2x);
 
-    &.mx_ToastContainer_stacked::before {
+    /* The hidden toasts peek out from under the last one */
+    &.mx_ToastContainer_stacked::after {
         content: "";
-        margin: 0 var(--cpd-space-1-5x);
-        grid-row: 2 / -1;
-        grid-column: 1;
+        height: 36px;
+        margin: calc(-28px - var(--cpd-space-2x)) var(--cpd-space-1-5x) 0;
         background-color: $system;
         box-shadow: 0px 4px 20px rgb(0, 0, 0, 0.5);
         border-radius: var(--cpd-space-6x);
     }
 
     .mx_Toast_toast {
-        grid-row: 1 / 3;
-        grid-column: 1;
+        position: relative;
+        z-index: 1;
         background-color: var(--cpd-color-bg-canvas-default);
         color: $primary-content;
         box-shadow: 0px 4px 24px rgb(0, 0, 0, 0.1);
