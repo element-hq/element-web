@@ -382,6 +382,17 @@ describe("PdfViewer", () => {
             expect(iframe.port.postMessage).toHaveBeenCalledWith({ type: "zoom", direction: "out" });
         });
 
+        it("shows the zoom level the iframe reports", async () => {
+            const { iframe } = await renderLoaded();
+            expect(screen.queryByTestId("pdf-zoom-level")).not.toBeInTheDocument();
+
+            fromIframe(iframe, { type: "scale", scale: 150 } satisfies PdfUsercontentMessage);
+            expect(screen.getByTestId("pdf-zoom-level")).toHaveTextContent("150%");
+
+            fromIframe(iframe, { type: "scale", scale: 66.7 } satisfies PdfUsercontentMessage);
+            expect(screen.getByTestId("pdf-zoom-level")).toHaveTextContent("67%");
+        });
+
         it("hides the zoom buttons until the document is laid out", () => {
             render(<PdfViewer media={media()} />);
 

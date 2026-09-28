@@ -77,6 +77,7 @@ export const Ready: Story = {
         currentPage: 1,
         pageCount: 5,
         pageInput: "1",
+        zoomPercent: 100,
     },
     play: async ({ canvasElement }) => {
         await waitFor(() => {

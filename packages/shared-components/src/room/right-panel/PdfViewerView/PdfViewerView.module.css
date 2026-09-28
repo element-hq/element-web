@@ -49,6 +49,14 @@ Please see LICENSE files in the repository root for full details.
     font: var(--cpd-font-body-sm-medium);
 }
 
+.zoomLevel {
+    /* Wide enough for "100%" so the buttons stay put as the level changes. */
+    min-width: 5ch;
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-sm-semibold);
+}
+
 /* The host's document surface. Fills the shell's body, which is the positioning context. */
 .surface {
     position: absolute;

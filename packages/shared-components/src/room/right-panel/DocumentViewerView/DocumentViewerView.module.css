@@ -15,11 +15,12 @@ Please see LICENSE in the repository root for full details.
     background: var(--cpd-color-bg-subtle-secondary);
 }
 
+/* Control groups sit at either end of the bar; a lone group sits at the start. */
 .toolbar {
     flex: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: var(--cpd-space-4x);
     padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
