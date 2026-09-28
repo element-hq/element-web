@@ -294,10 +294,13 @@
     },
     "timeline": {
         "call_tile": {
-            "call_failed": "Call failed: %(reason)s",
             "declined": {
-                "call_declined": "Call declined",
-                "call_declined_by_us": "You declined a call"
+                "inbound": "Inbound call declined",
+                "outbound": "Outbound call declined"
+            },
+            "failed": {
+                "inbound": "Inbound call failed: %(reason)s",
+                "outbound": "Outbound call failed: %(reason)s"
             },
             "inbound": {
                 "video": "Inbound video call",
