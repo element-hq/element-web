@@ -42,6 +42,7 @@ const meta = {
         timestamp: "12:36",
         callDirection: CallDirection.Incoming,
         isCallDeclined: false,
+        answered: true,
         type: CallType.Voice,
     },
     parameters: {
@@ -66,6 +67,29 @@ export const VoiceEnded: Story = {
 export const VideoEnded: Story = {
     args: {
         type: CallType.Video,
+    },
+};
+
+export const OutgoingVoice: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Outgoing,
+    },
+};
+
+export const MissedVoice: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Incoming,
+        answered: false,
+    },
+};
+
+export const MissedVideo: Story = {
+    args: {
+        type: CallType.Video,
+        callDirection: CallDirection.Incoming,
+        answered: false,
     },
 };
 

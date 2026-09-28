@@ -75,6 +75,40 @@ describe("DmTombstoneCallTileViewModel", () => {
         expect(type).toStrictEqual(CallType.Video);
     });
 
+    describe("should tell whether we answered", () => {
+        const timelineWith = (cli: ReturnType<typeof stubClient>, mxEvent: MatrixEvent, after: MatrixEvent[]) =>
+            vi.spyOn(cli, "getRoom").mockReturnValue({
+                getTimelineForEvent: () => ({ getEvents: () => [mxEvent, ...after] }),
+            } as any);
+        const member = (sender: string, roomId: string, content: object) =>
+            new MatrixEvent({ type: EventType.GroupCallMemberPrefix, sender, room_id: roomId, content });
+
+        it("yes, when our call membership follows the ring", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            timelineWith(cli, mxEvent, [member("@alice:m.org", mxEvent.getRoomId()!, { application: "m.call" })]);
+            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
+            expect(vm.getSnapshot().answered).toStrictEqual(true);
+        });
+
+        it("no, when only the caller's membership follows, or ours is for a later ring", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
+            const later = getMockedRtcNotificationEvent("audio", 1752583230365, 1752583230365, "@bob:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            const roomId = mxEvent.getRoomId()!;
+            timelineWith(cli, mxEvent, [
+                member("@bob:m.org", roomId, { application: "m.call" }),
+                member("@alice:m.org", roomId, {}),
+                later,
+                member("@alice:m.org", roomId, { application: "m.call" }),
+            ]);
+            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
+            expect(vm.getSnapshot().answered).toStrictEqual(false);
+        });
+    });
+
     describe("should compute callDirection", () => {
         it("for outgoing", () => {
             const mxEvent = getMockedRtcNotificationEvent("video", 1752583130365, 1752583130365, "@alice:m.org");

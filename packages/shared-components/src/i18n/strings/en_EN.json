@@ -299,6 +299,14 @@
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
             },
+            "incoming": {
+                "video": "Incoming video call",
+                "voice": "Incoming voice call"
+            },
+            "missed": {
+                "video": "Missed video call",
+                "voice": "Missed voice call"
+            },
             "ongoing": {
                 "common": {
                     "call_started_by": "%(startedByDisplayName)s started a call",
@@ -316,13 +324,15 @@
                     "title": "Group call in progress"
                 }
             },
+            "outgoing": {
+                "video": "Outgoing video call",
+                "voice": "Outgoing voice call"
+            },
             "tombstone": {
                 "room": {
                     "title": "Group call ended"
                 }
-            },
-            "video_call_title": "Video call",
-            "voice_call_title": "Voice call"
+            }
         },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",

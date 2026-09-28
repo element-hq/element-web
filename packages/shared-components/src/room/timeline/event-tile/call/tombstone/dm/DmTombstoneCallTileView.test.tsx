@@ -17,6 +17,9 @@ const {
     OutgoingVideoDeclined,
     VideoEnded,
     VoiceEnded,
+    OutgoingVoice,
+    MissedVoice,
+    MissedVideo,
     OutgoingVoiceFailed,
     IncomingVideoFailed,
 } = composeStories(Stories);
@@ -52,6 +55,21 @@ describe("DmTombstoneCallTileView", () => {
 
         it("VoiceEnded", () => {
             const { container } = render(<VoiceEnded />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("OutgoingVoice", () => {
+            const { container } = render(<OutgoingVoice />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MissedVoice", () => {
+            const { container } = render(<MissedVoice />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MissedVideo", () => {
+            const { container } = render(<MissedVideo />);
             expect(container).toMatchSnapshot();
         });
     });
