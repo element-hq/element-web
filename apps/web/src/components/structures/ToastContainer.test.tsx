@@ -33,11 +33,12 @@ describe("ToastContainer", () => {
             });
         }
         store.addOrReplaceToast({ key: "c", priority: 10, component: Body, props: { text: "other" } });
-        const { container } = render(<ToastContainer />);
+        render(<ToastContainer />);
 
         expect(screen.getByText("caller A")).toBeVisible();
         expect(screen.getByText("caller B")).toBeVisible();
         expect(screen.queryByText("other")).toBeNull();
-        expect(container.querySelector(".mx_ToastContainer_stacked")).not.toBeNull();
+        // Portalled into the persisted elements' container, not the render root
+        expect(document.querySelector(".mx_ToastContainer_stacked")).not.toBeNull();
     });
 });

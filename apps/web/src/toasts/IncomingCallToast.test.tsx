@@ -55,7 +55,7 @@ function makeNotificationEvent(room: Room, content: IContent = {}): MatrixEvent 
     const ts = Date.now();
     const notificationContent = {
         "notification_type": "notification",
-        "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
+        "m.relates_to": { rel_type: "m.reference", event_id: "$memberEventId" },
         "m.mentions": { user_ids: [], room: true },
         "lifetime": 3000,
         "sender_ts": ts,
@@ -88,6 +88,7 @@ describe("IncomingCallToast", () => {
     } as unknown as DMRoomMap;
     const toastStore = {
         dismissToast: vi.fn(),
+        getToasts: vi.fn().mockReturnValue([]),
     } as unknown as Mocked<ToastStore>;
 
     beforeEach(async () => {
@@ -354,9 +355,11 @@ describe("IncomingCallToast", () => {
     });
 
     it("closes toast when the call event is redacted", async () => {
-        const callId = renderToast();
-
         const event = room.currentState.getStateEvents(MockedCall.EVENT_TYPE, "1")!;
+        const callId = renderToast(
+            makeNotificationEvent(room, { "m.relates_to": { rel_type: "m.reference", event_id: event.getId() } }),
+        );
+
         room.emit(MatrixEventEvent.BeforeRedaction, event, {} as unknown as MatrixEvent);
 
         await waitFor(() =>
