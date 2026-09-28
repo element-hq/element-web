@@ -5,8 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type Ref } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 import classNames from "classnames";
+import { IconButton } from "@vector-im/compound-web";
+import { MinusIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
 import styles from "./PdfViewerView.module.css";
@@ -24,10 +26,6 @@ export interface PdfViewerViewProps {
     pageCount: number;
     /** The controlled value of the page-number input. */
     pageInput: string;
-    /** Receives the scrolling element that the host renderer measures and observes. */
-    containerRef: Ref<HTMLDivElement>;
-    /** Receives the inner element into which the host renders document pages. */
-    viewerRef: Ref<HTMLDivElement>;
     /** Called with each new value typed into the controlled page-number input. */
     onPageInputChange: (value: string) => void;
     /** Called when the page-number input enters its editing state. */
@@ -38,79 +36,97 @@ export interface PdfViewerViewProps {
     onPageInputCancel: () => void;
     /** Called when the user submits the page-number form. */
     onPageSubmit: () => void;
-    /**
-     * Optional CSS class for host-level styling. Applied to the outer element, so a host can scope
-     * styling for its own renderer's markup without that markup being known here.
-     */
+    /** Called when the user presses the zoom-in button. */
+    onZoomIn: () => void;
+    /** Called when the user presses the zoom-out button. */
+    onZoomOut: () => void;
+    /** Optional CSS class for the outer element. */
     className?: string;
 }
 
-/**
- * Renders the reusable presentation shell for a PDF document viewer.
- *
- * The host owns document loading and rendering. It receives both required DOM elements through refs,
- * while this View owns the toolbar, status overlays, accessibility labels, and pdf.js-compatible page styling.
- */
+/** The shell around a PDF viewer: toolbar and status overlays. `children` is the document surface. */
 export function PdfViewerView({
     status,
     currentPage,
     pageCount,
     pageInput,
-    containerRef,
-    viewerRef,
+    children,
     onPageInputChange,
     onPageInputFocus,
     onPageInputBlur,
     onPageInputCancel,
     onPageSubmit,
+    onZoomIn,
+    onZoomOut,
     className,
-}: Readonly<PdfViewerViewProps>): JSX.Element {
+}: Readonly<PropsWithChildren<PdfViewerViewProps>>): JSX.Element {
     const { translate: _t } = useI18n();
 
     return (
         <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
             {pageCount > 0 ? (
-                <form
-                    className={styles.toolbar}
-                    onSubmit={(event) => {
-                        event.preventDefault();
-                        onPageSubmit();
-                    }}
-                >
-                    {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
-                    <fieldset
-                        className={styles.pageForm}
-                        aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                <div className={styles.toolbar}>
+                    <form
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            onPageSubmit();
+                        }}
                     >
-                        <input
-                            aria-label={_t("pdf_viewer|page_number")}
-                            className={styles.pageInput}
-                            data-testid="pdf-page-input"
-                            inputMode="numeric"
-                            onBlur={onPageInputBlur}
-                            onChange={(event) => onPageInputChange(event.target.value)}
-                            onFocus={onPageInputFocus}
-                            onKeyDown={(event) => {
-                                if (event.key !== "Escape") return;
+                        {/* A fieldset carries the implicit `group` role. */}
+                        <fieldset
+                            className={styles.pageForm}
+                            aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                        >
+                            <input
+                                aria-label={_t("pdf_viewer|page_number")}
+                                className={styles.pageInput}
+                                data-testid="pdf-page-input"
+                                inputMode="numeric"
+                                onBlur={onPageInputBlur}
+                                onChange={(event) => onPageInputChange(event.target.value)}
+                                onFocus={onPageInputFocus}
+                                onKeyDown={(event) => {
+                                    if (event.key !== "Escape") return;
 
-                                onPageInputCancel();
-                                // Blurring completes the same editing lifecycle as clicking away from the input.
-                                event.currentTarget.blur();
-                            }}
-                            value={pageInput}
-                        />
-                        <span aria-hidden="true" className={styles.pageSeparator}>
-                            |
-                        </span>
-                        <span className={styles.pageTotal} data-testid="pdf-page-total">
-                            {pageCount}
-                        </span>
+                                    onPageInputCancel();
+                                    // Blur ends the edit the same way clicking away does.
+                                    event.currentTarget.blur();
+                                }}
+                                value={pageInput}
+                            />
+                            <span aria-hidden="true" className={styles.pageSeparator}>
+                                |
+                            </span>
+                            <span className={styles.pageTotal} data-testid="pdf-page-total">
+                                {pageCount}
+                            </span>
+                        </fieldset>
+                    </form>
+                    <fieldset className={styles.zoomControls} aria-label={_t("pdf_viewer|zoom")}>
+                        <IconButton
+                            size="28px"
+                            aria-label={_t("pdf_viewer|zoom_out")}
+                            tooltip={_t("pdf_viewer|zoom_out")}
+                            data-testid="pdf-zoom-out"
+                            onClick={onZoomOut}
+                        >
+                            <MinusIcon />
+                        </IconButton>
+                        <IconButton
+                            size="28px"
+                            aria-label={_t("pdf_viewer|zoom_in")}
+                            tooltip={_t("pdf_viewer|zoom_in")}
+                            data-testid="pdf-zoom-in"
+                            onClick={onZoomIn}
+                        >
+                            <PlusIcon />
+                        </IconButton>
                     </fieldset>
-                </form>
+                </div>
             ) : null}
             <div className={styles.body}>
-                <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
-                    <div className="pdfViewer" ref={viewerRef} />
+                <div className={styles.surface} data-testid="pdf-surface">
+                    {children}
                 </div>
                 {status === "loading" ? (
                     <div className={styles.message} role="status" aria-live="polite">

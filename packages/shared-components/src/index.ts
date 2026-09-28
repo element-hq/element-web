@@ -40,6 +40,8 @@ export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
 export * from "./room/WidgetPip";
+export * from "./room/ElementCallAppTile";
+export * from "./room/ElementCallMockView";
 export * from "./room/HistoryVisibilityBadge";
 export * from "./room/right-panel/PdfViewerView";
 export * from "./room/right-panel/WidgetContextMenuView";
