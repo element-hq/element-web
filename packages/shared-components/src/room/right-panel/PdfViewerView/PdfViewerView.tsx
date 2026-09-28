@@ -40,8 +40,15 @@ export interface PdfViewerViewProps {
     onZoomIn: () => void;
     /** Called when the user presses the zoom-out button. */
     onZoomOut: () => void;
+    /** The current zoom level as a percentage. Omitted until the host reports one. */
+    zoomPercent?: number;
     /** Optional CSS class for the outer element. */
     className?: string;
+}
+
+/** A whole-number percentage in the user's locale, e.g. "150%". */
+function formatZoomPercent(zoomPercent: number, language: string): string {
+    return new Intl.NumberFormat(language, { style: "percent", maximumFractionDigits: 0 }).format(zoomPercent / 100);
 }
 
 /** The shell around a PDF viewer: toolbar and status overlays. `children` is the document surface. */
@@ -58,9 +65,10 @@ export function PdfViewerView({
     onPageSubmit,
     onZoomIn,
     onZoomOut,
+    zoomPercent,
     className,
 }: Readonly<PropsWithChildren<PdfViewerViewProps>>): JSX.Element {
-    const { translate: _t } = useI18n();
+    const { translate: _t, language } = useI18n();
 
     return (
         <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
@@ -112,6 +120,11 @@ export function PdfViewerView({
                         >
                             <MinusIcon />
                         </IconButton>
+                        {zoomPercent !== undefined ? (
+                            <span className={styles.zoomLevel} data-testid="pdf-zoom-level">
+                                {formatZoomPercent(zoomPercent, language)}
+                            </span>
+                        ) : null}
                         <IconButton
                             size="28px"
                             aria-label={_t("pdf_viewer|zoom_in")}
