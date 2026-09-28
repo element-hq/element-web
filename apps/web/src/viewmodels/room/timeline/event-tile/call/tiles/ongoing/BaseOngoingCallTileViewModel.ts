@@ -73,7 +73,17 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
     return Array.from(participants).some((participant) => participant.userId !== notificationEvent.sender?.userId);
 }
 
-function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
+/**
+ * When the call's timer starts: with the first membership, or, for a DM, with
+ * the second (the other side picking up), so that it does not run while ringing.
+ */
+function callStartTs(call: ElementCall, fromSecondJoin: boolean): number | undefined {
+    if (!fromSecondJoin) return call.session.getOldestMembership()?.createdTs();
+    const [, second] = [...call.session.memberships].sort((a, b) => a.createdTs() - b.createdTs());
+    return second?.createdTs();
+}
+
+function computeSnapshot(props: Props, timerFromSecondJoin: boolean): CommonOngoingCallTileViewSnapshot {
     const mxEvent = props.mxEvent;
     const callStore = props.callStore;
     const cli = props.cli;
@@ -121,11 +131,8 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
         .getState(EventTimeline.FORWARDS)
         ?.mayClientSendStateEvent(EventType.GroupCallMemberPrefix, room.client);
 
-    const callStartTs = call.session.getOldestMembership()?.createdTs();
-    let durationViewModel: DurationViewModel | undefined;
-    if (callStartTs) {
-        durationViewModel = new DurationViewModel({ callStartTs });
-    }
+    const startTs = callStartTs(call, timerFromSecondJoin);
+    const durationViewModel = startTs ? new DurationViewModel({ callStartTs: startTs }) : undefined;
 
     return {
         startedByDisplayName,
@@ -145,11 +152,16 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
 export class BaseOngoingCallViewModel<
     T extends CommonOngoingCallTileViewSnapshot = CommonOngoingCallTileViewSnapshot,
 > extends BaseViewModel<T, Props> {
-    public constructor(props: Props, extraSnapshot: Partial<T> = {}) {
-        const snapshot = { ...computeSnapshot(props), ...extraSnapshot };
+    public constructor(
+        props: Props,
+        extraSnapshot: Partial<T> = {},
+        private readonly timerFromSecondJoin = false,
+    ) {
+        const snapshot = { ...computeSnapshot(props, timerFromSecondJoin), ...extraSnapshot };
         super(props, snapshot as T);
         this.disposables.track(snapshot.facePileViewModel as BaseViewModel<unknown, unknown>);
         this.disposables.track(snapshot.memberAvatarViewModel as BaseViewModel<unknown, unknown>);
+        if (snapshot.durationViewModel) this.disposables.track(snapshot.durationViewModel as DurationViewModel);
         this.setupListener();
     }
 
@@ -191,6 +203,13 @@ export class BaseOngoingCallViewModel<
         const members = Array.from(participants.keys());
         const callHasOtherParticipants = doesCallHaveOtherParticipants(this.props.mxEvent, members);
         (this.getSnapshot().facePileViewModel as FacePileViewModel).updateMembers(members);
-        this.snapshot.merge({ isJoined, callHasOtherParticipants, ...extraSnapshot });
+        // The timer may only be able to start now (the other side just picked up)
+        let { durationViewModel } = this.getSnapshot();
+        const startTs = callStartTs(getCallOrThrow(this.props.callStore, roomId), this.timerFromSecondJoin);
+        if (!durationViewModel && startTs) {
+            durationViewModel = new DurationViewModel({ callStartTs: startTs });
+            this.disposables.track(durationViewModel as DurationViewModel);
+        }
+        this.snapshot.merge({ isJoined, callHasOtherParticipants, durationViewModel, ...extraSnapshot } as Partial<T>);
     }
 }

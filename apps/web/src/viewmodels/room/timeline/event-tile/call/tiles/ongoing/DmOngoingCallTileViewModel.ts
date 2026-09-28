@@ -22,6 +22,7 @@ export class DmOngoingCallTileViewModel
 {
     public constructor(props: Props) {
         const callType = getIntentFromEvent(props.mxEvent);
-        super(props, { callType });
+        // A DM call's timer starts when the other side picks up, not while it rings
+        super(props, { callType }, true);
     }
 }
