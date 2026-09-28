@@ -131,12 +131,37 @@ describe("DmTombstoneCallTileViewModel", () => {
                 );
             // The bridge joins while still ringing; that is not the answer
             timelineWith(cli, mxEvent, [
-                member("@_sip_bob:m.org", roomId, { application: "m.call" }, 1_000),
-                member("@_sip_bob:m.org", roomId, { application: "m.call" }, 20_500),
+                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE+publish" }, 1_000),
+                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE" }, 20_500),
                 member("@_sip_bob:m.org", roomId, {}, 50_000),
             ]);
             const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
             expect(vm.getSnapshot().durationSeconds).toStrictEqual(30);
+        });
+
+        it("or, without a connected report, from the other side's first membership that is not its publisher's", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@alice:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            const roomId = mxEvent.getRoomId()!;
+            const unanswered = [
+                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE+publish" }, 1_000),
+                member("@_sip_bob:m.org", roomId, {}, 50_000),
+            ];
+            timelineWith(cli, mxEvent, unanswered);
+            expect(
+                new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() }).getSnapshot()
+                    .durationSeconds,
+            ).toBeUndefined();
+            timelineWith(cli, mxEvent, [
+                unanswered[0],
+                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE" }, 20_000),
+                unanswered[1],
+            ]);
+            expect(
+                new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() }).getSnapshot()
+                    .durationSeconds,
+            ).toStrictEqual(30);
         });
 
         it("no, when our membership comes after the ring ended (we placed the next call)", () => {
