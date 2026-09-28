@@ -6,7 +6,7 @@
  */
 
 import { CallDirection, type DmTombstoneCallTileViewSnapshot } from "@element-hq/web-shared-components";
-import { type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../../../../../settings/SettingsStore";
 import type { GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
@@ -28,6 +28,28 @@ export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTile
     cli: MatrixClient;
 }
 
+/**
+ * Whether the local user joined the call this notification rang for: a call
+ * membership of theirs in the timeline after the notification, before the next
+ * one. A join follows the ring within seconds, so it is loaded alongside.
+ */
+function didWeAnswer(cli: MatrixClient, mxEvent: MatrixEvent): boolean {
+    const eventId = mxEvent.getId();
+    const events = eventId && cli.getRoom(mxEvent.getRoomId())?.getTimelineForEvent?.(eventId)?.getEvents();
+    if (!events) return false;
+    const after = events.slice(events.findIndex((e) => e.getId() === eventId) + 1);
+    for (const e of after) {
+        if (e.getType() === EventType.RTCNotification) break;
+        if (
+            e.getType() === EventType.GroupCallMemberPrefix &&
+            e.getSender() === cli.getUserId() &&
+            Object.keys(e.getContent()).length > 0
+        )
+            return true;
+    }
+    return false;
+}
+
 function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
     snapshot: DmTombstoneCallTileViewSnapshot;
     declineEvent: MatrixEvent | null;
@@ -46,8 +68,9 @@ function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
     const failureReason = getFailureReason(mxEvent, getRelationsForEvent);
     const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
     const timestamp = getTimeFromEvent(declineEvent ?? mxEvent, showTwelveHour);
+    const answered = didWeAnswer(cli, mxEvent);
     return {
-        snapshot: { timestamp, type, callDirection, isCallDeclined: !!declineEvent, failureReason },
+        snapshot: { timestamp, type, callDirection, isCallDeclined: !!declineEvent, failureReason, answered },
         declineEvent,
     };
 }
