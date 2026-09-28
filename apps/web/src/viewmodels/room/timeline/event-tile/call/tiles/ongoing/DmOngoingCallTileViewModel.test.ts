@@ -7,11 +7,12 @@
 
 // @vitest-environment happy-dom
 
-import { it, describe, expect } from "vitest";
+import { it, describe, expect, vi } from "vitest";
 import { CallType } from "@element-hq/web-shared-components";
 import { stubClient, TestSDKContext } from "test-utils";
 
 import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "../../call-mocks";
+import { CallEvent } from "../../../../../../../models/Call";
 import { DmOngoingCallTileViewModel } from "./DmOngoingCallTileViewModel";
 
 const roomId = "!my-room:m.org";
@@ -21,6 +22,26 @@ describe("DmOngoingCallTileViewModel", () => {
     const legacyCallHandler = sdkContext.legacyCallHandler;
 
     describe("should compute the correct snapshot", () => {
+        it("starts the timer when the other side picks up, not while ringing", () => {
+            const cli = stubClient();
+            const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100);
+            mxEvent.sender = getMockedMember(roomId, "@alice:m.org", "Alice");
+            const bob = getMockedMember(roomId, "@bob:m.org", "Bob");
+
+            const call = MockedCall.create().withParticipants([mxEvent.sender]).withMembershipTs(1000);
+            const callStore = MockedCallStore.create(call);
+            const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            expect(vm.getSnapshot().durationViewModel).toBeUndefined();
+
+            vi.useFakeTimers();
+            vi.setSystemTime(12_000);
+            call.withParticipants([bob]).withMembershipTs(1000, 5000);
+            call.emit(CallEvent.Participants, call.participants, new Map());
+            // Counted from Bob's join at 5 s, not Alice's at 1 s
+            expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);
+            vi.useRealTimers();
+        });
+
         describe("callType", () => {
             it("voice", () => {
                 const cli = stubClient();

@@ -81,7 +81,7 @@ function OutgoingCallContent({ snapshot }: { snapshot: DmOngoingCallTileViewSnap
     return (
         <>
             <MemberAvatarView classNames={commonStyles.avatar} vm={snapshot.memberAvatarViewModel} />
-            <div className={commonStyles.title}>{_t("timeline|call_tile|ongoing|dm|call_started")}</div>
+            <div className={commonStyles.title}>{_t("timeline|call_tile|ongoing|dm|ringing")}</div>
         </>
     );
 }
