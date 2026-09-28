@@ -51,10 +51,13 @@ function callOutcome(
     // anyone leaves
     const progress = getInviteProgress(mxEvent, getRelationsForEvent);
     let connectedTs = getConnectedTs(progress);
+    // A join after the ring has ended is the next call's (its caller joins before notifying), not an answer
+    const ringUntil = mxEvent.getTs() + (mxEvent.getContent().lifetime ?? 90_000);
     for (const e of after) {
         if (e.getType() === EventType.RTCNotification) break;
         if (e.getType() !== EventType.GroupCallMemberPrefix) continue;
         const joined = Object.keys(e.getContent()).length > 0;
+        if (joined && connectedTs === undefined && e.getTs() > ringUntil) break;
         if (joined && e.getSender() === cli.getUserId()) answered = true;
         if (joined && connectedTs === undefined && !progress.length && e.getSender() !== mxEvent.getSender())
             connectedTs = e.getTs();
