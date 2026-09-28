@@ -1128,6 +1128,20 @@ export class ElementCall extends Call {
         this.held = await this.componentHandle.setHold(request);
     }
 
+    /**
+     * Asks a mounted React component sitting in its lobby to join, as if the user had pressed the lobby's
+     * join button. Does nothing when no component is mounted or nothing in it is waiting to join (it is
+     * already in the call, say): showing the lobby is then all Element Web can do.
+     */
+    public async requestJoinFromReactComponent(): Promise<void> {
+        if (this.componentHandle === null) return;
+        try {
+            await this.componentHandle.join({ audioInput: null, videoInput: null });
+        } catch (e) {
+            logger.debug(`Element Call component for ${this.roomId} did not take a join request: ${e}`);
+        }
+    }
+
     /** Element Call reports that the user held or resumed the call with its own button. */
     public handleHold(held: HoldState): void {
         this.held = held;

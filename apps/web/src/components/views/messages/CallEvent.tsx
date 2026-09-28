@@ -107,8 +107,10 @@ const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProp
                 view_call: true,
                 metricsTrigger: undefined,
             });
+            // Already looking at the lobby? Then viewing the call changes nothing; join it instead.
+            void call.requestJoinFromReactComponent();
         },
-        [mxEvent],
+        [mxEvent, call],
     );
 
     const disconnect = useCallback(
