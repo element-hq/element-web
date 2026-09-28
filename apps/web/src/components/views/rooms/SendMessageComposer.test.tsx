@@ -49,7 +49,7 @@ describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: RoomContextType = {
         roomViewStore: SDKContextClass.instance.roomViewStore,
         roomLoading: true,
-        peekLoading: false,
+        peekAndSummaryLoading: false,
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
@@ -85,7 +85,6 @@ describe("<SendMessageComposer/>", () => {
         resizing: false,
         narrow: false,
         msc3946ProcessDynamicPredecessor: false,
-        canAskToJoin: false,
         promptAskToJoin: false,
         isRoomEncrypted: false,
     };

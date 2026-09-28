@@ -87,6 +87,12 @@ export default defineProject({
                     environmentOptions: {
                         happyDOM: {
                             url: "http://localhost/",
+                            settings: {
+                                navigation: {
+                                    // Nothing is served at these URLs under test; an iframe's `src` is just an attribute.
+                                    disableChildFrameNavigation: true,
+                                },
+                            },
                         },
                         jsdom: {
                             url: "http://localhost/",
