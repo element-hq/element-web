@@ -88,9 +88,11 @@ const MAX_RING_TIME_MS = 90 * 1000;
 interface JoinCallButtonWithCallProps {
     onClick: (e: ButtonEvent) => void;
     disabledTooltip: string | undefined;
+    /** "Accept" for a 1:1 call, "Join" for a group call */
+    label: string;
 }
 
-function JoinCallButtonWithCall({ onClick, disabledTooltip }: JoinCallButtonWithCallProps): JSX.Element {
+function JoinCallButtonWithCall({ onClick, disabledTooltip, label }: JoinCallButtonWithCallProps): JSX.Element {
     const button = (
         <Button
             className="mx_IncomingCallToast_actionButton"
@@ -100,7 +102,7 @@ function JoinCallButtonWithCall({ onClick, disabledTooltip }: JoinCallButtonWith
             Icon={CheckIcon}
             size="md"
         >
-            {_t("action|join")}
+            {label}
         </Button>
     );
 
@@ -344,6 +346,13 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 >
                     <ExpandIcon width={16} height={16} aria-hidden />
                 </AccessibleButton>
+                <AccessibleButton
+                    className="mx_IncomingCallToast_expandButton"
+                    onClick={onCloseClick}
+                    title={_t("action|ignore")}
+                >
+                    <CloseIcon width={16} height={16} aria-hidden />
+                </AccessibleButton>
             </div>
             <AvatarWithDetails
                 avatar={<RoomAvatar room={room ?? undefined} size="40px" />}
@@ -381,6 +390,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 <JoinCallButtonWithCall
                     onClick={onJoinClick}
                     disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
+                    label={otherUserId === undefined ? _t("action|join") : _t("action|accept")}
                 />
             </div>
         </div>
