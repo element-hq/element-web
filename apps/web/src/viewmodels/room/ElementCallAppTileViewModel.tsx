@@ -210,7 +210,9 @@ export class ElementCallAppTileViewModel
     public setLayout(layout: TileLayout): void {
         this.miniMode = layout.miniMode;
         this.snapshot.merge(layoutSnapshot(layout));
-        if (this.started) this.setDocked(!layout.miniMode);
+        // A stale effect can still call this after disposal (see start); a disposed tile must not
+        // re-dock the call, as nothing would undock it again and it would never be torn down.
+        if (this.started && !this.isDisposed) this.setDocked(!layout.miniMode);
     }
 
     /**
