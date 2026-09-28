@@ -137,7 +137,7 @@ exports[`<Notifications /> > main notification switches > renders only enable no
           class="_label_1o4d9_60"
           for="mx_SettingsFlag_testid_2"
         >
-          Only show notifications in the thread activity centre
+          In the Other threads tab, only show notifications
         </label>
       </div>
     </div>

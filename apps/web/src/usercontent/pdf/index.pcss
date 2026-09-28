@@ -1,0 +1,222 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * The subset of pdf.js's `web/pdf_viewer.css` a read-only viewer needs. The app's theme does not reach
+ * the iframe, so it stays transparent and pages are white with a neutral shadow. XFA, editor, spread
+ * and presentation markup is never created and has no styles here.
+ */
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+/* pdf.js requires the scroll container to be absolutely positioned. */
+#container {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+
+    --pdfViewer-padding-bottom: 16px;
+    --page-margin: 16px auto;
+}
+
+.pdfViewer {
+    --scale-factor: 1;
+
+    padding-bottom: var(--pdfViewer-padding-bottom);
+}
+
+.pdfViewer .page {
+    --user-unit: 1;
+    --total-scale-factor: calc(var(--scale-factor) * var(--user-unit));
+    --scale-round-x: 1px;
+    --scale-round-y: 1px;
+
+    position: relative;
+    direction: ltr;
+    width: 816px;
+    height: 1056px;
+    margin: var(--page-margin);
+    overflow: visible;
+    border: 1px solid rgb(0 0 0 / 0.15);
+    background-color: white;
+    background-clip: content-box;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
+}
+
+.pdfViewer .canvasWrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.pdfViewer .canvasWrapper canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    contain: content;
+}
+
+/* High-resolution tile of the visible region, drawn over the CSS-zoomed page. */
+.pdfViewer .canvasWrapper canvas.detailView {
+    image-rendering: pixelated;
+}
+
+/*
+ * Selection highlight drawn by pdf.js. It is clipped in units of the text layer's box, so it must cover
+ * exactly the same box or the highlight lands at the wrong height.
+ */
+.pdfViewer .canvasWrapper .selection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Matches the native selection below; Firefox gets an inline `backdrop-filter` from pdf.js instead. */
+    background: color-mix(in srgb, AccentColor, transparent 50%);
+}
+
+/* Invisible, selectable copy of the page text over the canvas. The custom properties are pdf.js's contract. */
+.textLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: clip;
+    color-scheme: only light;
+    text-align: initial;
+    line-height: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    opacity: 1;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    caret-color: CanvasText;
+
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+
+.textLayer span,
+.textLayer br {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+    user-select: text;
+}
+
+.textLayer > :not(.markedContent),
+.textLayer .markedContent span:not(.markedContent) {
+    z-index: 1;
+
+    --font-height: 0;
+    --scale-x: 1;
+    --rotate: 0deg;
+
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+}
+
+.textLayer .markedContent {
+    display: contents;
+}
+
+.textLayer span[role="img"] {
+    cursor: default;
+    user-select: none;
+}
+
+/* Native highlight, used where pdf.js does not draw the selection itself. */
+.textLayer ::selection {
+    color: transparent;
+    background: color-mix(in srgb, AccentColor, transparent 50%);
+}
+
+/* Where pdf.js draws the selection, the native highlight must be suppressed or both are painted. */
+.textLayer.selectionRendering ::selection {
+    color: transparent;
+    background: transparent;
+}
+
+.textLayer br::selection {
+    background: transparent;
+}
+
+/* Marker pdf.js grows over the page while a selection is dragged, so it extends past line ends. */
+.textLayer .endOfContent {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    user-select: none;
+}
+
+.textLayer.selecting .endOfContent {
+    top: 0;
+}
+
+/*
+ * Link hit areas. pdf.js builds the whole annotation layer, so everything but links is hidden. Needs a
+ * z-index above the text layer's or links sit under the selectable text.
+ */
+.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: 0 0;
+    color-scheme: only light;
+}
+
+.annotationLayer section {
+    position: absolute;
+    box-sizing: border-box;
+    text-align: initial;
+    pointer-events: auto;
+    transform-origin: 0 0;
+    user-select: none;
+}
+
+.annotationLayer section:not(.linkAnnotation) {
+    display: none;
+}
+
+.annotationLayer .linkAnnotation > a {
+    position: absolute;
+    inset: 0;
+    font-size: 1em;
+}
+
+.annotationLayer .linkAnnotation:not(.hasBorder) > a:hover {
+    opacity: 0.2;
+    background-color: rgb(255 255 0);
+}
+
+.annotationLayer .linkAnnotation.hasBorder:hover {
+    background-color: rgb(255 255 0 / 0.2);
+}
+
+.annotationLayer .hasBorder {
+    background-size: 100% 100%;
+}
