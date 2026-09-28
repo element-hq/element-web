@@ -23,11 +23,6 @@ exports[`RoomTombstoneCallTileView > renders the tile 1`] = `
     >
       Group call ended
     </div>
-    <div
-      class="common-module_time"
-    >
-      12:36
-    </div>
   </div>
 </div>
 `;

@@ -13,7 +13,6 @@ import { EventType, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matr
 import { stubClient } from "test-utils";
 
 import { getMockedRtcDeclineEvent, getMockedRtcNotificationEvent } from "../../call-mocks";
-import { formatTime } from "../../../../../../../DateUtils";
 import { DmTombstoneCallTileViewModel } from "./DmTombstoneCallTileViewModel";
 
 describe("DmTombstoneCallTileViewModel", () => {
@@ -33,8 +32,6 @@ describe("DmTombstoneCallTileViewModel", () => {
         });
         mxEvent.emit(MatrixEventEvent.RelationsCreated, "m.reference", EventType.RTCDecline);
 
-        // Timestamp should be that of the decline event
-        expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285416000)));
         // Call should be declined
         expect(vm.getSnapshot().isCallDeclined).toStrictEqual(true);
     });
@@ -80,8 +77,14 @@ describe("DmTombstoneCallTileViewModel", () => {
             vi.spyOn(cli, "getRoom").mockReturnValue({
                 getTimelineForEvent: () => ({ getEvents: () => [mxEvent, ...after] }),
             } as any);
-        const member = (sender: string, roomId: string, content: object) =>
-            new MatrixEvent({ type: EventType.GroupCallMemberPrefix, sender, room_id: roomId, content });
+        const member = (sender: string, roomId: string, content: object, ts = 0) =>
+            new MatrixEvent({
+                type: EventType.GroupCallMemberPrefix,
+                sender,
+                room_id: roomId,
+                content,
+                origin_server_ts: ts,
+            });
 
         it("yes, when our call membership follows the ring", () => {
             const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
@@ -90,6 +93,20 @@ describe("DmTombstoneCallTileViewModel", () => {
             timelineWith(cli, mxEvent, [member("@alice:m.org", mxEvent.getRoomId()!, { application: "m.call" })]);
             const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
             expect(vm.getSnapshot().answered).toStrictEqual(true);
+        });
+
+        it("and how long the call lasted, from the other side joining to anyone leaving", () => {
+            const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@bob:m.org");
+            const cli = stubClient();
+            vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
+            const roomId = mxEvent.getRoomId()!;
+            timelineWith(cli, mxEvent, [
+                member("@alice:m.org", roomId, { application: "m.call" }, 10_000),
+                member("@bob:m.org", roomId, {}, 95_400),
+                member("@alice:m.org", roomId, {}, 96_000),
+            ]);
+            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
+            expect(vm.getSnapshot()).toMatchObject({ answered: true, durationSeconds: 85 });
         });
 
         it("no, when only the caller's membership follows, or ours is for a later ring", () => {
@@ -105,7 +122,7 @@ describe("DmTombstoneCallTileViewModel", () => {
                 member("@alice:m.org", roomId, { application: "m.call" }),
             ]);
             const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() });
-            expect(vm.getSnapshot().answered).toStrictEqual(false);
+            expect(vm.getSnapshot()).toMatchObject({ answered: false, durationSeconds: undefined });
         });
     });
 

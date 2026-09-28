@@ -26,7 +26,14 @@ exports[`DmTombstoneCallTileView > renders the tile > IncomingVideoDeclined 1`] 
     <div
       class="common-module_time"
     >
-      12:36
+      (
+      <time
+        class="mx_Clock"
+        datetime="PT12M34S"
+      >
+        12:34
+      </time>
+      )
     </div>
   </div>
 </div>
@@ -54,11 +61,6 @@ exports[`DmTombstoneCallTileView > renders the tile > MissedVideo 1`] = `
       class="common-module_title"
     >
       Missed video call
-    </div>
-    <div
-      class="common-module_time"
-    >
-      12:36
     </div>
   </div>
 </div>
@@ -90,11 +92,6 @@ exports[`DmTombstoneCallTileView > renders the tile > MissedVoice 1`] = `
     >
       Missed voice call
     </div>
-    <div
-      class="common-module_time"
-    >
-      12:36
-    </div>
   </div>
 </div>
 `;
@@ -125,7 +122,14 @@ exports[`DmTombstoneCallTileView > renders the tile > OutgoingVideoDeclined 1`] 
     <div
       class="common-module_time"
     >
-      12:36
+      (
+      <time
+        class="mx_Clock"
+        datetime="PT12M34S"
+      >
+        12:34
+      </time>
+      )
     </div>
   </div>
 </div>
@@ -155,12 +159,19 @@ exports[`DmTombstoneCallTileView > renders the tile > OutgoingVoice 1`] = `
     <div
       class="common-module_title"
     >
-      Outgoing voice call
+      Outbound voice call
     </div>
     <div
       class="common-module_time"
     >
-      12:36
+      (
+      <time
+        class="mx_Clock"
+        datetime="PT12M34S"
+      >
+        12:34
+      </time>
+      )
     </div>
   </div>
 </div>
@@ -187,12 +198,19 @@ exports[`DmTombstoneCallTileView > renders the tile > VideoEnded 1`] = `
     <div
       class="common-module_title"
     >
-      Incoming video call
+      Inbound video call
     </div>
     <div
       class="common-module_time"
     >
-      12:36
+      (
+      <time
+        class="mx_Clock"
+        datetime="PT12M34S"
+      >
+        12:34
+      </time>
+      )
     </div>
   </div>
 </div>
@@ -219,12 +237,19 @@ exports[`DmTombstoneCallTileView > renders the tile > VoiceEnded 1`] = `
     <div
       class="common-module_title"
     >
-      Incoming voice call
+      Inbound voice call
     </div>
     <div
       class="common-module_time"
     >
-      12:36
+      (
+      <time
+        class="mx_Clock"
+        datetime="PT12M34S"
+      >
+        12:34
+      </time>
+      )
     </div>
   </div>
 </div>

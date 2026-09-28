@@ -299,9 +299,9 @@
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
             },
-            "incoming": {
-                "video": "Incoming video call",
-                "voice": "Incoming voice call"
+            "inbound": {
+                "video": "Inbound video call",
+                "voice": "Inbound voice call"
             },
             "missed": {
                 "video": "Missed video call",
@@ -324,9 +324,9 @@
                     "title": "Group call in progress"
                 }
             },
-            "outgoing": {
-                "video": "Outgoing video call",
-                "voice": "Outgoing voice call"
+            "outbound": {
+                "video": "Outbound video call",
+                "voice": "Outbound voice call"
             },
             "tombstone": {
                 "room": {
