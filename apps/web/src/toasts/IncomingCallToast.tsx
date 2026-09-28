@@ -188,8 +188,12 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
-        ToastStore.sharedInstance().dismissToast(toastKey);
-        sdkContext.legacyCallHandler.pause(AudioID.Ring);
+        const toasts = ToastStore.sharedInstance();
+        toasts.dismissToast(toastKey);
+        // The ringtone is shared by every ringing toast: it stops with the last one
+        if (!toasts.getToasts().some((t) => t.component === IncomingCallToast)) {
+            sdkContext.legacyCallHandler.pause(AudioID.Ring);
+        }
     }, [toastKey, sdkContext.legacyCallHandler]);
 
     // Dismiss if the notification event or call event is redacted
