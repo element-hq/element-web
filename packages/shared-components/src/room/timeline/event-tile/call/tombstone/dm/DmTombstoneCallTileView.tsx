@@ -24,6 +24,7 @@ import styles from "../common.module.css";
 import { useI18n } from "../../../../../../core/i18n/i18nContext";
 import { CallDirection, CallType } from "../../common";
 import { type RoomTombstoneCallTileViewSnapshot } from "../room/RoomTombstoneCallTileView";
+import { Clock } from "../../../../../../audio/Clock";
 
 export interface DmTombstoneCallTileViewSnapshot extends RoomTombstoneCallTileViewSnapshot {
     /**
@@ -46,6 +47,11 @@ export interface DmTombstoneCallTileViewSnapshot extends RoomTombstoneCallTileVi
      * that was neither answered nor declined was missed.
      */
     answered: boolean;
+    /**
+     * How long the call lasted once connected, in seconds, when the timeline
+     * shows both ends of it.
+     */
+    durationSeconds?: number;
     /**
      * Why the call never connected, when the callee side reported it
      * (MSC4075 invite progress), e.g. "unreachable (SIP 404)".
@@ -93,7 +99,7 @@ function getIconVariant(snapshot: DmTombstoneCallTileViewSnapshot): IconVariant 
  */
 export function DmTombstoneCallTileView({ vm, className }: DmTombstoneCallTileViewProps): React.ReactNode {
     const snapshot = useViewModel(vm);
-    const { type, timestamp, isCallDeclined, failureReason } = snapshot;
+    const { type, isCallDeclined, failureReason, durationSeconds } = snapshot;
     const classNames = classnames(className, styles.container);
     const Icon = icons[type][getIconVariant(snapshot)];
     return (
@@ -109,7 +115,11 @@ export function DmTombstoneCallTileView({ vm, className }: DmTombstoneCallTileVi
                 )}
             </div>
 
-            <div className={styles.time}>{timestamp}</div>
+            {durationSeconds !== undefined && (
+                <div className={styles.time}>
+                    (<Clock seconds={durationSeconds} hoursMinLength={1} minutesMinLength={1} />)
+                </div>
+            )}
         </Flex>
     );
 }
@@ -119,8 +129,8 @@ function NormalContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): Re
     const { translate: _t } = useI18n();
     const voice = type === CallType.Voice;
     if (callDirection === CallDirection.Outgoing)
-        return voice ? _t("timeline|call_tile|outgoing|voice") : _t("timeline|call_tile|outgoing|video");
-    if (answered) return voice ? _t("timeline|call_tile|incoming|voice") : _t("timeline|call_tile|incoming|video");
+        return voice ? _t("timeline|call_tile|outbound|voice") : _t("timeline|call_tile|outbound|video");
+    if (answered) return voice ? _t("timeline|call_tile|inbound|voice") : _t("timeline|call_tile|inbound|video");
     return voice ? _t("timeline|call_tile|missed|voice") : _t("timeline|call_tile|missed|video");
 }
 

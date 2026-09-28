@@ -616,7 +616,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderSt
         });
         const showTimestamp = getShouldShowTimestamp({
             eventTs: event.eventTs,
-            isRtcNotification: event.isRtcNotification,
             hideTimestamp: timestamp.hideTimestamp,
             alwaysShowTimestamps: timestamp.alwaysShowTimestamps,
             last: display.isLast,

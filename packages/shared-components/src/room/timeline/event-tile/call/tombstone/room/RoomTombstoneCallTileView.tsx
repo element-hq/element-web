@@ -37,13 +37,12 @@ export interface CallStartedTileViewProps {
  */
 export function RoomTombstoneCallTileView({ vm, className }: CallStartedTileViewProps): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { timestamp } = useViewModel(vm);
+    useViewModel(vm);
     const classNames = classnames(className, styles.container);
     return (
         <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
             <VideoCallDeclinedSolidIcon className={styles.icon} width={20} height={20} />
             <div className={styles.title}>{_t("timeline|call_tile|tombstone|room|title")}</div>
-            <div className={styles.time}>{timestamp}</div>
         </Flex>
     );
 }
