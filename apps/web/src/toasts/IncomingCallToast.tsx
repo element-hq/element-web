@@ -200,7 +200,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     const onCall = useCallback(
         (call: Call, callRoomId: string): void => {
             const roomId = notificationEvent.getRoomId();
-            if (!roomId && roomId !== callRoomId) return;
+            if (roomId !== callRoomId) return;
             if (call === null || call.participants.size === 0) {
                 dismissToast();
             }

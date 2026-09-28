@@ -42,7 +42,7 @@ import {
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { CallStore } from "../stores/CallStore";
+import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import DMRoomMap from "../utils/DMRoomMap";
 import ToastStore from "../stores/ToastStore";
@@ -382,6 +382,14 @@ describe("IncomingCallToast", () => {
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId)),
         );
+    });
+
+    it("keeps ringing when a call in another room ends", async () => {
+        const callId = renderToast();
+        CallStore.instance.emit(CallStoreEvent.Call, null, "!other:example.org");
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(toastStore.dismissToast).not.toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
     });
 
     it("closes toast when a decline event was received", async () => {
