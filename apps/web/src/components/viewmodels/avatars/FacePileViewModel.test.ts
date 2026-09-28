@@ -8,8 +8,8 @@
 // @vitest-environment happy-dom
 
 import { it, describe, expect } from "vitest";
+import { mkRoomMember, stubClient } from "test-utils";
 
-import { mkRoomMember, stubClient } from "../../../../test/test-utils";
 import { FacePileViewModel } from "./FacePileViewModel";
 
 describe("FacePileViewModel", () => {

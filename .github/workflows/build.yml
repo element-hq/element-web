@@ -47,16 +47,18 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: ./.github/actions/setup-node-pnpm
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
                   cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
-                  node-version: "lts/*"
 
             - name: Fetch layered build
-              run: ./scripts/layered.sh
+              id: layered
+              run: |
+                  ./scripts/layered.sh
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
             - name: Copy config
               working-directory: apps/web
@@ -66,7 +68,8 @@ jobs:
               working-directory: apps/web
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
+                  VERSION: ${{ steps.layered.outputs.version }}
+              run: pnpm run build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

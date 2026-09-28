@@ -278,6 +278,11 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
                         <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
                         <SettingsFlag name="RoomList.showSections" level={SettingLevel.ACCOUNT} />
+                        <SettingsFlag
+                            name="RoomList.showPeopleSection"
+                            level={SettingLevel.ACCOUNT}
+                            requires={["RoomList.showSections"]}
+                        />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")} formWrap>
@@ -351,6 +356,13 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
                             level={SettingLevel.DEVICE}
                             requires={["urlPreviewsEnabled"]}
                         />
+                        {SettingsStore.getValue("feature_msc4095_url_preview_bundle") && (
+                            <SettingsFlag
+                                name="urlPreviewsEnabled_e2ee_bundled_only"
+                                level={SettingLevel.DEVICE}
+                                requires={["urlPreviewsEnabled", "urlPreviewsEnabled_e2ee"]}
+                            />
+                        )}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|media_heading")} formWrap>

@@ -37,22 +37,16 @@ import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 /**
  * The possible states of the component.
  * - `inform_user`: The user is informed about the recovery key.
- * - `save_key_setup_flow`: The user is asked to save the new recovery key during the setup flow.
- * - `save_key_change_flow`: The user is asked to save the new recovery key during the change key flow.
- * - `confirm_key_setup_flow`: The user is asked to confirm the new recovery key during the set up flow.
- * - `confirm_key_change_flow`: The user is asked to confirm the new recovery key during the change key flow.
+ * - `save_key_flow`: A new generated recovery key is displayed to the user and they are asked to save it.
+ * - `confirm_key_flow`: The user is asked to confirm the new recovery key.
  */
-type State =
-    | "inform_user"
-    | "save_key_setup_flow"
-    | "save_key_change_flow"
-    | "confirm_key_setup_flow"
-    | "confirm_key_change_flow";
+type State = "inform_user" | "save_key_flow" | "confirm_key_flow";
 
 interface ChangeRecoveryKeyProps {
     /**
-     * If true, the component will display the flow to change the recovery key.
-     * If false,the component will display the flow to set up a new recovery key.
+     * Whether the user already has a recovery key.
+     * This affects some labels (referring to changing the recovery key, versus setting up recovery), and the starting
+     * state of component (whether the introductory text is shown or not).
      */
     userHasRecoveryKey: boolean;
     /**
@@ -77,7 +71,7 @@ export function ChangeRecoveryKey({
 
     // If the user is setting up recovery for the first time, we first show them a panel explaining what
     // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
-    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_change_flow" : "inform_user");
+    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_flow" : "inform_user");
 
     const onCancelClickWrapper = useCallback(() => {
         logger.debug("ChangeRecoveryKey: user cancelled");
@@ -95,31 +89,23 @@ export function ChangeRecoveryKey({
             // Show a panel explaining what "recovery" is for, and what a recovery key does.
             content = (
                 <InformationPanel
-                    onContinueClick={() => setState("save_key_setup_flow")}
+                    onContinueClick={() => setState("save_key_flow")}
                     onCancelClick={onCancelClickWrapper}
                 />
             );
             break;
-        case "save_key_setup_flow":
-        case "save_key_change_flow":
+        case "save_key_flow":
             // Show a generated recovery key and ask the user to save it.
             content = (
                 <KeyPanel
                     // encodedPrivateKey is always defined, the optional typing is incorrect
                     recoveryKey={recoveryKey.encodedPrivateKey!}
-                    onConfirmClick={() =>
-                        setState((currentState) =>
-                            currentState === "save_key_change_flow"
-                                ? "confirm_key_change_flow"
-                                : "confirm_key_setup_flow",
-                        )
-                    }
+                    onConfirmClick={() => setState("confirm_key_flow")}
                     onCancelClick={onCancelClickWrapper}
                 />
             );
             break;
-        case "confirm_key_setup_flow":
-        case "confirm_key_change_flow":
+        case "confirm_key_flow":
             // Ask the user to enter the recovery key they just saved to confirm it.
             content = (
                 <KeyForm
@@ -166,9 +152,9 @@ export function ChangeRecoveryKey({
                         }
                     }}
                     submitButtonLabel={
-                        state === "confirm_key_setup_flow"
-                            ? _t("settings|encryption|recovery|set_up_recovery_confirm_button")
-                            : _t("settings|encryption|recovery|change_recovery_confirm_button")
+                        userHasRecoveryKey
+                            ? _t("settings|encryption|recovery|change_recovery_confirm_button")
+                            : _t("settings|encryption|recovery|set_up_recovery_confirm_button")
                     }
                 />
             );
@@ -180,7 +166,7 @@ export function ChangeRecoveryKey({
             ? _t("settings|encryption|recovery|change_recovery_key")
             : _t("settings|encryption|recovery|set_up_recovery"),
     ];
-    const labels = getLabels(state);
+    const labels = getLabels(state, userHasRecoveryKey);
 
     return (
         <>
@@ -217,7 +203,7 @@ type Labels = {
  * Get the header title and description for the given state.
  * @param state
  */
-function getLabels(state: State): Labels {
+function getLabels(state: State, userHasRecoveryKey: boolean): Labels {
     switch (state) {
         case "inform_user":
             return {
@@ -226,26 +212,26 @@ function getLabels(state: State): Labels {
                     changeRecoveryKeyButton: _t("settings|encryption|recovery|change_recovery_key"),
                 }),
             };
-        case "save_key_setup_flow":
-            return {
-                title: _t("settings|encryption|recovery|set_up_recovery_save_key_title"),
-                description: _t("settings|encryption|recovery|set_up_recovery_save_key_description"),
-            };
-        case "save_key_change_flow":
-            return {
-                title: _t("settings|encryption|recovery|change_recovery_key_title"),
-                description: _t("settings|encryption|recovery|change_recovery_key_description"),
-            };
-        case "confirm_key_setup_flow":
-            return {
-                title: _t("settings|encryption|recovery|set_up_recovery_confirm_title"),
-                description: _t("settings|encryption|recovery|set_up_recovery_confirm_description"),
-            };
-        case "confirm_key_change_flow":
-            return {
-                title: _t("settings|encryption|recovery|change_recovery_confirm_title"),
-                description: _t("settings|encryption|recovery|change_recovery_confirm_description"),
-            };
+        case "save_key_flow":
+            return userHasRecoveryKey
+                ? {
+                      title: _t("settings|encryption|recovery|change_recovery_key_title"),
+                      description: _t("settings|encryption|recovery|change_recovery_key_description"),
+                  }
+                : {
+                      title: _t("settings|encryption|recovery|set_up_recovery_save_key_title"),
+                      description: _t("settings|encryption|recovery|set_up_recovery_save_key_description"),
+                  };
+        case "confirm_key_flow":
+            return userHasRecoveryKey
+                ? {
+                      title: _t("settings|encryption|recovery|change_recovery_confirm_title"),
+                      description: _t("settings|encryption|recovery|change_recovery_confirm_description"),
+                  }
+                : {
+                      title: _t("settings|encryption|recovery|set_up_recovery_confirm_title"),
+                      description: _t("settings|encryption|recovery|set_up_recovery_confirm_description"),
+                  };
     }
 }
 

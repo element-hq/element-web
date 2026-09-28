@@ -241,6 +241,14 @@ export default class HTMLExporter extends Exporter {
         return avatarUrl ? mediaFromMxc(avatarUrl).getThumbnailOfSourceHttp(30, 30, "crop") : null;
     }
 
+    /**
+     * The path, inside the export, of the avatar file for the given user.
+     * The path is sanitized in case of malicious content.
+     */
+    private getAvatarFilePath(userId: string): string {
+        return `users/${escapeHtml(userId.replace(/:/g, "-").replace(/\//g, "-"))}.png`;
+    }
+
     protected async saveAvatarIfNeeded(event: MatrixEvent): Promise<void> {
         const member = event.sender!;
         if (!this.avatars.has(member.userId)) {
@@ -249,7 +257,7 @@ export default class HTMLExporter extends Exporter {
                 this.avatars.set(member.userId, true);
                 const image = await fetch(avatarUrl!);
                 const blob = await image.blob();
-                this.addFile(`users/${member.userId.replace(/:/g, "-")}.png`, blob);
+                this.addFile(this.getAvatarFilePath(member.userId), blob);
             } catch (err) {
                 logger.log("Failed to fetch user's avatar" + err);
             }
@@ -355,7 +363,7 @@ export default class HTMLExporter extends Exporter {
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
                 encodeURI(avatarUrl).replace(/&/g, "&amp;"),
-                `users/${mxEv.sender!.userId.replace(/:/g, "-")}.png`,
+                this.getAvatarFilePath(mxEv.sender!.userId),
             );
         }
         return eventTileMarkup;

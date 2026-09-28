@@ -47,14 +47,6 @@ vi.mock("../../../utils/direct-messages", async () => ({
 
 vi.mock("../../../dispatcher/dispatcher");
 
-vi.mock("../../../customisations/UserIdentifier", () => {
-    return {
-        default: {
-            getDisplayUserIdentifier: vi.fn().mockReturnValue("customUserIdentifier"),
-        },
-    };
-});
-
 vi.mock("../../../utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: vi.fn(),
@@ -209,14 +201,16 @@ describe("<UserInfo />", () => {
         describe.each([[ProfileKeyTimezone], [ProfileKeyMSC4175Timezone]])("timezone rendering (%s)", (profileKey) => {
             it("renders user timezone if set", async () => {
                 // For timezone, force a consistent locale.
-                vi.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(
-                    function (this: Date, _locale, opts) {
-                        return origDate.call(this, "en-US", {
-                            ...opts,
-                            hourCycle: "h12",
-                        });
-                    },
-                );
+                vi.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
+                    this: Date,
+                    _locale,
+                    opts,
+                ) {
+                    return origDate.call(this, "en-US", {
+                        ...opts,
+                        hourCycle: "h12",
+                    });
+                });
                 mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
                 mockClient.getExtendedProfile.mockResolvedValue({ [profileKey]: "Europe/London" });
                 renderComponent();
@@ -433,6 +427,9 @@ describe("<UserInfo />", () => {
             if (screen.queryAllByRole("progressbar").length) {
                 await act(() => waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar")));
             }
+            await expect(
+                screen.findByText("User verification unavailable", { exact: false }),
+            ).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
     });

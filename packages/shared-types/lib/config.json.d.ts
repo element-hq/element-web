@@ -223,4 +223,31 @@ export interface WebConfigJson {
 export interface DesktopConfigJson extends WebConfigJson {
     web_base_url?: string;
     update_base_url?: string;
+    /**
+     * Configuration for experimental X.509-based identity verification.
+     */
+    x509?: {
+        /**
+         * Path to the PKCS#11 library used to interface with our supported hardware keys.
+         *
+         * For Yubikeys, this is generally:
+         * - Linux: `/usr/local/lib/libykcs11.so` (distribution dependent)
+         * - macOS: `/opt/homebrew/lib/libykcs11.dylib` (via Homebrew)
+         * - Windows: `C:\Program Files\Yubico\Yubico PIV Tool\bin\libykcs11.dll`
+         *
+         * Element Desktop Pro likely ships this as part of its build, and so this should be
+         * configured to point there.
+         */
+        library_path: string;
+        /**
+         * Overrides the name reported by the PKCS#11 library. This can generally be left unset.
+         */
+        library_name?: string;
+        /**
+         * Path to a PEM file holding the current user's own certificate chain. The chain is formatted with
+         * the leaf certificate first, followed by its intermediates, omitting the root. The file is passed
+         * to the crypto stack verbatim.
+         */
+        certificate_path?: string;
+    };
 }

@@ -27,6 +27,10 @@
         "yes": "Да"
     },
     "confirm_quit": "Вы уверены, что хотите выйти?",
+    "download": {
+        "unable_to_open_description": "Файл не удалось открыть. Возможно, он был перемещён или удалён.",
+        "unable_to_open_title": "Не удалось открыть файл"
+    },
     "edit_menu": {
         "speech": "Речь",
         "speech_start_speaking": "Говорите",
@@ -63,6 +67,10 @@
         "save_image_as": "Сохранить изображение как...",
         "save_image_as_error_description": "Не удалось сохранить изображение",
         "save_image_as_error_title": "Не удалось сохранить изображение"
+    },
+    "save_dialog": {
+        "all_files": "Все файлы",
+        "named_file_type": "%(extension)s Файл"
     },
     "store": {
         "error": {

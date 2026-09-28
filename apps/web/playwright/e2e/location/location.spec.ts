@@ -46,7 +46,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await submitShareLocation(page);
 
-            await page.getByRole("button", { name: "Map marker" }).click();
+            await page.getByLabel("Map marker").click();
 
             const dialog = page.getByRole("dialog");
 
@@ -60,7 +60,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await app.closeDialog();
 
-            await expect(page.getByRole("button", { name: "Map marker" })).toBeVisible();
+            await expect(page.getByLabel("Map marker")).toBeVisible();
         },
     );
 

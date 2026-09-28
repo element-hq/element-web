@@ -140,11 +140,15 @@ export class DisplayMediaSessionController {
             this.state !== "Selecting" ||
             owned.senderId !== senderId ||
             owned.id !== binding.requestId ||
-            owned.requesterWidgetId !== binding.requesterWidgetId ||
+            (owned.requesterWidgetId !== null && owned.requesterWidgetId !== binding.requesterWidgetId) ||
             owned.sessionId !== undefined
         ) {
             return false;
         }
+        // Component-hosted Element Call invokes getDisplayMedia in Element Web's top frame, which has no
+        // widgetId URL parameter. The renderer may correlate that request only when it has exactly one
+        // pending HostBridge session; adopt its identity for this exact sender/current Selecting request.
+        owned.requesterWidgetId = binding.requesterWidgetId;
         owned.sessionId = binding.sessionId;
         return true;
     }

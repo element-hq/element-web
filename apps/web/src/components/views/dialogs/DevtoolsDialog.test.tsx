@@ -14,8 +14,8 @@ import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
+import { stubClient } from "test-utils";
 
-import { stubClient } from "../../../../test/test-utils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DevtoolsDialog from "./DevtoolsDialog";

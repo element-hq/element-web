@@ -90,7 +90,6 @@ This release process revolves around our main repositories:
 We own other repositories, but they have more ad-hoc releases and are not part of the bi-weekly cycle:
 
 - https://github.com/matrix-org/matrix-web-i18n/
-- https://github.com/matrix-org/matrix-react-sdk-module-api
 
 </blockquote></details>
 

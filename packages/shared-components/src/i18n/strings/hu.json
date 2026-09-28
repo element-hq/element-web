@@ -56,7 +56,6 @@
             "clear_status": "Törlés",
             "create_an_account": "Fiók létrehozása",
             "got_an_account": "Van már fiókja?",
-            "manage_account": "Fiók kezelése",
             "sign_in": "Bejelentkezés",
             "title": "Felhasználói menü"
         }
@@ -276,8 +275,6 @@
         "pending_moderation": "Moderálásra váró üzenet",
         "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
         "url_preview": {
-            "close": "Előnézet bezárása",
-            "open_link": "Hivatkozás megnyitása",
             "show_n_more": {
                 "one": "%(count)s további előnézet megjelenítése",
                 "other": "%(count)s további előnézet megjelenítése"

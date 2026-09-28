@@ -12,7 +12,7 @@ import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/ico
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import { DeviceListener } from "../device-listener";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import { Action } from "../dispatcher/actions";
 import { snoozeBulkUnverifiedDeviceReminder } from "../utils/device/snoozeBulkUnverifiedDeviceReminder";

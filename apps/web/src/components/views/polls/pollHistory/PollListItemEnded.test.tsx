@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeAll, afterAll } from "vitest";
+import { vi, describe, it, expect } from "vitest";
 import React from "react";
 import { render } from "test-utils-rtl";
 import { type MatrixEvent, type Poll, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
@@ -18,9 +18,7 @@ import {
     makePollResponseEvent,
     makePollStartEvent,
     mockClientMethodsUser,
-    mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
-    unmockIntlDateTimeFormat,
 } from "test-utils";
 
 import { PollListItemEnded } from "./PollListItemEnded";
@@ -55,16 +53,6 @@ describe("<PollListItemEnded />", () => {
 
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
         render(<PollListItemEnded {...props} onClick={vi.fn()} />);
-
-    beforeAll(() => {
-        // mock default locale to en-GB and set timezone
-        // so these tests run the same everywhere
-        mockIntlDateTimeFormat();
-    });
-
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
-    });
 
     it("renders a poll with no responses", async () => {
         await setupRoomWithPollEvents([pollStartEvent], [], [pollEndEvent], mockClient, room);

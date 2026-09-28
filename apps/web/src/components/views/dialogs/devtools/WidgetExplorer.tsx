@@ -54,7 +54,7 @@ const WidgetExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
             <FilteredList query={query} onChange={setQuery}>
                 {widgets.map((w) => (
                     <button
-                        className="mx_DevTools_button"
+                        className="mx_LegacyDialogButton mx_DevTools_button"
                         key={w.url + w.eventId}
                         onClick={() => setWidget(w)}
                         type="button"

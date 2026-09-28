@@ -58,34 +58,11 @@ function createProps(overrides: Partial<EventTileViewProps> = {}): EventTileView
 const applicationStylingClasses = {
     root: "mx_EventTile",
     line: "mx_EventTile_line",
-    details: "mx_EventTile_details",
-    slotAvatar: "mx_EventTile_avatar",
-    senderDetails: "mx_EventTile_senderDetails",
-    senderDetailsLink: "mx_EventTile_senderDetailsLink",
-    slotBody: "mx_EventTile_body",
-    slotNotificationRoomLabel: "mx_EventTile_truncated",
-    slotNotificationBadge: "mx_NotificationBadge",
-    slotSender: "mx_DisambiguatedProfile",
     slotTimestamp: "mx_MessageTimestamp",
-    slotPadlock: "mx_EventTile_e2eIcon",
-    slotReplyChain: "mx_EventTile_reply",
-    slotActionBar: "mx_MessageActionBar",
-    slotFooter: "mx_EventTile_footer",
-    slotThreadInfo: "mx_ThreadSummary",
-    slotReceipt: "mx_ReadReceiptGroup_container",
 } satisfies Partial<EventTileViewClassNames>;
 
 const applicationSlotClassNames: Record<string, keyof typeof applicationStylingClasses> = {
-    avatar: "slotAvatar",
-    sender: "slotSender",
-    body: "slotBody",
     timestamp: "slotTimestamp",
-    padlock: "slotPadlock",
-    replyChain: "slotReplyChain",
-    actionBar: "slotActionBar",
-    footer: "slotFooter",
-    threadInfo: "slotThreadInfo",
-    receipt: "slotReceipt",
 };
 
 const slotClasses: Record<string, string> = {
@@ -159,7 +136,7 @@ const lineStateMatrix = [
 }>;
 
 const groupLineSlotOrder = [
-    "event-tile-slot-contextMenu",
+    "styling-contract-contextMenu",
     "event-tile-slot-timestamp",
     "event-tile-slot-padlock",
     "event-tile-slot-replyChain",
@@ -170,14 +147,14 @@ const groupLineSlotOrder = [
 const groupRootSlotOrder = [
     "event-tile-slot-sender",
     "event-tile-slot-avatar",
-    "event-line-1",
+    "event-tile-line",
     "event-tile-slot-footer",
     "event-tile-slot-threadInfo",
     "event-tile-slot-receipt",
 ];
 
 const ircLineSlotOrder = [
-    "event-tile-slot-contextMenu",
+    "styling-contract-contextMenu",
     "event-tile-slot-replyChain",
     "event-tile-slot-body",
     "event-tile-slot-actionBar",
@@ -190,7 +167,7 @@ const ircRootSlotOrder = [
     "event-tile-slot-padlock",
     "event-tile-slot-avatar",
     "event-tile-slot-sender",
-    "event-line-1",
+    "event-tile-line",
     "event-tile-slot-receipt",
 ];
 
@@ -232,7 +209,7 @@ describe("EventTileView", () => {
         const { container, getByTestId } = render(<EventTileView {...createProps()} />);
         const root = container.firstElementChild;
         const line = getByTestId("body").closest(".custom-line");
-        const contextMenu = getByTestId("context-menu").parentElement;
+        const contextMenu = getByTestId("context-menu");
 
         expect(root).toHaveClass("custom-root");
         expect(root).toHaveAttribute("aria-live", "off");
@@ -244,8 +221,35 @@ describe("EventTileView", () => {
         expect(line).toHaveClass("custom-line");
         expect(line).toHaveAttribute("id", "event-line-1");
         expect(getByTestId("context-menu")).toBeInTheDocument();
-        expect(contextMenu).toHaveClass("custom-context-menu");
-        expect(contextMenu).toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
+        expect(contextMenu.parentElement).toBe(line);
+        expect(contextMenu).not.toHaveAttribute("data-testid", "event-tile-slot-contextMenu");
+    });
+
+    it("renders the card shape with the room slot structure", () => {
+        const { container, getByTestId } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, shape: "Card" },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.shapeCard);
+        expect(getByTestId("styling-contract-body").closest(`#${renderState.id}`)).toBeInTheDocument();
+    });
+
+    it("exposes the Search shape styling hook", () => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, shape: "Search" },
+                    slots: createStylingContractSlots(),
+                })}
+            />,
+        );
+
+        expect(container.firstElementChild).toHaveClass(styles.shapeSearch);
     });
 
     it("exposes shell state through application-neutral state classes", () => {
@@ -340,8 +344,8 @@ describe("EventTileView", () => {
 
             const containedLineSlots =
                 layout === "irc"
-                    ? ["contextMenu", "replyChain", "body", "actionBar", "footer", "threadInfo"]
-                    : ["contextMenu", "timestamp", "padlock", "replyChain", "body", "actionBar"];
+                    ? ["replyChain", "body", "actionBar", "footer", "threadInfo"]
+                    : ["timestamp", "padlock", "replyChain", "body", "actionBar"];
             for (const slotName of containedLineSlots) {
                 expect(root.querySelector(`[data-testid="event-tile-slot-${slotName}"]`)?.parentElement).toBe(line);
             }
@@ -364,18 +368,7 @@ describe("EventTileView", () => {
             group.getByTestId("styling-contract-body").closest(`.${applicationStylingClasses.line}`),
         ).toBeInTheDocument();
 
-        for (const slot of [
-            "sender",
-            "avatar",
-            "body",
-            "timestamp",
-            "padlock",
-            "replyChain",
-            "actionBar",
-            "footer",
-            "threadInfo",
-            "receipt",
-        ]) {
+        for (const slot of ["timestamp"]) {
             expect(
                 group.getByTestId(`styling-contract-${slot}`).closest('[data-testid^="event-tile-slot-"]'),
             ).toHaveClass(applicationStylingClasses[applicationSlotClassNames[slot]]);
@@ -387,19 +380,6 @@ describe("EventTileView", () => {
             ).toHaveAttribute("data-testid", `event-tile-slot-${slot}`);
         }
 
-        const thread = render(
-            <EventTileView
-                {...createProps({
-                    classNames: applicationStylingClasses,
-                    root: { ...renderState, shape: "Thread" },
-                    slots: createStylingContractSlots(),
-                })}
-            />,
-        );
-        expect(thread.container.querySelector(".mx_EventTile_senderDetails")).toHaveClass(
-            applicationStylingClasses.senderDetails,
-        );
-
         const preview = render(
             <EventTileView
                 {...createProps({
@@ -409,29 +389,71 @@ describe("EventTileView", () => {
                 })}
             />,
         );
-        expect(preview.container.querySelector(".mx_EventTile_details")).toHaveClass(applicationStylingClasses.details);
         expect(preview.getByTestId("styling-contract-notificationRoomLabel").parentElement).toHaveClass(
-            applicationStylingClasses.slotNotificationRoomLabel,
+            slotClasses.notificationRoomLabel,
         );
         expect(preview.getByTestId("styling-contract-notificationBadge").parentElement).toHaveClass(
-            applicationStylingClasses.slotNotificationBadge,
+            slotClasses.notificationBadge,
         );
-        expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(
-            applicationStylingClasses.slotAvatar,
-        );
+        expect(preview.getByTestId("styling-contract-room-avatar").parentElement).toHaveClass(slotClasses.avatar);
+    });
 
-        const file = render(
+    it("renders multiple slot children inside one wrapper boundary", () => {
+        const { getByTestId } = render(
             <EventTileView
                 {...createProps({
-                    classNames: applicationStylingClasses,
-                    root: { ...renderState, shape: "File" },
-                    slots: createStylingContractSlots(),
+                    slots: {
+                        body: (
+                            <>
+                                <span data-testid="fragment-child-one">One</span>
+                                <span data-testid="fragment-child-two">Two</span>
+                            </>
+                        ),
+                    },
                 })}
             />,
         );
-        expect(file.container.querySelector(".mx_EventTile_senderDetailsLink")).toHaveClass(
-            applicationStylingClasses.senderDetailsLink,
+
+        const firstChild = getByTestId("fragment-child-one");
+        const secondChild = getByTestId("fragment-child-two");
+        const wrapper = firstChild.closest('[data-testid="event-tile-slot-body"]');
+
+        expect(wrapper).not.toBeNull();
+        expect(secondChild.parentElement).toBe(wrapper);
+        expect(wrapper).toHaveClass(styles.slotBody);
+        expect(wrapper?.children).toHaveLength(2);
+    });
+
+    it.each([undefined, null, false] as const)("does not render a wrapper for an empty %s slot", (content) => {
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        avatar: content,
+                    },
+                })}
+            />,
         );
+
+        expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeInTheDocument();
+    });
+
+    it("derives receipt gutter styling from receipt slot presence", () => {
+        const withReceipt = render(
+            <EventTileView
+                {...createProps({
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        receipt: <span data-testid="receipt">Receipt</span>,
+                    },
+                })}
+            />,
+        );
+        const withoutReceipt = render(<EventTileView {...createProps()} />);
+
+        expect(withReceipt.container.querySelector("li")).toHaveClass(styles.hasReceiptSlot);
+        expect(withoutReceipt.container.querySelector("li")).not.toHaveClass(styles.hasReceiptSlot);
     });
 
     it.each(["group", "bubble"] as const)("renders the %s thread layout in the original slot order", (layout) => {

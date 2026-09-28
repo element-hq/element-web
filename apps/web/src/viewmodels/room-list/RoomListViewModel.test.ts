@@ -442,7 +442,7 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
-        describe("Favourites and Low Priority filters (RoomList.showSections)", () => {
+        describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                     if (setting === "RoomList.showSections") return showSections;
@@ -453,7 +453,7 @@ describe("RoomListViewModel", () => {
                 });
             }
 
-            it("hides the Favourites and Low Priority filters when sections are enabled", () => {
+            it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -464,9 +464,10 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).not.toContain("favourite");
                 expect(filterIds).not.toContain("low_priority");
+                expect(filterIds).not.toContain("invites");
             });
 
-            it("shows the Favourites and Low Priority filters when sections are disabled", () => {
+            it("shows the Favourites, Low Priority and Invites filters when sections are disabled", () => {
                 mockShowSections(false);
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
@@ -477,6 +478,7 @@ describe("RoomListViewModel", () => {
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).toContain("favourite");
                 expect(filterIds).toContain("low_priority");
+                expect(filterIds).toContain("invites");
             });
 
             it("recomputes the filters and clears the active filter when the setting changes", () => {
@@ -1137,7 +1139,7 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections).toHaveLength(0);
             });
 
-            it("should exclude favourite and low_priority from filter list", () => {
+            it("should exclude favourite, low_priority and invites from filter list", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1147,6 +1149,7 @@ describe("RoomListViewModel", () => {
                 const snapshot = viewModel.getSnapshot();
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
+                expect(snapshot.filterIds).not.toContain("invites");
                 // Other filters should still be present
                 expect(snapshot.filterIds).toContain("unread");
                 expect(snapshot.filterIds).toContain("people");
@@ -1184,6 +1187,61 @@ describe("RoomListViewModel", () => {
                 expect(headerVM).toBeDefined();
                 expect(headerVM.getSnapshot().id).toBe(DefaultTagID.Favourite);
                 expect(headerVM.getSnapshot().isExpanded).toBe(true);
+            });
+
+            it.each([
+                { tag: DefaultTagID.Favourite, showPeopleSection: false, title: "Favourites" },
+                // Without a People section, the Chats section holds the direct messages too
+                { tag: CHATS_TAG, showPeopleSection: false, title: "Chats" },
+                { tag: CHATS_TAG, showPeopleSection: true, title: "Rooms" },
+                { tag: DefaultTagID.DM, showPeopleSection: true, title: "People" },
+            ])(
+                'should title the $tag section header "$title" when showPeopleSection is $showPeopleSection',
+                ({ tag, showPeopleSection, title }) => {
+                    const getValueSpy = vi.spyOn(SettingsStore, "getValue");
+                    const getValue = getValueSpy.getMockImplementation()!;
+                    getValueSpy.mockImplementation((setting, roomId, excludeDefault) =>
+                        setting === "RoomList.showPeopleSection"
+                            ? showPeopleSection
+                            : getValue(setting, roomId, excludeDefault),
+                    );
+
+                    viewModel = new RoomListViewModel({
+                        client: matrixClient,
+                        spaceStore: SDKContextClass.instance.spaceStore,
+                        roomViewStore: SDKContextClass.instance.roomViewStore,
+                    });
+
+                    expect(viewModel.getSectionHeaderViewModel(tag).getSnapshot().title).toBe(title);
+                },
+            );
+
+            it("should retitle the Chats section header when showPeopleSection changes", () => {
+                let showPeopleSection = false;
+                let watchCallback: () => void = () => {};
+                const getValueSpy = vi.spyOn(SettingsStore, "getValue");
+                const getValue = getValueSpy.getMockImplementation()!;
+                getValueSpy.mockImplementation((setting, roomId, excludeDefault) =>
+                    setting === "RoomList.showPeopleSection"
+                        ? showPeopleSection
+                        : getValue(setting, roomId, excludeDefault),
+                );
+                vi.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                    if (setting === "RoomList.showPeopleSection") watchCallback = callback as () => void;
+                    return "watcher-id";
+                });
+
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    spaceStore: SDKContextClass.instance.spaceStore,
+                    roomViewStore: SDKContextClass.instance.roomViewStore,
+                });
+                expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).getSnapshot().title).toBe("Chats");
+
+                showPeopleSection = true;
+                watchCallback();
+
+                expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).getSnapshot().title).toBe("Rooms");
             });
 
             it("should reuse section header view models", () => {
@@ -1661,7 +1719,7 @@ describe("RoomListViewModel", () => {
                 it("should collapse every section on drag start", () => {
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
 
-                    viewModel.onSectionDragStart();
+                    viewModel.onSectionOrRoomDragStart();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
@@ -1676,8 +1734,8 @@ describe("RoomListViewModel", () => {
                     // Collapse Favourite before the drag; other sections remain expanded
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
 
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
@@ -1697,13 +1755,13 @@ describe("RoomListViewModel", () => {
                 it("should re-snapshot expansion state on each drag start", () => {
                     // First cycle: Favourite is collapsed before the drag
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // Between cycles: collapse CHATS_TAG as well
                     viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
-                    viewModel.onSectionDragStart();
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragStart();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     // The second drag end must restore the state captured at the second drag start
                     // (Favourite collapsed, CHATS_TAG collapsed, LowPriority expanded), not the first cycle's snapshot.
@@ -1713,7 +1771,7 @@ describe("RoomListViewModel", () => {
                 });
 
                 it("should be a no-op when drag end is called without drag start", () => {
-                    viewModel.onSectionDragEnd();
+                    viewModel.onSectionOrRoomDragEnd();
 
                     expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
                     expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
@@ -1752,7 +1810,7 @@ describe("RoomListViewModel", () => {
 
             viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
 
-            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite);
+            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite, true);
         });
 
         it("should do nothing when the room is not found", () => {
@@ -1773,14 +1831,20 @@ describe("RoomListViewModel", () => {
         });
     });
 
-    describe("show_room_tile scroll", () => {
+    describe("scrolling the active room into view", () => {
         beforeEach(() => {
             // Dispatching ViewRoom is also handled by the global RoomViewStore, which calls
             // MatrixClientPeg.safeGet(); stubClient sets up the peg so that doesn't throw.
             stubClient();
         });
 
-        it("should scroll a room into view in a flat list", async () => {
+        it.each([
+            [
+                "a ViewRoom dispatch asking for the tile",
+                { action: Action.ViewRoom, room_id: "!room2:server", show_room_tile: true, metricsTrigger: undefined },
+            ],
+            ["the active room changing", { action: Action.ActiveRoomChanged, newRoomId: "!room2:server" }],
+        ])("should scroll a room into view in a flat list on %s", async (_trigger, payload) => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
                 roomViewStore: sdkContext.roomViewStore,
@@ -1789,12 +1853,7 @@ describe("RoomListViewModel", () => {
             const scrollSpy = vi.fn();
             viewModel.setScrollToIndex(scrollSpy);
 
-            dispatcher.dispatch({
-                action: Action.ViewRoom,
-                room_id: "!room2:server",
-                show_room_tile: true,
-                metricsTrigger: undefined,
-            });
+            dispatcher.dispatch(payload);
 
             // Flat list: entry index == room index.
             await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(1));
@@ -1841,13 +1900,133 @@ describe("RoomListViewModel", () => {
 
             dispatcher.dispatch({
                 action: Action.ViewRoom,
-                room_id: "!room3:server",
+                room_id: "!nope:server",
                 show_room_tile: true,
                 metricsTrigger: undefined,
             });
 
+            await flushPromises();
+            expect(scrollSpy).not.toHaveBeenCalled();
+        });
+
+        it("should expand a collapsed section whose header view model does not exist yet", async () => {
+            const favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
+            const favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
+            const regularRoom1 = mkStubRoom("!reg1:server", "Reg 1", matrixClient);
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                    { tag: CHATS_TAG, rooms: [regularRoom1] },
+                ],
+            });
+            // Favourites is collapsed from a previous session, and no header view model has been
+            // created for it yet.
+            sectionExpansionState = { home: { [DefaultTagID.Favourite]: false } };
+
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
+            const scrollSpy = vi.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                newRoomId: "!fav2:server",
+            });
+
+            // Entry space: [Fav header(0), fav1(1), fav2(2), Chats header(3), reg1(4)]
             await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(2));
-            expect(scrollSpy).toHaveBeenCalledTimes(1);
+            expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
+        });
+
+        it("should scroll once the view registers its scroll handle", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
+
+            // The room is opened before the view has mounted, so there is nothing to scroll with.
+            vi.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                newRoomId: "!room2:server",
+            });
+            await flushPromises();
+
+            const scrollSpy = vi.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(1));
+        });
+
+        it("should scroll once the room shows up after a space change", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
+            const scrollSpy = vi.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            // The room lives in another space, so it is not in the list yet.
+            vi.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!spacereg:server");
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                newRoomId: "!spacereg:server",
+            });
+            await flushPromises();
+            expect(scrollSpy).not.toHaveBeenCalled();
+
+            // The space switch settles and the room list is refreshed.
+            const spaceRoom = mkStubRoom("!spacereg:server", "Space Reg", matrixClient);
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "!space:server",
+                sections: [{ tag: CHATS_TAG, rooms: [room1, spaceRoom] }],
+            });
+            vi.spyOn(sdkContext.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(1));
+        });
+
+        it("should drop a pending request once the user leaves the room", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
+            const scrollSpy = vi.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            // A room that isn't in the list, so the request has to wait.
+            vi.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!spacereg:server");
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                newRoomId: "!spacereg:server",
+            });
+            await flushPromises();
+            expect(scrollSpy).not.toHaveBeenCalled();
+
+            // The user closes the room, so nothing replaces the waiting request.
+            vi.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(null);
+            dispatcher.dispatch({ action: Action.ActiveRoomChanged, newRoomId: null });
+            await flushPromises();
+            scrollSpy.mockClear();
+
+            // The room finally turns up, but the request has already been dropped.
+            const spaceRoom = mkStubRoom("!spacereg:server", "Space Reg", matrixClient);
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1, spaceRoom] }],
+            });
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            await flushPromises();
+
+            expect(scrollSpy).not.toHaveBeenCalled();
         });
     });
 });

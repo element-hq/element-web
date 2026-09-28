@@ -77,13 +77,13 @@ export default function AskInviteAnywayDialog({
             </div>
 
             <div className="mx_Dialog_buttons">
-                <button onClick={onGiveUpClicked} type="button">
+                <button onClick={onGiveUpClicked} className="mx_LegacyDialogButton" type="button">
                     {_t("action|close")}
                 </button>
-                <button onClick={onInviteNeverWarnClicked} type="button">
+                <button onClick={onInviteNeverWarnClicked} className="mx_LegacyDialogButton" type="button">
                     {inviteNeverWarnLabel ?? _t("invite|unable_find_profiles_invite_never_warn_label_default")}
                 </button>
-                <button onClick={onInviteClicked} autoFocus={true} type="button">
+                <button onClick={onInviteClicked} autoFocus={true} className="mx_LegacyDialogButton" type="button">
                     {inviteLabel ?? _t("invite|unable_find_profiles_invite_label_default")}
                 </button>
             </div>

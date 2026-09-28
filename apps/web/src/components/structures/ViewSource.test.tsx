@@ -16,6 +16,7 @@ import React from "react";
 import { mkEvent, stubClient, mkMessage } from "test-utils";
 import ViewSource from "./ViewSource";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import userEvent from "@testing-library/user-event";
 
 describe("ViewSource", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -43,6 +44,18 @@ describe("ViewSource", () => {
 
     beforeEach(stubClient);
 
+    it("should render", () => {
+        const event = mkMessage({
+            msg: "hello",
+            user: SENDER,
+            room: ROOM_ID,
+            event: true,
+            id: "$event1:example.org",
+        });
+        const { asFragment } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     // See https://github.com/vector-im/element-web/issues/24165
     it("doesn't error when viewing redacted encrypted messages", () => {
         // Sanity checks
@@ -53,14 +66,18 @@ describe("ViewSource", () => {
         expect(() => render(<ViewSource mxEvent={redactedMessageEvent} onFinished={() => {}} />)).not.toThrow();
     });
 
-    it("should show edit button if we are the sender and can post an edit", () => {
+    it("should be able to edit a message", async () => {
         const event = mkMessage({
             msg: "Test",
             user: MatrixClientPeg.get()!.getSafeUserId(),
             room: ROOM_ID,
             event: true,
+            id: "$event2:example.org",
         });
-        const { getByRole } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
-        expect(getByRole("button", { name: "Edit" })).toBeInTheDocument();
+        const { getByRole, asFragment } = render(<ViewSource mxEvent={event} onFinished={() => {}} />);
+        const editButton = getByRole("button", { name: "Edit" });
+        expect(editButton).toBeInTheDocument();
+        await userEvent.click(editButton);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

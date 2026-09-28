@@ -182,7 +182,7 @@ describe("ThreadPanel", () => {
         function findEvents(container: HTMLElement): EventData[] {
             return Array.from(container.querySelectorAll(".mx_EventTile")).map((el) => {
                 const sender = el.querySelector(".mx_DisambiguatedProfile_displayName")?.textContent ?? null;
-                const content = el.querySelector(".mx_EventTile_body")?.textContent ?? null;
+                const content = el.querySelector('[data-testid="event-tile-slot-body"]')?.textContent ?? null;
                 return { sender, content };
             });
         }

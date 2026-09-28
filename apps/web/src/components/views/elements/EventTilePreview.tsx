@@ -117,7 +117,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         return (
-            <EventPresentationContextProvider layout={this.props.layout}>
+            <EventPresentationContextProvider layout={this.props.layout} useCompactLayout={false}>
                 <div className={className} role="presentation">
                     <EventTile
                         mxEvent={event}

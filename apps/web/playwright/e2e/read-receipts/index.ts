@@ -415,7 +415,7 @@ class Helpers {
      * Note: matches part of the message content as well as the whole of it.
      */
     async assertMessageLoaded(messagePart: string) {
-        await expect(this.page.locator(".mx_EventTile_body").getByText(messagePart)).toBeVisible();
+        await expect(this.page.getByTestId("event-tile-slot-body").getByText(messagePart)).toBeVisible();
     }
 
     /**
@@ -423,7 +423,7 @@ class Helpers {
      * Note: matches part of the message content as well as the whole of it.
      */
     async assertMessageNotLoaded(messagePart: string) {
-        await expect(this.page.locator(".mx_EventTile_body").getByText(messagePart)).not.toBeVisible();
+        await expect(this.page.getByTestId("event-tile-slot-body").getByText(messagePart)).not.toBeVisible();
     }
 
     /**

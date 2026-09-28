@@ -44,7 +44,7 @@ import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
-import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -479,19 +479,32 @@ export default class ElectronPlatform extends BasePlatform {
         requesterWidgetId: string | null | undefined,
     ): Promise<void> {
         this.closePreviousDesktopCapturerPicker();
+        const effectiveRequesterWidgetId = requesterWidgetId ?? this.claimPendingScreenShareAudioSession();
         const picker = Modal.createDialog(DesktopCapturerSourcePicker);
         this.desktopCapturerPicker = picker;
-        await this.bindDesktopCapturerPickerSession(requestId, requesterWidgetId);
+        await this.bindDesktopCapturerPickerSession(requestId, effectiveRequesterWidgetId);
 
         const [source] = await picker.finished;
         if (this.desktopCapturerPicker !== picker) return;
         this.desktopCapturerPicker = undefined;
         this.desktopCapturerPickerSession = undefined;
-        const boundSession = this.getBoundScreenShareAudioSession(requestId, requesterWidgetId);
-        if (!source && boundSession && requesterWidgetId) {
-            this.isolatedScreenShareAudioSessions.delete(requesterWidgetId);
+        const boundSession = this.getBoundScreenShareAudioSession(requestId, effectiveRequesterWidgetId);
+        if (!source && boundSession && effectiveRequesterWidgetId) {
+            this.isolatedScreenShareAudioSessions.delete(effectiveRequesterWidgetId);
         }
-        await this.replyToDesktopCapturerPicker(requestId, requesterWidgetId, source?.id ?? null, boundSession);
+        await this.replyToDesktopCapturerPicker(
+            requestId,
+            effectiveRequesterWidgetId,
+            source?.id ?? null,
+            boundSession,
+        );
+    }
+
+    private claimPendingScreenShareAudioSession(): string | null {
+        const pending = [...this.isolatedScreenShareAudioSessions].filter(
+            ([, session]) => session.requestId === undefined,
+        );
+        return pending.length === 1 ? pending[0][0] : null;
     }
 
     private closePreviousDesktopCapturerPicker(): void {

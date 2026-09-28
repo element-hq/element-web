@@ -126,8 +126,8 @@ test.describe("Room list custom sections", () => {
 
             // The custom section header should be visible (even though it is empty)
             await expect(getSectionHeader(page, "Work")).toBeVisible();
-            // The Chats section should also be visible
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            // The Rooms section should also be visible
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
         });
 
         test("should show 'Section created' toast after creating a section", async ({ page, app }) => {
@@ -171,7 +171,7 @@ test.describe("Room list custom sections", () => {
             await expect(getSectionHeader(page, "Projects")).toBeVisible();
 
             // Skipping the room selection drops it, so the room stays where it was
-            await assertRoomInSection(page, "Chats", "my room");
+            await assertRoomInSection(page, "Rooms", "my room");
         });
 
         test("should preselect the room when creating a section from its options menu", async ({ page, app }) => {
@@ -226,7 +226,7 @@ test.describe("Room list custom sections", () => {
             await expect(dialog).not.toBeVisible();
 
             // No custom section should be created - should remain a flat list
-            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).not.toBeVisible();
         });
 
         test("should create multiple custom sections", async ({ page, app }) => {
@@ -238,7 +238,7 @@ test.describe("Room list custom sections", () => {
             // Both custom sections should be visible
             await expect(getSectionHeader(page, "Work")).toBeVisible();
             await expect(getSectionHeader(page, "Personal")).toBeVisible();
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
         });
     });
 
@@ -271,7 +271,7 @@ test.describe("Room list custom sections", () => {
             await assertRoomInSection(page, "Work", "alpha room");
             await assertRoomInSection(page, "Work", "beta room");
             // The room that was not picked stays where it was
-            await assertRoomInSection(page, "Chats", "gamma room");
+            await assertRoomInSection(page, "Rooms", "gamma room");
         });
 
         test("should add and remove rooms when editing a section", async ({ page, app }) => {
@@ -297,25 +297,25 @@ test.describe("Room list custom sections", () => {
             // The name did not change, but the rooms did
             await expect(getSectionHeader(page, "Work")).toBeVisible();
             await assertRoomInSection(page, "Work", "beta room");
-            await assertRoomInSection(page, "Chats", "alpha room");
+            await assertRoomInSection(page, "Rooms", "alpha room");
         });
     });
 
     test.describe("Custom section display", () => {
         test("should show empty custom sections", async ({ page, app }) => {
-            // Create a room so the Chats section has something
+            // Create a room so the Rooms section has something
             await app.client.createRoom({ name: "my room" });
 
             await createCustomSection(page, "Empty Section");
 
             // The custom section should be visible even with no rooms
             await expect(getSectionHeader(page, "Empty Section")).toBeVisible();
-            // The room should still be in the Chats section
+            // The room should still be in the Rooms section
             const roomList = getRoomList(page);
             await expect(roomList.getByRole("row", { name: "Open room my room" })).toBeVisible();
         });
 
-        test("should display custom sections between Favourites and Chats", async ({ page, app }) => {
+        test("should display custom sections between Favourites and Rooms", async ({ page, app }) => {
             // Create a favourite room
             const favouriteId = await app.client.createRoom({ name: "favourite room" });
             await app.client.evaluate(async (client, roomId) => {
@@ -339,7 +339,7 @@ test.describe("Room list custom sections", () => {
             await expect(getSectionHeader(page, "Work")).toBeVisible();
             // Should be expanded by default
             await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "true");
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(getSectionHeader(page, "Low Priority")).toBeVisible();
         });
     });
@@ -378,7 +378,7 @@ test.describe("Room list custom sections", () => {
     });
 
     test.describe("Section removal", () => {
-        test("should move rooms back to Chats when their section is removed", async ({ page, app }) => {
+        test("should move rooms back to Rooms when their section is removed", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
             await createCustomSection(page, "Work");
             await createCustomSection(page, "Personal");
@@ -403,8 +403,8 @@ test.describe("Room list custom sections", () => {
 
             // Section should be gone
             await expect(getSectionHeader(page, "Work")).not.toBeVisible();
-            // Room should now be in the Chats section
-            await assertRoomInSection(page, "Chats", "my room");
+            // Room should now be in the Rooms section
+            await assertRoomInSection(page, "Rooms", "my room");
         });
     });
 
@@ -416,7 +416,7 @@ test.describe("Room list custom sections", () => {
             const roomList = getRoomList(page);
             const header = getRoomListHeader(page);
 
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
             await expect(getSectionHeader(page, "Work")).toBeVisible();
 
             const collapseButton = header.getByRole("button", { name: "Collapse all sections" });
@@ -426,7 +426,7 @@ test.describe("Room list custom sections", () => {
 
             await collapseButton.click();
 
-            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "false");
+            await expect(getSectionHeader(page, "Rooms")).toHaveAttribute("aria-expanded", "false");
             await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "false");
         });
 
@@ -437,14 +437,14 @@ test.describe("Room list custom sections", () => {
             const roomList = getRoomList(page);
             const header = getRoomListHeader(page);
 
-            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Rooms")).toBeVisible();
 
             await header.getByRole("button", { name: "Collapse all sections" }).click();
             await expect(roomList.getByRole("row", { name: "Open room my room" })).not.toBeVisible();
 
             await header.getByRole("button", { name: "Expand all sections" }).click();
 
-            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+            await expect(getSectionHeader(page, "Rooms")).toHaveAttribute("aria-expanded", "true");
             await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "true");
         });
     });
@@ -455,12 +455,12 @@ test.describe("Room list custom sections", () => {
             await createCustomSection(page, "Work");
             await createCustomSection(page, "Personal");
 
-            // Default placement: custom sections sit at the top of Chats
-            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+            // Default placement: custom sections sit at the top of Rooms
+            await assertSectionsOrder(page, ["Work", "Personal", "Rooms"]);
 
-            // Moves Work after Chats
-            await dragSectionToSection(page, "Work", "Chats");
-            await assertSectionsOrder(page, ["Personal", "Chats", "Work"]);
+            // Moves Work after Rooms
+            await dragSectionToSection(page, "Work", "Rooms");
+            await assertSectionsOrder(page, ["Personal", "Rooms", "Work"]);
         });
 
         test("should insert a section before the target when dragging up", async ({ page, app }) => {
@@ -468,11 +468,11 @@ test.describe("Room list custom sections", () => {
             await createCustomSection(page, "Work");
             await createCustomSection(page, "Personal");
 
-            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+            await assertSectionsOrder(page, ["Work", "Personal", "Rooms"]);
 
             // Personal sits below Work, so dragging it onto Work inserts it before Work.
             await dragSectionToSection(page, "Personal", "Work");
-            await assertSectionsOrder(page, ["Personal", "Work", "Chats"]);
+            await assertSectionsOrder(page, ["Personal", "Work", "Rooms"]);
         });
     });
 
@@ -483,7 +483,7 @@ test.describe("Room list custom sections", () => {
 
             const roomList = getRoomList(page);
 
-            // Room starts in Chats section (aria-level=2)
+            // Room starts in Rooms section (aria-level=2)
             const roomItem = roomList.getByRole("row", { name: "Open room my room" });
             await expect(roomItem).toBeVisible();
 
@@ -560,8 +560,8 @@ test.describe("Room list custom sections", () => {
             await page.getByRole("menuitem", { name: "Move to" }).hover();
             await page.getByRole("menuitem", { name: "Work" }).click();
 
-            // Room is back in the Chats section
-            await assertRoomInSection(page, "Chats", "my room");
+            // Room is back in the Rooms section
+            await assertRoomInSection(page, "Rooms", "my room");
         });
 
         test("should remove a room from a custom section via the 'Remove from section' menu entry", async ({
@@ -588,8 +588,8 @@ test.describe("Room list custom sections", () => {
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Remove from section" }).click();
 
-            // Room is back in the Chats section
-            await assertRoomInSection(page, "Chats", "my room");
+            // Room is back in the Rooms section
+            await assertRoomInSection(page, "Rooms", "my room");
         });
     });
 });

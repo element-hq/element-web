@@ -160,7 +160,7 @@ exports[`<DecoratedRoomAvatarView /> > should render a video room decoration 1`]
 </DocumentFragment>
 `;
 
-exports[`<DecoratedRoomAvatarView /> > should render the 'busy' presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> > should render the busy presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -220,7 +220,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the 'busy' presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<DecoratedRoomAvatarView /> > should render the 'offline' presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> > should render the offline presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -280,7 +280,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the 'offline' presence 1`] 
 </DocumentFragment>
 `;
 
-exports[`<DecoratedRoomAvatarView /> > should render the 'online' presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> > should render the online presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -338,7 +338,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the 'online' presence 1`] =
 </DocumentFragment>
 `;
 
-exports[`<DecoratedRoomAvatarView /> > should render the 'unavailable' presence 1`] = `
+exports[`<DecoratedRoomAvatarView /> > should render the unavailable presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"

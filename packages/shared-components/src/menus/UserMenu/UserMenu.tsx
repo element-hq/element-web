@@ -12,7 +12,6 @@ import {
     DevicesIcon,
     HomeIcon,
     LockIcon,
-    PopOutIcon,
     SettingsIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
@@ -48,10 +47,6 @@ export interface UserMenuViewSnapshot {
      * Matrix user ID for the user.
      */
     userId: string;
-    /**
-     * Account management URL if the user is using OIDC.
-     */
-    manageAccountHref?: string;
     /**
      * The user status to display, or undefined for no icon / status.
      */
@@ -134,7 +129,6 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
         avatarUrl,
         expanded,
         open,
-        manageAccountHref,
         actions,
         showAvatar,
         userStatus,
@@ -192,19 +186,6 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     >
                         {userId}
                     </Text>
-                    {manageAccountHref && (
-                        <Button
-                            as="a"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            size="md"
-                            kind="tertiary"
-                            href={manageAccountHref}
-                            Icon={PopOutIcon}
-                        >
-                            {_t("menus|user_menu|manage_account")}
-                        </Button>
-                    )}
                     {actions.createAccount && (
                         <Button
                             className={styles.createAccount}

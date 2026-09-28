@@ -93,6 +93,35 @@ describe("DisplayMediaSessionController", () => {
         expect(controller.state).toBe("Selecting");
     });
 
+    it("adopts a renderer-correlated widget only for the exact top-level Selecting request", async () => {
+        const picker = vi.fn(() => true);
+        const controller = new DisplayMediaSessionController({
+            enumerateSources: async () => [source()],
+            openPicker: picker,
+            isElementOwnedSource: () => false,
+        });
+        controller.begin({
+            senderId: 7,
+            requesterWidgetId: null,
+            audioRequested: true,
+            callback: vi.fn(),
+            onRequesterDestroyed: () => vi.fn(),
+        });
+        await tick();
+        const binding = {
+            requestId: 1,
+            requesterWidgetId: "react-widget",
+            sessionId: "12345678-1234-4123-8123-123456789abc",
+        };
+
+        expect(controller.bind(8, binding)).toBe(false);
+        expect(controller.bind(7, { ...binding, requestId: 2 })).toBe(false);
+        expect(controller.bind(7, binding)).toBe(true);
+        expect(controller.bind(7, { ...binding, sessionId: "22345678-1234-4123-8123-123456789abc" })).toBe(false);
+        await controller.release(7, binding);
+        expect(controller.state).toBe("Idle");
+    });
+
     it("re-enumerates the exact source and rejects malformed or stale video", async () => {
         const enumerateSources = vi.fn(async () => [source("window:other:0")]);
         const { controller, callbacks } = harness({ enumerateSources });

@@ -333,6 +333,7 @@ async function readQrCode(base: Locator) {
             height: number;
             buffer: number[];
         },
+        void,
         HTMLImageElement
     >(async (img) => {
         // draw the image on a canvas

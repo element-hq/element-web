@@ -99,7 +99,12 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                                 setTool([label, tool]);
                             };
                             return (
-                                <button className="mx_DevTools_button" key={label} onClick={onClick} type="button">
+                                <button
+                                    className="mx_LegacyDialogButton mx_DevTools_button"
+                                    key={label}
+                                    onClick={onClick}
+                                    type="button"
+                                >
                                     {_t(label)}
                                 </button>
                             );
@@ -118,6 +123,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="Developer.elementCallMockComponent" level={SettingLevel.DEVICE} />
                 </Form.Root>
                 {/* The settings field needs to be outside `Form.Root` because `SettingsField` will have a inner Form,
                     Otherwise we end up with a nester `Form` and that prohibits `preventDefault` so setting the value

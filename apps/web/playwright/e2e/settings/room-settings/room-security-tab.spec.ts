@@ -34,6 +34,7 @@ test.describe("Roles & Permissions room settings tab", () => {
                     ["m.room.history_visibility"]: 100,
                 },
             },
+            room_version: "11",
         });
         await app.viewRoomByName(roomName);
         settings = await app.settings.openRoomSettings("Security & Privacy");

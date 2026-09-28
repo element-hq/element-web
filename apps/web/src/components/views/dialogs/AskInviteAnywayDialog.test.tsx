@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { getByText, render, type RenderResult } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import AskInviteAnywayDialog, { type AskInviteAnywayDialogProps } from "./AskInviteAnywayDialog";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -38,7 +38,7 @@ describe("AskInviteaAnywayDialog", () => {
         );
     }
 
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
     });
 

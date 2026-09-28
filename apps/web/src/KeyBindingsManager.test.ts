@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect } from "vitest";
 
 import { isKeyComboMatch, type KeyCombo } from "./KeyBindingsManager";
+import { Key } from "./Keyboard";
 
 function mockKeyEvent(
     key: string,
@@ -163,5 +164,35 @@ describe("KeyBindingsManager", () => {
         // MAC:
         expect(isKeyComboMatch(mockKeyEvent("k", { metaKey: true, altKey: true }), combo, true)).toBe(true);
         expect(isKeyComboMatch(mockKeyEvent("k", { ctrlKey: true, altKey: true }), combo, true)).toBe(false);
+    });
+
+    it("should match a letter key combo when caps lock is on", () => {
+        // With caps lock enabled the browser reports an upper case `key` while `shiftKey` stays false.
+        const combo: KeyCombo = {
+            key: "k",
+            ctrlOrCmdKey: true,
+        };
+        // PC:
+        expect(isKeyComboMatch(mockKeyEvent("K", { ctrlKey: true }), combo, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent("N", { ctrlKey: true }), combo, false)).toBe(false);
+        // MAC:
+        expect(isKeyComboMatch(mockKeyEvent("K", { metaKey: true }), combo, true)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent("N", { metaKey: true }), combo, true)).toBe(false);
+    });
+
+    it("should not let a case insensitive comparison merge distinct keys", () => {
+        // No two entries of the `Key` map collide once lower cased, so comparing case insensitively
+        // cannot make two distinct shortcuts overlap.
+        const lowerCased = Object.values(Key).map((key) => key.toLowerCase());
+        expect(new Set(lowerCased).size).toBe(lowerCased.length);
+    });
+
+    it("should not match, rather than throw, when the event carries no key", () => {
+        // Dropdown, RoomGeneralContextMenu, RoomNotificationContextMenu and EditableText all hand
+        // getAccessibilityAction a ButtonEvent, which for a mouse activation has no `key` at all.
+        const combo: KeyCombo = { key: "k", ctrlOrCmdKey: true };
+        const clickEvent = { ctrlKey: true } as unknown as KeyboardEvent;
+        expect(isKeyComboMatch(clickEvent, combo, false)).toBe(false);
+        expect(isKeyComboMatch(clickEvent, combo, true)).toBe(false);
     });
 });

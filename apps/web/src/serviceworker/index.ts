@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { idbLoad } from "../utils/StorageAccess";
-import { ACCESS_TOKEN_IV, tryDecryptToken } from "../utils/tokens/tokens";
+import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
 
 const serverSupportMap: {
@@ -135,7 +135,7 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
     // Finally, try decrypting the thing and return that. This may fail, but that's okay.
     try {
         const pickleKey = await buildAndEncodePickleKey(pickleKeyData, userId, deviceId);
-        const accessToken = await tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_IV);
+        const accessToken = await tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_NAME);
         return { accessToken, homeserver };
     } catch (e) {
         throw new Error("SW: Error decrypting access token.", { cause: e });

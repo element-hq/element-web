@@ -24,6 +24,15 @@ vi.mock("matrix-js-sdk/src/matrix", async () => ({
     createClient: vi.fn(),
 }));
 
+// Field.tsx debounces validation via lodash.debounce, stub it out so runs synchronously and is less flaky.
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    debounce: vi.fn((fn) => {
+        fn.cancel = vi.fn();
+        return fn;
+    }),
+}));
+
 describe("<ForgotPassword>", () => {
     const testEmail = "user@example.com";
     const testSid = "sid42";

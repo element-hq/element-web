@@ -8,16 +8,21 @@
 // @vitest-environment happy-dom
 
 import {
+    EventStatus,
     MatrixEventEvent,
     NotificationCountType,
     PendingEventOrdering,
     Room,
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import { mkEvent, stubClient } from "test-utils";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { mkEvent, mkMessage, muteRoom, stubClient } from "test-utils";
+import { mkThread } from "test-utils/threads";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import * as RoomNotifs from "../../../RoomNotifs";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { UnreadNotificationBadgeViewModel } from "./UnreadNotificationBadgeViewModel";
 
 describe("UnreadNotificationBadgeViewModel", () => {
@@ -37,6 +42,10 @@ describe("UnreadNotificationBadgeViewModel", () => {
         room = new Room("!room:example.org", client, "@user:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     function setUnreads(greys: number, reds: number): void {
@@ -74,6 +83,103 @@ describe("UnreadNotificationBadgeViewModel", () => {
         });
         expect(listener).toHaveBeenCalled();
 
+        vm.dispose();
+    });
+
+    it("updates when the thread unread state changes", () => {
+        const { rootEvent } = mkThread({
+            room,
+            client,
+            authorId: client.getUserId()!,
+            participantUserIds: [client.getUserId()!],
+        });
+        const threadId = rootEvent.getId()!;
+        room.setThreadUnreadNotificationCount(threadId, NotificationCountType.Total, 1);
+
+        const vm = new UnreadNotificationBadgeViewModel({ room, threadId });
+        expect(vm.getSnapshot()).toMatchObject({
+            shouldRender: true,
+            isNotification: true,
+            isHighlight: false,
+            symbol: "1",
+        });
+
+        room.setThreadUnreadNotificationCount(threadId, NotificationCountType.Highlight, 1);
+
+        expect(vm.getSnapshot()).toMatchObject({
+            isHighlight: true,
+            symbol: "1",
+        });
+        vm.dispose();
+    });
+
+    it("does not render when there are no unread notifications", () => {
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+
+        expect(vm.getSnapshot().shouldRender).toBe(false);
+        vm.dispose();
+    });
+
+    it("renders a warning for unsent messages", () => {
+        const event = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Hello world!",
+            event: true,
+        });
+        event.status = EventStatus.NOT_SENT;
+        room.addPendingEvent(event, "123");
+
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            shouldRender: true,
+            symbol: "!",
+            isHighlight: true,
+        });
+        vm.dispose();
+    });
+
+    it("renders a warning for invites", () => {
+        room.updateMyMembership(KnownMembership.Invite);
+
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            shouldRender: true,
+            symbol: "!",
+            isHighlight: true,
+        });
+        vm.dispose();
+    });
+
+    it("does not render for muted rooms", () => {
+        muteRoom(room);
+        setUnreads(1, 0);
+
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+
+        expect(vm.getSnapshot().shouldRender).toBe(false);
+        vm.dispose();
+    });
+
+    it("renders a dot for activity-level unread messages", () => {
+        vi.spyOn(RoomNotifs, "determineUnreadState").mockReturnValue({
+            level: NotificationLevel.Activity,
+            symbol: null,
+            count: 0,
+            invited: false,
+        });
+
+        const vm = new UnreadNotificationBadgeViewModel({ room });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            shouldRender: true,
+            isVisible: true,
+            badgeType: "dot",
+            isNotification: false,
+            isHighlight: false,
+        });
         vm.dispose();
     });
 

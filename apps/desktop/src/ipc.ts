@@ -15,7 +15,7 @@ import {
     handleScreenShareAudioSessionRelease,
     supportsIsolatedScreenShareAudio,
 } from "./display-media.js";
-import Store, { clearDataAndRelaunch } from "./store.js";
+import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
 
 let focusHandlerAttached = false;
@@ -33,55 +33,6 @@ ipcMain.on("loudNotification", function (): void {
 });
 
 ipcMain.handle("supportsIsolatedScreenShareAudio", () => supportsIsolatedScreenShareAudio());
-
-interface Breadcrumb {
-    roomId: string;
-    avatarUrl: string | null;
-    initial: string;
-}
-
-function setBreadcrumbsTouchBar(recents: Breadcrumb[]): void {
-    if (process.platform !== "darwin") return;
-    const { TouchBarPopover, TouchBarButton } = TouchBar;
-    const recentsBar = new TouchBar({
-        items: recents.map((recent) => {
-            const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
-            const total = recent.roomId.split("").reduce((sum, character) => sum + character.codePointAt(0)!, 0);
-            const button = new TouchBarButton({
-                label: recent.initial,
-                backgroundColor: defaultColors[total % defaultColors.length],
-                click: (): void => {
-                    void global.mainWindow?.loadURL(`vector://vector/webapp/#/room/${recent.roomId}`);
-                },
-            });
-            if (recent.avatarUrl) {
-                void fetch(recent.avatarUrl)
-                    .then((response) => {
-                        if (!response.ok) return;
-                        return response.arrayBuffer();
-                    })
-                    .then((arrayBuffer) => {
-                        if (!arrayBuffer) return;
-                        button.icon = nativeImage.createFromBuffer(Buffer.from(arrayBuffer));
-                        button.label = "";
-                        button.backgroundColor = "";
-                    });
-            }
-            return button;
-        }),
-    });
-    global.mainWindow?.setTouchBar(
-        new TouchBar({
-            items: [
-                new TouchBarPopover({
-                    label: "Recents",
-                    showCloseButton: true,
-                    items: recentsBar,
-                }),
-            ],
-        }),
-    );
-}
 
 async function getPickleKey(store: Store, key: string): Promise<string | null | undefined> {
     try {
@@ -235,11 +186,59 @@ ipcMain.on("ipcCall", async function (ev: IpcMainEvent, payload) {
             break;
 
         case "clearStorage":
-            await clearDataAndRelaunch(global.mainWindow.webContents.session);
-            return; // the app is about to stop, we don't need to reply to the IPC
+            await clearData(global.mainWindow.webContents.session);
+            ret = null;
+            break;
 
         case "breadcrumbs": {
-            setBreadcrumbsTouchBar(args[0]);
+            if (process.platform === "darwin") {
+                const { TouchBarPopover, TouchBarButton } = TouchBar;
+
+                const recentsBar = new TouchBar({
+                    items: args[0].map((r: { roomId: string; avatarUrl: string | null; initial: string }) => {
+                        const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
+                        let total = 0;
+                        for (let i = 0; i < r.roomId.length; ++i) {
+                            total += r.roomId.charCodeAt(i);
+                        }
+
+                        const button = new TouchBarButton({
+                            label: r.initial,
+                            backgroundColor: defaultColors[total % defaultColors.length],
+                            click: (): void => {
+                                void global.mainWindow?.loadURL(`vector://vector/webapp/#/room/${r.roomId}`);
+                            },
+                        });
+                        if (r.avatarUrl) {
+                            void global.mainWindow?.webContents.session
+                                .fetch(r.avatarUrl)
+                                .then((resp) => {
+                                    if (!resp.ok) return;
+                                    return resp.arrayBuffer();
+                                })
+                                .then((arrayBuffer) => {
+                                    if (!arrayBuffer) return;
+                                    const buffer = Buffer.from(arrayBuffer);
+                                    button.icon = nativeImage.createFromBuffer(buffer);
+                                    button.label = "";
+                                    button.backgroundColor = "";
+                                });
+                        }
+                        return button;
+                    }),
+                });
+
+                const touchBar = new TouchBar({
+                    items: [
+                        new TouchBarPopover({
+                            label: "Recents",
+                            showCloseButton: true,
+                            items: recentsBar,
+                        }),
+                    ],
+                });
+                global.mainWindow.setTouchBar(touchBar);
+            }
             break;
         }
 

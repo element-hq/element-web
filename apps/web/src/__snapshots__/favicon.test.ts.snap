@@ -179,7 +179,7 @@ exports[`Favicon > should clear a badge if called with a zero value 1`] = `
       "maxWidth": null,
       "text": "123",
       "x": 72,
-      "y": 131,
+      "y": 100,
     },
     "transform": [
       1,
@@ -415,7 +415,7 @@ exports[`Favicon > should draw a badge if called with a non-zero value 1`] = `
       "maxWidth": null,
       "text": "123",
       "x": 72,
-      "y": 131,
+      "y": 100,
     },
     "transform": [
       1,

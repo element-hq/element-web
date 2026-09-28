@@ -52,7 +52,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Simple message");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile.png",
                     screenshotOptions(page),
                 );
@@ -64,7 +64,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Fall through here");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-fall-through.png",
                     screenshotOptions(page),
                 );
@@ -76,7 +76,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Do not replace me");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-original.png",
                     screenshotOptions(page),
                 );
@@ -148,7 +148,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the filter!");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-filter.png",
                     screenshotOptions(page),
                 );
@@ -160,7 +160,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the renderer!");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-renderer.png",
                     screenshotOptions(page),
                 );

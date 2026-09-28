@@ -116,17 +116,7 @@ describe("FontWatcher", function () {
     });
 
     it("should update root font size with positive delta", async () => {
-        // happy-dom's CSSStyleDeclaration validation regex for `calc()` doesn't support the nested
-        // parentheses used by `var(...)` inside `calc(...)`, so it silently drops the value set by FontWatcher.
         const root = document.querySelector<HTMLElement>(":root")!;
-        let fontSize = "";
-        Object.defineProperty(root.style, "fontSize", {
-            configurable: true,
-            get: () => fontSize,
-            set: (value: string) => {
-                fontSize = value;
-            },
-        });
 
         await new FontWatcher().start();
 

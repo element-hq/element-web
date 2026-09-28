@@ -21,7 +21,7 @@ import { userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserv
 import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
 import Modal from "../../../Modal";
-import GenericToast from "./GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";

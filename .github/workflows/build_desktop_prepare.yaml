@@ -58,7 +58,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
             - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: apps/desktop/.node-version
@@ -97,17 +97,6 @@ jobs:
               run: cp "$CONFIG_DIR/build.json" variant.json
               env:
                   CONFIG_DIR: ${{ inputs.config }}
-
-            # We split this out to save the build_* scripts having to do it to make use of `hashFiles` in the cache action
-            - name: Generate cache hash files
-              working-directory: apps/desktop
-              run: |
-                  set -ex
-                  # Add --no-sandbox as otherwise it fails because the helper isn't setuid root. It's only getting the version.
-                  pnpm --silent electron --no-sandbox --version > electronVersion
-                  cat package.json | jq -c .hakDependencies | sha1sum > hakHash
-                  find hak -type f -print0 | xargs -0 sha1sum >> hakHash
-                  find scripts/hak -type f -print0 | xargs -0 sha1sum >> hakHash
 
             - name: "[Nightly] Calculate version"
               id: versions
@@ -191,7 +180,5 @@ jobs:
                   retention-days: 1
                   path: |
                       apps/desktop/webapp.asar
-                      apps/desktop/electronVersion
-                      apps/desktop/hakHash
                       apps/desktop/changelog.Debian
                       apps/desktop/variant.json

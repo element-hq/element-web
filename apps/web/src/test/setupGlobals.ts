@@ -9,7 +9,7 @@ import { vi, beforeEach } from "vitest";
 import { PredictableRandom } from "test-utils/predictableRandom.ts";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
-import { mocks } from "../../test/setup/mocks.ts";
+import { mocks } from "./mocks.ts";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 
 // Fake random strings to give a predictable snapshot for IDs

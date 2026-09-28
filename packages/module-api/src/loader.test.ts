@@ -55,4 +55,21 @@ describe("ModuleLoader", () => {
         await loader.start();
         expect(spy).not.toHaveBeenCalledWith();
     });
+
+    test("should load a module with a union semver range", async () => {
+        const TestModule = {
+            default: class TestModule {
+                public static moduleApiVersion = "^0 || ^1";
+                public constructor(private readonly api: Api) {}
+                public async load(): Promise<void> {}
+            },
+        };
+
+        const spy = vi.spyOn(TestModule.default.prototype, "load");
+
+        const loader = new ModuleLoader(mockApi);
+        await loader.load(TestModule);
+        await loader.start();
+        expect(spy).toHaveBeenCalledWith();
+    });
 });

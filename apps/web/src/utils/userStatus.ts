@@ -78,7 +78,7 @@ function validateMCallStatus(rawCallStatus: unknown): UserStatus | undefined {
  * Takes both MSC4426 user status fields (m.status and m.call) and returns a UserStatus
  * object that reflects the information they represent.
  */
-export function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
+function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
     const validatedUserStatus = validateUserStatus(userStatus);
     if (validatedUserStatus) return validatedUserStatus;
 
