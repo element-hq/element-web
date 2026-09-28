@@ -313,7 +313,7 @@
                     "join_button": "Join"
                 },
                 "dm": {
-                    "call_started": "Call started",
+                    "ringing": "Call started (ringing)",
                     "title": "Call in progress"
                 },
                 "room": {
