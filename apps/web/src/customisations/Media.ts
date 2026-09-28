@@ -137,11 +137,41 @@ class MediaImplementation {
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
     public async downloadSource(): Promise<Response> {
-        const src = this.srcHttp;
+        let src = this.srcHttp;
         if (!src) {
             throw new UserFriendlyError("error|download_media");
         }
-        const res = await fetch(src);
+
+        const headers: Record<string, string> = {};
+
+        // Fall back to an explicit Authorization header when the service worker is not controlling the page
+        // (e.g. after a hard reload Ctrl+Shift+R, or in environments where the SW is not supported/active).
+        // Desktop (Electron) has its own webRequest session interceptors in media-auth.ts, so this only applies to web.
+        const isWorkerControlling = Boolean(navigator.serviceWorker?.controller);
+        if (!isWorkerControlling && !window.electron) {
+            const accessToken = this.client.getAccessToken();
+            if (accessToken) {
+                const supportsAuthedMedia = await this.client.isVersionSupported("v1.11").catch(() => false);
+                if (supportsAuthedMedia) {
+                    // eslint-disable-next-line no-restricted-properties
+                    const authedSrc = this.client.mxcUrlToHttp(
+                        this.srcMxc,
+                        undefined,
+                        undefined,
+                        undefined,
+                        false,
+                        true,
+                        true,
+                    );
+                    if (authedSrc) {
+                        src = authedSrc;
+                        headers["Authorization"] = `Bearer ${accessToken}`;
+                    }
+                }
+            }
+        }
+
+        const res = await fetch(src, Object.keys(headers).length > 0 ? { headers } : undefined);
         if (!res.ok) {
             throw parseErrorResponse(res, await res.text());
         }
