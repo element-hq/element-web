@@ -493,7 +493,7 @@ describe("EventTileViewModel", () => {
         expect(snapshot.timestamp.displayState.showRealTimestamp).toBe(true);
     });
 
-    it("suppresses RTC notification timestamps", () => {
+    it("shows RTC notification timestamps like any other event's", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 event: {
@@ -505,8 +505,7 @@ describe("EventTileViewModel", () => {
             }),
         );
 
-        expect(snapshot.timestamp.show).toBe(false);
-        expect(snapshot.timestamp.displayState.showRealTimestamp).toBe(false);
+        expect(snapshot.timestamp.show).toBe(true);
     });
 
     it("derives footer placement state", () => {

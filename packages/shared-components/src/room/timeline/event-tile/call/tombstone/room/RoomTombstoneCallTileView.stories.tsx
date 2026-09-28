@@ -23,14 +23,7 @@ const meta = {
     title: "Timeline/Timeline Event/Call/Tombstone/RoomTombstoneCallTileView",
     component: RoomTombstoneCallTileViewWrapper,
     tags: ["autodocs"],
-    argTypes: {
-        timestamp: {
-            control: { type: "text" },
-        },
-    },
-    args: {
-        timestamp: "12:36",
-    },
+    args: {},
     parameters: {
         design: {
             type: "figma",
