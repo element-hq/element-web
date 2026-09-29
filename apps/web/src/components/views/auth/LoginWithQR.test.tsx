@@ -132,7 +132,7 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.generateCode).toHaveBeenCalled();
                 expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
@@ -157,14 +157,14 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.generateCode).toHaveBeenCalled();
                 expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
                 // Expire the channel
                 rendezvous.onFailure!(ClientRendezvousFailureReason.Expired);
-                await waitFor(() => expect(ref.current!.state.rendezvous).toBeDefined(), { timeout: 2000 });
-                expect(ref.current!.state.rendezvous).not.toBe(rendezvous);
+                await waitFor(() => expect(ref.current!.state.flow).toBeDefined(), { timeout: 2000 });
+                expect(ref.current!.state.flow).not.toBe(rendezvous);
             });
 
             test("failed to connect", async () => {
@@ -238,7 +238,7 @@ describe("<LoginWithQR />", () => {
                 );
                 expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.shareSecrets).toHaveBeenCalled();
             });
 
@@ -259,7 +259,7 @@ describe("<LoginWithQR />", () => {
                 );
 
                 await waitFor(() => {
-                    const rendezvous = ref.current!.state.rendezvous!;
+                    const rendezvous = ref.current!.state.flow!;
                     expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UnsupportedProtocol);
                 });
             });
@@ -310,7 +310,7 @@ describe("<LoginWithQR />", () => {
                 const onClick = mockedFlow.mock.calls[0][0].onClick;
                 await onClick(Click.Cancel);
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
             });
         });
@@ -398,7 +398,7 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.shareSecrets).toHaveBeenCalled();
             });
         });
