@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 /** The spec version that introduced authenticated media (MSC3916). */
 const AUTHENTICATED_MEDIA_VERSION = "v1.11";
@@ -66,7 +67,21 @@ export async function fetchAuthenticatedMedia(
     // The worker only rewrites when the homeserver actually supports authenticated media,
     // and so must we: against a server still serving the legacy endpoints, asking for the
     // authenticated one would turn a working download into a 404.
-    if (!(await client.isVersionSupported(AUTHENTICATED_MEDIA_VERSION))) return fetch(url, init);
+    //
+    // isVersionSupported REJECTS when /versions could not be fetched, rather than reporting
+    // no support - the SDK requests it authenticated (MSC4026), so a token that expired
+    // before the app refreshed it is enough to do it - and that must not take the media
+    // request down with it. An unanswerable check means leaving the request exactly as it
+    // would have been before this fallback existed. The SDK does not cache the failure, so
+    // the next media request asks again.
+    let supportsAuthedMedia: boolean;
+    try {
+        supportsAuthedMedia = await client.isVersionSupported(AUTHENTICATED_MEDIA_VERSION);
+    } catch (err) {
+        logger.warn("Could not determine authenticated media support; leaving the media request unchanged", err);
+        return fetch(url, init);
+    }
+    if (!supportsAuthedMedia) return fetch(url, init);
 
     const headers = new Headers(init?.headers);
     headers.set("Authorization", `Bearer ${accessToken}`);

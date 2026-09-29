@@ -96,6 +96,21 @@ describe("fetchAuthenticatedMedia", () => {
         expect(new Headers(call!.options.headers).get("X-Test")).toBe("kept");
     });
 
+    it("leaves the request unchanged when the support check cannot be answered", async () => {
+        const cli = authedMediaClient();
+        // The SDK requests /versions authenticated, so an expired token makes this reject
+        // rather than report no support. It must not take the media request with it.
+        vi.mocked(cli.isVersionSupported).mockRejectedValue(new Error("M_UNKNOWN_TOKEN"));
+        setController(null);
+        fetchMock.get(LEGACY, { status: 200, body: "data" });
+
+        await expect(fetchAuthenticatedMedia(LEGACY, cli)).resolves.toBeDefined();
+
+        const call = fetchMock.callHistory.lastCall(LEGACY);
+        expect(call).toBeDefined();
+        expect(new Headers(call!.options.headers).get("Authorization")).toBeNull();
+    });
+
     it("does not check server support while a worker is in control", async () => {
         const cli = authedMediaClient();
         setController({});
