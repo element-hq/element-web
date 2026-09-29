@@ -229,7 +229,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_document_previews": IFeature;
+    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
@@ -656,7 +656,9 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
-    "feature_document_previews": {
+    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
+    // that people who already turned the lab on keep it, and only for as long as the lab exists.
+    "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|document_previews"),

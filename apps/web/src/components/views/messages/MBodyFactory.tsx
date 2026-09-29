@@ -59,7 +59,7 @@ function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: 
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
-    const documentPreviewsEnabled = useSettingValue("feature_document_previews");
+    const documentPreviewsEnabled = useSettingValue("feature_pdf_viewer");
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -96,7 +96,7 @@ interface PreviewFileBodyProps {
 
 /// the new preview file tile
 function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
-    const documentPreviewsEnabled = useSettingValue("feature_document_previews");
+    const documentPreviewsEnabled = useSettingValue("feature_pdf_viewer");
     const vm = useCreateAutoDisposedViewModel(
         () => new MBodyTileViewModel(mxEvent, mediaEventHelper, documentPreviewsEnabled),
     );
