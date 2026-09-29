@@ -7,13 +7,18 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../../element-web-test";
 import {
+    INTENTIONAL_ROOM_MENTION_RULE,
+    INTENTIONAL_USER_MENTION_RULE,
     LEGACY_ROOM_MENTION_RULE,
+    LEGACY_USER_MENTION_RULES,
     expectSavedWithoutErrors,
     openLabsNotificationSettings,
     proceedPastUpdateBanner,
     serverPushRules,
     trackPushRuleErrors,
+    trackPushRuleWrites,
     turnOffRoomMentions,
+    turnOffUserMentions,
 } from "./labs-mention-rules";
 
 // `synapseConfig` is worker-scoped and can only be set at the top level of a spec file,
@@ -29,17 +34,46 @@ test.use({
 });
 
 test.describe("Labs notification settings, legacy mention rules not served", () => {
-    test("does not create the legacy rule the server dropped", async ({ page, app, user, homeserver, credentials }) => {
+    test("turning off @room mentions does not write the legacy @room rule", async ({
+        page,
+        app,
+        user,
+        homeserver,
+        credentials,
+    }) => {
         const fetchRules = serverPushRules(page, homeserver, credentials);
         expect((await fetchRules()).has(LEGACY_ROOM_MENTION_RULE)).toBe(false);
         const errors = trackPushRuleErrors(page);
+        const writtenRuleIds = trackPushRuleWrites(page);
 
         const settings = await openLabsNotificationSettings(app);
         await proceedPastUpdateBanner(settings);
         await turnOffRoomMentions(settings, fetchRules);
 
         await expectSavedWithoutErrors(settings, errors);
-        const rules = await fetchRules();
-        expect(rules.has(LEGACY_ROOM_MENTION_RULE)).toBe(false);
+        expect(writtenRuleIds).toContain(INTENTIONAL_ROOM_MENTION_RULE);
+        expect(writtenRuleIds).not.toContain(LEGACY_ROOM_MENTION_RULE);
+    });
+
+    test("turning off user mentions does not write the legacy display name and user name rules", async ({
+        page,
+        app,
+        user,
+        homeserver,
+        credentials,
+    }) => {
+        const fetchRules = serverPushRules(page, homeserver, credentials);
+        const initialRules = await fetchRules();
+        expect(LEGACY_USER_MENTION_RULES.filter((ruleId) => initialRules.has(ruleId))).toEqual([]);
+        const errors = trackPushRuleErrors(page);
+        const writtenRuleIds = trackPushRuleWrites(page);
+
+        const settings = await openLabsNotificationSettings(app);
+        await proceedPastUpdateBanner(settings);
+        await turnOffUserMentions(settings, fetchRules);
+
+        await expectSavedWithoutErrors(settings, errors);
+        expect(writtenRuleIds).toContain(INTENTIONAL_USER_MENTION_RULE);
+        expect(writtenRuleIds.filter((ruleId) => LEGACY_USER_MENTION_RULES.includes(ruleId))).toEqual([]);
     });
 });

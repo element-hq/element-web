@@ -13,8 +13,11 @@ import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { type Credentials, type HomeserverInstance } from "../../../plugins/homeserver";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
-const ROOM_MENTION_RULE = ".m.rule.is_room_mention";
-/** Removed from the spec in Matrix v1.17 (MSC4210); Synapse stops serving it when `msc4210_enabled` is set. */
+export const INTENTIONAL_USER_MENTION_RULE = ".m.rule.is_user_mention";
+export const INTENTIONAL_ROOM_MENTION_RULE = ".m.rule.is_room_mention";
+
+// Removed from the spec in Matrix v1.17 (MSC4210); Synapse stops serving them when `msc4210_enabled` is set.
+export const LEGACY_USER_MENTION_RULES = [".m.rule.contains_display_name", ".m.rule.contains_user_name"];
 export const LEGACY_ROOM_MENTION_RULE = ".m.rule.roomnotif";
 
 type ServerPushRules = () => Promise<Map<string, IPushRule>>;
@@ -49,6 +52,22 @@ export function trackPushRuleErrors(page: Page): string[] {
 }
 
 /**
+ * Record the ID of every push rule the client writes to, whatever the server answers.
+ */
+export function trackPushRuleWrites(page: Page): string[] {
+    const ruleIds: string[] = [];
+    page.on("request", (request) => {
+        const path = decodeURIComponent(new URL(request.url()).pathname);
+        // .../pushrules/global/<kind>/<ruleId>[/<attribute>]
+        const ruleId = path.split("/pushrules/")[1]?.split("/")[2];
+        if (request.method() !== "GET" && ruleId) {
+            ruleIds.push(ruleId);
+        }
+    });
+    return ruleIds;
+}
+
+/**
  * Enable the labs notification settings page and open it.
  *
  * @returns the settings dialog
@@ -69,24 +88,41 @@ export async function proceedPastUpdateBanner(settings: Locator): Promise<void> 
     await expect(proceed).not.toBeVisible();
 }
 
+async function turnOffMentions(
+    checkbox: Locator,
+    intentionalRuleId: string,
+    fetchRules: ServerPushRules,
+): Promise<void> {
+    await expect(checkbox).toBeEnabled();
+    await expect(checkbox).toBeChecked();
+
+    await checkbox.uncheck();
+    await expect(checkbox).not.toBeChecked();
+
+    await expect
+        .poll(async () => {
+            const rules = await fetchRules();
+            return rules.get(intentionalRuleId)!.actions;
+        })
+        .toEqual(["dont_notify"]);
+}
+
 /**
  * Turn off `@room` mentions and wait for the intentional room mention rule on the
  * server to follow.
  */
 export async function turnOffRoomMentions(settings: Locator, fetchRules: ServerPushRules): Promise<void> {
-    const roomMentions = settings.getByLabel("Notify when someone mentions using @room");
-    await expect(roomMentions).toBeEnabled();
-    await expect(roomMentions).toBeChecked();
+    const checkbox = settings.getByLabel("Notify when someone mentions using @room");
+    await turnOffMentions(checkbox, INTENTIONAL_ROOM_MENTION_RULE, fetchRules);
+}
 
-    await roomMentions.uncheck();
-    await expect(roomMentions).not.toBeChecked();
-
-    await expect
-        .poll(async () => {
-            const rules = await fetchRules();
-            return rules.get(ROOM_MENTION_RULE)!.actions;
-        })
-        .toEqual(["dont_notify"]);
+/**
+ * Turn off mentions of the user's display name or user ID and wait for the
+ * intentional user mention rule on the server to follow.
+ */
+export async function turnOffUserMentions(settings: Locator, fetchRules: ServerPushRules): Promise<void> {
+    const checkbox = settings.getByLabel(/^Notify when someone mentions using @displayname or /);
+    await turnOffMentions(checkbox, INTENTIONAL_USER_MENTION_RULE, fetchRules);
 }
 
 /**
