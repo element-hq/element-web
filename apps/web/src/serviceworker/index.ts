@@ -106,11 +106,9 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
         return; // up to date
     }
 
-    if (!serverSupportChecks[clientApiUrl]) {
-        serverSupportChecks[clientApiUrl] = checkServerSupport(clientApiUrl, accessToken).finally(() => {
-            serverSupportChecks[clientApiUrl] = undefined;
-        });
-    }
+    serverSupportChecks[clientApiUrl] ??= checkServerSupport(clientApiUrl, accessToken).finally(() => {
+        serverSupportChecks[clientApiUrl] = undefined;
+    });
     return serverSupportChecks[clientApiUrl];
 }
 
@@ -128,18 +126,16 @@ async function checkServerSupport(clientApiUrl: string, accessToken?: string): P
         response = await fetch(versionsUrl);
     }
 
-    let versions;
-    if (response.ok) {
-        versions = await response.json();
-    } else {
+    // Never cache a failed check: a response without a list of versions would read as "no authenticated media" and
+    // send every media request to the legacy endpoints (which fail on servers that enforce authenticated media)
+    // until the cache expires. Throwing leaves the map untouched, so the next media request checks again.
+    if (!response.ok) {
         discardBody(response);
-    }
-    if (!Array.isArray(versions?.versions)) {
-        // Never cache a failed check: an error response has no `versions`, which would read as "no authenticated
-        // media" and send every media request to the legacy endpoints (which fail on servers that enforce
-        // authenticated media) until the cache expires. Throwing leaves the map untouched, so the next media request
-        // checks again.
         throw new Error(`SW: /versions for '${clientApiUrl}' returned ${response.status}; not caching server support`);
+    }
+    const versions = await response.json();
+    if (!Array.isArray(versions?.versions)) {
+        throw new TypeError(`SW: /versions for '${clientApiUrl}' has no list of versions; not caching server support`);
     }
     console.log(`[ServiceWorker] /versions response for '${clientApiUrl}': ${JSON.stringify(versions)}`);
 
