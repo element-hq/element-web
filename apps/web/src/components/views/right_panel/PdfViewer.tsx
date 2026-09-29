@@ -11,7 +11,11 @@ import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-comp
 
 import { type PdfMedia } from "../../../@types/pdf-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
-import { type PdfHostMessage, parsePdfUsercontentMessage } from "../../../usercontent/pdf/protocol";
+import {
+    type PdfHostMessage,
+    type PdfZoomDirection,
+    parsePdfUsercontentMessage,
+} from "../../../usercontent/pdf/protocol";
 import { _t } from "../../../languageHandler";
 
 const loggerPdf = logger.getChild("PdfViewer");
@@ -55,6 +59,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [pageInput, setPageInput] = useState("1");
+    const [zoomPercent, setZoomPercent] = useState<number>();
     // Don't overwrite the page box while it is being typed in.
     const isEditingPageRef = useRef(false);
     // Escape blurs the box, and blur commits, so the cancellation must survive into the blur.
@@ -73,6 +78,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         setStatus("loading");
         setCurrentPage(1);
         setPageCount(0);
+        setZoomPercent(undefined);
 
         let disposed = false;
         let isLoaded = false;
@@ -135,6 +141,9 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
                 case "page":
                     setCurrentPage(message.page);
                     break;
+                case "scale":
+                    setZoomPercent(message.scale);
+                    break;
                 case "position":
                     // Positions before `loaded` predate the restore.
                     if (!isLoaded) return;
@@ -189,6 +198,14 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         }
     }, [currentPage, pageCount, pageInput]);
 
+    const zoom = useCallback((direction: PdfZoomDirection): void => {
+        const message: PdfHostMessage = { type: "zoom", direction };
+        portRef.current?.postMessage(message);
+    }, []);
+
+    const zoomIn = useCallback((): void => zoom("in"), [zoom]);
+    const zoomOut = useCallback((): void => zoom("out"), [zoom]);
+
     const onPageInputChange = useCallback((value: string): void => {
         setPageInput(value);
     }, []);
@@ -227,6 +244,9 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             onPageInputBlur={onPageInputBlur}
             onPageInputCancel={onPageInputCancel}
             onPageSubmit={commitPageInput}
+            onZoomIn={zoomIn}
+            onZoomOut={zoomOut}
+            zoomPercent={zoomPercent}
         >
             {/* Keyed on the file so a new document gets a fresh iframe. `src` is set by the effect above. */}
             <iframe

@@ -58,6 +58,13 @@ describe("parsePdfHostMessage", () => {
         expect(parsePdfHostMessage({ type: "go_to_page", page: "7" })).toBeUndefined();
     });
 
+    it("accepts a zoom step in either direction, and nothing else", () => {
+        expect(parsePdfHostMessage({ type: "zoom", direction: "in" })).toEqual({ type: "zoom", direction: "in" });
+        expect(parsePdfHostMessage({ type: "zoom", direction: "out" })).toEqual({ type: "zoom", direction: "out" });
+        expect(parsePdfHostMessage({ type: "zoom", direction: "sideways" })).toBeUndefined();
+        expect(parsePdfHostMessage({ type: "zoom" })).toBeUndefined();
+    });
+
     it.each([undefined, null, 42, "load", {}, { type: "ready" }, { type: "explode" }])("rejects %j", (value) => {
         expect(parsePdfHostMessage(value)).toBeUndefined();
     });
@@ -72,6 +79,7 @@ describe("parsePdfUsercontentMessage", () => {
             page: 4,
         });
         expect(parsePdfUsercontentMessage({ type: "page", page: 9 })).toEqual({ type: "page", page: 9 });
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: 150 })).toEqual({ type: "scale", scale: 150 });
         expect(parsePdfUsercontentMessage({ type: "position", position })).toEqual({ type: "position", position });
         expect(parsePdfUsercontentMessage({ type: "error", message: "boom" })).toEqual({
             type: "error",
@@ -85,6 +93,14 @@ describe("parsePdfUsercontentMessage", () => {
         expect(parsePdfUsercontentMessage({ type: "loaded", pageCount: 3.5, page: 1 })).toBeUndefined();
         expect(parsePdfUsercontentMessage({ type: "page", page: -1 })).toBeUndefined();
         expect(parsePdfUsercontentMessage({ type: "page", page: Number.NaN })).toBeUndefined();
+    });
+
+    it("rejects a zoom level that is not a positive number", () => {
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: 0 })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: -50 })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: Number.NaN })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: "150" })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale" })).toBeUndefined();
     });
 
     it("copies only the known fields out of a position", () => {
