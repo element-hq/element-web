@@ -167,14 +167,49 @@ describe("<LoginWithQR />", () => {
                 expect(ref.current!.state.flow).not.toBe(rendezvous);
             });
 
+            test("shows check code prompt before the device authorization grant", async () => {
+                render(getComponent({ client }));
+                vi.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                const dag = vi.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant");
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                // MSC4388 step 7: nothing further is sent until the user has confirmed the check code
+                expect(dag).not.toHaveBeenCalled();
+            });
+
             test("failed to connect", async () => {
                 render(getComponent({ client }));
                 vi.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
                 vi.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockRejectedValue(
                     new HTTPError("Internal Server Error", 500),
                 );
-                const fn = vi.spyOn(MSC4108SignInWithQR.prototype, "cancel");
-                await waitFor(() => expect(fn).toHaveBeenLastCalledWith(ClientRendezvousFailureReason.Unknown));
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve);
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith(
+                        expect.objectContaining({
+                            phase: Phase.Error,
+                            failureReason: ClientRendezvousFailureReason.Unknown,
+                        }),
+                    ),
+                );
             });
 
             test("should show error if check code doesn't match", async () => {
@@ -226,6 +261,10 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
+                const rendezvous = ref.current!.state.flow!;
+                // the device authorization grant must wait for the user to confirm the check code
+                expect(rendezvous.deviceAuthorizationGrant).not.toHaveBeenCalled();
+
                 const onClick = mockedFlow.mock.calls[0][0].onClick;
                 await onClick(Click.Approve);
 
@@ -236,9 +275,8 @@ describe("<LoginWithQR />", () => {
                         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                     }),
                 );
+                expect(rendezvous.deviceAuthorizationGrant).toHaveBeenCalled();
                 expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
-
-                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.shareSecrets).toHaveBeenCalled();
             });
 

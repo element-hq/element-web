@@ -240,11 +240,10 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             if (this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
                 // MSC4108-Flow: NewScanned
                 await flow.negotiateProtocols();
-                const { verificationUri } = await flow.deviceAuthorizationGrant();
-                this.setState({
-                    phase: Phase.OutOfBandConfirmation,
-                    verificationUri,
-                });
+                // The secure channel is established but, as we generated the QR code, we don't trust it until the
+                // user has entered the check code shown on the other device (MSC4388 step 7). We must not send
+                // anything further until then: see approveLogin().
+                this.setState({ phase: Phase.OutOfBandConfirmation });
             } else {
                 // The v2024 flow gives us a server name to resolve, the v2025 flow gives us the base URL directly
                 const { serverName, baseUrl } = await flow.negotiateProtocols();
@@ -317,8 +316,15 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 // MSC4108-Flow: NewScanned
                 this.setState({ phase: Phase.Loading });
 
-                if (this.state.verificationUri) {
-                    window.open(this.state.verificationUri, "_blank");
+                // The user has confirmed the check code so we now trust the channel. In the v2025 flow this is
+                // where we tell the other device which protocols are available and wait for it to tell us which
+                // one it is using, along with the verification URI. In the v2024 flow the other device already
+                // sent that, so this only waits for it.
+                const { verificationUri } = await this.state.flow.deviceAuthorizationGrant();
+                this.setState({ verificationUri });
+
+                if (verificationUri) {
+                    window.open(verificationUri, "_blank");
                 }
 
                 this.setState({ phase: Phase.WaitingForDevice });
