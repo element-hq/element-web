@@ -5,18 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX, lazy, Suspense, useMemo } from "react";
+import React, { type JSX, Suspense, useMemo } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import Spinner from "../elements/Spinner";
-import { documentMediaForEvent } from "../../../utils/documentViewer";
+import { documentMediaForEvent, documentViewerForEvent } from "../../../utils/documentViewer";
 import { _t } from "../../../languageHandler";
-
-// The viewer pulls in the Markdown renderer, which is of no use until someone opens a Markdown file, so
-// it is code split behind Suspense.
-const MarkdownViewer = lazy(() => import("./MarkdownViewer").then((module) => ({ default: module.MarkdownViewer })));
 
 interface Props {
     mxEvent: MatrixEvent;
@@ -24,22 +20,25 @@ interface Props {
 }
 
 /**
- * The right panel card that hosts the Markdown viewer.
+ * The right panel card that hosts whichever document viewer can open the event's attachment.
  *
  * The card owns the media handle rather than the viewer, so that re-rendering the panel — which
  * happens on every resize — does not hand the viewer a new `blob` identity and make it reload the file.
  */
-export function MarkdownViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
+export function DocumentViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
+    const viewer = documentViewerForEvent(mxEvent);
     const media = useMemo(() => documentMediaForEvent(mxEvent), [mxEvent]);
 
-    if (!media) return null;
+    if (!viewer || !media) return null;
+
+    const Viewer = viewer.Component;
 
     return (
         // Name the card after the file being read; BaseCard ellipsizes a title too long to fit.
-        <BaseCard onClose={onClose} header={media.name ?? _t("markdown_viewer|title")} withoutScrollContainer>
+        <BaseCard onClose={onClose} header={media.name ?? _t("document_viewer|title")} withoutScrollContainer>
             <ErrorBoundary>
                 <Suspense fallback={<Spinner />}>
-                    <MarkdownViewer media={media} />
+                    <Viewer media={media} />
                 </Suspense>
             </ErrorBoundary>
         </BaseCard>

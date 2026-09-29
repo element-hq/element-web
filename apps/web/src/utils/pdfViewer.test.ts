@@ -7,12 +7,10 @@ Please see LICENSE in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isPdfEvent, openPdfViewer } from "./pdfViewer";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { Action } from "../dispatcher/actions";
+import { isPdfEvent } from "./pdfViewer";
 
 function mkFileEvent(info?: Record<string, unknown>): MatrixEvent {
     return new MatrixEvent({
@@ -51,20 +49,5 @@ describe("isPdfEvent", () => {
         });
 
         expect(isPdfEvent(mxEvent)).toBe(false);
-    });
-});
-
-describe("openPdfViewer", () => {
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
-    it("dispatches the open action for the event", () => {
-        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const mxEvent = mkFileEvent({ mimetype: "application/pdf" });
-
-        openPdfViewer(mxEvent);
-
-        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenPdfViewer, event: mxEvent });
     });
 });

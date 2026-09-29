@@ -10,9 +10,9 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type Action } from "../actions";
 import { type ActionPayload } from "../payloads";
 
-export interface OpenMarkdownViewerPayload extends ActionPayload {
-    action: Action.OpenMarkdownViewer;
+export interface OpenDocumentViewerPayload extends ActionPayload {
+    action: Action.OpenDocumentViewer;
 
-    /** The event whose Markdown attachment should be opened. */
+    /** The event whose attachment should be opened in its document viewer. */
     event: MatrixEvent;
 }

@@ -7,23 +7,13 @@ Please see LICENSE in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { documentMediaForEvent, documentViewerForEvent } from "./documentViewer";
+import { documentMediaForEvent, documentViewerForEvent, openDocumentViewer } from "./documentViewer";
 import { type MediaEventHelper } from "./MediaEventHelper";
-import { openPdfViewer } from "./pdfViewer";
-import { openMarkdownViewer } from "./markdownViewer";
-
-vi.mock("./pdfViewer", async (importOriginal) => ({
-    ...(await importOriginal<typeof import("./pdfViewer")>()),
-    openPdfViewer: vi.fn(),
-}));
-
-vi.mock("./markdownViewer", async (importOriginal) => ({
-    ...(await importOriginal<typeof import("./markdownViewer")>()),
-    openMarkdownViewer: vi.fn(),
-}));
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
 
 function mkFileEvent(body: string, info?: Record<string, unknown>): MatrixEvent {
     return new MatrixEvent({
@@ -46,9 +36,6 @@ describe("documentViewerForEvent", () => {
 
         expect(viewer?.openLabel()).toBe("Open PDF");
         expect(viewer?.Component).toBeDefined();
-        viewer?.open(mxEvent);
-        expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
-        expect(openMarkdownViewer).not.toHaveBeenCalled();
     });
 
     it("picks the Markdown viewer for a Markdown file", () => {
@@ -58,9 +45,6 @@ describe("documentViewerForEvent", () => {
 
         expect(viewer?.openLabel()).toBe("Open Markdown");
         expect(viewer?.Component).toBeDefined();
-        viewer?.open(mxEvent);
-        expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
-        expect(openPdfViewer).not.toHaveBeenCalled();
     });
 });
 
@@ -107,4 +91,19 @@ describe("documentMediaForEvent", () => {
             expect(media?.size).toBeUndefined();
         },
     );
+});
+
+describe("openDocumentViewer", () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("dispatches the open action for the event", () => {
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const mxEvent = mkFileEvent("README.md", { mimetype: "text/markdown" });
+
+        openDocumentViewer(mxEvent);
+
+        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenDocumentViewer, event: mxEvent });
+    });
 });

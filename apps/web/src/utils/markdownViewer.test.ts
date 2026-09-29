@@ -7,12 +7,10 @@ Please see LICENSE in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isMarkdownEvent, openMarkdownViewer } from "./markdownViewer";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { Action } from "../dispatcher/actions";
+import { isMarkdownEvent } from "./markdownViewer";
 
 function mkFileEvent(info?: Record<string, unknown>, body = "README.md", filename?: string): MatrixEvent {
     return new MatrixEvent({
@@ -68,20 +66,5 @@ describe("isMarkdownEvent", () => {
         });
 
         expect(isMarkdownEvent(mxEvent)).toBe(false);
-    });
-});
-
-describe("openMarkdownViewer", () => {
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
-    it("dispatches the open action for the event", () => {
-        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const mxEvent = mkFileEvent({ mimetype: "text/markdown" });
-
-        openMarkdownViewer(mxEvent);
-
-        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenMarkdownViewer, event: mxEvent });
     });
 });

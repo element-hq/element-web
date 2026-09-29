@@ -27,7 +27,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { documentViewerForEvent } from "../../utils/documentViewer";
+import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -289,7 +289,7 @@ export class FileBodyViewModel
         });
     };
 
-    public onOpenClick = (): void => documentViewerForEvent(this.props.mxEvent)?.open(this.props.mxEvent);
+    public onOpenClick = (): void => openDocumentViewer(this.props.mxEvent);
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 

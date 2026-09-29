@@ -12,8 +12,11 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { type DocumentMedia } from "../@types/document-viewer";
 import { _t } from "../languageHandler";
 import { MediaEventHelper } from "./MediaEventHelper";
-import { isPdfEvent, openPdfViewer } from "./pdfViewer";
-import { isMarkdownEvent, openMarkdownViewer } from "./markdownViewer";
+import { isPdfEvent } from "./pdfViewer";
+import { isMarkdownEvent } from "./markdownViewer";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
+import { type OpenDocumentViewerPayload } from "../dispatcher/payloads/OpenDocumentViewerPayload";
 
 /** A viewer for one kind of attachment, shown in the right panel. */
 export interface DocumentViewer {
@@ -21,8 +24,6 @@ export interface DocumentViewer {
     matches: (mxEvent: MatrixEvent) => boolean;
     /** Label for the timeline action that opens the viewer, in the current language. */
     openLabel: () => string;
-    /** Opens the event's attachment in this viewer. */
-    open: (mxEvent: MatrixEvent) => void;
     /**
      * Renders the attachment. Loaded on first use, so that a viewer's dependencies stay out of the
      * bundle until someone opens a file it handles.
@@ -38,7 +39,6 @@ const DOCUMENT_VIEWERS: readonly DocumentViewer[] = [
     {
         matches: isPdfEvent,
         openLabel: () => _t("pdf_viewer|open"),
-        open: openPdfViewer,
         Component: lazy(() =>
             import("../components/views/right_panel/PdfViewer").then((module) => ({ default: module.PdfViewer })),
         ),
@@ -46,7 +46,6 @@ const DOCUMENT_VIEWERS: readonly DocumentViewer[] = [
     {
         matches: isMarkdownEvent,
         openLabel: () => _t("markdown_viewer|open"),
-        open: openMarkdownViewer,
         Component: lazy(() =>
             import("../components/views/right_panel/MarkdownViewer").then((module) => ({
                 default: module.MarkdownViewer,
@@ -76,4 +75,18 @@ export function documentMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventH
         size: typeof size === "number" && Number.isFinite(size) && size >= 0 ? size : undefined,
         blob: () => mediaEventHelper.sourceBlob.value,
     };
+}
+
+/**
+ * Open the given event's attachment in the right panel of the room it belongs to. The card picks the
+ * viewer with {@link documentViewerForEvent}.
+ *
+ * Dispatched rather than calling RightPanelStore directly: this module is reached from the message
+ * body view models, and the store leads back round to the message bodies via SDKContextClass.
+ */
+export function openDocumentViewer(mxEvent: MatrixEvent): void {
+    defaultDispatcher.dispatch<OpenDocumentViewerPayload>({
+        action: Action.OpenDocumentViewer,
+        event: mxEvent,
+    });
 }

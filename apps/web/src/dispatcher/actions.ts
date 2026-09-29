@@ -389,14 +389,10 @@ export enum Action {
     FocusMessageSearch = "focus_search",
 
     /**
-     * Opens the given event's PDF attachment in the right panel. Use with an OpenPdfViewerPayload.
+     * Opens the given event's attachment in its document viewer in the right panel. Use with an
+     * OpenDocumentViewerPayload.
      */
-    OpenPdfViewer = "open_pdf_viewer",
-
-    /**
-     * Opens the given event's Markdown attachment in the right panel. Use with an OpenMarkdownViewerPayload.
-     */
-    OpenMarkdownViewer = "open_markdown_viewer",
+    OpenDocumentViewer = "open_document_viewer",
 
     /**
      * Open the direct message dialog

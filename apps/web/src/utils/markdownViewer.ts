@@ -9,9 +9,6 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type FileContent, type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { MediaEventHelper } from "./MediaEventHelper";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { Action } from "../dispatcher/actions";
-import { type OpenMarkdownViewerPayload } from "../dispatcher/payloads/OpenMarkdownViewerPayload";
 
 export const MARKDOWN_MIMETYPES = new Set(["text/markdown", "text/x-markdown"]);
 
@@ -40,17 +37,4 @@ export function isMarkdownEvent(mxEvent: MatrixEvent): boolean {
 
     const name = (content.filename || content.body || "").toLowerCase();
     return MARKDOWN_EXTENSIONS.some((extension) => name.endsWith(extension));
-}
-
-/**
- * Open the given event's Markdown file in the right panel of the room it belongs to.
- *
- * Dispatched rather than calling RightPanelStore directly: this module is reached from the message
- * body view models, and the store leads back round to the message bodies via SDKContextClass.
- */
-export function openMarkdownViewer(mxEvent: MatrixEvent): void {
-    defaultDispatcher.dispatch<OpenMarkdownViewerPayload>({
-        action: Action.OpenMarkdownViewer,
-        event: mxEvent,
-    });
 }

@@ -18,8 +18,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { openPdfViewer } from "../../utils/pdfViewer";
-import { openMarkdownViewer } from "../../utils/markdownViewer";
+import { openDocumentViewer } from "../../utils/documentViewer";
 
 const mockDownload = vi.fn();
 
@@ -31,14 +30,9 @@ vi.mock("../../utils/FileDownloader", () => ({
     }),
 }));
 
-vi.mock("../../utils/pdfViewer", async (importOriginal) => ({
-    ...(await importOriginal<typeof import("../../utils/pdfViewer")>()),
-    openPdfViewer: vi.fn(),
-}));
-
-vi.mock("../../utils/markdownViewer", async (importOriginal) => ({
-    ...(await importOriginal<typeof import("../../utils/markdownViewer")>()),
-    openMarkdownViewer: vi.fn(),
+vi.mock("../../utils/documentViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../utils/documentViewer")>()),
+    openDocumentViewer: vi.fn(),
 }));
 
 vi.mock("../../customisations/Media", () => ({
@@ -410,7 +404,7 @@ describe("FileBodyViewModel", () => {
 
             vm.onOpenClick();
 
-            expect(openPdfViewer).toHaveBeenCalledWith(mxEvent);
+            expect(openDocumentViewer).toHaveBeenCalledWith(mxEvent);
         });
 
         describe("for Markdown", () => {
@@ -449,8 +443,7 @@ describe("FileBodyViewModel", () => {
 
                 vm.onOpenClick();
 
-                expect(openMarkdownViewer).toHaveBeenCalledWith(mxEvent);
-                expect(openPdfViewer).not.toHaveBeenCalled();
+                expect(openDocumentViewer).toHaveBeenCalledWith(mxEvent);
             });
         });
     });

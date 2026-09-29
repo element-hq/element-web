@@ -25,10 +25,8 @@ export interface IRightPanelCardState {
     initialEventScrollIntoView?: boolean;
     // room summary
     focusRoomSearch?: boolean;
-    // pdf viewer: the m.file event whose attachment is being read
-    pdfViewerEvent?: MatrixEvent;
-    // markdown viewer: the m.file event whose attachment is being read
-    markdownViewerEvent?: MatrixEvent;
+    // document viewer: the m.file event whose attachment is being read
+    documentViewerEvent?: MatrixEvent;
 }
 
 export interface IRightPanelCardStateStored {
@@ -42,10 +40,8 @@ export interface IRightPanelCardStateStored {
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
-    // pdf viewer
-    pdfViewerEventId?: string;
-    // markdown viewer
-    markdownViewerEventId?: string;
+    // document viewer
+    documentViewerEventId?: string;
 }
 
 export interface IRightPanelCard {
@@ -90,8 +86,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        pdfViewerEventId: state?.pdfViewerEvent?.getId(),
-        markdownViewerEventId: state?.markdownViewerEvent?.getId(),
+        documentViewerEventId: state?.documentViewerEvent?.getId(),
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -111,9 +106,8 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        pdfViewerEvent: !!stateStored?.pdfViewerEventId ? room.findEventById(stateStored.pdfViewerEventId) : undefined,
-        markdownViewerEvent: !!stateStored?.markdownViewerEventId
-            ? room.findEventById(stateStored.markdownViewerEventId)
+        documentViewerEvent: !!stateStored?.documentViewerEventId
+            ? room.findEventById(stateStored.documentViewerEventId)
             : undefined,
     };
 

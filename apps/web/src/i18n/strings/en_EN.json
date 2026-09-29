@@ -929,6 +929,9 @@
         "widget_screenshots": "Enable widget screenshots on supported widgets"
     },
     "dialog_close_label": "Close dialog",
+    "document_viewer": {
+        "title": "Document"
+    },
     "download_completed": "Download Completed",
     "empty_room": "Empty room",
     "empty_room_was_name": "Empty room (was %(oldName)s)",
@@ -1685,8 +1688,7 @@
         "toggle_attribution": "Toggle attribution"
     },
     "markdown_viewer": {
-        "open": "Open Markdown",
-        "title": "Markdown"
+        "open": "Open Markdown"
     },
     "member_list": {
         "count": {

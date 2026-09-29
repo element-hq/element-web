@@ -19,7 +19,7 @@ import { DownloadIcon, ExpandIcon } from "@vector-im/compound-design-tokens/asse
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
-import { documentViewerForEvent } from "../../utils/documentViewer";
+import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
     private readonly mxEvent: MatrixEvent;
@@ -54,7 +54,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
             ...(viewer
-                ? [{ label: viewer.openLabel(), icon: <ExpandIcon />, onClick: () => viewer.open(mxEvent) }]
+                ? [{ label: viewer.openLabel(), icon: <ExpandIcon />, onClick: () => openDocumentViewer(mxEvent) }]
                 : []),
             {
                 label: _t("action|download"),
