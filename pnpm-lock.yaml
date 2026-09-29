@@ -662,8 +662,8 @@ importers:
         specifier: npm:lodash-es@4.18.1
         version: lodash-es@4.18.1
       maplibre-gl:
-        specifier: ^6.0.0
-        version: 6.11.2
+        specifier: 6.10.0
+        version: 6.10.0
       matrix-encrypt-attachment:
         specifier: ^1.0.3
         version: 1.0.3
@@ -9740,8 +9740,8 @@ packages:
     resolution: {integrity: sha512-uCbIa8jWWmQZt4dSnEStkVC6gdakiinAm4PiGsywIkguF0eWMdcjDz0ECYhUolFU3pFLOev9VNPCEygydXnddg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  maplibre-gl@6.11.2:
-    resolution: {integrity: sha512-Xh06pxoipjX/Ad1sUPGhiNh9go9naCNGZZ1IJm3sIeqK1kYGuMaMDSTIGDQ2igOLfVyukJU7kvEOA089VO7Z7g==}
+  maplibre-gl@6.10.0:
+    resolution: {integrity: sha512-pZIJ1/rsB1jDjT3eBTfMaeSY45lRKdCuZtqXqTnkUrn0UJO9IwtbywT5ym3/cz57MGEELwAwQSYjB/Fj9TlktQ==}
     engines: {node: '>=16.14.0', npm: '>=8.1.0'}
 
   mark.js@8.11.1:
@@ -22106,7 +22106,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  maplibre-gl@6.11.2:
+  maplibre-gl@6.10.0:
     dependencies:
       '@mapbox/point-geometry': 1.1.0
       '@mapbox/tiny-sdf': 2.2.0
