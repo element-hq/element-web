@@ -276,6 +276,8 @@
             "tap_avatar_link_new_device": "Tap your avatar and select \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",
+            "verification_uri_explainer": "Continue to your account provider to approve signing in your other device.",
+            "verification_uri_heading": "Approve the sign-in with your account provider",
             "waiting_for_device": "Waiting for your other device"
         },
         "register_action": "Create Account",

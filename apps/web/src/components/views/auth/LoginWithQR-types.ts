@@ -21,6 +21,8 @@ export enum Phase {
     ShowingQR,
     // The following are specific to MSC4108
     OutOfBandConfirmation,
+    // The verification URI could not be opened automatically, so the user is asked to open it
+    OpenVerificationUri,
     WaitingForDevice,
     Verifying,
     Error,
@@ -46,4 +48,8 @@ export enum Click {
      * Initialise the flow & show QR code
      */
     ShowQr,
+    /**
+     * The user opened the verification URI that could not be opened automatically
+     */
+    OpenVerificationUri,
 }
