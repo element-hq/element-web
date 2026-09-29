@@ -1079,6 +1079,9 @@ importers:
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
+      '@fetch-mock/vitest':
+        specifier: ^0.2.18
+        version: 0.2.18(vitest@5.0.0)
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.1
