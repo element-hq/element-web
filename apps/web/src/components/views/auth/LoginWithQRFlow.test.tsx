@@ -36,6 +36,7 @@ describe("<LoginWithQRFlow />", () => {
         failureReason?: FailureReason;
         code?: Uint8Array;
         intent: RendezvousIntent;
+        verificationUri?: string;
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
     afterEach(() => {
@@ -92,6 +93,30 @@ describe("<LoginWithQRFlow />", () => {
                 );
                 expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
                 expect(container).toMatchSnapshot();
+                fireEvent.click(screen.getByTestId("cancel-button"));
+                expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
+            });
+
+            it("asks the user to open the verification URI if it could not be opened automatically", async () => {
+                render(
+                    getComponent({
+                        phase: Phase.OpenVerificationUri,
+                        intent,
+                        verificationUri: "https://example.com/verify",
+                    }),
+                );
+                expect(
+                    screen.getByRole("heading", { name: "Approve the sign-in with your account provider" }),
+                ).toBeInTheDocument();
+                expect(screen.queryByText("Waiting for your other device")).not.toBeInTheDocument();
+                expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
+
+                const link = screen.getByRole("link", { name: "Continue" });
+                expect(link).toHaveAttribute("href", "https://example.com/verify");
+                expect(link).toHaveAttribute("target", "_blank");
+                fireEvent.click(link);
+                expect(onClick).toHaveBeenCalledWith(Click.OpenVerificationUri);
+
                 fireEvent.click(screen.getByTestId("cancel-button"));
                 expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
             });

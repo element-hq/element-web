@@ -13,7 +13,12 @@ import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/i
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import { BigIcon, Button, Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
-import { LockSolidIcon, MobileIcon, QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    LockSolidIcon,
+    MobileIcon,
+    QrCodeIcon,
+    WebBrowserIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -51,6 +56,10 @@ interface Props {
      * The 6 digit user code to render in Phase.WaitingForDevice
      */
     userCode?: string;
+    /**
+     * The verification URI to render as a button in Phase.OpenVerificationUri
+     */
+    verificationUri?: string;
 }
 
 /**
@@ -68,8 +77,8 @@ export default class LoginWithQRFlow extends React.Component<Props> {
         };
     };
 
-    private cancelButton = (): JSX.Element => (
-        <Button data-testid="cancel-button" kind="primary" size="lg" onClick={this.handleClick(Click.Cancel)}>
+    private cancelButton = (kind: "primary" | "tertiary" = "primary"): JSX.Element => (
+        <Button data-testid="cancel-button" kind={kind} size="lg" onClick={this.handleClick(Click.Cancel)}>
             {_t("action|cancel")}
         </Button>
     );
@@ -331,6 +340,38 @@ export default class LoginWithQRFlow extends React.Component<Props> {
             }
             case Phase.Loading:
                 main = this.simpleSpinner();
+                break;
+            case Phase.OpenVerificationUri:
+                // We couldn't open the verification URI automatically, so ask the user to open it
+                main = (
+                    <>
+                        <BigIcon>
+                            <WebBrowserIcon />
+                        </BigIcon>
+                        <Heading as="h1" size="sm" weight="semibold">
+                            {_t("auth|qr_code_login|verification_uri_heading")}
+                        </Heading>
+                        <Text size="md">{_t("auth|qr_code_login|verification_uri_explainer")}</Text>
+                    </>
+                );
+                buttons = (
+                    <>
+                        <Button
+                            as="a"
+                            data-testid="open-verification-uri-button"
+                            href={this.props.verificationUri}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            kind="primary"
+                            size="lg"
+                            // Not handleClick() as that would stop the link from opening
+                            onClick={() => void this.props.onClick(Click.OpenVerificationUri)}
+                        >
+                            {_t("action|continue")}
+                        </Button>
+                        {this.cancelButton("tertiary")}
+                    </>
+                );
                 break;
             case Phase.WaitingForDevice:
                 main =
