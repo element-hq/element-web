@@ -18,6 +18,11 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import { type OpenDocumentViewerPayload } from "../dispatcher/payloads/OpenDocumentViewerPayload";
 
+/** The props every document viewer component takes. */
+export interface DocumentViewerProps {
+    media: DocumentMedia;
+}
+
 /** A viewer for one kind of attachment, shown in the right panel. */
 export interface DocumentViewer {
     /** Whether this viewer can open the event's attachment. */
@@ -28,7 +33,12 @@ export interface DocumentViewer {
      * Renders the attachment. Loaded on first use, so that a viewer's dependencies stay out of the
      * bundle until someone opens a file it handles.
      */
-    Component: ComponentType<{ media: DocumentMedia }>;
+    Component: ComponentType<DocumentViewerProps>;
+}
+
+/** Code split a viewer component, typed against the props every viewer takes. */
+function lazyViewer(load: () => Promise<ComponentType<DocumentViewerProps>>): ComponentType<DocumentViewerProps> {
+    return lazy(() => load().then((Component) => ({ default: Component })));
 }
 
 /**
@@ -39,17 +49,15 @@ const DOCUMENT_VIEWERS: readonly DocumentViewer[] = [
     {
         matches: isPdfEvent,
         openLabel: () => _t("pdf_viewer|open"),
-        Component: lazy(() =>
-            import("../components/views/right_panel/PdfViewer").then((module) => ({ default: module.PdfViewer })),
+        Component: lazyViewer(() =>
+            import("../components/views/right_panel/PdfViewer").then((module) => module.PdfViewer),
         ),
     },
     {
         matches: isMarkdownEvent,
         openLabel: () => _t("markdown_viewer|open"),
-        Component: lazy(() =>
-            import("../components/views/right_panel/MarkdownViewer").then((module) => ({
-                default: module.MarkdownViewer,
-            })),
+        Component: lazyViewer(() =>
+            import("../components/views/right_panel/MarkdownViewer").then((module) => module.MarkdownViewer),
         ),
     },
 ];
