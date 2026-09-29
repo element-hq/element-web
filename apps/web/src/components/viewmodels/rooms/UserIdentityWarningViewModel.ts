@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EventType, type MatrixEvent, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { throttle } from "lodash";
@@ -68,7 +68,11 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
     const cli = useMatrixClientContext();
     const crypto = cli.getCrypto();
 
-    const [members, setMembers] = useState<RoomMember[]>([]);
+    // The members we check for violations. Kept in a ref rather than state so that the
+    // UserTrustStatusChanged listener below always sees the latest list: a state value
+    // only reaches the listener after React has re-rendered and re-run its effects, and a
+    // trust change arriving before that would be dropped.
+    const members = useRef<RoomMember[]>([]);
     const [currentPrompt, setCurrentPrompt] = useState<ViolationPrompt | undefined>(undefined);
 
     const loadViolations = useMemo(
@@ -76,13 +80,13 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
             throttle(async (): Promise<void> => {
                 const isEncrypted = crypto && (await crypto.isEncryptionEnabledInRoom(room.roomId));
                 if (!isEncrypted) {
-                    setMembers([]);
+                    members.current = [];
                     setCurrentPrompt(undefined);
                     return;
                 }
 
                 const targetMembers = await room.getEncryptionTargetMembers();
-                setMembers(targetMembers);
+                members.current = targetMembers;
                 const violations = await mapToViolations(crypto, targetMembers);
 
                 let candidatePrompt: ViolationPrompt | undefined;
@@ -148,7 +152,7 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
         CryptoEvent.UserTrustStatusChanged,
         useCallback(
             (userId: string): void => {
-                if (members.find((m) => m.userId == userId)) {
+                if (members.current.some((m) => m.userId == userId)) {
                     // This member is tracked, we need to refresh.
                     // refresh all for now?
                     // As a later optimisation we could store the current violations and only update the relevant one.
@@ -157,7 +161,7 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
                     });
                 }
             },
-            [loadViolations, members],
+            [loadViolations],
         ),
     );
 
