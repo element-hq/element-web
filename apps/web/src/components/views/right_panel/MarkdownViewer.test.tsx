@@ -13,10 +13,10 @@ import { render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 
 import { MarkdownViewer } from "./MarkdownViewer";
-import { type MarkdownMedia } from "../../../@types/markdown-viewer";
+import { type DocumentMedia } from "../../../@types/document-viewer";
 import { stubClient } from "../../../test/test-utils";
 
-function media(body = "# Hello\n\nSome text.\n", name = "README.md", size?: number): MarkdownMedia {
+function media(body = "# Hello\n\nSome text.\n", name = "README.md", size?: number): DocumentMedia {
     return {
         uri: `mxc://example.org/${name}`,
         name,

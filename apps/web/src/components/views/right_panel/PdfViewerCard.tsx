@@ -11,7 +11,7 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PdfViewer } from "./PdfViewer";
-import { pdfMediaForEvent } from "../../../utils/pdfViewer";
+import { documentMediaForEvent } from "../../../utils/documentViewer";
 import { _t } from "../../../languageHandler";
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 
 /** The right panel card hosting the PDF viewer. Owns the media handle so resizes do not reload the document. */
 export function PdfViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
-    const media = useMemo(() => pdfMediaForEvent(mxEvent), [mxEvent]);
+    const media = useMemo(() => documentMediaForEvent(mxEvent), [mxEvent]);
 
     if (!media) return null;
 

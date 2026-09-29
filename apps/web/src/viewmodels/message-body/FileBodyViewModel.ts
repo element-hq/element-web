@@ -27,7 +27,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { attachmentViewerForEvent } from "../../utils/attachmentViewer";
+import { documentViewerForEvent } from "../../utils/documentViewer";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -160,10 +160,10 @@ export class FileBodyViewModel
         // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
         const viewer =
             showFileInfo && !props.forExport && !!props.mediaEventHelper && props.documentPreviewsEnabled
-                ? attachmentViewerForEvent(props.mxEvent)
+                ? documentViewerForEvent(props.mxEvent)
                 : undefined;
         const showOpen = !!viewer;
-        const openLabel = viewer?.openLabel;
+        const openLabel = viewer?.openLabel();
         // Once the row carries an action for opening, downloading needs to be an action too rather than
         // staying hidden behind a click on the file name.
         const showInlineDownload = showOpen;
@@ -289,7 +289,7 @@ export class FileBodyViewModel
         });
     };
 
-    public onOpenClick = (): void => attachmentViewerForEvent(this.props.mxEvent)?.open();
+    public onOpenClick = (): void => documentViewerForEvent(this.props.mxEvent)?.open(this.props.mxEvent);
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 

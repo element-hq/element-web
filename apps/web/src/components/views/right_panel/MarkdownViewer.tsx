@@ -9,7 +9,7 @@ import React, { type JSX, type MouseEvent, useCallback, useEffect, useState } fr
 import { logger } from "matrix-js-sdk/src/logger";
 import { MarkdownViewerView, type MarkdownViewerStatus } from "@element-hq/web-shared-components";
 
-import { type MarkdownMedia } from "../../../@types/markdown-viewer";
+import { type DocumentMedia } from "../../../@types/document-viewer";
 import { renderMarkdown } from "../../../utils/renderMarkdown";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
@@ -28,7 +28,7 @@ const MAX_MARKDOWN_BYTES = 2 * 1024 * 1024;
  * messages are followed within the app, as they are in the timeline; the sanitizer already makes every
  * other link open in a new tab.
  */
-export function MarkdownViewer({ media }: { media: MarkdownMedia }): JSX.Element {
+export function MarkdownViewer({ media }: { media: DocumentMedia }): JSX.Element {
     const [status, setStatus] = useState<MarkdownViewerStatus>("loading");
     const [html, setHtml] = useState("");
 

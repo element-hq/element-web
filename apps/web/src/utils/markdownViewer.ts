@@ -8,7 +8,6 @@ Please see LICENSE in the repository root for full details.
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type FileContent, type MediaEventContent } from "matrix-js-sdk/src/types";
 
-import { type MarkdownMedia } from "../@types/markdown-viewer";
 import { MediaEventHelper } from "./MediaEventHelper";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -41,24 +40,6 @@ export function isMarkdownEvent(mxEvent: MatrixEvent): boolean {
 
     const name = (content.filename || content.body || "").toLowerCase();
     return MARKDOWN_EXTENSIONS.some((extension) => name.endsWith(extension));
-}
-
-/**
- * Adapt an event's media to the handle the viewer wants. `sourceBlob` decrypts transparently, so the
- * viewer never has to know whether the room is encrypted.
- */
-export function markdownMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): MarkdownMedia | undefined {
-    if (!isMarkdownEvent(mxEvent)) return;
-
-    const mediaEventHelper = helper ?? new MediaEventHelper(mxEvent);
-    const size = mxEvent.getContent<MediaEventContent>().info?.size;
-
-    return {
-        uri: mediaEventHelper.media.srcMxc,
-        name: mediaEventHelper.fileName,
-        size: typeof size === "number" && Number.isFinite(size) && size >= 0 ? size : undefined,
-        blob: () => mediaEventHelper.sourceBlob.value,
-    };
 }
 
 /**

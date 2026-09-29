@@ -8,7 +8,6 @@ Please see LICENSE in the repository root for full details.
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
-import { type PdfMedia } from "../@types/pdf-viewer";
 import { MediaEventHelper } from "./MediaEventHelper";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -24,24 +23,6 @@ export function isPdfEvent(mxEvent: MatrixEvent): boolean {
     if (!MediaEventHelper.isEligible(mxEvent)) return false;
     const mimetype = mxEvent.getContent<MediaEventContent>().info?.mimetype;
     return mimetype?.split(";")[0].trim().toLowerCase() === PDF_MIMETYPE;
-}
-
-/**
- * Adapt an event's media to the handle the viewer wants. `sourceBlob` decrypts transparently, so the
- * viewer never has to know whether the room is encrypted.
- */
-export function pdfMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): PdfMedia | undefined {
-    if (!isPdfEvent(mxEvent)) return;
-
-    const mediaEventHelper = helper ?? new MediaEventHelper(mxEvent);
-    const size = mxEvent.getContent<MediaEventContent>().info?.size;
-
-    return {
-        uri: mediaEventHelper.media.srcMxc,
-        name: mediaEventHelper.fileName,
-        size: typeof size === "number" && Number.isFinite(size) && size >= 0 ? size : undefined,
-        blob: () => mediaEventHelper.sourceBlob.value,
-    };
 }
 
 /**

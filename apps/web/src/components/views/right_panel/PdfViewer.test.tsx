@@ -16,10 +16,15 @@ import { PdfViewer, PDF_IFRAME_PERMISSIONS, PDF_USERCONTENT_URL } from "./PdfVie
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { flushPdfViewerState } from "../../../utils/pdfViewerState";
-import { type PdfMedia } from "../../../@types/pdf-viewer";
+import { type DocumentMedia } from "../../../@types/document-viewer";
 import { type PdfHostMessage, type PdfUsercontentMessage } from "../../../usercontent/pdf/protocol";
 
-function media(name = "spec.pdf", body = "%PDF-1.7\n", uri = `mxc://example.org/${name}`, size?: number): PdfMedia {
+function media(
+    name = "spec.pdf",
+    body = "%PDF-1.7\n",
+    uri = `mxc://example.org/${name}`,
+    size?: number,
+): DocumentMedia {
     return {
         uri,
         name,
@@ -93,7 +98,7 @@ async function loadIntoIframe(iframe: FakeIframe): Promise<PdfHostMessage & { ty
 
 /** Render, load and lay out. */
 async function renderLoaded(
-    pdfMedia: PdfMedia = media(),
+    pdfMedia: DocumentMedia = media(),
     { pageCount = 100, page = 1 } = {},
 ): Promise<{ iframe: FakeIframe; unmount: () => void }> {
     const { unmount } = render(<PdfViewer media={pdfMedia} />);

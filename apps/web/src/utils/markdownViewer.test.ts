@@ -10,8 +10,7 @@ Please see LICENSE in the repository root for full details.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isMarkdownEvent, markdownMediaForEvent, openMarkdownViewer } from "./markdownViewer";
-import { type MediaEventHelper } from "./MediaEventHelper";
+import { isMarkdownEvent, openMarkdownViewer } from "./markdownViewer";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 
@@ -70,45 +69,6 @@ describe("isMarkdownEvent", () => {
 
         expect(isMarkdownEvent(mxEvent)).toBe(false);
     });
-});
-
-/** A MediaEventHelper that does not need a logged-in client behind it. */
-function mkHelper(blob = new Blob(["# Hello\n"], { type: "text/markdown" })): MediaEventHelper {
-    return {
-        media: { srcMxc: "mxc://example.org/readme" },
-        fileName: "README.md",
-        sourceBlob: { value: Promise.resolve(blob) },
-    } as unknown as MediaEventHelper;
-}
-
-describe("markdownMediaForEvent", () => {
-    it("returns nothing for an event that is not Markdown", () => {
-        expect(markdownMediaForEvent(mkFileEvent({ mimetype: "application/pdf" }))).toBeUndefined();
-    });
-
-    it("keys on the MXC URI and defers to the helper for the bytes", async () => {
-        const blob = new Blob(["# Hello\n"], { type: "text/markdown" });
-        const media = markdownMediaForEvent(mkFileEvent({ mimetype: "text/markdown" }), mkHelper(blob));
-
-        expect(media).toMatchObject({ uri: "mxc://example.org/readme", name: "README.md" });
-        // The helper decrypts behind `sourceBlob`, so the viewer gets plaintext either way.
-        await expect(media!.blob()).resolves.toBe(blob);
-    });
-
-    it("passes on the declared size so the viewer can refuse a file before downloading it", () => {
-        const media = markdownMediaForEvent(mkFileEvent({ mimetype: "text/markdown", size: 1234 }), mkHelper());
-
-        expect(media?.size).toBe(1234);
-    });
-
-    it.each([undefined, "1234", -1, Number.NaN, Number.POSITIVE_INFINITY])(
-        "leaves the size unset when the sender declared %s",
-        (size) => {
-            const media = markdownMediaForEvent(mkFileEvent({ mimetype: "text/markdown", size }), mkHelper());
-
-            expect(media?.size).toBeUndefined();
-        },
-    );
 });
 
 describe("openMarkdownViewer", () => {

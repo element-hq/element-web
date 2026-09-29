@@ -6,10 +6,11 @@ Please see LICENSE in the repository root for full details.
 */
 
 /**
- * The handle on a Markdown file that `MarkdownViewer` needs. `blob` is expected to decrypt
- * transparently for encrypted media, so the viewer never has to care whether the room is encrypted.
+ * The handle on an attachment that a document viewer needs: something to key per-file state on, and
+ * a way to get at the bytes. `blob` is expected to decrypt transparently for encrypted media, so a
+ * viewer never has to care whether the room is encrypted.
  */
-export interface MarkdownMedia {
+export interface DocumentMedia {
     /** The MXC URI of the file. */
     uri: string;
     /** The file name, as sent. */

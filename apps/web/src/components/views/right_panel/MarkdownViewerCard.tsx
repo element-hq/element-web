@@ -11,7 +11,7 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import Spinner from "../elements/Spinner";
-import { markdownMediaForEvent } from "../../../utils/markdownViewer";
+import { documentMediaForEvent } from "../../../utils/documentViewer";
 import { _t } from "../../../languageHandler";
 
 // The viewer pulls in the Markdown renderer, which is of no use until someone opens a Markdown file, so
@@ -30,7 +30,7 @@ interface Props {
  * happens on every resize — does not hand the viewer a new `blob` identity and make it reload the file.
  */
 export function MarkdownViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
-    const media = useMemo(() => markdownMediaForEvent(mxEvent), [mxEvent]);
+    const media = useMemo(() => documentMediaForEvent(mxEvent), [mxEvent]);
 
     if (!media) return null;
 
