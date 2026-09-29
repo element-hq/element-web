@@ -60,8 +60,8 @@ HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB
 # Each module is pinned to a version and the sha256 of its release archive.
 FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS modules
 
-ARG MODULE_BANNER_VERSION=v2.1.0
-ADD --checksum=sha256:c8498112c460af25f8733c57058251b657495a24300b59f4a36d17b7521246c1 \
+ARG MODULE_BANNER_VERSION=v2.1.1
+ADD --checksum=sha256:bd894fa30df4faa4fd7aab450f8d15c2f1b8246b3073b51932e5fa35821973da \
     https://github.com/element-hq/element-web/releases/download/module%2Fbanner%2F${MODULE_BANNER_VERSION}/banner-${MODULE_BANNER_VERSION}.zip \
     /tmp/modules/banner-${MODULE_BANNER_VERSION}.zip
 
