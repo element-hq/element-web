@@ -23,7 +23,24 @@ describe("createMessageContent", () => {
         vi.resetAllMocks();
     });
 
+    it("should omit explicit-link markers when the Labs flag is disabled", async () => {
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+        expect("formatted_body" in content && content.formatted_body).not.toContain("data-org.matrix.msc4550.link");
+    });
+
+    it("should remove supplied explicit-link markers when the Labs flag is disabled", async () => {
+        const content = await createMessageContent(
+            '<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link>DM me</a>',
+            true,
+            {},
+        );
+        expect("formatted_body" in content && content.formatted_body).not.toContain("data-org.matrix.msc4550.link");
+    });
+
     it("marks authored Markdown links in the rich-text composer", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links" || setting === "MessageComposerInput.useMarkdown",
+        );
         const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
         if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
         expect(content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
@@ -41,6 +58,9 @@ describe("createMessageContent", () => {
     });
 
     it("retains explicit links in replacement content", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
         const editedEvent = mkEvent({
             type: "m.room.message",
             room: "!room:example.org",
@@ -60,6 +80,9 @@ describe("createMessageContent", () => {
         );
     });
     it("marks authored rich-text links while retaining mentions", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
         const content = await createMessageContent(
             '<a href="https://matrix.to/#/@alice:example.org">DM me</a> ' +
                 '<a href="https://matrix.to/#/@bob:example.org" data-mention-type="user">Bob</a>',

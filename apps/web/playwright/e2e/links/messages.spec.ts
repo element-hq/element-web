@@ -15,15 +15,18 @@ test.describe("Message links", () => {
             await use({ roomId });
         },
     });
-    test("sends and renders an explicit Matrix link with its authored label", async ({ page, room }) => {
-        await page.goto(`#/room/${room.roomId}`);
-        const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
-        await composer.fill("[DM me](https://matrix.to/#/@alice:example.org)");
-        await composer.press("Enter");
-        const link = page.getByTestId("event-tile-slot-body").getByRole("link", { name: "DM me", exact: true });
-        await expect(link).toBeVisible();
-        await expect(link).toHaveAttribute("data-org.matrix.msc4550.link", "");
-        await expect(link).toHaveAttribute("href", "https://matrix.to/#/@alice:example.org");
+    test.describe("Explicit links", () => {
+        test.use({ labsFlags: ["feature_msc4550_explicit_links"] });
+        test("sends and renders an explicit Matrix link with its authored label", async ({ page, room }) => {
+            await page.goto(`#/room/${room.roomId}`);
+            const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+            await composer.fill("[DM me](https://matrix.to/#/@alice:example.org)");
+            await composer.press("Enter");
+            const link = page.getByTestId("event-tile-slot-body").getByRole("link", { name: "DM me", exact: true });
+            await expect(link).toBeVisible();
+            await expect(link).toHaveAttribute("data-org.matrix.msc4550.link", "");
+            await expect(link).toHaveAttribute("href", "https://matrix.to/#/@alice:example.org");
+        });
     });
     for (const link of ["https://example.org", "ftp://example.org"]) {
         test(`should linkify a regular link '${link}'`, async ({ page, user, app, room }) => {

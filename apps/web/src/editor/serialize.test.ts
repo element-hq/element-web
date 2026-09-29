@@ -34,7 +34,14 @@ describe("editor/serialize", function () {
             ).join("");
             expect(htmlSerializeIfNeeded(model)).toBe(`<code>${expected}</code>`);
         });
+        it("omits explicit-link markers when the Labs flag is disabled", () => {
+            const html = htmlSerializeFromMdIfNeeded("[DM me](https://matrix.to/#/@alice:example.org)");
+            expect(html).not.toContain("data-org.matrix.msc4550.link");
+        });
         it("distinguishes authored links from identical mention pills", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === "feature_msc4550_explicit_links",
+            );
             const pc = createPartCreator();
             const model = new EditorModel(
                 [pc.plain("[Alice](https://matrix.to/#/@alice:hs.tld) "), pc.userPill("Alice", "@alice:hs.tld")],

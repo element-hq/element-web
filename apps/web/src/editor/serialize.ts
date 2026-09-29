@@ -175,8 +175,10 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
         const phtml = new DOMParser().parseFromString(parser.toHTML(), "text/html");
-        for (const anchor of phtml.querySelectorAll("a")) {
-            anchor.dataset["org.matrix.msc4550.link"] = "";
+        if (SettingsStore.getValue("feature_msc4550_explicit_links")) {
+            for (const anchor of phtml.querySelectorAll("a")) {
+                anchor.dataset["org.matrix.msc4550.link"] = "";
+            }
         }
 
         if (SettingsStore.getValue("feature_latex_maths")) {

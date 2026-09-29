@@ -14,6 +14,7 @@ import reactStringReplace from "react-string-replace";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { Pill } from "../components/views/elements/Pill";
+import SettingsStore from "../settings/SettingsStore";
 import { PillType } from "../components/views/elements/PillType";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
@@ -31,7 +32,12 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
  *   Composer completions already create an A tag.
  */
 const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null, isHtml: boolean): boolean => {
-    if (!parts || Object.hasOwn(node.attribs, "data-org.matrix.msc4550.link")) return false;
+    if (
+        !parts ||
+        (SettingsStore.getValue("feature_msc4550_explicit_links") &&
+            Object.hasOwn(node.attribs, "data-org.matrix.msc4550.link"))
+    )
+        return false;
 
     const text = textContent(node);
 
@@ -67,6 +73,7 @@ export const mentionPillRenderer: RendererMap = {
             if (
                 parent.type === "tag" &&
                 parent.name === "a" &&
+                SettingsStore.getValue("feature_msc4550_explicit_links") &&
                 Object.hasOwn(parent.attribs, "data-org.matrix.msc4550.link")
             ) {
                 return;

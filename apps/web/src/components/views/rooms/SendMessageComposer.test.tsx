@@ -34,6 +34,7 @@ import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
 import { attachUrlPreviews } from "../../../utils/messages";
+import SettingsStore from "../../../settings/SettingsStore";
 
 vi.mock("../../../utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
@@ -48,6 +49,12 @@ vi.mock("../../../utils/messages", async (importOriginal) => {
 
 describe("<SendMessageComposer/>", () => {
     it("does not notify the room when saving an explicit link labelled @room", () => {
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const settingSpy = vi
+            .spyOn(SettingsStore, "getValue")
+            .mockImplementation((setting, ...args) =>
+                setting === "feature_msc4550_explicit_links" ? true : originalGetValue(setting, ...args),
+            );
         const pc = createPartCreator();
         const event = mkEvent({
             type: "m.room.message",
@@ -65,13 +72,21 @@ describe("<SendMessageComposer/>", () => {
         const content = createMessageContent("@sender:example.org", model, undefined, undefined);
         expect(content["m.mentions"]).toEqual({});
         expect("formatted_body" in content && content.formatted_body).toContain("<strong>@room</strong>");
+        settingSpy.mockRestore();
     });
     it("does not mention a user just because an authored link points to them", () => {
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const settingSpy = vi
+            .spyOn(SettingsStore, "getValue")
+            .mockImplementation((setting, ...args) =>
+                setting === "feature_msc4550_explicit_links" ? true : originalGetValue(setting, ...args),
+            );
         const pc = createPartCreator();
         const model = new EditorModel([pc.plain("[DM me](https://matrix.to/#/@alice:example.org)")], pc);
         const content = createMessageContent("@sender:example.org", model, undefined, undefined);
         expect(content["m.mentions"]).toEqual({});
         expect("formatted_body" in content && content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
+        settingSpy.mockRestore();
     });
     const defaultRoomContext: RoomContextType = {
         roomViewStore: SDKContextClass.instance.roomViewStore,

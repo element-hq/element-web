@@ -83,13 +83,19 @@ export async function createMessageContent(
         formattedBody = await plainToRich(message, true);
     }
     if (formattedBody) {
+        const explicitLinksEnabled = SettingsStore.getValue("feature_msc4550_explicit_links");
         const document = new DOMParser().parseFromString(formattedBody, "text/html");
-        let hasLinks = false;
-        for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a:not([data-mention-type])")) {
-            anchor.dataset["org.matrix.msc4550.link"] = "";
-            hasLinks = true;
+        let changed = false;
+        for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a")) {
+            if (explicitLinksEnabled && !anchor.hasAttribute("data-mention-type")) {
+                anchor.dataset["org.matrix.msc4550.link"] = "";
+                changed = true;
+            } else if (!explicitLinksEnabled && anchor.dataset["org.matrix.msc4550.link"] !== undefined) {
+                delete anchor.dataset["org.matrix.msc4550.link"];
+                changed = true;
+            }
         }
-        if (hasLinks) formattedBody = document.body.innerHTML;
+        if (changed) formattedBody = document.body.innerHTML;
     }
 
     if (formattedBody) {

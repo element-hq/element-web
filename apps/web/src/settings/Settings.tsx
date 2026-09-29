@@ -238,6 +238,7 @@ export interface Settings {
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
+    "feature_msc4550_explicit_links": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -670,6 +671,17 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Ui,
         displayName: _td("labs|login_with_qr"),
         description: _td("labs|config_only"),
+        isFeature: true,
+        default: false,
+    },
+    "feature_msc4550_explicit_links": {
+        labsGroup: LabGroup.Messaging,
+        // Existing message bodies need to render again when the flag changes.
+        controller: new ReloadOnChangeController(),
+        displayName: _td("labs|explicit_links"),
+        description: _td("labs|explicit_links_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
         isFeature: true,
         default: false,
     },

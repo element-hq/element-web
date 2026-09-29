@@ -13,6 +13,7 @@ import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { type Part, type PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
+import SettingsStore from "../settings/SettingsStore";
 import Markdown from "../Markdown";
 import { textToHtmlRainbow } from "../utils/colour";
 import { stripPlainReply } from "../utils/Reply";
@@ -87,7 +88,9 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     // URL, so it appends a trailing slash to an origin-only link and absolutises a relative one.
     // The composer should show the author what they wrote.
     const href = (n as HTMLAnchorElement).getAttribute("href") ?? "";
-    const explicitLink = (n as HTMLAnchorElement).dataset["org.matrix.msc4550.link"] !== undefined;
+    const explicitLink =
+        SettingsStore.getValue("feature_msc4550_explicit_links") &&
+        (n as HTMLAnchorElement).dataset["org.matrix.msc4550.link"] !== undefined;
     const resourceId = explicitLink ? null : getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {
