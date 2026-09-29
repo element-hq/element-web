@@ -90,7 +90,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     );
 
     return (
-        <div>
+        <div className="mx_EditMessageComposerWrapper">
             <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
             {editor}
         </div>

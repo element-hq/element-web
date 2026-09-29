@@ -126,8 +126,8 @@ describe("ActionBarView", () => {
 
         render(<ActionBarView vm={vm} />);
 
-        expect(screen.getByRole("button", { name: /remove/i })).toHaveTextContent(/remove/i);
-        expect(screen.getByRole("button", { name: /view source/i })).toHaveTextContent(/view source/i);
+        expect(screen.getByRole("button", { name: /remove/i })).toMatchTextContent(/remove/i);
+        expect(screen.getByRole("button", { name: /view source/i })).toMatchTextContent(/view source/i);
     });
 
     it("renders only the options button in the minimal state", () => {

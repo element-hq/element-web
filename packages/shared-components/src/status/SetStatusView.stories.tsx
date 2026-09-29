@@ -48,6 +48,12 @@ export const WithStatus: Story = {
     },
 };
 
+export const Disabled: Story = {
+    args: {
+        disabled: true,
+    },
+};
+
 // Rules needed for any story where the menu is open.
 const MENU_OPEN_A11Y_RULES = [
     {

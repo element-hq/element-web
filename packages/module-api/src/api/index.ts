@@ -25,6 +25,7 @@ import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 import { type UrlPreviewApi } from "./urlpreview.ts";
+import { type X509Api } from "./x509.ts";
 
 /**
  * Module interface for modules to implement.
@@ -135,6 +136,13 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
      * Access some very specific functionality from the client.
      */
     readonly client: ClientApi;
+
+    /**
+     * Allows modules to access hardware keys attached to the user's device as part of experimental
+     * X.509-based identity verification.
+     * @alpha Subject to change.
+     */
+    readonly x509?: X509Api;
 
     /**
      * API for modules to auto-approve widget preloading, identity token requests, and capability requests.

@@ -265,11 +265,18 @@ export class Helpers {
     }
 
     /**
-     * Click on a room in the Threads Activity Centre
-     * @param name - room name
+     * Click on a thread row in the Threads Activity Centre
+     * @param name - room or thread name
      */
-    clickRoomInTac(name: string) {
+    clickThreadInTac(name: string) {
         return this.getTacPanel().getByRole("menuitem", { name }).click();
+    }
+
+    /**
+     * Switch to the "Other threads" tab in the TAC
+     */
+    switchToOtherThreadsTab() {
+        return this.getTacPanel().getByRole("tab", { name: "Other threads" }).click();
     }
 
     /**
@@ -298,10 +305,10 @@ export class Helpers {
     }
 
     /**
-     * Assert that the threads activity centre panel has the expected rooms
+     * Assert that the threads activity centre panel has the expected thread rows
      * @param content - the expected rooms and their notification levels
      */
-    async assertRoomsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
+    async assertThreadsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
         // Ensure that we have the right number of rooms
         await expect(this.getTacPanel().getByRole("menuitem")).toHaveCount(content.length);
 
@@ -311,7 +318,7 @@ export class Helpers {
             const roomLocator = roomsLocator.nth(index);
             // Ensure that the room name are correct
             await expect(roomLocator).toHaveText(new RegExp(room));
-            // There is no accessibility marker for the StatelessNotificationBadge
+            // The notification decoration exposes no per-level marker, so the row wrapper carries one
             await expect(roomLocator.locator(`[data-notification-level="${notificationLevel}"]`)).toBeVisible();
         }
     }
@@ -367,6 +374,16 @@ export class Helpers {
      */
     expandSpacePanel() {
         return this.page.getByRole("navigation", { name: "Spaces" }).getByRole("button", { name: "Expand" }).click();
+    }
+
+    /**
+     * Go back from a thread to the thread list in the right panel.
+     *
+     * Clicking a row in the TAC opens the thread itself on top of the thread list, so the
+     * card's back button is the way to reach the list.
+     */
+    clickBackToThreadList() {
+        return this.page.getByRole("complementary").getByRole("button", { name: "Threads" }).click();
     }
 
     /**
