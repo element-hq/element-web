@@ -11,11 +11,12 @@ import {
     ClientRendezvousFailureReason,
     linkNewDeviceByGeneratingQR,
     MSC4108FailureReason,
-    MSC4108SignInWithQR,
     RendezvousError,
     type RendezvousFailureReason,
     RendezvousIntent,
     signInByGeneratingQR,
+    type SignInWithQRFlow,
+    type SignInWithQRSecrets,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -35,10 +36,10 @@ import { getOAuthClientId } from "../../../utils/oauth/registerClient.ts";
 import SdkConfig from "../../../SdkConfig.ts";
 import { type Context } from "../../../utils/oauth/persistOAuthSettings.ts";
 
-export type QrLoginCredentials = CompleteOAuthLoginResponse &
-    Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>> & {
-        deviceId: string;
-    };
+export type QrLoginCredentials = CompleteOAuthLoginResponse & {
+    secrets?: SignInWithQRSecrets;
+    deviceId: string;
+};
 
 type BaseProps = {
     /**
@@ -90,7 +91,7 @@ interface IState {
     /**
      * The Sign in with QR flow to use
      */
-    flow?: MSC4108SignInWithQR;
+    flow?: SignInWithQRFlow;
     /**
      * TODO
      */
@@ -158,7 +159,8 @@ async function resolveServerURLs(
  * It implements `login.reciprocate` & `login.start` capabilities and showing QR codes.
  * It does not implement any flows requiring the scanning of QR codes.
  *
- * Implements the v2024 version of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
+ * Supports the v2024 and v2025 versions of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
+ * The version in use is chosen by matrix-js-sdk.
  */
 export default class LoginWithQR extends React.Component<Props, IState> {
     private finished = false;
@@ -215,7 +217,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
     }
 
     private generateAndShowCode = async (abortController: AbortController): Promise<void> => {
-        let flow: MSC4108SignInWithQR;
+        let flow: SignInWithQRFlow;
         try {
             flow =
                 this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
@@ -244,8 +246,17 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     verificationUri,
                 });
             } else {
-                const { serverName } = await flow.negotiateProtocols();
-                const { homeserverUrl, identityServerUrl } = await resolveServerURLs(serverName!);
+                // The v2024 flow gives us a server name to resolve, the v2025 flow gives us the base URL directly
+                const { serverName, baseUrl } = await flow.negotiateProtocols();
+                const serverNameOrBaseUrl = baseUrl ?? serverName;
+
+                if (!serverNameOrBaseUrl) {
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    logger.error("Failed to discover homeserver URL");
+                    throw new Error("Failed to discover homeserver URL");
+                }
+
+                const { homeserverUrl, identityServerUrl } = await resolveServerURLs(serverNameOrBaseUrl);
 
                 if (!homeserverUrl) {
                     this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
@@ -291,7 +302,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
     };
 
     private approveLogin = async (checkCode: string | undefined): Promise<void> => {
-        if (!(this.state.flow instanceof MSC4108SignInWithQR)) {
+        if (!this.state.flow) {
             this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
             throw new Error("Rendezvous not found");
         }
