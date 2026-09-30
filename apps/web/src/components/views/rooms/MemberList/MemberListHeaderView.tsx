@@ -44,7 +44,6 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
         return (
             <InviteTooltip canInvite={vm.canInvite}>
                 <Button
-                    className="mx_MemberListHeaderView_invite_small"
                     kind="secondary"
                     onClick={vm.onInviteButtonClick}
                     size="md"
@@ -63,9 +62,9 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
         <InviteTooltip canInvite={vm.canInvite}>
             <Button
                 kind="secondary"
+                className="mx_MemberListHeaderView_inviteButton"
                 size="md"
                 Icon={UserAddIcon}
-                className="mx_MemberListHeaderView_invite_large"
                 disabled={!vm.canInvite}
                 onClick={vm.onInviteButtonClick}
                 type="button"
@@ -104,7 +103,7 @@ export const MemberListHeaderView: React.FC<Props> = (props: Props) => {
     if (vm.shouldShowSearch) {
         // When we need to show the search box
         contentJSX = (
-            <Flex justify="center" className="mx_MemberListHeaderView_container">
+            <Flex justify="center" gap="var(--cpd-space-3x)" className="mx_MemberListHeaderView_container">
                 <Search
                     className="mx_MemberListHeaderView_search mx_no_textinput"
                     name="searchMembers"
@@ -117,7 +116,7 @@ export const MemberListHeaderView: React.FC<Props> = (props: Props) => {
     } else if (!vm.shouldShowSearch && vm.shouldShowInvite) {
         // When we don't need to show the search box but still need an invite button
         contentJSX = (
-            <Flex justify="center" className="mx_MemberListHeaderView_container">
+            <Flex direction="column" align="center" className="mx_MemberListHeaderView_container">
                 <InviteButton vm={vm} />
             </Flex>
         );
