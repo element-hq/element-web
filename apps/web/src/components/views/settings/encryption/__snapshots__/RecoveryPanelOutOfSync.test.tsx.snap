@@ -10,7 +10,7 @@ exports[`<RecoveyPanelOutOfSync /> > should render 1`] = `
       class="mx_SettingsSection_header"
     >
       <h2
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+        class="_typography _font-heading-sm-semibold mx_SettingsHeader"
       >
         Backup
       </h2>
@@ -40,7 +40,7 @@ exports[`<RecoveyPanelOutOfSync /> > should render 1`] = `
       class="mx_RecoveryPanelOutOfSync"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -49,7 +49,7 @@ exports[`<RecoveyPanelOutOfSync /> > should render 1`] = `
         Forgot recovery key?
       </button>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="md"
         role="button"
