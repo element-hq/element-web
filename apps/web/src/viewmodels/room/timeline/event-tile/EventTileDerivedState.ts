@@ -211,8 +211,6 @@ export function getShouldShowMessageActionBar({
 export interface ShouldShowTimestampInput {
     /** The event origin timestamp. */
     eventTs: number;
-    /** Whether the event is an RTC notification. */
-    isRtcNotification: boolean;
     /** Whether timestamp rendering is disabled. */
     hideTimestamp?: boolean;
     /** Whether timestamps should always show. */
@@ -232,7 +230,6 @@ export interface ShouldShowTimestampInput {
 /** Whether EventTile should render the message timestamp. */
 export function getShouldShowTimestamp({
     eventTs,
-    isRtcNotification,
     hideTimestamp,
     alwaysShowTimestamps,
     last,
@@ -243,7 +240,6 @@ export function getShouldShowTimestamp({
 }: ShouldShowTimestampInput): boolean {
     return (
         !!eventTs &&
-        !isRtcNotification &&
         !hideTimestamp &&
         (alwaysShowTimestamps || last || hover || focusWithin || actionBarFocused || hasContextMenu)
     );

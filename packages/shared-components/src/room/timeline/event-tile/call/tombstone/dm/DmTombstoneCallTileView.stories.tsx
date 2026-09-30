@@ -25,8 +25,8 @@ const meta = {
     component: RoomTombstoneCallTileViewWrapper,
     tags: ["autodocs"],
     argTypes: {
-        timestamp: {
-            control: { type: "text" },
+        durationSeconds: {
+            control: { type: "number" },
         },
         callDirection: {
             options: [CallDirection.Incoming, CallDirection.Outgoing],
@@ -39,9 +39,10 @@ const meta = {
         },
     },
     args: {
-        timestamp: "12:36",
+        durationSeconds: 754,
         callDirection: CallDirection.Incoming,
         isCallDeclined: false,
+        answered: true,
         type: CallType.Voice,
     },
     parameters: {
@@ -66,6 +67,40 @@ export const VoiceEnded: Story = {
 export const VideoEnded: Story = {
     args: {
         type: CallType.Video,
+    },
+};
+
+export const OutgoingVoice: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Outgoing,
+    },
+};
+
+export const OutgoingVoiceUnanswered: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Outgoing,
+        answered: false,
+        durationSeconds: undefined,
+    },
+};
+
+export const MissedVoice: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Incoming,
+        answered: false,
+        durationSeconds: undefined,
+    },
+};
+
+export const MissedVideo: Story = {
+    args: {
+        type: CallType.Video,
+        callDirection: CallDirection.Incoming,
+        answered: false,
+        durationSeconds: undefined,
     },
 };
 

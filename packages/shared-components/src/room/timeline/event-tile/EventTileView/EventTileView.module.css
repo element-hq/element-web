@@ -253,6 +253,12 @@
         text-align: center;
     }
 
+    /* Call tiles are a single box taller than a line, with their text centred in it. */
+    &.stateAlignedBetweenBubbles .slotTimestamp {
+        inset-block: 0;
+        margin-block: auto;
+    }
+
     .slotPadlock {
         position: absolute;
         inset-block-start: 0;

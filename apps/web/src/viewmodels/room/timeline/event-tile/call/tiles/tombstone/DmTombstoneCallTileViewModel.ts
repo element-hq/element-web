@@ -6,16 +6,21 @@
  */
 
 import { CallDirection, type DmTombstoneCallTileViewSnapshot } from "@element-hq/web-shared-components";
-import { type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
-import SettingsStore from "../../../../../../../settings/SettingsStore";
 import type { GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
-import { getTimeFromEvent } from "./common";
 import {
     RoomTombstoneCallTileViewModel,
     type RoomTombstoneCallTileViewModelProps,
 } from "./RoomTombstoneCallTileViewModel";
-import { getDeclinedEvents, getFailureReason, getIntentFromEvent } from "../../common";
+import {
+    getConnectedTs,
+    reportsProgress,
+    getDeclinedEvents,
+    getFailureReason,
+    getIntentFromEvent,
+    getInviteProgress,
+} from "../../common";
 
 export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTileViewModelProps {
     /**
@@ -26,6 +31,47 @@ export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTile
      * The {@link MatrixClient} object to access js-sdk API.
      */
     cli: MatrixClient;
+}
+
+/**
+ * What the timeline says became of the call this notification rang for: the
+ * call memberships after it, before the next ring. A join follows the ring
+ * within seconds, so it is loaded alongside; the leave may not be.
+ */
+function callOutcome(
+    cli: MatrixClient,
+    mxEvent: MatrixEvent,
+    getRelationsForEvent?: GetRelationsForEvent,
+): { answered: boolean; durationSeconds?: number } {
+    const eventId = mxEvent.getId();
+    const events = eventId && cli.getRoom(mxEvent.getRoomId())?.getTimelineForEvent?.(eventId)?.getEvents();
+    if (!events) return { answered: false };
+    const after = events.slice(events.findIndex((e) => e.getId() === eventId) + 1);
+    let answered = false;
+    // Connected when the other side reports it, or else once someone other than the caller joins; over when
+    // anyone leaves
+    const progress = getInviteProgress(mxEvent, getRelationsForEvent);
+    let connectedTs = getConnectedTs(progress);
+    // A join after the ring has ended is the next call's (its caller joins before notifying), not an answer
+    const ringUntil = mxEvent.getTs() + (mxEvent.getContent().lifetime ?? 90_000);
+    for (const e of after) {
+        if (e.getType() === EventType.RTCNotification) break;
+        if (e.getType() !== EventType.GroupCallMemberPrefix) continue;
+        const joined = Object.keys(e.getContent()).length > 0;
+        if (joined && connectedTs === undefined && e.getTs() > ringUntil) break;
+        if (joined && e.getSender() === cli.getUserId()) answered = true;
+        // (unless that side reports its progress: then only its `connected` is)
+        if (
+            joined &&
+            connectedTs === undefined &&
+            e.getSender() !== mxEvent.getSender() &&
+            !reportsProgress(progress, e.getSender())
+        )
+            connectedTs = e.getTs();
+        else if (!joined && connectedTs !== undefined && e.getTs() >= connectedTs)
+            return { answered, durationSeconds: Math.round((e.getTs() - connectedTs) / 1000) };
+    }
+    return { answered };
 }
 
 function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
@@ -44,10 +90,9 @@ function generateSnapshot(props: DmTombstoneCallTileViewModelProps): {
 
     const declineEvent = getDeclinedEvents(mxEvent, getRelationsForEvent)?.[0] ?? null;
     const failureReason = getFailureReason(mxEvent, getRelationsForEvent);
-    const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
-    const timestamp = getTimeFromEvent(declineEvent ?? mxEvent, showTwelveHour);
+    const { answered, durationSeconds } = callOutcome(cli, mxEvent, getRelationsForEvent);
     return {
-        snapshot: { timestamp, type, callDirection, isCallDeclined: !!declineEvent, failureReason },
+        snapshot: { type, callDirection, isCallDeclined: !!declineEvent, failureReason, answered, durationSeconds },
         declineEvent,
     };
 }
@@ -59,25 +104,12 @@ export class DmTombstoneCallTileViewModel extends RoomTombstoneCallTileViewModel
     DmTombstoneCallTileViewSnapshot,
     DmTombstoneCallTileViewModelProps
 > {
-    /**
-     * The decline event associated with this call, if any.
-     */
-    private declineEvent: MatrixEvent | null;
-
     public constructor(props: DmTombstoneCallTileViewModelProps) {
-        const { snapshot, declineEvent } = generateSnapshot(props);
-        super(props, snapshot);
-        this.declineEvent = declineEvent;
+        super(props, generateSnapshot(props).snapshot);
 
         // When a relation is added to the event, recompute the state.
         this.disposables.trackListener(props.mxEvent, MatrixEventEvent.RelationsCreated, () => {
-            const { declineEvent, snapshot } = generateSnapshot(props);
-            this.declineEvent = declineEvent;
-            this.snapshot.set(snapshot);
+            this.snapshot.set(generateSnapshot(props).snapshot);
         });
-    }
-
-    protected getTimestamp(showTwelveHour: boolean): string {
-        return getTimeFromEvent(this.declineEvent ?? this.props.mxEvent, showTwelveHour);
     }
 }

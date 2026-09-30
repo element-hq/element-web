@@ -9,7 +9,11 @@ import React from "react";
 import {
     VideoCallSolidIcon,
     VideoCallDeclinedSolidIcon,
+    VideoCallMissedSolidIcon,
+    VideoCallOutgoingSolidIcon,
     VoiceCallDeclinedSolidIcon,
+    VoiceCallMissedSolidIcon,
+    VoiceCallOutgoingSolidIcon,
     VoiceCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classnames from "classnames";
@@ -20,6 +24,7 @@ import styles from "../common.module.css";
 import { useI18n } from "../../../../../../core/i18n/i18nContext";
 import { CallDirection, CallType } from "../../common";
 import { type RoomTombstoneCallTileViewSnapshot } from "../room/RoomTombstoneCallTileView";
+import { Clock } from "../../../../../../audio/Clock";
 
 export interface DmTombstoneCallTileViewSnapshot extends RoomTombstoneCallTileViewSnapshot {
     /**
@@ -36,6 +41,17 @@ export interface DmTombstoneCallTileViewSnapshot extends RoomTombstoneCallTileVi
      * Whether this call was declined.
      */
     isCallDeclined: boolean;
+
+    /**
+     * Whether we picked up: the local user joined the call. An incoming call
+     * that was neither answered nor declined was missed.
+     */
+    answered: boolean;
+    /**
+     * How long the call lasted once connected, in seconds, when the timeline
+     * shows both ends of it.
+     */
+    durationSeconds?: number;
     /**
      * Why the call never connected, when the callee side reported it
      * (MSC4075 invite progress), e.g. "unreachable (SIP 404)".
@@ -54,15 +70,28 @@ export interface DmTombstoneCallTileViewProps {
     className?: string;
 }
 
-function getIcon(type: CallType, isCallDeclined: boolean): React.ReactNode {
-    const VideoIcon = isCallDeclined ? VideoCallDeclinedSolidIcon : VideoCallSolidIcon;
-    const VoiceIcon = isCallDeclined ? VoiceCallDeclinedSolidIcon : VoiceCallSolidIcon;
-    switch (type) {
-        case CallType.Video:
-            return <VideoIcon className={styles.icon} width={20} height={20} />;
-        case CallType.Voice:
-            return <VoiceIcon className={styles.icon} width={20} height={20} />;
-    }
+type IconVariant = "normal" | "declined" | "missed" | "outgoing";
+
+const icons: Record<CallType, Record<IconVariant, React.ComponentType<React.SVGAttributes<SVGElement>>>> = {
+    [CallType.Video]: {
+        normal: VideoCallSolidIcon,
+        declined: VideoCallDeclinedSolidIcon,
+        missed: VideoCallMissedSolidIcon,
+        outgoing: VideoCallOutgoingSolidIcon,
+    },
+    [CallType.Voice]: {
+        normal: VoiceCallSolidIcon,
+        declined: VoiceCallDeclinedSolidIcon,
+        missed: VoiceCallMissedSolidIcon,
+        outgoing: VoiceCallOutgoingSolidIcon,
+    },
+};
+
+function getIconVariant(snapshot: DmTombstoneCallTileViewSnapshot): IconVariant {
+    const { callDirection, isCallDeclined, failureReason, answered } = snapshot;
+    if (isCallDeclined || failureReason) return "declined";
+    if (callDirection === CallDirection.Outgoing) return "outgoing";
+    return answered ? "normal" : "missed";
 }
 
 /**
@@ -70,43 +99,51 @@ function getIcon(type: CallType, isCallDeclined: boolean): React.ReactNode {
  */
 export function DmTombstoneCallTileView({ vm, className }: DmTombstoneCallTileViewProps): React.ReactNode {
     const snapshot = useViewModel(vm);
-    const { type, timestamp, isCallDeclined, failureReason } = snapshot;
+    const { type, isCallDeclined, failureReason, durationSeconds } = snapshot;
     const classNames = classnames(className, styles.container);
+    const Icon = icons[type][getIconVariant(snapshot)];
     return (
         <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
-            {getIcon(type, isCallDeclined || !!failureReason)}
+            <Icon className={styles.icon} width={20} height={20} />
             <div className={styles.title}>
                 {isCallDeclined ? (
                     <DeclinedContent snapshot={snapshot} />
                 ) : failureReason ? (
-                    <FailedContent reason={failureReason} />
+                    <FailedContent snapshot={snapshot} reason={failureReason} />
                 ) : (
                     <NormalContent snapshot={snapshot} />
                 )}
             </div>
 
-            <div className={styles.time}>{timestamp}</div>
+            {durationSeconds !== undefined && (
+                <div className={styles.time}>
+                    (<Clock seconds={durationSeconds} hoursMinLength={1} minutesMinLength={1} />)
+                </div>
+            )}
         </Flex>
     );
 }
 
 function NormalContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): React.ReactNode {
-    const { type } = props.snapshot;
+    const { type, callDirection, answered } = props.snapshot;
     const { translate: _t } = useI18n();
-    return type === CallType.Voice
-        ? _t("timeline|call_tile|voice_call_title")
-        : _t("timeline|call_tile|video_call_title");
+    const voice = type === CallType.Voice;
+    if (callDirection === CallDirection.Outgoing)
+        return voice ? _t("timeline|call_tile|outbound|voice") : _t("timeline|call_tile|outbound|video");
+    if (answered) return voice ? _t("timeline|call_tile|inbound|voice") : _t("timeline|call_tile|inbound|video");
+    return voice ? _t("timeline|call_tile|missed|voice") : _t("timeline|call_tile|missed|video");
 }
 
-function FailedContent(props: { reason: string }): React.ReactNode {
+function FailedContent(props: { snapshot: DmTombstoneCallTileViewSnapshot; reason: string }): React.ReactNode {
     const { translate: _t } = useI18n();
-    return _t("timeline|call_tile|call_failed", { reason: props.reason });
+    return props.snapshot.callDirection === CallDirection.Incoming
+        ? _t("timeline|call_tile|failed|inbound", { reason: props.reason })
+        : _t("timeline|call_tile|failed|outbound", { reason: props.reason });
 }
 
 function DeclinedContent(props: { snapshot: DmTombstoneCallTileViewSnapshot }): React.ReactNode {
-    const { callDirection } = props.snapshot;
     const { translate: _t } = useI18n();
-    return callDirection === CallDirection.Incoming
-        ? _t("timeline|call_tile|declined|call_declined_by_us")
-        : _t("timeline|call_tile|declined|call_declined");
+    return props.snapshot.callDirection === CallDirection.Incoming
+        ? _t("timeline|call_tile|declined|inbound")
+        : _t("timeline|call_tile|declined|outbound");
 }

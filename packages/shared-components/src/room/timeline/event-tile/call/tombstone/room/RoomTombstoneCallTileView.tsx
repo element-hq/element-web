@@ -14,12 +14,9 @@ import { Flex } from "../../../../../../core/utils/Flex";
 import styles from "../common.module.css";
 import { useI18n } from "../../../../../../core/i18n/i18nContext";
 
-export type RoomTombstoneCallTileViewSnapshot = {
-    /**
-     * Time when this call was started.
-     */
-    timestamp: string;
-};
+// The tile has nothing to say beyond that a call took place; the timestamp is in the margin like any event's
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface RoomTombstoneCallTileViewSnapshot {}
 
 export type RoomTombstoneCallTileViewModel = ViewModel<RoomTombstoneCallTileViewSnapshot>;
 
@@ -37,13 +34,12 @@ export interface CallStartedTileViewProps {
  */
 export function RoomTombstoneCallTileView({ vm, className }: CallStartedTileViewProps): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { timestamp } = useViewModel(vm);
+    useViewModel(vm);
     const classNames = classnames(className, styles.container);
     return (
         <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
             <VideoCallDeclinedSolidIcon className={styles.icon} width={20} height={20} />
             <div className={styles.title}>{_t("timeline|call_tile|tombstone|room|title")}</div>
-            <div className={styles.time}>{timestamp}</div>
         </Flex>
     );
 }

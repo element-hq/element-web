@@ -294,10 +294,21 @@
     },
     "timeline": {
         "call_tile": {
-            "call_failed": "Call failed: %(reason)s",
             "declined": {
-                "call_declined": "Call declined",
-                "call_declined_by_us": "You declined a call"
+                "inbound": "Inbound call declined",
+                "outbound": "Outbound call declined"
+            },
+            "failed": {
+                "inbound": "Inbound call failed: %(reason)s",
+                "outbound": "Outbound call failed: %(reason)s"
+            },
+            "inbound": {
+                "video": "Inbound video call",
+                "voice": "Inbound voice call"
+            },
+            "missed": {
+                "video": "Missed video call",
+                "voice": "Missed voice call"
             },
             "ongoing": {
                 "common": {
@@ -305,7 +316,7 @@
                     "join_button": "Join"
                 },
                 "dm": {
-                    "call_started": "Call started",
+                    "ringing": "Call started (ringing)",
                     "title": "Call in progress"
                 },
                 "room": {
@@ -316,13 +327,15 @@
                     "title": "Group call in progress"
                 }
             },
+            "outbound": {
+                "video": "Outbound video call",
+                "voice": "Outbound voice call"
+            },
             "tombstone": {
                 "room": {
                     "title": "Group call ended"
                 }
-            },
-            "video_call_title": "Video call",
-            "voice_call_title": "Voice call"
+            }
         },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",

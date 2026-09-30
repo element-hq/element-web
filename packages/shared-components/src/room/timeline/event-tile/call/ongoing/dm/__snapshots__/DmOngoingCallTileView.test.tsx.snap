@@ -253,7 +253,7 @@ exports[`DmOngoingCallTileView > renders the tile > OutgoingVideoCall 1`] = `
         <div
           class="common-module_title"
         >
-          Call started
+          Call started (ringing)
         </div>
       </div>
       <div
@@ -353,7 +353,7 @@ exports[`DmOngoingCallTileView > renders the tile > OutgoingVoiceCall 1`] = `
         <div
           class="common-module_title"
         >
-          Call started
+          Call started (ringing)
         </div>
       </div>
       <div

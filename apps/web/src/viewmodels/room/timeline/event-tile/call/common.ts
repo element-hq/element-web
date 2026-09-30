@@ -38,14 +38,43 @@ export function getIntentFromEvent(event: MatrixEvent): CallType {
 const RTC_INVITE_PROGRESS = "org.matrix.msc4075.rtc.invite_progress";
 
 /**
+ * The invite progress events relating to the given rtc notification event.
+ */
+export function getInviteProgress(event: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): MatrixEvent[] {
+    const eventId = event.getId();
+    if (!eventId || !getRelationsForEvent) return [];
+    return getRelationsForEvent(eventId, RelationType.Reference, RTC_INVITE_PROGRESS)?.getRelations() ?? [];
+}
+
+/**
+ * When the callee's side reported the call answered (`connected`), if it did.
+ * A side that reports its progress (a bridge, which joins the call as soon as
+ * it dials) is only answered when it says so: its memberships are not the
+ * answer, see {@link reportsProgress}.
+ */
+export function getConnectedTs(progress: MatrixEvent[]): number | undefined {
+    return progress.find((e) => e.getContent().state === "connected")?.getTs();
+}
+
+/**
+ * Whether this user is one whose device reports the invite's progress, so its
+ * memberships say nothing about whether the call was answered. Anyone else's
+ * join is still an answer, as it is when nobody reports at all.
+ */
+// ponytail: per user rather than per device (a bridge's +publish twin shares its user); per device once a
+// user can have a reporting bridge device and a phone that answers
+export function reportsProgress(progress: MatrixEvent[], sender: string | undefined): boolean {
+    return sender !== undefined && progress.some((e) => e.getSender() === sender);
+}
+
+/**
  * Why the call never connected, from the invite progress relation with a
  * terminal state (`busy` or `unreachable`), e.g. "SIP 404".
  */
 export function getFailureReason(event: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): string | null {
-    const eventId = event.getId();
-    if (!eventId || !getRelationsForEvent) return null;
-    const relations = getRelationsForEvent(eventId, RelationType.Reference, RTC_INVITE_PROGRESS)?.getRelations();
-    const failed = relations?.find((e) => ["busy", "unreachable"].includes(e.getContent().state));
+    const failed = getInviteProgress(event, getRelationsForEvent).find((e) =>
+        ["busy", "unreachable"].includes(e.getContent().state),
+    );
     if (!failed) return null;
     const { state, reason } = failed.getContent<{ state: string; reason?: string }>();
     return reason ? `${state} (${reason})` : state;
