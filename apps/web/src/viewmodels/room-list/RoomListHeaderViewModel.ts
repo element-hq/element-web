@@ -70,6 +70,13 @@ export class RoomListHeaderViewModel
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
 
+        const settingsNotificationsRef = SettingsStore.watchSetting(
+            "feature_notifications",
+            null,
+            this.onNotificationsFeatureFlagChange,
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsNotificationsRef));
+
         const settingsShowSectionsRef = SettingsStore.watchSetting(
             "RoomList.showSections",
             null,
@@ -138,6 +145,21 @@ export class RoomListHeaderViewModel
         this.snapshot.merge({
             canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
         });
+    };
+
+    /**
+     * Handles notifications feature flag change events.
+     */
+    private readonly onNotificationsFeatureFlagChange = (): void => {
+        const displayNotificationsToggle = SettingsStore.getValue("feature_notifications");
+        this.snapshot.merge({
+            displayNotificationsToggle,
+            isNotificationsViewActive: displayNotificationsToggle && this.snapshot.current.isNotificationsViewActive,
+        });
+    };
+
+    public toggleNotificationsView = (): void => {
+        this.snapshot.merge({ isNotificationsViewActive: !this.snapshot.current.isNotificationsViewActive });
     };
 
     /**
@@ -292,6 +314,8 @@ function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient):
     return {
         activeSortOption,
         isMessagePreviewEnabled,
+        displayNotificationsToggle: SettingsStore.getValue("feature_notifications"),
+        isNotificationsViewActive: false,
         ...computeHeaderSpaceState(spaceStore, matrixClient),
     };
 }

@@ -12,7 +12,7 @@ import React from "react";
 
 import * as stories from "./RoomListHeaderView.stories";
 
-const { Default, NoSpaceMenu, CollapseSections, ExpandSections } = composeStories(stories);
+const { Default, NoSpaceMenu, CollapseSections, ExpandSections, NotificationsToggle } = composeStories(stories);
 
 describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
@@ -40,5 +40,11 @@ describe("RoomListHeaderView", () => {
         const collapseButton = getByRole("button", { name: "Collapse all sections" });
         collapseButton.click();
         expect(CollapseSections.args?.collapseOrExpandSections).toHaveBeenCalled();
+    });
+
+    it("should bind the notifications toggle action", () => {
+        const { getByRole } = render(<NotificationsToggle />);
+        getByRole("button", { name: "Show notifications" }).click();
+        expect(NotificationsToggle.args?.toggleNotificationsView).toHaveBeenCalled();
     });
 });

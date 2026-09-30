@@ -118,6 +118,22 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().canCreateVideoRoom).toBe(false);
         });
 
+        it("should show the notifications toggle only when feature_notifications is enabled", () => {
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            expect(vm.getSnapshot().displayNotificationsToggle).toBe(false);
+            vm.dispose();
+
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName: string) => settingName === "feature_notifications",
+            );
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            expect(vm.getSnapshot().displayNotificationsToggle).toBe(true);
+            expect(vm.getSnapshot().isNotificationsViewActive).toBe(false);
+
+            vm.toggleNotificationsView();
+            expect(vm.getSnapshot().isNotificationsViewActive).toBe(true);
+        });
+
         it("should show alphabetical sort option when RoomList.preferredSorting is Alphabetic", () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
                 if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Alphabetic;

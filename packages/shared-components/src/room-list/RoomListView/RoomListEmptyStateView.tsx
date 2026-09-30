@@ -124,7 +124,11 @@ interface GenericPlaceholderProps {
 /**
  * A generic placeholder for the room list
  */
-function GenericPlaceholder({ title, description, children }: PropsWithChildren<GenericPlaceholderProps>): JSX.Element {
+export function GenericPlaceholder({
+    title,
+    description,
+    children,
+}: PropsWithChildren<GenericPlaceholderProps>): JSX.Element {
     return (
         <Flex
             data-testid="empty-room-list"
