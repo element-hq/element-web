@@ -55,7 +55,13 @@ describe("DmOngoingCallTileViewModel", () => {
             const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100, "@alice:m.org");
             mxEvent.sender = getMockedMember(roomId, "@alice:m.org", "Alice");
             const bridge = getMockedMember(roomId, "@_sip_bob:m.org", "Bob (SIP)");
-            const progress: { getContent: () => { state: string }; getTs: () => number }[] = [];
+            const progress: { getContent: () => { state: string }; getTs: () => number; getSender: () => string }[] =
+                [];
+            const report = (state: string, ts: number) => ({
+                getContent: () => ({ state }),
+                getTs: () => ts,
+                getSender: () => "@_sip_bob:m.org",
+            });
             const getRelationsForEvent = vi
                 .fn()
                 .mockImplementation((_id, _rel, type) =>
@@ -76,18 +82,56 @@ describe("DmOngoingCallTileViewModel", () => {
             });
             // Its membership arrived before its first report: the timer started, and stops again
             expect(vm.getSnapshot().callHasOtherParticipants).toBe(true);
-            progress.push({ getContent: () => ({ state: "ringing" }), getTs: () => 2500 });
+            progress.push(report("ringing", 2500));
             call.emit(CallEvent.Participants, call.participants, new Map());
             expect(vm.getSnapshot().durationViewModel).toBeUndefined();
             expect(vm.getSnapshot().callHasOtherParticipants).toBe(false);
 
             vi.useFakeTimers();
             vi.setSystemTime(12_000);
-            progress.push({ getContent: () => ({ state: "connected" }), getTs: () => 5000 });
+            progress.push(report("connected", 5000));
             call.emit(CallEvent.Participants, call.participants, new Map());
             // Counted from the connected report at 5 s, not the bridge's join at 2 s
             expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);
             expect(vm.getSnapshot().callHasOtherParticipants).toBe(true);
+            vi.useRealTimers();
+        });
+
+        it("still takes anyone else's join as the answer while a reporting side only rings", () => {
+            const cli = stubClient();
+            const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100, "@alice:m.org");
+            mxEvent.sender = getMockedMember(roomId, "@alice:m.org", "Alice");
+            const bridge = getMockedMember(roomId, "@_sip_bob:m.org", "Bob (SIP)");
+            const bob = getMockedMember(roomId, "@bob:m.org", "Bob");
+            const getRelationsForEvent = vi.fn().mockImplementation((_id, _rel, type) =>
+                type === "org.matrix.msc4075.rtc.invite_progress"
+                    ? {
+                          getRelations: () => [
+                              {
+                                  getContent: () => ({ state: "ringing" }),
+                                  getTs: () => 2500,
+                                  getSender: () => "@_sip_bob:m.org",
+                              },
+                          ],
+                      }
+                    : undefined,
+            );
+            const call = MockedCall.create()
+                .withParticipants([mxEvent.sender, bridge, bob])
+                .withMemberships(["@alice:m.org", 1000], ["@_sip_bob:m.org", 2000], ["@bob:m.org", 5000]);
+            const callStore = MockedCallStore.create(call);
+            vi.useFakeTimers();
+            vi.setSystemTime(12_000);
+            const vm = new DmOngoingCallTileViewModel({
+                mxEvent,
+                cli,
+                callStore,
+                roomId,
+                legacyCallHandler,
+                getRelationsForEvent,
+            });
+            // Bob's phone picked up at 5 s: the bridge's ringing says nothing about Bob
+            expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);
             vi.useRealTimers();
         });
 

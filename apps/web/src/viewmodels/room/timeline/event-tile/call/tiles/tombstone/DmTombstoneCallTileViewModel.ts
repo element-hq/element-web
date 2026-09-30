@@ -15,6 +15,7 @@ import {
 } from "./RoomTombstoneCallTileViewModel";
 import {
     getConnectedTs,
+    reportsProgress,
     getDeclinedEvents,
     getFailureReason,
     getIntentFromEvent,
@@ -59,8 +60,13 @@ function callOutcome(
         const joined = Object.keys(e.getContent()).length > 0;
         if (joined && connectedTs === undefined && e.getTs() > ringUntil) break;
         if (joined && e.getSender() === cli.getUserId()) answered = true;
-        // (unless the other side reports its progress: then only its `connected` is)
-        if (joined && connectedTs === undefined && e.getSender() !== mxEvent.getSender() && progress.length === 0)
+        // (unless that side reports its progress: then only its `connected` is)
+        if (
+            joined &&
+            connectedTs === undefined &&
+            e.getSender() !== mxEvent.getSender() &&
+            !reportsProgress(progress, e.getSender())
+        )
             connectedTs = e.getTs();
         else if (!joined && connectedTs !== undefined && e.getTs() >= connectedTs)
             return { answered, durationSeconds: Math.round((e.getTs() - connectedTs) / 1000) };

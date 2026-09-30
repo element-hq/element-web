@@ -28,7 +28,7 @@ import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
-import { getConnectedTs, getIntentFromEvent, getInviteProgress } from "../../common";
+import { getConnectedTs, reportsProgress, getIntentFromEvent, getInviteProgress } from "../../common";
 import { DurationViewModel } from "./components/DurationViewModel";
 import type LegacyCallHandler from "../../../../../../../LegacyCallHandler.tsx";
 
@@ -84,10 +84,10 @@ function callStartTs(call: ElementCall, props: Props, fromAnswer: boolean): numb
     if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
     const progress = getInviteProgress(props.mxEvent, props.getRelationsForEvent);
     const connectedTs = getConnectedTs(progress);
-    // The other side reports its progress: it is in the call when it says so
-    if (connectedTs !== undefined || progress.length > 0) return connectedTs;
+    if (connectedTs !== undefined) return connectedTs;
+    // A side that reports its progress is in the call when it says so; anyone else, when they join
     const answers = call.session.memberships
-        .filter((m) => m.sender !== props.mxEvent.getSender())
+        .filter((m) => m.sender !== props.mxEvent.getSender() && !reportsProgress(progress, m.sender))
         .map((m) => m.createdTs());
     return answers.length ? Math.min(...answers) : undefined;
 }

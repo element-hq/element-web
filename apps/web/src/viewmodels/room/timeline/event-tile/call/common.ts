@@ -48,13 +48,23 @@ export function getInviteProgress(event: MatrixEvent, getRelationsForEvent?: Get
 
 /**
  * When the callee's side reported the call answered (`connected`), if it did.
- * A side that reports its progress at all (a bridge, which joins the call as
- * soon as it dials) is only answered when it says so: its memberships are
- * not the answer, so callers must not fall back to them once `progress` is
- * non-empty.
+ * A side that reports its progress (a bridge, which joins the call as soon as
+ * it dials) is only answered when it says so: its memberships are not the
+ * answer, see {@link reportsProgress}.
  */
 export function getConnectedTs(progress: MatrixEvent[]): number | undefined {
     return progress.find((e) => e.getContent().state === "connected")?.getTs();
+}
+
+/**
+ * Whether this user is one whose device reports the invite's progress, so its
+ * memberships say nothing about whether the call was answered. Anyone else's
+ * join is still an answer, as it is when nobody reports at all.
+ */
+// ponytail: per user rather than per device (a bridge's +publish twin shares its user); per device once a
+// user can have a reporting bridge device and a phone that answers
+export function reportsProgress(progress: MatrixEvent[], sender: string | undefined): boolean {
+    return sender !== undefined && progress.some((e) => e.getSender() === sender);
 }
 
 /**

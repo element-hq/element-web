@@ -48,7 +48,7 @@ export function RootCallTileView({ vm }: Props): React.ReactNode {
         case "ongoing-call-dm":
             return <DmOngoingCallTileView vm={tileViewModel as TileTypeToViewModelMap["ongoing-call-dm"]} />;
         case "tombstone-call-room":
-            return <RoomTombstoneCallTileView vm={tileViewModel as TileTypeToViewModelMap["tombstone-call-room"]} />;
+            return <RoomTombstoneCallTileView vm={tileViewModel} />;
         case "tombstone-call-dm":
             return <DmTombstoneCallTileView vm={tileViewModel as TileTypeToViewModelMap["tombstone-call-dm"]} />;
     }
