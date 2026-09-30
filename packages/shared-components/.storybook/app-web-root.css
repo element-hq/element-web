@@ -10,6 +10,26 @@ Please see LICENSE files in the repository root for full details.
  * Shared component stories should inherit the same root typography and font
  * feature settings as the real app, while still owning their component styling.
  */
+
+/*
+ * The Twemoji font bundled with app/web, so emoji render consistently rather than depending on the system emoji font.
+ */
+@font-face {
+    font-family: Twemoji;
+    font-weight: 400;
+    src: url("../../../apps/web/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}
+@font-face {
+    font-family: Twemoji;
+    font-weight: 600;
+    src: url("../../../apps/web/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}
+@font-face {
+    font-family: Twemoji;
+    font-weight: 700;
+    src: url("../../../apps/web/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}
+
 @layer app-web {
     :root[data-storybook-root-css="app-web"] {
         [class^="cpd-theme"][class^="cpd-theme"] {
