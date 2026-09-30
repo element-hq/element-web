@@ -32,7 +32,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display a spinner wh
       >
         <svg
           aria-label="Loading…"
-          class="_icon_1855a_18"
+          class="_icon"
           fill="currentColor"
           height="1em"
           style="width: 20px; height: 20px;"
@@ -53,7 +53,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display a spinner wh
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_1nw83_8 _has-icon_1nw83_60"
+      class="_button _has-icon"
       data-kind="secondary"
       data-size="md"
       role="button"
@@ -74,7 +74,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display a spinner wh
       Export keys
     </button>
     <button
-      class="_button_1nw83_8 _has-icon_1nw83_60"
+      class="_button _has-icon"
       data-kind="secondary"
       data-size="md"
       role="button"
@@ -96,7 +96,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display a spinner wh
     </button>
   </div>
   <button
-    class="_button_1nw83_8 _destructive_1nw83_110"
+    class="_button _destructive"
     data-kind="tertiary"
     data-size="md"
     role="button"
@@ -145,7 +145,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display the device k
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_1nw83_8 _has-icon_1nw83_60"
+      class="_button _has-icon"
       data-kind="secondary"
       data-size="md"
       role="button"
@@ -166,7 +166,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display the device k
       Export keys
     </button>
     <button
-      class="_button_1nw83_8 _has-icon_1nw83_60"
+      class="_button _has-icon"
       data-kind="secondary"
       data-size="md"
       role="button"
@@ -188,7 +188,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display the device k
     </button>
   </div>
   <button
-    class="_button_1nw83_8 _destructive_1nw83_110"
+    class="_button _destructive"
     data-kind="tertiary"
     data-size="md"
     role="button"
@@ -201,7 +201,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display the device k
 
 exports[`<AdvancedPanel /> > <OtherSettings /> > should display the blacklist of unverified devices settings 1`] = `
 <form
-  class="_root_1o4d9_17 mx_OtherSettings"
+  class="_root mx_OtherSettings"
   data-testid="otherSettings"
 >
   <h3
@@ -210,18 +210,18 @@ exports[`<AdvancedPanel /> > <OtherSettings /> > should display the blacklist of
     Other people’s devices
   </h3>
   <div
-    class="_inline-field_1o4d9_33"
+    class="_inline-field"
   >
     <div
-      class="_inline-field-control_1o4d9_45"
+      class="_inline-field-control"
     >
       <div
-        class="_container_udcm8_10"
+        class="_container"
       >
         <input
           aria-describedby="radix-react-use-id-1"
           checked=""
-          class="_input_udcm8_24"
+          class="_input"
           id="radix-react-use-id-2"
           name="neverSendEncrypted"
           role="switch"
@@ -229,21 +229,21 @@ exports[`<AdvancedPanel /> > <OtherSettings /> > should display the blacklist of
           type="checkbox"
         />
         <div
-          class="_ui_udcm8_34"
+          class="_ui"
         />
       </div>
     </div>
     <div
-      class="_inline-field-body_1o4d9_39"
+      class="_inline-field-body"
     >
       <label
-        class="_label_1o4d9_60"
+        class="_label"
         for="radix-react-use-id-2"
       >
         In encrypted rooms, only send messages to verified users
       </label>
       <span
-        class="_message_1o4d9_86 _help-message_1o4d9_92"
+        class="_message _help-message"
         id="radix-react-use-id-1"
       >
         Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.

@@ -87,12 +87,21 @@ export default defineProject({
                     environmentOptions: {
                         happyDOM: {
                             url: "http://localhost/",
+                            settings: {
+                                navigation: {
+                                    // Nothing is served at these URLs under test; an iframe's `src` is just an attribute.
+                                    disableChildFrameNavigation: true,
+                                },
+                            },
                         },
                         jsdom: {
                             url: "http://localhost/",
                         },
                     },
-                    snapshotSerializers: [resolve("./src/test/react-use-id-serializer.ts")],
+                    snapshotSerializers: [
+                        resolve("./src/test/react-use-id-serializer.ts"),
+                        resolve("./src/test/css-module-class-serializer.ts"),
+                    ],
                 },
                 plugins: [
                     svgr({

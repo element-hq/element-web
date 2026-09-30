@@ -24,6 +24,15 @@ vi.mock("matrix-js-sdk/src/matrix", async () => ({
     createClient: vi.fn(),
 }));
 
+// Field.tsx debounces validation via lodash.debounce, stub it out so runs synchronously and is less flaky.
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    debounce: vi.fn((fn) => {
+        fn.cancel = vi.fn();
+        return fn;
+    }),
+}));
+
 describe("<ForgotPassword>", () => {
     const testEmail = "user@example.com";
     const testSid = "sid42";
@@ -34,8 +43,10 @@ describe("<ForgotPassword>", () => {
     let onLoginClick: () => void;
     let renderResult: RenderResult;
 
+    // Paste rather than type to avoid slow zxcvbn validation per character.
     const typeIntoField = async (label: string, value: string): Promise<void> => {
-        await userEvent.type(screen.getByLabelText(label), value, { delay: null });
+        await userEvent.click(screen.getByLabelText(label), { delay: null });
+        await userEvent.paste(value);
     };
 
     const click = async (element: Element): Promise<void> => {

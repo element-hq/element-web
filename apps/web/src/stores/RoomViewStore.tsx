@@ -761,6 +761,15 @@ export class RoomViewStore extends EventEmitter {
         return this.state.shouldPeek;
     }
 
+    /**
+     * Servers which are known to know about the room currently being viewed.
+     *
+     * @returns the via servers, which may be empty if we reached the room without any.
+     */
+    public getViaServers(): string[] {
+        return this.state.viaServers;
+    }
+
     public getWasContextSwitch(): boolean {
         return this.state.wasContextSwitch;
     }
