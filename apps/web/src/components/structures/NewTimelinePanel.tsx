@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, type JSX, type ReactNode } from "react";
+import React, { useCallback, useEffect, useRef, type JSX, type ReactNode } from "react";
 import {
     TimelineView,
     useCreateAutoDisposedViewModel,
@@ -20,13 +20,14 @@ import type { EventType, MatrixClient, RelationType, Relations, Room } from "mat
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
-import type { GetRelationsForEvent } from "../views/rooms/EventTile";
+import type { GetRelationsForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
 import { Layout } from "../../settings/enums/Layout";
 import { useSettingValue } from "../../hooks/useSettings";
 import { _t } from "../../languageHandler";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
+import type { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 
 interface NewTimelinePanelProps {
     room: Room;
@@ -46,6 +47,8 @@ interface NewTimelinePanelProps {
     showReactions?: boolean;
     /** Set while a message is being edited; the matching tile renders the edit composer. */
     editState?: EditorStateTransfer;
+    /** Whether other users' read receipts are drawn beside messages (the `showReadReceipts` setting). */
+    showReadReceipts?: boolean;
 }
 
 /** Everything a timeline row needs from the panel to draw itself. */
@@ -56,6 +59,16 @@ interface RenderItemContext {
     permalinkCreator?: RoomPermalinkCreator;
     showUrlPreview?: boolean;
     showReactions?: boolean;
+    showReadReceipts: boolean;
+    /** Other users' receipts for each message, as computed by the view model. */
+    readReceiptsByEvent: ReadonlyMap<string, IReadReceiptProps[]>;
+    /**
+     * Where each user's receipt avatar was last drawn. One object shared by every tile, so a
+     * receipt moving to a newer message can animate from its old row to its new one.
+     */
+    readReceiptMap: { [userId: string]: IReadReceiptPosition };
+    /** The message showing a "Sent" tick in place of read receipts, if any. */
+    lastSuccessfulEventId: string | null;
     isTwelveHour: boolean;
     alwaysShowTimestamps: boolean;
     editState?: EditorStateTransfer;
@@ -108,11 +121,15 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
                     mxEvent={mxEvent}
                     continuation={item.continuation}
                     lastInSection={item.lastInSection}
+                    lastSuccessful={item.key === ctx.lastSuccessfulEventId}
                     layout={ctx.effectiveLayout}
                     isSelectedEvent={ctx.highlightedId !== null && item.key === ctx.highlightedId}
                     // A tile treats any edit state it is given as its own, so
                     // only the message being edited may receive it.
                     editState={ctx.editState?.getEvent().getId() === item.key ? ctx.editState : undefined}
+                    readReceipts={ctx.readReceiptsByEvent.get(item.key)}
+                    readReceiptMap={ctx.readReceiptMap}
+                    showReadReceipts={ctx.showReadReceipts}
                     getRelationsForEvent={ctx.getRelationsForEvent}
                     permalinkCreator={ctx.permalinkCreator}
                     showUrlPreview={ctx.showUrlPreview}
@@ -140,6 +157,7 @@ export function NewTimelinePanel({
     showUrlPreview,
     showReactions,
     editState,
+    showReadReceipts = true,
 }: Readonly<NewTimelinePanelProps>): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
@@ -161,6 +179,7 @@ export function NewTimelinePanel({
                 client,
                 room,
                 initialEventId: highlightedEventId,
+                showReadReceipts,
             }),
     );
 
@@ -168,6 +187,11 @@ export function NewTimelinePanel({
         vm.start();
         // Disposal is handled by useCreateAutoDisposedViewModel; no cleanup needed here.
     }, [vm]);
+
+    // The setting can change while the room is open.
+    useEffect(() => {
+        vm.setShowReadReceipts(showReadReceipts);
+    }, [vm, showReadReceipts]);
 
     useEffect(() => {
         // Load the syntax highlighter up front. Code blocks fetch it the first time
@@ -186,7 +210,11 @@ export function NewTimelinePanel({
     );
 
     const snapshot = useViewModel(vm);
-    const { highlightedEventId: highlightedId } = snapshot;
+    const { highlightedEventId: highlightedId, readReceiptsByEvent, lastSuccessfulEventId } = snapshot;
+
+    // Where each user's receipt avatar was last drawn; see RenderItemContext. Lives as long as
+    // the panel, which is recreated per room, just like MessagePanel's copy.
+    const readReceiptMap = useRef<{ [userId: string]: IReadReceiptPosition }>({});
 
     const renderItem = useCallback(
         (item: TimelineItem): ReactNode =>
@@ -197,6 +225,10 @@ export function NewTimelinePanel({
                 permalinkCreator,
                 showUrlPreview,
                 showReactions,
+                showReadReceipts,
+                readReceiptsByEvent,
+                readReceiptMap: readReceiptMap.current,
+                lastSuccessfulEventId,
                 isTwelveHour,
                 alwaysShowTimestamps,
                 editState,
@@ -209,6 +241,9 @@ export function NewTimelinePanel({
             permalinkCreator,
             showUrlPreview,
             showReactions,
+            showReadReceipts,
+            readReceiptsByEvent,
+            lastSuccessfulEventId,
             isTwelveHour,
             alwaysShowTimestamps,
             editState,

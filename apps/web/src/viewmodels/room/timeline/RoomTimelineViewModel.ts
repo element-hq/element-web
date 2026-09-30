@@ -32,6 +32,13 @@ import { haveRendererForEvent, pickFactory } from "../../../events/EventTileFact
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { clearRoomNotification } from "../../../utils/notifications";
+import { findLastSuccessfulWeSent } from "./event-tile/EventTileReceiptState";
+import {
+    getReadReceiptsByShownEvent,
+    getReadReceiptsForEvent,
+    type ShownReadReceipt,
+} from "../../../utils/read-receipts";
+import type { IReadReceiptProps } from "../../../components/views/rooms/EventTile";
 
 const DEBUG_TIMELINE = false;
 
@@ -104,11 +111,32 @@ const PAGINATE_DECRYPT_WAIT_MS = 500;
  */
 type LoadTarget = { kind: "live" } | { kind: "permalink"; eventId: string } | { kind: "restore"; eventId: string };
 
+/**
+ * What the room timeline publishes to its view: the shared snapshot, plus the per-message detail
+ * the legacy tiles need and the shared view has no opinion about.
+ */
+export interface RoomTimelineViewSnapshot extends TimelineViewSnapshot {
+    /**
+     * Other users' read receipts, keyed by the id of the message they are drawn beside. A receipt
+     * for an event that is not shown (a reaction, a membership change) is drawn beside the last
+     * shown message before it. Empty while read receipts are turned off.
+     */
+    readReceiptsByEvent: ReadonlyMap<string, IReadReceiptProps[]>;
+    /**
+     * The newest message of ours that has reached the server, when it is also the newest message
+     * that could carry a receipt — the one tile that shows a "Sent" tick in place of read
+     * receipts. Mirrors `lastSuccessfulWeSent` in the old MessagePanel.
+     */
+    lastSuccessfulEventId: string | null;
+}
+
 export interface RoomTimelineViewModelOpts {
     client: MatrixClient;
     room: Room;
     /** Optional anchor for initial load (permalink, search result). Shown highlighted and centred. */
     initialEventId?: string;
+    /** Whether other users' read receipts are drawn; see {@link RoomTimelineViewModel.setShowReadReceipts}. Default true. */
+    showReadReceipts?: boolean;
 }
 
 /**
@@ -141,11 +169,20 @@ export interface RoomTimelineViewModelOpts {
  * belongs in {@link start}, which the view calls exactly once.
  */
 export class RoomTimelineViewModel
-    extends BaseViewModel<TimelineViewSnapshot, RoomTimelineViewModelOpts>
+    extends BaseViewModel<RoomTimelineViewSnapshot, RoomTimelineViewModelOpts>
     implements TimelineViewActions
 {
     private readonly opts: RoomTimelineViewModelOpts;
     private timelineWindow: TimelineWindow;
+
+    /** Whether other users' read receipts are drawn; see {@link setShowReadReceipts}. */
+    private showReadReceipts: boolean;
+
+    /**
+     * Where each user's receipt was last drawn, so a receipt that moves onto an event we do not
+     * hold stays where it was; see {@link getReadReceiptsByShownEvent}.
+     */
+    private receiptsByUserId: Map<string, ShownReadReceipt> = new Map();
 
     /**
      * Cache of continuation decisions keyed by event id.
@@ -310,9 +347,12 @@ export class RoomTimelineViewModel
             canJumpToReadMarker: false,
             numUnreadMessages: 0,
             hasHighlights: false,
+            readReceiptsByEvent: new Map(),
+            lastSuccessfulEventId: null,
         });
 
         this.opts = opts;
+        this.showReadReceipts = opts.showReadReceipts ?? true;
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet(), {
             windowLimit: WINDOW_LIMIT,
         });
@@ -378,6 +418,21 @@ export class RoomTimelineViewModel
             MatrixEventEvent.Decrypted,
             this.onEventDecrypted as (...args: unknown[]) => void,
         );
+        // Other users' read receipts moving.
+        this.disposables.trackListener(this.opts.room, RoomEvent.Receipt, this.onRoomReceipt);
+    }
+
+    /** Someone's read receipt moved. Only the receipts change, so the rows are left alone. */
+    private onRoomReceipt = (): void => {
+        if (this.isDisposed || !this.showReadReceipts) return;
+        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, "receipt");
+    };
+
+    /** Show or hide other users' read receipts — the room-level `showReadReceipts` setting. */
+    public setShowReadReceipts(show: boolean): void {
+        if (show === this.showReadReceipts) return;
+        this.showReadReceipts = show;
+        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, "show-read-receipts");
     }
 
     private onRoomTimeline = (
@@ -1121,7 +1176,7 @@ export class RoomTimelineViewModel
      * Publish {@link baseItems} to the View, layering spinners on top:
      * `[ (backward?), ...baseItems, (forward?) ]`.
      */
-    private republish(reason: string, extra: Partial<TimelineViewSnapshot> = {}): void {
+    private republish(reason: string, extra: Partial<RoomTimelineViewSnapshot> = {}): void {
         const items: TimelineItem[] = [];
         if (this.backwardSpinnerVisible) {
             items.push({ kind: "loading", key: RoomTimelineViewModel.BACKWARD_LOADING_KEY });
@@ -1130,7 +1185,16 @@ export class RoomTimelineViewModel
         if (this.forwardSpinnerVisible) {
             items.push({ kind: "loading", key: RoomTimelineViewModel.FORWARD_LOADING_KEY });
         }
-        this.mergeSnapshot({ items, ...extra }, reason);
+        const isShown = this.shownEventTest();
+        this.mergeSnapshot(
+            {
+                items,
+                readReceiptsByEvent: this.computeReadReceipts(isShown),
+                lastSuccessfulEventId: this.computeLastSuccessfulEventId(isShown),
+                ...extra,
+            },
+            reason,
+        );
     }
 
     /**
@@ -1332,6 +1396,43 @@ export class RoomTimelineViewModel
     private static readonly CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000;
     private static readonly CONTINUED_TYPES = new Set(["m.room.message", "m.sticker"]);
 
+    /**
+     * Which read receipts to draw beside which message. Placed by the same code as the old
+     * timeline's, over the loaded events, with a row for each event in {@link baseItems}.
+     */
+    private computeReadReceipts(isShown = this.shownEventTest()): Map<string, IReadReceiptProps[]> {
+        if (!this.showReadReceipts) {
+            this.receiptsByUserId = new Map();
+            return new Map();
+        }
+        const { room, client } = this.opts;
+        const myUserId = client.getSafeUserId();
+        const { receiptsByEvent, receiptsByUserId } = getReadReceiptsByShownEvent(
+            this.timelineWindow.getEvents(),
+            isShown,
+            (event) => getReadReceiptsForEvent(event, room, room, client, myUserId),
+            this.receiptsByUserId,
+        );
+        this.receiptsByUserId = receiptsByUserId;
+        return receiptsByEvent;
+    }
+
+    /** The message showing a "Sent" tick in place of read receipts, if any; see {@link findLastSuccessfulWeSent}. */
+    private computeLastSuccessfulEventId(isShown: (event: MatrixEvent) => boolean): string | null {
+        const events = this.timelineWindow.getEvents();
+        const index = findLastSuccessfulWeSent(events, isShown, this.opts.client.getSafeUserId());
+        return index >= 0 ? (events[index].getId() ?? null) : null;
+    }
+
+    /** Whether an event has a row of its own in {@link baseItems}. */
+    private shownEventTest(): (event: MatrixEvent) => boolean {
+        const shownEventIds = new Set<string>();
+        for (const item of this.baseItems) {
+            if (item.kind === "event") shownEventIds.add(item.key);
+        }
+        return (event) => shownEventIds.has(event.getId()!);
+    }
+
     private buildItems(): TimelineItem[] {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
         const items: TimelineItem[] = [];
@@ -1524,7 +1625,7 @@ export class RoomTimelineViewModel
      * a UI jump: filter the console on `[VM-merge]` and find the merge whose
      * field changes line up with the symptom.
      */
-    private mergeSnapshot(partial: Partial<TimelineViewSnapshot>, reason: string): void {
+    private mergeSnapshot(partial: Partial<RoomTimelineViewSnapshot>, reason: string): void {
         const before = this.snapshot.current;
         const changes: string[] = [];
         for (const [k, v] of Object.entries(partial)) {

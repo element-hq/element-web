@@ -13,8 +13,10 @@ import { mkEvent } from "test-utils";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import {
+    findLastSuccessfulWeSent,
     getEventTileReceiptState,
     isEligibleForSpecialReceipt,
+    isSentState,
     type EventTileReceiptStateInput,
 } from "./EventTileReceiptState";
 
@@ -139,5 +141,45 @@ describe("EventTileReceiptState", () => {
 
         expect(state.isEligibleForSpecialReceipt).toBe(false);
         expect(state.shouldListenForReceipts).toBe(false);
+    });
+});
+
+describe("isSentState", () => {
+    it("counts an event that came down sync as sent", () => {
+        expect(isSentState(makeEvent())).toBe(true);
+    });
+
+    it("counts a confirmed local echo as sent, and one still on its way as not", () => {
+        const event = makeEvent();
+        event.setStatus(EventStatus.SENDING);
+        expect(isSentState(event)).toBe(false);
+        event.setStatus(EventStatus.SENT);
+        expect(isSentState(event)).toBe(true);
+    });
+});
+
+describe("findLastSuccessfulWeSent", () => {
+    const allShown = (): boolean => true;
+
+    it("picks our newest message", () => {
+        const events = [makeEvent(), makeEvent({ user: otherUserId }), makeEvent()];
+        expect(findLastSuccessfulWeSent(events, allShown, ownUserId)).toBe(2);
+    });
+
+    it("picks nothing when someone else's message is newest", () => {
+        const events = [makeEvent(), makeEvent({ user: otherUserId })];
+        expect(findLastSuccessfulWeSent(events, allShown, ownUserId)).toBe(-1);
+    });
+
+    it("looks past events without a row and events that cannot carry the tick", () => {
+        const events = [makeEvent(), makeEvent({ user: otherUserId }), makeEvent({ type: EventType.RoomTopic })];
+        const shownExceptSecond = (_event: MatrixEvent, index: number): boolean => index !== 1;
+        expect(findLastSuccessfulWeSent(events, shownExceptSecond, ownUserId)).toBe(0);
+    });
+
+    it("looks past a message that is still being sent", () => {
+        const pending = makeEvent();
+        pending.setStatus(EventStatus.SENDING);
+        expect(findLastSuccessfulWeSent([makeEvent(), pending], allShown, ownUserId)).toBe(0);
     });
 });
