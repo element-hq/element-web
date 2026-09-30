@@ -235,6 +235,6 @@ export class BaseOngoingCallViewModel<
         const callHasOtherParticipants = this.timerFromAnswer
             ? startTs !== undefined
             : doesCallHaveOtherParticipants(this.props.mxEvent, members);
-        this.snapshot.merge({ isJoined, callHasOtherParticipants, durationViewModel, ...extraSnapshot } as Partial<T>);
+        this.snapshot.merge({ isJoined, callHasOtherParticipants, durationViewModel, ...extraSnapshot });
     }
 }
