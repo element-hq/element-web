@@ -28,7 +28,7 @@ import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
-import { getConnectedTs, getIntentFromEvent, getInviteProgress, isRingTimeDevice } from "../../common";
+import { getConnectedTs, getIntentFromEvent, getInviteProgress } from "../../common";
 import { DurationViewModel } from "./components/DurationViewModel";
 import type LegacyCallHandler from "../../../../../../../LegacyCallHandler.tsx";
 
@@ -82,10 +82,12 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
  */
 function callStartTs(call: ElementCall, props: Props, fromAnswer: boolean): number | undefined {
     if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
-    const connectedTs = getConnectedTs(getInviteProgress(props.mxEvent, props.getRelationsForEvent));
-    if (connectedTs !== undefined) return connectedTs;
+    const progress = getInviteProgress(props.mxEvent, props.getRelationsForEvent);
+    const connectedTs = getConnectedTs(progress);
+    // The other side reports its progress: it is in the call when it says so
+    if (connectedTs !== undefined || progress.length > 0) return connectedTs;
     const answers = call.session.memberships
-        .filter((m) => m.sender !== props.mxEvent.getSender() && !isRingTimeDevice(m.deviceId))
+        .filter((m) => m.sender !== props.mxEvent.getSender())
         .map((m) => m.createdTs());
     return answers.length ? Math.min(...answers) : undefined;
 }
@@ -149,7 +151,8 @@ function computeSnapshot(props: Props, timerFromAnswer: boolean): CommonOngoingC
         memberAvatarViewModel,
         callDirection,
         durationViewModel,
-        callHasOtherParticipants,
+        // A call timed from its answer is only in progress once answered
+        callHasOtherParticipants: timerFromAnswer ? startTs !== undefined : callHasOtherParticipants,
     };
 }
 
@@ -159,6 +162,9 @@ function computeSnapshot(props: Props, timerFromAnswer: boolean): CommonOngoingC
 export class BaseOngoingCallViewModel<
     T extends CommonOngoingCallTileViewSnapshot = CommonOngoingCallTileViewSnapshot,
 > extends BaseViewModel<T, Props> {
+    /** What the timer counts from, to notice when that changes. */
+    private startTs: number | undefined;
+
     public constructor(
         props: Props,
         extraSnapshot: Partial<T> = {},
@@ -166,6 +172,9 @@ export class BaseOngoingCallViewModel<
     ) {
         const snapshot = { ...computeSnapshot(props, timerFromAnswer), ...extraSnapshot };
         super(props, snapshot as T);
+        this.startTs = snapshot.durationViewModel
+            ? callStartTs(getCallOrThrow(props.callStore, props.roomId), props, timerFromAnswer)
+            : undefined;
         this.disposables.track(snapshot.facePileViewModel as BaseViewModel<unknown, unknown>);
         this.disposables.track(snapshot.memberAvatarViewModel as BaseViewModel<unknown, unknown>);
         if (snapshot.durationViewModel) this.disposables.track(snapshot.durationViewModel as DurationViewModel);
@@ -212,15 +221,20 @@ export class BaseOngoingCallViewModel<
         const roomId = this.props.roomId;
         const isJoined = !!this.props.callStore.getActiveCall(roomId);
         const members = Array.from(participants.keys());
-        const callHasOtherParticipants = doesCallHaveOtherParticipants(this.props.mxEvent, members);
         (this.getSnapshot().facePileViewModel as FacePileViewModel).updateMembers(members);
-        // The timer may only be able to start now (the other side just picked up)
+        // The timer may only be able to start now (the other side just picked
+        // up), or turn out to have started early (a join that the other side's
+        // first progress report then shows was not its answer)
         let { durationViewModel } = this.getSnapshot();
         const startTs = callStartTs(getCallOrThrow(this.props.callStore, roomId), this.props, this.timerFromAnswer);
-        if (!durationViewModel && startTs) {
-            durationViewModel = new DurationViewModel({ callStartTs: startTs });
-            this.disposables.track(durationViewModel as DurationViewModel);
+        if (startTs !== this.startTs) {
+            this.startTs = startTs;
+            durationViewModel = startTs ? new DurationViewModel({ callStartTs: startTs }) : undefined;
+            if (durationViewModel) this.disposables.track(durationViewModel as DurationViewModel);
         }
+        const callHasOtherParticipants = this.timerFromAnswer
+            ? startTs !== undefined
+            : doesCallHaveOtherParticipants(this.props.mxEvent, members);
         this.snapshot.merge({ isJoined, callHasOtherParticipants, durationViewModel, ...extraSnapshot } as Partial<T>);
     }
 }

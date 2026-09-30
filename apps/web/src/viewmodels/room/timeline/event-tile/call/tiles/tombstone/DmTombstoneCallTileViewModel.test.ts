@@ -139,24 +139,30 @@ describe("DmTombstoneCallTileViewModel", () => {
             expect(vm.getSnapshot().durationSeconds).toStrictEqual(30);
         });
 
-        it("or, without a connected report, from the other side's first membership that is not its publisher's", () => {
+        it("or, from a side that does not report its progress, from its first membership", () => {
             const mxEvent = getMockedRtcNotificationEvent("audio", 1752583130365, 1752583130365, "@alice:m.org");
             const cli = stubClient();
             vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
             const roomId = mxEvent.getRoomId()!;
-            const unanswered = [
-                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE+publish" }, 1_000),
+            // A side that reports progress (a bridge, joining as it dials) but never connected: unanswered
+            const ringingOnly = vi
+                .fn()
+                .mockImplementation((_id, _rel, type) =>
+                    type === "org.matrix.msc4075.rtc.invite_progress"
+                        ? { getRelations: () => [{ getContent: () => ({ state: "ringing" }), getTs: () => 900 }] }
+                        : undefined,
+                );
+            timelineWith(cli, mxEvent, [
+                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE" }, 1_000),
                 member("@_sip_bob:m.org", roomId, {}, 50_000),
-            ];
-            timelineWith(cli, mxEvent, unanswered);
+            ]);
             expect(
-                new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() }).getSnapshot()
+                new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: ringingOnly }).getSnapshot()
                     .durationSeconds,
             ).toBeUndefined();
             timelineWith(cli, mxEvent, [
-                unanswered[0],
-                member("@_sip_bob:m.org", roomId, { application: "m.call", device_id: "SIPBRIDGE" }, 20_000),
-                unanswered[1],
+                member("@bob:m.org", roomId, { application: "m.call", device_id: "BOBSPHONE" }, 20_000),
+                member("@bob:m.org", roomId, {}, 50_000),
             ]);
             expect(
                 new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent: vi.fn() }).getSnapshot()
