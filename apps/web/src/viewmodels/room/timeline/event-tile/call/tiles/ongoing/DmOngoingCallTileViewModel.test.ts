@@ -46,6 +46,48 @@ describe("DmOngoingCallTileViewModel", () => {
             call.emit(CallEvent.Participants, call.participants, new Map());
             // Counted from Bob's join at 5 s, not Alice's at 1 s
             expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);
+            expect(vm.getSnapshot().callHasOtherParticipants).toBe(true);
+            vi.useRealTimers();
+        });
+
+        it("takes a side that reports its progress to be in the call only once it reports connected", () => {
+            const cli = stubClient();
+            const mxEvent = getMockedRtcNotificationEvent("audio", 100, 100, "@alice:m.org");
+            mxEvent.sender = getMockedMember(roomId, "@alice:m.org", "Alice");
+            const bridge = getMockedMember(roomId, "@_sip_bob:m.org", "Bob (SIP)");
+            const progress: { getContent: () => { state: string }; getTs: () => number }[] = [];
+            const getRelationsForEvent = vi
+                .fn()
+                .mockImplementation((_id, _rel, type) =>
+                    type === "org.matrix.msc4075.rtc.invite_progress" ? { getRelations: () => progress } : undefined,
+                );
+            // The bridge joins as soon as it dials, and says so: still ringing
+            const call = MockedCall.create()
+                .withParticipants([mxEvent.sender, bridge])
+                .withMemberships(["@alice:m.org", 1000], ["@_sip_bob:m.org", 2000]);
+            const callStore = MockedCallStore.create(call);
+            const vm = new DmOngoingCallTileViewModel({
+                mxEvent,
+                cli,
+                callStore,
+                roomId,
+                legacyCallHandler,
+                getRelationsForEvent,
+            });
+            // Its membership arrived before its first report: the timer started, and stops again
+            expect(vm.getSnapshot().callHasOtherParticipants).toBe(true);
+            progress.push({ getContent: () => ({ state: "ringing" }), getTs: () => 2500 });
+            call.emit(CallEvent.Participants, call.participants, new Map());
+            expect(vm.getSnapshot().durationViewModel).toBeUndefined();
+            expect(vm.getSnapshot().callHasOtherParticipants).toBe(false);
+
+            vi.useFakeTimers();
+            vi.setSystemTime(12_000);
+            progress.push({ getContent: () => ({ state: "connected" }), getTs: () => 5000 });
+            call.emit(CallEvent.Participants, call.participants, new Map());
+            // Counted from the connected report at 5 s, not the bridge's join at 2 s
+            expect(vm.getSnapshot().durationViewModel?.getSnapshot().duration).toStrictEqual(7);
+            expect(vm.getSnapshot().callHasOtherParticipants).toBe(true);
             vi.useRealTimers();
         });
 

@@ -19,7 +19,6 @@ import {
     getFailureReason,
     getIntentFromEvent,
     getInviteProgress,
-    isRingTimeDevice,
 } from "../../common";
 
 export interface DmTombstoneCallTileViewModelProps extends RoomTombstoneCallTileViewModelProps {
@@ -50,7 +49,8 @@ function callOutcome(
     let answered = false;
     // Connected when the other side reports it, or else once someone other than the caller joins; over when
     // anyone leaves
-    let connectedTs = getConnectedTs(getInviteProgress(mxEvent, getRelationsForEvent));
+    const progress = getInviteProgress(mxEvent, getRelationsForEvent);
+    let connectedTs = getConnectedTs(progress);
     // A join after the ring has ended is the next call's (its caller joins before notifying), not an answer
     const ringUntil = mxEvent.getTs() + (mxEvent.getContent().lifetime ?? 90_000);
     for (const e of after) {
@@ -59,12 +59,8 @@ function callOutcome(
         const joined = Object.keys(e.getContent()).length > 0;
         if (joined && connectedTs === undefined && e.getTs() > ringUntil) break;
         if (joined && e.getSender() === cli.getUserId()) answered = true;
-        if (
-            joined &&
-            connectedTs === undefined &&
-            e.getSender() !== mxEvent.getSender() &&
-            !isRingTimeDevice(e.getContent().device_id)
-        )
+        // (unless the other side reports its progress: then only its `connected` is)
+        if (joined && connectedTs === undefined && e.getSender() !== mxEvent.getSender() && progress.length === 0)
             connectedTs = e.getTs();
         else if (!joined && connectedTs !== undefined && e.getTs() >= connectedTs)
             return { answered, durationSeconds: Math.round((e.getTs() - connectedTs) / 1000) };
