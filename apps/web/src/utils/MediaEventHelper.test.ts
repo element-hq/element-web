@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi, afterEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
@@ -106,6 +107,46 @@ describe("MediaEventHelper", () => {
 
             expect(helper.isFromLocalUpload).toBe(false);
             await expect(helper.sourceUrl.value).resolves.toBe(helper.media.srcHttp);
+        });
+    });
+    describe("when no service worker controls the page", () => {
+        const THUMB_AUTHED = "https://matrix.org/_matrix/client/v1/media/download/matrix.org/thumbnail";
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+            fetchMock.mockReset();
+        });
+
+        it("authenticates the thumbnail request itself", async () => {
+            const cli = stubClient();
+            // eslint-disable-next-line no-restricted-properties
+            vi.mocked(cli.mxcUrlToHttp).mockImplementation(
+                (mxc) => `https://matrix.org/_matrix/media/v3/download/${mxc.slice(6)}`,
+            );
+            vi.mocked(cli.getAccessToken).mockReturnValue("token_abc");
+            vi.mocked(cli.isVersionSupported).mockResolvedValue(true);
+            fetchMock.get(THUMB_AUTHED, { status: 200, body: "thumb" });
+
+            // happy-dom's navigator has no serviceWorker at all, so this page is
+            // uncontrolled — the state a hard reload leaves a real browser in.
+            const event = new MatrixEvent({
+                type: "m.room.message",
+                content: {
+                    msgtype: "m.image",
+                    body: "image.png",
+                    info: { mimetype: "image/png", thumbnail_url: "mxc://matrix.org/thumbnail" },
+                    url: "mxc://matrix.org/abcdef",
+                },
+            });
+
+            await new MediaEventHelper(event).thumbnailBlob.value;
+
+            // A plain fetch of thumbnailHttp would go to the retired /_matrix/media/v3
+            // endpoint unauthenticated, and a homeserver with authenticated media
+            // enabled answers 404 — a thumbnail that silently never appears.
+            const call = fetchMock.callHistory.lastCall(THUMB_AUTHED);
+            expect(call, "the thumbnail was not fetched from the authenticated endpoint").toBeDefined();
+            expect(new Headers(call!.options.headers).get("Authorization")).toBe("Bearer token_abc");
         });
     });
 });

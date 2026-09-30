@@ -13,6 +13,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
 import { type PublicInterface } from "../test/test-utils/@types/common.ts";
+import { fetchAuthenticatedMedia } from "../utils/authenticatedMedia.ts";
 
 // Populate this class with the details of your customisations when copying it.
 
@@ -134,6 +135,10 @@ class MediaImplementation {
 
     /**
      * Downloads the source media.
+     *
+     * Authenticates the request itself when no service worker controls the page; see
+     * {@link fetchAuthenticatedMedia}.
+     *
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
     public async downloadSource(): Promise<Response> {
@@ -141,11 +146,31 @@ class MediaImplementation {
         if (!src) {
             throw new UserFriendlyError("error|download_media");
         }
-        const res = await fetch(src);
+
+        const res = await fetchAuthenticatedMedia(src, this.client);
         if (!res.ok) {
             throw parseErrorResponse(res, await res.text());
         }
         return res;
+    }
+
+    /**
+     * Downloads the thumbnail media, if a thumbnail is recorded.
+     *
+     * Authenticates the request itself when no service worker controls the page; see
+     * {@link fetchAuthenticatedMedia}.
+     *
+     * Unlike {@link downloadSource} this does not throw on a non-ok response: the caller
+     * treats an unusable thumbnail as simply absent, which is the behaviour it had before.
+     *
+     * @returns {Promise<Response | null>} Resolves to the server's response, or null if no
+     *     thumbnail is recorded.
+     */
+    public async downloadThumbnail(): Promise<Response | null> {
+        // Neither an absent thumbnail nor an MXC that yields no URL is an error here.
+        const thumbnail = this.thumbnailHttp;
+        if (!thumbnail) return null;
+        return fetchAuthenticatedMedia(thumbnail, this.client);
     }
 }
 
