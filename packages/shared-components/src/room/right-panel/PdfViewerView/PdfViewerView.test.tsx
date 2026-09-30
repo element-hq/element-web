@@ -164,6 +164,24 @@ describe("PdfViewerView", () => {
         expect(screen.queryByRole("button", { name: "Zoom out" })).not.toBeInTheDocument();
     });
 
+    it("shows the rounded zoom level between the zoom buttons", () => {
+        renderView({ status: "ready", pageCount: 42, zoomPercent: 123.4 });
+
+        const level = screen.getByTestId("pdf-zoom-level");
+        const zoomOut = screen.getByRole("button", { name: "Zoom out" });
+        const zoomIn = screen.getByRole("button", { name: "Zoom in" });
+
+        expect(level).toHaveTextContent("123%");
+        expect(zoomOut.compareDocumentPosition(level) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        expect(level.compareDocumentPosition(zoomIn) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it("hides the zoom level until the host reports one", () => {
+        renderView({ status: "ready", pageCount: 42 });
+
+        expect(screen.queryByTestId("pdf-zoom-level")).not.toBeInTheDocument();
+    });
+
     it("forwards zoom button presses", async () => {
         const user = userEvent.setup();
         const onZoomIn = vi.fn();
