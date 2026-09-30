@@ -25,13 +25,13 @@ describe("DmTombstoneCallTileView", () => {
     describe("renders the tile", () => {
         it("OutgoingVoiceFailed", () => {
             const { container } = render(<OutgoingVoiceFailed />);
-            expect(container).toHaveTextContent(/unreachable \(SIP 404\)/);
+            expect(container.textContent).toContain("unreachable (SIP 404)");
             expect(container).toMatchSnapshot();
         });
 
         it("IncomingVideoFailed", () => {
             const { container } = render(<IncomingVideoFailed />);
-            expect(container).toHaveTextContent(/busy/);
+            expect(container.textContent).toContain("busy");
             expect(container).toMatchSnapshot();
         });
 
