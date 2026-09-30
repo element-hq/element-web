@@ -20,18 +20,31 @@ export interface ModuleSpacePanelItem extends SpacePanelItemProps {
     spaceKey: string;
 }
 
-enum ExtrasApiEvent {
+export enum ExtrasApiEvent {
     SpacePanelItemsChanged = "SpacePanelItemsChanged",
+    DialPadHandlerChanged = "DialPadHandlerChanged",
 }
 
 interface EmittedEvents {
     [ExtrasApiEvent.SpacePanelItemsChanged]: () => void;
+    [ExtrasApiEvent.DialPadHandlerChanged]: () => void;
 }
 
 export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> implements ExtrasApi {
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
     public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
+    /** What the room list's dial pad button does, when a module provides a dialler. */
+    public dialPadHandler?: () => void;
+
+    /**
+     * Have the dial pad button in the room list header (otherwise only shown
+     * for homeservers with PSTN support) open the module's own dialler.
+     */
+    public setDialPadHandler(cb: (() => void) | undefined): void {
+        this.dialPadHandler = cb;
+        this.emit(ExtrasApiEvent.DialPadHandlerChanged);
+    }
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);

@@ -16,6 +16,7 @@ import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { ModuleApi } from "../../modules/Api.ts";
 
 vi.mock("../../customisations/helpers/UIComponents", () => ({
     shouldShowComponent: vi.fn(),
@@ -90,6 +91,20 @@ describe("RoomListSearchViewModel", () => {
 
             expect(vm.getSnapshot().displayDialButton).toBe(false);
         });
+
+        it("should show dial button once a module provides a dialler", () => {
+            vi.spyOn(context.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(false);
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
+            expect(vm.getSnapshot().displayDialButton).toBe(false);
+
+            ModuleApi.instance.extras.setDialPadHandler(() => {});
+            expect(vm.getSnapshot().displayDialButton).toBe(true);
+            ModuleApi.instance.extras.setDialPadHandler(undefined);
+            expect(vm.getSnapshot().displayDialButton).toBe(false);
+        });
     });
 
     describe("actions", () => {
@@ -113,6 +128,21 @@ describe("RoomListSearchViewModel", () => {
 
             vm.onDialPadClick();
             expect(fireSpy).toHaveBeenCalledWith(Action.OpenDialPad);
+        });
+
+        it("should open the module dialler instead when one is provided", () => {
+            const fireSpy = vi.spyOn(defaultDispatcher, "fire");
+            const dialler = vi.fn();
+            ModuleApi.instance.extras.setDialPadHandler(dialler);
+            const vm = new RoomListSearchViewModel({
+                activeSpace: MetaSpace.Home,
+                legacyCallHandler: context.legacyCallHandler,
+            });
+
+            vm.onDialPadClick();
+            expect(dialler).toHaveBeenCalled();
+            expect(fireSpy).not.toHaveBeenCalledWith(Action.OpenDialPad);
+            ModuleApi.instance.extras.setDialPadHandler(undefined);
         });
 
         it("should fire ViewRoomDirectory action and track interaction when onExploreClick is called", () => {
