@@ -178,9 +178,13 @@ class LoggedInView extends React.Component<IProps, IState> {
             SettingsStore.watchSetting("userTimezonePublish", null, this.onTimezoneUpdate),
             SettingsStore.watchSetting("userTimezone", null, this.onTimezoneUpdate),
         ];
-        // Call this initially to ensure that we set the correct timezone, if the
-        // system time has changed between sessions.
-        void this.onTimezoneUpdate();
+        // Set the timezone on login only when publishing is enabled.
+        // Do NOT call when disabled — that would delete a timezone written by
+        // another client, which must only happen when the user actively turns
+        // off publishing (handled by the setting watcher above).
+        if (SettingsStore.getValue("userTimezonePublish")) {
+            void this.onTimezoneUpdate();
+        }
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         void this.refreshBackgroundImage();

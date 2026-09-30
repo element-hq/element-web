@@ -468,11 +468,11 @@ describe("<LoggedInView />", () => {
             SETTINGS["userTimezonePublish"].controller = originalController;
         });
 
-        it("does not update the timezone when userTimezonePublish is off", async () => {
+        it("does not touch the timezone on login when userTimezonePublish is off", async () => {
+            // On initial load with publish disabled we must not delete the timezone —
+            // another client may have set it and we should not wipe it out.
             getComponent();
-            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
+            expect(mockClient.deleteExtendedProfileProperty).not.toHaveBeenCalled();
             expect(mockClient.setExtendedProfileProperty).not.toHaveBeenCalled();
         });
         it("should set the user timezone when userTimezonePublish is enabled", async () => {
