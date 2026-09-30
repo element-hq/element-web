@@ -147,6 +147,9 @@ $left-gutter: 64px;
         background-color: inherit;
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
         flex: 1;
+        /* Flex items default to min-width: auto, which lets wide code blocks
+           expand the tile rather than constraining the pre to allow scrolling. */
+        min-width: 0;
 
         pre,
         code {
