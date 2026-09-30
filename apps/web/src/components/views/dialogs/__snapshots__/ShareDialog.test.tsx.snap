@@ -36,7 +36,7 @@ exports[`ShareDialog > should not render the QR code if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -182,7 +182,7 @@ exports[`ShareDialog > should not render the socials if disabled 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -205,7 +205,7 @@ exports[`ShareDialog > should not render the socials if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -292,7 +292,7 @@ exports[`ShareDialog > should render a share dialog for a matrix event 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -316,15 +316,15 @@ exports[`ShareDialog > should render a share dialog for a matrix event 1`] = `
       </div>
       <label>
         <div
-          class="_container_153f2_10"
+          class="_container"
         >
           <input
             checked=""
-            class="_input_153f2_18"
+            class="_input"
             type="checkbox"
           />
           <div
-            class="_ui_153f2_19"
+            class="_ui"
           >
             <svg
               aria-hidden="true"
@@ -343,7 +343,7 @@ exports[`ShareDialog > should render a share dialog for a matrix event 1`] = `
         Link to selected message
       </label>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -489,7 +489,7 @@ exports[`ShareDialog > should render a share dialog for a room 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -513,14 +513,14 @@ exports[`ShareDialog > should render a share dialog for a room 1`] = `
       </div>
       <label>
         <div
-          class="_container_153f2_10"
+          class="_container"
         >
           <input
-            class="_input_153f2_18"
+            class="_input"
             type="checkbox"
           />
           <div
-            class="_ui_153f2_19"
+            class="_ui"
           >
             <svg
               aria-hidden="true"
@@ -539,7 +539,7 @@ exports[`ShareDialog > should render a share dialog for a room 1`] = `
         Link to most recent message
       </label>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -685,7 +685,7 @@ exports[`ShareDialog > should render a share dialog for a room member 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -708,7 +708,7 @@ exports[`ShareDialog > should render a share dialog for a room member 1`] = `
         </span>
       </div>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -854,7 +854,7 @@ exports[`ShareDialog > should render a share dialog for an URL 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -877,7 +877,7 @@ exports[`ShareDialog > should render a share dialog for an URL 1`] = `
         </span>
       </div>
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="primary"
         data-size="lg"
         role="button"

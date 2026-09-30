@@ -3,13 +3,13 @@
 exports[`<RoomListSearch /> > renders 1`] = `
 <DocumentFragment>
   <div
-    class="_flex_4dswl_9 _view_zk0ja_8"
+    class="_flex _view"
     data-testid="room-list-search"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_1nw83_8 _search_zk0ja_16 _has-icon_1nw83_60"
+      class="_button _search _has-icon"
       data-kind="secondary"
       data-size="md"
       id="room-list-search-button"
@@ -29,11 +29,11 @@ exports[`<RoomListSearch /> > renders 1`] = `
         />
       </svg>
       <span
-        class="_flex_4dswl_9 _search_container_zk0ja_28"
+        class="_flex _search_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="_search_text_zk0ja_40"
+          class="_search_text"
         >
           Search
         </span>
