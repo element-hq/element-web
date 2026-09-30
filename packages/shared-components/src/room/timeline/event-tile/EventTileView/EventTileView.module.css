@@ -67,6 +67,14 @@
     padding-top: 18px;
 }
 
+/* Controls that are hidden until the reader shows interest in the event are
+   revealed by hovering anywhere on it, not just the control's own row. The
+   shell owns the tile boundary, so it publishes the state and the slot
+   contents decide what to do with it. */
+.root:hover {
+    --event-tile-add-reaction-visibility: visible;
+}
+
 /* Line. */
 .line {
     position: relative;
