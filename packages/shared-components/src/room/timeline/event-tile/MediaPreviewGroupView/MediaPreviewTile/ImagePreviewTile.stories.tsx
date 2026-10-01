@@ -83,7 +83,7 @@ export const NoButtons: Story = {
     },
 };
 
-// The timeline link preview: a fixed thumbnail on the left, title, description and site name on the right.
+// Timeline link preview with a thumbnail.
 export const SideBySide: Story = {
     args: {
         layout: "side",

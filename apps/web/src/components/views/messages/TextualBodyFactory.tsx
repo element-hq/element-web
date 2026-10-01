@@ -157,15 +157,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    // The footer shows where the link goes, e.g. "github.com", rather than the site's self-declared
-    // name, so the user can judge the destination. Falls back to the site name for unparsable links.
+    // Footer: the link's host, e.g. "github.com". Site name if the link cannot be parsed.
     const previewHost = (preview: UrlPreview): string => {
         if (!URL.canParse(preview.link)) return preview.siteName;
         return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
     };
 
-    // Link previews use the side-by-side tile: thumbnail on the left; title, description and host
-    // on the right. The title links to the page, so no separate open-link button is needed.
+    // Side layout: thumbnail left, title/description/host right. The title is the link, so no button.
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {

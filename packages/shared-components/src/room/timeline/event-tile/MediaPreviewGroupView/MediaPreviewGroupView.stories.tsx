@@ -146,7 +146,7 @@ export const SingleAudio: Story = {
     args: withEntries([audioEntry]),
 };
 
-// Timeline link previews use the side layout: thumbnail on the left, text on the right.
+// Timeline link previews: side layout.
 export const LinkPreviews: Story = {
     args: withEntries([linkPreviewEntry, textLinkPreviewEntry]),
 };

@@ -13,8 +13,7 @@
     }
 }
 
-/* Media on the left, text on the right. The thumbnail fixes the height at 142px, so with the
-   border the tile matches the 480x144px link preview design. */
+/* Media left, text right. With the thumbnail and border the tile is 480x144px. */
 .tileSide {
     display: flex;
     align-items: stretch;

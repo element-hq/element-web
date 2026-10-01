@@ -37,8 +37,7 @@
     min-width: 0;
 }
 
-/* The side layout has the full tile height available, so the header and body get two lines each and
-   the header reads as the tile's title rather than as an inline link. */
+/* Side layout: two lines each for header and body, header styled as a title. */
 .textContentSide {
     display: flex;
     flex-direction: column;
@@ -159,7 +158,7 @@
     object-fit: contain;
 }
 
-/* Fixed box beside the text in the side layout; sizes from the Figma link preview design. */
+/* Fixed 130x142px box for the side layout. */
 .image.thumbnailImage,
 .video.thumbnailVideo {
     width: 130px;

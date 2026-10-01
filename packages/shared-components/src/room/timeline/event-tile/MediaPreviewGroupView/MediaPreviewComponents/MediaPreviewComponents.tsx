@@ -42,12 +42,11 @@ export interface TextContentProps {
      */
     body: string;
     /**
-     * footer text (optional), shown below the body
+     * optional: footer text below the body
      */
     footer?: string;
     /**
-     * tile layout the text is part of (optional, defaults to "stacked"). The "side" layout gives the
-     * header and body two lines each instead of one.
+     * optional: tile layout, defaults to "stacked". "side" allows two lines for header and body.
      */
     layout?: MediaPreviewLayout;
 }

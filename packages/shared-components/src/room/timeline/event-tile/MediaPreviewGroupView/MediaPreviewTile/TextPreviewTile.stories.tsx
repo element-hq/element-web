@@ -60,7 +60,7 @@ export const ClickableIcon: Story = {
     },
 };
 
-// A timeline link preview for a page without an image.
+// Timeline link preview without an image.
 export const SideBySide: Story = {
     args: {
         layout: "side",
