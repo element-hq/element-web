@@ -13,7 +13,7 @@ exports[`LegacyCryptoUnsupportedView > Storybook snapshots > renders the default
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <h1
-          class="_typography_6v6n8_153 _font-heading-xl-semibold_6v6n8_140"
+          class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
         >
           This device cannot be used
         </h1>
