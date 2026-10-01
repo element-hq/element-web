@@ -3446,14 +3446,14 @@
                 "other": "%(senderName)s added the alternative addresses %(addresses)s for this chat."
             },
             "alt_removed": {
-                "one": "%(senderName)s removed alternative address %(addresses)s for this room.",
-                "other": "%(senderName)s removed the alternative addresses %(addresses)s for this room."
+                "one": "%(senderName)s removed alternative address %(addresses)s for this chat.",
+                "other": "%(senderName)s removed the alternative addresses %(addresses)s for this chat."
             },
-            "changed": "%(senderName)s changed the addresses for this room.",
-            "changed_alternative": "%(senderName)s changed the alternative addresses for this room.",
-            "changed_main_and_alternative": "%(senderName)s changed the main and alternative addresses for this room.",
-            "removed": "%(senderName)s removed the main address for this room.",
-            "set": "%(senderName)s set the main address for this room to %(address)s."
+            "changed": "%(senderName)s changed the addresses for this chat.",
+            "changed_alternative": "%(senderName)s changed the alternative addresses for this chat.",
+            "changed_main_and_alternative": "%(senderName)s changed the main and alternative addresses for this chat.",
+            "removed": "%(senderName)s removed the main address for this chat.",
+            "set": "%(senderName)s set the main address for this chat to %(address)s."
         },
         "m.room.create": {
             "continuation": "This room is a continuation of another conversation.",

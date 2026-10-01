@@ -106,7 +106,7 @@ exports[`messageForResourceLimitError > should match snapshot for admin contact 
       rel="noreferrer noopener"
       target="_blank"
     >
-      contact your service administrator
+      contact your account provider
     </a>
      to continue using this service.
   </span>
@@ -115,7 +115,7 @@ exports[`messageForResourceLimitError > should match snapshot for admin contact 
 
 exports[`messageForResourceLimitError > should match snapshot for monthly_active_user 1`] = `
 <DocumentFragment>
-  This homeserver has hit its Monthly Active User limit.
+  This service has hit its Monthly Active User limit.
 </DocumentFragment>
 `;
 
