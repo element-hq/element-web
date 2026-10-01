@@ -53,6 +53,12 @@ describe("/status", () => {
         expect((result.error as UserFriendlyError).message).toBe("The text you provided was too long.");
     });
 
+    it("should reject if the status text exceeds the 30-character UI guideline", () => {
+        const result = run(`🎉 ${"a".repeat(31)}`);
+        expect(result.error).toBeInstanceOf(UserFriendlyError);
+        expect((result.error as UserFriendlyError).message).toBe("The text you provided was too long.");
+    });
+
     it("should set the extended profile property on success", async () => {
         const result = run("🎉 Having a great day");
         expect(result.error).toBeUndefined();

@@ -7,8 +7,15 @@ Please see LICENSE in the repository root for full details.
 
 import * as os from "node:os";
 import * as fs from "node:fs";
+import * as fsp from "node:fs/promises";
 import path from "node:path";
-import { type Configuration as BaseConfiguration, log } from "electron-builder";
+import {
+    type Configuration as BaseConfiguration,
+    type AfterPackContext,
+    type BeforeBuildContext,
+    Arch,
+    log,
+} from "electron-builder";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 /**
@@ -20,7 +27,6 @@ import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/modul
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
- *  Removes libsqlcipher0 recommended dependency if env SQLCIPHER_BUNDLED is asserted.
  *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
  */
 
@@ -44,6 +50,7 @@ interface Metadata {
  * Extra metadata fields that are injected into the build to pass to the app at runtime.
  */
 interface ExtraMetadata extends Metadata {
+    desktopName: string;
     electron_appId: string;
     electron_protocol: string;
     electron_windows_cert_sn?: string;
@@ -120,19 +127,16 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         loadBrowserProcessSpecificV8Snapshot: false,
         enableEmbeddedAsarIntegrityValidation: true,
     },
-    files: [
-        "package.json",
-        {
-            from: ".hak/hakModules",
-            to: "node_modules",
-        },
-        "lib/**",
-    ],
+    files: ["package.json", "lib/**"],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
         name: variant.name,
         productName: variant.productName,
         description: variant.description,
+        // Read by Electron to set the Wayland app_id / X11 WM_CLASS, so compositors
+        // can associate our windows with the desktop file of the same name.
+        // https://www.electron.build/linux#window-association-desktopname--syncdesktopname
+        desktopName: `${variant.name}.desktop`,
         electron_appId: variant.appId,
         electron_protocol: variant.protocols[0],
     },
@@ -141,6 +145,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         category: "Network;InstantMessaging;Chat",
         icon: "icon.png",
         executableName: variant.name, // element-desktop or element-desktop-nightly
+        // Name the desktop file after desktopName and set its StartupWMClass to match
+        syncDesktopName: true,
     },
     deb: {
         packageCategory: "net",
@@ -157,8 +163,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             "libasound2",
             "libgbm1",
         ],
-        recommends: ["libsqlcipher0", "element-io-archive-keyring"],
-        fpm: ["--deb-pre-depends", "libc6 (>= 2.31)"],
+        recommends: ["element-io-archive-keyring"],
+        fpm: ["--deb-pre-depends", "libc6 (>= 2.35)"],
     },
     mac: {
         target: ["dmg", "zip"],
@@ -170,7 +176,9 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         entitlements: "./build/entitlements.mac.plist",
         icon: "build/icon.icon",
         mergeASARs: true,
-        x64ArchFiles: "**/matrix-seshat/*.node", // hak already runs lipo
+        // The prebuilt seshat binaries are single-arch and present in both halves of the universal build,
+        // the loader picks the right one at runtime so they must not be lipo'd together.
+        x64ArchFiles: "**/@matrix-org/seshat-darwin-*/*.node",
     },
     dmg: {
         badgeIcon: "build/icon.icon",
@@ -195,6 +203,47 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     nativeRebuilder: "sequential",
     nodeGypRebuild: false,
     npmRebuild: true,
+    beforeBuild: async (context: BeforeBuildContext) => {
+        // Assert that the webapp.asar file exists
+        try {
+            await fsp.access(path.join(context.appDir, "webapp.asar"), fs.constants.F_OK);
+        } catch (err) {
+            console.error("The webapp.asar archive is missing. Building without a webapp is fruitless.");
+            console.log(
+                "RTFM https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#fetching-element.",
+            );
+            throw err;
+        }
+        return true; // Continue build
+    },
+    afterPack: async (context: AfterPackContext) => {
+        // @matrix-org/seshat pulls in a prebuilt binary package per platform+arch as optional dependencies.
+        // CI installs more than one of them so that cross-arch builds work, so prune the ones we don't need
+        // from the packaged app. We always keep both darwin architectures as electron-builder packs each half
+        // of a universal build separately, and @electron/universal requires them to contain the same files.
+        const platform = context.electronPlatformName;
+        const arch = Arch[context.arch];
+        const keep = platform === "darwin" ? /^seshat-darwin-/ : new RegExp(`^seshat-${platform}-${arch}$`);
+
+        const modulesDir = path.join(
+            context.packager.getResourcesDir(context.appOutDir),
+            "app.asar.unpacked",
+            "node_modules",
+            "@matrix-org",
+        );
+        let entries: string[];
+        try {
+            entries = await fsp.readdir(modulesDir);
+        } catch {
+            return; // No unpacked seshat binaries in this build
+        }
+        for (const entry of entries) {
+            if (entry.startsWith("seshat-") && !keep.test(entry)) {
+                console.log(`Pruning ${entry} from ${platform}-${arch} build`);
+                await fsp.rm(path.join(modulesDir, entry), { recursive: true, force: true });
+            }
+        }
+    },
 };
 
 /**
@@ -232,11 +281,6 @@ if (os.platform() === "linux") {
      */
     if (process.env.ED_DEBIAN_CHANGELOG) {
         config.deb.fpm.push(`--deb-changelog=${process.env.ED_DEBIAN_CHANGELOG}`);
-    }
-
-    if (process.env.SQLCIPHER_BUNDLED) {
-        // Remove sqlcipher dependency when using bundled
-        config.deb.recommends = config.deb.recommends?.filter((d) => d !== "libsqlcipher0");
     }
 }
 

@@ -21,7 +21,6 @@ import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -61,6 +60,23 @@ export function preparePlatform(): void {
     } else {
         logger.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
+    }
+
+    // Deliberately not awaited: the version is only wanted for the logs, so it must not hold up startup.
+    void logAppVersion();
+}
+
+/**
+ * Log the version of the app, so that each rageshake log file starts with the version that produced it.
+ *
+ * The rageshake store keeps one log file per app instance, so logging this at startup means an upgrade or
+ * downgrade between sessions is visible when reading a report.
+ */
+export async function logAppVersion(): Promise<void> {
+    try {
+        logger.info(`App version: ${await PlatformPeg.get()!.getAppVersion()}`);
+    } catch (e) {
+        logger.warn("Unable to determine app version for logging", e);
     }
 }
 
@@ -142,16 +158,6 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
     );
-}
-
-/**
- * @deprecated in favour of the plugin system
- */
-export async function loadModules(): Promise<void> {
-    const { INSTALLED_MODULES } = await import("../modules.js");
-    for (const InstalledModule of INSTALLED_MODULES) {
-        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
-    }
 }
 
 export async function loadPlugins(): Promise<void> {

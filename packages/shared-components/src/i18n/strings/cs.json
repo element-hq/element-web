@@ -55,7 +55,6 @@
         "user_menu": {
             "create_an_account": "Vytvořit účet",
             "got_an_account": "Máte účet?",
-            "manage_account": "Spravovat účet",
             "sign_in": "Přihlásit se",
             "title": "Uživatelská nabídka"
         }
@@ -259,8 +258,6 @@
         "pending_moderation": "Zpráva čeká na moderaci",
         "pending_moderation_reason": "Zpráva čeká na moderaci: %(reason)s",
         "url_preview": {
-            "close": "Zavřít náhled",
-            "open_link": "Otevřít odkaz",
             "show_n_more": {
                 "one": "Zobrazit %(count)s další náhled",
                 "few": "Zobrazit %(count)s další náhledy",

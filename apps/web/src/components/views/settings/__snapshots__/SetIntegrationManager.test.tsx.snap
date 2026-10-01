@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SetIntegrationManager > should render manage integrations sections 1`] = `
+<form
+  class="_root mx_SetIntegrationManager"
+  data-testid="mx_SetIntegrationManager"
+>
+  <div
+    class="mx_SettingsFlag"
+  >
+    <div
+      class="mx_SetIntegrationManager_heading_manager"
+    >
+      <h2
+        class="mx_Heading_h3"
+      >
+        Manage integrations
+      </h2>
+      <h3
+        class="mx_Heading_h4"
+        id="mx_SetIntegrationManager_ManagerName"
+      >
+        (scalar.vector.im)
+      </h3>
+    </div>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+    id="mx_SetIntegrationManager_BodyText"
+  >
+    <span>
+      Use an integration manager 
+      <strong>
+        (scalar.vector.im)
+      </strong>
+       to manage bots, widgets, and sticker packs.
+    </span>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
+  </div>
+  <div
+    class="_inline-field"
+  >
+    <div
+      class="_inline-field-control"
+    >
+      <div
+        class="_container"
+      >
+        <input
+          class="_input"
+          id="react-use-id-1"
+          role="switch"
+          type="checkbox"
+        />
+        <div
+          class="_ui"
+        />
+      </div>
+    </div>
+    <div
+      class="_inline-field-body"
+    >
+      <label
+        class="_label"
+        for="react-use-id-1"
+      >
+        Enable the integration manager
+      </label>
+    </div>
+  </div>
+</form>
+`;

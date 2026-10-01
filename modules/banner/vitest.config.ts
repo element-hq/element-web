@@ -10,5 +10,7 @@ import { defineProject } from "vitest/config";
 export default defineProject({
     test: {
         exclude: ["./e2e/**/*", "./node_modules/**/*"],
+        environment: "happy-dom",
+        setupFiles: ["src/setupTests.ts"],
     },
 });

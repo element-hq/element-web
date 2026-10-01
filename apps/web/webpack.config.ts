@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import dotenv from "dotenv";
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import webpack from "webpack";
 import "webpack-dev-server"; // for types
@@ -27,7 +27,6 @@ import postcssMixins from "postcss-mixins";
 import postcssNested from "postcss-nested";
 
 import pkgJson from "./package.json" with { type: "json" };
-import componentsJson from "./components.json" with { type: "json" };
 import { I18nWebpackPlugin } from "./I18nWebpackPlugin.ts";
 import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
@@ -64,59 +63,11 @@ const cssThemes = {
     "theme-dark-custom": "./res/themes/dark-custom/css/dark-custom.pcss",
 };
 
-// See docs/customisations.md
-let fileOverrides = {/* {[file: string]: string} */};
-try {
-    const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
-    fileOverrides = JSON.parse(customisationsFile);
-
-    // stringify the output so it appears in logs correctly, as large files can sometimes get
-    // represented as `<Object>` which is less than helpful.
-    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
-
-    process.on("exit", () => {
-        console.log(""); // blank line
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
-        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log(""); // blank line
-    });
-} catch {
-    // ignore - not important
-}
-
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
     const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
     return path.dirname(fileURLToPath(targetPath));
 }
-
-function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
-    return Object.entries(overrides).map(([oldPath, newPath]) => {
-        return new webpack.NormalModuleReplacementPlugin(
-            // because the input is effectively defined by the person running the build, we don't
-            // need to do anything special to protect against regex overrunning, etc.
-            new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            function (resource) {
-                resource.request = path.resolve(__dirname, newPath);
-                resource.createData.resource = path.resolve(__dirname, newPath);
-                // Starting with Webpack 5 we also need to set the context as otherwise replacing
-                // files in e.g. matrix-js-sdk with files from element-web will try to resolve
-                // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
-                resource.context = path.dirname(resource.request);
-                resource.createData.context = path.dirname(resource.createData.resource);
-            },
-        );
-    });
-}
-
-const moduleReplacementPlugins = [
-    ...parseOverridesToReplacements(componentsJson),
-
-    // Allow customisations to override the default components too
-    ...parseOverridesToReplacements(fileOverrides),
-];
 
 export default (env: string, argv: Record<string, any>): webpack.Configuration => {
     // Establish settings based on the environment and args.
@@ -155,6 +106,16 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // directory, so we don't have to rely on an index.js or similar file existing.
     const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
+    // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
+    // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
+    // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
+    // and is only loaded when a call renders on the React path. That holds for both the stylesheet itself
+    // (real path, as webpack resolves symlinks) and the wrapper that puts it in the `element-call` layer.
+    const elementCallComponentStylesheets = [
+        fs.realpathSync(fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css"))),
+        path.resolve(__dirname, "src/components/views/voip/ElementCallComponent.css"),
+    ];
+
     return {
         ...development,
 
@@ -165,11 +126,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         bail: true,
 
         entry: {
-            bundle: "./src/vector/index.ts",
-            mobileguide: "./src/vector/mobile_guide/index.ts",
-            jitsi: "./src/vector/jitsi/index.ts",
-            usercontent: "./src/usercontent/index.ts",
-            serviceworker: {
+            "bundle": "./src/vector/index.ts",
+            "mobileguide": "./src/vector/mobile_guide/index.ts",
+            "jitsi": "./src/vector/jitsi/index.ts",
+            "usercontent": "./src/usercontent/index.ts",
+            "usercontent-pdf": "./src/usercontent/pdf/index.ts",
+            "serviceworker": {
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
             },
@@ -184,7 +146,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 cacheGroups: {
                     styles: {
                         name: "styles",
-                        test: /\.css$/,
+                        test: (module: webpack.Module): boolean => {
+                            const name = module.nameForCondition?.();
+                            return !!name && name.endsWith(".css") && !elementCallComponentStylesheets.includes(name);
+                        },
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
@@ -244,9 +209,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "react": getPackageRoot("react"),
                 "react-dom": getPackageRoot("react-dom"),
 
+                // The Element Call component (an ES module built by element-call) imports matrix-js-sdk by
+                // its package entry and `lib/*` build outputs; point those at the same `src/*` modules the
+                // rest of Element Web uses, or we end up with two copies of the SDK (and MatrixRTC sessions
+                // that Element Web does not recognise). Order matters: these must come before the prefix alias.
+                "matrix-js-sdk$": path.join(getPackageRoot("matrix-js-sdk"), "src", "matrix.ts"),
+                "matrix-js-sdk/lib": path.join(getPackageRoot("matrix-js-sdk"), "src"),
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
-                "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
 
@@ -293,6 +263,15 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    // The Element Call component bundles MediaPipe (background blur), whose WASM loader has an
+                    // `import(url)` fallback for module workers whose `importScripts` refuses to run. Webpack
+                    // cannot resolve an import of an expression and warns "Critical dependency: the request of
+                    // a dependency is an expression". The branch never runs on the main thread, where the
+                    // component runs, so the warning is noise: this rule stops webpack treating it as critical.
+                    test: /element-call-component[\\/]dist[\\/]element-call\.js$/,
+                    parser: { exprContextCritical: false },
+                },
                 {
                     // Match imports containing the ?raw query string
                     resourceQuery: /raw/,
@@ -349,7 +328,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            // `ident` names this options object, so it has to differ from the one the
+                            // .pcss rule below uses: sharing a name makes both rules run with whichever
+                            // plugin list was registered last, which sends plain CSS through
+                            // postcss-import.
+                            ident: "postcss-css",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
@@ -400,7 +383,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            ident: "postcss-pcss",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
@@ -615,8 +598,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         },
 
         plugins: [
-            ...moduleReplacementPlugins,
-
             new I18nWebpackPlugin({
                 stringsPath: "src/i18n/strings/",
                 additionalStringsPaths: ["../../packages/shared-components/src/i18n/strings/"],
@@ -637,7 +618,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
+                excludeChunks: ["mobileguide", "usercontent", "usercontent-pdf", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -681,6 +662,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 filename: "usercontent/index.html",
                 minify: false,
                 chunks: ["usercontent"],
+            }),
+
+            // This is the PDF viewer's usercontent target (see docs/usercontent.md)
+            new HtmlWebpackPlugin({
+                template: "./src/usercontent/pdf/index.html",
+                filename: "usercontent/pdf/index.html",
+                minify: false,
+                chunks: ["usercontent-pdf"],
             }),
 
             new HtmlWebpackInjectPreload({
@@ -789,6 +778,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",
+                watch: true,
             },
 
             devMiddleware: {

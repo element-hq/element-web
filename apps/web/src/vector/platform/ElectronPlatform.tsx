@@ -44,7 +44,7 @@ import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
-import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 interface SquirrelUpdate {
     releaseNotes: string;

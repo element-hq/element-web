@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, type JSX, type ReactNode, type SyntheticEvent } from "react";
-import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -57,7 +57,7 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
-import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
+import MultiInviter from "../../../utils/MultiInviter.ts";
 import { DMRoomTile } from "./invite/DMRoomTile.tsx";
 import { logErrorAndShowErrorDialog } from "../../../utils/ErrorUtils.tsx";
 import UnknownIdentityUsersWarningDialog from "./invite/UnknownIdentityUsersWarningDialog.tsx";
@@ -358,16 +358,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
 
-    private shouldAbortAfterInviteError(
-        states: MultiInviterCompletionStates,
-        inviter: MultiInviter,
-        room: Room,
-    ): boolean {
-        this.setState({ busy: false });
-        const userMap = new Map<string, Member>(this.state.targets.map((member) => [member.userId, member]));
-        return !showAnyInviteErrors(states, room, inviter, userMap);
-    }
-
     private convertFilter(): Member[] {
         // Check to see if there's anything to convert first
         if (!this.state.filterText || !this.state.filterText.includes("@")) return this.state.targets || [];
@@ -441,10 +431,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 inhibitProgressDialog: true,
             });
             const states = await inviter.invite(targetIds);
-            if (!this.shouldAbortAfterInviteError(states, inviter, room)) {
-                // handles setting error message too
-                this.props.onFinished(true);
-            }
+            this.setState({ busy: false });
+            const userMap = new Map<string, Member>(this.state.targets.map((member) => [member.userId, member]));
+            this.props.onFinished(true);
+            showAnyInviteErrors(states, room, inviter, userMap);
         } catch (err) {
             logger.error(err);
             this.setState({

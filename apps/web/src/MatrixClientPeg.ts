@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IStartClientOpts, type MatrixClient, MemoryStore, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import type { X509ClientInitOpts } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "./settings/SettingsStore";
 import MatrixActionCreators from "./actions/MatrixActionCreators";
@@ -46,6 +47,11 @@ export interface MatrixClientPegAssignOpts {
      * directly where possible.
      */
     rustCryptoStorePassword?: string;
+
+    /**
+     * Options for X.509 signing.
+     */
+    x509?: X509ClientInitOpts;
 }
 
 /**
@@ -256,7 +262,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         // try to initialise e2e on the new client
         if (!SettingsStore.getValue("lowBandwidth")) {
-            await this.initClientCrypto(assignOpts.rustCryptoStoreKey, assignOpts.rustCryptoStorePassword);
+            await this.initClientCrypto(assignOpts);
         }
 
         const opts = utils.deepCopy(this.opts);
@@ -294,28 +300,23 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     /**
-     * Attempt to initialize the crypto layer on a newly-created MatrixClient
-     *
-     * @param rustCryptoStoreKey - A key with which to encrypt the rust crypto indexeddb.
-     *   If provided, it must be exactly 32 bytes of data. If both this and `rustCryptoStorePassword` are
-     *   undefined, the store will be unencrypted.
-     *
-     * @param rustCryptoStorePassword - An alternative to `rustCryptoStoreKey`. Ignored if `rustCryptoStoreKey` is set.
-     *    A password which will be used to derive a key to encrypt the store with. Deriving a key from a password is
-     *    (deliberately) a slow operation, so prefer to pass a `rustCryptoStoreKey` directly where possible.
+     * Attempt to initialize the crypto layer on a newly-created MatrixClient.
      */
-    private async initClientCrypto(rustCryptoStoreKey?: Uint8Array, rustCryptoStorePassword?: string): Promise<void> {
+    private async initClientCrypto(opts: MatrixClientPegAssignOpts): Promise<void> {
         if (!this.matrixClient) {
             throw new Error("createClient must be called first");
         }
 
-        if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
+        if (!opts.rustCryptoStoreKey && !opts.rustCryptoStorePassword) {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
 
         await this.matrixClient.initRustCrypto({
-            storageKey: rustCryptoStoreKey,
-            storagePassword: rustCryptoStorePassword,
+            storageKey: opts.rustCryptoStoreKey,
+            storagePassword: opts.rustCryptoStorePassword,
+            caCertsPem: opts.x509?.userVerificationCaCertsPem,
+            x509Signer: opts.x509?.signer,
+            x509Validity: opts.x509?.validity,
         });
 
         StorageManager.setCryptoInitialised(true);

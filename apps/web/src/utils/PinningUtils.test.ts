@@ -10,8 +10,8 @@
 
 import { vi, describe, it, test, expect, beforeEach } from "vitest";
 import { EventTimeline, EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
 
-import { createTestClient } from "../../test/test-utils";
 import PinningUtils from "./PinningUtils";
 import SettingsStore from "../settings/SettingsStore";
 import { isContentActionable } from "./EventUtils";

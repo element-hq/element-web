@@ -7,7 +7,7 @@ permissions: {} # Uses ELEMENT_BOT_TOKEN instead
 jobs:
     add_design_pr_to_project:
         name: Move PRs asking for design review to the design board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: octokit/graphql-action@ddde8ebb2493e79f390e6449c725c21663a67505 # v3.0.2
               id: find_team_members
@@ -29,7 +29,8 @@ jobs:
               env:
                   TEAM: "design"
                   GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - id: any_matching_reviewers
+            - name: Check for matching team reviewers
+              id: any_matching_reviewers
               run: |
                   # Fetch requested reviewers, and people who are on the team
                   echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
@@ -74,7 +75,7 @@ jobs:
 
     add_product_pr_to_project:
         name: Move PRs asking for design review to the design board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: octokit/graphql-action@ddde8ebb2493e79f390e6449c725c21663a67505 # v3.0.2
               id: find_team_members
@@ -96,7 +97,8 @@ jobs:
               env:
                   TEAM: "product"
                   GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - id: any_matching_reviewers
+            - name: Check for matching team reviewers
+              id: any_matching_reviewers
               run: |
                   # Fetch requested reviewers, and people who are on the team
                   echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json

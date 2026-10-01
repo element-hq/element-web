@@ -232,6 +232,10 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         // ...but never hold onto a loading spinner as that reference row (see above). This
         // option comes from our @tanstack/virtual-core patch and is pending upstream.
         isValidAnchorItem,
+        // How near the bottom still counts as being at the bottom, for staying put
+        // when a message grows. The library's own default of 1px is missed by
+        // fractional scroll positions; this is the same tolerance we report with.
+        scrollEndThreshold: AT_BOTTOM_THRESHOLD_PX,
         // Scroll down to follow newly arrived messages, but only when we are at the live end
         // of the timeline and are not part-way through jumping somewhere else.
         followOnAppend: snapshot.atLiveEnd && snapshot.pendingAnchor === null,

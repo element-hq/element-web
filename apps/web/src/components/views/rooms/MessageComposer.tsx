@@ -63,7 +63,7 @@ import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
-import { useSettingValue } from "../../../hooks/useSettings";
+import { ModuleApi } from "../../../modules/Api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -405,7 +405,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         // otherwise the send message function will think there are no URLs in
         // message and will not attach URL bundles
         const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
-        void this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
+        this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so
             // just send out the voice recording.
@@ -434,7 +434,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onChange = (model: EditorModel): void => {
-        void this.props.urlPreviewVm.updateWithText({
+        this.props.urlPreviewVm.updateWithText({
             content: model.contentPlainText,
             debounced: true,
         });
@@ -444,7 +444,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onWysiwygChange = (content: string): void => {
-        void this.props.urlPreviewVm.updateWithText({ content, debounced: true });
+        this.props.urlPreviewVm.updateWithText({ content, debounced: true });
         this.setState({
             composerContent: content,
             isComposerEmpty: content?.length === 0,
@@ -750,19 +750,18 @@ const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
     const client = useMatrixClientContext();
-    const urlPreviewBundle = useSettingValue("feature_msc4095_url_preview_bundle");
     const urlPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
                 client,
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundle,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
             }),
     );
 
     useEffect(() => {
-        void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
+        urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;

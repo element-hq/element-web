@@ -15,6 +15,12 @@ Please see LICENSE files in the repository root for full details.
     line-height: normal;
 }
 
+.content[data-event-layout="irc"] {
+    /* Keep hidden-event source previews aligned with the IRC event line. */
+    padding-block: 1px;
+    line-height: 1.125rem;
+}
+
 .source {
     flex: 1;
     overflow-inline: auto;

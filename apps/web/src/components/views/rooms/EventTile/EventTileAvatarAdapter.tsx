@@ -35,13 +35,11 @@ export function EventTileAvatarAdapter({
     }
 
     return (
-        <div className="mx_EventTile_avatar">
-            <MemberAvatar
-                member={avatarMember}
-                size={avatarSize}
-                viewUserOnClick={senderSnapshot.viewUserOnClick}
-                forceHistorical={senderSnapshot.forceHistoricalAvatar}
-            />
-        </div>
+        <MemberAvatar
+            member={avatarMember}
+            size={avatarSize}
+            viewUserOnClick={senderSnapshot.viewUserOnClick}
+            forceHistorical={senderSnapshot.forceHistoricalAvatar}
+        />
     );
 }

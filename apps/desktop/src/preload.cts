@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { ipcRenderer, contextBridge, type IpcRendererEvent } from "electron";
 import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
+import type { X509Api } from "shared-types" with { "resolution-mode": "import" };
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid
 // handing out generalised messaging access.
@@ -77,4 +78,14 @@ contextBridge.exposeInMainWorld("electron", {
     async getSettingValue(settingName: string): Promise<any> {
         return ipcRenderer.invoke("getSettingValue", settingName);
     },
+
+    // X.509 hardware-key IPC
+    x509: {
+        getUserCertificate: () => ipcRenderer.invoke("x509", "getUserCertificate"),
+        listHardwareKeys: () => ipcRenderer.invoke("x509", "listHardwareKeys"),
+        getKeyState: (serialNumber: string) => ipcRenderer.invoke("x509", "getKeyState", serialNumber),
+        logIntoKey: (serialNumber: string, pin: string) => ipcRenderer.invoke("x509", "logIntoKey", serialNumber, pin),
+        signData: (serialNumber: string, data: Uint8Array) =>
+            ipcRenderer.invoke("x509", "signData", serialNumber, data),
+    } satisfies X509Api,
 });

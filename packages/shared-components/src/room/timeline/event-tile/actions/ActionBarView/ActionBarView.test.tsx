@@ -126,8 +126,8 @@ describe("ActionBarView", () => {
 
         render(<ActionBarView vm={vm} />);
 
-        expect(screen.getByRole("button", { name: /remove/i })).toHaveTextContent(/remove/i);
-        expect(screen.getByRole("button", { name: /view source/i })).toHaveTextContent(/view source/i);
+        expect(screen.getByRole("button", { name: /remove/i })).toMatchTextContent(/remove/i);
+        expect(screen.getByRole("button", { name: /view source/i })).toMatchTextContent(/view source/i);
     });
 
     it("renders only the options button in the minimal state", () => {
@@ -279,6 +279,42 @@ describe("ActionBarView", () => {
 
         fireEvent.contextMenu(optionsButton);
         expect(onOptionsClick).toHaveBeenCalledWith(optionsButton);
+    });
+
+    it("does not propagate action clicks to the parent", async () => {
+        const user = userEvent.setup();
+        const onParentClick = vi.fn();
+        const onViewInRoomClick = vi.fn();
+        const onCopyLinkClick = vi.fn();
+
+        class ActionBarViewModel extends MockViewModel<ActionBarViewSnapshot> implements ActionBarViewActions {
+            public onViewInRoomClick = onViewInRoomClick;
+            public onCopyLinkClick = onCopyLinkClick;
+        }
+
+        const vm = new ActionBarViewModel({
+            actions: [ActionBarAction.ViewInRoom, ActionBarAction.CopyLink],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        // e.g. the thread list tile, which opens the thread when clicked
+        render(
+            <div onClick={onParentClick}>
+                <ActionBarView vm={vm} />
+            </div>,
+        );
+
+        await user.click(screen.getByRole("button", { name: /view in room/i }));
+        await user.click(screen.getByRole("button", { name: /copy link to thread/i }));
+
+        expect(onViewInRoomClick).toHaveBeenCalled();
+        expect(onCopyLinkClick).toHaveBeenCalled();
+        expect(onParentClick).not.toHaveBeenCalled();
     });
 
     it("forwards label-mode actions with the triggering button as anchor", async () => {

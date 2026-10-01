@@ -47,7 +47,6 @@ const meta = {
         avatarUrl,
         displayName: "Sally Sanderson",
         userId: "@person-name:homeserver.com",
-        manageAccountHref: "#",
         expanded: true,
         actions: {
             linkNewDevice: true,
@@ -166,7 +165,6 @@ export const Guest: Story = {
     args: {
         displayName: "Guest",
         userId: "@guest:attendees.example.org",
-        manageAccountHref: undefined,
         showAvatar: false,
         setStatusViewModel: new MockSetStatusViewModel({}),
         showUserStatus: false,

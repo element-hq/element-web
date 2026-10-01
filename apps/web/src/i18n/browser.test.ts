@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import { getLanguagesFromBrowser } from "./browser";
 
 describe("getLanguagesFromBrowser", () => {
-    beforeEach(() => {
+    afterEach(() => {
         vi.restoreAllMocks();
     });
 

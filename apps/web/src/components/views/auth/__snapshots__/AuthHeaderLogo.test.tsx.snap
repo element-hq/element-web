@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<AuthHeaderLogo /> > should match snapshot 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_AuthHeaderLogo"
+  >
+    <img
+      alt="Element"
+      src="themes/element/img/logos/element-logo.svg"
+    />
+  </aside>
+</DocumentFragment>
+`;

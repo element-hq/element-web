@@ -28,6 +28,7 @@ import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
+import { type RoomNotificationState } from "../notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
@@ -197,15 +198,13 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
-            const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
             const rooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
-            for (const room of rooms) {
-                const state = RoomNotificationStateStore.instance.getRoomState(room);
-                if (hasMentions ? state.hasMentions : state.isUnread) {
-                    roomId = room.roomId;
-                    break;
-                }
-            }
+            const findRoom = (predicate: (state: RoomNotificationState) => boolean): Room | undefined =>
+                rooms.find((room) => predicate(RoomNotificationStateStore.instance.getRoomState(room)));
+            // Prefer a room with a mention and fall back to any unread one. The summarised state
+            // the badge renders from may lag behind the per-room states, so letting its hasMentions
+            // choose a single scan can leave the click doing nothing at all.
+            roomId = (findRoom((state) => state.hasMentions) ?? findRoom((state) => state.isUnread))?.roomId;
         } else {
             roomId = this.getNotificationState(space).getFirstRoomWithNotifications();
         }

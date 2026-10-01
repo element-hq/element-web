@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SettingsHeader /> > should render the component 1`] = `
+<DocumentFragment>
+  <h2
+    class="_typography _font-heading-sm-semibold mx_SettingsHeader"
+  >
+    Settings Header
+  </h2>
+</DocumentFragment>
+`;
+
+exports[`<SettingsHeader /> > should render the component with the recommended tag 1`] = `
+<DocumentFragment>
+  <h2
+    class="_typography _font-heading-sm-semibold mx_SettingsHeader mx_SettingsHeader_recommended"
+  >
+    Settings Header
+  </h2>
+</DocumentFragment>
+`;

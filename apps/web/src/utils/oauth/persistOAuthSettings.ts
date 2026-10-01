@@ -39,13 +39,12 @@ export const getStoredOAuthClientId = (): string => {
 type OAuth2Context = ConstructorParameters<typeof OAuth2>[1];
 
 /**
- * Utility function to get the OAuth parameters needed to construct an OAuth2 instance
- * @param clientId - the registered OAuth client ID
+ * Utility function to get the redirect URL for the OAuth2 instance
  */
-export function getOAuthParams(clientId: string): OAuth2Context {
+export function getRedirectUrl(): string {
     const platform = PlatformPeg.get()!;
     const redirectUri = platform.getOAuthCallbackUrl().href;
-    return { clientId, redirectUri };
+    return redirectUri;
 }
 
 /**

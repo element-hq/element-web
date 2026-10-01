@@ -9,8 +9,8 @@
 
 import { it, describe, expect } from "vitest";
 import { CallType } from "@element-hq/web-shared-components";
+import { stubClient, TestSDKContext } from "test-utils";
 
-import { stubClient, TestSDKContext } from "../../../../../../../../test/test-utils";
 import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "../../call-mocks";
 import { DmOngoingCallTileViewModel } from "./DmOngoingCallTileViewModel";
 

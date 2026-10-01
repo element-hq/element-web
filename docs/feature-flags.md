@@ -35,7 +35,7 @@ clients commit to doing the associated clean up work once a feature stabilises.
 When starting work on a feature, we should create a matching feature flag:
 
 1. Add a new
-   [setting](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx)
+   [setting](https://github.com/element-hq/element-web/blob/develop/apps/web/src/settings/Settings.tsx)
    of the form:
 
 ```js

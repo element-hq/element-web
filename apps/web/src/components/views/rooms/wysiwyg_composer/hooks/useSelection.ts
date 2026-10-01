@@ -14,7 +14,7 @@ import { useComposerContext, type ComposerContextState } from "../ComposerContex
 function setSelectionContext(composerContext: ComposerContextState): void {
     const selection = document.getSelection();
 
-    if (selection) {
+    if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         const isForward = range.startContainer === selection.anchorNode && range.startOffset === selection.anchorOffset;
 

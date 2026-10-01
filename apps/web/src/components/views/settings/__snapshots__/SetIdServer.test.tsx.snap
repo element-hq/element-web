@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SetIdServer /> > renders expected fields 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      Identity server
+    </legend>
+    <div
+      class="mx_SettingsFieldset_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <form
+        class="_root mx_IdentityServerPicker"
+      >
+        <div
+          class="_field"
+        >
+          <label
+            class="_label"
+            for="radix-react-use-id-1"
+          >
+            Enter a new identity server
+          </label>
+          <div
+            class="_controls"
+          >
+            <input
+              class="_control"
+              id="radix-react-use-id-1"
+              name="input"
+              placeholder=""
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;

@@ -134,6 +134,31 @@ export class ElementAppPage {
         }
     }
 
+    /**
+     * Expands the Invites section in the room list and opens the given invited room.
+     *
+     * @param name The exact room name of the invite to find and click on/open.
+     */
+    public async viewInvitedRoomByName(name: string): Promise<void> {
+        const header = this.page.getByRole("button", { name: "Toggle Invites section" });
+        // Open the section if not already opened
+        if ((await header.getAttribute("aria-expanded")) !== "true") {
+            await header.click();
+        }
+
+        await this.viewRoomByName(name);
+    }
+
+    /**
+     * Expands the Invites section in the room list, opens the given invited room and accepts the invite.
+     *
+     * @param name The exact room name of the invite to accept.
+     */
+    public async acceptInvitedRoomByName(name: string): Promise<void> {
+        await this.viewInvitedRoomByName(name);
+        await this.page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+    }
+
     public async viewRoomById(roomId: string): Promise<void> {
         await this.page.goto(`/#/room/${roomId}`);
     }
