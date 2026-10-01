@@ -1684,7 +1684,7 @@ describe("<MatrixChat />", () => {
             // warning dialog
             expect(
                 within(dialog).getByText(
-                    "We asked the browser to remember which homeserver you use to let you sign in, " +
+                    "We asked the browser to remember which account provider you use to let you sign in, " +
                         "but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 ),
             ).toBeInTheDocument();
