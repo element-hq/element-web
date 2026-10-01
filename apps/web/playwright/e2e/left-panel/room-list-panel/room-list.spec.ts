@@ -379,6 +379,35 @@ test.describe("Room list", () => {
         });
     });
 
+    test.describe("Preview room", () => {
+        test("should show a peeked room while it is open", async ({ page, app, bot }) => {
+            const peekableId = await bot.createRoom({
+                name: "Peekable",
+                // @ts-ignore Visibility enum is not accessible
+                visibility: "public",
+                initial_state: [
+                    {
+                        type: "m.room.history_visibility",
+                        content: {
+                            history_visibility: "world_readable",
+                        },
+                        state_key: "",
+                    },
+                ],
+            });
+            await app.client.createRoom({ name: "Other" });
+
+            const roomListView = getRoomList(page);
+            const peekableRoom = roomListView.getByRole("option", { name: "Open room Peekable" });
+
+            await app.viewRoomById(peekableId);
+            await expect(peekableRoom).toBeVisible();
+
+            await app.viewRoomByName("Other");
+            await expect(peekableRoom).not.toBeVisible();
+        });
+    });
+
     test.describe("Notification decoration", () => {
         test("should render the invitation decoration", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
             const roomListView = getRoomList(page);

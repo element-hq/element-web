@@ -30,7 +30,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
+import { I18nContext, LinkedTextContext, LinkedText, GenericToast } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -119,7 +119,6 @@ import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SDKContext } from "../../contexts/SDKContext";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
-import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { sanitizeHtmlText } from "../../HtmlUtils";

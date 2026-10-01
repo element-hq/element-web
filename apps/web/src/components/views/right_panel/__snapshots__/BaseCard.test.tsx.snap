@@ -13,7 +13,7 @@ exports[`<BaseCard /> > should close when clicking X button 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Heading text
@@ -21,7 +21,7 @@ exports[`<BaseCard /> > should close when clicking X button 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -29,7 +29,7 @@ exports[`<BaseCard /> > should close when clicking X button 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -47,7 +47,7 @@ exports[`<BaseCard /> > should close when clicking X button 1`] = `
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div>

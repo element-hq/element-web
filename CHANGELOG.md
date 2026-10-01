@@ -1,3 +1,7 @@
+Changes in [1.12.29](https://github.com/element-hq/element-web/releases/tag/v1.12.29) (2026-09-22)
+==================================================================================================
+Update modules in element-web modules Docker image
+
 Changes in [1.12.28](https://github.com/element-hq/element-web/releases/tag/v1.12.28) (2026-09-16)
 ==================================================================================================
 ## ⚠️ Important

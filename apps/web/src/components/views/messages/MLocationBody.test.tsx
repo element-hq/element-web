@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
+import { type EventEmitter } from "node:events";
 import { describe, it, expect, beforeEach, afterAll, vi, type MockInstance } from "vitest";
 import { fireEvent, render, waitFor } from "test-utils-rtl";
 import * as maplibregl from "maplibre-gl";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { sleep } from "matrix-js-sdk/src/utils";
 import { makeLocationEvent, getMockClientWithEventEmitter } from "test-utils";
 
 import MLocationBody from "./MLocationBody";
@@ -31,7 +31,10 @@ describe("MLocationBody", () => {
     describe("<MLocationBody>", () => {
         const roomId = "!room:server";
         const userId = "@user:server";
-        const mockMapInstance = new maplibregl.Map({ container: {} as unknown as HTMLElement, style: "" });
+        const mockMapInstance = new maplibregl.Map({
+            container: {} as unknown as HTMLElement,
+            style: "",
+        }) as unknown as maplibregl.Map & Pick<EventEmitter, "emit" | "removeAllListeners">;
         const mockClient = getMockClientWithEventEmitter({
             getClientWellKnown: vi.fn().mockReturnValue({
                 [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
@@ -53,23 +56,26 @@ describe("MLocationBody", () => {
                     <MLocationBody {...defaultProps} {...props} />
                 </MatrixClientContext.Provider>,
             );
-        const getMapErrorComponent = () => {
+        const getMapErrorComponent = async () => {
             mockClient.getClientWellKnown.mockReturnValue({
                 [TILE_SERVER_WK_KEY.name]: { map_style_url: "bad-tile-server.com" },
             });
             const component = getComponent();
 
-            sleep(10).then(() => {
-                // simulate error initialising map in maplibregl
-                // @ts-ignore
-                mockMapInstance.emit("error", { status: 404 });
-            });
+            // wait for the lazy-loaded map to be created, then simulate error initialising map in maplibregl
+            await waitFor(() => expect(maplibregl.Map).toHaveBeenCalled());
+            mockMapInstance.emit("error", { status: 404 });
+            await waitFor(() =>
+                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeInTheDocument(),
+            );
 
             return component;
         };
 
         beforeEach(() => {
             vi.clearAllMocks();
+            // the mock map is a singleton, drop listeners from components rendered in previous tests
+            mockMapInstance.removeAllListeners();
         });
 
         describe("with error", () => {
@@ -98,16 +104,15 @@ describe("MLocationBody", () => {
             });
 
             it("displays correct fallback content when map_style_url is misconfigured", async () => {
-                const component = getMapErrorComponent();
-                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toBeTruthy());
-                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot());
+                const component = await getMapErrorComponent();
+                expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 
-            it("should clear the error on reconnect", () => {
-                const component = getMapErrorComponent();
-                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeDefined();
+            it("should clear the error on reconnect", async () => {
+                const component = await getMapErrorComponent();
+                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeInTheDocument();
                 mockClient.emit(ClientEvent.Sync, SyncState.Reconnecting, SyncState.Error);
-                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeFalsy();
+                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_tileError")).toBeFalsy());
             });
         });
 

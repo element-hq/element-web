@@ -18,6 +18,9 @@ function getTs(event: MatrixEvent): number {
         const content = event.getContent<IRTCNotificationContent>();
         const senderTs = content["sender_ts"];
         const originServerTs = event.getTs();
+        // A notification we couldn't decrypt, or one from a sender that omits
+        // sender_ts, would otherwise give an invalid date and take the timeline down
+        if (typeof senderTs !== "number") return originServerTs;
         const ts = Math.abs(senderTs - originServerTs) > 20000 ? originServerTs : senderTs;
         return ts;
     } else return event.getTs();

@@ -1,0 +1,17 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/*
+ * Element Call's stylesheet, pulled into its own cascade layer rather than imported unlayered, so that
+ * it takes part in the layer order Element Web declares in `res/css/_index.pcss` instead of outranking
+ * every layered rule in the app. `element-call` is the last layer, so Element Call still wins where it
+ * redeclares something Element Web also sets (the Compound design tokens, notably).
+ *
+ * Imported from `WrappedElementCallComponent`, not from `_index.pcss`, to keep the stylesheet in the
+ * component's lazily loaded chunk.
+ */
+@import url("@element-hq/element-call-component/style.css") layer(element-call);

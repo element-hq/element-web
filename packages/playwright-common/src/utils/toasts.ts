@@ -154,7 +154,7 @@ async function clickToastButton(
     }
 
     if (toast) {
-        await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
+        await toast.getByTestId("toast-buttons").locator(`button[data-kind="${button}"]`).click();
         return true;
     }
     return false;
