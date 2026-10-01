@@ -9,13 +9,15 @@ on:
 concurrency:
     group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
     cancel-in-progress: true
+env:
+    NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 permissions: {}
 jobs:
     build:
         name: "Build & Deploy develop.element.io"
         # Only respect triggers from our develop branch, ignore that of forks
         if: github.repository == 'element-hq/element-web'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         environment: develop
         permissions:
             checks: read
@@ -26,17 +28,17 @@ jobs:
             R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
-            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
-
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
-                  cache: "yarn"
-                  node-version: "lts/*"
+                  persist-credentials: false
+
+            - uses: ./.github/actions/setup-node-pnpm
 
             - name: Install Dependencies
               run: "./scripts/layered.sh"
 
             - name: Build, Package & Upload sourcemaps
+              working-directory: apps/web
               run: "./scripts/ci_package.sh"
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -52,20 +54,21 @@ jobs:
                   CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+              working-directory: apps/web
 
-            - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: webapp
-                  path: dist/develop.tar.gz
+                  path: apps/web/dist/develop.tar.gz
                   retention-days: 1
 
             - name: Extract webapp
               run: |
                   mkdir _deploy
-                  tar xf dist/develop.tar.gz -C _deploy --strip-components=1
+                  tar xf apps/web/dist/develop.tar.gz -C _deploy --strip-components=1
 
             - name: Copy config
-              run: cp element.io/develop/config.json _deploy/config.json
+              run: cp apps/web/element.io/develop/config.json _deploy/config.json
 
             - name: Populate 404.html
               run: echo "404 Not Found" > _deploy/404.html
@@ -104,7 +107,7 @@ jobs:
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload).)*$
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload|Netlify|Report|deploy).)*$
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.
@@ -112,7 +115,7 @@ jobs:
             # Checksum algorithm specified as per https://developers.cloudflare.com/r2/examples/aws/aws-cli/
             - name: Deploy to R2
               run: |
-                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
+                  aws s3 cp apps/web/dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
                   aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
@@ -120,13 +123,14 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@25853364521e0d392ece9b0c1e97a4b37b638087 # v4.1.2
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: element-web-develop
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name element-web-develop
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - run: |
-                  echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+                  echo "Deployed to ${STEPS_CFP_OUTPUTS_URL}" >> $GITHUB_STEP_SUMMARY
+              env:
+                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.deployment-url }}

@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Ακύρωση",
+        "close": "Κλείσιμο",
+        "close_brand": "Κλείσιμο %(brand)s",
+        "copy": "Αντιγραφή",
+        "cut": "Αποκοπή",
+        "delete": "Διαγραφή",
+        "edit": "Επεξεργασία",
+        "minimise": "Ελαχιστοποίηση",
+        "paste": "Επικόλληση",
+        "paste_match_style": "Επικόλληση και Ταίριασμα Στυλ",
+        "quit": "Κλείσιμο",
+        "redo": "Επανάληψη",
+        "select_all": "Επιλογή Όλων",
+        "show_hide": "Eμφάνιση/Απόκρυψη",
+        "undo": "Αναίρεση",
+        "zoom_in": "Μεγέθυνση",
+        "zoom_out": "Σμίκρυνση"
+    },
+    "common": {
+        "about": "Σχετικά με",
+        "brand_help": "%(brand)s Υποστήριξη",
+        "help": "Βοήθεια",
+        "preferences": "Προτιμήσεις"
+    },
+    "confirm_quit": "Είστε βέβαιος ότι θέλετε να εγκαταλείψετε;",
+    "edit_menu": {
+        "speech": "Ομιλία",
+        "speech_start_speaking": "Ξεκινήστε να μιλάτε",
+        "speech_stop_speaking": "Τερματίστε να μιλάτε"
+    },
+    "file_menu": {
+        "label": "Αρχείο"
+    },
+    "menu": {
+        "hide": "Απόκρυψη",
+        "hide_others": "Απόκρυψη Άλλων",
+        "services": "Υπηρεσίες",
+        "unhide": "Εμφάνιση"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Προσθήκη στο λεξικό",
+        "copy_email": "Αντιγραφή διεύθυνσης email",
+        "copy_image": "Αντιγραφή εικόνας",
+        "copy_image_url": "Αντιγραφή διεύθυνσης εικόνας",
+        "copy_link_url": "Αντιγραφή διεύθυνσης συνδέσμου",
+        "save_image_as": "Αποθήκευση εικόνας ως...",
+        "save_image_as_error_description": "Η αποθήκευση της εικόνας απέτυχε",
+        "save_image_as_error_title": "Αποτυχία αποθήκευσης εικόνας"
+    },
+    "view_menu": {
+        "actual_size": "Πραγματικό Μέγεθος",
+        "toggle_developer_tools": "Άνοιγμα Εργαλείων Προγραμματιστή",
+        "toggle_full_screen": "Εναλλαγή σε Πλήρη Οθόνη",
+        "view": "Προβολή"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Μεταφορά Όλων στο Προσκήνιο",
+        "label": "Παράθυρο",
+        "zoom": "Ζουμ"
+    }
+}

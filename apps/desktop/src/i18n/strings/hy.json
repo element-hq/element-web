@@ -1,0 +1,87 @@
+{
+    "action": {
+        "cancel": "Չեղարկել",
+        "close": "Փակել",
+        "close_brand": "Փակել %(brand)s",
+        "copy": "Պատճենել",
+        "cut": "Կտրել",
+        "delete": "Ջնջել",
+        "edit": "Խմբագրել",
+        "minimise": "Նվազագույնի հասցնել",
+        "paste": "Տեղադրել",
+        "paste_match_style": "Տեղադրել և համապատասխանեցնել ոճը",
+        "quit": "Դուրս գալ",
+        "redo": "Կրկնել",
+        "select_all": "Ընտրել բոլորը",
+        "show_hide": "Ցուցադրել/Թաքցնել",
+        "undo": "Հետարկել",
+        "zoom_in": "Մեծացնել",
+        "zoom_out": "Փոքրացնել"
+    },
+    "common": {
+        "about": "Կենսագրություն",
+        "brand_help": "%(brand)s Օգնություն",
+        "help": "Օգնություն",
+        "no": "Ոչ",
+        "preferences": "Նախապատվություններ",
+        "yes": "Այո"
+    },
+    "confirm_quit": "Վստա՞հ եք, որ ուզում եք դուրս գալ։",
+    "edit_menu": {
+        "speech": "Խոսք/Ելույթ",
+        "speech_start_speaking": "Սկսեք խոսել",
+        "speech_stop_speaking": "Դադարեցրեք խոսելը"
+    },
+    "file_menu": {
+        "label": "Ֆայլ"
+    },
+    "icon_overlay": {
+        "description_error": "Սխալ",
+        "description_notifications": {
+            "one": "Դուք ունեք %(count)s չկարդացված ծանուցում։",
+            "other": "Դուք ունեք %(count)s չկարդացված ծանուցումներ։"
+        }
+    },
+    "menu": {
+        "hide": "Թաքցնել",
+        "hide_others": "Թաքցնել մյուսները",
+        "services": "Ծառայություններ",
+        "unhide": "Ապաթաքցնել"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Ավելացնել բառարանում",
+        "copy_email": "Պատճենել էլ․ հասցեն",
+        "copy_image": "Պատճենել պատկերը",
+        "copy_image_url": "Պատճենել պատկերի հասցեն",
+        "copy_link_url": "Պատճենել հղման հասցեն",
+        "save_image_as": "Պահպանել պատկերը որպես...",
+        "save_image_as_error_description": "Պատկերը չհաջողվեց պահպանել",
+        "save_image_as_error_title": "Չհաջողվեց պահպանել պատկերը"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Մաքրե՞լ տվյալները և վերաբեռնե՞լ",
+            "backend_changed_detail": "Գաղտնի տվյալները հասանելի չեն համակարգի բանալիների պահոցից(keyring), կարծես թե այն փոխվել է։",
+            "backend_changed_title": "Չհաջողվեց բեռնել տվյալների բազան",
+            "backend_no_encryption": "Ձեր համակարգը ունի աջակցվող բանալիների պահոց, բայց գաղտնագրումը հասանելի չէ։",
+            "backend_no_encryption_detail": "Electron-ը հայտնաբերել է, որ ձեր բանալիների պահոցում %(backend)s գաղտնագրումը հասանելի չէ։ Խնդրում ենք համոզվել, որ բանալիների պահոցը տեղադրված է։ Եթե այն արդեն տեղադրված է, վերագործարկեք համակարգը և փորձեք կրկին։ Ցանկության դեպքում կարող եք թույլատրել %(brand)s-ին կիրառել ավելի թույլ գաղտնագրման տարբերակ։",
+            "backend_no_encryption_title": "Գաղտնագրման աջակցություն չկա",
+            "unsupported_keyring": "Համակարգում օգտագործվող բանալիների պահոցը(keyring) չի աջակցվում, ինչը նշանակում է, որ տվյալների բազան հնարավոր չէ բացել։",
+            "unsupported_keyring_detail": "Electron-ի բանալիների պահոցի ստուգումը չգտավ համատեղելի backend։ Կարող եք փորձել ձեռքով կարգավորել backend-ը` մեկնարկելով %(brand)s-ը command-line արգումենտով, մեկանգամյա գործողությամբ։ Տես %(link)s։",
+            "unsupported_keyring_title": "Համակարգը չի աջակցվում",
+            "unsupported_keyring_use_basic_text": "Օգտագործել ավելի թույլ գաղտնագրում",
+            "unsupported_keyring_use_plaintext": "Չօգտագործել գաղտնագրում"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Իրական չափս",
+        "toggle_developer_tools": "Միացնել/անջատել ծրագրավորողի գործիքները",
+        "toggle_full_screen": "Միացնել/անջատել ամբողջական էկրանը",
+        "view": "Դիտել"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Բերեք բոլորին առջևի պլան",
+        "label": "Պատուհան",
+        "zoom": "Մեծացնել"
+    }
+}

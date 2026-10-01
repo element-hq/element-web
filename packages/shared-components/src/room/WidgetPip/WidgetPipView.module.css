@@ -1,0 +1,35 @@
+/*
+Copyright (c) 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.container {
+    width: 304px; /* hardcoded to match figma -> might become a resizable pip in the future */
+    height: 278px; /* hardcoded to match figma -> might become a resizable pip in the future */
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--cpd-space-3x);
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-6x);
+    gap: var(--cpd-space-2x);
+    box-shadow: 0 0 var(--cpd-space-2x) rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    top: 0;
+    gap: var(--cpd-space-2x);
+    display: flex;
+    font: var(--cpd-font-body-md-semibold);
+    align-items: center;
+}
+
+.roundedCornerContainer {
+    border-radius: var(--cpd-space-4x);
+    overflow: hidden;
+    display: flex;
+    flex-grow: 1;
+}

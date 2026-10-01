@@ -16,33 +16,52 @@ import React, { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
-import { I18nApi, I18nContext } from "../..";
+import {
+    DEFAULT_EVENT_PRESENTATION,
+    EventPresentationProvider,
+    I18nApi,
+    I18nContext,
+    LinkedTextContext,
+    type EventPresentation,
+} from "../..";
 
-const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
+type SharedRenderOptions = RenderOptions & {
+    presentation?: Partial<EventPresentation>;
+};
+
+const i18nApi = new I18nApi();
+const linkedTextConfiguration = {};
+
+const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"], presentation?: Partial<EventPresentation>) => {
     return ({ children }: { children: React.ReactNode }) => {
-        if (Wrapper) {
-            return (
-                <I18nContext.Provider value={new I18nApi()}>
-                    <Wrapper>
-                        <TooltipProvider>{children}</TooltipProvider>
-                    </Wrapper>
-                </I18nContext.Provider>
-            );
-        } else {
-            return (
-                <I18nContext.Provider value={new I18nApi()}>
-                    <TooltipProvider>{children}</TooltipProvider>
-                </I18nContext.Provider>
-            );
-        }
+        const resolvedPresentation: EventPresentation | undefined = presentation
+            ? { ...DEFAULT_EVENT_PRESENTATION, ...presentation }
+            : undefined;
+        const content = resolvedPresentation ? (
+            <EventPresentationProvider value={resolvedPresentation}>
+                <TooltipProvider>{children}</TooltipProvider>
+            </EventPresentationProvider>
+        ) : (
+            <TooltipProvider>{children}</TooltipProvider>
+        );
+
+        const wrapped = Wrapper ? <Wrapper>{content}</Wrapper> : content;
+
+        return (
+            <I18nContext.Provider value={i18nApi}>
+                <LinkedTextContext.Provider value={linkedTextConfiguration}>{wrapped}</LinkedTextContext.Provider>
+            </I18nContext.Provider>
+        );
     };
 };
 
-const customRender = (ui: ReactElement, options: RenderOptions = {}): ReturnType<typeof render> => {
+const customRender = (ui: ReactElement, options: SharedRenderOptions = {}): ReturnType<typeof render> => {
+    const { presentation, wrapper, ...renderOptions } = options;
+
     return render(ui, {
-        ...options,
-        wrapper: wrapWithTooltipProvider(options?.wrapper) as RenderOptions["wrapper"],
-    }) as ReturnType<typeof render>;
+        ...renderOptions,
+        wrapper: wrapWithTooltipProvider(wrapper, presentation) as RenderOptions["wrapper"],
+    });
 };
 
 // eslint-disable-next-line no-restricted-imports

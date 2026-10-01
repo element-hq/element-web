@@ -10,7 +10,7 @@ import classNames from "classnames";
 
 import { type SasEmoji, tEmoji } from "./SasEmojiTranslate.ts";
 import styles from "./SasEmoji.module.css";
-import { useI18n } from "../../utils/i18nContext.ts";
+import { useI18n } from "../../core/i18n/i18nContext.ts";
 
 export type Props = {
     /**
@@ -31,6 +31,7 @@ export function SasEmoji({ emoji, className }: Props): JSX.Element {
     const { language } = useI18n();
 
     const emojiBlocks = emoji.map((emoji, i) => (
+        // oxlint-disable-next-line react/no-array-index-key
         <div className={styles.segment} key={i}>
             <div className={styles.emoji} aria-hidden={true}>
                 {emoji}

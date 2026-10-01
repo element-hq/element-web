@@ -6,15 +6,16 @@
  */
 
 import React, { useState, type JSX } from "react";
-import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
-import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
+import { IconButton, Menu, MenuItem, ReleaseAnnouncement } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
+import SectionIcon from "@vector-im/compound-design-tokens/assets/web/icons/section";
+import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
-import { useI18n } from "../../../utils/i18nContext";
-import { useViewModel } from "../../../viewmodel";
+import { useI18n } from "../../../core/i18n/i18nContext";
+import { useViewModel } from "../../../core/viewmodel";
 
 interface ComposeMenuViewProps {
     /**
@@ -35,7 +36,29 @@ interface ComposeMenuViewProps {
 export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { canCreateRoom, canCreateVideoRoom } = useViewModel(vm);
+    const { canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement, areSectionsEnabled } =
+        useViewModel(vm);
+
+    // 28px button with a 20px icon
+    const button = (
+        <IconButton size="28px" style={{ padding: "4px" }} tooltip={_t("action|new_conversation")}>
+            <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+        </IconButton>
+    );
+
+    if (displaySectionReleaseAnnouncement) {
+        return (
+            <ReleaseAnnouncement
+                open={displaySectionReleaseAnnouncement}
+                onClick={vm.closeSectionReleaseAnnouncement}
+                header={_t("release_announcement|room_list_section_title")}
+                description={_t("release_announcement|room_list_section_description")}
+                closeLabel={_t("release_announcement|room_list_section_close")}
+            >
+                {button}
+            </ReleaseAnnouncement>
+        );
+    }
 
     return (
         <Menu
@@ -44,12 +67,7 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
             showTitle={false}
             title={_t("action|open_menu")}
             align="start"
-            trigger={
-                // 36px button with a 24px icon
-                <IconButton size="36px" style={{ padding: "6px" }} tooltip={_t("action|new_conversation")}>
-                    <ComposeIcon aria-hidden />
-                </IconButton>
-            }
+            trigger={button}
         >
             <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={vm.createChatRoom} hideChevron />
             {canCreateRoom && (
@@ -62,6 +80,9 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
                     onSelect={vm.createVideoRoom}
                     hideChevron
                 />
+            )}
+            {areSectionsEnabled && (
+                <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
             )}
         </Menu>
     );

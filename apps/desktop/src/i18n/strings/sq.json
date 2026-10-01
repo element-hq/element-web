@@ -1,0 +1,17 @@
+{
+    "action": {
+        "cancel": "Anuloje",
+        "close": "Mbylle",
+        "copy": "Kopjoje",
+        "delete": "Fshije",
+        "edit": "Përpuno"
+    },
+    "common": {
+        "about": "Mbi",
+        "help": "Ndihmë",
+        "preferences": "Parapëlqime"
+    },
+    "view_menu": {
+        "view": "Shihni"
+    }
+}

@@ -1,0 +1,48 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_TimelineCard {
+    .mx_TimelineCard_timeline {
+        overflow: hidden;
+        position: relative; /* offset parent for jump to bottom button */
+        flex: 1;
+        border-radius: 8px;
+    }
+
+    .mx_NewRoomIntro {
+        margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+        margin-inline-end: var(--BaseCard_EventTile-spacing-inline);
+    }
+
+    .mx_LegacyCallEvent_wrapper {
+        justify-content: center;
+        margin: auto 5px;
+        .mx_LegacyCallEvent {
+            margin: 4px;
+        }
+    }
+
+    .mx_GenericEventListSummary {
+        &[data-layout="irc"],
+        &[data-layout="group"] {
+            .mx_EventTile_line,
+            .mx_GenericEventListSummary_unstyledList > .mx_EventTile > :has(> .mx_BaseAvatar) ~ .mx_EventTile_line {
+                padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
+                padding-inline-end: var(--MessageTimestamp-width); /* ensure timestamp is not hidden */
+            }
+        }
+    }
+
+    .mx_WhoIsTypingTile {
+        margin-left: -12px; /* undo padding on the message list */
+    }
+
+    .mx_WhoIsTypingTile_avatars {
+        flex-basis: 48px; /* 12 (padding on message list) + 36 (padding on event lines) */
+    }
+}

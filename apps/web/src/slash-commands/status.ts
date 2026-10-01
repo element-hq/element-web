@@ -1,0 +1,52 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { _td, limitUserStatusInputText } from "@element-hq/web-shared-components";
+
+import { Command } from "./command";
+import { CommandCategories } from "./interface";
+import SettingsStore from "../settings/SettingsStore";
+import { reject, success, splitAtFirstSpace } from "./utils";
+import { UserFriendlyError } from "../languageHandler";
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import { setUserStatus } from "../utils/userStatus";
+
+export const statusCommand = new Command({
+    command: "status",
+    args: "<emoji> <text>",
+    description: _td("slash_command|status|description"),
+    isEnabled: () => SettingsStore.getValue("feature_user_status"),
+    runFn: function (cli, _roomId, _threadId, args) {
+        if (!args) {
+            return reject(new UserFriendlyError("slash_command|status|no_args"));
+        }
+        const [emojiText, text] = splitAtFirstSpace(args);
+        if (!emojiText) {
+            return reject(new UserFriendlyError("slash_command|status|no_emoji"));
+        }
+        if (!text) {
+            return reject(new UserFriendlyError("slash_command|status|no_text"));
+        }
+        const [emoji, additionalSegment] = [...new Intl.Segmenter().segment(emojiText)];
+        if (additionalSegment) {
+            // This is "too long" in that it's more than one grapheme, so the error we give is
+            // that it's "not an emoji".
+            return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
+        }
+        if (limitUserStatusInputText(text) !== text) {
+            return reject(new UserFriendlyError("slash_command|status|too_long_text"));
+        }
+        return success(
+            setUserStatus(cli, {
+                emoji: emoji.segment,
+                text,
+            }),
+        );
+    },
+    category: CommandCategories.actions,
+    renderingTypes: [TimelineRenderingType.Room],
+});

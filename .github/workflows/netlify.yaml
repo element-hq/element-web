@@ -2,14 +2,16 @@
 # and uploading it to netlify
 name: Upload Preview Build to Netlify
 on:
-    workflow_run:
+    # Privilege escalation necessary to publish to Netlify
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["Build"]
         types:
             - completed
 jobs:
     deploy:
         if: github.event.workflow_run.conclusion != 'cancelled' && github.event.workflow_run.event == 'pull_request'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         environment: Netlify
         permissions:
             actions: read
@@ -28,7 +30,7 @@ jobs:
                       Exercise caution. Use test accounts.
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}

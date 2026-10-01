@@ -1,0 +1,449 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { type Locator, type Page, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
+import { Settings } from "./settings";
+import { Client } from "./client";
+import { Timeline } from "./timeline";
+import { Spotlight } from "./Spotlight";
+
+/**
+ * A set of utility methods for interacting with the Element-Web UI.
+ */
+export class ElementAppPage {
+    public constructor(public readonly page: Page) {}
+
+    // We create these lazily on first access to avoid calling setup code which might cause conflicts,
+    // e.g. the network routing code in the client subfixture.
+    private _settings?: Settings;
+    public get settings(): Settings {
+        if (!this._settings) this._settings = new Settings(this.page);
+        return this._settings;
+    }
+    private _client?: Client;
+    public get client(): Client {
+        if (!this._client) this._client = new Client(this.page);
+        return this._client;
+    }
+    private _timeline?: Timeline;
+    public get timeline(): Timeline {
+        if (!this._timeline) this._timeline = new Timeline(this.page);
+        return this._timeline;
+    }
+
+    public async cleanup() {
+        await this._client?.cleanup();
+    }
+
+    /**
+     * Open the top left user menu, returning a Locator to the resulting context menu.
+     */
+    public async openUserMenu(): Promise<Locator> {
+        return this.settings.openUserMenu();
+    }
+
+    /**
+     * Open room creation dialog.
+     */
+
+    public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
+        await this.page
+            .getByRole("navigation", { name: "Room list" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
+            .click();
+        await this.page.getByRole("menuitem", { name: roomKindname }).click();
+        return this.page.locator(".mx_CreateRoomDialog");
+    }
+
+    /**
+     * Close dialog currently open dialog
+     */
+    public async closeDialog(): Promise<void> {
+        return this.settings.closeDialog();
+    }
+
+    public async getClipboard(): Promise<string> {
+        return await this.page.evaluate(() => navigator.clipboard.readText());
+    }
+
+    /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
+    }
+
+    /**
+     * Opens the given room by name. The room must be visible in the
+     * room list and the room may contain unread messages.
+     *
+     * @param name The exact room name to find and click on/open.
+     */
+    public async viewRoomByName(name: string): Promise<void> {
+        // Expand the left panel if necessary
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const type = await separator.getAttribute("data-separator-type");
+        if (type === "bar") {
+            await separator.click();
+        }
+
+        // Make sure the room list is actually present before we try closing toasts,
+        // otherwise we may race with page loading
+        await this.page.getByTestId("room-list").waitFor();
+
+        const dismissToasts = async (): Promise<void> => {
+            await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
+            const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", {
+                timeout: 50,
+            });
+            if (keyStorageToastRejected) {
+                await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+            }
+            await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
+        };
+
+        await dismissToasts();
+
+        // We get the room list by test-id which is a listbox and matching title=name.
+        // Retry, closing toasts each time, as otherwise it can race and the toast can appear after we try to close them
+        const roomTile = this.page.getByTestId("room-list").locator(`[title="${name}"]`).first();
+        for (let attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
+            try {
+                await roomTile.click({ timeout: 500 });
+                return;
+            } catch (e) {
+                if (attemptsLeft === 1) throw e;
+                await dismissToasts();
+            }
+        }
+    }
+
+    /**
+     * Expands the Invites section in the room list and opens the given invited room.
+     *
+     * @param name The exact room name of the invite to find and click on/open.
+     */
+    public async viewInvitedRoomByName(name: string): Promise<void> {
+        const header = this.page.getByRole("button", { name: "Toggle Invites section" });
+        // Open the section if not already opened
+        if ((await header.getAttribute("aria-expanded")) !== "true") {
+            await header.click();
+        }
+
+        await this.viewRoomByName(name);
+    }
+
+    /**
+     * Expands the Invites section in the room list, opens the given invited room and accepts the invite.
+     *
+     * @param name The exact room name of the invite to accept.
+     */
+    public async acceptInvitedRoomByName(name: string): Promise<void> {
+        await this.viewInvitedRoomByName(name);
+        await this.page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+    }
+
+    public async viewRoomById(roomId: string): Promise<void> {
+        await this.page.goto(`/#/room/${roomId}`);
+    }
+
+    /**
+     * Get the composer element
+     * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
+     */
+    public getComposer(isRightPanel?: boolean): Locator {
+        const panelClass = isRightPanel ? ".mx_RightPanel" : ".mx_RoomView_body";
+        return this.page.locator(`${panelClass} .mx_MessageComposer`);
+    }
+
+    /**
+     * Get the composer input field
+     * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
+     */
+    public getComposerField(isRightPanel?: boolean): Locator {
+        return this.getComposer(isRightPanel).locator("div[contenteditable]");
+    }
+
+    /**
+     * Open the message composer kebab menu
+     * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
+     */
+    public async openMessageComposerOptions(isRightPanel?: boolean): Promise<Locator> {
+        const composer = this.getComposer(isRightPanel);
+        await composer.getByRole("button", { name: "More options", exact: true }).click();
+        return this.page.getByRole("menu");
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public setComposerInputFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): ReturnType<Locator["setInputFiles"]> {
+        const input = this.page
+            .locator(location === "room" ? ".mx_RoomView_body" : ".mx_RightPanel")
+            .getByTestId("room-upload-context-input");
+        return input.setInputFiles(...params);
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog, and then automaticlly submits the dialog that pops up which
+     * causes the file to be uploaded.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public async composerUploadFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): Promise<void> {
+        await this.setComposerInputFiles(location, ...params);
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
+     * Drags a "file" into the specified composer and automatically uploads it.
+     * @param location Should the drop target the main room or the thread.
+     * @param samplePath The path to the sample file so it can be read.
+     * @param type The mimetype of the file.
+     */
+    public async composerDragAndUploadFiles(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
+        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
+        // This read a file, encodes it into base64 and then sends it along to the page to be treated
+        // as a DataTransfer (the mechanism for drag and dropped files).
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
+
+        const dataTransfer = await this.page.evaluateHandle(
+            async ([buffer, name, type]) => {
+                const dt = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
+                    type,
+                });
+                dt.items.add(file);
+                return dt;
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.dispatchEvent(location === "room" ? ".mx_RoomView_body" : ".mx_ThreadPanel", "drop", {
+            dataTransfer,
+        });
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
+     * Paste a "file" into the specified locator and automatically uploads it.
+     * @param location Should the drop target the main room or the thread.
+     * @param samplePath The path to the sample file so it can be read.
+     * @param type The mimetype of the file.
+     */
+    public async composerDragAndPasteFile(
+        location: "room" | "thread",
+        samplePath: string,
+        type: string,
+    ): Promise<void> {
+        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
+        // This read a file, encodes it into base64 and then sends it along to the page to be treated
+        // as a DataTransfer (the mechanism for drag and dropped files).
+        const buffer = await readFile(samplePath);
+        const name = path.basename(samplePath);
+        const composer = this.getComposerField(location === "thread");
+
+        await composer.evaluate(
+            async (element, [buffer, name, type]) => {
+                const clipboardData = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64!(buffer)], name, {
+                    type,
+                });
+                clipboardData.items.add(file);
+                element.dispatchEvent(
+                    new ClipboardEvent("paste", {
+                        clipboardData,
+                        bubbles: true,
+                        cancelable: true,
+                    }),
+                );
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
+     * Returns the space panel space button based on a name. The space
+     * must be visible in the space panel
+     * @param name The space name to find
+     */
+    public async getSpacePanelButton(name: string): Promise<Locator> {
+        const button = this.page.getByRole("button", { name: name });
+        await expect(button).toHaveClass(/mx_SpaceButton/);
+        return button;
+    }
+
+    /**
+     * Opens the given space home by name. The space must be visible in
+     * the space list.
+     * @param name The space name to find and click on/open.
+     */
+    public async viewSpaceHomeByName(name: string): Promise<void> {
+        const button = await this.getSpacePanelButton(name);
+        return button.dblclick();
+    }
+
+    /**
+     * Opens the given space by name. The space must be visible in the
+     * space list.
+     * @param name The space name to find and click on/open.
+     */
+    public async viewSpaceByName(name: string): Promise<void> {
+        const button = await this.getSpacePanelButton(name);
+        return button.click();
+    }
+
+    public async openSpotlight(): Promise<Spotlight> {
+        const spotlight = new Spotlight(this.page);
+        await spotlight.open();
+        return spotlight;
+    }
+
+    /**
+     * Opens/closes the room info panel
+     * @returns locator to the right panel
+     */
+    public async toggleRoomInfoPanel(): Promise<Locator> {
+        await this.page.getByRole("button", { name: "Room info" }).first().click();
+        return this.page.locator(".mx_RightPanel");
+    }
+
+    /**
+     * Opens the room info panel if it is not already open.
+     *
+     * TODO: fix this so that it works correctly if, say, the member list was open instead of the room info panel.
+     *
+     * @returns locator to the right panel
+     */
+    public async openRoomInfoPanel(): Promise<Locator> {
+        const locator = this.page.getByTestId("right-panel");
+        if (!(await locator.isVisible())) {
+            await this.page.getByRole("button", { name: "Room info" }).first().click();
+        }
+        return locator;
+    }
+
+    /**
+     * Opens/closes the memberlist panel
+     * @returns locator to the memberlist panel
+     */
+    public async toggleMemberlistPanel(): Promise<Locator> {
+        const locator = this.page.locator(".mx_FacePile");
+        await locator.click();
+        const memberlist = this.page.locator(".mx_MemberListView");
+        await memberlist.waitFor();
+        return memberlist;
+    }
+
+    /**
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
+     * @param options - Options object
+     */
+    public async inviteUserToCurrentRoom(
+        userId: string,
+        options?: {
+            /** If true, expect and acknowledge "Confirm inviting new users" page */
+            confirmUnknownUser?: boolean;
+        },
+    ): Promise<void> {
+        const rightPanel = await this.openRoomInfoPanel();
+        await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
+
+        const dialogLocator = this.page.getByRole("dialog");
+        const input = dialogLocator.getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await dialogLocator.getByRole("button", { name: "Invite" }).click();
+
+        if (options?.confirmUnknownUser) {
+            await expect(
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+            ).toBeVisible();
+            await dialogLocator.getByRole("button", { name: "Invite" }).click();
+        }
+    }
+
+    /**
+     * Dismiss the "Turn on key storage" toast and dismiss the confirmation
+     * dialog.
+     *
+     * Note: to dismiss normal toasts, use the {@link rejectToast} function
+     * directly.
+     */
+    public async closeKeyStorageToast() {
+        await rejectToast(this.page, "Turn on key storage");
+        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+    }
+
+    /**
+     * Scroll an infinite list to the bottom.
+     * @param list The element to scroll
+     */
+    public async scrollListToBottom(list: Locator): Promise<void> {
+        // First hover the mouse over the element that we want to scroll
+        await list.hover();
+
+        const needsScroll = async () => {
+            // From https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#determine_if_an_element_has_been_totally_scrolled
+            const fullyScrolled = await list.evaluate(
+                (e) => Math.abs(e.scrollHeight - e.clientHeight - e.scrollTop) <= 1,
+            );
+            return !fullyScrolled;
+        };
+
+        // Scroll the element until we detect that it is fully scrolled
+        do {
+            await this.page.mouse.wheel(0, 1000);
+        } while (await needsScroll());
+    }
+
+    /**
+     * Resize the left panel by a given number of pixels.
+     * @param delta The number of pixels to resize by. Negative value makes the panel smaller.
+     */
+    public async resizeLeftPanel(delta: number): Promise<void> {
+        const separator = this.page.getByRole("separator", { name: "Click or drag to expand" });
+        const boundingRectangle = await separator.boundingBox();
+
+        // Place the cursor in the center of the separator
+        const centerX = boundingRectangle!.x + boundingRectangle!.width / 2;
+        await this.page.mouse.move(centerX, boundingRectangle!.y);
+
+        // Drag the cursor by delta pixels
+        await this.page.mouse.down();
+        await this.page.mouse.move(centerX + delta, boundingRectangle!.y);
+        await this.page.mouse.up();
+    }
+}

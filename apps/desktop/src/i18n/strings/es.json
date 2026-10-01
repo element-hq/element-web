@@ -1,0 +1,65 @@
+{
+    "action": {
+        "cancel": "Cancelar",
+        "close": "Cerrar",
+        "close_brand": "Cerrar %(brand)s",
+        "copy": "Copiar",
+        "cut": "Cortar",
+        "delete": "Borrar",
+        "edit": "Editar",
+        "minimise": "Minimizar",
+        "paste": "Pegar",
+        "paste_match_style": "Pegar manteniendo estilo",
+        "quit": "Salir",
+        "redo": "Rehacer",
+        "select_all": "Seleccionar todo",
+        "show_hide": "Ver/Ocultar",
+        "undo": "Deshacer",
+        "zoom_in": "Acercar",
+        "zoom_out": "Alejar"
+    },
+    "common": {
+        "about": "Acerca de",
+        "brand_help": "Ayuda sobre %(brand)s",
+        "help": "Ayuda",
+        "no": "No",
+        "preferences": "Preferencias",
+        "yes": "Sí"
+    },
+    "confirm_quit": "¿Quieres salir?",
+    "edit_menu": {
+        "speech": "Dictado",
+        "speech_start_speaking": "Empezar a hablar",
+        "speech_stop_speaking": "Parar de hablar"
+    },
+    "file_menu": {
+        "label": "Archivo"
+    },
+    "menu": {
+        "hide": "Ocultar",
+        "hide_others": "Ocultar otros",
+        "services": "Servicios",
+        "unhide": "Mostrar"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Añadir al diccionario",
+        "copy_email": "Copiar dirección de correo",
+        "copy_image": "Copiar imagen",
+        "copy_image_url": "Copiar dirección de la imagen",
+        "copy_link_url": "Copiar dirección de enlace",
+        "save_image_as": "Guardar imagen como...",
+        "save_image_as_error_description": "La imagen no se ha podido guardar",
+        "save_image_as_error_title": "No se ha podido guardar la imagen"
+    },
+    "view_menu": {
+        "actual_size": "Tamaño real",
+        "toggle_developer_tools": "Abrir/cerrar herramientas de desarrollo",
+        "toggle_full_screen": "Entrar/salir de pantalla completa",
+        "view": "Ver"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Traer todas al primer plano",
+        "label": "Ventana",
+        "zoom": "Acercamiento"
+    }
+}

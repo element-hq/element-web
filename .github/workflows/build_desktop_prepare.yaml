@@ -1,0 +1,184 @@
+# This action helps perform common actions before the build_* actions are started in parallel.
+on:
+    workflow_call:
+        inputs:
+            config:
+                type: string
+                required: true
+                description: "The config directory to use"
+            version:
+                type: string
+                required: false
+                description: "The version tag to fetch, or 'develop', will pick automatically if not passed"
+            nightly:
+                type: boolean
+                required: false
+                default: false
+                description: "Whether the build is a Nightly and to calculate the version strings new builds should use"
+            deploy:
+                type: boolean
+                required: false
+                default: false
+                description: "Whether the build should be deployed to production"
+            webapp-artifact:
+                type: string
+                required: false
+                description: "Name of the webapp artifact that should be used, will fetch a relevant build if omitted"
+        secrets:
+            # Required if `nightly` is set
+            CF_R2_ACCESS_KEY_ID:
+                required: false
+            # Required if `nightly` is set
+            CF_R2_TOKEN:
+                required: false
+        outputs:
+            nightly-version:
+                description: "The version string the next Nightly should use, only output for nightly"
+                value: ${{ jobs.prepare.outputs.nightly-version }}
+            packages-dir:
+                description: "The directory non-deb packages for this run should live in within packages.element.io"
+                value: ${{ inputs.nightly && 'nightly' || 'desktop' }}
+            # This is just a simple pass-through of the input to simplify reuse of complex inline conditions
+            deploy:
+                description: "Whether the build should be deployed to production"
+                value: ${{ inputs.deploy }}
+permissions: {}
+jobs:
+    prepare:
+        name: Prepare
+        environment: ${{ inputs.nightly && 'packages.element.io' || '' }}
+        runs-on: ubuntu-26.04
+        permissions:
+            contents: read
+        outputs:
+            nightly-version: ${{ steps.versions.outputs.nightly }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+                  repository: element-hq/element-web
+
+            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version-file: apps/desktop/.node-version
+                  cache: "pnpm"
+
+            - name: Install Deps
+              working-directory: apps/desktop
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
+
+            - name: Fetch Element Web (from artifact)
+              if: inputs.webapp-artifact != ''
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: ${{ inputs.webapp-artifact }}
+                  path: apps/desktop/webapp
+
+            - name: Build webapp.asar (from artifact)
+              if: inputs.webapp-artifact != ''
+              working-directory: apps/desktop
+              run: |
+                  cp -f "$CONFIG_DIR/config.json" webapp/config.json
+                  pnpm run asar-webapp
+              env:
+                  CONFIG_DIR: ${{ inputs.config }}
+
+            - name: Fetch Element Web (${{ inputs.version }})
+              if: inputs.webapp-artifact == ''
+              working-directory: apps/desktop
+              run: pnpm run fetch --noverify -d ${CONFIG} ${VERSION}
+              env:
+                  CONFIG: ${{ inputs.config }}
+                  VERSION: ${{ inputs.version }}
+
+            - name: Copy variant config
+              working-directory: apps/desktop
+              run: cp "$CONFIG_DIR/build.json" variant.json
+              env:
+                  CONFIG_DIR: ${{ inputs.config }}
+
+            - name: "[Nightly] Calculate version"
+              id: versions
+              if: inputs.nightly
+              working-directory: apps/desktop
+              run: |
+                  set -e
+
+                  # Find all latest Nightly versions
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/macos/releases.json - --endpoint-url $R2_URL --region auto | jq -r .currentRelease >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/debian/dists/default/main/binary-amd64/Packages - --endpoint-url $R2_URL --region auto | grep "Package: element-nightly" -A 50 | grep Version -m1 | sed -n 's/Version: //p' >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/debian/dists/default/main/binary-arm64/Packages - --endpoint-url $R2_URL --region auto | grep "Package: element-nightly" -A 50 | grep Version -m1 | sed -n 's/Version: //p' >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/win32/x64/RELEASES - --endpoint-url $R2_URL --region auto | awk '{print $2}' | cut -d "-" -f 5 | cut -c 8- >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/win32/arm64/RELEASES - --endpoint-url $R2_URL --region auto | awk '{print $2}' | cut -d "-" -f 5 | cut -c 8- >> VERSIONS
+
+                  # Pick the greatest one
+                  VERSION=$(cat VERSIONS | sort -uf | tail -n1)
+                  echo "Found latest nightly version $VERSION"
+                  # Increment it
+                  echo "nightly=$(scripts/generate-nightly-version.ts --latest $VERSION)" >> $GITHUB_OUTPUT
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+                  R2_BUCKET: ${{ vars.R2_BUCKET }}
+                  R2_URL: ${{ vars.CF_R2_S3_API }}
+
+            - name: Check version
+              id: package
+              working-directory: apps/desktop
+              run: |
+                  echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT
+
+            - name: "[Release] Fetch release"
+              id: release
+              if: ${{ !inputs.nightly && inputs.version != 'develop' }}
+              uses: cardinalby/git-get-release-action@2ab178299eecb253f820dcf2cce11f62be1178f7 # 1.2.6
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  tag: v${{ steps.package.outputs.version }}
+
+            - name: "[Release] Write changelog"
+              if: ${{ !inputs.nightly && inputs.version != 'develop' }}
+              working-directory: apps/desktop
+              run: |
+                  TIME=$(date -d "$PUBLISHED_AT" -R)
+                  echo "element-desktop ($VERSION) default; urgency=medium" >> changelog.Debian
+                  echo "$BODY" | sed 's/^##/\n  */g;s/^\*/  */g' | perl -pe 's/\[.+?]\((.+?)\)/\1/g' >> changelog.Debian
+                  echo "" >> changelog.Debian
+                  echo " -- $ACTOR <support@element.io>  $TIME" >> changelog.Debian
+              env:
+                  ACTOR: ${{ github.actor }}
+                  VERSION: v${{ steps.package.outputs.version }}
+                  BODY: ${{ steps.release.outputs.body }}
+                  PUBLISHED_AT: ${{ steps.release.outputs.published_at }}
+
+            - name: "[Nightly] Write summary"
+              if: inputs.nightly
+              working-directory: apps/desktop
+              run: |
+                  set -e
+
+                  BUNDLE_HASH=$(pnpm exec asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
+                  WEBAPP_VERSION=$(./scripts/get-version.ts)
+                  WEB_VERSION=${WEBAPP_VERSION:0:12}
+                  JS_VERSION=${WEBAPP_VERSION:16:12}
+
+                  echo "### Nightly build ${NIGHTLY_VERSION}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "| Component   | Version |" >> $GITHUB_STEP_SUMMARY
+                  echo "| ----------- | ------- |" >> $GITHUB_STEP_SUMMARY
+                  echo "| Bundle Hash | $BUNDLE_HASH |" >> $GITHUB_STEP_SUMMARY
+                  echo "| Element Web | [$WEB_VERSION](https://github.com/element-hq/element-web/commit/$WEB_VERSION) |" >> $GITHUB_STEP_SUMMARY
+                  echo "| JS SDK      | [$JS_VERSION](https://github.com/matrix-org/matrix-js-sdk/commit/$JS_VERSION) |" >> $GITHUB_STEP_SUMMARY
+              env:
+                  NIGHTLY_VERSION: ${{ steps.versions.outputs.nightly }}
+
+            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              with:
+                  name: desktop-prepare
+                  retention-days: 1
+                  path: |
+                      apps/desktop/webapp.asar
+                      apps/desktop/changelog.Debian
+                      apps/desktop/variant.json

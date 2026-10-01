@@ -1,0 +1,192 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LoginWithQRSection p {
+    margin-top: 0;
+    margin-bottom: var(--cpd-space-4x);
+}
+
+.mx_LoginWithQRSection {
+    .mx_AccessibleButton_kind_primary + p {
+        color: var(--cpd-color-text-secondary);
+        margin-top: var(--cpd-space-2x);
+    }
+}
+
+.mx_LoginWithQRSection .mx_AccessibleButton svg {
+    margin-right: var(--cpd-space-3x);
+}
+
+.mx_LoginWithQR_dialog .mx_Dialog {
+    padding: var(--cpd-space-12x) var(--cpd-space-12x) var(--cpd-space-10x);
+
+    .mx_LoginWithQR {
+        width: 500px;
+    }
+}
+
+.mx_LoginWithQR {
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    font: var(--cpd-font-body-md-regular);
+
+    h1 {
+        font-size: $font-24px;
+        margin-bottom: 0;
+    }
+
+    h2 {
+        margin-top: var(--cpd-space-6x);
+    }
+
+    .mx_LoginWithQR_qrWrapper {
+        display: flex;
+        padding: var(--cpd-space-7x) 0;
+
+        .mx_Spinner {
+            /* Match the size of the QR code to prevent jumps */
+            height: 200px;
+            width: 200px;
+        }
+    }
+
+    .mx_LoginWithQR_confirmationDigits {
+        text-align: center;
+        margin: var(--cpd-space-12x) auto;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-24px;
+        color: $primary-content;
+    }
+
+    .mx_LoginWithQR_confirmationAlert {
+        border: 1px solid $quaternary-content;
+        border-radius: var(--cpd-space-2x);
+        padding: var(--cpd-space-2x);
+        line-height: 1.5em;
+        display: flex;
+
+        svg {
+            height: 30px;
+        }
+    }
+
+    .mx_LoginWithQR_separator {
+        margin: 1em 0;
+    }
+
+    ol {
+        padding-inline-start: 0;
+        list-style: none; /* list markers do not support the outlined number styling we need */
+
+        li {
+            position: relative;
+            padding-left: var(--cpd-space-7x);
+            color: 1px solid $input-placeholder;
+            margin-bottom: var(--cpd-space-4x);
+            line-height: 20px;
+            text-align: initial;
+        }
+
+        /* Circled number list item marker */
+        li::before {
+            content: counter(list-item);
+            position: absolute;
+            left: 0;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50%;
+            border: 1px solid $input-placeholder;
+            box-sizing: border-box;
+            text-align: center;
+        }
+    }
+
+    label[for="mx_LoginWithQR_checkCode"] {
+        margin-top: var(--cpd-space-6x);
+        color: var(--cpd-color-text-primary);
+        margin-bottom: var(--cpd-space-1x);
+    }
+
+    .mx_LoginWithQR_checkCode_input {
+        margin-bottom: var(--cpd-space-1x);
+        text-align: initial;
+
+        input {
+            /* Workaround for one of the input rules in _common.pcss being not specific enough */
+            padding: 0;
+            padding-inline-start: calc(40px / 2 - (1ch / 2));
+        }
+    }
+
+    .mx_LoginWithQR_heading {
+        display: flex;
+        gap: var(--cpd-space-3x);
+        align-items: center;
+    }
+
+    .mx_LoginWithQR_BackButton {
+        height: var(--cpd-space-7x);
+        border-radius: var(--cpd-space-7x);
+        padding: var(--cpd-space-1x);
+        box-sizing: border-box;
+        background-color: var(--cpd-color-bg-subtle-secondary);
+        svg {
+            height: 100%;
+        }
+    }
+
+    .mx_LoginWithQR_breadcrumbs {
+        font-size: $font-13px;
+        color: $secondary-content;
+    }
+
+    .mx_LoginWithQR_main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        color: $primary-content;
+        text-align: center;
+
+        p {
+            color: $secondary-content;
+            margin-bottom: var(--cpd-space-8x);
+        }
+    }
+
+    .mx_LoginWithQR_buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--cpd-space-4x);
+        margin-top: var(--cpd-space-6x);
+
+        .mx_AccessibleButton {
+            width: 300px;
+            height: 48px;
+            box-sizing: border-box;
+        }
+    }
+
+    .mx_QRCode {
+        border-radius: var(--cpd-space-2x);
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_LoginWithQR_spinner {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+}

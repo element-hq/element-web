@@ -8,18 +8,19 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     RoomListHeaderView,
     type RoomListHeaderViewActions,
     type RoomListHeaderViewSnapshot,
 } from "./RoomListHeaderView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 
 type RoomListHeaderProps = RoomListHeaderViewSnapshot & RoomListHeaderViewActions;
 
-const RoomListHeaderViewWrapper = ({
+const RoomListHeaderViewWrapperImpl = ({
     createChatRoom,
     createRoom,
     createVideoRoom,
@@ -29,6 +30,9 @@ const RoomListHeaderViewWrapper = ({
     openSpacePreferences,
     sort,
     toggleMessagePreview,
+    createSection,
+    collapseOrExpandSections,
+    closeSectionReleaseAnnouncement,
     ...rest
 }: RoomListHeaderProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -41,11 +45,15 @@ const RoomListHeaderViewWrapper = ({
         sort,
         openSpacePreferences,
         toggleMessagePreview,
+        createSection,
+        collapseOrExpandSections,
+        closeSectionReleaseAnnouncement,
     });
     return <RoomListHeaderView vm={vm} />;
 };
+const RoomListHeaderViewWrapper = withViewDocs(RoomListHeaderViewWrapperImpl, RoomListHeaderView);
 
-export default {
+const meta = {
     title: "Room List/RoomListHeaderView",
     component: RoomListHeaderViewWrapper,
     tags: ["autodocs"],
@@ -60,6 +68,9 @@ export default {
         sort: fn(),
         openSpacePreferences: fn(),
         toggleMessagePreview: fn(),
+        createSection: fn(),
+        collapseOrExpandSections: fn(),
+        closeSectionReleaseAnnouncement: fn(),
     },
     parameters: {
         design: {
@@ -67,18 +78,81 @@ export default {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=2925-19173",
         },
     },
-} as Meta<typeof RoomListHeaderViewWrapper>;
+} satisfies Meta<typeof RoomListHeaderViewWrapper>;
 
-const Template: StoryFn<typeof RoomListHeaderViewWrapper> = (args) => <RoomListHeaderViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const NoSpaceMenu = Template.bind({});
-NoSpaceMenu.args = {
-    displaySpaceMenu: false,
+export const NoSpaceMenu: Story = {
+    args: {
+        displaySpaceMenu: false,
+    },
 };
 
-export const NoComposeMenu = Template.bind({});
-NoComposeMenu.args = {
-    displayComposeMenu: false,
+export const LongTitle: Story = {
+    decorators: [
+        (Story) => (
+            <div style={{ width: "200px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+    args: {
+        title: "Loooooooooooooooooooooooooooooooooooooong title",
+    },
+};
+
+export const CollapseSections: Story = {
+    args: {
+        collapseSections: "collapse",
+    },
+};
+
+export const ExpandSections: Story = {
+    args: {
+        collapseSections: "expand",
+    },
+};
+
+export const DisplaySectionReleaseAnnouncement: Story = {
+    decorators: [
+        (Story) => (
+            <div style={{ width: "300px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+    args: {
+        displaySectionReleaseAnnouncement: true,
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // compound-web's ReleaseAnnouncement renders its header as <h3>,
+                        // which jumps from RoomListHeaderView's <h1> ("Rooms").
+                        id: "heading-order",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
+    },
+};
+
+export const SectionsDisabled: Story = {
+    args: {
+        areSectionsEnabled: false,
+    },
+};
+
+export const NoComposeMenu: Story = {
+    args: {
+        canCreateRoom: false,
+        canCreateVideoRoom: false,
+        areSectionsEnabled: false,
+    },
 };

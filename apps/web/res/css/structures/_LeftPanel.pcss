@@ -1,0 +1,97 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MatrixChat--with-avatar {
+    .mx_LeftPanel,
+    .mx_LeftPanel .mx_LeftPanel_roomListContainer {
+        background-color: transparent;
+    }
+}
+
+.mx_LeftPanel_outerWrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    position: relative;
+}
+
+.mx_LeftPanel_wrapper,
+.mx_LeftPanel {
+    --collapsedWidth: 68px;
+}
+
+.mx_LeftPanel_panel {
+    .mx_LeftPanel_outerWrapper {
+        height: 100%;
+        max-width: none;
+    }
+
+    .mx_LeftPanel_wrapper--user {
+        width: 100%;
+    }
+}
+
+.mx_LeftPanel_wrapper {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    height: 100%; /* ensure space panel is still scrollable with an outer wrapper */
+
+    .mx_LeftPanel_wrapper--user {
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
+
+        &[data-collapsed] {
+            max-width: var(--collapsedWidth);
+        }
+    }
+}
+
+.mx_LeftPanel {
+    background-color: var(--cpd-color-bg-canvas-default);
+    /* The room list is not designed to be collapsed to just icons. */
+    /* 224 + 68(spaces bar) was deemed by design to be a good minimum for the left panel. */
+    --collapsedWidth: 224px;
+
+    /* Create a row-based flexbox for the space panel and the room list */
+    display: flex;
+    contain: content;
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+
+    .mx_LeftPanel_roomListContainer {
+        flex: 1 0 0;
+        min-width: 0;
+        /* Create another flexbox (this time a column) for the room list components */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* These styles override the defaults for the minimized (66px) layout */
+    &.mx_LeftPanel_minimized {
+        flex-grow: 0;
+        min-width: unset;
+        width: unset !important;
+
+        .mx_LeftPanel_roomListContainer {
+            width: var(--collapsedWidth);
+        }
+    }
+}
+
+#left-panel .mx_LeftPanel_wrapper--user {
+    /*
+     * Disable background when using the new room list.
+     * This background sometimes shows when the panel is resized and it looks like a thicker border.
+     */
+    background: none;
+}

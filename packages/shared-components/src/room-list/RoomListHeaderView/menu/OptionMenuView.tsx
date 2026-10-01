@@ -10,8 +10,8 @@ import React, { type JSX, useState } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
-import { useViewModel } from "../../../viewmodel";
-import { useI18n } from "../../../utils/i18nContext";
+import { useViewModel } from "../../../core/viewmodel";
+import { useI18n } from "../../../core/i18n/i18nContext";
 import styles from "./OptionMenuView.module.css";
 
 interface OptionMenuViewProps {

@@ -1,0 +1,49 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { describe, it, expect, afterEach, vi } from "vitest";
+import { cleanup, render } from "test-utils-rtl";
+import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "test-utils/qrcode";
+import React from "react";
+
+import QRCode from "./QRCode";
+
+vi.mock("qrcode", async () => ({
+    ...(await vi.importActual("qrcode")),
+    toDataURL: vi.fn(),
+}));
+
+describe("<QRCode />", () => {
+    afterEach(() => {
+        resetQRCodeMock();
+        cleanup();
+    });
+
+    it("shows a spinner when data is null", async () => {
+        const { container } = render(<QRCode data={null} />);
+        expect(container.querySelector(".mx_Spinner")).toBeDefined();
+    });
+
+    it("renders a QR with defaults", async () => {
+        mockQRCodeRender();
+        const { container, getAllByAltText } = render(<QRCode data="asd" />);
+        await waitForQRCodeRender();
+        expect(getAllByAltText("QR Code")).toHaveLength(1);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders a QR with high error correction level", async () => {
+        mockQRCodeRender();
+        const { container, getAllByAltText } = render(<QRCode data="asd" errorCorrectionLevel="high" />);
+        await waitForQRCodeRender();
+        expect(getAllByAltText("QR Code")).toHaveLength(1);
+        expect(container).toMatchSnapshot();
+    });
+});

@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Atcelt",
+        "close": "Aizvērt",
+        "close_brand": "Aizvērt %(brand)s",
+        "copy": "Kopēt",
+        "cut": "Izgriezt",
+        "delete": "Dzēst",
+        "edit": "Labot",
+        "minimise": "Samazināt",
+        "paste": "Ielīmēt",
+        "paste_match_style": "Ielīmēt un pielāgot stilu",
+        "quit": "Iziet",
+        "redo": "Atatsaukt",
+        "select_all": "Atzīmēt visu",
+        "show_hide": "Parādīt/paslēpt",
+        "undo": "Atsaukt",
+        "zoom_in": "Tuvināt",
+        "zoom_out": "Tālināt"
+    },
+    "common": {
+        "about": "Par",
+        "brand_help": "%(brand)s palīdzība",
+        "help": "Palīdzība",
+        "preferences": "Iestatījumi"
+    },
+    "confirm_quit": "Vai tiešām iziet?",
+    "edit_menu": {
+        "speech": "Runa",
+        "speech_start_speaking": "Uzsākt runāšanu",
+        "speech_stop_speaking": "Pārtraukt runāšanu"
+    },
+    "file_menu": {
+        "label": "Datne"
+    },
+    "menu": {
+        "hide": "Paslēpt",
+        "hide_others": "Paslēpt citus",
+        "services": "Pakalpojumi",
+        "unhide": "Rādīt"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Pievienot vārdnīcai",
+        "copy_email": "Ievietot e-pasta adresi starpliktuvē",
+        "copy_image": "Ievietot attēlu starpliktuvē",
+        "copy_image_url": "Ievietot attēla adresi starpliktuvē",
+        "copy_link_url": "Ievietot saites adresi starpliktuvē",
+        "save_image_as": "Saglabāt attēlu kā...",
+        "save_image_as_error_description": "Attēlu neizdevās saglabāt",
+        "save_image_as_error_title": "Neizdevās saglabāt attēlu"
+    },
+    "view_menu": {
+        "actual_size": "Īstais izmērs",
+        "toggle_developer_tools": "Pārslēgt izstrādātāja rīkus",
+        "toggle_full_screen": "Pārslēgt pilnekrānu",
+        "view": "Skats"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Iznest visu priekšplānā",
+        "label": "Logs",
+        "zoom": "Tālummaiņa"
+    }
+}

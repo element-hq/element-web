@@ -1,0 +1,190 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React, { useMemo, useState, type JSX } from "react";
+import { IconButton, Menu, MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
+import {
+    MarkAsReadIcon,
+    MarkAsUnreadIcon,
+    FavouriteIcon,
+    ArrowDownIcon,
+    UserAddIcon,
+    LinkIcon,
+    LeaveIcon,
+    OverflowHorizontalIcon,
+    ArrowRightIcon,
+    CheckIcon,
+    MinusIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
+
+import { _t } from "../../../../core/i18n/i18n";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
+import styles from "./RoomListItemMoreOptionsMenu.module.css";
+
+/**
+ * View model type for room list item
+ */
+export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomListItemViewActions>;
+
+/**
+ * Props for RoomListItemMoreOptionsMenu component
+ */
+export interface RoomListItemMoreOptionsMenuProps {
+    /** The room item view model */
+    vm: RoomListItemViewModel;
+}
+
+/**
+ * The more options menu for room list items.
+ * Displays additional room actions like mark as read/unread, favorite, invite, etc.
+ */
+export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuProps): JSX.Element {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Menu
+            open={open}
+            onOpenChange={setOpen}
+            title={_t("room_list|room|more_options")}
+            showTitle={false}
+            align="start"
+            trigger={
+                <IconButton
+                    tooltip={_t("room_list|room|more_options")}
+                    aria-label={_t("room_list|room|more_options")}
+                    size="24px"
+                    style={{ padding: "2px" }}
+                >
+                    <OverflowHorizontalIcon />
+                </IconButton>
+            }
+        >
+            <MoreOptionContent vm={vm} />
+        </Menu>
+    );
+}
+
+interface MoreOptionContentProps {
+    vm: RoomListItemViewModel;
+}
+
+export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
+    const snapshot = useViewModel(vm);
+    const hasSections = snapshot.sections.length > 0;
+    const isInSection = useMemo(() => snapshot.sections.some((section) => section.isSelected), [snapshot.sections]);
+    return (
+        <div onKeyDown={(e) => e.stopPropagation()}>
+            {snapshot.canMarkAsRead && (
+                <MenuItem
+                    Icon={MarkAsReadIcon}
+                    label={_t("room_list|more_options|mark_read")}
+                    onSelect={vm.onMarkAsRead}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {snapshot.canMarkAsUnread && (
+                <MenuItem
+                    Icon={MarkAsUnreadIcon}
+                    label={_t("room_list|more_options|mark_unread")}
+                    onSelect={vm.onMarkAsUnread}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {/* Favourited and Low priority assign a section, so they are hidden for a room whose
+                section is fixed, such as one with a pending invitation */}
+            {snapshot.canChangeSection && (
+                <>
+                    <ToggleMenuItem
+                        checked={snapshot.isFavourite}
+                        Icon={FavouriteIcon}
+                        label={_t("room_list|more_options|favourited")}
+                        onSelect={vm.onToggleFavorite}
+                        onClick={(evt) => evt.stopPropagation()}
+                    />
+                    <ToggleMenuItem
+                        checked={snapshot.isLowPriority}
+                        Icon={ArrowDownIcon}
+                        label={_t("room_list|more_options|low_priority")}
+                        onSelect={vm.onToggleLowPriority}
+                        onClick={(evt) => evt.stopPropagation()}
+                    />
+                </>
+            )}
+            <Separator />
+            {snapshot.canInvite && (
+                <MenuItem
+                    Icon={UserAddIcon}
+                    label={_t("action|invite")}
+                    onSelect={vm.onInvite}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {snapshot.canCopyRoomLink && (
+                <MenuItem
+                    Icon={LinkIcon}
+                    label={_t("room_list|more_options|copy_link")}
+                    onSelect={vm.onCopyRoomLink}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {snapshot.areSectionsEnabled && snapshot.canChangeSection && (
+                <>
+                    <SubMenu
+                        trigger={
+                            <MenuItem
+                                Icon={ArrowRightIcon}
+                                label={_t("room_list|more_options|move_to_section")}
+                                onSelect={null}
+                            />
+                        }
+                    >
+                        {snapshot.sections.map((section) => (
+                            <MenuItem
+                                key={section.tag}
+                                label={section.name}
+                                labelProps={{ className: styles.sectionLabel }}
+                                onSelect={() => vm.onToggleSection(section.tag)}
+                                onClick={(evt) => evt.stopPropagation()}
+                                hideChevron={true}
+                                aria-checked={section.isSelected}
+                            >
+                                {section.isSelected && (
+                                    <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
+                                )}
+                            </MenuItem>
+                        ))}
+                        {hasSections && <Separator />}
+                        <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
+                    </SubMenu>
+                    {isInSection && (
+                        <MenuItem
+                            Icon={MinusIcon}
+                            label={_t("room_list|more_options|remove_from_section")}
+                            onSelect={vm.onRemoveFromSection}
+                            onClick={(evt) => evt.stopPropagation()}
+                            hideChevron={true}
+                        />
+                    )}
+                </>
+            )}
+            <Separator />
+            <MenuItem
+                kind="critical"
+                Icon={LeaveIcon}
+                label={_t("room_list|more_options|leave_room")}
+                onSelect={vm.onLeaveRoom}
+                onClick={(evt) => evt.stopPropagation()}
+                hideChevron={true}
+            />
+        </div>
+    );
+}

@@ -1,0 +1,495 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+$left-gutter: 64px;
+
+.mx_EventTile {
+    /* Pass the application/theme-specific highlight colour to the shared
+       EventTileView interaction styles. */
+    --event-tile-state-highlight-background: $event-highlight-bg-color;
+    --event-tile-state-hover-background: $event-selected-color;
+    --event-tile-state-selected-background: $event-selected-color;
+    --event-tile-bubble-hover-background: $eventbubble-bg-hover;
+    --event-tile-bubble-other-background: $eventbubble-others-bg;
+    --event-tile-bubble-self-background: $eventbubble-self-bg;
+    --event-tile-preview-hover-background: $panels;
+    --event-tile-preview-separator-color: $quinary-content;
+    --EventTile_group_line-spacing-block-start: 1px;
+    --EventTile_group_line-spacing-block-end: 3px;
+    --EventTile_group_line-spacing-inline-start: $left-gutter;
+    --EventTile_group_line-line-height: $font-22px;
+    --EventTile_ThreadSummary-line-height: calc(2 * $font-12px);
+
+    flex-shrink: 0;
+    max-width: 100%;
+    clear: both; /* TODO: check if this is necessary */
+    position: relative;
+
+    /* Retained for legacy error/fallback markup that does not use EventTileView. */
+    &.mx_EventTile_info {
+        font-size: var(--cpd-font-size-body-sm);
+        color: $secondary-content;
+    }
+
+    .mx_EventTile_content {
+        &.mx_EditMessageComposer,
+        &.mx_EditWysiwygComposer {
+            /* Make sure the formatting bar is visible */
+            overflow: visible;
+        }
+    }
+
+    .mx_EditMessageComposerWrapper {
+        /* This keeps the autocomplete / format bar visible above the edit composer. */
+        overflow: visible;
+    }
+
+    .mx_EventTile_searchHighlight {
+        background-color: $accent;
+        color: $accent-fg-color;
+        border-radius: 5px;
+        padding-inline: 2px;
+        cursor: pointer;
+
+        a {
+            background-color: $accent;
+            color: $accent-fg-color;
+        }
+    }
+
+    .mx_EventTileBubble {
+        margin-block: var(--EventTileBubble_margin-block);
+        min-width: 100px;
+    }
+
+    .mx_ImageBody {
+        .mx_ImageBody_container {
+            display: flex;
+            align-items: center; /* on every layout */
+        }
+    }
+
+    .mx_ReactionsRow {
+        display: flex;
+        flex-flow: wrap;
+        align-items: center;
+        gap: var(--cpd-space-1x);
+    }
+
+    .mx_ReplyChain--expanded {
+        .mx_EventTile_content .mx_EventTile_body {
+            /* !important needed to override the reply-tile content clamp. */
+            display: block !important;
+            overflow-y: scroll;
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            /* !important needed due to .mx_ReplyTile .mx_EventTile_content .mx_EventTile_pre_container > pre */
+            display: block !important;
+        }
+    }
+}
+
+/* Theads do not set a background on mentioned events as they use an indicator dot */
+.mx_ThreadPanel .mx_EventTile {
+    --event-tile-preview-highlight-background: none;
+}
+
+.mx_GenericEventListSummary {
+    &[data-layout="irc"],
+    &[data-layout="group"] {
+        .mx_EventTile_line .mx_RedactedBody {
+            line-height: 1; /* remove spacing between lines */
+        }
+    }
+
+    &[data-layout="irc"] {
+        /* Apply only collapsed events block */
+        > .mx_EventTile_line {
+            /* add --right-padding value of MessageTimestamp and avatar only */
+            /* stylelint-disable-next-line declaration-colon-space-after */
+            padding-left: calc(
+                var(--name-width) + var(--icon-width) + var(--MessageTimestamp-width) + 2 * var(--right-padding)
+            );
+        }
+    }
+
+    &[data-layout="group"] {
+        /* The collapsed summary has a legacy line outside EventTileView. */
+        > .mx_EventTile_line {
+            padding-inline-start: $left-gutter;
+        }
+    }
+}
+
+.mx_EventTile_content {
+    /*
+    all the overflow-y: hidden; are to trap Zalgos -
+    but they introduce an implicit overflow-x: auto.
+    so make that explicitly hidden too to avoid random
+    horizontal scrollbars occasionally appearing, like in
+    https://github.com/vector-im/vector-web/issues/1154
+    */
+    overflow-y: hidden;
+    overflow-x: hidden;
+    .markdown-body {
+        font: var(--cpd-font-body-md-regular) !important;
+        letter-spacing: var(--cpd-font-letter-spacing-body-md);
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
+        background-color: inherit;
+        color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+        flex: 1;
+
+        pre,
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $system;
+        }
+
+        code:not(pre *) {
+            background-color: $inlinecode-background-color;
+            border: 1px solid $inlinecode-border-color;
+            border-radius: 4px;
+            /* The horizontal padding is added by github-markdown-css .markdown-body */
+            padding: var(--cpd-space-0-5x) 0;
+            /* Avoid inline code blocks to be sticked when on multiple lines */
+            line-height: $font-22px;
+            /* Avoid the border to be glued to the other words */
+            margin-right: var(--cpd-space-0-5x);
+        }
+
+        code {
+            white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+        }
+
+        pre {
+            /* have to use overlay rather than auto otherwise Linux and Windows */
+            /* Chrome gets very confused about vertical spacing: */
+            /* https://github.com/vector-im/vector-web/issues/754 */
+            overflow-x: overlay;
+            overflow-y: visible;
+
+            &::-webkit-scrollbar-corner {
+                background: transparent;
+            }
+
+            border: 1px solid $quinary-content;
+
+            code {
+                white-space: pre; /* we want code blocks to be scrollable and not wrap */
+
+                > * {
+                    display: inline;
+                }
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: inherit !important;
+            color: inherit;
+        }
+
+        /* Make h1 and h2 the same size as h3. */
+        h1,
+        h2 {
+            font-size: 1.5em;
+            border-bottom: none !important; /* override GFM */
+        }
+
+        a {
+            color: $accent-alt;
+        }
+
+        blockquote {
+            border-left: 2px solid $blockquote-bar-color;
+            color: $secondary-content;
+            border-radius: 2px;
+            padding: 0 10px;
+        }
+
+        /*
+        // actually, removing the Italic TTF provides
+        // better results seemingly
+
+        // compensate for Nunito italics being terrible
+        // https://github.com/google/fonts/issues/1726
+        em {
+            transform: skewX(-14deg);
+            display: inline-block;
+        }
+        */
+
+        /* Support arbitrarily large marker numbers */
+        ol {
+            list-style-position: inside;
+            padding-inline-start: 0.5em;
+        }
+
+        /* Override nested lists being lower-roman */
+        ol ol,
+        ul ol {
+            list-style-type: revert;
+        }
+
+        /* Make list type disc to match rich text editor */
+        ul {
+            list-style-type: disc;
+        }
+
+        /* override styles from the base markdown CSS that put markdown content on its own line,
+           as this isn't what we want for richtext emote content.
+         */
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            display: none;
+        }
+    }
+}
+
+/* Spoiler stuff */
+.mx_EventTile_spoiler {
+    cursor: pointer;
+
+    /* clear button styles */
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    text-align: inherit;
+
+    .mx_EventTile_spoiler_reason {
+        color: $event-timestamp-color;
+        font-size: $font-11px;
+    }
+
+    .mx_EventTile_spoiler_content {
+        filter: blur(5px) saturate(0.1) sepia(1);
+        transition-duration: 0.5s;
+        pointer-events: none;
+    }
+
+    &.visible > .mx_EventTile_spoiler_content {
+        filter: none;
+        user-select: auto;
+        pointer-events: auto;
+    }
+}
+
+.mx_EventTile_bigEmoji {
+    font-size: 48px;
+    line-height: 57px;
+
+    .mx_Emoji {
+        font-size: inherit !important;
+    }
+}
+
+.mx_EventTile_body {
+    pre {
+        border: 1px solid transparent;
+
+        .mx_EventTile:hover &,
+        .mx_EventTile:focus-visible:focus-within & {
+            border: 1px solid $tertiary-content;
+        }
+    }
+
+    /* selector wrongly applies to pill avatars but those have explicit width/height passed at a higher specificity */
+    &.markdown-body img {
+        object-fit: contain;
+        object-position: left top;
+
+        /* Override the default colors of the 'github-markdown-css' library
+        (#fff for light theme, #000 for dark theme) to match the inherited theme */
+        background-color: inherit !important;
+    }
+
+    .mx_EventTile_pre_container {
+        /* For correct positioning of _copyButton (See TextualBody) */
+        position: relative;
+
+        /* Emoji are enlarged in prose, but a code block's line numbers are one fixed-height block
+           per line and cannot follow a line that an enlarged emoji has made taller. */
+        .mx_Emoji {
+            font-size: inherit;
+        }
+
+        &:focus-within,
+        &:hover {
+            .mx_EventTile_button {
+                visibility: visible;
+            }
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            max-height: 30vh;
+            padding-top: var(--cpd-space-3x);
+            padding-bottom: var(--cpd-space-3x);
+        }
+
+        /* Inserted adjacent to <pre> blocks, (See TextualBody) */
+        .mx_EventTile_button {
+            position: absolute;
+            top: var(--cpd-space-2x);
+            right: var(--cpd-space-2x);
+            visibility: hidden;
+
+            &.mx_EventTile_buttonBottom {
+                top: 33px;
+            }
+
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $message-action-bar-fg-color;
+            }
+        }
+    }
+}
+
+.mx_EventTile_lineNumbers {
+    float: left;
+    margin: 0 0.5em 0 -1.5em;
+    color: gray;
+
+    & span {
+        text-align: right;
+        display: block;
+        padding-left: 1em;
+    }
+}
+
+.mx_EventTile_button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.mx_EventTile_tileError {
+    color: red;
+    text-align: center;
+
+    /* Remove some of the default tile padding so that the error is centered */
+    margin-right: 0;
+
+    .mx_EventTile_line {
+        padding-left: 0;
+        margin-right: 0;
+
+        span {
+            padding: var(--cpd-space-1x) var(--cpd-space-2x);
+        }
+    }
+
+    a {
+        margin-left: 1em;
+    }
+}
+
+.mx_EventTile:hover .mx_ThreadActionBar,
+[data-whatinput="keyboard"] .mx_EventTile:focus-within .mx_ThreadActionBar,
+.mx_EventTile:focus-visible:focus-within .mx_ThreadActionBar {
+    visibility: visible;
+}
+
+/* Thread-list reply summaries retain the legacy application styling while
+   remaining independent of the EventTileView root DOM contract. */
+.mx_EventTile .mx_ThreadPanel_replies {
+    margin-top: var(--cpd-space-2x);
+    display: flex;
+    align-items: center;
+    position: relative;
+    font: var(--cpd-font-body-sm-regular);
+
+    > svg {
+        @mixin ThreadSummaryIcon;
+    }
+
+    .mx_ThreadPanel_replies_amount {
+        @mixin ThreadRepliesAmount;
+    }
+}
+
+.mx_ThreadSummary_icon {
+    display: inline-block;
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
+
+    > svg {
+        @mixin ThreadSummaryIcon;
+        vertical-align: middle;
+        margin-inline-end: var(--cpd-space-2x);
+        margin-top: -2px;
+    }
+
+    a& {
+        color: $secondary-content;
+    }
+}
+
+/* For style rules of ThreadView, see _ThreadPanel.pcss */
+.mx_ThreadView {
+    --ThreadView_group_spacing-start: 56px; /* 56px: 64px - 8px (padding) */
+    --ThreadView_group_spacing-end: 8px; /* same as padding */
+
+    .mx_GenericEventListSummary {
+        &[data-layout="irc"],
+        &[data-layout="group"] {
+            > .mx_EventTile_line {
+                padding-inline-start: var(--ThreadView_group_spacing-start); /* align summary text with message text */
+                padding-inline-end: var(--ThreadView_group_spacing-end); /* align summary text with message text */
+            }
+        }
+    }
+
+    /* ViewSourceEvent explicitly uses Compound's 11px body-xs token. Legacy
+       thread info tiles applied their 12px size directly to event content;
+       keep that override on the body component after its slot boundary. */
+    .mx_EventTile .mx_EventTile_line .mx_ViewSourceEvent {
+        font-size: $font-12px;
+    }
+}
+
+/* Body-only compact markdown spacing remains application-owned. */
+.mx_MatrixChat_useCompactLayout {
+    .mx_EventTile {
+        .mx_EventTile_content .markdown-body {
+            p,
+            ul,
+            ol,
+            dl,
+            blockquote,
+            pre,
+            table {
+                margin-bottom: var(--cpd-space-1x); /* 1/4 of the non-compact margin-bottom */
+            }
+        }
+    }
+}
+
+/* Media query for mobile UI */
+@media only screen and (max-width: 480px) {
+    .mx_EventTile_content {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "close_brand": "Fecha %(brand)s",
+        "copy": "Copiar",
+        "cut": "Cortar",
+        "delete": "Apagar",
+        "edit": "Editar",
+        "minimise": "Minimizar",
+        "paste": "Colar",
+        "paste_match_style": "Colar e combinar o estilo",
+        "quit": "Desistir",
+        "redo": "Refazer",
+        "select_all": "Selecionar tudo",
+        "show_hide": "Mostrar/ocultar",
+        "undo": "Desfazer",
+        "zoom_in": "Ampliar",
+        "zoom_out": "Reduzir"
+    },
+    "common": {
+        "about": "Sobre",
+        "brand_help": "%(brand)s Ajuda",
+        "help": "Ajuda",
+        "preferences": "Preferências"
+    },
+    "confirm_quit": "Tens a certeza de que queres desistir?",
+    "edit_menu": {
+        "speech": "Discurso",
+        "speech_start_speaking": "Começa a falar",
+        "speech_stop_speaking": "Pára de falar"
+    },
+    "file_menu": {
+        "label": "Ficheiro"
+    },
+    "menu": {
+        "hide": "Ocultar",
+        "hide_others": "Ocultar Outros",
+        "services": "Serviços",
+        "unhide": "Mostrar"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Adicionar ao dicionário",
+        "copy_email": "Copiar endereço de e-mail",
+        "copy_image": "Copiar imagem",
+        "copy_image_url": "Copiar endereço da imagem",
+        "copy_link_url": "Copiar endereço do link",
+        "save_image_as": "Salvar imagem como...",
+        "save_image_as_error_description": "A imagem não foi salva",
+        "save_image_as_error_title": "Falha ao salvar a imagem"
+    },
+    "view_menu": {
+        "actual_size": "Tamanho original",
+        "toggle_developer_tools": "Alternar ferramentas de desenvolvedor",
+        "toggle_full_screen": "Alternar ecrã inteiro",
+        "view": "Ver"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Traz tudo para a frente",
+        "label": "Janela",
+        "zoom": "Ampliação"
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "action": {
+        "cancel": "Afbryd",
+        "close": "Luk",
+        "close_brand": "Luk %(brand)s",
+        "copy": "Kopiér",
+        "cut": "Klip",
+        "delete": "Slet",
+        "edit": "Rediger",
+        "minimise": "Minimér",
+        "paste": "Indsæt",
+        "paste_match_style": "Indsæt og match stil",
+        "quit": "Luk",
+        "redo": "Omgør",
+        "select_all": "Vælg alle",
+        "show_hide": "Vis/skjul",
+        "undo": "Fortryd",
+        "zoom_in": "Zoom ind",
+        "zoom_out": "Zoom ud"
+    },
+    "common": {
+        "about": "Om",
+        "brand_help": "%(brand)sHjælp",
+        "help": "Hjælp",
+        "no": "Nej",
+        "preferences": "Indstillinger",
+        "yes": "Ja"
+    },
+    "confirm_quit": "Er du sikker på, du vil afslutte?",
+    "edit_menu": {
+        "speech": "Tale",
+        "speech_start_speaking": "Begynd at tale",
+        "speech_stop_speaking": "Stop med at tale"
+    },
+    "file_menu": {
+        "label": "Fil"
+    },
+    "icon_overlay": {
+        "description_error": "Fejl"
+    },
+    "menu": {
+        "hide": "Skjul",
+        "hide_others": "Skjul andre",
+        "services": "Tjenester",
+        "unhide": "Vis"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Tilføj til ordbog",
+        "copy_email": "Kopier e-mailadresse",
+        "copy_image": "Kopier billede",
+        "copy_image_url": "Kopier billed-adresse",
+        "copy_link_url": "Kopier linkadresse",
+        "save_image_as": "Gem billede som...",
+        "save_image_as_error_description": "Billedet kunne ikke gemmes",
+        "save_image_as_error_title": "Kunne ikke gemme billedet"
+    },
+    "store": {
+        "error": {
+            "backend_no_encryption": "Dit system har en understøttet nøglering, men kryptering er ikke tilgængelig.",
+            "unsupported_keyring": "Dit system har en ikke-understøttet nøglering, hvilket betyder at databasen ikke kan åbnes."
+        }
+    },
+    "view_menu": {
+        "actual_size": "Faktisk størrelse",
+        "toggle_developer_tools": "Skift udviklerværktøjer",
+        "toggle_full_screen": "Skift fuld skærm",
+        "view": "Vis"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Bring alt i front",
+        "label": "Vindue",
+        "zoom": "Zoom"
+    }
+}

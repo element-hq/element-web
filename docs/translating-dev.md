@@ -8,7 +8,7 @@
 
 ## Translating strings vs. marking strings for translation
 
-Translating strings are done with the `_t()` function found in `languageHandler.tsx`.
+Translating strings are done with the `_t()` function found in `languageHandler`.
 It is recommended to call this function wherever you introduce a string constant which should be translated.
 However, translating can not be performed until after the translation system has been initialized.
 Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced.
@@ -45,18 +45,25 @@ We are aiming for a set of common strings to be shared then some more localised 
 3. Keys for common accessibility strings must start by `a11y_`. Example: `a11y_hide_password`
 4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
+6. Key names should match the meaning and purpose of the translations as closely as they can. E.g. "button_click_biscuits" -> "Click for biscuits"
 
 ## Adding new strings
 
 1. Check if the import `import { _t } from ".../languageHandler";` is present. If not add it to the other import statements. Also import `_td` if needed.
 1. Add `_t()` to your string passing the translation key you come up with based on the rules above. If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
-1. Run `yarn i18n` to add the keys to `src/i18n/strings/en_EN.json`
+1. Run `pnpm i18n` to add the keys to `src/i18n/strings/en_EN.json`
 1. Modify the new entries in `src/i18n/strings/en_EN.json` with the English (UK) translations for the added keys.
 
-## Editing existing strings
+## Editing non-English UK existing strings
 
-Edits to existing strings should be performed only via Localazy.
+Edits to existing **non-en_EN** strings should be performed only via Localazy.
 There you can also require all translations to be redone if the meaning of the string has changed significantly.
+
+### Editing English UK (en_EN) strings
+
+Edits to `en_EN.json` **require** a PR, since there is a high chance that a test covers the string in use and may be impacted if it were to change. This also gives us a clean change history.
+
+When changing a string, be careful to rename the key if the meaning changes. For instance, if the key `button_click_biscuits` changed from "Click for biscuits" to "Click for vegetables", then they key should have changed to `button_click_vegetables`.
 
 ## Removing existing strings
 

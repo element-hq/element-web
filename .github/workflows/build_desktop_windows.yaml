@@ -1,0 +1,235 @@
+# Windows GHA runner by default uses the pwsh shell which breaks codeSigningCert in the workflow
+# We always sign using eSignerCKA to ensure it keeps working, but aside from release & nightlies we use demo credentials
+# which do not yield trusted signatures.
+defaults:
+    run:
+        shell: powershell
+on:
+    workflow_call:
+        secrets:
+            ESIGNER_USER_NAME:
+                required: false
+            ESIGNER_USER_PASSWORD:
+                required: false
+            ESIGNER_USER_TOTP:
+                required: false
+        inputs:
+            ref:
+                type: string
+                required: false
+                description: "The git ref to checkout, defaults to the default branch"
+            arch:
+                type: string
+                required: true
+                description: "The architecture to build for, one of 'x64' | 'arm64'"
+            version:
+                type: string
+                required: false
+                description: "Version string to override the one in package.json, used for non-release builds"
+            sign:
+                type: string
+                required: false
+                description: "Whether to sign & notarise the build, requires 'Desktop eSigner' environment"
+            blob_report:
+                type: boolean
+                required: false
+                description: "Whether to run the blob report"
+            prepare-artifact-name:
+                type: string
+                required: false
+                description: |
+                    The name of the prepare artifact to use, defaults to 'desktop-prepare'.
+                    The artifact must contain the following:
+                    + webapp.asar - the asar archive of the webapp to embed in the desktop app
+                    + variant.json - the variant configuration to use for the build
+
+
+                    The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
+                    for example icons in the `build/` directory to override the app icons.
+                default: "desktop-prepare"
+            test:
+                type: boolean
+                required: false
+                default: true
+                description: "Whether to run the test stage after building"
+            test-runs-on:
+                type: string
+                required: false
+                description: "The runner image to use for testing, normally set for you, may be needed for running in private repos."
+            test-args:
+                type: string
+                required: false
+                description: "Additional arguments to pass to playwright"
+            artifact-prefix:
+                type: string
+                required: false
+                description: "An optional prefix to add to the artifact name, useful for distinguishing builds in private repos."
+                default: ""
+            targets:
+                type: string
+                required: false
+                description: "List of targets to build"
+                default: "squirrel msi"
+permissions: {} # No permissions required
+jobs:
+    build:
+        name: Build Windows ${{ inputs.arch }}
+        runs-on: windows-2025
+        environment: ${{ inputs.sign && 'Desktop eSigner' || '' }}
+        env:
+            SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
+            BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
+        steps:
+            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
+            - name: Configure git line endings
+              run: |
+                  git config --system core.autocrlf false
+                  git config --system core.eol lf
+
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  repository: element-hq/element-web
+                  ref: ${{ inputs.ref }}
+                  persist-credentials: false
+
+            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: ${{ inputs.prepare-artifact-name }}
+                  path: apps/desktop/
+
+            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version-file: apps/desktop/.node-version
+                  cache: "pnpm"
+
+            # Ensure the prebuilt seshat binaries for the target architecture get installed when cross-building
+            - name: Enable installing optional dependencies for the target architecture
+              shell: bash
+              run: |
+                  cat >> pnpm-workspace.yaml <<EOF
+
+                  supportedArchitectures:
+                      os: [current]
+                      cpu: [current, $ARCH]
+                  EOF
+              env:
+                  ARCH: ${{ inputs.arch }}
+
+            - name: Install Deps
+              working-directory: apps/desktop
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
+
+            - name: Install and configure eSigner CKA
+              run: |
+                  Set-StrictMode -Version 'Latest'
+
+                  # Download, extract, and rename
+                  Invoke-WebRequest -OutFile eSigner_CKA.zip "$env:ESIGNER_URL"
+                  Expand-Archive -Path eSigner_CKA.zip -DestinationPath .
+                  Get-ChildItem -Path * -Include "*_build_*.exe" | Rename-Item -NewName eSigner_CKA.exe
+
+                  # Install
+                  New-Item -ItemType Directory -Force -Path "$env:INSTALL_DIR"
+                  ./eSigner_CKA.exe /CURRENTUSER /VERYSILENT /SUPPRESSMSGBOXES /DIR="${{ env.INSTALL_DIR }}" | Out-Null
+
+                  # Disable logger
+                  $LogConfig = Get-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
+                  $LogConfig[0] = '<log4net threshold="OFF">'
+                  $LogConfig | Set-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
+
+                  # Configure - default credentials from https://www.ssl.com/guide/esigner-demo-credentials-and-certificates/
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe config `
+                      -mode "$env:ESIGNER_MODE" `
+                      -user "${{ secrets.ESIGNER_USER_NAME || 'esigner_demo' }}" `
+                      -pass "${{ secrets.ESIGNER_USER_PASSWORD || 'esignerDemo#1' }}" `
+                      -totp "${{ secrets.ESIGNER_USER_TOTP || 'RDXYgV9qju+6/7GnMf1vCbKexXVJmUVr+86Wq/8aIGg=' }}" `
+                      -key "${{ env.MASTER_KEY_FILE }}" -r
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe unload
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe load
+
+                  # Find certificate
+                  $CodeSigningCert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object -First 1
+                  echo Certificate: $CodeSigningCert
+
+                  # Extract thumbprint and subject name
+                  $Thumbprint = $CodeSigningCert.Thumbprint
+                  $SubjectName = ($CodeSigningCert.Subject -replace ", ?", "`n" | ConvertFrom-StringData).CN
+
+                  echo "ED_SIGNTOOL_THUMBPRINT=$Thumbprint" >> $env:GITHUB_ENV
+                  echo "ED_SIGNTOOL_SUBJECT_NAME=$SubjectName" >> $env:GITHUB_ENV
+              env:
+                  ESIGNER_MODE: ${{ vars.ESIGNER_MODE || 'sandbox' }}
+                  ESIGNER_URL: https://github.com/SSLcom/eSignerCKA/releases/download/v1.0.6/SSL.COM-eSigner-CKA_1.0.6.zip
+                  INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
+                  MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
+
+            - name: Build App
+              working-directory: apps/desktop
+              run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
+              shell: bash
+              env:
+                  VARIANT_PATH: variant.json
+                  # Only set for Nightly builds
+                  # The windows packager relies on parsing this as semver, so we have to make it look like one.
+                  # This will give our update packages really stupid names, but we probably can't change that either
+                  # because squirrel windows parses them for the version too. We don't really care: nobody sees them.
+                  # We just give the installer a static name, so you'll just see this in the 'about' dialog.
+                  # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
+                  VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
+                  TARGETS: ${{ inputs.targets }}
+
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
+            - name: Check app was signed successfully
+              working-directory: apps/desktop
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Get-ChildItem `
+                      -Recurse dist `
+                      -Include *.exe, *.msi `
+                  | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              with:
+                  name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
+                  path: |
+                      apps/desktop/dist
+                  retention-days: 1
+
+            - name: Assert executable is present
+              working-directory: apps/desktop
+              run: |
+                  Test-Path './dist/win-*unpacked/Element*.exe'
+
+            - name: Assert all Squirrel files are present
+              if: contains(inputs.targets, 'squirrel')
+              working-directory: apps/desktop
+              run: |
+                  Test-Path './dist/squirrel-windows*/Element Setup*.exe'
+                  Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
+                  Test-Path './dist/squirrel-windows*/RELEASES'
+
+            - name: Assert MSI is present
+              if: contains(inputs.targets, 'msi')
+              working-directory: apps/desktop
+              run: |
+                  Test-Path './dist/Element*.msi'
+
+    test:
+        name: Test Windows ${{ inputs.arch }}
+        needs: build
+        if: inputs.test
+        uses: ./.github/workflows/build_desktop_test.yaml
+        with:
+            project: win-${{ inputs.arch }}
+            artifact: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
+            runs-on: ${{ inputs.test-runs-on || (inputs.arch == 'arm64' && 'windows-11-arm' || 'windows-2022') }}
+            executable: ./dist/win*-unpacked/Element*.exe
+            blob_report: ${{ inputs.blob_report }}
+            args: ${{ inputs.test-args }}

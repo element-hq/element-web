@@ -1,0 +1,18 @@
+diff --git a/dist/plugins/babel/index.js b/dist/plugins/babel/index.js
+index d451e0ab75c530b794e6925466e18e798b7df960..ca4eeb240ef200fe89964532764513279c45b45c 100644
+--- a/dist/plugins/babel/index.js
++++ b/dist/plugins/babel/index.js
+@@ -9,11 +9,13 @@ const config = ['babel.config.{json,js,cjs,mjs,cts,ts}', '.babelrc.{json,js,cjs,
+ const getName = (value) => [Array.isArray(value) ? value[0] : value].filter(name => typeof name === 'string');
+ export const getDependenciesFromConfig = (config) => {
+     const presets = config.presets?.flatMap(getName).map(name => resolveName(name, 'preset')) ?? [];
++    const presetIncludes = config.presets?.filter(preset => Array.isArray(preset) && typeof preset[1] === "object").flatMap(preset => preset[1]?.include ?? []).map(name => resolveName(name, 'plugin')) ?? [];
+     const plugins = config.plugins?.flatMap(getName).map(name => resolveName(name, 'plugin')) ?? [];
+     const nested = config.env ? Object.values(config.env).flatMap(getDependenciesFromConfig) : [];
+     const overrides = config.overrides ? [config.overrides].flat().flatMap(getDependenciesFromConfig) : [];
+     return compact([
+         ...presets.map(id => toDeferResolve(id)),
++        ...presetIncludes.map(id => toDeferResolve(id)),
+         ...plugins.map(id => toDeferResolve(id)),
+         ...(plugins.includes('@babel/plugin-transform-runtime')
+             ? [toDeferResolve('@babel/runtime', { optional: true })]

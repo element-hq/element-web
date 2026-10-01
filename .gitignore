@@ -3,30 +3,20 @@
 /dist
 /key.pem
 /lib
-/node_modules
-/webapp
+node_modules
 /.npmrc
 /*.log
 package-lock.json
 .DS_Store
-electron/dist
-electron/pub
 **/.idea
-/config.json
-/config.json.*
-/config.local*.json
-# Legacy skinning file that some people might still have
-/src/component-index.js
-/.tmp
 /webpack-stats.json
+/.tmp
 .vscode
 .vscode/
+.zed/
 .env
-/coverage
-# Auto-generated file
-/src/modules.js
-/build_config.yaml
-/book
+.env.*
+coverage
 /index.html
 # version file and tarball created by `npm pack` / `yarn pack`
 /git-revision.txt
@@ -39,5 +29,21 @@ storybook-static
 /packages/shared-components/dist
 /packages/shared-components/src/i18nKeys.d.ts
 
+# Vitest blob reports, merged HTML reports, and attachments (screenshots recorded on failing
+# tests) - written at the repo root by `pnpm test:unit`, or under a package's own directory when
+# running vitest scoped to it directly
+.vitest
+
 # TSC incremental compilation information
 *.tsbuildinfo
+
+/.link-config
+
+.nx/cache
+.nx/workspace-data
+
+.pnpm-store
+
+# vitepress
+/docs/.vitepress/dist
+/docs/.vitepress/cache

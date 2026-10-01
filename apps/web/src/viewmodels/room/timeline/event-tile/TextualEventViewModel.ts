@@ -1,0 +1,31 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { type TextualEventViewSnapshot, BaseViewModel } from "@element-hq/web-shared-components";
+
+import { type EventTileTypeProps } from "../../../../events/EventTileFactory";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { textForEvent } from "../../../../TextForEvent";
+
+export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapshot, EventTileTypeProps> {
+    public constructor(props: EventTileTypeProps) {
+        super(props, { content: "" });
+        this.setTextFromEvent();
+        this.disposables.trackListener(this.props.mxEvent, MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
+    }
+
+    private setTextFromEvent = (): void => {
+        const client = MatrixClientPeg.safeGet();
+        // An export is a static HTML file, so any button rendered into it does nothing when clicked.
+        // Ask for the plain text equivalent instead.
+        const content = this.props.forExport
+            ? textForEvent(this.props.mxEvent, client)
+            : textForEvent(this.props.mxEvent, client, true, this.props.showHiddenEvents);
+        this.snapshot.set({ content });
+    };
+}

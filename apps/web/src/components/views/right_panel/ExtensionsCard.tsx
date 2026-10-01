@@ -1,0 +1,204 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type JSX, useContext, useEffect, useMemo, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
+import { Button, Link, Separator, Text } from "@vector-im/compound-web";
+import {
+    PlusIcon,
+    ExtensionsIcon,
+    OverflowHorizontalIcon,
+    PinSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
+
+import BaseCard from "./BaseCard";
+import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
+import { _t } from "../../../languageHandler";
+import { useContextMenu } from "../../structures/ContextMenu";
+import { type IApp } from "../../../stores/WidgetStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import { MAX_PINNED } from "../../../stores/widgets/WidgetLayoutStore";
+import AccessibleButton from "../elements/AccessibleButton";
+import WidgetAvatar from "../avatars/WidgetAvatar";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import EmptyState from "./EmptyState";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
+import { UIComponent } from "../../../settings/UIFeature.ts";
+import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
+
+interface Props {
+    room: Room;
+    onClose(this: void): void;
+}
+
+interface IAppRowProps {
+    app: IApp;
+    room: Room;
+}
+
+const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
+    const sdkContext = useContext(SDKContext);
+    const name = WidgetUtils.getWidgetName(app);
+    const [canModifyWidget, setCanModifyWidget] = useState<boolean>();
+
+    useEffect(() => {
+        setCanModifyWidget(WidgetUtils.canUserModifyWidgets(room.client, room.roomId));
+    }, [room.client, room.roomId]);
+
+    const onOpenWidgetClick = (): void => {
+        sdkContext.rightPanelStore.pushCard({
+            phase: RightPanelPhases.Widget,
+            state: { widgetId: app.id },
+        });
+    };
+
+    const isPinned = sdkContext.widgetLayoutStore.isInContainer(room, app, "top");
+    const togglePin = isPinned
+        ? () => {
+              sdkContext.widgetLayoutStore.moveToContainer(room, app, "right");
+          }
+        : () => {
+              sdkContext.widgetLayoutStore.moveToContainer(room, app, "top");
+          };
+
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+
+    const cannotPin = !isPinned && !sdkContext.widgetLayoutStore.canAddToContainer(room, "top");
+
+    let pinTitle: string;
+    if (cannotPin) {
+        pinTitle = _t("right_panel|pinned_messages|limits", { count: MAX_PINNED });
+    } else {
+        pinTitle = isPinned ? _t("action|unpin") : _t("action|pin");
+    }
+
+    const isMaximised = sdkContext.widgetLayoutStore.isInContainer(room, app, "center");
+
+    let openTitle = "";
+    if (isPinned) {
+        openTitle = _t("widget|unpin_to_view_right_panel");
+    } else if (isMaximised) {
+        openTitle = _t("widget|close_to_view_right_panel");
+    }
+
+    const classes = classNames("mx_BaseCard_Button mx_ExtensionsCard_Button", {
+        mx_ExtensionsCard_Button_pinned: isPinned,
+    });
+
+    return (
+        <div className={classes}>
+            <AccessibleButton
+                className="mx_ExtensionsCard_icon_app"
+                onClick={onOpenWidgetClick}
+                // only show a tooltip if the widget is pinned
+                title={!(isPinned || isMaximised) ? undefined : openTitle}
+                disabled={isPinned || isMaximised}
+            >
+                <WidgetAvatar app={app} size="24px" />
+                <Text size="md" weight="medium" className="mx_lineClamp">
+                    {name}
+                </Text>
+            </AccessibleButton>
+
+            {canModifyWidget && (
+                <WidgetContextMenu
+                    app={app}
+                    onFinished={closeMenu}
+                    menuDisplayed={menuDisplayed}
+                    trigger={
+                        <AccessibleButton
+                            ref={handle}
+                            className="mx_ExtensionsCard_app_options"
+                            onClick={openMenu}
+                            title={_t("common|options")}
+                        >
+                            <OverflowHorizontalIcon />
+                        </AccessibleButton>
+                    }
+                />
+            )}
+
+            <AccessibleButton
+                className="mx_ExtensionsCard_app_pinToggle"
+                onClick={togglePin}
+                title={pinTitle}
+                disabled={cannotPin}
+            >
+                <PinSolidIcon />
+            </AccessibleButton>
+        </div>
+    );
+};
+
+/**
+ * A right panel card displaying a list of widgets in the room and allowing the user to manage them.
+ * @param room the room to manage widgets for
+ * @param onClose callback when the card is closed
+ */
+const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
+    const sdkContext = useContext(SDKContext);
+    const apps = useWidgets(room);
+    // Filter out virtual widgets
+    const realApps = useMemo(() => apps.filter((app) => app.eventId !== undefined), [apps]);
+
+    const onManageIntegrations = (): void => {
+        const managers = IntegrationManagers.sharedInstance();
+        if (!managers.hasManager()) {
+            managers.openNoManagerDialog();
+        } else {
+            void managers.getPrimaryManager()?.open(room);
+        }
+    };
+
+    let body: JSX.Element;
+    if (realApps.length < 1) {
+        body = (
+            <EmptyState
+                Icon={ExtensionsIcon}
+                title={_t("right_panel|extensions_empty_title")}
+                description={_t("right_panel|extensions_empty_description", {
+                    addIntegrations: _t("right_panel|add_integrations"),
+                })}
+            />
+        );
+    } else {
+        let copyLayoutBtn: JSX.Element | null = null;
+        if (sdkContext.widgetLayoutStore.canCopyLayoutToRoom(room)) {
+            copyLayoutBtn = (
+                <Link onClick={() => sdkContext.widgetLayoutStore.copyLayoutToRoom(room)}>
+                    {_t("widget|set_room_layout")}
+                </Link>
+            );
+        }
+
+        body = (
+            <>
+                <Separator />
+                {realApps.map((app) => (
+                    <AppRow key={app.id} app={app} room={room} />
+                ))}
+                {copyLayoutBtn}
+            </>
+        );
+    }
+
+    return (
+        <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
+            {shouldShowComponent(UIComponent.AddIntegrations) && (
+                <Button size="md" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                    {_t("right_panel|add_integrations")}
+                </Button>
+            )}
+            {body}
+        </BaseCard>
+    );
+};
+
+export default ExtensionsCard;

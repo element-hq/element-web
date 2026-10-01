@@ -1,0 +1,101 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: var(--cpd-space-2x);
+
+    & a {
+        display: flex;
+        flex-grow: 1;
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+.content [data-type="info"] {
+    display: inline-flex;
+    align-items: center;
+    flex-grow: 1;
+
+    & > button {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        border: none;
+        width: 100%;
+        min-block-size: unset;
+        color: inherit;
+        background-color: inherit;
+        gap: var(--cpd-space-3x);
+
+        & svg {
+            width: 16px;
+            height: 16px;
+            padding: var(--cpd-space-2x);
+            color: var(--cpd-color-text-secondary);
+            background-color: var(--cpd-color-bg-subtle-primary);
+            border-radius: 20px;
+        }
+
+        & span {
+            flex: 1;
+            min-width: 0;
+            text-align: start;
+            font: var(--cpd-font-body-md-regular);
+            letter-spacing: var(--cpd-font-letter-spacing-body-md);
+            color: var(--cpd-color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+/*
+ * Actions sitting after the file name, inside the same pill. Only rendered for files we can open, so
+ * everything here is scoped to a row that actually has them and the plain row is untouched.
+ */
+.content [data-type="info"]:has([data-type="actions"]) > button {
+    /* The name no longer owns the whole pill: let it share, and ellipsize, rather than push the icons out. */
+    width: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.content [data-type="actions"] {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--cpd-space-1x);
+    margin-inline-start: var(--cpd-space-2x);
+
+    & svg {
+        width: 16px;
+        height: 16px;
+        color: var(--cpd-color-icon-secondary);
+    }
+}
+
+.content [data-type="download"] {
+    align-items: center;
+    height: var(--cpd-space-9x);
+    margin-block-start: var(--event-tile-file-download-margin-block-start, 0);
+
+    & iframe {
+        margin: 0;
+        padding: 0;
+        border: none;
+        width: 100%;
+    }
+}
+
+.invalid {
+    color: var(--cpd-color-text-critical-primary);
+}

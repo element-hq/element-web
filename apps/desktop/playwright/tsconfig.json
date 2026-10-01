@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "target": "es2022",
+        "module": "ESNext",
+        "lib": ["es2024", "dom", "dom.iterable"],
+        "strictNullChecks": false,
+        "types": ["node"]
+    },
+    "include": ["**/*.ts"]
+}

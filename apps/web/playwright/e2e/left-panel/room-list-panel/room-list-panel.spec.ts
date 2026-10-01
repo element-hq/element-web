@@ -1,0 +1,46 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
+import { test, expect } from "../../../element-web-test";
+import { getRoomListView } from "./utils";
+
+test.describe("Room list panel", () => {
+    test.use({
+        displayName: "Eve",
+    });
+
+    test.beforeEach(async ({ page, app, user }) => {
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+
+        // Populate the room list
+        for (let i = 0; i < 20; i++) {
+            await app.client.createRoom({ name: `room${i}` });
+        }
+
+        // focus the user menu to avoid to have hover decoration
+        await page.getByRole("button", { name: "User menu" }).focus();
+    });
+
+    test("should render the room list panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        const roomListView = getRoomListView(page);
+        // Wait for the last room to be visible
+        await expect(roomListView.getByRole("option", { name: "Open room room19" })).toBeVisible();
+        await expect(roomListView).toMatchScreenshot("room-list-panel.png");
+    });
+
+    test.describe("small screen", () => {
+        test.use({ lockLeftPanelWidth: false });
+        test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
+            await page.setViewportSize({ width: 575, height: 600 });
+            await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png");
+        });
+    });
+});

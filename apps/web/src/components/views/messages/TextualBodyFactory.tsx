@@ -1,0 +1,328 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { MsgType } from "matrix-js-sdk/src/matrix";
+import {
+    _t,
+    EventContentBodyView,
+    TextualBodyView,
+    type TextualBodyContentElement,
+    useCreateAutoDisposedViewModel,
+    MediaPreviewGroupPreview,
+    useViewModel,
+    linkIcon,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
+} from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
+
+import { type IBodyProps } from "./IBodyProps";
+import RoomContext from "../../../contexts/RoomContext";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/TextualBodyViewModel";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
+import { getParentEventId } from "../../../utils/Reply";
+import Modal from "../../../Modal";
+import PosthogTrackers from "../../../PosthogTrackers";
+import ImageView from "../elements/ImageView";
+import {
+    UrlPreviewGroupViewModel,
+    type UrlPreviewKind,
+} from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import PlatformPeg from "../../../PlatformPeg";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
+import { ModuleApi } from "../../../modules/Api";
+
+const logger = rootLogger.getChild("TextualBodyFactory");
+
+function getTextualBodyClassName(msgtype: MsgType | undefined): string {
+    if (msgtype === MsgType.Notice) {
+        return "mx_MNoticeBody mx_EventTile_content";
+    }
+
+    if (msgtype === MsgType.Emote) {
+        return "mx_MEmoteBody mx_EventTile_content";
+    }
+
+    if ([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType)) {
+        return "mx_MTextBody mx_EventTile_caption";
+    }
+
+    return "mx_MTextBody mx_EventTile_content";
+}
+
+export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
+    const roomContext = useContext(RoomContext);
+    const client = useMatrixClientContext();
+    const [mediaVisible] = useMediaVisible(props.mxEvent);
+    const content = props.mxEvent.getContent();
+    const isEmote = content.msgtype === MsgType.Emote;
+    const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
+    const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
+    const contentRef = useRef<TextualBodyContentElement>(null);
+
+    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
+
+    let urlPreviewKind: UrlPreviewKind;
+
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
+
+    const textualBodyVm = useCreateAutoDisposedViewModel(
+        () =>
+            new TextualBodyViewModel({
+                id: props.id,
+                mxEvent: props.mxEvent,
+                highlightLink: props.highlightLink,
+                replacingEventId: props.replacingEventId,
+                isSeeingThroughMessageHiddenForModeration: props.isSeeingThroughMessageHiddenForModeration,
+                timelineRenderingType: roomContext.timelineRenderingType,
+            }),
+    );
+
+    const eventContentBodyVm = useCreateAutoDisposedViewModel(
+        () =>
+            new EventContentBodyViewModel({
+                as: willHaveWrapper ? "span" : "div",
+                includeDir: false,
+                mxEvent: props.mxEvent,
+                content,
+                stripReply,
+                linkify: true,
+                highlights: props.highlights,
+                renderTooltipsForAmbiguousLinks: true,
+                renderKeywordPills: true,
+                renderMentionPills: true,
+                renderCodeBlocks: true,
+                renderSpoilers: true,
+                client: roomContext.room?.client ?? client ?? null,
+            }),
+    );
+
+    const urlPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new UrlPreviewGroupViewModel({
+                client,
+                mxEvent: props.mxEvent,
+                mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
+                onImageClicked: (preview: UrlPreview): void => {
+                    if (!preview.image?.imageFull) {
+                        return;
+                    }
+
+                    Modal.createDialog(
+                        ImageView,
+                        {
+                            src: preview.image.imageFull,
+                            width: preview.image.width,
+                            height: preview.image.height,
+                            name: preview.title,
+                            fileSize: preview.image.fileSize,
+                            link: preview.link,
+                        },
+                        "mx_Dialog_lightbox",
+                        undefined,
+                        true,
+                    );
+                },
+                visible: props.showUrlPreview ?? false,
+                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
+                urlPreviewKind,
+            }),
+    );
+
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(urlPreviewVm);
+
+    // Memoised because it feeds the media preview view model from an effect: a fresh object on every
+    // render would notify subscribers on every render.
+    const collapse = useMemo(
+        () =>
+            overPreviewLimit
+                ? {
+                      collapsed: previewsLimited,
+                      hiddenCount: totalPreviewCount - previews.length,
+                      onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
+                  }
+                : undefined,
+        [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
+    );
+
+    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
+        let content: MediaPreviewGroupEntryContent;
+        if (preview.image === undefined) {
+            content = {
+                type: "text",
+            };
+        } else {
+            content = {
+                type: "image",
+                image: preview.image.imageFull,
+                imageAlt: preview.title,
+                imageSize: "banner",
+                imageOnClick: () => {
+                    Modal.createDialog(
+                        ImageView,
+                        {
+                            src: preview.image!.imageFull, // full-res URL
+                            name: `Thumbnail of ${preview.title}`,
+                            width: preview.image?.width,
+                            height: preview.image?.height,
+                            fileSize: preview.image?.fileSize,
+                        },
+                        "mx_Dialog_lightbox",
+                        undefined,
+                        true,
+                    );
+                },
+            };
+        }
+
+        let body: string;
+        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+        else body = preview.description!;
+
+        return {
+            id: preview.link,
+            header: preview.title,
+            headerUrl: preview.link,
+            body,
+            buttons: [
+                {
+                    label: _t("timeline|url_preview|open_link"),
+                    icon: <PopOutIcon />,
+                    onClick: async () => {
+                        window.open(preview.link, "_blank", "noreferrer");
+                    },
+                },
+            ],
+            ...linkIcon(),
+            ...content,
+        };
+    };
+
+    const mediaPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: previews.map(previewToEntry),
+                collapse,
+            }),
+    );
+
+    useEffect(() => {
+        textualBodyVm.setId(props.id);
+    }, [props.id, textualBodyVm]);
+
+    useEffect(() => {
+        textualBodyVm.setEvent(props.mxEvent);
+    }, [props.mxEvent, textualBodyVm]);
+
+    useEffect(() => {
+        textualBodyVm.setHighlightLink(props.highlightLink);
+    }, [props.highlightLink, textualBodyVm]);
+
+    useEffect(() => {
+        textualBodyVm.setReplacingEventId(props.replacingEventId);
+    }, [props.replacingEventId, textualBodyVm]);
+
+    useEffect(() => {
+        textualBodyVm.setIsSeeingThroughMessageHiddenForModeration(props.isSeeingThroughMessageHiddenForModeration);
+    }, [props.isSeeingThroughMessageHiddenForModeration, textualBodyVm]);
+
+    useEffect(() => {
+        textualBodyVm.setTimelineRenderingType(roomContext.timelineRenderingType);
+    }, [roomContext.timelineRenderingType, textualBodyVm]);
+
+    useEffect(() => {
+        eventContentBodyVm.setEventContent(props.mxEvent, content);
+    }, [content, props.mxEvent, eventContentBodyVm]);
+
+    useEffect(() => {
+        eventContentBodyVm.setStripReply(stripReply);
+    }, [stripReply, eventContentBodyVm]);
+
+    useEffect(() => {
+        eventContentBodyVm.setAs(willHaveWrapper ? "span" : "div");
+    }, [willHaveWrapper, eventContentBodyVm]);
+
+    useEffect(() => {
+        eventContentBodyVm.setHighlights(props.highlights);
+    }, [props.highlights, eventContentBodyVm]);
+
+    useEffect(() => {
+        const eventElement = contentRef.current;
+        if (!eventElement) {
+            return;
+        }
+
+        void urlPreviewVm.updateEventElement(eventElement).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to updateEventElement", error);
+        });
+    }, [
+        props.mxEvent,
+        props.highlights,
+        props.replacingEventId,
+        props.isSeeingThroughMessageHiddenForModeration,
+        urlPreviewVm,
+    ]);
+
+    useEffect(() => {
+        void urlPreviewVm.updateUrlPreviewVisible(props.showUrlPreview ?? false).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to updateUrlPreviewVisible", error);
+        });
+    }, [props.showUrlPreview, urlPreviewVm]);
+
+    useEffect(() => {
+        void urlPreviewVm.updateMediaVisible(mediaVisible).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to updateMediaVisible", error);
+        });
+    }, [mediaVisible, urlPreviewVm]);
+
+    useEffect(() => {
+        mediaPreviewVm.setProps({
+            entries: previews.map(previewToEntry),
+            collapse,
+        });
+    }, [previews, collapse, mediaPreviewVm]);
+
+    useEffect(() => {
+        if (previews.length === 0) {
+            return;
+        }
+
+        PosthogTrackers.instance.trackUrlPreview(props.mxEvent.getId()!, props.mxEvent.isEncrypted(), previews);
+    }, [props.mxEvent, previews]);
+
+    if (props.editState) {
+        return (
+            <EditMessageComposerWrapper
+                editState={props.editState}
+                className="mx_EventTile_content"
+                mxClient={client}
+                showUrlPreview={props.showUrlPreview ?? false}
+            />
+        );
+    }
+
+    return (
+        <TextualBodyView
+            vm={textualBodyVm}
+            body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
+            bodyRef={contentRef}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} className="mx_TextualBody_urlPreviews" />}
+            className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
+        />
+    );
+}

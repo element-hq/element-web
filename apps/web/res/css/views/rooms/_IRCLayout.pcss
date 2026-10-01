@@ -1,0 +1,62 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+:root {
+    --irc-line-height: $font-18px;
+}
+
+.mx_IRCLayout {
+    --name-width: 80px; /* cf. ircDisplayNameWidth on Settings.tsx */
+    --icon-width: 14px;
+    --line-height: var(--irc-line-height);
+    --right-padding: 5px;
+    /* Map application IRC geometry onto the shared EventTileView API. */
+    --event-tile-irc-name-width: var(--name-width);
+    --event-tile-irc-timestamp-width: var(--MessageTimestamp-width);
+
+    line-height: var(--line-height) !important;
+
+    blockquote {
+        margin: 0;
+    }
+
+    .mx_NewRoomIntro {
+        > h2 {
+            line-height: initial; /* Cancel var(--irc-line-height) */
+        }
+    }
+
+    .mx_ReplyChain {
+        .mx_DisambiguatedProfile {
+            width: unset;
+            order: unset;
+            flex-shrink: unset; /* Unset flex-shrink to prevent long display name blowout */
+        }
+    }
+
+    .mx_ProfileResizer {
+        --resizer-width: 15px;
+        --resizer-a11y: 3px; /* Magic number, to be replaced with something more proper from the perspective of a11y */
+
+        position: absolute;
+        height: 100%;
+        width: var(--resizer-width);
+        cursor: col-resize;
+        z-index: 100;
+
+        /* Add width of every element rendered before the resizer (including padding for the avatar and the display
+           name), subtracting the resizer width itself to prevent the resizer from overlapping the text and moving
+           the resizer a bit to the left to make it easier to avoid selecting the resizer when highlighting text.
+           Please note that MessageTimestamp does not have inline padding. */
+        inset-inline-start: calc(
+            var(--RoomView_MessageList-padding) + var(--MessageTimestamp-width) + var(--icon-width) +
+                var(--right-padding) + var(--name-width) + var(--right-padding) - var(--resizer-width) -
+                var(--resizer-a11y)
+        );
+    }
+}

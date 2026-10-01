@@ -1,10 +1,7 @@
 # Element Web/Desktop code style guide
 
 This code style applies to projects which the element-web team directly maintains or is reasonably
-adjacent to. As of writing, these are:
-
-- element-desktop
-- element-web
+adjacent to.
 
 ## Guiding principles
 
@@ -41,7 +38,7 @@ adjacent to. As of writing, these are:
 
 Unless otherwise specified, the following applies to all code:
 
-1. Files must be formatted with Prettier.
+1. Files must be formatted with Oxfmt.
 2. 120 character limit per line. Match existing code in the file if it is using a lower guide.
 3. A tab/indentation is 4 spaces.
 4. Newlines are Unix.
@@ -274,6 +271,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 20. Do not use `React.Component::forceUpdate`.
 21. Prefer to use [compound typography components](https://compound.element.io/?path=/docs/compound-web_typography--docs) instead of raw HTML elements for text. This ensures consistent font usage and letter spacing across the app.
 22. If you can't use 21, don't forget to apply the correct CSS classes for font and letter spacing.
+23. Prefer to use `Flex` or `Box` components from shared-components for layout instead of raw HTML elements with CSS flexbox styles.
 
 ## Stylesheets
 
@@ -303,8 +301,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
     - Note: These are deprecated. Prefer Compound typography tokens like `var(--cpd-font-body-md-regular)` for new code.
 7. Use theme color variables like `$primary-content`, `$secondary-content`, `$accent`, `$alert` for colors.
     - Prefer Compound color tokens like `var(--cpd-color-text-primary)` for new code.
-8. Use spacing variables like `$spacing-8`, `$spacing-12`, `$spacing-16` where available.
-    - Prefer Compound spacing tokens like `var(--cpd-space-2x)` for new code.
+8. Use spacing variables like `var(--cpd-space-2x)`, `var(--cpd-space-3x)`, `var(--cpd-space-4x)`.
 
 #### Syntax and formatting
 
@@ -419,7 +416,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 ## Tests
 
 1. Tests must be written in TypeScript.
-2. Jest mocks are declared below imports, but above everything else.
+2. Mocks are declared below imports, but above everything else.
 3. Use the following convention template:
 
     ```typescript

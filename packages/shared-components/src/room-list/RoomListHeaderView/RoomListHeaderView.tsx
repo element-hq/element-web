@@ -7,11 +7,11 @@
 
 import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
-import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
+import { CollapseAllIcon, ExpandAllIcon, ChatIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
-import { Flex } from "../../utils/Flex";
-import { useI18n } from "../../utils/i18nContext";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { Flex } from "../../core/utils/Flex";
+import { useI18n } from "../../core/i18n/i18nContext";
 import { ComposeMenuView, OptionMenuView, SpaceMenuView } from "./menu";
 import styles from "./RoomListHeaderView.module.css";
 
@@ -20,16 +20,16 @@ import styles from "./RoomListHeaderView.module.css";
  */
 export type SortOption = "recent" | "alphabetical" | "unread-first";
 
+/**
+ * The available options for collapsing sections in the room list.
+ */
+export type CollapseSectionsOption = "collapse" | "expand";
+
 export interface RoomListHeaderViewSnapshot {
     /**
      * The title of the room list
      */
     title: string;
-    /**
-     * Whether to display the compose menu
-     * True if the user can create rooms
-     */
-    displayComposeMenu: boolean;
     /**
      * Whether to display the space menu
      * True if there is an active space
@@ -59,6 +59,20 @@ export interface RoomListHeaderViewSnapshot {
      * Whether message previews are enabled in the room list.
      */
     isMessagePreviewEnabled: boolean;
+    /**
+     * Whether sections are enabled in the room list.
+     */
+    areSectionsEnabled: boolean;
+    /**
+     * If "collapse", an icon to collapse all sections is shown.
+     * If "expand", an icon to expand all sections is shown.
+     * If undefined, no  icon are shown.
+     */
+    collapseSections?: CollapseSectionsOption;
+    /**
+     *  Whether to display the section release announcement
+     */
+    displaySectionReleaseAnnouncement: boolean;
 }
 
 export interface RoomListHeaderViewActions {
@@ -98,12 +112,24 @@ export interface RoomListHeaderViewActions {
      * Toggle message preview display in the room list.
      */
     toggleMessagePreview: () => void;
+    /**
+     * Create a new section in the room list.
+     */
+    createSection: () => void;
+    /**
+     * Collapse or expand all sections in the room list depending on the current state.
+     */
+    collapseOrExpandSections: () => void;
+    /**
+     * Close the section release announcement
+     */
+    closeSectionReleaseAnnouncement: () => void;
 }
 
 /**
  * The view model for the room list header component.
  */
-export type RoomListHeaderViewModel = ViewModel<RoomListHeaderViewSnapshot> & RoomListHeaderViewActions;
+export type RoomListHeaderViewModel = ViewModel<RoomListHeaderViewSnapshot, RoomListHeaderViewActions>;
 
 interface RoomListHeaderViewProps {
     /**
@@ -123,37 +149,58 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, displayComposeMenu } = useViewModel(vm);
+    const { title, displaySpaceMenu, collapseSections, areSectionsEnabled, canCreateRoom, canCreateVideoRoom } =
+        useViewModel(vm);
+    const canOnlyStartChat = !areSectionsEnabled && !canCreateRoom && !canCreateVideoRoom;
 
     return (
         <Flex
             as="header"
             className={styles.header}
             aria-label={_t("room|context_menu|title")}
-            justify="space-between"
-            align="center"
+            align="end"
             data-testid="room-list-header"
         >
-            <Flex className={styles.title} align="center" gap="var(--cpd-space-1x)">
-                <H1 size="sm" title={title}>
-                    {title}
-                </H1>
-                {displaySpaceMenu && <SpaceMenuView vm={vm} />}
-            </Flex>
-            <Flex align="center" gap="var(--cpd-space-2x)">
-                <OptionMenuView vm={vm} />
-
-                {/* If we don't display the compose menu, it means that the user can only send DM */}
-                {displayComposeMenu ? (
-                    <ComposeMenuView vm={vm} />
-                ) : (
-                    <IconButton
-                        onClick={(e) => vm.createChatRoom(e.nativeEvent)}
-                        tooltip={_t("action|new_conversation")}
-                    >
-                        <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-                    </IconButton>
-                )}
+            <Flex className={styles.container} justify="space-between" align="center" gap="var(--cpd-space-3x)">
+                <Flex className={styles.title} align="center" gap="var(--cpd-space-1x)">
+                    <H1 size="sm" title={title}>
+                        {title}
+                    </H1>
+                    {displaySpaceMenu && <SpaceMenuView vm={vm} />}
+                </Flex>
+                <Flex align="center" gap="var(--cpd-space-2x)">
+                    <OptionMenuView vm={vm} />
+                    {areSectionsEnabled && collapseSections && (
+                        <IconButton
+                            size="28px"
+                            style={{ padding: "4px" }}
+                            onClick={() => vm.collapseOrExpandSections()}
+                            tooltip={
+                                collapseSections === "collapse"
+                                    ? _t("room_list|collapse_all_sections")
+                                    : _t("room_list|expand_all_sections")
+                            }
+                        >
+                            {collapseSections === "collapse" ? (
+                                <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            ) : (
+                                <ExpandAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            )}
+                        </IconButton>
+                    )}
+                    {canOnlyStartChat ? (
+                        <IconButton
+                            size="28px"
+                            style={{ padding: "4px" }} // Work around miscalculated padding on 28px button: https://github.com/element-hq/compound/issues/409
+                            onClick={(e) => vm.createChatRoom(e.nativeEvent)}
+                            tooltip={_t("action|start_chat")}
+                        >
+                            <ChatIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                        </IconButton>
+                    ) : (
+                        <ComposeMenuView vm={vm} />
+                    )}
+                </Flex>
             </Flex>
         </Flex>
     );

@@ -1,0 +1,53 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/**
+ * Formats a number of seconds into a human-readable string.
+ * @param inSeconds
+ */
+export function formatSeconds(
+    inSeconds: number,
+    opts?: { hoursMinLength?: number; minutesMinLength?: number },
+): string {
+    const isNegative = inSeconds < 0;
+    inSeconds = Math.abs(inSeconds);
+
+    const hoursMinLength = opts?.hoursMinLength ?? 2;
+    const hours = Math.floor(inSeconds / (60 * 60));
+    const hoursText = hours.toFixed(0).padStart(hoursMinLength, "0");
+
+    const minutesMinLength = hours > 0 ? 2 : (opts?.minutesMinLength ?? 2);
+    const minutes = Math.floor((inSeconds % (60 * 60)) / 60);
+    const minutesText = minutes.toFixed(0).padStart(minutesMinLength, "0");
+
+    const seconds = Math.round((inSeconds % (60 * 60)) % 60);
+    const secondsText = seconds.toFixed(0).padStart(2, "0");
+
+    let output = "";
+    if (hours > 0) output += `${hoursText}:`;
+    output += `${minutesText}:${secondsText}`;
+
+    if (isNegative) {
+        output = "-" + output;
+    }
+
+    return output;
+}
+
+/**
+ * Formats dates to be compatible with attributes of a `<input type="date">`. Dates
+ * should be formatted like "2020-06-23" (formatted according to ISO8601).
+ *
+ * @param date The date to format.
+ * @returns The date string in ISO8601 format ready to be used with an `<input>`
+ */
+export function formatDateForInput(date: Date): string {
+    const year = `${date.getFullYear()}`.padStart(4, "0");
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}

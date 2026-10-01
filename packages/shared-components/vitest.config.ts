@@ -5,72 +5,52 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-/// <reference types="@vitest/browser-playwright" />
-
 import { defineConfig } from "vitest/config";
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
-import { playwright } from "@vitest/browser-playwright";
+import { playwright, type PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { InlineConfig } from "vite";
-import { Reporter } from "vitest/reporters";
-import { env } from "process";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
-const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import rootConfig from "../../vitest.config";
 
-const reporters: NonNullable<InlineConfig["test"]>["reporters"] = [["default"]];
-const slowTestReporter: Reporter = {
-    onTestRunEnd(testModules, unhandledErrors, reason) {
-        const tests = testModules
-            .flatMap((m) => Array.from(m.children.allTests()))
-            .filter((test) => test.diagnostic()?.slow);
-        tests.sort((x, y) => x.diagnostic()?.duration! - y.diagnostic()?.duration!);
-        tests.reverse();
-        if (tests.length > 0) {
-            console.warn("Slowest 10 tests:");
-        }
-        for (const t of tests.slice(0, 10)) {
-            console.warn(`${t.module.moduleId} > ${t.fullName}: ${t.diagnostic()?.duration.toFixed(0)}ms`);
-        }
-    },
+const viewport = { width: 960, height: 720 };
+
+const commonContextOptions: PlaywrightProviderOptions["contextOptions"] = {
+    reducedMotion: "reduce",
+    // Force consistent font rendering
+    colorScheme: "light",
+    // Disable font smoothing for consistent rendering
+    deviceScaleFactor: 1,
+    viewport,
 };
 
-// if we're running under GHA, enable the GHA & Sonar reporters
-if (env["GITHUB_ACTIONS"] !== undefined) {
-    reporters.push([
-        "github-actions",
-        {
-            silent: false,
-        },
-    ]);
+const commonLaunchOptions = {
+    // Options to try to make font rendering more consistent
+    args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
+};
 
-    reporters.push([
-        "vitest-sonar-reporter",
-        {
-            outputFile: "coverage/sonar-report.xml",
-            onWritePath: (path) => `packages/shared-components/${path}`,
-        },
-    ]);
-
-    // if we're running against the develop branch, also enable the slow test reporter
-    if (env["GITHUB_REF"] == "refs/heads/develop") {
-        reporters.push(slowTestReporter);
-    }
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
     test: {
         coverage: {
+            exclude: ["src/**/*.stories.tsx"],
             provider: "v8",
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.stories.tsx"],
             reporter: [["lcov", { projectRoot: "../../" }]],
         },
-        reporters,
-        globals: false,
+        reporters: rootConfig.test?.reporters,
+        onConsoleLog(log: string): boolean | void {
+            // Suppress the i18n language-loading log; it fires on every
+            // setLanguage() call in setup and adds noise to test output.
+            if (log.startsWith("Loading language from")) return false;
+        },
+        environment: "node",
         pool: "threads",
+        globals: false,
         projects: [
             {
                 extends: true,
@@ -78,50 +58,89 @@ export default defineConfig({
                     // The plugin will run tests for the stories defined in your Storybook config
                     // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
                     storybookTest({
-                        configDir: path.join(dirname, ".storybook"),
+                        configDir: path.resolve(__dirname, "./.storybook"),
                         storybookScript: "storybook --ci",
+                        tags: {
+                            exclude: ["skip-test"],
+                        },
                     }),
-                    storybookVis({}),
+                    storybookVis({
+                        // 3px of difference allowed before marking as failed
+                        failureThreshold: 3,
+                        // When running in CI=1 mode, set the platform to `linux` as that is the platform where the browser-in-docker is running
+                        snapshotRootDir: ({ ci, platform }) => `__vis__/${ci ? "linux" : platform}`,
+                    }),
                 ],
                 test: {
                     name: "storybook",
                     browser: {
                         enabled: true,
                         headless: true,
-                        provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
+                        provider: playwright({
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                            connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
+                                ? {
+                                      wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+                                      exposeNetwork: "<loopback>",
+                                  }
+                                : undefined,
+                        }),
                         instances: [{ browser: "chromium" }],
+                        viewport,
                     },
                     setupFiles: [".storybook/vitest.setup.ts"],
                 },
             },
             {
                 extends: true,
-                plugins: [nodePolyfills({ include: ["util"], globals: { global: false } })],
+                // as any is workaround for https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/150
+                plugins: [nodePolyfills({ include: ["util"], globals: { global: false } }) as any],
                 test: {
                     name: "unit",
                     browser: {
                         enabled: true,
                         headless: true,
-                        provider: playwright({}),
+                        provider: playwright({
+                            // These tests don't actually take screenshots (at least at time of writing)
+                            // but let's pass these options everywhere for consistency
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                        }),
                         instances: [{ browser: "chromium" }],
                     },
                     setupFiles: ["src/test/setupTests.ts"],
                 },
                 css: {
                     modules: {
-                        // Stabilise snapshots by stripping the hash component of the CSS module class name
-                        generateScopedName: (name) => name,
+                        // Stabilise snapshots while keeping names distinct across CSS modules.
+                        generateScopedName: "[name]_[local]",
                     },
                 },
             },
         ],
     },
     optimizeDeps: {
-        include: ["vite-plugin-node-polyfills/shims/buffer", "vite-plugin-node-polyfills/shims/process"],
+        include: [
+            "vite-plugin-node-polyfills/shims/buffer",
+            "vite-plugin-node-polyfills/shims/process",
+            "@vector-im/compound-design-tokens/assets/web/icons",
+            "storybook/preview-api",
+            // The room-list view pulls in a heavy dnd-kit + react-virtuoso graph. If these are left to
+            // runtime discovery, the browser-mode dep optimizer can re-bundle mid-run and reload the page,
+            // which fails the in-flight setupTests.ts import for the room-list unit suites. Pre-bundle the
+            // whole graph up front so the optimizer never needs to re-run while tests are loading.
+            "@dnd-kit/abstract",
+            "@dnd-kit/abstract/modifiers",
+            "@dnd-kit/dom",
+            "@dnd-kit/react",
+            "react-virtuoso",
+        ],
     },
     resolve: {
         alias: {
-            "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
+            "@test-utils": fileURLToPath(import.meta.resolve("./src/test/utils/index.tsx")),
         },
     },
+    plugins: [react()],
 });

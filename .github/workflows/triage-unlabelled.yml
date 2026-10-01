@@ -7,7 +7,7 @@ permissions: {}
 jobs:
     move_no_longer_needs_info_issues:
         name: Move no longer X-Needs-Info issues to Triaged
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             !contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
@@ -27,7 +27,7 @@ jobs:
 
     remove_Z-Labs_label:
         name: Remove Z-Labs label when features behind labs flags are removed
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             !(contains(github.event.issue.labels.*.name, 'A-Maths') ||
             contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
@@ -43,7 +43,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Element-Call')) &&
             contains(github.event.issue.labels.*.name, 'Z-Labs')
         steps:
-            - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+            - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
               with:
                   script: |
                       github.rest.issues.removeLabel({

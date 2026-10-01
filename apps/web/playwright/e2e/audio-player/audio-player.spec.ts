@@ -1,0 +1,397 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 Suguru Hirahara
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { readFile } from "node:fs/promises";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
+import type { Locator, Page } from "@playwright/test";
+import { test, expect, type ExtendedToMatchScreenshotOptions } from "../../element-web-test";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Layout } from "../../../src/settings/enums/Layout";
+import type { ElementAppPage } from "../../pages/ElementAppPage";
+import { getSampleFilePath } from "../../sample-files";
+
+// Find and click "Reply" button
+const clickButtonReply = async (tile: Locator) => {
+    await expect(async () => {
+        await tile.hover();
+        await tile.getByRole("button", { name: "Reply", exact: true }).click();
+    }).toPass();
+    await expect(tile.page().getByText("Replying", { exact: true })).toBeVisible();
+};
+
+test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+    test.slow();
+    test.use({
+        displayName: "Hanako",
+    });
+    let roomId: string;
+
+    const uploadFile = async (app: ElementAppPage, sampleFile: string) => {
+        // Upload a file from the message composer
+        await app.composerUploadFiles("room", getSampleFilePath(sampleFile));
+
+        // Wait until the file is sent
+        await expect(app.page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
+        await expect(app.page.locator(".mx_EventTile").last().getByRole("status")).toHaveAccessibleName(
+            "Your message was sent",
+        );
+        // wait for the tile to finish loading
+        await expect(app.page.getByTestId("audio-player-name").last().filter({ hasText: sampleFile })).toBeVisible();
+    };
+
+    const sendAudioFile = async (app: ElementAppPage, sampleFile: string, replyToEventId?: string): Promise<string> => {
+        const file = await readFile(getSampleFilePath(sampleFile));
+        const upload = await app.client.uploadContent(file, { name: sampleFile, type: "audio/ogg" });
+        const content = {
+            body: sampleFile,
+            msgtype: "m.audio",
+            url: upload.content_uri,
+            info: {
+                mimetype: "audio/ogg",
+                size: file.byteLength,
+                duration: 1000,
+            },
+            ...(replyToEventId
+                ? {
+                      "m.relates_to": {
+                          "m.in_reply_to": {
+                              event_id: replyToEventId,
+                          },
+                      },
+                  }
+                : {}),
+        };
+
+        const { event_id: eventId } = await app.client.sendEvent(roomId, null, "m.room.message", content);
+        await expect(
+            app.page.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" }),
+        ).toBeVisible();
+        await expect(app.page.getByTestId("audio-player-name").last()).toHaveText(sampleFile);
+        return eventId;
+    };
+
+    const scrollToBottomOfTimeline = async (page: Page) => {
+        await page.locator(".mx_RoomView_MessageList").click();
+        await page.mouse.wheel(0, 100);
+    };
+
+    /**
+     * Take snapshots of the selected EventTile on each layout, outputting log for reference/debugging.
+     * @param detail The snapshot name. Used for outputting logs too.
+     * @param monospace This changes the font used to render the UI from a default one to Fira Code. Set to false by default.
+     */
+    const takeSnapshots = async (page: Page, app: ElementAppPage, detail: string, monospace = false) => {
+        // Check that the audio player is rendered and its button becomes visible
+        const checkPlayerVisibility = async (locator: Locator) => {
+            // Assert that the audio player and media information are visible
+            const mediaInfo = locator.getByRole("region", { name: "Audio player" });
+            await expect(mediaInfo.getByText(".ogg")).toBeVisible(); // extension
+            await expect(mediaInfo.getByRole("time")).toHaveText("00:01"); // duration
+            await expect(mediaInfo.getByText("(3.56 KB)")).toBeVisible(); // actual size;
+
+            // Assert that the play button can be found and is visible
+            await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
+
+            if (monospace) {
+                // Assert that the monospace timer is visible
+                await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", '"Fira Code"');
+            }
+        };
+
+        if (monospace) {
+            // Enable system font and monospace setting
+            await app.settings.setValue("useBundledEmojiFont", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("useSystemFont", null, SettingLevel.DEVICE, true);
+            await app.settings.setValue("systemFont", null, SettingLevel.DEVICE, "Fira Code");
+        }
+
+        // Check the status of the seek bar
+        expect(await page.getByRole("region", { name: "Audio player" }).getByRole("slider").count()).toBeGreaterThan(0);
+
+        // Enable IRC layout
+        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+
+        const ircTile = page.locator(".mx_EventTile").last();
+        // Click the event timestamp to highlight EventTile in case it is not visible
+        await ircTile.locator(".mx_MessageTimestamp").click();
+        // Assert that rendering of the player settled and the play button is visible before taking a snapshot
+        await checkPlayerVisibility(ircTile);
+
+        const screenshotOptions: ExtendedToMatchScreenshotOptions = {
+            css: `
+                /* The timestamp is of inconsistent width depending on the time the test runs at */
+                .mx_MessageTimestamp {
+                    visibility: hidden;
+                }
+                /* The MAB showing up on hover is not needed for the test */
+                .mx_MessageActionBar {
+                    display: none !important;
+                }
+                /* Stabilize play button appearance in CI (disabled due to decoding) */
+                button[aria-label="Play"] {
+                    opacity: 1 !important;
+                }
+                button[aria-label="Play"] svg,
+                button[aria-label="Play"] path {
+                    fill: magenta !important;
+                    stroke: magenta !important;
+                }
+            `,
+            mask: [page.getByTestId("audio-player-seek")],
+            clip: undefined,
+            hideJumpToBottomButton: true,
+        };
+
+        // Take a snapshot of the selected EventTile on IRC layout
+        screenshotOptions.clip = (await ircTile.boundingBox()) ?? undefined;
+        await scrollToBottomOfTimeline(page);
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
+
+        // Take a snapshot on modern/group layout
+        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+        const groupTile = page.locator(".mx_EventTile").last();
+        await groupTile.locator(".mx_MessageTimestamp").click();
+        await checkPlayerVisibility(groupTile);
+        screenshotOptions.clip = (await groupTile.boundingBox()) ?? undefined;
+        await scrollToBottomOfTimeline(page);
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
+
+        // Take a snapshot on bubble layout
+        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+        const bubbleTile = page.locator(".mx_EventTile").last();
+        await bubbleTile.locator(".mx_MessageTimestamp").click();
+        await checkPlayerVisibility(bubbleTile);
+        screenshotOptions.clip = (await bubbleTile.boundingBox()) ?? undefined;
+        await scrollToBottomOfTimeline(page);
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
+    };
+
+    test.beforeEach(async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+        roomId = await app.client.createRoom({ name: "Test Room" });
+        await app.viewRoomByName("Test Room");
+
+        // Wait until configuration is finished
+        await expect(
+            page
+                .locator(".mx_GenericEventListSummary[data-layout='group'] .mx_GenericEventListSummary_summary")
+                .getByText(`${user.displayName} created and configured the room.`),
+        ).toBeVisible();
+    });
+
+    test("should be correctly rendered - light theme", { tag: "@screenshot" }, async ({ page, app }) => {
+        await uploadFile(app, "1sec-long-name-audio-file.ogg");
+        await takeSnapshots(page, app, "Selected EventTile of audio player (light theme)");
+    });
+
+    test(
+        "should be correctly rendered - light theme with monospace font",
+        { tag: "@screenshot" },
+        async ({ page, app }) => {
+            await uploadFile(app, "1sec-long-name-audio-file.ogg");
+
+            await takeSnapshots(page, app, "Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
+        },
+    );
+
+    test("should be correctly rendered - high contrast theme", { tag: "@screenshot" }, async ({ page, app }) => {
+        // Disable system theme in case ThemeWatcher enables the theme automatically,
+        // so that the high contrast theme can be enabled
+        await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+
+        // Enable high contrast manually
+        const settings = await app.settings.openUserSettings("Appearance");
+        await settings.getByRole("radio", { name: "High contrast" }).click();
+
+        await app.closeDialog();
+
+        await uploadFile(app, "1sec-long-name-audio-file.ogg");
+
+        await takeSnapshots(page, app, "Selected EventTile of audio player (high contrast)");
+    });
+
+    test("should be correctly rendered - dark theme", { tag: "@screenshot" }, async ({ page, app }) => {
+        // Enable dark theme
+        await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+
+        await uploadFile(app, "1sec-long-name-audio-file.ogg");
+
+        await takeSnapshots(page, app, "Selected EventTile of audio player (dark theme)");
+    });
+
+    test("should play an audio file", async ({ page, app }) => {
+        await uploadFile(app, "1sec.ogg");
+
+        // Assert that the audio player is rendered
+        const container = page.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" });
+        // Assert that the counter is zero before clicking the play button
+        await expect(container.getByRole("timer")).toHaveText("00:00");
+
+        // Find and click "Play" button, the wait is to make the test less flaky
+        await expect(container.getByRole("button", { name: "Play" })).toBeVisible();
+        await container.getByRole("button", { name: "Play" }).click();
+
+        // Assert that "Pause" button can be found
+        await expect(container.getByRole("button", { name: "Pause" })).toBeVisible();
+
+        // Assert that the timer is reset when the audio file finished playing
+        await expect(container.getByRole("timer")).toHaveText("00:00");
+
+        // Assert that "Play" button can be found
+        await expect(container.getByRole("button", { name: "Play" })).toBeVisible();
+    });
+
+    test("should support downloading an audio file", async ({ page, app }) => {
+        await uploadFile(app, "1sec.ogg");
+
+        const downloadPromise = page.waitForEvent("download");
+
+        // Find and click "Download" button on MessageActionBar
+        const tile = page.locator(".mx_EventTile").last();
+        await tile.hover();
+        await tile.getByRole("button", { name: "Download" }).click();
+
+        // Assert that the file was downloaded
+        const download = await downloadPromise;
+        expect(download.suggestedFilename()).toBe("1sec.ogg");
+    });
+
+    test(
+        "should support replying to audio file with another audio file",
+        { tag: "@screenshot" },
+        async ({ page, app }) => {
+            await uploadFile(app, "1sec.ogg");
+
+            // Assert the audio player is rendered
+            await expect(page.getByRole("region", { name: "Audio player" })).toBeVisible();
+
+            // Find and click "Reply" button on MessageActionBar
+            const tile = page.locator(".mx_EventTile").last();
+            await clickButtonReply(tile);
+
+            // Reply to the player with another audio file
+            await uploadFile(app, "1sec.ogg");
+
+            // Assert that the audio player is rendered
+            await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
+
+            // Assert that replied audio file is rendered as file button inside ReplyChain
+            const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody [role='button']");
+            // Assert that the file button has file name
+            await expect(button.locator("span")).toBeVisible();
+
+            await takeSnapshots(page, app, "Selected EventTile of audio player with a reply");
+        },
+    );
+
+    test(
+        "should support creating a reply chain with multiple audio files",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            // Note: "mx_ReplyChain" element is used not only for replies which
+            // create a reply chain, but also for a single reply without a replied
+            // message. This test checks whether a reply chain which consists of
+            // multiple audio file replies is rendered properly.
+
+            const tile = page.locator(".mx_EventTile").last();
+
+            const firstEventId = await sendAudioFile(app, "upload-first.ogg");
+            const secondEventId = await sendAudioFile(app, "upload-second.ogg", firstEventId);
+            await sendAudioFile(app, "upload-third.ogg", secondEventId);
+
+            // Assert that the audio player is rendered
+            await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
+
+            // Assert that there are two "mx_ReplyChain" elements
+            await expect(tile.locator(".mx_ReplyChain")).toHaveCount(2);
+
+            // Assert that one line contains the user name
+            await expect(
+                tile.locator(".mx_ReplyChain").getByTestId("reply-tile-sender").getByText(user.displayName!),
+            ).toBeVisible();
+
+            // Assert that the other line contains the file button
+            await expect(tile.locator(".mx_ReplyChain .mx_MFileBody")).toBeVisible();
+
+            // Click "In reply to"
+            await tile.locator(".mx_ReplyChain .mx_ReplyChain_show", { hasText: "In reply to" }).click();
+
+            const replyChain = tile.locator(".mx_ReplyChain:first-of-type");
+            // Assert that "In reply to" has disappeared
+            await expect(replyChain.getByText("In reply to")).not.toBeVisible();
+
+            // Assert that the file button contains the name of the file sent at first
+            await expect(
+                replyChain.locator(".mx_MFileBody [role='button']").locator("span", { hasText: "upload-first.ogg" }),
+            ).toBeVisible();
+
+            // Take snapshots
+            await takeSnapshots(page, app, "Selected EventTile of audio player with a reply chain");
+        },
+    );
+
+    test("should be rendered, play, and support replying on a thread", async ({ page, app }) => {
+        await uploadFile(app, "1sec-long-name-audio-file.ogg");
+
+        // On the main timeline
+        const messageList = page.locator(".mx_RoomView_MessageList");
+        // Assert the audio player is rendered
+        await expect(
+            messageList.locator(".mx_EventTile").last().getByRole("region", { name: "Audio player" }),
+        ).toBeVisible();
+        // Find and click "Reply in thread" button
+        await messageList.locator(".mx_EventTile").last().hover();
+        await messageList.locator(".mx_EventTile").last().getByRole("button", { name: "Reply in thread" }).click();
+
+        // On a thread
+        const thread = page.locator(".mx_ThreadView");
+        const threadTile = thread.locator(".mx_EventTile").last();
+        const audioPlayer = threadTile.getByRole("region", { name: "Audio player" });
+
+        // Assert that the counter is zero before clicking the play button
+        await expect(audioPlayer.getByRole("timer")).toHaveText("00:00");
+
+        // Find and click "Play" button, the wait is to make the test less flaky
+        await expect(audioPlayer.getByRole("button", { name: "Play" })).toBeVisible();
+        await audioPlayer.getByRole("button", { name: "Play" }).click();
+
+        // Assert that "Pause" button can be found
+        await expect(audioPlayer.getByRole("button", { name: "Pause" })).toBeVisible();
+
+        // Assert that the timer is reset when the audio file finished playing
+        await expect(audioPlayer.getByRole("timer")).toHaveText("00:00");
+
+        // Assert that "Play" button can be found
+        await expect(audioPlayer.getByRole("button", { name: "Play" })).not.toBeDisabled();
+
+        // Find and click "Reply" button
+        await threadTile.hover();
+        await threadTile.getByRole("button", { name: "Reply", exact: true }).click();
+
+        const composer = thread.locator(".mx_MessageComposer--compact");
+        // Assert that the reply preview contains audio ReplyTile the file info button
+        await expect(
+            composer
+                .locator(".mx_ReplyPreview")
+                .getByTestId("reply-tile")
+                .getByRole("button", { name: /1sec-long-name-.*\.ogg/ }),
+        ).toBeVisible();
+
+        // Select :smile: emoji and send it
+        await composer.getByTestId("basicmessagecomposer").fill(":smile:");
+        await composer.locator(".mx_Autocomplete_Completion[aria-selected='true']").click();
+        await composer.getByTestId("basicmessagecomposer").press("Enter");
+
+        // Assert that the file name is rendered on the file button
+        await expect(
+            threadTile.getByTestId("reply-tile").getByRole("button", { name: /1sec-long-name-.*\.ogg/ }),
+        ).toBeVisible();
+    });
+});

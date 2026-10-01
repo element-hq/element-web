@@ -1,0 +1,91 @@
+{
+    "action": {
+        "cancel": "취소",
+        "close": "닫기",
+        "close_brand": "%(brand)s 닫기",
+        "copy": "복사하기",
+        "cut": "잘라내기",
+        "delete": "삭제",
+        "edit": "편집",
+        "minimise": "최소화",
+        "paste": "붙여넣기",
+        "paste_match_style": "붙여넣고 스타일 일치",
+        "quit": "종료",
+        "redo": "되돌리기",
+        "select_all": "전체 선택",
+        "show_hide": "보이기/숨기기",
+        "undo": "실행 취소",
+        "zoom_in": "확대",
+        "zoom_out": "축소"
+    },
+    "common": {
+        "about": "정보",
+        "brand_help": "%(brand)s 도움말",
+        "help": "도움말",
+        "no": "아니오",
+        "preferences": "환경 설정",
+        "yes": "예"
+    },
+    "confirm_quit": "종료하시겠습니까?",
+    "edit_menu": {
+        "speech": "음성",
+        "speech_start_speaking": "말하기 시작하기",
+        "speech_stop_speaking": "말하기 중단하기"
+    },
+    "eol": {
+        "no_more_updates": "현재 지원되지 않는 macOS 버전을 사용 중입니다. %(brand)s 업데이트를 계속 받으시려면 운영 체제를 업그레이드해 주세요.",
+        "title": "시스템이 지원되지 않습니다",
+        "warning": "현재 지원되지 않는 macOS 버전을 사용 중입니다. %(brand)s을(를) 계속 사용하시려면 운영 체제를 업그레이드해야 합니다."
+    },
+    "file_menu": {
+        "label": "파일"
+    },
+    "icon_overlay": {
+        "description_error": "오류",
+        "description_notifications": {
+            "other": "읽지 않은 알림 %(count)s개가 있습니다"
+        }
+    },
+    "menu": {
+        "hide": "숨기기",
+        "hide_others": "다른 사람 숨기기",
+        "services": "서비스",
+        "unhide": "숨기기 취소"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "사전에 추가",
+        "copy_email": "이메일 주소 복사",
+        "copy_image": "이미지 복사",
+        "copy_image_url": "이미지 주소 복사",
+        "copy_link_url": "링크 주소 복사",
+        "save_image_as": "다음으로 이미지 저장...",
+        "save_image_as_error_description": "이미지 저장 실패",
+        "save_image_as_error_title": "이미지 저장 실패"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "데이터를 지우고 다시 로드하시겠습니까?",
+            "backend_changed_detail": "시스템 키링에서 비밀에 접근할 수 없습니다. 변경된 것으로 보입니다.",
+            "backend_changed_title": "데이터베이스 로드에 실패했습니다",
+            "backend_no_encryption": "시스템에 지원되는 키링이 있지만 암호화를 사용할 수 없습니다.",
+            "backend_no_encryption_detail": "Electron이 키링 %(backend)s에서 암호화를 사용할 수 없음을 감지했습니다. 키링이 설치되어 있는지 확인하세요. 이미 설치되어 있다면, 시스템을 재부팅한 후 다시 시도해 주세요. 선택적으로 %(brand)s가 약한 형태의 암호화를 사용하도록 허용할 수 있습니다",
+            "backend_no_encryption_title": "암호화를 지원 안함",
+            "unsupported_keyring": "시스템에 지원되지 않는 키링이 존재하여 데이터베이스를 열 수 없습니다.",
+            "unsupported_keyring_detail": "Electron의 키링 감지 기능이 지원되는 백엔드를 찾지 못했습니다. 명령줄 인수를 사용하여 %(brand)s 를 시작함으로써 백엔드를 수동으로 구성해 볼 수 있습니다. 이는 일회성 작업입니다. 자세한 내용은 %(link)s 를 참조하십시오.",
+            "unsupported_keyring_title": "시스템이 지원되지 않습니다",
+            "unsupported_keyring_use_basic_text": "암호화 수준 낮게 사용",
+            "unsupported_keyring_use_plaintext": "암호화를 사용하지 마십시오"
+        }
+    },
+    "view_menu": {
+        "actual_size": "실제 크기",
+        "toggle_developer_tools": "개발자 도구 전환",
+        "toggle_full_screen": "전체 화면으로 전환",
+        "view": "보기"
+    },
+    "window_menu": {
+        "bring_all_to_front": "모두 맨 앞으로 가져오기",
+        "label": "창",
+        "zoom": "확대/축소"
+    }
+}

@@ -1,0 +1,106 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React from "react";
+import { describe, it, expect, afterAll, vi } from "vitest";
+import { render, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
+import fetchMock from "@fetch-mock/vitest";
+import { getMockClientWithEventEmitter, mockClientMethodsUser, mockClientMethodsServer } from "test-utils";
+
+import SetIdServer from "./SetIdServer";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+
+describe("<SetIdServer />", () => {
+    const userId = "@alice:server.org";
+
+    const mockClient = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(userId),
+        ...mockClientMethodsServer(),
+        getOpenIdToken: vi.fn().mockResolvedValue("a_token"),
+        getTerms: vi.fn(),
+        setAccountData: vi.fn(),
+    });
+
+    const getComponent = () => (
+        <MatrixClientContext.Provider value={mockClient}>
+            <SetIdServer missingTerms={false} />
+        </MatrixClientContext.Provider>
+    );
+
+    afterAll(() => {
+        vi.resetAllMocks();
+    });
+
+    it("renders expected fields", () => {
+        const { asFragment } = render(getComponent());
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should allow setting an identity server", async () => {
+        const { getByLabelText, findByText, getByRole, findByRole } = render(getComponent());
+
+        fetchMock.get("https://identity.example.org/_matrix/identity/v2", {
+            body: {},
+        });
+        fetchMock.get("https://identity.example.org/_matrix/identity/v2/account", {
+            body: { user_id: userId },
+        });
+        fetchMock.post("https://identity.example.org/_matrix/identity/v2/account/register", {
+            body: { token: "foobar" },
+        });
+
+        const identServerField = getByLabelText("Enter a new identity server");
+        await userEvent.type(identServerField, "https://identity.example.org");
+        await userEvent.click(getByRole("button", { name: "Change" }));
+        await userEvent.click(await findByRole("button", { name: "Continue" }));
+
+        await expect(findByText("Your identity server has been changed")).resolves.toBeVisible();
+    });
+
+    it("should clear input on cancel", async () => {
+        const { getByLabelText, findByRole } = render(getComponent());
+        const identServerField = getByLabelText("Enter a new identity server");
+        await userEvent.type(identServerField, "https://identity.example.org");
+        await userEvent.click(await findByRole("button", { name: "Reset" }));
+        expect((identServerField as HTMLInputElement).value).toEqual("");
+    });
+
+    it("should show error when an error occurs", async () => {
+        const { getByLabelText, getByRole, getByText } = render(getComponent());
+
+        fetchMock.get("https://invalid.example.org/_matrix/identity/v2", {
+            body: {},
+            status: 404,
+        });
+        fetchMock.get("https://invalid.example.org/_matrix/identity/v2/account", {
+            body: {},
+            status: 404,
+        });
+        fetchMock.post("https://invalid.example.org/_matrix/identity/v2/account/register", {
+            body: {},
+            status: 404,
+        });
+
+        const identServerField = getByLabelText("Enter a new identity server");
+        await userEvent.type(identServerField, "https://invalid.example.org");
+        await userEvent.click(getByRole("button", { name: "Change" }));
+
+        await waitFor(
+            () => {
+                expect(getByText("Not a valid identity server (status code 404)")).toBeVisible();
+            },
+            { timeout: 3000 },
+        );
+
+        // Check the error vanishes when the input is edited.
+        await userEvent.type(identServerField, "https://identity2.example.org");
+        expect(() => getByText("Not a valid identity server (status code 404)")).toThrow();
+    });
+});

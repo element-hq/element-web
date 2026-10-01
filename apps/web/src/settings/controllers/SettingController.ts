@@ -1,0 +1,118 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2017 Travis Ralston
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { type SettingLevel } from "../SettingLevel";
+import type SettingsStore from "../SettingsStore";
+import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
+
+/**
+ * Represents a controller for individual settings to alter the reading behaviour
+ * based upon environmental conditions, or to react to changes and therefore update
+ * the working environment.
+ *
+ * This is not intended to replace the functionality of a SettingsHandler, it is only
+ * intended to handle environmental factors for specific settings.
+ */
+export default abstract class SettingController {
+    public static sdkContext: SDKContextClass;
+    public static settingsStore: typeof SettingsStore;
+
+    /**
+     * Gets the overridden value for the setting, if any. This must return null if the
+     * value is not to be overridden, otherwise it must return the new value.
+     * @param {string} level The level at which the value was requested at.
+     * @param {String} roomId The room ID, may be null.
+     * @param {*} calculatedValue The value that the handlers think the setting should be,
+     * may be null.
+     * @param {SettingLevel} calculatedAtLevel The level for which the calculated value was
+     * calculated at. May be null.
+     * @returns {*} The value that should be used, or null if no override is applicable.
+     */
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string | null,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel | null,
+    ): any {
+        return null; // no override
+    }
+
+    /**
+     * Called before the setting value has been changed, can abort the change.
+     * @param {string} level The level at which the setting has been modified.
+     * @param {String} roomId The room ID, may be null.
+     * @param {*} newValue The new value for the setting, may be null.
+     * @returns {boolean} Whether the settings change should be accepted.
+     */
+    public async beforeChange(level: SettingLevel, roomId: string | null, newValue: any): Promise<boolean> {
+        return true;
+    }
+
+    /**
+     * Called when the setting value has been changed.
+     * @param {string} level The level at which the setting has been modified.
+     * @param {String} roomId The room ID, may be null.
+     * @param {*} newValue The new value for the setting, may be null.
+     */
+    public onChange(level: SettingLevel, roomId: string | null, newValue: any): void {
+        // do nothing by default
+    }
+
+    /**
+     * Gets whether the setting has been disabled due to this controller.
+     * Can also return a string with the reason the setting is disabled.
+     */
+    public get settingDisabled(): boolean | string {
+        return false;
+    }
+
+    /**
+     * Accessor to the SettingsStore injected at runtime.
+     * Preferred to direct imports in order to avoid import cycles.
+     */
+    protected get settingsStore(): typeof SettingsStore {
+        return SettingController.settingsStore;
+    }
+
+    /**
+     * Accessor to the SDKContext injected at runtime.
+     * Preferred to direct imports in order to avoid import cycles.
+     */
+    protected get sdkContext(): SDKContextClass {
+        return SettingController.sdkContext;
+    }
+}
+
+/**
+ * Normalises a setting's `controller` field into a list, keeping the order it was declared in.
+ * @param controller The controller, list of controllers, or nothing.
+ * @returns The controllers to consult, in declaration order.
+ */
+export function toControllers(controller?: SettingController | SettingController[]): SettingController[] {
+    if (!controller) return [];
+    return Array.isArray(controller) ? controller : [controller];
+}
+
+/**
+ * Gets whether any of the given controllers disables the setting.
+ * A reason given by one controller is preferred over a plain `true` from another, so that the
+ * UI can tell the user why the setting is disabled.
+ * @param controller The controller, list of controllers, or nothing.
+ * @returns The reason the setting is disabled, `true` if it is disabled without a reason,
+ * or `false` if it is not disabled.
+ */
+export function getSettingDisabled(controller?: SettingController | SettingController[]): boolean | string {
+    let disabled: boolean | string = false;
+    for (const c of toControllers(controller)) {
+        const settingDisabled = c.settingDisabled;
+        if (typeof settingDisabled === "string") return settingDisabled;
+        if (settingDisabled) disabled = true;
+    }
+    return disabled;
+}

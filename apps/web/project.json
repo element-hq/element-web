@@ -1,0 +1,65 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "targets": {
+        "prebuild:rethemendex": {
+            "cache": true,
+            "executor": "nx:run-script",
+            "options": {
+                "script": "rethemendex",
+                "cwd": "apps/web"
+            },
+            "inputs": ["{projectRoot}/res/css/**/*"],
+            "outputs": ["{projectRoot}/res/css/_components.pcss"]
+        },
+        "build": {
+            "command": "webpack-cli --progress --mode production",
+            "outputs": ["{projectRoot}/webapp"],
+            "options": { "cwd": "apps/web" }
+        },
+        "start": {
+            "command": "webpack-dev-server --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
+            "dependsOn": ["prebuild:rethemendex", "^start"],
+            "continuous": true,
+            "options": { "cwd": "apps/web" }
+        },
+        "lint:types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    // We indirect via `pnpm exec` to stop knip interpreting the
+                    // commandline and declaring `playwright` as unlisted dependency.
+                    "pnpm exec tsc --noEmit",
+                    "pnpm exec tsc --noEmit --project ./tsconfig.browser-test.json",
+                    "pnpm exec tsc --noEmit --project playwright"
+                ],
+                "parallel": false,
+                "cwd": "apps/web"
+            },
+            "dependsOn": ["^build", "^build:playwright"]
+        },
+        "lint:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["^build"]
+        },
+        "test:unit:prepare": {
+            "executor": "nx:noop",
+            "dependsOn": ["^build"]
+        },
+        "test:unit": {
+            "command": "vitest run",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["test:unit:prepare"]
+        },
+        "test:playwright": {
+            "command": "playwright test",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
+        },
+        "test:playwright:screenshots": {
+            "command": "playwright-screenshots playwright test --update-snapshots --project=Chrome --grep @screenshot",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
+        }
+    }
+}

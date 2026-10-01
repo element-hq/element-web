@@ -3,39 +3,155 @@
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
+        "back": "Back",
+        "cancel": "Cancel",
+        "click": "Select",
+        "close": "Close",
+        "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
+        "go": "Go",
+        "hide": "Hide",
         "invite": "Invite",
-        "new_conversation": "New conversation",
+        "new_conversation": "New",
         "new_room": "New room",
+        "new_section": "New section",
         "new_video_room": "New video room",
+        "no": "No",
         "open_menu": "Open menu",
         "pause": "Pause",
+        "pin": "Pin",
         "play": "Play",
+        "react": "React",
         "remove": "Remove",
+        "reply": "Reply",
+        "reply_in_thread": "Reply in thread",
         "retry": "Retry",
+        "save": "Save",
         "search": "Search",
-        "start_chat": "Start chat"
+        "start_chat": "Start chat",
+        "unpin": "Unpin",
+        "view_source": "View source",
+        "yes": "Yes"
     },
     "common": {
-        "preferences": "Preferences"
+        "attachment": "Attachment",
+        "encryption_enabled": "Encryption enabled",
+        "loading": "Loading…",
+        "options": "Options",
+        "preferences": "Preferences",
+        "state_encryption_enabled": "Experimental state encryption enabled"
+    },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Clear all",
+            "collapse": "Collapse URL previews",
+            "failed": "Failed to fetch preview",
+            "loading": "Fetching preview…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s links"
+            },
+            "remove": "Remove URL preview"
+        }
+    },
+    "devtools": {
+        "custom_themes": {
+            "add": "Add custom theme",
+            "downloading": "Downloading custom theme…",
+            "error_already_installed": "A theme with that name is already installed.",
+            "error_downloading": "Error downloading theme",
+            "error_invalid": "Invalid theme schema.",
+            "error_save_failed": "Failed to save the change. It may still complete in the background.",
+            "help": "Enter the URL of a custom theme you want to apply.",
+            "installed_heading": "Installed custom themes",
+            "refresh": "Re-download theme",
+            "url_label": "Custom theme URL"
+        },
+        "toggle_event": "Event source"
+    },
+    "emoji": {
+        "categories": "Categories",
+        "category_activities": "Activities",
+        "category_animals_nature": "Animals & Nature",
+        "category_flags": "Flags",
+        "category_food_drink": "Food & Drink",
+        "category_frequently_used": "Frequently Used",
+        "category_objects": "Objects",
+        "category_smileys_people": "Smileys & People",
+        "category_symbols": "Symbols",
+        "category_travel_places": "Travel & Places",
+        "quick_reactions": "Quick Reactions"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Cancel search",
+        "emoji_picker": "Emoji picker"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Open dial pad"
+        "open_dial_pad": "Open dial pad",
+        "separator_label": "Click or drag to expand"
+    },
+    "menus": {
+        "user_menu": {
+            "clear_status": "Clear status",
+            "create_an_account": "Create an account",
+            "got_an_account": "Already have an account?",
+            "sign_in": "Sign in",
+            "title": "User menu"
+        }
+    },
+    "notifications": {
+        "all_messages": "All messages",
+        "default_settings": "Match default settings",
+        "mark_all_read": "Mark all as read",
+        "mentions_keywords": "Mentions and keywords",
+        "message_didnt_send": "Message didn't send. Select for info.",
+        "mute_room": "Mute room"
+    },
+    "pdf_viewer": {
+        "error_load": "Unable to load PDF.",
+        "loading": "Loading PDF…",
+        "page_label": "Page %(page)s of %(total)s",
+        "page_number": "Page number",
+        "zoom": "Zoom",
+        "zoom_in": "Zoom in",
+        "zoom_out": "Zoom out"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": "Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_title": "Introducing Sections"
     },
     "room": {
         "context_menu": {
             "title": "Room options"
         },
+        "history_visibility_badge": {
+            "private": "New members don't see history",
+            "shared": "New members see history",
+            "world_readable": "Anyone can see history"
+        },
+        "jump_read_marker": "Scroll to first unread message.",
+        "jump_to_bottom_button": "Scroll to most recent messages",
+        "jump_to_date": "Scroll to date",
+        "jump_to_date_beginning": "The beginning of the room",
+        "jump_to_date_prompt": "Pick a date to scroll to",
+        "knock_sent": "Request to join sent",
+        "pinned_message_badge": "Pinned message",
         "status_bar": {
+            "contact_account_provider": "Contact account provider",
             "delete_all": "Delete all",
-            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
-            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
+            "exceeded_resource_limit_description": "Please contact your account provider to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this service has exceeded a resource limit.",
             "failed_to_create_room_title": "Could not start a chat with this user",
-            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
-            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
+            "homeserver_blocked_title": "Your message wasn't sent because this service has been blocked by account provider.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this service has hit its Monthly Active User Limit.",
             "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
             "retry_all": "Retry all",
             "select_messages_to_retry": "You can select all or individual messages to retry or delete",
@@ -45,23 +161,121 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Open room %(roomName)s",
+            "drag_cancelled": "Dragging cancelled",
+            "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_end_after": "%(source)s was dropped after %(target)s",
+            "drag_end_before": "%(source)s was dropped before %(target)s",
+            "drag_end_original": "%(source)s returned to its original position",
+            "drag_instructions": "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
+            "drag_over": "%(source)s is over %(target)s",
+            "drag_over_after": "%(source)s will be dropped after %(target)s",
+            "drag_over_before": "%(source)s will be dropped before %(target)s",
+            "drag_over_original": "%(source)s will return to its original position",
+            "drag_start": "Dragging %(source)s",
+            "invitation": "Open room %(roomName)s invitation.",
+            "mention": {
+                "one": "Open room %(roomName)s with 1 unread mention.",
+                "other": "Open room %(roomName)s with %(count)s unread mentions."
+            },
+            "unread": {
+                "one": "Open room %(roomName)s with 1 unread message.",
+                "other": "Open room %(roomName)s with %(count)s unread messages."
+            },
+            "unsent_message": "Open room %(roomName)s with an unsent message.",
+            "video_call": "Open room %(roomName)s, video call in progress.",
+            "voice_call": "Open room %(roomName)s, voice call in progress."
+        },
         "appearance": "Appearance",
+        "chat_moved": "Chat moved",
+        "collapse_all_sections": "Collapse all sections",
+        "collapse_filters": "Collapse filter list",
+        "empty": {
+            "no_chats": "No chats yet",
+            "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_room_rights": "Get started by messaging someone",
+            "no_invites": "You don't have any unread invites",
+            "no_mentions": "You don't have any unread mentions",
+            "no_people": "You don’t have direct chats with anyone yet",
+            "no_people_description": "You can deselect filters in order to see your other chats",
+            "no_rooms": "You’re not in any room yet",
+            "no_rooms_description": "You can deselect filters in order to see your other chats",
+            "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
+            "show_chats": "Show all chats"
+        },
+        "expand_all_sections": "Expand all sections",
+        "expand_filters": "Expand filter list",
+        "filters": {
+            "favourite": "Favourites",
+            "invites": "Invites",
+            "low_priority": "Low priority",
+            "mentions": "Mentions",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unread"
+        },
+        "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread",
+            "move_to_section": "Move to",
+            "remove_from_section": "Remove from section"
+        },
+        "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
+        "room": {
+            "more_options": "More Options"
+        },
         "room_options": "Room Options",
+        "section_created": "Section created",
+        "section_creation": {
+            "description": "Sections are only for you",
+            "label": "Section name"
+        },
+        "section_header": {
+            "edit_section": "Edit section",
+            "more_options": "More options",
+            "remove_section": "Remove section",
+            "toggle": "Toggle %(section)s section",
+            "toggle_unread": "Toggle %(section)s section with unread rooms"
+        },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
-            "activity": "Activity",
+            "activity": "Latest activity",
             "atoz": "A-Z",
             "unread_first": "Unread first"
         },
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
+        },
+        "unread_messages": "Unread messages"
+    },
+    "status": {
+        "set_status": {
+            "away": "Away",
+            "be_right_back": "Be right back",
+            "choose_emoji": "Choose Emoji",
+            "custom": "Custom…",
+            "focus_time": "Focus Time",
+            "in_a_meeting": "In a meeting",
+            "on_the_road": "On the road",
+            "set_status_prompt": "What's your status?"
         }
     },
     "terms": {
         "tac_button": "Review terms and conditions"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "You can't start a thread from this message."
     },
     "time": {
         "about_day_ago": "about a day ago",
@@ -80,19 +294,121 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Call declined",
+                "call_declined_by_us": "You declined a call"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
+                    "title": "Group call in progress"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
+            },
+            "video_call_title": "Video call",
+            "voice_call_title": "Voice call"
+        },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",
-            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_identity_previously_verified": "Sender's verified digital identity was reset",
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
+        "download_action_decrypting": "Decrypting",
+        "download_action_downloading": "Downloading",
+        "e2e_state": "State of the end-to-end encryption",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        },
+        "m.file": {
+            "error_invalid": "Invalid file"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s changed the room avatar to <img/>",
+            "removed": "%(senderDisplayName)s removed the room avatar."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignored attempt to disable encryption",
+            "disabled": "Encryption not enabled",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile — select their profile picture.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.",
+            "unsupported": "The encryption used by this room isn't supported."
+        },
+        "mab": {
+            "collapse_reply_chain": "Collapse quotes",
+            "copy_link_thread": "Copy link to thread",
+            "expand_reply_chain": "Expand quotes",
+            "label": "Message actions",
+            "view_in_room": "View in room"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
+        "message_timestamp_received_at": "Received at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyway.</a>"
+        },
+        "pending_moderation": "Message pending moderation",
+        "pending_moderation_reason": "Message pending moderation: %(reason)s",
+        "url_preview": {
+            "show_n_more": {
+                "one": "Show %(count)s other preview",
+                "other": "Show %(count)s other previews"
+            },
+            "view_audio": "View audio",
+            "view_file": "View file",
+            "view_image": "View image",
+            "view_video": "View video"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Link new device",
+        "open_feedback": "Feedback",
+        "open_home": "Home",
+        "open_security": "Security & Privacy",
+        "open_settings": "All settings"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Effective configuration",
+            "configuration": "Configuration",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "in call",
+            "in_lobby": "in lobby",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "HostBridge log",
+            "mute_audio": "Mute audio",
+            "mute_video": "Mute video",
+            "no_participants": "No one is in this call",
+            "participants": "Participants",
+            "status": "%(roomId)s · intent %(intent)s · %(state)s · theme %(theme)s · language %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Unknown room %(roomId)s",
+            "unmute_audio": "Unmute audio",
+            "unmute_video": "Unmute video"
         }
     },
     "widget": {

@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "გაუქმება",
+        "close": "დახურვა",
+        "close_brand": "დახურვა %(brand)s",
+        "copy": "კოპირება",
+        "cut": "მოჭრა",
+        "delete": "წაშალეთ",
+        "edit": "რედაქტირება",
+        "minimise": "შეამცირეთ",
+        "paste": "პასტა",
+        "paste_match_style": "ჩასვით და მატჩის სტილი",
+        "quit": "თავი დაანებე",
+        "redo": "რედო",
+        "select_all": "აირჩიეთ ყველა",
+        "show_hide": "ჩვენება/დამალვა",
+        "undo": "გაუქმება",
+        "zoom_in": "გაზარდოთ",
+        "zoom_out": "გაფართოება"
+    },
+    "common": {
+        "about": "შესახებ",
+        "brand_help": "%(brand)sდახმარება",
+        "help": "დახმარება",
+        "preferences": "პრეფერენციები"
+    },
+    "confirm_quit": "დარწმუნებული ხართ, რომ გსურთ დატოვება?",
+    "edit_menu": {
+        "speech": "გამოსვლა",
+        "speech_start_speaking": "დაიწყეთ საუბარი",
+        "speech_stop_speaking": "შეწყვიტე ლაპარ"
+    },
+    "file_menu": {
+        "label": "ფაილი"
+    },
+    "menu": {
+        "hide": "დამალვა",
+        "hide_others": "სხვების დამალვა",
+        "services": "მომსახურება",
+        "unhide": "გამოხატე"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "ლექსიკონში დამატება",
+        "copy_email": "ელ. ფოსტის მისამართის",
+        "copy_image": "სურათის დაკოპირება",
+        "copy_image_url": "გამოსახულების მისამართის კოპირ",
+        "copy_link_url": "ბმულის მისამართის კოპირება",
+        "save_image_as": "შეინახეთ სურათი როგორც...",
+        "save_image_as_error_description": "სურათის შენახვა ვერ შეძლო",
+        "save_image_as_error_title": "სურათის შენახვა ვერ შეძლ"
+    },
+    "view_menu": {
+        "actual_size": "რეალური ზომა",
+        "toggle_developer_tools": "დეველოპერის ინსტრუმენტების",
+        "toggle_full_screen": "სრული ეკრანის გადართვა",
+        "view": "ნახვა"
+    },
+    "window_menu": {
+        "bring_all_to_front": "ყველაფერი წინ წამოიყვანეთ",
+        "label": "ფანჯარა",
+        "zoom": "გაზუსტება"
+    }
+}

@@ -1,0 +1,179 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { throttle } from "lodash";
+import { type Room, ClientEvent, SyncState, type EmptyObject } from "matrix-js-sdk/src/matrix";
+
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
+import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
+import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
+import { NotificationStateEvents } from "./NotificationState";
+import { RoomNotificationState } from "./RoomNotificationState";
+import { SummarizedNotificationState } from "./SummarizedNotificationState";
+import { isRoomVisible } from "../room-list-v3/isRoomVisible";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
+import SettingsStore from "../../settings/SettingsStore";
+
+export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
+
+export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject> {
+    private static readonly internalInstance = (() => {
+        const instance = new RoomNotificationStateStore();
+        void instance.start();
+        return instance;
+    })();
+    private roomMap = new Map<Room, RoomNotificationState>();
+
+    private listMap = new Map<TagID, ListNotificationState>();
+    private _globalState = new SummarizedNotificationState();
+
+    private constructor(dispatcher = defaultDispatcher) {
+        super(dispatcher, {});
+        SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
+            // We pass SyncState.Syncing here to "simulate" a sync happening.
+            // The code that receives these events actually doesn't care
+            // what state we pass, except that it behaves differently if we
+            // pass SyncState.Error.
+            this.emitUpdateIfStateChanged(SyncState.Syncing, false);
+        });
+    }
+
+    /**
+     * @internal Public for test only
+     */
+    public static testInstance(dispatcher: MatrixDispatcher): RoomNotificationStateStore {
+        return new RoomNotificationStateStore();
+    }
+
+    /**
+     * Gets a snapshot of notification state for all visible rooms. The number of states recorded
+     * on the SummarizedNotificationState is equivalent to rooms.
+     */
+    public get globalState(): SummarizedNotificationState {
+        return this._globalState;
+    }
+
+    /**
+     * Gets an instance of the list state class for the given tag.
+     * @param tagId The tag to get the notification state for.
+     * @returns The notification state for the tag.
+     */
+    public getListState(tagId: TagID): ListNotificationState {
+        if (this.listMap.has(tagId)) {
+            return this.listMap.get(tagId)!;
+        }
+
+        // TODO: Update if/when invites move out of the room list.
+        const useTileCount = tagId === DefaultTagID.Invite;
+        const getRoomFn: FetchRoomFn = (room: Room) => {
+            return this.getRoomState(room);
+        };
+        const state = new ListNotificationState(useTileCount, getRoomFn);
+        this.listMap.set(tagId, state);
+        return state;
+    }
+
+    /**
+     * Gets a copy of the notification state for a room. The consumer should not
+     * attempt to destroy the returned state as it may be shared with other
+     * consumers.
+     * @param room The room to get the notification state for.
+     * @returns The room's notification state.
+     */
+    public getRoomState(room: Room): RoomNotificationState {
+        if (!this.roomMap.has(room)) {
+            const state = new RoomNotificationState(room, false);
+            state.on(NotificationStateEvents.Update, this.onRoomStateUpdate);
+            this.roomMap.set(room, state);
+        }
+        return this.roomMap.get(room)!;
+    }
+
+    public static get instance(): RoomNotificationStateStore {
+        return RoomNotificationStateStore.internalInstance;
+    }
+
+    private onSync = (state: SyncState, prevState: SyncState | null): void => {
+        this.emitUpdateIfStateChanged(state, state !== prevState);
+    };
+
+    /**
+     * Recompute the summary when one of the room states it is built from reports a change. Sync
+     * alone is not enough: receipts, decryption and local echo all move a room's state between
+     * sync responses, and the space badges follow those immediately, so a sync-only summary can
+     * contradict the space panel for the rest of a sync-loop iteration.
+     */
+    private onRoomStateUpdate = throttle(
+        (): void => {
+            // The sync state travels with the update and decides whether the app calls itself
+            // offline, so report the real one: a room going unread while the connection is down
+            // must not be the thing that clears the offline indicator.
+            this.emitUpdateIfStateChanged(this.matrixClient?.getSyncState() ?? SyncState.Syncing, false);
+        },
+        100,
+        { leading: false, trailing: true },
+    );
+
+    /**
+     * If the SummarizedNotificationState of this room has changed, or forceEmit
+     * is true, emit an UPDATE_STATUS_INDICATOR event.
+     *
+     * @internal public for test
+     */
+    public emitUpdateIfStateChanged = (state: SyncState, forceEmit: boolean): void => {
+        if (!this.matrixClient) return;
+        // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
+        // This will include highlights from the previous version of the room internally
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        const globalState = new SummarizedNotificationState();
+        const visibleRooms = this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
+
+        let numFavourites = 0;
+        for (const room of visibleRooms) {
+            if (isRoomVisible(room)) {
+                const state = this.getRoomState(room);
+                // The space badges leave a low priority room's activity out, so the summary must
+                // too — otherwise Home and the tab badge light up for a room that no space badge
+                // admits to (https://github.com/vector-im/element-web/issues/20372).
+                if (!state.isLowPriorityActivity) globalState.add(state);
+
+                if (room.tags[DefaultTagID.Favourite] && !room.getType()) numFavourites++;
+            }
+        }
+
+        PosthogAnalytics.instance.setProperty("numFavouriteRooms", numFavourites);
+
+        if (
+            this.globalState.symbol !== globalState.symbol ||
+            this.globalState.count !== globalState.count ||
+            this.globalState.level !== globalState.level ||
+            this.globalState.numUnreadStates !== globalState.numUnreadStates ||
+            forceEmit
+        ) {
+            this._globalState = globalState;
+            this.emit(UPDATE_STATUS_INDICATOR, globalState, state);
+        }
+    };
+
+    protected async onReady(): Promise<void> {
+        this.matrixClient?.on(ClientEvent.Sync, this.onSync);
+    }
+
+    protected async onNotReady(): Promise<any> {
+        this.matrixClient?.off(ClientEvent.Sync, this.onSync);
+        this.onRoomStateUpdate.cancel();
+        for (const roomState of this.roomMap.values()) {
+            roomState.destroy();
+        }
+    }
+
+    // We don't need this, but our contract says we do.
+    protected async onAction(payload: ActionPayload): Promise<void> {}
+}

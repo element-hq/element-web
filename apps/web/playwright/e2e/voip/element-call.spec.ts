@@ -1,0 +1,859 @@
+/*
+Copyright 2025 New Vector Ltd.
+Copyright (C) 2025 Element Creations Ltd
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { type Locator, type Page } from "@playwright/test";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+
+import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { test, expect } from "../../element-web-test";
+import type { Credentials } from "../../plugins/homeserver";
+import { Bot } from "../../pages/bot";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { readSampleFile } from "../../sample-files";
+
+// Load a copy of our fake Element Call app, and the latest widget API.
+// The fake call app does *just* enough to convince Element Web that a call is ongoing
+// and functions like PiP work. It does not actually do anything though, to limit the
+// surface we test.
+const widgetApi = readFile(fileURLToPath(import.meta.resolve("matrix-widget-api/dist/api.min.js")), "utf-8");
+const fakeCallClient = readSampleFile("fake-element-call.html");
+
+function assertCommonCallParameters(
+    url: URLSearchParams,
+    hash: URLSearchParams,
+    user: Credentials,
+    room: { roomId: string },
+): void {
+    expect(url.has("widgetId")).toEqual(true);
+    expect(url.has("parentUrl")).toEqual(true);
+
+    expect(hash.get("perParticipantE2EE")).toEqual("false");
+    expect(hash.get("userId")).toEqual(user.userId);
+    expect(hash.get("deviceId")).toEqual(user.deviceId);
+    expect(hash.get("roomId")).toEqual(room.roomId);
+}
+
+async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification", intent?: string) {
+    const resp = await bot.sendStateEvent(
+        roomId,
+        "org.matrix.msc3401.call.member",
+        {
+            "application": "m.call",
+            "call_id": "",
+            "m.call.intent": intent,
+            "device_id": "OiDFxsZrjz",
+            "expires": 180000000,
+            "foci_preferred": [
+                {
+                    livekit_alias: roomId,
+                    livekit_service_url: "https://example.org",
+                    type: "livekit",
+                },
+            ],
+            "focus_active": {
+                focus_selection: "oldest_membership",
+                type: "livekit",
+            },
+            "scope": "m.room",
+        },
+        `_@${bot.credentials!.userId}_OiDFxsZrjz_m.call`,
+    );
+    if (!notification) {
+        return;
+    }
+    await bot.sendEvent(roomId, null, "org.matrix.msc4075.rtc.notification", {
+        "lifetime": 30000,
+        "m.mentions": {
+            room: true,
+            user_ids: [],
+        },
+        "m.relates_to": {
+            event_id: resp.event_id,
+            rel_type: "m.reference",
+        },
+        "m.call.intent": intent,
+        "notification_type": notification,
+        "sender_ts": 1758611895996,
+    });
+}
+
+test.use({
+    synapseConfig: {
+        experimental_features: {
+            msc4143_enabled: true,
+        },
+        matrix_rtc: {
+            transports: [
+                {
+                    type: "livekit",
+                    livekit_service_url: "https://example.org/can-be-anything",
+                },
+            ],
+        },
+    },
+});
+
+test.describe("Element Call", () => {
+    test.use({
+        displayName: "Alice",
+        botCreateOpts: {
+            autoAcceptInvites: true,
+            displayName: "Bob",
+        },
+    });
+
+    test.beforeEach(async ({ page, user, app }) => {
+        // Mock a widget page. We use a fake version of Element Call here.
+        // We should match on things after .html as these widgets get a ton of extra params.
+        await page.route(/\/widget.html.+/, async (route) => {
+            await route.fulfill({
+                status: 200,
+                // Do enough to
+                body: (await fakeCallClient).replace("widgetCodeHere", await widgetApi),
+            });
+        });
+        await app.settings.setValue(
+            "Developer.elementCallUrl",
+            null,
+            SettingLevel.DEVICE,
+            new URL("/widget.html#", page.url()).toString(),
+        );
+        // On the React embedding, render the mock component: this backend has no LiveKit.
+        await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, true);
+
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
+    });
+
+    test.describe("Group Chat", () => {
+        let charlie: Bot;
+        test.use({
+            room: async ({ page, app, user, homeserver, bot }, use) => {
+                charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                await charlie.prepareClient();
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+        });
+        test("should be able to start a video call", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            expect(frameUrlStr).toBeDefined();
+            // Ensure we set the correct parameters for ECall.
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, room);
+            expect(hash.get("intent")).toEqual("start_call");
+            expect(hash.get("skipLobby")).toEqual(null);
+        });
+
+        test("should NOT be able to start a voice call", async ({ page, user, room, app }) => {
+            // Voice calls do not exist in group rooms
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await expect(page.getByRole("button", { name: "Voice call" })).not.toBeVisible();
+        });
+
+        test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.keyboard.down("Shift");
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await page.keyboard.up("Shift");
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, room);
+            expect(hash.get("intent")).toEqual("start_call");
+            expect(hash.get("skipLobby")).toEqual("true");
+        });
+
+        ["voice", "video"].forEach((callType) => {
+            test(`should be able to join a ${callType} call in progress`, async ({ page, user, bot, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                // Allow bob to create a call
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+                // Fake a start of a call
+                await sendRTCState(bot, room.roomId, undefined, callType === "voice" ? "audio" : "video");
+                const button = page.getByTestId("join-call-button");
+                await expect(button).toBeInViewport({ timeout: 5000 });
+                // Room list should show that a call is ongoing
+                await expect(
+                    page.getByRole("option", { name: `Open room TestRoom, ${callType} call in progress.` }),
+                ).toBeVisible();
+                // And test joining
+                await button.click();
+                const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
+                const hash = new URLSearchParams(url.hash.slice(1));
+                assertCommonCallParameters(url.searchParams, hash, user, room);
+
+                const expectedIntent = callType === "voice" ? "join_existing_voice" : "join_existing";
+                expect(hash.get("intent")).toEqual(expectedIntent);
+                expect(hash.get("skipLobby")).toEqual(null);
+
+                // pip layout check
+                switch (callType) {
+                    case "voice": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).toBeVisible();
+                        break;
+                    }
+                    case "video": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).not.toBeVisible();
+                        break;
+                    }
+                }
+            });
+        });
+
+        [true, false].forEach((joinWithVideo) => {
+            test(
+                `should be able to join a call via incoming video call toast (joinWithVideo=${joinWithVideo})`,
+                { tag: ["@screenshot"] },
+                async ({ page, user, bot, room, app }) => {
+                    await app.viewRoomById(room.roomId);
+                    // Allow bob to create a call
+                    await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                    await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+                    // Fake a start of a call
+                    await sendRTCState(bot, room.roomId, "notification", "video");
+                    const toast = page.locator(".mx_Toast_toast");
+                    const button = toast.getByRole("button", { name: "Join" });
+
+                    if (joinWithVideo) {
+                        await toast.getByRole("switch").check();
+                        await expect(toast).toMatchScreenshot(`incoming-call-group-video-toast-checked.png`);
+                    } else {
+                        await toast.getByRole("switch").uncheck();
+                        await expect(toast).toMatchScreenshot(`incoming-call-group-video-toast-unchecked.png`);
+                    }
+
+                    // And test joining
+                    await button.click();
+                    const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                    expect(frameUrlStr).toBeDefined();
+                    const url = new URL(frameUrlStr!);
+                    const hash = new URLSearchParams(url.hash.slice(1));
+                    assertCommonCallParameters(url.searchParams, hash, user, room);
+
+                    expect(hash.get("intent")).toEqual(joinWithVideo ? "join_existing" : "join_existing_voice");
+                    expect(hash.get("skipLobby")).toEqual("true");
+                },
+            );
+        });
+
+        test(
+            `should be able to join a call via incoming voice call toast`,
+            { tag: ["@screenshot"] },
+            async ({ page, user, bot, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                // Allow bob to create a call
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+                // Fake a start of a call
+                await sendRTCState(bot, room.roomId, "notification", "audio");
+                const toast = page.locator(".mx_Toast_toast");
+                const button = toast.getByRole("button", { name: "Join" });
+
+                await expect(toast).toMatchScreenshot(`incoming-call-group-voice-toast.png`);
+
+                // And test joining
+                await button.click();
+                const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
+                const hash = new URLSearchParams(url.hash.slice(1));
+                assertCommonCallParameters(url.searchParams, hash, user, room);
+
+                expect(hash.get("intent")).toEqual("join_existing_voice");
+                expect(hash.get("skipLobby")).toEqual("true");
+            },
+        );
+    });
+
+    test.describe("DMs", () => {
+        test.use({
+            room: async ({ page, app, user, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    preset: "trusted_private_chat" as Preset.TrustedPrivateChat,
+                    invite: [bot.credentials!.userId],
+                });
+                await bot.awaitRoomMembership(roomId);
+                await app.client.setAccountData("m.direct" as EventType.Direct, {
+                    [bot.credentials!.userId]: [roomId],
+                });
+                await use({ roomId });
+            },
+        });
+
+        test("should be able to start a video call", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, room);
+            expect(hash.get("intent")).toEqual("start_call_dm");
+            expect(hash.get("skipLobby")).toEqual(null);
+        });
+
+        test("should be able to skip lobby by holding down shift", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.keyboard.down("Shift");
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await page.keyboard.up("Shift");
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, room);
+            expect(hash.get("intent")).toEqual("start_call_dm");
+            expect(hash.get("skipLobby")).toEqual("true");
+        });
+
+        test("should start a voice call in PiP", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+            await page.getByRole("button", { name: "Voice call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            expect(frameUrlStr).toBeDefined();
+
+            // The call should be presented in the picture-in-picture container, right in the room we started it
+            // from, rather than taking over the room view.
+            const pipContainer = page.getByTestId("widget-pip-container");
+            await expect(pipContainer).toBeVisible();
+        });
+
+        test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+            // Fake a start of a call
+            await sendRTCState(bot, room.roomId);
+            const button = page.getByTestId("join-call-button");
+            await expect(button).toBeInViewport({ timeout: 5000 });
+            // And test joining
+            await button.click();
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            expect(frameUrlStr).toBeDefined();
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, room);
+
+            expect(hash.get("intent")).toEqual("join_existing_dm");
+            expect(hash.get("skipLobby")).toEqual(null);
+        });
+
+        [true, false].forEach((joinWithVideo) => {
+            test(
+                `should be able to join a call via incoming call toast (joinWithVideo=${joinWithVideo})`,
+                { tag: ["@screenshot"] },
+                async ({ page, user, bot, room, app }) => {
+                    await app.viewRoomById(room.roomId);
+                    await expect(page.getByText("Bob joined the room")).toBeVisible();
+                    // Fake a start of a call
+                    await sendRTCState(bot, room.roomId, "ring", "video");
+                    const toast = page.locator(".mx_Toast_toast");
+                    const button = toast.getByRole("button", { name: "Join" });
+                    if (joinWithVideo) {
+                        await toast.getByRole("switch").check();
+                    } else {
+                        await toast.getByRole("switch").uncheck();
+                    }
+                    await expect(toast).toMatchScreenshot(
+                        `incoming-call-dm-video-toast-${joinWithVideo ? "checked" : "unchecked"}.png`,
+                        {
+                            // Hide UserId
+                            css: `
+                            .mx_IncomingCallToast_AvatarWithDetails span:nth-child(2) {
+                                opacity: 0;
+                            }
+                        `,
+                        },
+                    );
+
+                    // And test joining
+                    await button.click();
+                    const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                    expect(frameUrlStr).toBeDefined();
+                    const url = new URL(frameUrlStr!);
+                    const hash = new URLSearchParams(url.hash.slice(1));
+                    assertCommonCallParameters(url.searchParams, hash, user, room);
+
+                    expect(hash.get("intent")).toEqual(joinWithVideo ? "join_existing_dm" : "join_existing_dm_voice");
+                    expect(hash.get("skipLobby")).toEqual("true");
+                },
+            );
+        });
+
+        test(
+            `should be able to join a call via incoming voice call toast`,
+            { tag: ["@screenshot"] },
+            async ({ page, user, bot, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob joined the room")).toBeVisible();
+                // Fake a start of a call
+                await sendRTCState(bot, room.roomId, "ring", "audio");
+                const toast = page.locator(".mx_Toast_toast");
+                const button = toast.getByRole("button", { name: "Join" });
+
+                await expect(toast).toMatchScreenshot(`incoming-call-dm-voice-toast.png`, {
+                    // Hide UserId
+                    css: `
+                        .mx_IncomingCallToast_AvatarWithDetails span:nth-child(2) {
+                            opacity: 0;
+                        }
+                    `,
+                });
+
+                // And test joining
+                await button.click();
+                const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr!);
+                const hash = new URLSearchParams(url.hash.slice(1));
+                assertCommonCallParameters(url.searchParams, hash, user, room);
+
+                expect(hash.get("intent")).toEqual("join_existing_dm_voice");
+                expect(hash.get("skipLobby")).toEqual("true");
+            },
+        );
+    });
+
+    test.describe("Video Rooms", () => {
+        test.use({
+            config: {
+                features: {
+                    feature_video_rooms: true,
+                    feature_element_call_video_rooms: true,
+                },
+            },
+        });
+        test("should be able to create and join a video room", async ({ page, user }) => {
+            await page
+                .getByRole("navigation", { name: "Room list" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
+                .click();
+            await page.getByRole("menuitem", { name: "New video room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill("Test room");
+            await page.getByRole("button", { name: "Create video room" }).click();
+            await expect(page).toHaveURL(new RegExp(`/#/room/`));
+            const roomId = new URL(page.url()).hash.slice("#/room/".length);
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            expect(frameUrlStr).toBeDefined();
+            // Ensure we set the correct parameters for ECall.
+            const url = new URL(frameUrlStr!);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, { roomId });
+            expect(hash.get("intent")).toEqual("join_existing");
+            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("returnToLobby")).toEqual("true");
+        });
+    });
+
+    /**
+     * Element Call has two embeddings in Element Web: the widget in an iframe (stubbed by the fake call
+     * page above) and, behind `feature_element_call_react`, an in-process React component (currently a
+     * mock with buttons that drive its HostBridge). Persistence and PiP must work the same for both.
+     */
+    for (const embedding of ["widget", "react"] as const) {
+        test.describe(`Switching rooms (${embedding} Element Call)`, () => {
+            let charlie: Bot;
+            test.use({
+                room: async ({ page, app, user, homeserver, bot }, use) => {
+                    charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                    await charlie.prepareClient();
+                    const roomId = await app.client.createRoom({
+                        name: "TestRoom",
+                        invite: [bot.credentials!.userId, charlie.credentials!.userId],
+                    });
+                    await app.client.createRoom({
+                        name: "OtherRoom",
+                    });
+                    await use({ roomId });
+                },
+                lockLeftPanelWidth: false,
+                config: {
+                    features: {
+                        feature_element_call_react: embedding === "react",
+                    },
+                },
+            });
+
+            /** The mock Element Call React component, wherever it currently is (docked or PiP). */
+            const reactCall = (page: Page): Locator => page.getByRole("region", { name: "Element Call (mock)" });
+
+            async function openAndJoinCall(page: Page, existing = false) {
+                if (existing) {
+                    await page.getByTestId("join-call-button").click();
+                } else {
+                    await page.getByRole("button", { name: "Video call" }).click();
+                    await page.getByRole("menuitem", { name: "Element Call" }).click();
+                }
+
+                if (embedding === "widget") {
+                    const iframe = page.locator("iframe");
+                    await expect(iframe).toBeVisible();
+                    const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                    const callFrame = page.frame({ url: frameUrlStr! })!;
+                    await callFrame.getByRole("button", { name: "Join Call" }).click();
+                    await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+                } else {
+                    // No iframe: the component renders straight into the call view
+                    await expect(reactCall(page)).toBeVisible();
+                    await expect(page.locator("iframe")).toHaveCount(0);
+                    // What the real component does when the user joins: tell the host, and ask to stay on screen
+                    await reactCall(page).getByRole("button", { name: "notifyJoined" }).click();
+                    await reactCall(page).getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+                    await expect(reactCall(page).getByText(/in call/)).toBeVisible();
+                }
+
+                // Wait for Element Web to pickup the RTC session and update the room list entry.
+                await expect(page.getByTestId("notification-decoration")).toBeVisible();
+            }
+
+            /** Leaves the call from wherever Element Call currently is (PiP or docked). */
+            async function closeCall(page: Page) {
+                if (embedding === "widget") {
+                    const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+                    await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
+                } else {
+                    await reactCall(page).getByRole("button", { name: "Close", exact: true }).click();
+                }
+            }
+
+            test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+
+                // We should have a PiP container here.
+                await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+                if (embedding === "react") {
+                    // The very same component instance keeps running in PiP: its HostBridge log is intact
+                    await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
+                        "→ setAlwaysOnScreen(true)",
+                    );
+                }
+            });
+
+            test("should be able to start a call, close it via PiP, and start again in the same room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Wait for call to stop.
+                await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByTestId("join-call-button")).not.toBeVisible();
+
+                // Join the call again.
+                await openAndJoinCall(page);
+            });
+
+            test("should be able to start a call, close it via PiP, and start again in a different room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Wait for call to stop.
+                await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
+                await expect(page.getByTestId("join-call-button")).not.toBeVisible();
+
+                // Join the call again, but from the other room.
+                await openAndJoinCall(page);
+            });
+
+            // For https://github.com/element-hq/element-web/issues/30838
+            test("should be able to join a call, leave via PiP, and rejoin the call", async ({
+                page,
+                user,
+                room,
+                app,
+                bot,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+
+                await sendRTCState(bot, room.roomId);
+                await openAndJoinCall(page, true);
+
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Rejoin the call
+                await app.viewRoomById(room.roomId);
+                await openAndJoinCall(page, true);
+            });
+        });
+    }
+
+    /**
+     * The real Element Call component (`@element-hq/element-call-component`), not the mock: this suite's
+     * backend has no LiveKit, so only that its chunk loads and it mounts in the call view is checked here.
+     * The full call with media is `element-call-full-call.spec.ts`.
+     */
+    test.describe("React component (real)", () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("mounts inside the call view without an iframe", async ({ page, user, room, app }) => {
+            // The suite's beforeEach switched the mock on; this test wants the real component.
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            await expect(page.locator(".mx_CallView")).toBeVisible();
+            // The tile's content lives in a persisted element attached to <body> (so it survives
+            // navigation), hence page-level locators. Element Call's lobby is the proof of life.
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+            // Element Call scopes its theme and portals to its own root element
+            await expect(page.locator("[data-element-call-root]")).toBeAttached();
+            await expect(page.locator("iframe")).toHaveCount(0);
+            await expect(page.getByRole("region", { name: "Element Call (mock)" })).toHaveCount(0);
+        });
+
+        test("follows Element Web's theme", async ({ page, user, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+
+            // Element Call themes its root element with Compound's theme classes. Left to itself it
+            // defaults to dark, so a light Element Web must tell it from the start...
+            const callRoot = page.locator("[data-element-call-root]");
+            await expect(callRoot).toHaveClass(/cpd-theme-light/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-dark/);
+
+            // ...and keep it up to date while the call runs
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(callRoot).toHaveClass(/cpd-theme-dark/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
+        });
+    });
+
+    test.describe("Theme (React component)", () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("is shown in Element Web's theme, and follows it", async ({ page, user, room, app }) => {
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+            await expect(mock).toBeVisible();
+
+            await expect(mock.getByText(/theme light/)).toBeVisible();
+
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(mock.getByText(/theme dark/)).toBeVisible();
+        });
+    });
+
+    test.describe("Widget leak bug reproduction", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test.skip(isDendrite, "No need to test on other HS, this is a client bug reproduction");
+        test.use({
+            config: {
+                features: {
+                    feature_video_rooms: true,
+                    feature_element_call_video_rooms: true,
+                },
+            },
+        });
+
+        const fakeCallClientSend = readSampleFile("fake-element-call-with-send.html");
+
+        let charlie: Bot;
+        test.use({
+            room: async ({ page, app, user, homeserver, bot }, use) => {
+                charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                await charlie.prepareClient();
+                const roomId = await app.client.createRoom({
+                    name: "VideoRoom",
+                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
+                    creation_content: {
+                        type: "org.matrix.msc3417.call",
+                    },
+                });
+                await app.client.createRoom({
+                    name: "OtherRoom",
+                });
+                await use({ roomId });
+            },
+        });
+
+        test.beforeEach(async ({ page, user, app }) => {
+            // use a specific widget to reproduce the bug.
+            // Mock a widget page. We use a fake version of Element Call here.
+            // We should match on things after .html as these widgets get a ton of extra params.
+            await page.route(/\/widget-with-send.html.+/, async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    // Do enough to
+                    body: (await fakeCallClientSend).replace("widgetCodeHere", await widgetApi),
+                });
+            });
+            await app.settings.setValue(
+                "Developer.elementCallUrl",
+                null,
+                SettingLevel.DEVICE,
+                new URL("/widget-with-send.html#", page.url()).toString(),
+            );
+        });
+
+        test("Switching rooms should not leak widgets", async ({ page, user, room, app }) => {
+            await app.viewRoomByName("VideoRoom");
+
+            await expect(page.getByRole("heading", { name: "Approve widget permissions" })).toBeVisible();
+            // approve
+            await page.getByTestId("dialog-primary-button").click();
+
+            // Switch back and forth a few times to trigger the bug.
+
+            await app.viewRoomByName("OtherRoom");
+            await app.viewRoomByName("VideoRoom");
+            await app.viewRoomByName("OtherRoom");
+            await app.viewRoomByName("VideoRoom");
+
+            // For this test we want to display the chat area alongside the widget
+            await page.getByRole("button", { name: "Chat" }).click();
+            // Wait for the right panel to show the timeline.
+            await expect(
+                page.locator(".mx_RightPanel .mx_TimelineCard").getByText("Alice created and configured the room."),
+            ).toBeVisible();
+
+            await page
+                .locator('iframe[title="Element Call"]')
+                .contentFrame()
+                .getByRole("button", { name: "Send Room Message" })
+                .click();
+
+            const timelineLocator = page.locator(".mx_RightPanel .mx_TimelineCard");
+            // First wait for the message to appear in the timeline then
+            // check the count. This improves test stability as we know the message has been sent.
+            await expect(timelineLocator.getByText("I sent this once!!")).toBeVisible();
+
+            const messageSent = await timelineLocator.getByText("I sent this once!!").count();
+
+            expect(messageSent).toBe(1);
+        });
+    });
+});

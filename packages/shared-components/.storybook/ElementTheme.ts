@@ -21,8 +21,7 @@ export default create({
     // Toolbar
     barBg: "#ffffff",
 
-    brandTitle: "Element Web",
-    brandUrl: "https://github.com/element-hq/element-web",
-    brandImage: "https://element.io/images/logo-ele-secondary.svg",
+    brandTitle: "Web Shared Components",
+    brandUrl: "https://github.com/element-hq/element-web/tree/develop/packages/shared-components",
     brandTarget: "_self",
 });

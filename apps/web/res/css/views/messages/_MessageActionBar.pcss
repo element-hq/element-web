@@ -1,0 +1,39 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* EventTileView owns the generic action-bar geometry. These are application
+   context exceptions and intentionally target only the outer slot wrapper. */
+.mx_EventTile_line > :has(> .mx_MessageActionBar)::before {
+    /* Improve clickability of the first event below a collapsed bubble summary. */
+    .mx_GenericEventListSummary[data-layout="bubble"]
+        .mx_GenericEventListSummary_toggle
+        ~ .mx_GenericEventListSummary_unstyledList
+        .mx_EventTile:first-of-type
+        & {
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+
+    /* Remove the vertical safe area for view-source events. */
+    .mx_EventTile:has(> .mx_EventTile_line .mx_ViewSourceEvent) & {
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+}
+
+/* Align event action bars with right-column bubbles in an expanded bubble
+   summary. */
+.mx_GenericEventListSummary[data-layout="bubble"][data-expanded="true"]
+    > .mx_GenericEventListSummary_unstyledList
+    > .mx_EventTile
+    > .mx_EventTile_line
+    > :has(> .mx_MessageActionBar) {
+    inset-inline-start: initial;
+    inset-inline-end: 48px;
+}

@@ -1,0 +1,16 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import MatrixSvg from "../../../res/img/matrix.svg";
+
+/**
+ * Intended to replace $matrixLogo in the welcome page.
+ */
+export const MATRIX_LOGO_HTML = `<a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
+    <img class="mx_WelcomePage_logo" width="79" height="34" alt="Matrix" style="padding-left: 1px;vertical-align: middle" src="${MatrixSvg}"/>
+</a>`;

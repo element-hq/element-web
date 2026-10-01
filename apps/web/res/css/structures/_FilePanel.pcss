@@ -1,0 +1,25 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FilePanel {
+    order: 2;
+    flex: 1 1 0;
+    overflow-y: auto;
+    display: flex;
+
+    .mx_RoomView_messageListWrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_RoomView_MessageList {
+        width: 100%;
+        gap: var(--cpd-space-6x);
+    }
+}

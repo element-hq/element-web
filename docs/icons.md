@@ -24,7 +24,7 @@ const MyComponent = () => {
 }
 ```
 
-If possible, use the icon classes from [here](../res/css/compound/_Icon.pcss).
+If possible, use the icon classes from [here](https://github.com/element-hq/element-web/blob/develop/apps/web/res/css/compound/_Icon.pcss).
 
 ## Custom styling
 

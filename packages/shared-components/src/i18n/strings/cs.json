@@ -3,15 +3,185 @@
         "seek_bar_label": "Panel posunu zvuku"
     },
     "action": {
+        "back": "Zpět",
+        "click": "Klikněte",
+        "close": "Zavřít",
+        "collapse": "Sbalit",
         "delete": "Smazat",
         "dismiss": "Zavřít",
+        "download": "Stáhnout",
+        "edit": "Upravit",
         "explore_rooms": "Procházet místnosti",
+        "go": "Přejít",
+        "hide": "Skrýt",
+        "invite": "Pozvat",
+        "new_conversation": "Nová konverzace",
+        "new_room": "Nová místnost",
+        "new_section": "Nová sekce",
+        "new_video_room": "Nová video místnost",
+        "open_menu": "Otevřít nabídku",
         "pause": "Pozastavit",
+        "pin": "Připnout",
         "play": "Přehrát",
-        "search": "Hledání"
+        "react": "Reagovat",
+        "remove": "Odstranit",
+        "reply": "Odpovědět",
+        "reply_in_thread": "Odpovědět ve vlákně",
+        "retry": "Zkusit znovu",
+        "search": "Hledání",
+        "start_chat": "Zahájit konverzaci",
+        "unpin": "Odepnout",
+        "view_source": "Zobrazit zdroj"
+    },
+    "common": {
+        "attachment": "Příloha",
+        "encryption_enabled": "Šifrování povoleno",
+        "loading": "Načítání…",
+        "options": "Možnosti",
+        "preferences": "Předvolby",
+        "state_encryption_enabled": "Experimentální šifrování stavu povoleno"
+    },
+    "devtools": {
+        "toggle_event": "přepnout událost"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Otevřít číselník"
+        "open_dial_pad": "Otevřít číselník",
+        "separator_label": "Kliknutím nebo přetažením rozbalíte"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Vytvořit účet",
+            "got_an_account": "Máte účet?",
+            "sign_in": "Přihlásit se",
+            "title": "Uživatelská nabídka"
+        }
+    },
+    "notifications": {
+        "all_messages": "Všechny zprávy",
+        "default_settings": "Shoda s výchozím nastavením",
+        "mentions_keywords": "Zmínky a klíčová slova",
+        "mute_room": "Ztlumit místnost"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Možnosti místnosti"
+        },
+        "history_visibility_badge": {
+            "private": "Noví členové nevidí historii",
+            "shared": "Noví členové vidí historii",
+            "world_readable": "Každý může vidět historii"
+        },
+        "jump_to_date": "Přejít na datum",
+        "jump_to_date_beginning": "Začátek místnosti",
+        "jump_to_date_prompt": "Vyberte datum, na které chcete přejít",
+        "pinned_message_badge": "Připnutá zpráva",
+        "status_bar": {
+            "delete_all": "Smazat vše",
+            "exceeded_resource_limit_description": "Chcete-li službu nadále používat, obraťte se na správce služby.",
+            "exceeded_resource_limit_title": "Vaše zpráva nebyla odeslána, protože tento domovský server překročil limit zdrojů.",
+            "failed_to_create_room_title": "S tímto uživatelem se nepodařilo zahájit chat.",
+            "homeserver_blocked_title": "Vaše zpráva nebyla odeslána, protože tento domovský server byl zablokován jeho správcem.",
+            "monthly_user_limit_reached_title": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl svého měsíčního limitu aktivních uživatelů.",
+            "requires_consent_agreement_title": "Nemůžete odesílat žádné zprávy, dokud si nepřečtete a nesouhlasíte s našimi obchodními podmínkami.",
+            "retry_all": "Zkusit vše znovu",
+            "select_messages_to_retry": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete znovu odeslat nebo smazat.",
+            "server_connectivity_lost_description": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
+            "server_connectivity_lost_title": "Připojení k serveru bylo ztraceno.",
+            "some_messages_not_sent": "Některé z vašich zpráv nebyly odeslány"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Otevřít místnost %(roomName)s",
+            "invitation": "Otevřít pozvánku do místnosti %(roomName)s.",
+            "mention": {
+                "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zmínkou.",
+                "few": "",
+                "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zmínkami."
+            },
+            "unread": {
+                "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zprávou.",
+                "few": "",
+                "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
+            },
+            "unsent_message": "Otevřít místnost %(roomName)s s neodeslanou zprávou.",
+            "video_call": "Otevřete místnost %(roomName)s prostřednictvím videohovoru.",
+            "voice_call": "Otevřete místnost %(roomName)s pomocí hlasového hovoru."
+        },
+        "appearance": "Vzhled",
+        "chat_moved": "Chat byl přesunut",
+        "collapse_all_sections": "Sbalit všechny sekce",
+        "collapse_filters": "Sbalit seznam filtrů",
+        "empty": {
+            "no_chats": "Zatím žádné chaty",
+            "no_chats_description": "Začněte tím, že někomu pošlete zprávu nebo vytvoříte místnost",
+            "no_chats_description_no_room_rights": "Začněte tím, že někomu napíšete zprávu",
+            "no_invites": "Nemáte žádné nepřečtené pozvánky",
+            "no_mentions": "Nemáte žádné nepřečtené zmínky",
+            "no_people": "Zatím s nikým nemáte přímé chaty",
+            "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
+            "no_rooms": "Ještě nejste v žádné místnosti",
+            "no_rooms_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
+            "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
+            "show_activity": "Zobrazit veškerou aktivitu",
+            "show_chats": "Zobrazit všechny chaty"
+        },
+        "expand_all_sections": "Rozbalit všechny sekce",
+        "expand_filters": "Rozbalit seznam filtrů",
+        "filters": {
+            "favourite": "Oblíbené",
+            "invites": "Pozvánky",
+            "low_priority": "Nízká priorita",
+            "mentions": "Zmínky",
+            "people": "Lidé",
+            "rooms": "Místnosti",
+            "unread": "Nepřečtené"
+        },
+        "list_title": "Seznam místností",
+        "more_options": {
+            "copy_link": "Kopírovat odkaz na místnost",
+            "favourited": "Oblíbené",
+            "leave_room": "Opustit místnost",
+            "low_priority": "Nízká priorita",
+            "mark_read": "Označit jako přečtené",
+            "mark_unread": "Označit jako nepřečtené",
+            "move_to_section": "Přejít na"
+        },
+        "notification_options": "Možnosti oznámení",
+        "open_space_menu": "Otevřít nabídku prostoru",
+        "primary_filters": "Filtry seznamu místností",
+        "room": {
+            "more_options": "Více možností"
+        },
+        "room_options": "Možnosti místnosti",
+        "section_created": "Sekce vytvořena",
+        "section_header": {
+            "edit_section": "Upravit sekci",
+            "more_options": "Další možnosti",
+            "remove_section": "Odstranit sekci",
+            "toggle": "Přepnout %(section)s sekci",
+            "toggle_unread": "Přepnout sekci %(section)s s nepřečtenými místnostmi"
+        },
+        "show_message_previews": "Zobrazit náhledy zpráv",
+        "sort": "Řadit",
+        "sort_type": {
+            "activity": "Poslední aktivita",
+            "atoz": "A-Z",
+            "unread_first": "Nepřečtené jako první"
+        },
+        "space_menu": {
+            "home": "Domov prostoru",
+            "space_settings": "Nastavení prostoru"
+        }
+    },
+    "terms": {
+        "tac_button": "Přečíst smluvní podmínky"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nelze vytvořit vlákno z události s existujícím vztahem"
     },
     "time": {
         "about_day_ago": "před jedním dnem",
@@ -30,10 +200,87 @@
         "n_minutes_ago": "před %(num)s minutami"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Hovor odmítnut",
+                "call_declined_by_us": "Odmítli jste hovor"
+            },
+            "video_call_title": "Videohovor",
+            "voice_call_title": "Hlasový hovor"
+        },
+        "decryption_failure": {
+            "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno",
+            "historical_event_no_key_backup": "Historické zprávy nejsou na tomto zařízení k dispozici",
+            "historical_event_unverified_device": "Pro přístup k historickým zprávám musíte toto zařízení ověřit",
+            "historical_event_user_not_joined": "Nemáte přístup k této zprávě",
+            "sender_identity_previously_verified": "Ověřená digitální identita odesílatele byla resetována",
+            "sender_unsigned_device": "Odesláno z nezabezpečeného zařízení.",
+            "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
+        },
+        "download_action_decrypting": "Dešifrování",
+        "download_action_downloading": "Stahování",
+        "e2e_state": "Stav koncového šifrování",
         "m.audio": {
             "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "unnamed_audio": "Nepojmenovaný audio soubor"
+        },
+        "m.file": {
+            "error_invalid": "Neplatný soubor"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s změnil(a) avatar místnosti na <img/>",
+            "removed": "%(senderDisplayName)s odstranil(a) avatar místnosti."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
+            "disabled": "Šifrování není povoleno",
+            "enabled": "Zprávy v této místnosti jsou koncově šifrovány. Když lidé vstoupí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
+            "enabled_dm": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
+            "enabled_local": "Zprávy v tomto chatu budou koncově šifrovány.",
+            "parameters_changed": "Některé parametry šifrování byly změněny.",
+            "state_enabled": "Zprávy a události v této místnosti jsou koncově šifrovány. Když se lidé připojí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
+            "unsupported": "Šifrování používané v této místnosti není podporováno."
+        },
+        "mab": {
+            "collapse_reply_chain": "Sbalit citace",
+            "copy_link_thread": "Kopírovat odkaz na vlákno",
+            "expand_reply_chain": "Rozbalit citace",
+            "label": "Akce zprávy",
+            "view_in_room": "Zobrazit v místnosti"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
+        "message_timestamp_received_at": "Přijato: %(dateTime)s",
+        "message_timestamp_sent_at": "Odesláno: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Tohoto uživatele ignorujete, takže jsou jeho zprávy skryté. <a>Přesto zobrazit.</a>"
+        },
+        "pending_moderation": "Zpráva čeká na moderaci",
+        "pending_moderation_reason": "Zpráva čeká na moderaci: %(reason)s",
+        "url_preview": {
+            "show_n_more": {
+                "one": "Zobrazit %(count)s další náhled",
+                "few": "Zobrazit %(count)s další náhledy",
+                "other": "Zobrazit %(count)s dalších náhledů"
+            },
+            "view_image": "Zobrazit obrázek"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Připojit nové zařízení",
+        "open_feedback": "Zpětná vazba",
+        "open_home": "Domov",
+        "open_security": "Zabezpečení a soukromí",
+        "open_settings": "Všechna nastavení"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Posunout doleva",
+            "move_right": "Posunout doprava",
+            "remove": "Odstranit pro všechny",
+            "revoke": "Odvolat oprávnění",
+            "screenshot": "Vyfotit",
+            "start_audio_stream": "Zahájit audio přenos"
         }
     }
 }

@@ -1,0 +1,26 @@
+{
+    "logo_alt": {
+        "en": "Portal logo",
+        "de": "Portal Logo"
+    },
+    "menu_label": {
+        "en": "Menu",
+        "de": "Menü"
+    },
+    "trigger_label": {
+        "en": "Show menu",
+        "de": "Menü anzeigen"
+    },
+    "close_label": {
+        "en": "Close menu",
+        "de": "Menü schließen"
+    },
+    "logo_link_label": {
+        "en": "Show portal",
+        "de": "Portal anzeigen"
+    },
+    "univention_error": {
+        "en": "Could not fetch central navigation from the portal",
+        "de": "Konnte die zentrale Navigation nicht aus dem Portal abrufen"
+    }
+}

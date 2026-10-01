@@ -14,89 +14,37 @@ concurrency:
 jobs:
     build:
         name: GitHub Pages
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
-            - name: Fetch element-desktop
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
-                  repository: element-hq/element-desktop
-                  path: element-desktop
+                  persist-credentials: false
 
-            - name: Fetch element-web
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
               with:
-                  path: element-web
-
-            - name: Fetch matrix-js-sdk
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+                  package_json_file: package.json
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
-                  repository: matrix-org/matrix-js-sdk
-                  path: matrix-js-sdk
-
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-              with:
-                  cache: "yarn"
-                  cache-dependency-path: element-web/yarn.lock
+                  cache: "pnpm"
+                  cache-dependency-path: pnpm-lock.yaml
                   node-version: "lts/*"
 
-            - name: Generate automations docs
-              working-directory: element-web
-              run: |
-                  yarn install --frozen-lockfile
-                  yarn node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
-                  echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
-
-            - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@ee69d230fe19748b7abf22df32acaa93833fad08 # v2
-              with:
-                  mdbook-version: "0.5.1"
-
-            - name: Install mdbook extensions
-              run: cargo install mdbook-combiner mdbook-mermaid
-
-            - name: Prepare docs
-              run: |
-                  mkdir docs
-
-                  mv element-desktop/README.md element-desktop/docs/
-                  mv element-desktop/docs "docs/Element Desktop"
-
-                  mv element-web/README.md element-web/docs/
-                  mv element-web/docs/lib docs/
-                  mv element-web/docs "docs/Element Web"
-
-                  mv matrix-js-sdk/README.md matrix-js-sdk/docs/
-                  mv matrix-js-sdk/docs "docs/Matrix JS SDK"
-
-                  sed -i -e 's/\.\.\/README.md/README.md/' docs/**/SUMMARY.md
-
-                  mdbook-combiner -m docs
-                  sed -i -E 's/^\t# (.+)$/- [\1]()/gm;t' SUMMARY.md
-                  sed -i -E 's/^- \[(.+)]\(<>\)$/---\n# \1/gm;t' SUMMARY.md
-                  sed -i -E 's/\t- \[Introduction]/- [Introduction]/gm;t' SUMMARY.md
-
-                  cat <<EOF > docs/SUMMARY.md
-                  # Summary
-                  - [Introduction](<Element Web/README.md>)
-
-                  EOF
-                  cat SUMMARY.md >> docs/SUMMARY.md
-
-                  mv element-web/book.toml .
+            - name: Fetch layered build
+              run: ./scripts/layered.sh
 
             - name: Build docs
-              run: mdbook build
+              run: pnpm run docs:build
 
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+              uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
               with:
-                  path: ./book
+                  path: ./docs/.vitepress/dist
 
     deploy:
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             pages: write
             id-token: write
@@ -104,4 +52,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+              uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

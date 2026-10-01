@@ -1,0 +1,35 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.statusPill {
+    border-radius: 30px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    display: inline-flex;
+    /* Disables filling to available width if we're in a flex container */
+    align-self: flex-start;
+    align-items: center;
+    padding-inline-start: var(--cpd-space-2x);
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+
+    .menuStatusEmoji {
+        flex-shrink: 0;
+    }
+
+    .menuStatusText {
+        overflow: hidden;
+        min-width: 0;
+        text-overflow: ellipsis;
+    }
+
+    span {
+        font: var(--cpd-font-body-md-medium);
+        color: var(--cpd-color-text-secondary);
+    }
+}

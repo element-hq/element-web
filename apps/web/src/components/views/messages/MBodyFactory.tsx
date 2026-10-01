@@ -1,0 +1,350 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type ImageContent } from "matrix-js-sdk/src/types";
+import {
+    DecryptionFailureBodyView,
+    FileBodyView,
+    ImageBodyView,
+    MediaPreviewGroupPreview,
+    RedactedBodyView,
+    VideoBodyView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
+
+import { type IBodyProps } from "./IBodyProps";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
+import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
+import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyViewModel";
+import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
+import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
+import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
+
+type MBodyComponent = React.ComponentType<IBodyProps>;
+
+type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
+
+export function FileBodyFactory(props: FileBodyProps): JSX.Element {
+    // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
+    // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
+    // in the panels which don't render the media, e.g. the files and notification panels — and those,
+    // like exports, keep the classic file body.
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    // preview file body can't handle this, let the legacy file body handle it
+    if (props.mediaEventHelper === undefined) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper} mxEvent={props.mxEvent} />;
+}
+
+/// the old look for files, still used for images, videos, audio, voice messages
+function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
+    const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new FileBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                showFileInfo,
+                timelineRenderingType,
+                refIFrame,
+                refLink,
+                pdfViewerEnabled,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            mediaEventHelper,
+            forExport,
+            showFileInfo,
+            timelineRenderingType,
+            pdfViewerEnabled,
+        });
+    }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, pdfViewerEnabled, vm]);
+
+    return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+}
+
+interface PreviewFileBodyProps {
+    mxEvent: MatrixEvent;
+    mediaEventHelper: MediaEventHelper;
+}
+
+/// the new preview file tile
+function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
+    const pdfViewerEnabled = useSettingValue("feature_pdf_viewer");
+    const vm = useCreateAutoDisposedViewModel(
+        () => new MBodyTileViewModel(mxEvent, mediaEventHelper, pdfViewerEnabled),
+    );
+
+    // The view model is built once, so turning the lab on has to reach an already-rendered tile.
+    useEffect(() => {
+        vm.setPdfViewerEnabled(pdfViewerEnabled);
+    }, [pdfViewerEnabled, vm]);
+
+    return (
+        <div className="mx_EventTile_content">
+            <MediaPreviewGroupPreview vm={vm} />
+        </div>
+    );
+}
+
+export function VideoBodyFactory({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    inhibitInteraction,
+}: Readonly<Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "inhibitInteraction">>): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new VideoBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                inhibitInteraction,
+                mediaVisible,
+                onPreviewClick: (): void => setMediaVisible(true),
+                videoRef,
+            }),
+    );
+
+    useEffect(() => {
+        vm.loadInitialMediaIfVisible();
+    }, [vm]);
+
+    useEffect(() => {
+        vm.setEvent(mxEvent, mediaEventHelper);
+    }, [mxEvent, mediaEventHelper, vm]);
+
+    useEffect(() => {
+        vm.setForExport(forExport);
+    }, [forExport, vm]);
+
+    useEffect(() => {
+        vm.setInhibitInteraction(inhibitInteraction);
+    }, [inhibitInteraction, vm]);
+
+    useEffect(() => {
+        vm.setMediaVisible(mediaVisible);
+    }, [mediaVisible, vm]);
+
+    useEffect(() => {
+        vm.setOnPreviewClick((): void => setMediaVisible(true));
+    }, [setMediaVisible, vm]);
+
+    const showFileBody =
+        !forExport &&
+        timelineRenderingType !== TimelineRenderingType.Room &&
+        timelineRenderingType !== TimelineRenderingType.Pinned &&
+        timelineRenderingType !== TimelineRenderingType.Search;
+
+    return (
+        <VideoBodyView
+            vm={vm}
+            className="mx_MVideoBody"
+            containerClassName="mx_MVideoBody_container"
+            videoRef={videoRef}
+        >
+            {showFileBody ? (
+                <FileBodyFactory
+                    mxEvent={mxEvent}
+                    mediaEventHelper={mediaEventHelper}
+                    forExport={forExport}
+                    showFileInfo={false}
+                />
+            ) : null}
+        </VideoBodyView>
+    );
+}
+
+export function ImageBodyFactory({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    maxImageHeight,
+    permalinkCreator,
+    showFileInfo,
+}: Readonly<
+    Pick<
+        IBodyProps,
+        "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo"
+    >
+>): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+    const imageRef = useRef<HTMLImageElement>(null);
+    const content = mxEvent.getContent<ImageContent>();
+    const shouldFallbackToFileBody =
+        mediaEventHelper?.media.isEncrypted === true &&
+        !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
+        !content.info?.thumbnail_info;
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ImageBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                maxImageHeight,
+                mediaVisible,
+                permalinkCreator,
+                timelineRenderingType,
+                imageRef,
+                setMediaVisible,
+            }),
+    );
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.loadInitialMediaIfVisible();
+    }, [shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setEvent(mxEvent, mediaEventHelper);
+    }, [mediaEventHelper, mxEvent, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setForExport(forExport);
+    }, [forExport, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setMaxImageHeight(maxImageHeight);
+    }, [maxImageHeight, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setMediaVisible(mediaVisible);
+    }, [mediaVisible, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setPermalinkCreator(permalinkCreator);
+    }, [permalinkCreator, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setTimelineRenderingType(timelineRenderingType);
+    }, [shouldFallbackToFileBody, timelineRenderingType, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setSetMediaVisible(setMediaVisible);
+    }, [setMediaVisible, shouldFallbackToFileBody, vm]);
+
+    const showFileBody =
+        !forExport &&
+        timelineRenderingType !== TimelineRenderingType.Room &&
+        timelineRenderingType !== TimelineRenderingType.Pinned &&
+        timelineRenderingType !== TimelineRenderingType.Search &&
+        timelineRenderingType !== TimelineRenderingType.Thread &&
+        timelineRenderingType !== TimelineRenderingType.ThreadsList;
+
+    if (shouldFallbackToFileBody) {
+        return (
+            <FileBodyFactory
+                mxEvent={mxEvent}
+                mediaEventHelper={mediaEventHelper}
+                forExport={forExport}
+                showFileInfo={showFileInfo}
+            />
+        );
+    }
+
+    return (
+        <ImageBodyView
+            vm={vm}
+            className="mx_ImageBody"
+            containerClassName="mx_ImageBody_container"
+            imageClassName="mx_ImageBody_image"
+            imageRef={imageRef}
+        >
+            {showFileBody ? (
+                <FileBodyFactory
+                    mxEvent={mxEvent}
+                    mediaEventHelper={mediaEventHelper}
+                    forExport={forExport}
+                    showFileInfo={false}
+                />
+            ) : null}
+        </ImageBodyView>
+    );
+}
+
+export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
+    const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
+    const props = getRedactedBodyViewModelProps(mxEvent, showTwelveHour);
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel(props));
+
+    useEffect(() => {
+        vm.setProps(getRedactedBodyViewModelProps(mxEvent, showTwelveHour));
+    }, [mxEvent, showTwelveHour, vm]);
+
+    return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
+}
+
+export function DecryptionFailureBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
+    const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new DecryptionFailureBodyViewModel({
+                decryptionFailureCode: mxEvent.decryptionFailureReason,
+                verificationState,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setDecryptionFailureCode(mxEvent.decryptionFailureReason);
+        vm.setVerificationState(verificationState);
+    }, [mxEvent, verificationState, vm]);
+
+    return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
+}
+
+// Message body factory registry for bodies that already route through view-model-backed wrappers.
+const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
+    [MsgType.Image, ImageBodyFactory],
+    [MsgType.File, FileBodyFactory],
+    [MsgType.Video, VideoBodyFactory],
+]);
+
+// Render a body using the picked factory.
+// Falls back to the provided factory when msgtype has no specific handler.
+export function renderMBody(props: IBodyProps, fallbackFactory?: MBodyComponent): JSX.Element | null {
+    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype!) ?? fallbackFactory;
+    if (!BodyType) {
+        return null;
+    }
+
+    return <BodyType {...props} />;
+}

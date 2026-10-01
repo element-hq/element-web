@@ -8,3 +8,7 @@
 
 # Ignore coverage report
 /coverage/
+# Ignore generated docs
+typedoc
+# Build storybook
+storybook-static

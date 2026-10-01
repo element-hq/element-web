@@ -1,0 +1,76 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomView_body[data-layout="bubble"] {
+    .mx_RoomView_timeline,
+    .mx_RoomView_statusArea,
+    .mx_MessageComposer {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+.mx_GenericEventListSummary[data-layout="bubble"] {
+    --avatarSize: 32px;
+    --gutterSize: 11px;
+    --cornerRadius: 12px;
+    --maxWidth: 70%;
+
+    /* Generic event list summaries still use the legacy bubble variables. */
+    --EventTile_bubble-margin-inline-start: 49px;
+    --EventTile_bubble-margin-inline-end: 60px;
+
+    margin-inline-start: var(--EventTile_bubble-margin-inline-start);
+    margin-inline-end: var(--EventTile_bubble-margin-inline-end);
+
+    /* Keep the following event clear of the expand/collapse control when the
+       summary is collapsed. */
+    &[data-expanded="false"] + .mx_EventTile {
+        margin-block-start: 20px;
+    }
+
+    /* Keep expanded informational rows aligned with the legacy summary layout. */
+    &[data-expanded="true"] .mx_EventTile:has(> .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent)) {
+        padding-block: 2px;
+        margin-inline-end: 0;
+
+        /* EventTileView owns the line-height for informational rows. */
+        > .mx_EventTile_line {
+            /* EventTileView keeps the state-info line at min-width: 100% for
+               ordinary bubble rows. Expanded summaries must be allowed to
+               shrink around the sender avatar, as in the legacy tile. */
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .mx_ReadReceiptGroup {
+            /* match alignment to RRs of chat bubbles */
+            inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
+        }
+
+        &::before {
+            inset-inline-end: 0; /* match alignment of the hover background to that of chat bubbles */
+        }
+    }
+}
+
+/* Preserve the legacy expanded-summary metrics in RoomView. ThreadView owns
+   its informational row metrics through EventTileView. */
+.mx_RoomView_timeline .mx_GenericEventListSummary[data-layout="bubble"] {
+    &[data-expanded="true"] .mx_EventTile:has(> .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent)) {
+        > .mx_EventTile_line {
+            line-height: normal;
+        }
+
+        > .mx_EventTile_line :is(.mx_TextualEvent, .mx_ViewSourceEvent) {
+            padding-block: 0;
+        }
+    }
+}

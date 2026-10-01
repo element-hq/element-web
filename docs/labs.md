@@ -10,11 +10,6 @@ If a labs features gets more stable, it _may_ be promoted to a beta feature
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
-## Submit Abuse Report to Moderators [MSC3215](https://github.com/matrix-org/matrix-doc/pull/3215) support (`feature_report_to_moderators`)
-
-A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
-if the room supports it.
-
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
@@ -63,20 +58,11 @@ present in the room. The Bridge info tab pulls information from the `m.bridge` s
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
 
-## Custom themes (`feature_custom_themes`)
-
-Custom themes are possible through Element's [theme support](./theming.md), though
-normally these themes need to be defined in the config for Element. This labs flag
-adds an ability for end users to add themes themselves by using a URL to the JSON
-theme definition.
-
-For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
 
-## Video rooms (`feature_video_rooms`)
+## Video rooms (`feature_video_rooms`) [Beta]
 
 Enables support for creating video rooms, which are persistent video chats that users can jump in and out of.
 
@@ -85,12 +71,6 @@ Enables support for creating video rooms, which are persistent video chats that 
 Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
 
 This flag will not have any effect unless `feature_video_rooms` is also enabled.
-
-## New group call experience (`feature_group_calls`) [In Development]
-
-This feature allows users to place native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
-
-If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
 ## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
 
@@ -109,23 +89,11 @@ Unreliable in encrypted rooms.
 
 Enables knock feature for rooms. This allows users to ask to join a room.
 
-## New room list (`feature_new_room_list`) [In Development]
-
-Enable the new room list that is currently in development.
-
 ## Exclude insecure devices when sending/receiving messages (`feature_exclude_insecure_devices`)
 
 Do not send or receive messages to/from devices that are not properly verified. Users with unverified devices will not
 receive your messages at all on those devices, and if they send messages, you will not be able to read them, but you
 will be aware that a message exists.
-
-## Share encrypted history with new members (`feature_share_history_on_invite`) [In Development]
-
-When inviting users to an encrypted room with shared history (i.e. a room with the "Who can read history?" setting set
-to "Members only (since the point in time of selecting this option)"), send the keys for previous messages to the
-invitee so they can read them.
-
-Both the inviter and the invitee must set this labs flag, before the invitation is sent.
 
 ## Encrypted state events (MSC4362) (`feature_msc4362_encrypted_state_events`)
 
@@ -134,3 +102,30 @@ Encrypt most of the state events in the room, including the room name and topic.
 WARNING: this means that users joining a room who do not have access to its history will not be able to see the name or
 topic of the room, or any other room state information. It also means the room name and topic are not available before
 joining a room.
+
+## New notifications settings (`feature_notification_settings2`) [Beta]
+
+Replaces the legacy notification settings with a new one to manage push rules.
+
+## User status (`feature_user_status`)
+
+Enables setting a status message in your profile and to be able to view other's statuses.
+Requires [MSC4429](https://github.com/matrix-org/matrix-spec-proposals/pull/4429) and [MSC4426](https://github.com/matrix-org/matrix-spec-proposals/pull/4426).
+
+**Warning** This feature has options which are not backwards compatible, disabling
+it may have unintended consequences.
+
+## Log in with QR (`feature_login_with_qr`)
+
+Enables logging in to Element Web/Desktop by using Element X to scan a QR code.
+Requires server support, based on the v2024 edition of [MSC4108](https://github.com/matrix-org/matrix-spec-proposals/pull/4108).
+Can only be configured via config.json, as labs flags cannot be set until after login, and are cleared on log out. The UI option is disabled.
+Note, this does not affect the existing `Link new device` flow using the same MSC.
+
+## URL Preview Bundle (MSC4095) (`feature_msc4095_url_preview_bundle`)
+
+Attaches URL preview information generated by the homeserver on messages sent.
+
+## Element Call React Component (`feature_element_call_react`)
+
+Renders Element Call as a React component instead of a widget.

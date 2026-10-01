@@ -1,0 +1,386 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Page } from "@playwright/test";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+
+import { expect, test } from "../../../element-web-test";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
+
+test.describe("Room list filters and sort", () => {
+    test.use({
+        displayName: "Alice",
+        botCreateOpts: {
+            displayName: "BotBob",
+            autoAcceptInvites: true,
+        },
+    });
+
+    /**
+     * Get the room list
+     * @param page
+     */
+    function getRoomList(page: Page) {
+        return page.getByTestId("room-list");
+    }
+
+    test.beforeEach(async ({ page, app, bot, user }) => {
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
+    });
+
+    test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
+        // This bug shows up with this setting turned on
+        await app.settings.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, true);
+
+        /*
+        We will first create a room named 'Old Room' and will invite the bot user to this room.
+        We will also send a simple message in this room.
+        */
+        const oldRoomId = await app.client.createRoom({ name: "Old Room" });
+        await app.client.inviteUser(oldRoomId, bot.credentials!.userId);
+        await bot.joinRoom(oldRoomId);
+        const response = await app.client.sendMessage(oldRoomId, "Hello!");
+
+        /*
+        At this point, we haven't done anything interesting.
+        So we expect 'Old Room' to show up in the room list.
+        */
+        const roomListView = getRoomList(page);
+        const oldRoomTile = roomListView.getByRole("option", { name: "Open room Old Room" });
+        await expect(oldRoomTile).toBeVisible();
+
+        /*
+        Now let's tombstone 'Old Room'.
+        First we create a new room ('New Room') with the predecessor set to the old room..
+        */
+        const newRoomId = await bot.createRoom({
+            name: "New Room",
+            creation_content: {
+                predecessor: {
+                    event_id: response.event_id,
+                    room_id: oldRoomId,
+                },
+            },
+            visibility: "public" as Visibility,
+        });
+
+        /*
+        Now we can send the tombstone event itself to the 'Old Room'.
+        */
+        await app.client.sendStateEvent(oldRoomId, "m.room.tombstone", {
+            body: "This room has been replaced",
+            replacement_room: newRoomId,
+        });
+
+        // Let's join the replaced room.
+        await app.client.joinRoom(newRoomId);
+
+        // We expect 'Old Room' to be hidden from the room list.
+        await expect(oldRoomTile).not.toBeVisible();
+
+        /*
+        Let's say some user in the 'Old Room' changes their display name.
+        This will send events to the all the rooms including 'Old Room'.
+        Nevertheless, the replaced room should not be shown in the room list.
+        */
+        await bot.setDisplayName("MyNewName");
+        await expect(oldRoomTile).not.toBeVisible();
+    });
+
+    test.describe("Room list", () => {
+        let unReadDmId: string;
+        let unReadRoomId: string;
+
+        test.beforeEach(async ({ page, app, bot, user }) => {
+            await app.client.createRoom({ name: "empty room" });
+
+            unReadDmId = await bot.createRoom({
+                name: "unread dm",
+                invite: [user.userId],
+                is_direct: true,
+            });
+            await app.client.joinRoom(unReadDmId);
+            await bot.sendMessage(unReadDmId, "I am a robot. Beep.");
+
+            unReadRoomId = await app.client.createRoom({ name: "unread room" });
+            await app.client.inviteUser(unReadRoomId, bot.credentials!.userId);
+            await bot.joinRoom(unReadRoomId);
+            await bot.sendMessage(unReadRoomId, "I am a robot. Beep.");
+
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, favouriteId) => {
+                await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
+            }, favouriteId);
+
+            const lowPrioId = await app.client.createRoom({ name: "Low prio room" });
+            await app.client.evaluate(async (client, id) => {
+                await client.setRoomTag(id, "m.lowpriority", { order: 0.5 });
+            }, lowPrioId);
+
+            await bot.createRoom({
+                name: "invited room",
+                invite: [user.userId],
+                is_direct: true,
+            });
+
+            const mentionRoomId = await app.client.createRoom({ name: "room with mention" });
+            await app.client.inviteUser(mentionRoomId, bot.credentials!.userId);
+            await bot.joinRoom(mentionRoomId);
+
+            const clientBot = await bot.prepareClient();
+            await clientBot.evaluate(
+                async (client, { mentionRoomId, userId }) => {
+                    await client.sendMessage(mentionRoomId, {
+                        // @ts-ignore ignore usage of MsgType.text
+                        "msgtype": "m.text",
+                        "body": "User",
+                        "format": "org.matrix.custom.html",
+                        "formatted_body": `<a href="https://matrix.to/#/${userId}">User</a>`,
+                        "m.mentions": {
+                            user_ids: [userId],
+                        },
+                    });
+                },
+                { mentionRoomId, userId: user.userId },
+            );
+        });
+
+        test("should filter the list (with primary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomList = getRoomList(page);
+            const primaryFilters = getPrimaryFilters(page);
+
+            const allFilters = await primaryFilters.locator("option").all();
+            for (const filter of allFilters) {
+                expect(await filter.getAttribute("aria-selected")).toBe("false");
+            }
+            await expect(primaryFilters).toMatchScreenshot("unselected-primary-filters.png");
+
+            await primaryFilters.getByRole("option", { name: "Unread" }).click();
+            // only one room should be visible
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            // A pending invitation counts as unread, so the Invites section shows too, but it is
+            // collapsed so its room is not listed: 3 rooms + the Invites, People and Rooms headers.
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(6);
+            await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
+
+            await primaryFilters.getByRole("option", { name: "People" }).click();
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            // The invited dm matches the People filter, but sits in the collapsed Invites section,
+            // so only its header shows: the joined dm + the People and Invites headers = 3 buttons.
+            await expect(roomList.getByRole("button", { name: "Toggle Invites section" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room invited room" })).not.toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(3);
+
+            await primaryFilters.getByRole("option", { name: "Rooms" }).click();
+            // "Open room" prefix disambiguates the room tile from the "Toggle Rooms section with
+            // unread rooms" section header button, which also matches the "unread room" substring.
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "empty room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "room with mention" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Low prio room" })).toBeVisible();
+            // 5 room tiles spread across 3 sections (Favourites, Rooms, Low priority); each section
+            // header is also a button, so 5 rooms + 3 section headers = 8 buttons.
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(8);
+
+            await primaryFilters.getByRole("option", { name: "Mentions" }).click();
+            await expect(roomList.getByRole("option", { name: "room with mention" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
+
+            // The Invites filter is not offered while sections are enabled: invited rooms are
+            // surfaced by the Invites section instead.
+            await expect(primaryFilters.getByRole("option", { name: "Invites" })).not.toBeVisible();
+        });
+
+        test.describe("Unread filter", () => {
+            test(
+                "unread filter should only match unread rooms that have a count when Notifications.showbold=off",
+                { tag: "@screenshot" },
+                async ({ page, app, bot }) => {
+                    const roomListView = getRoomList(page);
+                    const primaryFilters = getPrimaryFilters(page);
+
+                    // Let's configure unread dm room so that we only get notification for mentions and keywords
+                    await app.viewRoomById(unReadDmId);
+                    await app.settings.openRoomSettings("Notifications");
+                    await page.getByText("@mentions and replies").click();
+                    await app.settings.closeDialog();
+
+                    // Let's open a room other than unread room or unread dm
+                    await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
+
+                    // Let's make the bot send a new message in both rooms
+                    await bot.sendMessage(unReadDmId, "Hello!");
+                    await bot.sendMessage(unReadRoomId, "Hello!");
+
+                    // Let's activate the unread filter now
+                    await primaryFilters.getByRole("option", { name: "Unread" }).click();
+
+                    // Unread filter should only show unread room and not unread dm!
+                    const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                    await expect(unreadRoom).toBeVisible();
+                    await expect(unreadRoom).toMatchScreenshot("unread-room.png");
+                    await expect(roomListView.getByRole("button", { name: "Open room unread dm" })).not.toBeVisible();
+                },
+            );
+
+            test("unread filter should only match unread rooms that have an activity when Notifications.activityIsUnread=true", async ({
+                page,
+                app,
+                bot,
+            }) => {
+                const roomListView = getRoomList(page);
+                const primaryFilters = getPrimaryFilters(page);
+
+                // The unread DM room only notifies for mentions and keywords
+                await app.viewRoomById(unReadDmId);
+                await app.settings.openRoomSettings("Notifications");
+                await page.getByText("@mentions and replies").click();
+                await app.settings.closeDialog();
+
+                // (The unread non-DM room still notifies for all activity)
+
+                // Open some other room
+                await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
+
+                // Send a message in the unread DM room and the unread non-DM room
+                await bot.sendMessage(unReadDmId, "Hello!");
+                await bot.sendMessage(unReadRoomId, "Hello!");
+
+                // Turn the "Unread" filter on
+                await primaryFilters.getByRole("option", { name: "Unread" }).click();
+
+                const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+                const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
+
+                // Only the unread room is visible. The DM room is hidden.
+                await expect(unreadRoom).toBeVisible();
+                await expect(unreadDm).not.toBeVisible();
+
+                // Now set "activityIsUnread" to on
+                await app.settings.setValue("Notifications.activityIsUnread", null, SettingLevel.DEVICE, true);
+
+                // Now both unread rooms are visible
+                await expect(unreadRoom).toBeVisible();
+                await expect(unreadDm).toBeVisible();
+
+                // Even though favourite room is read (because we have it open), it is still shown because it is
+                // the current room.
+                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
+            });
+        });
+
+        test("should sort the room list alphabetically", async ({ page }) => {
+            const roomListView = getRoomList(page);
+
+            await getRoomOptionsMenu(page).click();
+            await page.getByRole("menuitemradio", { name: "A-Z" }).click();
+
+            // Invites + Favourites + People + Rooms section headers are buttons, and the favourite
+            // room and the dm come before the first room of the Rooms section. The invited room is
+            // not listed because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(6)).toHaveText(/empty room/);
+        });
+
+        test("should move room to the top on message (chat section) when sorting by activity", async ({
+            page,
+            bot,
+        }) => {
+            const roomListView = getRoomList(page);
+
+            await bot.sendMessage(unReadDmId, "Hello!");
+
+            // Invites + Favourites + People section headers are buttons, and the favourite room
+            // comes before the first room of the People section. The invited room is not listed
+            // because the Invites section is collapsed.
+            await expect(roomListView.getByRole("button").nth(4)).toHaveText(/unread dm/);
+        });
+    });
+
+    test.describe("Empty room list", () => {
+        // Sections are turned off so that every primary filter is offered as a chip. With sections
+        // enabled, Favourites, Low Priority and Invites are surfaced as sections instead, and the
+        // remaining chips fit without an expand button.
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+        });
+
+        /**
+         * Get the empty state
+         * @param page
+         */
+        function getEmptyRoomList(page: Page) {
+            return page.getByTestId("empty-room-list");
+        }
+
+        test("should render the primary filters", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const primaryFilters = getPrimaryFilters(page);
+            await expect(primaryFilters).toMatchScreenshot("collapsed-primary-filters.png");
+            await getFilterExpandButton(page).click();
+            await expect(primaryFilters).toMatchScreenshot("expanded-primary-filters.png");
+        });
+
+        test(
+            "should render the default placeholder when there is no filter",
+            { tag: "@screenshot" },
+            async ({ page, app, user }) => {
+                const emptyRoomList = getEmptyRoomList(page);
+                await expect(emptyRoomList).toMatchScreenshot("default-empty-room-list.png");
+                await expect(page.getByRole("navigation", { name: "Room list" })).toMatchScreenshot(
+                    "room-panel-empty-room-list.png",
+                );
+            },
+        );
+
+        [
+            { filter: "Unread", action: "Show all chats" },
+            { filter: "Mentions", action: "See all activity" },
+            { filter: "Invites", action: "See all activity" },
+        ].forEach(({ filter, action }) => {
+            test(
+                `should render the placeholder for ${filter} filter`,
+                { tag: "@screenshot" },
+                async ({ page, app, user }) => {
+                    const primaryFilters = getPrimaryFilters(page);
+                    await getFilterExpandButton(page).click();
+
+                    await primaryFilters.getByRole("option", { name: filter }).click();
+
+                    const emptyRoomList = getEmptyRoomList(page);
+                    await expect(emptyRoomList).toMatchScreenshot(`${filter}-empty-room-list.png`);
+
+                    await emptyRoomList.getByRole("button", { name: action }).click();
+                    await expect(primaryFilters.getByRole("option", { name: filter })).not.toBeChecked();
+                },
+            );
+        });
+
+        ["People", "Rooms"].forEach((filter) => {
+            test(
+                `should render the placeholder for ${filter} filter`,
+                { tag: "@screenshot" },
+                async ({ page, app, user }) => {
+                    const primaryFilters = getPrimaryFilters(page);
+                    await getFilterExpandButton(page).click();
+
+                    await primaryFilters.getByRole("option", { name: filter }).click();
+
+                    const emptyRoomList = getEmptyRoomList(page);
+                    await expect(emptyRoomList).toMatchScreenshot(`${filter}-empty-room-list.png`);
+                },
+            );
+        });
+    });
+});

@@ -1,0 +1,31 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--cpd-color-bg-canvas-default);
+    box-sizing: border-box;
+    padding: var(--cpd-space-11x) var(--cpd-space-12x) var(--cpd-space-4x);
+
+    &.mx_WelcomePage_registrationDisabled {
+        .mx_ButtonCreateAccount {
+            display: none;
+        }
+    }
+}
+
+.mx_Welcome .mx_AuthBody_language {
+    width: 160px;
+    margin: var(--cpd-space-1x) 0;
+}
+
+/* Invert image colours in dark mode. */
+.cpd-theme-dark .mx_WelcomePage_logo {
+    filter: invert(1);
+}

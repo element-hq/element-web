@@ -57,6 +57,15 @@ If both `default_server_config` and `default_server_name` are used, Element will
 information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
 information.
 
+1. `enable_client_well_known_lookups`: Controls whether Element makes runtime requests to the logged-in user's
+   [`<server_name>/.well-known/matrix/...`](https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient)
+   endpoints (for example, polling for client configuration after login). Set it to `false` to stop Element making these
+   requests, so it only contacts the homeserver base URL; the `well_known` object returned inline in the `/login` response
+   is unaffected. Defaults to `true`.
+   This option covers those runtime requests only; login-time `.well-known` autodiscovery is separate. Setting
+   `default_server_config` with `disable_custom_urls: true` fixes the homeserver and removes the server picker, covering
+   the startup lookup and server selection. It also doesn't cover the legacy password login form (not shown for delegated authentication/OIDC) which performs its own `.well-known` lookup when a full Matrix ID is entered.
+
 ## Labs flags
 
 Labs flags are optional, typically beta or in-development, features that can be turned on or off. The full range of
@@ -109,7 +118,7 @@ instance. As of writing those settings are not fully documented, however a few a
     }
     ```
     These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
-    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/apps/web/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -160,7 +169,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
 20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -213,14 +223,15 @@ Starting with `branding`, the following subproperties are available:
 
 1. `welcome_background_url`: When a string, the URL for the full-page image background of the login, registration, and welcome
    pages. This property can additionally be an array to have the app choose an image at random from the selections.
-2. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
-3. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
+2. `logo_link_url`: When rendering the a brand Logo, if it is linkified, this is the link it should direct to. Defaults to `https://element.io`.
+3. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
+4. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
    `url` property.
 
 `embedded_pages` can be configured as such:
 
-1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`). When not specified, the default
-   `welcome.html` that ships with Element will be used instead.
+1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`).
+   When not specified, a default internal component will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
    no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
@@ -249,7 +260,7 @@ Together, the options might look like this in your config:
 Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
 links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
 and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
-change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`. Alternatively, you can edit
+change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" pnpm build`. Alternatively, you can edit
 the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
 
 ## SSO setup
@@ -259,7 +270,7 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 1. `logout_redirect_url`: Optional URL to redirect the user to after they have logged out. Some SSO systems support a page that the
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
-   all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
+   all unauthenticated users will be automatically redirected to the SSO/OIDC system to start their login. If instead you'd only like to
    have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
    redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
@@ -274,8 +285,6 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
 
 ## Native OIDC
-
-Native OIDC support is currently in labs and is subject to change.
 
 Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
 Issuer must have a trailing forward slash. As an example:
@@ -298,7 +307,6 @@ The following subproperties are available:
 2. `logo_uri`: Optional URI for the client logo.
 3. `tos_uri`: Optional URI for the client's terms of service.
 4. `policy_uri`: Optional URI for the client's privacy policy.
-5. `contacts`: Optional list of contact emails for the client.
 
 As an example:
 
@@ -308,8 +316,7 @@ As an example:
         "client_uri": "https://example.com",
         "logo_uri": "https://example.com/logo.png",
         "tos_uri": "https://example.com/tos",
-        "policy_uri": "https://example.com/policy",
-        "contacts": ["support@example.com"]
+        "policy_uri": "https://example.com/policy"
     }
 }
 ```
@@ -390,7 +397,12 @@ The VoIP and Jitsi options are:
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
     - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
-      the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
+      the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
+      It is a misconfiguration if its set to true while `element_call.disable` is also true!
+      Defaults to `false`.
+    - `disable`: A boolean flag specifying whether Element Call should be disabled.
+      If `true`, `element_call.use_exclusively` has no effect!
+      Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
     - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
@@ -408,11 +420,8 @@ If you run your own rageshake server to collect bug reports, the following optio
    not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit
    rageshakes to us, or use your own rageshake server.
    You may also set the value to `"local"` if you wish to only store logs locally, in order to download them for debugging.
-2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
-   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
-   (in contrast to other rageshakes submitted by the app, which use `element-web`).
-3. `existing_issues_url`: URL for where to find existing issues.
-4. `new_issue_url`: URL for where to submit new issues.
+2. `existing_issues_url`: URL for where to find existing issues.
+3. `new_issue_url`: URL for where to submit new issues.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
@@ -541,7 +550,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/element-hq/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson
 
 ## UI Features
 
@@ -581,8 +590,6 @@ Currently, the following UI feature flags are supported:
   This should only be used if the room history visibility options are managed by the server.
 - `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
   timeline for recent messages. When false day dates will be used.
-- `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
-  to true.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
@@ -601,7 +608,7 @@ Currently, the following UI feature flags are supported:
 }
 ```
 
-Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api).
+Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-web/tree/develop/packages/module-api).
 
 ## Undocumented / developer options
 
@@ -611,3 +618,15 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+
+## Additional config options for Element Desktop
+
+1. `update_base_url`: Specifies the URL of the update server, see [document](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/updates.md).
+2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
+
+---
+
+The app contains a configuration file specified at build time using [these instructions](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#config).
+This config can be overwritten by the end using by creating a `config.json` file at the paths described [here](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson).
+
+After changing the config, the app will need to be exited fully (including via the task tray) and re-started.

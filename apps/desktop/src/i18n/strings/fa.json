@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "لغو",
+        "close": "بستن",
+        "close_brand": "بستن %(brand)s",
+        "copy": "رونوشت",
+        "cut": "برش",
+        "delete": "پاک‌کردن",
+        "edit": "ویرایش",
+        "minimise": "کمینه",
+        "paste": "جای‌گذاری",
+        "paste_match_style": "جای‌گذاری و تطبیق سَبک",
+        "quit": "خروج",
+        "redo": "انجام دوباره",
+        "select_all": "گزینش همه",
+        "show_hide": "نمایش/پنهان",
+        "undo": "بازگردانی",
+        "zoom_in": "بزرگنمایی به داخل",
+        "zoom_out": "بزرگنمایی به خارج"
+    },
+    "common": {
+        "about": "درباره",
+        "brand_help": "کمک %(brand)s",
+        "help": "راهنما",
+        "preferences": "ترجیحات"
+    },
+    "confirm_quit": "آیا مطمئنید که می‌خواهید خارج شوید؟",
+    "edit_menu": {
+        "speech": "صحبت کردن",
+        "speech_start_speaking": "صحبت کردن را شروع کنید",
+        "speech_stop_speaking": "صحبت کردن را تمام کنید"
+    },
+    "file_menu": {
+        "label": "پرونده"
+    },
+    "menu": {
+        "hide": "پنهان",
+        "hide_others": "پنهان کردن دیگران",
+        "services": "خدمات",
+        "unhide": "آشکار"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "افزودن به لغت‌نامه",
+        "copy_email": "رونوشت نشانی رایانامه",
+        "copy_image": "رونوشت تصویر",
+        "copy_image_url": "رونوشت نشانی تصویر",
+        "copy_link_url": "رونوشت نشانی پیوند",
+        "save_image_as": "ذخیرهٔ تصویر به عنوان...",
+        "save_image_as_error_description": "تصویر ذخیره نشد",
+        "save_image_as_error_title": "ذخیرهٔ تصویر شکست خورد"
+    },
+    "view_menu": {
+        "actual_size": "اندازهٔ واقعی",
+        "toggle_developer_tools": "تغییر وضعیت ابزارهای توسعه‌دهنده",
+        "toggle_full_screen": "تغییر وضعیت تمام‌صفحه",
+        "view": "مشاهده"
+    },
+    "window_menu": {
+        "bring_all_to_front": "همه را به جلو بیاورید",
+        "label": "پنجره",
+        "zoom": "بزرگنمایی"
+    }
+}

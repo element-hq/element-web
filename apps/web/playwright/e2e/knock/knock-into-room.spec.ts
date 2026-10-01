@@ -1,0 +1,358 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 Mikhail Aheichyk
+Copyright 2023 Nordeck IT + Consulting GmbH.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+
+import { test, expect } from "../../element-web-test";
+import { waitForRoom } from "../utils";
+import { Filter } from "../../pages/Spotlight";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
+
+test.describe("Knock Into Room", () => {
+    test.skip(isDendrite, "Dendrite does not have support for knocking");
+    test.use({
+        displayName: "Alice",
+        labsFlags: ["feature_ask_to_join"],
+        botCreateOpts: {
+            displayName: "Bob",
+        },
+        room: async ({ bot }, use) => {
+            const roomId = await bot.createRoom({
+                name: "Cybersecurity",
+                initial_state: [
+                    {
+                        type: "m.room.join_rules",
+                        content: {
+                            join_rule: "knock",
+                        },
+                        state_key: "",
+                    },
+                ],
+            });
+            await use({ roomId });
+        },
+    });
+
+    test("should knock into the room then knock is approved and user joins the room then user is kicked and joins again", async ({
+        page,
+        app,
+        user,
+        bot,
+        room,
+    }) => {
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        // Knocked room should appear in Rooms
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot invites Alice
+        await bot.inviteUser(room.roomId, user.userId);
+
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // The knock, invite and join events collapse into a membership summary; expand it
+        // to reveal the individual events, including the knock itself.
+        await expect(page.getByText("Alice requested to join, was granted access, and joined")).toBeVisible();
+        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]").last().click();
+        await expect(page.getByText("Alice is requesting to join")).toBeVisible();
+        await expect(page.getByText("Bob granted access to Alice")).toBeVisible();
+        await expect(page.getByText("Alice joined the room")).toBeVisible();
+        // Collapse it again so the summary assertions below see the collapsed form.
+        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=true]").last().click();
+
+        // bot kicks Alice
+        await bot.kick(room.roomId, user.userId);
+
+        await roomPreviewBar.getByRole("button", { name: "Re-join" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot invites Alice
+        await bot.inviteUser(room.roomId, user.userId);
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+
+        await expect(
+            page.getByText(
+                "Alice requested to join, was granted access, joined, was removed, requested to join, " +
+                    "was granted access, and joined",
+            ),
+        ).toBeVisible();
+    });
+
+    test("should knock into the room then knock is approved and user joins the room then user is banned/unbanned and joins again", async ({
+        page,
+        app,
+        user,
+        bot,
+        room,
+    }) => {
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        // Knocked room should appear in Rooms
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot invites Alice
+        await bot.inviteUser(room.roomId, user.userId);
+
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // The knock, invite and join events collapse into a membership summary; expand it
+        // to reveal the individual events, including the knock itself.
+        await expect(page.getByText("Alice requested to join, was granted access, and joined")).toBeVisible();
+        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]").last().click();
+        await expect(page.getByText("Alice is requesting to join")).toBeVisible();
+        await expect(page.getByText("Bob granted access to Alice")).toBeVisible();
+        await expect(page.getByText("Alice joined the room")).toBeVisible();
+        // Collapse it again so the summary assertions below see the collapsed form.
+        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=true]").last().click();
+
+        // bot bans Alice
+        await bot.ban(room.roomId, user.userId);
+
+        await expect(
+            page.locator(".mx_RoomPreviewBar").getByText("You were banned from Cybersecurity by Bob"),
+        ).toBeVisible();
+
+        // bot unbans Alice
+        await bot.unban(room.roomId, user.userId);
+
+        await roomPreviewBar.getByRole("button", { name: "Re-join" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot invites Alice
+        await bot.inviteUser(room.roomId, user.userId);
+
+        // Alice have to accept invitation in order to join the room.
+        // It will be not needed when homeserver implements auto accept knock requests.
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+
+        await expect(
+            page.getByText(
+                "Alice requested to join, was granted access, joined, was banned, was unbanned, " +
+                    "requested to join, was granted access, and joined",
+            ),
+        ).toBeVisible();
+    });
+
+    test("should knock into the room and knock is cancelled by user himself", async ({ page, app, bot, room }) => {
+        await app.client.createRoom({ name: "Other" });
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        // Knocked room should appear in Rooms
+        page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" });
+
+        await roomPreviewBar.getByRole("button", { name: "Cancel request" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("button", { name: "Request access" })).toBeVisible();
+
+        // The room is still open, so it stays in the room list
+        const cybersecurityOption = page
+            .getByTestId("room-list")
+            .getByRole("option", { name: "Open room Cybersecurity" });
+        await expect(cybersecurityOption).toBeVisible();
+
+        // It goes away when another room is opened
+        await app.viewRoomByName("Other");
+        // Wait for Other to be open, otherwise viewing the room by id may happen before the URL has changed
+        await expect(page.getByRole("banner").getByRole("heading", { name: "Other" })).toBeVisible();
+        await expect(cybersecurityOption).not.toBeVisible();
+
+        // The client still knows the room, so it shows in the room list again when it is opened
+        await app.viewRoomById(room.roomId);
+        await expect(cybersecurityOption).toBeVisible();
+    });
+
+    test("should show a knock room that can't be peeked in the room list while it is open", async ({
+        page,
+        app,
+        room,
+    }) => {
+        await app.client.createRoom({ name: "Other" });
+
+        const cybersecurityOption = page
+            .getByTestId("room-list")
+            .getByRole("option", { name: "Open room Cybersecurity" });
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+
+        // The client doesn't know the room, so it is shown from its summary while it is open
+        await app.viewRoomById(room.roomId);
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(cybersecurityOption).toBeVisible();
+
+        // and goes away when another room is opened
+        await app.viewRoomByName("Other");
+        await expect(page.getByRole("banner").getByRole("heading", { name: "Other" })).toBeVisible();
+        await expect(cybersecurityOption).not.toBeVisible();
+
+        // Once the user has knocked, the room stays in the list
+        await app.viewRoomById(room.roomId);
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        await app.viewRoomByName("Other");
+        await expect(cybersecurityOption).toBeVisible();
+    });
+
+    test("should knock into the room then knock is cancelled by another user and room is forgotten", async ({
+        page,
+        app,
+        user,
+        bot,
+        room,
+    }) => {
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        // Knocked room should appear in Rooms
+        await expect(
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
+        ).toBeVisible();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot kicks Alice
+        await bot.kick(room.roomId, user.userId);
+
+        // Room should stay in Rooms and have red badge when knock is denied
+        await expect(
+            page
+                .getByTestId("room-list")
+                .getByRole("option", { name: "Open room Cybersecurity with 1 unread mention." }),
+        ).toBeVisible();
+
+        await expect(roomPreviewBar.getByRole("heading", { name: "You have been denied access" })).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Forget this room" }).click();
+
+        // Room should disappear from the list completely when forgotten
+        // Should be enabled when issue is fixed: https://github.com/vector-im/element-web/issues/26195
+        // await expect(page.getByRole("treeitem", { name: /Cybersecurity/ })).not.toBeVisible();
+    });
+
+    test("should knock into the public knock room via spotlight", async ({ page, app, bot, room }) => {
+        await bot.setRoomDirectoryVisibility(room.roomId, "public" as Visibility);
+
+        const spotlightDialog = await app.openSpotlight();
+        await spotlightDialog.filter(Filter.PublicRooms);
+        await spotlightDialog.search("Cyber");
+        await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
+        await spotlightDialog.results.nth(0).click();
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+    });
+});

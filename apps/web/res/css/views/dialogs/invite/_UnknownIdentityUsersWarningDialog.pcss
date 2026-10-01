@@ -1,0 +1,45 @@
+/*
+ Copyright 2026 Element Creations Ltd.
+
+ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UnknownIdentityUsersWarningDialog {
+    display: flex;
+    flex-direction: column;
+    height: 600px; /* Consistency with InviteDialog */
+}
+
+.mx_UnknownIdentityUsersWarningDialog_headerContainer {
+    /* Centre the PageHeader component horizontally */
+    display: flex;
+    justify-content: center;
+
+    /* Styling for the regular text inside the header */
+    font: var(--cpd-font-body-lg-regular);
+
+    /* Space before the list */
+    padding-bottom: var(--cpd-space-6x);
+}
+
+.mx_UnknownIdentityUsersWarningDialog_userList {
+    width: 100%;
+    overflow: auto;
+
+    /* Fill available vertical space, but don't allow it to shrink to less than 60px (about the height of a single tile) */
+    flex: 1 0 60px;
+
+    /* Remove browser default ul padding/margin */
+    padding: 0;
+    margin: 0;
+}
+
+.mx_UnknownIdentityUsersWarningDialog_buttons {
+    display: flex;
+    gap: var(--cpd-space-4x);
+
+    > button {
+        flex: 1;
+    }
+}

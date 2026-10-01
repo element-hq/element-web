@@ -3,30 +3,87 @@
         "seek_bar_label": "Hang keresősávja"
     },
     "action": {
+        "back": "Vissza",
+        "click": "Kattintson",
+        "close": "Bezárás",
+        "collapse": "Összecsukás",
         "delete": "Törlés",
         "dismiss": "Eltüntetés",
+        "download": "Letöltés",
+        "edit": "Szerkesztés",
         "explore_rooms": "Szobák felderítése",
+        "go": "Kezdés",
+        "hide": "Elrejtés",
         "invite": "Meghívás",
         "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
+        "new_section": "Új szakasz",
         "new_video_room": "Új videószoba",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
+        "pin": "Kitűzés",
         "play": "Lejátszás",
+        "react": "Reakció",
+        "remove": "Eltávolítás",
+        "reply": "Válasz",
+        "reply_in_thread": "Válasz üzenetszálban",
         "retry": "Újra",
         "search": "Keresés",
-        "start_chat": "Csevegés indítása"
+        "start_chat": "Csevegés indítása",
+        "unpin": "Kitűzés megszüntetése",
+        "view_source": "Forrás megjelenítése"
     },
     "common": {
-        "preferences": "Beállítások"
+        "attachment": "Melléklet",
+        "encryption_enabled": "Titkosítás engedélyezve",
+        "loading": "Betöltés…",
+        "options": "Beállítások",
+        "preferences": "Beállítások",
+        "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
+    },
+    "devtools": {
+        "toggle_event": "esemény be/ki"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Számlap megnyitása"
+        "open_dial_pad": "Számlap megnyitása",
+        "separator_label": "Kattintson vagy húzza az egérrel a kibontáshoz"
+    },
+    "menus": {
+        "user_menu": {
+            "clear_status": "Törlés",
+            "create_an_account": "Fiók létrehozása",
+            "got_an_account": "Van már fiókja?",
+            "sign_in": "Bejelentkezés",
+            "title": "Felhasználói menü"
+        }
+    },
+    "notifications": {
+        "all_messages": "Összes üzenet",
+        "default_settings": "Alapértelmezett beállításoknak megfelelően",
+        "mentions_keywords": "Említések és kulcsszavak",
+        "mute_room": "Szoba némítása"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Rendben",
+        "room_list_section_description": " Csoportosítsa szakaszokba a csevegéseit, hogy a beszélgetések rendezettek és könnyen áttekinthetők legyenek.",
+        "room_list_section_title": "Szakaszok bemutatása"
     },
     "room": {
         "context_menu": {
             "title": "Szobabeállítások"
         },
+        "history_visibility_badge": {
+            "private": "Az új tagok nem látják az előzményeket",
+            "shared": "Az új tagok látják az előzményeket",
+            "world_readable": "Bárki láthatja az előzményeket"
+        },
+        "jump_to_date": "Ugrás időpontra",
+        "jump_to_date_beginning": "A szoba kezdete",
+        "jump_to_date_prompt": "Idő kiválasztása az ugráshoz",
+        "pinned_message_badge": "Kitűzött üzenet",
         "status_bar": {
             "delete_all": "Összes törlése",
             "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
@@ -43,23 +100,105 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "%(roomName)s szoba megnyitása",
+            "drag_cancelled": "Húzás megszakítva",
+            "drag_end": "A(z) %(source)s ide lett dobva: %(target)s",
+            "drag_end_after": "A(z) %(source)s a(z) %(target)s után lett dobva",
+            "drag_end_before": "A(z) %(source)s a(z) %(target)s elé lett dobva",
+            "drag_end_original": "A(z) %(source)s visszakerült az eredeti helyére",
+            "drag_instructions": "A húzás megkezdéséhez vagy leállításához nyomja meg a Szóköz billentyűt, a mozgatáshoz használja a nyílgombokat, a megszakításhoz pedig az Escape billentyűt.",
+            "drag_over": "A(z) %(source)s efölött van: %(target)s",
+            "drag_over_after": "A(z) %(source)s a(z) %(target)s mögé lesz dobva",
+            "drag_over_before": "A(z) %(source)s a(z) %(target)s elé lesz dobva",
+            "drag_over_original": "A(z) %(source)s visszakerül az eredeti helyére",
+            "drag_start": "A(z) %(source)s húzása",
+            "invitation": "%(roomName)s szoba meghívásának megnyitása.",
+            "mention": {
+                "one": "%(roomName)s szoba megnyitása 1 megemlítéssel.",
+                "other": "%(roomName)s szoba megnyitása %(count)s megemlítéssel."
+            },
+            "unread": {
+                "one": "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
+                "other": "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
+            },
+            "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel.",
+            "video_call": "Szoba megnyitása videóhívással itt: %(roomName)s",
+            "voice_call": "Szoba megnyitása hanghívással itt: %(roomName)s"
+        },
         "appearance": "Megjelenítés",
+        "chat_moved": "Csevegés áthelyezve",
+        "collapse_all_sections": "Az összes szakasz összecsukása",
+        "collapse_filters": "Szűrőlista összecsukása",
+        "empty": {
+            "no_chats": "Még nincsenek csevegések",
+            "no_chats_description": "Kezdje azzal, hogy üzenetet küld valakinek, vagy létrehoz egy szobát",
+            "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
+            "no_invites": "Nincs olvasatlan meghívója",
+            "no_mentions": "Nincs olvasatlan említése",
+            "no_people": "Még nincs közvetlen csevegése senkivel",
+            "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
+            "no_rooms": "Még nincs egy szobában sem",
+            "no_rooms_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
+            "no_unread": "Gratulálunk! Nincsenek olvasatlan üzenetei.",
+            "show_activity": "Összes tevékenység megtekintése",
+            "show_chats": "Összes csevegés megjelenítése"
+        },
+        "expand_all_sections": "Az összes szakasz kibontása",
+        "expand_filters": "Szűrőlista kibontása",
+        "filters": {
+            "favourite": "Kedvencek",
+            "invites": "Meghívók",
+            "low_priority": "Alacsony prioritás",
+            "mentions": "Említések",
+            "people": "Emberek",
+            "rooms": "Szobák",
+            "unread": "Olvasatlan"
+        },
+        "list_title": "Szobalista",
+        "more_options": {
+            "copy_link": "Szoba hivatkozásának másolása",
+            "favourited": "Kedvencnek jelölve",
+            "leave_room": "Szoba elhagyása",
+            "low_priority": "Alacsony prioritás",
+            "mark_read": "Megjelölés olvasottként",
+            "mark_unread": "Megjelölés olvasatlanként",
+            "move_to_section": "Áthelyezés ide:",
+            "remove_from_section": "Eltávolítás a szakaszból"
+        },
+        "notification_options": "Értesítési beállítások",
         "open_space_menu": "Tér menü megnyitása",
+        "primary_filters": "Szobalistaszűrők",
+        "room": {
+            "more_options": "További lehetőségek"
+        },
         "room_options": "Szobabeállítások",
+        "section_created": "Szakasz létrehozva",
+        "section_header": {
+            "edit_section": "Szakasz szerkesztése",
+            "more_options": "További beállítások",
+            "remove_section": "Szakasz eltávolítása",
+            "toggle": "%(section)s szakasz be/ki",
+            "toggle_unread": "Olvasatlan szobákat tartalmazó %(section)s szakasz be/ki"
+        },
         "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "sort": "Rendezés",
         "sort_type": {
-            "activity": "Tevékenység",
+            "activity": "Legutóbbi tevékenység",
             "atoz": "A–Z",
             "unread_first": "Olvasatlan elöl"
         },
         "space_menu": {
             "home": "Kezdő tér",
             "space_settings": "Térbeállítások"
-        }
+        },
+        "unread_messages": "Olvasatlan üzenetek"
     },
     "terms": {
         "tac_button": "Általános Szerződési Feltételek elolvasása"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről, amely már rendelkezik kapcsolattal"
     },
     "time": {
         "about_day_ago": "egy napja",
@@ -78,10 +217,86 @@
         "n_minutes_ago": "%(num)s perccel ezelőtt"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Hívás elutasítva",
+                "call_declined_by_us": "Elutasított egy hívást"
+            },
+            "video_call_title": "Videóhívás",
+            "voice_call_title": "Hanghívás"
+        },
+        "decryption_failure": {
+            "blocked": "A feladó megakadályozta, hogy megkapja ezt az üzenetet, mert az eszköze nincs ellenőrizve.",
+            "historical_event_no_key_backup": "A korábbi üzenetek nem érhetők el ezen az eszközön",
+            "historical_event_unverified_device": "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez",
+            "historical_event_user_not_joined": "Nincs hozzáférése ehhez az üzenethez",
+            "sender_identity_previously_verified": "A feladó ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva",
+            "sender_unsigned_device": "Nem biztonságos eszközről küldve.",
+            "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
+        },
+        "download_action_decrypting": "Visszafejtés",
+        "download_action_downloading": "Letöltés",
+        "e2e_state": "A végpontok közti titkosítás állapota",
         "m.audio": {
             "audio_player": "Hanglejátszó",
             "error_downloading_audio": "Hiba a hang letöltésekor",
             "unnamed_audio": "Névtelen hang"
+        },
+        "m.file": {
+            "error_invalid": "Érvénytelen fájl"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s erre változtatta a szoba profilképét: <img/>",
+            "removed": "%(senderDisplayName)s törölte a szoba profilképét."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "A titkosítás kikapcsolására tett kísérlet figyelmen kívül lett hagyva",
+            "disabled": "Titkosítás nincs engedélyezve",
+            "enabled": "Az ebben a szobában lévő üzenetek végpontok közti titkosítással rendelkeznek. Amikor valaki csatlakozik, akkor ellenőrizheti a profilján, csak kattintson a profilképére.",
+            "enabled_dm": "Az itt található üzenetek végpontok közti titkosítással rendelkeznek. Ellenőrizze %(displayName)s felhasználót a profilján – kattintson a profilképére.",
+            "enabled_local": "Az üzenetek ebben a beszélgetésben végponti titkosítással lesznek védve.",
+            "parameters_changed": "Néhány titkosítási paraméter megváltozott.",
+            "state_enabled": "Az ebben a szobában lévő üzenetek és állapotesemények végpontok közötti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak kattintson a profilképére.",
+            "unsupported": "A szobában használt titkosítás nem támogatott."
+        },
+        "mab": {
+            "collapse_reply_chain": "Idézetek összecsukása",
+            "copy_link_thread": "Hivatkozás másolása az üzenetszálba",
+            "expand_reply_chain": "Idézetek megjelenítése",
+            "label": "Üzenetműveletek",
+            "view_in_room": "Megjelenítés a szobában"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) megosztotta ezt az üzenetet, mivel nem volt a szobában, amikor elküldték.",
+        "message_timestamp_received_at": "Érkezett: %(dateTime)s",
+        "message_timestamp_sent_at": "Elküldve: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Mellőzte ezt a felhasználót, így az üzenete rejtve van. <a>Megjelenítés mindenképp.</a>"
+        },
+        "pending_moderation": "Moderálásra váró üzenet",
+        "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
+        "url_preview": {
+            "show_n_more": {
+                "one": "%(count)s további előnézet megjelenítése",
+                "other": "%(count)s további előnézet megjelenítése"
+            },
+            "view_image": "Kép megtekintése"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Új eszköz összekapcsolása",
+        "open_feedback": "Visszajelzés",
+        "open_home": "Kezdőlap",
+        "open_security": "Biztonság és adatvédelem",
+        "open_settings": "Összes beállítás"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Mozgatás balra",
+            "move_right": "Mozgatás jobbra",
+            "remove": "Visszavonás mindenkitől",
+            "revoke": "Jogosultságok visszavonása",
+            "screenshot": "Fénykép készítése",
+            "start_audio_stream": "Hangközvetítés indítása"
         }
     }
 }

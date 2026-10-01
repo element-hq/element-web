@@ -1,0 +1,45 @@
+/*
+Copyright 2024-2025 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { type Config } from "@element-hq/element-web-module-api";
+
+export * from "./utils/config_json.js";
+export * from "./utils/context.js";
+export * from "./utils/release_accouncement.js";
+export * from "./utils/toasts.js";
+export { test, type CombinedTestFixtures, type TestFixtures, type WorkerArgs } from "./fixtures/index.js";
+
+export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
+
+// Enable experimental service worker support
+// See https://playwright.dev/docs/service-workers-experimental#how-to-enable
+process.env["PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS"] = "1";
+
+export type { Config };
+
+// This is deliberately quite a minimal config.json, so that we can test that the default settings actually work.
+// We use the Module API Config interface so that all modules
+// which use declaration merging will have their config types correctly applied.
+export const CONFIG_JSON: Partial<Config> = {
+    default_server_config: {},
+
+    // The default language is set here for test consistency
+    setting_defaults: {
+        language: "en-GB",
+    },
+
+    // the location tests want a map style url.
+    map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+
+    features: {
+        // We don't want to go through the feature announcement during the e2e test
+        feature_release_announcement: false,
+    },
+};
+
+export { expect, type ToMatchScreenshotOptions } from "./expect/index.js";

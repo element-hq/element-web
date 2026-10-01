@@ -1,0 +1,5 @@
+{
+    "*": "oxfmt --no-error-on-unmatched-pattern",
+    "*.{js,jsx,ts,tsx,mjs,cjs}": "oxlint --no-error-on-unmatched-pattern",
+    "*.pcss": ["stylelint --fix"]
+}

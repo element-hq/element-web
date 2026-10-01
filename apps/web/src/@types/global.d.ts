@@ -1,0 +1,200 @@
+/*
+Copyright 2020-2024 New Vector Ltd.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// eslint-disable-next-line no-restricted-imports
+import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
+
+import type { ModuleLoader, X509Api } from "@element-hq/element-web-module-api";
+import type { logger } from "matrix-js-sdk/src/logger";
+import type ContentMessages from "../ContentMessages";
+import { type IMatrixClientPeg } from "../MatrixClientPeg";
+import type ToastStore from "../stores/ToastStore";
+import { type DeviceListener } from "../device-listener";
+import { type PlatformPeg } from "../PlatformPeg";
+import { type IntegrationManagers } from "../integrations/IntegrationManagers";
+import { type ModalManager } from "../Modal";
+import type SettingsStore from "../settings/SettingsStore";
+import type UserActivity from "../UserActivity";
+import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
+import { type EventIndexPeg } from "../indexing/EventIndexPeg";
+import { type VoiceRecordingStore } from "../stores/VoiceRecordingStore";
+import type PerformanceMonitor from "../performance";
+import type UIStore from "../stores/UIStore";
+import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
+import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
+import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
+import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import type { CallStatusListener } from "../CallStatusListener";
+import { type IConfigOptions } from "../IConfigOptions";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type DeepReadonly } from "./common";
+import type MatrixChat from "../components/structures/MatrixChat";
+import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
+import { type ModuleApiType } from "../modules/Api.ts";
+import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
+import { type SDKContextClass } from "../contexts/SDKContextClass.ts";
+
+type ElectronChannel =
+    | "app_onAction"
+    | "before-quit"
+    | "check_updates"
+    | "install_update"
+    | "ipcCall"
+    | "ipcReply"
+    | "loudNotification"
+    | "preferences"
+    | "seshat"
+    | "seshatReply"
+    | "setBadgeCount"
+    | "update-downloaded"
+    | "userDownloadCompleted"
+    | "userDownloadAction"
+    | "openDesktopCapturerSourcePicker"
+    | "userAccessToken"
+    | "homeserverUrl"
+    | "serverSupportedVersions"
+    | "showToast";
+
+declare global {
+    // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
+    // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
+    // The overload for clear{Interval,Timeout} is resolved as expected.
+    // We use `ReturnType<typeof setTimeout>` in the code to be agnostic of if this definition gets loaded.
+    function setInterval(handler: TimerHandler, timeout: number, ...args: any[]): number;
+    function setTimeout(handler: TimerHandler, timeout: number, ...args: any[]): number;
+
+    interface Window {
+        mxSendRageshake: (text: string, withLogs?: boolean) => Promise<void>;
+        matrixLogger: typeof logger;
+        matrixChat?: MatrixChat;
+        mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
+        mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
+        mxDispatcher: MatrixDispatcher;
+        mxMatrixClientPeg: IMatrixClientPeg;
+        mxReactSdkConfig: DeepReadonly<IConfigOptions>;
+
+        // https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
+        // we only ever check for its existence, so we can ignore its actual type
+        MSStream?: unknown;
+
+        mxContentMessages: ContentMessages;
+        mxToastStore: ToastStore;
+        mxDeviceListener: DeviceListener;
+        mxCallStatusListener: CallStatusListener;
+        getRoomListStoreV3: () => RoomListStoreV3Class;
+        mxPlatformPeg: PlatformPeg;
+        mxIntegrationManagers: typeof IntegrationManagers;
+        singletonModalManager: ModalManager;
+        mxSettingsStore: SettingsStore;
+        mxUserActivity: UserActivity;
+        mxModalWidgetStore: ModalWidgetStore;
+        mxVoiceRecordingStore: VoiceRecordingStore;
+        mxEventIndexPeg: EventIndexPeg;
+        mxPerformanceMonitor: PerformanceMonitor;
+        mxPerformanceEntryNames: any;
+        mxUIStore: UIStore;
+        mxSetupEncryptionStore?: SetupEncryptionStore;
+        mxInitialCryptoStore?: InitialCryptoSetupStore;
+        mxRoomScrollStateStore?: RoomScrollStateStore;
+        mxActiveWidgetStore?: ActiveWidgetStore;
+        mxOnRecaptchaLoaded?: () => void;
+        mxModuleLoader: ModuleLoader;
+        mxModuleApi: ModuleApiType;
+        mxSdkContext: SDKContextClass;
+
+        // electron-only
+        electron?: Electron;
+        // opera-only
+        opera?: any;
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
+        InstallTrigger: any;
+    }
+
+    interface Electron {
+        // Legacy
+        on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
+        send(channel: ElectronChannel, ...args: any[]): void;
+        // Initialisation
+        initialise(): Promise<{
+            protocol: string;
+            sessionId: string;
+            supportsBadgeOverlay: boolean;
+            config: IConfigOptions;
+            supportedSettings: Record<string, boolean>;
+        }>;
+        // Settings
+        setSettingValue(settingName: string, value: any): Promise<void>;
+        getSettingValue(settingName: string): Promise<any>;
+        // X.509 hardware key IPC
+        x509?: X509Api;
+    }
+
+    interface DesktopCapturerSource {
+        id: string;
+        name: string;
+        thumbnailURL: string;
+    }
+
+    interface GetSourcesOptions {
+        types: Array<string>;
+        thumbnailSize?: {
+            height: number;
+            width: number;
+        };
+        fetchWindowIcons?: boolean;
+    }
+
+    interface StorageEstimate {
+        usageDetails?: { [key: string]: number };
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    interface AudioWorkletProcessor {
+        readonly port: MessagePort;
+        process(inputs: Float32Array[][], outputs: Float32Array[][], parameters: Record<string, Float32Array>): boolean;
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    const AudioWorkletProcessor: {
+        prototype: AudioWorkletProcessor;
+        new (options?: AudioWorkletNodeOptions): AudioWorkletProcessor;
+    };
+
+    // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-881509595
+    interface AudioParamDescriptor {
+        readonly port: MessagePort;
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    function registerProcessor(
+        name: string,
+        processorCtor: (new (options?: AudioWorkletNodeOptions) => AudioWorkletProcessor) & {
+            parameterDescriptors?: AudioParamDescriptor[];
+        },
+    ): void;
+
+    var grecaptcha:
+        | undefined
+        | {
+              reset: (id: string) => void;
+              render: (
+                  divId: string,
+                  options: {
+                      sitekey: string;
+                      callback: (response: string) => void;
+                  },
+              ) => string;
+              isReady: () => boolean;
+          };
+
+    var mx_rage_logger: ConsoleLogger;
+    var mx_rage_initPromise: Promise<void>;
+    var mx_rage_initStoragePromise: Promise<void>;
+    var mx_rage_store: IndexedDBLogStore;
+}

@@ -1,0 +1,389 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2017-2023 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { useEffect, type JSX } from "react";
+import classNames from "classnames";
+import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ReplyTileView, useCreateAutoDisposedViewModel, useEventPresentation } from "@element-hq/web-shared-components";
+
+import { _t } from "../../../languageHandler";
+import dis from "../../../dispatcher/dispatcher";
+import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import SettingsStore from "../../../settings/SettingsStore";
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
+import { Action } from "../../../dispatcher/actions";
+import Spinner from "./Spinner";
+import { Pill } from "./Pill";
+import { PillType } from "./PillType";
+import AccessibleButton from "./AccessibleButton";
+import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
+import RoomContext from "../../../contexts/RoomContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
+import { ReplyTileViewModel } from "../../../viewmodels/room/timeline/event-tile/ReplyTileViewModel";
+import { useUserStatus } from "../../../hooks/useUserStatus";
+
+/**
+ * This number is based on the previous behavior - if we have message of height
+ * over 60px then we want to show button that will allow to expand it.
+ */
+const SHOW_EXPAND_QUOTE_PIXELS = 60;
+
+function ReplyChainPresentationWrapper({ children }: Readonly<{ children: React.ReactNode }>): JSX.Element {
+    const { density } = useEventPresentation();
+
+    return (
+        <div
+            className={classNames("mx_ReplyChain_wrapper", {
+                mx_ReplyChain_compact: density === "compact",
+            })}
+        >
+            {children}
+        </div>
+    );
+}
+
+interface IProps {
+    // the latest event in this chain of replies
+    parentEv: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    // Whether to always show a timestamp
+    alwaysShowTimestamps?: boolean;
+    forExport?: boolean;
+    isQuoteExpanded?: boolean;
+    setQuoteExpanded: (isExpanded: boolean) => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+    /**
+     * Keep the preview at one height from the moment it appears, for the new
+     * timeline — where a preview that grows afterwards pushes the messages around
+     * it. It shows the quoted message right away if the room already has it, and
+     * stands a fixed-height skeleton in while fetching one it doesn't.
+     */
+    compactPreview?: boolean;
+}
+
+interface IState {
+    // The loaded events to be rendered as linear-replies
+    events: MatrixEvent[];
+    // The latest loaded event which has not yet been shown
+    loadedEv: MatrixEvent | null;
+    // Whether the component is still loading more events
+    loading: boolean;
+    // Whether as error was encountered fetching a replied to event.
+    err: boolean;
+}
+
+interface ReplyTileProps {
+    mxEvent: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    toggleExpandedQuote?: () => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+function ReplyTile({
+    mxEvent,
+    permalinkCreator,
+    toggleExpandedQuote,
+    getRelationsForEvent,
+}: ReplyTileProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const userStatus = useUserStatus(mxEvent.getSender() ?? mxEvent.sender?.userId);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ReplyTileViewModel({
+                mxEvent,
+                permalinkCreator,
+                toggleExpandedQuote,
+                getRelationsForEvent,
+                cli,
+                userStatus,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            permalinkCreator,
+            toggleExpandedQuote,
+            getRelationsForEvent,
+            cli,
+            userStatus,
+        });
+    }, [cli, getRelationsForEvent, mxEvent, permalinkCreator, toggleExpandedQuote, userStatus, vm]);
+
+    return <ReplyTileView vm={vm} />;
+}
+
+// This component does no cycle detection, simply because the only way to make such a cycle would be to
+// craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
+// be low as each event being loaded (after the first) is triggered by an explicit user action.
+export default class ReplyChain extends React.Component<IProps, IState> {
+    public static contextType = RoomContext;
+    declare public context: React.ContextType<typeof RoomContext>;
+
+    private unmounted = false;
+    private room: Room;
+    private blockquoteRef = React.createRef<HTMLQuoteElement>();
+
+    public constructor(props: IProps) {
+        super(props);
+
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
+
+        // Usually the quoted message is already loaded in this room, so take it
+        // now: the first render is then the finished preview, at its final height.
+        let initialEvents: MatrixEvent[] = [];
+        let loading = true;
+        if (props.compactPreview) {
+            const parentEventId = getParentEventId(props.parentEv);
+            const ev = parentEventId ? this.room?.findEventById(parentEventId) : undefined;
+            if (ev) {
+                initialEvents = [ev];
+                loading = false;
+            }
+        }
+
+        this.state = {
+            events: initialEvents,
+            loadedEv: null,
+            loading,
+            err: false,
+        };
+    }
+
+    private get matrixClient(): MatrixClient {
+        return MatrixClientPeg.safeGet();
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
+        if (this.state.loading) {
+            void this.initialize();
+        } else if (this.state.events.length > 0) {
+            // The constructor already found the quoted message, so only the
+            // "In reply to" header above it is left to fetch.
+            void this.loadHeaderEvent(this.state.events[0]);
+        }
+        this.trySetExpandableQuotes();
+    }
+
+    /**
+     * Fetches the message the quoted one was itself replying to, which puts the
+     * "In reply to" header above the preview. Usually it is already loaded and
+     * the header appears a frame after the preview, before the row is on screen.
+     */
+    private async loadHeaderEvent(quotedEvent: MatrixEvent): Promise<void> {
+        const loadedEv = await this.getNextEvent(quotedEvent);
+        if (this.unmounted || !loadedEv) return;
+        this.setState({ loadedEv });
+    }
+
+    public componentDidUpdate(): void {
+        this.trySetExpandableQuotes();
+    }
+
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+    }
+
+    private trySetExpandableQuotes(): void {
+        if (this.props.isQuoteExpanded === undefined && this.blockquoteRef.current) {
+            const el: HTMLElement | null = this.blockquoteRef.current.querySelector(".mx_EventTile_body");
+            if (el) {
+                const code: HTMLElement | null = el.querySelector("code");
+                const isCodeEllipsisShown = code ? code.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS : false;
+                const isElipsisShown =
+                    isCodeEllipsisShown ||
+                    el.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS ||
+                    // Check whether the body fits into it's scroll container
+                    el.clientHeight !== el.scrollHeight ||
+                    // Do the same for its children as the scroll container may be on them instead
+                    [...el.children].some((child) => child.clientHeight !== child.scrollHeight);
+                if (isElipsisShown) {
+                    this.props.setQuoteExpanded(false);
+                }
+            }
+        }
+    }
+
+    private async initialize(): Promise<void> {
+        const { parentEv } = this.props;
+        // at time of making this component we checked that props.parentEv has a parentEventId
+        const ev = await this.getEvent(getParentEventId(parentEv));
+
+        if (this.unmounted) return;
+
+        if (ev) {
+            const loadedEv = await this.getNextEvent(ev);
+            this.setState({
+                events: [ev],
+                loadedEv,
+                loading: false,
+            });
+        } else {
+            this.setState({ err: true });
+        }
+    }
+
+    private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent | null> {
+        try {
+            const inReplyToEventId = getParentEventId(ev);
+            if (!inReplyToEventId) return null;
+            return await this.getEvent(inReplyToEventId);
+        } catch {
+            return null;
+        }
+    }
+
+    private async getEvent(eventId?: string): Promise<MatrixEvent | null> {
+        if (!eventId) return null;
+        const event = this.room.findEventById(eventId);
+        if (event) return event;
+
+        try {
+            // ask the client to fetch the event we want using the context API, only interface to do so is to ask
+            // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
+            await this.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
+        } catch {
+            // if it fails catch the error and return early, there's no point trying to find the event in this case.
+            // Return null as it is falsy and thus should be treated as an error (as the event cannot be resolved).
+            return null;
+        }
+        return this.room.findEventById(eventId) ?? null;
+    }
+
+    public canCollapse = (): boolean => {
+        return this.state.events.length > 1;
+    };
+
+    public collapse = (): void => {
+        void this.initialize();
+    };
+
+    private onQuoteClick = async (): Promise<void> => {
+        if (!this.state.loadedEv) return;
+        const events = [this.state.loadedEv, ...this.state.events];
+
+        let loadedEv: MatrixEvent | null = null;
+        if (events.length > 0) {
+            loadedEv = await this.getNextEvent(events[0]);
+        }
+
+        this.setState({
+            loadedEv,
+            events,
+        });
+
+        dis.fire(Action.FocusSendMessageComposer);
+    };
+
+    private getReplyChainColorClass(ev: MatrixEvent): string {
+        return getUserNameColorClass(ev.getSender()!).replace("Username", "ReplyChain");
+    }
+
+    public render(): React.ReactNode {
+        let header: JSX.Element | undefined;
+        if (this.state.err) {
+            header = (
+                <blockquote className="mx_ReplyChain mx_ReplyChain_error">
+                    {_t("timeline|reply|error_loading")}
+                </blockquote>
+            );
+        } else if (this.state.loadedEv && shouldDisplayReply(this.state.events[0])) {
+            const ev = this.state.loadedEv;
+            const room = this.matrixClient.getRoom(ev.getRoomId());
+            header = (
+                <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>
+                    {_t(
+                        "timeline|reply|in_reply_to",
+                        {},
+                        {
+                            a: (sub) => (
+                                <AccessibleButton
+                                    kind="link_inline"
+                                    className="mx_ReplyChain_show"
+                                    onClick={this.onQuoteClick}
+                                >
+                                    {sub}
+                                </AccessibleButton>
+                            ),
+                            pill: (
+                                <Pill
+                                    type={PillType.UserMention}
+                                    room={room ?? undefined}
+                                    url={makeUserPermalink(ev.getSender()!)}
+                                    shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
+                                />
+                            ),
+                        },
+                    )}
+                </blockquote>
+            );
+        } else if (this.props.forExport) {
+            const eventId = getParentEventId(this.props.parentEv);
+            header = (
+                <p className="mx_ReplyChain_Export">
+                    {_t(
+                        "timeline|reply|in_reply_to_for_export",
+                        {},
+                        {
+                            a: (sub) => (
+                                <a className="mx_reply_anchor" href={`#${eventId}`} data-scroll-to={eventId}>
+                                    {" "}
+                                    {sub}{" "}
+                                </a>
+                            ),
+                        },
+                    )}
+                </p>
+            );
+        } else if (this.state.loading) {
+            header = this.props.compactPreview ? (
+                // Two rows, the same heights as the sender and message lines they
+                // stand in for, so the preview doesn't resize once it loads.
+                <blockquote className="mx_ReplyChain mx_ReplyChain_placeholder">
+                    <div className="mx_ReplyChain_placeholderRow" />
+                    <div className="mx_ReplyChain_placeholderRow" />
+                </blockquote>
+            ) : (
+                <Spinner size={16} />
+            );
+        }
+
+        const { isQuoteExpanded } = this.props;
+        const evTiles = this.state.events.map((ev) => {
+            const classname = classNames({
+                "mx_ReplyChain": true,
+                [this.getReplyChainColorClass(ev)]: true,
+                // We don't want to add the class if it's undefined, it should only be expanded/collapsed when it's true/false
+                "mx_ReplyChain--expanded": isQuoteExpanded === true,
+                // We don't want to add the class if it's undefined, it should only be expanded/collapsed when it's true/false
+                "mx_ReplyChain--collapsed": isQuoteExpanded === false,
+            });
+            return (
+                <blockquote ref={this.blockquoteRef} className={classname} key={ev.getId()}>
+                    <ReplyTile
+                        mxEvent={ev}
+                        permalinkCreator={this.props.permalinkCreator}
+                        toggleExpandedQuote={() => this.props.setQuoteExpanded(!this.props.isQuoteExpanded)}
+                        getRelationsForEvent={this.props.getRelationsForEvent}
+                    />
+                </blockquote>
+            );
+        });
+
+        return (
+            <ReplyChainPresentationWrapper>
+                <div>{header}</div>
+                <div>{evTiles}</div>
+            </ReplyChainPresentationWrapper>
+        );
+    }
+}

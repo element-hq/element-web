@@ -1,0 +1,62 @@
+{
+    "action": {
+        "cancel": "キャンセル",
+        "close": "閉じる",
+        "close_brand": "%(brand)sを閉じる",
+        "copy": "コピー",
+        "cut": "切り取り",
+        "delete": "削除",
+        "edit": "編集",
+        "minimise": "最小化",
+        "paste": "貼り付け",
+        "paste_match_style": "スタイルを保持して貼り付け",
+        "quit": "終了",
+        "redo": "やり直す",
+        "select_all": "全て選択",
+        "show_hide": "表示/非表示",
+        "undo": "取り消す",
+        "zoom_in": "拡大",
+        "zoom_out": "縮小"
+    },
+    "common": {
+        "about": "概要",
+        "help": "ヘルプ",
+        "preferences": "環境設定"
+    },
+    "confirm_quit": "終了してよろしいですか？",
+    "edit_menu": {
+        "speech": "スピーチ",
+        "speech_start_speaking": "録音を開始",
+        "speech_stop_speaking": "録音を停止"
+    },
+    "file_menu": {
+        "label": "ファイル"
+    },
+    "menu": {
+        "hide": "非表示",
+        "hide_others": "他を非表示",
+        "services": "サービス",
+        "unhide": "再表示"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "辞書に追加",
+        "copy_email": "メールアドレスをコピー",
+        "copy_image": "画像をコピー",
+        "copy_image_url": "画像のアドレスをコピー",
+        "copy_link_url": "リンクのアドレスをコピー",
+        "save_image_as": "画像を保存",
+        "save_image_as_error_description": "画像の保存に失敗しました",
+        "save_image_as_error_title": "画像の保存に失敗"
+    },
+    "view_menu": {
+        "actual_size": "等倍",
+        "toggle_developer_tools": "開発者ツールを切り替える",
+        "toggle_full_screen": "全画面表示を切り替える",
+        "view": "表示"
+    },
+    "window_menu": {
+        "bring_all_to_front": "全てを前面に表示",
+        "label": "ウィンドウ",
+        "zoom": "ズーム"
+    }
+}

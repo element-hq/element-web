@@ -1,0 +1,93 @@
+{
+    "action": {
+        "cancel": "Diddymu",
+        "close": "Cau",
+        "close_brand": "Cau %(brand)s",
+        "copy": "Copïo",
+        "cut": "Torri",
+        "delete": "Dileu",
+        "edit": "Golygu",
+        "minimise": "Lleihau",
+        "paste": "Gludo",
+        "paste_match_style": "Arddull Gludo a Chyfateb",
+        "quit": "Gadael",
+        "redo": "Ail-wneud",
+        "select_all": "Dewis y Cyfan",
+        "show_hide": "Dangos/Cuddio",
+        "undo": "Dadwneud",
+        "zoom_in": "Chwyddo i Mewn",
+        "zoom_out": "Chwyddo Allan"
+    },
+    "common": {
+        "about": "Ynghylch",
+        "brand_help": "Cymorth %(brand)s",
+        "help": "Cymorth",
+        "no": "Na",
+        "preferences": "Dewisiadau",
+        "yes": "Iawn"
+    },
+    "confirm_quit": "Ydych chi'n siŵr eich bod am roi'r gorau iddi?",
+    "edit_menu": {
+        "speech": "Lleferydd",
+        "speech_start_speaking": "Cychwyn Llefaru",
+        "speech_stop_speaking": "Peidio Llefaru"
+    },
+    "eol": {
+        "no_more_updates": "Rydych chi'n rhedeg fersiwn o macOS nad yw'n cael ei chefnogi. Uwchraddiwch i dderbyn diweddariadau %(brand)s.",
+        "title": "System heb ei chefnogi",
+        "warning": "Rydych chi'n rhedeg fersiwn o macOS nad yw'n cael ei chefnogi. Uwchraddiwch i sicrhau bod %(brand)s yn parhau i weithio."
+    },
+    "file_menu": {
+        "label": "Ffeil"
+    },
+    "icon_overlay": {
+        "description_error": "Gwall",
+        "description_notifications": {
+            "Mae gennych chi %(count)s hysbysiadau heb eu darllen.": "zero",
+            "Mae gennych chi %(count)s hysbysiad heb ei ddarllen.": "one",
+            "Mae gennych chi %(count)s hysbysiad heb eu darllen.": "other"
+        }
+    },
+    "menu": {
+        "hide": "Cuddio",
+        "hide_others": "Cuddio'r Gweddill",
+        "services": "Gwasanaethau",
+        "unhide": "Datguddio"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Ychwanegu at y geiriadur",
+        "copy_email": "Copïo cyfeiriad e-bost",
+        "copy_image": "Copïo delwedd",
+        "copy_image_url": "Copïo cyfeiriad delwedd",
+        "copy_link_url": "Copïo cyfeiriad y ddolen",
+        "save_image_as": "Cadw delwedd fel...",
+        "save_image_as_error_description": "Methodd cadw'r ddelwedd",
+        "save_image_as_error_title": "Methodd cadw'r ddelwedd"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Clirio data ac ail-lwytho?",
+            "backend_changed_detail": "Methu cael mynediad at y gyfrinach o allweddi'r system, mae'n ymddangos ei fod wedi newid.",
+            "backend_changed_title": "Methwyd llwytho'r gronfa ddata",
+            "backend_no_encryption": "Mae gan eich system cylch allwedd sy'n cael ei gefnogi ond nid yw amgryptio ar gael.",
+            "backend_no_encryption_detail": "Mae Electron wedi canfod nad yw amgryptio ar gael ar eich cylch allweddi %(backend)s. Gwnewch yn siŵr bod y cylch allweddi wedi'i osod. Os oes y cylch allweddi wedi'i osod, ail gychwynnwch a cheisiwch eto. Yn ddewisol, gallwch ganiatáu i %(brand)s ddefnyddio ffurf wannach o amgryptio.",
+            "backend_no_encryption_title": "Dim cefnogaeth amgryptio",
+            "unsupported_keyring": "Mae gan eich system allweddell nad yw'n cael ei chefnogi sy'n golygu nad oes modd agor y gronfa ddata.",
+            "unsupported_keyring_detail": "Heb ganfod allweddell Electron gefn. Gallwch geisio ffurfweddu'r gefn â llaw trwy gychwyn %(brand)s gyda dadl llinell orchymyn, gweithrediad untro. Gweler %(link)s.",
+            "unsupported_keyring_title": "System heb ei chefnogi",
+            "unsupported_keyring_use_basic_text": "Defnyddiwch amgryptio gwannach",
+            "unsupported_keyring_use_plaintext": "Peidiwch â defnyddio amgryptio"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Maint Gwirioneddol",
+        "toggle_developer_tools": "Toglo Offer Datblygwyr",
+        "toggle_full_screen": "Toglo Sgrin Lawn",
+        "view": "Golwg"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Popeth i'r Blaen",
+        "label": "Ffenestr",
+        "zoom": "Chwyddo"
+    }
+}

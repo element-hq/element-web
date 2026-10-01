@@ -1,0 +1,46 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ThemeChoicePanel_ThemeSelectors {
+    display: flex;
+    flex-wrap: wrap;
+    /* Override form default style */
+    flex-direction: row !important;
+    gap: var(--cpd-space-4x) !important;
+
+    .mx_ThemeChoicePanel_themeSelector {
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        border-radius: var(--cpd-space-1-5x);
+        padding: var(--cpd-space-3x) var(--cpd-space-5x) var(--cpd-space-3x) var(--cpd-space-3x);
+        gap: var(--cpd-space-2x);
+        background-color: var(--cpd-color-bg-canvas-default);
+
+        &.mx_ThemeChoicePanel_themeSelector_enabled {
+            border-color: var(--cpd-color-border-interactive-primary);
+        }
+
+        &.mx_ThemeChoicePanel_themeSelector_disabled {
+            border-color: var(--cpd-color-border-disabled);
+
+            .mx_ThemeChoicePanel_themeSelector_Label {
+                color: var(--cpd-color-text-disabled);
+                cursor: not-allowed;
+            }
+        }
+
+        .mx_ThemeChoicePanel_themeSelector_Label {
+            font: var(--cpd-font-body-md-semibold);
+        }
+
+        &:not(.mx_ThemeChoicePanel_themeSelector_disabled) {
+            .mx_ThemeChoicePanel_themeSelector_Label {
+                color: var(--cpd-color-text-primary);
+            }
+        }
+    }
+}

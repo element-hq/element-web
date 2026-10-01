@@ -1,0 +1,439 @@
+/*
+Copyright 2018-2025 New Vector Ltd.
+Copyright 2017-2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2016 Aviral Dasgupta
+Copyright 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// Squirrel on windows starts the app with various flags as hooks to tell us when we've been installed/uninstalled etc.
+import "./squirrelhooks.js";
+import {
+    app,
+    BrowserWindow,
+    Menu,
+    autoUpdater,
+    dialog,
+    type Input,
+    type Event,
+    session,
+    protocol,
+    desktopCapturer,
+} from "electron";
+import * as Sentry from "@sentry/electron/main";
+import path from "node:path";
+import windowStateKeeper from "electron-window-state";
+import { URL, fileURLToPath } from "node:url";
+
+import "./ipc.js";
+import "./seshat.js";
+import "./settings.js";
+import "./badge.js";
+import "./x509.js";
+import * as tray from "./tray.js";
+import Store from "./store.js";
+import { buildMenuTemplate } from "./vectormenu.js";
+import webContentsHandler from "./webcontents-handler.js";
+import * as updater from "./updater.js";
+import ProtocolHandler from "./protocol.js";
+import { _t, AppLocalization } from "./language-helper.js";
+import { setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { setupMacosTitleBar } from "./macos-titlebar.js";
+import { setupMediaAuth } from "./media-auth.js";
+import { handleWindowClose, revealMainWindow } from "./window-close.js";
+import { type RendererRecovery, setupRendererRecovery } from "./renderer-recovery.js";
+import { getBuildConfig } from "./build-config.js";
+import { getAsarPath } from "./asar.js";
+import { getIconPath } from "./icon.js";
+import { getArgs } from "./args.js";
+import { type ConfigOptions, loadConfig } from "./config.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const buildConfig = getBuildConfig();
+const protocolHandler = new ProtocolHandler(buildConfig.protocol);
+const args = getArgs(protocolHandler);
+
+app.setPath("userData", args.userDataPath);
+
+// Renderer crash auto-recovery for the main window (element-web#32222). Held at module scope so the
+// dock `activate` / `second-instance` relaunch handlers can route a crashed renderer through the same
+// capped recovery rather than reloading inline (which would re-arm an already-given-up crash loop).
+let rendererRecovery: RendererRecovery | undefined;
+
+// Configure Electron Sentry and crashReporter using sentry.dsn in config.json if one is present.
+async function configureSentry(): Promise<void> {
+    const config = await loadConfig(args.localConfigPath);
+    const { dsn, environment } = config.sentry || {};
+    if (dsn) {
+        console.log(`Enabling Sentry with dsn=${dsn} environment=${environment}`);
+        Sentry.init({
+            dsn,
+            environment,
+            // We don't actually use this IPC, but we do not want Sentry injecting preloads
+            ipcMode: Sentry.IPCMode.Classic,
+        });
+    }
+}
+
+global.appQuitting = false;
+
+const exitShortcuts: Array<(input: Input, platform: string) => boolean> = [
+    (input, platform): boolean => platform !== "darwin" && input.alt && input.key.toUpperCase() === "F4",
+    (input, platform): boolean => platform !== "darwin" && input.control && input.key.toUpperCase() === "Q",
+    (input, platform): boolean =>
+        platform === "darwin" && input.meta && !input.control && input.key.toUpperCase() === "Q",
+];
+
+void configureSentry();
+
+// handle uncaught errors otherwise it displays
+// stack traces in popup dialogs, which is terrible (which
+// it will do any time the auto update poke fails, and there's
+// no other way to catch this error).
+// Assuming we generally run from the console when developing,
+// this is far preferable.
+process.on("uncaughtException", function (error: Error): void {
+    console.log("Unhandled exception", error);
+});
+
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+    console.log("Other instance detected: exiting");
+    app.exit();
+}
+
+// Register the scheme the app is served from as 'standard'
+// which allows things like relative URLs and IndexedDB to
+// work.
+// Also mark it as secure (ie. accessing resources from this
+// protocol and HTTPS won't trigger mixed content warnings).
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: "vector",
+        privileges: {
+            standard: true,
+            secure: true,
+            supportFetchAPI: true,
+        },
+    },
+]);
+
+// Turn the sandbox on for *all* windows we might generate. Doing this means we don't
+// have to specify a `sandbox: true` to each BrowserWindow.
+//
+// This also fixes an issue with window.open where if we only specified the sandbox
+// on the main window we'd run into cryptic "ipc_renderer be broke" errors. Turns out
+// it's trying to jump the sandbox and make some calls into electron, which it can't
+// do when half of it is sandboxed. By turning on the sandbox for everything, the new
+// window (no matter how temporary it may be) is also sandboxed, allowing for a clean
+// transition into the user's browser.
+app.enableSandbox();
+
+// We disable media controls here. We do this because calls use audio and video elements and they sometimes capture the media keys. See https://github.com/vector-im/element-web/issues/15704
+app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,MediaSessionService");
+
+const store = Store.initialize(args.storageMode); // must be called before any async actions
+
+// Disable hardware acceleration if the setting has been set.
+if (store.get("disableHardwareAcceleration")) {
+    console.log("Disabling hardware acceleration.");
+    app.disableHardwareAcceleration();
+}
+
+app.on("ready", async () => {
+    console.debug("Reached Electron ready state");
+
+    let asarPath: string;
+    let config: ConfigOptions;
+
+    try {
+        asarPath = await getAsarPath();
+        config = await loadConfig(args.localConfigPath);
+    } catch (e) {
+        console.log("App setup failed: exiting", e);
+        process.exit(1);
+        // process.exit doesn't cause node to stop running code immediately,
+        // so return (we could let the exception propagate but then we end up
+        // with node printing all sorts of stuff about unhandled exceptions
+        // when we want the actual error to be as obvious as possible).
+        return;
+    }
+
+    if (args.devtools) {
+        try {
+            const { installExtension, REACT_DEVELOPER_TOOLS } = await import("electron-devtools-installer");
+            installExtension(REACT_DEVELOPER_TOOLS)
+                .then((ext) => console.log(`Added Extension: ${ext.name}`))
+                .catch((err: unknown) => console.log("An error occurred: ", err));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    protocol.registerFileProtocol("vector", (request, callback) => {
+        if (request.method !== "GET") {
+            callback({ error: -322 }); // METHOD_NOT_SUPPORTED from chromium/src/net/base/net_error_list.h
+            return null;
+        }
+
+        const parsedUrl = new URL(request.url);
+        if (parsedUrl.protocol !== "vector:") {
+            callback({ error: -302 }); // UNKNOWN_URL_SCHEME
+            return;
+        }
+        if (parsedUrl.host !== "vector") {
+            callback({ error: -105 }); // NAME_NOT_RESOLVED
+            return;
+        }
+
+        const target = parsedUrl.pathname.split("/");
+
+        // path starts with a '/'
+        if (target[0] !== "") {
+            callback({ error: -6 }); // FILE_NOT_FOUND
+            return;
+        }
+
+        if (target[target.length - 1] == "") {
+            target[target.length - 1] = "index.html";
+        }
+
+        let baseDir: string;
+        if (target[1] === "webapp") {
+            baseDir = asarPath;
+        } else {
+            callback({ error: -6 }); // FILE_NOT_FOUND
+            return;
+        }
+
+        // Normalise the base dir and the target path separately, then make sure
+        // the target path isn't trying to back out beyond its root
+        baseDir = path.normalize(baseDir);
+
+        const relTarget = path.normalize(path.join(...target.slice(2)));
+        if (relTarget.startsWith("..")) {
+            callback({ error: -6 }); // FILE_NOT_FOUND
+            return;
+        }
+        const absTarget = path.join(baseDir, relTarget);
+
+        callback({
+            path: absTarget,
+        });
+    });
+
+    if (!args.update) {
+        console.log("Auto update disabled via command line flag");
+    } else if (config.update_base_url) {
+        void updater.start(config.update_base_url);
+    } else {
+        console.log("No update_base_url is defined: auto update is disabled");
+    }
+
+    // Set up i18n before loading storage as we need translations for dialogs
+    global.appLocalization = new AppLocalization({
+        components: [(): void => tray.initApplicationMenu(), (): void => Menu.setApplicationMenu(buildMenuTemplate())],
+        store,
+    });
+
+    // Load the previous window state with fallback to defaults
+    const mainWindowState = windowStateKeeper({
+        defaultWidth: 1024,
+        defaultHeight: 768,
+    });
+
+    console.debug("Opening main window");
+    const preloadScript = path.normalize(`${__dirname}/preload.cjs`);
+    global.mainWindow = new BrowserWindow({
+        // https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
+        backgroundColor: "#fff",
+
+        titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
+        trafficLightPosition: { x: 12, y: 8 },
+
+        icon: await getIconPath(),
+        show: false,
+        autoHideMenuBar: store.get("autoHideMenuBar"),
+
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
+        webPreferences: {
+            preload: preloadScript,
+            nodeIntegration: false,
+            //sandbox: true, // We enable sandboxing from app.enableSandbox() above
+            contextIsolation: true,
+            webgl: true,
+        },
+    });
+
+    global.mainWindow.setContentProtection(store.get("enableContentProtection"));
+
+    try {
+        console.debug("Ensuring storage is ready");
+        if (!(await store.prepareSafeStorage(global.mainWindow.webContents.session))) return;
+    } catch (e) {
+        console.error(e);
+        app.exit(1);
+    }
+
+    // do this after we know we are the primary instance of the app
+    const hasDeeplink = protocolHandler.initialise(args);
+    if (!hasDeeplink) {
+        void global.mainWindow.loadURL("vector://vector/webapp/");
+    }
+
+    if (process.platform === "darwin") {
+        setupMacosTitleBar(global.mainWindow);
+    }
+
+    // Handle spellchecker
+    // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
+    global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
+
+    // Create trayIcon icon
+    if (store.get("minimizeToTray")) await tray.create();
+
+    global.mainWindow.once("ready-to-show", () => {
+        if (!global.mainWindow) return;
+        mainWindowState.manage(global.mainWindow);
+
+        if (!args.hidden) {
+            global.mainWindow.show();
+        } else {
+            // hide here explicitly because window manage above sometimes shows it
+            global.mainWindow.hide();
+        }
+    });
+
+    global.mainWindow.webContents.on("before-input-event", (event: Event, input: Input): void => {
+        const exitShortcutPressed =
+            input.type === "keyDown" && exitShortcuts.some((shortcutFn) => shortcutFn(input, process.platform));
+
+        // We only care about the exit shortcuts here
+        if (!exitShortcutPressed || !global.mainWindow) return;
+
+        // Prevent the default behaviour
+        event.preventDefault();
+
+        // Let's ask the user if they really want to exit the app
+        const shouldWarnBeforeExit = store.get("warnBeforeExit", true);
+        if (shouldWarnBeforeExit) {
+            const shouldCancelCloseRequest =
+                dialog.showMessageBoxSync(global.mainWindow, {
+                    type: "question",
+                    buttons: [
+                        _t("action|cancel"),
+                        _t("action|close_brand", {
+                            brand: config.brand,
+                        }),
+                    ],
+                    message: _t("confirm_quit"),
+                    defaultId: 1,
+                    cancelId: 0,
+                }) === 0;
+            if (shouldCancelCloseRequest) return;
+        }
+
+        // Exit the app
+        app.exit();
+    });
+
+    global.mainWindow.on("closed", () => {
+        global.mainWindow = null;
+    });
+    global.mainWindow.on("close", (e) =>
+        handleWindowClose(e, global.mainWindow, { appQuitting: global.appQuitting, hasTray: tray.hasTray() }),
+    );
+
+    if (process.platform === "win32") {
+        // Handle forward/backward mouse buttons in Windows
+        global.mainWindow.on("app-command", (e, cmd) => {
+            if (cmd === "browser-backward" && global.mainWindow?.webContents.canGoBack()) {
+                global.mainWindow.webContents.goBack();
+            } else if (cmd === "browser-forward" && global.mainWindow?.webContents.canGoForward()) {
+                global.mainWindow.webContents.goForward();
+            }
+        });
+    }
+
+    webContentsHandler(global.mainWindow.webContents);
+
+    // Auto-recover from an upstream renderer/GPU-process crash (white screen, element-web#32222). This
+    // is a MITIGATION of an upstream Electron/Chromium defect, not a root-cause fix — without it a dead
+    // renderer stays a permanent blank window the user can only escape by killing the whole app.
+    rendererRecovery = setupRendererRecovery(global.mainWindow);
+
+    session.defaultSession.setDisplayMediaRequestHandler(
+        (_, callback) => {
+            if (process.env.XDG_SESSION_TYPE === "wayland") {
+                // On Wayland, calling getSources() opens the xdg-desktop-portal picker.
+                // The user can only select a single source there, so Electron will return an array with exactly one entry.
+                desktopCapturer
+                    .getSources({ types: ["screen", "window"] })
+                    .then((sources) => {
+                        // oxlint-disable-next-line promise/no-callback-in-promise
+                        callback({ video: sources[0] });
+                    })
+                    .catch((err) => {
+                        // If the user cancels the dialog an error occurs "Failed to get sources"
+                        console.error("Wayland: failed to get user-selected source:", err);
+                        // oxlint-disable-next-line promise/no-callback-in-promise
+                        callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
+                    });
+            } else {
+                global.mainWindow?.webContents.send("openDesktopCapturerSourcePicker");
+            }
+            setDisplayMediaCallback(callback);
+        },
+        { useSystemPicker: true },
+    ); // Use Mac OS 15+ native picker
+
+    setupMediaAuth(global.mainWindow);
+});
+
+app.on("window-all-closed", () => {
+    app.quit();
+});
+
+app.on("activate", () => {
+    // If the renderer crashed while the window was hidden (element-web#32222), reload it before showing
+    // so the user sees the UI rather than the white screen. Routed through the capped recovery (rather
+    // than an inline reload) so a relaunch can't re-arm a crash loop we've already given up on; it is a
+    // no-op when the renderer is healthy.
+    rendererRecovery?.recoverIfCrashed();
+    global.mainWindow?.show();
+});
+
+function beforeQuit(): void {
+    global.appQuitting = true;
+    global.mainWindow?.webContents.send("before-quit");
+}
+
+app.on("before-quit", beforeQuit);
+autoUpdater.on("before-quit-for-update", beforeQuit);
+
+app.on("second-instance", (ev, commandLine, workingDirectory) => {
+    // If other instance launched with --hidden then skip showing window
+    if (commandLine.includes("--hidden")) return;
+
+    // Someone tried to run a second instance, we should focus our window.
+    if (global.mainWindow) {
+        // If the renderer crashed (element-web#32222), reload before surfacing the window so the user is
+        // brought to a working UI rather than a white screen. Routed through the capped recovery so a
+        // relaunch can't re-arm a crash loop we've already given up on; a no-op for a healthy window.
+        rendererRecovery?.recoverIfCrashed();
+        revealMainWindow(global.mainWindow);
+    }
+});
+
+// This is required to make notification handlers work
+// on Windows 8.1/10/11 (and is a noop on other platforms);
+// It must also match the ID found in 'electron-builder'
+// in order to get the title and icon to show up correctly.
+// Ref: https://stackoverflow.com/a/77314604/3525780
+app.setAppUserModelId(buildConfig.appId);

@@ -1,0 +1,17 @@
+/webapp
+/config.json
+/config.json.*
+/config.local*.json
+# Legacy skinning file that some people might still have
+/src/component-index.js
+# Auto-generated file
+/src/modules.js
+/build_config.yaml
+
+# Vitest browser-mode screenshots. Only the linux baselines are committed, as linux
+# is what CI renders with; regenerate them with `pnpm test:unit:screenshots`, which
+# runs the browser in the same pinned container. Anything else written under
+# __screenshots__ is the actual image from a failing run, which is local-only, as
+# are the diffs vitest writes alongside it.
+/src/**/__screenshots__/*
+!/src/**/__screenshots__/linux/
