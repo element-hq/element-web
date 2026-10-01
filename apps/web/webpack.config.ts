@@ -106,11 +106,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // directory, so we don't have to rely on an index.js or similar file existing.
     const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
-    // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
-    // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
-    // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
-    // and is only loaded when a call renders on the React path. That holds for both the stylesheet itself
-    // (real path, as webpack resolves symlinks) and the wrapper that puts it in the `element-call` layer.
+    // The Element Call component's stylesheet is only needed when a call renders on the React path, so it
+    // stays with the component's own (lazy) chunk rather than being folded into the app-wide `styles` chunk.
+    // That holds for both the stylesheet itself (real path, as webpack resolves symlinks) and the wrapper
+    // that imports it (see `ElementCallComponent.css` for how it fits Element Web's cascade layers).
     const elementCallComponentStylesheets = [
         fs.realpathSync(fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css"))),
         path.resolve(__dirname, "src/components/views/voip/ElementCallComponent.css"),
