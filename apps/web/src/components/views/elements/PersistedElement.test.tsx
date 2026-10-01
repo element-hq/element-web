@@ -62,4 +62,44 @@ describe("PersistedElement", () => {
         second.unmount();
         expect(child().style.display).toBe("none");
     });
+
+    it("can move its DOM tree into another host and back", async () => {
+        const { unmount } = mount();
+        await act(async () => {});
+        const host = document.createElement("div");
+        document.body.appendChild(host);
+
+        expect(PersistedElement.detach(persistKey, host)).toBe(true);
+        expect(PersistedElement.isDetached(persistKey)).toBe(true);
+        expect(container()?.parentElement).toBe(host);
+        // Filling the host rather than following the placeholder
+        expect(child().style.width).toBe("100%");
+        expect(child().style.height).toBe("100%");
+        expect(child().style.transform).toBe("none");
+
+        // While detached, losing the placeholder does not hide it
+        unmount();
+        expect(child().style.display).toBe("block");
+
+        PersistedElement.reattach(persistKey);
+        expect(PersistedElement.isDetached(persistKey)).toBe(false);
+        expect(container()?.parentElement?.id).toBe("mx_PersistedElement_container");
+        // No placeholder is mounted any more, so it goes back to being hidden
+        expect(child().style.display).toBe("none");
+
+        // A placeholder mounting again places it
+        mount();
+        await act(async () => {});
+        expect(child().style.display).toBe("block");
+        expect(child().style.width).not.toBe("100%");
+
+        host.remove();
+    });
+
+    it("reports when there is nothing to detach", () => {
+        expect(PersistedElement.detach("widget_unknown", document.body)).toBe(false);
+        expect(PersistedElement.isDetached("widget_unknown")).toBe(false);
+        // And forgets the detached state once destroyed
+        PersistedElement.reattach("widget_unknown");
+    });
 });
