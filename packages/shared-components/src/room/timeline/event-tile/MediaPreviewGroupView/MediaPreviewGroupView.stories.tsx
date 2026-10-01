@@ -74,6 +74,29 @@ const audioEntry: MediaPreviewGroupEntry = {
     buttons,
 };
 
+const linkPreviewEntry: MediaPreviewGroupEntry = {
+    id: "https://techcrunch.com/ai-future",
+    type: "image",
+    layout: "side",
+    image: demoImage,
+    imageAlt: "Stacks of newspapers",
+    imageSize: "thumbnail",
+    header: "The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives",
+    headerUrl: "https://techcrunch.com/ai-future",
+    body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation.",
+    footer: "techcrunch.com",
+};
+
+const textLinkPreviewEntry: MediaPreviewGroupEntry = {
+    id: "https://matrix.org/",
+    type: "text",
+    layout: "side",
+    header: "Matrix",
+    headerUrl: "https://matrix.org/",
+    body: "An open network for secure, decentralised communication",
+    footer: "matrix.org",
+};
+
 const withEntries = (
     entries: Array<MediaPreviewGroupEntry>,
     collapse?: MediaPreviewGroupSnapshot["collapse"],
@@ -121,6 +144,11 @@ export const SingleVideo: Story = {
 
 export const SingleAudio: Story = {
     args: withEntries([audioEntry]),
+};
+
+// Timeline link previews use the side layout: thumbnail on the left, text on the right.
+export const LinkPreviews: Story = {
+    args: withEntries([linkPreviewEntry, textLinkPreviewEntry]),
 };
 
 export const Collapsed: Story = {
