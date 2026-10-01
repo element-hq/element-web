@@ -26,6 +26,7 @@ import ActiveWidgetStore from "./stores/ActiveWidgetStore";
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from "./utils/StorageManager";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 import * as StorageAccess from "./utils/StorageAccess";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -220,6 +221,12 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         // We may be aborted e.g. because our token expired, so don't show an error here
         if (opts.abortSignal?.aborted) {
             return false;
+        }
+
+        if (e instanceof LegacyCryptoStoreError) {
+            // This session predates the rust crypto stack and cannot be migrated. Let this
+            // propagate up to MatrixChat, which shows a dedicated error screen for it.
+            throw e;
         }
 
         if (e instanceof AbortLoginAndRebuildStorage) {
