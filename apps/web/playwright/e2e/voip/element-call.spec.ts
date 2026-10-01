@@ -733,6 +733,33 @@ test.describe("Element Call", () => {
             await expect(callRoot).toHaveClass(/cpd-theme-dark/);
             await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
         });
+
+        test("has its tooltips styled by Element Web's Compound", async ({ page, user, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+
+            // Element Call's own stylesheet only reaches inside its root element, but its tooltips float
+            // through a Compound portal into the body, like Element Web's own. They are styled all the same
+            // because the component shares Element Web's copy of Compound rather than bundling one of its
+            // own: a label tooltip is in the DOM from the start, hidden by Compound's stylesheet until
+            // hovered, and would show as bare text the whole time if that stylesheet did not reach it.
+            const callRoot = page.locator("[data-element-call-root]");
+            const microphone = callRoot.getByRole("switch", { name: /microphone/ });
+            const label = page.getByText(/^(Mute|Unmute) microphone$/);
+            // The bubble around the label is what the stylesheet clips; it carries no role of its own
+            const tooltip = label.locator("..");
+            await expect(label).toBeAttached();
+            await expect(callRoot.getByText(/^(Mute|Unmute) microphone$/)).toHaveCount(0);
+            await expect(tooltip).toHaveCSS("clip-path", "inset(50%)");
+
+            await microphone.hover();
+            await expect(label).toBeVisible();
+            await expect(tooltip).toHaveCSS("clip-path", "none");
+        });
     });
 
     test.describe("Theme (React component)", () => {
