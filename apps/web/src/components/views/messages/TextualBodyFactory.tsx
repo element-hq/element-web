@@ -157,8 +157,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    // Link previews use the side-by-side tile: thumbnail on the left; title, description and site
-    // name on the right. The title links to the page, so no separate open-link button is needed.
+    // The footer shows where the link goes, e.g. "github.com", rather than the site's self-declared
+    // name, so the user can judge the destination. Falls back to the site name for unparsable links.
+    const previewHost = (preview: UrlPreview): string => {
+        if (!URL.canParse(preview.link)) return preview.siteName;
+        return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
+    };
+
+    // Link previews use the side-by-side tile: thumbnail on the left; title, description and host
+    // on the right. The title links to the page, so no separate open-link button is needed.
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {
@@ -195,7 +202,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             header: preview.title,
             headerUrl: preview.link,
             body: preview.description?.trim() ?? "",
-            footer: preview.siteName,
+            footer: previewHost(preview),
             ...content,
         };
     };

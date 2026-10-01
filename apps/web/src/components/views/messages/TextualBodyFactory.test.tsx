@@ -613,7 +613,16 @@ describe("<TextualBody />", () => {
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
-        it("shows only the title and site name when the preview has no description", async () => {
+        it("shows the lowercased host of the link rather than the site name", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:site_name": "GitHub" }));
+
+            await renderPreviews("Visit https://WWW.GitHub.com/element-hq/element-web");
+
+            expect(screen.getByText("github.com")).toBeInTheDocument();
+            expect(screen.queryByText("GitHub")).not.toBeInTheDocument();
+        });
+
+        it("shows only the title and host when the preview has no description", async () => {
             vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
 
             const { container } = await renderPreviews();
