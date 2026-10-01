@@ -234,6 +234,10 @@ export class ElementCallAppTileViewModel
     public readonly ElementCall: FC;
 
     private setDocked(docked: boolean): void {
+        // Disposing undocks for good. In StrictMode dev, a consumer's layout effect can still run against
+        // the disposed view model (see `start`), and docking from there would leak a reference that keeps
+        // the call docked, and out of the floating PiP, after its last tile has gone.
+        if (docked && this.isDisposed) return;
         if (docked === this.docked) return;
         this.docked = docked;
         const store = ActiveWidgetStore.instance;
