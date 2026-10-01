@@ -6,6 +6,9 @@
 - Latest LTS version of Node.js installed
 - Be able to understand English
 
+This document covers the **mechanics** of translation. For guidance on **what to write** — voice, grammatical form,
+punctuation, terminology — see the [UI copy and localisation guidelines](./ui-copy.md).
+
 ## Translating strings vs. marking strings for translation
 
 Translating strings are done with the `_t()` function found in `languageHandler`.
