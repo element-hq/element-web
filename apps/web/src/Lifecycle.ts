@@ -134,13 +134,99 @@ function checkSessionLock(): void {
 class SessionLockStolenError extends Error {}
 
 interface ILoadSessionOpts {
+    /** Set to true to enable guest access tokens and auto-guest registrations. */
     enableGuest?: boolean;
+    /** Homeserver URL. Only used if `enableGuest` is true; defines the HS to register against. */
     guestHsUrl?: string;
+    /** Identity server URL. Only used if `enableGuest` is true; defines the IS to use. */
     guestIsUrl?: string;
+    /** If the stored session is a guest account, ignore it and don't load it. */
     ignoreGuest?: boolean;
+    /** Default display name to use when registering as a guest. */
     defaultDeviceDisplayName?: string;
+    /** The parameters read in at app load time from the URL. */
     urlParams?: URLParams;
+    /** If aborted, `loadSession` resolves to `false` instead of showing an error when it fails. */
     abortSignal?: AbortSignal;
+}
+
+/**
+ * Get the homeserver URL to use for guest access.
+ *
+ * @returns the URL, or undefined if guest access is disabled or no homeserver URL was given.
+ */
+function getGuestHsUrl(opts: ILoadSessionOpts): string | undefined {
+    if (!opts.enableGuest) return undefined;
+    if (!opts.guestHsUrl) {
+        logger.warn("Cannot enable guest access: can't determine HS URL to use");
+        return undefined;
+    }
+    return opts.guestHsUrl;
+}
+
+/**
+ * Attempt to load the session, taking into account whether guest
+ * parameters were provided or the session lock had been used.
+ */
+async function tryLoadSession(opts: ILoadSessionOpts): Promise<boolean> {
+    const guestHsUrl = getGuestHsUrl(opts);
+    const guestCreds = opts.urlParams?.guest;
+
+    if (guestHsUrl && guestCreds?.guest_user_id && guestCreds.guest_access_token) {
+        logger.log("Using guest access credentials");
+        await doSetLoggedIn(
+            {
+                userId: guestCreds.guest_user_id,
+                accessToken: guestCreds.guest_access_token,
+                homeserverUrl: guestHsUrl,
+                identityServerUrl: opts.guestIsUrl,
+                guest: true,
+            },
+            true,
+            false,
+        );
+        return true;
+    }
+
+    if (await restoreSessionFromStorage({ ignoreGuest: Boolean(opts.ignoreGuest) })) {
+        return true;
+    }
+    if (sessionLockStolen) {
+        return false;
+    }
+
+    if (guestHsUrl) {
+        return registerAsGuest(guestHsUrl, opts.guestIsUrl, opts.defaultDeviceDisplayName);
+    }
+
+    // fall back to welcome screen
+    return false;
+}
+
+/**
+ * Handle an error thrown by {@link tryLoadSession}.
+ *
+ * @returns `false` to fall back to the welcome screen, or the result of {@link handleLoadSessionFailure}.
+ * @throws {@link LegacyCryptoStoreError} so that MatrixChat can show a dedicated error screen for it.
+ */
+async function handleLoadSessionError(e: unknown, opts: ILoadSessionOpts): Promise<boolean> {
+    // We may be aborted e.g. because our token expired, so don't show an error here
+    if (opts.abortSignal?.aborted) {
+        return false;
+    }
+
+    // This session predates the rust crypto stack and cannot be migrated.
+    if (e instanceof LegacyCryptoStoreError) {
+        throw e;
+    }
+
+    // If we're aborting login because of a storage inconsistency, or the session lock was stolen while we were
+    // trying to start, we don't need to show the general failure dialog. Instead, just go back to welcome.
+    if (e instanceof AbortLoginAndRebuildStorage || sessionLockStolen) {
+        return false;
+    }
+
+    return handleLoadSessionFailure(e, opts);
 }
 
 /**
@@ -156,91 +242,15 @@ interface ILoadSessionOpts {
  * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
- * @param {object} [opts]
- * @param {object} [opts.fragmentQueryParams]: string->string map of the
- *     query-parameters extracted from the #-fragment of the starting URI.
- * @param {boolean} [opts.enableGuest]: set to true to enable guest access
- *     tokens and auto-guest registrations.
- * @param {string} [opts.guestHsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the HS to register against.
- * @param {string} [opts.guestIsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the IS to use.
- * @param {bool} [opts.ignoreGuest]: If the stored session is a guest account,
- *     ignore it and don't load it.
- * @param {string} [opts.defaultDeviceDisplayName]: Default display name to use
- *     when registering as a guest.
- * @returns {Promise} a promise which resolves when the above process completes.
+ * @returns A promise which resolves when the above process completes.
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
 export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
-        let enableGuest = opts.enableGuest || false;
-        const guestHsUrl = opts.guestHsUrl;
-        const guestIsUrl = opts.guestIsUrl;
-        const urlParams = opts.urlParams;
-        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-
-        if (enableGuest && !guestHsUrl) {
-            logger.warn("Cannot enable guest access: can't determine HS URL to use");
-            enableGuest = false;
-        }
-
-        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
-            logger.log("Using guest access credentials");
-            await doSetLoggedIn(
-                {
-                    userId: urlParams.guest.guest_user_id,
-                    accessToken: urlParams.guest.guest_access_token,
-                    homeserverUrl: guestHsUrl,
-                    identityServerUrl: guestIsUrl,
-                    guest: true,
-                },
-                true,
-                false,
-            );
-            return true;
-        }
-        const success = await restoreSessionFromStorage({
-            ignoreGuest: Boolean(opts.ignoreGuest),
-        });
-        if (success) {
-            return true;
-        }
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        if (enableGuest && guestHsUrl) {
-            return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
-        }
-
-        // fall back to welcome screen
-        return false;
+        return await tryLoadSession(opts);
     } catch (e) {
-        // We may be aborted e.g. because our token expired, so don't show an error here
-        if (opts.abortSignal?.aborted) {
-            return false;
-        }
-
-        if (e instanceof LegacyCryptoStoreError) {
-            // This session predates the rust crypto stack and cannot be migrated. Let this
-            // propagate up to MatrixChat, which shows a dedicated error screen for it.
-            throw e;
-        }
-
-        if (e instanceof AbortLoginAndRebuildStorage) {
-            // If we're aborting login because of a storage inconsistency, we don't
-            // need to show the general failure dialog. Instead, just go back to welcome.
-            return false;
-        }
-
-        // likewise, if the session lock has been stolen while we've been trying to start
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        return handleLoadSessionFailure(e, opts);
+        return handleLoadSessionError(e, opts);
     }
 }
 
