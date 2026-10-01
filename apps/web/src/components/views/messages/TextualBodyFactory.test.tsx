@@ -609,15 +609,19 @@ describe("<TextualBody />", () => {
 
             expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", link);
             expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
-        it("falls back to the site name when the preview has no description", async () => {
+        it("shows only the title and site name when the preview has no description", async () => {
             vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
 
-            await renderPreviews();
+            const { container } = await renderPreviews();
 
             expect(screen.getByText("matrix.org")).toBeInTheDocument();
+            expect(container.querySelector(".mx_TextualBody_urlPreviews")).not.toHaveTextContent(
+                "An open network for secure, decentralised communication",
+            );
         });
 
         it("renders a preview with an image and opens the lightbox when it is clicked", async () => {
@@ -637,14 +641,11 @@ describe("<TextualBody />", () => {
             );
         });
 
-        it("opens the previewed link in a new tab", async () => {
-            const open = vi.spyOn(window, "open").mockReturnValue(null);
-
+        it("links the title to the previewed page in a new tab and has no other buttons", async () => {
             await renderPreviews();
 
-            fireEvent.click(screen.getByRole("button", { name: "Open link" }));
-
-            expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+            expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("target", "_blank");
+            expect(screen.queryByRole("button", { name: "Open link" })).not.toBeInTheDocument();
         });
 
         it("expands the group when more previews are available than are shown", async () => {

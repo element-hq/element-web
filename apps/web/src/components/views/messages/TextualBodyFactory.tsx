@@ -9,14 +9,12 @@ import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
-    _t,
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,
-    linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
@@ -39,7 +37,6 @@ import {
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
-import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
 
@@ -160,6 +157,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
+    // Link previews use the side-by-side tile: thumbnail on the left; title, description and site
+    // name on the right. The title links to the page, so no separate open-link button is needed.
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {
@@ -171,7 +170,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 type: "image",
                 image: preview.image.imageFull,
                 imageAlt: preview.title,
-                imageSize: "banner",
+                imageSize: "thumbnail",
                 imageOnClick: () => {
                     Modal.createDialog(
                         ImageView,
@@ -190,25 +189,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             };
         }
 
-        let body: string;
-        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
-        else body = preview.description!;
-
         return {
             id: preview.link,
+            layout: "side",
             header: preview.title,
             headerUrl: preview.link,
-            body,
-            buttons: [
-                {
-                    label: _t("timeline|url_preview|open_link"),
-                    icon: <PopOutIcon />,
-                    onClick: async () => {
-                        window.open(preview.link, "_blank", "noreferrer");
-                    },
-                },
-            ],
-            ...linkIcon(),
+            body: preview.description?.trim() ?? "",
+            footer: preview.siteName,
             ...content,
         };
     };
