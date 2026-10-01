@@ -33,6 +33,15 @@
             "enabled": false
         },
         {
+            "description": "Allow major updates to @matrix-org/matrix-sdk-crypto-wasm as the crypto team bump this frequently",
+            "matchUpdateTypes": ["major"],
+            "matchManagers": ["npm"],
+            "matchFileNames": ["pnpm-workspace.yaml"],
+            "matchDepTypes": ["pnpm-workspace.overrides"],
+            "matchPackageNames": ["@matrix-org/matrix-sdk-crypto-wasm"],
+            "enabled": true
+        },
+        {
             "groupName": "oxc",
             "matchDepNames": ["oxlint", "oxfmt"]
         }

@@ -140,6 +140,11 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
+    # The WASM bindings release major versions frequently, and pinning it here
+    # avoids needing to bump matrix-js-sdk just to use them. Renovate will also
+    # pick these up and create PRs for them.
+    "@matrix-org/matrix-sdk-crypto-wasm": 18.9.0
+
     # Only one instance of LiveKit in the build: the Element Call component and
     # Element Web must share it, E2EE workers included.
     livekit-client: "^2.22.2"

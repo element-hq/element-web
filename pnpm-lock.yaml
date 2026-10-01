@@ -281,6 +281,7 @@ catalogs:
       version: 6.0.2
 
 overrides:
+  '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
   livekit-client: ^2.22.2
   pretty-format@30>react-is: 19.3.0
   '@types/react': ^19.2.10
