@@ -16,7 +16,6 @@ import { MockViewModel } from "../../../../../core/viewmodel";
 
 const {
     Default,
-    StateEncryptionEnabled,
     ParametersChanged,
     DisableAttempt,
     EnabledDirectMessage,
@@ -26,15 +25,9 @@ const {
 } = composeStories(stories);
 
 describe("EncryptionEventView", () => {
-    const renderView = (
-        state: EncryptionEventState,
-        encryptedStateEvents?: boolean,
-        userName?: string,
-        className?: string,
-    ): void => {
+    const renderView = (state: EncryptionEventState, userName?: string, className?: string): void => {
         const vm = new MockViewModel({
             state,
-            encryptedStateEvents,
             userName,
         });
         render(<EncryptionEventView vm={vm} className={className} />);
@@ -42,11 +35,6 @@ describe("EncryptionEventView", () => {
 
     it("renders Default story", () => {
         const { container } = render(<Default />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders StateEncryptionEnabled story", () => {
-        const { container } = render(<StateEncryptionEnabled />);
         expect(container).toMatchSnapshot();
     });
 
@@ -91,17 +79,6 @@ describe("EncryptionEventView", () => {
         ).toBeInTheDocument();
     });
 
-    it("shows enabled state encryption copy", () => {
-        renderView(EncryptionEventState.ENABLED, true);
-
-        expect(screen.getByText("Experimental state encryption enabled")).toBeInTheDocument();
-        expect(
-            screen.getByText(
-                "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
-            ),
-        ).toBeInTheDocument();
-    });
-
     it("shows changed encryption parameters copy", () => {
         renderView(EncryptionEventState.CHANGED);
 
@@ -131,7 +108,7 @@ describe("EncryptionEventView", () => {
     });
 
     it("shows dm room encryption copy with display name", () => {
-        renderView(EncryptionEventState.ENABLED_DM, false, "Alice");
+        renderView(EncryptionEventState.ENABLED_DM, "Alice");
 
         expect(screen.getByText("Encryption enabled")).toBeInTheDocument();
         expect(
@@ -142,7 +119,7 @@ describe("EncryptionEventView", () => {
     });
 
     it("renders additional class name on the event tile bubble", () => {
-        renderView(EncryptionEventState.ENABLED, false, undefined, "custom-class");
+        renderView(EncryptionEventState.ENABLED, undefined, "custom-class");
 
         expect(screen.getByText("Encryption enabled").parentElement).toHaveClass("custom-class");
     });

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, screen, within } from "jest-matrix-react";
+import { fireEvent, render, screen, within } from "jest-matrix-react";
 import { type Room, JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
 
 import CreateRoomDialog from "../../../../../src/components/views/dialogs/CreateRoomDialog";
@@ -247,7 +247,6 @@ describe("<CreateRoomDialog />", () => {
                 createOpts: {},
                 name: roomName,
                 encryption: true,
-                stateEncryption: false,
                 parentSpace: undefined,
                 roomType: undefined,
             });
@@ -260,29 +259,6 @@ describe("<CreateRoomDialog />", () => {
             const { asFragment } = getComponent();
             await flushPromises();
             expect(asFragment()).toMatchSnapshot();
-        });
-
-        describe("when the state encryption labs flag is on", () => {
-            beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === "feature_msc4362_encrypted_state_events",
-                );
-            });
-
-            it("should turn on state encryption when toggled", async () => {
-                // Given we have the create room dialog open
-                const { asFragment } = getComponent();
-                await flushPromises();
-                expect(asFragment()).toMatchSnapshot();
-
-                // When I click the Encrypt state events toggle
-                const toggle = screen.getByRole("switch", { name: "Encrypt state events" });
-                expect(toggle).not.toBeChecked();
-                act(() => toggle.click());
-
-                // Then it changes state
-                expect(toggle).toBeChecked();
-            });
         });
     });
 
@@ -332,7 +308,6 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
-                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,
@@ -351,7 +326,6 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
-                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,

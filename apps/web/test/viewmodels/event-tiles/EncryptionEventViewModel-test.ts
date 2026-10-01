@@ -10,7 +10,6 @@ import { mocked } from "jest-mock";
 import { RoomStateEvent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { EncryptionEventState } from "@element-hq/web-shared-components";
 
-import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { EncryptionEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
 import { LocalRoom } from "../../../src/models/LocalRoom";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
@@ -64,7 +63,6 @@ describe("EncryptionEventViewModel", () => {
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
         expect(vm.getSnapshot()).toMatchObject({
             state: EncryptionEventState.ENABLED,
-            encryptedStateEvents: false,
         });
     });
 
@@ -74,16 +72,6 @@ describe("EncryptionEventViewModel", () => {
 
         const vm = createVm();
         expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED);
-    });
-
-    it("sets ENABLED with encryptedStateEvents=true for encrypted state events", async () => {
-        setRoomEncrypted(true);
-        client.enableEncryptedStateEvents = true;
-        (event.getContent() as RoomEncryptionEventContent)["io.element.msc4362.encrypt_state_events"] = true;
-
-        const vm = createVm();
-        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
-        expect(vm.getSnapshot().encryptedStateEvents).toBe(true);
     });
 
     it("sets CHANGED when previous algorithm is already megolm", async () => {

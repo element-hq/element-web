@@ -32,8 +32,6 @@ export enum EncryptionEventState {
 export type EncryptionEventViewSnapshot = {
     /** Which encryption event variant to render. */
     state: EncryptionEventState;
-    /** Whether state-event encryption messaging should be shown. */
-    encryptedStateEvents?: boolean;
     /** Display name for DM partner, used by ENABLED_DM subtitle text. */
     userName?: string;
     /** Optional timestamp element rendered in the EventTileBubble footer slot. */
@@ -64,7 +62,6 @@ export interface EncryptionEventViewProps {
  * Renders a timeline bubble describing an encryption-related room event.
  *
  * Text and icon are selected from `snapshot.state` with optional context:
- * - `encryptedStateEvents` switches to state-event specific wording.
  * - `userName` is used for DM-specific subtitle text.
  * - `timestamp` renders in the bubble footer slot.
  *
@@ -77,10 +74,10 @@ export interface EncryptionEventViewProps {
  */
 export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionEventViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { state, encryptedStateEvents, userName, timestamp } = useViewModel(vm);
+    const { state, userName, timestamp } = useViewModel(vm);
 
     let icon = <LockSolidIcon data-state="supported" />;
-    let title = encryptedStateEvents ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled");
+    let title = _t("common|encryption_enabled");
     let subtitle = "";
 
     switch (state) {
@@ -92,9 +89,7 @@ export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionE
             subtitle = _t("timeline|m.room.encryption|disable_attempt");
             break;
         case EncryptionEventState.ENABLED:
-            subtitle = encryptedStateEvents
-                ? _t("timeline|m.room.encryption|state_enabled")
-                : _t("timeline|m.room.encryption|enabled");
+            subtitle = _t("timeline|m.room.encryption|enabled");
             break;
         case EncryptionEventState.ENABLED_DM:
             subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName: userName });

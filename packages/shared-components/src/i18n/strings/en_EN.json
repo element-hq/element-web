@@ -38,8 +38,7 @@
         "encryption_enabled": "Encryption enabled",
         "loading": "Loading…",
         "options": "Options",
-        "preferences": "Preferences",
-        "state_encryption_enabled": "Experimental state encryption enabled"
+        "preferences": "Preferences"
     },
     "devtools": {
         "toggle_event": "toggle event"
@@ -248,7 +247,6 @@
             "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
-            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "mab": {
