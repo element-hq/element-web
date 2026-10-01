@@ -916,6 +916,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // Room changed while we were fetching the summary, so ignore it.
         if (this.unmounted || this.state.roomId !== roomId) return;
+        // Share the summary so the room list can show the room before the user joins it.
+        this.roomViewStore.setRoomSummary(roomId, roomSummary);
 
         const alreadyJoined = roomSummary?.membership === KnownMembership.Join;
         if (!shouldPeek || !(roomSummary?.world_readable || alreadyJoined)) {

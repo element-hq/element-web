@@ -97,7 +97,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
     >
       <svg
         aria-label="Loading…"
-        class="_icon_1855a_18"
+        class="_icon"
         data-testid="spinner"
         fill="currentColor"
         height="1em"
@@ -135,7 +135,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
         tabindex="-1"
       >
         <div
-          class="_glass_sepwu_8"
+          class="_glass"
         >
           <div
             class="mx_Welcome"
@@ -155,7 +155,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
                 />
               </a>
               <h1
-                class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
+                class="_typography _font-heading-md-semibold"
               >
                 Welcome to Test
               </h1>
@@ -163,7 +163,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
                 class="mx_DefaultWelcome_buttons"
               >
                 <a
-                  class="_button_1nw83_8"
+                  class="_button"
                   data-kind="primary"
                   data-size="md"
                   href="#/login"
@@ -173,7 +173,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
                   Sign in
                 </a>
                 <a
-                  class="_button_1nw83_8"
+                  class="_button"
                   data-kind="secondary"
                   data-size="md"
                   href="#/register"
@@ -183,7 +183,7 @@ exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during
                   Create account
                 </a>
                 <a
-                  class="_button_1nw83_8"
+                  class="_button"
                   data-kind="tertiary"
                   data-size="md"
                   href="#/directory"
@@ -297,7 +297,7 @@ exports[`<MatrixChat /> > qr login > should fire ViewQrLogin action on 'qr_login
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -351,7 +351,7 @@ exports[`<MatrixChat /> > qr login > should open QrLoginDialog on ViewQrLogin ac
           >
             <svg
               aria-label="Loading…"
-              class="_icon_1855a_18"
+              class="_icon"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -388,7 +388,7 @@ exports[`<MatrixChat /> > should render spinner while app is loading 1`] = `
     >
       <svg
         aria-label="Loading…"
-        class="_icon_1855a_18"
+        class="_icon"
         data-testid="spinner"
         fill="currentColor"
         height="1em"

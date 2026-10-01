@@ -12,35 +12,35 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_1o4d9_17 mx_SettingsSubsection_content"
+          class="_root mx_SettingsSubsection_content"
         >
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
                   checked=""
-                  class="_input_udcm8_24"
+                  class="_input"
                   disabled=""
                   id="react-use-id-1"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="react-use-id-1"
               >
                 Enable notifications for this account
@@ -48,30 +48,30 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
                 Enable desktop notifications for this session
@@ -79,30 +79,30 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_QgU2PomxwKpa"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_QgU2PomxwKpa"
               >
                 Show message preview in desktop notification
@@ -110,31 +110,31 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
                   checked=""
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_6hpi3YEetmBG"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
                 Enable audible notifications for this session
@@ -263,26 +263,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_4yVCeEefiP"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -300,10 +300,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_4yVCeEefiP"
                     >
                       <span
@@ -320,26 +320,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_qpMRMwbPDm"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -357,10 +357,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_qpMRMwbPDm"
                     >
                       <span
@@ -377,26 +377,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_fGtmGQvdMW"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -414,10 +414,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_fGtmGQvdMW"
                     >
                       <span
@@ -451,26 +451,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_e954DVIAu5"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -488,10 +488,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_e954DVIAu5"
                     >
                       <span
@@ -508,25 +508,25 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_CsiHRD7nyr"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -544,10 +544,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_CsiHRD7nyr"
                     >
                       <span
@@ -564,26 +564,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_A2ohjWVJIP"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -601,10 +601,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_A2ohjWVJIP"
                     >
                       <span
@@ -640,13 +640,13 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               <span>
                 Show a badge 
                 <div
-                  class="mx_NotificationSettings2_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
+                  class="mx_NotificationSettings2_notificationBadge _notificationBadge _visible _notification _badge2Char cpd-theme-light"
                   data-badge-type="badge_2char"
                   data-notification-level="notification"
                   data-testid="notification-badge"
                 >
                   <span
-                    class="_count_19whq_40"
+                    class="_count"
                   >
                     1
                   </span>
@@ -662,26 +662,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_auy1OmnTid"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -699,10 +699,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_auy1OmnTid"
                     >
                       <span
@@ -720,26 +720,26 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               id="mx_NotificationSettings2_MentionCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_X4ePDS0OpW"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -757,10 +757,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_X4ePDS0OpW"
                     >
                       <span
@@ -777,27 +777,27 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         aria-describedby="react-use-id-2"
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         disabled=""
                         id="checkbox_wAHG75JNTN"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -815,10 +815,10 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_wAHG75JNTN"
                     >
                       <span
@@ -828,7 +828,7 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                       </span>
                     </label>
                     <span
-                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      class="_message _help-message"
                       id="react-use-id-2"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
@@ -877,34 +877,34 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
               />
             </div>
             <form
-              class="_root_1o4d9_17"
+              class="_root"
             >
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
                       checked=""
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_kNU64raTLcRs"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_kNU64raTLcRs"
                   >
                     Show all activity in the room list (dots or number of unread messages)
@@ -912,30 +912,30 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                 </div>
               </div>
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_QRlYy75nfv5b"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_QRlYy75nfv5b"
                   >
                     Consider all new activity as an unread message
@@ -943,31 +943,31 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
                 </div>
               </div>
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
                       checked=""
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_OEPN1su1JYVt"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_OEPN1su1JYVt"
                   >
                     In the Other threads tab, only show notifications
@@ -1021,7 +1021,7 @@ exports[`<Notifications /> > correctly handles the loading/disabled state 1`] = 
             />
           </div>
           <div
-            class="_separator_13qwf_8"
+            class="_separator"
             data-kind="primary"
             data-orientation="horizontal"
             role="separator"
@@ -1071,34 +1071,34 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_1o4d9_17 mx_SettingsSubsection_content"
+          class="_root mx_SettingsSubsection_content"
         >
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
                   checked=""
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="react-use-id-1"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="react-use-id-1"
               >
                 Enable notifications for this account
@@ -1106,30 +1106,30 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
                 Enable desktop notifications for this session
@@ -1137,30 +1137,30 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_QgU2PomxwKpa"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_QgU2PomxwKpa"
               >
                 Show message preview in desktop notification
@@ -1168,31 +1168,31 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_1o4d9_33"
+            class="_inline-field"
           >
             <div
-              class="_inline-field-control_1o4d9_45"
+              class="_inline-field-control"
             >
               <div
-                class="_container_udcm8_10"
+                class="_container"
               >
                 <input
                   checked=""
-                  class="_input_udcm8_24"
+                  class="_input"
                   id="mx_SettingsFlag_6hpi3YEetmBG"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_udcm8_34"
+                  class="_ui"
                 />
               </div>
             </div>
             <div
-              class="_inline-field-body_1o4d9_39"
+              class="_inline-field-body"
             >
               <label
-                class="_label_1o4d9_60"
+                class="_label"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
                 Enable audible notifications for this session
@@ -1318,25 +1318,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_OyR5kbu3pE"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1354,10 +1354,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_OyR5kbu3pE"
                     >
                       <span
@@ -1374,25 +1374,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_wuLn9EnnYu"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1410,10 +1410,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_wuLn9EnnYu"
                     >
                       <span
@@ -1430,25 +1430,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_xfFEpOsztW"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1466,10 +1466,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_xfFEpOsztW"
                     >
                       <span
@@ -1503,25 +1503,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_hQkBerF1ej"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1539,10 +1539,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_hQkBerF1ej"
                     >
                       <span
@@ -1559,24 +1559,24 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_c4GFes1UFz"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1594,10 +1594,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_c4GFes1UFz"
                     >
                       <span
@@ -1614,25 +1614,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_OK2nvfGFMl"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1650,10 +1650,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_OK2nvfGFMl"
                     >
                       <span
@@ -1689,13 +1689,13 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               <span>
                 Show a badge 
                 <div
-                  class="mx_NotificationSettings2_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
+                  class="mx_NotificationSettings2_notificationBadge _notificationBadge _visible _notification _badge2Char cpd-theme-light"
                   data-badge-type="badge_2char"
                   data-notification-level="notification"
                   data-testid="notification-badge"
                 >
                   <span
-                    class="_count_19whq_40"
+                    class="_count"
                   >
                     1
                   </span>
@@ -1711,25 +1711,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_dL2r2vbsSw"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1747,10 +1747,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_dL2r2vbsSw"
                     >
                       <span
@@ -1768,25 +1768,25 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               id="mx_NotificationSettings2_MentionCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_icmKUiOBdv"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1804,10 +1804,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_icmKUiOBdv"
                     >
                       <span
@@ -1824,26 +1824,26 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_1o4d9_17"
+                class="_root"
               >
                 <div
-                  class="_inline-field_1o4d9_33"
+                  class="_inline-field"
                 >
                   <div
-                    class="_inline-field-control_1o4d9_45"
+                    class="_inline-field-control"
                   >
                     <div
-                      class="_container_153f2_10"
+                      class="_container"
                     >
                       <input
                         aria-describedby="react-use-id-2"
                         checked=""
-                        class="_input_153f2_18"
+                        class="_input"
                         id="checkbox_qsxEaZtl3A"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_153f2_19"
+                        class="_ui"
                       >
                         <svg
                           aria-hidden="true"
@@ -1861,10 +1861,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_1o4d9_39"
+                    class="_inline-field-body"
                   >
                     <label
-                      class="_label_1o4d9_60"
+                      class="_label"
                       for="checkbox_qsxEaZtl3A"
                     >
                       <span
@@ -1874,7 +1874,7 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                       </span>
                     </label>
                     <span
-                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      class="_message _help-message"
                       id="react-use-id-2"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
@@ -2137,34 +2137,34 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
               </div>
             </div>
             <form
-              class="_root_1o4d9_17"
+              class="_root"
             >
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
                       checked=""
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_kNU64raTLcRs"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_kNU64raTLcRs"
                   >
                     Show all activity in the room list (dots or number of unread messages)
@@ -2172,30 +2172,30 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_QRlYy75nfv5b"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_QRlYy75nfv5b"
                   >
                     Consider all new activity as an unread message
@@ -2203,31 +2203,31 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="_inline-field_1o4d9_33"
+                class="_inline-field"
               >
                 <div
-                  class="_inline-field-control_1o4d9_45"
+                  class="_inline-field-control"
                 >
                   <div
-                    class="_container_udcm8_10"
+                    class="_container"
                   >
                     <input
                       checked=""
-                      class="_input_udcm8_24"
+                      class="_input"
                       id="mx_SettingsFlag_OEPN1su1JYVt"
                       role="switch"
                       type="checkbox"
                     />
                     <div
-                      class="_ui_udcm8_34"
+                      class="_ui"
                     />
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_1o4d9_39"
+                  class="_inline-field-body"
                 >
                   <label
-                    class="_label_1o4d9_60"
+                    class="_label"
                     for="mx_SettingsFlag_OEPN1su1JYVt"
                   >
                     In the Other threads tab, only show notifications
@@ -2283,24 +2283,24 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                 class="mx_LabelledCheckbox"
               >
                 <form
-                  class="_root_1o4d9_17"
+                  class="_root"
                 >
                   <div
-                    class="_inline-field_1o4d9_33"
+                    class="_inline-field"
                   >
                     <div
-                      class="_inline-field-control_1o4d9_45"
+                      class="_inline-field-control"
                     >
                       <div
-                        class="_container_153f2_10"
+                        class="_container"
                       >
                         <input
-                          class="_input_153f2_18"
+                          class="_input"
                           id="checkbox_NIiWzqsApP"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_153f2_19"
+                          class="_ui"
                         >
                           <svg
                             aria-hidden="true"
@@ -2318,10 +2318,10 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_inline-field-body_1o4d9_39"
+                      class="_inline-field-body"
                     >
                       <label
-                        class="_label_1o4d9_60"
+                        class="_label"
                         for="checkbox_NIiWzqsApP"
                       >
                         <span
@@ -2337,7 +2337,7 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_separator_13qwf_8"
+            class="_separator"
             data-kind="primary"
             data-orientation="horizontal"
             role="separator"
@@ -2365,7 +2365,7 @@ exports[`<Notifications /> > matches the snapshot 1`] = `
             </ul>
           </div>
           <div
-            class="_separator_13qwf_8"
+            class="_separator"
             data-kind="primary"
             data-orientation="horizontal"
             role="separator"

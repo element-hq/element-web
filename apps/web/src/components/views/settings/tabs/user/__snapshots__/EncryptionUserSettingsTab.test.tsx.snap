@@ -16,7 +16,7 @@ exports[`<EncryptionUserSettingsTab /> > should display a verify button when the
           class="mx_SettingsSection_header"
         >
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
           >
             Device not verified
           </h2>
@@ -42,7 +42,7 @@ exports[`<EncryptionUserSettingsTab /> > should display a verify button when the
           </div>
         </div>
         <button
-          class="_button_1nw83_8 _has-icon_1nw83_60"
+          class="_button _has-icon"
           data-kind="primary"
           data-size="md"
           role="button"
@@ -78,19 +78,19 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
       class="mx_SettingsTab_sections"
     >
       <nav
-        class="_breadcrumb_t96w3_8"
+        class="_breadcrumb"
       >
         <button
           aria-disabled="false"
           aria-label="Back"
-          class="_icon-button_1215g_8"
+          class="_icon-button"
           data-kind="secondary"
           role="button"
           style="--cpd-icon-button-size: 28px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -107,11 +107,11 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
           </div>
         </button>
         <ol
-          class="_pages_t96w3_17"
+          class="_pages"
         >
           <li>
             <a
-              class="_link_13esb_8"
+              class="_link"
               data-kind="primary"
               data-size="sm"
               rel="noreferrer noopener"
@@ -124,7 +124,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
           <li>
             <span
               aria-current="page"
-              class="_last-page_t96w3_30"
+              class="_last-page"
             >
               Change recovery key
             </span>
@@ -138,7 +138,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_big-icon_1ssbv_8"
+            class="_big-icon"
             data-kind="primary"
             data-size="lg"
           >
@@ -155,7 +155,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
             </svg>
           </div>
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+            class="_typography _font-heading-sm-semibold"
           >
             Change recovery key?
           </h2>
@@ -167,33 +167,33 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
           class="mx_KeyPanel"
         >
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60"
+            class="_typography _font-body-md-medium"
           >
             Recovery key
           </span>
           <div>
             <span
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_KeyPanel_key"
+              class="_typography _font-body-md-regular mx_KeyPanel_key"
               data-testid="recoveryKey"
             >
               encoded private key
             </span>
             <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+              class="_typography _font-body-sm-regular"
             >
               Do not share this with anyone!
             </span>
           </div>
           <button
             aria-label="Copy"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 28px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -217,7 +217,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
           class="mx_EncryptionCard_buttons"
         >
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -226,7 +226,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the change recovery key 
             Continue
           </button>
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="tertiary"
             data-size="lg"
             role="button"
@@ -257,7 +257,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the identity needs reset
           class="mx_SettingsSection_header"
         >
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
           >
             Your key storage is out of sync.
           </h2>
@@ -284,7 +284,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the identity needs reset
         </div>
         <div>
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="primary"
             data-size="md"
             role="button"
@@ -316,7 +316,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the recovery out of sync
           class="mx_SettingsSection_header"
         >
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
           >
             Backup
           </h2>
@@ -346,7 +346,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the recovery out of sync
           class="mx_RecoveryPanelOutOfSync"
         >
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="secondary"
             data-size="md"
             role="button"
@@ -355,7 +355,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the recovery out of sync
             Forgot recovery key?
           </button>
           <button
-            class="_button_1nw83_8 _has-icon_1nw83_60"
+            class="_button _has-icon"
             data-kind="primary"
             data-size="md"
             role="button"
@@ -392,19 +392,19 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
       class="mx_SettingsTab_sections"
     >
       <nav
-        class="_breadcrumb_t96w3_8"
+        class="_breadcrumb"
       >
         <button
           aria-disabled="false"
           aria-label="Back"
-          class="_icon-button_1215g_8"
+          class="_icon-button"
           data-kind="secondary"
           role="button"
           style="--cpd-icon-button-size: 28px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -421,11 +421,11 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
           </div>
         </button>
         <ol
-          class="_pages_t96w3_17"
+          class="_pages"
         >
           <li>
             <a
-              class="_link_13esb_8"
+              class="_link"
               data-kind="primary"
               data-size="sm"
               rel="noreferrer noopener"
@@ -438,7 +438,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
           <li>
             <span
               aria-current="page"
-              class="_last-page_t96w3_30"
+              class="_last-page"
             >
               Reset encryption
             </span>
@@ -452,7 +452,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_big-icon_1ssbv_8"
+            class="_big-icon"
             data-kind="critical"
             data-size="lg"
           >
@@ -469,24 +469,24 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
             </svg>
           </div>
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+            class="_typography _font-heading-sm-semibold"
           >
             Are you sure you want to reset your digital identity?
           </h2>
         </div>
         <div
-          class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
+          class="_flex mx_EncryptionCard_emphasisedContent"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <ul
-            class="_visual-list_6zpfn_8"
+            class="_visual-list"
           >
             <li
-              class="_visual-list-item_1nc1y_8"
+              class="_visual-list-item"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-success_1nc1y_22"
+                class="_visual-list-item-icon _visual-list-item-icon-success"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -500,11 +500,11 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
               Your account details, contacts, preferences, and chat list will be kept
             </li>
             <li
-              class="_visual-list-item_1nc1y_8"
+              class="_visual-list-item"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1nc1y_17"
+                class="_visual-list-item-icon"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -523,11 +523,11 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
               You will lose any message history that’s stored only on the server
             </li>
             <li
-              class="_visual-list-item_1nc1y_8"
+              class="_visual-list-item"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1nc1y_17"
+                class="_visual-list-item-icon"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -555,7 +555,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
         >
           <button
             aria-disabled="false"
-            class="_button_1nw83_8 _destructive_1nw83_110"
+            class="_button _destructive"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -564,7 +564,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
             Continue
           </button>
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="tertiary"
             data-size="lg"
             role="button"
@@ -589,19 +589,19 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
       class="mx_SettingsTab_sections"
     >
       <nav
-        class="_breadcrumb_t96w3_8"
+        class="_breadcrumb"
       >
         <button
           aria-disabled="false"
           aria-label="Back"
-          class="_icon-button_1215g_8"
+          class="_icon-button"
           data-kind="secondary"
           role="button"
           style="--cpd-icon-button-size: 28px;"
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -618,11 +618,11 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           </div>
         </button>
         <ol
-          class="_pages_t96w3_17"
+          class="_pages"
         >
           <li>
             <a
-              class="_link_13esb_8"
+              class="_link"
               data-kind="primary"
               data-size="sm"
               rel="noreferrer noopener"
@@ -635,7 +635,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           <li>
             <span
               aria-current="page"
-              class="_last-page_t96w3_30"
+              class="_last-page"
             >
               Get recovery key
             </span>
@@ -649,7 +649,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_big-icon_1ssbv_8"
+            class="_big-icon"
             data-kind="primary"
             data-size="lg"
           >
@@ -666,7 +666,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
             </svg>
           </div>
           <h2
-            class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+            class="_typography _font-heading-sm-semibold"
           >
             Get recovery key
           </h2>
@@ -675,7 +675,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           </span>
         </div>
         <span
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_InformationPanel_description"
+          class="_typography _font-body-md-medium mx_InformationPanel_description"
         >
           After clicking continue, we’ll generate a recovery key for you.
         </span>
@@ -683,7 +683,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           class="mx_EncryptionCard_buttons"
         >
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -692,7 +692,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
             Continue
           </button>
           <button
-            class="_button_1nw83_8"
+            class="_button"
             data-kind="tertiary"
             data-size="lg"
             role="button"
