@@ -26,8 +26,16 @@ export type MediaPreviewGroupEntryTextContent = {
  * - full: show full image contained in tile
  * - banner: show image covering tile, height 100px
  * - tallbanner: show image covering tile, height 300px
+ * - thumbnail: show image covering a fixed 130x142px box, for the "side" tile layout
  */
-export type ImageSize = "full" | "banner" | "tallbanner";
+export type ImageSize = "full" | "banner" | "tallbanner" | "thumbnail";
+
+/**
+ * How a tile arranges its media and text.
+ * - stacked: media above a row of icon, text and buttons (the default)
+ * - side: media on the left, text on the right; the icon is not shown
+ */
+export type MediaPreviewLayout = "stacked" | "side";
 
 export type MediaPreviewGroupEntryImageContent = {
     type: "image";
@@ -123,10 +131,18 @@ export type MediaPreviewGroupEntryBase = {
      */
     body: string;
     /**
+     * optional: a final line below the body, e.g. the site name of a link preview
+     */
+    footer?: string;
+    /**
+     * optional: how the tile is laid out, defaults to "stacked"
+     */
+    layout?: MediaPreviewLayout;
+    /**
      * buttons to add to the right of the tile
      */
     buttons?: MediaPreviewEntryButton[];
-} & MediaPreviewIcon;
+} & Partial<MediaPreviewIcon>;
 
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
 export type MediaPreviewGroupImageEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryImageContent;

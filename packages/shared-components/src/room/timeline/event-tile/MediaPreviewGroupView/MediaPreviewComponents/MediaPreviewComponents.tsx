@@ -8,7 +8,7 @@ Please see LICENSE in the repository root for full details.
 import React, { type JSX, useEffect, useState, type ReactNode } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
-import { type ImageSize, type MediaPreviewEntryButton } from "../MediaPreviewGroupView";
+import { type ImageSize, type MediaPreviewEntryButton, type MediaPreviewLayout } from "../MediaPreviewGroupView";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 
@@ -24,6 +24,10 @@ export function Body({ children }: { children: ReactNode }): JSX.Element {
     );
 }
 
+export function Footer({ children }: { children: ReactNode }): JSX.Element {
+    return <div className={styles.footer}>{children}</div>;
+}
+
 export interface TextContentProps {
     /**
      * header text
@@ -37,11 +41,20 @@ export interface TextContentProps {
      * body text
      */
     body: string;
+    /**
+     * footer text (optional), shown below the body
+     */
+    footer?: string;
+    /**
+     * tile layout the text is part of (optional, defaults to "stacked"). The "side" layout gives the
+     * header and body two lines each instead of one.
+     */
+    layout?: MediaPreviewLayout;
 }
 
-export function TextContent({ header, headerUrl, body }: TextContentProps): JSX.Element {
+export function TextContent({ header, headerUrl, body, footer, layout = "stacked" }: TextContentProps): JSX.Element {
     return (
-        <div className={styles.textContent}>
+        <div className={classNames(styles.textContent, { [styles.textContentSide]: layout === "side" })}>
             <Header>
                 {headerUrl ? (
                     <a href={headerUrl} target="_blank">
@@ -51,7 +64,8 @@ export function TextContent({ header, headerUrl, body }: TextContentProps): JSX.
                     header
                 )}
             </Header>
-            <Body>{body}</Body>
+            {body && <Body>{body}</Body>}
+            {footer && <Footer>{footer}</Footer>}
         </div>
     );
 }
@@ -63,11 +77,11 @@ export function Icon({
 }: {
     icon: JSX.Element;
     onClick?: () => void;
-    color: string;
+    color?: string;
 }): JSX.Element {
     const { translate: _t } = useI18n();
 
-    icon = React.cloneElement(icon, { style: { color } });
+    if (color) icon = React.cloneElement(icon, { style: { color } });
 
     if (onClick) {
         return (
@@ -183,6 +197,8 @@ function getImageClass(size: ImageSize): string {
             return styles.bannerImage;
         case "tallbanner":
             return styles.tallBannerImage;
+        case "thumbnail":
+            return styles.thumbnailImage;
     }
 }
 
@@ -194,6 +210,8 @@ function getVideoClass(size: ImageSize): string {
             return styles.bannerVideo;
         case "tallbanner":
             return styles.tallBannerVideo;
+        case "thumbnail":
+            return styles.thumbnailVideo;
     }
 }
 

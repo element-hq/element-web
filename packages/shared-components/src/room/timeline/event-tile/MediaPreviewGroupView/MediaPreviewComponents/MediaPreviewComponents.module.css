@@ -24,9 +24,51 @@
     color: var(--cpd-color-text-secondary);
 }
 
+.footer {
+    font: var(--cpd-font-body-sm-regular);
+    color: var(--cpd-color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .textContent {
     display: inline-block;
     min-width: 0;
+}
+
+/* The side layout has the full tile height available, so the header and body get two lines each and
+   the header reads as the tile's title rather than as an inline link. */
+.textContentSide {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    flex-grow: 1;
+    min-width: 0;
+    padding: var(--cpd-space-3x);
+
+    .header,
+    .body {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .header {
+        font: var(--cpd-font-body-md-semibold);
+    }
+
+    .header a {
+        color: var(--cpd-color-text-primary);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .body {
+        font: var(--cpd-font-body-md-regular);
+    }
 }
 
 .icon {
@@ -115,4 +157,22 @@
 .image.fullImage img {
     max-height: 300px;
     object-fit: contain;
+}
+
+/* Fixed box beside the text in the side layout; sizes from the Figma link preview design. */
+.image.thumbnailImage,
+.video.thumbnailVideo {
+    width: 130px;
+    height: 142px;
+    flex-shrink: 0;
+
+    button {
+        height: 100%;
+    }
+}
+
+.image.thumbnailImage img,
+.video.thumbnailVideo video {
+    height: 100%;
+    object-fit: cover;
 }

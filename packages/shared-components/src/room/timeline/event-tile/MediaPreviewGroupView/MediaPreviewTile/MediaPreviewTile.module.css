@@ -12,3 +12,15 @@
         gap: var(--cpd-space-2x);
     }
 }
+
+/* Media on the left, text on the right. The thumbnail fixes the height at 142px, so with the
+   border the tile matches the 480x144px link preview design. */
+.tileSide {
+    display: flex;
+    align-items: stretch;
+
+    .sideButtons {
+        align-self: flex-start;
+        margin: var(--cpd-space-3x);
+    }
+}
