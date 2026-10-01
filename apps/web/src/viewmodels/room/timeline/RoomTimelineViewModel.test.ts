@@ -644,10 +644,12 @@ describe("RoomTimelineViewModel", () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
             const before = room.listenerCount(RoomEvent.Timeline);
+            const receiptListenersBefore = room.listenerCount(RoomEvent.Receipt);
 
             vm.dispose();
 
             expect(room.listenerCount(RoomEvent.Timeline)).toBeLessThan(before);
+            expect(room.listenerCount(RoomEvent.Receipt)).toBeLessThan(receiptListenersBefore);
         });
 
         it("remembers where the reader got to, so the next visit resumes there", async () => {
@@ -711,6 +713,138 @@ describe("RoomTimelineViewModel", () => {
             } as any);
 
             expect(vm.getSnapshot().items).toBe(itemsAtDispose);
+        });
+    });
+
+    describe("read receipts shown beside messages", () => {
+        /** Record `userId` having read `eventId`, as a receipt arriving from sync would. */
+        const receiveReceipt = (eventId: string, userId: string, ts: number): void => {
+            room.addReceipt(
+                new MatrixEvent({
+                    type: EventType.Receipt,
+                    content: { [eventId]: { [ReceiptType.Read]: { [userId]: { ts } } } },
+                }),
+            );
+        };
+
+        const usersOn = (vm: RoomTimelineViewModel, eventId: string): string[] | undefined =>
+            vm
+                .getSnapshot()
+                .readReceiptsByEvent.get(eventId)
+                ?.map((r) => r.userId);
+
+        beforeEach(() => {
+            vi.mocked(client.getSafeUserId).mockReturnValue(USER_ID);
+        });
+
+        it("draws another user's receipt beside the message they read", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+            expect(usersOn(vm, "$b")).toEqual([]);
+        });
+
+        it("leaves out the reader's own receipt", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([]);
+        });
+
+        it("draws a receipt for a hidden event beside the last shown message before it", async () => {
+            // A reaction gets no row of its own; a receipt pointing at it belongs with the message above.
+            const reaction = new MatrixEvent({
+                type: EventType.Reaction,
+                room_id: ROOM_ID,
+                sender: OTHER_USER_ID,
+                event_id: "$react",
+                origin_server_ts: 3,
+                content: { "m.relates_to": { rel_type: "m.annotation", event_id: "$a", key: "👍" } },
+            });
+            seedTimeline([makeMessage("$a"), reaction, makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$react", OTHER_USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+        });
+
+        it("orders a message's receipts newest first", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", "@earlier:example.org", 1000);
+            receiveReceipt("$a", "@later:example.org", 2000);
+
+            expect(usersOn(vm, "$a")).toEqual(["@later:example.org", "@earlier:example.org"]);
+        });
+
+        it("keeps a user's receipt where it was when it moves onto a message that is not loaded", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$b", OTHER_USER_ID, 1000);
+            expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
+
+            receiveReceipt("$somewhere-else", OTHER_USER_ID, 2000);
+
+            expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
+        });
+
+        it("draws nothing while receipts are turned off, and everything once they are turned back on", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = new RoomTimelineViewModel({ client, room, showReadReceipts: false });
+            vms.push(vm);
+            vm.start();
+            await vi.waitFor(() => expect(vm.getSnapshot().items.length).toBeGreaterThan(0));
+
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            expect(vm.getSnapshot().readReceiptsByEvent.size).toBe(0);
+
+            vm.setShowReadReceipts(true);
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+        });
+    });
+
+    describe('the "Sent" tick', () => {
+        beforeEach(() => {
+            vi.mocked(client.getSafeUserId).mockReturnValue(USER_ID);
+        });
+
+        it("goes on the newest message of ours once it has reached the server", async () => {
+            seedTimeline([makeMessage("$a", { user: OTHER_USER_ID }), makeMessage("$b", { user: USER_ID })]);
+
+            const vm = await createStartedViewModel();
+
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$b");
+        });
+
+        it("comes off our message once someone else's arrives below it", async () => {
+            seedTimeline([makeMessage("$a", { user: USER_ID })]);
+            const vm = await createStartedViewModel();
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$a");
+
+            const reply = makeMessage("$b", { user: OTHER_USER_ID });
+            room.getUnfilteredTimelineSet().addLiveEvent(reply, { addToState: false });
+            room.emit(RoomEvent.Timeline, reply, room, false, false, {
+                timeline: room.getLiveTimeline(),
+                liveEvent: true,
+            } as any);
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("$b"));
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBeNull();
+        });
+
+        it("is not shown when someone else's message is newer than ours", async () => {
+            seedTimeline([makeMessage("$a", { user: USER_ID }), makeMessage("$b", { user: OTHER_USER_ID })]);
+
+            const vm = await createStartedViewModel();
+
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBeNull();
         });
     });
 });

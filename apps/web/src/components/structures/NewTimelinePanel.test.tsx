@@ -55,7 +55,7 @@ const { vmState } = vi.hoisted(() => ({
     // snapshots by identity, so handing back a fresh object each call would loop.
     vmState: {
         snapshot: {} as Record<string, unknown>,
-        setRows(items: unknown[]) {
+        setRows(items: unknown[], extra: Record<string, unknown> = {}) {
             this.snapshot = {
                 items,
                 atLiveEnd: true,
@@ -65,13 +65,24 @@ const { vmState } = vi.hoisted(() => ({
                 canJumpToReadMarker: false,
                 numUnreadMessages: 0,
                 hasHighlights: false,
+                readReceiptsByEvent: new Map(),
+                lastSuccessfulEventId: null,
+                ...extra,
             };
         },
     },
 }));
 
+const { vmSpies } = vi.hoisted(() => ({
+    vmSpies: { setShowReadReceipts: vi.fn(), constructorOpts: [] as Record<string, unknown>[] },
+}));
+
 vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
     RoomTimelineViewModel: class {
+        public constructor(opts: Record<string, unknown>) {
+            vmSpies.constructorOpts.push(opts);
+        }
+        public setShowReadReceipts = vmSpies.setShowReadReceipts;
         public start = (): void => {};
         public dispose = (): void => {};
         public subscribe = (): (() => void) => (): void => {};
@@ -105,8 +116,8 @@ describe("<NewTimelinePanel />", () => {
         );
 
     /** Set the rows the timeline is given to draw. */
-    const withItems = (items: TimelineItem[]): void => {
-        vmState.setRows(items);
+    const withItems = (items: TimelineItem[], extra: Record<string, unknown> = {}): void => {
+        vmState.setRows(items, extra);
     };
 
     beforeEach(() => {
@@ -114,6 +125,8 @@ describe("<NewTimelinePanel />", () => {
         tileProps.current = [];
         rowsRendered.current = [];
         vmState.setRows([]);
+        vmSpies.setShowReadReceipts.mockReset();
+        vmSpies.constructorOpts = [];
         client = createTestClient();
         room = new Room(ROOM_ID, client, USER_ID, { pendingEventOrdering: PendingEventOrdering.Detached });
         vi.spyOn(client, "getRoom").mockReturnValue(room);
@@ -227,5 +240,57 @@ describe("<NewTimelinePanel />", () => {
         // Nothing has reacted, so there are no relations to find — but the lookup
         // has to reach the room without throwing.
         expect(getRelationsForEvent(event.getId()!, "m.annotation", "m.reaction")).toBeUndefined();
+    });
+
+    describe("read receipts", () => {
+        const eventRow = (): TimelineItem =>
+            ({ key: event.getId()!, kind: "event", continuation: false, lastInSection: true }) as TimelineItem;
+
+        it("renders receipts provided by the view model", () => {
+            const receipts = [{ userId: "@bob:example.org", roomMember: null, ts: 1000 }];
+            withItems([eventRow()], { readReceiptsByEvent: new Map([[event.getId()!, receipts]]) });
+
+            renderPanel();
+
+            expect(tileProps.current[0].readReceipts).toBe(receipts);
+            expect(tileProps.current[0].showReadReceipts).toBe(true);
+            // Shared by every tile so an avatar can animate from its old row to its new one.
+            expect(tileProps.current[0].readReceiptMap).toEqual({});
+        });
+
+        it('puts the "Sent" tick only on the message the view model chose', () => {
+            const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
+            room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
+            withItems(
+                [
+                    eventRow(),
+                    { key: other.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
+                ],
+                { lastSuccessfulEventId: other.getId() },
+            );
+
+            renderPanel();
+
+            expect(tileProps.current[0].lastSuccessful).toBe(false);
+            expect(tileProps.current[1].lastSuccessful).toBe(true);
+        });
+
+        it("follows the room's read receipts setting", () => {
+            withItems([eventRow()]);
+
+            const { rerender } = renderPanel({ showReadReceipts: false });
+            expect(vmSpies.constructorOpts[0].showReadReceipts).toBe(false);
+            expect(tileProps.current[0].showReadReceipts).toBe(false);
+
+            rerender(
+                <MatrixClientContext.Provider value={client}>
+                    <SDKContext.Provider value={new TestSDKContext()}>
+                        <NewTimelinePanel room={room} showReadReceipts={true} />
+                    </SDKContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+
+            expect(vmSpies.setShowReadReceipts).toHaveBeenLastCalledWith(true);
+        });
     });
 });

@@ -8,16 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler } from "react";
 import classNames from "classnames";
-import {
-    type Room,
-    type MatrixClient,
-    RoomStateEvent,
-    EventStatus,
-    type MatrixEvent,
-    EventType,
-} from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import { ReadMarker, TimelineSeparator, type EventTileRenderingMode } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
@@ -51,7 +43,8 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
-import { isEligibleForSpecialReceipt } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
+import { findLastSuccessfulWeSent } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
+import { getReadReceiptsByShownEvent, getReadReceiptsForEvent, type ShownReadReceipt } from "../../utils/read-receipts";
 import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -207,11 +200,6 @@ interface IState {
     hideSender: boolean;
 }
 
-interface IReadReceiptForUser {
-    lastShownEventId: string;
-    receipt: IReadReceiptProps;
-}
-
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 export default class MessagePanel extends React.Component<IProps, IState> {
@@ -257,7 +245,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // This is recomputed on each render, using the data from the previous
     // render as our fallback for any user IDs we can't match a receipt to a
     // displayed event in the current render cycle.
-    private readReceiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
+    private readReceiptsByUserId: Map<string, ShownReadReceipt> = new Map();
 
     private readonly _showHiddenEvents: boolean;
     private unmounted = false;
@@ -603,12 +591,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
-    private isSentState(ev: MatrixEvent): boolean {
-        const status = ev.getAssociatedStatus();
-        // A falsey state applies to events which have come down sync, including remote echoes
-        return !status || status === EventStatus.SENT;
-    }
-
     private getEventTiles(): ReactNode[] {
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
@@ -623,9 +605,17 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
 
-        let foundLastSuccessfulEvent = false;
+        const lastSuccessfulIndex = findLastSuccessfulWeSent(
+            this.props.events,
+            (_event, i) => !!events[i].shouldShow,
+            userId,
+        );
+        if (lastSuccessfulIndex >= 0) {
+            events[lastSuccessfulIndex].lastSuccessfulWeSent = true;
+        }
+
         let lastShownNonLocalEchoIndex = -1;
-        // Find the indices of the last successful event we sent and the last non-local-echo events shown
+        // Find the last event shown, and the index of the last shown event that is not a local echo
         for (let i = events.length - 1; i >= 0; i--) {
             const { event, shouldShow } = events[i];
             if (!shouldShow) {
@@ -636,21 +626,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 lastShownEvent = event;
             }
 
-            if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
-                foundLastSuccessfulEvent = true;
-                // If we are not sender of this last successful event eligible for special receipt then we stop here
-                // As we do not want to render our sent receipt if there are more receipts below it and events sent
-                // by other users get a synthetic read receipt for their sent events.
-                if (event.getSender() === userId) {
-                    events[i].lastSuccessfulWeSent = true;
-                }
-            }
-
-            if (lastShownNonLocalEchoIndex < 0 && !event.status) {
+            if (!event.status) {
                 lastShownNonLocalEchoIndex = i;
-            }
-
-            if (lastShownNonLocalEchoIndex >= 0 && foundLastSuccessfulEvent) {
                 break;
             }
         }
@@ -876,88 +853,27 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const receiptDestination = this.context.threadId ? room.getThread(this.context.threadId) : room;
 
-        const receipts: IReadReceiptProps[] = [];
-
         if (!receiptDestination) {
             logger.debug(
                 "Discarding request, could not find the receiptDestination for event: " + this.context.threadId,
             );
-            return receipts;
+            return [];
         }
 
-        receiptDestination.getReceiptsForEvent(event).forEach((r) => {
-            if (!r.userId || !isSupportedReceiptType(r.type) || r.userId === myUserId) {
-                return; // ignore non-read receipts and receipts from self.
-            }
-            if (MatrixClientPeg.safeGet().isUserIgnored(r.userId)) {
-                return; // ignore ignored users
-            }
-            const member = room.getMember(r.userId);
-            receipts.push({
-                userId: r.userId,
-                roomMember: member,
-                ts: r.data ? r.data.ts : 0,
-            });
-        });
-        return receipts;
+        return getReadReceiptsForEvent(event, receiptDestination, room, MatrixClientPeg.safeGet(), myUserId);
     }
 
     // Get an object that maps from event ID to a list of read receipts that
     // should be shown next to that event. If a hidden event has read receipts,
     // they are folded into the receipts of the last shown event.
     private getReadReceiptsByShownEvent(events: WrappedEvent[]): Map<string, IReadReceiptProps[]> {
-        const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
-        const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
-
-        let lastShownEventId: string | undefined;
-        for (const event of this.props.events) {
-            if (this.shouldShowEvent(event)) {
-                lastShownEventId = event.getId();
-            }
-            if (!lastShownEventId) {
-                continue;
-            }
-
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            const newReceipts = this.getReadReceiptsForEvent(event);
-            if (!newReceipts) continue;
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
-
-            // Record these receipts along with their last shown event ID for
-            // each associated user ID.
-            for (const receipt of newReceipts) {
-                receiptsByUserId.set(receipt.userId, {
-                    lastShownEventId,
-                    receipt,
-                });
-            }
-        }
-
-        // It's possible in some cases (for example, when a read receipt
-        // advances before we have paginated in the new event that it's marking
-        // received) that we can temporarily not have a matching event for
-        // someone which had one in the last. By looking through our previous
-        // mapping of receipts by user ID, we can cover recover any receipts
-        // that would have been lost by using the same event ID from last time.
-        for (const userId of this.readReceiptsByUserId.keys()) {
-            if (receiptsByUserId.get(userId)) {
-                continue;
-            }
-            const { lastShownEventId, receipt } = this.readReceiptsByUserId.get(userId)!;
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
-            receiptsByUserId.set(userId, { lastShownEventId, receipt });
-        }
+        const { receiptsByEvent, receiptsByUserId } = getReadReceiptsByShownEvent(
+            this.props.events,
+            (_event, i) => !!events[i].shouldShow,
+            (event) => this.getReadReceiptsForEvent(event),
+            this.readReceiptsByUserId,
+        );
         this.readReceiptsByUserId = receiptsByUserId;
-
-        // After grouping receipts by shown events, do another pass to sort each
-        // receipt list.
-        for (const receipts of receiptsByEvent.values()) {
-            receipts.sort((r1, r2) => {
-                return r2.ts - r1.ts;
-            });
-        }
-
         return receiptsByEvent;
     }
 
