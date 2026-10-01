@@ -10,6 +10,7 @@ export { BACKWARD_LOADING_KEY, FORWARD_LOADING_KEY } from "./types";
 export type {
     TimelineItem,
     TimelineItemKind,
+    EventSendState,
     TimelineViewSnapshot,
     TimelineViewActions,
     TimelineViewModel,

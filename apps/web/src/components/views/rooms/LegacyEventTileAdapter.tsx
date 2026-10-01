@@ -6,8 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import type { EventSendState } from "@element-hq/web-shared-components";
 
-import type { EventStatus, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EventTile, { type GetRelationsForEvent, type IReadReceiptProps } from "./EventTile";
 import type { Layout } from "../../../settings/enums/Layout";
 import type { IReadReceiptPosition } from "./ReadReceiptMarker";
@@ -54,12 +55,17 @@ export interface LegacyEventTileAdapterProps {
     /** Set only on the message being edited; that tile shows the edit box. */
     editState?: EditorStateTransfer;
 
-    /**
-     * Sending / sent / failed, for a message of ours still on its way. Passed as a prop rather
-     * than read from the event so a change of state re-renders the tile.
-     */
-    eventSendStatus?: EventStatus;
+    /** The row's send state, from the view model. */
+    sendState?: EventSendState;
 }
+
+/** The legacy tile takes the SDK's status; this is the one it would read off the event. */
+const EVENT_STATUS: Record<EventSendState, EventStatus> = {
+    encrypting: EventStatus.ENCRYPTING,
+    sending: EventStatus.SENDING,
+    sent: EventStatus.SENT,
+    failed: EventStatus.NOT_SENT,
+};
 
 /**
  * Renders an unmigrated event using the legacy EventTile.
@@ -95,7 +101,7 @@ export function LegacyEventTileAdapter(props: Readonly<LegacyEventTileAdapterPro
             permalinkCreator={props.permalinkCreator}
             callEventGrouper={props.callEventGrouper}
             editState={props.editState}
-            eventSendStatus={props.eventSendStatus}
+            eventSendStatus={props.sendState && EVENT_STATUS[props.sendState]}
             compactReplyPreview={true}
         />
     );

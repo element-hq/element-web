@@ -116,9 +116,7 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
                     // A tile treats any edit state it is given as its own, so
                     // only the message being edited may receive it.
                     editState={ctx.editState?.getEvent().getId() === item.key ? ctx.editState : undefined}
-                    // Sending / sent / failed, for a message of ours that is still on its way. The
-                    // view model publishes fresh rows on every change, so the tile keeps up.
-                    eventSendStatus={mxEvent.getAssociatedStatus() ?? undefined}
+                    sendState={item.sendState}
                     getRelationsForEvent={ctx.getRelationsForEvent}
                     permalinkCreator={ctx.permalinkCreator}
                     showUrlPreview={ctx.showUrlPreview}

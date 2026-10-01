@@ -10,6 +10,7 @@ import {
     Direction,
     RoomEvent,
     EventType,
+    EventStatus,
     MatrixEventEvent,
     NotificationCountType,
     ReceiptType,
@@ -22,6 +23,7 @@ import { BaseViewModel } from "@element-hq/web-shared-components";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type {
+    EventSendState,
     TimelineViewSnapshot,
     TimelineViewActions,
     TimelineItem,
@@ -42,6 +44,26 @@ const debug = (message: string): void => {
 
 /** How long after the last scroll event to wait before sending a read receipt (ms). */
 const READ_RECEIPT_DEBOUNCE_MS = 500;
+
+/**
+ * The send state of a row's message, read as `MessagePanel` reads it for the old timeline: the
+ * associated status also covers our pending edit or redaction of a message the server already has.
+ */
+function sendStateOf(event: MatrixEvent): EventSendState | undefined {
+    switch (event.getAssociatedStatus()) {
+        case EventStatus.ENCRYPTING:
+            return "encrypting";
+        case EventStatus.QUEUED:
+        case EventStatus.SENDING:
+            return "sending";
+        case EventStatus.SENT:
+            return "sent";
+        case EventStatus.NOT_SENT:
+            return "failed";
+        default:
+            return undefined;
+    }
+}
 
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
@@ -135,8 +157,9 @@ export interface RoomTimelineViewModelOpts {
  *    message, and returning to a room restores where the reader left off. See `LoadTarget`.
  *  - **Read state.** Tracking the unread marker, deciding whether to offer a jump to it, and
  *    sending read receipts as the reader catches up.
- *  - **Messages being sent.** Drawn from the room's pending list until the server echoes them.
- *    See `pendingEventsToShow` and `onLocalEchoUpdated`.
+ *  - **Messages being sent.** Drawn from the room's pending list until the server echoes them,
+ *    with the row's `sendState` saying how far each has got. See `pendingEventsToShow` and
+ *    `onLocalEchoUpdated`.
  *
  * A note on timing: the constructor deliberately does nothing but set fields. React's StrictMode
  * builds two instances in development and discards one, so anything that subscribes or fetches
@@ -1493,6 +1516,7 @@ export class RoomTimelineViewModel
                 kind: "event",
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
                 lastInSection: false, // computed in the post-pass below, once the next event is known
+                sendState: sendStateOf(event),
             });
 
             // Insert the read-marker item directly after the event it belongs to.

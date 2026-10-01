@@ -775,6 +775,8 @@ describe("RoomTimelineViewModel", () => {
             await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]));
             expect(timelineEvents).not.toHaveBeenCalled();
             expect(pending.status).toBe(EventStatus.SENDING);
+            expect(eventRow(vm, "~pending")?.sendState).toBe("sending");
+            expect(eventRow(vm, "$a")?.sendState).toBeUndefined();
             // Our own message is not unread, and the newest messages are still the ones loaded.
             expect(vm.getSnapshot().numUnreadMessages).toBe(0);
             expect(vm.getSnapshot().atLiveEnd).toBe(true);
@@ -855,6 +857,7 @@ describe("RoomTimelineViewModel", () => {
 
             await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]));
             expect(room.getPendingEvents()).toEqual([]);
+            expect(eventRow(vm, "$real")?.sendState).toBeUndefined();
             // Every publish along the way kept exactly one row for the message: it never
             // disappeared, and it was never drawn twice under both ids.
             expect(published.length).toBeGreaterThanOrEqual(1);
@@ -944,20 +947,49 @@ describe("RoomTimelineViewModel", () => {
             expect(client.setRoomReadMarkers).toHaveBeenCalledWith(ROOM_ID, "$real");
         });
 
+        it("says how far a message being sent has got", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventRow(vm, "~pending")?.sendState).toBe("sending"));
+
+            room.updatePendingEvent(pending, EventStatus.ENCRYPTING);
+            await settle();
+            expect(eventRow(vm, "~pending")?.sendState).toBe("encrypting");
+
+            room.updatePendingEvent(pending, EventStatus.SENDING);
+            await settle();
+            expect(eventRow(vm, "~pending")?.sendState).toBe("sending");
+
+            // The server has accepted it and given it an id, but /sync has not echoed it yet.
+            room.updatePendingEvent(pending, EventStatus.SENT, "$real");
+            await settle();
+            expect(eventRow(vm, "$real")?.sendState).toBe("sent");
+        });
+
+        it("marks a delivered message as sending while our edit of it is", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            const edit = addPendingMessage("~edit", { relatesTo: { rel_type: RelationType.Replace, event_id: "$a" } });
+            await vi.waitFor(() => expect(eventRow(vm, "$a")?.sendState).toBe("sending"));
+
+            room.updatePendingEvent(edit, EventStatus.NOT_SENT);
+            await settle();
+            expect(eventRow(vm, "$a")?.sendState).toBe("failed");
+        });
+
         it("keeps showing a message whose send failed, and drops one that is cancelled", async () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
             const pending = addPendingMessage("~pending");
             await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
-            const rowsWhileSending = vm.getSnapshot().items;
 
-            // Failed: the row stays, so the reader can retry or cancel it. The rows are published
-            // afresh, which is what lets the tile pick up the new state.
+            // Failed: the row stays, so the reader can retry or cancel it.
             room.updatePendingEvent(pending, EventStatus.NOT_SENT);
             await settle();
             expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]);
-            expect(vm.getSnapshot().items).not.toBe(rowsWhileSending);
-            expect(room.getPendingEvent("~pending")?.status).toBe(EventStatus.NOT_SENT);
+            expect(eventRow(vm, "~pending")?.sendState).toBe("failed");
 
             // Cancelled: the message leaves the pending list, so its row goes too.
             room.updatePendingEvent(pending, EventStatus.CANCELLED);

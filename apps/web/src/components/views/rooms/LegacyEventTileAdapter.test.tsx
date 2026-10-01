@@ -103,9 +103,20 @@ describe("<LegacyEventTileAdapter />", () => {
         expect(tileProps.current?.editState).toBeUndefined();
     });
 
-    it("passes the send state through, so the tile can show a message as sending or failed", () => {
-        render(<LegacyEventTileAdapter mxEvent={event} eventSendStatus={EventStatus.NOT_SENT} />);
+    it.each([
+        ["encrypting", EventStatus.ENCRYPTING],
+        ["sending", EventStatus.SENDING],
+        ["sent", EventStatus.SENT],
+        ["failed", EventStatus.NOT_SENT],
+    ] as const)("hands the tile the SDK status for a %s message", (sendState, status) => {
+        render(<LegacyEventTileAdapter mxEvent={event} sendState={sendState} />);
 
-        expect(tileProps.current?.eventSendStatus).toBe(EventStatus.NOT_SENT);
+        expect(tileProps.current?.eventSendStatus).toBe(status);
+    });
+
+    it("gives the tile no send status for a message the server has", () => {
+        render(<LegacyEventTileAdapter mxEvent={event} />);
+
+        expect(tileProps.current?.eventSendStatus).toBeUndefined();
     });
 });

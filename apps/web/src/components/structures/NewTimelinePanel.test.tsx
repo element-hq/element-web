@@ -140,19 +140,27 @@ describe("<NewTimelinePanel />", () => {
         expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
     });
 
-    it("draws a message that is still being sent, with its send state", () => {
+    it("draws a message that is still being sent, with the row's send state", () => {
         // Until the server echoes it back, the room holds the message apart from the timeline.
         const pending = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "on its way", event: true });
         pending.setTxnId("txn1");
-        pending.setStatus(EventStatus.SENDING);
+        pending.setStatus(EventStatus.NOT_SENT);
         room.addPendingEvent(pending, "txn1");
         expect(room.findEventById(pending.getId()!)).toBeUndefined();
-        withItems([{ key: pending.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([
+            {
+                key: pending.getId()!,
+                kind: "event",
+                continuation: false,
+                lastInSection: true,
+                sendState: "failed",
+            } as TimelineItem,
+        ]);
 
         renderPanel();
 
         expect(tileProps.current[0].mxEvent).toBe(pending);
-        expect(tileProps.current[0].eventSendStatus).toBe(EventStatus.SENDING);
+        expect(tileProps.current[0].sendState).toBe("failed");
     });
 
     it("gives a delivered message no send state", () => {
@@ -160,7 +168,7 @@ describe("<NewTimelinePanel />", () => {
 
         renderPanel();
 
-        expect(tileProps.current[0].eventSendStatus).toBeUndefined();
+        expect(tileProps.current[0].sendState).toBeUndefined();
     });
 
     it('labels the read marker "New"', () => {
