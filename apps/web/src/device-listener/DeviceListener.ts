@@ -67,6 +67,10 @@ export class DeviceListener {
     public currentDeviceChangedEmitter = new CurrentDeviceChangedEmitter();
 
     private running = false;
+    // Whether a recheck is in flight. Rechecks run one at a time; see `recheck`.
+    private recheckRunning = false;
+    // Whether something asked for a recheck while one was in flight, so another is owed once it ends.
+    private recheckQueued = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
     private client?: MatrixClient;
     private shouldRecordClientInformation = false;
@@ -227,13 +231,30 @@ export class DeviceListener {
     };
 
     public recheck(): void {
-        this.doRecheck().catch((e) => {
-            if (e instanceof ClientStoppedError) {
-                // the client was stopped while recheck() was running. Nothing left to do.
-            } else {
-                logger.error("Error during `DeviceListener.recheck`", e);
-            }
-        });
+        if (this.recheckRunning) {
+            // Run rechecks one at a time and coalesce any that arrive meanwhile into a single
+            // re-run. Concurrent rechecks finish in arbitrary order, so a stale verdict could
+            // overwrite a newer one with nothing left to trigger a correction.
+            this.recheckQueued = true;
+            return;
+        }
+
+        this.recheckRunning = true;
+        this.doRecheck()
+            .catch((e) => {
+                if (e instanceof ClientStoppedError) {
+                    // the client was stopped while recheck() was running. Nothing left to do.
+                } else {
+                    logger.error("Error during `DeviceListener.recheck`", e);
+                }
+            })
+            .finally(() => {
+                this.recheckRunning = false;
+                if (this.recheckQueued) {
+                    this.recheckQueued = false;
+                    this.recheck();
+                }
+            });
     }
 
     private async doRecheck(): Promise<void> {
