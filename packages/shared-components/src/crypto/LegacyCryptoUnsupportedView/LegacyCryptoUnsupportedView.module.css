@@ -5,8 +5,10 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-.view {
-    width: 100%;
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100%;
 }
 

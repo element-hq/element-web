@@ -40,6 +40,14 @@ const meta = {
     parameters: {
         layout: "fullscreen",
     },
+    // The view fills its parent, so give it a full-height parent as it has in the app.
+    decorators: [
+        (Story) => (
+            <div style={{ height: "100vh" }}>
+                <Story />
+            </div>
+        ),
+    ],
 } satisfies Meta<typeof LegacyCryptoUnsupportedViewWrapper>;
 
 export default meta;

@@ -56,9 +56,9 @@ export function LegacyCryptoUnsupportedView({ vm }: Readonly<LegacyCryptoUnsuppo
     const { brand, version } = useViewModel(vm);
 
     return (
-        <Flex className={styles.view} align="center" justify="center" role="alert">
-            <Flex className={styles.body} direction="column" align="center" gap="var(--cpd-space-4x)">
-                <Heading as="h1" size="lg">
+        <div className={styles.container}>
+            <Flex className={styles.body} direction="column" align="center" gap="var(--cpd-space-2x)">
+                <Heading as="h1" weight="semibold" size="md">
                     {_t("error|legacy_crypto_unsupported|title")}
                 </Heading>
                 <Text size="lg">{_t("error|legacy_crypto_unsupported|description", { brand })}</Text>
@@ -69,6 +69,6 @@ export function LegacyCryptoUnsupportedView({ vm }: Readonly<LegacyCryptoUnsuppo
                     {_t("action|remove_this_device")}
                 </Button>
             </Flex>
-        </Flex>
+        </div>
     );
 }
