@@ -20,8 +20,6 @@ test.describe("Encryption tab", () => {
     test.use({ displayName: "Alice" });
 
     test.describe("when encryption is set up", () => {
-        test.slow();
-
         let recoveryKey: GeneratedSecretStorageKey;
         let expectedBackupVersion: string;
 
