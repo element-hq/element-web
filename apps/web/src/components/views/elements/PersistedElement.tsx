@@ -79,6 +79,9 @@ export default class PersistedElement extends React.Component<IProps> {
     private child?: HTMLDivElement;
 
     private static rootMap: Record<string, [root: Root, container: Element]> = {};
+    // The PersistedElements currently mounted for each persistKey, so that one leaving can hand the tree
+    // over to one that stays (see `componentWillUnmount`).
+    private static instances = new Map<string, Set<PersistedElement>>();
 
     public constructor(props: IProps) {
         super(props);
@@ -131,6 +134,12 @@ export default class PersistedElement extends React.Component<IProps> {
         // the timeline_resize action.
         window.addEventListener("resize", this.repositionChild);
         this.dispatcherRef = dis.register(this.onAction);
+        let instances = PersistedElement.instances.get(this.props.persistKey);
+        if (!instances) {
+            instances = new Set();
+            PersistedElement.instances.set(this.props.persistKey, instances);
+        }
+        instances.add(this);
 
         this.updateChild();
         this.renderApp();
@@ -142,7 +151,18 @@ export default class PersistedElement extends React.Component<IProps> {
     }
 
     public componentWillUnmount(): void {
-        this.updateChildVisibility(this.child, false);
+        const instances = PersistedElement.instances.get(this.props.persistKey);
+        instances?.delete(this);
+        if (instances?.size) {
+            // Another placeholder for this tree is mounted: the content is moving between containers, and
+            // both were rendered in the same commit, so whichever rendered the tree last owns the child's
+            // ref, which may well be this one. Hand the tree over to the most recently mounted survivor by
+            // rendering it again with that one's wrapper, which then places the child; hiding it here would
+            // hide it for good.
+            [...instances].at(-1)!.renderApp();
+        } else {
+            this.updateChildVisibility(this.child, false);
+        }
         this.resizeObserver.disconnect();
         window.removeEventListener("resize", this.repositionChild);
         dis.unregister(this.dispatcherRef);
