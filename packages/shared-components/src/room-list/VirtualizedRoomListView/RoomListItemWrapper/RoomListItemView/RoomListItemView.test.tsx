@@ -26,6 +26,8 @@ const {
     NoMessagePreview,
     WithHoverMenu,
     WithoutHoverMenu,
+    LongContent,
+    WithUserStatus,
 } = composeStories(stories);
 
 describe("<RoomListItemView />", () => {
@@ -146,5 +148,54 @@ describe("<RoomListItemView />", () => {
         option.blur();
         await waitFor(() => expect(option.className).not.toMatch(/keyboardActive/));
         expect(moreButton).not.toBeVisible();
+    });
+
+    /*
+     * The room name and message preview are truncated with an ellipsis, and the full text is meant
+     * to be available on hover. It is currently exposed through a native `title` attribute, which
+     * on Element Desktop for macOS is at the mercy of an open Electron regression: since Electron
+     * 38 (Element Desktop has shipped >= 38 since 2025-09-16) a `title` tooltip fires on the first
+     * hover and then only intermittently.
+     *   https://github.com/element-hq/element-web/issues/34049
+     *   https://github.com/electron/electron/issues/49843
+     * The fix is to render the tooltip ourselves with the Compound `Tooltip` component, as this
+     * component already does for the user status emoji, rather than asking the browser for one.
+     */
+    describe("truncated text tooltips", () => {
+        // Control: the user status emoji already uses the Compound `Tooltip` component. This proves
+        // the suite can observe a rendered tooltip, so the two failures below are the missing
+        // tooltip itself. (These tests run in real Chromium via Playwright browser mode, where a
+        // native `title` still contributes no element to the DOM for the suite to find.)
+        it("shows the user status text in a tooltip on hover", async () => {
+            const user = userEvent.setup();
+            render(<WithUserStatus />);
+
+            await user.hover(screen.getByText("🌭"));
+            await waitFor(() => {
+                expect(screen.getByRole("tooltip")).toHaveTextContent("Hot");
+            });
+        });
+
+        it("shows the full message preview in a tooltip on hover", async () => {
+            const user = userEvent.setup();
+            const preview = "Loooooooooooooooooooooooooooooooooooooong preview";
+            render(<LongContent />);
+
+            await user.hover(screen.getByText(preview));
+            await waitFor(() => {
+                expect(screen.getByRole("tooltip")).toHaveTextContent(preview);
+            });
+        });
+
+        it("shows the full room name in a tooltip on hover", async () => {
+            const user = userEvent.setup();
+            const name = "Loooooooooooooooooooooooooooooooooooooong name";
+            render(<LongContent />);
+
+            await user.hover(screen.getByTestId("room-name"));
+            await waitFor(() => {
+                expect(screen.getByRole("tooltip")).toHaveTextContent(name);
+            });
+        });
     });
 });
