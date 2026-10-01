@@ -68,6 +68,10 @@
     .body {
         font: var(--cpd-font-body-md-regular);
     }
+
+    .footer {
+        margin-top: auto;
+    }
 }
 
 .icon {
