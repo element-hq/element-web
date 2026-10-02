@@ -10,13 +10,15 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { fireEvent, render, screen } from "test-utils-rtl";
 import { logger } from "matrix-js-sdk/src/logger";
 import { flushPromises } from "test-utils";
 
 import VoiceUserSettingsTab from "./VoiceUserSettingsTab";
 import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 
 vi.mock("../../../../../MediaDeviceHandler");
 const MediaDeviceHandlerMock = vi.mocked(MediaDeviceHandler);
@@ -111,6 +113,63 @@ describe("<VoiceUserSettingsTab />", () => {
 
             expect(screen.getByText("No Audio Outputs detected")).toBeInTheDocument();
             expect(screen.queryByLabelText("Audio Output")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("ringtone output", () => {
+        const audioOut1 = {
+            deviceId: "4",
+            groupId: "g2",
+            kind: MediaDeviceKindEnum.AudioOutput,
+            label: "Headset",
+        };
+        const audioOut2 = {
+            deviceId: "5",
+            groupId: "g3",
+            kind: MediaDeviceKindEnum.AudioOutput,
+            label: "Speakers",
+        };
+
+        beforeEach(() => {
+            MediaDeviceHandlerMock.getDevices.mockResolvedValue({
+                ...defaultMediaDevices,
+                [MediaDeviceKindEnum.AudioOutput]: [audioOut1, audioOut2],
+            } as unknown as IMediaDevices);
+        });
+
+        afterEach(() => {
+            vi.unstubAllGlobals();
+        });
+
+        it("stores the output device chosen for the ringtone", async () => {
+            vi.stubGlobal(
+                "AudioContext",
+                class {
+                    public setSinkId(): void {}
+                },
+            );
+            const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            render(getComponent());
+
+            const dropdown = await screen.findByLabelText("Ringtone output");
+            fireEvent.change(dropdown, { target: { value: audioOut2.deviceId } });
+
+            expect(setValueSpy).toHaveBeenCalledWith(
+                "webrtc_ringtone_audiooutput",
+                null,
+                SettingLevel.DEVICE,
+                audioOut2.deviceId,
+            );
+            expect(dropdown).toHaveDisplayValue(audioOut2.label);
+            setValueSpy.mockRestore();
+        });
+
+        it("is not offered when the browser cannot choose an output device", async () => {
+            vi.stubGlobal("AudioContext", class {});
+            render(getComponent());
+            await flushPromises();
+
+            expect(screen.queryByLabelText("Ringtone output")).not.toBeInTheDocument();
         });
     });
 
