@@ -10,9 +10,9 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type Action } from "../actions";
 import { type ActionPayload } from "../payloads";
 
-export interface OpenPdfViewerPayload extends ActionPayload {
-    action: Action.OpenPdfViewer;
+export interface OpenDocumentViewerPayload extends ActionPayload {
+    action: Action.OpenDocumentViewer;
 
-    /** The event whose PDF attachment should be opened. */
+    /** The event whose attachment should be opened in its document viewer. */
     event: MatrixEvent;
 }

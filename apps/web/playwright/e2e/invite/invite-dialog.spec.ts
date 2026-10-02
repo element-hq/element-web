@@ -96,7 +96,8 @@ test.describe("Invite dialog", function () {
             await rejectToast(page, "Verify this device");
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
                 .click();
             await page.getByRole("menuitem", { name: "Start chat" }).click();
 

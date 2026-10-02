@@ -29,8 +29,8 @@ export interface IRightPanelCardState {
     initialEventScrollIntoView?: boolean;
     // room summary
     focusRoomSearch?: boolean;
-    // pdf viewer: the m.file event whose attachment is being read
-    pdfViewerEvent?: MatrixEvent;
+    // document viewer: the m.file event whose attachment is being read
+    documentViewerEvent?: MatrixEvent;
     // file viewer
     fileViewer?: RegisteredFileViewer;
     fileViewerSourceEvent?: MatrixEvent;
@@ -48,8 +48,8 @@ export interface IRightPanelCardStateStored {
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
-    // pdf viewer
-    pdfViewerEventId?: string;
+    // document viewer
+    documentViewerEventId?: string;
     // file viewer
     fileViewerId?: string;
     fileViewerSourceEventId?: string;
@@ -101,7 +101,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        pdfViewerEventId: state?.pdfViewerEvent?.getId(),
+        documentViewerEventId: state?.documentViewerEvent?.getId(),
         fileViewerId: state?.fileViewer?.options.id,
         fileViewerSourceEventId: state?.fileViewerSourceEvent?.getId(),
         fileViewerSourceRoomId: state?.fileViewerSourceEvent?.getRoomId(),
@@ -125,7 +125,9 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        pdfViewerEvent: !!stateStored?.pdfViewerEventId ? room.findEventById(stateStored.pdfViewerEventId) : undefined,
+        documentViewerEvent: !!stateStored?.documentViewerEventId
+            ? room.findEventById(stateStored.documentViewerEventId)
+            : undefined,
         fileViewer: stateStored?.fileViewerId
             ? ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId)
             : undefined,

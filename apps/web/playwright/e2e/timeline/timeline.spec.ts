@@ -650,14 +650,14 @@ test.describe("Timeline", () => {
             const viewSourceEventGroup = page.locator(".mx_EventTile").last().locator(".mx_ViewSourceEvent");
             await viewSourceEventGroup.hover();
             await viewSourceEventGroup
-                .getByRole("button", { name: "toggle event" })
+                .getByRole("button", { name: "Event source" })
                 .click({ position: { x: 0, y: 0 } });
 
             // Make sure the expand toggle works
             const viewSourceEventExpanded = page.locator(".mx_EventTile");
             const viewSourceEventExpandedContent = viewSourceEventExpanded.locator(".mx_ViewSourceEvent_expanded");
             await viewSourceEventExpandedContent.hover();
-            const toggleEventButton = viewSourceEventExpandedContent.getByRole("button", { name: "toggle event" });
+            const toggleEventButton = viewSourceEventExpandedContent.getByRole("button", { name: "Event source" });
             // Click again to collapse the source
             await toggleEventButton.click({ position: { x: 0, y: 0 } });
 
@@ -682,7 +682,7 @@ test.describe("Timeline", () => {
             );
 
             // Click view source event toggle
-            await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 8, y: 8 } });
+            await viewSourceEventIrc.getByRole("button", { name: "Event source" }).click({ position: { x: 8, y: 8 } });
 
             // Make sure the expand toggle worked
             await expect(

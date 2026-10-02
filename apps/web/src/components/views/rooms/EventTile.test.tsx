@@ -1019,6 +1019,24 @@ describe("EventTile", () => {
                 }),
             );
         });
+
+        it("does not open the thread when a thread list action is clicked", async () => {
+            vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const permalinkCreator = new RoomPermalinkCreator(room);
+            vi.spyOn(permalinkCreator, "forEvent");
+
+            getComponent({ permalinkCreator }, TimelineRenderingType.ThreadsList);
+
+            await userEvent.click(screen.getByRole("button", { name: "View in room" }));
+            expect(dis.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({ action: Action.ViewRoom, event_id: mxEvent.getId() }),
+            );
+
+            await userEvent.click(screen.getByRole("button", { name: "Copy link to thread" }));
+            expect(permalinkCreator.forEvent).toHaveBeenCalledWith(mxEvent.getId());
+
+            expect(dis.dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ action: Action.ShowThread }));
+        });
     });
     describe("Event verification", () => {
         // data for our stubbed getEncryptionInfoForEvent: a map from event id to result

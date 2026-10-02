@@ -19,7 +19,7 @@ import { DownloadIcon, ExpandIcon } from "@vector-im/compound-design-tokens/asse
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
-import { isPdfEvent, openPdfViewer } from "../../utils/pdfViewer";
+import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
 import { ModuleApi } from "../../modules/Api";
 import { uploadedMediaOfEvent } from "../../modules/FileViewerApi";
 import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
@@ -34,27 +34,27 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         mxEvent: MatrixEvent,
         mediaEventHelper: MediaEventHelper,
         rightPanelStore: RightPanelStore,
-        pdfViewerEnabled = false,
+        documentPreviewsEnabled = false,
     ) {
-        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, rightPanelStore, pdfViewerEnabled));
+        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, rightPanelStore, documentPreviewsEnabled));
         this.mxEvent = mxEvent;
         this.mediaEventHelper = mediaEventHelper;
         this.rightPanelStore = rightPanelStore;
     }
 
     /**
-     * Re-derive the tile for a new value of the PDF viewer lab. The setting can be toggled while the
-     * tile is already on screen, so the entry has to be rebuilt rather than only built on construction.
+     * Re-derive the tile for a new value of the document previews lab. The setting can be toggled while
+     * the tile is already on screen, so the entry has to be rebuilt rather than only built on construction.
      *
-     * @param pdfViewerEnabled Whether the PDF viewer lab is currently enabled.
+     * @param documentPreviewsEnabled Whether the document previews lab is currently enabled.
      */
-    public setPdfViewerEnabled(pdfViewerEnabled: boolean): void {
+    public setDocumentPreviewsEnabled(documentPreviewsEnabled: boolean): void {
         this.setProps(
             MBodyTileViewModel.buildSnapshot(
                 this.mxEvent,
                 this.mediaEventHelper,
                 this.rightPanelStore,
-                pdfViewerEnabled,
+                documentPreviewsEnabled,
             ),
         );
     }
@@ -63,7 +63,7 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         mxEvent: MatrixEvent,
         mediaEventHelper: MediaEventHelper,
         rightPanelStore: RightPanelStore,
-        pdfViewerEnabled: boolean,
+        documentPreviewsEnabled: boolean,
     ): MediaPreviewGroupSnapshot {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
@@ -82,18 +82,13 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
               )
             : [];
 
+        // Behind the same lab as the legacy file body's viewers.
+        const viewer = documentPreviewsEnabled ? documentViewerForEvent(mxEvent) : undefined;
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
             ...fileViewerButtons,
-            // Behind the same lab as the legacy file body's viewer, and only for PDFs.
-            ...(pdfViewerEnabled && isPdfEvent(mxEvent)
-                ? [
-                      {
-                          label: _t("pdf_viewer|open"),
-                          icon: <ExpandIcon />,
-                          onClick: () => openPdfViewer(mxEvent),
-                      },
-                  ]
+            ...(viewer
+                ? [{ label: viewer.openLabel(), icon: <ExpandIcon />, onClick: () => openDocumentViewer(mxEvent) }]
                 : []),
             {
                 label: _t("action|download"),

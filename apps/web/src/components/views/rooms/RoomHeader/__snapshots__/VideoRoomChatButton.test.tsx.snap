@@ -4,7 +4,7 @@ exports[`<VideoRoomChatButton /> > renders button with an unread marker when roo
 <button
   aria-label="Chat"
   aria-labelledby="react-use-id-1"
-  class="_icon-button_1215g_8"
+  class="_icon-button"
   data-indicator="default"
   data-kind="primary"
   role="button"
@@ -12,7 +12,7 @@ exports[`<VideoRoomChatButton /> > renders button with an unread marker when roo
   tabindex="0"
 >
   <div
-    class="_indicator-icon_147l5_17"
+    class="_indicator-icon"
     data-indicator="default"
     style="--cpd-icon-button-size: 100%;"
   >

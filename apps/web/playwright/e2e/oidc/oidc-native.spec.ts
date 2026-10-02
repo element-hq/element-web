@@ -226,7 +226,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await page.getByRole("button", { name: "Continue" }).click();
 
                 // We should be in, and not able to dismiss the verify dialog
-                await expect(page.getByText("Verify this device")).toBeVisible();
+                await expect(page.getByText("Confirm your digital identity")).toBeVisible();
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
 
                 // When we start verifying with another device
@@ -236,7 +236,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await page.getByRole("button", { name: "Close dialog" }).click();
 
                 // Then we should still be at the unskippable verify prompt
-                await expect(page.getByText("Verify this device")).toBeVisible();
+                await expect(page.getByText("Confirm your digital identity")).toBeVisible();
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
             },
         );

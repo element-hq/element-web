@@ -13,7 +13,7 @@ exports[`<PinnedMessagesCard /> > should show the empty state when there are no 
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Pinned messages
@@ -21,7 +21,7 @@ exports[`<PinnedMessagesCard /> > should show the empty state when there are no 
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -29,7 +29,7 @@ exports[`<PinnedMessagesCard /> > should show the empty state when there are no 
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -47,11 +47,11 @@ exports[`<PinnedMessagesCard /> > should show the empty state when there are no 
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
-        class="_flex_4dswl_9 mx_EmptyState"
+        class="_flex mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg
@@ -68,12 +68,12 @@ exports[`<PinnedMessagesCard /> > should show the empty state when there are no 
           />
         </svg>
         <p
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+          class="_typography _font-body-lg-semibold"
         >
           Pin important messages so that they can be easily discovered
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
         >
           Select a message and choose “Pin” to it include here.
         </p>
@@ -96,7 +96,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           2 Pinned messages
@@ -104,7 +104,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -112,7 +112,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -130,7 +130,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
@@ -143,7 +143,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
+              class="_avatar mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -172,7 +172,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-react-use-id-4"
@@ -182,7 +182,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -200,7 +200,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
+              class="mx_MTextBody mx_EventTile_content _root _text"
               data-event-density="default"
               data-event-layout="group"
               id="react-use-id-3"
@@ -215,7 +215,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
           </div>
         </div>
         <div
-          class="_separator_13qwf_8 mx_PinnedMessagesCard_Separator"
+          class="_separator mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -226,7 +226,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
+              class="_avatar mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -255,7 +255,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-react-use-id-7"
@@ -265,7 +265,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -283,7 +283,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
+              class="mx_MTextBody mx_EventTile_content _root _text"
               data-event-density="default"
               data-event-layout="group"
               id="react-use-id-6"
@@ -302,7 +302,7 @@ exports[`<PinnedMessagesCard /> > should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_1nw83_8"
+          class="_button"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -329,7 +329,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           2 Pinned messages
@@ -337,7 +337,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -345,7 +345,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -363,7 +363,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
@@ -376,7 +376,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
         >
           <div>
             <span
-              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
+              class="_avatar mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -405,7 +405,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-react-use-id-4"
@@ -415,7 +415,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
                 type="button"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -433,7 +433,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
+              class="mx_MTextBody mx_EventTile_content _root _text"
               data-event-density="default"
               data-event-layout="group"
               id="react-use-id-3"
@@ -448,7 +448,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
           </div>
         </div>
         <div
-          class="_separator_13qwf_8 mx_PinnedMessagesCard_Separator"
+          class="_separator mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -459,7 +459,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
         >
           <div>
             <span
-              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
+              class="_avatar mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -488,7 +488,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-react-use-id-7"
@@ -498,7 +498,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
                 type="button"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -516,7 +516,7 @@ exports[`<PinnedMessagesCard /> > unpin all > should not allow to unpinall 1`] =
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_ihs22_8 _text_ihs22_25"
+              class="mx_MTextBody mx_EventTile_content _root _text"
               data-event-density="default"
               data-event-layout="group"
               id="react-use-id-6"

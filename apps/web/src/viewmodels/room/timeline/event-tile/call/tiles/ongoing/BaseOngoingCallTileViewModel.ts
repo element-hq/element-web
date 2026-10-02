@@ -121,7 +121,10 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
         .getState(EventTimeline.FORWARDS)
         ?.mayClientSendStateEvent(EventType.GroupCallMemberPrefix, room.client);
 
-    const callStartTs = call.session.getOldestMembership()?.createdTs();
+    // TODO: The oldest active membership is not necessarily the membership that
+    // started the call. The member who started the call could have left by now.
+    const oldestActiveMembership = call.session.memberships.at(0);
+    const callStartTs = oldestActiveMembership?.createdTs(); // not really
     let durationViewModel: DurationViewModel | undefined;
     if (callStartTs) {
         durationViewModel = new DurationViewModel({ callStartTs });
