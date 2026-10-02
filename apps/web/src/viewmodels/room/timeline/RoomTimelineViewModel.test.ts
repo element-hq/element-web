@@ -777,6 +777,8 @@ describe("RoomTimelineViewModel", () => {
             expect(pending.status).toBe(EventStatus.SENDING);
             expect(eventRow(vm, "~pending")?.sendState).toBe("sending");
             expect(eventRow(vm, "$a")?.sendState).toBeUndefined();
+            // The row carries the message itself, so the view need not look it up in the room.
+            expect(eventRow(vm, "~pending")?.event).toBe(pending);
             // Our own message is not unread, and the newest messages are still the ones loaded.
             expect(vm.getSnapshot().numUnreadMessages).toBe(0);
             expect(vm.getSnapshot().atLiveEnd).toBe(true);
@@ -858,6 +860,8 @@ describe("RoomTimelineViewModel", () => {
             await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]));
             expect(room.getPendingEvents()).toEqual([]);
             expect(eventRow(vm, "$real")?.sendState).toBeUndefined();
+            // The SDK turns our copy into the server's in place, so the row keeps the same object.
+            expect(eventRow(vm, "$real")?.event).toBe(pending);
             // Every publish along the way kept exactly one row for the message: it never
             // disappeared, and it was never drawn twice under both ids.
             expect(published.length).toBeGreaterThanOrEqual(1);

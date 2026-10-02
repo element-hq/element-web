@@ -11,6 +11,7 @@ export type {
     TimelineItem,
     TimelineItemKind,
     EventSendState,
+    TimelineEvent,
     TimelineViewSnapshot,
     TimelineViewActions,
     TimelineViewModel,

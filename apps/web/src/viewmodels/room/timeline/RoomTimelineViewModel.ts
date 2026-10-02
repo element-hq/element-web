@@ -1514,6 +1514,7 @@ export class RoomTimelineViewModel
             items.push({
                 key: eventId,
                 kind: "event",
+                event,
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
                 lastInSection: false, // computed in the post-pass below, once the next event is known
                 sendState: sendStateOf(event),

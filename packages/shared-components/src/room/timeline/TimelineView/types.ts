@@ -13,9 +13,16 @@ import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 /** Discriminated union of every row kind the timeline can render. */
 export type TimelineItemKind = "event" | "date-separator" | "read-marker" | "loading" | "gap";
 
+/**
+ * Opaque type representing an event object from the parent application
+ */
+export type TimelineEvent = unknown;
+
 export interface EventTimelineItem {
     key: string;
     kind: "event";
+    /** The opaque event object from the client (e.g., matrix-js-sdk MatrixEvent) */
+    event: TimelineEvent;
     /** Whether this event continues unbroken from the previous sender (suppresses avatar/name). */
     continuation: boolean;
     /**

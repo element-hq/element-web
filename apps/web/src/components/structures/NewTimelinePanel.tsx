@@ -16,7 +16,7 @@ import {
 import { InlineSpinner } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-import type { EventType, MatrixClient, RelationType, Relations, Room } from "matrix-js-sdk/src/matrix";
+import type { EventType, MatrixClient, MatrixEvent, RelationType, Relations, Room } from "matrix-js-sdk/src/matrix";
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
@@ -50,7 +50,7 @@ interface NewTimelinePanelProps {
 
 /** Everything a timeline row needs from the panel to draw itself. */
 interface RenderItemContext {
-    room: Room;
+    roomId: string;
     highlightedId: string | null;
     effectiveLayout: Layout;
     permalinkCreator?: RoomPermalinkCreator;
@@ -68,7 +68,7 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
         case "date-separator":
             // The same view model as the old timeline, so the label and
             // jump-to-date menu behave identically in both.
-            return <DateSeparatorWrapper key={item.key} roomId={ctx.room.roomId} ts={item.ts} />;
+            return <DateSeparatorWrapper key={item.key} roomId={ctx.roomId} ts={item.ts} />;
         case "read-marker":
             // Rendered as a div because the timeline already puts each row in
             // its own list item.
@@ -92,15 +92,7 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
         case "gap":
             return null;
         case "event": {
-            // This id comes from the view model's snapshot and may no longer resolve: a
-            // gappy sync can trigger a timeline reset, which drops every loaded event.
-            // Rendering a tile without its event crashes, replacing the whole timeline
-            // with an error, so leave the row empty until the next snapshot.
-            //
-            // A message we are still sending is not in the timeline yet; the room holds it
-            // separately until the server echoes it back.
-            const mxEvent = ctx.room.findEventById(item.key) ?? ctx.room.getPendingEvent(item.key);
-            if (!mxEvent) return null;
+            const mxEvent = item.event as MatrixEvent;
 
             // For now, all events go through the legacy adapter.
             // As tiles are migrated to MVVM, this switch will
@@ -195,7 +187,7 @@ export function NewTimelinePanel({
     const renderItem = useCallback(
         (item: TimelineItem): ReactNode =>
             renderTimelineItem(item, {
-                room,
+                roomId: room.roomId,
                 highlightedId,
                 effectiveLayout,
                 permalinkCreator,
@@ -207,7 +199,7 @@ export function NewTimelinePanel({
                 getRelationsForEvent,
             }),
         [
-            room,
+            room.roomId,
             highlightedId,
             effectiveLayout,
             permalinkCreator,
