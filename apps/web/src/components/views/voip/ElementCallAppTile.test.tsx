@@ -98,6 +98,25 @@ describe("ElementCallAppTile", () => {
         floating.dispose();
     });
 
+    it("does not dock again from a layout change after it was disposed", () => {
+        const vm = new ElementCallAppTileViewModel({
+            app: call.widget,
+            room,
+            sdkContext,
+            miniMode: false,
+            fullWidth: false,
+        });
+        vm.start();
+        expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(true);
+        vm.dispose();
+        expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(false);
+
+        // In StrictMode dev the tile's layout effect replays against the view model that was just disposed.
+        // Docking from there would leak a reference that keeps the call docked, and out of PiP, for good.
+        vm.setLayout({ miniMode: false, fullWidth: false });
+        expect(ActiveWidgetStore.instance.isDocked(call.widget.id, room.roomId)).toBe(false);
+    });
+
     it("renders the Element Call component in a persisted element with the call tile classes", async () => {
         await renderTile({ overlay: <div data-testid="overlay" /> });
         expect(await screen.findByText("Element Call (mock)")).toBeInTheDocument();

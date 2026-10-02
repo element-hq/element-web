@@ -123,6 +123,14 @@ for (const embedding of ["widget", "react"] as const) {
                     });
                 }
 
+                // Compound's component styles must win over Element Call's own element reset. On the React
+                // embedding both come from different stylesheets, which Element Web has to layer in the right
+                // order (see `ElementCallComponent.css`): the layout switch keeps Compound's padding and the
+                // gap between its two options rather than the reset's.
+                const layoutSwitch = callScope(page).getByRole("group", { name: "Layout" });
+                await expect(layoutSwitch).toHaveCSS("padding", "1px");
+                await expect(layoutSwitch.getByRole("radio").first()).toHaveCSS("margin-right", "8px");
+
                 // Bob leaves; Alice sees him go
                 await callScope(bobPage).getByTestId("incall_leave").click();
                 await expect(callScope(page).getByTestId("videoTile")).toHaveCount(1, { timeout: 30_000 });
