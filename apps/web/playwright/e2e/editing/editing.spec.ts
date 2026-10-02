@@ -405,6 +405,8 @@ test.describe("Editing", () => {
                 .getByTestId("event-tile-slot-body")
                 .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > :first-child"),
         ).toHaveText("Edited body");
-        await expect(messageTile.getByRole("button", { name: /Edited at .*? Select to view edits\./ })).toBeVisible();
+        await expect(
+            messageTile.getByRole("button", { name: /Edited at .*? Select to view edit history/ }),
+        ).toBeVisible();
     });
 });
