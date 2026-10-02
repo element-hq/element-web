@@ -1579,6 +1579,9 @@ importers:
       '@typescript/native':
         specifier: 'catalog:'
         version: typescript@7.0.2
+      happy-dom:
+        specifier: ^20.10.2
+        version: 20.14.5
       typescript:
         specifier: catalog:ts6
         version: '@typescript/typescript6@6.0.2'
