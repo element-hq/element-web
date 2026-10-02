@@ -1607,10 +1607,13 @@ export class RoomTimelineViewModel
     /**
      * Return the continuation flag for `event`, using a cached value if we
      * have already seen the event before. See `continuationCache` for why.
+     *
+     * Local echoes are not cached: another sender's event can arrive above one, and a cached
+     * continuation would then draw our message as part of theirs.
      */
     private getCachedContinuation(eventId: string, prev: MatrixEvent | null, cur: MatrixEvent): boolean {
         const cached = this.continuationCache.get(eventId);
-        if (cached !== undefined) return cached;
+        if (cached !== undefined && !this.opts.room.hasPendingEvent(eventId)) return cached;
         const value = this.shouldFormContinuation(prev, cur);
         this.continuationCache.set(eventId, value);
         return value;

@@ -799,6 +799,29 @@ describe("RoomTimelineViewModel", () => {
             await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "$real"]));
         });
 
+        it("recomputes a local echo's continuation when another sender's event lands above it", async () => {
+            const sentAt = new Date("2026-03-01T10:00:00Z").getTime();
+            seedTimeline([makeMessage("$a", { ts: sentAt })]);
+            const vm = await createStartedViewModel();
+            // Sent straight after our own $a, so at first it continues it.
+            const pending = addPendingMessage("~pending", { ts: sentAt + 1000 });
+            await vi.waitFor(() => expect(eventRow(vm, "~pending")?.continuation).toBe(true));
+
+            // Someone else's message now sits between the two of ours. Drawn as a continuation,
+            // ours would show no name under theirs, as if they had written it.
+            await room.addLiveEvents([makeMessage("$b", { user: OTHER_USER_ID, ts: sentAt + 500 })], {
+                addToState: false,
+            });
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "~pending"]));
+            expect(eventRow(vm, "~pending")?.continuation).toBe(false);
+            expect(eventRow(vm, "$b")?.lastInSection).toBe(true);
+
+            // And it keeps our name once the server has it.
+            await receiveRemoteEcho(pending, "$real", sentAt + 1000);
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "$real"]));
+            expect(eventRow(vm, "$real")?.continuation).toBe(false);
+        });
+
         it("shows a message that was already pending when the room was opened", async () => {
             // Pending messages survive a reload (the SDK restores them from storage), so one can be
             // there before the first load has run; that load has to pick it up itself.
