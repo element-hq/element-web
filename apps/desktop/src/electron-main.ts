@@ -39,7 +39,7 @@ import webContentsHandler from "./webcontents-handler.js";
 import * as updater from "./updater.js";
 import ProtocolHandler from "./protocol.js";
 import { _t, AppLocalization } from "./language-helper.js";
-import { displayMediaController, handleDisplayMediaRequest } from "./display-media.js";
+import { cancelDisplayMediaRequest, handleDisplayMediaRequest } from "./display-media.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
 import { handleWindowClose, revealMainWindow } from "./window-close.js";
@@ -415,7 +415,7 @@ app.on("activate", () => {
 
 function beforeQuit(): void {
     global.appQuitting = true;
-    void displayMediaController.stop();
+    cancelDisplayMediaRequest();
     global.mainWindow?.webContents.send("before-quit");
 }
 

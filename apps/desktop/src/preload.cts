@@ -62,24 +62,14 @@ contextBridge.exposeInMainWorld("electron", {
          * Do we need to render badge overlays for new notifications?
          */
         supportsBadgeOverlay: boolean;
-        supportsIsolatedScreenShareAudio: boolean;
     }> {
         ipcRenderer.emit("initialise");
-        const [{ protocol, sessionId }, config, supportedSettings, supportsIsolatedScreenShareAudio] =
-            await Promise.all([
-                ipcRenderer.invoke("getProtocol"),
-                ipcRenderer.invoke("getConfig"),
-                ipcRenderer.invoke("getSupportedSettings"),
-                ipcRenderer.invoke("supportsIsolatedScreenShareAudio"),
-            ]);
-        return {
-            protocol,
-            sessionId,
-            config,
-            supportedSettings,
-            supportsBadgeOverlay: process.platform === "win32",
-            supportsIsolatedScreenShareAudio,
-        };
+        const [{ protocol, sessionId }, config, supportedSettings] = await Promise.all([
+            ipcRenderer.invoke("getProtocol"),
+            ipcRenderer.invoke("getConfig"),
+            ipcRenderer.invoke("getSupportedSettings"),
+        ]);
+        return { protocol, sessionId, config, supportedSettings, supportsBadgeOverlay: process.platform === "win32" };
     },
 
     async setSettingValue(settingName: string, value: any): Promise<void> {

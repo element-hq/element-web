@@ -45,6 +45,7 @@ import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import { GenericToast } from "@element-hq/web-shared-components";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -54,17 +55,6 @@ interface SquirrelUpdate {
 }
 
 const SSO_ID_KEY = "element-desktop-ssoid";
-
-interface IsolatedScreenShareAudioSession {
-    sessionId: string;
-    requestId?: number;
-}
-
-interface DesktopCapturerPickerSession {
-    requestId: number;
-    requesterWidgetId: string;
-    sessionId: string;
-}
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
@@ -104,14 +94,11 @@ export default class ElectronPlatform extends BasePlatform {
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
     private desktopCapturerPicker?: IHandle<typeof DesktopCapturerSourcePicker>;
-    private desktopCapturerPickerSession?: DesktopCapturerPickerSession;
     private protocol!: string;
     private sessionId!: string;
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
     private config!: IConfigOptions;
     private supportedSettings?: Record<string, boolean>;
-    private isolatedScreenShareAudioSupported = false;
-    private readonly isolatedScreenShareAudioSessions = new Map<string, IsolatedScreenShareAudioSession>();
     private clientStartedPromiseWithResolvers = Promise.withResolvers<void>();
 
     public constructor() {
@@ -193,8 +180,22 @@ export default class ElectronPlatform extends BasePlatform {
             });
         });
 
-        this.electron.on("openDesktopCapturerSourcePicker", async (_event, request) => {
-            await this.openDesktopCapturerSourcePicker(request.requestId, request.requesterWidgetId);
+        this.electron.on("openDesktopCapturerSourcePicker", async (_event, { requestId }) => {
+            this.desktopCapturerPicker?.close();
+
+            const showSystemAudioOption =
+                platformFriendlyName() === "Windows" && SettingsStore.getValue("feature_windows_screen_share_audio");
+            const picker = Modal.createDialog(DesktopCapturerSourcePicker, { showSystemAudioOption });
+            this.desktopCapturerPicker = picker;
+            const [source, shareSystemAudio = false] = await picker.finished;
+            if (this.desktopCapturerPicker !== picker) return;
+            this.desktopCapturerPicker = undefined;
+
+            await this.ipc.call("callDisplayMediaCallback", {
+                requestId,
+                sourceId: source?.id ?? null,
+                shareSystemAudio: Boolean(source && showSystemAudioOption && shareSystemAudio),
+            });
         });
 
         this.electron.on("showToast", async (ev, { title, description, priority = 40 }) => {
@@ -236,19 +237,12 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     private async initialise(): Promise<void> {
-        const {
-            protocol,
-            sessionId,
-            config,
-            supportedSettings,
-            supportsBadgeOverlay,
-            supportsIsolatedScreenShareAudio,
-        } = await this.electron.initialise();
+        const { protocol, sessionId, config, supportedSettings, supportsBadgeOverlay } =
+            await this.electron.initialise();
         this.protocol = protocol;
         this.sessionId = sessionId;
         this.config = config;
         this.supportedSettings = supportedSettings;
-        this.isolatedScreenShareAudioSupported = supportsIsolatedScreenShareAudio;
         if (supportsBadgeOverlay) {
             this.badgeOverlayRenderer = new BadgeOverlayRenderer();
         }
@@ -472,143 +466,6 @@ export default class ElectronPlatform extends BasePlatform {
 
     public supportsDesktopCapturer(): boolean {
         return true;
-    }
-
-    private async openDesktopCapturerSourcePicker(
-        requestId: number,
-        requesterWidgetId: string | null | undefined,
-    ): Promise<void> {
-        this.closePreviousDesktopCapturerPicker();
-        const effectiveRequesterWidgetId = requesterWidgetId ?? this.claimPendingScreenShareAudioSession();
-        const picker = Modal.createDialog(DesktopCapturerSourcePicker);
-        this.desktopCapturerPicker = picker;
-        await this.bindDesktopCapturerPickerSession(requestId, effectiveRequesterWidgetId);
-
-        const [source] = await picker.finished;
-        if (this.desktopCapturerPicker !== picker) return;
-        this.desktopCapturerPicker = undefined;
-        this.desktopCapturerPickerSession = undefined;
-        const boundSession = this.getBoundScreenShareAudioSession(requestId, effectiveRequesterWidgetId);
-        if (!source && boundSession && effectiveRequesterWidgetId) {
-            this.isolatedScreenShareAudioSessions.delete(effectiveRequesterWidgetId);
-        }
-        await this.replyToDesktopCapturerPicker(
-            requestId,
-            effectiveRequesterWidgetId,
-            source?.id ?? null,
-            boundSession,
-        );
-    }
-
-    private claimPendingScreenShareAudioSession(): string | null {
-        const pending = [...this.isolatedScreenShareAudioSessions].filter(
-            ([, session]) => session.requestId === undefined,
-        );
-        return pending.length === 1 ? pending[0][0] : null;
-    }
-
-    private closePreviousDesktopCapturerPicker(): void {
-        this.desktopCapturerPicker?.close();
-        const pickerSession = this.desktopCapturerPickerSession;
-        if (pickerSession) {
-            const session = this.isolatedScreenShareAudioSessions.get(pickerSession.requesterWidgetId);
-            if (session?.sessionId === pickerSession.sessionId && session.requestId === pickerSession.requestId) {
-                this.isolatedScreenShareAudioSessions.delete(pickerSession.requesterWidgetId);
-            }
-        }
-        this.desktopCapturerPickerSession = undefined;
-    }
-
-    private async bindDesktopCapturerPickerSession(
-        requestId: number,
-        requesterWidgetId: string | null | undefined,
-    ): Promise<void> {
-        if (!requesterWidgetId) return;
-        const session = this.isolatedScreenShareAudioSessions.get(requesterWidgetId);
-        if (!session) return;
-        session.requestId = requestId;
-        this.desktopCapturerPickerSession = { requestId, requesterWidgetId, sessionId: session.sessionId };
-        const bound = await this.ipc.call("bindScreenShareAudioSession", {
-            requestId,
-            requesterWidgetId,
-            sessionId: session.sessionId,
-        });
-        const stillCurrent = this.isolatedScreenShareAudioSessions.get(requesterWidgetId) === session;
-        if (bound && !stillCurrent) {
-            await this.ipc.call("releaseScreenShareAudioSession", {
-                requestId,
-                requesterWidgetId,
-                sessionId: session.sessionId,
-            });
-        } else if (!bound && stillCurrent) {
-            session.requestId = undefined;
-            if (this.desktopCapturerPickerSession?.requestId === requestId) {
-                this.desktopCapturerPickerSession = undefined;
-            }
-        }
-    }
-
-    private getBoundScreenShareAudioSession(
-        requestId: number,
-        requesterWidgetId: string | null | undefined,
-    ): IsolatedScreenShareAudioSession | undefined {
-        const session = requesterWidgetId ? this.isolatedScreenShareAudioSessions.get(requesterWidgetId) : undefined;
-        return session?.requestId === requestId ? session : undefined;
-    }
-
-    private async replyToDesktopCapturerPicker(
-        requestId: number,
-        requesterWidgetId: string | null | undefined,
-        sourceId: string | null,
-        session: IsolatedScreenShareAudioSession | undefined,
-    ): Promise<void> {
-        const reply: Record<string, unknown> = { requestId, sourceId };
-        if (requesterWidgetId !== undefined && requesterWidgetId !== null) {
-            reply.requesterWidgetId = requesterWidgetId;
-            reply.sessionId = session?.sessionId ?? null;
-        }
-        await this.ipc.call("callDisplayMediaCallback", reply);
-    }
-
-    public supportsIsolatedScreenShareAudio(): boolean {
-        return this.isolatedScreenShareAudioSupported;
-    }
-
-    public async acquireIsolatedScreenShareAudio(widgetId: string, sessionId: string): Promise<boolean> {
-        await this.initialised;
-        if (!this.isolatedScreenShareAudioSupported) return false;
-        const previous = this.isolatedScreenShareAudioSessions.get(widgetId);
-        if (previous?.requestId !== undefined) {
-            await this.ipc.call("releaseScreenShareAudioSession", {
-                requestId: previous.requestId,
-                requesterWidgetId: widgetId,
-                sessionId: previous.sessionId,
-            });
-        }
-        this.isolatedScreenShareAudioSessions.set(widgetId, { sessionId });
-        return true;
-    }
-
-    public async releaseIsolatedScreenShareAudio(widgetId: string, sessionId: string): Promise<void> {
-        const current = this.isolatedScreenShareAudioSessions.get(widgetId);
-        if (current?.sessionId !== sessionId) return;
-        this.isolatedScreenShareAudioSessions.delete(widgetId);
-        if (
-            this.desktopCapturerPickerSession?.requesterWidgetId === widgetId &&
-            this.desktopCapturerPickerSession.sessionId === sessionId
-        ) {
-            this.desktopCapturerPickerSession = undefined;
-            const picker = this.desktopCapturerPicker;
-            this.desktopCapturerPicker = undefined;
-            picker?.close();
-        }
-        if (current.requestId !== undefined) {
-            await this.ipc.call("releaseScreenShareAudioSession", {
-                requestId: current.requestId,
-                requesterWidgetId: widgetId,
-                sessionId,
-            });
-        }
     }
 
     public supportsJitsiScreensharing(): boolean {

@@ -40,10 +40,6 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
      */
     public readonly allowJoinUnmutedViaIntent = true;
 
-    public get supportsIsolatedScreenShareAudio(): boolean {
-        return this.call.supportsIsolatedScreenShareAudio();
-    }
-
     public constructor(
         private readonly call: ElementCall,
         private readonly opts: ElementWebHostBridgeOptions,
@@ -82,13 +78,5 @@ export class ElementWebHostBridge implements ElementCallHostBridge {
 
     public readonly close = async (): Promise<void> => {
         this.call.handleClose();
-    };
-
-    public readonly acquireIsolatedScreenShareAudio = async (sessionId: string): Promise<boolean> => {
-        return await this.call.acquireIsolatedScreenShareAudio(sessionId);
-    };
-
-    public readonly releaseIsolatedScreenShareAudio = async (sessionId: string): Promise<boolean> => {
-        return await this.call.releaseIsolatedScreenShareAudio(sessionId);
     };
 }

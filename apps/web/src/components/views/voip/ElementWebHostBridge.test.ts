@@ -26,9 +26,6 @@ describe("ElementWebHostBridge", () => {
         handleHangup: ReturnType<typeof vi.fn>;
         handleClose: ReturnType<typeof vi.fn>;
         handleDeviceMute: ReturnType<typeof vi.fn>;
-        supportsIsolatedScreenShareAudio: ReturnType<typeof vi.fn>;
-        acquireIsolatedScreenShareAudio: ReturnType<typeof vi.fn>;
-        releaseIsolatedScreenShareAudio: ReturnType<typeof vi.fn>;
     };
     let setWidgetPersistence: ReturnType<typeof vi.spyOn>;
     let bridge: ElementWebHostBridge;
@@ -41,9 +38,6 @@ describe("ElementWebHostBridge", () => {
             handleHangup: vi.fn(),
             handleClose: vi.fn(),
             handleDeviceMute: vi.fn(),
-            supportsIsolatedScreenShareAudio: vi.fn(() => true),
-            acquireIsolatedScreenShareAudio: vi.fn(async () => true),
-            releaseIsolatedScreenShareAudio: vi.fn(async () => true),
         };
         setWidgetPersistence = vi
             .spyOn(ActiveWidgetStore.instance, "setWidgetPersistence")
@@ -132,16 +126,5 @@ describe("ElementWebHostBridge", () => {
         const hostBridge: ElementCallHostBridge = bridge;
         expect(hostBridge.supportsReactions).toBe(true);
         expect(hostBridge.allowJoinUnmutedViaIntent).toBe(true);
-    });
-
-    it("forwards isolated screen-share audio capability and lifecycle to the call model", async () => {
-        const sessionId = "12345678-1234-4123-8123-123456789abc";
-
-        expect(bridge.supportsIsolatedScreenShareAudio).toBe(true);
-        expect(call.supportsIsolatedScreenShareAudio).toHaveBeenCalledOnce();
-        await expect(bridge.acquireIsolatedScreenShareAudio(sessionId)).resolves.toBe(true);
-        expect(call.acquireIsolatedScreenShareAudio).toHaveBeenCalledWith(sessionId);
-        await expect(bridge.releaseIsolatedScreenShareAudio(sessionId)).resolves.toBe(true);
-        expect(call.releaseIsolatedScreenShareAudio).toHaveBeenCalledWith(sessionId);
     });
 });

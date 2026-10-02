@@ -32,17 +32,8 @@
         "build:res": {
             "cache": true,
             "command": "node scripts/copy-res.ts",
-            "inputs": ["{projectRoot}/i18n", "{projectRoot}/src/screen-share-audio/assets"],
-            "outputs": ["{projectRoot}/lib/i18n", "{projectRoot}/lib/screen-share-audio/assets"],
-            "options": {
-                "cwd": "apps/desktop"
-            }
-        },
-        "build:screen-share-audio-helper": {
-            "cache": true,
-            "command": "node native/windows-process-loopback/build.mjs",
-            "inputs": ["{projectRoot}/native/windows-process-loopback"],
-            "outputs": ["{projectRoot}/native/windows-process-loopback/build/windows-x64/windows-process-loopback.exe"],
+            "inputs": ["{projectRoot}/i18n"],
+            "outputs": ["{projectRoot}/lib/i18n"],
             "options": {
                 "cwd": "apps/desktop"
             }
@@ -50,12 +41,7 @@
         "build": {
             "cache": true,
             "command": "pnpm exec electron-builder",
-            "inputs": [
-                "src",
-                "{projectRoot}/electron-builder.ts",
-                "{projectRoot}/native/windows-process-loopback",
-                "{projectRoot}/webapp.asar"
-            ],
+            "inputs": ["src", "{projectRoot}/electron-builder.json", "{projectRoot}/webapp.asar"],
             "outputs": ["{projectRoot}/dist"],
             "options": {
                 "cwd": "apps/desktop"

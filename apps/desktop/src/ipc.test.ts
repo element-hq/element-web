@@ -9,11 +9,7 @@ import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
 import { desktopCapturer, nativeImage, TouchBar } from "electron";
 
 import { getConfig } from "./config.js";
-import {
-    handleDisplayMediaPickerReply,
-    handleScreenShareAudioSessionBinding,
-    handleScreenShareAudioSessionRelease,
-} from "./display-media.js";
+import { handleDisplayMediaPickerReply } from "./display-media.js";
 import { clearData } from "./store.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
@@ -31,7 +27,7 @@ const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
 }));
 
 vi.mock("electron", () => ({
-    app: { getVersion: vi.fn(() => "1.0.0"), isPackaged: true },
+    app: { getVersion: vi.fn(() => "1.0.0") },
     autoUpdater: { getFeedURL: vi.fn() },
     desktopCapturer: { getSources: vi.fn() },
     ipcMain: {
@@ -61,9 +57,6 @@ vi.mock("./store.js", () => ({
 vi.mock("./utils.js", () => ({ randomArray }));
 vi.mock("./display-media.js", () => ({
     handleDisplayMediaPickerReply: vi.fn(),
-    handleScreenShareAudioSessionBinding: vi.fn(),
-    handleScreenShareAudioSessionRelease: vi.fn(),
-    supportsIsolatedScreenShareAudio: vi.fn().mockResolvedValue(false),
 }));
 vi.mock("./config.js");
 
@@ -231,28 +224,16 @@ describe("ipcCall: breadcrumbs", () => {
 describe("ipcCall: callDisplayMediaCallback", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.mocked(handleDisplayMediaPickerReply).mockReset();
         (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
     });
 
-    it("forwards the picker response with the requesting sender identity", async () => {
-        await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
+    it("forwards a picker reply with the renderer identity", async () => {
+        const reply = { requestId: 4, sourceId: "screen:1", shareSystemAudio: true };
 
-        expect(handleDisplayMediaPickerReply).toHaveBeenCalledWith(23, { id: "screen:1" });
+        await callIpc("callDisplayMediaCallback", 13, [reply]);
+
+        expect(handleDisplayMediaPickerReply).toHaveBeenCalledWith(23, reply);
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
-    });
-
-    it("forwards session binding and release through the request-aware controller", async () => {
-        vi.mocked(handleScreenShareAudioSessionBinding).mockReturnValue(true);
-
-        await callIpc("bindScreenShareAudioSession", 14, [{ requestId: "request", sessionId: "session" }]);
-        await callIpc("releaseScreenShareAudioSession", 15, [{ sessionId: "session" }]);
-
-        expect(handleScreenShareAudioSessionBinding).toHaveBeenCalledWith(23, {
-            requestId: "request",
-            sessionId: "session",
-        });
-        expect(handleScreenShareAudioSessionRelease).toHaveBeenCalledWith(23, { sessionId: "session" });
-        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: true });
-        expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
     });
 });

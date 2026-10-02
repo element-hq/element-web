@@ -1,163 +1,124 @@
 /*
 Copyright 2026 Element Creations Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
 */
 
-import {
-    BrowserWindow,
-    desktopCapturer,
-    webContents,
-    type DisplayMediaRequestHandlerHandlerRequest,
-    type Streams,
-} from "electron";
+import { desktopCapturer, webContents, type DisplayMediaRequestHandlerHandlerRequest, type Streams } from "electron";
 
-import { ElectronScreenShareAudioBridgeFactory } from "./screen-share-audio/bridge.js";
-import { createProcessLoopbackProvider } from "./screen-share-audio/process-loopback-provider.js";
-import {
-    DisplayMediaSessionController,
-    type DisplayMediaRequest,
-    type PickerReply,
-    type ScreenShareAudioSessionRelease,
-    type ScreenShareAudioSessionBinding,
-} from "./screen-share-audio/session-controller.js";
-
-const sessionIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function isValidWidgetId(value: unknown): value is string {
-    return (
-        typeof value === "string" &&
-        value.length > 0 &&
-        value.length <= 255 &&
-        [...value].every((character) => character.codePointAt(0)! >= 32 && character.codePointAt(0) !== 127)
-    );
+interface DisplayMediaPickerReply {
+    requestId: number;
+    sourceId: string | null;
+    shareSystemAudio: boolean;
 }
 
-export function getRequesterWidgetId(frameUrl: string): string | null {
-    try {
-        const value = new URL(frameUrl).searchParams.get("widgetId");
-        return isValidWidgetId(value) ? value : null;
-    } catch {
-        return null;
-    }
+interface PendingDisplayMediaRequest {
+    requestId: number;
+    senderId: number;
+    audioRequested: boolean;
+    callback: (streams: Streams) => void;
+    dispose: () => void;
 }
 
-export function observeRequester(
-    frame: Electron.WebFrameMain,
-    contents: Electron.WebContents,
-): DisplayMediaRequest["onRequesterDestroyed"] {
-    return (listener): (() => void) => {
-        const frameTreeNodeId = frame.frameTreeNodeId;
-        const navigationListener = (
-            details: Electron.Event<Electron.WebContentsDidStartNavigationEventParams>,
-        ): void => {
-            if (details.isSameDocument) return;
-            if (frame.detached || details.frame?.frameTreeNodeId === frameTreeNodeId) listener();
-        };
-        const goneListener = (): void => listener();
-        contents.once("destroyed", listener);
-        contents.once("render-process-gone", goneListener);
-        contents.on("did-start-navigation", navigationListener);
-        return (): void => {
-            contents.removeListener("destroyed", listener);
-            contents.removeListener("render-process-gone", goneListener);
-            contents.removeListener("did-start-navigation", navigationListener);
-        };
-    };
+const emptySource = { id: "", name: "" };
+let nextRequestId = 1;
+let pendingRequest: PendingDisplayMediaRequest | undefined;
+
+function complete(request: PendingDisplayMediaRequest, streams: Streams): void {
+    if (pendingRequest !== request) return;
+    pendingRequest = undefined;
+    request.dispose();
+    request.callback(streams);
 }
 
-const processLoopbackProvider = createProcessLoopbackProvider();
+function cancelPendingRequest(): void {
+    const request = pendingRequest;
+    if (request) complete(request, { video: emptySource });
+}
 
-export const displayMediaController = new DisplayMediaSessionController({
-    enumerateSources: async () => desktopCapturer.getSources({ types: ["screen", "window"] }),
-    openPicker: (senderId, requestId, requesterWidgetId) => {
-        const mainWindow = global.mainWindow;
-        if (mainWindow?.webContents.id === senderId) {
-            mainWindow.webContents.send("openDesktopCapturerSourcePicker", { requestId, requesterWidgetId });
-            return true;
-        }
-        return false;
-    },
-    isElementOwnedSource: (source) =>
-        BrowserWindow.getAllWindows().some(
-            (window) => !window.isDestroyed() && window.getMediaSourceId() === source.id,
-        ),
-    provider: processLoopbackProvider,
-    bridgeFactory: new ElectronScreenShareAudioBridgeFactory(),
-});
-
+/**
+ * Handles a display-media request using the Element source picker.
+ *
+ * Electron's native loopback captures the complete system mix independently of the selected video source. The
+ * renderer must therefore ask for it explicitly after explaining that scope to the user.
+ */
 export function handleDisplayMediaRequest(
     request: DisplayMediaRequestHandlerHandlerRequest,
     callback: (streams: Streams) => void,
 ): void {
     const frame = request.frame;
     const contents = frame && webContents.fromFrame(frame);
-    if (!frame || frame.detached || !contents) {
-        callback({ video: { id: "", name: "" } });
+    const mainWindow = global.mainWindow;
+    if (!frame || frame.detached || !contents || !mainWindow || mainWindow.webContents.id !== contents.id) {
+        callback({ video: emptySource });
         return;
     }
-    displayMediaController.begin({
+
+    cancelPendingRequest();
+
+    const requestId = nextRequestId++;
+    const onRequesterDestroyed = (): void => cancelPendingRequest();
+    contents.once("destroyed", onRequesterDestroyed);
+    contents.once("render-process-gone", onRequesterDestroyed);
+
+    pendingRequest = {
+        requestId,
         senderId: contents.id,
-        requesterWidgetId: getRequesterWidgetId(frame.url),
         audioRequested: request.audioRequested,
         callback,
-        onRequesterDestroyed: observeRequester(frame, contents),
-    });
+        dispose: () => {
+            contents.removeListener("destroyed", onRequesterDestroyed);
+            contents.removeListener("render-process-gone", onRequesterDestroyed);
+        },
+    };
+    mainWindow.webContents.send("openDesktopCapturerSourcePicker", { requestId });
 }
 
-export function handleDisplayMediaPickerReply(senderId: number, reply: PickerReply): void {
+/** Completes the matching display-media request with the source selected in the renderer. */
+export async function handleDisplayMediaPickerReply(senderId: number, reply: unknown): Promise<void> {
     if (
         typeof reply !== "object" ||
         reply === null ||
+        !("requestId" in reply) ||
         !Number.isSafeInteger(reply.requestId) ||
+        !("sourceId" in reply) ||
         (typeof reply.sourceId !== "string" && reply.sourceId !== null) ||
-        (reply.requesterWidgetId !== undefined &&
-            typeof reply.requesterWidgetId !== "string" &&
-            reply.requesterWidgetId !== null) ||
-        (reply.sessionId !== undefined && typeof reply.sessionId !== "string" && reply.sessionId !== null) ||
-        (reply.sessionId !== undefined && reply.sessionId !== null && !sessionIdPattern.test(reply.sessionId))
+        !("shareSystemAudio" in reply) ||
+        typeof reply.shareSystemAudio !== "boolean"
     ) {
         return;
     }
-    displayMediaController.reply(senderId, {
-        ...reply,
-        requesterWidgetId: reply.requesterWidgetId ?? null,
-        sessionId: reply.sessionId ?? null,
-    });
-}
 
-export function handleScreenShareAudioSessionRelease(senderId: number, release: ScreenShareAudioSessionRelease): void {
-    if (
-        typeof release !== "object" ||
-        release === null ||
-        !Number.isSafeInteger(release.requestId) ||
-        !isValidWidgetId(release.requesterWidgetId) ||
-        typeof release.sessionId !== "string" ||
-        !sessionIdPattern.test(release.sessionId)
-    ) {
+    const pickerReply = reply as unknown as DisplayMediaPickerReply;
+    const request = pendingRequest;
+    if (!request || request.senderId !== senderId || request.requestId !== pickerReply.requestId) return;
+    if (pickerReply.sourceId === null) {
+        complete(request, { video: emptySource });
         return;
     }
-    void displayMediaController.release(senderId, release);
-}
 
-export function handleScreenShareAudioSessionBinding(
-    senderId: number,
-    binding: ScreenShareAudioSessionBinding,
-): boolean {
-    if (
-        typeof binding !== "object" ||
-        binding === null ||
-        !Number.isSafeInteger(binding.requestId) ||
-        !isValidWidgetId(binding.requesterWidgetId) ||
-        typeof binding.sessionId !== "string" ||
-        !sessionIdPattern.test(binding.sessionId)
-    ) {
-        return false;
+    try {
+        const sources = await desktopCapturer.getSources({ types: ["screen", "window"] });
+        if (pendingRequest !== request) return;
+        const source = sources.find(({ id }) => id === pickerReply.sourceId);
+        if (!source) {
+            complete(request, { video: emptySource });
+            return;
+        }
+
+        const shareSystemAudio = process.platform === "win32" && request.audioRequested && pickerReply.shareSystemAudio;
+        complete(request, {
+            video: source,
+            ...(shareSystemAudio ? { audio: "loopback" as const } : {}),
+        });
+    } catch (error) {
+        console.error("Failed to validate desktop capturer source", error);
+        complete(request, { video: emptySource });
     }
-    return displayMediaController.bind(senderId, binding);
 }
 
-export async function supportsIsolatedScreenShareAudio(): Promise<boolean> {
-    return (await processLoopbackProvider.getAvailability()) === "available";
+/** Clears a pending picker request during application shutdown. */
+export function cancelDisplayMediaRequest(): void {
+    cancelPendingRequest();
 }

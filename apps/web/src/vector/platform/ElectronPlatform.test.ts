@@ -24,19 +24,20 @@ import Modal from "../../Modal";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "./ElectronPlatform";
 import ToastStore from "../../stores/ToastStore.ts";
+import SettingsStore from "../../settings/SettingsStore";
 
 vi.mock("../../rageshake/rageshake", () => ({
     flush: vi.fn(),
 }));
 
 describe("ElectronPlatform", () => {
+    const getSettingValue = vi.spyOn(SettingsStore, "getValue");
     const initialiseValues = vi.fn().mockReturnValue({
         protocol: "io.element.desktop",
         sessionId: "session-id",
         config: { _config: true },
         supportedSettings: { setting1: false, setting2: true },
         supportsBadgeOverlay: false,
-        supportsIsolatedScreenShareAudio: false,
     });
     const defaultUserAgent =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -59,6 +60,7 @@ describe("ElectronPlatform", () => {
     beforeEach(() => {
         window.electron = mockElectron;
         vi.clearAllMocks();
+        getSettingValue.mockReturnValue(false);
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
@@ -120,194 +122,62 @@ describe("ElectronPlatform", () => {
         });
 
         const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        handler({} as any, { requestId: 42 });
+        handler({}, { requestId: 42 });
 
         await waitForIPCSend;
 
         expect(event).toBeTruthy();
-        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker, {
+            showSystemAudioOption: false,
+        });
         // @ts-ignore mock
         expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", {
             requestId: 42,
             sourceId: "source",
+            shareSystemAudio: false,
         });
     });
 
-    it("returns a request-aware cancellation without changing the picker", async () => {
-        const plat = new ElectronPlatform();
+    it("offers and returns system audio only after Windows Labs consent", async () => {
+        Object.defineProperty(window, "navigator", {
+            value: { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            writable: true,
+        });
+        getSettingValue.mockReturnValue(true);
+        const platform = new ElectronPlatform();
+        Modal.createDialog = vi.fn().mockReturnValue({
+            finished: Promise.resolve([{ id: "window:1:0" }, true]),
+        });
+        // @ts-ignore mock
+        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(undefined);
+
+        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        await handler({}, { requestId: 7 });
+
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker, {
+            showSystemAudioOption: true,
+        });
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 7,
+            sourceId: "window:1:0",
+            shareSystemAudio: true,
+        });
+    });
+
+    it("returns request-aware cancellation without system audio", async () => {
+        const platform = new ElectronPlatform();
         Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([]) });
         // @ts-ignore mock
-        const call = vi.spyOn(plat.ipc, "call").mockResolvedValue(undefined);
+        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(undefined);
 
         const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        await handler({} as any, { requestId: 9 });
+        await handler({}, { requestId: 9 });
 
-        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
-        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", { requestId: 9, sourceId: null });
-    });
-
-    it("closes an overlapping picker and ignores its late result", async () => {
-        const plat = new ElectronPlatform();
-        const first = Promise.withResolvers<any[]>();
-        const second = Promise.withResolvers<any[]>();
-        const firstHandle = { finished: first.promise, close: vi.fn() };
-        const secondHandle = { finished: second.promise, close: vi.fn() };
-        Modal.createDialog = vi.fn().mockReturnValueOnce(firstHandle).mockReturnValueOnce(secondHandle);
-        // @ts-ignore mock
-        const call = vi.spyOn(plat.ipc, "call").mockResolvedValue(undefined);
-        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-
-        const firstRun = handler({} as any, { requestId: 1 });
-        const secondRun = handler({} as any, { requestId: 2 });
-        expect(firstHandle.close).toHaveBeenCalledOnce();
-        first.resolve([{ id: "stale" }]);
-        second.resolve([{ id: "current" }]);
-        await Promise.all([firstRun, secondRun]);
-
-        expect(call).toHaveBeenCalledOnce();
-        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", { requestId: 2, sourceId: "current" });
-        expect(secondHandle.close).not.toHaveBeenCalled();
-    });
-
-    it("binds and releases only the exact isolated screen-share audio session", async () => {
-        initialiseValues.mockResolvedValueOnce({
-            protocol: "io.element.desktop",
-            sessionId: "session-id",
-            config: { _config: true },
-            supportedSettings: {},
-            supportsBadgeOverlay: false,
-            supportsIsolatedScreenShareAudio: true,
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 9,
+            sourceId: null,
+            shareSystemAudio: false,
         });
-        const platform = new ElectronPlatform();
-        await platform.initialised;
-        expect(platform.supportsIsolatedScreenShareAudio()).toBe(true);
-        await expect(platform.acquireIsolatedScreenShareAudio("widget", "session-a")).resolves.toBe(true);
-
-        Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([{ id: "source" }]) });
-        // @ts-ignore private test seam
-        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(true);
-        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        await handler({}, { requestId: 7, requesterWidgetId: "widget" });
-
-        expect(call).toHaveBeenNthCalledWith(1, "bindScreenShareAudioSession", {
-            requestId: 7,
-            requesterWidgetId: "widget",
-            sessionId: "session-a",
-        });
-        expect(call).toHaveBeenNthCalledWith(2, "callDisplayMediaCallback", {
-            requestId: 7,
-            sourceId: "source",
-            requesterWidgetId: "widget",
-            sessionId: "session-a",
-        });
-        await platform.releaseIsolatedScreenShareAudio("widget", "stale");
-        expect(call).toHaveBeenCalledTimes(2);
-        await platform.releaseIsolatedScreenShareAudio("widget", "session-a");
-        expect(call).toHaveBeenLastCalledWith("releaseScreenShareAudioSession", {
-            requestId: 7,
-            requesterWidgetId: "widget",
-            sessionId: "session-a",
-        });
-    });
-
-    it("claims one pending HostBridge session for a top-level display-media request", async () => {
-        initialiseValues.mockResolvedValueOnce({
-            protocol: "io.element.desktop",
-            sessionId: "session-id",
-            config: {},
-            supportedSettings: {},
-            supportsBadgeOverlay: false,
-            supportsIsolatedScreenShareAudio: true,
-        });
-        const platform = new ElectronPlatform();
-        await platform.initialised;
-        await platform.acquireIsolatedScreenShareAudio("react-widget", "12345678-1234-4123-8123-123456789abc");
-        Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([{ id: "source" }]) });
-        // @ts-ignore private test seam
-        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(true);
-
-        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        await handler({}, { requestId: 8, requesterWidgetId: null });
-
-        expect(call).toHaveBeenNthCalledWith(1, "bindScreenShareAudioSession", {
-            requestId: 8,
-            requesterWidgetId: "react-widget",
-            sessionId: "12345678-1234-4123-8123-123456789abc",
-        });
-        expect(call).toHaveBeenNthCalledWith(2, "callDisplayMediaCallback", {
-            requestId: 8,
-            sourceId: "source",
-            requesterWidgetId: "react-widget",
-            sessionId: "12345678-1234-4123-8123-123456789abc",
-        });
-    });
-
-    it("fails closed when a top-level display-media request has ambiguous pending sessions", async () => {
-        initialiseValues.mockResolvedValueOnce({
-            protocol: "io.element.desktop",
-            sessionId: "session-id",
-            config: {},
-            supportedSettings: {},
-            supportsBadgeOverlay: false,
-            supportsIsolatedScreenShareAudio: true,
-        });
-        const platform = new ElectronPlatform();
-        await platform.initialised;
-        await platform.acquireIsolatedScreenShareAudio("widget-a", "12345678-1234-4123-8123-123456789abc");
-        await platform.acquireIsolatedScreenShareAudio("widget-b", "22345678-1234-4123-8123-123456789abc");
-        Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([{ id: "source" }]) });
-        // @ts-ignore private test seam
-        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(true);
-
-        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        await handler({}, { requestId: 8, requesterWidgetId: null });
-
-        expect(call).toHaveBeenCalledOnce();
-        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", { requestId: 8, sourceId: "source" });
-    });
-
-    it("falls back without retaining a session when capability is unavailable", async () => {
-        const platform = new ElectronPlatform();
-        await platform.initialised;
-        expect(platform.supportsIsolatedScreenShareAudio()).toBe(false);
-        await expect(platform.acquireIsolatedScreenShareAudio("widget", "session-a")).resolves.toBe(false);
-    });
-
-    it("releases an exact session while its picker binding is pending", async () => {
-        initialiseValues.mockResolvedValueOnce({
-            protocol: "io.element.desktop",
-            sessionId: "session-id",
-            config: {},
-            supportedSettings: {},
-            supportsBadgeOverlay: false,
-            supportsIsolatedScreenShareAudio: true,
-        });
-        const platform = new ElectronPlatform();
-        await platform.initialised;
-        await platform.acquireIsolatedScreenShareAudio("widget", "session-a");
-        const binding = Promise.withResolvers<boolean>();
-        const pickerResult = Promise.withResolvers<any[]>();
-        const picker = { finished: pickerResult.promise, close: vi.fn() };
-        Modal.createDialog = vi.fn().mockReturnValue(picker);
-        // @ts-ignore private test seam
-        const call = vi.spyOn(platform.ipc, "call").mockImplementation((action) => {
-            if (action === "bindScreenShareAudioSession") return binding.promise;
-            return Promise.resolve(undefined);
-        });
-        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        const handling = handler({}, { requestId: 7, requesterWidgetId: "widget" });
-        await Promise.resolve();
-        await platform.releaseIsolatedScreenShareAudio("widget", "session-a");
-        expect(picker.close).toHaveBeenCalledOnce();
-        expect(call).toHaveBeenCalledWith("releaseScreenShareAudioSession", {
-            requestId: 7,
-            requesterWidgetId: "widget",
-            sessionId: "session-a",
-        });
-        binding.resolve(true);
-        pickerResult.resolve([]);
-        await handling;
-        expect(call).not.toHaveBeenCalledWith("callDisplayMediaCallback", expect.anything());
     });
 
     it("should show a toast when showToast is fired", async () => {

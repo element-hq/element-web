@@ -94,12 +94,7 @@ export default {
             ],
         },
         "apps/desktop": {
-            entry: [
-                "src/preload.cts!",
-                "src/screen-share-audio/assets/worklet.js!",
-                "electron-builder.ts!",
-                "scripts/**",
-            ],
+            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**"],
             project: ["**/*.{js,ts,pcss}"],
             ignoreBinaries: [
                 // Used by the fetch-package script (optional)
