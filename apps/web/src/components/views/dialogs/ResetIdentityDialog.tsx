@@ -25,6 +25,12 @@ interface ResetIdentityDialogProps {
     onReset: () => void;
 
     /**
+     * If supplied, show a "Sign out" button instead of "Go back", and call this
+     * function when it is clicked.
+     */
+    onSignOut?: () => void;
+
+    /**
      * Which variant of this dialog to show.
      */
     variant: ResetIdentityBodyVariant;
@@ -33,7 +39,12 @@ interface ResetIdentityDialogProps {
 /**
  * The dialog for resetting the identity of the current user.
  */
-export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdentityDialogProps): JSX.Element {
+export function ResetIdentityDialog({
+    onFinished,
+    onReset,
+    onSignOut,
+    variant,
+}: ResetIdentityDialogProps): JSX.Element {
     const matrixClient = MatrixClientPeg.safeGet();
 
     const onResetWrapper: () => void = () => {
@@ -41,9 +52,21 @@ export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdent
         // Close the dialog
         onFinished();
     };
+
+    const onCancelOrSignOut: () => void = () => {
+        // Normally, the cancel button will just close the dialog, but if there
+        // are no other viable verification methods, the only sensible option
+        // other than a reset is for the user to give up and sign out.
+        if (onSignOut && variant === "no_verification_method") {
+            onSignOut();
+        } else {
+            onFinished();
+        }
+    };
+
     return (
         <MatrixClientContext.Provider value={matrixClient}>
-            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onFinished} variant={variant} />
+            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onCancelOrSignOut} variant={variant} />
         </MatrixClientContext.Provider>
     );
 }
