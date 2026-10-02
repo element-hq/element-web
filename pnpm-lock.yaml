@@ -533,8 +533,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.7
       '@element-hq/element-call-component':
-        specifier: github:element-hq/element-call#toger5/fix-component-sounds&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/d96d00b64ab200e6ce3888278de4e5c937439bce#path:/component(@vector-im/compound-design-tokens@11.0.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.3.0)(react@19.3.0)
+        specifier: github:element-hq/element-call#main&path:/component
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/1d57a8eee1bf8e4eca72edf69e20d5195eaf3208#path:/component(@vector-im/compound-design-tokens@11.0.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2809,8 +2809,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/d96d00b64ab200e6ce3888278de4e5c937439bce#path:/component':
-    resolution: {gitHosted: true, integrity: sha512-GWEalYSVGQARzUdd4bF8067jAGQY5Y29SdFax97zLXAD+jfZBoFiof5uRxpXo2pwHtG29t+M3lXA+BDll6EUxw==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/d96d00b64ab200e6ce3888278de4e5c937439bce}
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/1d57a8eee1bf8e4eca72edf69e20d5195eaf3208#path:/component':
+    resolution: {gitHosted: true, integrity: sha512-tg3ZMPXmdYWqXJH2XEKeMD2pGujyE6ovez4ORyzWQIRp4aQtDBLVamIPg5Ql157exvc2J3Q5ych+14gj7htAjQ==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/1d57a8eee1bf8e4eca72edf69e20d5195eaf3208}
     version: 0.0.0
     peerDependencies:
       '@vector-im/compound-design-tokens': ^11.0.0
@@ -15057,7 +15057,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/d96d00b64ab200e6ce3888278de4e5c937439bce#path:/component(@vector-im/compound-design-tokens@11.0.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/1d57a8eee1bf8e4eca72edf69e20d5195eaf3208#path:/component(@vector-im/compound-design-tokens@11.0.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@42.3.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.0.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.0.0)(react-dom@19.3.0)(react@19.3.0)
