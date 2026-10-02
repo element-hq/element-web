@@ -136,6 +136,9 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
+            onSignOut: () => {
+                dispatcher.dispatch({ action: "logout" });
+            },
             variant: store.lostKeys() ? "no_verification_method" : "confirm",
         });
     };
