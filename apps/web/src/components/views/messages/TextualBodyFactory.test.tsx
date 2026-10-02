@@ -35,6 +35,11 @@ import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import { ModuleApi } from "../../../modules/Api";
+import { type RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { type SDKContextClass } from "../../../contexts/SDKContextClass";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
@@ -676,6 +681,38 @@ describe("<TextualBody />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Open link" }));
 
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("offers the module file viewers for the previewed link and opens them in the right panel", async () => {
+            const viewer: RegisteredFileViewer = {
+                match: () => true,
+                render: vi.fn(),
+                options: { id: "test-viewer", cardHeader: () => "", buttonText: "Open in viewer", buttonIcon: <></> },
+            };
+            const getViewersFor = vi.spyOn(ModuleApi.instance.fileViewer, "getViewersFor").mockReturnValue([viewer]);
+            const sdkContext = { rightPanelStore: { setCard: vi.fn() } } as unknown as SDKContextClass;
+            const mxEvent = mkRoomTextMessage(`Visit ${link}`);
+
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient, (ui: React.ReactElement) =>
+                render(<SDKContext.Provider value={sdkContext}>{ui}</SDKContext.Provider>),
+            );
+            await screen.findByRole("link", { name: "Matrix" });
+
+            expect(getViewersFor).toHaveBeenCalledWith({
+                type: "remote",
+                preview: expect.objectContaining({ link, title: "Matrix" }),
+            });
+
+            fireEvent.click(screen.getByRole("button", { name: "Open in viewer" }));
+
+            expect(sdkContext.rightPanelStore.setCard).toHaveBeenCalledWith({
+                phase: RightPanelPhases.FileViewer,
+                state: {
+                    fileViewer: viewer,
+                    fileViewerMedia: expect.objectContaining({ type: "remote" }),
+                    fileViewerSourceEvent: mxEvent,
+                },
+            });
         });
 
         it("expands the group when more previews are available than are shown", async () => {
