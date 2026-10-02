@@ -132,7 +132,7 @@ function removeAll<T>(target: Set<T>, ...toRemove: T[]): void {
     }
 }
 
-function useServers(): ServerList {
+export function useServers(): ServerList {
     const [userDefinedServers, setUserDefinedServers] = useSettingsValueWithSetter(SETTING_NAME, SettingLevel.ACCOUNT);
 
     const homeServer = MatrixClientPeg.safeGet().getDomain()!;
@@ -157,15 +157,41 @@ function useServers(): ServerList {
 }
 
 interface IProps {
-    protocols: Protocols | null;
+    /**
+     * Third-party protocol metadata per server, so bridged-network instances
+     * can be offered under any server we know them for (the local server's
+     * always; remote servers' when the homeserver supports federated
+     * third-party lookups).
+     */
+    protocolsByServer: Record<string, Protocols>;
     config: IPublicRoomDirectoryConfig | null;
     setConfig: (value: IPublicRoomDirectoryConfig | null) => void;
+    /**
+     * Whether to offer servers other than our own (and the option to add
+     * more). Callers whose lookups need server-side support for remote
+     * targets (e.g. MSC4258 user directory search) set this false when the
+     * homeserver doesn't advertise it. Defaults to true.
+     */
+    remoteServersAllowed?: boolean;
+    /**
+     * What the picker is choosing between: room directories (the default) or
+     * user directories, so the selected label reads "... rooms" or "... users"
+     * to match.
+     */
+    entity?: "rooms" | "users";
 }
 
-export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig }) => {
+export const NetworkDropdown: React.FC<IProps> = ({
+    protocolsByServer,
+    config,
+    setConfig,
+    remoteServersAllowed = true,
+    entity = "rooms",
+}) => {
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
+    const servers = remoteServersAllowed ? allServers : [homeServer];
 
-    const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map((roomServer) => ({
+    const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = servers.map((roomServer) => ({
         key: { roomServer, instanceId: undefined },
         label: roomServer,
         description:
@@ -175,14 +201,12 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                 key: { roomServer, instanceId: undefined },
                 label: _t("common|matrix"),
             },
-            ...(roomServer === homeServer && protocols
-                ? Object.values(protocols)
-                      .flatMap((protocol) => protocol.instances)
-                      .map((instance) => ({
-                          key: { roomServer, instanceId: instance.instance_id },
-                          label: instance.desc,
-                      }))
-                : []),
+            ...Object.values(protocolsByServer[roomServer] ?? {})
+                .flatMap((protocol) => protocol.instances)
+                .map((instance) => ({
+                    key: { roomServer, instanceId: instance.instance_id },
+                    label: instance.desc,
+                })),
         ],
         ...(userDefinedServers.includes(roomServer)
             ? {
@@ -248,15 +272,23 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
             }
             options={options}
             onChange={(option) => setConfig(option)}
-            selectedLabel={(option) =>
-                option?.key
-                    ? _t("spotlight|public_rooms|network_dropdown_selected_label_instance", {
-                          server: option.key.roomServer,
-                          instance: option.key.instanceId ? option.label : "Matrix",
-                      })
-                    : _t("spotlight|public_rooms|network_dropdown_selected_label")
-            }
-            AdditionalOptions={addNewServer}
+            selectedLabel={(option) => {
+                if (option?.key) {
+                    return entity === "users"
+                        ? _t("spotlight|public_rooms|network_dropdown_selected_label_instance_users", {
+                              server: option.key.roomServer,
+                              instance: option.key.instanceId ? option.label : "Matrix",
+                          })
+                        : _t("spotlight|public_rooms|network_dropdown_selected_label_instance", {
+                              server: option.key.roomServer,
+                              instance: option.key.instanceId ? option.label : "Matrix",
+                          });
+                }
+                return entity === "users"
+                    ? _t("spotlight|public_rooms|network_dropdown_selected_label_users")
+                    : _t("spotlight|public_rooms|network_dropdown_selected_label");
+            }}
+            AdditionalOptions={remoteServersAllowed ? addNewServer : undefined}
         />
     );
 };
