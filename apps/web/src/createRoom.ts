@@ -440,7 +440,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                     description = _t("create_room|unsupported_version");
                 }
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("create_room|error_title"),
+                    title:
+                        opts.roomType === RoomType.Space
+                            ? _t("create_room|error_title|space")
+                            : _t("create_room|error_title|room"),
                     description,
                 });
                 return null;
