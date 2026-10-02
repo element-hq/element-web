@@ -82,7 +82,7 @@ test.describe("Registration", () => {
             // check that the device considers itself verified
             await page.getByRole("button", { name: "User menu", exact: true }).click();
             await page.getByRole("menuitem", { name: "All settings", exact: true }).click();
-            await page.getByRole("tab", { name: "Sessions", exact: true }).click();
+            await page.getByRole("tab", { name: "Devices", exact: true }).click();
             await expect(
                 page.getByTestId("current-session-section").getByTestId("device-metadata-isVerified"),
             ).toHaveText("Verified");
