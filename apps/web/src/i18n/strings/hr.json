@@ -3291,9 +3291,7 @@
         "show_thread_filter": "Prikaži:"
     },
     "threads_activity_centre": {
-        "header": "Aktivnost u nitima",
-        "no_rooms_with_threads_notifs": "Još nemate sobe s obavijestima o nitima.",
-        "no_rooms_with_unread_threads": "Još nemate sobe s nepročitanim nitima."
+        "header": "Aktivnost u nitima"
     },
     "time": {
         "date_at_time": "%(date)s u %(time)s",

@@ -2605,10 +2605,6 @@
         },
         "show_thread_filter": "Rādīt:"
     },
-    "threads_activity_centre": {
-        "no_rooms_with_threads_notifs": "Jums vēl nav istabu ar pavedienu paziņojumiem.",
-        "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
-    },
     "time": {
         "date_at_time": "%(date)s pulksten %(time)s",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)s m %(seconds)s s atlicis",

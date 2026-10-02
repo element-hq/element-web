@@ -3196,9 +3196,7 @@
         "show_thread_filter": "Zobraziť:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vlákien",
-        "no_rooms_with_threads_notifs": "Zatiaľ nemáte miestnosti s upozorneniami na vlákna.",
-        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
+        "header": "Aktivita vlákien"
     },
     "time": {
         "date_at_time": "%(date)s o %(time)s",

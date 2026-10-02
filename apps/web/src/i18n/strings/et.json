@@ -3246,9 +3246,7 @@
         "show_thread_filter": "Näita:"
     },
     "threads_activity_centre": {
-        "header": "Jutulõngade ülevaade",
-        "no_rooms_with_threads_notifs": "Pole veel ühtegi jutulõngakohase teavitusega jututuba.",
-        "no_rooms_with_unread_threads": "Pole veel ühtegi lugemata jutulõngaga jututuba."
+        "header": "Jutulõngade ülevaade"
     },
     "time": {
         "date_at_time": "%(date)s %(time)s",
