@@ -7,6 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import React, { type JSX, Suspense, useMemo } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { DocumentViewerView } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
@@ -25,11 +26,20 @@ interface Props {
  * The card owns the media handle rather than the viewer, so that re-rendering the panel — which
  * happens on every resize — does not hand the viewer a new `blob` identity and make it reload the file.
  */
-export function DocumentViewerCard({ mxEvent, onClose }: Props): JSX.Element | null {
+export function DocumentViewerCard({ mxEvent, onClose }: Props): JSX.Element {
     const viewer = documentViewerForEvent(mxEvent);
     const media = useMemo(() => documentMediaForEvent(mxEvent), [mxEvent]);
 
-    if (!viewer || !media) return null;
+    // The store only opens the card for an event a viewer can handle, but the event can stop being
+    // one while the card is open, e.g. when the attachment is redacted. Show the error rather than an
+    // empty panel, so the card can still be closed.
+    if (!viewer || !media) {
+        return (
+            <BaseCard onClose={onClose} header={_t("document_viewer|title")} withoutScrollContainer>
+                <DocumentViewerView status="error" />
+            </BaseCard>
+        );
+    }
 
     const Viewer = viewer.Component;
 
