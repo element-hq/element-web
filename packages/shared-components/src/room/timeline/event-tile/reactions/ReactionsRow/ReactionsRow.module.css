@@ -28,6 +28,9 @@
 
 .addReactionButton {
     all: unset;
+    /* The host decides where the control sits. Own-message bubbles put it at
+       the start so the reactions stay flush with the bubble edge. */
+    order: var(--event-tile-reactions-add-button-order, 0);
     display: inline-flex;
     align-items: center;
     justify-content: center;
