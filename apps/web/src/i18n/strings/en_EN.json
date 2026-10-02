@@ -930,6 +930,9 @@
         "widget_screenshots": "Enable widget screenshots on supported widgets"
     },
     "dialog_close_label": "Close dialog",
+    "document_viewer": {
+        "title": "Document"
+    },
     "download_completed": "Download Completed",
     "empty_room": "Empty room",
     "empty_room_was_name": "Empty room (was %(oldName)s)",
@@ -1009,7 +1012,7 @@
             "complete_action": "Got It",
             "complete_description": "You've successfully verified this user.",
             "complete_title": "Verified!",
-            "confirm_identity_description": "Verify this device to set up secure messaging",
+            "confirm_identity_description": "Choose how to verify to set up secure messaging.",
             "confirm_identity_title": "Confirm your digital identity",
             "confirm_the_emojis": "Confirm that the emojis below match those shown on your other device.",
             "error_starting_description": "We were unable to start a chat with the other user.",
@@ -1514,6 +1517,8 @@
         "click_for_info": "Click for more info",
         "config_only": "Can only be enabled via config.json.",
         "currently_experimental": "Currently experimental.",
+        "document_previews": "Experimental document previews",
+        "document_previews_description": "Open PDF and Markdown attachments in the right panel.",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -1567,8 +1572,6 @@
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
-        "pdf_viewer": "Open PDFs",
-        "pdf_viewer_description": "Read PDF attachments in the right panel.",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "sliding_sync": "Sliding Sync mode",
@@ -1684,6 +1687,9 @@
         "share_type_pin": "Drop a Pin",
         "share_type_prompt": "What location type do you want to share?",
         "toggle_attribution": "Toggle attribution"
+    },
+    "markdown_viewer": {
+        "open": "Open Markdown"
     },
     "member_list": {
         "count": {
@@ -2508,8 +2514,9 @@
                 "breadcrumb_page": "Reset encryption",
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
-                "breadcrumb_title": "Are you sure you want to reset your digital identity?",
+                "breadcrumb_title": "Can't confirm? You’ll need to reset your digital identity.",
                 "breadcrumb_title_cant_confirm": "You need to reset your digital identity",
+                "breadcrumb_title_compromised": "Are you sure you want to reset your digital identity?",
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your digital identity.",
                 "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your digital identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",

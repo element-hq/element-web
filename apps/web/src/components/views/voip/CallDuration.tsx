@@ -43,6 +43,7 @@ export const SessionDuration: FC<SessionDurationProps> = ({ session }) => {
     // This is a temporal solution.
     // Using the oldest membership will update when this user leaves.
     // This implies that the displayed call duration will also update consequently.
-    const createdTs = session?.getOldestMembership()?.createdTs();
+    const oldestActiveMembership = session?.memberships.at(0);
+    const createdTs = oldestActiveMembership?.createdTs();
     return createdTs ? <CallDuration delta={now - createdTs} /> : <CallDuration delta={0} />;
 };

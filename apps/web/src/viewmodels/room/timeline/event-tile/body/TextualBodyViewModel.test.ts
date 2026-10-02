@@ -236,6 +236,46 @@ describe("TextualBodyViewModel", () => {
         expect(window.location.hash).toBe("#/room/#room:example.org");
     });
 
+    it("shows linkified user IDs in the right panel", () => {
+        const vm = createVm();
+        const preventDefault = vi.fn();
+        const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
+
+        vm.onRootClick({
+            preventDefault,
+            target: {
+                dataset: {
+                    [LINKIFIED_DATA_ATTRIBUTE]: "true",
+                },
+                href: "https://matrix.to/#/@user:example.org",
+                nodeName: "A",
+            },
+        } as any);
+
+        expect(preventDefault).toHaveBeenCalled();
+        expect(dispatchSpy).toHaveBeenCalledWith({
+            action: Action.ViewUser,
+            member: expect.objectContaining({ userId: "@user:example.org" }),
+        });
+        expect(window.location.hash).toBe("");
+    });
+
+    it("ignores root clicks which were already handled", () => {
+        const vm = createVm();
+        const transformSpy = vi.spyOn(permalinkUtils, "tryTransformPermalinkToLocalHref");
+
+        vm.onRootClick({
+            defaultPrevented: true,
+            target: {
+                href: "https://matrix.to/#/@user:example.org",
+                nodeName: "A",
+            },
+        } as any);
+
+        expect(transformSpy).not.toHaveBeenCalled();
+        expect(window.location.hash).toBe("");
+    });
+
     it("leaves linkified ordinary links alone", () => {
         const vm = createVm();
         const preventDefault = vi.fn();
