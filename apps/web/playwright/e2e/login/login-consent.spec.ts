@@ -314,7 +314,7 @@ test.describe("Login", () => {
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // First try cancelling and restarting
-                await page.getByRole("button", { name: "Cancel" }).click();
+                await page.getByRole("button", { name: "Go back" }).click();
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // Then click outside the dialog and restart
