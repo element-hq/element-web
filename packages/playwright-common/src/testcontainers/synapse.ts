@@ -352,7 +352,7 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                     },
                     loggers: {
                         "synapse.storage.SQL": {
-                            level: "DEBUG",
+                            level: "INFO",
                         },
                         "twisted": {
                             handlers: ["console"],
