@@ -59,6 +59,10 @@ import { getClientInformationEventType } from "../../../../../utils/device/clien
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
+vi.mock("../../../auth/LoginWithQR", () => ({
+    default: () => <div data-testid="login-with-qr" />,
+}));
+
 mockPlatformPeg();
 
 // to restore later
@@ -1655,8 +1659,6 @@ describe("<SessionManagerTab />", () => {
             await flushPromises();
 
             fireEvent.click(getByText("Show QR code"));
-            await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-
             await expect(findByTestId("login-with-qr")).resolves.toBeTruthy();
         });
     });

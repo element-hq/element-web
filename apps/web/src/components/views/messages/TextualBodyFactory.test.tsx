@@ -33,6 +33,8 @@ import Modal from "../../../Modal";
 import ImageView from "../elements/ImageView";
 import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import SettingsStore from "../../../settings/SettingsStore";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
@@ -89,6 +91,7 @@ const mkFormattedMessage = (body: string, formattedBody: string): MatrixEvent =>
 describe("<TextualBody />", () => {
     afterEach(() => {
         vi.spyOn(global.Math, "random").mockRestore();
+        vi.restoreAllMocks();
     });
 
     let defaultRoom: Room;
@@ -291,6 +294,21 @@ describe("<TextualBody />", () => {
             expect(content.innerHTML).toMatchSnapshot();
         });
 
+        it("clicking a linkified MXID shows the user without navigating away from the room", () => {
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const hash = window.location.hash;
+            const ev = mkRoomTextMessage("Chat with @user:example.com");
+            getComponent({ mxEvent: ev });
+
+            fireEvent.click(screen.getByRole("link", { name: "@user:example.com" }));
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.ViewUser,
+                member: expect.objectContaining({ userId: "@user:example.com" }),
+            });
+            expect(window.location.hash).toBe(hash);
+        });
+
         it("should pillify an MXID permalink", () => {
             const ev = mkRoomTextMessage("Chat with https://matrix.to/#/@user:example.com");
             const { container } = getComponent({ mxEvent: ev });
@@ -418,6 +436,19 @@ describe("<TextualBody />", () => {
             expect(container).toHaveTextContent("Hey Member");
             const content = container.querySelector(".mx_EventTile_body");
             expect(content).toMatchSnapshot();
+        });
+
+        it("clicking a user pill shows the user without navigating away from the room", () => {
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const hash = window.location.hash;
+            const ev = mkFormattedMessage("Hey User", 'Hey <a href="https://matrix.to/#/@user:server">Member</a>');
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+
+            // Click the anchor itself, as happy-dom follows links on clicks to their children before React can prevent it
+            fireEvent.click(container.querySelector("a.mx_UserPill")!);
+
+            expect(dispatchSpy).toHaveBeenCalledWith(expect.objectContaining({ action: Action.ViewUser }));
+            expect(window.location.hash).toBe(hash);
         });
 
         it("pills do not appear in code blocks", () => {
