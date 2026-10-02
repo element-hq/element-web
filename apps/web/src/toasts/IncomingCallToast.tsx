@@ -191,7 +191,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
 
     // Dismiss if the notification event or call event is redacted
     useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {
-        if ([ev.getId(), ev.getRelation()?.event_id].includes(ev.getId())) {
+        if ([notificationEvent.getId(), notificationEvent.getRelation()?.event_id].includes(ev.getId())) {
             dismissToast();
         }
     });
