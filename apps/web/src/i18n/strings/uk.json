@@ -107,6 +107,7 @@
         "show_all": "Показати все",
         "sign_in": "Увійти",
         "sign_out": "Вилучити цей пристрій",
+        "sign_out_before_verify": "Вийти",
         "skip": "Пропустити",
         "start": "Почати",
         "stop": "Припинити",
@@ -879,6 +880,7 @@
         "setting_definition": "Означення налаштування:",
         "setting_id": "ID налаштувань",
         "settings": {
+            "elementCallMockComponent": "Використовувати імітаційну версію компонента Element Call (React-транспорт, без медіа)",
             "elementCallUrl": "URL Element Call"
         },
         "settings_explorer": "Налаштування оглядача",
@@ -1037,6 +1039,8 @@
                 "text": "Надайте ID і цифровий відбиток одного з ваших пристроїв, щоб верифікувати його. ЗАУВАЖТЕ, це дозволяє іншому пристрою надсилати та отримувати повідомлення від вашого імені. ЯКЩО ХТОСЬ СКАЗАВ ВАМ ВСТАВИТИ ЩОСЬ СЮДИ, ШВИДШЕ ЗА ВСЕ, ВАС ОБМАНЮЮТЬ!",
                 "wrong_fingerprint": "Не вдалося верифікувати пристрій '%(deviceId)s' - наданий цифровий відбиток '%(fingerprint)s' не збігається з відбитком пристрою, '%(fprint)s'"
             },
+            "no_other_devices": "Ця опція недоступна, оскільки у вас немає інших пристроїв",
+            "no_recovery_key": "Ця опція недоступна, оскільки ви не налаштували ключ відновлення.",
             "no_support_qr_emoji": "Пристрій, який ви намагаєтесь звірити, не підтримує сканування QR-коду або звірення за допомогою емоджі, що є підтримувані %(brand)s. Спробуйте використати інший клієнт.",
             "now_you_can": "Тепер ви можете безпечно читати та надсилати повідомлення, а всі, з ким ви спілкуєтеся, також можуть довіряти цьому пристрою.",
             "once_accepted_can_continue": "Після погодження ви зможете продовжити верифікацію.",
@@ -1096,7 +1100,7 @@
         "verification_requested_toast_title": "Запит перевірки",
         "verified_identity_changed": "Цифрову ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
         "verified_identity_changed_no_displayname": "Цифрову ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a> ",
-        "verify_toast_description": "З кінця жовтня 2026 року, не звірені пристрої не зможуть надсилати та отримувати повідомлення. <a>Докладніше</a>",
+        "verify_toast_description": "Незабаром незвірені пристрої не зможуть надсилати та отримувати повідомлення. <a>Докладніше</a>",
         "verify_toast_title": "Звірити цей пристрій",
         "withdraw_verification_action": "Відкликати верифікацію"
     },
@@ -1476,6 +1480,11 @@
         "room_list_expand_section": "Розгорнути розділ з переліком кімнат",
         "room_list_navigate_down": "Перейти вниз списку кімнат",
         "room_list_navigate_up": "Перейти вгору списку кімнат",
+        "room_list_panel_collapse": "Сховати список кімнат (коли фокус на маркері зміни розміру)",
+        "room_list_panel_expand": "Показати список кімнат на повну ширину (коли фокус на маркері зміни розміру)",
+        "room_list_panel_grow": "Розширити список кімнат (коли фокус на маркері зміни розміру)",
+        "room_list_panel_shrink": "Звузити список кімнат (коли фокус на маркері зміни розміру)",
+        "room_list_panel_toggle": "Сховати або показати список кімнат (коли фокус на маркері зміни розміру)",
         "room_list_select_room": "Вибрати кімнату з переліку",
         "save": "Зберегти",
         "scroll_down_timeline": "Гортати стрічку вниз",
@@ -1519,6 +1528,7 @@
         "experimental_section": "Ранній огляд",
         "extended_profiles_msc_support": "Вимагає, щоб ваш сервер підтримував MSC4133",
         "feature_disable_call_per_sender_encryption": "Вимкнути шифрування для кожного відправника для Element Call",
+        "feature_element_call_react": "Рендеринг Element Call як компонента React замість віджета",
         "feature_retention": {
             "description": "Автоматично вилучати повідомлення з кімнати, коли вони досягають налаштованого періоду зберігання. Наразі підтримуються лише налаштування читання.",
             "disabled_sliding_sync": "Правила тривалості збереження неможливо ввімкнути, якщо увімкнено Sliding Sync.",
@@ -3003,7 +3013,7 @@
             "label": "Відкривати %(brand)s після входу на комп'ютері",
             "minimised": "Згорнуто"
         },
-        "tac_only_notifications": "Показувати сповіщення лише в центрі діяльності в гілках",
+        "tac_only_notifications": "На вкладці Інші гілки показувати лише сповіщення",
         "use_12_hour_format": "Показувати час у 12-годинному форматі (напр. 2:30 пп)",
         "use_command_enter_send_message": "Натисніть Command + Enter, щоб надіслати повідомлення",
         "use_command_f_search": "Command + F для пошуку в стрічці",
@@ -3301,9 +3311,35 @@
         "show_thread_filter": "Показати:"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з непрочитаними повідомленнями.",
+            "default_no_sender": "Відкрити гілку в %(roomName)s з непрочитаними повідомленнями.",
+            "mention": {
+                "one": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з 1 непрочитаною згадкою.",
+                "few": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з %(count)s непрочитаними згадками.",
+                "many": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з %(count)s непрочитаними згадками."
+            },
+            "mention_no_sender": {
+                "one": "Відкрити гілку в %(roomName)s з 1 непрочитаною згадкою.",
+                "few": "Відкрити гілку в %(roomName)s з %(count)s непрочитаними згадками.",
+                "many": "Відкрити гілку в %(roomName)s з %(count)s непрочитаними згадками."
+            },
+            "unread": {
+                "one": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з 1 непрочитаним повідомленням.",
+                "few": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з %(count)s непрочитаними повідомленнями.",
+                "many": "Відкрити гілку в %(roomName)s від %(sender)s: %(preview)s, з %(count)s непрочитаними повідомленнями."
+            },
+            "unread_no_sender": {
+                "one": "Відкрити гілку в %(roomName)s з 1 непрочитаним повідомленням.",
+                "few": "Відкрити гілку в %(roomName)s з %(count)s непрочитаними повідомленнями.",
+                "many": "Відкрити гілку в %(roomName)s з %(count)s непрочитаними повідомленнями."
+            }
+        },
         "header": "Діяльність у гілках",
-        "no_rooms_with_threads_notifs": "У вас ще немає кімнат зі сповіщеннями в гілках.",
-        "no_rooms_with_unread_threads": "У вас ще немає кімнат з непрочитаними гілками."
+        "my_threads_tab": "Мої гілки",
+        "no_other_unread_threads": "Немає непрочитаних гілок від інших користувачів.",
+        "no_participating_threads_unread": "У вас немає непрочитаних гілок, у яких ви брали участь.",
+        "other_threads_tab": "Інші гілки"
     },
     "time": {
         "date_at_time": "%(date)s о %(time)s",
@@ -3960,6 +3996,11 @@
         "disabled_no_perms_start_voice_call": "У вас немає дозволу розпочинати голосові виклики",
         "disabled_ongoing_call": "Поточний виклик",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "типово",
+            "not_called": "не викликається",
+            "participant_you": "%(participant)s – you"
+        },
         "enable_camera": "Увімкнути камеру",
         "enable_microphone": "Увімкнути мікрофон",
         "expand": "Повернутися до виклику",

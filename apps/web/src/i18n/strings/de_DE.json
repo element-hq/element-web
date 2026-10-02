@@ -3283,9 +3283,7 @@
         "show_thread_filter": "Zeige:"
     },
     "threads_activity_centre": {
-        "header": "Thread-Aktivität",
-        "no_rooms_with_threads_notifs": "Es gibt keine Chats mit Thread-Benachrichtigungen.",
-        "no_rooms_with_unread_threads": "Es gibt keine Chats mit ungelesenen Threads."
+        "header": "Thread-Aktivität"
     },
     "time": {
         "date_at_time": "%(date)s um %(time)s",

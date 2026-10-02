@@ -2741,9 +2741,7 @@
         "show_thread_filter": "Vis:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitet i tråde",
-        "no_rooms_with_threads_notifs": "Du har ingen rum med notifikationer fra tråde endnu.",
-        "no_rooms_with_unread_threads": "Du har ingen rum med ulæste tråde."
+        "header": "Aktivitet i tråde"
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s",

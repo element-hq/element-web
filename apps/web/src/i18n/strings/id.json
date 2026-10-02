@@ -3147,9 +3147,7 @@
         "show_thread_filter": "Tampilkan:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitas utas",
-        "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
+        "header": "Aktivitas utas"
     },
     "time": {
         "date_at_time": "%(date)s pada %(time)s",

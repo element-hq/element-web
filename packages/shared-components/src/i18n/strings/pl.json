@@ -20,6 +20,7 @@
         "new_room": "Nowy pokój",
         "new_section": "Nowa sekcja",
         "new_video_room": "Nowy pokój wideo",
+        "no": "Nie",
         "open_menu": "Otwórz menu",
         "pause": "Wstrzymaj",
         "pin": "Przypnij",
@@ -33,7 +34,8 @@
         "search": "Szukaj",
         "start_chat": "Rozpocznij czat",
         "unpin": "Odepnij",
-        "view_source": "Wyświetl źródło"
+        "view_source": "Wyświetl źródło",
+        "yes": "Tak"
     },
     "common": {
         "attachment": "Załącznik",
@@ -117,7 +119,10 @@
         "error_load": "Nie można wczytać pliku PDF.",
         "loading": "Ładowanie pliku PDF…",
         "page_label": "Strona %(page)s z %(total)s",
-        "page_number": "Numer strony"
+        "page_number": "Numer strony",
+        "zoom": "Powiększenie",
+        "zoom_in": "Powiększ",
+        "zoom_out": "Pomniejsz"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -308,8 +313,8 @@
                 "room": {
                     "join_count": {
                         "one": "%(count)s dołączyła",
-                        "few": "%(count)s dołączyło",
-                        "many": "%(count)s dołączyło"
+                        "few": "%(count)s dołączyły",
+                        "many": "%(count)s dołączyły"
                     },
                     "title": "Trwa połączenie grupowe"
                 }
@@ -377,7 +382,10 @@
                 "few": "Pokaż %(count)s inne podglądy",
                 "many": "Pokaż %(count)s innych podglądów"
             },
-            "view_image": "Wyświetl obraz"
+            "view_audio": "Wyświetl dźwięk",
+            "view_file": "Wyświetl plik",
+            "view_image": "Wyświetl obraz",
+            "view_video": "Wyświetl wideo"
         }
     },
     "user_menu": {
@@ -386,6 +394,26 @@
         "open_home": "Strona główna",
         "open_security": "Bezpieczeństwo i prywatność",
         "open_settings": "Wszystkie ustawienia"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Skuteczna konfiguracja",
+            "configuration": "Konfiguracja",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "w trakcie rozmowy",
+            "in_lobby": "w poczekalni",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "Dziennik HostBridge",
+            "mute_audio": "Wycisz dźwięk",
+            "mute_video": "Wycisz wideo",
+            "no_participants": "Nikt nie bierze udziału w tej rozmowie",
+            "participants": "Uczestnicy",
+            "status": "%(roomId)s · intent %(intent)s · %(state)s · theme %(theme)s · language %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Nieznany pokój %(roomId)s",
+            "unmute_audio": "Wyłącz wyciszenie dźwięku",
+            "unmute_video": "Włącz wideo"
+        }
     },
     "widget": {
         "context_menu": {

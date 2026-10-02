@@ -121,7 +121,8 @@
     },
     "release_announcement": {
         "room_list_section_close": "ОК",
-        "room_list_section_description": "Сгруппируйте свои чаты на разделы, чтобы упорядочить беседы и упростить навигацию."
+        "room_list_section_description": "Сгруппируйте свои чаты на разделы, чтобы упорядочить беседы и упростить навигацию.",
+        "room_list_section_title": "Знакомство с разделами"
     },
     "room": {
         "context_menu": {
@@ -245,6 +246,7 @@
             "be_right_back": "Скоро вернусь",
             "choose_emoji": "Выбрать эмодзи",
             "custom": "Пользовательский...",
+            "focus_time": "Фокусировка",
             "in_a_meeting": "На встрече",
             "on_the_road": "На дороге",
             "set_status_prompt": "Какой у вас статус?"
@@ -292,9 +294,17 @@
                         "one": "%(count)s присоединился",
                         "few": "%(count)s присоединилось",
                         "many": "%(count)s присоединилось"
-                    }
+                    },
+                    "title": "Групповой звонок в процессе"
                 }
-            }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Групповой звонок завершён"
+                }
+            },
+            "video_call_title": "Видеозвонок",
+            "voice_call_title": "Голосовой звонок"
         },
         "decryption_failure": {
             "blocked": "Отправитель заблокировал получение этого сообщения, поскольку ваше устройство не проверено.",
@@ -305,6 +315,9 @@
             "sender_unsigned_device": "Отправлено с незащищенного устройства",
             "unable_to_decrypt": "Не удалось расшифровать сообщение"
         },
+        "download_action_decrypting": "Расшифровка",
+        "download_action_downloading": "Скачивание",
+        "e2e_state": "Состояние сквозного шифрования",
         "m.audio": {
             "audio_player": "Аудиоплеер",
             "error_downloading_audio": "Ошибка скачивания аудио",
@@ -312,6 +325,10 @@
         },
         "m.file": {
             "error_invalid": "Недопустимый файл"
+        },
+        "m.room.avatar": {
+            "changed_img": "Пользователь %(senderDisplayName)s изменил аватар комнаты на <img/>",
+            "removed": "Пользователь %(senderDisplayName)s удалил аватар комнаты."
         },
         "m.room.encryption": {
             "disable_attempt": "Проигнорированная попытка отключить шифрование",
@@ -339,7 +356,10 @@
         "pending_moderation": "Сообщение ожидает модерации",
         "pending_moderation_reason": "Сообщение ожидает модерации: %(reason)s",
         "url_preview": {
-            "view_image": "Просмотреть изображение"
+            "view_audio": "Прослушать аудио",
+            "view_file": "Просмотреть файл",
+            "view_image": "Просмотреть изображение",
+            "view_video": "Посмотреть видео"
         }
     },
     "user_menu": {
