@@ -19,6 +19,41 @@ import SdkConfig from "../SdkConfig";
 
 describe("editor/serialize", function () {
     describe("with markdown", function () {
+        it("preserves mention destinations inside code", () => {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("`"), pc.userPill("Alice", "@alice:hs.tld"), pc.plain("`")], pc);
+            expect(htmlSerializeIfNeeded(model)).toBe("<code>[Alice](https://matrix.to/#/@alice:hs.tld)</code>");
+        });
+        it("preserves all destinations when code contains more than ten mention pills", () => {
+            const pc = createPartCreator();
+            const pills = Array.from({ length: 11 }, (_, i) => pc.userPill(`User ${i}`, `@user${i}:hs.tld`));
+            const model = new EditorModel([pc.plain("`"), ...pills, pc.plain("`")], pc);
+            const expected = Array.from(
+                { length: 11 },
+                (_, i) => `[User ${i}](https://matrix.to/#/@user${i}:hs.tld)`,
+            ).join("");
+            expect(htmlSerializeIfNeeded(model)).toBe(`<code>${expected}</code>`);
+        });
+        it("omits explicit-link markers when the Labs flag is disabled", () => {
+            const html = htmlSerializeFromMdIfNeeded("[DM me](https://matrix.to/#/@alice:example.org)");
+            expect(html).not.toContain("data-org.matrix.msc4550.link");
+        });
+        it("distinguishes authored links from identical mention pills", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === "feature_msc4550_explicit_links",
+            );
+            const pc = createPartCreator();
+            const model = new EditorModel(
+                [pc.plain("[Alice](https://matrix.to/#/@alice:hs.tld) "), pc.userPill("Alice", "@alice:hs.tld")],
+                pc,
+            );
+            const document = new DOMParser().parseFromString(htmlSerializeIfNeeded(model)!, "text/html");
+            const anchors = document.querySelectorAll("a");
+            expect(anchors).toHaveLength(2);
+            expect(anchors[0].hasAttribute("data-org.matrix.msc4550.link")).toBe(true);
+            expect(anchors[1].hasAttribute("data-org.matrix.msc4550.link")).toBe(false);
+            expect(anchors[1].getAttribute("href")).toBe("https://matrix.to/#/@alice:hs.tld");
+        });
         it("user pill turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);

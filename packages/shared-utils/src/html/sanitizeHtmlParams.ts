@@ -65,7 +65,7 @@ const MATRIX_ALLOWED_ATTRIBUTES: HtmlSanitizeAllowedAttributes = {
     font: ["color", "data-mx-bg-color", "data-mx-color", "style"],
     span: ["data-mx-maths", "data-mx-bg-color", "data-mx-color", "data-mx-spoiler", "style"],
     div: ["data-mx-maths"],
-    a: ["href", "name", "target", "rel"],
+    a: ["href", "name", "target", "rel", "data-org.matrix.msc4550.link"],
     img: ["src", "alt", "title", "style"],
     ol: ["start"],
     code: ["class"],

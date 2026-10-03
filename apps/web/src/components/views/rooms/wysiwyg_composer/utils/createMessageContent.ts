@@ -39,6 +39,13 @@ interface CreateMessageContentParams {
 
 const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instanceof MatrixEvent;
 
+/**
+ * Build message content, marking authored links as explicit while preserving composer mentions.
+ * @param message - The composer content.
+ * @param isHTML - Whether the content is HTML rather than plain text or Markdown.
+ * @param options - The relation, reply target, and original event when editing.
+ * @returns Message content, including replacement content when editing.
+ */
 export async function createMessageContent(
     message: string,
     isHTML: boolean,
@@ -68,10 +75,28 @@ export async function createMessageContent(
         body: isEditing ? `* ${body}` : body,
     } as RoomMessageTextEventContent & ReplacementEvent<RoomMessageTextEventContent>;
 
-    // TODO markdown support
-
     const isMarkdownEnabled = SettingsStore.getValue("MessageComposerInput.useMarkdown");
-    const formattedBody = isHTML ? message : isMarkdownEnabled ? await plainToRich(message, true) : null;
+    let formattedBody: string | null = null;
+    if (isHTML) {
+        formattedBody = message;
+    } else if (isMarkdownEnabled) {
+        formattedBody = await plainToRich(message, true);
+    }
+    if (formattedBody) {
+        const explicitLinksEnabled = SettingsStore.getValue("feature_msc4550_explicit_links");
+        const document = new DOMParser().parseFromString(formattedBody, "text/html");
+        let changed = false;
+        for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a")) {
+            if (explicitLinksEnabled && !anchor.hasAttribute("data-mention-type")) {
+                anchor.dataset["org.matrix.msc4550.link"] = "";
+                changed = true;
+            } else if (!explicitLinksEnabled && anchor.dataset["org.matrix.msc4550.link"] !== undefined) {
+                delete anchor.dataset["org.matrix.msc4550.link"];
+                changed = true;
+            }
+        }
+        if (changed) formattedBody = document.body.innerHTML;
+    }
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
