@@ -132,7 +132,7 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.generateCode).toHaveBeenCalled();
                 expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
@@ -157,14 +157,14 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.generateCode).toHaveBeenCalled();
                 expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
                 // Expire the channel
                 rendezvous.onFailure!(ClientRendezvousFailureReason.Expired);
-                await waitFor(() => expect(ref.current!.state.rendezvous).toBeDefined(), { timeout: 2000 });
-                expect(ref.current!.state.rendezvous).not.toBe(rendezvous);
+                await waitFor(() => expect(ref.current!.state.flow).toBeDefined(), { timeout: 2000 });
+                expect(ref.current!.state.flow).not.toBe(rendezvous);
             });
 
             test("failed to connect", async () => {
@@ -238,7 +238,7 @@ describe("<LoginWithQR />", () => {
                 );
                 expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.shareSecrets).toHaveBeenCalled();
             });
 
@@ -259,7 +259,7 @@ describe("<LoginWithQR />", () => {
                 );
 
                 await waitFor(() => {
-                    const rendezvous = ref.current!.state.rendezvous!;
+                    const rendezvous = ref.current!.state.flow!;
                     expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UnsupportedProtocol);
                 });
             });
@@ -310,8 +310,31 @@ describe("<LoginWithQR />", () => {
                 const onClick = mockedFlow.mock.calls[0][0].onClick;
                 await onClick(Click.Cancel);
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
+            });
+
+            test("handles user declining during reciprocation", async () => {
+                const onFinished = vi.fn();
+                render(getComponent({ client, onFinished }));
+                vi.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                vi.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
+                const decline = vi
+                    .spyOn(MSC4108SignInWithQR.prototype, "declineLoginOnExistingDevice")
+                    .mockResolvedValue();
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Decline);
+
+                expect(decline).toHaveBeenCalled();
+                expect(onFinished).toHaveBeenCalledWith(false);
             });
         });
 
@@ -398,8 +421,41 @@ describe("<LoginWithQR />", () => {
                     }),
                 );
 
-                const rendezvous = ref.current!.state.rendezvous!;
+                const rendezvous = ref.current!.state.flow!;
                 expect(rendezvous.shareSecrets).toHaveBeenCalled();
+            });
+
+            it("should show an error if the other device does not provide a homeserver", async () => {
+                const cancel = vi.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
+                render(getComponent({ client }));
+                vi.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith(
+                        expect.objectContaining({
+                            phase: Phase.Error,
+                            failureReason: ClientRendezvousFailureReason.Unknown,
+                        }),
+                    ),
+                );
+                expect(cancel).toHaveBeenCalledWith(ClientRendezvousFailureReason.Unknown);
+            });
+
+            it("should cancel if the user declines", async () => {
+                const onFinished = vi.fn();
+                vi.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
+                const cancel = vi.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
+                render(getComponent({ client, onFinished }));
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({ phase: Phase.ShowingQR })),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Decline);
+
+                expect(cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
+                expect(onFinished).toHaveBeenCalledWith(false);
             });
         });
     });
