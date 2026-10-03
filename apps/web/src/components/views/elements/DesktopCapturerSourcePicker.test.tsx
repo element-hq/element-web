@@ -90,6 +90,22 @@ describe("DesktopCapturerSourcePicker", () => {
 
         await userEvent.click(screen1Button);
         await userEvent.click(screen.getByRole("button", { name: "Share" }));
-        expect(onFinished).toHaveBeenCalledWith(SOURCES[0]);
+        expect(onFinished).toHaveBeenCalledWith(SOURCES[0], false);
+    });
+
+    it("requires explicit consent before sharing system audio", async () => {
+        const onFinished = vi.fn();
+        render(<DesktopCapturerSourcePicker onFinished={onFinished} showSystemAudioOption />);
+
+        expect(screen.getByRole("checkbox", { name: "Share system audio" })).not.toBeChecked();
+        expect(
+            screen.getByText("Audio from all applications will be shared, even when sharing one window."),
+        ).toBeInTheDocument();
+
+        await userEvent.click(screen.getByRole("checkbox", { name: "Share system audio" }));
+        await userEvent.click(await screen.findByRole("button", { name: "Screen 1" }));
+        await userEvent.click(screen.getByRole("button", { name: "Share" }));
+
+        expect(onFinished).toHaveBeenCalledWith(SOURCES[0], true);
     });
 });

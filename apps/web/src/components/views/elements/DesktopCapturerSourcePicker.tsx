@@ -16,6 +16,7 @@ import AccessibleButton from "./AccessibleButton";
 import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
 import PlatformPeg from "../../../PlatformPeg";
 import { type NonEmptyArray } from "../../../@types/common";
+import StyledCheckbox from "./StyledCheckbox";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {
@@ -68,9 +69,12 @@ export interface PickerIState {
     selectedTab: Tabs;
     sources: Array<DesktopCapturerSource>;
     selectedSource?: DesktopCapturerSource;
+    shareSystemAudio: boolean;
 }
 export interface PickerIProps {
-    onFinished(source?: DesktopCapturerSource): void;
+    /** Whether to offer native system-loopback audio for this share. */
+    showSystemAudioOption?: boolean;
+    onFinished(source?: DesktopCapturerSource, shareSystemAudio?: boolean): void;
 }
 
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
@@ -82,6 +86,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         this.state = {
             selectedTab: Tabs.Screens,
             sources: [],
+            shareSystemAudio: false,
         };
     }
 
@@ -110,7 +115,11 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     };
 
     private onShare = (): void => {
-        this.props.onFinished(this.state.selectedSource);
+        this.props.onFinished(this.state.selectedSource, this.state.shareSystemAudio);
+    };
+
+    private onShareSystemAudioChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ shareSystemAudio: event.target.checked });
     };
 
     private onTabChange = (tab: Tabs): void => {
@@ -156,6 +165,15 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
                     activeTabId={this.state.selectedTab}
                     onChange={this.onTabChange}
                 />
+                {this.props.showSystemAudioOption && (
+                    <StyledCheckbox
+                        checked={this.state.shareSystemAudio}
+                        onChange={this.onShareSystemAudioChange}
+                        description={_t("voip|screenshare_system_audio_warning")}
+                    >
+                        {_t("voip|screenshare_system_audio")}
+                    </StyledCheckbox>
+                )}
                 <DialogButtons
                     primaryButton={_t("action|share")}
                     hasCancel={true}

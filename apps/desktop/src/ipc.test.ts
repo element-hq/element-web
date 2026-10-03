@@ -9,7 +9,7 @@ import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
 import { desktopCapturer, nativeImage, TouchBar } from "electron";
 
 import { getConfig } from "./config.js";
-import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import { handleDisplayMediaPickerReply } from "./display-media.js";
 import { clearData } from "./store.js";
 
 const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
@@ -55,8 +55,8 @@ vi.mock("./store.js", () => ({
     SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
-vi.mock("./displayMediaCallback.js", () => ({
-    consumeDisplayMediaCallback: vi.fn(),
+vi.mock("./display-media.js", () => ({
+    handleDisplayMediaPickerReply: vi.fn(),
 }));
 vi.mock("./config.js");
 
@@ -65,7 +65,7 @@ await import("./ipc.js");
 const ARGS = ["@alice:example.org", "DEVICEID"];
 
 async function callIpc(name: string, id = 1, args: unknown[] = ARGS): Promise<void> {
-    await ipcHandlers["ipcCall"]({}, { id, name, args });
+    await ipcHandlers["ipcCall"]({ sender: { id: 23 } }, { id, name, args });
 }
 
 describe("ipc pickle key handling", () => {
@@ -224,26 +224,16 @@ describe("ipcCall: breadcrumbs", () => {
 describe("ipcCall: callDisplayMediaCallback", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.mocked(consumeDisplayMediaCallback).mockReset();
+        vi.mocked(handleDisplayMediaPickerReply).mockReset();
         (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
     });
 
-    it("invokes the consumed callback once with the chosen video source", async () => {
-        const callback = vi.fn();
-        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(callback);
+    it("forwards a picker reply with the renderer identity", async () => {
+        const reply = { requestId: 4, sourceId: "screen:1", shareSystemAudio: true };
 
-        await callIpc("callDisplayMediaCallback", 13, [{ id: "screen:1" }]);
+        await callIpc("callDisplayMediaCallback", 13, [reply]);
 
-        expect(consumeDisplayMediaCallback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith({ video: { id: "screen:1" } });
+        expect(handleDisplayMediaPickerReply).toHaveBeenCalledWith(23, reply);
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 13, reply: null });
-    });
-
-    it("is a safe no-op when a stale or duplicate IPC finds no pending callback", async () => {
-        vi.mocked(consumeDisplayMediaCallback).mockReturnValue(null);
-
-        await callIpc("callDisplayMediaCallback", 14, [{}]);
-
-        expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: null });
     });
 });

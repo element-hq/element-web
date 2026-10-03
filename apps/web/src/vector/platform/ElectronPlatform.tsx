@@ -26,7 +26,7 @@ import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
 import { type IConfigOptions } from "../../IConfigOptions";
 import * as rageshake from "../../rageshake/rageshake";
-import Modal from "../../Modal";
+import Modal, { type IHandle } from "../../Modal";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
 import Spinner from "../../components/views/elements/Spinner";
 import { Action } from "../../dispatcher/actions";
@@ -45,6 +45,7 @@ import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import { GenericToast } from "@element-hq/web-shared-components";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -92,6 +93,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
+    private desktopCapturerPicker?: IHandle<typeof DesktopCapturerSourcePicker>;
     private protocol!: string;
     private sessionId!: string;
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
@@ -178,11 +180,22 @@ export default class ElectronPlatform extends BasePlatform {
             });
         });
 
-        this.electron.on("openDesktopCapturerSourcePicker", async () => {
-            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-            const [source] = await finished;
-            // getDisplayMedia promise does not return if no dummy is passed here as source
-            await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
+        this.electron.on("openDesktopCapturerSourcePicker", async (_event, { requestId }) => {
+            this.desktopCapturerPicker?.close();
+
+            const showSystemAudioOption =
+                platformFriendlyName() === "Windows" && SettingsStore.getValue("feature_windows_screen_share_audio");
+            const picker = Modal.createDialog(DesktopCapturerSourcePicker, { showSystemAudioOption });
+            this.desktopCapturerPicker = picker;
+            const [source, shareSystemAudio = false] = await picker.finished;
+            if (this.desktopCapturerPicker !== picker) return;
+            this.desktopCapturerPicker = undefined;
+
+            await this.ipc.call("callDisplayMediaCallback", {
+                requestId,
+                sourceId: source?.id ?? null,
+                shareSystemAudio: Boolean(source && showSystemAudioOption && shareSystemAudio),
+            });
         });
 
         this.electron.on("showToast", async (ev, { title, description, priority = 40 }) => {
