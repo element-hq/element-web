@@ -12,3 +12,14 @@
         gap: var(--cpd-space-2x);
     }
 }
+
+/* Media left, text right. With the thumbnail and border the tile is 480x144px. */
+.tileSide {
+    display: flex;
+    align-items: stretch;
+
+    .sideButtons {
+        align-self: flex-start;
+        margin: var(--cpd-space-3x);
+    }
+}

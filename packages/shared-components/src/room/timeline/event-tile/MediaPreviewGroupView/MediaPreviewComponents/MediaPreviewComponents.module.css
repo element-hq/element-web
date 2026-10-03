@@ -24,9 +24,54 @@
     color: var(--cpd-color-text-secondary);
 }
 
+.footer {
+    font: var(--cpd-font-body-sm-regular);
+    color: var(--cpd-color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .textContent {
     display: inline-block;
     min-width: 0;
+}
+
+/* Side layout: two lines each for header and body, header styled as a title. */
+.textContentSide {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    flex-grow: 1;
+    min-width: 0;
+    padding: var(--cpd-space-3x);
+
+    .header,
+    .body {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .header {
+        font: var(--cpd-font-body-md-semibold);
+    }
+
+    .header a {
+        color: var(--cpd-color-text-primary);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .body {
+        font: var(--cpd-font-body-md-regular);
+    }
+
+    .footer {
+        margin-top: auto;
+    }
 }
 
 .icon {
@@ -115,4 +160,22 @@
 .image.fullImage img {
     max-height: 300px;
     object-fit: contain;
+}
+
+/* Fixed 130x142px box for the side layout. */
+.image.thumbnailImage,
+.video.thumbnailVideo {
+    width: 130px;
+    height: 142px;
+    flex-shrink: 0;
+
+    button {
+        height: 100%;
+    }
+}
+
+.image.thumbnailImage img,
+.video.thumbnailVideo video {
+    height: 100%;
+    object-fit: cover;
 }

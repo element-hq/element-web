@@ -30,15 +30,27 @@ export interface MediaPreviewTileProps extends MediaPreviewGroupEntryBase {
 }
 
 export function MediaPreviewTile(props: MediaPreviewTileProps): JSX.Element {
+    const buttons = props.buttons && props.buttons.length !== 0 && <Buttons buttons={props.buttons} />;
+
+    if (props.layout === "side") {
+        return (
+            <div className={classNames(styles.tile, styles.tileSide)}>
+                {props.children}
+                <TextContent {...props} />
+                {buttons && <div className={styles.sideButtons}>{buttons}</div>}
+            </div>
+        );
+    }
+
     return (
         <div className={classNames(styles.tile, props.children ? styles.tileWithAbove : styles.tileWithoutAbove)}>
             {props.children}
             <div className={styles.below}>
                 <LeftGroup>
-                    <Icon {...props} />
+                    {props.icon && <Icon icon={props.icon} onClick={props.onClick} color={props.color} />}
                     <TextContent {...props} />
                 </LeftGroup>
-                {props.buttons && props.buttons.length !== 0 && <Buttons buttons={props.buttons} />}
+                {buttons}
             </div>
         </div>
     );

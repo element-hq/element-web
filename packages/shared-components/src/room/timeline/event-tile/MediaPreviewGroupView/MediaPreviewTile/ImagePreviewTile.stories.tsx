@@ -82,3 +82,25 @@ export const NoButtons: Story = {
         buttons: [],
     },
 };
+
+// Timeline link preview with a thumbnail.
+export const SideBySide: Story = {
+    args: {
+        layout: "side",
+        imageSize: "thumbnail",
+        imageOnClick: () => {},
+        header: "The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives",
+        headerUrl: "https://techcrunch.com/ai-future",
+        body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation and what it means for the years ahead.",
+        footer: "techcrunch.com",
+        icon: undefined,
+        buttons: [],
+    },
+};
+
+export const SideBySideWithButtons: Story = {
+    args: {
+        ...SideBySide.args,
+        buttons: [{ label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) }],
+    },
+};
