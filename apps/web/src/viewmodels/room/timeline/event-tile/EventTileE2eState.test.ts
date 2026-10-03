@@ -222,7 +222,7 @@ describe("EventTileE2eState", () => {
             E2ePadlockIcon.Warning,
             "The authenticity of this encrypted message can't be guaranteed on this device.",
         ],
-        [EventShieldReason.MISMATCHED_SENDER_KEY, E2ePadlockIcon.Warning, "Encrypted by an unverified session"],
+        [EventShieldReason.MISMATCHED_SENDER_KEY, E2ePadlockIcon.Warning, "Encrypted by an unverified device"],
         [EventShieldReason.SENT_IN_CLEAR, E2ePadlockIcon.Warning, "Not encrypted"],
         [
             EventShieldReason.VERIFICATION_VIOLATION,

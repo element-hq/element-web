@@ -72,9 +72,9 @@ describe("<ServerPickerDialog />", () => {
 
     // checkbox and text input have the same aria-label
     const getOtherHomeserverCheckBox = () =>
-        screen.getAllByLabelText("Other homeserver").find((node) => node.getAttribute("type") === "radio")!;
+        screen.getAllByLabelText("Other account provider").find((node) => node.getAttribute("type") === "radio")!;
     const getOtherHomeserverInput = () =>
-        screen.getAllByLabelText("Other homeserver").find((node) => node.getAttribute("type") === "text")!;
+        screen.getAllByLabelText("Other account provider").find((node) => node.getAttribute("type") === "text")!;
 
     describe("when default server config is selected", () => {
         it("should select other homeserver field on open", () => {

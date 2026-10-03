@@ -101,7 +101,7 @@ exports[`ConfirmRejectInviteDialog > can reject with options selected 1`] = `
             class="_message _help-message"
             id="radix-react-use-id-4"
           >
-            Report this room to your account provider.
+            Report this chat to your account provider.
           </span>
         </div>
       </div>
