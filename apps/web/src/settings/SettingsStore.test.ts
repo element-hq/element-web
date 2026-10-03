@@ -215,7 +215,7 @@ describe("SettingsStore", () => {
             it("migrates media preview configuration immediately", async () => {
                 client.setAccountData = vi.fn();
                 SettingsStore.runMigrations(false);
-                expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
+                expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", {
                     invite_avatars: "off",
                     media_previews: "off",
                 });
@@ -228,7 +228,7 @@ describe("SettingsStore", () => {
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
                 // Update is asynchronous
                 await waitFor(() => {
-                    expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
+                    expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", {
                         invite_avatars: "off",
                         media_previews: "off",
                     });
@@ -247,6 +247,92 @@ describe("SettingsStore", () => {
                 client.getAccountData = vi.fn().mockReturnValue({});
                 SettingsStore.runMigrations(false);
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
+
+            it("does not migrate media preview configuration if the unstable account data is already set", async () => {
+                client.setAccountData = vi.fn();
+                client.getAccountData = vi.fn().mockImplementation((type) => {
+                    if (type === "io.element.msc4278.media_preview_config") {
+                        return { getContent: vi.fn().mockReturnValue({ media_previews: "on" }) };
+                    }
+                    return undefined;
+                });
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                // Only the unstable -> stable migration should run, not the legacy migration.
+                await waitFor(() => {
+                    expect(client.setAccountData).toHaveBeenCalledTimes(1);
+                });
+                expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", {
+                    media_previews: "on",
+                });
+            });
+        });
+
+        describe("Migrate media preview configuration to the stable type", () => {
+            const unstableContent = { invite_avatars: "off", media_previews: "private" };
+
+            function mockAccountData(data: Record<string, Record<string, unknown>>): void {
+                client.getAccountData = vi.fn().mockImplementation((type) => {
+                    if (type in data) {
+                        return { getContent: vi.fn().mockReturnValue(data[type]) };
+                    }
+                    return undefined;
+                });
+            }
+
+            beforeEach(() => {
+                MatrixClientBackedController.matrixClient = client;
+                client.setAccountData = vi.fn();
+            });
+
+            it("copies the unstable config to the stable type", async () => {
+                mockAccountData({ "io.element.msc4278.media_preview_config": unstableContent });
+                SettingsStore.runMigrations(false);
+                await waitFor(() => {
+                    expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", unstableContent);
+                });
+                expect(client.setAccountData).toHaveBeenCalledTimes(1);
+            });
+
+            it("migrates even on a fresh login, as the data is server-side", async () => {
+                mockAccountData({ "io.element.msc4278.media_preview_config": unstableContent });
+                SettingsStore.runMigrations(true);
+                await waitFor(() => {
+                    expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", unstableContent);
+                });
+            });
+
+            it("migrates once the client is ready", async () => {
+                mockAccountData({ "io.element.msc4278.media_preview_config": unstableContent });
+                const mockInitialSync = (client.isInitialSyncComplete = vi.fn().mockReturnValue(false));
+                SettingsStore.runMigrations(false);
+                await Promise.resolve();
+                expect(client.setAccountData).not.toHaveBeenCalled();
+                mockInitialSync.mockReturnValue(true);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                await waitFor(() => {
+                    expect(client.setAccountData).toHaveBeenCalledWith("m.media_preview_config", unstableContent);
+                });
+            });
+
+            it("does nothing if the stable config already exists", async () => {
+                mockAccountData({
+                    "m.media_preview_config": { media_previews: "on" },
+                    "io.element.msc4278.media_preview_config": unstableContent,
+                });
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                await Promise.resolve();
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
+
+            it("does nothing if there is no unstable config", async () => {
+                mockAccountData({});
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                await Promise.resolve();
                 expect(client.setAccountData).not.toHaveBeenCalled();
             });
         });

@@ -19,6 +19,7 @@ import MatrixClientBackedController from "../../../../../settings/controllers/Ma
 import MatrixClientBackedSettingsHandler from "../../../../../settings/handlers/MatrixClientBackedSettingsHandler";
 import {
     MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
+    MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE,
     type MediaPreviewConfig,
     MediaPreviewValue,
 } from "../../../../../@types/media_preview";
@@ -56,12 +57,14 @@ describe("MediaPreviewAccountSettings", () => {
         // Defaults
         const element = getByLabelText("Hide avatars of room and inviter");
         await userEvent.click(element);
-        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, {
+        const expected = {
             invite_avatars: MediaPreviewValue.Off,
             media_previews: MediaPreviewValue.On,
-        });
-        // Ensure we don't double set the account data.
-        expect(client.setAccountData).toHaveBeenCalledTimes(1);
+        };
+        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, expected);
+        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE, expected);
+        // Ensure we don't double set the account data (one call per type).
+        expect(client.setAccountData).toHaveBeenCalledTimes(2);
     });
 
     // Skip the default.
@@ -87,11 +90,13 @@ describe("MediaPreviewAccountSettings", () => {
 
         const element = getByLabelText(key);
         await userEvent.click(element);
-        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, {
+        const expected = {
             invite_avatars: MediaPreviewValue.On,
             media_previews: value,
-        });
-        // Ensure we don't double set the account data.
-        expect(client.setAccountData).toHaveBeenCalledTimes(1);
+        };
+        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, expected);
+        expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE, expected);
+        // Ensure we don't double set the account data (one call per type).
+        expect(client.setAccountData).toHaveBeenCalledTimes(2);
     });
 });
