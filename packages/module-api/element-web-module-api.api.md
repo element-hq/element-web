@@ -7,6 +7,7 @@
 import { ComponentType } from 'react';
 import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
+import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { SVGAttributes } from 'react';
@@ -47,6 +48,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly customisations: CustomisationsApi;
     // @alpha
     readonly extras: ExtrasApi;
+    // @alpha
+    readonly fileViewer: FileViewerApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
@@ -262,6 +265,31 @@ export interface ExtrasApi {
 }
 
 // @alpha
+export interface FileViewerApi {
+    registerFileViewer(match: FileViewerMatcher, renderer: FileViewerRenderFunction, opts: FileViewerOptions): void;
+}
+
+// @alpha
+export type FileViewerMatcher = (media: MediaHandle) => boolean;
+
+// @alpha
+export interface FileViewerOptions {
+    buttonIcon: JSX_2.Element;
+    buttonText: string;
+    cardHeader: (media: MediaHandle) => string;
+    id: string;
+}
+
+// @alpha
+export interface FileViewerProps {
+    media: MediaHandle;
+    onClose: () => void;
+}
+
+// @alpha
+export type FileViewerRenderFunction = (props: FileViewerProps) => JSX_2.Element;
+
+// @alpha
 export interface HardwareKey {
     // (undocumented)
     label: string;
@@ -309,6 +337,9 @@ export interface MatrixEvent {
 
 // @public
 export type MaybePromise<T> = T | PromiseLike<T>;
+
+// @alpha
+export type MediaHandle = RemoteMedia | UploadedMedia;
 
 // @public
 export interface Module {
@@ -375,6 +406,12 @@ export interface Profile {
 export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
+
+// @alpha
+export type RemoteMedia = {
+    type: "remote";
+    preview: UrlPreview;
+};
 
 // @public
 export interface RichVariables {
@@ -466,12 +503,23 @@ export const enum UIComponent {
 }
 
 // @alpha
+export interface UploadedMedia {
+    blob(): Promise<Blob>;
+    // (undocumented)
+    byteSize?: number;
+    // (undocumented)
+    mimetype?: string;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    type: "uploaded";
+}
+
+// @alpha
 export interface UrlPreviewApi {
     registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
 }
 
-// Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
-//
 // @alpha
 export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
 
@@ -588,6 +636,10 @@ export type X509LoginResult = X509Result<void, X509LoginError>;
 
 // @alpha
 export type X509Result<T, E extends X509IpcError = X509IpcError> = { ok: true; data: T } | { ok: false; error: E };
+
+// Warnings were encountered during analysis:
+//
+// src/api/file-viewer.ts:29:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

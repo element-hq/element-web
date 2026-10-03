@@ -27,6 +27,7 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type RegisteredFileViewer } from "../../modules/FileViewerApi";
 
 const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
 
@@ -240,5 +241,58 @@ describe("RightPanel", () => {
 
         // As above: the header proves the card picked up this event.
         await waitFor(() => expect(screen.getByRole("heading", { name: "README.md" })).toBeInTheDocument());
+    });
+
+    it("renders a module's file viewer card for the media it was opened with", async () => {
+        const room = mkRoom(cli, "r1");
+        cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
+
+        const fileEvent = new MatrixEvent({
+            room_id: "r1",
+            sender: "@user:example.org",
+            event_id: "$file",
+            type: EventType.RoomMessage,
+            content: { body: "spec.pdf", msgtype: MsgType.File, url: "mxc://example.org/spec" },
+        });
+        const viewer: RegisteredFileViewer = {
+            match: () => true,
+            render: ({ media }) => <article aria-label={media.type === "uploaded" ? media.name : ""} />,
+            options: {
+                id: "test-viewer",
+                cardHeader: () => "Test viewer",
+                buttonText: "Open in test viewer",
+                buttonIcon: <></>,
+            },
+        };
+
+        await spinUpStores();
+
+        render(
+            <RightPanel
+                room={room}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+        );
+
+        const rpsUpdated = waitForRpsUpdate();
+        dis.dispatch({ action: Action.ViewRoom, room_id: "r1" });
+        await rpsUpdated;
+
+        RightPanelStore.instance.setCard(
+            {
+                phase: RightPanelPhases.FileViewer,
+                state: {
+                    fileViewer: viewer,
+                    fileViewerMedia: { type: "uploaded", name: "spec.pdf", blob: vi.fn() },
+                    fileViewerSourceEvent: fileEvent,
+                },
+            },
+            true,
+            "r1",
+        );
+
+        await waitFor(() => expect(screen.getByRole("heading", { name: "Test viewer" })).toBeInTheDocument());
+        expect(screen.getByRole("article", { name: "spec.pdf" })).toBeInTheDocument();
     });
 });
