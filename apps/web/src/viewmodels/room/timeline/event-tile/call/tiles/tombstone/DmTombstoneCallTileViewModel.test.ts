@@ -9,7 +9,7 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { CallDirection, CallType } from "@element-hq/web-shared-components";
-import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import { getMockedRtcDeclineEvent, getMockedRtcNotificationEvent } from "../../call-mocks";
@@ -37,6 +37,23 @@ describe("DmTombstoneCallTileViewModel", () => {
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285416000)));
         // Call should be declined
         expect(vm.getSnapshot().isCallDeclined).toStrictEqual(true);
+    });
+
+    it("should report why the call failed from invite progress", () => {
+        const mxEvent = getMockedRtcNotificationEvent("audio", 924285348000, 924285348000, "@alice:m.org");
+        const progress = new MatrixEvent({
+            type: "org.matrix.msc4075.rtc.invite_progress",
+            content: { state: "unreachable", reason: "SIP 404" },
+            sender: "@_sip_bot:m.org",
+            room_id: mxEvent.getRoomId(),
+        });
+        const getRelationsForEvent = vi.fn();
+        getRelationsForEvent.mockImplementation((_id, _rel, type) =>
+            type === "org.matrix.msc4075.rtc.invite_progress" ? { getRelations: () => [progress] } : undefined,
+        );
+        const vm = new DmTombstoneCallTileViewModel({ mxEvent, getRelationsForEvent, cli: stubClient() });
+        expect(vm.getSnapshot().failureReason).toStrictEqual("unreachable (SIP 404)");
+        expect(vm.getSnapshot().isCallDeclined).toStrictEqual(false);
     });
 
     it("should compute voice intent in state", () => {
