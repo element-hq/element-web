@@ -47,11 +47,12 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
-                  cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
+                  cache: ${{ runner.os != 'Windows' }}
+                  install: false
 
             - name: Fetch layered build
               id: layered

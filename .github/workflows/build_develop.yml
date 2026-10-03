@@ -32,7 +32,10 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+              with:
+                  cache: true
+                  install: false
 
             - name: Install Dependencies
               run: "./scripts/layered.sh"
