@@ -167,4 +167,58 @@ describe("<TimelineView />", () => {
         // The View hands the VM its imperative scroll handle.
         expect(actions.onJumpToLive.mock.calls[0][0]).toBeTypeOf("function");
     });
+
+    describe("when the viewport changes height", () => {
+        // The view is height:100%, so re-rendering the wrapper with a new height is how the composer
+        // growing, or a banner appearing above the timeline, reaches the scroller.
+        function renderResizable(vm: TimelineViewModel, height: number): { resize: (h: number) => void } {
+            const view = (h: number): React.ReactElement => (
+                <div style={{ height: h, width: 320 }}>
+                    <TimelineView vm={vm} renderItem={renderItem} />
+                </div>
+            );
+            const result = render(view(height));
+            return { resize: (h) => result.rerender(view(h)) };
+        }
+
+        const distanceFromBottom = (el: HTMLElement): number => el.scrollHeight - el.scrollTop - el.clientHeight;
+
+        it("keeps a reader who was at the bottom at the bottom when the viewport shrinks", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(true));
+            expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1);
+            actions.onAtBottomStateChange.mockClear();
+
+            resize(VIEWPORT_HEIGHT - 60);
+
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT - 60));
+            await waitFor(() => expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1));
+            // The view model is never told the reader left the bottom: they did not.
+            expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
+        });
+
+        it("leaves the scroll position alone when the reader was not at the bottom", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            // The first load's scrollToIndex keeps steering back to its target for a moment; let
+            // it settle, or it would undo the reader's scroll below.
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            scroller.scrollTop = 200;
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(false));
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            expect(scroller.scrollTop).toBe(200);
+
+            resize(VIEWPORT_HEIGHT - 60);
+
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT - 60));
+            // Give the view time to scroll, in case it wrongly does.
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            expect(scroller.scrollTop).toBe(200);
+        });
+    });
 });
