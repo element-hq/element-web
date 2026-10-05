@@ -1290,12 +1290,13 @@ export class RoomTimelineViewModel
         if (this.forwardSpinnerVisible) {
             items.push({ kind: "loading", key: RoomTimelineViewModel.FORWARD_LOADING_KEY });
         }
+        const events = this.loadedEvents();
         const isShown = this.shownEventTest();
         this.mergeSnapshot(
             {
                 items,
-                readReceiptsByEvent: this.computeReadReceipts(isShown),
-                lastSuccessfulEventId: this.computeLastSuccessfulEventId(isShown),
+                readReceiptsByEvent: this.computeReadReceipts(events, isShown),
+                lastSuccessfulEventId: this.computeLastSuccessfulEventId(events, isShown),
                 ...extra,
             },
             reason,
@@ -1524,7 +1525,10 @@ export class RoomTimelineViewModel
      * Which read receipts to draw beside which message, worked out by the same code as the old
      * timeline's, over the loaded and pending events, with a row for each event in {@link baseItems}.
      */
-    private computeReadReceipts(isShown = this.shownEventTest()): Map<string, IReadReceiptProps[]> {
+    private computeReadReceipts(
+        events = this.loadedEvents(),
+        isShown = this.shownEventTest(),
+    ): Map<string, IReadReceiptProps[]> {
         if (!this.showReadReceipts) {
             this.receiptsByUserId = new Map();
             return new Map();
@@ -1532,7 +1536,7 @@ export class RoomTimelineViewModel
         const { room, client } = this.opts;
         const myUserId = client.getSafeUserId();
         const { receiptsByEvent, receiptsByUserId } = getReadReceiptsByShownEvent(
-            this.loadedEvents(),
+            events,
             isShown,
             (event) => getReadReceiptsForEvent(event, room, room, client, myUserId),
             this.receiptsByUserId,
@@ -1542,9 +1546,11 @@ export class RoomTimelineViewModel
     }
 
     /** The message showing a "Sent" tick in place of read receipts, if any; see {@link findLastSuccessfulWeSent}. */
-    private computeLastSuccessfulEventId(isShown: (event: MatrixEvent) => boolean): string | null {
+    private computeLastSuccessfulEventId(
+        events: readonly MatrixEvent[],
+        isShown: (event: MatrixEvent) => boolean,
+    ): string | null {
         // Pending messages count: one the server has accepted takes the tick before its echo arrives.
-        const events = this.loadedEvents();
         const index = findLastSuccessfulWeSent(events, isShown, this.opts.client.getSafeUserId());
         return index >= 0 ? (events[index].getId() ?? null) : null;
     }
