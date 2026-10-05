@@ -47,7 +47,7 @@ export default defineConfig({
         "react-perf",
         "jsx-a11y",
     ],
-    jsPlugins: ["eslint-plugin-element-call", "eslint-plugin-react-web-api"],
+    jsPlugins: ["eslint-plugin-element-call", "eslint-plugin-element-web", "eslint-plugin-react-web-api"],
     categories: {
         correctness: "error",
         perf: "error",
@@ -187,6 +187,10 @@ export default defineConfig({
         ],
 
         // Catch work which outlives the component, hook or disposable class which started it
+        "element-web/no-leaked-class-timer": "error",
+        "element-web/no-leaked-emitter-listener": "error",
+        "element-web/no-subscribe-after-await": "error",
+        "element-web/require-lodash-cancel": "error",
         "react-web-api/no-leaked-event-listener": "error",
         "react-web-api/no-leaked-fetch": "error",
         "react-web-api/no-leaked-intersection-observer": "error",

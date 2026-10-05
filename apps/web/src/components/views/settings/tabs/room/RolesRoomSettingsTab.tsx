@@ -158,6 +158,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         if (client) {
             client.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         }
+        this.onThisRoomMembership.cancel();
     }
 
     private onRoomStateUpdate = (state: RoomState): void => {

@@ -84,6 +84,10 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         if (!this.state.messaging) return;
         this.state.messaging.off("ready", this.onReady);
         this.state.messaging.off(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
+        this.state.messaging.off(
+            `action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`,
+            this.onButtonEnableToggle,
+        );
         this.state.messaging.stop();
     }
 

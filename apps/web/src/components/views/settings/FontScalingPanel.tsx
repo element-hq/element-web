@@ -59,6 +59,8 @@ export default class FontScalingPanel extends React.Component<EmptyObject, IStat
         const client = MatrixClientPeg.safeGet();
         const userId = client.getSafeUserId();
         const profileInfo = await client.getProfileInfo(userId);
+        if (this.unmounted) return;
+
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, () => {
             // Update the layout for the preview window according to the user selection
             const value = SettingsStore.getValue("layout");
@@ -68,7 +70,6 @@ export default class FontScalingPanel extends React.Component<EmptyObject, IStat
                 });
             }
         });
-        if (this.unmounted) return;
 
         this.setState({
             userId,
