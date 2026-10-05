@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -194,6 +194,33 @@ describe("Spotlight Dialog", () => {
         fireEvent.keyDown(document.querySelector(".mx_SpotlightDialog_searchBox input")!, { key: "Enter" });
 
         expect(document.querySelector("div.mx_SpotlightDialog_filter")).not.toBeInTheDocument();
+    });
+
+    describe("focus reset when the results change", () => {
+        const originalScrollIntoView = Element.prototype.scrollIntoView;
+        let scrollIntoView: Mock<Element["scrollIntoView"]>;
+        beforeEach(() => {
+            scrollIntoView = vi.fn<Element["scrollIntoView"]>();
+            Element.prototype.scrollIntoView = scrollIntoView;
+        });
+        afterEach(() => {
+            Element.prototype.scrollIntoView = originalScrollIntoView;
+        });
+
+        it("scrolls the first result into view", async () => {
+            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            expect(scrollIntoView).toHaveBeenCalled();
+        });
+
+        it("does not touch the results after unmount", async () => {
+            const { unmount } = render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            unmount();
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            expect(scrollIntoView).not.toHaveBeenCalled();
+        });
     });
 
     it("should not offer the enter shortcut on the no results entry", async () => {
