@@ -178,7 +178,7 @@ exports[`<ResetIdentityPanel /> > should display the 'forgot recovery key' varia
         role="button"
         tabindex="0"
       >
-        Cancel
+        Go back
       </button>
     </div>
   </div>
@@ -363,7 +363,7 @@ exports[`<ResetIdentityPanel /> > should display the 'sync failed' variant corre
         role="button"
         tabindex="0"
       >
-        Cancel
+        Go back
       </button>
     </div>
   </div>
@@ -551,7 +551,7 @@ exports[`<ResetIdentityPanel /> > should reset the encryption when the continue 
         role="button"
         tabindex="0"
       >
-        Cancel
+        Go back
       </button>
     </div>
   </div>
