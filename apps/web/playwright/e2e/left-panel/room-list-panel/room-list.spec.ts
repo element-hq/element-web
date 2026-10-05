@@ -14,6 +14,11 @@ import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { getRoomList, getSectionHeader } from "./utils";
 
+test.use({
+    // These tests check unread counts calculated by the homeserver, which need push enabled.
+    synapseConfig: { push: { enabled: true } },
+});
+
 test.describe("Room list", () => {
     test.use({
         displayName: "Alice",

@@ -11,6 +11,11 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
+test.use({
+    // These tests check unread counts calculated by the homeserver, which need push enabled.
+    synapseConfig: { push: { enabled: true } },
+});
+
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
 

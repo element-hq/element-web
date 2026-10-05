@@ -13,6 +13,11 @@ import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
 
+test.use({
+    // These tests check unread counts calculated by the homeserver, which need push enabled.
+    synapseConfig: { push: { enabled: true } },
+});
+
 test.describe("Room list filters and sort", () => {
     test.use({
         displayName: "Alice",

@@ -13,6 +13,11 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const TEST_ROOM_NAME = "The mark unread test room";
 
+test.use({
+    // These tests check unread counts calculated by the homeserver, which need push enabled.
+    synapseConfig: { push: { enabled: true } },
+});
+
 test.describe("Mark as Unread", () => {
     test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
 

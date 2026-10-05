@@ -11,6 +11,11 @@ import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { getSampleFilePath } from "../../sample-files";
 
+test.use({
+    // These tests check unread counts calculated by the homeserver, which need push enabled.
+    synapseConfig: { push: { enabled: true } },
+});
+
 test.describe("Threads", () => {
     test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3489");
     test.use({

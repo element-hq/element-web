@@ -190,6 +190,9 @@ export interface SynapseConfig {
         allowed_lifetime_min?: string;
         allowed_lifetime_max?: string;
     };
+    push?: {
+        enabled: boolean;
+    };
 }
 
 const DEFAULT_CONFIG: SynapseConfig = {
@@ -312,6 +315,14 @@ const DEFAULT_CONFIG: SynapseConfig = {
     },
     room_list_publication_rules: [{ action: "allow" }],
     modules: [],
+    // Disabling means that push rules are not calculated during
+    // room creation or event sending which can result in a moderate
+    // speed-up per test.
+    // The downside is we don't get notification counts down sync, so
+    // tests that rely on that should enable push in their configuration.
+    push: {
+        enabled: false,
+    },
 };
 
 /**
@@ -360,7 +371,7 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                         },
                     },
                     root: {
-                        level: "DEBUG",
+                        level: "INFO",
                         handlers: ["console"],
                     },
                     disable_existing_loggers: false,
