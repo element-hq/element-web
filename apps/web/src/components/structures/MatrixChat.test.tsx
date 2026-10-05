@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach, type Mocked } from "vitest";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { cleanup, fireEvent, render, type RenderResult, screen, waitFor, within, act } from "test-utils-rtl";
 import {
@@ -396,6 +396,11 @@ describe("<MatrixChat />", () => {
     });
 
     describe("qr login", () => {
+        beforeAll(async () => {
+            // Preload to avoid the first lazy-load hitting a test timeout
+            await import("../../async-components/views/dialogs/QrLoginDialog");
+        });
+
         beforeEach(() => {
             const authConfig = makeDelegatedAuthMetadata();
             defaultProps.config.validated_server_config!.delegatedAuthentication = authConfig;
