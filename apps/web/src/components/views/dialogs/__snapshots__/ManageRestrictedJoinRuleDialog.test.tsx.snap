@@ -70,7 +70,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> > should list spaces which are not p
         class="mx_ManageRestrictedJoinRuleDialog_section"
       >
         <h3>
-          Your spaces that do not contain this room
+          Your spaces that do not contain this chat
         </h3>
         <div
           class="mx_ManageRestrictedJoinRuleDialog_entry"

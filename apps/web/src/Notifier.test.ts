@@ -860,28 +860,22 @@ describe("Notifier", () => {
             });
         });
 
-        it("should not show toast when group call is already connected", () => {
+        it("should not show toast when group call is already connected", async () => {
             const members = [
-                new CallMembership(
+                await CallMembership.parseFromEvent(
                     mkEvent({
                         event: true,
                         room: testRoom.roomId,
                         user: userId,
                         type: EventType.GroupCallMemberPrefix,
-                        content: {},
-                    }),
-                    {
-                        // TODO: Once https://github.com/matrix-org/matrix-js-sdk/pull/5134 is merged this can be MembershipKind.Session
-                        kind: "session" as any,
-                        data: {
+                        content: {
                             call_id: "123",
                             application: "m.call",
                             focus_active: { type: "livekit", focus_selection: "oldest_membership" },
                             foci_preferred: [],
                             device_id: "DEVICE",
                         },
-                    },
-                    "hashed_id_XXXAAAAA",
+                    }),
                 ),
             ];
 

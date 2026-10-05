@@ -53,7 +53,7 @@ test.describe("Advanced section in Encryption tab", () => {
             const tab = await util.openEncryptionTab();
             const section = util.getEncryptionDetailsSection();
 
-            await section.getByRole("button", { name: "Reset cryptographic identity" }).click();
+            await section.getByRole("button", { name: "Reset digital identity" }).click();
             await expect(util.getEncryptionTabContent()).toMatchScreenshot("reset-cryptographic-identity.png");
             await tab.getByRole("button", { name: "Continue" }).click();
 
@@ -62,7 +62,7 @@ test.describe("Advanced section in Encryption tab", () => {
             await dialog.getByRole("textbox", { name: "Password" }).fill(credentials.password!);
             await dialog.getByRole("button", { name: "Continue" }).click();
 
-            await expect(section.getByRole("button", { name: "Reset cryptographic identity" })).toBeVisible();
+            await expect(section.getByRole("button", { name: "Reset digital identity" })).toBeVisible();
 
             // After resetting the identity, the user should set up a new recovery key
             await expect(
