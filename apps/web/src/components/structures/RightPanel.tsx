@@ -31,7 +31,7 @@ import TimelineCard from "../views/right_panel/TimelineCard";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { type IRightPanelCard, type IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
-import { PdfViewerCard } from "../views/right_panel/PdfViewerCard";
+import { DocumentViewerCard } from "../views/right_panel/DocumentViewerCard";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
@@ -279,9 +279,9 @@ export default class RightPanel extends React.Component<Props, IState> {
                 }
                 break;
 
-            case RightPanelPhases.PdfViewer:
-                if (!!cardState?.pdfViewerEvent) {
-                    card = <PdfViewerCard mxEvent={cardState.pdfViewerEvent} onClose={this.onClose} />;
+            case RightPanelPhases.DocumentViewer:
+                if (!!cardState?.documentViewerEvent) {
+                    card = <DocumentViewerCard mxEvent={cardState.documentViewerEvent} onClose={this.onClose} />;
                 }
                 break;
         }

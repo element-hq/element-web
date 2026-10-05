@@ -51,7 +51,7 @@ exports[`<LoginSplashView /> > Renders an error message 1`] = `
       class="mx_LoginSplashView_syncError"
     >
       <div>
-        Unable to connect to Homeserver. Retrying…
+        Unable to connect. Retrying…
       </div>
     </div>
     <div

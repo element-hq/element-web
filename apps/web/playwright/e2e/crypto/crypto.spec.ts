@@ -136,7 +136,7 @@ test.describe("Cryptography", function () {
 
         // Find "the Reset cryptographic identity" button
         const encryptionTab = await app.settings.openUserSettings("Encryption");
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
@@ -160,8 +160,8 @@ test.describe("Cryptography", function () {
         const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
         // Check that key storage starts off as disabled
         expect(await keyStorageToggle.isChecked()).toBe(false);
-        // Find "the Reset cryptographic identity" button
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        // Find "the Reset digital identity" button
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
@@ -190,8 +190,8 @@ test.describe("Cryptography", function () {
         // default 4S key to be empty
         await app.client.setAccountData("m.secret_storage.default_key", {} as unknown as { key: string });
 
-        // Find "the Reset cryptographic identity" button
-        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+        // Find "the Reset digital identity" button
+        await encryptionTab.getByRole("button", { name: "Reset digital identity" }).click();
 
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();

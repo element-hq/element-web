@@ -26,7 +26,7 @@ interface IProps {
 }
 
 const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
-    const [copiedText, setCopiedText] = useState(_t("action|click_to_copy"));
+    const [copiedText, setCopiedText] = useState(_t("action|select_to_copy"));
 
     return (
         <div className="mx_SpacePublicShare">
@@ -43,7 +43,7 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                     await sleep(5000);
                     if (copiedText === text) {
                         // if the text hasn't changed by another click then clear it after some time
-                        setCopiedText(_t("action|click_to_copy"));
+                        setCopiedText(_t("action|select_to_copy"));
                     }
                 }}
             />

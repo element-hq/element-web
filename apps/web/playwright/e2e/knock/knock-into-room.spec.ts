@@ -52,7 +52,7 @@ test.describe("Knock Into Room", () => {
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
 
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
@@ -102,7 +102,7 @@ test.describe("Knock Into Room", () => {
 
         await roomPreviewBar.getByRole("button", { name: "Re-join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
 
         // bot waits for knock request from Alice
         await waitForRoom(page, bot, room.roomId, (room) => {
@@ -142,7 +142,7 @@ test.describe("Knock Into Room", () => {
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
         // Knocked room should appear in Rooms
@@ -198,7 +198,7 @@ test.describe("Knock Into Room", () => {
 
         await roomPreviewBar.getByRole("button", { name: "Re-join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
 
         // bot waits for knock request from Alice
         await waitForRoom(page, bot, room.roomId, (room) => {
@@ -233,7 +233,7 @@ test.describe("Knock Into Room", () => {
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
         // Knocked room should appear in Rooms
@@ -241,7 +241,7 @@ test.describe("Knock Into Room", () => {
 
         await roomPreviewBar.getByRole("button", { name: "Cancel request" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
-        await expect(roomPreviewBar.getByRole("button", { name: "Request access" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("button", { name: "Request to join" })).toBeVisible();
 
         // The room is still open, so it stays in the room list
         const cybersecurityOption = page
@@ -284,7 +284,7 @@ test.describe("Knock Into Room", () => {
 
         // Once the user has knocked, the room stays in the list
         await app.viewRoomById(room.roomId);
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
         await app.viewRoomByName("Other");
@@ -303,7 +303,7 @@ test.describe("Knock Into Room", () => {
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
         // Knocked room should appear in Rooms
@@ -352,7 +352,7 @@ test.describe("Knock Into Room", () => {
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
-        await roomPreviewBar.getByRole("button", { name: "Request access" }).click();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
     });
 });

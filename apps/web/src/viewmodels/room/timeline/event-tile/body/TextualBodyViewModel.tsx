@@ -6,9 +6,10 @@
  */
 
 import React, { type MouseEvent } from "react";
-import { MatrixEventEvent, MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, MsgType, type MatrixEvent, User } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
+    LINKIFIED_DATA_ATTRIBUTE,
     TextualBodyViewBodyWrapperKind,
     TextualBodyViewKind,
     type TextualBodyViewModel as TextualBodyViewModelInterface,
@@ -20,8 +21,9 @@ import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { _t } from "../../../../../languageHandler";
 import { IntegrationManagers } from "../../../../../integrations/IntegrationManagers";
-import { tryTransformPermalinkToLocalHref } from "../../../../../utils/permalinks/Permalinks";
+import { parsePermalink, tryTransformPermalinkToLocalHref } from "../../../../../utils/permalinks/Permalinks";
 import { Action } from "../../../../../dispatcher/actions";
+import { type ViewUserPayload } from "../../../../../dispatcher/payloads/ViewUserPayload";
 import QuestionDialog from "../../../../../components/views/dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../../../../../components/views/dialogs/MessageEditHistoryDialog";
 import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
@@ -275,6 +277,11 @@ export class TextualBodyViewModel
     }
 
     public onRootClick = (event: MouseEvent<HTMLDivElement>): void => {
+        // The click was already handled by a child component, e.g. a pill
+        if (event.defaultPrevented) {
+            return;
+        }
+
         let target: HTMLLinkElement | null = event.target as HTMLLinkElement;
 
         if (target.nodeName !== "A") {
@@ -282,6 +289,17 @@ export class TextualBodyViewModel
         }
 
         if (!target) {
+            return;
+        }
+
+        // Show linkified user IDs in the right panel, as we do for user pills, rather than navigating to the user view
+        const userId = target.dataset?.[LINKIFIED_DATA_ATTRIBUTE] ? parsePermalink(target.href)?.userId : undefined;
+        if (userId) {
+            event.preventDefault();
+            dis.dispatch<ViewUserPayload>({
+                action: Action.ViewUser,
+                member: new User(userId),
+            });
             return;
         }
 

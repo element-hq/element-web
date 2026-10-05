@@ -26,7 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
-import { type OpenPdfViewerPayload } from "../../dispatcher/payloads/OpenPdfViewerPayload";
+import { type OpenDocumentViewerPayload } from "../../dispatcher/payloads/OpenDocumentViewerPayload";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
@@ -93,10 +93,10 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 break;
             }
 
-            case Action.OpenPdfViewer: {
-                const { event } = <OpenPdfViewerPayload>payload;
+            case Action.OpenDocumentViewer: {
+                const { event } = <OpenDocumentViewerPayload>payload;
                 this.setCard(
-                    { phase: RightPanelPhases.PdfViewer, state: { pdfViewerEvent: event } },
+                    { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: event } },
                     true,
                     event.getRoomId(),
                 );
@@ -387,14 +387,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state?.widgetId;
-            case RightPanelPhases.PdfViewer:
+            case RightPanelPhases.DocumentViewer:
                 // Also drop a card stored before the lab was turned off, so disabling it closes any
                 // viewer that was left open rather than restoring it on the next load.
                 if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
-                if (!card.state?.pdfViewerEvent) {
-                    logger.warn("removed card from right panel because of missing pdfViewerEvent in card state");
+                if (!card.state?.documentViewerEvent) {
+                    logger.warn("removed card from right panel because of missing documentViewerEvent in card state");
                 }
-                return !!card.state?.pdfViewerEvent;
+                return !!card.state?.documentViewerEvent;
         }
         return true;
     }

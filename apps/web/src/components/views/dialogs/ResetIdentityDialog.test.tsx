@@ -38,14 +38,14 @@ describe("ResetIdentityDialog", () => {
         expect(client.getCrypto()?.resetEncryption).toHaveBeenCalled();
     });
 
-    it("should call onFinished when we click Cancel", async () => {
+    it("should call onFinished when we click Go back", async () => {
         const client = mockClient();
 
         const onFinished = vi.fn();
         const onReset = vi.fn();
         const dialog = render(<ResetIdentityDialog onFinished={onFinished} onReset={onReset} variant="compromised" />);
 
-        await act(async () => dialog.getByRole("button", { name: "Cancel" }).click());
+        await act(async () => dialog.getByRole("button", { name: "Go back" }).click());
 
         expect(onFinished).toHaveBeenCalled();
 

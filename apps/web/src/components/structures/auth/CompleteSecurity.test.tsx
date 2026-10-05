@@ -127,7 +127,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 
@@ -155,7 +155,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 });

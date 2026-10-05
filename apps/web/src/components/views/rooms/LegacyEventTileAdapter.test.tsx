@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "test-utils-rtl";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkMessage, stubClient } from "test-utils";
 
 import { LegacyEventTileAdapter } from "./LegacyEventTileAdapter";
@@ -101,5 +101,22 @@ describe("<LegacyEventTileAdapter />", () => {
         render(<LegacyEventTileAdapter mxEvent={event} />);
 
         expect(tileProps.current?.editState).toBeUndefined();
+    });
+
+    it.each([
+        ["encrypting", EventStatus.ENCRYPTING],
+        ["sending", EventStatus.SENDING],
+        ["sent", EventStatus.SENT],
+        ["failed", EventStatus.NOT_SENT],
+    ] as const)("hands the tile the SDK status for a %s message", (sendState, status) => {
+        render(<LegacyEventTileAdapter mxEvent={event} sendState={sendState} />);
+
+        expect(tileProps.current?.eventSendStatus).toBe(status);
+    });
+
+    it("gives the tile no send status for a message the server has", () => {
+        render(<LegacyEventTileAdapter mxEvent={event} />);
+
+        expect(tileProps.current?.eventSendStatus).toBeUndefined();
     });
 });
