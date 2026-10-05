@@ -84,8 +84,15 @@ export async function openLabsNotificationSettings(app: ElementAppPage): Promise
  */
 export async function proceedPastUpdateBanner(settings: Locator): Promise<void> {
     const proceed = settings.getByRole("button", { name: "Proceed" });
-    await proceed.click();
-    await expect(proceed).not.toBeVisible();
+    await expect(proceed).toBeVisible();
+    // TODO: proceed only once when the race between `monitorSyncedPushRules` and the
+    // "Proceed" handler is fixed; it can leave the banner up after the first click.
+    await expect(async () => {
+        if (await proceed.isVisible()) {
+            await proceed.click();
+        }
+        await expect(proceed).not.toBeVisible({ timeout: 2000 });
+    }).toPass();
 }
 
 async function turnOffMentions(
