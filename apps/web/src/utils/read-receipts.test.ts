@@ -8,11 +8,17 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { EventType, MatrixEvent, ReceiptType, Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, ReceiptType, Room, RoomMember, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createTestClient, mkMessage } from "test-utils";
 
 import type { IReadReceiptProps } from "../components/views/rooms/EventTile";
-import { getReadReceiptsByShownEvent, getReadReceiptsForEvent, type ShownReadReceipt } from "./read-receipts";
+import {
+    getReadReceiptsByShownEvent,
+    getReadReceiptsForEvent,
+    readReceiptsEqual,
+    reuseUnchangedReadReceipts,
+    type ShownReadReceipt,
+} from "./read-receipts";
 
 const ROOM_ID = "!room:example.org";
 const ME = "@alice:example.org";
@@ -138,6 +144,80 @@ describe("which message each read receipt is drawn beside", () => {
 
             expect(usersOn(second, "$a")).toEqual([]);
             expect(usersOn(second, "$b")).toEqual([BOB]);
+        });
+    });
+});
+
+describe("read receipt comparison", () => {
+    const member = (userId: string, name: string): RoomMember => {
+        const m = new RoomMember(ROOM_ID, userId);
+        m.name = name;
+        return m;
+    };
+    const bob = member(BOB, "Bob");
+    const carol = member(CAROL, "Carol");
+
+    describe("readReceiptsEqual", () => {
+        it("treats the same readers, in order, with the same timestamps as equal", () => {
+            expect(
+                readReceiptsEqual([{ userId: BOB, roomMember: bob, ts: 1 }], [{ userId: BOB, roomMember: bob, ts: 1 }]),
+            ).toBe(true);
+            expect(readReceiptsEqual(undefined, undefined)).toBe(true);
+        });
+
+        it("tells apart different readers, orders, timestamps and members", () => {
+            const one = [{ userId: BOB, roomMember: bob, ts: 1 }];
+            expect(readReceiptsEqual(one, undefined)).toBe(false);
+            expect(readReceiptsEqual(one, [{ userId: CAROL, roomMember: carol, ts: 1 }])).toBe(false);
+            expect(readReceiptsEqual(one, [{ userId: BOB, roomMember: bob, ts: 2 }])).toBe(false);
+            expect(readReceiptsEqual(one, [{ userId: BOB, roomMember: null, ts: 1 }])).toBe(false);
+            expect(
+                readReceiptsEqual(
+                    [...one, { userId: CAROL, roomMember: carol, ts: 1 }],
+                    [{ userId: CAROL, roomMember: carol, ts: 1 }, ...one],
+                ),
+            ).toBe(false);
+        });
+    });
+
+    describe("reuseUnchangedReadReceipts", () => {
+        it("hands back the previous map when nothing moved", () => {
+            const previous = new Map([["$a", [{ userId: BOB, roomMember: bob, ts: 1 }]]]);
+            const next = new Map([["$a", [{ userId: BOB, roomMember: bob, ts: 1 }]]]);
+            expect(reuseUnchangedReadReceipts(previous, next)).toBe(previous);
+        });
+
+        it("keeps the lists of messages whose receipts did not move", () => {
+            const onA = [{ userId: BOB, roomMember: bob, ts: 1 }];
+            const previous = new Map([
+                ["$a", onA],
+                ["$b", [{ userId: CAROL, roomMember: carol, ts: 1 }]],
+            ]);
+            const movedToC = [{ userId: CAROL, roomMember: carol, ts: 2 }];
+            const next = new Map([
+                ["$a", [{ userId: BOB, roomMember: bob, ts: 1 }]],
+                ["$b", []],
+                ["$c", movedToC],
+            ]);
+
+            const result = reuseUnchangedReadReceipts(previous, next);
+
+            expect(result).not.toBe(previous);
+            expect(result.get("$a")).toBe(onA);
+            expect(result.get("$b")).toEqual([]);
+            expect(result.get("$c")).toBe(movedToC);
+        });
+
+        it("drops messages that no longer carry receipts", () => {
+            const previous = new Map([
+                ["$a", [{ userId: BOB, roomMember: bob, ts: 1 }]],
+                ["$b", [{ userId: CAROL, roomMember: carol, ts: 1 }]],
+            ]);
+            const next = new Map([["$a", [{ userId: BOB, roomMember: bob, ts: 1 }]]]);
+
+            const result = reuseUnchangedReadReceipts(previous, next);
+
+            expect([...result.keys()]).toEqual(["$a"]);
         });
     });
 });

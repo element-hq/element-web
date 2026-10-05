@@ -146,3 +146,44 @@ export function getReadReceiptsByShownEvent(
 
     return { receiptsByEvent, receiptsByUserId };
 }
+
+/**
+ * Whether two lists of receipts for one message draw the same: the same readers in the same order,
+ * with the same timestamps and the same room members. Members are compared by reference: one
+ * appearing (members lazy-loading) counts as a change, but a profile change does not, since the
+ * SDK updates the member in place and both lists then hold the same, already-changed object.
+ */
+export function readReceiptsEqual(
+    a: readonly IReadReceiptProps[] | null | undefined,
+    b: readonly IReadReceiptProps[] | null | undefined,
+): boolean {
+    if (a === b) return true;
+    if (!a || !b || a.length !== b.length) return false;
+    return a.every((ra, i) => {
+        const rb = b[i];
+        return ra.userId === rb.userId && ra.ts === rb.ts && ra.roomMember === rb.roomMember;
+    });
+}
+
+/**
+ * The receipts just worked out, keeping the previous list for each message whose receipts draw the same
+ * (see {@link readReceiptsEqual}), so only the tiles whose receipts moved get new props. When no
+ * message's receipts changed, `previous` itself is returned.
+ */
+export function reuseUnchangedReadReceipts(
+    previous: ReadonlyMap<string, IReadReceiptProps[]>,
+    next: ReadonlyMap<string, IReadReceiptProps[]>,
+): ReadonlyMap<string, IReadReceiptProps[]> {
+    let changed = previous.size !== next.size;
+    const result = new Map<string, IReadReceiptProps[]>();
+    for (const [eventId, receipts] of next) {
+        const previousReceipts = previous.get(eventId);
+        if (previousReceipts && readReceiptsEqual(previousReceipts, receipts)) {
+            result.set(eventId, previousReceipts);
+        } else {
+            result.set(eventId, receipts);
+            changed = true;
+        }
+    }
+    return changed ? result : previous;
+}

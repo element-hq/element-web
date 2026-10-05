@@ -40,6 +40,7 @@ import { findLastSuccessfulWeSent } from "./event-tile/EventTileReceiptState";
 import {
     getReadReceiptsByShownEvent,
     getReadReceiptsForEvent,
+    reuseUnchangedReadReceipts,
     type ShownReadReceipt,
 } from "../../../utils/read-receipts";
 import type { IReadReceiptProps } from "../../../components/views/rooms/EventTile";
@@ -1550,10 +1551,11 @@ export class RoomTimelineViewModel
     private computeReadReceipts(
         events = this.loadedEvents(),
         isShown = this.shownEventTest(),
-    ): Map<string, IReadReceiptProps[]> {
+    ): ReadonlyMap<string, IReadReceiptProps[]> {
+        const previous = this.snapshot.current.readReceiptsByEvent;
         if (!this.showReadReceipts) {
             this.receiptsByUserId = new Map();
-            return new Map();
+            return previous.size === 0 ? previous : new Map();
         }
         const { room, client } = this.opts;
         const myUserId = client.getSafeUserId();
@@ -1564,7 +1566,8 @@ export class RoomTimelineViewModel
             this.receiptsByUserId,
         );
         this.receiptsByUserId = receiptsByUserId;
-        return receiptsByEvent;
+        // Keep what is already published where nothing moved, so those rows are not redrawn.
+        return reuseUnchangedReadReceipts(previous, receiptsByEvent);
     }
 
     /** The message showing a "Sent" tick in place of read receipts, if any; see {@link findLastSuccessfulWeSent}. */

@@ -1124,6 +1124,22 @@ describe("RoomTimelineViewModel", () => {
             expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
         });
 
+        it("keeps the published receipts when a receipt changes nothing drawn", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            const published = vm.getSnapshot().readReceiptsByEvent;
+
+            // Our own receipt is never drawn, so the rows have nothing to redraw.
+            receiveReceipt("$b", USER_ID, 2000);
+            expect(vm.getSnapshot().readReceiptsByEvent).toBe(published);
+
+            // Someone else reading $b changes only $b's receipts; $a keeps its list.
+            receiveReceipt("$b", "@carol:example.org", 3000);
+            expect(vm.getSnapshot().readReceiptsByEvent).not.toBe(published);
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")).toBe(published.get("$a"));
+        });
+
         it("picks up a reader's profile once their membership loads", async () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
