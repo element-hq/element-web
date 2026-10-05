@@ -111,7 +111,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                     </EncryptionCardEmphasisedContent>
                 ) : (
                     <Button kind="tertiary" onClick={onCancelClick}>
-                        {_t("action|cancel")}
+                        {_t("action|go_back")}
                     </Button>
                 )}
             </EncryptionCardButtons>
@@ -121,9 +121,10 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
 
 function titleForVariant(variant: ResetIdentityBodyVariant): string {
     switch (variant) {
-        case "compromised":
         case "confirm":
             return _t("settings|encryption|advanced|breadcrumb_title");
+        case "compromised":
+            return _t("settings|encryption|advanced|breadcrumb_title_compromised");
         case "sync_failed":
             return _t("settings|encryption|advanced|breadcrumb_title_sync_failed");
         case "forgot":
