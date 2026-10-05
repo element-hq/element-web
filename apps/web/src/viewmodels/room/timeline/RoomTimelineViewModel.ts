@@ -14,10 +14,12 @@ import {
     MatrixEventEvent,
     NotificationCountType,
     ReceiptType,
+    RoomStateEvent,
     type IRoomTimelineData,
     type MatrixClient,
     type MatrixEvent,
     type Room,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -457,13 +459,33 @@ export class RoomTimelineViewModel
         );
         // Other users' read receipts moving.
         this.disposables.trackListener(this.opts.room, RoomEvent.Receipt, this.onRoomReceipt);
+        // Members loading or changing profile, whose receipts carry their avatar and name. Listened
+        // for on the client, which re-emits it for whichever state object the room currently has.
+        this.disposables.trackListener(
+            this.opts.client,
+            RoomStateEvent.Update,
+            this.onRoomStateUpdate as (...args: unknown[]) => void,
+        );
     }
 
     /** Someone's read receipt moved. Only the receipts change, so the rows are left alone. */
     private onRoomReceipt = (): void => {
-        if (this.isDisposed || !this.showReadReceipts) return;
-        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, "receipt");
+        this.updateReadReceipts("receipt");
     };
+
+    private onRoomStateUpdate = (state: RoomState): void => {
+        if (state.roomId !== this.opts.room.roomId) return;
+        this.updateReadReceipts("members");
+    };
+
+    /**
+     * Update the receipts shown beside the current rows. Skipped while a load or rebuild is due,
+     * since the rows are about to change and that republish updates the receipts anyway.
+     */
+    private updateReadReceipts(reason: string): void {
+        if (this.isDisposed || !this.showReadReceipts || this.loading || this.rebuildQueued) return;
+        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, reason);
+    }
 
     /** Show or hide other users' read receipts — the room-level `showReadReceipts` setting. */
     public setShowReadReceipts(show: boolean): void {

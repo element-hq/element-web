@@ -19,11 +19,13 @@ import {
     RelationType,
     Room,
     RoomEvent,
+    RoomStateEvent,
     type IEventRelation,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type TimelineItem } from "@element-hq/web-shared-components";
-import { createTestClient, mkMessage } from "test-utils";
+import { createTestClient, mkMembership, mkMessage } from "test-utils";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomTimelineViewModel } from "./RoomTimelineViewModel";
@@ -1120,6 +1122,27 @@ describe("RoomTimelineViewModel", () => {
             receiveReceipt("$somewhere-else", OTHER_USER_ID, 2000);
 
             expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
+        });
+
+        it("picks up a reader's profile once their membership loads", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")?.[0].roomMember).toBeNull();
+
+            // Lazy-loaded members arrive after the room has opened.
+            room.currentState.setStateEvents([
+                mkMembership({
+                    room: ROOM_ID,
+                    mship: KnownMembership.Join,
+                    user: OTHER_USER_ID,
+                    name: "Bob",
+                    event: true,
+                }),
+            ]);
+            client.emit(RoomStateEvent.Update, room.currentState);
+
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")?.[0].roomMember?.name).toBe("Bob");
         });
 
         it("draws nothing while receipts are turned off, and everything once they are turned back on", async () => {
