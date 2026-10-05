@@ -88,8 +88,11 @@ export async function proceedPastUpdateBanner(settings: Locator): Promise<void> 
     // TODO: proceed only once when the race between `monitorSyncedPushRules` and the
     // "Proceed" handler is fixed; it can leave the banner up after the first click.
     await expect(async () => {
+        // On a retry the banner may already be gone, in which case click() would wait
+        // for it instead of letting the assertion pass. The short click timeout covers
+        // the banner going away between the check and the click.
         if (await proceed.isVisible()) {
-            await proceed.click();
+            await proceed.click({ timeout: 1000 });
         }
         await expect(proceed).not.toBeVisible({ timeout: 2000 });
     }).toPass();
