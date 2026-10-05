@@ -146,7 +146,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
-        const button = await waitFor(() => screen.getByRole("button", { name: "Reset cryptographic identity" }));
+        const button = await waitFor(() => screen.getByRole("button", { name: "Reset digital identity" }));
         await user.click(button);
         await waitFor(() =>
             expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
@@ -211,7 +211,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await user.click(screen.getByRole("button", { name: "Back" }));
         await waitFor(() =>
-            screen.getByText("Your key storage is out of sync. Click one of the buttons below to fix the problem."),
+            screen.getByText("Your key storage is out of sync. Select one of the buttons below to fix the problem."),
         );
     });
 

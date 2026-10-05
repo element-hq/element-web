@@ -124,7 +124,7 @@ describe("<CreateRoomDialog />", () => {
             expect(getE2eeEnableToggleInputElement()).not.toBeDisabled();
             expect(
                 screen.getByText(
-                    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
+                    "Your account provider has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
             ).toBeDefined();
         });
@@ -144,7 +144,7 @@ describe("<CreateRoomDialog />", () => {
             expect(getE2eeEnableToggleInputElement()).toBeDisabled();
             expect(
                 screen.getByText(
-                    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
+                    "Your account provider has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
             ).toBeDefined();
         });
@@ -195,7 +195,7 @@ describe("<CreateRoomDialog />", () => {
             expect(getE2eeEnableToggleInputElement()).toBeDisabled();
             expect(
                 screen.getByText(
-                    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
+                    "Your account provider has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
             ).toBeDefined();
         });
