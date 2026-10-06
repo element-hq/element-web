@@ -598,8 +598,6 @@ Currently, the following UI feature flags are supported:
 
 `modules`: An optional array of module paths to load at runtime. Each entry is a URL or path to a JavaScript module entry point that will be dynamically imported when Element Web starts.
 
-**Note:** This is separate from the build-time module system configured via `build_config.yaml`. Runtime modules are loaded dynamically from the paths specified in `config.json`, while build-time modules are bundled during compilation.
-
 **Example:**
 
 ```json
