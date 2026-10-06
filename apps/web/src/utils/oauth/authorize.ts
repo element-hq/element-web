@@ -13,6 +13,7 @@ import { OAuthClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { getRedirectUrl, loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
+import { waitForLogoutCleanup } from "../../Lifecycle.ts";
 
 const RESPONSE_MODE = "fragment";
 
@@ -34,6 +35,9 @@ export const startOAuthLogin = async (
     identityServerUrl?: string,
     isRegistration?: boolean,
 ): Promise<void> => {
+    // A logout which is still clearing storage would wipe the context we need when the issuer sends us back
+    await waitForLogoutCleanup();
+
     const platform = PlatformPeg.get()!;
     const state = secureRandomString(32) + platform.getOAuthClientState();
 

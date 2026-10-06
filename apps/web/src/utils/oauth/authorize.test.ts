@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, afterAll, vi } from "vitest";
 import { OAuth2, type BearerTokenResponse } from "matrix-js-sdk/src/matrix";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";
@@ -17,7 +17,8 @@ import { mockPlatformPeg } from "test-utils";
 
 import { completeOAuthLogin, startOAuthLogin } from "./authorize";
 import { OAuthClientError } from "./error";
-import { storeAuthContext } from "./persistOAuthSettings.ts";
+import { loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
+import * as Lifecycle from "../../Lifecycle.ts";
 
 const webCrypto = new Crypto();
 
@@ -52,6 +53,10 @@ describe("OAuth2 authorization", () => {
             },
             configurable: true,
         });
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     afterAll(() => {
@@ -92,6 +97,21 @@ describe("OAuth2 authorization", () => {
             const authUrl = new URL(window.location.href);
 
             expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
+        });
+
+        it("should not store its context until a logout has finished clearing storage", async () => {
+            const cleanup = Promise.withResolvers<void>();
+            // Like a logout, the cleanup ends by clearing sessionStorage
+            vi.spyOn(Lifecycle, "waitForLogoutCleanup").mockReturnValue(
+                cleanup.promise.then(() => sessionStorage.clear()),
+            );
+
+            const login = startOAuthLogin(delegatedAuthConfig, clientId, homeserverUrl);
+            cleanup.resolve();
+            await login;
+
+            const state = new URL(window.location.href).searchParams.get("state");
+            expect(loadAuthContext()?.state).toEqual(state);
         });
     });
 
