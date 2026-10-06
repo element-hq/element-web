@@ -56,6 +56,9 @@ jobs:
 
             - name: Fetch layered build
               id: layered
+              env:
+                  # pnpm 12 on Windows breaks running scripts after switching to the pnpm version a git dependency pins
+                  PNPM_CONFIG_PM_ON_FAIL: ignore
               run: |
                   ./scripts/layered.sh
                   VERSION=$(scripts/get-version-from-git.sh)
