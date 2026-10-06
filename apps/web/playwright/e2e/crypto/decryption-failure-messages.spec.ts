@@ -32,14 +32,6 @@ test.describe("Cryptography", function () {
     test.describe("decryption failure messages", () => {
         test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
 
-        // This test logs in again and skips verification to check how undecryptable
-        // history is shown, so opt out of the (now default) forced verification.
-        test.use({
-            config: {
-                force_verification: false,
-            },
-        });
-
         test(
             "should handle device-relative historical messages",
             { tag: "@screenshot" },
