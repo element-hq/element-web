@@ -1071,8 +1071,8 @@ importers:
         specifier: ^9.0.0
         version: 9.9.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.3.0)(react@19.3.0)
       motion:
-        specifier: ^13.0.0
-        version: 13.4.4(react-dom@19.3.0)(react@19.3.0)
+        specifier: ^14.0.0
+        version: 14.0.0(react-dom@19.3.0)(react@19.3.0)
       styled-components:
         specifier: ^6.1.18
         version: 6.5.3(react-dom@19.3.0)(react@19.3.0)
@@ -8667,8 +8667,8 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
-  framer-motion@13.4.4:
-    resolution: {integrity: sha512-lbsZO95NGbulo6apz70zEt6Vxf/anoRwQI2ECEc/EQYWO5CGbITtl7plDW8P/VXgXw6e8wrbhH4a9i+ygke0Mg==}
+  framer-motion@14.0.0:
+    resolution: {integrity: sha512-QAtHmybrDFSliyW1sexMtSQTQd+1jw2ajibEmzpuI4XdPVzQkn+dAzJMm2sW3pl9MJuSS4xN51djQ7huhlP/VA==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -10080,14 +10080,14 @@ packages:
   moo-color@1.0.3:
     resolution: {integrity: sha512-i/+ZKXMDf6aqYtBhuOcej71YSlbjT3wCO/4H1j8rPvxDJEifdwgg5MaFyu6iYAT8GBZJg2z0dkgK4YMzvURALQ==}
 
-  motion-dom@13.4.4:
-    resolution: {integrity: sha512-z2qN3RUABSci4G7cr5aHTFhqPNCWJsEMMfRlzxqtANQsSCIbVJmHvMV288m5x7doEQBTYbRTWbKdztmquCn4Sw==}
+  motion-dom@14.0.0:
+    resolution: {integrity: sha512-aU3ApXo1yTpeUi3JU+jbDk2TELjxPE3MbBMUP7nZHlARb6RweJK+ojmLjpuB0YsY6zhbBl1YWGo8LMsI1/Llqw==}
 
-  motion-utils@13.3.0:
-    resolution: {integrity: sha512-sgSschQp7EseHInIlR7hBbMuvet3RA0bs28KPZAXJcGKGdxHGvh1ogpYDilY3bOMtl73EqPNmp75sAKHYPU5sg==}
+  motion-utils@14.0.0:
+    resolution: {integrity: sha512-jBsyjVxTTRZNeuvd/v+btVXr90LQkYl4HhRu9T2ARc+PMnvkmjsjRVeAg4Qm10b6TlTw+kykWI8gu/6LuvpLSQ==}
 
-  motion@13.4.4:
-    resolution: {integrity: sha512-lyX5kpAum2MmigecKWrFdIj3Sjn7pHek2EUrXY0WGZbOjJ1f5NfX0g4KQAb2Bp2EqL0a6dUzse11s1n7OYr5jg==}
+  motion@14.0.0:
+    resolution: {integrity: sha512-oGc2lkge2lkRZCP+J8/JsnYu4NFjqP1MtXirNdetn3QbvK2JqwM9A200EdT4C598KfzDhjLT12zF21xDM4Oilw==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -21005,10 +21005,10 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@13.4.4(react-dom@19.3.0)(react@19.3.0):
+  framer-motion@14.0.0(react-dom@19.3.0)(react@19.3.0):
     dependencies:
-      motion-dom: 13.4.4
-      motion-utils: 13.3.0
+      motion-dom: 14.0.0
+      motion-utils: 14.0.0
       tslib: 2.8.1
     optionalDependencies:
       react: 19.3.0
@@ -22469,15 +22469,15 @@ snapshots:
     dependencies:
       color-name: 1.1.4
 
-  motion-dom@13.4.4:
+  motion-dom@14.0.0:
     dependencies:
-      motion-utils: 13.3.0
+      motion-utils: 14.0.0
 
-  motion-utils@13.3.0: {}
+  motion-utils@14.0.0: {}
 
-  motion@13.4.4(react-dom@19.3.0)(react@19.3.0):
+  motion@14.0.0(react-dom@19.3.0)(react@19.3.0):
     dependencies:
-      framer-motion: 13.4.4(react-dom@19.3.0)(react@19.3.0)
+      framer-motion: 14.0.0(react-dom@19.3.0)(react@19.3.0)
       tslib: 2.8.1
     optionalDependencies:
       react: 19.3.0
