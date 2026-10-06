@@ -2315,6 +2315,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         vm={
                             new LegacyCryptoUnsupportedViewModel({
                                 dispatcher: dis,
+                                brand: SdkConfig.get().brand,
                             })
                         }
                     />

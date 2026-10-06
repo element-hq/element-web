@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
  * Error thrown when we find a crypto store which was created by a version of the application using
  * the legacy (libolm) crypto stack, and which was never migrated to the Rust crypto stack.
  *
- * The ErrorBoundary component shows an appropriate error.
+ * Thrown by `MatrixClientPeg` when setting up the client's crypto, and rethrown by `Lifecycle.loadSession`. `MatrixChat`
+ * catches it and switches to `Views.LEGACY_CRYPTO_UNSUPPORTED`, which explains the problem to the user.
  */
 export class LegacyCryptoStoreError extends Error {
     public constructor() {

@@ -9,7 +9,6 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import { LAST_LEGACY_CRYPTO_VERSION, LegacyCryptoUnsupportedViewModel } from "./legacyCryptoUnsupportedViewModel";
 import { MatrixDispatcher } from "../../dispatcher/dispatcher";
-import SdkConfig from "../../SdkConfig";
 
 describe("LegacyCryptoUnsupportedViewModel", () => {
     let dispatcher: MatrixDispatcher;
@@ -20,19 +19,17 @@ describe("LegacyCryptoUnsupportedViewModel", () => {
 
     afterEach(() => {
         vi.restoreAllMocks();
-        SdkConfig.reset();
     });
 
     it("exposes the brand and the last supported version in the snapshot", () => {
-        SdkConfig.put({ brand: "Acme Chat" });
-        const vm = new LegacyCryptoUnsupportedViewModel({ dispatcher });
+        const vm = new LegacyCryptoUnsupportedViewModel({ dispatcher, brand: "Acme Chat" });
 
         expect(vm.getSnapshot()).toEqual({ brand: "Acme Chat", version: LAST_LEGACY_CRYPTO_VERSION });
     });
 
     it("dispatches a logout when the sign out action is invoked", () => {
         const dispatch = vi.spyOn(dispatcher, "dispatch");
-        const vm = new LegacyCryptoUnsupportedViewModel({ dispatcher });
+        const vm = new LegacyCryptoUnsupportedViewModel({ dispatcher, brand: "Element" });
 
         vm.onSignOutClick();
 

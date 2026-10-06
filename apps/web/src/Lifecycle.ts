@@ -146,7 +146,10 @@ interface ILoadSessionOpts {
     defaultDeviceDisplayName?: string;
     /** The parameters read in at app load time from the URL. */
     urlParams?: URLParams;
-    /** If aborted, `loadSession` resolves to `false` instead of showing an error when it fails. */
+    /**
+     * Signal that is aborted if the server logs this session out while we are loading it (for example because the
+     * access token expired). If loading then fails, the error is ignored and `loadSession` resolves to `false`.
+     */
     abortSignal?: AbortSignal;
 }
 
@@ -215,8 +218,9 @@ async function handleLoadSessionError(e: unknown, opts: ILoadSessionOpts): Promi
         return false;
     }
 
-    // This session predates the rust crypto stack and cannot be migrated.
     if (e instanceof LegacyCryptoStoreError) {
+        // This session predates the rust crypto stack and cannot be migrated. Let this
+        // propagate up to MatrixChat, which shows a dedicated error screen for it.
         throw e;
     }
 

@@ -11,7 +11,6 @@ import {
     type LegacyCryptoUnsupportedViewModel as LegacyCryptoUnsupportedViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import SdkConfig from "../../SdkConfig";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 
 /**
@@ -25,6 +24,10 @@ interface LegacyCryptoUnsupportedViewModelProps {
      * Dispatcher used to trigger the sign out.
      */
     dispatcher: MatrixDispatcher;
+    /**
+     * The brand name for the client.
+     */
+    brand: string;
 }
 
 /**
@@ -37,7 +40,7 @@ export class LegacyCryptoUnsupportedViewModel
 {
     public constructor(props: LegacyCryptoUnsupportedViewModelProps) {
         super(props, {
-            brand: SdkConfig.get().brand,
+            brand: props.brand,
             version: LAST_LEGACY_CRYPTO_VERSION,
         });
     }

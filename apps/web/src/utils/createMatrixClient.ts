@@ -166,10 +166,10 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauthClientId?:
  * Create a new matrix client, with the persistent stores set up appropriately
  * (using localstorage/indexeddb, etc)
  *
- * @param {Object} opts  options to pass to Matrix.createClient. This will be
- *    extended with `sessionStore` and `store` members.
+ * @param opts - options to pass to Matrix.createClient. This will be
+ *    extended with `store` and `useAuthorizationHeader` members.
  *
- * @returns {MatrixClient} the newly-created MatrixClient
+ * @returns the newly-created MatrixClient
  */
 export function createMatrixClient(opts: ICreateClientOpts): MatrixClient {
     const storeOpts: Partial<ICreateClientOpts> = {

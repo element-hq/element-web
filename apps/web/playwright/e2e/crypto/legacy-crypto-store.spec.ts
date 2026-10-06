@@ -17,14 +17,14 @@ test.describe("legacy crypto store", function () {
     test.use({
         displayName: "Alice",
 
-        // Replace the `user` fixture with one which populates the indexeddb data before starting the app.
+        // Replace the `user` fixture with one which populates the legacy indexeddb data before starting the app.
         user: async ({ context, pageWithCredentials: page, credentials }, use) => {
-            await page.route(`/test_indexeddb_cryptostore_dump/*`, async (route, request) => {
+            await page.route(`/test_legacy_indexeddb_cryptostore_dump/*`, async (route, request) => {
                 const resourcePath = path.join(__dirname, new URL(request.url()).pathname);
                 const body = await readFile(resourcePath, { encoding: "utf-8" });
                 await route.fulfill({ body });
             });
-            await page.goto("/test_indexeddb_cryptostore_dump/index.html");
+            await page.goto("/test_legacy_indexeddb_cryptostore_dump/index.html");
 
             await use(credentials);
         },
