@@ -21,7 +21,7 @@ export function useIsExpanded(ref: RefObject<HTMLElement | null> | undefined, br
             });
 
             resizeObserver.observe(editor);
-            return () => resizeObserver.unobserve(editor);
+            return () => resizeObserver.disconnect();
         }
     }, [ref, breakingPoint]);
 

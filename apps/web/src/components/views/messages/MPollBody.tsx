@@ -14,6 +14,7 @@ import {
     type MatrixClient,
     type Relations,
     type Poll,
+    type Room,
     PollEvent,
     M_POLL_KIND_DISCLOSED,
     M_POLL_RESPONSE,
@@ -158,6 +159,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
     private seenEventIds: string[] = []; // Events we have already seen
+    // The room we registered `onNewPoll` against, so it can be unregistered with the same reference.
+    private room?: Room | null;
 
     public constructor(props: IBodyProps) {
         super(props);
@@ -174,13 +177,19 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         if (poll) {
             void this.setPollInstance(poll);
         } else {
-            room?.on(PollEvent.New, this.setPollInstance.bind(this));
+            this.room = room;
+            room?.on(PollEvent.New, this.onNewPoll);
         }
     }
 
     public componentWillUnmount(): void {
+        this.room?.off(PollEvent.New, this.onNewPoll);
         this.removeListeners();
     }
+
+    private onNewPoll = (poll: Poll): void => {
+        void this.setPollInstance(poll);
+    };
 
     private async setPollInstance(poll: Poll): Promise<void> {
         if (poll.pollId !== this.props.mxEvent.getId()) {
@@ -198,16 +207,19 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     private addListeners(): void {
         this.state.poll?.on(PollEvent.Responses, this.onResponsesChange);
         this.state.poll?.on(PollEvent.End, this.onRelationsChange);
-        this.state.poll?.on(PollEvent.UndecryptableRelations, this.render.bind(this));
+        this.state.poll?.on(PollEvent.UndecryptableRelations, this.onUndecryptableRelations);
     }
 
     private removeListeners(): void {
         if (this.state.poll) {
             this.state.poll.off(PollEvent.Responses, this.onResponsesChange);
             this.state.poll.off(PollEvent.End, this.onRelationsChange);
-            this.state.poll.off(PollEvent.UndecryptableRelations, this.render.bind(this));
+            this.state.poll.off(PollEvent.UndecryptableRelations, this.onUndecryptableRelations);
         }
     }
+
+    // Bound once so it can be removed with the same reference it was added with.
+    private onUndecryptableRelations = this.render.bind(this);
 
     private onResponsesChange = (responses: Relations): void => {
         this.setState({ voteRelations: responses });

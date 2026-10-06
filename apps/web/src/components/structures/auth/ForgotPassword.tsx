@@ -278,10 +278,10 @@ export default class ForgotPassword extends React.Component<Props, State> {
             },
         );
 
-        // Don't retry if the phase changed. For example when going back to email input.
-        while (this.state.phase === Phase.ResettingPassword) {
+        while (!this.unmounted && this.state.phase === Phase.ResettingPassword) {
             try {
                 await this.reset.setNewPassword(this.state.password);
+                if (this.unmounted) return;
                 this.setState({ phase: Phase.Done });
                 modal.close();
             } catch {

@@ -22,6 +22,7 @@ const AUTO_COLLAPSE_WIDTH = 768;
  */
 export class CollapseOnWindowResizeBehaviour extends BaseCollapseBehaviour {
     private isAutoCollapsed = CollapseOnWindowResizeBehaviour.shouldStartCollapsed();
+    private expandTimeout?: number;
 
     public constructor(collapseHandler: CollapseHandler) {
         super(collapseHandler);
@@ -45,7 +46,8 @@ export class CollapseOnWindowResizeBehaviour extends BaseCollapseBehaviour {
             if (!this.isAutoCollapsed) return;
             // As the window is resized, react-resizable-panels is also resizing the panels.
             // We'll expand the panel after a second to avoid racing with the library logic.
-            window.setTimeout(() => {
+            window.clearTimeout(this.expandTimeout);
+            this.expandTimeout = window.setTimeout(() => {
                 this.collapseHandler.expand();
                 this.isAutoCollapsed = false;
             }, 1000);
@@ -68,6 +70,9 @@ export class CollapseOnWindowResizeBehaviour extends BaseCollapseBehaviour {
     public dispose = (): void => {
         UIStore.instance.off(UI_EVENTS.WidthIncreased, this.onWindowWidthIncreased);
         UIStore.instance.off(UI_EVENTS.WidthDecreased, this.onWindowWidthDecreased);
+        this.onWindowWidthIncreased.cancel();
+        this.onWindowWidthDecreased.cancel();
+        window.clearTimeout(this.expandTimeout);
     };
 
     public static shouldStartCollapsed(): boolean {

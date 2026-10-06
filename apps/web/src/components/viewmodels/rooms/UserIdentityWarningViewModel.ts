@@ -165,6 +165,9 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
         loadViolations().catch((e) => {
             logger.error("Error initialising UserIdentityWarning:", e);
         });
+        return () => {
+            loadViolations.cancel();
+        };
     }, [loadViolations]);
 
     const dispatchAction = useCallback(

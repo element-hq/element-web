@@ -64,6 +64,10 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         };
     }
 
+    public componentWillUnmount(): void {
+        this.validateRecoveryKeyOnChange.cancel();
+    }
+
     private onCancel = (): void => {
         this.props.onFinished(false);
     };

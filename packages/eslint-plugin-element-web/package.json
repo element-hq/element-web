@@ -1,0 +1,21 @@
+{
+    "name": "eslint-plugin-element-web",
+    "type": "module",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Element Web specific lint rules, loaded by oxlint as a JS plugin",
+    "license": "SEE LICENSE IN README.md",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "lint:types": "nx lint:types",
+        "test:unit": "vitest"
+    },
+    "devDependencies": {
+        "@typescript/native": "catalog:",
+        "oxlint": "1.85.0",
+        "typescript": "catalog:ts6",
+        "vitest": "catalog:"
+    }
+}

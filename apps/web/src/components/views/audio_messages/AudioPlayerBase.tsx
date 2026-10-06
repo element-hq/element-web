@@ -44,7 +44,6 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
     }
 
     public componentDidMount(): void {
-        // We don't need to de-register: the class handles this for us internally
         this.props.playback.on(UPDATE_EVENT, this.onPlaybackUpdate);
 
         // Don't wait for the promise to complete - it will emit a progress update when it
@@ -53,6 +52,11 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
             logger.error("Error processing audio file:", e);
             this.setState({ error: true });
         });
+    }
+
+    public componentWillUnmount(): void {
+        // The playback can outlive this component, e.g. when it is reused in the composer
+        this.props.playback.off(UPDATE_EVENT, this.onPlaybackUpdate);
     }
 
     protected onKeyDown = (ev: React.KeyboardEvent): void => {

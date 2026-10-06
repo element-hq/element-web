@@ -181,6 +181,7 @@ export default class EventListSummary extends React.Component<Props, State> {
 
     public componentWillUnmount(): void {
         this.unbindSentinelListeners(this.props.events);
+        this.onEventSentinelUpdated.cancel();
     }
 
     private bindSentinelListeners(events: MatrixEvent[]): void {

@@ -121,6 +121,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.content = this.snapshot.current.content;
         this.previewCache = props.cachedEntries ?? new Map();
         this.disposables.track(() => this.fetcher.dispose());
+        this.disposables.track(() => this.computeSnapshotDebounced.cancel());
 
         // set state with initial content
         if (props.content) {

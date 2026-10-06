@@ -86,6 +86,7 @@ export class CreateSectionDialogViewModel
             emptyListText: _t("create_section_dialog|empty_list_text"),
             listTitle: _t("create_section_dialog|list_title"),
         });
+        this.disposables.track(() => this.search.cancel());
     }
 
     /**

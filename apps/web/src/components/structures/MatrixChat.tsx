@@ -230,6 +230,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private readonly loggedInView = createRef<LoggedInViewType>();
     private dispatcherRef?: string;
+    // Watches the setting which controls whether the current client's crypto sends to unverified devices
+    private blacklistUnverifiedDevicesWatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SDKContextClass;
@@ -463,6 +465,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        // UIStore.destroy() removes all its listeners on unmount
+        // oxlint-disable-next-line element-web/no-leaked-emitter-listener
         UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
 
         // For PersistentElement
@@ -519,8 +523,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.fontWatcher?.stop();
         UIStore.destroy();
         this.stores.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
+        RoomNotificationStateStore.instance.off(UPDATE_STATUS_INDICATOR, this.onUpdateStatusIndicator);
         window.removeEventListener("resize", this.onWindowResized);
-
+        this.warnInConsole.cancel();
+        if (this.blacklistUnverifiedDevicesWatcherRef) {
+            SettingsStore.unwatchSetting(this.blacklistUnverifiedDevicesWatcherRef);
+        }
         DecryptionFailureTracker.instance.stop();
     }
 
@@ -1616,6 +1624,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return this.loggedInView.current.canResetTimelineInRoom(roomId);
         });
 
+        // These listeners live as long as the client: Lifecycle.stopMatrixClient() removes all of them
+        /* oxlint-disable element-web/no-leaked-emitter-listener */
         cli.on(ClientEvent.Sync, (state: SyncState, prevState: SyncState | null, data?: SyncStateData) => {
             if (state === SyncState.Error || state === SyncState.Reconnecting) {
                 this.setState({ syncError: data?.error ?? null });
@@ -1768,6 +1778,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
             }
         });
+        /* oxlint-enable element-web/no-leaked-emitter-listener */
     }
 
     /**
@@ -1778,15 +1789,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
 
-        const shouldForceVerification = await this.shouldForceVerification();
-
         const crypto = cli.getCrypto();
+        // Replace any watcher from a previous client, which would otherwise pile up with each client start
+        if (this.blacklistUnverifiedDevicesWatcherRef) {
+            SettingsStore.unwatchSetting(this.blacklistUnverifiedDevicesWatcherRef);
+            this.blacklistUnverifiedDevicesWatcherRef = undefined;
+        }
         if (crypto) {
             crypto.globalBlacklistUnverifiedDevices = SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
                 "blacklistUnverifiedDevices",
             );
-            SettingsStore.watchSetting(
+            this.blacklistUnverifiedDevicesWatcherRef = SettingsStore.watchSetting(
                 "blacklistUnverifiedDevices",
                 null,
                 (_settingName, _roomId, atLevel, blacklistEnabled) => {
@@ -1797,6 +1811,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 },
             );
         }
+
+        const shouldForceVerification = await this.shouldForceVerification();
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
         // Will be moved to a pre-login flow as well

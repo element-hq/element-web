@@ -120,6 +120,8 @@ interface CallEventHandlerMap {
 export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandlerMap> {
     protected readonly widgetUid: string;
     protected readonly room: Room;
+    /** Whether destroy() has been called, after which an in-flight start() must not add listeners. */
+    protected destroyed = false;
 
     private _callType: CallType;
     public get callType(): CallType {
@@ -323,6 +325,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Stops all internal timers and tasks to prepare for garbage collection.
      */
     public destroy(): void {
+        this.destroyed = true;
         if (this.connected) {
             this.setDisconnected();
             this.close();
@@ -499,6 +502,7 @@ export class JitsiCall extends Call {
 
     public async start(): Promise<ClientWidgetApi> {
         const widgetApi = (await super.start())!;
+        if (this.destroyed) return widgetApi;
         widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
@@ -1035,6 +1039,7 @@ export class ElementCall extends Call {
             this.widgetGenerationParameters,
         ).toString();
         const widgetApi = (await super.start())!;
+        if (this.destroyed) return widgetApi;
         widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         widgetApi.on(`action:${ElementWidgetActions.Close}`, this.onClose);
@@ -1131,8 +1136,6 @@ export class ElementCall extends Call {
         // so the call would linger and its timeline tile stay "in progress"
         if (this.presented) this.presented = false;
     }
-
-    private destroyed = false;
 
     public destroy(): void {
         // close() above may re-enter here via checkDestroy while destroying

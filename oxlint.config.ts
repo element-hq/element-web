@@ -47,7 +47,7 @@ export default defineConfig({
         "react-perf",
         "jsx-a11y",
     ],
-    jsPlugins: ["eslint-plugin-element-call"],
+    jsPlugins: ["eslint-plugin-element-call", "eslint-plugin-element-web", "eslint-plugin-react-web-api"],
     categories: {
         correctness: "error",
         perf: "error",
@@ -185,6 +185,18 @@ export default defineConfig({
             "error",
             "/*\nCopyright %%CURRENT_YEAR%% Element Creations Ltd.\n\nSPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial\nPlease see LICENSE in the repository root for full details.\n*/\n\n",
         ],
+
+        // Catch work which outlives the component, hook or disposable class which started it
+        "element-web/no-leaked-class-timer": "error",
+        "element-web/no-leaked-emitter-listener": "error",
+        "element-web/no-subscribe-after-await": "error",
+        "element-web/require-lodash-cancel": "error",
+        "react-web-api/no-leaked-event-listener": "error",
+        "react-web-api/no-leaked-fetch": "error",
+        "react-web-api/no-leaked-intersection-observer": "error",
+        "react-web-api/no-leaked-interval": "error",
+        "react-web-api/no-leaked-resize-observer": "error",
+        "react-web-api/no-leaked-timeout": "error",
 
         // Allow the use of underscore to show args are not used.
         // This is helpful for seeing that a function implements

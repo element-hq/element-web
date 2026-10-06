@@ -42,6 +42,11 @@ export function SeekBar({ value = 0, className, ...rest }: Readonly<SeekBarProps
     useEffect(() => {
         setThrottledValue(value);
     }, [value, setThrottledValue]);
+    useEffect(() => {
+        return () => {
+            setThrottledValue.cancel();
+        };
+    }, [setThrottledValue]);
 
     return (
         <input
