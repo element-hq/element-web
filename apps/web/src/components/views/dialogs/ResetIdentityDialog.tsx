@@ -25,8 +25,9 @@ interface ResetIdentityDialogProps {
     onReset: () => void;
 
     /**
-     * If supplied, show a "Sign out" button instead of "Go back", and call this
-     * function when it is clicked.
+     * When `variant` is `no_verification_method`, this function must be
+     * supplied. It will be called when the user clicks "Sign out", which
+     * replaces the cancel button in this variant.
      */
     onSignOut?: () => void;
 
@@ -57,6 +58,10 @@ export function ResetIdentityDialog({
         // Normally, the cancel button will just close the dialog, but if there
         // are no other viable verification methods, the only sensible option
         // other than a reset is for the user to give up and sign out.
+        //
+        // If we are in `no_verification_method` mode, then we should have been
+        // supplied `onSignOut` but if that didn't happen for some reason, just
+        // close the dialog as normal.
         if (onSignOut && variant === "no_verification_method") {
             onSignOut();
         } else {
