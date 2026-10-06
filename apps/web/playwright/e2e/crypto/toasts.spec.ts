@@ -180,6 +180,13 @@ test.describe("'Turn on key storage' toast", () => {
 });
 
 test.describe("Verify this device toast", () => {
+    //This is also testing skipping verification, hence need to allow it
+    test.use({
+        config: {
+            force_verification: false,
+        },
+    });
+
     test(
         "The toast is displayed if we are not verified",
         { tag: "@screenshot" },

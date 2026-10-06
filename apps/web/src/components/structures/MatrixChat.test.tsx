@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach, type Mocked } from "vitest";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { cleanup, fireEvent, render, type RenderResult, screen, waitFor, within, act } from "test-utils-rtl";
 import {
@@ -396,6 +396,11 @@ describe("<MatrixChat />", () => {
     });
 
     describe("qr login", () => {
+        beforeAll(async () => {
+            // Preload to avoid the first lazy-load hitting a test timeout
+            await import("../../async-components/views/dialogs/QrLoginDialog");
+        });
+
         beforeEach(() => {
             const authConfig = makeDelegatedAuthMetadata();
             defaultProps.config.validated_server_config!.delegatedAuthentication = authConfig;
@@ -657,7 +662,7 @@ describe("<MatrixChat />", () => {
                 );
 
                 await expectOAuthError(
-                    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
+                    "We asked the browser to remember which account provider you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 );
             });
 
@@ -1588,6 +1593,8 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
+                        defaultProps.config.force_verification = false;
+
                         vi.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
                             async (roomId: string) => {
                                 return roomId === encryptedRoom.roomId;
@@ -1684,7 +1691,7 @@ describe("<MatrixChat />", () => {
             // warning dialog
             expect(
                 within(dialog).getByText(
-                    "We asked the browser to remember which homeserver you use to let you sign in, " +
+                    "We asked the browser to remember which account provider you use to let you sign in, " +
                         "but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 ),
             ).toBeInTheDocument();
@@ -1719,11 +1726,7 @@ describe("<MatrixChat />", () => {
                 const dialog = await screen.findByRole("dialog");
 
                 // warning dialog
-                expect(
-                    within(dialog).getByText(
-                        "There was a problem communicating with the homeserver, please try again later.",
-                    ),
-                ).toBeInTheDocument();
+                expect(within(dialog).getByText("Something went wrong. Please try again later.")).toBeInTheDocument();
             });
 
             it("should not clear storage", async () => {

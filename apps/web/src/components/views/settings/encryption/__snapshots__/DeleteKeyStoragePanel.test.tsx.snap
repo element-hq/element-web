@@ -82,14 +82,14 @@ exports[`<DeleteKeyStoragePanel /> > should match snapshot 1`] = `
       <h2
         class="_typography _font-heading-sm-semibold"
       >
-        Are you sure you want to turn off key storage and delete it?
+        Turn off and delete key storage?
       </h2>
     </div>
     <div
       class="_flex mx_EncryptionCard_emphasisedContent"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
+      Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:
       <ul
         class="_visual-list"
       >
