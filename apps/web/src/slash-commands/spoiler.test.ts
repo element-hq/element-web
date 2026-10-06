@@ -8,6 +8,7 @@
 // @vitest-environment happy-dom
 
 import { describe, it, expect } from "vitest";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 
 import { setUpCommandTest } from "./__mocks__";
 
@@ -21,17 +22,24 @@ describe("/spoiler", () => {
 
     it("should wrap plain text in a spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        await expect(command.run(client, roomId, null, "plain text").promise).resolves.toMatchSnapshot();
+        const content = (await command.run(client, roomId, null, "plain text").promise) as IContent;
+        // Single-line plain text is not wrapped in <p> by the markdown serializer
+        expect(content.formatted_body).toBe("<span data-mx-spoiler>plain text</span>");
+        expect(content.body).toBe("plain text");
     });
 
     it("should convert markdown to HTML inside the spoiler span", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        await expect(command.run(client, roomId, null, "**secret** message").promise).resolves.toMatchSnapshot();
+        const content = (await command.run(client, roomId, null, "**secret** message").promise) as IContent;
+        // Single-line markdown: no <p> wrapper, ** becomes <strong>
+        expect(content.formatted_body).toBe("<span data-mx-spoiler><strong>secret</strong> message</span>");
+        expect(content.body).toBe("**secret** message");
     });
 
     it("should preserve the plain text body unchanged", async () => {
         const { client, command } = setUpCommandTest(roomId, `/spoiler`);
-        const result = await command.run(client, roomId, null, "just text").promise;
-        expect(result).toMatchSnapshot();
+        const content = (await command.run(client, roomId, null, "just text").promise) as IContent;
+        expect(content.body).toBe("just text");
+        expect(content.formatted_body).toBe("<span data-mx-spoiler>just text</span>");
     });
 });
