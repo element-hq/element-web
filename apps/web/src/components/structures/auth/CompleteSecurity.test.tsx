@@ -49,10 +49,10 @@ describe("CompleteSecurity", () => {
         vi.restoreAllMocks();
     });
 
-    it("Renders with a cancel button by default", () => {
+    it("Does not render with a cancel button by default", () => {
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Skip verification for now" })).not.toBeInTheDocument();
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
@@ -92,6 +92,9 @@ describe("CompleteSecurity", () => {
         // The "Can't confirm?" button is visible and enabled.
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
 
+        // And you also have the option to sign out
+        expect(screen.queryByRole("button", { name: "Sign out" })).toBeInTheDocument();
+
         // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
@@ -124,7 +127,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 
@@ -152,7 +155,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 });

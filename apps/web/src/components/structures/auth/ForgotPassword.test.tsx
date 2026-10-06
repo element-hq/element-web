@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { render, type RenderResult, screen, waitFor, cleanup } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
@@ -43,8 +43,10 @@ describe("<ForgotPassword>", () => {
     let onLoginClick: () => void;
     let renderResult: RenderResult;
 
+    // Paste rather than type to avoid slow zxcvbn validation per character.
     const typeIntoField = async (label: string, value: string): Promise<void> => {
-        await userEvent.type(screen.getByLabelText(label), value, { delay: null });
+        await userEvent.click(screen.getByLabelText(label), { delay: null });
+        await userEvent.paste(value);
     };
 
     const click = async (element: Element): Promise<void> => {
@@ -57,6 +59,12 @@ describe("<ForgotPassword>", () => {
             expect(screen.getByText("Reset your password")).toBeInTheDocument();
         });
     };
+
+    beforeAll(async () => {
+        // PassphraseField lazy loads the password scorer and its large dictionaries, which can be slow on CI.
+        // Preload it so the first tests submitting a password aren't racing the import.
+        await import("../../../utils/PasswordScorer");
+    });
 
     filterConsole(
         // not implemented by js-dom https://github.com/jsdom/jsdom/issues/1937
@@ -156,7 +164,7 @@ describe("<ForgotPassword>", () => {
             it("should show an info about that", async () => {
                 await expect(
                     screen.findByText(
-                        "Cannot reach homeserver: Ensure you have a stable internet connection, or get in touch with the server admin",
+                        "Can't connect: Ensure you have a stable internet connection, or get in touch with your account provider",
                     ),
                 ).resolves.toBeInTheDocument();
             });
@@ -266,10 +274,10 @@ describe("<ForgotPassword>", () => {
                             await click(screen.getByText("Reset password"));
                         });
 
-                        it("should show the rate limit error message", () => {
-                            expect(
-                                screen.getByText("Too many attempts in a short time. Retry after 13:37."),
-                            ).toBeInTheDocument();
+                        it("should show the rate limit error message", async () => {
+                            await expect(
+                                screen.findByText("Too many attempts in a short time. Retry after 13:37."),
+                            ).resolves.toBeInTheDocument();
                         });
                     });
 
@@ -389,16 +397,18 @@ describe("<ForgotPassword>", () => {
                             await click(screen.getByText("Continue"));
 
                             // expect setPassword with logoutDevices = true
-                            expect(client.setPassword).toHaveBeenCalledWith(
-                                {
-                                    type: "m.login.email.identity",
-                                    threepid_creds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
+                            await waitFor(() =>
+                                expect(client.setPassword).toHaveBeenCalledWith(
+                                    {
+                                        type: "m.login.email.identity",
+                                        threepid_creds: {
+                                            client_secret: expect.any(String),
+                                            sid: testSid,
+                                        },
                                     },
-                                },
-                                testPassword,
-                                true,
+                                    testPassword,
+                                    true,
+                                ),
                             );
                         });
                     });

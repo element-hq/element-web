@@ -1244,7 +1244,7 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
   >
     <button
       aria-haspopup="menu"
-      aria-label="Open room General with a video call."
+      aria-label="Open room General, video call in progress."
       aria-selected="false"
       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
@@ -1392,7 +1392,7 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
   >
     <button
       aria-haspopup="menu"
-      aria-label="Open room General with a voice call."
+      aria-label="Open room General, voice call in progress."
       aria-selected="false"
       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"

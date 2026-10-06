@@ -172,14 +172,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
 
         const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
-        const parts = this.restoreStoredEditorState(partCreator) || [];
-        this.model = new EditorModel(parts, partCreator);
+        this.model = new EditorModel([], partCreator);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
     }
 
     public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
+
+        // Restore the draft here rather than in the constructor, as another composer for the same room
+        // may be unmounting in this same render (e.g. the right panel timeline when a call ends), and it
+        // only saves its draft in componentWillUnmount, which React runs before componentDidMount,
+        // but after our constructor.
+        const parts = this.restoreStoredEditorState(this.model.partCreator);
+        if (parts) {
+            this.model.reset(parts);
+        }
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {

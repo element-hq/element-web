@@ -167,7 +167,7 @@ test.describe("Login", () => {
         });
 
         test.describe("verification after login", () => {
-            test("Shows verification prompt after login if signing keys are set up, skippable by default", async ({
+            test("Shows verification prompt after login if signing keys are set up, not skippable by default", async ({
                 page,
                 homeserver,
                 request,
@@ -189,7 +189,7 @@ test.describe("Login", () => {
                     page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
                 ).toBeVisible();
 
-                await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
             });
 
             test.describe("with force_verification off", () => {
@@ -314,7 +314,7 @@ test.describe("Login", () => {
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // First try cancelling and restarting
-                await page.getByRole("button", { name: "Cancel" }).click();
+                await page.getByRole("button", { name: "Go back" }).click();
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // Then click outside the dialog and restart

@@ -52,6 +52,8 @@ export type PdfUsercontentMessage =
     | { type: "loaded"; pageCount: number; page: number }
     /** The page at the top of the view changed. */
     | { type: "page"; page: number }
+    /** The zoom level changed. `scale` is a percentage. */
+    | { type: "scale"; scale: number }
     | { type: "position"; position: PdfPosition }
     /** For the log, not the reader. */
     | { type: "error"; message: string };
@@ -114,6 +116,9 @@ export function parsePdfUsercontentMessage(data: unknown): PdfUsercontentMessage
         case "page":
             if (!isPositiveInteger(data.page)) return;
             return { type: "page", page: data.page };
+        case "scale":
+            if (!isFiniteNumber(data.scale) || data.scale <= 0) return;
+            return { type: "scale", scale: data.scale };
         case "position": {
             if (!isPdfPosition(data.position)) return;
             const { page, scale, left, top } = data.position;

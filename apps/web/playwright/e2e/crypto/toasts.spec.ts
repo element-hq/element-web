@@ -78,7 +78,8 @@ test.describe("'Turn on key storage' toast", () => {
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
@@ -179,6 +180,13 @@ test.describe("'Turn on key storage' toast", () => {
 });
 
 test.describe("Verify this device toast", () => {
+    //This is also testing skipping verification, hence need to allow it
+    test.use({
+        config: {
+            force_verification: false,
+        },
+    });
+
     test(
         "The toast is displayed if we are not verified",
         { tag: "@screenshot" },

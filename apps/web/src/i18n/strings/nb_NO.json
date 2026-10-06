@@ -27,7 +27,6 @@
         "cancel": "Avbryt",
         "change": "Endre",
         "clear": "Tøm",
-        "click_to_copy": "Klikk for å kopiere",
         "close": "Lukk",
         "collapse": "Trekk sammen",
         "complete": "Fullført",
@@ -3158,9 +3157,7 @@
         "show_thread_filter": "Vis:"
     },
     "threads_activity_centre": {
-        "header": "Trådaktivitet",
-        "no_rooms_with_threads_notifs": "Du har ikke rom med trådvarsler ennå.",
-        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
+        "header": "Trådaktivitet"
     },
     "time": {
         "date_at_time": "%(date)s klokken %(time)s",
