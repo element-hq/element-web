@@ -49,10 +49,10 @@ describe("CompleteSecurity", () => {
         vi.restoreAllMocks();
     });
 
-    it("Does not render with a cancel button by default", () => {
+    it("Renders with a cancel button by default", () => {
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.queryByRole("button", { name: "Skip verification for now" })).not.toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
