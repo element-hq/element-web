@@ -25,7 +25,7 @@ interface ResetIdentityBodyProps {
     onReset: () => void;
 
     /**
-     * Called when the cancel button is clicked.
+     * Called when the "Go back" or "Sign out" button is clicked.
      */
     onCancelClick: () => void;
 
@@ -51,7 +51,8 @@ interface ResetIdentityBodyProps {
  *
  * "no_verification_method" is shown when the device is unverified and has no way of
  * obtaining the existing keys, and hence the identity needs to be reset to have
- * a cross-signed device.
+ * a cross-signed device. When this variant is used, a "Sign out" button is displayed
+ * instead of the normal cancel ("Go back") button.
  */
 export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm" | "no_verification_method";
 
