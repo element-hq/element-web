@@ -107,6 +107,27 @@ describe("init", () => {
         delete window.matrixChat;
     });
 
+    it("should route back to the screen it last set after the hash moved elsewhere", () => {
+        const location = {
+            hash: "",
+            replace: vi.fn(),
+            assign: vi.fn(),
+        };
+        Object.defineProperty(window, "location", { value: location, writable: true });
+        window.matrixChat = {
+            showScreen: vi.fn(),
+        } as unknown as MatrixChat;
+        init();
+
+        onNewScreen("room/!room:server");
+        location.hash = "#/home";
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+        location.hash = "#/room/!room:server";
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+
+        expect(window.matrixChat.showScreen).toHaveBeenLastCalledWith("room/!room:server", {});
+    });
+
     it("should call showScreen on MatrixChat on hashchange", () => {
         Object.defineProperty(window, "location", {
             value: {
