@@ -29,7 +29,6 @@
         "cancel": "Canslo",
         "change": "Newid",
         "clear": "Clirio",
-        "click_to_copy": "Clicio i gopïo",
         "close": "Cau",
         "collapse": "Cau",
         "complete": "Wedi cwblhau",
@@ -3191,9 +3190,7 @@
         "show_thread_filter": "Dangos:"
     },
     "threads_activity_centre": {
-        "header": "Gweithgaredd edafedd",
-        "no_rooms_with_threads_notifs": "Nid oes gennych chi ystafelloedd gyda hysbysiadau edafedd eto.",
-        "no_rooms_with_unread_threads": "Nid oes gennych chi ystafelloedd ag edafedd heb eu darllen eto."
+        "header": "Gweithgaredd edafedd"
     },
     "time": {
         "date_at_time": "%(date)s am %(time)s",
