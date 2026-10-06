@@ -13,11 +13,6 @@ import { CommandOrControl } from "../../utils";
 import { isDendrite } from "../../../plugins/homeserver/dendrite";
 import { getRoomList, getRoomOptionsMenu } from "../../left-panel/room-list-panel/utils";
 
-test.use({
-    // These tests check unread counts calculated by the homeserver, which need push enabled.
-    synapseConfig: { push: { enabled: true } },
-});
-
 test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test.skip(
         isDendrite,

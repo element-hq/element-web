@@ -16,11 +16,6 @@ import { createFillerRooms, getRoomList, getSectionHeader, sortAlphabetically } 
  * notification count (the green decoration) is scrolled below the visible area. Clicking it scrolls that
  * room into view. Rooms with only an unread-activity dot (white/black) must not trigger it.
  */
-test.use({
-    // These tests check unread counts calculated by the homeserver, which need push enabled.
-    synapseConfig: { push: { enabled: true } },
-});
-
 test.describe("Room list unread activity toast", () => {
     test.use({
         displayName: "Alice",

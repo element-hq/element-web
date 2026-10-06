@@ -11,8 +11,6 @@ import { mentionNotificationSettingsTests, mentionNotificationSettingsTransition
 test.use({
     displayName: "Alice",
     synapseConfig: {
-        // The shared tests check mention/message counts calculated by the homeserver, which need push enabled.
-        push: { enabled: true },
         experimental_features: {
             // Serve the legacy text-matching mention rules (MSC4210)
             msc4210_enabled: false,

@@ -59,11 +59,6 @@ function spaceChildInitialState(
     };
 }
 
-test.use({
-    // These tests check unread counts calculated by the homeserver, which need push enabled.
-    synapseConfig: { push: { enabled: true } },
-});
-
 test.describe("Spaces", () => {
     test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
     test.use({

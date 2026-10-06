@@ -21,11 +21,6 @@ import {
     getSectionHeader,
 } from "./utils";
 
-test.use({
-    // These tests check unread counts calculated by the homeserver, which need push enabled.
-    synapseConfig: { push: { enabled: true } },
-});
-
 test.describe("Room list sections", () => {
     test.use({
         displayName: "Alice",

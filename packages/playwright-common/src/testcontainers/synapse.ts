@@ -110,6 +110,7 @@ export interface SynapseConfig {
     dynamic_thumbnails: boolean;
     enable_registration: boolean;
     enable_registration_without_verification: boolean;
+    bcrypt_rounds?: number;
     disable_msisdn_registration: boolean;
     registrations_require_3pid: string[];
     enable_metrics: boolean;
@@ -190,9 +191,9 @@ export interface SynapseConfig {
         allowed_lifetime_min?: string;
         allowed_lifetime_max?: string;
     };
-    push?: {
-        enabled: boolean;
-    };
+    // If this is blanked out, Synapse skips out a whole ton of federation
+    // work which we don't exercise in tests by default.
+    federation_sender_instances?: never[],
 }
 
 const DEFAULT_CONFIG: SynapseConfig = {
@@ -282,6 +283,8 @@ const DEFAULT_CONFIG: SynapseConfig = {
     max_upload_size: "50M",
     max_image_pixels: "32M",
     dynamic_thumbnails: false,
+    // Minimum supported value. 4 represents about 1ms of work, rather than the default of 12 with 250ms of work.
+    bcrypt_rounds: 4,
     enable_registration: true,
     enable_registration_without_verification: true,
     disable_msisdn_registration: false,
@@ -315,14 +318,9 @@ const DEFAULT_CONFIG: SynapseConfig = {
     },
     room_list_publication_rules: [{ action: "allow" }],
     modules: [],
-    // Disabling means that push rules are not calculated during
-    // room creation or event sending which can result in a moderate
-    // speed-up per test.
-    // The downside is we don't get notification counts down sync, so
-    // tests that rely on that should enable push in their configuration.
-    push: {
-        enabled: false,
-    },
+    // No federation in e2e tests: stop the main process running the federation
+    // sender, which otherwise works out destinations for every event.
+    federation_sender_instances: [],
 };
 
 /**
