@@ -193,7 +193,7 @@ export interface SynapseConfig {
     };
     // If this is blanked out, Synapse skips out a whole ton of federation
     // work which we don't exercise in tests by default.
-    federation_sender_instances?: never[],
+    federation_sender_instances?: never[];
 }
 
 const DEFAULT_CONFIG: SynapseConfig = {
