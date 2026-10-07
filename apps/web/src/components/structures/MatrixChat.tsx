@@ -1368,7 +1368,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private async shouldForceVerification(): Promise<boolean> {
         if (!SdkConfig.get("force_verification")) return false;
-        const mustVerifyFlag = localStorage.getItem("must_verify_device");
+        const mustVerifyFlag = localStorage.getItem("force_verification_on_at_login");
         if (!mustVerifyFlag) return false;
 
         const client = MatrixClientPeg.safeGet();

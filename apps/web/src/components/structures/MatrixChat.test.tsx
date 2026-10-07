@@ -1327,7 +1327,7 @@ describe("<MatrixChat />", () => {
 
                 // And this device is being force-verified (because it logged in after
                 // enforcement was turned on).
-                localStorage.setItem("must_verify_device", "true");
+                localStorage.setItem("force_verification_on_at_login", "true");
 
                 // lostKeys returns false, meaning there are other devices to verify against
                 const realStore = SetupEncryptionStore.sharedInstance();
@@ -1338,7 +1338,7 @@ describe("<MatrixChat />", () => {
                 vi.restoreAllMocks();
                 // Reset things back to how they were before we started
                 defaultProps.config.force_verification = false;
-                localStorage.removeItem("must_verify_device");
+                localStorage.removeItem("force_verification_on_at_login");
             });
 
             it("should show the Complete Security screen if unskippable verification is enabled", async () => {
