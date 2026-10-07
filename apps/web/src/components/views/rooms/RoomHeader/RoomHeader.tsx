@@ -11,9 +11,8 @@ import React, { type JSX, useCallback, useContext, useState } from "react";
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
-import CollapseIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse";
-import ExpandIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import PopInIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-in";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
@@ -98,25 +97,20 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         [callOptions, voiceCallClick],
     );
 
-    // While in a call: Element Web's own picture-in-picture (the floating view over the app)...
-    const toggleCallButton = (
+    const toggleCallButton = !documentPip.available ? (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
-            <IconButton onClick={toggleCall} data-testid="call-pip-button" className="mx_RoomHeader_outlineIcon">
-                {isViewingCall ? <CollapseIcon /> : <ExpandIcon />}
+            <IconButton onClick={toggleCall}>
+                <VideoCallIcon />
             </IconButton>
         </Tooltip>
-    );
+    ) : undefined;
 
     // ...and the browser's, a window of its own that can leave the browser. Only the Element Call React
     // component can be moved there, so this is only offered when the call is rendered that way.
     const documentPipButton = documentPip.available ? (
         <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
-            <IconButton
-                onClick={documentPip.toggle}
-                data-testid="document-pip-button"
-                className="mx_RoomHeader_outlineIcon"
-            >
-                <PopOutIcon />
+            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+                {documentPip.active ? <PopInIcon /> : <PopOutIcon />}
             </IconButton>
         </Tooltip>
     ) : undefined;
