@@ -367,7 +367,7 @@ importers:
         version: https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
-        version: 10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
+        version: 10.6.1(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -8422,8 +8422,8 @@ packages:
     resolution: {gitHosted: true, integrity: sha512-K6yITBnVEz9UNmBFwCXIL0xthT+vipTqVXhiToF2QeIri8f7eXNrtjxzVU6tqAFG1YJABxukEGdKJLhJNjsOWg==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f}
     version: 0.0.0
 
-  eslint-plugin-storybook@10.6.0:
-    resolution: {integrity: sha512-HK3yD5Nslv97buJ5JfT1xFkTOoyJgGIENmBoZZI3F8t2UpBzb/dHpKyCh5bQ8AvJWnhoM/WAtDNqyd9nq6xgcg==}
+  eslint-plugin-storybook@10.6.1:
+    resolution: {integrity: sha512-XBmXuQcI0wzxMYc0rWKIiydvUxgS+GzLesO1YK1adnj97LhMqqsnlalbM+nXfQo1JoH2F2CI12sAH9/dAC99Dw==}
     peerDependencies:
       eslint: '>=8'
 
@@ -20708,7 +20708,7 @@ snapshots:
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f#path:/eslint: {}
 
-  eslint-plugin-storybook@10.6.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
+  eslint-plugin-storybook@10.6.1(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/types': 8.67.0
       '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
