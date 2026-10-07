@@ -154,8 +154,8 @@ test.describe("Custom Component API", () => {
             await app.timeline.scrollToBottom();
             const eventTile = page.locator(".mx_EventTile").last();
             await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
-            await expect(eventTile.getByTestId("event-tile-slot-sender")).not.toBeVisible();
-            await expect(eventTile.getByTestId("event-tile-slot-avatar")).not.toBeVisible();
+            await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+            await expect(eventTile.getByTestId("event-tile-slot-avatar")).toHaveCount(0);
         });
         test("should hide avatar and sender profile when the renderSenderProfile hint is set to false", async ({
             page,
@@ -169,7 +169,7 @@ test.describe("Custom Component API", () => {
             await app.timeline.scrollToBottom();
             const eventTile = page.locator(".mx_EventTile").last();
             await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
-            await expect(eventTile.getByTestId("event-tile-slot-sender")).not.toBeVisible();
+            await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
             await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
         });
         test(
