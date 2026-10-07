@@ -882,6 +882,9 @@ async function doSetLoggedIn(
         " freshLogin: " + credentials.freshLogin,
     );
 
+    // A logout which is still clearing storage would wipe the session we are about to persist
+    await waitForLogoutCleanup();
+
     if (clearStorageEnabled) {
         await clearStorage();
     }
@@ -1154,10 +1157,8 @@ export async function onLoggedOut(): Promise<void> {
     // that can occur when components try to use a null client.
     dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
-    await clearStorage({ deleteEverything: true });
-    clearUploadedMediaCache();
-    await PlatformPeg.get()?.clearStorage();
-    SettingsStore.reset();
+    loggedOutStorageCleared = clearLoggedOutStorage();
+    await loggedOutStorageCleared;
 
     // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
@@ -1170,6 +1171,30 @@ export async function onLoggedOut(): Promise<void> {
     }
     // Do this last to prevent racing `stopMatrixClient` and `on_logged_out` with MatrixChat handling Session.logged_out
     _isLoggingOut = false;
+}
+
+/**
+ * Promise of the latest run of {@link clearLoggedOutStorage}.
+ */
+let loggedOutStorageCleared: Promise<void> | undefined;
+
+async function clearLoggedOutStorage(): Promise<void> {
+    await clearStorage({ deleteEverything: true });
+    clearUploadedMediaCache();
+    await PlatformPeg.get()?.clearStorage();
+    SettingsStore.reset();
+}
+
+/**
+ * Wait for a recent logout to finish clearing storage, if it is still running.
+ * Call this before storing anything for a new login to avoid it possibly getting corrupted.
+ */
+export async function waitForLogoutCleanup(): Promise<void> {
+    try {
+        await loggedOutStorageCleared;
+    } catch {
+        // onLoggedOut reports its own errors
+    }
 }
 
 /**

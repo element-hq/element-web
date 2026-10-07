@@ -43,6 +43,9 @@ function onHashChange(): void {
         // we just set this: no need to route it!
         return;
     }
+    // The URL has moved somewhere we did not set it to, so the hash we last set is stale. Forget it, otherwise
+    // navigating straight back to it, before the app has handled this change and set a new one, would be ignored.
+    lastLocationHashSet = null;
     routeUrl(window.location);
 }
 

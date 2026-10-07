@@ -162,7 +162,13 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
         homeserver.setRequest(request);
         await logger.onTestStarted(context);
         await use(context);
+        try {
+            await homeserver.onTestFinished(testInfo);
+        } catch (e) {
+            // The test itself passed, so the logger would not attach the logs which explain this failure
+            await logger.attachLogs(testInfo);
+            throw e;
+        }
         await logger.onTestFinished(testInfo);
-        await homeserver.onTestFinished(testInfo);
     },
 });

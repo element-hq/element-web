@@ -67,13 +67,21 @@ export class Logger {
      */
     public async onTestFinished(testInfo: TestInfo) {
         if (testInfo.status !== "passed") {
-            for (const id in this.logs) {
-                if (!this.logs[id]) continue;
-                await testInfo.attach(id, {
-                    body: stripAnsi(this.logs[id]),
-                    contentType: "text/plain",
-                });
-            }
+            await this.attachLogs(testInfo);
+        }
+    }
+
+    /**
+     * Attach all the collected logs to the test, whatever its status.
+     * @param testInfo - the info about the test to attach the logs to.
+     */
+    public async attachLogs(testInfo: TestInfo) {
+        for (const id in this.logs) {
+            if (!this.logs[id]) continue;
+            await testInfo.attach(id, {
+                body: stripAnsi(this.logs[id]),
+                contentType: "text/plain",
+            });
         }
     }
 }
