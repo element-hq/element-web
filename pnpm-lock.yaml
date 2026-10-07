@@ -320,7 +320,7 @@ packageExtensionsChecksum: sha256-kCJccFy7l6HmjcpzmxV958fHndI9zZq246f1ttgkURI=
 
 patchedDependencies:
   '@arcmantle/vite-plugin-import-css-sheet': 8019aa9feca17db6bab3483612b4150c911d70b58fddc52bf2d7258a1484a747
-  '@tanstack/virtual-core@3': 71da5da1ddec893afd6cfd513e81996f92820a7a2aa1004d2e19dfc1c984d7d7
+  '@tanstack/virtual-core@3': 782a7233eeab5fbc9783b471c2f398224a7429ca24dd12b0f38185df8d98e0ee
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
   knip: 9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28
@@ -17716,11 +17716,11 @@ snapshots:
 
   '@tanstack/react-virtual@3.14.13(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
-      '@tanstack/virtual-core': 3.17.11(patch_hash=71da5da1ddec893afd6cfd513e81996f92820a7a2aa1004d2e19dfc1c984d7d7)
+      '@tanstack/virtual-core': 3.17.11(patch_hash=782a7233eeab5fbc9783b471c2f398224a7429ca24dd12b0f38185df8d98e0ee)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  '@tanstack/virtual-core@3.17.11(patch_hash=71da5da1ddec893afd6cfd513e81996f92820a7a2aa1004d2e19dfc1c984d7d7)': {}
+  '@tanstack/virtual-core@3.17.11(patch_hash=782a7233eeab5fbc9783b471c2f398224a7429ca24dd12b0f38185df8d98e0ee)': {}
 
   '@testcontainers/postgresql@12.2.0(supports-color@10.2.2)':
     dependencies:
