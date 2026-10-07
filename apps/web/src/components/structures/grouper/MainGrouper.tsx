@@ -19,6 +19,7 @@ import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { hintAsInformationalMessage } from "../../../utils/EventUtils.ts";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -33,7 +34,12 @@ const groupedStateEvents = [
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
     const sdkContext = useContext(SDKContext);
     const vm = useCreateAutoDisposedViewModel(
-        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
+        () =>
+            new DateSeparatorViewModel({
+                roomId,
+                ts,
+                roomViewStore: sdkContext.roomViewStore,
+            }),
     );
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
@@ -52,6 +58,10 @@ export class MainGrouper extends BaseGrouper {
         }
 
         if (panel.showHiddenEvents && !panel.shouldShowEvent(ev, true)) {
+            return true;
+        }
+
+        if (hintAsInformationalMessage(ev)) {
             return true;
         }
 
@@ -85,6 +95,9 @@ export class MainGrouper extends BaseGrouper {
             return true;
         }
         if (this.panel.showHiddenEvents && !this.panel.shouldShowEvent(ev, true)) {
+            return true;
+        }
+        if (hintAsInformationalMessage(ev)) {
             return true;
         }
         return false;
