@@ -257,7 +257,9 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addMemberListHeaderActionCallback(cb: RoomActionCallback): void;
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomSummaryCardActionCallback(cb: RoomActionCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
@@ -292,6 +294,9 @@ export interface I18nApi {
 
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
+
+// @public
+export type JoinRule = "public" | "invite" | "knock" | "restricted" | "private";
 
 // @alpha
 export type LocationRenderFunction = () => JSX.Element;
@@ -387,10 +392,29 @@ export interface RichVariables {
 
 // @public
 export interface Room {
+    canChangeJoinRule: () => boolean;
+    canInvite: () => boolean;
     getLastActiveTimestamp: () => number;
+    getPermalink: () => string;
     id: string;
+    joinRule: Watchable<JoinRule>;
     name: Watchable<string>;
+    setJoinRule: (joinRule: JoinRule) => Promise<void>;
+    supportsKnock: () => boolean;
 }
+
+// @alpha
+export interface RoomAction {
+    disabled?: boolean;
+    disabledTooltip?: string;
+    icon: ComponentType<SVGAttributes<SVGElement>>;
+    key: string;
+    label: string;
+    onClick: () => void;
+}
+
+// @alpha
+export type RoomActionCallback = (roomId: string) => RoomAction | undefined;
 
 // @alpha
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;

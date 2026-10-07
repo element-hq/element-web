@@ -21,6 +21,7 @@ import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
 import MatrixClientContext from "../contexts/MatrixClientContext";
 import { RoomView } from "../components/structures/RoomView";
 import { ModuleApi } from "./Api";
+import { ElementWebExtrasApi, getRoomActions } from "./ExtrasApi";
 
 describe("ExtrasApi", () => {
     let client: MatrixClient;
@@ -76,5 +77,24 @@ describe("ExtrasApi", () => {
         });
 
         expect(callback).toHaveBeenCalled();
+    });
+
+    it("stores the room summary card and member list header actions separately", () => {
+        const api = new ElementWebExtrasApi();
+        const roomSummaryCardCallback = vi.fn();
+        const memberListHeaderCallback = vi.fn();
+        api.addRoomSummaryCardActionCallback(roomSummaryCardCallback);
+        api.addMemberListHeaderActionCallback(memberListHeaderCallback);
+
+        expect(api.roomSummaryCardActionCallbacks).toEqual([roomSummaryCardCallback]);
+        expect(api.memberListHeaderActionCallbacks).toEqual([memberListHeaderCallback]);
+    });
+
+    it("getRoomActions returns the actions of the given callbacks for the room", () => {
+        const action = { key: "action", label: "Action", icon: () => null, onClick: vi.fn() };
+        const callback = vi.fn().mockReturnValue(action);
+
+        expect(getRoomActions([callback, () => undefined], "!room:example.org")).toEqual([action]);
+        expect(callback).toHaveBeenCalledWith("!room:example.org");
     });
 });
