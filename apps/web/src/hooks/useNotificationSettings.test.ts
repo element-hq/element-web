@@ -200,4 +200,101 @@ describe("useNotificationSettings", () => {
             StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
         );
     });
+
+    it("sets a rule's actions before enabling it", async () => {
+        const writes: string[] = [];
+        cli.setPushRuleActions = vi.fn(async (_scope: string, _kind: PushRuleKind, ruleId: string) => {
+            writes.push(`${ruleId} actions`);
+            return {};
+        }) as unknown as MatrixClient["setPushRuleActions"];
+        cli.setPushRuleEnabled = vi.fn(async (_scope: string, _kind: PushRuleKind, ruleId: string) => {
+            writes.push(`${ruleId} enabled`);
+            return {};
+        }) as unknown as MatrixClient["setPushRuleEnabled"];
+        cli.deletePushRule = vi.fn(cli.deletePushRule).mockResolvedValue({});
+
+        const { result } = renderHook(() => useNotificationSettings(cli));
+        await waitFor(() => expect(result.current.model).toEqual(expectedModel));
+        result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(writes).toHaveLength(12));
+
+        const enabledWrites = writes.filter((write) => write.endsWith(" enabled"));
+        expect(enabledWrites).toHaveLength(6);
+        for (const enabledWrite of enabledWrites) {
+            const actionsWrite = enabledWrite.replace(/ enabled$/, " actions");
+            expect(writes.indexOf(actionsWrite)).toBeGreaterThanOrEqual(0);
+            expect(writes.indexOf(actionsWrite)).toBeLessThan(writes.indexOf(enabledWrite));
+        }
+    });
+
+    describe("when the server serves the legacy mention rules", () => {
+        beforeEach(() => {
+            cli.supportsIntentionalMentions = vi.fn(cli.supportsIntentionalMentions).mockReturnValue(true);
+            cli.setPushRuleEnabled = vi.fn(cli.setPushRuleEnabled).mockResolvedValue({});
+            cli.deletePushRule = vi.fn(cli.deletePushRule).mockResolvedValue({});
+        });
+
+        /** Turns room mentions off, which changes both `.m.rule.roomnotif` and `.m.rule.is_room_mention`. */
+        async function turnOffRoomMentions(result: { current: ReturnType<typeof useNotificationSettings> }) {
+            await waitFor(() => expect(result.current.model).not.toEqual(null));
+            const model = result.current.model!;
+            result.current.reconcile({ ...model, mentions: { ...model.mentions, room: false } });
+        }
+
+        it("writes the legacy rule before the rule the monitor copies it onto", async () => {
+            // A sync between the two writes makes monitorSyncedPushRules copy the legacy rule
+            // onto the intentional one, so the legacy rule has to hold its new actions first.
+            const legacyRuleWrite = Promise.withResolvers<{}>();
+            const setPushRuleActions = vi.fn(async (_scope: string, _kind: PushRuleKind, ruleId: string) =>
+                ruleId === RuleId.AtRoomNotification ? legacyRuleWrite.promise : {},
+            );
+            cli.setPushRuleActions = setPushRuleActions as unknown as MatrixClient["setPushRuleActions"];
+            const writtenRuleIds = (): string[] =>
+                [...setPushRuleActions.mock.calls, ...vi.mocked(cli.setPushRuleEnabled).mock.calls].map(
+                    ([, , ruleId]) => ruleId,
+                );
+
+            const { result } = renderHook(() => useNotificationSettings(cli));
+            await turnOffRoomMentions(result);
+
+            await waitFor(() =>
+                expect(setPushRuleActions).toHaveBeenCalledWith(
+                    "global",
+                    PushRuleKind.Override,
+                    RuleId.AtRoomNotification,
+                    StandardActions.ACTION_DONT_NOTIFY,
+                ),
+            );
+            expect(writtenRuleIds()).not.toContain(RuleId.IsRoomMention);
+
+            legacyRuleWrite.resolve({});
+            await waitFor(() =>
+                expect(setPushRuleActions).toHaveBeenCalledWith(
+                    "global",
+                    PushRuleKind.Override,
+                    RuleId.IsRoomMention,
+                    StandardActions.ACTION_DONT_NOTIFY,
+                ),
+            );
+        });
+
+        it("still writes the other rules when writing a legacy rule fails", async () => {
+            const setPushRuleActions = vi.fn(async (_scope: string, _kind: PushRuleKind, ruleId: string) => {
+                if (ruleId === RuleId.AtRoomNotification) throw new Error("M_NOT_FOUND");
+                return {};
+            });
+            cli.setPushRuleActions = setPushRuleActions as unknown as MatrixClient["setPushRuleActions"];
+
+            const { result } = renderHook(() => useNotificationSettings(cli));
+            await turnOffRoomMentions(result);
+
+            await waitFor(() => expect(result.current.reconciliationError).toEqual(new Error("M_NOT_FOUND")));
+            expect(setPushRuleActions).toHaveBeenCalledWith(
+                "global",
+                PushRuleKind.Override,
+                RuleId.IsRoomMention,
+                StandardActions.ACTION_DONT_NOTIFY,
+            );
+        });
+    });
 });

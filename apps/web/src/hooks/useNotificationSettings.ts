@@ -9,25 +9,46 @@ Please see LICENSE files in the repository root for full details.
 import { type IPushRules, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { partition } from "lodash";
 
 import { type NotificationSettings } from "../models/notificationsettings/NotificationSettings";
-import { type PushRuleDiff } from "../models/notificationsettings/PushRuleDiff";
+import { type PushRuleDiff, type PushRuleUpdate } from "../models/notificationsettings/PushRuleDiff";
 import { reconcileNotificationSettings } from "../models/notificationsettings/reconcileNotificationSettings";
 import { toNotificationSettings } from "../models/notificationsettings/toNotificationSettings";
+import { VectorPushRulesDefinitions } from "../notifications";
+
+/**
+ * Whether `monitorSyncedPushRules` copies this rule onto other rules whenever a sync shows them
+ * out of step, as it copies the legacy `.m.rule.roomnotif` onto `.m.rule.is_room_mention`.
+ */
+function isSyncedRuleSource(ruleId: string): boolean {
+    return !!VectorPushRulesDefinitions[ruleId]?.syncedRuleIds?.length;
+}
+
+async function applyUpdate(cli: MatrixClient, change: PushRuleUpdate): Promise<void> {
+    // Set the actions before enabling the rule. A disabled rule's actions are ignored, so the
+    // rule is never enabled with its old actions for the monitor to copy.
+    if (change.actions !== undefined) {
+        await cli.setPushRuleActions("global", change.kind, change.rule_id, change.actions);
+    }
+    if (change.enabled !== undefined) {
+        await cli.setPushRuleEnabled("global", change.kind, change.rule_id, change.enabled);
+    }
+}
 
 async function applyChanges(cli: MatrixClient, changes: PushRuleDiff): Promise<void> {
     await Promise.all(changes.deleted.map((change) => cli.deletePushRule("global", change.kind, change.rule_id)));
     await Promise.all(changes.added.map((change) => cli.addPushRule("global", change.kind, change.rule_id, change)));
-    await Promise.all(
-        changes.updated.map(async (change) => {
-            if (change.enabled !== undefined) {
-                await cli.setPushRuleEnabled("global", change.kind, change.rule_id, change.enabled);
-            }
-            if (change.actions !== undefined) {
-                await cli.setPushRuleActions("global", change.kind, change.rule_id, change.actions);
-            }
-        }),
-    );
+
+    // Finish writing the rules the monitor copies from before writing the rules it copies to.
+    // A sync landing between the two writes then makes it copy the new actions. In the other
+    // order it would put the old actions back on the rule just written.
+    const [sources, others] = partition(changes.updated, (change) => isSyncedRuleSource(change.rule_id));
+    const sourceResults = await Promise.allSettled(sources.map((change) => applyUpdate(cli, change)));
+    // Still send the other writes if a source write failed, as when they were all sent together
+    await Promise.all(others.map((change) => applyUpdate(cli, change)));
+    const failure = sourceResults.find((result): result is PromiseRejectedResult => result.status === "rejected");
+    if (failure) throw failure.reason;
 }
 
 type UseNotificationSettings = {
