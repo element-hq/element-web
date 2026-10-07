@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 type Handler = () => void;
 
@@ -15,38 +15,22 @@ type Handler = () => void;
  * @knipignore
  */
 export const useTimeout = (handler: Handler, timeoutMs: number): void => {
-    // Create a ref that stores handler
-    const savedHandler = useRef<Handler>(undefined);
-
-    // Update ref.current value if handler changes.
-    useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
+    const onTimeout = useEffectEvent(handler);
 
     // Set up timer
     useEffect(() => {
-        const timeoutID = window.setTimeout(() => {
-            savedHandler.current?.();
-        }, timeoutMs);
+        const timeoutID = window.setTimeout(onTimeout, timeoutMs);
         return () => clearTimeout(timeoutID);
     }, [timeoutMs]);
 };
 
 // Hook to simplify intervals in functional components
 export const useInterval = (handler: Handler, intervalMs: number): void => {
-    // Create a ref that stores handler
-    const savedHandler = useRef<Handler>(undefined);
-
-    // Update ref.current value if handler changes.
-    useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
+    const onInterval = useEffectEvent(handler);
 
     // Set up timer
     useEffect(() => {
-        const intervalID = window.setInterval(() => {
-            savedHandler.current?.();
-        }, intervalMs);
+        const intervalID = window.setInterval(onInterval, intervalMs);
         return () => clearInterval(intervalID);
     }, [intervalMs]);
 };
