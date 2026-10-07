@@ -34,7 +34,7 @@
     },
     "devDependencies": {
         "@microsoft/api-extractor": "^7.56.0",
-        "@types/sanitize-html": "2.16.1",
+        "@types/sanitize-html": "2.16.2",
         "@types/node": "catalog:ts6",
         "@typescript/native": "catalog:",
         "typescript": "catalog:ts6",
