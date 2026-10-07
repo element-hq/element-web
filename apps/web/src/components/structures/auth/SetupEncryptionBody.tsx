@@ -136,7 +136,10 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
-            variant: store.lostKeys() ? "no_verification_method" : "confirm",
+            onSignOut: () => {
+                dispatcher.dispatch({ action: "logout" });
+            },
+            variant: store.lostKeys() && this.props.allowLogout ? "no_verification_method" : "confirm",
         });
     };
 
@@ -213,7 +216,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             if (this.props.allowLogout) {
                 signOutButton = (
                     <Button kind="tertiary" onClick={this.onSignOutClick}>
-                        {_t("action|sign_out")}
+                        {_t("action|sign_out_before_verify")}
                     </Button>
                 );
             }

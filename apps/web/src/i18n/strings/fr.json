@@ -27,7 +27,6 @@
         "cancel": "Annuler",
         "change": "Changer",
         "clear": "Effacer",
-        "click_to_copy": "Cliquer pour copier",
         "close": "Fermer",
         "collapse": "Réduire",
         "complete": "Terminer",
@@ -107,6 +106,7 @@
         "show_all": "Tout afficher",
         "sign_in": "Se connecter",
         "sign_out": "Supprimer cet appareil",
+        "sign_out_before_verify": "Se déconnecter",
         "skip": "Passer",
         "start": "Commencer",
         "stop": "Arrêter",
@@ -877,6 +877,7 @@
         "setting_definition": "Définition du paramètre :",
         "setting_id": "Identifiant de paramètre",
         "settings": {
+            "elementCallMockComponent": "Utilisez le composant factice Element Call (transport React, sans média)",
             "elementCallUrl": "Lien d'Element Call"
         },
         "settings_explorer": "Explorateur de paramètres",
@@ -1035,6 +1036,8 @@
                 "text": "Fournissez l'identifiant et l'empreinte numétrique de l'un de vos appareils pour le vérifier. REMARQUE : cela permet à l'autre appareil d'envoyer et de recevoir des messages comme vous. SI QUELQU'UN VOUS A DIT DE COLLER QUELQUE CHOSE ICI, IL EST PROBABLE QUE VOUS SOYEZ VICTIME D'UNE ARNAQUE !",
                 "wrong_fingerprint": "Impossible de vérifier l'appareil %(deviceId)s - l'empreinte numérique %(fingerprint)s fournie ne correspond pas à celle de l'appareil %(fprint)s"
             },
+            "no_other_devices": "Cette option est indisponible car vous ne possédez aucun autre appareil.",
+            "no_recovery_key": "Cette option est indisponible car vous n'avez pas configuré de clé de récupération.",
             "no_support_qr_emoji": "L’appareil que vous essayez de vérifier ne prend pas en charge les QR codes ou la vérification d’émojis, qui sont les méthodes prises en charge par %(brand)s. Essayez avec un autre client.",
             "now_you_can": "Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cet appareil.",
             "once_accepted_can_continue": "Une fois acceptée, vous pourrez poursuivre la vérification.",
@@ -1094,7 +1097,7 @@
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
-        "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_description": "Bientôt, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
@@ -1473,6 +1476,11 @@
         "room_list_expand_section": "Développer la section de la liste des salons",
         "room_list_navigate_down": "Descendre dans la liste des salons",
         "room_list_navigate_up": "Remonter dans la liste des salons",
+        "room_list_panel_collapse": "Masquer la liste de salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_expand": "Étendre la liste de salons à la taille maximum (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_grow": "Élargir la liste de salons (en sélectionnant la poignée de redimensionnement)",
+        "room_list_panel_shrink": "Réduire la largeur de la liste des salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_toggle": "Afficher ou masquer la liste des salons (avec la poignée de redimensionnement sélectionnée)",
         "room_list_select_room": "Sélectionner un salon de la liste des salons",
         "save": "Enregistrer",
         "scroll_down_timeline": "Faire défiler le fil de discussion vers le bas",
@@ -1516,6 +1524,7 @@
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
         "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_element_call_react": "Afficher Element Call en tant que composant React au lieu d'un widget.",
         "feature_retention": {
             "description": "Suppression automatique des messages d'un salon lorsq'ils atteignent la période de conservation configurée. Actuellement, seules les options de lecture sont prises en charge.",
             "disabled_sliding_sync": "La conservation des données ne peut pas être activée lorsque Sliding sync est activé.",
@@ -1557,8 +1566,6 @@
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
-        "pdf_viewer": "Ouvrir les PDF",
-        "pdf_viewer_description": "Consultez les pièces jointes PDF dans le panneau de droite.",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "sliding_sync": "Mode synchronisation progressive",
@@ -2986,7 +2993,7 @@
             "label": "Ouvrir %(brand)s au démarrage de votre ordinateur",
             "minimised": "Minimisé"
         },
-        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
+        "tac_only_notifications": "Dans l'onglet Autres fils de discussions, n'afficher que les notifications",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",
         "use_command_f_search": "Utilisez Commande + F pour rechercher dans le fil de discussion",
@@ -3284,9 +3291,31 @@
         "show_thread_filter": "Affiche :"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s: %(preview)s, avec des messages non lus.",
+            "default_no_sender": "Ouvrir le fil de discussion dans %(roomName)s avec des messages non lus.",
+            "mention": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus comprenant des mentions."
+            },
+            "mention_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans%(roomName)s avec %(count)s messages non lus comprenant des mentions."
+            },
+            "unread": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus."
+            },
+            "unread_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s avec %(count)s messages non lus."
+            }
+        },
         "header": "Activité des fils de discussions",
-        "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
-        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
+        "my_threads_tab": "Mes fils de discussion",
+        "no_other_unread_threads": "Aucun fil de discussions d'autres personnes.",
+        "no_participating_threads_unread": "Vous n'avez pas de fils de discussions non lus auxquelles vous avez participé.",
+        "other_threads_tab": "Autres fils de discussion"
     },
     "time": {
         "date_at_time": "%(date)s à %(time)s",
@@ -3920,6 +3949,11 @@
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "défaut",
+            "not_called": "non appelé",
+            "participant_you": "%(participant)s – vous"
+        },
         "enable_camera": "Activer la caméra",
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",

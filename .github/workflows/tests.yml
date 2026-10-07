@@ -35,7 +35,7 @@ jobs:
             matrix:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2, 3]
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
             # so, with the one at the end too, this will let us work out how much disk has been used.
@@ -107,7 +107,7 @@ jobs:
         needs:
             - vitest
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             contents: read
             pull-requests: read
@@ -142,7 +142,7 @@ jobs:
             - name: Diff Coverage
               id: coverage
               if: needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
-              uses: Affanmir/diff-cover-action@a35ea05c1c458490473f6fc2233737e809678273 # v2.1.1
+              uses: Affanmir/diff-cover-action@0c892dd61c33b7bc2de45669677d23ede3e145fa # v2.2.0
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}
                   mode: coverage

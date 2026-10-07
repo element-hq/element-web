@@ -83,12 +83,6 @@ export default {
                 // would with a normal library).
                 "@types/sdp-transform",
 
-                // Referenced as a tsconfig `types` entry rather than imported, so knip
-                // cannot see it. It has to be a direct dependency for
-                // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
-                // See apps/web/tsconfig.browser-test.json.
-                "@vitest/browser",
-
                 // Used by Playwright to serve the built web app.
                 "serve",
             ],

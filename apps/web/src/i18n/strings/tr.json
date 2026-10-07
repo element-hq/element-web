@@ -27,7 +27,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
         "complete": "Tamamlandı",
@@ -2969,9 +2968,7 @@
         "show_thread_filter": "Göster:"
     },
     "threads_activity_centre": {
-        "header": "Mesaj dizileri etkinliği",
-        "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
+        "header": "Mesaj dizileri etkinliği"
     },
     "time": {
         "date_at_time": "%(date)s e %(time)s",

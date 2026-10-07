@@ -19,7 +19,8 @@
     },
     "scripts": {
         "prepack": "nx build:playwright",
-        "lint:types": "nx lint:types"
+        "lint:types": "nx lint:types",
+        "test:unit": "vitest"
     },
     "publishConfig": {
         "executableFiles": [
@@ -29,7 +30,8 @@
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",
         "@types/lodash-es": "^4.17.12",
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "vitest": "catalog:"
     },
     "dependencies": {
         "@axe-core/playwright": "^4.10.1",

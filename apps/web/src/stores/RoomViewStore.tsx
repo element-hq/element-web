@@ -10,7 +10,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, type Room, type MatrixEvent, type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixError,
+    JoinRule,
+    type Room,
+    type MatrixEvent,
+    type IJoinRoomOpts,
+    type RoomSummary,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
@@ -108,6 +115,10 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
+    /**
+     * The summary of the room being viewed, if one was fetched because the client doesn't know the room.
+     */
+    roomSummary?: RoomSummary;
 }
 
 const INITIAL_STATE: State = {
@@ -183,6 +194,8 @@ export class RoomViewStore extends EventEmitter {
 
         const lastRoomId = this.state.roomId;
         this.state = Object.assign(this.state, newState);
+        // A summary only describes the room it was fetched for.
+        if (lastRoomId !== this.state.roomId) this.state.roomSummary = undefined;
         if (!this.lockedToRoomId && lastRoomId !== this.state.roomId) {
             if (lastRoomId) this.emitForRoom(lastRoomId, false);
             if (this.state.roomId) this.emitForRoom(this.state.roomId, true);
@@ -684,6 +697,23 @@ export class RoomViewStore extends EventEmitter {
     // The room ID of the room currently being viewed
     public getRoomId(): string | null {
         return this.state.roomId;
+    }
+
+    /**
+     * Keep the summary of the room being viewed.
+     * @param roomId The id of the room the summary was fetched for. The summary is ignored if this room isn't open.
+     * @param summary The summary of the room.
+     */
+    public setRoomSummary(roomId: string, summary: RoomSummary | undefined): void {
+        if (roomId !== this.state.roomId) return;
+        this.setState({ roomSummary: summary });
+    }
+
+    /**
+     * The summary of the room being viewed, if one was fetched.
+     */
+    public getRoomSummary(): RoomSummary | undefined {
+        return this.state.roomSummary;
     }
 
     public getThreadId(): string | null {

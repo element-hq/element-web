@@ -656,11 +656,13 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
+    // that people who already turned the lab on keep it, and only for as long as the lab exists.
     "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pdf_viewer"),
-        description: _td("labs|pdf_viewer_description"),
+        displayName: _td("labs|document_previews"),
+        description: _td("labs|document_previews_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

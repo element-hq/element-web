@@ -79,6 +79,7 @@ describe("parsePdfUsercontentMessage", () => {
             page: 4,
         });
         expect(parsePdfUsercontentMessage({ type: "page", page: 9 })).toEqual({ type: "page", page: 9 });
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: 150 })).toEqual({ type: "scale", scale: 150 });
         expect(parsePdfUsercontentMessage({ type: "position", position })).toEqual({ type: "position", position });
         expect(parsePdfUsercontentMessage({ type: "error", message: "boom" })).toEqual({
             type: "error",
@@ -92,6 +93,14 @@ describe("parsePdfUsercontentMessage", () => {
         expect(parsePdfUsercontentMessage({ type: "loaded", pageCount: 3.5, page: 1 })).toBeUndefined();
         expect(parsePdfUsercontentMessage({ type: "page", page: -1 })).toBeUndefined();
         expect(parsePdfUsercontentMessage({ type: "page", page: Number.NaN })).toBeUndefined();
+    });
+
+    it("rejects a zoom level that is not a positive number", () => {
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: 0 })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: -50 })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: Number.NaN })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale", scale: "150" })).toBeUndefined();
+        expect(parsePdfUsercontentMessage({ type: "scale" })).toBeUndefined();
     });
 
     it("copies only the known fields out of a position", () => {

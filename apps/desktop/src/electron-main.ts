@@ -99,11 +99,6 @@ process.on("uncaughtException", function (error: Error): void {
     console.log("Unhandled exception", error);
 });
 
-app.commandLine.appendSwitch("--enable-usermedia-screen-capturing");
-if (!app.commandLine.hasSwitch("enable-features")) {
-    app.commandLine.appendSwitch("enable-features", "WebRTCPipeWireCapturer");
-}
-
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
     console.log("Other instance detected: exiting");

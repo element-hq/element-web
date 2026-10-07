@@ -7,7 +7,7 @@ permissions: {} # Uses ELEMENT_BOT_TOKEN instead
 jobs:
     add_design_pr_to_project:
         name: Move PRs asking for design review to the design board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: octokit/graphql-action@ddde8ebb2493e79f390e6449c725c21663a67505 # v3.0.2
               id: find_team_members
@@ -75,7 +75,7 @@ jobs:
 
     add_product_pr_to_project:
         name: Move PRs asking for design review to the design board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: octokit/graphql-action@ddde8ebb2493e79f390e6449c725c21663a67505 # v3.0.2
               id: find_team_members
