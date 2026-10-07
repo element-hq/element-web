@@ -152,10 +152,9 @@ test.describe("Custom Component API", () => {
             await app.client.sendMessage(room.roomId, "Render as informational message");
 
             await app.timeline.scrollToBottom();
-            const eventTile = page.locator(".mx_EventTile").last();
-            await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
+            const eventList = page.locator(".mx_GenericEventListSummary").last();
+            const eventTile = eventList.locator(".mx_EventTile").last();
             await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
-            await expect(eventTile.getByTestId("event-tile-slot-avatar")).toHaveCount(0);
         });
         test("should hide avatar and sender profile when the renderSenderProfile hint is set to false", async ({
             page,

@@ -292,13 +292,15 @@ export const highlightEvent = (roomId: string, eventId: string): void => {
     });
 };
 
+/** Default to showing the message as a regular message unless the hint is explicitly set to true. */
 export function hintAsInformationalMessage(mxEvent: MatrixEvent): boolean {
-    // Default to showing the message as a regular message unless the hint is explicitly set to true.
     return ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.renderAsInformationalMessage === true;
 }
 
+/**
+ * Defaults to showing the sender profile unless the hint is explicitly false.
+ * This avoids breaking existing custom components that don't set this hint.
+ */
 export function hintHideSenderProfile(mxEvent: MatrixEvent): boolean {
-    // Default to showing the sender profile unless the hint is explicitly set to false.
-    // This is to avoid breaking existing custom components that don't set this hint.
     return ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.renderSenderProfile === false;
 }
