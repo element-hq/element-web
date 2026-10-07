@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type JSX } from "react";
+import { type ComponentType, type JSX, type SVGAttributes } from "react";
 
 /**
  * Properties of an item added to the Space panel
@@ -53,6 +53,51 @@ export interface SpacePanelItemProps {
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
 
 /**
+ * An action added by a module to a room UI surface, such as the room info panel or the member list header.
+ * @alpha
+ */
+export interface RoomAction {
+    /**
+     * A key to identify this action. Must be unique among the actions shown for a room.
+     */
+    key: string;
+
+    /**
+     * The label of the action. Also used as the tooltip when the action is shown as an icon-only button.
+     */
+    label: string;
+
+    /**
+     * The icon of the action.
+     */
+    icon: ComponentType<SVGAttributes<SVGElement>>;
+
+    /**
+     * Callback when the action is clicked.
+     */
+    onClick: () => void;
+
+    /**
+     * Whether the action is disabled.
+     */
+    disabled?: boolean;
+
+    /**
+     * Tooltip shown when the action is disabled, to explain why. No tooltip is shown when not set.
+     */
+    disabledTooltip?: string;
+}
+
+/**
+ * A callback that returns the action to show for a room.
+ *
+ * @alpha
+ * @param roomId - The ID of the room for which the action is being rendered.
+ * @returns The action to show, or undefined if no action should be shown for this room.
+ */
+export type RoomActionCallback = (roomId: string) => RoomAction | undefined;
+
+/**
  * API for inserting extra UI into Element Web.
  * @alpha Subject to change.
  */
@@ -83,4 +128,18 @@ export interface ExtrasApi {
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
      */
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+
+    /**
+     * Adds a callback to get an extra action shown in the room info panel.
+     *
+     * @param cb - A callback that returns the action to show (see {@link RoomActionCallback}).
+     */
+    addRoomSummaryCardActionCallback(cb: RoomActionCallback): void;
+
+    /**
+     * Adds a callback to get an extra button shown in the member list header.
+     *
+     * @param cb - A callback that returns the action to show (see {@link RoomActionCallback}).
+     */
+    addMemberListHeaderActionCallback(cb: RoomActionCallback): void;
 }
