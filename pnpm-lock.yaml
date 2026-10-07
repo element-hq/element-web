@@ -669,7 +669,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5c231093e1b6bb072311c07cc3baf1573e17035b
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b
       matrix-widget-api:
         specifier: ^1.18.0
         version: 1.19.0
@@ -997,16 +997,16 @@ importers:
         version: 5.0.0(webpack@5.111.1)
       stylelint:
         specifier: ^17.0.0
-        version: 17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+        version: 17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
       stylelint-config-standard:
         specifier: ^40.0.0
-        version: 40.0.0(stylelint@17.15.0)
+        version: 40.0.0(stylelint@17.16.0)
       stylelint-scss:
         specifier: ^7.0.0
-        version: 7.3.0(stylelint@17.15.0)
+        version: 7.3.0(stylelint@17.16.0)
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.0.1
-        version: 6.1.1(stylelint@17.15.0)
+        version: 6.1.1(stylelint@17.16.0)
       terser-webpack-plugin:
         specifier: ^5.3.9
         version: 5.6.1(clean-css@5.3.3)(cssnano@7.1.2)(csso@5.0.5)(esbuild@0.27.4)(html-minifier-terser@6.1.0)(lightningcss@1.33.0)(postcss@8.5.28)(uglify-js@3.19.3)(webpack@5.111.1)
@@ -9805,8 +9805,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5c231093e1b6bb072311c07cc3baf1573e17035b:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5c231093e1b6bb072311c07cc3baf1573e17035b}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b}
     version: 43.0.0
     engines: {node: '>=22.0.0'}
 
@@ -11989,8 +11989,8 @@ packages:
     peerDependencies:
       stylelint: '>=16'
 
-  stylelint@17.15.0:
-    resolution: {integrity: sha512-mWIkesYQvQjf4Kvdeu9ns0IL8/K/wtjaGxPqsPd6DlLZvaQxGysJsocxUDrBcyHQ5VleAk4uSMat4yMrVED7PA==}
+  stylelint@17.16.0:
+    resolution: {integrity: sha512-ejlWnbJ13x1GU32+zZXa6sYQJsKKkwSdv2B4rAdO3OWdEmvhSJKcXi5pOphQYSzyaj1kXpuGJr7pcMBNfDIuPw==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -15091,7 +15091,7 @@ snapshots:
       '@vector-im/compound-design-tokens': 10.2.1(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@10.2.1)(react-dom@19.3.0)(react@19.3.0)
       livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5c231093e1b6bb072311c07cc3baf1573e17035b
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -22209,7 +22209,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5c231093e1b6bb072311c07cc3baf1573e17035b:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -24799,16 +24799,16 @@ snapshots:
       postcss: 8.5.28
       postcss-selector-parser: 7.1.6
 
-  stylelint-config-recommended@18.0.0(stylelint@17.15.0):
+  stylelint-config-recommended@18.0.0(stylelint@17.16.0):
     dependencies:
-      stylelint: 17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+      stylelint: 17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
 
-  stylelint-config-standard@40.0.0(stylelint@17.15.0):
+  stylelint-config-standard@40.0.0(stylelint@17.16.0):
     dependencies:
-      stylelint: 17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
-      stylelint-config-recommended: 18.0.0(stylelint@17.15.0)
+      stylelint: 17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+      stylelint-config-recommended: 18.0.0(stylelint@17.16.0)
 
-  stylelint-scss@7.3.0(stylelint@17.15.0):
+  stylelint-scss@7.3.0(stylelint@17.16.0):
     dependencies:
       '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2)(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
@@ -24821,15 +24821,15 @@ snapshots:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.6
       postcss-value-parser: 4.2.0
-      stylelint: 17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+      stylelint: 17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
 
-  stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@17.15.0):
+  stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@17.16.0):
     dependencies:
       postcss-value-parser: 4.2.0
       resolve: 1.22.12
-      stylelint: 17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+      stylelint: 17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
 
-  stylelint@17.15.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2):
+  stylelint@17.16.0(@typescript/typescript6@6.0.2)(supports-color@10.2.2):
     dependencies:
       '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2)(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
