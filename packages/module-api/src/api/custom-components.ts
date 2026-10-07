@@ -52,6 +52,17 @@ export type CustomMessageRenderHints = {
      * If this function is not supplied, media downloads are allowed.
      */
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
+    /**
+     * Should the event be formatted as an informational message.
+     * This will remove the sender's profile and avatar from the message.
+     * Default is false.
+     */
+    renderAsInformationalMessage?: boolean;
+    /**
+     * Should the sender's profile be rendered for this event.
+     * Default is true.
+     */
+    renderSenderProfile?: boolean;
 };
 
 /**
