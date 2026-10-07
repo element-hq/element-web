@@ -11,6 +11,8 @@ import {
     type SpacePanelItemProps,
     type ExtrasApi,
     type RoomHeaderButtonsCallback,
+    type RoomAction,
+    type RoomActionCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
@@ -33,6 +35,8 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
     public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
     public creditsAttributions = new Map<string, () => JSX.Element>();
+    public roomSummaryCardActionCallbacks: RoomActionCallback[] = [];
+    public memberListHeaderActionCallbacks: RoomActionCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -50,6 +54,23 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public setCreditsAttribution(attributionId: string, render: () => JSX.Element): void {
         this.creditsAttributions.set(attributionId, render);
     }
+
+    public addRoomSummaryCardActionCallback(cb: RoomActionCallback): void {
+        this.roomSummaryCardActionCallbacks.push(cb);
+    }
+
+    public addMemberListHeaderActionCallback(cb: RoomActionCallback): void {
+        this.memberListHeaderActionCallbacks.push(cb);
+    }
+}
+
+/**
+ * Get the actions registered by modules for a room.
+ * @param callbacks - The module callbacks of the UI surface showing the actions.
+ * @param roomId - The ID of the room.
+ */
+export function getRoomActions(callbacks: RoomActionCallback[], roomId: string): RoomAction[] {
+    return callbacks.map((cb) => cb(roomId)).filter((action): action is RoomAction => action !== undefined);
 }
 
 export function useModuleSpacePanelItems(api: ElementWebExtrasApi): ModuleSpacePanelItem[] {
