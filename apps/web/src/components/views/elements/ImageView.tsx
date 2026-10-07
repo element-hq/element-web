@@ -714,7 +714,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                     {this.props.onPrev && (
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
-                            title={_t("action|back")}
+                            title={_t("action|previous")}
                             onMouseDown={this.stopPropagation}
                             onClick={this.onPrevClick}
                         >
