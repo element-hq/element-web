@@ -36,9 +36,14 @@ exports[`WidgetPipView > detects back click action 1`] = `
         </div>
       </button>
       <div
+        class="WidgetPipView-module_avatar"
         style="width: 20px; height: 20px; border-radius: 50%; background-color: grey;"
       />
-      Room Name
+      <span
+        class="WidgetPipView-module_name"
+      >
+        Room Name
+      </span>
     </div>
     <div
       class="WidgetPipView-module_roundedCornerContainer"
@@ -87,9 +92,14 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
         </div>
       </button>
       <div
+        class="WidgetPipView-module_avatar"
         style="width: 20px; height: 20px; border-radius: 50%; background-color: grey;"
       />
-      Room Name
+      <span
+        class="WidgetPipView-module_name"
+      >
+        Room Name
+      </span>
     </div>
     <div
       class="WidgetPipView-module_roundedCornerContainer"
@@ -138,9 +148,14 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
         </div>
       </button>
       <div
+        class="WidgetPipView-module_avatar"
         style="width: 20px; height: 20px; border-radius: 50%; background-color: grey;"
       />
-      Room Name
+      <span
+        class="WidgetPipView-module_name"
+      >
+        Room Name
+      </span>
     </div>
     <div
       class="WidgetPipView-module_roundedCornerContainer"
@@ -153,7 +168,7 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
 </div>
 `;
 
-exports[`WidgetPipView > renders with gray widget 1`] = `
+exports[`WidgetPipView > renders 1`] = `
 <div>
   <div
     class="WidgetPipView-module_container"
@@ -189,9 +204,14 @@ exports[`WidgetPipView > renders with gray widget 1`] = `
         </div>
       </button>
       <div
+        class="WidgetPipView-module_avatar"
         style="width: 20px; height: 20px; border-radius: 50%; background-color: grey;"
       />
-      Room Name
+      <span
+        class="WidgetPipView-module_name"
+      >
+        Room Name
+      </span>
     </div>
     <div
       class="WidgetPipView-module_roundedCornerContainer"

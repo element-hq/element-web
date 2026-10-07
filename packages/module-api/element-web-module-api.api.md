@@ -240,7 +240,8 @@ export type DialogHandle<M> = {
 
 // @public
 export interface DialogOptions {
-    title: string;
+    ariaLabel?: string;
+    title?: string;
 }
 
 // @public
