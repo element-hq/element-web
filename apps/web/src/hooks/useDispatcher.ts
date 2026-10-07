@@ -6,25 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent } from "react";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 
 // Hook to simplify listening to event dispatches
 export const useDispatcher = (dispatcher: MatrixDispatcher, handler: (payload: ActionPayload) => void): void => {
-    // Create a ref that stores handler
-    const savedHandler = useRef((payload: ActionPayload) => {});
-
-    // Update ref.current value if handler changes.
-    useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
+    const onDispatch = useEffectEvent(handler);
 
     useEffect(() => {
-        // Create event listener that calls handler function stored in ref
-        const ref = dispatcher.register((payload) => savedHandler.current(payload));
-        // Remove event listener on cleanup
+        const ref = dispatcher.register(onDispatch);
         return () => {
             dispatcher.unregister(ref);
         };
