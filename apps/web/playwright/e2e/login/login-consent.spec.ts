@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { buildConfigJson } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
@@ -225,6 +226,52 @@ test.describe("Login", () => {
                     ).toBeVisible();
 
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                });
+
+                test("Does not force verification on reload if force_verification is enabled after login", async ({
+                    page,
+                    homeserver,
+                    request,
+                    credentials,
+                }) => {
+                    const res = await request.post(
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
+                    );
+                    expect(res.status() / 100).toEqual(2);
+
+                    // Log in while force_verification is off, and skip verification
+                    await page.goto("/");
+                    await login(page, homeserver, credentials);
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Skip verification for now" }).click();
+                    await page.getByRole("button", { name: "I'll verify later" }).click();
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+
+                    // The deployment now turns force_verification on. A page-level route takes
+                    // precedence over the context-level one registered by the `config` fixture.
+                    await page.route("/config.json*", (route) =>
+                        route.fulfill({ json: buildConfigJson(homeserver.baseUrl, { force_verification: true }) }),
+                    );
+
+                    await page.reload();
+
+                    await expect
+                        .poll(() => page.evaluate(() => window.mxReactSdkConfig?.force_verification))
+                        .toBe(true);
+
+                    // The session existed before enforcement was enabled, so it goes straight
+                    // to the logged-in view rather than the verification screen
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).not.toBeVisible();
                 });
             });
 
