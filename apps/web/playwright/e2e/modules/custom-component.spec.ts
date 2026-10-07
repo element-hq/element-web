@@ -142,6 +142,36 @@ test.describe("Custom Component API", () => {
             await expect(imageView).toBeVisible();
             await expect(imageView.getByLabel("Download")).toBeVisible();
         });
+        test("should hide avatar and sender profile when the renderAsInformationalMessage hint is set to true", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Render as informational message");
+
+            await app.timeline.scrollToBottom();
+            const eventTile = page.locator(".mx_EventTile").last();
+            await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
+            await expect(eventTile.locator(".mx_EventTile_senderProfile")).not.toBeVisible();
+            await expect(eventTile.locator(".mx_EventTile_avatar")).not.toBeVisible();
+        });
+        test("should hide avatar and sender profile when the renderSenderProfile hint is set to false", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Render without sender profile");
+
+            await app.timeline.scrollToBottom();
+            const eventTile = page.locator(".mx_EventTile").last();
+            await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
+            await expect(eventTile.locator(".mx_EventTile_senderProfile")).not.toBeVisible();
+            await expect(eventTile.locator(".mx_EventTile_avatar")).toBeVisible();
+        });
         test(
             "should render the next registered component if the filter function throws",
             { tag: "@screenshot" },
