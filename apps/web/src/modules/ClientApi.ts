@@ -9,10 +9,12 @@ import { Room as ModuleRoom } from "./models/Room";
 import { AccountDataApi } from "./AccountDataApi";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ClientCreationManagementApi } from "./ClientCreationManagementApi.ts";
+import { HttpApi } from "./HttpApi.ts";
 
 export class ClientApi implements IClientApi {
     public readonly accountData = new AccountDataApi();
     public readonly creationManagement = new ClientCreationManagementApi();
+    public readonly http = new HttpApi();
 
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
