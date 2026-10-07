@@ -25,7 +25,6 @@
         "cancel": "취소",
         "change": "변경",
         "clear": "지우기",
-        "click_to_copy": "복사하려면 클릭하세요.",
         "close": "닫기",
         "collapse": "접기",
         "complete": "완료",
@@ -3157,9 +3156,7 @@
         "show_thread_filter": "표시:"
     },
     "threads_activity_centre": {
-        "header": "스레드 활동",
-        "no_rooms_with_threads_notifs": "아직 스레드 알림이 있는 방이 없습니다.",
-        "no_rooms_with_unread_threads": "아직 읽지 않은 스레드가 있는 방이 없습니다."
+        "header": "스레드 활동"
     },
     "time": {
         "date_at_time": "%(date)s, %(time)s",
