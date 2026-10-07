@@ -68,6 +68,13 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
 }
 
 // @alpha
+export interface AuthedRequestOpts {
+    body?: unknown;
+    prefix?: string;
+    queryParams?: Record<string, string>;
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -99,6 +106,8 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly http: HttpApi;
     // @alpha
     readonly toDevice: ToDeviceApi;
     waitForClientStarted(): Promise<void>;
@@ -319,6 +328,14 @@ export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticat
 
 // @public
 export type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
+
+// @alpha
+export interface HttpApi {
+    authedRequest<T>(method: HttpMethod, path: string, opts?: AuthedRequestOpts): Promise<T>;
+}
+
+// @alpha
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 // @public
 export interface I18nApi {

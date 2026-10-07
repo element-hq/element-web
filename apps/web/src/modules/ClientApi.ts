@@ -10,6 +10,7 @@ import { AccountDataApi } from "./AccountDataApi";
 import { ToDeviceApi } from "./ToDeviceApi";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ClientCreationManagementApi } from "./ClientCreationManagementApi.ts";
+import { HttpApi } from "./HttpApi.ts";
 import type { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import type { ActionPayload } from "../dispatcher/payloads";
@@ -18,6 +19,7 @@ import type { OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload
 export class ClientApi implements IClientApi {
     public readonly accountData = new AccountDataApi();
     public readonly creationManagement = new ClientCreationManagementApi();
+    public readonly http = new HttpApi();
     public readonly toDevice = new ToDeviceApi(null);
 
     // Resolves when the client next starts; replaced on logout so later callers wait for the next start.
