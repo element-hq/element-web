@@ -193,7 +193,7 @@ exports[`<SpaceSettingsVisibilityTab /> > for a public space > renders addresses
                   <div
                     class="mx_SettingsSubsection_text"
                   >
-                    Published addresses can be used by anyone on any server to join your space. To publish an address, it needs to be set as a local address first.
+                    Published addresses can be used by anyone at any account provider to join your space. To publish an address, it needs to be set as a local address first.
                   </div>
                 </div>
                 <div
@@ -307,7 +307,7 @@ exports[`<SpaceSettingsVisibilityTab /> > for a public space > renders addresses
                   <div
                     class="mx_SettingsSubsection_text"
                   >
-                    Set addresses for this space so users can find this space through your homeserver (matrix.org)
+                    Set addresses for this space so users can find this space through your account provider (matrix.org)
                   </div>
                 </div>
                 <div

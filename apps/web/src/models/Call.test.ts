@@ -782,7 +782,7 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when answering DMs", async () => {
-            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            roomSession.memberships = [{} as CallMembership]; // Remote party is already there
             getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
                 room.roomId === roomId ? "any-user" : undefined,
             );
@@ -795,7 +795,6 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when creating a non-DM call", async () => {
-            roomSession.getOldestMembership.mockReturnValue(undefined);
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -805,7 +804,7 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when joining a non-DM call", async () => {
-            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            roomSession.memberships = [{} as CallMembership]; // Remote party is already there
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");

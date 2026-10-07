@@ -167,6 +167,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         this.id = this.props.id || getId();
     }
 
+    public componentWillUnmount(): void {
+        this.validateOnChange.cancel();
+    }
+
     public focus(): void {
         this.inputRef.current?.focus();
         // programmatic does not fire onFocus handler

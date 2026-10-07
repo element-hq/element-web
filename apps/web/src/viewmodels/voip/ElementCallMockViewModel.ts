@@ -109,7 +109,7 @@ const participantsOf = (rtcSession: MatrixRTCSession | null, client: MatrixClien
         const isOwnDevice = membership.sender === ownUserId && membership.deviceId === ownDeviceId;
         const participant = `${membership.sender} (${membership.deviceId})`;
         return {
-            id: membership.membershipID,
+            id: membership.memberId,
             label: isOwnDevice ? _t("voip|element_call_mock|participant_you", { participant }) : participant,
         };
     });

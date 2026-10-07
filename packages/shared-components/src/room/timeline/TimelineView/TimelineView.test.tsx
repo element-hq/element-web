@@ -28,6 +28,7 @@ function eventItems(count: number, offset = 0): TimelineItem[] {
     return Array.from({ length: count }, (_, i) => ({
         key: `evt-${offset + i}`,
         kind: "event" as const,
+        event: null,
         continuation: false,
         lastInSection: true,
     }));

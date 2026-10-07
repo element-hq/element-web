@@ -48,7 +48,7 @@ describe("FilePanel", () => {
             clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
         await waitFor(() => {
-            expect(screen.getByText("No files visible in this room")).toBeInTheDocument();
+            expect(screen.getByText("No files in this room")).toBeInTheDocument();
         });
         expect(asFragment()).toMatchSnapshot();
     });
@@ -81,7 +81,7 @@ describe("FilePanel", () => {
             <FilePanel roomId={room.roomId} onClose={vi.fn()} />,
             clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
-        await screen.findByText("No files visible in this room");
+        await screen.findByText("No files in this room");
 
         expect(screen.queryByText("a message being sent")).not.toBeInTheDocument();
     });
@@ -108,7 +108,7 @@ describe("FilePanel", () => {
                 />,
                 clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
-            await screen.findByText("No files visible in this room");
+            await screen.findByText("No files in this room");
 
             const event = mkEvent({
                 type: "m.room.message",

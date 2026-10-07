@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "@fetch-mock/vitest";
 import { cleanup } from "@test-utils";
 import { afterEach, expect } from "vitest";
+import { commands } from "vitest/browser";
 
 import { setLanguage } from "../../src/core/i18n/i18n";
 import en from "../i18n/strings/en_EN.json";
@@ -61,6 +62,15 @@ fetchMock.mockGlobal();
 
 setLanguage("en");
 
-afterEach(() => {
+declare module "vitest/browser" {
+    interface BrowserCommands {
+        parkPointer: () => Promise<void>;
+    }
+}
+
+afterEach(async () => {
     cleanup();
+    // `userEvent` from `vitest/browser` drives the real pointer, which stays where it was left across tests
+    // and files, so later tests can render under it and pick up unintended `:hover` styles.
+    await commands.parkPointer();
 });

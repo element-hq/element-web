@@ -20,6 +20,7 @@
         "new_room": "Nouveau salon",
         "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
+        "no": "Non",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
         "pin": "Épingler",
@@ -33,7 +34,8 @@
         "search": "Rechercher",
         "start_chat": "Démarrer une discussion",
         "unpin": "Désépingler",
-        "view_source": "Voir la source"
+        "view_source": "Voir la source",
+        "yes": "Oui"
     },
     "common": {
         "attachment": "Pièce jointe",
@@ -113,10 +115,11 @@
         "mute_room": "Rendre le salon muet"
     },
     "pdf_viewer": {
-        "error_load": "Impossible de charger le PDF.",
-        "loading": "Chargement du PDF…",
         "page_label": "Page %(page)s de %(total)s",
-        "page_number": "Numéro de page"
+        "page_number": "Numéro de page",
+        "zoom": "Zoom",
+        "zoom_in": "Zoomer",
+        "zoom_out": "Dé-zoomer"
     },
     "release_announcement": {
         "room_list_section_close": "OK",
@@ -384,6 +387,26 @@
         "open_home": "Accueil",
         "open_security": "Sécurité et confidentialité",
         "open_settings": "Tous les paramètres"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Configuration active",
+            "configuration": "Configuration",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent : %(allowJoinUnmutedViaIntent)s · fermer : %(close)s",
+            "in_call": "appel en cours",
+            "in_lobby": "dans le salon d'attente",
+            "initialized_with": "initializeElementCall : %(value)s",
+            "log_label": "Journal HostBridge",
+            "mute_audio": "Couper le son",
+            "mute_video": "Couper la vidéo",
+            "no_participants": "Personne ne participe à cet appel",
+            "participants": "Participants",
+            "status": "%(roomId)s · intention %(intent)s · %(state)s · thème %(theme)s · langue %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Salon inconnu %(roomId)s",
+            "unmute_audio": "Réactiver le son",
+            "unmute_video": "Réactiver la vidéo"
+        }
     },
     "widget": {
         "context_menu": {

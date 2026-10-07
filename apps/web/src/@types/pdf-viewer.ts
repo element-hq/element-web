@@ -28,19 +28,3 @@ export interface PdfViewerState {
     /** When this position was last recorded, in milliseconds since the epoch. Used to evict old entries. */
     updatedAt: number;
 }
-
-/**
- * The handle on a PDF that `PdfViewer` needs: something to key the saved reading position on,
- * and a way to get at the bytes. `blob` is expected to decrypt transparently for encrypted media, so
- * the viewer never has to care whether the room is encrypted.
- */
-export interface PdfMedia {
-    /** The MXC URI of the file, used as the key for its saved reading position. */
-    uri: string;
-    /** The file name, as sent. */
-    name?: string;
-    /** The size in bytes the sender declared for the file, if any. A claim, not a measurement. */
-    size?: number;
-    /** Resolves the file contents, decrypting first if the media is encrypted. */
-    blob: () => Promise<Blob>;
-}

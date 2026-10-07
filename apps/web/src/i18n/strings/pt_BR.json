@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
         "complete": "Concluir",
@@ -3130,9 +3129,7 @@
         "show_thread_filter": "Exibir:"
     },
     "threads_activity_centre": {
-        "header": "Atividade de tópicos",
-        "no_rooms_with_threads_notifs": "Você ainda não tem salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
+        "header": "Atividade de tópicos"
     },
     "time": {
         "date_at_time": "%(date)s às %(time)s",

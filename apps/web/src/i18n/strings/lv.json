@@ -28,7 +28,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
         "complete": "Pabeigt",
@@ -2604,10 +2603,6 @@
             "other": "%(count)s atbildes"
         },
         "show_thread_filter": "Rādīt:"
-    },
-    "threads_activity_centre": {
-        "no_rooms_with_threads_notifs": "Jums vēl nav istabu ar pavedienu paziņojumiem.",
-        "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
     },
     "time": {
         "date_at_time": "%(date)s pulksten %(time)s",

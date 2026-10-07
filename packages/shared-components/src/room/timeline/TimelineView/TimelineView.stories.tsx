@@ -25,23 +25,22 @@ const LINES = [
     "Passed on the second go.",
     "Great, merging now.",
 ];
-const mockEvents = Array.from({ length: 12 }, (_, i) => ({
-    key: `evt-${i}`,
-    sender: SENDERS[i % SENDERS.length],
-    body: LINES[i % LINES.length],
-}));
-const mockContent = new Map(mockEvents.map((e) => [e.key, e]));
+interface MockEvent {
+    sender: string;
+    body: string;
+}
 
-const mockItems: TimelineItem[] = mockEvents.map((e) => ({
-    key: e.key,
+const mockItems: TimelineItem[] = Array.from({ length: 12 }, (_, i) => ({
+    key: `evt-${i}`,
     kind: "event",
+    event: { sender: SENDERS[i % SENDERS.length], body: LINES[i % LINES.length] } satisfies MockEvent,
     continuation: false,
     lastInSection: true,
 }));
 
 const renderItem = (item: TimelineItem): React.ReactNode => {
-    const content = mockContent.get(item.key);
-    if (!content) return null;
+    if (item.kind !== "event") return null;
+    const content = item.event as MockEvent;
     return (
         <div style={{ padding: "6px 12px", minHeight: "44px", boxSizing: "border-box" }}>
             <div style={{ fontWeight: 600, fontSize: "13px", color: "var(--cpd-color-text-primary)" }}>

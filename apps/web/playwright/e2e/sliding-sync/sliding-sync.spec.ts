@@ -266,7 +266,10 @@ test.describe("Sliding Sync", () => {
         // Invite + chats section headers + 1 invites + Test Room + Room to Join = 5
         await expect(page.getByTestId("room-list").getByRole("button")).toHaveCount(5);
 
-        await expect(page.getByRole("button", { name: "Open room Room to Rescind" })).toBeVisible();
+        // Open the invite before rescinding it. Once the rescind syncs, the room leaves the Invites
+        // section, so clicking its tile afterwards would race the room list update.
+        await page.getByRole("button", { name: "Open room Room to Rescind" }).click();
+        await expect(page.locator(".mx_RoomView").getByRole("button", { name: "Accept" })).toBeVisible();
 
         // now rescind the invite
         await bot.evaluate(
@@ -275,8 +278,6 @@ test.describe("Sliding Sync", () => {
             },
             { roomRescind, clientUserId },
         );
-
-        await page.getByRole("button", { name: "Open room Room to Rescind" }).click();
 
         await page.locator(".mx_RoomView").getByRole("button", { name: "Forget this room", exact: true }).click();
 

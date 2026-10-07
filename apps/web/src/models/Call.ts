@@ -716,8 +716,7 @@ export class ElementCall extends Call {
         }
 
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-        const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+        const hasCallStarted = client.matrixRTC.getRoomSession(room).memberships.length > 0;
         if (isDM) {
             if (hasCallStarted) {
                 return { intent: voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM };

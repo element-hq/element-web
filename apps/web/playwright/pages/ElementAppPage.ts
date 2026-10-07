@@ -389,7 +389,7 @@ export class ElementAppPage {
 
         if (options?.confirmUnknownUser) {
             await expect(
-                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this chat?" }),
             ).toBeVisible();
             await dialogLocator.getByRole("button", { name: "Invite" }).click();
         }

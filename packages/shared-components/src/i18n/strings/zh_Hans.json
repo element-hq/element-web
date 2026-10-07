@@ -20,6 +20,7 @@
         "new_room": "新房间",
         "new_section": "新区域",
         "new_video_room": "新视频房间",
+        "no": "否",
         "open_menu": "打开菜单",
         "pause": "暂停",
         "pin": "置顶",
@@ -33,7 +34,8 @@
         "search": "搜索",
         "start_chat": "开始聊天",
         "unpin": "取消置顶",
-        "view_source": "查看源代码"
+        "view_source": "查看源代码",
+        "yes": "是"
     },
     "common": {
         "attachment": "附件",
@@ -69,6 +71,10 @@
             "url_label": "自定义主题URL"
         },
         "toggle_event": "事件源码"
+    },
+    "document_viewer": {
+        "error_load": "无法加载此文件。",
+        "loading": "正在加载文档…"
     },
     "emoji": {
         "categories": "类别",
@@ -109,10 +115,11 @@
         "mute_room": "静默房间"
     },
     "pdf_viewer": {
-        "error_load": "无法加载 PDF。",
-        "loading": "正在加载 PDF…",
         "page_label": "第 %(page)s 页，共 %(total)s 页",
-        "page_number": "页码"
+        "page_number": "页码",
+        "zoom": "缩放",
+        "zoom_in": "放大",
+        "zoom_out": "缩小"
     },
     "release_announcement": {
         "room_list_section_close": "确定",
@@ -126,7 +133,7 @@
         "history_visibility_badge": {
             "private": "新成员不能看到历史",
             "shared": "新成员可以看到历史",
-            "world_readable": "任何人都可以看到历史"
+            "world_readable": "任何人都能查看历史"
         },
         "jump_read_marker": "滚动到首条未读消息。",
         "jump_to_bottom_button": "滚动到最近的消息",
@@ -136,6 +143,7 @@
         "knock_sent": "已发送加入申请",
         "pinned_message_badge": "已被置顶的消息",
         "status_bar": {
+            "contact_account_provider": "联系账户提供者",
             "delete_all": "全部删除",
             "exceeded_resource_limit_description": "要继续使用此服务请联系账户提供者。",
             "exceeded_resource_limit_title": "你的消息未能发送，因为此服务已超过资源限制。",
@@ -186,9 +194,9 @@
             "no_invites": "你没有任何未读邀请",
             "no_mentions": "你没有任何未读提及",
             "no_people": "你尚未与任何人私聊",
-            "no_people_description": "你可以取消选择筛选条件，以便查看其它聊天记录",
+            "no_people_description": "你可以取消选择筛选条件，以便查看其他聊天记录",
             "no_rooms": "尚未处于任何房间",
-            "no_rooms_description": "你可以取消选择筛选条件，以便查看其它聊天记录",
+            "no_rooms_description": "你可以取消选择筛选条件，以便查看其他聊天记录",
             "no_unread": "恭喜！你没有任何未读消息",
             "show_activity": "查看所有活动",
             "show_chats": "显示所有聊天"
@@ -332,7 +340,7 @@
             "error_invalid": "无效文件"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s 已将聊天头像更改为 <img/>",
+            "changed_img": "%(senderDisplayName)s 已将房间头像更改为 <img/>",
             "removed": "%(senderDisplayName)s 已移除房间头像。"
         },
         "m.room.encryption": {
@@ -378,12 +386,30 @@
         "open_security": "安全与隐私",
         "open_settings": "所有设置"
     },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "有效配置",
+            "configuration": "配置",
+            "in_call": "通话中",
+            "in_lobby": "位于大厅",
+            "log_label": "HostBridge 日志",
+            "mute_audio": "静音",
+            "mute_video": "静默视频",
+            "no_participants": "无人参与此通话",
+            "participants": "参与者",
+            "status": "%(roomId)s · 意图 %(intent)s · %(state)s · 主题 %(theme)s · 语言 %(language)s",
+            "title": "Element Call（模拟）",
+            "unknown_room": "未知房间 %(roomId)s",
+            "unmute_audio": "取消静音",
+            "unmute_video": "取消静默视频"
+        }
+    },
     "widget": {
         "context_menu": {
             "move_left": "向左移动",
             "move_right": "向右移动",
             "remove": "为所有人移除",
-            "revoke": "撤消权限",
+            "revoke": "撤销权限",
             "screenshot": "拍摄照片",
             "start_audio_stream": "开始音频串流"
         }

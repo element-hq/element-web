@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
+
 import { idbLoad } from "../utils/StorageAccess";
 import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
@@ -120,7 +122,12 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
 async function getAuthData(client: unknown): Promise<{ accessToken: string; homeserver: string }> {
     // Access tokens are encrypted at rest, so while we can grab the "access token", we'll need to do work to get the
     // real thing.
-    const encryptedAccessToken = await idbLoad("account", "mx_access_token");
+    // idbLoad is untyped; a token persisted with a pickle key is an encrypted payload, and one
+    // persisted without (or written by the localStorage fallback) is a plain string.
+    const storedAccessToken: string | AESEncryptedSecretStoragePayload | undefined = await idbLoad(
+        "account",
+        "mx_access_token",
+    );
 
     // We need to extract a user ID and device ID from localstorage, which means calling WebPlatform for the
     // read operation. Service workers can't access localstorage.
@@ -134,8 +141,23 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
 
     // Finally, try decrypting the thing and return that. This may fail, but that's okay.
     try {
-        const pickleKey = await buildAndEncodePickleKey(pickleKeyData, userId, deviceId);
-        const accessToken = await tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_NAME);
+        if (typeof storedAccessToken === "string") {
+            // Stored unencrypted, because there was no pickle key when it was persisted, so there is
+            // nothing to decrypt. `tryDecryptToken` only handles encrypted payloads.
+            return { accessToken: storedAccessToken, homeserver };
+        }
+
+        if (!storedAccessToken) {
+            throw new Error("no access token in storage");
+        }
+
+        const pickleKey = pickleKeyData ? await buildAndEncodePickleKey(pickleKeyData, userId, deviceId) : undefined;
+        if (!pickleKey) {
+            // The token is encrypted and we have no key for it.
+            throw new Error("no pickle key found");
+        }
+
+        const accessToken = await tryDecryptToken(pickleKey, storedAccessToken, ACCESS_TOKEN_NAME);
         return { accessToken, homeserver };
     } catch (e) {
         throw new Error("SW: Error decrypting access token.", { cause: e });

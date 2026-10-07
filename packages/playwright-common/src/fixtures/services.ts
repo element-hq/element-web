@@ -126,8 +126,9 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
 
     synapseConfig: [{}, { scope: "worker" }],
     _homeserver: [
-        async ({ logger }, use) => {
-            const container = new SynapseContainer().withLogConsumer(logger.getConsumer("synapse"));
+        async ({}, use) => {
+            // The log consumer is attached by `homeserver`, as testcontainers only keeps the last one registered.
+            const container = new SynapseContainer();
             await use(container);
         },
         { scope: "worker" },

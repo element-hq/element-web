@@ -9,7 +9,7 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from "react
 import { logger } from "matrix-js-sdk/src/logger";
 import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-components";
 
-import { type PdfMedia } from "../../../@types/pdf-viewer";
+import { type DocumentMedia } from "../../../@types/document-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
 import {
     type PdfHostMessage,
@@ -51,7 +51,7 @@ function hasPdfHeader(data: Uint8Array): boolean {
  * owns the toolbar, and remembers the reading position per MXC URI. Messages from the iframe are
  * validated before use.
  */
-export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
+export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     /** The app's end of the channel the iframe hands over with `ready`. */
     const portRef = useRef<MessagePort | null>(null);

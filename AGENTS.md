@@ -191,12 +191,4 @@ Keep comments short and relevant.
 
 ## Pull requests
 
-- The PR title becomes the changelog entry. Write it from the user's point of view and descriptively —
-  "Fix bug where cows had five legs", not "Update file.ts". No issue number in the title.
-- Keep the description short and relevant: what changed and why, `Fixes #NNN` for the issue, and a brief testing
-  strategy. Put explanations of _how_ the code works in code comments, not the description.
-- **State in the description that the PR was generated with AI.**
-- Add screenshots for visual changes.
-- Apply the right type label: `T-Enhancement` (minor bump), `T-Defect` (bug fix), or `T-Task` for changes with no
-  user-facing effect — a `T-Task` gets no changelog entry. Add `X-Breaking-Change` for a breaking change.
-- Never force-push to a PR branch; the project squash-merges.
+- Don't open PR. This should be done by the human, not the agent.
