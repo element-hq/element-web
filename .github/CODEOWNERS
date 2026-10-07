@@ -9,6 +9,7 @@
 /apps/web/src/SecurityManager*                                                   @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
+/apps/web/src/device-listener/                                                   @element-hq/element-crypto-web-reviewers
 /apps/web/src/stores/SetupEncryptionStore*                                       @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
@@ -17,6 +18,7 @@
 /apps/web/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
 /packages/shared-components/src/crypto/                                          @element-hq/element-crypto-web-reviewers
 /packages/shared-types/lib/x509.d.ts                                             @element-hq/element-crypto-web-reviewers
+
 
 
 /apps/web/src/models/Call*                               @element-hq/element-call-reviewers
