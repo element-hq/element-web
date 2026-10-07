@@ -8,7 +8,7 @@ exports[`RoomPickerView > Storybook snapshots > renders the empty state when the
   >
     <div
       class="Flex-module_flex PillInput-module_pillInput"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <input
         autocomplete="off"
@@ -33,15 +33,15 @@ exports[`RoomPickerView > Storybook snapshots > renders the list of rooms 1`] = 
   >
     <div
       class="Flex-module_flex PillInput-module_pillInput"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         class="Flex-module_flex"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: wrap;"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
       >
         <div
           class="Flex-module_flex Pill-module_pill"
-          style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
         >
           <div
             style="width: 20px; height: 20px; background-color: rgb(204, 204, 204); border-radius: 50%;"
@@ -55,7 +55,7 @@ exports[`RoomPickerView > Storybook snapshots > renders the list of rooms 1`] = 
           <button
             aria-describedby="react-use-id-1"
             aria-label="Delete"
-            class="_icon-button_1215g_8 mx_Dialog_nonDialogButton"
+            class="_icon-button_1215g_8 Pill-module_icon mx_Dialog_nonDialogButton"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 16px;"
@@ -82,7 +82,7 @@ exports[`RoomPickerView > Storybook snapshots > renders the list of rooms 1`] = 
       </div>
       <input
         autocomplete="off"
-        class="PillInput-module_input PillInput-module_largerInput"
+        class="PillInput-module_input"
         placeholder="Search rooms"
       />
     </div>
@@ -222,7 +222,7 @@ exports[`RoomPickerView > Storybook snapshots > renders the list without any sel
   >
     <div
       class="Flex-module_flex PillInput-module_pillInput"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <input
         autocomplete="off"
