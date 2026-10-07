@@ -20,7 +20,6 @@
 /packages/shared-types/lib/x509.d.ts                                             @element-hq/element-crypto-web-reviewers
 
 
-
 /apps/web/src/models/Call*                               @element-hq/element-call-reviewers
 /apps/web/src/stores/CallStore*                          @element-hq/element-call-reviewers
 /apps/web/src/call-types.ts                              @element-hq/element-call-reviewers
