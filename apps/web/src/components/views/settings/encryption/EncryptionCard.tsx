@@ -5,7 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type PropsWithChildren, type ComponentType, type SVGAttributes } from "react";
+import React, {
+    type JSX,
+    type PropsWithChildren,
+    type ComponentProps,
+    type ComponentType,
+    type SVGAttributes,
+} from "react";
 import { BigIcon, Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 
@@ -27,6 +33,10 @@ interface EncryptionCardProps {
      */
     destructive?: boolean;
     /**
+     * Whether this icon shows a successful outcome. Ignored if `destructive` is set.
+     */
+    success?: boolean;
+    /**
      * The icon to display.
      */
     Icon: ComponentType<SVGAttributes<SVGElement>>;
@@ -40,13 +50,21 @@ export function EncryptionCard({
     description,
     className,
     destructive = false,
+    success = false,
     Icon,
     children,
 }: PropsWithChildren<EncryptionCardProps>): JSX.Element {
+    let iconKind: ComponentProps<typeof BigIcon>["kind"] = "primary";
+    if (destructive) {
+        iconKind = "critical";
+    } else if (success) {
+        iconKind = "success";
+    }
+
     return (
         <div className={classNames("mx_EncryptionCard", className)}>
             <div className="mx_EncryptionCard_header">
-                <BigIcon kind={destructive ? "critical" : "primary"}>
+                <BigIcon kind={iconKind}>
                     <Icon />
                 </BigIcon>
                 <Heading as="h2" size="sm" weight="semibold">
