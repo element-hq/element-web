@@ -26,6 +26,22 @@ import dispatch from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
 
+// Covered by its own tests; stub it so we only test how the dialog drives it
+vi.mock("../settings/encryption/ChangeRecoveryKey", () => ({
+    ChangeRecoveryKeyBody: (props: {
+        userHasRecoveryKey: boolean;
+        skipIntroduction?: boolean;
+        onFinish: () => void;
+        onCancelClick: () => void;
+    }) => (
+        <div>
+            <span>{`ChangeRecoveryKeyBody userHasRecoveryKey=${props.userHasRecoveryKey} skipIntroduction=${props.skipIntroduction}`}</span>
+            <button onClick={props.onFinish}>Stub finish</button>
+            <button onClick={props.onCancelClick}>Stub cancel</button>
+        </div>
+    ),
+}));
+
 describe("LogoutDialog", () => {
     let mockClient: MockedObject<MatrixClient>;
     let mockCrypto: MockedObject<CryptoApi>;
@@ -216,6 +232,69 @@ describe("LogoutDialog", () => {
             });
             const rendered = renderComponent();
             await expect(rendered.findByText("Get recovery key")).resolves.toBeVisible();
+        });
+    });
+
+    describe("generating a recovery key inline", () => {
+        const keyFlow = (userHasRecoveryKey: boolean): string =>
+            `ChangeRecoveryKeyBody userHasRecoveryKey=${userHasRecoveryKey} skipIntroduction=true`;
+
+        beforeEach(() => {
+            vi.spyOn(dispatch, "dispatch").mockImplementation(() => {});
+        });
+
+        async function startFromRecoverySetUp(onFinished = vi.fn()): Promise<void> {
+            mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+            mockCrypto.isSecretStorageReady.mockResolvedValue(true);
+            renderComponent({ onFinished });
+            fireEvent.click(await screen.findByRole("button", { name: "Generate new recovery key" }));
+        }
+
+        it("generates a key in the dialog when recovery is set up", async () => {
+            await startFromRecoverySetUp();
+            await expect(screen.findByText(keyFlow(true))).resolves.toBeVisible();
+            expect(dispatch.dispatch).not.toHaveBeenCalled();
+        });
+
+        it("generates a key in the dialog when recovery is not set up", async () => {
+            mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
+            renderComponent();
+            fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
+            await expect(screen.findByText(keyFlow(false))).resolves.toBeVisible();
+            expect(dispatch.dispatch).not.toHaveBeenCalled();
+        });
+
+        it("returns to the warning on cancel", async () => {
+            await startFromRecoverySetUp();
+            fireEvent.click(await screen.findByRole("button", { name: "Stub cancel" }));
+            await expect(
+                screen.findByText("Make sure you have access to your recovery key before removing this device"),
+            ).resolves.toBeVisible();
+        });
+
+        it("confirms the new key is active once finished", async () => {
+            await startFromRecoverySetUp();
+            fireEvent.click(await screen.findByRole("button", { name: "Stub finish" }));
+            await expect(screen.findByText("Your new recovery key is now active")).resolves.toBeVisible();
+            expect(document.body.querySelector(".mx_LogoutDialog")).toMatchSnapshot();
+        });
+
+        it("logs out after the new key is active", async () => {
+            const onFinished = vi.fn();
+            await startFromRecoverySetUp(onFinished);
+            fireEvent.click(await screen.findByRole("button", { name: "Stub finish" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
+            expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
+            expect(onFinished).toHaveBeenCalledWith(true);
+        });
+
+        it("goes back to the app after the new key is active", async () => {
+            const onFinished = vi.fn();
+            await startFromRecoverySetUp(onFinished);
+            fireEvent.click(await screen.findByRole("button", { name: "Stub finish" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Take me back to the app" }));
+            expect(dispatch.dispatch).not.toHaveBeenCalled();
+            expect(onFinished).toHaveBeenCalledWith(false);
         });
     });
 });

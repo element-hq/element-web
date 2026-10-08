@@ -70,4 +70,22 @@ test.describe("Logout tests", () => {
             currentDialogLocator.getByRole("heading", { name: "You're about to lose access to your encrypted chats" }),
         ).toBeVisible();
     });
+
+    test("Get a recovery key without leaving the logout dialog", async ({ page, app }) => {
+        const locator = await app.settings.openUserMenu();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
+
+        const dialog = page.getByRole("dialog", { name: "Remove this device" });
+        await dialog.getByRole("button", { name: "Get recovery key" }).click();
+
+        const recoveryKey = await dialog.getByTestId("recoveryKey").innerText();
+        await dialog.getByRole("button", { name: "Continue" }).click();
+        await dialog.getByRole("textbox").fill(recoveryKey);
+        await dialog.getByRole("button", { name: "Finish set up" }).click();
+        await expect(dialog.getByRole("heading", { name: "Your new recovery key is now active" })).toBeVisible();
+
+        await dialog.getByRole("button", { name: "Continue to remove this device" }).click();
+        await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
+    });
 });
