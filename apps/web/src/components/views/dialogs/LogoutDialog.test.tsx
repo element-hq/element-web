@@ -88,7 +88,11 @@ describe("LogoutDialog", () => {
         mockCrypto.getDeviceVerificationStatus.mockResolvedValue(new DeviceVerificationStatus({ signedByOwner: true }));
 
         const rendered = renderComponent();
-        await expect(rendered.findByText("Are you sure you want to remove this device?")).resolves.toBeVisible();
+        await expect(
+            rendered.findByText(
+                "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.",
+            ),
+        ).resolves.toBeVisible();
     });
 
     it("prompts user to set up recovery if backups are enabled but recovery isn't", async () => {

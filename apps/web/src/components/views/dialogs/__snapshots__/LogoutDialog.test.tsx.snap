@@ -481,14 +481,14 @@ exports[`LogoutDialog > shows a regular dialog when crypto is disabled 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Remove this device
+        Are you sure you want to remove this device?
       </h1>
     </div>
     <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"
     >
-      Are you sure you want to remove this device?
+      Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.
     </div>
     <div
       class="mx_Dialog_buttons"
@@ -504,7 +504,7 @@ exports[`LogoutDialog > shows a regular dialog when crypto is disabled 1`] = `
           Cancel
         </button>
         <button
-          class="mx_LegacyDialogButton mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary danger"
           data-testid="dialog-primary-button"
           type="button"
         >

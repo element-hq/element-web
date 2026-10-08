@@ -153,8 +153,9 @@ function ConfirmLogout(props: SubComponentProps): JSX.Element {
     return (
         <QuestionDialog
             hasCancelButton={true}
-            title={_t("action|sign_out")}
-            description={_t("auth|logout_dialog|description")}
+            danger={true}
+            title={_t("auth|logout_dialog|description")}
+            description={_t("auth|logout_dialog|keep_access_description")}
             button={_t("action|sign_out")}
             onFinished={props.onFinished}
         />
