@@ -29,6 +29,12 @@ export const ModuleConfig = z.object({
      * @defaultValue `false`
      */
     skip_single_sign_on: z._default(z.boolean(), false),
+    /**
+     * If true, a copy invite link button will be shown in the email invitation dialog.
+     * The invite link is fetched from the homeserver, and the button is hidden if that fails.
+     * @defaultValue `false`
+     */
+    allow_copy_invite_link: z._default(z.boolean(), false),
 });
 
 export type ModuleConfig = z.infer<typeof ModuleConfig>;
