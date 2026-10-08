@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type FC, lazy, Suspense, useEffect, useMemo } from "react";
+import React, { type FC, lazy, Suspense, useCallback, useEffect, useMemo } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 // Type-only: the component itself is loaded lazily below
 import type * as ElementCallComponent from "@element-hq/element-call-component";
@@ -13,6 +13,8 @@ import type * as ElementCallComponent from "@element-hq/element-call-component";
 import { ElementCall as ElementCallModel } from "../../../models/Call";
 import { CallStore } from "../../../stores/CallStore";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { type DocumentPipStore, DocumentPipStoreEvent } from "../../../stores/DocumentPipStore";
 import { getCurrentLanguage } from "../../../languageHandler";
 import { useTheme } from "../../../hooks/useTheme";
 import Spinner from "../elements/Spinner";
@@ -80,10 +82,23 @@ const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
  * What the component reconnects on (`intent`, `config`) is decided once per call by the model; what it
  * takes live (`theme`, `language`, `hostBridge`) may change freely.
  */
-export const WrappedElementCallComponent: FC<{ call: ElementCallModel; client: MatrixClient }> = ({ call, client }) => {
+export const WrappedElementCallComponent: FC<{
+    call: ElementCallModel;
+    client: MatrixClient;
+    /** Where the call is shown in a browser Picture-in-Picture window, so the component can follow it there. */
+    documentPipStore: DocumentPipStore;
+}> = ({ call, client, documentPipStore }) => {
     // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
     const { effectiveTheme: theme } = useTheme();
+    // While the call's DOM is in the Picture-in-Picture window, its menus and tooltips must open there
+    // too: Compound would otherwise float them into this document, the one window the call is not in.
+    const portalRootFor = useCallback(
+        (): HTMLElement | null =>
+            documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : null,
+        [documentPipStore, call],
+    );
+    const portalRoot = useEventEmitterState(documentPipStore, DocumentPipStoreEvent.Update, portalRootFor);
     // Not a hook: changing the language reloads Element Web, so there is no live change to follow
     const language = getCurrentLanguage().replace("_", "-");
     const bridge = useMemo(
@@ -103,6 +118,7 @@ export const WrappedElementCallComponent: FC<{ call: ElementCallModel; client: M
                 ref={call.setComponentHandle}
                 theme={theme}
                 language={language}
+                portalRoot={portalRoot}
             />
             <MarkReadyOnMount call={call} />
         </Suspense>

@@ -28,6 +28,7 @@ import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { type ActionPayload } from "../../dispatcher/payloads";
+import { type DocumentPipStore } from "../../stores/DocumentPipStore";
 
 // For persisted apps in PiP we want the zIndex to be higher than for other persisted apps (100),
 // otherwise the PiP view is drawn UNDER another persistent app when dragged around. Same as AppTile.
@@ -98,16 +99,20 @@ const subscribeToCalls = (listener: () => void): (() => void) => {
 /**
  * Element Call for one widget, re-rendered when the room's call changes. Reads the call from the
  * `CallStore` rather than from a tile's view model, so that it belongs to no tile in particular.
+ * Rendered in the persisted root's own React tree, so what it needs from the SDK context is passed in.
  */
-const PersistedElementCall: FC<{ roomId: string; widgetId: string; client: MatrixClient }> = ({
-    roomId,
-    widgetId,
-    client,
-}) => {
+const PersistedElementCall: FC<{
+    roomId: string;
+    widgetId: string;
+    client: MatrixClient;
+    documentPipStore: DocumentPipStore;
+}> = ({ roomId, widgetId, client, documentPipStore }) => {
     const call = useSyncExternalStore(subscribeToCalls, () =>
         resolveCall(CallStore.instance.getCall(roomId), widgetId),
     );
-    return call === null ? null : <WrappedElementCallComponent call={call} client={client} />;
+    return call === null ? null : (
+        <WrappedElementCallComponent call={call} client={client} documentPipStore={documentPipStore} />
+    );
 };
 
 /**
@@ -118,10 +123,23 @@ const PersistedElementCall: FC<{ roomId: string; widgetId: string; client: Matri
  * the session on unmount would end the call.
  */
 const elementCallComponents = new Map<string, FC>();
-const elementCallComponentFor = (persistKey: string, roomId: string, widgetId: string, client: MatrixClient): FC => {
+const elementCallComponentFor = (
+    persistKey: string,
+    roomId: string,
+    widgetId: string,
+    client: MatrixClient,
+    documentPipStore: DocumentPipStore,
+): FC => {
     let component = elementCallComponents.get(persistKey);
     if (!component) {
-        component = () => <PersistedElementCall roomId={roomId} widgetId={widgetId} client={client} />;
+        component = () => (
+            <PersistedElementCall
+                roomId={roomId}
+                widgetId={widgetId}
+                client={client}
+                documentPipStore={documentPipStore}
+            />
+        );
         elementCallComponents.set(persistKey, component);
     }
     return component;
@@ -160,7 +178,13 @@ export class ElementCallAppTileViewModel
             ...layoutSnapshot(props),
         });
         this.client = props.sdkContext.client;
-        this.ElementCall = elementCallComponentFor(persistKey, roomId, props.app.id, this.client);
+        this.ElementCall = elementCallComponentFor(
+            persistKey,
+            roomId,
+            props.app.id,
+            this.client,
+            props.sdkContext.documentPipStore,
+        );
         this.elementCall = elementCall;
         this.miniMode = props.miniMode;
         this.widgetRoomId = isAppWidget(props.app) ? props.app.roomId : null;

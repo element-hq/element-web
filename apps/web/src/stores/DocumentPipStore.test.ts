@@ -89,6 +89,7 @@ describe("DocumentPipStore", () => {
         expect(requestWindow).toHaveBeenCalledWith({ width: 640, height: 360 });
         expect(PersistedElement.detach).toHaveBeenCalledWith(persistKey, pipWindow.document.body);
         expect(store.call).toBe(call);
+        expect(store.pipWindow).toBe(pipWindow);
         expect(store.isShowing(call)).toBe(true);
         expect(store.isShowingWidget("call-widget", roomId)).toBe(true);
         expect(store.isShowingWidget("other", roomId)).toBe(false);
@@ -191,6 +192,7 @@ describe("DocumentPipStore", () => {
         expect(pipWindow.close).toHaveBeenCalledTimes(1);
         expect(PersistedElement.reattach).toHaveBeenCalledTimes(1);
         expect(store.call).toBeNull();
+        expect(store.pipWindow).toBeNull();
     });
 
     it("closes the window when the call disconnects", async () => {

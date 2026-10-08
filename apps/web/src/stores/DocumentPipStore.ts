@@ -72,6 +72,11 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         return this.shown?.call ?? null;
     }
 
+    /** The Picture-in-Picture window, while a call is shown in one. */
+    public get pipWindow(): Window | null {
+        return this.shown?.pipWindow ?? null;
+    }
+
     public isShowing(call: Call | null): boolean {
         return call !== null && this.shown?.call === call;
     }
