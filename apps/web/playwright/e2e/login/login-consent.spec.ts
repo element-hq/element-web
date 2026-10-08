@@ -313,8 +313,13 @@ test.describe("Login", () => {
                 // Start the reset process
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // First try cancelling and restarting
-                await page.getByRole("button", { name: "Go back" }).click();
+                // First sign out and start again
+                await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Sign out" }).click();
+
+                await login(page, homeserver, credentials);
+                await expect(
+                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).toBeVisible();
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // Then click outside the dialog and restart
