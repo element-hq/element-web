@@ -133,12 +133,15 @@ export default class PersistedElement extends React.Component<IProps> {
     /**
      * Undoes `detach`: brings the DOM tree back into this document, where the mounted PersistedElements
      * (if any) position it again.
+     *
+     * @returns false if the tree under this persistKey was not detached.
      */
-    public static reattach(persistKey: string): void {
-        if (!PersistedElement.detached.delete(persistKey)) return;
+    public static reattach(persistKey: string): boolean {
+        if (!PersistedElement.detached.delete(persistKey)) return false;
         const pair = PersistedElement.rootMap[persistKey];
         if (pair) getOrCreateMasterContainer().appendChild(pair[1]);
         PersistedElement.refresh(persistKey);
+        return true;
     }
 
     public static isDetached(persistKey: string): boolean {

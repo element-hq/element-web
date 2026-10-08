@@ -83,8 +83,10 @@ describe("PersistedElement", () => {
         unmount();
         expect(child().style.display).toBe("block");
 
-        PersistedElement.reattach(persistKey);
+        expect(PersistedElement.reattach(persistKey)).toBe(true);
         expect(PersistedElement.isDetached(persistKey)).toBe(false);
+        // Nothing left to bring back
+        expect(PersistedElement.reattach(persistKey)).toBe(false);
         expect(container()?.parentElement?.id).toBe("mx_PersistedElement_container");
         // No placeholder is mounted any more, so it goes back to being hidden
         expect(child().style.display).toBe("none");

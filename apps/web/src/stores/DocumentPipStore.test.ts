@@ -60,7 +60,7 @@ describe("DocumentPipStore", () => {
 
         vi.spyOn(PersistedElement, "isMounted").mockReturnValue(true);
         vi.spyOn(PersistedElement, "detach").mockReturnValue(true);
-        vi.spyOn(PersistedElement, "reattach").mockImplementation(() => {});
+        vi.spyOn(PersistedElement, "reattach").mockReturnValue(true);
     });
 
     afterEach(() => {
