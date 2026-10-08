@@ -30,6 +30,25 @@ global.addEventListener("activate", (event) => {
     event.waitUntil(clients.claim());
 });
 
+/**
+ * Requests for user info sent to tabs which are awaiting a reply, keyed by the `responseKey` sent with the request.
+ */
+const pendingUserInfoRequests = new Map<
+    string,
+    (data: { userId: string; deviceId: string; homeserver: string }) => void
+>();
+
+// Event handlers must be added during the initial evaluation of the worker script, so we register a single `message`
+// listener here and route each reply to the request awaiting it, rather than adding a listener per request.
+global.addEventListener("message", (event: MessageEvent) => {
+    const responseKey = event.data?.responseKey;
+    if (typeof responseKey !== "string") return; // not a reply to one of our requests
+    const handler = pendingUserInfoRequests.get(responseKey);
+    if (!handler) return; // not for us, or already timed out
+    pendingUserInfoRequests.delete(responseKey);
+    handler(event.data);
+});
+
 // @ts-expect-error - the service worker types conflict with the DOM types available through TypeScript. Many hours
 // have been spent trying to convince the type system that there's no actual conflict, but it has yet to work. Instead
 // of trying to make it do the thing, we force-cast to something close enough where we can (and ignore errors otherwise).
@@ -179,21 +198,21 @@ async function askClientForUserIdParams(
         // We could also potentially use some version of TLS to encrypt postMessage, though that feels way more involved
         // than just reading IndexedDB ourselves.
 
-        // Avoid stalling the tab in case something goes wrong.
-        const timeoutId = setTimeout(() => reject(new Error("timeout in postMessage")), 1000);
-
         // We don't need particularly good randomness here - we just use this to generate a request ID, so we know
         // which postMessage reply is for our active request.
         const responseKey = Math.random().toString(36);
 
-        // Add the listener first, just in case the tab is *really* fast.
-        const listener = (event: MessageEvent): void => {
-            if (event.data?.responseKey !== responseKey) return; // not for us
+        // Avoid stalling the tab in case something goes wrong.
+        const timeoutId = setTimeout(() => {
+            pendingUserInfoRequests.delete(responseKey);
+            reject(new Error("timeout in postMessage"));
+        }, 1000);
+
+        // Register the pending request first, just in case the tab is *really* fast.
+        pendingUserInfoRequests.set(responseKey, (data) => {
             clearTimeout(timeoutId); // do this as soon as possible, avoiding a race between resolve and reject.
-            resolve(event.data); // "unblock" the remainder of the thread, if that were such a thing in JavaScript.
-            global.removeEventListener("message", listener); // cleanup, since we're not going to do anything else.
-        };
-        global.addEventListener("message", listener);
+            resolve(data); // "unblock" the remainder of the thread, if that were such a thing in JavaScript.
+        });
 
         // Ask the tab for the information we need. This is handled by WebPlatform.
         (client as Window).postMessage({ responseKey, type: "userinfo" });

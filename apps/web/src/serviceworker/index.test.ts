@@ -133,6 +133,15 @@ describe("serviceworker", () => {
         return encodeUnpaddedBase64(rawPickleKey);
     }
 
+    it("adds no event listeners after the initial evaluation of the worker script", async () => {
+        await persistTokens(undefined, { accessToken: "plain_text_token" });
+
+        await interceptMediaRequest();
+
+        expect(tab.postMessage).toHaveBeenCalled();
+        expect(global.addEventListener).not.toHaveBeenCalled();
+    });
+
     it("passes the request through unauthenticated when there is no access token stored", async () => {
         const { url, init } = await interceptMediaRequest();
 
