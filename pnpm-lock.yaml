@@ -533,8 +533,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.7
       '@element-hq/element-call-component':
-        specifier: github:element-hq/element-call#main&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/3b7ccb63e243739576efabca96daf55b6f0df113#path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.1.0)(matrix-js-sdk@43.0.0)(react-dom@19.3.0)(react@19.3.0)
+        specifier: github:element-hq/element-call#v0.28.0-rc.1&path:/component
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f#path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@43.0.0)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2831,12 +2831,13 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/3b7ccb63e243739576efabca96daf55b6f0df113#path:/component':
-    resolution: {gitHosted: true, integrity: sha512-gTHCOailEzKrkP4ib+0Ft9jWiFdAKM6plmqbh6T5kNFYr6BJAWtUkznnMdg11lzSNbgTHalOrruH8NQbI28kBA==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/3b7ccb63e243739576efabca96daf55b6f0df113}
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f#path:/component':
+    resolution: {gitHosted: true, integrity: sha512-K6yITBnVEz9UNmBFwCXIL0xthT+vipTqVXhiToF2QeIri8f7eXNrtjxzVU6tqAFG1YJABxukEGdKJLhJNjsOWg==, path: /component, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f}
     version: 0.0.0
     peerDependencies:
       '@vector-im/compound-design-tokens': ^11.0.0
       '@vector-im/compound-web': ^10.0.0
+      livekit-client: ^2.22.2
       matrix-js-sdk: '*'
       react: ^19
       react-dom: ^19
@@ -15102,10 +15103,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/3b7ccb63e243739576efabca96daf55b6f0df113#path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.1.0)(matrix-js-sdk@43.0.0)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/9b3c3569ecefbb79cf527ea24e3756ba50553a8f#path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.1.0)(livekit-client@2.22.3)(matrix-js-sdk@43.0.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
+      livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
       matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
