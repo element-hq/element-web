@@ -222,7 +222,7 @@ catalogs:
       specifier: 11.3.0
       version: 11.3.0
     '@vector-im/compound-web':
-      specifier: github:element-hq/compound-web#abdd1657b4787952b19203c7ce81fda02822ac7f
+      specifier: github:element-hq/compound-web#65fbe557780a53f93e55e17468613d2899e2d2a3
       version: 10.3.1
     '@vitejs/plugin-react':
       specifier: 6.1.1
@@ -570,7 +570,7 @@ importers:
         version: 11.3.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.3.0)
@@ -1508,7 +1508,7 @@ importers:
         version: typescript@7.0.2
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 6.1.1(vite@8.3.1)
@@ -6420,8 +6420,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f':
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f}
+  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3':
+    resolution: {gitHosted: true, integrity: sha512-aZGhgewV/yxhVFPunqqy1tZrwePPF3QbqO6tuW4t2cO0APMBdqbE2c6S2Fz4EJzP37nGrqboYcGHrIPi+oQNdQ==, tarball: https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3}
     version: 10.3.1
     peerDependencies:
       '@fontsource/inconsolata': ^5
@@ -15066,7 +15066,7 @@ snapshots:
   '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/f322af2742d2f2a8c6293566fda5c6f1fe16b03d#path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@43.0.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.0)
-      '@vector-im/compound-web': https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
+      '@vector-im/compound-web': https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
       matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/489a523001f7a20a49309c90ae42a737159a4f3b
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
@@ -18325,7 +18325,7 @@ snapshots:
       - '@types/react-dom'
       - react-dom
 
-  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/abdd1657b4787952b19203c7ce81fda02822ac7f(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)':
+  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/65fbe557780a53f93e55e17468613d2899e2d2a3(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.3.0)(@types/react-dom@19.2.3)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.3.0)(react@19.3.0)
       '@floating-ui/react-dom': 2.1.9(react-dom@19.3.0)(react@19.3.0)

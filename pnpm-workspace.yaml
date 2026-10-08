@@ -28,7 +28,7 @@ catalog:
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
     # A git dependency until PortalRoot (element-hq/compound-web#562) is released
-    "@vector-im/compound-web": "github:element-hq/compound-web#abdd1657b4787952b19203c7ce81fda02822ac7f"
+    "@vector-im/compound-web": "github:element-hq/compound-web#65fbe557780a53f93e55e17468613d2899e2d2a3"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
