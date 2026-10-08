@@ -11,6 +11,7 @@ import { type EventType, type MediaEventContent, type RelationType } from "matri
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
+import escapeHTML from "escape-html";
 
 import { ExportType, type IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
@@ -276,9 +277,10 @@ export default abstract class Exporter {
         }
         const filename = content.filename;
         if (typeof filename === "string") {
-            const lastDot = filename.lastIndexOf(".");
-            if (lastDot !== -1 && lastDot < filename.length - 1) {
-                const rawExt = filename.slice(lastDot + 1);
+            const escapedFilename = escapeHTML(filename);
+            const lastDot = escapedFilename.lastIndexOf(".");
+            if (lastDot !== -1 && lastDot < escapedFilename.length - 1) {
+                const rawExt = escapedFilename.slice(lastDot + 1);
                 if (rawExt) return "." + rawExt;
             }
         }

@@ -91,7 +91,8 @@ export interface TextualBodyViewSnapshot {
 
 export interface TextualBodyViewActions {
     /**
-     * Capture-phase click handler attached to the root message-body container.
+     * Click handler attached to the root message-body container.
+     * Runs in the bubble phase so that interactive children (e.g. pills) can handle their own clicks first.
      */
     onRootClick?: MouseEventHandler<HTMLDivElement>;
     /**
@@ -275,13 +276,10 @@ export function TextualBodyView({
 
     if (kind === TextualBodyViewKind.EMOTE) {
         return (
-            <div
-                id={id}
-                className={rootClasses}
-                onClickCapture={vm.onRootClick}
-                dir="auto"
-                {...eventPresentationAttributes}
-            >
+            // onRootClick is used to handle clicks in links and other interactive elements, so we don't need to add keyboard events here.
+            // The interactive children will handle their own keyboard events.
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
+            <div id={id} className={rootClasses} onClick={vm.onRootClick} dir="auto" {...eventPresentationAttributes}>
                 *&nbsp;
                 <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
@@ -294,7 +292,10 @@ export function TextualBodyView({
     }
 
     return (
-        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} {...eventPresentationAttributes}>
+        // onRootClick is used to handle clicks in links and other interactive elements, so we don't need to add keyboard events here.
+        // The interactive children will handle their own keyboard events.
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
+        <div id={id} className={rootClasses} onClick={vm.onRootClick} {...eventPresentationAttributes}>
             {renderedBody}
             {urlPreviews}
         </div>

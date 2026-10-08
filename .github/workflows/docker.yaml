@@ -12,7 +12,7 @@ permissions: {}
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
@@ -31,15 +31,15 @@ jobs:
               if: github.event_name != 'pull_request'
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
+              uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4
+              uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
               with:
                   install: true
 
             - name: Build and load
-              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
+              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -101,8 +101,8 @@ jobs:
                   )
 
                   # Every module pinned in the Dockerfile should be listed in the config and served
-                  MODULES=$(grep -oE '^ARG MODULE_[A-Z0-9_]+_VERSION=' apps/web/Dockerfile |
-                      sed -E 's/^ARG MODULE_(.*)_VERSION=$/\1/' | tr '[:upper:]_' '[:lower:]-')
+                  MODULES=$(sed -nE 's/^ARG MODULE_([A-Z0-9_]+)_VERSION=(.+)$/\1 \2/p' apps/web/Dockerfile |
+                      awk '{ name = tolower($1); gsub("_", "-", name); print name "-" $2 }')
                   test -n "$MODULES"
 
                   CONFIG=$(wget --retry-connrefused --tries=5 -q --wait=3 -O - "http://localhost:$ELEMENT_WEB_PORT/config.json")
@@ -164,7 +164,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Connect to Tailscale
-              uses: tailscale/github-action@306e68a486fd2350f2bfc3b19fcd143891a4a2d8 # v4
+              uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4
               if: github.event_name != 'pull_request'
               with:
                   oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
@@ -202,7 +202,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
+              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
               if: github.event_name != 'pull_request'
               with:
                   source: .

@@ -11,12 +11,12 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
+import { mkStubRoom, mockPlatformPeg, stubClient } from "test-utils";
 
 import type BasePlatform from "../BasePlatform";
 import SdkConfig from "../SdkConfig";
 import { SettingLevel } from "./SettingLevel";
 import SettingsStore from "./SettingsStore";
-import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test/test-utils";
 import { SETTINGS, type SettingKey } from "./Settings.tsx";
 import MatrixClientBackedController from "./controllers/MatrixClientBackedController.ts";
 import SettingController from "./controllers/SettingController.ts";

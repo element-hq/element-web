@@ -693,6 +693,76 @@ exports[`KeyboardUserSettingsTab > renders list of keyboard shortcuts 1`] = `
                     </kbd>
                   </div>
                 </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Hide or show the room list (with the resize handle focused)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Make the room list narrower (with the resize handle focused)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ←
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Make the room list wider (with the resize handle focused)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      →
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Hide the room list (with the resize handle focused)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Home
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Show the room list at full width (with the resize handle focused)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      End
+                       
+                    </kbd>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>

@@ -30,7 +30,7 @@ describe("/status", () => {
         const result = run(undefined);
         expect(result.error).toBeInstanceOf(UserFriendlyError);
         expect((result.error as UserFriendlyError).message).toBe(
-            "No arguments provided. You should supply an emoij and an optional text component.",
+            "No arguments provided. Supply an emoji and optionally some text.",
         );
     });
 
@@ -49,6 +49,12 @@ describe("/status", () => {
     it("should reject if the status text exceeds the maximum byte length", () => {
         const longText = "a".repeat(257);
         const result = run(`🎉 ${longText}`);
+        expect(result.error).toBeInstanceOf(UserFriendlyError);
+        expect((result.error as UserFriendlyError).message).toBe("The text you provided was too long.");
+    });
+
+    it("should reject if the status text exceeds the 30-character UI guideline", () => {
+        const result = run(`🎉 ${"a".repeat(31)}`);
         expect(result.error).toBeInstanceOf(UserFriendlyError);
         expect((result.error as UserFriendlyError).message).toBe("The text you provided was too long.");
     });

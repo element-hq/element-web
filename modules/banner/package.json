@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-module-banner",
     "private": true,
-    "version": "2.1.0",
+    "version": "2.1.1",
     "type": "module",
     "main": "lib/index.js",
     "license": "SEE LICENSE IN README.md",
@@ -12,6 +12,7 @@
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
         "@element-hq/element-web-module-api": "workspace:*",
+        "@fetch-mock/vitest": "^0.2.18",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^7.0.0",
         "@testing-library/react": "^16.3.2",
@@ -34,7 +35,7 @@
         "@radix-ui/react-dialog": "^1.1.6",
         "@vector-im/compound-design-tokens": "^10.0.0",
         "@vector-im/compound-web": "^9.0.0",
-        "motion": "^13.0.0",
+        "motion": "^14.0.0",
         "styled-components": "^6.1.18",
         "zod": "^4.0.0"
     }

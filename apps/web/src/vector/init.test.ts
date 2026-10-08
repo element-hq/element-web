@@ -12,12 +12,12 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "@fetch-mock/vitest";
 import { waitFor, screen } from "test-utils-rtl";
+import { mockPlatformPeg, unmockPlatformPeg } from "test-utils/platform.ts";
 
 import { loadApp, logAppVersion, showError, showIncompatibleBrowser } from "./init.tsx";
 import SdkConfig from "../SdkConfig.ts";
 import MatrixChat from "../components/structures/MatrixChat.tsx";
 import { parseAppUrl } from "./url_utils.ts";
-import { mockPlatformPeg, unmockPlatformPeg } from "../../test/test-utils/platform.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();

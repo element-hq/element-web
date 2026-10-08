@@ -23,7 +23,6 @@
         "cancel": "キャンセル",
         "change": "変更",
         "clear": "消去",
-        "click_to_copy": "クリックでコピー",
         "close": "閉じる",
         "collapse": "折りたたむ",
         "complete": "完了",
@@ -1220,8 +1219,6 @@
     "language_dropdown_label": "言語一覧",
     "leave_room_dialog": {
         "last_person_warning": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
-        "leave_room_question": "このルーム「%(roomName)s」から退出してよろしいですか？",
-        "leave_space_question": "このスペース「%(spaceName)s」から退出してよろしいですか？",
         "room_rejoin_warning": "このルームは公開されていません。再度参加するには、招待が必要です。",
         "space_rejoin_warning": "このスペースは公開されていません。再度参加するには、招待が必要です。"
     },
@@ -1534,7 +1531,6 @@
         "join_button_account": "サインアップ",
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "join_the_discussion": "ルームに参加",
-        "join_title": "ルームに参加",
         "join_title_account": "アカウントで会話に参加",
         "joining": "参加しています…",
         "joining_room": "ルームに参加しています…",

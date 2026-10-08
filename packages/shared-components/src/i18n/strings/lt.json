@@ -2,8 +2,14 @@
     "action": {
         "delete": "Ištrinti",
         "dismiss": "Atmesti",
+        "edit": "Redaguoti",
         "explore_rooms": "Žvalgyti kambarius",
         "search": "Ieškoti"
+    },
+    "menus": {
+        "user_menu": {
+            "got_an_account": "Jau turite paskyrą?"
+        }
     },
     "time": {
         "about_day_ago": "maždaug prieš dieną",

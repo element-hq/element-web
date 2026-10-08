@@ -7,8 +7,8 @@
 
 import { EventEmitter } from "node:events";
 import { type RoomMember, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { mkEvent, mkRoomMember } from "test-utils";
 
-import { mkEvent, mkRoomMember } from "../../../../../../test/test-utils";
 import { type ElementCall } from "../../../../../models/Call";
 import type { CallStore } from "../../../../../stores/CallStore";
 import type { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
@@ -118,11 +118,7 @@ export class MockedCall extends EventEmitter {
 
     public get session(): MatrixRTCSession {
         return {
-            getOldestMembership: (): CallMembership => {
-                return {
-                    createdTs: () => this.createdTs,
-                } as CallMembership;
-            },
+            memberships: [{ createdTs: () => this.createdTs } as CallMembership],
         } as MatrixRTCSession;
     }
 }

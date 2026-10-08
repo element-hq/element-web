@@ -55,7 +55,7 @@ permissions: {} # No permissions required
 jobs:
     prepare:
         name: "Build Element Web"
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: inputs.skip != true
         outputs:
             num-runners: ${{ env.NUM_RUNNERS }}
@@ -73,17 +73,17 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
+            - uses: ./.github/actions/setup-node-pnpm
 
             - name: Fetch layered build
+              id: layered
               env:
                   # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-              run: scripts/layered.sh
+              run: |
+                  ./scripts/layered.sh
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
             - name: Copy config
               working-directory: apps/web
@@ -92,8 +92,9 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
+                  VERSION: ${{ steps.layered.outputs.version }}
               working-directory: apps/web
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
+              run: pnpm run build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -115,7 +116,7 @@ jobs:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.prepare.outputs.num-runners }}"
         needs: prepare
         if: needs.prepare.outputs.skip == 'false'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             actions: read
             issues: read
@@ -150,7 +151,7 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -195,7 +196,7 @@ jobs:
         name: Modules Playwright tests
         needs: prepare
         if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
-        runs-on: ubuntu-24.04-arm
+        runs-on: ubuntu-26.04-arm
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -203,7 +204,7 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -270,19 +271,14 @@ jobs:
         uses: ./.github/workflows/build_desktop_linux.yaml
         strategy:
             matrix:
-                sqlcipher: [system, static]
                 arch: [amd64, arm64]
                 runAllTests:
                     - ${{ needs.prepare.outputs.run-all-desktop == 'true' }}
                 exclude:
-                    # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
-                    - runAllTests: false
-                      sqlcipher: system
-                    # Additionally skip arm64 system builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
+                    # Skip arm64 builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
                     - runAllTests: false
                       arch: arm64
         with:
-            sqlcipher: ${{ matrix.sqlcipher }}
             arch: ${{ matrix.arch }}
             blob_report: true
 
@@ -307,7 +303,7 @@ jobs:
             - build_ed_linux
             - build_ed_macos
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
@@ -329,7 +325,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: needs.prepare.outputs.skip == 'false'
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   pattern: blob-report-*
                   path: all-blob-reports

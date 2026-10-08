@@ -44,7 +44,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
     return (
         <Flex
             display="inline-flex"
-            gap="var(--cpd-space-1-5x)"
+            gap="var(--cpd-space-1x)"
             align="center"
             className={classNames(styles.pill, className)}
             {...props}
@@ -59,7 +59,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
                     size="16px"
                     onClick={onClick}
                     aria-label={_t("action|delete")}
-                    className="mx_Dialog_nonDialogButton"
+                    className={classNames(styles.icon, "mx_Dialog_nonDialogButton")}
                 >
                     <CloseIcon />
                 </IconButton>

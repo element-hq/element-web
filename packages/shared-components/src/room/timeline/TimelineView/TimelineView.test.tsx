@@ -9,6 +9,7 @@ import React from "react";
 import { act, render, screen, waitFor, type RenderResult } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
+import { page } from "vitest/browser";
 
 import { TimelineView } from "./TimelineView";
 import type { TimelineItem, TimelineViewModel, TimelineViewSnapshot } from "./types";
@@ -28,6 +29,7 @@ function eventItems(count: number, offset = 0): TimelineItem[] {
     return Array.from({ length: count }, (_, i) => ({
         key: `evt-${offset + i}`,
         kind: "event" as const,
+        event: null,
         continuation: false,
         lastInSection: true,
     }));
@@ -165,5 +167,99 @@ describe("<TimelineView />", () => {
         expect(actions.onJumpToLive).toHaveBeenCalledTimes(1);
         // The View hands the VM its imperative scroll handle.
         expect(actions.onJumpToLive.mock.calls[0][0]).toBeTypeOf("function");
+    });
+
+    describe("when the viewport changes height", () => {
+        // The view is height:100%, so re-rendering the wrapper with a new height is how the composer
+        // growing, or a banner appearing above the timeline, reaches the scroller.
+        function renderResizable(vm: TimelineViewModel, height: number): { resize: (h: number) => void } {
+            const view = (h: number): React.ReactElement => (
+                <div style={{ height: h, width: 320 }}>
+                    <TimelineView vm={vm} renderItem={renderItem} />
+                </div>
+            );
+            const result = render(view(height));
+            return { resize: (h) => result.rerender(view(h)) };
+        }
+
+        const distanceFromBottom = (el: HTMLElement): number => el.scrollHeight - el.scrollTop - el.clientHeight;
+        // Long enough for TanStack's scroll corrections to finish, or for a wrongful scroll to show.
+        const settle = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 100));
+
+        it("keeps a reader who was at the bottom at the bottom when the viewport shrinks", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(true));
+            expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1);
+            actions.onAtBottomStateChange.mockClear();
+
+            resize(VIEWPORT_HEIGHT - 60);
+
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT - 60));
+            await waitFor(() => expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1));
+            // The view model is never told the reader left the bottom: they did not.
+            expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
+        });
+
+        it("leaves the scroll position alone when the reader was not at the bottom", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            // The first load's scrollToIndex keeps steering back to its target for a moment; let
+            // it settle, or it would undo the reader's scroll below.
+            await settle();
+            scroller.scrollTop = 200;
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(false));
+            await settle();
+            expect(scroller.scrollTop).toBe(200);
+
+            resize(VIEWPORT_HEIGHT - 60);
+
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT - 60));
+            // Give the view time to scroll, in case it wrongly does.
+            await settle();
+            expect(scroller.scrollTop).toBe(200);
+        });
+
+        it("keeps a reader at the bottom when the window shrinks and some rows shrink with it", async () => {
+            // Every fourth row is sized as a share of the window height, like a collapsed code
+            // block, so it changes height in the same frame as the viewport.
+            const renderWindowSizedItem = (item: TimelineItem): React.ReactNode => (
+                <div
+                    data-testid={`row-${item.key}`}
+                    style={{ height: Number(item.key.slice("evt-".length)) % 4 === 0 ? "30vh" : ROW_HEIGHT }}
+                >
+                    {item.key}
+                </div>
+            );
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            render(
+                <div style={{ height: "50vh", width: 320 }}>
+                    <TimelineView vm={vm} renderItem={renderWindowSizedItem} />
+                </div>,
+            );
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(true));
+            await settle();
+            actions.onAtBottomStateChange.mockClear();
+
+            const { innerWidth: width, innerHeight: height } = window;
+            try {
+                // Shrink in steps, as dragging the window edge does.
+                for (const shrinkBy of [60, 120, 180]) {
+                    await page.viewport(width, height - shrinkBy);
+                    await waitFor(() => expect(scroller.clientHeight).toBe(Math.round((height - shrinkBy) / 2)));
+                    await settle();
+                    expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1);
+                }
+            } finally {
+                await page.viewport(width, height);
+            }
+            expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
+        });
     });
 });

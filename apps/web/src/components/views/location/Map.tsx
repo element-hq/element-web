@@ -123,7 +123,7 @@ const useMapWithStyle = ({
     };
 };
 
-const onGeolocateError = (e: GeolocationPositionError): void => {
+const onGeolocateError = (e: maplibregl.GeolocateErrorEvent): void => {
     logger.error("Could not fetch location", e);
     Modal.createDialog(ErrorDialog, {
         title: _t("location_sharing|error_fetch_location"),

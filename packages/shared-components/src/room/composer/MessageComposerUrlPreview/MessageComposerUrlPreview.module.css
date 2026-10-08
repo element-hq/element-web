@@ -39,7 +39,14 @@
     padding: var(--cpd-space-2x) 0px var(--cpd-space-1x) var(--cpd-space-2x);
 
     * {
-        vertical-align: center;
+        /* the alignment looks correct on chromium with "middle", but wrong on firefox */
+        /* the alignment looks correct on firefox with "center", but chromium does not support "center" yet */
+        vertical-align: middle;
+
+        @supports (vertical-align: center) {
+            vertical-align: center;
+        }
+
         line-height: 100%;
     }
 
@@ -262,4 +269,25 @@
 .entryIcon[data-color="6"] {
     background-color: var(--cpd-color-bg-decorative-6);
     color: var(--cpd-color-text-decorative-6);
+}
+
+.siteName {
+    vertical-align: middle;
+    display: flex;
+    gap: var(--cpd-space-1-5x);
+
+    > * {
+        /* Center everything */
+        margin: auto 0;
+    }
+}
+
+.title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    margin: 0;
+    color: var(--cpd-color-text-primary);
+    text-decoration-line: none;
 }

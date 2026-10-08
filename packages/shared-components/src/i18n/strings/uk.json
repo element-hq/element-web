@@ -20,6 +20,7 @@
         "new_room": "Нова кімната",
         "new_section": "Новий розділ",
         "new_video_room": "Нова відеокімната",
+        "no": "Ні",
         "open_menu": "Відкрити меню",
         "pause": "Призупинити",
         "pin": "Закріпити",
@@ -33,7 +34,8 @@
         "search": "Пошук",
         "start_chat": "Розпочати бесіду",
         "unpin": "Відкріпити",
-        "view_source": "Переглянути джерело"
+        "view_source": "Переглянути джерело",
+        "yes": "Так"
     },
     "common": {
         "attachment": "Вкладення",
@@ -101,7 +103,6 @@
             "clear_status": "Очистити статус",
             "create_an_account": "Створити обліковий запис",
             "got_an_account": "Маєте обліковий запис?",
-            "manage_account": "Керувати обліковим записом",
             "sign_in": "Увійти",
             "title": "Меню користувача"
         }
@@ -113,6 +114,13 @@
         "mentions_keywords": "Згадки та ключові слова",
         "message_didnt_send": "Повідомлення не надіслане. Натисніть, щоб дізнатись подробиці.",
         "mute_room": "Вимкнути сповіщення кімнати"
+    },
+    "pdf_viewer": {
+        "page_label": "Сторінка %(page)s з %(total)s",
+        "page_number": "Номер сторінки",
+        "zoom": "Масштаб",
+        "zoom_in": "Збільшити",
+        "zoom_out": "Зменшити"
     },
     "release_announcement": {
         "room_list_section_close": "ОК",
@@ -136,6 +144,7 @@
         "knock_sent": "Запит на приєднання надіслано",
         "pinned_message_badge": "Закріплене повідомлення",
         "status_bar": {
+            "contact_account_provider": "Зв'язатися з постачальником облікового запису",
             "delete_all": "Видалити все",
             "exceeded_resource_limit_description": "Зверніться до постачальника вашого облікового запису, щоб продовжити користуватися службою.",
             "exceeded_resource_limit_title": "Ваше повідомлення не надіслано, оскільки ця служба перевищила ліміт ресурсів.",
@@ -338,7 +347,7 @@
             "error_invalid": "Недійсний файл"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s змінює аватар бесіди на <img/>",
+            "changed_img": "%(senderDisplayName)s змінює аватар кімнати на <img/>",
             "removed": "%(senderDisplayName)s вилучає аватар кімнати."
         },
         "m.room.encryption": {
@@ -367,14 +376,15 @@
         "pending_moderation": "Повідомлення очікує модерування",
         "pending_moderation_reason": "Повідомлення очікує модерування: %(reason)s",
         "url_preview": {
-            "close": "Закрити попередній перегляд",
-            "open_link": "Відкрити посилання",
             "show_n_more": {
                 "one": "Показати ще %(count)s попередній перегляд",
                 "few": "Показати ще %(count)s попередні перегляди",
                 "many": "Показати ще %(count)s попередні перегляди"
             },
-            "view_image": "Переглянути зображення"
+            "view_audio": "Переглянути аудіо",
+            "view_file": "Переглянути файл",
+            "view_image": "Переглянути зображення",
+            "view_video": "Переглянути відео"
         }
     },
     "user_menu": {
@@ -383,6 +393,26 @@
         "open_home": "Головна",
         "open_security": "Безпека та приватність",
         "open_settings": "Усі налаштування"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Ефективна конфігурація",
+            "configuration": "Конфігурація",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "під час виклику",
+            "in_lobby": "у черзі на приєднання",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "Журнал HostBridge",
+            "mute_audio": "Вимкнути звук аудіо",
+            "mute_video": "Вимкнути звук відео",
+            "no_participants": "Ніхто не бере участі в цьому виклику",
+            "participants": "Учасники",
+            "status": "%(roomId)s · намір %(intent)s · %(state)s · тема %(theme)s · мова %(language)s",
+            "title": "Element Call (тестовий)",
+            "unknown_room": "Невідома кімната %(roomId)s",
+            "unmute_audio": "Увімкнути звук аудіо",
+            "unmute_video": "Увімкнути звук відео"
+        }
     },
     "widget": {
         "context_menu": {

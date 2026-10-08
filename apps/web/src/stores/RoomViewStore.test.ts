@@ -389,6 +389,31 @@ describe("RoomViewStore", function () {
         });
     });
 
+    it("keeps the summary of the open room until another room is opened", async () => {
+        const summary = {
+            room_id: roomId,
+            num_joined_members: 1,
+            world_readable: false,
+            guest_can_join: false,
+        };
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+
+        // A summary for a room that isn't open is ignored
+        roomViewStore.setRoomSummary(roomId2, { ...summary, room_id: roomId2 });
+        expect(roomViewStore.getRoomSummary()).toBeUndefined();
+
+        const onUpdate = vi.fn();
+        roomViewStore.on(UPDATE_EVENT, onUpdate);
+        roomViewStore.setRoomSummary(roomId, summary);
+        expect(roomViewStore.getRoomSummary()).toBe(summary);
+        expect(onUpdate).toHaveBeenCalled();
+
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId2 });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+        expect(roomViewStore.getRoomSummary()).toBeUndefined();
+    });
+
     it("removes the roomId on ViewHomePage", async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);

@@ -28,7 +28,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
         "complete": "Pabeigt",
@@ -1249,8 +1248,6 @@
     },
     "leave_room_dialog": {
         "last_person_warning": "Jūs šeit esat vienīgais. Ja jūs to pametīsiet, nākotnē neviens vairs nevarēs pievienoties, ieskaitot jūs.",
-        "leave_room_question": "Vai tiešām pamest istabu '%(roomName)s'?",
-        "leave_space_question": "Vai tiešām pamest vietu '%(spaceName)s'?",
         "room_leave_admin_warning": "Jūs esat vienīgais administrators šajā istabā. Ja jūs to pametīsiet, neviens nevarēs mainīt istabas iestatījumus vai veikt citas svarīgas darbības.",
         "room_leave_mod_warning": "Jūs esat vienīgais moderators šajā telpā. Ja to pametīsiet, neviens nevarēs mainīt istabas iestatījumus vai veikt citas svarīgas darbības.",
         "room_rejoin_warning": "Šī istaba nav publiska. Tai nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.",
@@ -1611,7 +1608,6 @@
         "join_button_account": "Reģistrēties",
         "join_failed_needs_invite": "Lai skatītu %(roomName)s, jums ir nepieciešams uzaicinājums",
         "join_the_discussion": "Pievienoties diskusijai",
-        "join_title": "Pievienoties istabai, lai piedalītos",
         "join_title_account": "Pievienoties sarunai ar kontu",
         "joining": "Pievienojas…",
         "joining_room": "Pievienojas istabai…",
@@ -2607,10 +2603,6 @@
             "other": "%(count)s atbildes"
         },
         "show_thread_filter": "Rādīt:"
-    },
-    "threads_activity_centre": {
-        "no_rooms_with_threads_notifs": "Jums vēl nav istabu ar pavedienu paziņojumiem.",
-        "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
     },
     "time": {
         "date_at_time": "%(date)s pulksten %(time)s",

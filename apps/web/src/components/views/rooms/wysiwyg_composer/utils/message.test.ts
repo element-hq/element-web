@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
 import { EventStatus, type IEventRelation, MsgType } from "matrix-js-sdk/src/matrix";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "test-utils";
 import { type IRoomState } from "../../../../structures/RoomView";
@@ -24,6 +25,13 @@ import * as Commands from "../../../../../editor/commands";
 import * as Reply from "../../../../../utils/Reply";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import { Action } from "../../../../../dispatcher/actions";
+import { attachUrlPreviews } from "../../../../../utils/messages";
+
+// Wrapped rather than replaced: only the cancellation test below overrides it.
+vi.mock("../../../../../utils/messages", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../../../utils/messages")>();
+    return { ...actual, attachUrlPreviews: vi.fn(actual.attachUrlPreviews) };
+});
 
 describe("message", () => {
     const message = "<i><b>hello</b> world</i>";
@@ -68,7 +76,7 @@ describe("message", () => {
             await sendMessage("", true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -84,7 +92,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: mockRoomContextWithoutId,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -98,7 +106,12 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -110,7 +123,12 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     relation: {},
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -125,7 +143,12 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.does_not_match",
                     },
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -141,7 +164,12 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.thread",
                     },
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -154,7 +182,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -182,7 +210,7 @@ describe("message", () => {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
                 replyToEvent: mockReplyEvent,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -212,7 +240,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -227,7 +255,7 @@ describe("message", () => {
             await sendMessage("🎉", false, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { entries: [], content: "" },
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
             });
 
             // Then
@@ -243,7 +271,12 @@ describe("message", () => {
                 await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -256,7 +289,12 @@ describe("message", () => {
                 await sendMessage(invalidPrefixCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -274,7 +312,12 @@ describe("message", () => {
                 const result = await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // Then
@@ -289,7 +332,12 @@ describe("message", () => {
                     await sendMessage(inputText, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
                         "myfakeroom",
@@ -309,7 +357,12 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         relation: mockRelation,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
 
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
@@ -326,7 +379,12 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     replyToEvent: mockEvent,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 expect(addReplySpy).toHaveBeenCalledTimes(1);
@@ -341,7 +399,12 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         replyToEvent: mockEvent,
-                        urlPreviewSnapshot: { entries: [], content: "" },
+                        urlPreviewSnapshot: {
+                            entries: [],
+                            content: "",
+                            contentLinks: new Set<string>(),
+                            isModified: false,
+                        },
                     });
 
                     expect(result).toBeUndefined();
@@ -356,7 +419,12 @@ describe("message", () => {
                 await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 // we expect the message to have been sent
@@ -377,11 +445,29 @@ describe("message", () => {
                 const result = await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { entries: [], content: "" },
+                    urlPreviewSnapshot: {
+                        entries: [],
+                        content: "",
+                        contentLinks: new Set<string>(),
+                        isModified: false,
+                    },
                 });
 
                 expect(result).toBeUndefined();
             });
+        });
+        // Attaching the previews can take a while in an encrypted room, and the user may cancel the
+        // pending message in the meantime; the message must then not be sent after all.
+        it("Should not send the message when attaching the previews reports a cancellation", async () => {
+            vi.mocked(attachUrlPreviews).mockResolvedValueOnce(true);
+
+            await sendMessage(message, true, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                urlPreviewSnapshot: { entries: [], content: "", contentLinks: new Set<string>(), isModified: false },
+            });
+
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
         });
     });
 
@@ -460,6 +546,105 @@ describe("message", () => {
             };
             expect(mockClient.sendMessage).toHaveBeenCalledWith(mockEvent.getRoomId(), null, expectedContent);
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
+        });
+
+        // Removing a URL preview changes the event without changing a character of its text, so the
+        // edit has to be sent even though `isContentModified` says nothing changed.
+        it("Should send a message when only the preview list is modified", async () => {
+            await editMessage(mockEvent.getContent().body, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                editorStateTransfer,
+                isUrlPreviewsModified: true,
+            });
+
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should attach the bundle to the new content before sending", async () => {
+            const attachBundles = vi.fn(async (content: RoomMessageEventContent) => {
+                (content as unknown as Record<string, unknown>)["com.beeper.linkpreviews"] = [
+                    { matched_url: "https://example.org" },
+                ];
+                return false;
+            });
+
+            await editMessage(mockEvent.getContent().body, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                editorStateTransfer,
+                isUrlPreviewsModified: true,
+                attachBundles,
+            });
+
+            // It is handed the new content, not the fallback body.
+            expect(attachBundles).toHaveBeenCalledWith(expect.objectContaining({ body: mockEvent.getContent().body }));
+            expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                mockEvent.getRoomId(),
+                null,
+                expect.objectContaining({
+                    "m.new_content": expect.objectContaining({
+                        "com.beeper.linkpreviews": [{ matched_url: "https://example.org" }],
+                    }),
+                }),
+            );
+        });
+
+        // Uploading the preview images can take a while, and the user should not be left staring at
+        // an open editor until it finishes.
+        it("Should close the editor before the bundle has finished attaching", async () => {
+            let finishAttaching: (cancelled: boolean) => void;
+            const attaching = new Promise<boolean>((resolve) => {
+                finishAttaching = resolve;
+            });
+
+            const editing = editMessage(mockEvent.getContent().body, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                editorStateTransfer,
+                isUrlPreviewsModified: true,
+                attachBundles: () => attaching,
+            });
+
+            // The editor is already closed, but nothing has been sent yet.
+            await vi.waitFor(() =>
+                expect(spyDispatcher).toHaveBeenCalledWith(
+                    expect.objectContaining({ action: Action.EditEvent, event: null }),
+                ),
+            );
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+
+            finishAttaching!(false);
+            await editing;
+
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(1);
+        });
+
+        // The user cancelled the pending message while its images were uploading, so the edit must
+        // not go out after all.
+        it("Should not send the edit when it was cancelled while attaching", async () => {
+            const result = await editMessage(mockEvent.getContent().body, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                editorStateTransfer,
+                isUrlPreviewsModified: true,
+                attachBundles: async () => true,
+            });
+
+            expect(result).toBeUndefined();
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            expect(spyDispatcher).not.toHaveBeenCalledWith({ action: "message_sent" });
+        });
+
+        it("Should still send when there is no bundle to attach", async () => {
+            const newMessage = `${mockEvent.getContent().body} new content`;
+            await editMessage(newMessage, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                editorStateTransfer,
+            });
+
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(1);
         });
     });
 });

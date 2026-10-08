@@ -22,6 +22,7 @@ import {
     Thread,
 } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
+import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import {
@@ -35,12 +36,6 @@ import {
     isLocationEvent,
     isVoiceMessage,
 } from "./EventUtils";
-import {
-    getMockClientWithEventEmitter,
-    makeBeaconInfoEvent,
-    makePollStartEvent,
-    stubClient,
-} from "../../test/test-utils";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 

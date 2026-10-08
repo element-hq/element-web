@@ -44,7 +44,7 @@ import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
-import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -494,13 +494,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        try {
-            return await this.ipc.call("getPickleKey", userId, deviceId);
-        } catch {
-            // if we can't connect to the password storage, assume there's no
-            // pickle key
-            return null;
-        }
+        return (await this.ipc.call("getPickleKey", userId, deviceId)) ?? null;
     }
 
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {

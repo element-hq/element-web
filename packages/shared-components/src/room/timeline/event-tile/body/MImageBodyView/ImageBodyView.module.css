@@ -10,11 +10,18 @@
     flex-direction: column;
     gap: var(--image-body-content-gap, var(--cpd-space-2x));
     min-width: var(--cpd-space-0x);
+
+    margin-bottom: var(--cpd-space-1x);
 }
 
 .link {
     display: block;
     width: fit-content;
+    /* The frame inside holds the picture's space with a definite width, which makes
+       this wrapper at least that wide — so without this clamp the image overflows
+       any container narrower than the picture. The frame's own max-width cannot do
+       it: a percentage there resolves against this wrapper, which the frame sizes. */
+    max-width: 100%;
     color: inherit;
     text-decoration: none;
 }
@@ -86,9 +93,12 @@
     position: absolute;
     display: block;
     top: var(--cpd-space-0x);
-    left: 14px; /* Preserve the original GIF badge offset from _MImageBody.pcss. */
-    padding: 5px; /* Preserve the original GIF badge padding from _MImageBody.pcss. */
-    border-radius: 5px; /* Preserve the original GIF badge corner radius from _MImageBody.pcss. */
+    left: 14px;
+    /* Preserve the original GIF badge offset from _MImageBody.pcss. */
+    padding: 5px;
+    /* Preserve the original GIF badge padding from _MImageBody.pcss. */
+    border-radius: 5px;
+    /* Preserve the original GIF badge corner radius from _MImageBody.pcss. */
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid rgba(0, 0, 0, 0.2);
     color: rgba(255, 255, 255, 1);

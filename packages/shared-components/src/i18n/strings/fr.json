@@ -20,6 +20,7 @@
         "new_room": "Nouveau salon",
         "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
+        "no": "Non",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
         "pin": "Épingler",
@@ -33,7 +34,8 @@
         "search": "Rechercher",
         "start_chat": "Démarrer une discussion",
         "unpin": "Désépingler",
-        "view_source": "Voir la source"
+        "view_source": "Voir la source",
+        "yes": "Oui"
     },
     "common": {
         "attachment": "Pièce jointe",
@@ -100,7 +102,6 @@
             "clear_status": "Effacer le statut",
             "create_an_account": "Créer un compte",
             "got_an_account": "Tu as un compte ?",
-            "manage_account": "Gérer le compte",
             "sign_in": "Se connecter",
             "title": "Menu utilisateur"
         }
@@ -112,6 +113,13 @@
         "mentions_keywords": "Mentions et mots-clés",
         "message_didnt_send": "Le message n'a pas été envoyé. Cliquez pour plus d'informations",
         "mute_room": "Rendre le salon muet"
+    },
+    "pdf_viewer": {
+        "page_label": "Page %(page)s de %(total)s",
+        "page_number": "Numéro de page",
+        "zoom": "Zoom",
+        "zoom_in": "Zoomer",
+        "zoom_out": "Dé-zoomer"
     },
     "release_announcement": {
         "room_list_section_close": "OK",
@@ -363,13 +371,14 @@
         "pending_moderation": "Message en attente de modération",
         "pending_moderation_reason": "Message en attente de modération : %(reason)s",
         "url_preview": {
-            "close": "Fermer l’aperçu",
-            "open_link": "Ouvrir le lien",
             "show_n_more": {
                 "one": "Montrer %(count)s autre preview",
                 "other": "Montrer %(count)s autres previews"
             },
-            "view_image": "Afficher l'image"
+            "view_audio": "Écouter l'audio",
+            "view_file": "Afficher le fichier",
+            "view_image": "Afficher l'image",
+            "view_video": "Visionner la vidéo"
         }
     },
     "user_menu": {
@@ -378,6 +387,26 @@
         "open_home": "Accueil",
         "open_security": "Sécurité et confidentialité",
         "open_settings": "Tous les paramètres"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Configuration active",
+            "configuration": "Configuration",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent : %(allowJoinUnmutedViaIntent)s · fermer : %(close)s",
+            "in_call": "appel en cours",
+            "in_lobby": "dans le salon d'attente",
+            "initialized_with": "initializeElementCall : %(value)s",
+            "log_label": "Journal HostBridge",
+            "mute_audio": "Couper le son",
+            "mute_video": "Couper la vidéo",
+            "no_participants": "Personne ne participe à cet appel",
+            "participants": "Participants",
+            "status": "%(roomId)s · intention %(intent)s · %(state)s · thème %(theme)s · langue %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Salon inconnu %(roomId)s",
+            "unmute_audio": "Réactiver le son",
+            "unmute_video": "Réactiver la vidéo"
+        }
     },
     "widget": {
         "context_menu": {

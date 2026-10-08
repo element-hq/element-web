@@ -29,7 +29,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
         "complete": "Dokončiť",
@@ -1557,8 +1556,6 @@
     "language_dropdown_label": "Rozbaľovací zoznam jazykov",
     "leave_room_dialog": {
         "last_person_warning": "Ste tu jediný človek. Ak odídete, nikto sa už v budúcnosti nebude môcť pripojiť do tejto miestnosti, vrátane vás.",
-        "leave_room_question": "Ste si istí, že chcete opustiť miestnosť '%(roomName)s'?",
-        "leave_space_question": "Ste si istí, že chcete opustiť priestor '%(spaceName)s'?",
         "room_leave_admin_warning": "Ste jediný správca v tejto miestnosti. Ak odídete, nikto nebude môcť zmeniť nastavenia miestnosti alebo podniknúť ďalšie dôležité kroky.",
         "room_leave_mod_warning": "Ste jediným moderátorom v tejto miestnosti. Ak odídete, nikto nebude môcť zmeniť nastavenia miestnosti alebo podniknúť ďalšie dôležité kroky.",
         "room_rejoin_warning": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu.",
@@ -1988,7 +1985,6 @@
         "join_button_account": "Zaregistrovať sa",
         "join_failed_needs_invite": "Na zobrazenie %(roomName)s potrebujete pozvánku",
         "join_the_discussion": "Pripojiť sa k diskusii",
-        "join_title": "Pripojte sa k miestnosti a zúčastnite sa",
         "join_title_account": "Pripojte sa ku konverzácii pomocou účtu",
         "joining": "Pripájanie…",
         "joining_room": "Pripájanie do miestnosti …",
@@ -3199,9 +3195,7 @@
         "show_thread_filter": "Zobraziť:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vlákien",
-        "no_rooms_with_threads_notifs": "Zatiaľ nemáte miestnosti s upozorneniami na vlákna.",
-        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
+        "header": "Aktivita vlákien"
     },
     "time": {
         "date_at_time": "%(date)s o %(time)s",

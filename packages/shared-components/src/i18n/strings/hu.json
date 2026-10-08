@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Vissza",
+        "cancel": "Mégse",
         "click": "Kattintson",
         "close": "Bezárás",
         "collapse": "Összecsukás",
@@ -15,10 +16,11 @@
         "go": "Kezdés",
         "hide": "Elrejtés",
         "invite": "Meghívás",
-        "new_conversation": "Új beszélgetés",
+        "new_conversation": "Új",
         "new_room": "Új szoba",
         "new_section": "Új szakasz",
         "new_video_room": "Új videószoba",
+        "no": "Nem",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
         "pin": "Kitűzés",
@@ -28,10 +30,12 @@
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
         "retry": "Újra",
+        "save": "Mentés",
         "search": "Keresés",
         "start_chat": "Csevegés indítása",
         "unpin": "Kitűzés megszüntetése",
-        "view_source": "Forrás megjelenítése"
+        "view_source": "Forrás megjelenítése",
+        "yes": "Igen"
     },
     "common": {
         "attachment": "Melléklet",
@@ -40,6 +44,15 @@
         "options": "Beállítások",
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
+    },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Összes törlése",
+            "collapse": "Webcímelőnézetek összecsukása",
+            "failed": "Nem sikerült az előnézet lekérése",
+            "loading": "Előnézet lekérése…",
+            "remove": "Webcímelőnézet eltávolítása"
+        }
     },
     "devtools": {
         "toggle_event": "esemény be/ki"
@@ -56,7 +69,6 @@
             "clear_status": "Törlés",
             "create_an_account": "Fiók létrehozása",
             "got_an_account": "Van már fiókja?",
-            "manage_account": "Fiók kezelése",
             "sign_in": "Bejelentkezés",
             "title": "Felhasználói menü"
         }
@@ -276,8 +288,6 @@
         "pending_moderation": "Moderálásra váró üzenet",
         "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
         "url_preview": {
-            "close": "Előnézet bezárása",
-            "open_link": "Hivatkozás megnyitása",
             "show_n_more": {
                 "one": "%(count)s további előnézet megjelenítése",
                 "other": "%(count)s további előnézet megjelenítése"

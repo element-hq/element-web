@@ -29,7 +29,6 @@
         "cancel": "Canslo",
         "change": "Newid",
         "clear": "Clirio",
-        "click_to_copy": "Clicio i gopïo",
         "close": "Cau",
         "collapse": "Cau",
         "complete": "Wedi cwblhau",
@@ -1555,8 +1554,6 @@
     "language_dropdown_label": "Cwymplen Iaith",
     "leave_room_dialog": {
         "last_person_warning": "Chi yw'r unig berson yma. Os byddwch yn gadael, ni fydd neb yn gallu ymuno yn y dyfodol, gan gynnwys chi.",
-        "leave_room_question": "Ydych chi'n siŵr eich bod am adael ystafell '%(roomName)s'?",
-        "leave_space_question": "Ydych chi'n siŵr eich bod am adael y bwlch '%(spaceName)s'?",
         "room_leave_admin_warning": "Chi yw'r unig weinyddwr yn yr ystafell hon. Os byddwch yn gadael, ni fydd neb yn gallu newid gosodiadau ystafell na chymryd camau pwysig eraill.",
         "room_leave_mod_warning": "Chi yw'r unig gymedrolwr yn yr ystafell hon. Os byddwch yn gadael, ni fydd neb yn gallu newid gosodiadau ystafell na chymryd camau pwysig eraill.",
         "room_rejoin_warning": "Nid yw'r ystafell hon yn gyhoeddus. Fyddwch chi ddim yn gallu ailymuno heb wahoddiad.",
@@ -1973,7 +1970,6 @@
         "join_button_account": "Cofrestru",
         "join_failed_needs_invite": "I weld %(roomName)s, mae angen gwahoddiad arnoch chi",
         "join_the_discussion": "Ymunwch â'r drafodaeth",
-        "join_title": "Ymunwch â'r ystafell i gymryd rhan",
         "join_title_account": "Ymunwch â'r sgwrs gyda chyfrif",
         "joining": "Wrthi'n ymuno…",
         "joining_room": "Wrthi'n ymuno â'r ystafell…",
@@ -3194,9 +3190,7 @@
         "show_thread_filter": "Dangos:"
     },
     "threads_activity_centre": {
-        "header": "Gweithgaredd edafedd",
-        "no_rooms_with_threads_notifs": "Nid oes gennych chi ystafelloedd gyda hysbysiadau edafedd eto.",
-        "no_rooms_with_unread_threads": "Nid oes gennych chi ystafelloedd ag edafedd heb eu darllen eto."
+        "header": "Gweithgaredd edafedd"
     },
     "time": {
         "date_at_time": "%(date)s am %(time)s",

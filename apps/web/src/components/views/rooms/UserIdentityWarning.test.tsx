@@ -27,6 +27,15 @@ import { stubClient } from "test-utils";
 import { UserIdentityWarning } from "./UserIdentityWarning";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
+// UserIdentityWarningViewModel throttles loadViolations via lodash.throttle, causing flakiness
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    throttle: vi.fn((fn) => {
+        fn.cancel = vi.fn();
+        return fn;
+    }),
+}));
+
 const ROOM_ID = "!room:id";
 
 function mockRoom(): Room {
@@ -58,6 +67,11 @@ function mockMembershipForRoom(room: Room, users: string[] | [string, "joined" |
             }
         });
 
+    mockMembers(room, members);
+}
+
+/** Make the given members the room's members, and the ones it encrypts for. */
+function mockMembers(room: Room, members: RoomMember[]): void {
     vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue(members);
 
     vi.spyOn(room, "getMember").mockImplementation((userId) => {
@@ -490,10 +504,7 @@ describe("UserIdentityWarning", () => {
     // identity no longer needs approval (e.g. their identity was approved),
     // then we show the next one.
     it("displays the next user when the current user's identity is approved", async () => {
-        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-            mockRoomMember("@bob:example.org"),
-        ]);
+        mockMembers(room, [mockRoomMember("@alice:example.org", "Alice"), mockRoomMember("@bob:example.org")]);
         const crypto = client.getCrypto()!;
         vi.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
@@ -524,10 +535,7 @@ describe("UserIdentityWarning", () => {
     });
 
     it("displays the next user when the verification requirement is withdrawn", async () => {
-        vi.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-            mockRoomMember("@alice:example.org", "Alice"),
-            mockRoomMember("@bob:example.org"),
-        ]);
+        mockMembers(room, [mockRoomMember("@alice:example.org", "Alice"), mockRoomMember("@bob:example.org")]);
         const crypto = client.getCrypto()!;
         vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
             if (userId == "@alice:example.org") {
@@ -562,5 +570,71 @@ describe("UserIdentityWarning", () => {
         await waitFor(() =>
             expect(getWarningByText("@bob:example.org's digital identity was reset.")).toBeInTheDocument(),
         );
+    });
+
+    it("should not miss a verification change which arrives as soon as the warning is shown", async () => {
+        mockMembers(room, [mockRoomMember("@alice:example.org", "Alice"), mockRoomMember("@bob:example.org")]);
+        const crypto = client.getCrypto()!;
+        vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+            if (userId == "@alice:example.org") {
+                return new UserVerificationStatus(false, true, false, true);
+            } else {
+                return new UserVerificationStatus(false, false, false, true);
+            }
+        });
+
+        await new Promise<void>((resolve) => {
+            const observer = new MutationObserver(() => {
+                if (!document.body.textContent?.includes("Alice's (@alice:example.org) digital identity was reset.")) {
+                    return;
+                }
+                observer.disconnect();
+                vi.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+                    if (userId == "@alice:example.org") {
+                        return new UserVerificationStatus(false, false, false, false);
+                    } else {
+                        return new UserVerificationStatus(false, false, false, true);
+                    }
+                });
+                client.emit(
+                    CryptoEvent.UserTrustStatusChanged,
+                    "@alice:example.org",
+                    new UserVerificationStatus(false, false, false, false),
+                );
+                resolve();
+            });
+            observer.observe(document.body, { subtree: true, childList: true, characterData: true });
+            renderComponent(client, room);
+        });
+
+        await waitFor(() =>
+            expect(getWarningByText("@bob:example.org's digital identity was reset.")).toBeInTheDocument(),
+        );
+    });
+
+    it("should load once more after changes which arrive while it is loading", async () => {
+        const firstLoad = Promise.withResolvers<RoomMember[]>();
+        const getEncryptionTargetMembers = vi
+            .spyOn(room, "getEncryptionTargetMembers")
+            .mockReturnValueOnce(firstLoad.promise)
+            .mockResolvedValue([mockRoomMember("@alice:example.org", "Alice")]);
+        vi.spyOn(client.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, true, false, true),
+        );
+
+        renderComponent(client, room);
+        await waitFor(() => expect(getEncryptionTargetMembers).toHaveBeenCalledTimes(1));
+
+        act(() => {
+            emitMembershipChange(client, "@alice:example.org", "join");
+            emitMembershipChange(client, "@bob:example.org", "join");
+            emitMembershipChange(client, "@carol:example.org", "join");
+        });
+        firstLoad.resolve([]);
+
+        await waitFor(() =>
+            expect(getWarningByText("Alice's (@alice:example.org) digital identity was reset.")).toBeInTheDocument(),
+        );
+        expect(getEncryptionTargetMembers).toHaveBeenCalledTimes(2);
     });
 });

@@ -10,8 +10,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { type EventTimeline, EventType, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:events";
+import { mkEvent, mkRoom, mkRoomMember, stubClient } from "test-utils";
 
-import { mkEvent, mkRoom, mkRoomMember, stubClient } from "../../test/test-utils";
 import { CallStoreEvent, type CallStore } from "./CallStore";
 import { LatestRtcNotificationEventStore } from "./LatestRtcNotificationEventStore";
 import { type ElementCall, type Call } from "../models/Call";
@@ -130,11 +130,7 @@ describe("LatestRtcNotificationEventStore", () => {
         call.participants = new Map([[mkRoomMember("!my-room1:m.org", "@alice:m.org"), new Set()]]);
         // @ts-ignore
         call.session = {
-            getOldestMembership: () => {
-                return {
-                    eventId: callMembershipEvent.getId(),
-                };
-            },
+            memberships: [{ eventId: callMembershipEvent.getId() }],
         };
 
         const callStore = new EventEmitter() as unknown as CallStore;

@@ -42,6 +42,12 @@ import styles from "./TimelineView.module.css";
  *  - **New messages arrive at the bottom.** `followOnAppend` scrolls down to keep them in
  *    view, but only when we are already at the live end and not jumping somewhere else.
  *
+ *  - **The viewport changes height** while the reader is at the bottom (the composer grows, a
+ *    banner appears, the window resizes). The browser keeps `scrollTop`, not the distance from
+ *    the bottom, so the newest message would be cut off. Our @tanstack/virtual-core patch makes
+ *    `anchorTo: "end"` keep the end in view when the scroller resizes, as it already does when
+ *    a row resizes.
+ *
  *  - **Reaching either end**, which is the cue to load more, is worked out from which rows
  *    are currently rendered. TanStack has no "you reached the top/bottom" callback.
  *
@@ -232,6 +238,10 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         // ...but never hold onto a loading spinner as that reference row (see above). This
         // option comes from our @tanstack/virtual-core patch and is pending upstream.
         isValidAnchorItem,
+        // How near the bottom still counts as being at the bottom, for staying put
+        // when a message grows or the viewport resizes. The library's own default of 1px is missed by
+        // fractional scroll positions; this is the same tolerance we report with.
+        scrollEndThreshold: AT_BOTTOM_THRESHOLD_PX,
         // Scroll down to follow newly arrived messages, but only when we are at the live end
         // of the timeline and are not part-way through jumping somewhere else.
         followOnAppend: snapshot.atLiveEnd && snapshot.pendingAnchor === null,

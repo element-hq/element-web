@@ -12,7 +12,7 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
-import { type PublicInterface } from "../../test/@types/common.ts";
+import { type PublicInterface } from "../test/test-utils/@types/common.ts";
 
 // Populate this class with the details of your customisations when copying it.
 

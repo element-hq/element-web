@@ -27,7 +27,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
         "complete": "Selesai",
@@ -1542,8 +1541,6 @@
     "language_dropdown_label": "Dropdown Bahasa",
     "leave_room_dialog": {
         "last_person_warning": "Anda adalah satu-satunya di sini. Jika Anda keluar, tidak ada siapa saja dapat bergabung di masa mendatang, termasuk Anda.",
-        "leave_room_question": "Anda yakin ingin meninggalkan ruangan '%(roomName)s'?",
-        "leave_space_question": "Apakah Anda yakin untuk keluar dari space '%(spaceName)s'?",
         "room_leave_admin_warning": "Anda adalah administrator satu-satunya di ruangan ini. Jika Anda keluar, tidak ada siapa pun yang dapat mengubah pengaturan ruangan atau melakukan tindakan penting lainnya.",
         "room_leave_mod_warning": "Anda adalah moderator satu-satunya di ruangan ini. Jika Anda keluar, tidak ada siapa pun yang dapat mengubah pengaturan ruangan atau melakukan tindakan penting lainnya.",
         "room_rejoin_warning": "Ruangan ini tidak publik. Anda tidak dapat bergabung lagi tanpa sebuah undangan.",
@@ -1952,7 +1949,6 @@
         "join_button_account": "Daftar",
         "join_failed_needs_invite": "Untuk menampilkan %(roomName)s, Anda perlu sebuah undangan",
         "join_the_discussion": "Bergabung dengan diskusinya",
-        "join_title": "Bergabung dengan ruangan ini untuk berpartisipasi",
         "join_title_account": "Bergabung obrolan dengan sebuah akun",
         "joining": "Bergabung…",
         "joining_room": "Bergabung dengan ruangan…",
@@ -3150,9 +3146,7 @@
         "show_thread_filter": "Tampilkan:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitas utas",
-        "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
+        "header": "Aktivitas utas"
     },
     "time": {
         "date_at_time": "%(date)s pada %(time)s",

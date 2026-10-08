@@ -3,12 +3,10 @@
         "jump_first_invite": "跳转到首个邀请",
         "message_composer": "消息编辑器",
         "n_unread_messages": {
-            "one": "1 个未读消息",
-            "other": "%(count)s 个未读消息。"
+            "other": "%(count)s 条未读消息。"
         },
         "n_unread_messages_mentions": {
-            "one": "1 个未读提及",
-            "other": "%(count)s 个包含提及在内的未读消息"
+            "other": "%(count)s 条未读消息（含提及）"
         },
         "room_status_bar": "房间状态栏",
         "seek_bar_label": "音频搜索栏",
@@ -27,7 +25,6 @@
         "cancel": "取消",
         "change": "更改",
         "clear": "清除",
-        "click_to_copy": "选择以复制",
         "close": "关闭",
         "collapse": "折叠",
         "complete": "完成",
@@ -96,17 +93,18 @@
         "resume": "恢复",
         "retry": "重试",
         "review": "审阅",
-        "revoke": "撤消",
+        "revoke": "撤销",
         "save": "保存",
         "search": "搜索",
         "send_report": "发送举报",
-        "set_avatar": "设置个人资料图像",
+        "set_avatar": "设置头像",
         "share": "分享",
         "show": "显示",
         "show_advanced": "显示高级选项",
         "show_all": "显示全部",
         "sign_in": "登录",
         "sign_out": "移除此设备",
+        "sign_out_before_verify": "注销",
         "skip": "跳过",
         "start": "开始",
         "stop": "停止",
@@ -138,17 +136,17 @@
         "accept_button": "良好",
         "bullet_1": "我们<Bold>不</Bold>记录或分析任何个人数据",
         "bullet_2": "我们<Bold>不</Bold>分享数据给第三方",
-        "consent_migration": "你已于之前同意我们分享匿名使用情况数据。我们正在更新其运作方式。",
+        "consent_migration": "你此前已同意与我们共享匿名使用数据。我们正在更新相关机制。",
         "disable_prompt": "你可以随时在设置中关闭此选项。",
         "enable_prompt": "帮助改进 %(analyticsOwner)s",
-        "learn_more": "分享匿名数据已帮助我们识别问题。不涉及个人隐私及第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
+        "learn_more": "共享匿名数据以帮助我们发现问题。不涉及个人隐私及第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
         "privacy_policy": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们的所有条款",
         "pseudonymous_usage_data": "通过分享匿名使用数据，帮助我们发现问题并改进 %(analyticsOwner)s。为了解用户如何使用多台设备，我们将生成一个由你的设备共享的随机标识符。",
         "shared_data_heading": "以下任何数据都可能被分享："
     },
     "auth": {
         "3pid_in_use": "该邮件地址或电话号码已被使用。",
-        "account_clash": "你的新账户 (%(newAccountId)s) 已注册，但你已登录到其它账户 (%(loggedInUserId)s)。",
+        "account_clash": "你的新账户 (%(newAccountId)s) 已注册，但你已登录到其他账户 (%(loggedInUserId)s)。",
         "account_clash_previous_account": "使用上一个账户继续",
         "account_deactivated": "此账户已被停用。",
         "autodiscovery_generic_failure": "从服务器获取自动发现配置失败",
@@ -165,7 +163,7 @@
         "autodiscovery_unexpected_error_is": "解析身份服务器配置时出现未知错误",
         "captcha_description": "你的账户提供者需要确认你是否为机器人。",
         "change_password_action": "更改密码",
-        "change_password_confirm_invalid": "两次输入的密码不匹配",
+        "change_password_confirm_invalid": "密码不一致",
         "change_password_confirm_label": "确认密码",
         "change_password_current_label": "当前密码",
         "change_password_empty": "密码不能为空",
@@ -204,13 +202,13 @@
         "forgot_password_send_email": "发送邮件",
         "identifier_label": "登录选项",
         "incorrect_credentials": "用户名或密码错误。",
-        "incorrect_credentials_detail": "请留意你登录的服务器为 %(hs)s 而不是 matrix.org",
+        "incorrect_credentials_detail": "请注意，您正在登录的是 %(hs)s 服务器，而非 matrix.org。",
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
             "description": "你确定要移除此设备？",
-            "setup_key_backup_title": "你即将失去加密聊天的访问权",
-            "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时你需要使用恢复密钥验证数字身份并恢复加密聊天。",
+            "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
+            "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
         },
         "misconfigured_body": "请 %(brand)s 的管理员检查<a>你的配置</a>中是否存在错误或重复的条目。",
@@ -233,8 +231,8 @@
         "phone_label": "电话",
         "phone_optional_label": "电话号码（可选）",
         "qr_code_login": {
-            "check_code_explainer": "这将验证与其它设备的关联是否安全。",
-            "check_code_heading": "输入其它设备上显示的数字",
+            "check_code_explainer": "这将验证与其他设备的关联是否安全。",
+            "check_code_heading": "输入其他设备上显示的数字",
             "check_code_input_label": "2 位数代码",
             "check_code_mismatch": "数字不匹配",
             "choose_desktop_computer": "选择“%(desktopComputer)s”",
@@ -245,23 +243,23 @@
             "error_expired_title": "登录未及时完成",
             "error_insecure_channel_detected": "无法与新设备建立安全连接。你的现有设备仍然安全，无需担心。",
             "error_insecure_channel_detected_instructions": "现在怎么办？",
-            "error_insecure_channel_detected_instructions_1": "如果是网络问题，请尝试使用二维码再次登录到其它设备。",
-            "error_insecure_channel_detected_instructions_2": "如果你遇到同样的问题，请尝试其它 Wi-Fi 网络或使用移动数据流量。",
+            "error_insecure_channel_detected_instructions_1": "如果是网络问题，请尝试使用二维码再次登录到其他设备。",
+            "error_insecure_channel_detected_instructions_2": "如果你遇到同样的问题，请尝试其他 Wi-Fi 网络或使用移动数据流量。",
             "error_insecure_channel_detected_instructions_3": "如果未能生效，请手动登录",
             "error_insecure_channel_detected_title": "不安全连接",
             "error_other_device_already_signed_in": "你不需要做其他任何事情。",
-            "error_other_device_already_signed_in_title": "你的其它设备已登录",
+            "error_other_device_already_signed_in_title": "你的其他设备已登录",
             "error_rate_limited": "短时间内尝试次数过多。请稍后再试。",
-            "error_unexpected": "发生意外错误。连接你其它设备的请求已被取消。",
-            "error_unsupported_protocol": "此设备不支持使用二维码登录其它设备。",
-            "error_unsupported_protocol_title": "其它设备不兼容",
+            "error_unexpected": "发生意外错误。连接你其他设备的请求已被取消。",
+            "error_unsupported_protocol": "此设备不支持使用二维码登录其他设备。",
+            "error_unsupported_protocol_title": "其他设备不兼容",
             "error_user_cancelled": "已在另一设备上取消登录。",
             "error_user_cancelled_title": "登录请求已取消",
             "error_user_declined": "你或账户提供者拒绝了登录请求。",
             "error_user_declined_title": "登录被拒绝",
             "follow_remaining_instructions": "按剩余说明操作",
             "open_element_mobile_device": "在移动设备上打开 %(brand)s",
-            "open_element_other_device": "在你的其它设备上打开 %(brand)s",
+            "open_element_other_device": "在你的其他设备上打开 %(brand)s",
             "point_the_camera": "扫描此处显示的二维码",
             "ready_to_scan": "准备进行扫描",
             "scan_code_instruction": "扫描二维码",
@@ -275,7 +273,7 @@
             "tap_avatar_link_new_device": "点击头像并选择“%(linkNewDevice)s”",
             "unsupported_explainer": "你的账户提供者不支持通过二维码登录到新设备。",
             "unsupported_heading": "二维码不受支持",
-            "waiting_for_device": "正在等待其它设备"
+            "waiting_for_device": "正在等待其他设备"
         },
         "register_action": "创建账户",
         "registration": {
@@ -288,21 +286,21 @@
         "registration_rate_limited": "短时间内尝试次数过多。请稍后再试。",
         "registration_rate_limited_with_time": "短时间内尝试次数过多。请于 %(timeout)s 秒后重试。",
         "registration_successful": "注册成功",
-        "registration_username_in_use": "该用户名已被使用。请尝试其它用户名，如果是你本人，请在下方登录。",
-        "registration_username_unable_check": "无法检查用户名是否被占用。稍后再试。",
+        "registration_username_in_use": "该用户名已被使用。请尝试其他用户名，如果这是你本人，请在下方登录。",
+        "registration_username_unable_check": "无法检查用户名是否已被使用。请稍后再试。",
         "registration_username_validation": "只能使用小写字母、数字、破折号与下划线",
         "reset_password": {
             "confirm_new_password": "确认新密码",
             "devices_logout_success": "你已移除所有设备，将不再接收推送通知。要重新启用通知，请在每台设备上重新登录。",
             "other_devices_logout_warning_1": "移除设备将删除存储在其中的消息加密密钥，从而使加密的聊天历史无法读取。",
-            "other_devices_logout_warning_2": "要保留对加密房间中聊天记录的访问权，请在继续前设置恢复密钥，或从你的其它设备导出消息密钥。",
+            "other_devices_logout_warning_2": "要保留对加密房间中聊天记录的访问权，请在继续前设置恢复密钥，或从你的其他设备导出消息密钥。",
             "password_not_entered": "必须输入新密码。",
             "passwords_mismatch": "两次输入的新密码必须匹配。",
             "rate_limit_error": "短时间内尝试次数过多。请稍后再试。",
             "rate_limit_error_with_time": "短时间内尝试次数过多。请于 %(timeout)s 秒后重试。",
             "reset_successful": "密码已被重置。",
             "return_to_login": "回到登录屏幕",
-            "sign_out_other_devices": "移除其它设备"
+            "sign_out_other_devices": "移除其他设备"
         },
         "reset_password_action": "重置密码",
         "reset_password_button": "忘记密码？",
@@ -311,8 +309,8 @@
         "reset_password_email_not_associated": "你的邮件地址似乎未与此账户提供者的 Matrix ID 关联。",
         "reset_password_email_not_found_title": "此邮件地址未找到",
         "reset_password_title": "重置密码",
-        "server_picker_custom": "其它账户提供者",
-        "server_picker_description": "你可以使用自定义服务器选项，通过指定不同的主服务器网址登录其它账户提供者。这样你就可以通过现有的 Matrix 账户在其它账户提供者上使用 %(brand)s。",
+        "server_picker_custom": "其他账户提供者",
+        "server_picker_description": "你可以使用自定义服务器选项，通过指定不同的主服务器网址登录其他账户提供者。这样你就可以通过现有的 Matrix 账户在其他账户提供者上使用 %(brand)s。",
         "server_picker_description_matrix.org": "免费加入拥有数百万用户规模的最大账户提供者",
         "server_picker_dialog_title": "决定你的账户托管在哪里",
         "server_picker_explainer": "如果有首选账户提供者，请使用它，或托管自己的 Matrix 主服务器。",
@@ -334,7 +332,7 @@
         },
         "set_email_prompt": "你要设置邮件地址吗？",
         "sign_in_description": "使用你的账户以继续。",
-        "sign_in_instead": "其它登录方式",
+        "sign_in_instead": "其他登录方式",
         "sign_in_instead_prompt": "已有账户？<a>登录</a>",
         "sign_in_manually": "手动登录",
         "sign_in_or_register": "登录或创建账户",
@@ -352,7 +350,7 @@
         "soft_logout_intro_sso": "登录并重新获得对账户的访问权。",
         "soft_logout_intro_unsupported_auth": "你无法登录账户。请联系账户提供者了解更多信息。",
         "soft_logout_subheading": "清除个人数据",
-        "soft_logout_warning": "警告：你的个人数据（包括加密密钥）仍存储在此会话中。如果你结束使用此会话或想要登录其它账户，请清除它。",
+        "soft_logout_warning": "警告：你的个人数据（包括加密密钥）仍存储在此会话中。如果你结束使用此会话或想要登录到其他账户，请清除它。",
         "sso": "单点登录",
         "sso_complete_in_browser_dialog_title": "转到浏览器以完成登录",
         "sso_failed_missing_storage": "我们要求浏览器记住你用于登录的账户提供者，但很遗憾，你的浏览器忘记了它。请转到登录页面并重试。",
@@ -394,12 +392,12 @@
         "verify_email_heading": "验证邮件地址以继续"
     },
     "bug_reporting": {
-        "additional_context": "如果有其它有助于分析问题的上下文（例如你当时在做什么、房间 ID、用户 ID 等），请在此处包含这些内容。",
+        "additional_context": "如果有其他有助于分析问题的上下文（例如你当时在做什么、房间 ID、用户 ID 等），请在此处包含这些内容。",
         "before_submitting": "建议你<a>创建 GitHub Issue</a>，以确保你的报告被审核。",
         "collecting_information": "正在收集 App 版本信息",
         "collecting_logs": "正在收集日志",
         "create_new_issue": "请在 GitHub 上<newIssueLink>创建新 issue</newIssueLink>，以便我们调查此错误。",
-        "description": "调试日志包含 App 使用数据、你的用户名、访问过的房间 ID 或其别名、上次与之交互的 UI 元素以及其他用户的用户名。它们不包含消息。",
+        "description": "调试日志包含应用使用数据、你的用户名、访问过的房间 ID 或别名、最近交互过的 UI 元素以及其他用户的用户名。但不包含消息。",
         "download_logs": "下载日志",
         "downloading_logs": "正在下载日志",
         "error_empty": "请告诉我们出了什么问题，或者更好的做法是创建一个 GitHub issue 来描述问题。",
@@ -523,7 +521,7 @@
         "offline": "离线",
         "on": "开",
         "options": "选项",
-        "orphan_rooms": "其它房间",
+        "orphan_rooms": "其他房间",
         "password": "密码",
         "people": "人员",
         "preferences": "偏好",
@@ -576,7 +574,7 @@
         "unverified": "未验证",
         "updating": "正在更新…",
         "user": "用户",
-        "user_avatar": "个人资料图像",
+        "user_avatar": "头像",
         "username": "用户名",
         "verified": "已验证",
         "version": "版本",
@@ -699,8 +697,8 @@
         "failed_create_initial_rooms": "创建初始空间失败",
         "failed_invite_users": "邀请以下用户到空间失败：%(csvUsers)s",
         "invite_teammates_by_username": "通过用户名邀请",
-        "invite_teammates_description": "确保认识的人可以访问。你可以稍后再邀请其他人。",
-        "invite_teammates_heading": "邀请同事",
+        "invite_teammates_description": "确保只有合适的人员拥有访问权限。之后你可以邀请更多人。",
+        "invite_teammates_heading": "邀请团队成员",
         "inviting_users": "正在邀请…",
         "label": "创建空间",
         "name_required": "请输入空间名称",
@@ -711,8 +709,8 @@
         "private_only_heading": "你的空间",
         "private_personal_description": "确保受你期许的人员可以访问 %(name)s",
         "private_personal_heading": "你与谁合作？",
-        "private_space": "我与我的同事",
-        "private_space_description": "你与同事的私有空间",
+        "private_space": "我与我的团队成员",
+        "private_space_description": "你与团队成员的私有空间",
         "public_description": "任何人都可以加入，包括你的组织之外的人员。适用于社区",
         "public_heading": "你的公共空间",
         "search_public_button": "在公共空间中搜索",
@@ -749,7 +747,7 @@
     "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
     "devtools": {
         "active_widgets": "激活小部件",
-        "category_other": "其它",
+        "category_other": "其他",
         "category_room": "房间",
         "caution_colon": "警告：",
         "checking_sticky_events_support": "正在检查是否支持黏着事件…",
@@ -835,7 +833,7 @@
         "invalid_json": "JSON 似乎无效",
         "level": "层级",
         "low_bandwidth_mode": "禁用对带宽有刚需的功能",
-        "low_bandwidth_mode_description": "禁用加密、状态、已读回执与键入通知",
+        "low_bandwidth_mode_description": "这将禁用加密、在线状态、已读回执与键入通知",
         "main_timeline": "主要时间线",
         "manual_device_verification": "手动设备验证",
         "no_receipt_found": "未找到回执",
@@ -876,6 +874,7 @@
         "setting_definition": "设置定义：",
         "setting_id": "设置 ID",
         "settings": {
+            "elementCallMockComponent": "使用模拟 Element Call 组件（React 传输，无媒体）",
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "设置浏览器",
@@ -926,6 +925,9 @@
         "widget_screenshots": "为支持的小部件启用“小部件屏幕截图”"
     },
     "dialog_close_label": "关闭对话框",
+    "document_viewer": {
+        "title": "文档"
+    },
     "download_completed": "下载完成",
     "empty_room": "空房间",
     "empty_room_was_name": "空房间（曾是 %(oldName)s）",
@@ -1005,14 +1007,14 @@
             "complete_action": "明白",
             "complete_description": "你已成功验证此用户。",
             "complete_title": "已验证！",
-            "confirm_identity_description": "验证此设备以设置安全消息传递",
+            "confirm_identity_description": "选择验证方式以设置安全的消息传输。",
             "confirm_identity_title": "确认你的数字身份",
-            "confirm_the_emojis": "确认以下 Emoji 与你其它设备上显示的相符。",
+            "confirm_the_emojis": "确认以下 Emoji 与你其他设备上显示的相符。",
             "error_starting_description": "我们无法与其他用户开始聊天。",
             "error_starting_title": "开始验证时出错",
             "explainer": "与此用户的安全消息已进行端到端加密，第三方无法读取。",
             "in_person": "为了安全起见，请亲自执行此操作或使用受信任的通信方式。",
-            "incoming_sas_device_dialog_text_1": "验证此设备并将其标记为受信任。信任此设备可让你和其它用户在使用端到端加密消息时更加安心。",
+            "incoming_sas_device_dialog_text_1": "验证此设备并将其标记为受信任。信任此设备可让你和其他用户在使用端到端加密消息时更放心。",
             "incoming_sas_device_dialog_text_2": "验证此设备会将其标记为受信任，并且已与你验证过的用户将信任此设备。",
             "incoming_sas_dialog_title": "验证请求传入",
             "incoming_sas_dialog_waiting": "等待对方确认…",
@@ -1030,10 +1032,12 @@
                 "no_userid": "无法验证设备：无法找到用户 ID",
                 "success_description": "此设备（%(deviceId)s）已交叉签名",
                 "success_title": "验证成功",
-                "text": "请提供你自己的一台设备的 ID 和指纹进行验证。请注意，这将允许其它设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你很可能被诈骗！",
+                "text": "请提供你自己的一台设备的 ID 和指纹进行验证。请注意，这将允许其他设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你极有可能正在遭遇诈骗！",
                 "wrong_fingerprint": "无法验证设备“%(deviceId)s”：提供的指纹“%(fingerprint)s”与设备指纹“%(fprint)s”不匹配。"
             },
-            "no_support_qr_emoji": "你尝试验证的设备不支持扫描二维码或 Emoji 验证，而 %(brand)s 支持这些功能。请尝试使用其它客户端。",
+            "no_other_devices": "由于你没有任何其他设备，此选项不可用。",
+            "no_recovery_key": "由于你尚未设置恢复密钥，此选项不可用。",
+            "no_support_qr_emoji": "你尝试验证的设备不支持扫描二维码或 Emoji 验证，而 %(brand)s 支持这些功能。请尝试使用其他客户端。",
             "now_you_can": "现在你可以安全地读取或发送消息，并且与你聊天的任何人也可以信任此设备。",
             "once_accepted_can_continue": "一旦被接受，你将可以继续验证。",
             "other_party_cancelled": "对方已取消验证。",
@@ -1041,7 +1045,7 @@
             "prompt_unencrypted": "在加密房间中验证所有用户以确保安全。",
             "qr_or_sas": "%(qrCode)s 或 %(emojiCompare)s",
             "qr_prompt": "扫描此唯一代码",
-            "qr_reciprocate_check_again_device": "再次在你的其它设备上检查以完成验证。",
+            "qr_reciprocate_check_again_device": "再次在你的其他设备上检查以完成验证。",
             "qr_reciprocate_no": "否，我没有看到绿色盾牌",
             "qr_reciprocate_same_shield_user": "即将完成！%(displayName)s 显示的是相同的盾牌吗？",
             "qr_reciprocate_yes": "是，我看到了绿色盾牌",
@@ -1070,10 +1074,10 @@
             "use_recovery_key": "使用恢复密钥",
             "verification_dialog_title_choose": "选择验证方式",
             "verification_dialog_title_compare_emojis": "比较 Emoji",
-            "verification_dialog_title_confirm_green_shield": "确认你在其它设备上看到了绿色盾牌。",
-            "verification_dialog_title_device": "验证其它设备",
+            "verification_dialog_title_confirm_green_shield": "确认你在其他设备上看到了绿色盾牌。",
+            "verification_dialog_title_device": "验证其他设备",
             "verification_dialog_title_failed": "验证失败",
-            "verification_dialog_title_start_on_other_device": "在其它设备上开始验证",
+            "verification_dialog_title_start_on_other_device": "在其他设备上开始验证",
             "verification_dialog_title_user": "验证请求",
             "verification_dialog_title_verified": "设备已验证",
             "verification_skip_warning": "在没有验证的情况下你将无法访问所有消息，并且无法被其他人信任。",
@@ -1085,16 +1089,16 @@
             "verify_emoji_prompt_qr": "如果无法扫描上述二维码，可通过比较唯一的 Emoji 验证。",
             "verify_later": "稍后验证",
             "waiting_for_user_accept": "正在等待 %(displayName)s 接受…",
-            "waiting_other_device": "正在等待其它设备验证…",
+            "waiting_other_device": "正在等待在其他设备上验证…",
             "waiting_other_device_details": "等待你在另一台设备上验证，%(deviceName)s（%(deviceId)s）…",
             "waiting_other_user": "正在等待 %(displayName)s 验证…"
         },
         "verification_requested_toast_title": "请求验证",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
-        "verify_toast_description": "自 2026 年 10 月起，未经验证的设备将无法发送与接收消息。<a>了解更多</a>",
+        "verify_toast_description": "未经验证的设备即将无法发送与接收消息。<a>了解更多</a>",
         "verify_toast_title": "验证此设备",
-        "withdraw_verification_action": "撤消验证"
+        "withdraw_verification_action": "撤销验证"
     },
     "error": {
         "admin_contact": "请<a>联系你的账户提供者</a>以继续使用此服务。",
@@ -1134,10 +1138,10 @@
         "unknown": "未知错误",
         "unknown_error_code": "未知错误代码",
         "update_history_visibility": "历史可见性更改失败",
-        "update_power_level": "权力值更改失败"
+        "update_power_level": "权力级别更改失败"
     },
-    "error_app_open_in_another_tab": "切换到其它标签页以连接到 %(brand)s。现在可以关闭此标签页。",
-    "error_app_open_in_another_tab_title": "%(brand)s 已在其它标签页中打开",
+    "error_app_open_in_another_tab": "切换到其他标签页以连接到 %(brand)s。现在可以关闭此标签页。",
+    "error_app_open_in_another_tab_title": "%(brand)s 已在其他标签页中打开",
     "error_app_opened_in_another_window": "%(brand)s 已在另一个窗口中打开。点选“%(label)s”即可在此处使用 %(brand)s 并断开与另一个窗口的连接。",
     "error_database_closed_description": {
         "for_desktop": "你的磁盘可能已满。请清理空间并重新加载。",
@@ -1303,7 +1307,6 @@
     "in_space": "位于 %(spaceName)s。",
     "in_space1_and_space2": "位于空间 %(space1Name)s 与 %(space2Name)s。",
     "in_space_and_n_other_spaces": {
-        "one": "%(spaceName)s 与剩余 1 个空间。",
         "other": "位于 %(spaceName)s 与其余 %(count)s 个空间。"
     },
     "incompatible_browser": {
@@ -1319,7 +1322,7 @@
         "use_desktop_heading": "请改用 %(brand)s 桌面应用",
         "use_mobile_heading": "在手机上换用 %(brand)s",
         "use_mobile_heading_after_desktop": "或使用移动 App",
-        "windows_64bit": "Windows （64 位）",
+        "windows_64bit": "Windows（64 位）",
         "windows_arm_64bit": "Windows （ARM 64 位）"
     },
     "info_tooltip_title": "信息",
@@ -1327,7 +1330,7 @@
         "connecting": "正在连接到集成管理器…",
         "error_connecting": "集成管理器处于离线状态或其无法连接到你的主服务器。",
         "error_connecting_heading": "无法连接到集成管理器",
-        "explainer": "集成管理器可接收配置数据， 并可以代表你修改小部件、发送房间邀请与设置权力值。",
+        "explainer": "集成管理器可接收配置数据， 并可以代表你修改小部件、发送房间邀请与设置权力级别。",
         "manage_title": "管理集成",
         "toggle_label": "启用集成管理器",
         "use_im": "使用集成管理器管理机器人、小部件与贴纸包。",
@@ -1429,8 +1432,8 @@
         "close_dialog_menu": "关闭对话框或上下文菜单",
         "composer_jump_end": "跳转到编辑器末尾",
         "composer_jump_start": "跳转到编辑器开头",
-        "composer_navigate_next_history": "导航到下一个消息编辑器历史",
-        "composer_navigate_prev_history": "导航到上一个消息编辑器历史",
+        "composer_navigate_next_history": "导航到消息编辑器中的下一个历史",
+        "composer_navigate_prev_history": "导航到消息编辑器中的上一个历史",
         "composer_new_line": "另起一行",
         "composer_redo": "重做编辑",
         "composer_toggle_bold": "粗体",
@@ -1438,7 +1441,7 @@
         "composer_toggle_italics": "斜体",
         "composer_toggle_link": "超链接",
         "composer_toggle_quote": "引用",
-        "composer_undo": "撤消编辑",
+        "composer_undo": "撤销编辑",
         "control": "",
         "dismiss_read_marker_and_jump_bottom": "忽略已读标记并跳转到底部",
         "end": "",
@@ -1446,7 +1449,7 @@
         "escape": "",
         "go_home_view": "转到主页视图",
         "home": "",
-        "jump_first_message": "跳转到首个消息",
+        "jump_first_message": "跳转到首条消息",
         "jump_last_message": "跳转到最新消息",
         "jump_room_search": "跳转到房间搜索",
         "jump_to_read_marker": "跳转到最旧的未读消息",
@@ -1469,6 +1472,11 @@
         "room_list_expand_section": "展开房间列表部分",
         "room_list_navigate_down": "向下导航到房间列表",
         "room_list_navigate_up": "向上导航到房间列表",
+        "room_list_panel_collapse": "隐藏房间列表（当聚焦于调整控件时）",
+        "room_list_panel_expand": "全宽显示房间列表（当聚焦于调整控件时）",
+        "room_list_panel_grow": "使房间列表加宽（当聚焦于调整控件时）",
+        "room_list_panel_shrink": "使房间列表缩窄（当聚焦于调整控件时）",
+        "room_list_panel_toggle": "隐藏或显示房间列表（当聚焦于调整控件时）",
         "room_list_select_room": "从房间列表中选择房间",
         "save": "保存",
         "scroll_down_timeline": "向下滚动时间线",
@@ -1501,6 +1509,8 @@
         "click_for_info": "更多信息",
         "config_only": "此功能必须由你的账户提供者在 config.json 中启用。",
         "currently_experimental": "当前为实验性。",
+        "document_previews": "实验性文档预览",
+        "document_previews_description": "在右侧面板打开 PDF 与 Markdown 附件。",
         "dynamic_room_predecessors": "动态房间前身",
         "dynamic_room_predecessors_description": "需要启用 MSC3946 以支持“迟到房间归档”。",
         "element_call_video_rooms": "Element Call 视频房间",
@@ -1508,10 +1518,11 @@
         "encrypted_state_events_description": "启用加密状态事件的实验性支持，此功能会对服务器隐藏房间名称与主题等元数据。这些元数据对之后加入房间的用户与不支持 MSC4362 的客户端隐藏。",
         "exclude_insecure_devices": "发送或接收消息时排除不安全的设备",
         "exclude_insecure_devices_description": "此模式启用后，加密消息将不会分享给未验证的设备，并且来自未验证设备的消息将显示为“错误”。注意：如果启用此模式，则可能无法与尚未验证其设备的用户通信。",
-        "experimental_description": "感觉很有实验性？试试我们正在开发的最新创意。这些功能尚未最终确定；它们可能不稳定，可能会改变，也可能被完全放弃。<a>了解更多</a>。",
+        "experimental_description": "想体验实验性功能？试试我们正在开发的最新创意。这些功能尚未最终确定；它们可能不稳定，可能会改变，也可能被完全放弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
+        "feature_element_call_react": "将 Element Call 渲染为 React 组件而不是小部件。",
         "feature_retention": {
             "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持为“已读消息”设置。",
             "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
@@ -1520,7 +1531,7 @@
         "feature_user_status": {
             "description": "启用以查看并设置当前状态。",
             "display_name": "用户状态",
-            "required_msc_support": "需要 MSC4429（面向旧版同步模式的配置文件更新）"
+            "required_msc_support": "需要 MSC4429（面向旧版同步模式的个人资料更新）"
         },
         "feature_wysiwyg_composer_description": "在消息编辑器中使用富文本取代 Markdown。",
         "group_developer": "开发者",
@@ -1548,6 +1559,7 @@
         "login_with_qr": "使用二维码登录",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
+        "new_timeline": "改进的时间线滚动与导航",
         "notification_settings": "新的通知设置",
         "notification_settings_beta_caption": "介绍一种更简单的方法来更改通知设置。就像你喜欢的那样定制 %(brand)s。",
         "notification_settings_beta_title": "通知设置",
@@ -1585,7 +1597,7 @@
         "explainer_2": "忽略人员是通过“封禁列表”完成的，封禁列表包含谁被封禁的规则。订阅封禁列表意味着位于该列表的用户/服务器将对你隐藏。",
         "lists": "你当前已订阅：",
         "lists_description_1": "你订阅封禁列表意味着该列表将作为一个房间加入！",
-        "lists_description_2": "如果这不是你想要的，请使用其它工具忽略用户。",
+        "lists_description_2": "如果这不是你想要的，请使用其他工具忽略用户。",
         "lists_heading": "已订阅的列表",
         "lists_new_label": "封禁列表中的房间 ID 或地址",
         "no_lists": "你没有订阅任何列表",
@@ -1608,12 +1620,14 @@
     "language_dropdown_label": "语言下拉菜单",
     "leave_room_dialog": {
         "last_person_warning": "你是此处唯一的用户。如果你离开，以后将没有人能加入，包括你自己。",
-        "leave_room_question": "你确定要离开房间“%(roomName)s”？",
-        "leave_space_question": "你确定要离开空间“%(spaceName)s”？",
-        "room_leave_admin_warning": "你是此房间的唯一管理员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
-        "room_leave_mod_warning": "你是此房间的唯一协管员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
-        "room_rejoin_warning": "此房间非公共房间。你无法在未被邀请的情况下重新加入。",
-        "space_rejoin_warning": "此空间非公开。未经邀请，你将无法重新加入。"
+        "leave_room_title": "离开“%(roomName)s”？",
+        "leave_space_title": "离开“%(spaceName)s”？",
+        "room_leave_admin_warning": "你是此房间的唯一管理员。如果你离开，任何人都将无法更改房间设置或执行其他重要操作。",
+        "room_leave_mod_warning": "你是此房间的唯一协管员。如果你离开，任何人都将无法更改房间设置或执行其他重要操作。",
+        "room_rejoin_warning": "此房间为私有，你无法在未被邀请的情况下重新加入。",
+        "room_rejoin_warning_restricted": "此房间已设为受限，除非你已位于其授权区域或受邀，否则无法重新加入。",
+        "space_rejoin_warning": "此空间为私有，你无法在未被邀请的情况下重新加入。",
+        "space_rejoin_warning_restricted": "此空间已设为受限，除非你已位于其授权区域或受邀，否则无法重新加入。"
     },
     "lightbox": {
         "rotate_left": "向左旋转",
@@ -1656,6 +1670,7 @@
         "loading_live_location": "正在加载实时位置…",
         "location_not_available": "位置不可用",
         "map_feedback": "地图反馈",
+        "map_marker": "地图标记",
         "mapbox_logo": "Mapbox 图标",
         "reset_bearing": "重置方向为正北",
         "share_button": "分享位置",
@@ -1664,6 +1679,9 @@
         "share_type_pin": "放置锚点",
         "share_type_prompt": "你想分享的位置的类型？",
         "toggle_attribution": "切换属性"
+    },
+    "markdown_viewer": {
+        "open": "打开 Markdown"
     },
     "member_list": {
         "count": {
@@ -1692,9 +1710,9 @@
     },
     "notifications": {
         "all_messages": "全部消息",
-        "all_messages_description": "接收每个消息的通知",
+        "all_messages_description": "接收每条消息的通知",
         "class_global": "全局",
-        "class_other": "其它",
+        "class_other": "其他",
         "default": "默认",
         "email_pusher_app_display_name": "邮件通知",
         "enable_prompt_toast_description": "启用桌面通知",
@@ -1729,8 +1747,12 @@
         "welcome_detail": "协助你开始",
         "welcome_user": "欢迎 %(name)s"
     },
+    "pdf_viewer": {
+        "open": "打开 PDF",
+        "title": "PDF"
+    },
     "pill": {
-        "permalink_other_room": "一个位于 %(room)s 的消息",
+        "permalink_other_room": "一条位于 %(room)s 的消息",
         "permalink_this_room": "来自 %(user)s 的消息"
     },
     "poll": {
@@ -1787,9 +1809,9 @@
         "admin": "管理员",
         "creator": "所有者",
         "custom": "自定义（%(level)s）",
-        "custom_level": "自定义权力值",
+        "custom_level": "自定义权力级别",
         "default": "默认",
-        "label": "权力值",
+        "label": "权力级别",
         "moderator": "协管员",
         "restricted": "已受限"
     },
@@ -1813,8 +1835,8 @@
         "title": "快速设置"
     },
     "quit_warning": {
-        "call_in_progress": "你似乎正在通话，你确定要退出？",
-        "file_upload_in_progress": "你似乎正在上传文件，你确定要退出？"
+        "call_in_progress": "你似乎正在通话，确定退出？",
+        "file_upload_in_progress": "你似乎正在上传文件，确定退出？"
     },
     "redact": {
         "confirm_button": "确认移除",
@@ -1838,7 +1860,7 @@
         "report_content_to_homeserver": "向账户提供者举报此内容"
     },
     "report_room": {
-        "description": "向账户提供者举报此聊天。如果消息已被加密，则账户提供者读取这些消息。",
+        "description": "向管理员举报此聊天。如果消息已加密，账户提供者将无法读取。",
         "reason_label": "描述理由"
     },
     "restore_key_backup_dialog": {
@@ -1872,12 +1894,10 @@
         "extensions_empty_title": "使用更多工具、小部件与机器人提高生产力",
         "files_button": "文件",
         "pinned_messages": {
-            "empty_description": "选择一个消息并点击“%(pinAction)s”以包含在此处。",
+            "empty_description": "选择一条消息并选择“%(pinAction)s”以包含在此处。",
             "empty_title": "置顶重要的消息以便于发现",
             "header": {
-                "one": "1 个已置顶的消息",
-                "other": "%(count)s 个已置顶的消息",
-                "zero": "已置顶的消息"
+                "other": "%(count)s 条已置顶的消息"
             },
             "limits": {
                 "other": "你最多只能钉住 %(count)s 个小部件"
@@ -1886,7 +1906,7 @@
             "reply_thread": "回复 <link>消息列中的消息</link>",
             "unpin_all": {
                 "button": "取消置顶所有消息",
-                "content": "确实要移除所有已置顶的消息？此操作无法撤消。",
+                "content": "确实要移除所有已置顶的消息？此操作无法撤销。",
                 "title": "取消置顶所有消息？"
             },
             "view": "在时间线中查看"
@@ -1959,7 +1979,7 @@
         "edit_topic": "编辑主题",
         "error_cancel_knock_title": "取消失败",
         "error_join_403": "你需要被邀请才能访问此房间。",
-        "error_join_404_1": "你尝试使用房间 ID 加入，但未提供要加入的服务器列表。房间 ID 是内部标识符，如果没有其它信息，则无法用于加入房间。",
+        "error_join_404_1": "你尝试使用房间 ID 加入，但未提供要加入的服务器列表。房间 ID 是内部标识符，如果没有其他信息，则无法用于加入房间。",
         "error_join_404_2": "如果你知道房间地址，请尝试通过该地址加入。",
         "error_join_404_invite": "邀请你的人已离开，或其服务器已离线。",
         "error_join_404_invite_same_hs": "邀请你的人已离开。",
@@ -1997,7 +2017,7 @@
             },
             "room_is_public": "此为公共房间",
             "shared_history_tooltip": "新成员可以看到历史",
-            "world_readable_history_tooltip": "任何人都可以看到历史"
+            "world_readable_history_tooltip": "任何人都能查看历史"
         },
         "header_avatar_open_settings_label": "打开房间设置",
         "header_face_pile_tooltip": "人员",
@@ -2016,7 +2036,7 @@
             "no_topic": "<a>添加主题</a>有助于人们了解此房间与哪些事物相关。",
             "private_unencrypted_warning": "你的私有消息通常是加密的，但此房间不是。通常这是由于使用了不受支持的设备或方法，例如通过邮件地址邀请。",
             "room_invite": "仅邀请到此房间",
-            "send_message_start_dm": "发送第一个消息以邀请 <displayName/> 聊天",
+            "send_message_start_dm": "发送第一条消息以邀请 <displayName/> 聊天",
             "start_of_dm_history": "此处是你与 <displayName/> 的私聊历史的开头。",
             "start_of_room": "这是 <roomName/> 的开始。",
             "unencrypted_warning": "端到端加密未启用",
@@ -2034,12 +2054,11 @@
         "join_button_account": "注册",
         "join_failed_needs_invite": "要查看 %(roomName)s，你需要被邀请",
         "join_the_discussion": "加入讨论",
-        "join_title": "加入房间以参与",
         "join_title_account": "通过账户加入对话",
         "joining": "正在加入…",
         "joining_room": "正在加入房间…",
         "joining_space": "加入空间",
-        "jump_read_marker": "滚动到首个未读消息。",
+        "jump_read_marker": "滚动到首条未读消息。",
         "jump_to_bottom_button": "滚动到最近的消息",
         "kick_reason": "原因：%(reason)s",
         "kicked_by": "你已被 %(memberName)s 移除",
@@ -2072,7 +2091,7 @@
             "description": "已置顶的消息",
             "go_to_newest_message": "在此处查看时间线中的置顶消息和最新的置顶消息",
             "go_to_next_message": "在此处查看时间线中的置顶消息和下一条最早的置顶消息",
-            "title": "<bold>第 %(index)s 个已置顶的消息，共 %(length)s 个</bold>"
+            "title": "<bold>第 %(index)s 条已置顶的消息，共 %(length)s 条</bold>"
         },
         "read_topic": "阅读完整主题",
         "rejecting": "正在拒绝邀请…",
@@ -2122,6 +2141,7 @@
         "section": {
             "chats": "聊天",
             "favourites": "收藏",
+            "invites": "邀请",
             "low_priority": "低优先级"
         },
         "show_less": "显示更少"
@@ -2180,8 +2200,8 @@
             "alias_field_taken_invalid_domain": "此地址已被使用",
             "alias_field_taken_valid": "此地址可供使用",
             "alias_heading": "房间地址",
-            "aliases_items_label": "其它已发布地址：",
-            "aliases_no_items_label": "暂无其它已发布的地址，可以在下面添加。",
+            "aliases_items_label": "其他已发布地址：",
+            "aliases_no_items_label": "暂无其他已发布的地址，可以在下面添加。",
             "aliases_section": "房间地址",
             "avatar_field_label": "房间头像",
             "canonical_alias_field_label": "主要地址",
@@ -2206,7 +2226,7 @@
             "new_alias_placeholder": "新的发布地址（例如：#alias:server）",
             "no_aliases_room": "此房间没有本地地址",
             "no_aliases_space": "此空间没有本地地址",
-            "other_section": "其它",
+            "other_section": "其他",
             "publish_toggle": "发布此房间到 %(domain)s 的房间目录？",
             "publish_warn_invite_only": "你无法发布被设为仅限邀请的房间。",
             "publish_warn_no_canonical_permission": "你必须拥有设置主要地址的权限才能发布房间。",
@@ -2240,10 +2260,10 @@
             "ban_reason": "理由",
             "banned_by": "已被 %(displayName)s 封禁",
             "banned_users_section": "已被封禁的用户",
-            "error_changing_pl_description": "更改用户权力值时出错。请确保你拥有足够的权限并重试。",
-            "error_changing_pl_reqs_description": "更改房间权力值要求时出错。请确保你拥有足够的权限并重试。",
-            "error_changing_pl_reqs_title": "更改权力值要求时出错",
-            "error_changing_pl_title": "更改权力值时出错",
+            "error_changing_pl_description": "更改用户权力级别时出错。请确保你拥有足够的权限并重试。",
+            "error_changing_pl_reqs_description": "更改房间权力级别要求时出错。请确保你拥有足够的权限并重试。",
+            "error_changing_pl_reqs_title": "更改权力级别要求时出错",
+            "error_changing_pl_title": "更改权力级别时出错",
             "error_unbanning": "解封失败",
             "events_default": "发送消息",
             "invite": "邀请用户",
@@ -2320,7 +2340,7 @@
             "join_rule_restricted_dialog_empty_warning": "你将移除所有已授权的空间。访问权将默认变更为“仅邀请”。",
             "join_rule_restricted_dialog_filter_placeholder": "搜索空间",
             "join_rule_restricted_dialog_heading_known": "此聊天未被包含在你的空间",
-            "join_rule_restricted_dialog_heading_other": "其它你并非其成员的空间",
+            "join_rule_restricted_dialog_heading_other": "你并非其成员的其他空间",
             "join_rule_restricted_dialog_heading_room": "包含此聊天的空间",
             "join_rule_restricted_dialog_heading_space": "你已知包含到此空间的子空间",
             "join_rule_restricted_dialog_heading_unknown": "这些聊天可能有其他房间的管理员参与其中。",
@@ -2384,7 +2404,7 @@
         "error_missing_room_id_request": "请求中缺少“room_id”",
         "error_missing_user_id_request": "请求中缺少“user_id”",
         "error_permission": "你无权在此房间内执行此操作。",
-        "error_power_level_invalid": "权力值必须为正整数。",
+        "error_power_level_invalid": "权力级别必须为正整数。",
         "error_room_not_visible": "房间 %(roomId)s 不可见",
         "error_room_unknown": "无法识别此房间。",
         "error_send_request": "请求发送失败。",
@@ -2463,13 +2483,13 @@
             "match_system_theme": "跟随系统主题",
             "timeline_image_size": "时间线中的图像尺寸"
         },
-        "automatic_language_detection_syntax_highlight": "启用“自动检测语法高亮中的编程语言”",
+        "automatic_language_detection_syntax_highlight": "启用“自动检测编程语言的语法高亮”",
         "autoplay_gifs": "自动播放 GIF",
         "autoplay_videos": "自动播放视频",
         "big_emoji": "在聊天中启用加大的 Emoji",
         "code_block_expand_default": "默认展开代码块",
         "code_block_line_numbers": "显示代码块中的行号",
-        "disable_historical_profile": "在消息历史中显示用户当前名称与个人资料图像",
+        "disable_historical_profile": "在消息历史中显示用户的当前名称与头像",
         "discovery": {
             "title": "如何找到你"
         },
@@ -2482,8 +2502,9 @@
                 "breadcrumb_page": "重置加密",
                 "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的消息历史",
                 "breadcrumb_third_description": "你将需要再次验证所有现有设备与联系人",
-                "breadcrumb_title": "你确定要重置数字身份？",
+                "breadcrumb_title": "无法确认？你需要重置数字身份。",
                 "breadcrumb_title_cant_confirm": "你需要重置数字身份",
+                "breadcrumb_title_compromised": "你确定要重置数字身份？",
                 "breadcrumb_title_forgot": "忘记恢复密钥？你需要重置数字身份。",
                 "breadcrumb_title_sync_failed": "同步密钥存储失败。你需要重置数字身份。",
                 "breadcrumb_warning": "仅当你认为账户被盗时才这么做。",
@@ -2491,7 +2512,7 @@
                 "do_not_close_warning": "在重置完成之前请勿关闭此窗口",
                 "export_keys": "导出密钥",
                 "import_keys": "导入密钥",
-                "other_people_device_description": "警告：未向你明确验证（例如使用 Emoji）的用户、已验证用户的未验证设备都将不会收到你的加密消息。要使此更改生效需要重新启动应用程序。",
+                "other_people_device_description": "警告：未向你通过 Emoji 等方法明确验证的用户、已验证用户的未验证设备都将不会收到你的加密消息。此更改需要重启应用以生效。",
                 "other_people_device_label": "在加密房间中仅发送消息到已验证的用户",
                 "other_people_device_title": "其他人的设备",
                 "reset_identity": "重置数字身份",
@@ -2576,7 +2597,7 @@
             "deactivate_confirm_content_3": "任何人都无法重复使用你的用户名 (MXID)，包括你自己：此用户名将保持不可用状态。",
             "deactivate_confirm_content_4": "你将离开你所在的所有房间与私聊",
             "deactivate_confirm_content_5": "你将被从身份服务器中移除：你的好友将无法再通过你的邮件地址或电话号码找到你。",
-            "deactivate_confirm_content_6": "你的旧消息仍然会被接收者看到，就像你过去发送的邮件一样。是否对以后加入房间的人员隐藏你发送的消息？",
+            "deactivate_confirm_content_6": "你之前发送的消息仍然对已接收的人员可见，就像你过去发送的邮件一样。是否对将来加入房间的人员隐藏你已发送的消息？",
             "deactivate_confirm_continue": "确认停用账户",
             "deactivate_confirm_erase_label": "对新加入者隐藏我的消息",
             "deactivate_section": "停用账户",
@@ -2607,7 +2628,7 @@
             "error_password_change_title": "更改密码时出错",
             "error_password_change_unknown": "更改密码时出现未知错误 （%(stringifiedError)s）",
             "error_remove_3pid": "无法移除联系人信息",
-            "error_revoke_email_discovery": "无法撤消分享的邮件地址",
+            "error_revoke_email_discovery": "无法撤销分享的邮件地址",
             "error_revoke_msisdn_discovery": "无法找到与此电话号码对应的分享",
             "error_share_email_discovery": "无法分享邮件地址",
             "error_share_msisdn_discovery": "无法分享电话号码",
@@ -2636,6 +2657,7 @@
         },
         "inline_url_previews_default": "启用预览",
         "inline_url_previews_encrypted": "在加密房间启用 URL 预览",
+        "inline_url_previews_encrypted_bundled_only": "仅在加密房间中显示绑定式预览",
         "insert_trailing_colon_mentions": "在位于消息开头的用户提及后插入一个冒号",
         "invite_controls": {
             "default_label": "允许用户邀请你到房间"
@@ -2676,7 +2698,7 @@
             "export_description_2": "导出的文件将允许任何可以读取它的人解密你可以看到的任何加密消息，应小心确保其安全。为此你应该在下面输入一个唯一的口令，该口令仅用于加密导出的数据，并且只能使用相同的口令导入数据。",
             "export_title": "导出房间密钥",
             "file_to_import": "要导入的文件",
-            "import_description_1": "此过程允许你导入以前从其它 Matrix 客户端导出的加密密钥，然后你将能够解密其它客户端可以解密的任何消息。",
+            "import_description_1": "此过程允许你导入以前从其他 Matrix 客户端导出的加密密钥，然后你将能够解密其他客户端可以解密的任何消息。",
             "import_description_2": "已导出的文件使用口令进行保护。你应该在此处输入口令来解密此文件。",
             "import_title": "导入房间密钥",
             "phrase_cannot_be_empty": "口令不能为空",
@@ -2736,7 +2758,7 @@
             "notify_at_room": "当有人提及使用“@room”时通知",
             "notify_keyword": "当有人使用关键字时通知",
             "notify_mention": "当有人提及使用“@displayname”或“%(mxid)s”时通知",
-            "other_section": "你可能感兴趣的其它内容：",
+            "other_section": "你可能感兴趣的其他内容：",
             "people_mentions_keywords": "人员、提及与关键词",
             "play_sound_for_description": "此设置将默认应用于你所有设备中的所有房间。",
             "play_sound_for_section": "播放声音",
@@ -2760,7 +2782,7 @@
             "voip": "音频与视频通话"
         },
         "preferences": {
-            "Electron.enableContentProtection": "阻止窗口内容被其它应用程序捕获",
+            "Electron.enableContentProtection": "阻止窗口内容被其他应用程序捕获",
             "Electron.enableHardwareAcceleration": "启用硬件加速（需要重新启动 %(appName)s 以生效）",
             "always_show_menu_bar": "始终显示窗口菜单栏",
             "autocomplete_delay": "自动补全延时（毫秒）",
@@ -2809,8 +2831,7 @@
             "message_search_disable_warning": "如果停用此功能，来自加密房间的消息将不会显示在搜索结果中。",
             "message_search_disabled": "在安全地在本地缓存加密消息以使其出现在搜索结果中。",
             "message_search_enabled": {
-                "one": "占用 %(size)s 的空间以存储来自 %(rooms)s 个房间的消息，加密消息已安全地在本地缓存，并可以使其显示在搜索结果中。",
-                "other": "占用 %(size)s 的空间以存储来自 %(rooms)s 个房间的消息，加密消息已安全地在本地缓存，并可以使其显示在搜索结果中。"
+                "other": "为了存储来自 %(rooms)s 个房间的消息，当前已占用 %(size)s 的存储空间，加密消息已安全缓存到本地并可以使其列出在搜索结果。"
             },
             "message_search_failed": "消息搜索初始化失败",
             "message_search_indexed_messages": "已索引的消息：",
@@ -2827,7 +2848,13 @@
             "message_search_unsupported_web": "%(brand)s 在 Web 浏览器中运行时无法安全地在本地缓存加密消息。请使用 <desktopLink>%(brand)s Desktop</desktopLink> 使加密消息出现在搜索结果中。",
             "record_session_details": "在设备管理器中记录客户端名称、版本及 URL 以更易于识别",
             "send_analytics": "发送分析数据",
-            "strict_encryption": "仅向已验证用户发送消息"
+            "strict_encryption": "仅向已验证用户发送消息",
+            "tokenizer_mode": "搜索分词器模式",
+            "tokenizer_mode_change_warning": "更改分词器模式需要删除现有的搜索索引。索引将自动重建。是否继续？",
+            "tokenizer_mode_language": "基于语言",
+            "tokenizer_mode_language_description": "仅支持基于用户界面语言的单一语言。目前仅支持部分语言（例如英文、德文等）。",
+            "tokenizer_mode_ngram": "N-gram",
+            "tokenizer_mode_ngram_description": "支持包括不含单词边界的语言在内的所有语言。同样支持混合语言。"
         },
         "send_read_receipts": "发送已读回执",
         "send_read_receipts_unsupported": "你的服务器不支持禁用发送已读回执。",
@@ -2881,7 +2908,7 @@
             "no_sessions": "未找到设备。",
             "no_unverified_sessions": "未找到未经验证的设备。",
             "no_verified_sessions": "未找到已验证的设备。",
-            "other_sessions_heading": "其它设备",
+            "other_sessions_heading": "其他设备",
             "push_heading": "推送通知",
             "push_subheading": "在此设备接收通知推送",
             "push_toggle": "切换此设备的推送通知开关。",
@@ -2899,7 +2926,7 @@
             "sign_in_with_qr_description": "使用二维码登录到另一设备并设置安全消息传递。",
             "sign_in_with_qr_unsupported": "账户提供者不支持",
             "sign_out": "移除此会话",
-            "sign_out_all_other_sessions": "移除所有其它 （%(otherSessionsCount)s） 个设备",
+            "sign_out_all_other_sessions": "移除所有其他设备 （%(otherSessionsCount)s 个）",
             "sign_out_confirm_description": {
                 "other": "你确定要移除 %(count)s 个设备？"
             },
@@ -2925,8 +2952,8 @@
             "verify_session": "验证设备",
             "web_session": "浏览器"
         },
-        "show_avatar_changes": "显示个人资料图像更改",
-        "show_breadcrumbs": "在房间列表之上显示最近访问的房间的捷径",
+        "show_avatar_changes": "显示头像更改",
+        "show_breadcrumbs": "在房间列表之上显示最近访问的房间的快捷入口",
         "show_chat_effects": "显示聊天特效（例如当收到“五彩纸屑”时）",
         "show_displayname_changes": "显示用户的“显示名称更改”",
         "show_join_leave": "显示加入及离开消息（邀请、移除及封禁不受影响）",
@@ -2938,7 +2965,7 @@
         "show_sections": "显示区域",
         "show_stickers_button": "显示贴纸按钮",
         "show_typing_notifications": "显示用户的键入通知",
-        "showbold": "在房间列表上显示所有活动（用于未读消息的圆点与数字）",
+        "showbold": "在房间列表上显示所有活动（用于未读消息的圆点或数字）",
         "sidebar": {
             "dialog_title": "<strong>设置：</strong>边栏",
             "metaspaces_home_all_rooms": "显示所有房间",
@@ -2959,7 +2986,7 @@
             "label": "登录时启动 %(brand)s",
             "minimised": "最小化"
         },
-        "tac_only_notifications": "仅在消息列中枢显示通知",
+        "tac_only_notifications": "在其他消息列选项卡中仅显示通知",
         "use_12_hour_format": "以 12 小时制显示时间戳（例如：下午 2:30）",
         "use_command_enter_send_message": "按 Command + Enter 发送消息",
         "use_command_f_search": "允许按 Command + F 搜索时间线",
@@ -2974,15 +3001,15 @@
             "auto_gain_control": "自动增益控制",
             "dialog_title": "<strong>设置：</strong>语音与视频",
             "echo_cancellation": "回声消除",
-            "echo_cancellation_description": "在通话期间移除回声。此设置亦将应用于 Element Call。",
+            "echo_cancellation_description": "通话期间消除麦克风输入的回声。此设置也适用于 Element Call。",
             "enable_fallback_ice_server": "允许备选的通话辅助服务器（%(server)s）",
             "enable_fallback_ice_server_description": "仅适用于你所在的账户提供者不提供时。你的 IP 地址会在通话期间被分享。",
             "enable_legacy_calls": "启用旧版语音视频通话",
             "enable_legacy_calls_description": "适用于 Jitsi 与一对一 WebRTC 通话",
             "mirror_local_feed": "镜像本地视频源",
-            "missing_permissions_prompt": "要参与通话，请为 %(brand)s 授予麦克风与摄像头的访问权。",
+            "missing_permissions_prompt": "要参与通话，请为 %(brand)s 授予对麦克风与摄像头的访问权。",
             "noise_suppression": "降噪",
-            "noise_suppression_description": "在通话期间降低背景噪音。此设置亦将应用于 Element Call。",
+            "noise_suppression_description": "降低通话期间麦克风输入的背景噪音。此设置也适用于 Element Call。",
             "permissions": "允许访问麦克风和摄像头",
             "request_permissions": "请求",
             "title": "语音与视频",
@@ -3020,7 +3047,7 @@
         "category_advanced": "高级",
         "category_effects": "特效",
         "category_messages": "消息",
-        "category_other": "其它",
+        "category_other": "其他",
         "command_error": "指令出错",
         "converttodm": "转换房间为私聊",
         "converttoroom": "转换私聊到房间",
@@ -3048,28 +3075,28 @@
         "jumptodate": "在时间线中跳转到指定日期",
         "jumptodate_invalid_input": "我们无法理解指定的日期（%(inputDate)s）。尝试使用 YYYY-MM-DD 格式。",
         "lenny": "附加“( ͡° ͜ʖ ͡°)”到纯文本消息",
-        "manual_device_verification_confirm_description": "这将允许其它设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你很可能被诈骗！你确定要验证此设备？",
+        "manual_device_verification_confirm_description": "这将允许其他设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你极有可能正在遭遇诈骗！你确定要验证此设备？",
         "manual_device_verification_confirm_title": "警告：手动设备验证",
         "me": "显示操作",
         "msg": "向指定用户发送消息",
-        "myavatar": "更改个人资料图像（应用于所有房间）",
-        "myroomavatar": "仅更改我在当前房间内的个人资料图像",
+        "myavatar": "在所有房间更改你的头像",
+        "myroomavatar": "仅更改你在当前房间内的头像",
         "myroomnick": "仅更改我在当前房间内的显示名称",
         "nick": "更改显示名称",
         "no_active_call": "此房间没有活跃的通话",
-        "op": "设置用户的权力值",
+        "op": "设置用户的权力级别",
         "part_unknown_alias": "无法识别的房间地址：%(roomAlias)s",
-        "plain": "作为纯文本发送消息，而不是将其解释为 Markdown",
+        "plain": "作为纯文本发送，不解析 Markdown 语法",
         "query": "打开与指定用户的聊天",
         "query_not_found_phone_number": "无法找到与此电话号码对应的 Matrix ID",
         "rageshake": "通过日志发送 Bug 报告",
-        "rainbow": "发送一个渲染为彩虹色的消息",
-        "rainbowme": "发送一个带有我的显示名称与渲染为彩虹色的消息",
+        "rainbow": "以彩虹色发送消息",
+        "rainbowme": "发送彩虹色的指定表情符号",
         "remove": "通过指定的 ID 从当前房间移除用户",
         "roomavatar": "更改当前房间的头像",
         "roomname": "设置房间名称",
         "server_error": "服务器错误",
-        "server_error_detail": "服务器不可用、超载或出现其它问题。",
+        "server_error_detail": "服务器不可用、超载或出现其他问题。",
         "shrug": "附加“ˉ\\_(ツ)_/ˉ”到纯文本消息",
         "spoiler": "作为剧透发送指定消息",
         "status": {
@@ -3132,7 +3159,7 @@
         },
         "failed_load_rooms": "载入房间列表失败。",
         "failed_remove_rooms": "某些房间移除失败。请稍后再试。",
-        "incompatible_server_hierarchy": "你的账户提供者者不支持显示空间层级。",
+        "incompatible_server_hierarchy": "你的账户提供者不支持显示空间层级。",
         "invite": "邀请人员",
         "invite_description": "通过电话号码或邮件地址邀请",
         "invite_link": "分享邀请链接",
@@ -3196,14 +3223,14 @@
         "create_new_room_button": "创建新房间",
         "failed_querying_public_rooms": "公共房间查询失败",
         "failed_querying_public_spaces": "公共空间查询失败",
-        "group_chat_section_title": "其它选项",
+        "group_chat_section_title": "其他选项",
         "heading_with_query": "使用“%(query)s”搜索",
         "heading_without_query": "搜索类型",
         "join_button_text": "加入 %(roomAddress)s",
         "keyboard_scroll_hint": "使用 <arrows/> 滚动",
         "messages_label": "消息",
         "no_results": "未找到结果",
-        "other_rooms_in_space": "%(spaceName)s 中的其它房间",
+        "other_rooms_in_space": "%(spaceName)s 中的其他房间",
         "public_rooms_label": "公共房间",
         "public_spaces_label": "公共空间",
         "recent_searches_section_title": "最近搜索",
@@ -3248,7 +3275,7 @@
             "one": "%(count)s 个回复",
             "other": "%(count)s 个回复"
         },
-        "empty_description": "将鼠标指针悬停在某个消息上并点击“%(replyInThread)s”。",
+        "empty_description": "鼠标指针悬停在某条消息上时选择“%(replyInThread)s”。",
         "empty_title": "消息列有助于持续并跟进题内的对话。",
         "mark_all_read": "全部设为已读",
         "my_threads": "我的消息列",
@@ -3257,20 +3284,38 @@
         "show_thread_filter": "显示："
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "在 %(roomName)s 中打开来自 %(sender)s 的消息列：%(preview)s，含有未读消息。",
+            "default_no_sender": "在 %(roomName)s 中打开消息列，含有未读消息。",
+            "mention": {
+                "other": "在 %(roomName)s 中打开来自 %(sender)s 的消息列：%(preview)s，含有包括提及在内的 %(count)s 条未读消息。"
+            },
+            "mention_no_sender": {
+                "other": "在 %(roomName)s 中打开消息列，含有包括提及在内的 %(count)s 条未读消息。"
+            },
+            "unread": {
+                "other": "在 %(roomName)s 中打开来自 %(sender)s 的消息列：%(preview)s，含有 %(count)s 条未读消息。"
+            },
+            "unread_no_sender": {
+                "other": "在 %(roomName)s 中打开消息列，含有 %(count)s 条未读消息。"
+            }
+        },
         "header": "消息列活动",
-        "no_rooms_with_threads_notifs": "暂无包含消息列通知的房间。",
-        "no_rooms_with_unread_threads": "暂无包含未读消息列的房间。"
+        "my_threads_tab": "我的消息列",
+        "no_other_unread_threads": "暂无来自其他人员的未读消息列。",
+        "no_participating_threads_unread": "在你已参与的消息列中暂无未读消息列。",
+        "other_threads_tab": "其他消息列"
     },
     "time": {
         "date_at_time": "%(date)s 的 %(time)s",
         "hours_minutes_seconds_left": "已离开 %(hours)s 小时 %(minutes)s 分钟 %(seconds)s 秒",
         "left": "剩余 %(timeRemaining)s",
-        "minutes_seconds_left": "已离开 %(minutes)s 分钟 %(seconds)ss 秒",
-        "seconds_left": "已离开 %(seconds)ss 秒",
+        "minutes_seconds_left": "已离开 %(minutes)s 分钟 %(seconds)s 秒",
+        "seconds_left": "已离开 %(seconds)s 秒",
         "short_days": "%(value)s 天",
         "short_days_hours_minutes_seconds": "%(days)s 天 %(hours)s 小时 %(minutes)s 分钟 %(seconds)s 秒",
         "short_hours": "%(value)s 小时",
-        "short_hours_minutes_seconds": "%(hours)s 小时 %(minutes)s 分钟 %(seconds)ss 秒",
+        "short_hours_minutes_seconds": "%(hours)s 小时 %(minutes)s 分钟 %(seconds)s 秒",
         "short_minutes": "%(value)s 分钟",
         "short_minutes_seconds": "%(minutes)s 分钟 %(seconds)s 秒",
         "short_seconds": "%(value)s 秒"
@@ -3347,7 +3392,8 @@
             "voice_call_unsupported": "%(senderName)s 已开始语音通话。(此浏览器不支持）"
         },
         "m.file": {
-            "error_decrypting": "解密附件时出错"
+            "error_decrypting": "解密附件时出错",
+            "size_unknown": "未知大小"
         },
         "m.image": {
             "error": "由于错误无法显示图片",
@@ -3426,9 +3472,9 @@
             "ban_reason": "%(senderName)s 已封禁 1 个用户： %(reason)s",
             "ban_reason_spoiler": "%(senderName)s 已封禁 <user/>：%(reason)s",
             "ban_spoiler": "%(senderName)s 已封禁 <user/>",
-            "change_avatar": "%(senderName)s 已更改其个人资料图像",
+            "change_avatar": "%(senderName)s 已更改其头像",
             "change_name": "%(oldDisplayName)s 已将其显示名称更改为 %(displayName)s",
-            "change_name_avatar": "%(oldDisplayName)s 已更改其显示名称与个人资料图片",
+            "change_name_avatar": "%(oldDisplayName)s 已更改其显示名称与头像",
             "invite": "%(senderName)s 邀请了 %(targetName)s",
             "join": "%(targetName)s 已加入房间",
             "kick": "%(senderName)s 已移除 %(targetName)s",
@@ -3443,13 +3489,13 @@
             "no_change": "%(senderName)s 未产生任何更改",
             "reject_invite": "%(targetName)s 已拒绝邀请",
             "reject_invite_reason": "%(targetName)s 拒绝了邀请：%(reason)s",
-            "remove_avatar": "%(senderName)s 已移除其个人资料图像",
+            "remove_avatar": "%(senderName)s 已移除其头像",
             "remove_name": "%(senderName)s 已移除其显示名称（%(oldDisplayName)s）",
-            "set_avatar": "%(senderName)s 设置了个人资料图像",
+            "set_avatar": "%(senderName)s 已设置头像",
             "set_name": "%(senderName)s 已设置其显示名称为 %(displayName)s",
             "unban": "%(senderName)s 解封了 %(targetName)s",
-            "withdrew_invite": "%(senderName)s 撤消了 %(targetName)s 的邀请",
-            "withdrew_invite_reason": "%(senderName)s 已撤消对 %(targetName)s 的邀请：%(reason)s"
+            "withdrew_invite": "%(senderName)s 已撤销对 %(targetName)s 的邀请",
+            "withdrew_invite_reason": "%(senderName)s 已撤销对 %(targetName)s 的邀请：%(reason)s"
         },
         "m.room.name": {
             "change": "%(senderDisplayName)s 已更改房间名称从 %(oldRoomName)s 到 %(newRoomName)s。",
@@ -3459,17 +3505,17 @@
         "m.room.pinned_events": {
             "changed": "%(senderName)s 已更改此房间已置顶的消息。",
             "changed_link": "%(senderName)s 更改了房间的<a>已置顶消息</a>。",
-            "pinned": "%(senderName)s 将一个消息置顶到此房间。查看所有已置顶的消息。",
-            "pinned_link": "%(senderName)s 已在此房间置顶了<a>一个消息</a>。 查看所有<b>已置顶的消息</b>。",
-            "unpinned": "%(senderName)s 已在此房间取消置顶一个消息。查看所有已置顶的消息。",
-            "unpinned_link": "%(senderName)s 已在此房间取消置顶了<a>一个消息</a>。 查看所有<b>已置顶的消息</b>。"
+            "pinned": "%(senderName)s 已在此房间置顶一条消息。查看所有已置顶的消息。",
+            "pinned_link": "%(senderName)s 已在此房间置顶<a>一条消息</a>。 查看所有<b>已置顶的消息</b>。",
+            "unpinned": "%(senderName)s 已在此房间取消置顶一条消息。查看所有已置顶的消息。",
+            "unpinned_link": "%(senderName)s 已在此房间取消置顶<a>一条消息</a>。 查看所有<b>已置顶的消息</b>。"
         },
         "m.room.power_levels": {
             "changed": "%(senderName)s 已更改 %(powerLevelDiffText)s。",
-            "user_from_to": "%(userId)s 的权力值从 %(fromPowerLevel)s 到 %(toPowerLevel)s"
+            "user_from_to": "%(userId)s 的权力级别从 %(fromPowerLevel)s 到 %(toPowerLevel)s"
         },
         "m.room.third_party_invite": {
-            "revoked": "%(senderName)s 已撤消 %(targetDisplayName)s 加入房间的邀请。",
+            "revoked": "%(senderName)s 已撤销 %(targetDisplayName)s 加入房间的邀请。",
             "sent": "%(senderName)s 已向 %(targetDisplayName)s 发送了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 已升级此房间。",
@@ -3486,7 +3532,7 @@
             "added": "%(senderName)s 添加了小部件：%(widgetName)s",
             "jitsi_ended": "%(senderName)s 已结束视频会议",
             "jitsi_join_right_prompt": "从右侧的房间信息卡片加入会议",
-            "jitsi_join_top_prompt": "在此房间加入会议的前排",
+            "jitsi_join_top_prompt": "加入此房间界面顶部的会议",
             "jitsi_started": "%(senderName)s 已开始视频会议",
             "jitsi_updated": "%(senderName)s 已更新视频会议",
             "modified": "小部件 %(widgetName)s 已被 %(senderName)s 修改",
@@ -3525,6 +3571,7 @@
             "label": "%(reactors)s 使用 %(content)s 作出反应",
             "tooltip_caption": "已使用 %(shortName)s 作出反应"
         },
+        "read_marker_new": "新增",
         "read_receipt_title": {
             "one": "已被 %(count)s 个人查看",
             "other": "已被 %(count)s 个人查看"
@@ -3558,12 +3605,10 @@
                 "other": "已被封禁 %(count)s 次"
             },
             "changed_avatar": {
-                "one": "%(oneUser)s 已更改其个人资料图像",
-                "other": "%(oneUser)s 已更改其个人资料图像 %(count)s 次"
+                "other": "%(oneUser)s 已更改其头像 %(count)s 次"
             },
             "changed_avatar_multiple": {
-                "one": "%(severalUsers)s 已更改其个人资料图像",
-                "other": "%(severalUsers)s 已更改其个人资料图像 %(count)s 次"
+                "other": "%(severalUsers)s 已更改头像 %(count)s 次"
             },
             "changed_name": {
                 "one": "%(oneUser)s 已更改其名称",
@@ -3575,20 +3620,16 @@
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
-                "one": "%(oneUser)s 发送了一个隐藏消息",
-                "other": "%(oneUser)s 发送了 %(count)s 个隐藏消息"
+                "other": "%(oneUser)s 发送了 %(count)s 条隐藏消息"
             },
             "hidden_event_multiple": {
-                "one": "%(severalUsers)s 发送了一个隐藏事件",
-                "other": "%(severalUsers)s 发送了 %(count)s 个隐藏消息"
+                "other": "%(severalUsers)s 发送了 %(count)s 条隐藏消息"
             },
             "invite_withdrawn": {
-                "one": "%(oneUser)s 已撤消其邀请",
-                "other": "%(oneUser)s 已撤消其邀请 %(count)s 次"
+                "other": "%(oneUser)s 已撤销其邀请 %(count)s 次"
             },
             "invite_withdrawn_multiple": {
-                "one": "已撤消 %(severalUsers)s 的邀请",
-                "other": "%(severalUsers)s 已撤消其邀请 %(count)s 次"
+                "other": "%(severalUsers)s 已撤销其邀请 %(count)s 次"
             },
             "invited": {
                 "one": "被邀请",
@@ -3667,12 +3708,10 @@
                 "other": "%(severalUsers)s 已更改该房间的<a>已置顶消息</a> %(count)s 次。"
             },
             "redacted": {
-                "one": "%(oneUser)s 已移除一个消息",
-                "other": "%(oneUser)s 已移除 %(count)s 个消息"
+                "other": "%(oneUser)s 已移除 %(count)s 条消息"
             },
             "redacted_multiple": {
-                "one": "%(severalUsers)s 已移除一个消息",
-                "other": "%(severalUsers)s 已移除 %(count)s 个消息"
+                "other": "%(severalUsers)s 已移除 %(count)s 条消息"
             },
             "rejected_invite": {
                 "one": "%(oneUser)s 已拒绝其邀请",
@@ -3707,10 +3746,13 @@
             "one_user": "%(displayName)s 正在输入…",
             "two_users": "%(names)s 与 %(lastPerson)s 正在输入…"
         },
-        "undecryptable_tooltip": "此消息无法解密"
+        "undecryptable_tooltip": "此消息无法解密",
+        "url_preview": {
+            "open_link": "打开链接"
+        }
     },
     "truncated_list_n_more": {
-        "other": "以及剩余 %(count)s 个…"
+        "other": "以及其余 %(count)s 个…"
     },
     "unsupported_browser": {
         "description": "如果继续，某些功能可能会停止运行，并且你将来可能会丢失数据。请更新浏览器以继续使用 %(brand)s。",
@@ -3729,7 +3771,7 @@
         "no_update": "无可用更新。",
         "release_notes_toast_title": "新特性",
         "see_changes_button": "新增内容？",
-        "toast_description": "%(brand)s 有新版本可供更新",
+        "toast_description": "%(brand)s 有新版本可用",
         "toast_title": "更新 %(brand)s",
         "unavailable": "不可用"
     },
@@ -3765,21 +3807,21 @@
         "ban_space_everything": "禁止他们访问我所能访问的一切",
         "ban_space_specific": "禁止这些人做某些我有权决定的事",
         "deactivate_confirm_action": "停用用户",
-        "deactivate_confirm_description": "停用此用户将移除其设备并阻止重新登录。其所有聊天也江北移除。此操作无法撤消。",
+        "deactivate_confirm_description": "停用此用户将移除其设备并阻止重新登录。其所有聊天也将被移除。此操作无法撤销。",
         "deactivate_confirm_title": "停用用户？",
         "demote_button": "降权",
-        "demote_self_confirm_description_space": "由于你正在降级自身，因此无法撤消此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
-        "demote_self_confirm_room": "由于你正在降级自身，因此无法撤消此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
+        "demote_self_confirm_description_space": "由于你正在降级自身，因此无法撤销此更改。如果你是房间中最后一个拥有特权的用户，则无法重新获得特权。",
+        "demote_self_confirm_room": "由于你正在降级自身，因此无法撤销此更改。如果你是空间中最后一个拥有特权的用户，则无法重新获得特权。",
         "demote_self_confirm_title": "降级自身？",
-        "disinvite_button_room": "撤消邀请",
+        "disinvite_button_room": "撤销邀请",
         "disinvite_button_room_name": "从 %(roomName)s 取消邀请",
         "disinvite_button_space": "从空间取消邀请",
         "error_ban_user": "封禁用户失败",
         "error_deactivate": "用户停用失败",
         "error_kicking_user": "用户移除失败",
         "error_mute_user": "静默用户失败",
-        "error_revoke_3pid_invite_description": "无法撤消邀请。服务器可能出现临时问题，或者你没有足够的权限撤消邀请。",
-        "error_revoke_3pid_invite_title": "邀请撤消失败",
+        "error_revoke_3pid_invite_description": "无法撤销邀请。服务器可能出现临时问题，或者你没有足够的权限撤销邀请。",
+        "error_revoke_3pid_invite_title": "邀请撤销失败",
         "ignore_button": "忽略",
         "ignore_confirm_description": "来自此用户的所有消息与邀请都将被隐藏。你确定要忽略？",
         "ignore_confirm_title": "忽略 %(user)s",
@@ -3791,15 +3833,13 @@
         "kick_button_space_everything": "从我所能及的一切中将它们移除",
         "kick_space_specific": "将它们从我能够处理的特定事物中移除",
         "kick_space_warning": "他们仍然可以访问任何你不是管理员的空间。",
-        "promote_warning": "由于你正在将该用户提升为与你相同的权力值，因此你将无法撤消此更改。",
+        "promote_warning": "由于你正在将该用户提升为与你相同的权力级别，因此你将无法撤销此更改。",
         "redact": {
             "confirm_button": {
-                "one": "移除 1 个消息",
-                "other": "移除 %(count)s 个消息"
+                "other": "移除 %(count)s 条消息"
             },
             "confirm_description_1": {
-                "one": "即将移除 %(user)s 发送的 %(count)s 个消息。这将永久删除对话中所有参与者的消息。是否继续？",
-                "other": "即将移除 %(user)s 发送的 %(count)s 个消息。这将永久删除对话中所有参与者的消息。是否继续？"
+                "other": "即将移除 %(user)s 发送的 %(count)s 条消息。这将为对话中所有参与者永久删除。是否继续？"
             },
             "confirm_description_2": "如果消息量较大，这可能需要一些时间。在此期间请勿刷新客户端。",
             "confirm_keep_state_explainer": "如果你还想移除此用户的系统消息（例如，成员关系变更、个人资料变更等），请取消选中。",
@@ -3809,7 +3849,7 @@
             "no_recent_messages_title": "未找到 %(user)s 的最近消息"
         },
         "redact_button": "移除消息",
-        "revoke_invite": "撤消申请",
+        "revoke_invite": "撤销邀请",
         "room_encrypted": "此处的消息是端到端加密的。",
         "room_encrypted_detail": "你的消息是安全的，只有你与对方拥有解锁它们的唯一密钥。",
         "room_unencrypted": "在此房间中的消息非端到端加密。",
@@ -3834,11 +3874,11 @@
         "already_in_call": "已在通话中",
         "already_in_call_person": "你已与此人处于通话。",
         "answered_elsewhere": "已在别处接听",
-        "answered_elsewhere_description": "通话已在其它设备上接听。",
+        "answered_elsewhere_description": "通话已在其他设备上接听。",
         "call_failed": "通话失败",
         "call_failed_description": "无法建立通话",
         "call_failed_media": "通话失败，因为无法访问摄像头或麦克风。请检查：",
-        "call_failed_media_applications": "无其它应用程序使用摄像头",
+        "call_failed_media_applications": "无其他应用程序使用摄像头",
         "call_failed_media_connected": "麦克风与摄像头已插入并正确设置",
         "call_failed_media_permissions": "已授予摄像头使用权",
         "call_failed_microphone": "通话失败，因为无法访问麦克风。请检查麦克风是否已插入并正确设置。",
@@ -3871,6 +3911,11 @@
         "disabled_no_perms_start_voice_call": "你无权发起语音通话",
         "disabled_ongoing_call": "通话中",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "默认",
+            "not_called": "未接通",
+            "participant_you": "%(participant)s – 你"
+        },
         "enable_camera": "打开摄像头",
         "enable_microphone": "取消静音麦克风",
         "expand": "返回到通话",
@@ -4046,7 +4091,7 @@
         },
         "popout": "弹出小部件",
         "set_room_layout": "为所有人布局",
-        "shared_data_avatar": "个人资料图像 URL",
+        "shared_data_avatar": "头像 URL",
         "shared_data_device_id": "你的设备 ID",
         "shared_data_lang": "你的语言",
         "shared_data_mxid": "你的用户 ID",
@@ -4071,7 +4116,7 @@
             "l33t": "像用“@”代替“a”这样可预料的替换行为并没有什么帮助",
             "longerKeyboardPattern": "使用更复杂的击键序列",
             "noNeed": "不需要符号、数字或大写字母",
-            "pwned": "如果你在其它地方使用此密码，则应进行更改。",
+            "pwned": "如果你在其他地方使用此密码，则应进行更改。",
             "recentYears": "避免近些年",
             "repeated": "避免重复的单词与字符",
             "reverseWords": "颠倒的单词很难被猜测到",

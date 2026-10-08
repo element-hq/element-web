@@ -27,7 +27,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
         "complete": "Tamamlandı",
@@ -1438,8 +1437,6 @@
     "language_dropdown_label": "Dil Açılır Listesi",
     "leave_room_dialog": {
         "last_person_warning": "Buradaki tek kişi sensin. Ayrılırsanız, gelecekte siz de dahil olmak üzere hiç kimse katılamaz.",
-        "leave_room_question": "'%(roomName)s' odasından ayrılmak istediğinize emin misiniz ?",
-        "leave_space_question": "'%(spaceName)s' alanından ayrılmak istediğinizden emin misiniz?",
         "room_leave_admin_warning": "Bu odadaki tek yönetici sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_leave_mod_warning": "Bu odadaki tek moderatör sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_rejoin_warning": "Bu oda herkese açık değildir. Davetiye olmadan tekrar katılamazsınız.",
@@ -1834,7 +1831,6 @@
         "join_button_account": "Kayıt Ol",
         "join_failed_needs_invite": "%(roomName)s görüntülemek için bir davetiyeye ihtiyacınız var",
         "join_the_discussion": "Tartışmaya katılın",
-        "join_title": "Sohbete başlamak için odaya katılın",
         "join_title_account": "Konuşmaya bir hesapla katıl",
         "joining": "Katılınıyor…",
         "joining_room": "Odaya katılıyor…",
@@ -2972,9 +2968,7 @@
         "show_thread_filter": "Göster:"
     },
     "threads_activity_centre": {
-        "header": "Mesaj dizileri etkinliği",
-        "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
+        "header": "Mesaj dizileri etkinliği"
     },
     "time": {
         "date_at_time": "%(date)s e %(time)s",

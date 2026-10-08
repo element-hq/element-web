@@ -20,6 +20,7 @@
         "new_room": "Nowy pokój",
         "new_section": "Nowa sekcja",
         "new_video_room": "Nowy pokój wideo",
+        "no": "Nie",
         "open_menu": "Otwórz menu",
         "pause": "Wstrzymaj",
         "pin": "Przypnij",
@@ -33,7 +34,8 @@
         "search": "Szukaj",
         "start_chat": "Rozpocznij czat",
         "unpin": "Odepnij",
-        "view_source": "Wyświetl źródło"
+        "view_source": "Wyświetl źródło",
+        "yes": "Tak"
     },
     "common": {
         "attachment": "Załącznik",
@@ -72,6 +74,10 @@
         },
         "toggle_event": "Źródło zdarzenia"
     },
+    "document_viewer": {
+        "error_load": "Nie można załadować pliku.",
+        "loading": "Ładowanie dokumentu…"
+    },
     "emoji": {
         "categories": "Kategorie",
         "category_activities": "Aktywności",
@@ -101,7 +107,6 @@
             "clear_status": "Wyczyść status",
             "create_an_account": "Utwórz konto",
             "got_an_account": "Masz już konto?",
-            "manage_account": "Zarządzaj kontem",
             "sign_in": "Zaloguj się",
             "title": "Menu użytkownika"
         }
@@ -113,6 +118,13 @@
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "message_didnt_send": "Wiadomość nie została wysłana. Kliknij po więcej informacji.",
         "mute_room": "Wycisz pokój"
+    },
+    "pdf_viewer": {
+        "page_label": "Strona %(page)s z %(total)s",
+        "page_number": "Numer strony",
+        "zoom": "Powiększenie",
+        "zoom_in": "Powiększ",
+        "zoom_out": "Pomniejsz"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -136,6 +148,7 @@
         "knock_sent": "Wysłano prośbę o dołączenie",
         "pinned_message_badge": "Przypięta wiadomość",
         "status_bar": {
+            "contact_account_provider": "Skontaktuj się z dostawcą konta",
             "delete_all": "Usuń wszystkie",
             "exceeded_resource_limit_description": "Skontaktuj się ze swoim dostawcą konta, aby móc dalej korzystać z usługi.",
             "exceeded_resource_limit_title": "Wiadomość nie została wysłana, ponieważ usługa przekroczyła swój limit zasobów.",
@@ -260,7 +273,7 @@
             "focus_time": "W trakcie skupienia",
             "in_a_meeting": "Na spotkaniu",
             "on_the_road": "W trasie",
-            "set_status_prompt": "Jaki jest twój status?"
+            "set_status_prompt": "Jaki jest Twój status?"
         }
     },
     "terms": {
@@ -302,9 +315,9 @@
                 },
                 "room": {
                     "join_count": {
-                        "one": "%(count)s dołączył",
-                        "few": "%(count)s dołączyło",
-                        "many": "%(count)s dołączyło"
+                        "one": "%(count)s dołączyła",
+                        "few": "%(count)s dołączyły",
+                        "many": "%(count)s dołączyły"
                     },
                     "title": "Trwa połączenie grupowe"
                 }
@@ -338,7 +351,7 @@
             "error_invalid": "Nieprawidłowy plik"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s zmienił awatar czatu na <img/>",
+            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
             "removed": "%(senderDisplayName)s usunął awatar pokoju."
         },
         "m.room.encryption": {
@@ -367,14 +380,15 @@
         "pending_moderation": "Wiadomość oczekuje na moderację",
         "pending_moderation_reason": "Wiadomość oczekuje na moderację: %(reason)s",
         "url_preview": {
-            "close": "Zamknij podgląd",
-            "open_link": "Otwórz link",
             "show_n_more": {
                 "one": "Pokaż %(count)s inny podgląd",
                 "few": "Pokaż %(count)s inne podglądy",
                 "many": "Pokaż %(count)s innych podglądów"
             },
-            "view_image": "Wyświetl obraz"
+            "view_audio": "Wyświetl dźwięk",
+            "view_file": "Wyświetl plik",
+            "view_image": "Wyświetl obraz",
+            "view_video": "Wyświetl wideo"
         }
     },
     "user_menu": {
@@ -383,6 +397,26 @@
         "open_home": "Strona główna",
         "open_security": "Bezpieczeństwo i prywatność",
         "open_settings": "Wszystkie ustawienia"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Skuteczna konfiguracja",
+            "configuration": "Konfiguracja",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "w trakcie rozmowy",
+            "in_lobby": "w poczekalni",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "Dziennik HostBridge",
+            "mute_audio": "Wycisz dźwięk",
+            "mute_video": "Wycisz wideo",
+            "no_participants": "Nikt nie bierze udziału w tej rozmowie",
+            "participants": "Uczestnicy",
+            "status": "%(roomId)s · intent %(intent)s · %(state)s · theme %(theme)s · language %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Nieznany pokój %(roomId)s",
+            "unmute_audio": "Wyłącz wyciszenie dźwięku",
+            "unmute_video": "Włącz wideo"
+        }
     },
     "widget": {
         "context_menu": {
