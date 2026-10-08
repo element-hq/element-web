@@ -1593,8 +1593,6 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        defaultProps.config.force_verification = false;
-
                         vi.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
                             async (roomId: string) => {
                                 return roomId === encryptedRoom.roomId;
