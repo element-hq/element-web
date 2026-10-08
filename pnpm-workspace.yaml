@@ -27,7 +27,8 @@ catalog:
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
-    "@vector-im/compound-web": 10.1.0
+    # A git dependency until PortalRoot (element-hq/compound-web#562) is released
+    "@vector-im/compound-web": "github:element-hq/compound-web#abdd1657b4787952b19203c7ce81fda02822ac7f"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -79,6 +80,8 @@ allowBuilds:
     # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
     # pnpm matches git-hosted packages by repository URL, not by bare name.
     "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
+    # Compound until PortalRoot is released (see the catalog), built on install by its `prepare` script
+    "@vector-im/compound-web@git+https://github.com/element-hq/compound-web.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
