@@ -29,6 +29,7 @@ import { useHasOtherVerifiedDevices } from "../../../hooks/useHasOtherVerifiedDe
 import { EncryptionCard } from "../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../settings/encryption/EncryptionCardEmphasisedContent";
+import { type State as EncryptionState } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -63,14 +64,12 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(true);
     };
 
-    const onGoToSettings = (): void => {
-        // Open the user settings dialog to the encryption tab and start the flow to get recovery key
+    // Open the user settings dialog to the encryption tab in the given state
+    const onGoToSettings = (initialEncryptionState: EncryptionState): void => {
         const payload: OpenToTabPayload = {
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Encryption,
-            props: {
-                initialEncryptionState: "set_recovery_key",
-            },
+            props: { initialEncryptionState },
         };
         dis.dispatch(payload);
 
@@ -114,7 +113,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                             </Text>
                         </EncryptionCardEmphasisedContent>
                         <EncryptionCardButtons>
-                            <Button onClick={onGoToSettings} Icon={KeyIcon}>
+                            <Button onClick={() => onGoToSettings("set_recovery_key")} Icon={KeyIcon}>
                                 {_t("settings|encryption|recovery|set_up_recovery")}
                             </Button>
                             <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
