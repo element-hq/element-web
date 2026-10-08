@@ -35,6 +35,14 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+/* Server/network directory picker: right-aligned, as on the room directory */
+.mx_InviteDialog_directoryPicker {
+    display: flex;
+    justify-content: flex-end;
+    /* Match the address bar's right offset so the dropdown lines up with the search box edge */
+    margin: var(--cpd-space-2x) 45px 0 0;
+}
+
 .mx_InviteDialog_section {
     padding-bottom: var(--cpd-space-1x);
 
