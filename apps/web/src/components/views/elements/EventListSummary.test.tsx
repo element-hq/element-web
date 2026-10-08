@@ -26,6 +26,8 @@ import { Layout } from "../../../settings/enums/Layout";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import * as languageSettings from "../../../i18n/settings";
+import { ModuleApi } from "../../../modules/Api.ts";
+import { CustomComponentsApi } from "../../../modules/customComponentApi.ts";
 
 describe("EventListSummary", function () {
     const roomId = "!room:server.org";
@@ -159,6 +161,44 @@ describe("EventListSummary", function () {
         expect(children).toHaveLength(1);
         expect(children[0]).toHaveTextContent("Expanded membership");
         expect(children).toMatchSnapshot();
+    });
+
+    it("includes custom and built-in descriptions in one summary", function () {
+        const api = new CustomComponentsApi();
+        api.registerMessageRenderer("com.example.notice", () => <span>Notice</span>, {
+            renderGroupSummary: { getSummary: (events) => `shared ${events.length} updates` },
+        });
+        const groupingSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getGroupingForMessage")
+            .mockImplementation(api.getGroupingForMessage.bind(api));
+        const joined = generateMembershipEvent("joined", {
+            userId: "@user:some.domain",
+            prevMembership: KnownMembership.Leave,
+            membership: KnownMembership.Join,
+        });
+        const left = generateMembershipEvent("left", {
+            userId: "@user:some.domain",
+            prevMembership: KnownMembership.Join,
+            membership: KnownMembership.Leave,
+        });
+        const notices = Array.from({ length: 3 }, () =>
+            mkEvent({
+                event: true,
+                type: "com.example.notice",
+                room: roomId,
+                user: "@user:some.domain",
+                content: {},
+            }),
+        );
+        const { container } = renderComponent({ events: [joined, ...notices, left] });
+
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary")!;
+        expect(summary).toHaveTextContent("joined");
+        expect(summary).toHaveTextContent("shared 3 updates");
+        expect(summary).toHaveTextContent("left");
+        expect(summary.textContent!.indexOf("joined")).toBeLessThan(summary.textContent!.indexOf("shared"));
+        expect(summary.textContent!.indexOf("shared")).toBeLessThan(summary.textContent!.indexOf("left"));
+        groupingSpy.mockRestore();
     });
 
     it("renders expanded events if there are less than props.threshold for join and leave", function () {

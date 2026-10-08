@@ -156,6 +156,42 @@ test.describe("Custom Component API", () => {
             const eventTile = eventList.locator(".mx_EventTile").last();
             await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
         });
+        test("should group custom messages without the informational hint", async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            for (let i = 1; i <= 3; i++) {
+                await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                    "msgtype": "m.text",
+                    "body": `Grouped alpha ${i}`,
+                    "org.example.group": "alpha",
+                });
+            }
+
+            await app.timeline.scrollToBottom();
+            await expect(page.getByText(/Module grouped alpha: 3 messages/)).toBeVisible();
+            await page.getByRole("button", { name: "Expand" }).last().click();
+            await expect(page.getByText("Grouped alpha 1", { exact: true })).toBeVisible();
+            await expect(page.getByText("Grouped alpha 3", { exact: true })).toBeVisible();
+        });
+        test("should combine custom summaries by key with informational events", async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            for (const group of ["alpha", "beta"]) {
+                for (let i = 1; i <= 3; i++) {
+                    await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                        "msgtype": "m.text",
+                        "body": `Grouped ${group} ${i}`,
+                        "org.example.group": group,
+                    });
+                }
+            }
+            await app.client.sendMessage(room.roomId, "Render as informational message");
+
+            await app.timeline.scrollToBottom();
+            await expect(
+                page.getByText(/Module grouped alpha: 3 messages.*Module grouped beta: 3 messages/),
+            ).toHaveText(
+                /Module grouped alpha: 3 messages.*Module grouped beta: 3 messages.*Module grouped 1 informational message/,
+            );
+        });
         test("should hide avatar and sender profile when the renderSenderProfile hint is set to false", async ({
             page,
             room,

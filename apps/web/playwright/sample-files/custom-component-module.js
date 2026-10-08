@@ -31,7 +31,24 @@ export default class CustomComponentModule {
             (_props, originalComponent) => {
                 return originalComponent();
             },
-            { renderAsInformationalMessage: true },
+            {
+                renderAsInformationalMessage: true,
+                renderGroupSummary: {
+                    getSummary: (events) =>
+                        `Module grouped ${events.length} informational message${events.length === 1 ? "" : "s"}`,
+                },
+            },
+        );
+        this.api.customComponents.registerMessageRenderer(
+            (evt) => typeof evt.content["org.example.group"] === "string",
+            (_props, originalComponent) => originalComponent(),
+            {
+                renderGroupSummary: {
+                    getKey: (evt) => String(evt.content["org.example.group"]),
+                    getSummary: (events) =>
+                        `Module grouped ${String(events[0].content["org.example.group"])}: ${events.length} messages`,
+                },
+            },
         );
         this.api.customComponents.registerMessageRenderer(
             (evt) => evt.content.body === "Render without sender profile",
