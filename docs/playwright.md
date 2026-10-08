@@ -124,6 +124,18 @@ test.use({
 - We remove public rooms from the room directory between tests but deleting users doesn't have a homeserver agnostic solution.
 - Homeserver logs are attached to Playwright test reports
 
+**Capture logs for passing tests:**
+
+By default, container and browser console logs are only attached to tests that fail. Set `PLAYWRIGHT_CAPTURE_LOGS=1`
+to attach them to every test. Each container's logs are also written to
+`playwright/test-results/<test-dir>/<container>.log` (for example `homeserver.log`), which is useful for finding slow
+homeserver requests:
+
+```sh
+PLAYWRIGHT_CAPTURE_LOGS=1 pnpm run test:playwright playwright/e2e/threads/threads.spec.ts --project=Chrome
+grep -h "Processed request" playwright/test-results/*/homeserver.log
+```
+
 ### Fixtures
 
 We heavily leverage [Playwright fixtures](https://playwright.dev/docs/test-fixtures) to provide:
