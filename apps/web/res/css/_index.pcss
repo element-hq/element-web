@@ -6,12 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
- * `normalize` and `compound-legacy` belong to Element Call's stylesheet (loaded with the call component, see
- * `ElementCallComponent.css`): its element reset and legacy base styles, which must sit below Compound's
- * component styles, as they do in Element Call itself. `compound` is where Element Call keeps its copy of
- * Compound; it stays empty here, as Element Web's own copy is what the component uses.
+/*
+ * `normalize` and `compound-legacy` are declared first because they come from the call component's
+ * stylesheet (see `ElementCallComponent.css`), which loads lazily. Declared here, Element Call's element
+ * reset and base styles stay below `compound-web`, as they are in Element Call itself.
  */
-@layer normalize, compound-legacy, compound-tokens, compound-web, compound, shared-components, app-web;
+@layer normalize, compound-legacy, compound-tokens, compound-web, shared-components, app-web;
 
 @import url("maplibre-gl/dist/maplibre-gl.css") layer(app-web);
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound-tokens);
