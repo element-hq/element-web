@@ -35,6 +35,23 @@ export type OriginalMessageComponentProps = {
 };
 
 /**
+ * Controls how a custom message is grouped in the timeline.
+ * @alpha Subject to change.
+ */
+export interface CustomMessageGrouping {
+    /**
+     * Adjacent events from the same renderer are summarized together when their keys match.
+     * When omitted, all adjacent events from that renderer share a key.
+     */
+    getKey?: (mxEvent: MatrixEvent) => string;
+    /**
+     * Returns the collapsed summary for the visible events in this group.
+     * This function must be synchronous.
+     */
+    getSummary: (events: readonly MatrixEvent[]) => string;
+}
+
+/**
  * Hints to specify to Element when rendering events.
  * @alpha Subject to change.
  */
@@ -54,7 +71,6 @@ export type CustomMessageRenderHints = {
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
     /**
      * Should the event be formatted as an informational message.
-     * This will also apply grouping with other informational messages.
      * Default is false.
      */
     renderAsInformationalMessage?: boolean;
@@ -63,6 +79,11 @@ export type CustomMessageRenderHints = {
      * Default is true.
      */
     renderSenderProfile?: boolean;
+    /**
+     * Custom summary text for grouped messages. The summary is combined with
+     * descriptions of other events in the group.
+     */
+    renderGroupSummary?: CustomMessageGrouping;
 };
 
 /**
