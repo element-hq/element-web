@@ -43,6 +43,6 @@
         "vitest": "catalog:"
     },
     "dependencies": {
-        "sanitize-html": "2.17.7"
+        "sanitize-html": "2.18.0"
     }
 }
