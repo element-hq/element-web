@@ -12,6 +12,7 @@ import { name as ModuleName } from "../package.json";
 import RoomPreviewBar from "./RoomPreviewBar.tsx";
 import AuthFooter from "./AuthFooter.tsx";
 import style from "./style.css" with { type: "css" };
+import { initEmailInvitation } from "./email-invitation/index.ts";
 
 const GUEST_INVISIBLE_COMPONENTS = [
     "UIComponent.sendInvites",
@@ -23,7 +24,7 @@ const GUEST_INVISIBLE_COMPONENTS = [
 ];
 
 class RestrictedGuestsModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0 || ^2.0.0";
+    public static readonly moduleApiVersion = "^2.2.0";
 
     private config?: ModuleConfig;
 
@@ -67,6 +68,9 @@ class RestrictedGuestsModule implements Module {
                 <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} config={this.config!} />
             </OriginalComponent>
         ));
+
+        // Register the email invitation feature (for inviting guests to rooms via email)
+        initEmailInvitation(this.api, this.config);
     }
 
     /**

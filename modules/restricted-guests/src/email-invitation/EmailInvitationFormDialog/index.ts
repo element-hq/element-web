@@ -5,5 +5,5 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-@import "@vector-im/compound-web/dist/style.css" layer(compound-layer);
-@import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
+export { EmailInvitationFormDialog } from "./EmailInvitationFormDialog.tsx";
+export type { EmailInvitationFormResult } from "./types";

@@ -1,0 +1,73 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EmailInvitationSuccessDialog > renders the invited emails 1`] = `
+<div>
+  <div
+    class="_flex_4dswl_9 sc-bdvwhi hODBPg"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="_flex_4dswl_9"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-8x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="_big-icon_1ssbv_8"
+        data-kind="success"
+        data-size="lg"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+          />
+        </svg>
+      </div>
+      <div
+        class="_flex_4dswl_9"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <h1
+          class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112 sc-gsDMPd cGcpvv"
+        >
+          Guest invite sent
+        </h1>
+        <p
+          class="_flex_4dswl_9 sc-dkPwfY hLKLiO"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+        >
+          <span
+            class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
+          >
+            We have sent an invite to
+            <br />
+            <span
+              class="_typography_6v6n8_153 _font-body-lg-medium_6v6n8_79 sc-hKwBjT dkfaIM"
+            >
+              alice@example.com, bob@example.com
+            </span>
+          </span>
+          <span
+            class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
+          >
+            This invite will expire in 30 days
+          </span>
+        </p>
+      </div>
+    </div>
+    <button
+      class="_button_1nw83_8 sc-eCIkAO dlzDbr"
+      data-kind="primary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      Done
+    </button>
+  </div>
+</div>
+`;

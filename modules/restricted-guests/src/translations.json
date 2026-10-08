@@ -34,5 +34,86 @@
     "join_cta": {
         "en": "Join as guest",
         "de": "Als Gast beitreten"
+    },
+    "invite_guest": {
+        "en": "Invite guests"
+    },
+    "invite_guest_disabled_tooltip": {
+        "en": "You don’t have the permission to add guests"
+    },
+    "invitation_email_dialog_title": {
+        "en": "Add a guest to %(roomName)s"
+    },
+    "invitation_email_dialog_banner_guest": {
+        "en": "Guests will have limited access to the app"
+    },
+    "invitation_email_dialog_banner_history_on": {
+        "en": "They will have access to the full chat history"
+    },
+    "invitation_email_dialog_banner_history_off": {
+        "en": "They will not have access to the full chat history"
+    },
+    "invitation_email_dialog_banner_change_access": {
+        "en": "Change settings"
+    },
+    "invitation_email_dialog_copy_link": {
+        "en": "Copy invite link"
+    },
+    "invitation_email_dialog_copy_link_tooltip": {
+        "en": "Invite people with this link"
+    },
+    "invitation_email_dialog_link_copied_tooltip": {
+        "en": "Link copied - expires in 30 days"
+    },
+    "invitation_email_dialog_cancel": {
+        "en": "Cancel"
+    },
+    "invitation_email_dialog_send_invitations": {
+        "en": "Send invite to guest"
+    },
+    "invitation_email_dialog_join_rule_confirmation_title": {
+        "en": "Currently this room doesn't allow guests"
+    },
+    "invitation_email_dialog_join_rule_confirmation_text": {
+        "en": "Check the box below to confirm you want change room access to allow guests in"
+    },
+    "invitation_email_dialog_join_rule_confirmation_checkbox_label": {
+        "en": "Change room access to Ask to join"
+    },
+    "invitation_email_dialog_success_title": {
+        "en": "Guest invite sent"
+    },
+    "invitation_email_dialog_email_placeholder": {
+        "en": "Enter an email address"
+    },
+    "invitation_email_dialog_success_text": {
+        "en": "We have sent an invite to<br/><b>%(email)s</b>"
+    },
+    "invitation_email_dialog_success_expire": {
+        "en": "This invite will expire in 30 days"
+    },
+    "invitation_email_dialog_success_done": {
+        "en": "Done"
+    },
+    "error_dialog_ok": {
+        "en": "OK"
+    },
+    "room_version_error_dialog_title": {
+        "en": "%(roomName)s does not support guests"
+    },
+    "room_version_error_dialog_line_1": {
+        "en": "This room does not support guests."
+    },
+    "room_version_error_dialog_line_2": {
+        "en": "You can upgrade this room or create a new room."
+    },
+    "invitation_email_dialog_error_title": {
+        "en": "We could not send the invite"
+    },
+    "invitation_email_dialog_error_line_1": {
+        "en": "An error occurred when attempting to send the invite."
+    },
+    "invitation_email_dialog_error_line_2": {
+        "en": "Please try again."
     }
 }
