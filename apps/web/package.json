@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@element-hq/element-call-component": "github:element-hq/element-call#v0.28.0-rc.1&path:/component",
+        "@element-hq/element-call-component": "github:element-hq/element-call#f322af2742d2f2a8c6293566fda5c6f1fe16b03d&path:/component",
         "@element-hq/element-web-module-api": "workspace:*",
         "@element-hq/element-web-shared-utils": "workspace:*",
         "@element-hq/web-shared-components": "workspace:*",
