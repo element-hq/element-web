@@ -66,6 +66,11 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
     }
 
     private shown: Shown | null = null;
+    /**
+     * Counts requests to open a window. Opening waits for the browser, and a request overtaken in the
+     * meantime by another `open` or by `close` must not install itself once its window arrives.
+     */
+    private openRequest = 0;
 
     /** The call currently shown in a Picture-in-Picture window, if any. */
     public get call(): ElementCall | null {
@@ -103,6 +108,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         }
 
         this.close();
+        const request = ++this.openRequest;
         let pipWindow: Window;
         try {
             pipWindow = await window.documentPictureInPicture!.requestWindow(DEFAULT_WINDOW_SIZE);
@@ -110,8 +116,8 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
             logger.warn("Could not open a Document Picture-in-Picture window", e);
             return;
         }
-        // The call may have ended while the browser was opening the window
-        if (!PersistedElement.isMounted(persistKey)) {
+        // Overtaken while the browser was opening the window, or the call ended in the meantime
+        if (request !== this.openRequest || !PersistedElement.isMounted(persistKey)) {
             pipWindow.close();
             return;
         }
@@ -142,8 +148,12 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         this.emit(DocumentPipStoreEvent.Update);
     }
 
-    /** Closes the Picture-in-Picture window, bringing the call back into this document. */
+    /**
+     * Closes the Picture-in-Picture window, bringing the call back into this document. Also abandons a
+     * window that is still being opened.
+     */
     public close(): void {
+        this.openRequest++;
         const shown = this.shown;
         if (!shown) return;
         this.release(shown);

@@ -225,4 +225,56 @@ describe("DocumentPipStore", () => {
         expect(requestWindow).toHaveBeenCalledTimes(1);
         expect(pipWindow.focus).toHaveBeenCalled();
     });
+
+    describe("while the browser is still opening a window", () => {
+        /** A window whose arrival the test controls, so that requests can overlap. */
+        const pendingWindow = (): { window: Window; resolve: () => void } => {
+            const pending = {
+                document: document.implementation.createHTMLDocument("pip"),
+                addEventListener: vi.fn(),
+                removeEventListener: vi.fn(),
+                close: vi.fn(),
+                focus: vi.fn(),
+            } as unknown as Window;
+            let resolve!: () => void;
+            requestWindow.mockReturnValueOnce(new Promise<Window>((r) => (resolve = () => r(pending))));
+            return { window: pending, resolve };
+        };
+
+        it("installs only the most recent request", async () => {
+            const onUpdate = vi.fn();
+            store.on(DocumentPipStoreEvent.Update, onUpdate);
+            const onRoomView = vi.spyOn(roomViewStore, "on");
+            const first = pendingWindow();
+            const second = pendingWindow();
+
+            const opening = store.open(call);
+            const reopening = store.open(call);
+            // The browser hands out the windows in either order; the earlier request must not win either way
+            second.resolve();
+            await reopening;
+            first.resolve();
+            await opening;
+
+            expect(store.pipWindow).toBe(second.window);
+            expect(first.window.close).toHaveBeenCalled();
+            expect(first.window.addEventListener).not.toHaveBeenCalled();
+            expect(PersistedElement.detach).toHaveBeenCalledTimes(1);
+            expect(onRoomView).toHaveBeenCalledTimes(1);
+            expect(onUpdate).toHaveBeenCalledTimes(1);
+        });
+
+        it("abandons the window when closed in the meantime", async () => {
+            const pending = pendingWindow();
+
+            const opening = store.open(call);
+            store.close();
+            pending.resolve();
+            await opening;
+
+            expect(store.call).toBeNull();
+            expect(pending.window.close).toHaveBeenCalled();
+            expect(PersistedElement.detach).not.toHaveBeenCalled();
+        });
+    });
 });
