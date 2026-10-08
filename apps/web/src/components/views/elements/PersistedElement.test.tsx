@@ -76,6 +76,8 @@ describe("PersistedElement", () => {
         expect(child().style.width).toBe("100%");
         expect(child().style.height).toBe("100%");
         expect(child().style.transform).toBe("none");
+        // Nothing to stack against in the host's window; what is portalled there after it must show above it
+        expect(child().style.zIndex).toBe("auto");
 
         // While detached, losing the placeholder does not hide it
         unmount();
@@ -92,6 +94,7 @@ describe("PersistedElement", () => {
         await act(async () => {});
         expect(child().style.display).toBe("block");
         expect(child().style.width).not.toBe("100%");
+        expect(child().style.zIndex).toBe("9");
 
         host.remove();
     });

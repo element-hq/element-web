@@ -284,8 +284,10 @@ export default class PersistedElement extends React.Component<IProps> {
     ): void {
         const z = isNullOrUndefined(zIndex) ? 9 : zIndex;
         if (PersistedElement.isDetached(persistKey)) {
+            // Alone in its window, the tree has nothing to be stacked against, and a z-index here would
+            // put it over what gets portalled into that window's body after it: menus, tooltips.
             Object.assign(child.style, {
-                zIndex: z,
+                zIndex: "auto",
                 position: "absolute",
                 top: "0",
                 left: "0",
