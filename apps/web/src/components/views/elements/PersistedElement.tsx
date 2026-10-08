@@ -23,7 +23,7 @@ export const getPersistKey = (appId: string): string => "widget_" + appId;
 
 // We contain all persisted elements within a master container to allow them all to be within the same
 // CSS stacking context, and thus be able to control their z-indexes relative to each other.
-function getOrCreateMasterContainer(): HTMLDivElement {
+export function getOrCreateMasterContainer(): HTMLDivElement {
     let container = document.getElementById("mx_PersistedElement_container") as HTMLDivElement;
     if (!container) {
         container = document.createElement("div");

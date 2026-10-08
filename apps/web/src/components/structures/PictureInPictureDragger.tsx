@@ -6,10 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef } from "react";
+import { createPortal } from "react-dom";
 
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import { lerp } from "../../utils/AnimationUtils";
 import { MarkedExecution } from "../../utils/MarkedExecution";
+import { getOrCreateMasterContainer } from "../views/elements/PersistedElement";
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -71,7 +73,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     }
 
     public componentDidMount(): void {
-        document.addEventListener("mousemove", this.onMoving);
+        document.addEventListener("pointermove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
         UIStore.instance.on(UI_EVENTS.Resize, this.onResize);
         // correctly position the PiP
@@ -79,7 +81,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     }
 
     public componentWillUnmount(): void {
-        document.removeEventListener("mousemove", this.onMoving);
+        document.removeEventListener("pointermove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
         UIStore.instance.off(UI_EVENTS.Resize, this.onResize);
     }
@@ -184,7 +186,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.startingPositionY = event.clientY;
     };
 
-    private onMoving = (event: MouseEvent): void => {
+    private onMoving = (event: PointerEvent): void => {
         if (!this.mouseHeld) return;
 
         if (
@@ -201,6 +203,14 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
 
         if (!this.moving) {
             this.moving = true;
+            // Capture the pointer while moving: the PiP trails slightly behind the pointer, and
+            // as soon as the pointer gets ahead of it over a widget iframe, the iframe would swallow
+            // all further pointer events, leaving the PiP stuck until the pointer leaves the iframe.
+            try {
+                this.callViewWrapper.current?.setPointerCapture(event.pointerId);
+            } catch {
+                // The pointer may no longer be active, in which case there is nothing to capture
+            }
             this.initX = event.pageX - this.desiredTranslationX;
             this.initY = event.pageY - this.desiredTranslationY;
             this.scheduledUpdate.mark();
@@ -240,7 +250,10 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
             });
         });
 
-        return (
+        // Render into the persisted element container rather than in place: widget iframes live in that
+        // container, which is a separate stacking context painted above the main app, so the PiP would
+        // otherwise be drawn below any visible widget no matter its z-index.
+        return createPortal(
             <aside
                 className="mx_PictureInPictureDragger"
                 style={style}
@@ -249,7 +262,8 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
                 onDoubleClick={this.props.onDoubleClick}
             >
                 {children}
-            </aside>
+            </aside>,
+            getOrCreateMasterContainer(),
         );
     }
 }
