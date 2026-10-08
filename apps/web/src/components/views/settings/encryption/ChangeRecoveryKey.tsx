@@ -98,6 +98,10 @@ interface ChangeRecoveryKeyBodyProps extends ChangeRecoveryKeyProps {
      * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
      */
     className?: string;
+    /**
+     * Skip the panel explaining what "recovery" is about, e.g. when the caller has already explained it.
+     */
+    skipIntroduction?: boolean;
 }
 
 /**
@@ -108,12 +112,13 @@ export function ChangeRecoveryKeyBody({
     onFinish,
     onCancelClick,
     className,
+    skipIntroduction = false,
 }: Readonly<ChangeRecoveryKeyBodyProps>): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
     // If the user is setting up recovery for the first time, we first show them a panel explaining what
     // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
-    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_flow" : "inform_user");
+    const [state, setState] = useState<State>(userHasRecoveryKey || skipIntroduction ? "save_key_flow" : "inform_user");
 
     const onCancelClickWrapper = useCallback(() => {
         logger.debug("ChangeRecoveryKey: user cancelled");
