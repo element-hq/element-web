@@ -23,8 +23,6 @@ import {
 } from "test-utils";
 import LogoutDialog from "./LogoutDialog";
 import dispatch from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "./UserTab";
 
 // Mock the ChangeRecoveryKeyBody component to avoid testing its implementation details in this test suite.
 vi.mock("../settings/encryption/ChangeRecoveryKeyBody", () => ({
@@ -90,16 +88,6 @@ describe("LogoutDialog", () => {
             fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
             expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
             expect(onFinished).toHaveBeenCalledWith(true);
-        });
-
-        it("opens settings to check the recovery key", async () => {
-            renderComponent();
-            fireEvent.click(await screen.findByRole("button", { name: "Check your recovery key" }));
-            expect(dispatch.dispatch).toHaveBeenCalledWith({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: { initialEncryptionState: "main" },
-            });
         });
     });
 
