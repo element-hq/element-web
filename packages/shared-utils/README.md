@@ -2,9 +2,15 @@
 
 Standalone, utilities shared by Element projects.
 
-The package provides string-based HTML sanitization and URL validation for
-untrusted Matrix-compatible formatted content. It is designed to work in
-Element Web as well as in external JavaScript and TypeScript packages.
+The package provides:
+
+- string-based HTML sanitization and URL validation for untrusted
+  Matrix-compatible formatted content
+- copying plain text to the clipboard
+- email address validation
+
+It is designed to work in Element Web as well as in external JavaScript and
+TypeScript packages.
 
 ## Usage
 
@@ -15,8 +21,7 @@ const safeHtml = sanitizeHtml(untrustedHtml);
 const canOpen = isUrlPermitted(untrustedUrl);
 ```
 
-The package does not import React, access browser globals, or depend on
-Element Web application code.
+The package does not import React or depend on Element Web application code.
 
 ## Rendering transforms
 

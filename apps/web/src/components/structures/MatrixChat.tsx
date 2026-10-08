@@ -29,7 +29,7 @@ import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
-import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
+import { copyPlainTextToClipboard, sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import {
     I18nContext,
     LinkedTextContext,
@@ -100,7 +100,6 @@ import VerificationRequestToast from "../views/toasts/VerificationRequestToast";
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
-import { copyPlaintext } from "../../utils/strings";
 import { initSentry } from "../../sentry";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
@@ -1363,7 +1362,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private async copyRoom(roomId: string): Promise<void> {
         const roomLink = makeRoomPermalink(MatrixClientPeg.safeGet(), roomId);
-        const success = await copyPlaintext(roomLink);
+        const success = await copyPlainTextToClipboard(roomLink);
         if (!success) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("error_dialog|copy_room_link_failed|title"),
