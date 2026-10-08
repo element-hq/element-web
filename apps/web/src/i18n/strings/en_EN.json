@@ -1529,7 +1529,6 @@
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
-        "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
         "feature_element_call_react": "Render Element Call as a React component instead of a widget",
         "feature_matrixrtc_slots": "Require open MatrixRTC slots for Element Call calls",
         "feature_matrixrtc_slots_description": "Only allows starting or joining Element Call calls with a valid slot state event in the room.",
