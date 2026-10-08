@@ -19,7 +19,7 @@ import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
-import { hintAsInformationalMessage } from "../../../utils/EventUtils.ts";
+import { hintAsInformationalMessage, hintCustomGroupSummary } from "../../../utils/EventUtils.ts";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -65,6 +65,10 @@ export class MainGrouper extends BaseGrouper {
             return true;
         }
 
+        if (hintCustomGroupSummary(ev)) {
+            return true;
+        }
+
         return false;
     };
 
@@ -98,6 +102,9 @@ export class MainGrouper extends BaseGrouper {
             return true;
         }
         if (hintAsInformationalMessage(ev)) {
+            return true;
+        }
+        if (hintCustomGroupSummary(ev)) {
             return true;
         }
         return false;

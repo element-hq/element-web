@@ -31,6 +31,7 @@ import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { ModuleApi } from "../modules/Api";
+import type { MessageGrouping } from "../modules/customComponentApi.ts";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -295,6 +296,11 @@ export const highlightEvent = (roomId: string, eventId: string): void => {
 /** Default to showing the message as a regular message unless the hint is explicitly set to true. */
 export function hintAsInformationalMessage(mxEvent: MatrixEvent): boolean {
     return ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.renderAsInformationalMessage === true;
+}
+
+/** Return the custom grouping for this event, if its renderer provides one. */
+export function hintCustomGroupSummary(mxEvent: MatrixEvent): MessageGrouping | null {
+    return ModuleApi.instance.customComponents.getGroupingForMessage(mxEvent);
 }
 
 /**

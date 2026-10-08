@@ -32,6 +32,13 @@ type EventRenderer = {
     hints: ModuleCustomCustomMessageRenderHints;
 };
 
+/** Grouping selected for a timeline event. */
+export interface MessageGrouping {
+    renderer: object;
+    key: string;
+    summarize: (events: readonly MatrixEvent[]) => string | null;
+}
+
 interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentProps, "mxEvent"> {
     mxEvent: MatrixEvent;
 }
@@ -119,6 +126,39 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             };
         }
         return null;
+    }
+
+    /** Get the custom grouping for an event, if its renderer provides one. */
+    public getGroupingForMessage(mxEvent: MatrixEvent): MessageGrouping | null {
+        if (mxEvent.isRedacted()) return null;
+        const moduleEv = getModuleMatrixEvent(mxEvent);
+        const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
+        const grouping = renderer?.hints.renderGroupSummary;
+        if (!moduleEv || !renderer || !grouping) return null;
+
+        let key = "";
+        try {
+            key = grouping.getKey?.(moduleEv) ?? "";
+        } catch (ex) {
+            logger.warn("Message grouping failed to determine key", ex);
+            key = moduleEv.eventId;
+        }
+
+        return {
+            renderer,
+            key,
+            summarize: (events) => {
+                const moduleEvents = events.map(getModuleMatrixEvent);
+                if (!moduleEvents.every((event): event is ModuleMatrixEvent => event !== null)) return null;
+                try {
+                    const summary = grouping.getSummary(moduleEvents);
+                    return typeof summary === "string" && summary.trim() ? summary : null;
+                } catch (ex) {
+                    logger.warn("Message grouping failed to generate summary", ex);
+                    return null;
+                }
+            },
+        };
     }
 
     private _roomPreviewBarRenderer?: CustomRoomPreviewBarRenderFunction;
