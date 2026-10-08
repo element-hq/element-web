@@ -15,7 +15,7 @@ import userEvent from "@testing-library/user-event";
 import { createTestClient, withClientContextRenderOptions } from "test-utils";
 import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
-import { ChangeRecoveryKey } from "./ChangeRecoveryKey";
+import { ChangeRecoveryKey, ChangeRecoveryKeyBody } from "./ChangeRecoveryKey";
 import Modal from "../../../../Modal";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import { DeviceListener } from "../../../../device-listener";
@@ -294,5 +294,16 @@ describe("<ChangeRecoveryKey />", () => {
             expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery", { enabled: true });
             expect(onFinish).toHaveBeenCalledWith();
         });
+    });
+});
+
+describe("<ChangeRecoveryKeyBody />", () => {
+    it("should not display the settings breadcrumb", async () => {
+        render(
+            <ChangeRecoveryKeyBody userHasRecoveryKey={true} onFinish={vi.fn()} onCancelClick={vi.fn()} />,
+            withClientContextRenderOptions(createTestClient()),
+        );
+        await waitFor(() => expect(screen.getByText("Change recovery key?")).toBeInTheDocument());
+        expect(screen.queryByRole("button", { name: "Back" })).not.toBeInTheDocument();
     });
 });
