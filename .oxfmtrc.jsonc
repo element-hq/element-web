@@ -43,7 +43,7 @@
         // Downloaded and already minified,
         "/apps/web/res/jitsi_external_api.min.js",
         // This file is also machine-generated,
-        "/apps/web/playwright/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json",
+        "/apps/web/playwright/e2e/crypto/test_legacy_indexeddb_cryptostore_dump/dump.json",
         "/apps/web/playwright/test-results/",
         "/apps/web/playwright/html-report/",
         "/apps/web/playwright/logs/",

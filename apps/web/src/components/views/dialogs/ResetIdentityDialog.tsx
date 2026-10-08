@@ -25,6 +25,13 @@ interface ResetIdentityDialogProps {
     onReset: () => void;
 
     /**
+     * When `variant` is `no_verification_method`, this function must be
+     * supplied. It will be called when the user clicks "Sign out", which
+     * replaces the cancel button in this variant.
+     */
+    onSignOut?: () => void;
+
+    /**
      * Which variant of this dialog to show.
      */
     variant: ResetIdentityBodyVariant;
@@ -33,7 +40,12 @@ interface ResetIdentityDialogProps {
 /**
  * The dialog for resetting the identity of the current user.
  */
-export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdentityDialogProps): JSX.Element {
+export function ResetIdentityDialog({
+    onFinished,
+    onReset,
+    onSignOut,
+    variant,
+}: ResetIdentityDialogProps): JSX.Element {
     const matrixClient = MatrixClientPeg.safeGet();
 
     const onResetWrapper: () => void = () => {
@@ -41,9 +53,25 @@ export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdent
         // Close the dialog
         onFinished();
     };
+
+    const onCancelOrSignOut: () => void = () => {
+        // Normally, the cancel button will just close the dialog, but if there
+        // are no other viable verification methods, the only sensible option
+        // other than a reset is for the user to give up and sign out.
+        //
+        // If we are in `no_verification_method` mode, then we should have been
+        // supplied `onSignOut` but if that didn't happen for some reason, just
+        // close the dialog as normal.
+        if (onSignOut && variant === "no_verification_method") {
+            onSignOut();
+        } else {
+            onFinished();
+        }
+    };
+
     return (
         <MatrixClientContext.Provider value={matrixClient}>
-            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onFinished} variant={variant} />
+            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onCancelOrSignOut} variant={variant} />
         </MatrixClientContext.Provider>
     );
 }

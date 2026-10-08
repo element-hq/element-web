@@ -25,7 +25,7 @@ interface ResetIdentityBodyProps {
     onReset: () => void;
 
     /**
-     * Called when the cancel button is clicked.
+     * Called when the "Go back" or "Sign out" button is clicked.
      */
     onCancelClick: () => void;
 
@@ -51,7 +51,8 @@ interface ResetIdentityBodyProps {
  *
  * "no_verification_method" is shown when the device is unverified and has no way of
  * obtaining the existing keys, and hence the identity needs to be reset to have
- * a cross-signed device.
+ * a cross-signed device. When this variant is used, a "Sign out" button is displayed
+ * instead of the normal cancel ("Go back") button.
  */
 export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm" | "no_verification_method";
 
@@ -111,7 +112,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                     </EncryptionCardEmphasisedContent>
                 ) : (
                     <Button kind="tertiary" onClick={onCancelClick}>
-                        {_t("action|go_back")}
+                        {cancelTextForVariant(variant)}
                     </Button>
                 )}
             </EncryptionCardButtons>
@@ -131,5 +132,17 @@ function titleForVariant(variant: ResetIdentityBodyVariant): string {
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
         case "no_verification_method":
             return _t("settings|encryption|advanced|breadcrumb_title_cant_confirm");
+    }
+}
+
+function cancelTextForVariant(variant: ResetIdentityBodyVariant): string {
+    switch (variant) {
+        case "confirm":
+        case "compromised":
+        case "sync_failed":
+        case "forgot":
+            return _t("action|go_back");
+        case "no_verification_method":
+            return _t("action|sign_out_before_verify");
     }
 }

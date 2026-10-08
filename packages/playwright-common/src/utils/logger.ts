@@ -7,7 +7,16 @@ Please see LICENSE files in the repository root for full details.
 
 import { type BrowserContext, type Page, type TestInfo } from "@playwright/test";
 import { type Readable } from "node:stream";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import stripAnsi from "strip-ansi";
+
+/**
+ * Environment variable which, when set to any non-empty value, captures logs for every test rather than only for
+ * failing ones. Container logs are also written to `<container>.log` in the test's output directory, so they can be
+ * searched and processed after the run, e.g. to find slow homeserver requests.
+ */
+const CAPTURE_LOGS_ENV_VAR = "PLAYWRIGHT_CAPTURE_LOGS";
 
 /**
  * A logger that captures console logs from pages and testcontainers.
@@ -63,16 +72,24 @@ export class Logger {
 
     /**
      * Hook to call when a test finishes.
+     * Attaches the captured logs to the test if it did not pass, or always if `PLAYWRIGHT_CAPTURE_LOGS` is set.
      * @param testInfo - the info about the test that just finished.
      */
     public async onTestFinished(testInfo: TestInfo) {
-        if (testInfo.status !== "passed") {
-            for (const id in this.logs) {
-                if (!this.logs[id]) continue;
-                await testInfo.attach(id, {
-                    body: stripAnsi(this.logs[id]),
-                    contentType: "text/plain",
-                });
+        const captureLogs = !!process.env[CAPTURE_LOGS_ENV_VAR];
+        if (testInfo.status === "passed" && !captureLogs) return;
+
+        for (const id in this.logs) {
+            if (!this.logs[id]) continue;
+            const body = stripAnsi(this.logs[id]);
+
+            if (captureLogs && !id.startsWith("page-")) {
+                const logPath = testInfo.outputPath(`${id}.log`);
+                await mkdir(path.dirname(logPath), { recursive: true });
+                await writeFile(logPath, body);
+                await testInfo.attach(id, { path: logPath, contentType: "text/plain" });
+            } else {
+                await testInfo.attach(id, { body, contentType: "text/plain" });
             }
         }
     }
