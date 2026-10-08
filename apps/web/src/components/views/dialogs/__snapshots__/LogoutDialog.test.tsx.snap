@@ -9,7 +9,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
   />
   <div
     aria-describedby="mx_Dialog_content"
-    aria-labelledby="mx_BaseDialog_title"
+    aria-label="Remove this device"
     class="mx_LogoutDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
@@ -162,7 +162,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
   />
   <div
     aria-describedby="mx_Dialog_content"
-    aria-labelledby="mx_BaseDialog_title"
+    aria-label="Remove this device"
     class="mx_LogoutDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
@@ -315,7 +315,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
   />
   <div
     aria-describedby="mx_Dialog_content"
-    aria-labelledby="mx_BaseDialog_title"
+    aria-label="Remove this device"
     class="mx_LogoutDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"

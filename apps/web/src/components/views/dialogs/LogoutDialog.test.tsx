@@ -56,13 +56,6 @@ describe("LogoutDialog", () => {
         expect(rendered.container).toMatchSnapshot();
     });
 
-    it("shows a regular dialog if backups and recovery are working", async () => {
-        mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
-        mockCrypto.isSecretStorageReady.mockResolvedValue(true);
-        const rendered = renderComponent();
-        await expect(rendered.findByText("Are you sure you want to remove this device?")).resolves.toBeVisible();
-    });
-
     it("shows a regular dialog if the user has another verified device", async () => {
         const userId = mockClient.getUserId()!;
         mockCrypto.getUserDeviceInfo.mockResolvedValue(
