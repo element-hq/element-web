@@ -6,7 +6,7 @@
  */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 
 import { useCall, useConnectionState } from "../useCall";
 import { ConnectionState, ElementCall } from "../../models/Call";
@@ -14,6 +14,7 @@ import { useSettingValue } from "../useSettings";
 import { useEventEmitterState } from "../useEventEmitter";
 import { DocumentPipStore, DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 import { type LocalRoom } from "../../models/LocalRoom";
+import { SDKContext } from "../../contexts/SDKContext";
 
 /**
  * Whether, and how, the room's call can be shown in a browser Document Picture-in-Picture window.
@@ -31,14 +32,11 @@ export const useDocumentPip = (
     /** Moves the call into the window, or brings it back. Must be called from a user gesture. */
     toggle: () => void;
 } => {
+    const { documentPipStore } = useContext(SDKContext);
     const call = useCall(room.roomId);
     const connected = useConnectionState(call) === ConnectionState.Connected;
     const reactComponent = useSettingValue("feature_element_call_react");
-    const shownCall = useEventEmitterState(
-        DocumentPipStore.instance,
-        DocumentPipStoreEvent.Update,
-        () => DocumentPipStore.instance.call,
-    );
+    const shownCall = useEventEmitterState(documentPipStore, DocumentPipStoreEvent.Update, () => documentPipStore.call);
 
     const elementCall = call instanceof ElementCall ? call : null;
     const active = elementCall !== null && shownCall === elementCall;
@@ -46,9 +44,9 @@ export const useDocumentPip = (
 
     const toggle = useCallback((): void => {
         if (elementCall === null) return;
-        if (active) DocumentPipStore.instance.close();
-        else void DocumentPipStore.instance.open(elementCall);
-    }, [elementCall, active]);
+        if (active) documentPipStore.close();
+        else void documentPipStore.open(elementCall);
+    }, [documentPipStore, elementCall, active]);
 
     return { available, active, toggle };
 };

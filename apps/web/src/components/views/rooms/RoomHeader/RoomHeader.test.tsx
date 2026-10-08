@@ -496,7 +496,7 @@ describe("RoomHeader", () => {
             it("offers a browser Picture-in-Picture window for the React component", async () => {
                 const user = userEvent.setup();
                 await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
-                const open = vi.spyOn(DocumentPipStore.instance, "open").mockResolvedValue();
+                const open = vi.spyOn(SDKContextClass.instance.documentPipStore, "open").mockResolvedValue();
                 render(<RoomHeader room={room} />, getWrapper());
 
                 const button = screen.getByRole("button", { name: "Open call in a floating window" });
@@ -509,8 +509,8 @@ describe("RoomHeader", () => {
                 const user = userEvent.setup();
                 await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
                 const call = CallStore.instance.getCall(ROOM_ID) as ElementCall;
-                vi.spyOn(DocumentPipStore.instance, "call", "get").mockReturnValue(call);
-                const close = vi.spyOn(DocumentPipStore.instance, "close").mockImplementation(() => {});
+                vi.spyOn(SDKContextClass.instance.documentPipStore, "call", "get").mockReturnValue(call);
+                const close = vi.spyOn(SDKContextClass.instance.documentPipStore, "close").mockImplementation(() => {});
                 render(<RoomHeader room={room} />, getWrapper());
 
                 await user.click(screen.getByRole("button", { name: "Bring call back into this window" }));

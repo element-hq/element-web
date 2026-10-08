@@ -11,7 +11,7 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type Call, CallEvent, ConnectionState, type ElementCall } from "../models/Call";
 import PersistedElement, { getPersistKey } from "../components/views/elements/PersistedElement";
 import WidgetUtils from "../utils/WidgetUtils";
-import { SDKContextClass } from "../contexts/SDKContextClass";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import { UPDATE_EVENT } from "./AsyncStore";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -52,15 +52,12 @@ interface Shown {
  * it were moved. While a call is in the window, Element Web's floating PiP does not show it as well.
  *
  * Chromium only for now (`window.documentPictureInPicture`); see `isSupported`.
+ *
+ * Constructed once by `SDKContextClass`; reach it through the SDK context rather than a global.
  */
 export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, EventHandlerMap> {
-    private static internalInstance?: DocumentPipStore;
-
-    public static get instance(): DocumentPipStore {
-        if (!DocumentPipStore.internalInstance) {
-            DocumentPipStore.internalInstance = new DocumentPipStore();
-        }
-        return DocumentPipStore.internalInstance;
+    public constructor(private readonly sdkContext: SDKContextClass) {
+        super();
     }
 
     /** Whether this browser has the Document Picture-in-Picture API. */
@@ -114,7 +111,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
             return;
         }
 
-        const roomViewStore = SDKContextClass.instance.roomViewStore;
+        const roomViewStore = this.sdkContext.roomViewStore;
         const fromPipView = !(roomViewStore.isViewingCall() && roomViewStore.getRoomId() === call.roomId);
 
         prepareDocument(pipWindow.document);
@@ -158,7 +155,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
 
     private onRoomViewChanged = (): void => {
         // The user wants the call in the room view again
-        const roomViewStore = SDKContextClass.instance.roomViewStore;
+        const roomViewStore = this.sdkContext.roomViewStore;
         if (this.shown && roomViewStore.isViewingCall() && roomViewStore.getRoomId() === this.shown.call.roomId) {
             this.close();
         }
@@ -170,7 +167,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         this.shown = null;
         shown.pipWindow.removeEventListener("pagehide", this.onWindowClosed);
         shown.call.off(CallEvent.ConnectionState, this.onConnectionState);
-        const roomViewStore = SDKContextClass.instance.roomViewStore;
+        const roomViewStore = this.sdkContext.roomViewStore;
         roomViewStore.off(UPDATE_EVENT, this.onRoomViewChanged);
         PersistedElement.reattach(shown.persistKey);
         this.emit(DocumentPipStoreEvent.Update);

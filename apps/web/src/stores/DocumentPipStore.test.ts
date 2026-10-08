@@ -14,7 +14,8 @@ import { DocumentPipStore, DocumentPipStoreEvent } from "./DocumentPipStore";
 import PersistedElement, { getPersistKey } from "../components/views/elements/PersistedElement";
 import { CallEvent, ConnectionState, type ElementCall } from "../models/Call";
 import WidgetUtils from "../utils/WidgetUtils";
-import { SDKContextClass } from "../contexts/SDKContextClass";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
+import { type RoomViewStore } from "./RoomViewStore";
 import { UPDATE_EVENT } from "./AsyncStore";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -25,10 +26,16 @@ describe("DocumentPipStore", () => {
     let persistKey: string;
     let pipWindow: Window & { emitPageHide: () => void };
     let requestWindow: ReturnType<typeof vi.fn>;
-
-    const store = (): DocumentPipStore => DocumentPipStore.instance;
+    let roomViewStore: RoomViewStore & { isViewingCall: ReturnType<typeof vi.fn>; getRoomId: ReturnType<typeof vi.fn> };
+    let store: DocumentPipStore;
 
     beforeEach(() => {
+        roomViewStore = Object.assign(new TypedEventEmitter(), {
+            isViewingCall: vi.fn().mockReturnValue(false),
+            getRoomId: vi.fn().mockReturnValue(roomId),
+        }) as unknown as typeof roomViewStore;
+        store = new DocumentPipStore({ roomViewStore } as unknown as SDKContextClass);
+
         call = Object.assign(new TypedEventEmitter(), {
             widget: { id: "call-widget", roomId, type: "m.call" },
             roomId,
@@ -54,12 +61,10 @@ describe("DocumentPipStore", () => {
         vi.spyOn(PersistedElement, "isMounted").mockReturnValue(true);
         vi.spyOn(PersistedElement, "detach").mockReturnValue(true);
         vi.spyOn(PersistedElement, "reattach").mockImplementation(() => {});
-        vi.spyOn(SDKContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(false);
-        vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
     });
 
     afterEach(() => {
-        store().close();
+        store.close();
         vi.restoreAllMocks();
         // @ts-expect-error deleting the fake API again
         delete window.documentPictureInPicture;
@@ -77,16 +82,16 @@ describe("DocumentPipStore", () => {
         document.head.appendChild(style);
         document.body.className = "cpd-theme-light";
         const onUpdate = vi.fn();
-        store().on(DocumentPipStoreEvent.Update, onUpdate);
+        store.on(DocumentPipStoreEvent.Update, onUpdate);
 
-        await store().open(call);
+        await store.open(call);
 
         expect(requestWindow).toHaveBeenCalledWith({ width: 640, height: 360 });
         expect(PersistedElement.detach).toHaveBeenCalledWith(persistKey, pipWindow.document.body);
-        expect(store().call).toBe(call);
-        expect(store().isShowing(call)).toBe(true);
-        expect(store().isShowingWidget("call-widget", roomId)).toBe(true);
-        expect(store().isShowingWidget("other", roomId)).toBe(false);
+        expect(store.call).toBe(call);
+        expect(store.isShowing(call)).toBe(true);
+        expect(store.isShowingWidget("call-widget", roomId)).toBe(true);
+        expect(store.isShowingWidget("other", roomId)).toBe(false);
         expect(onUpdate).toHaveBeenCalledTimes(1);
         // The window got the page's stylesheets and theme
         const copiedStyles = Array.from(pipWindow.document.head.querySelectorAll("style"), (s) => s.textContent);
@@ -99,16 +104,16 @@ describe("DocumentPipStore", () => {
 
     it("does nothing when the call has nothing rendered", async () => {
         vi.mocked(PersistedElement.isMounted).mockReturnValue(false);
-        await store().open(call);
+        await store.open(call);
         expect(requestWindow).not.toHaveBeenCalled();
-        expect(store().call).toBeNull();
+        expect(store.call).toBeNull();
     });
 
     it("shows the timeline in place of the call view", async () => {
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
+        roomViewStore.isViewingCall.mockReturnValue(true);
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
 
-        await store().open(call);
+        await store.open(call);
 
         expect(dispatch).toHaveBeenCalledWith(
             expect.objectContaining({ action: Action.ViewRoom, room_id: roomId, view_call: false }),
@@ -116,23 +121,23 @@ describe("DocumentPipStore", () => {
     });
 
     it("brings the call back when the window is closed by the user", async () => {
-        await store().open(call);
+        await store.open(call);
         const onUpdate = vi.fn();
-        store().on(DocumentPipStoreEvent.Update, onUpdate);
+        store.on(DocumentPipStoreEvent.Update, onUpdate);
 
         pipWindow.emitPageHide();
 
         expect(PersistedElement.reattach).toHaveBeenCalledWith(persistKey);
-        expect(store().call).toBeNull();
+        expect(store.call).toBeNull();
         expect(onUpdate).toHaveBeenCalledTimes(1);
     });
 
     it("returns a call that filled the room view to it when the window is closed", async () => {
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
+        roomViewStore.isViewingCall.mockReturnValue(true);
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        await store().open(call);
+        await store.open(call);
         // The timeline is showing now
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(false);
+        roomViewStore.isViewingCall.mockReturnValue(false);
         dispatch.mockClear();
 
         pipWindow.emitPageHide();
@@ -144,7 +149,7 @@ describe("DocumentPipStore", () => {
 
     it("leaves a call that was floating in Element Web's PiP there when the window is closed", async () => {
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        await store().open(call);
+        await store.open(call);
 
         pipWindow.emitPageHide();
 
@@ -152,11 +157,11 @@ describe("DocumentPipStore", () => {
     });
 
     it("does not reopen the call view when the user has moved to another room", async () => {
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
+        roomViewStore.isViewingCall.mockReturnValue(true);
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        await store().open(call);
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(false);
-        vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
+        await store.open(call);
+        roomViewStore.isViewingCall.mockReturnValue(false);
+        roomViewStore.getRoomId.mockReturnValue("!other:example.org");
         dispatch.mockClear();
 
         pipWindow.emitPageHide();
@@ -165,10 +170,10 @@ describe("DocumentPipStore", () => {
     });
 
     it("does not reopen the call view for a call that has ended", async () => {
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
+        roomViewStore.isViewingCall.mockReturnValue(true);
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        await store().open(call);
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(false);
+        await store.open(call);
+        roomViewStore.isViewingCall.mockReturnValue(false);
         dispatch.mockClear();
 
         (call as unknown as { connected: boolean }).connected = false;
@@ -179,41 +184,41 @@ describe("DocumentPipStore", () => {
     });
 
     it("closes the window when asked to, once", async () => {
-        await store().open(call);
-        store().close();
-        store().close();
+        await store.open(call);
+        store.close();
+        store.close();
 
         expect(pipWindow.close).toHaveBeenCalledTimes(1);
         expect(PersistedElement.reattach).toHaveBeenCalledTimes(1);
-        expect(store().call).toBeNull();
+        expect(store.call).toBeNull();
     });
 
     it("closes the window when the call disconnects", async () => {
-        await store().open(call);
+        await store.open(call);
         call.emit(CallEvent.ConnectionState, ConnectionState.Disconnected, ConnectionState.Connected);
 
         expect(pipWindow.close).toHaveBeenCalled();
-        expect(store().call).toBeNull();
+        expect(store.call).toBeNull();
     });
 
     it("closes the window when the call view is opened again", async () => {
-        await store().open(call);
+        await store.open(call);
 
         // Some other room's view changing is not our business
-        vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
-        vi.mocked(SDKContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
-        SDKContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
-        expect(store().call).toBe(call);
+        roomViewStore.getRoomId.mockReturnValue("!other:example.org");
+        roomViewStore.isViewingCall.mockReturnValue(true);
+        roomViewStore.emit(UPDATE_EVENT);
+        expect(store.call).toBe(call);
 
-        vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
-        SDKContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
+        roomViewStore.getRoomId.mockReturnValue(roomId);
+        roomViewStore.emit(UPDATE_EVENT);
         expect(pipWindow.close).toHaveBeenCalled();
-        expect(store().call).toBeNull();
+        expect(store.call).toBeNull();
     });
 
     it("focuses the window when the same call is opened twice", async () => {
-        await store().open(call);
-        await store().open(call);
+        await store.open(call);
+        await store.open(call);
 
         expect(requestWindow).toHaveBeenCalledTimes(1);
         expect(pipWindow.focus).toHaveBeenCalled();

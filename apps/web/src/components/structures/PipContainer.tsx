@@ -23,7 +23,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPipViewModel";
 import { SDKContext } from "../../contexts/SDKContext.ts";
-import { DocumentPipStore, DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
+import { DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -93,7 +93,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
-        DocumentPipStore.instance.on(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
+        this.context.documentPipStore.on(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     public componentWillUnmount(): void {
@@ -108,7 +108,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
-        DocumentPipStore.instance.off(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
+        this.context.documentPipStore.off(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     /**
@@ -231,7 +231,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         if (persistentWidgetId && persistentRoomId && this.context.client?.getRoom(persistentRoomId)) {
             notDocked = !ActiveWidgetStore.instance.isDocked(persistentWidgetId, persistentRoomId);
             fromAnotherRoom = this.state.viewedRoomId !== persistentRoomId;
-            inDocumentPip = DocumentPipStore.instance.isShowingWidget(persistentWidgetId, persistentRoomId);
+            inDocumentPip = this.context.documentPipStore.isShowingWidget(persistentWidgetId, persistentRoomId);
         }
 
         // The widget should only be shown as a persistent app (in a floating

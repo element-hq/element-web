@@ -40,7 +40,7 @@ import { CallStore } from "../../stores/CallStore";
 import { WidgetMessagingStore } from "../../stores/widgets/WidgetMessagingStore";
 import { PipContainer as UnwrappedPipContainer } from "./PipContainer";
 import ActiveWidgetStore from "../../stores/ActiveWidgetStore";
-import { DocumentPipStore, DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
+import { DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -217,7 +217,7 @@ describe("PipContainer", () => {
     });
 
     it("does not show a widget that is in a browser Picture-in-Picture window", async () => {
-        const isShowingWidget = vi.spyOn(DocumentPipStore.instance, "isShowingWidget").mockReturnValue(true);
+        const isShowingWidget = vi.spyOn(sdkContext.documentPipStore, "isShowingWidget").mockReturnValue(true);
         viewRoom(room.roomId);
         await withCall(async () => {
             renderPip();
@@ -225,7 +225,7 @@ describe("PipContainer", () => {
 
             // Closing the window hands the widget back to the floating PiP
             isShowingWidget.mockReturnValue(false);
-            act(() => DocumentPipStore.instance.emit(DocumentPipStoreEvent.Update));
+            act(() => sdkContext.documentPipStore.emit(DocumentPipStoreEvent.Update));
             await screen.findByTestId("widget-pip-container");
         });
     });
