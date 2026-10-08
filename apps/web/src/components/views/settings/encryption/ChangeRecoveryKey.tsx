@@ -26,6 +26,7 @@ import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
+import Spinner from "../../elements/Spinner";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration.ts";
@@ -128,7 +129,7 @@ export function ChangeRecoveryKeyBody({
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
     // Waiting for the recovery key to be generated
-    if (!recoveryKey) return null;
+    if (!recoveryKey) return <Spinner />;
 
     let content: JSX.Element;
     switch (state) {

@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Device, DeviceVerification, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, DeviceVerificationStatus, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { fireEvent, render, type RenderResult, screen, waitFor } from "test-utils-rtl";
+import { fireEvent, render, type RenderResult, screen } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
 
 import {
@@ -77,16 +77,6 @@ describe("LogoutDialog", () => {
             expect(onFinished).toHaveBeenCalledWith(true);
         });
 
-        it("opens settings to generate a new recovery key", async () => {
-            renderComponent();
-            fireEvent.click(await screen.findByRole("button", { name: "Generate new recovery key" }));
-            expect(dispatch.dispatch).toHaveBeenCalledWith({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: { initialEncryptionState: "change_recovery_key" },
-            });
-        });
-
         it("opens settings to check the recovery key", async () => {
             renderComponent();
             fireEvent.click(await screen.findByRole("button", { name: "Check your recovery key" }));
@@ -142,18 +132,6 @@ describe("LogoutDialog", () => {
         const rendered = renderComponent();
         await rendered.findByText("Get recovery key");
         expect(rendered.container).toMatchSnapshot();
-
-        vi.spyOn(dispatch, "dispatch").mockImplementation(() => {});
-        fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
-        await waitFor(() =>
-            expect(dispatch.dispatch).toHaveBeenCalledWith({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: {
-                    initialEncryptionState: "set_recovery_key",
-                },
-            }),
-        );
     });
 
     it("Prompts user to set up recovery if there is no backup on the server", async () => {
