@@ -465,11 +465,13 @@ describe("RoomHeader", () => {
                     }),
                 );
 
-            beforeEach(() => {
+            beforeEach(async () => {
                 mockRoomMembers(room, 3);
                 vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
                 vi.spyOn(CallStore.instance, "getCall").mockReturnValue(connectedElementCall());
                 vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(true);
+                // The widget transport by default; the setting persists across tests, so set it explicitly
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, false);
             });
 
             it("offers minimising into PiP instead of starting a call", async () => {
@@ -480,7 +482,6 @@ describe("RoomHeader", () => {
                 expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
                 expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
                 const minimise = screen.getByRole("button", { name: "Minimise call" });
-                expect(minimise).toBe(screen.getByTestId("call-pip-button"));
 
                 const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
                 await user.click(minimise);
@@ -517,11 +518,21 @@ describe("RoomHeader", () => {
                 expect(close).toHaveBeenCalled();
             });
 
+            it("offers only the browser window for the React component", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                mockRoomViewStore.isViewingCall.mockReturnValue(true);
+                render(<RoomHeader room={room} />, getWrapper());
+                // Element Web's own PiP is not offered where the browser's is
+                expect(screen.getByTestId("document-pip-button")).toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Minimise call" })).not.toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Maximise call" })).not.toBeInTheDocument();
+            });
+
             it("does not offer the browser window for the widget transport", async () => {
                 await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, false);
                 render(<RoomHeader room={room} />, getWrapper());
                 expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
-                expect(screen.getByTestId("call-pip-button")).toBeInTheDocument();
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
             });
 
             it("does not offer the browser window without browser support", async () => {
@@ -529,6 +540,7 @@ describe("RoomHeader", () => {
                 vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(false);
                 render(<RoomHeader room={room} />, getWrapper());
                 expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
             });
         });
 

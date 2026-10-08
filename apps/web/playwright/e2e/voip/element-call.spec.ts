@@ -587,14 +587,18 @@ test.describe("Element Call", () => {
                     const header = page.locator(".mx_RoomHeader");
 
                     await openAndJoinCall(page);
-                    // In a call there is nothing to start, so the call buttons make way for minimising. The
-                    // pop-out button is only offered for the React embedding, and only where the browser
-                    // has the Document Picture-in-Picture API; screenshots are taken on Chrome, which does.
-                    await expect(header.getByRole("button", { name: "Minimise call" })).toBeVisible();
+                    // In a call there is nothing to start, so the call buttons make way for taking the call
+                    // out of the room view. The React embedding offers only the browser's own
+                    // Picture-in-Picture window (screenshots are taken on Chrome, which has the API); the
+                    // widget embedding offers only minimising into Element Web's floating PiP.
                     await expect(header.getByRole("button", { name: "Video call" })).toHaveCount(0);
                     await expect(header.getByRole("button", { name: "Voice call" })).toHaveCount(0);
                     await expect(header.getByTestId("document-pip-button")).toHaveCount(embedding === "react" ? 1 : 0);
+                    await expect(header.getByRole("button", { name: "Minimise call" })).toHaveCount(
+                        embedding === "widget" ? 1 : 0,
+                    );
                     await expect(header).toMatchScreenshot(`room-header-in-call-${embedding}.png`);
+                    if (embedding === "react") return;
 
                     // Minimised into Element Web's own PiP, the same button offers the way back
                     await header.getByRole("button", { name: "Minimise call" }).click();
@@ -856,8 +860,7 @@ test.describe("Element Call", () => {
             await mock.getByRole("button", { name: "notifyJoined" }).click();
             await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
 
-            // In a call: the two PiP buttons, and no button to start another call
-            await expect(page.getByRole("button", { name: "Minimise call" })).toBeVisible();
+            // In a call: the browser PiP button, and no button to start another call
             const documentPip = page.getByTestId("document-pip-button");
             await expect(documentPip).toBeVisible();
             await expect(page.getByRole("button", { name: "Video call" })).toHaveCount(0);
@@ -882,19 +885,7 @@ test.describe("Element Call", () => {
             await page.evaluate(() => window.documentPictureInPicture!.window!.close());
             await expect(mock).toBeVisible();
             await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
-            await expect(page.getByRole("button", { name: "Minimise call" })).toBeVisible();
             await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
-
-            // Whereas a call that was floating in Element Web's own PiP goes back there
-            await page.getByRole("button", { name: "Minimise call" }).click();
-            await expect(page.getByTestId("widget-pip-container")).toBeVisible();
-            await documentPip.click();
-            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
-            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
-            await page.evaluate(() => window.documentPictureInPicture!.window!.close());
-            await expect(mock).toBeVisible();
-            await expect(page.getByTestId("widget-pip-container")).toBeVisible();
-            await expect(page.getByRole("button", { name: "Maximise call" })).toBeVisible();
         });
     });
 
