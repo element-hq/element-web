@@ -263,6 +263,7 @@ export class MessageBuilder {
         const roomId = await room.evaluate((room) => room.roomId);
         const foundMessageId = await foundMessage.evaluate((ev) => ev.getId());
         await this.page.goto(`/#/room/${roomId}/${foundMessageId}`);
+        await this.helpers.assertRoomShown(roomRef.name);
     }
 
     async sendThreadedReadReceipt(room: JSHandle<Room>, targetMessage: string) {
@@ -372,7 +373,17 @@ class Helpers {
      * Open the room with the supplied name.
      */
     async goTo(room: RoomRef) {
-        await this.app.viewRoomByName(typeof room === "string" ? room : room.name);
+        const name = typeof room === "string" ? room : room.name;
+        await this.app.viewRoomByName(name);
+        // Wait for the room to be shown, so that a navigation straight after this one does not race with it
+        await this.assertRoomShown(name);
+    }
+
+    /**
+     * Assert that the room with the supplied name is the one being viewed.
+     */
+    async assertRoomShown(name: string) {
+        await expect(this.page.locator(".mx_RoomHeader").getByRole("heading", { level: 1 })).toHaveText(name);
     }
 
     /**

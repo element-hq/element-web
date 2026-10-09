@@ -25,6 +25,16 @@ describe("parseQsFromFragment", () => {
             }),
         });
     });
+
+    it("should leave a malformed percent-encoding as it is", () => {
+        location.hash = "#/room/%E0%A4%A?foo=bar";
+        expect(parseQsFromFragment(location)).toEqual({
+            location: "/room/%E0%A4%A",
+            params: new URLSearchParams({
+                foo: "bar",
+            }),
+        });
+    });
 });
 
 describe("searchParamsToQueryDict", () => {
