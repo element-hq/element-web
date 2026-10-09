@@ -98,6 +98,7 @@
         "revoke": "Återkalla",
         "save": "Spara",
         "search": "Sök",
+        "select_to_copy": "Markera för att kopiera",
         "send_report": "Skicka anmälan",
         "set_avatar": "Ställ in profilbild",
         "share": "Dela",
@@ -1530,6 +1531,8 @@
         "extended_profiles_msc_support": "Kräver att din server har stöd för MSC4133",
         "feature_disable_call_per_sender_encryption": "Inaktivera kryptering per avsändare för Element Call",
         "feature_element_call_react": "Anropa Render Element som en React-komponent istället för en widget",
+        "feature_matrixrtc_slots": "Kräver lediga MatrixRTC-slots för Element Call-samtal",
+        "feature_matrixrtc_slots_description": "Tillåter endast att starta eller ansluta till Element Call-samtal med en giltig slot händelse i rummet.",
         "feature_retention": {
             "description": "Ta automatiskt bort messages från en rum när de har nått en angiven lagringstid. För närvarande stöds endast läsinställningar.",
             "disabled_sliding_sync": "Lagringsregler kan inte aktiveras när Sliding Sync är aktiverat.",
@@ -1703,7 +1706,6 @@
     },
     "member_list_back_action_label": "Rumsmedlemmar",
     "message_edit_dialog_title": "Meddelanderedigeringar",
-    "migrating_crypto": "Häng kvar. Vi håller på att uppdatera%(brand)s för att göra kryptering snabbare och mer tillförlitlig.",
     "mobile_guide": {
         "toast_accept": "Använd app",
         "toast_description": "%(brand)s är experimentell i mobila webbläsare. För en bättre upplevelse och de senaste funktionerna använd våran nativa app.",
@@ -3451,14 +3453,14 @@
                 "other": "%(senderName)s har lagt till den alternativa adressen %(addresses)s för den här chatten."
             },
             "alt_removed": {
-                "other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet.",
-                "one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet."
+                "one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet.",
+                "other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet."
             },
-            "changed": "%(senderName)s ändrade adresserna för det här rummet.",
-            "changed_alternative": "%(senderName)s ändrade de alternativa adresserna för det här rummet.",
-            "changed_main_and_alternative": "%(senderName)s ändrade huvudadressen och de alternativa adresserna för det här rummet.",
-            "removed": "%(senderName)s tog bort huvudadressen för detta rum.",
-            "set": "%(senderName)s satte huvudadressen för detta rum till %(address)s."
+            "changed": "%(senderName)s har ändrat adresserna för den här chatten.",
+            "changed_alternative": "%(senderName)s har ändrat de alternativa adresserna för den här chatten.",
+            "changed_main_and_alternative": "%(senderName)s har ändrat huvudadressen och den alternativa adressen för den här chatten.",
+            "removed": "%(senderName)s tog bort huvudadressen för denna chatt.",
+            "set": "%(senderName)s angav huvudadressen för den här chatten till %(address)s."
         },
         "m.room.create": {
             "continuation": "Detta rum är en fortsättning på en annan konversation.",
@@ -3945,6 +3947,7 @@
         "camera_enabled": "Din kamera är fortfarande på",
         "cannot_call_yourself_description": "Du kan inte ringa till dig själv.",
         "close_lobby": "Stäng lobbyn",
+        "close_slot_failed_title": "Det gick inte att inaktivera samtal för det här rummet",
         "connecting": "Ansluter",
         "connection_lost": "Anslutningen till servern har förlorats",
         "connection_lost_description": "Du kan inte ringa samtal utan en anslutning till servern.",
@@ -3999,6 +4002,7 @@
         "no_permission_conference": "Behörighet krävs",
         "no_permission_conference_description": "Du har inte behörighet att starta ett gruppsamtal i detta rum",
         "on_hold": "%(name)s parkerad",
+        "open_slot_failed_title": "Det gick inte att aktivera samtal för det här rummet",
         "output_devices": "Utgångsenheter",
         "screenshare_monitor": "Dela hela skärmen",
         "screenshare_title": "Dela innehåll",

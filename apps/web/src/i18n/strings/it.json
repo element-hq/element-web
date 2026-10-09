@@ -1369,7 +1369,6 @@
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
-    "migrating_crypto": "Tieni duro. Stiamo aggiornando %(brand)s per rendere la crittografia più veloce e affidabile.",
     "mobile_guide": {
         "toast_accept": "Usa l'app",
         "toast_description": "%(brand)s è sperimentale su un browser web mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",

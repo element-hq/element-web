@@ -73,6 +73,9 @@
         },
         "toggle_event": "Source de l'événement"
     },
+    "document_viewer": {
+        "error_load": "Impossible de charger ce fichier."
+    },
     "emoji": {
         "categories": "Catégories",
         "category_activities": "Activités",
@@ -143,6 +146,7 @@
         "knock_sent": "Demande d’accès envoyée",
         "pinned_message_badge": "Message épinglé",
         "status_bar": {
+            "contact_account_provider": "Contacter le fournisseur de compte",
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit_description": "Veuillez contacter votre administrateur pour continuer à utiliser le service.",
             "exceeded_resource_limit_title": "Votre message n'a pas pu être envoyé car ce service a dépassé sa limite de ressources.",
@@ -342,7 +346,7 @@
             "error_invalid": "Fichier invalide"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s a changé l'avatar de la discussion en <img/>",
+            "changed_img": "%(senderDisplayName)s a changé l'avatar du salon pour <img/>",
             "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
         },
         "m.room.encryption": {

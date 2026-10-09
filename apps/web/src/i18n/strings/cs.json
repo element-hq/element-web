@@ -1655,7 +1655,6 @@
     },
     "member_list_back_action_label": "Členové místnosti",
     "message_edit_dialog_title": "Úpravy zpráv",
-    "migrating_crypto": "Vydržte. Aktualizujeme %(brand)s, aby bylo šifrování rychlejší a spolehlivější.",
     "mobile_guide": {
         "toast_accept": "Použijte aplikaci",
         "toast_description": "%(brand)s je experimentální v mobilním webovém prohlížeči. Chcete-li získat lepší zážitek a nejnovější funkce, použijte naši bezplatnou nativní aplikaci.",
