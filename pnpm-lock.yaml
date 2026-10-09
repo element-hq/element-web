@@ -281,7 +281,6 @@ catalogs:
       version: 6.0.2
 
 overrides:
-  livekit-client: ^2.22.2
   pretty-format@30>react-is: 19.3.0
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
