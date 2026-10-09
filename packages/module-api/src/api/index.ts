@@ -25,6 +25,7 @@ import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 import { type UrlPreviewApi } from "./urlpreview.ts";
+import { type FileViewerApi } from "./file-viewer.ts";
 import { type X509Api } from "./x509.ts";
 
 /**
@@ -184,6 +185,12 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
      * @alpha Subject to change.
      */
     readonly urlPreviews: UrlPreviewApi;
+
+    /**
+     * Register new file viewer
+     * @alpha Subject to change.
+     */
+    readonly fileViewer: FileViewerApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

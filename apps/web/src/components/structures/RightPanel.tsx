@@ -35,6 +35,7 @@ import { DocumentViewerCard } from "../views/right_panel/DocumentViewerCard";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import { FileViewerCard } from "../views/right_panel/FileViewerCard";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -282,6 +283,18 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.DocumentViewer:
                 if (!!cardState?.documentViewerEvent) {
                     card = <DocumentViewerCard mxEvent={cardState.documentViewerEvent} onClose={this.onClose} />;
+                }
+                break;
+
+            case RightPanelPhases.FileViewer:
+                if (!!cardState?.fileViewer && !!cardState.fileViewerMedia && !!cardState.fileViewerSourceEvent) {
+                    card = (
+                        <FileViewerCard
+                            viewer={cardState.fileViewer}
+                            media={cardState.fileViewerMedia}
+                            onClose={this.onClose}
+                        ></FileViewerCard>
+                    );
                 }
                 break;
         }
