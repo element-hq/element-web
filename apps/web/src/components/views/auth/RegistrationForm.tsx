@@ -10,8 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 
-import * as Email from "../../../email";
 import { looksValid as phoneNumberLooksValid, type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import Modal from "../../../Modal";
 import { _t, _td } from "../../../languageHandler";
@@ -260,7 +260,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             },
             {
                 key: "email",
-                test: ({ value }) => !value || Email.looksValid(value),
+                test: ({ value }) => !value || emailLooksValid(value),
                 invalid: () => _t("auth|email_field_label_invalid"),
             },
         ],

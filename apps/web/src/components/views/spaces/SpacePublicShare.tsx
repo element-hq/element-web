@@ -10,9 +10,9 @@ import React, { useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LinkIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../languageHandler";
-import { copyPlaintext } from "../../../utils/strings";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { showRoomInviteDialog } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -37,7 +37,7 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                 onClick={async (): Promise<void> => {
                     const permalinkCreator = new RoomPermalinkCreator(space);
                     permalinkCreator.load();
-                    const success = await copyPlaintext(permalinkCreator.forShareableRoom());
+                    const success = await copyPlainTextToClipboard(permalinkCreator.forShareableRoom());
                     const text = success ? _t("common|copied") : _t("error|failed_copy");
                     setCopiedText(text);
                     await sleep(5000);

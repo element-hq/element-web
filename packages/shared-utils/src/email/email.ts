@@ -14,7 +14,13 @@ const EMAIL_ADDRESS_REGEX = new RegExp(
     "i",
 );
 
-export function looksValid(email: string): boolean {
+/**
+ * Checks whether a string looks like a valid email address.
+ *
+ * @param email - The string to check.
+ * @returns True if the string matches the email address syntax, false otherwise.
+ */
+export function emailLooksValid(email: string): boolean {
     // short circuit regex with this basic check
     if (email.indexOf("@") < 1) return false;
 

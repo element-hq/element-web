@@ -728,8 +728,8 @@ importers:
         specifier: ^1.6.3
         version: 1.6.4
       sanitize-html:
-        specifier: 2.17.7
-        version: 2.17.7
+        specifier: 2.18.0
+        version: 2.18.0
       tar-js:
         specifier: ^0.3.0
         version: 0.3.0
@@ -1567,8 +1567,8 @@ importers:
   packages/shared-utils:
     dependencies:
       sanitize-html:
-        specifier: 2.17.7
-        version: 2.17.7
+        specifier: 2.18.0
+        version: 2.18.0
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ^7.56.0
@@ -1582,6 +1582,9 @@ importers:
       '@typescript/native':
         specifier: 'catalog:'
         version: typescript@7.0.2
+      happy-dom:
+        specifier: ^20.10.2
+        version: 20.14.5
       typescript:
         specifier: catalog:ts6
         version: '@typescript/typescript6@6.0.2'
@@ -7971,8 +7974,8 @@ packages:
   date-names@0.1.13:
     resolution: {integrity: sha512-IxxoeD9tdx8pXVcmqaRlPvrXIsSrSrIZzfzlOkm9u+hyzKp5Wk/odt9O/gd7Ockzy8n/WHeEpTVJ2bF3mMV4LA==}
 
-  dayjs@1.11.21:
-    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   debounce-fn@6.0.0:
     resolution: {integrity: sha512-rBMW+F2TXryBwB54Q0d8drNEI+TfoS9JpNTAoVpukbWEhjXQq4rySFYLaqXMFXwdv61Zb2OHtj5bviSoimqxRQ==}
@@ -9538,8 +9541,8 @@ packages:
   launch-editor@2.14.1:
     resolution: {integrity: sha512-QWBrQsMpH7gPr965dsKD/3cKWiNoTjpATQf++Xq63N6sKRGMwlVXz41O1IZTMfZQgBctD/K5Zt06+/I6pP6+HA==}
 
-  launder@1.7.1:
-    resolution: {integrity: sha512-mU6WRz5EusL9ZZuiZ5SO4Y6C0P9PAUR9iwdb6bzj4KDihm28DiHFw+/yk9DBH4f+Pv1wuzQ4e2jV3oQ7mkIqvw==}
+  launder@1.7.2:
+    resolution: {integrity: sha512-DLg3HPnHUfBi5/MxMLmJD12dmlMpFEC2HgMW6vkZ/9JR0RU00kXoRGvDxAvFmdO0o610OA77i4FgNTLucmhDVg==}
 
   layout-base@1.0.2:
     resolution: {integrity: sha512-8h2oVEZNktL4BH2JCOI90iD1yXwL6iNW7KcCKT2QZgQJR2vbqDsldCTPRU9NifTCqHZci57XvQQ15YTu+sTYPg==}
@@ -11579,8 +11582,8 @@ packages:
   sanitize-filename@1.6.4:
     resolution: {integrity: sha512-9ZyI08PsvdQl2r/bBIGubpVdR3RR9sY6RDiWFPreA21C/EFlQhmgo20UZlNjZMMZNubusLhAQozkA0Od5J21Eg==}
 
-  sanitize-html@2.17.7:
-    resolution: {integrity: sha512-PGtEkc9cbnedU3s9TmzDbpsZ8w086g/0Q8k8/oIO1NLNU3i5k9yn835CrjJSajp1KMmkisbO1qPXxNKO3welAg==}
+  sanitize-html@2.18.0:
+    resolution: {integrity: sha512-CvY+PV+NBhxe3BnjFI5f//vEDKLULm9OlZArso7gdgVsWvanBuq9PNDx+/2llfL+8XFYa/UNBxvqRBg3TWU2Ug==}
     engines: {node: '>=22.12.0'}
 
   sax@1.6.0:
@@ -20239,7 +20242,7 @@ snapshots:
 
   date-names@0.1.13: {}
 
-  dayjs@1.11.21: {}
+  dayjs@1.11.23: {}
 
   debounce-fn@6.0.0:
     dependencies:
@@ -21955,9 +21958,9 @@ snapshots:
       picocolors: 1.1.1
       shell-quote: 1.9.0
 
-  launder@1.7.1:
+  launder@1.7.2:
     dependencies:
-      dayjs: 1.11.21
+      dayjs: 1.11.23
 
   layout-base@1.0.2: {}
 
@@ -22337,7 +22340,7 @@ snapshots:
       d3: 7.9.0
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.14
-      dayjs: 1.11.21
+      dayjs: 1.11.23
       dompurify: 3.4.13
       elkjs: 0.9.3
       es-toolkit: 1.50.0
@@ -24353,13 +24356,13 @@ snapshots:
     dependencies:
       truncate-utf8-bytes: 1.0.2
 
-  sanitize-html@2.17.7:
+  sanitize-html@2.18.0:
     dependencies:
       deepmerge: 4.3.1
       escape-string-regexp: 4.0.0
       htmlparser2: 12.0.0
       is-plain-object: 5.1.0
-      launder: 1.7.1
+      launder: 1.7.2
       parse-srcset: 1.0.2
       postcss: 8.5.28
 
