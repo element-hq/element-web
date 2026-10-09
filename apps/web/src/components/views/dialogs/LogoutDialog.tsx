@@ -19,9 +19,6 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
 import dis from "../../../dispatcher/dispatcher";
-import { type OpenToTabPayload } from "../../../dispatcher/payloads/OpenToTabPayload";
-import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../../../components/views/dialogs/UserTab";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import QuestionDialog from "./QuestionDialog";
@@ -32,9 +29,8 @@ import { useHasOtherVerifiedDevices } from "../../../hooks/useHasOtherVerifiedDe
 import { EncryptionCard } from "../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../settings/encryption/EncryptionCardEmphasisedContent";
-import { type State as EncryptionState } from "../settings/tabs/user/EncryptionUserSettingsTab";
 import { ChangeRecoveryKeyBody } from "../settings/encryption/ChangeRecoveryKey";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { CheckRecoveryKey } from "../settings/encryption/CheckRecoveryKey";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -55,7 +51,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     const backupStatus = useKeyBackupStatus(client);
     const hasOtherVerifiedDevices = useHasOtherVerifiedDevices(client);
     // Recovery key steps shown inside the dialog, on top of the starting screen
-    const [step, setStep] = useState<"start" | "generate_key" | "key_active">("start");
+    const [step, setStep] = useState<"start" | "generate_key" | "key_active" | "check_key" | "key_checked">("start");
 
     const onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
@@ -71,149 +67,119 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(true);
     };
 
-    // Open the user settings dialog to the encryption tab in the given state
-    const onGoToSettings = (initialEncryptionState: EncryptionState): void => {
-        const payload: OpenToTabPayload = {
-            action: Action.ViewUserSettings,
-            initialTabId: UserTab.Encryption,
-            props: { initialEncryptionState },
-        };
-        dis.dispatch(payload);
-
-        props.onFinished(false);
-    };
-
-    if (step === "generate_key") {
-        return (
-            <BaseDialog
-                contentId="mx_Dialog_content"
-                hasCancel={true}
-                onFinished={onFinished}
-                className="mx_LogoutDialog"
-                aria-label={_t("action|sign_out")}
-            >
-                <MatrixClientContext.Provider value={client}>
-                    <ChangeRecoveryKeyBody
-                        userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
-                        skipIntroduction={true}
-                        className="mx_EncryptionCard_noBorder"
-                        onCancelClick={() => setStep("start")}
-                        onFinish={() => setStep("key_active")}
-                    />
-                </MatrixClientContext.Provider>
-            </BaseDialog>
+    // The card shown in the dialog; the plain confirmation and loading states use their own dialogs
+    let card: JSX.Element;
+    if (step === "check_key") {
+        card = (
+            <CheckRecoveryKey
+                className="mx_EncryptionCard_noBorder"
+                onCancelClick={() => setStep("start")}
+                onFinish={() => setStep("key_checked")}
+            />
         );
-    } else if (step === "key_active") {
-        return (
-            <BaseDialog
-                contentId="mx_Dialog_content"
-                hasCancel={true}
-                onFinished={onFinished}
-                className="mx_LogoutDialog"
-                aria-label={_t("action|sign_out")}
-            >
-                <EncryptionCard
-                    Icon={CheckCircleIcon}
-                    success={true}
-                    title={_t("auth|logout_dialog|key_active_title")}
-                    className="mx_EncryptionCard_noBorder"
-                >
-                    <EncryptionCardEmphasisedContent>
-                        <Text>{_t("auth|logout_dialog|key_active_description")}</Text>
-                    </EncryptionCardEmphasisedContent>
-                    <EncryptionCardButtons>
-                        <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
-                        <Button kind="tertiary" onClick={() => props.onFinished(false)}>
-                            {_t("auth|logout_dialog|back_to_app")}
-                        </Button>
-                    </EncryptionCardButtons>
-                </EncryptionCard>
-            </BaseDialog>
+    } else if (step === "generate_key") {
+        card = (
+            <ChangeRecoveryKeyBody
+                userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
+                skipIntroduction={true}
+                className="mx_EncryptionCard_noBorder"
+                onCancelClick={() => setStep("start")}
+                onFinish={() => setStep("key_active")}
+            />
         );
-    }
-
-    if (hasOtherVerifiedDevices === undefined) {
+    } else if (step === "key_active" || step === "key_checked") {
+        card = (
+            <EncryptionCard
+                Icon={CheckCircleIcon}
+                success={true}
+                title={
+                    step === "key_active"
+                        ? _t("auth|logout_dialog|key_active_title")
+                        : _t("auth|logout_dialog|key_checked_title")
+                }
+                className="mx_EncryptionCard_noBorder"
+            >
+                <EncryptionCardEmphasisedContent>
+                    <Text>{_t("auth|logout_dialog|key_active_description")}</Text>
+                </EncryptionCardEmphasisedContent>
+                <EncryptionCardButtons>
+                    <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
+                    <Button kind="tertiary" onClick={() => props.onFinished(false)}>
+                        {_t("auth|logout_dialog|back_to_app")}
+                    </Button>
+                </EncryptionCardButtons>
+            </EncryptionCard>
+        );
+    } else if (hasOtherVerifiedDevices === undefined) {
         return <Loading onFinished={onFinished} />;
     } else if (hasOtherVerifiedDevices) {
         return <ConfirmLogout onFinished={onFinished} />;
+    } else if (backupStatus === BackupStatus.LOADING) {
+        return <Loading onFinished={onFinished} />;
+    } else if (backupStatus === BackupStatus.NO_CRYPTO) {
+        return <ConfirmLogout onFinished={onFinished} />;
+    } else if (backupStatus === BackupStatus.BACKUP_ACTIVE) {
+        // Only device, but recovery is set up: make sure the user still has their recovery key
+        card = (
+            <EncryptionCard
+                Icon={InfoIcon}
+                title={_t("auth|logout_dialog|check_recovery_key_title")}
+                className="mx_EncryptionCard_noBorder"
+            >
+                <EncryptionCardEmphasisedContent>
+                    <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
+                </EncryptionCardEmphasisedContent>
+                <EncryptionCardButtons>
+                    <Button destructive={true} onClick={onLogoutConfirm} Icon={DeleteIcon}>
+                        {_t("auth|logout_dialog|continue")}
+                    </Button>
+                    <Button kind="secondary" onClick={() => setStep("check_key")}>
+                        {_t("auth|logout_dialog|check_recovery_key")}
+                    </Button>
+                    <Button kind="tertiary" onClick={() => setStep("generate_key")}>
+                        {_t("auth|logout_dialog|generate_recovery_key")}
+                    </Button>
+                </EncryptionCardButtons>
+            </EncryptionCard>
+        );
+    } else {
+        // Only device and no working recovery: no backup, backup disabled, no recovery key, or an error finding out
+        card = (
+            <EncryptionCard
+                Icon={ErrorIcon}
+                destructive={true}
+                title={_t("auth|logout_dialog|setup_key_backup_title")}
+                className="mx_EncryptionCard_noBorder"
+            >
+                <EncryptionCardEmphasisedContent>
+                    <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
+                    <Text as="a" target="_blank" href="https://element.io/en/help#encryption16">
+                        {_t("action|learn_more")} <PopOutIcon />
+                    </Text>
+                </EncryptionCardEmphasisedContent>
+                <EncryptionCardButtons>
+                    <Button onClick={() => setStep("generate_key")} Icon={KeyIcon}>
+                        {_t("settings|encryption|recovery|set_up_recovery")}
+                    </Button>
+                    <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
+                        {_t("auth|logout_dialog|skip_key_backup")}
+                    </Button>
+                </EncryptionCardButtons>
+            </EncryptionCard>
+        );
     }
-    switch (backupStatus) {
-        case BackupStatus.LOADING:
-            return <Loading onFinished={onFinished} />;
 
-        case BackupStatus.NO_CRYPTO:
-            return <ConfirmLogout onFinished={onFinished} />;
-
-        case BackupStatus.BACKUP_ACTIVE:
-            // Only device, but recovery is set up: make sure the user still has their recovery key
-            return (
-                <BaseDialog
-                    contentId="mx_Dialog_content"
-                    hasCancel={true}
-                    onFinished={onFinished}
-                    className="mx_LogoutDialog"
-                    aria-label={_t("action|sign_out")}
-                >
-                    <EncryptionCard
-                        Icon={InfoIcon}
-                        title={_t("auth|logout_dialog|check_recovery_key_title")}
-                        className="mx_EncryptionCard_noBorder"
-                    >
-                        <EncryptionCardEmphasisedContent>
-                            <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
-                        </EncryptionCardEmphasisedContent>
-                        <EncryptionCardButtons>
-                            <Button destructive={true} onClick={onLogoutConfirm} Icon={DeleteIcon}>
-                                {_t("auth|logout_dialog|continue")}
-                            </Button>
-                            <Button kind="secondary" onClick={() => onGoToSettings("main")}>
-                                {_t("auth|logout_dialog|check_recovery_key")}
-                            </Button>
-                            <Button kind="tertiary" onClick={() => setStep("generate_key")}>
-                                {_t("auth|logout_dialog|generate_recovery_key")}
-                            </Button>
-                        </EncryptionCardButtons>
-                    </EncryptionCard>
-                </BaseDialog>
-            );
-
-        case BackupStatus.NO_BACKUP:
-        case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
-        case BackupStatus.ERROR:
-        case BackupStatus.BACKUP_NO_RECOVERY: {
-            return (
-                <BaseDialog
-                    contentId="mx_Dialog_content"
-                    hasCancel={true}
-                    onFinished={onFinished}
-                    className="mx_LogoutDialog"
-                    aria-label={_t("action|sign_out")}
-                >
-                    <EncryptionCard
-                        Icon={ErrorIcon}
-                        destructive={true}
-                        title={_t("auth|logout_dialog|setup_key_backup_title")}
-                        className="mx_EncryptionCard_noBorder"
-                    >
-                        <EncryptionCardEmphasisedContent>
-                            <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
-                            <Text as="a" target="_blank" href="https://element.io/en/help#encryption16">
-                                {_t("action|learn_more")} <PopOutIcon />
-                            </Text>
-                        </EncryptionCardEmphasisedContent>
-                        <EncryptionCardButtons>
-                            <Button onClick={() => setStep("generate_key")} Icon={KeyIcon}>
-                                {_t("settings|encryption|recovery|set_up_recovery")}
-                            </Button>
-                            <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
-                                {_t("auth|logout_dialog|skip_key_backup")}
-                            </Button>
-                        </EncryptionCardButtons>
-                    </EncryptionCard>
-                </BaseDialog>
-            );
-        }
-    }
+    return (
+        <BaseDialog
+            contentId="mx_Dialog_content"
+            hasCancel={true}
+            onFinished={onFinished}
+            className="mx_LogoutDialog"
+            aria-label={_t("action|sign_out")}
+        >
+            {card}
+        </BaseDialog>
+    );
 }
 
 interface SubComponentProps {

@@ -218,6 +218,7 @@
             "keep_access_description": "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.",
             "key_active_description": "You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices.",
             "key_active_title": "Your new recovery key is now active",
+            "key_checked_title": "Your recovery key is active",
             "setup_key_backup_title": "You're about to lose access to your encrypted chats",
             "setup_secure_backup_description": "This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.",
             "skip_key_backup": "Remove this device anyway"
@@ -2567,6 +2568,9 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then select Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
+                "check_description": "Enter the recovery key you’ve saved to make sure that it’s correct and active.",
+                "check_error": "Incorrect recovery key",
+                "check_title": "Check your recovery key",
                 "description": "Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",

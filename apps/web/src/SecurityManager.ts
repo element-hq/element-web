@@ -47,7 +47,11 @@ export class AccessCancelledError extends Error {
     }
 }
 
-function makeInputToKey(
+/**
+ * Build a function turning what the user typed (a recovery key, or a passphrase for keys set up with one)
+ * into the private key described by `keyInfo`.
+ */
+export function makeInputToKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
 ): (keyParams: KeyParams) => Promise<Uint8Array<ArrayBuffer>> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array<ArrayBuffer>> => {

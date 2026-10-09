@@ -23,8 +23,6 @@ import {
 } from "test-utils";
 import LogoutDialog from "./LogoutDialog";
 import dispatch from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "./UserTab";
 
 // Covered by its own tests; stub it so we only test how the dialog drives it
 vi.mock("../settings/encryption/ChangeRecoveryKey", () => ({
@@ -38,6 +36,15 @@ vi.mock("../settings/encryption/ChangeRecoveryKey", () => ({
             <span>{`ChangeRecoveryKeyBody userHasRecoveryKey=${props.userHasRecoveryKey} skipIntroduction=${props.skipIntroduction}`}</span>
             <button onClick={props.onFinish}>Stub finish</button>
             <button onClick={props.onCancelClick}>Stub cancel</button>
+        </div>
+    ),
+}));
+vi.mock("../settings/encryption/CheckRecoveryKey", () => ({
+    CheckRecoveryKey: (props: { onFinish: () => void; onCancelClick: () => void }) => (
+        <div>
+            <span>CheckRecoveryKey</span>
+            <button onClick={props.onFinish}>Stub key correct</button>
+            <button onClick={props.onCancelClick}>Stub go back</button>
         </div>
     ),
 }));
@@ -91,16 +98,6 @@ describe("LogoutDialog", () => {
             fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
             expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
             expect(onFinished).toHaveBeenCalledWith(true);
-        });
-
-        it("opens settings to check the recovery key", async () => {
-            renderComponent();
-            fireEvent.click(await screen.findByRole("button", { name: "Check your recovery key" }));
-            expect(dispatch.dispatch).toHaveBeenCalledWith({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: { initialEncryptionState: "main" },
-            });
         });
     });
 
@@ -295,6 +292,48 @@ describe("LogoutDialog", () => {
             fireEvent.click(await screen.findByRole("button", { name: "Take me back to the app" }));
             expect(dispatch.dispatch).not.toHaveBeenCalled();
             expect(onFinished).toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("checking the recovery key inline", () => {
+        beforeEach(async () => {
+            mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+            mockCrypto.isSecretStorageReady.mockResolvedValue(true);
+            vi.spyOn(dispatch, "dispatch").mockImplementation(() => {});
+        });
+
+        async function startCheck(onFinished = vi.fn()): Promise<void> {
+            renderComponent({ onFinished });
+            fireEvent.click(await screen.findByRole("button", { name: "Check your recovery key" }));
+        }
+
+        it("checks the key in the dialog", async () => {
+            await startCheck();
+            await expect(screen.findByText("CheckRecoveryKey")).resolves.toBeVisible();
+            expect(dispatch.dispatch).not.toHaveBeenCalled();
+        });
+
+        it("returns to the warning on go back", async () => {
+            await startCheck();
+            fireEvent.click(await screen.findByRole("button", { name: "Stub go back" }));
+            await expect(
+                screen.findByText("Make sure you have access to your recovery key before removing this device"),
+            ).resolves.toBeVisible();
+        });
+
+        it("confirms the key is active once checked", async () => {
+            await startCheck();
+            fireEvent.click(await screen.findByRole("button", { name: "Stub key correct" }));
+            await expect(screen.findByText("Your recovery key is active")).resolves.toBeVisible();
+        });
+
+        it("logs out after the key is checked", async () => {
+            const onFinished = vi.fn();
+            await startCheck(onFinished);
+            fireEvent.click(await screen.findByRole("button", { name: "Stub key correct" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
+            expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
+            expect(onFinished).toHaveBeenCalledWith(true);
         });
     });
 });
