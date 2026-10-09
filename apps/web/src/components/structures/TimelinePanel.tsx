@@ -1250,6 +1250,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     };
 
+    public focusLastMessage = (): void => {
+        this.messagePanel.current?.focusLastMessage();
+    };
+
     public scrollToEventIfNeeded = (eventId: string): void => {
         this.messagePanel.current?.scrollToEventIfNeeded(eventId);
     };
