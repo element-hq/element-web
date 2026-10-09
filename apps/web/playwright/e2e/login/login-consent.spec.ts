@@ -228,7 +228,7 @@ test.describe("Login", () => {
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
                 });
 
-                test("Does not force verification on reload if force_verification is enabled after login", async ({
+                test("should not force verification on reload if force_verification is enabled after login", async ({
                     page,
                     homeserver,
                     request,
