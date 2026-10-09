@@ -29,11 +29,12 @@ import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStart
 import userEvent from "@testing-library/user-event";
 import { makeBeaconEvent, makeBeaconInfoEvent, makeLocationEvent, stubClient } from "test-utils";
 import { createMessageEventContent } from "test-utils/events";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type RoomContextType, TimelineRenderingType } from "../../../contexts/RoomContext";
 import { canEditContent } from "../../../utils/EventUtils";
-import { copyPlaintext, getSelectedText } from "../../../utils/strings";
+import { getSelectedText } from "../../../utils/strings";
 import MessageContextMenu from "./MessageContextMenu";
 import dispatcher from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -42,8 +43,11 @@ import { Action } from "../../../dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 
 vi.mock("../../../utils/strings", () => ({
-    copyPlaintext: vi.fn(),
     getSelectedText: vi.fn(),
+}));
+vi.mock("@element-hq/element-web-shared-utils", async () => ({
+    ...(await vi.importActual("@element-hq/element-web-shared-utils")),
+    copyPlainTextToClipboard: vi.fn(),
 }));
 vi.mock("../../../utils/EventUtils", async () => ({
     ...(await vi.importActual("../../../utils/EventUtils")),
@@ -589,7 +593,7 @@ describe("MessageContextMenu", () => {
             createRightClickMenuWithContent(eventContent);
             const copyButton = document.querySelector('li[aria-label="Copy"]')!;
             fireEvent.mouseDown(copyButton);
-            expect(copyPlaintext).toHaveBeenCalledWith(text);
+            expect(copyPlainTextToClipboard).toHaveBeenCalledWith(text);
         });
 
         it("copy button is not shown when there is nothing to copy", () => {
