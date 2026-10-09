@@ -579,17 +579,20 @@ describe("<TextualBody />", () => {
             });
         });
 
-        it("should listen to showUrlPreview change", () => {
+        it("should listen to showUrlPreview change", async () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            vi.spyOn(matrixClient, "getUrlPreview").mockResolvedValue({
+                "og:title": "Matrix",
+                "og:type": "website",
+                "og:url": "https://matrix.org/",
+            });
 
             const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
+            expect(container.querySelector(".mx_TextualBody_urlPreviews")).toBeNull();
 
             getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            waitFor(() => {
-                // Asynchronous check since the VM needs to recalcuate.
-                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
-            });
+            // Asynchronous check since the VM needs to recalculate.
+            await waitFor(() => expect(container.querySelector(".mx_TextualBody_urlPreviews")).toBeTruthy());
         });
     });
     describe("url preview tiles", () => {
