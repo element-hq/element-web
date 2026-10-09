@@ -7,6 +7,7 @@
 
 import { Alert, Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
 import CheckCircle from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
+import Devices from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import Group from "@vector-im/compound-design-tokens/assets/web/icons/group";
 import UserProfileSolid from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
 import VisibilityOff from "@vector-im/compound-design-tokens/assets/web/icons/visibility-off";
@@ -86,6 +87,9 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                     <VisualListItem Icon={Group}>
                         {_t("settings|encryption|advanced|breadcrumb_third_description")}
                     </VisualListItem>
+                    {destructiveForVariant(variant) && <VisualListItem Icon={Devices}>
+                        {_t("settings|encryption|advanced|breadcrumb_fourth_description")}
+                    </VisualListItem>}
                 </VisualList>
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
             </EncryptionCardEmphasisedContent>
