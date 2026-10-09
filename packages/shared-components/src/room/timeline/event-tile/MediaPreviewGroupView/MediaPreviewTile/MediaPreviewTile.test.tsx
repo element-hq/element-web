@@ -27,7 +27,12 @@ import demoVideo from "../../../../../../static/videoPreviewDemo.webm?inline";
 import demoAudio from "../../../../../../static/audioDemo.ogg";
 
 const { Default: DefaultText, WithHeaderUrl, NoButtons, SideBySide: SideBySideText } = composeStories(textStories);
-const { Default: DefaultImage, SideBySide: SideBySideImage, SideBySideWithButtons } = composeStories(imageStories);
+const {
+    Default: DefaultImage,
+    SideBySide: SideBySideImage,
+    SideBySideWithButtons,
+    SideBySideLogo,
+} = composeStories(imageStories);
 const { Default: DefaultVideo } = composeStories(videoStories);
 const { Default: DefaultAudio } = composeStories(audioStories);
 
@@ -221,6 +226,16 @@ describe("ImagePreviewTile", () => {
 
         await waitForImage(container);
         expect(screen.getByRole("button", { name: "View image" })).toContainElement(container.querySelector("img"));
+        expect(screen.getByText("techcrunch.com")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders the side-by-side logo story with an unclickable logo", async () => {
+        const { container } = render(<SideBySideLogo />);
+
+        await waitForImage(container);
+        expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        expect(container.querySelector("img")).toHaveAttribute("alt", "techcrunch.com");
         expect(screen.getByText("techcrunch.com")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });

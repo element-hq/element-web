@@ -224,6 +224,19 @@ describe("MediaPreviewComponents", () => {
                 expect(container.firstElementChild!.className).not.toEqual(bannerClass);
             });
 
+            it("uses a dedicated class for the logo size and leaves the logo unclickable", async () => {
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="thumbnail" />,
+                );
+                await waitForImage(container);
+                const thumbnailClass = container.firstElementChild!.className;
+
+                rerender(<Image image={demoImage} imageAlt="A wide demo image" imageSize="logo" />);
+
+                expect(container.firstElementChild!.className).not.toEqual(thumbnailClass);
+                expect(screen.queryByRole("button")).not.toBeInTheDocument();
+            });
+
             it("distinguishes banner and full sizes by class", async () => {
                 const { container, rerender } = render(
                     <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,

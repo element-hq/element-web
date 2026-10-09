@@ -198,6 +198,8 @@ function getImageClass(size: ImageSize): string {
             return styles.tallBannerImage;
         case "thumbnail":
             return styles.thumbnailImage;
+        case "logo":
+            return styles.logoImage;
     }
 }
 
@@ -210,6 +212,8 @@ function getVideoClass(size: ImageSize): string {
         case "tallbanner":
             return styles.tallBannerVideo;
         case "thumbnail":
+        // A video has no logo rendering, so it takes the thumbnail box.
+        case "logo":
             return styles.thumbnailVideo;
     }
 }

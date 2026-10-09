@@ -98,6 +98,47 @@ exports[`ImagePreviewTile > renders the default story with its image 1`] = `
 </div>
 `;
 
+exports[`ImagePreviewTile > renders the side-by-side logo story with an unclickable logo 1`] = `
+<div>
+  <div
+    class="MediaPreviewTile-module_tile MediaPreviewTile-module_tileSide"
+  >
+    <div
+      class="MediaPreviewComponents-module_image MediaPreviewComponents-module_logoImage"
+    >
+      <img
+        alt="techcrunch.com"
+        src="/static/element.png"
+      />
+    </div>
+    <div
+      class="MediaPreviewComponents-module_textContent MediaPreviewComponents-module_textContentSide"
+    >
+      <div
+        class="MediaPreviewComponents-module_header"
+      >
+        <a
+          href="https://techcrunch.com/ai-future"
+          target="_blank"
+        >
+          The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives
+        </a>
+      </div>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container MediaPreviewComponents-module_body"
+      >
+        Explore how artificial intelligence is revolutionizing everything from healthcare to transportation and what it means for the years ahead.
+      </p>
+      <div
+        class="MediaPreviewComponents-module_footer"
+      >
+        techcrunch.com
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`ImagePreviewTile > renders the side-by-side story with a clickable thumbnail 1`] = `
 <div>
   <div

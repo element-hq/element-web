@@ -27,8 +27,9 @@ export type MediaPreviewGroupEntryTextContent = {
  * - banner: show image covering tile, height 100px
  * - tallbanner: show image covering tile, height 300px
  * - thumbnail: show image covering a fixed 130x142px box, for the "side" layout
+ * - logo: show a small image such as a site logo centred in the same 130x142px box, for the "side" layout
  */
-export type ImageSize = "full" | "banner" | "tallbanner" | "thumbnail";
+export type ImageSize = "full" | "banner" | "tallbanner" | "thumbnail" | "logo";
 
 /**
  * - stacked: media above icon, text and buttons (default)

@@ -16,6 +16,7 @@ import {
 } from "./MediaPreviewGroupView";
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
 import demoImage from "../../../../../static/wideImage.png";
+import siteLogo from "../../../../../static/element.png";
 // Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
 // video controls draw a buffered-progress bar, so a clip that is still downloading when the snapshot
 // is taken makes the screenshot non-reproducible.
@@ -149,6 +150,20 @@ export const SingleAudio: Story = {
 // Timeline link previews: side layout.
 export const LinkPreviews: Story = {
     args: withEntries([linkPreviewEntry, textLinkPreviewEntry]),
+};
+
+// Timeline link previews showing the site's logo (MSC4448) in place of a preview image.
+export const LinkPreviewsWithSiteLogo: Story = {
+    args: withEntries([
+        {
+            ...linkPreviewEntry,
+            image: siteLogo,
+            imageAlt: "techcrunch.com",
+            imageSize: "logo",
+            imageOnClick: undefined,
+        },
+        textLinkPreviewEntry,
+    ]),
 };
 
 export const Collapsed: Story = {

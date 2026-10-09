@@ -179,3 +179,21 @@
     height: 100%;
     object-fit: cover;
 }
+
+/* Site logo in the side layout: the thumbnail box, with the logo centred rather than scaled up, as
+   favicons are small and blur when enlarged. */
+.image.logoImage {
+    width: 130px;
+    height: 142px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cpd-color-bg-canvas-default);
+}
+
+.image.logoImage img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}

@@ -11,6 +11,7 @@ import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-desi
 
 import { ImagePreviewTile } from "./MediaPreviewTile";
 import demoImage from "../../../../../../static/wideImage.png";
+import siteLogo from "../../../../../../static/element.png";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/ImagePreviewTile",
@@ -102,5 +103,16 @@ export const SideBySideWithButtons: Story = {
     args: {
         ...SideBySide.args,
         buttons: [{ label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) }],
+    },
+};
+
+// Timeline link preview showing the site's logo in place of a preview image.
+export const SideBySideLogo: Story = {
+    args: {
+        ...SideBySide.args,
+        image: siteLogo,
+        imageAlt: "techcrunch.com",
+        imageSize: "logo",
+        imageOnClick: undefined,
     },
 };
