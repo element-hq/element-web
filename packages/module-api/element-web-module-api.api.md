@@ -257,6 +257,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void;
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
@@ -391,6 +392,16 @@ export interface Room {
     id: string;
     name: Watchable<string>;
 }
+
+// @alpha
+export interface RoomCallOption {
+    exclusive?: boolean;
+    label: string;
+    onSelect: (video: boolean) => void;
+}
+
+// @alpha
+export type RoomCallOptionsCallback = (roomId: string) => Promise<RoomCallOption[]> | RoomCallOption[];
 
 // @alpha
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;

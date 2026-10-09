@@ -53,6 +53,42 @@ export interface SpacePanelItemProps {
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
 
 /**
+ * An extra way of placing a call, offered in the room header's voice and
+ * video call menus alongside Element Call, Jitsi and legacy calls.
+ * @alpha
+ */
+export interface RoomCallOption {
+    /**
+     * Label shown in the menu, e.g. "SIP: +441234567890".
+     */
+    label: string;
+
+    /**
+     * Start the call.
+     * @param video - Whether the video (rather than voice) call button was used.
+     */
+    onSelect: (video: boolean) => void;
+
+    /**
+     * Whether this is the only way to reach the room's members (e.g. they are all
+     * virtual users of a bridge), in which case Element Web's own call options are
+     * left out. With a single option left, the buttons call directly rather than
+     * opening a menu.
+     */
+    exclusive?: boolean;
+}
+
+/**
+ * A callback that returns the extra call options for a room. Called when
+ * the room header renders and whenever the room's membership changes.
+ *
+ * @alpha
+ * @param roomId - The ID of the room for which the header is being rendered.
+ * @returns The options to offer, possibly none.
+ */
+export type RoomCallOptionsCallback = (roomId: string) => Promise<RoomCallOption[]> | RoomCallOption[];
+
+/**
  * API for inserting extra UI into Element Web.
  * @alpha Subject to change.
  */
@@ -83,4 +119,12 @@ export interface ExtrasApi {
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
      */
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+
+    /**
+     * Adds a callback to get extra ways of placing a call in a room. When a room has more than one way
+     * (including Element Web's own), the header's call buttons open a menu to choose.
+     *
+     * @param cb - A callback that returns the options (see {@link RoomCallOptionsCallback}).
+     */
+    addRoomCallOptionsCallback(cb: RoomCallOptionsCallback): void;
 }
