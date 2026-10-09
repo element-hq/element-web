@@ -21,6 +21,7 @@ import {
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { logger } from "matrix-js-sdk/src/logger";
+import classNames from "classnames";
 import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
@@ -60,13 +61,54 @@ interface ChangeRecoveryKeyProps {
 }
 
 /**
- * A component to set up or change the recovery key.
+ * The Encryption Settings panel to set up or change the recovery key.
+ *
+ * A thin wrapper around {@link ChangeRecoveryKeyBody}, just adding breadcrumbs.
  */
-export function ChangeRecoveryKey({
+export function ChangeRecoveryKey(props: Readonly<ChangeRecoveryKeyProps>): JSX.Element {
+    const pages = [
+        _t("settings|encryption|title"),
+        props.userHasRecoveryKey
+            ? _t("settings|encryption|recovery|change_recovery_key")
+            : _t("settings|encryption|recovery|set_up_recovery"),
+    ];
+
+    // Keep the cancel log line for rageshakes, as the body does for its own cancel button
+    const { onCancelClick } = props;
+    const onBreadcrumbClick = useCallback(() => {
+        logger.debug("ChangeRecoveryKey: user cancelled via the breadcrumbs");
+        onCancelClick();
+    }, [onCancelClick]);
+
+    return (
+        <>
+            <Breadcrumb
+                backLabel={_t("action|back")}
+                onBackClick={onBreadcrumbClick}
+                pages={pages}
+                onPageClick={onBreadcrumbClick}
+            />
+            <ChangeRecoveryKeyBody {...props} />
+        </>
+    );
+}
+
+interface ChangeRecoveryKeyBodyProps extends ChangeRecoveryKeyProps {
+    /**
+     * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
+     */
+    className?: string;
+}
+
+/**
+ * A component to set up or change the recovery key, without the settings breadcrumbs.
+ */
+export function ChangeRecoveryKeyBody({
     userHasRecoveryKey,
     onFinish,
     onCancelClick,
-}: ChangeRecoveryKeyProps): JSX.Element | null {
+    className,
+}: Readonly<ChangeRecoveryKeyBodyProps>): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
     // If the user is setting up recovery for the first time, we first show them a panel explaining what
@@ -160,31 +202,17 @@ export function ChangeRecoveryKey({
             );
     }
 
-    const pages = [
-        _t("settings|encryption|title"),
-        userHasRecoveryKey
-            ? _t("settings|encryption|recovery|change_recovery_key")
-            : _t("settings|encryption|recovery|set_up_recovery"),
-    ];
     const labels = getLabels(state, userHasRecoveryKey);
 
     return (
-        <>
-            <Breadcrumb
-                backLabel={_t("action|back")}
-                onBackClick={onCancelClickWrapper}
-                pages={pages}
-                onPageClick={onCancelClickWrapper}
-            />
-            <EncryptionCard
-                Icon={KeyIcon}
-                title={labels.title}
-                description={labels.description}
-                className="mx_ChangeRecoveryKey"
-            >
-                {content}
-            </EncryptionCard>
-        </>
+        <EncryptionCard
+            Icon={KeyIcon}
+            title={labels.title}
+            description={labels.description}
+            className={classNames("mx_ChangeRecoveryKey", className)}
+        >
+            {content}
+        </EncryptionCard>
     );
 }
 
