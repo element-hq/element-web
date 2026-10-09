@@ -128,8 +128,8 @@ class StorageWriter {
 /**
  * Storage writer for secrets using safeStorage.
  *
- * Uses the asynchronous safeStorage APIs so that reads and writes of secrets do not block the
- * main process on the OS keychain.
+ * Uses the asynchronous safeStorage APIs, which do not block the main process on the OS keychain
+ * and which support key rotation via the `shouldReEncrypt` flag on decryption.
  */
 class SafeStorageWriter extends StorageWriter {
     public async set(key: string, secret: string): Promise<void> {
@@ -138,16 +138,38 @@ class SafeStorageWriter extends StorageWriter {
     }
 
     public async get(key: string): Promise<string | undefined> {
+        const decrypted = await this.decrypt(key);
+        if (!decrypted) return undefined;
+        if (decrypted.shouldReEncrypt) {
+            // safeStorage has rotated its key, or a stronger one is now available, so write the
+            // secret back under the new key. Failing to do so is not fatal - we still have the
+            // secret - so don't let it break the read.
+            try {
+                await this.set(key, decrypted.result);
+            } catch (e) {
+                console.error("Failed to re-encrypt secret after key rotation", e);
+            }
+        }
+        return decrypted.result;
+    }
+
+    /**
+     * As {@link get}, but never writes the secret back, even when safeStorage asks for it to be
+     * re-encrypted. The migration paths must be able to read every secret before deciding whether
+     * to write anything at all, so they cannot use a read which has a write as a side effect.
+     */
+    public async getWithoutReEncrypt(key: string): Promise<string | undefined> {
+        return (await this.decrypt(key))?.result;
+    }
+
+    private async decrypt(key: string): Promise<Electron.DecryptStringAsyncReturnValue | undefined> {
         const ciphertext = this.store.get<string, string | undefined>(this.getKey(key));
         if (!ciphertext) {
             // No secret stored.
             return undefined;
         }
         try {
-            // TODO: honour `shouldReEncrypt` by writing the secret back under safeStorage's new key.
-            // This will be enabled in a follow-up change.
-            const { result } = await safeStorage.decryptStringAsync(Buffer.from(ciphertext, "base64"));
-            return result;
+            return await safeStorage.decryptStringAsync(Buffer.from(ciphertext, "base64"));
         } catch (e) {
             // The secret exists but cannot be decrypted in this session. Returning undefined here (as
             // we used to) is indistinguishable from "no secret stored", which makes callers create or
@@ -483,7 +505,7 @@ class Store extends ElectronStore<StoreData> {
             const decrypted = new Map<string, string | undefined>();
             try {
                 for (const key in data) {
-                    decrypted.set(secrets.getKey(key), await secrets.get(key));
+                    decrypted.set(secrets.getKey(key), await secrets.getWithoutReEncrypt(key));
                 }
             } catch (e) {
                 // Abort the migration with the data untouched and stick with the basic_text backend
