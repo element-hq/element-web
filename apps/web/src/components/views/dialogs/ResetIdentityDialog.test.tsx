@@ -34,8 +34,7 @@ describe("ResetIdentityDialog", () => {
         expectWarning(dialog, "chat_list_kept");
         expectWarning(dialog, "lose_encrypted_history");
         expectWarning(dialog, "identity_reset");
-        // TODO: this warning is currently missing
-        // expectWarning(dialog, "devices_reconfirmed");
+        expectWarning(dialog, "devices_reconfirmed");
         expectNoWarning(dialog, "only_reset_if");
 
         // But not the one that is about logging in
@@ -54,8 +53,7 @@ describe("ResetIdentityDialog", () => {
         expectWarning(dialog, "chat_list_kept");
         expectWarning(dialog, "lose_encrypted_history");
         expectWarning(dialog, "identity_reset");
-        // TODO: this warning is currently missing
-        // expectWarning(dialog, "devices_reconfirmed");
+        expectWarning(dialog, "devices_reconfirmed");
         expectWarning(dialog, "only_reset_if");
     });
 
@@ -76,8 +74,7 @@ describe("ResetIdentityDialog", () => {
 
         // But we don't show the device reconfirmation warning because there are
         // no other devices.
-        // TODO: this warning is currently missing
-        // expectNoWarning(dialog, "devices_reconfirmed");
+        expectNoWarning(dialog, "devices_reconfirmed");
 
         // And we don't show the alert because there is no other choice
         expectNoWarning(dialog, "only_reset_if");
@@ -100,10 +97,11 @@ describe("ResetIdentityDialog", () => {
         //expectNoWarning(dialog, "chat_list_kept");
         //expectNoWarning(dialog, "lose_encrypted_history");
         //expectNoWarning(dialog, "identity_reset");
+        //
         //// But we don't show the device reconfirmation warning because there are
         //// no other devices.
-        //// TODO: this warning is currently missing
-        //// expectNoWarning(dialog, "devices_reconfirmed");
+        //expectNoWarning(dialog, "devices_reconfirmed");
+        //
         //// And we don't show the alert because there is no other choice
         //expectNoWarning(dialog, "only_reset_if");
     });
