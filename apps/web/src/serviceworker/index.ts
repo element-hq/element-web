@@ -31,12 +31,18 @@ self.addEventListener("activate", (event) => {
 });
 
 /**
+ * A tab's reply to a request for user info. The homeserver is missing when the tab has no logged-in session.
+ */
+interface UserInfo {
+    userId: string;
+    deviceId: string;
+    homeserver?: string;
+}
+
+/**
  * Requests for user info sent to tabs which are awaiting a reply, keyed by the `responseKey` sent with the request.
  */
-const pendingUserInfoRequests = new Map<
-    string,
-    (data: { userId: string; deviceId: string; homeserver: string }) => void
->();
+const pendingUserInfoRequests = new Map<string, (data: UserInfo) => void>();
 
 // Event handlers must be added during the initial evaluation of the worker script, so we register a single `message`
 // listener here and route each reply to the request awaiting it, rather than adding a listener per request.
@@ -155,6 +161,10 @@ async function getAuthData(client: Client): Promise<{ accessToken: string; homes
     // We need to extract a user ID and device ID from localstorage, which means calling WebPlatform for the
     // read operation. Service workers can't access localstorage.
     const { userId, deviceId, homeserver } = await askClientForUserIdParams(client);
+    if (!homeserver) {
+        // The tab has no client, e.g. it is logged out, so there is nothing to authenticate as.
+        throw new Error("SW: Tab has no logged-in session");
+    }
 
     // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
     const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
@@ -187,9 +197,7 @@ async function getAuthData(client: Client): Promise<{ accessToken: string; homes
     }
 }
 
-async function askClientForUserIdParams(
-    client: Client,
-): Promise<{ userId: string; deviceId: string; homeserver: string }> {
+async function askClientForUserIdParams(client: Client): Promise<UserInfo> {
     return new Promise((resolve, reject) => {
         // Dev note: this uses postMessage, which is a highly insecure channel. postMessage is typically visible to other
         // tabs, windows, browser extensions, etc, making it far from ideal for sharing sensitive information. This is

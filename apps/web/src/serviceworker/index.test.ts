@@ -58,10 +58,14 @@ describe("serviceworker", () => {
     let mediaUrl: string;
     let homeserverCount = 0;
 
+    let tabReplyOverrides: Record<string, unknown>;
+
     /** Stands in for the tab which the service worker asks for the user ID and device ID. */
     const tab = {
         postMessage: vi.fn(({ responseKey }: { responseKey: string }) => {
-            emit("message", { data: { responseKey, userId: USER_ID, deviceId: DEVICE_ID, homeserver } });
+            emit("message", {
+                data: { responseKey, userId: USER_ID, deviceId: DEVICE_ID, homeserver, ...tabReplyOverrides },
+            });
         }),
     };
 
@@ -73,6 +77,7 @@ describe("serviceworker", () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        tabReplyOverrides = {};
 
         storage = {};
         vi.spyOn(StorageAccess, "idbSave").mockImplementation(async (table, key, data) => {
@@ -185,6 +190,18 @@ describe("serviceworker", () => {
 
         expect(url).toEqual(`${homeserver}/_matrix/client/v1/media/download/example.com/abc123`);
         expect(init).toEqual({ headers: { Authorization: `Bearer plain_text_token` } });
+    });
+
+    it("passes the request through unauthenticated when the tab has no logged-in session", async () => {
+        await persistTokens(undefined, { accessToken: "plain_text_token" });
+        tabReplyOverrides = { userId: null, deviceId: null, homeserver: undefined };
+
+        const { url, init } = await interceptMediaRequest();
+
+        expect(url).toEqual(mediaUrl);
+        expect(init).toBeUndefined();
+        const [, error] = vi.mocked(console.error).mock.calls.at(-1)!;
+        expect(error).toMatchObject({ message: "SW: Tab has no logged-in session" });
     });
 
     it("passes the request through unauthenticated when the token is encrypted but the pickle key is missing", async () => {
