@@ -93,7 +93,7 @@ interface IState {
      */
     flow?: SignInWithQRFlow;
     /**
-     * TODO
+     * The verification URI for the user to open in Phase.OpenVerificationUri, as it could not be opened automatically.
      */
     verificationUri?: string;
     /**
@@ -240,11 +240,10 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             if (this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
                 // MSC4108-Flow: NewScanned
                 await flow.negotiateProtocols();
-                const { verificationUri } = await flow.deviceAuthorizationGrant();
-                this.setState({
-                    phase: Phase.OutOfBandConfirmation,
-                    verificationUri,
-                });
+                // The secure channel is established but, as we generated the QR code, we don't trust it until the
+                // user has entered the check code shown on the other device (MSC4388 step 7). We must not send
+                // anything further until then: see approveLogin().
+                this.setState({ phase: Phase.OutOfBandConfirmation });
             } else {
                 // The v2024 flow gives us a server name to resolve, the v2025 flow gives us the base URL directly
                 const { serverName, baseUrl } = await flow.negotiateProtocols();
@@ -317,13 +316,33 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 // MSC4108-Flow: NewScanned
                 this.setState({ phase: Phase.Loading });
 
-                if (this.state.verificationUri) {
-                    window.open(this.state.verificationUri, "_blank");
+                // The user has confirmed the check code so we now trust the channel. In the v2025 flow this is
+                // where we tell the other device which protocols are available and wait for it to tell us which
+                // one it is using, along with the verification URI. In the v2024 flow the other device already
+                // sent that, so this only waits for it.
+                const { verificationUri } = await this.state.flow.deviceAuthorizationGrant();
+
+                // Opening a window needs the user's click to still count as recent, even after the await above. This
+                // lasts for the browser's transient activation duration:
+                // https://html.spec.whatwg.org/multipage/interaction.html#transient-activation-duration
+                // This is believed to be in the order of 5 seconds in Chromium, Firefox and WebKit.
+                // When running in Electron the window.open() is intercepted and no limit is applied.
+                let phase = Phase.WaitingForDevice;
+                if (verificationUri) {
+                    // In a standard browser, window.open() returns null if the browser blocked it (e.g. because the transient activation
+                    // duration expired), in which case we offer a button to open it instead.
+                    // In Electron window.open() always returns null.
+                    const openResult = window.open(verificationUri, "_blank");
+
+                    // On a standard browser we show a button to open the verification URI if the browser blocked the automatic window.open() call.
+                    if (!openResult && !window.electron) {
+                        phase = Phase.OpenVerificationUri;
+                    }
                 }
 
-                this.setState({ phase: Phase.WaitingForDevice });
+                this.setState({ phase, verificationUri });
 
-                // send secrets
+                // wait for new device to authenticate and then send secrets
                 await this.state.flow.shareSecrets();
 
                 // done
@@ -365,10 +384,14 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             }
         } catch (e: RendezvousError | unknown) {
             logger.error("Error whilst approving sign in", e);
-            this.setState({
-                phase: Phase.Error,
-                failureReason: e instanceof RendezvousError ? e.code : ClientRendezvousFailureReason.Unknown,
-            });
+            const failureReason = e instanceof RendezvousError ? e.code : ClientRendezvousFailureReason.Unknown;
+            this.setState({ phase: Phase.Error, failureReason });
+            // Let the other device know rather than leaving it waiting for the rendezvous session to expire
+            try {
+                await this.state.flow.cancel(failureReason);
+            } catch (cancelError) {
+                logger.warn("Failed to cancel rendezvous after error", cancelError);
+            }
         }
     };
 
@@ -421,6 +444,10 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             case Click.ShowQr:
                 await this.updateMode(Mode.Show);
                 break;
+            case Click.OpenVerificationUri:
+                // The link has opened it, so show that we are waiting for the other device
+                this.setState({ phase: Phase.WaitingForDevice });
+                break;
         }
     };
 
@@ -432,6 +459,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 code={this.state.phase === Phase.ShowingQR ? this.state.flow?.code : undefined}
                 failureReason={this.state.failureReason}
                 userCode={this.state.userCode}
+                verificationUri={
+                    this.state.phase === Phase.OpenVerificationUri ? this.state.verificationUri : undefined
+                }
                 intent={this.props.intent}
             />
         );
