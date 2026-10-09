@@ -126,9 +126,7 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();
 
-            await expect(
-                page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
-            ).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Turn off and delete key storage?" })).toBeVisible();
 
             await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
 
@@ -170,11 +168,11 @@ test.describe("Encryption tab", () => {
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // First try cancelling and restarting
-            await page.getByRole("button", { name: "Cancel" }).click();
+            await page.getByRole("button", { name: "Go back" }).click();
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Then click outside the dialog and restart
-            await page.locator("li").filter({ hasText: "Encryption" }).click({ force: true });
+            await page.getByRole("heading", { name: "Settings" }).click({ force: true, position: { x: 0, y: 0 } });
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Finally we actually continue

@@ -20,12 +20,14 @@
         "new_room": "Nytt rum",
         "new_section": "Nytt avsnitt",
         "new_video_room": "Nytt videorum",
+        "no": "Nej",
         "open_menu": "Öppna meny",
         "pause": "Pausa",
         "pin": "Fäst",
         "play": "Spela",
         "react": "Reagera",
         "remove": "Ta bort",
+        "remove_this_device": "Ta bort den här enheten",
         "reply": "Svara",
         "reply_in_thread": "Svara i tråd",
         "retry": "Försök igen",
@@ -33,7 +35,8 @@
         "search": "Sök",
         "start_chat": "Starta chatt",
         "unpin": "Avfäst",
-        "view_source": "Visa källkod"
+        "view_source": "Visa källkod",
+        "yes": "Ja"
     },
     "common": {
         "attachment": "Bilaga",
@@ -71,6 +74,10 @@
         },
         "toggle_event": "Händelsekälla"
     },
+    "document_viewer": {
+        "error_load": "Det går inte att ladda den här filen.",
+        "loading": "Läser in dokument..."
+    },
     "emoji": {
         "categories": "Kategorier",
         "category_activities": "Aktiviteter",
@@ -87,6 +94,13 @@
     "emoji_picker": {
         "cancel_search_label": "Avbryt sökningen",
         "emoji_picker": "Emojiväljare"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Nedgradera antingen till <b>%(version)s</b> först eller ta bort den här enheten.",
+            "description": "%(brand)s uppdaterades från en gammal version och kan inte migrera ditt krypteringsarkiv till ett nytt format.",
+            "title": "Den här enheten kan inte användas"
+        }
     },
     "keyboard": {
         "shift": "Skift"
@@ -113,10 +127,11 @@
         "mute_room": "Tysta rum"
     },
     "pdf_viewer": {
-        "error_load": "Det gick inte att ladda PDF-filen.",
-        "loading": "Laddar PDF…",
         "page_label": "Sida %(page)s av %(total)s",
-        "page_number": "Sidnummer"
+        "page_number": "Sidnummer",
+        "zoom": "Zooma",
+        "zoom_in": "Zooma in",
+        "zoom_out": "Zooma ut"
     },
     "release_announcement": {
         "room_list_section_close": "OK",
@@ -140,6 +155,7 @@
         "knock_sent": "Begäran om att gå med har skickats",
         "pinned_message_badge": "Fäst meddelande",
         "status_bar": {
+            "contact_account_provider": "Kontakta kontoleverantören",
             "delete_all": "Radera alla",
             "exceeded_resource_limit_description": "Kontakta din kontoleverantör för att fortsätta använda tjänsten.",
             "exceeded_resource_limit_title": "Ditt meddelande skickades inte eftersom tjänsten har överskridit en resursgräns.",
@@ -339,7 +355,7 @@
             "error_invalid": "Ogiltig fil"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s ändrade chattikonen till <img/>",
+            "changed_img": "%(senderDisplayName)s ändrade rummets avatar till <img/>",
             "removed": "%(senderDisplayName)s tog bort rumsikonen."
         },
         "m.room.encryption": {
@@ -384,6 +400,26 @@
         "open_home": "Hem",
         "open_security": "Säkerhet & sekretess",
         "open_settings": "Alla inställningar"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Effektiv konfiguration",
+            "configuration": "Konfiguration",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "i samtal",
+            "in_lobby": "i lobbyn",
+            "initialized_with": "initialiseraElementCall: %(value)s",
+            "log_label": "Loggar för HostBridge",
+            "mute_audio": "Stäng av ljudet",
+            "mute_video": "Stäng av video",
+            "no_participants": "Det är ingen som deltar i detta samtal",
+            "participants": "Deltagare",
+            "status": "%(roomId)s · avsikt %(intent)s · %(state)s · tema %(theme)s · språk %(language)s",
+            "title": "Element Call (mock)",
+            "unknown_room": "Okänt rum %(roomId)s",
+            "unmute_audio": "Aktivera ljud",
+            "unmute_video": "Aktivera videon"
+        }
     },
     "widget": {
         "context_menu": {

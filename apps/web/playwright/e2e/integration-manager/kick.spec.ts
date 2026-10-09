@@ -86,6 +86,8 @@ test.describe("Integration Manager: Kick", () => {
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,
+                // Pre-creator power levels
+                room_version: "11",
             });
             await use({ roomId });
         },

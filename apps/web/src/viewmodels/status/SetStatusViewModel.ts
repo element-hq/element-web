@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, SyncState, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     BaseViewModel,
@@ -41,10 +41,16 @@ export class SetStatusViewModel
             // It could have a listener for when an emoji gets added but in practice, this
             // would be the only way a recent could possibly get added while the view is mounted.
             recentEmojis: recent.get(),
+            disabled: props.client.getSyncState() === SyncState.Error,
         });
 
         this.disposables.trackListener(props.ownProfileStore, UPDATE_EVENT, this.onProfileStoreUpdate);
+        this.disposables.trackListener(props.client, ClientEvent.Sync, this.onClientSync);
     }
+
+    private onClientSync = (): void => {
+        this.snapshot.merge({ disabled: this.props.client.getSyncState() === SyncState.Error });
+    };
 
     private onProfileStoreUpdate = (): void => {
         this.snapshot.merge({ userStatus: this.props.ownProfileStore.userStatus });

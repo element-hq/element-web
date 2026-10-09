@@ -214,7 +214,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                 target="_blank"
                                 rel="noreferrer noopener"
                             >
-                                Contact admin
+                                {_t("room|status_bar|contact_account_provider")}
                             </Button>
                         )
                     }

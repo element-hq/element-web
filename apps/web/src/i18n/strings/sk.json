@@ -29,7 +29,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
         "complete": "Dokončiť",
@@ -1626,7 +1625,6 @@
     },
     "member_list_back_action_label": "Členovia miestnosti",
     "message_edit_dialog_title": "Úpravy správy",
-    "migrating_crypto": "Ešte to vydržte. Aktualizujeme %(brand)s, aby bolo šifrovanie rýchlejšie a spoľahlivejšie.",
     "mobile_guide": {
         "toast_accept": "Použiť aplikáciu",
         "toast_description": "%(brand)s je v mobilnej verzii experimentálny. Ak chcete získať lepší zážitok a najnovšie funkcie, použite našu bezplatnú natívnu aplikáciu.",
@@ -3196,9 +3194,7 @@
         "show_thread_filter": "Zobraziť:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vlákien",
-        "no_rooms_with_threads_notifs": "Zatiaľ nemáte miestnosti s upozorneniami na vlákna.",
-        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
+        "header": "Aktivita vlákien"
     },
     "time": {
         "date_at_time": "%(date)s o %(time)s",

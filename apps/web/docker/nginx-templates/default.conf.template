@@ -19,6 +19,9 @@ server {
     location /i18n/ {
         add_header Cache-Control "no-cache";
     }
+    location /usercontent/ {
+        add_header Cache-Control "no-cache";
+    }
 
     # covers config.json and config.hostname.json requests as it is prefix.
     location /config {

@@ -27,7 +27,6 @@
         "cancel": "Loobu",
         "change": "Muuda",
         "clear": "Eemalda",
-        "click_to_copy": "Kopeerimiseks vali",
         "close": "Sulge",
         "collapse": "Ahenda",
         "complete": "Valmis",
@@ -1666,7 +1665,6 @@
     },
     "member_list_back_action_label": "Jututoa liikmed",
     "message_edit_dialog_title": "Sõnumite muutmised",
-    "migrating_crypto": "Oota veel üks viiv. Meil on pooleli %(brand)s uuendamine, misjärel kasutatav krüpto on kiirem ja töökindlam.",
     "mobile_guide": {
         "toast_accept": "Kasuta rakendust",
         "toast_description": "%(brand)s toimib nutiseadme veebibrauseris kastseliselt. Parima kasutajakogemuse ja uusima funktsionaalsuse jaoks kasuta meie rakendust.",
@@ -3246,9 +3244,7 @@
         "show_thread_filter": "Näita:"
     },
     "threads_activity_centre": {
-        "header": "Jutulõngade ülevaade",
-        "no_rooms_with_threads_notifs": "Pole veel ühtegi jutulõngakohase teavitusega jututuba.",
-        "no_rooms_with_unread_threads": "Pole veel ühtegi lugemata jutulõngaga jututuba."
+        "header": "Jutulõngade ülevaade"
     },
     "time": {
         "date_at_time": "%(date)s %(time)s",

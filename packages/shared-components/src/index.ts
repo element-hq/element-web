@@ -19,6 +19,7 @@ export * from "./room/composer/Banner";
 export * from "./room/composer/UploadButton";
 export * from "./room/composer/MessageComposerUrlPreview/index.ts";
 export * from "./crypto/SasEmoji";
+export * from "./crypto/LegacyCryptoUnsupportedView";
 export * from "./menus/UserMenu";
 export * from "./notifications/NotificationBadgeView";
 export * from "./room/timeline/ReadMarker";
@@ -40,8 +41,12 @@ export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
 export * from "./room/WidgetPip";
+export * from "./room/ElementCallAppTile";
+export * from "./room/ElementCallMockView";
 export * from "./room/HistoryVisibilityBadge";
+export * from "./room/right-panel/DocumentViewerView";
 export * from "./room/right-panel/PdfViewerView";
+export * from "./room/right-panel/MarkdownViewerView";
 export * from "./room/right-panel/WidgetContextMenuView";
 export * from "./room/timeline/DateSeparatorView";
 export * from "./room/timeline/TimelineSeparator";
@@ -88,6 +93,7 @@ export * from "./core/utils/Scrollbar";
 export * from "./core/VirtualizedList";
 export * from "./resize";
 export * from "./core/RoomPickerView";
+export * from "./core/toast";
 
 // Utils
 export * from "./core/i18n/i18n";

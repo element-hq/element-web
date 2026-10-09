@@ -27,7 +27,6 @@
         "cancel": "Annuler",
         "change": "Changer",
         "clear": "Effacer",
-        "click_to_copy": "Cliquer pour copier",
         "close": "Fermer",
         "collapse": "Réduire",
         "complete": "Terminer",
@@ -107,6 +106,7 @@
         "show_all": "Tout afficher",
         "sign_in": "Se connecter",
         "sign_out": "Supprimer cet appareil",
+        "sign_out_before_verify": "Se déconnecter",
         "skip": "Passer",
         "start": "Commencer",
         "stop": "Arrêter",
@@ -877,6 +877,7 @@
         "setting_definition": "Définition du paramètre :",
         "setting_id": "Identifiant de paramètre",
         "settings": {
+            "elementCallMockComponent": "Utilisez le composant factice Element Call (transport React, sans média)",
             "elementCallUrl": "Lien d'Element Call"
         },
         "settings_explorer": "Explorateur de paramètres",
@@ -928,6 +929,9 @@
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge"
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
+    "document_viewer": {
+        "title": "Document"
+    },
     "download_completed": "Téléchargement terminé",
     "empty_room": "Salon vide",
     "empty_room_was_name": "Salon vide (précédemment %(oldName)s)",
@@ -1007,7 +1011,7 @@
             "complete_action": "Compris",
             "complete_description": "Vous avez vérifié cet utilisateur avec succès.",
             "complete_title": "Vérifié !",
-            "confirm_identity_description": "Vérifier cet appareil pour configurer votre messagerie sécurisée",
+            "confirm_identity_description": "Choisissez comment vérifier afin de configurer votre messagerie sécurisée.",
             "confirm_identity_title": "Confirmez votre identité numérique",
             "confirm_the_emojis": "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre appareil.",
             "error_starting_description": "Nous n’avons pas pu démarrer une conversation avec l’autre utilisateur.",
@@ -1035,6 +1039,8 @@
                 "text": "Fournissez l'identifiant et l'empreinte numétrique de l'un de vos appareils pour le vérifier. REMARQUE : cela permet à l'autre appareil d'envoyer et de recevoir des messages comme vous. SI QUELQU'UN VOUS A DIT DE COLLER QUELQUE CHOSE ICI, IL EST PROBABLE QUE VOUS SOYEZ VICTIME D'UNE ARNAQUE !",
                 "wrong_fingerprint": "Impossible de vérifier l'appareil %(deviceId)s - l'empreinte numérique %(fingerprint)s fournie ne correspond pas à celle de l'appareil %(fprint)s"
             },
+            "no_other_devices": "Cette option est indisponible car vous ne possédez aucun autre appareil.",
+            "no_recovery_key": "Cette option est indisponible car vous n'avez pas configuré de clé de récupération.",
             "no_support_qr_emoji": "L’appareil que vous essayez de vérifier ne prend pas en charge les QR codes ou la vérification d’émojis, qui sont les méthodes prises en charge par %(brand)s. Essayez avec un autre client.",
             "now_you_can": "Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cet appareil.",
             "once_accepted_can_continue": "Une fois acceptée, vous pourrez poursuivre la vérification.",
@@ -1094,7 +1100,7 @@
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
-        "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_description": "Bientôt, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
@@ -1473,6 +1479,11 @@
         "room_list_expand_section": "Développer la section de la liste des salons",
         "room_list_navigate_down": "Descendre dans la liste des salons",
         "room_list_navigate_up": "Remonter dans la liste des salons",
+        "room_list_panel_collapse": "Masquer la liste de salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_expand": "Étendre la liste de salons à la taille maximum (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_grow": "Élargir la liste de salons (en sélectionnant la poignée de redimensionnement)",
+        "room_list_panel_shrink": "Réduire la largeur de la liste des salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_toggle": "Afficher ou masquer la liste des salons (avec la poignée de redimensionnement sélectionnée)",
         "room_list_select_room": "Sélectionner un salon de la liste des salons",
         "save": "Enregistrer",
         "scroll_down_timeline": "Faire défiler le fil de discussion vers le bas",
@@ -1505,6 +1516,8 @@
         "click_for_info": "Plus d'informations",
         "config_only": "Votre fournisseur de compte doit activer cette option dans le fichier config.json.",
         "currently_experimental": "Actuellement expérimental.",
+        "document_previews": "Aperçus expérimentales de documents",
+        "document_previews_description": "Ouvrez les pièces jointes PDF et Markdown dans le panneau de droite.",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
@@ -1516,6 +1529,7 @@
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
         "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_element_call_react": "Afficher Element Call en tant que composant React au lieu d'un widget.",
         "feature_retention": {
             "description": "Suppression automatique des messages d'un salon lorsq'ils atteignent la période de conservation configurée. Actuellement, seules les options de lecture sont prises en charge.",
             "disabled_sliding_sync": "La conservation des données ne peut pas être activée lorsque Sliding sync est activé.",
@@ -1557,8 +1571,6 @@
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
-        "pdf_viewer": "Ouvrir les PDF",
-        "pdf_viewer_description": "Consultez les pièces jointes PDF dans le panneau de droite.",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "sliding_sync": "Mode synchronisation progressive",
@@ -1675,6 +1687,9 @@
         "share_type_prompt": "Quel type de localisation voulez-vous partager ?",
         "toggle_attribution": "Changer l’attribution"
     },
+    "markdown_viewer": {
+        "open": "Ouvrir le document Markdown"
+    },
     "member_list": {
         "count": {
             "one": "%(count)s Membre",
@@ -1688,7 +1703,6 @@
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
-    "migrating_crypto": "Accrochez-vous. Nous mettons à jour %(brand)s pour que le chiffrement soit plus rapide et plus fiable.",
     "mobile_guide": {
         "toast_accept": "Utiliser l’application",
         "toast_description": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
@@ -2497,7 +2511,7 @@
                 "breadcrumb_page": "Réinitialiser le chiffrement",
                 "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
                 "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
-                "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique ?",
+                "breadcrumb_title": "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité numérique.",
@@ -2986,7 +3000,7 @@
             "label": "Ouvrir %(brand)s au démarrage de votre ordinateur",
             "minimised": "Minimisé"
         },
-        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
+        "tac_only_notifications": "Dans l'onglet Autres fils de discussions, n'afficher que les notifications",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",
         "use_command_f_search": "Utilisez Commande + F pour rechercher dans le fil de discussion",
@@ -3284,9 +3298,31 @@
         "show_thread_filter": "Affiche :"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s: %(preview)s, avec des messages non lus.",
+            "default_no_sender": "Ouvrir le fil de discussion dans %(roomName)s avec des messages non lus.",
+            "mention": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus comprenant des mentions."
+            },
+            "mention_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans%(roomName)s avec %(count)s messages non lus comprenant des mentions."
+            },
+            "unread": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus."
+            },
+            "unread_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s avec %(count)s messages non lus."
+            }
+        },
         "header": "Activité des fils de discussions",
-        "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
-        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
+        "my_threads_tab": "Mes fils de discussion",
+        "no_other_unread_threads": "Aucun fil de discussions d'autres personnes.",
+        "no_participating_threads_unread": "Vous n'avez pas de fils de discussions non lus auxquelles vous avez participé.",
+        "other_threads_tab": "Autres fils de discussion"
     },
     "time": {
         "date_at_time": "%(date)s à %(time)s",
@@ -3413,14 +3449,14 @@
                 "other": "%(senderName)s a ajouté les adresses alternatives %(addresses)s pour ce salon."
             },
             "alt_removed": {
-                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s pour ce salon.",
-                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s pour ce salon."
+                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s de cette discussion.",
+                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s de cette discussion."
             },
-            "changed": "%(senderName)s a changé les adresses de ce salon.",
-            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de ce salon.",
-            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et les adresses alternatives pour ce salon.",
-            "removed": "%(senderName)s a supprimé l’adresse principale de ce salon.",
-            "set": "%(senderName)s a défini l’adresse principale pour ce salon comme %(address)s."
+            "changed": "%(senderName)s a changé les adresses de cette discussion.",
+            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de cette discussion.",
+            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et alternatives de cette discussion.",
+            "removed": "%(senderName)s a supprimé l’adresse principale de cette discussion.",
+            "set": "%(senderName)s a défini l’adresse principale pour cette discussion comme %(address)s."
         },
         "m.room.create": {
             "continuation": "Ce salon est la suite d’une autre discussion.",
@@ -3920,6 +3956,11 @@
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "défaut",
+            "not_called": "non appelé",
+            "participant_you": "%(participant)s – vous"
+        },
         "enable_camera": "Activer la caméra",
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",

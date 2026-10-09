@@ -9,10 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import ToastStore from "../../../stores/ToastStore";
-import GenericToast, { type IProps as IGenericToastProps } from "./GenericToast";
+import { GenericToast, type GenericToastProps } from "@element-hq/web-shared-components";
 import { useExpiringCounter } from "../../../hooks/useTimeout";
 
-interface IProps extends IGenericToastProps {
+interface IProps extends Omit<
+    GenericToastProps,
+    "secondaryLabel" | "onSecondaryClick" | "SecondaryIcon" | "destructive"
+> {
     toastKey: string;
     numSeconds: number;
     dismissLabel: string;

@@ -29,8 +29,14 @@ import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
-import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
+import { copyPlainTextToClipboard, sanitizeHtml } from "@element-hq/element-web-shared-utils";
+import {
+    I18nContext,
+    LinkedTextContext,
+    LinkedText,
+    GenericToast,
+    LegacyCryptoUnsupportedView,
+} from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -94,7 +100,6 @@ import VerificationRequestToast from "../views/toasts/VerificationRequestToast";
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
-import { copyPlaintext } from "../../utils/strings";
 import { initSentry } from "../../sentry";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
@@ -119,7 +124,6 @@ import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SDKContext } from "../../contexts/SDKContext";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
-import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { sanitizeHtmlText } from "../../HtmlUtils";
@@ -130,6 +134,7 @@ import { Filter } from "../views/dialogs/spotlight/Filter";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
+import { LegacyCryptoStoreError } from "../../utils/LegacyCryptoStoreError.ts";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
@@ -143,6 +148,7 @@ import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
+import { LegacyCryptoUnsupportedViewModel } from "../../viewmodels/crypto/legacyCryptoUnsupportedViewModel.ts";
 
 const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
@@ -293,8 +299,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const initProm = this.initSession();
 
         initProm.catch((err) => {
-            // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
+
+            if (err instanceof LegacyCryptoStoreError) {
+                this.setState({ view: Views.LEGACY_CRYPTO_UNSUPPORTED });
+            }
         });
     };
 
@@ -1353,7 +1362,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private async copyRoom(roomId: string): Promise<void> {
         const roomLink = makeRoomPermalink(MatrixClientPeg.safeGet(), roomId);
-        const success = await copyPlaintext(roomLink);
+        const success = await copyPlainTextToClipboard(roomLink);
         if (!success) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("error_dialog|copy_room_link_failed|title"),
@@ -2221,13 +2230,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
             case Views.PENDING_CLIENT_START:
                 // we think we are logged in, but are still waiting for the /sync to complete
-                return (
-                    <LoginSplashView
-                        matrixClient={MatrixClientPeg.safeGet()}
-                        onLogoutClick={this.onLogoutClick}
-                        syncError={this.state.syncError}
-                    />
-                );
+                return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
             case Views.LOGGED_IN:
                 // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
                 // latter is set via the dispatcher). If we don't yet have a `page_type`,
@@ -2249,13 +2252,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     );
                 } else {
                     // we think we are logged in, but are still waiting for the /sync to complete
-                    return (
-                        <LoginSplashView
-                            matrixClient={MatrixClientPeg.safeGet()}
-                            onLogoutClick={this.onLogoutClick}
-                            syncError={this.state.syncError}
-                        />
-                    );
+                    return <LoginSplashView onLogoutClick={this.onLogoutClick} syncError={this.state.syncError} />;
                 }
             case Views.WELCOME:
                 return <Welcome {...this.getServerProperties()} />;
@@ -2311,6 +2308,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             case Views.LOCK_STOLEN:
                 return <SessionLockStolenView />;
+            case Views.LEGACY_CRYPTO_UNSUPPORTED:
+                return (
+                    <LegacyCryptoUnsupportedView
+                        vm={
+                            new LegacyCryptoUnsupportedViewModel({
+                                dispatcher: dis,
+                                brand: SdkConfig.get().brand,
+                            })
+                        }
+                    />
+                );
         }
     }
 

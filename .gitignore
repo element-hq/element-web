@@ -28,7 +28,11 @@ storybook-static
 /packages/shared-components/node_modules
 /packages/shared-components/dist
 /packages/shared-components/src/i18nKeys.d.ts
-/packages/shared-components/.vitest-attachments
+
+# Vitest blob reports, merged HTML reports, and attachments (screenshots recorded on failing
+# tests) - written at the repo root by `pnpm test:unit`, or under a package's own directory when
+# running vitest scoped to it directly
+.vitest
 
 # TSC incremental compilation information
 *.tsbuildinfo

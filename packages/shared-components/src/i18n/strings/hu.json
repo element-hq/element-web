@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Vissza",
+        "cancel": "Mégse",
         "click": "Kattintson",
         "close": "Bezárás",
         "collapse": "Összecsukás",
@@ -15,23 +16,27 @@
         "go": "Kezdés",
         "hide": "Elrejtés",
         "invite": "Meghívás",
-        "new_conversation": "Új beszélgetés",
+        "new_conversation": "Új",
         "new_room": "Új szoba",
         "new_section": "Új szakasz",
         "new_video_room": "Új videószoba",
+        "no": "Nem",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
         "pin": "Kitűzés",
         "play": "Lejátszás",
         "react": "Reakció",
         "remove": "Eltávolítás",
+        "remove_this_device": "Eszköz eltávolítása",
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
         "retry": "Újra",
+        "save": "Mentés",
         "search": "Keresés",
         "start_chat": "Csevegés indítása",
         "unpin": "Kitűzés megszüntetése",
-        "view_source": "Forrás megjelenítése"
+        "view_source": "Forrás megjelenítése",
+        "yes": "Igen"
     },
     "common": {
         "attachment": "Melléklet",
@@ -41,7 +46,22 @@
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Összes törlése",
+            "collapse": "Webcímelőnézetek összecsukása",
+            "failed": "Nem sikerült az előnézet lekérése",
+            "loading": "Előnézet lekérése…",
+            "remove": "Webcímelőnézet eltávolítása"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Egyéni téma hozzáadása",
+            "downloading": "Egyéni téma letöltése…",
+            "error_already_installed": "Már van telepítve ilyen nevű téma.",
+            "error_downloading": "Hiba a téma letöltése során"
+        },
         "toggle_event": "esemény be/ki"
     },
     "keyboard": {
@@ -115,12 +135,12 @@
             "drag_start": "A(z) %(source)s húzása",
             "invitation": "%(roomName)s szoba meghívásának megnyitása.",
             "mention": {
-                "one": "%(roomName)s szoba megnyitása 1 megemlítéssel.",
-                "other": "%(roomName)s szoba megnyitása %(count)s megemlítéssel."
+                "%(roomName)s szoba megnyitása 1 megemlítéssel.": "one",
+                "%(roomName)s szoba megnyitása %(count)s megemlítéssel.": "other"
             },
             "unread": {
-                "one": "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
-                "other": "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
+                "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.": "one",
+                "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel.": "other"
             },
             "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel.",
             "video_call": "Szoba megnyitása videóhívással itt: %(roomName)s",
@@ -276,8 +296,7 @@
         "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
         "url_preview": {
             "show_n_more": {
-                "one": "%(count)s további előnézet megjelenítése",
-                "other": "%(count)s további előnézet megjelenítése"
+                "%(count)s további előnézet megjelenítése": "other"
             },
             "view_image": "Kép megtekintése"
         }

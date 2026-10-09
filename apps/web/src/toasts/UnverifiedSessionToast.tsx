@@ -14,7 +14,7 @@ import dis from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { DeviceListener } from "../device-listener";
 import ToastStore from "../stores/ToastStore";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import { Action } from "../dispatcher/actions";
 import { isDeviceVerified } from "../utils/device/isDeviceVerified";
 import { DeviceMetaData } from "../components/views/settings/devices/DeviceMetaData";

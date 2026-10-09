@@ -27,7 +27,6 @@
         "cancel": "Avbryt",
         "change": "Ändra",
         "clear": "Rensa",
-        "click_to_copy": "Klicka för att kopiera",
         "close": "Stäng",
         "collapse": "Kollapsa",
         "complete": "Färdigställ",
@@ -99,6 +98,7 @@
         "revoke": "Återkalla",
         "save": "Spara",
         "search": "Sök",
+        "select_to_copy": "Markera för att kopiera",
         "send_report": "Skicka anmälan",
         "set_avatar": "Ställ in profilbild",
         "share": "Dela",
@@ -106,7 +106,8 @@
         "show_advanced": "Visa avancerat",
         "show_all": "Visa alla",
         "sign_in": "Logga in",
-        "sign_out": "Ta bort den här enheten",
+        "sign_out": "Logga ut",
+        "sign_out_before_verify": "Logga ut",
         "skip": "Hoppa över",
         "start": "Starta",
         "stop": "Stoppa",
@@ -877,6 +878,7 @@
         "setting_definition": "Inställningsdefinition:",
         "setting_id": "Inställnings-ID",
         "settings": {
+            "elementCallMockComponent": "Använd mock-komponenten ”Element Call” (React transport, inga medier)",
             "elementCallUrl": "Element Call-URL"
         },
         "settings_explorer": "Inställningar",
@@ -928,6 +930,9 @@
         "widget_screenshots": "Aktivera widget-skärmdumpar för widgets som stöder det"
     },
     "dialog_close_label": "Stäng dialogrutan",
+    "document_viewer": {
+        "title": "Dokument"
+    },
     "download_completed": "Nedladdning slutförd",
     "empty_room": "Tomt rum",
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
@@ -1007,7 +1012,7 @@
             "complete_action": "Uppfattat",
             "complete_description": "Du har verifierat den här användaren.",
             "complete_title": "Verifierad!",
-            "confirm_identity_description": "Verifiera den här enheten för att konfigurera säker meddelandehantering",
+            "confirm_identity_description": "Välj verifieringsmetod för att konfigurera säker hantering av messages.",
             "confirm_identity_title": "Bekräfta din digitala identitet",
             "confirm_the_emojis": "Bekräfta att emojierna nedan matchar de som visas på din andra enhet.",
             "error_starting_description": "Vi kunde inte starta en chatt med den andra användaren.",
@@ -1035,6 +1040,8 @@
                 "text": "Ange ID och fingeravtryck för en av dina egna enheter för att verifiera den. OBSERVERA att detta gör att den andra enheten kan skicka och ta emot meddelanden som om den vore du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD!",
                 "wrong_fingerprint": "Kunde inte verifiera enheten '%(deviceId)s' - det angivna fingeravtrycket '%(fingerprint)s' stämmer inte överens med enhetens fingeravtryck, '%(fprint)s'"
             },
+            "no_other_devices": "Det här alternativet är inte tillgängligt eftersom du inte har några andra enheter.",
+            "no_recovery_key": "Det här alternativet är inte tillgängligt eftersom du inte har konfigurerat en återställningsnyckel",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "now_you_can": "Nu kan du läsa eller skicka messages på ett säkert sätt, och alla du chatar med kan också lita på den här deviceen.",
             "once_accepted_can_continue": "När du har godkänt den kan du fortsätta med verifieringen.",
@@ -1094,7 +1101,7 @@
         "verification_requested_toast_title": "Verifiering begärd",
         "verified_identity_changed": "Verifierad identitet för %(displayName)s (<b>%(userId)s</b>) har ändrats. <a>Läs mer </a>",
         "verified_identity_changed_no_displayname": "Verifierad identitet för <b>%(userId)s</b> har ändrats. <a>Läs mer </a>",
-        "verify_toast_description": "Från och med slutet av oktober 2026 kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>",
+        "verify_toast_description": "Från och med slutet av oktober 2026 kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>\n\nhttps://github.com/element-hq/crypto-internal/issues/305",
         "verify_toast_title": "Verifiera den här enheten",
         "withdraw_verification_action": "Återkalla verifieringen"
     },
@@ -1120,7 +1127,7 @@
         "non_urgent_echo_failure_toast": "Din server svarar inte på vissa <a>förfrågningar</a>.",
         "resource_limits": "Hemservern har överskridit en av sina resursgränser.",
         "session_restore": {
-            "clear_storage_button": "Ta bort den här enheten",
+            "clear_storage_button": "Vill du verkligen logga ut?",
             "clear_storage_description": "Ta bort den här enheten tillsammans med dess krypteringsnycklar?",
             "description_1": "Dina sparade inloggningsuppgifter kunde inte återställas.",
             "description_2": "Om du tidigare har använt en nyare version av %(brand)s kan dina sparade data vara inkompatibla med den här versionen. Stäng det här fönstret och återgå till den nyare versionen.",
@@ -1473,6 +1480,11 @@
         "room_list_expand_section": "Expandera rumslistsektionen",
         "room_list_navigate_down": "Navigera ner i rumslistan",
         "room_list_navigate_up": "Navigera upp i rumslistan",
+        "room_list_panel_collapse": "Dölj rumslistan (med fstorleksändringikonen i fokus)",
+        "room_list_panel_expand": "Visa rumslistan i full bredd (med storleksjusteringsikonen i fokus)",
+        "room_list_panel_grow": "Gör rumslistan bredare (med storleksändringikonen i fokus)",
+        "room_list_panel_shrink": "Begränsa rumslistan (med storleksändringikonen i fokus)",
+        "room_list_panel_toggle": "Dölj eller visa rumslistan (med storleksändringikonen i fokus)",
         "room_list_select_room": "Välj rum från rumslistan",
         "save": "Spara",
         "scroll_down_timeline": "Skrolla ner i tidslinjen",
@@ -1505,6 +1517,8 @@
         "click_for_info": "Mer information",
         "config_only": "Din kontoleverantör måste aktivera detta i filen config.json.",
         "currently_experimental": "För närvarande experimentellt.",
+        "document_previews": "Förhandsvisningar av experimentella dokument",
+        "document_previews_description": "Öppna PDF- och Markdown-bilagor i den högra panelen.",
         "dynamic_room_predecessors": "Dynamiska rumsföregångare",
         "dynamic_room_predecessors_description": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
         "element_call_video_rooms": "Element Call videorum",
@@ -1516,6 +1530,9 @@
         "experimental_section": "Tidiga förhandstittar",
         "extended_profiles_msc_support": "Kräver att din server har stöd för MSC4133",
         "feature_disable_call_per_sender_encryption": "Inaktivera kryptering per avsändare för Element Call",
+        "feature_element_call_react": "Anropa Render Element som en React-komponent istället för en widget",
+        "feature_matrixrtc_slots": "Kräver lediga MatrixRTC-slots för Element Call-samtal",
+        "feature_matrixrtc_slots_description": "Tillåter endast att starta eller ansluta till Element Call-samtal med en giltig slot händelse i rummet.",
         "feature_retention": {
             "description": "Ta automatiskt bort messages från en rum när de har nått en angiven lagringstid. För närvarande stöds endast läsinställningar.",
             "disabled_sliding_sync": "Lagringsregler kan inte aktiveras när Sliding Sync är aktiverat.",
@@ -1557,8 +1574,6 @@
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
-        "pdf_viewer": "Öppna PDF-filer",
-        "pdf_viewer_description": "Läs PDF-bilagor i den högra panelen.",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "sliding_sync": "Sliding sync-läge",
@@ -1675,6 +1690,9 @@
         "share_type_prompt": "Vilken typ av positionsdelning vill du använda?",
         "toggle_attribution": "Växla tillskrivning"
     },
+    "markdown_viewer": {
+        "open": "Öppna Markdown"
+    },
     "member_list": {
         "count": {
             "one": "%(count)s medlem",
@@ -1688,7 +1706,6 @@
     },
     "member_list_back_action_label": "Rumsmedlemmar",
     "message_edit_dialog_title": "Meddelanderedigeringar",
-    "migrating_crypto": "Häng kvar. Vi håller på att uppdatera%(brand)s för att göra kryptering snabbare och mer tillförlitlig.",
     "mobile_guide": {
         "toast_accept": "Använd app",
         "toast_description": "%(brand)s är experimentell i mobila webbläsare. För en bättre upplevelse och de senaste funktionerna använd våran nativa app.",
@@ -2497,8 +2514,9 @@
                 "breadcrumb_page": "Återställ kryptering",
                 "breadcrumb_second_description": "Du kommer att förlora all meddelandehistorik som bara lagras på servern",
                 "breadcrumb_third_description": "Du måste verifiera alla dina befintliga enheter och kontakter igen",
-                "breadcrumb_title": "Är du säker på att du vill återställa din kryptering?",
+                "breadcrumb_title": "Kan du inte bekräfta? Då måste du återställa din digitala identitet.",
                 "breadcrumb_title_cant_confirm": "Du behöver återställa din digitala identitet",
+                "breadcrumb_title_compromised": "Är du säker på att du vill återställa din digitala identitet?",
                 "breadcrumb_title_forgot": "Glömt din återställningsnyckel? Du måste återställa din identitet.",
                 "breadcrumb_title_sync_failed": "Det gick inte att synkronisera nyckelförvaringen. Du måste återställa din digitala identitet.",
                 "breadcrumb_warning": "Gör bara detta om du tror att ditt konto har utsatts för intrång.",
@@ -2607,7 +2625,7 @@
             "email_address_in_use": "Den här e-postadressen används redan",
             "email_address_label": "E-postadress",
             "email_not_verified": "Din e-postadress har inte verifierats än",
-            "email_verification_instructions": "Klicka på länken i e-postmeddelandet för att bekräfta och klicka sedan på Fortsätt igen.",
+            "email_verification_instructions": "Öppna länken i e-postmeddelandet du fick för att verifiera och välj sedan Fortsätt igen.",
             "emails_heading": "E-postadresser",
             "error_add_email": "Kunde inte lägga till e-postadress",
             "error_deactivate_communication": "Ett problem inträffade vid kommunikation med servern. Vänligen försök igen.",
@@ -2986,7 +3004,7 @@
             "label": "Öppna %(brand)s när du loggar in på din dator",
             "minimised": "Minimerad"
         },
-        "tac_only_notifications": "Visa endast notiser i aktivitetscentret för trådar",
+        "tac_only_notifications": "På fliken ”Övriga trådar”, visa endast notiser",
         "use_12_hour_format": "Visa tidsstämplar i 12-timmarsformat (t.ex. 2:30em)",
         "use_command_enter_send_message": "Använd Kommando + Enter för att skicka ett meddelande",
         "use_command_f_search": "Använd Kommando + F för att söka på tidslinjen",
@@ -3284,9 +3302,31 @@
         "show_thread_filter": "Visa:"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Öppna tråd i %(roomName)s från %(sender)s: %(preview)s, med olästa meddelanden.",
+            "default_no_sender": "Öppna tråd i %(roomName)s med olästa meddelanden.",
+            "mention": {
+                "one": "Öppna tråd i %(roomName)s från %(sender)s: %(preview)s, med 1 oläst omnämnande.",
+                "other": "Öppna trådar i %(roomName)s från %(sender)s: %(preview)s, med %(count)s olästa meddelanden inklusive omnämnanden."
+            },
+            "mention_no_sender": {
+                "one": "Öppna tråd i %(roomName)s med 1 oläst omnämnande.",
+                "other": "Öppna tråd i %(roomName)s med %(count)s olästa meddelanden inklusive omnämnanden."
+            },
+            "unread": {
+                "one": "Öppna tråd i %(roomName)s från %(sender)s: %(preview)s, med 1 oläst meddelande.",
+                "other": "Öppna tråd i %(roomName)s från %(sender)s: %(preview)s, med %(count)s olästa meddelanden."
+            },
+            "unread_no_sender": {
+                "one": "Öppna tråd i %(roomName)s med 1 oläst meddelande.",
+                "other": "Öppna tråd i %(roomName)s med %(count)s olästa meddelanden."
+            }
+        },
         "header": "Aktivitet för trådar",
-        "no_rooms_with_threads_notifs": "Du har inga rum med trådaviseringar ännu.",
-        "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
+        "my_threads_tab": "Mina trådar",
+        "no_other_unread_threads": "Inga olästa trådar från andra användare.",
+        "no_participating_threads_unread": "Du har inga olästa trådar som du har deltagit i.",
+        "other_threads_tab": "Andra trådar"
     },
     "time": {
         "date_at_time": "%(date)s vid %(time)s",
@@ -3413,14 +3453,14 @@
                 "other": "%(senderName)s har lagt till den alternativa adressen %(addresses)s för den här chatten."
             },
             "alt_removed": {
-                "other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet.",
-                "one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet."
+                "one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet.",
+                "other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet."
             },
-            "changed": "%(senderName)s ändrade adresserna för det här rummet.",
-            "changed_alternative": "%(senderName)s ändrade de alternativa adresserna för det här rummet.",
-            "changed_main_and_alternative": "%(senderName)s ändrade huvudadressen och de alternativa adresserna för det här rummet.",
-            "removed": "%(senderName)s tog bort huvudadressen för detta rum.",
-            "set": "%(senderName)s satte huvudadressen för detta rum till %(address)s."
+            "changed": "%(senderName)s har ändrat adresserna för den här chatten.",
+            "changed_alternative": "%(senderName)s har ändrat de alternativa adresserna för den här chatten.",
+            "changed_main_and_alternative": "%(senderName)s har ändrat huvudadressen och den alternativa adressen för den här chatten.",
+            "removed": "%(senderName)s tog bort huvudadressen för denna chatt.",
+            "set": "%(senderName)s angav huvudadressen för den här chatten till %(address)s."
         },
         "m.room.create": {
             "continuation": "Detta rum är en fortsättning på en annan konversation.",
@@ -3907,6 +3947,7 @@
         "camera_enabled": "Din kamera är fortfarande på",
         "cannot_call_yourself_description": "Du kan inte ringa till dig själv.",
         "close_lobby": "Stäng lobbyn",
+        "close_slot_failed_title": "Det gick inte att inaktivera samtal för det här rummet",
         "connecting": "Ansluter",
         "connection_lost": "Anslutningen till servern har förlorats",
         "connection_lost_description": "Du kan inte ringa samtal utan en anslutning till servern.",
@@ -3920,6 +3961,11 @@
         "disabled_no_perms_start_voice_call": "Du är inte behörig att starta röstsamtal",
         "disabled_ongoing_call": "Pågående samtal",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "standard",
+            "not_called": "Inte ringd",
+            "participant_you": "%(participant)s – du"
+        },
         "enable_camera": "Sätt på kamera",
         "enable_microphone": "Slå på mikrofonen",
         "expand": "Återgå till samtal",
@@ -3956,6 +4002,7 @@
         "no_permission_conference": "Behörighet krävs",
         "no_permission_conference_description": "Du har inte behörighet att starta ett gruppsamtal i detta rum",
         "on_hold": "%(name)s parkerad",
+        "open_slot_failed_title": "Det gick inte att aktivera samtal för det här rummet",
         "output_devices": "Utgångsenheter",
         "screenshare_monitor": "Dela hela skärmen",
         "screenshare_title": "Dela innehåll",

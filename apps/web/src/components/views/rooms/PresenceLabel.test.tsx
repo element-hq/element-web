@@ -35,7 +35,7 @@ describe("<PresenceLabel/>", () => {
               <div
                 class="mx_PresenceLabel"
               >
-                User's server unreachable
+                Account provider of the user is unreachable
               </div>
             </DocumentFragment>
         `);

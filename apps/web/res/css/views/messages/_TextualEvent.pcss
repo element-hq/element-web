@@ -7,6 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_TextualBody_urlPreviews {
+    /* Separate the preview group from the message text above it. */
+    margin-top: var(--cpd-space-4x);
+
     /* Let shared-components own preview link colours instead of the app-wide anchor colour. */
     a:where(:not([data-kind])):hover,
     a:where(:not([data-kind])):link,
