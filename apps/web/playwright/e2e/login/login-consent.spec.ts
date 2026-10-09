@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { buildConfigJson } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
@@ -167,7 +168,7 @@ test.describe("Login", () => {
         });
 
         test.describe("verification after login", () => {
-            test("Shows verification prompt after login if signing keys are set up, skippable by default", async ({
+            test("Shows verification prompt after login if signing keys are set up, not skippable by default", async ({
                 page,
                 homeserver,
                 request,
@@ -189,7 +190,7 @@ test.describe("Login", () => {
                     page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
                 ).toBeVisible();
 
-                await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
             });
 
             test.describe("with force_verification off", () => {
@@ -225,6 +226,59 @@ test.describe("Login", () => {
                     ).toBeVisible();
 
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                });
+
+                test("should not force verification on reload if force_verification is enabled after login", async ({
+                    page,
+                    homeserver,
+                    request,
+                    credentials,
+                }) => {
+                    const res = await request.post(
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
+                    );
+                    expect(res.status() / 100).toEqual(2);
+
+                    // Log in while force_verification is off, and skip verification
+                    await page.goto("/");
+                    await login(page, homeserver, credentials);
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Skip verification for now" }).click();
+                    await page.getByRole("button", { name: "I'll verify later" }).click();
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+
+                    // The deployment now turns force_verification on. A page-level route takes
+                    // precedence over the context-level one registered by the `config` fixture.
+                    await page.route("/config.json*", (route) =>
+                        route.fulfill({ json: buildConfigJson(homeserver.baseUrl, { force_verification: true }) }),
+                    );
+
+                    await page.reload();
+
+                    // The session existed before enforcement was enabled, so it goes straight
+                    // to the logged-in view rather than the verification screen
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).not.toBeVisible();
+
+                    // To validate that the config actually changed (e.g. force_verification == true),
+                    // simulate as if the session was logged with force_verification == true and check
+                    // if the identity confirmation screen is now shown without the ability to skip
+                    await page.evaluate(() => localStorage.setItem("force_verification_on_at_login", "true"));
+                    await page.reload();
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
                 });
             });
 
