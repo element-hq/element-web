@@ -89,6 +89,7 @@ jobs:
               if: always()
               with:
                   name: vitest-blob-${{ matrix.runner }}
+                  overwrite: true # Overwrite any artifacts from previous runs (ie. flakes)
                   include-hidden-files: true
                   path: |
                       ./.vitest
