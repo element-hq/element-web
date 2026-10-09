@@ -23,6 +23,25 @@ export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
 
+/** Size of the thumbnail box in the side-by-side preview tile, see `MediaPreviewComponents.module.css`. */
+const THUMBNAIL_WIDTH_PX = 130;
+const THUMBNAIL_HEIGHT_PX = 142;
+/** The least of an image that cropping it to the thumbnail box may keep for it to still be worth showing. */
+const MIN_THUMBNAIL_KEPT_FRACTION = 2 / 3;
+
+/**
+ * Whether a preview image survives being cropped to the thumbnail box, which is nearly square.
+ * `object-fit: cover` trims whichever axis overflows, so a wide banner loses most of its width.
+ * An image of unknown size is assumed not to fit.
+ */
+export function imageFitsThumbnail(image: { width?: number; height?: number }): boolean {
+    if (!image.width || !image.height) return false;
+    const imageAspect = image.width / image.height;
+    const boxAspect = THUMBNAIL_WIDTH_PX / THUMBNAIL_HEIGHT_PX;
+    const keptFraction = imageAspect > boxAspect ? boxAspect / imageAspect : imageAspect / boxAspect;
+    return keptFraction >= MIN_THUMBNAIL_KEPT_FRACTION;
+}
+
 /**
  * Handles fetching and parsing URL previews.
  * Maintains a cache of previously fetched previews; call `clearCache` when

@@ -25,12 +25,12 @@ import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom, mockClie
 import { getRoomContext } from "test-utils/room";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { TextualBodyFactory as TextualBody } from "./TextualBodyFactory";
+import Modal from "../../../Modal";
+import ImageView from "../elements/ImageView";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
-import Modal from "../../../Modal";
-import ImageView from "../elements/ImageView";
 import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
@@ -664,14 +664,19 @@ describe("<TextualBody />", () => {
             );
         });
 
-        it("renders a preview with an image and opens the lightbox when it is clicked", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+        const ogLogo = { "msc4448:site_logo": "mxc://example.org/logo", "msc4448:site_logo:size": 1234 };
+
+        it("shows a near-square og:image as the thumbnail and opens the lightbox when it is clicked", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, ...ogLogo, "og:image:width": 480, "og:image:height": 480 }),
+            );
             const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
 
             await renderPreviews();
 
-            fireEvent.click(screen.getByRole("button", { name: "View image" }));
-
+            const button = await screen.findByRole("button", { name: "View image" });
+            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+            fireEvent.click(button);
             expect(createDialog).toHaveBeenCalledWith(
                 ImageView,
                 expect.objectContaining({ src: "mxc://example.org/preview", name: "Thumbnail of Matrix" }),
@@ -679,6 +684,44 @@ describe("<TextualBody />", () => {
                 undefined,
                 true,
             );
+        });
+
+        it("shows the site logo instead of a wide og:image which the thumbnail would crop", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ ...ogImage, ...ogLogo }));
+
+            await renderPreviews();
+
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/logo");
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
+
+        it("shows a wide og:image anyway when the site has no logo", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+
+            await renderPreviews();
+
+            const button = await screen.findByRole("button", { name: "View image" });
+            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+        });
+
+        it("shows the site logo guessed from a small og:image", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, "og:image:width": 32, "og:image:height": 32, "matrix:image:size": 500 }),
+            );
+
+            await renderPreviews();
+
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/preview");
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
+
+        it("shows a text-only tile when the page has neither an image nor a logo", async () => {
+            await renderPreviews();
+
+            expect(screen.queryByRole("img")).not.toBeInTheDocument();
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
         });
 
         it("links the title to the previewed page in a new tab and has no other buttons", async () => {

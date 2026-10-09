@@ -19,6 +19,7 @@ import {
     type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
+import { imageFitsThumbnail } from "../../../utils/UrlPreviewFetcher";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -163,14 +164,14 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
     };
 
-    // Side layout: thumbnail left, title/description/host right. The title is the link, so no button.
+    // Side layout: image left, title/description/host right. The title is the link, so no button.
+    //
+    // The page's Open Graph image is shown when cropping it to the thumbnail box keeps most of it.
+    // Otherwise (a wide banner, say) the site's logo (MSC4448) stands in, as a cropped sliver of a banner
+    // says less than a logo does. A page with neither gets a text-only tile.
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
-        if (preview.image === undefined) {
-            content = {
-                type: "text",
-            };
-        } else {
+        if (preview.image !== undefined && (imageFitsThumbnail(preview.image) || preview.siteIcon === undefined)) {
             content = {
                 type: "image",
                 image: preview.image.imageFull,
@@ -191,6 +192,17 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                         true,
                     );
                 },
+            };
+        } else if (preview.siteIcon !== undefined) {
+            content = {
+                type: "image",
+                image: preview.siteIcon,
+                imageAlt: previewHost(preview),
+                imageSize: "logo",
+            };
+        } else {
+            content = {
+                type: "text",
             };
         }
 

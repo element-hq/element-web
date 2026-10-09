@@ -12,7 +12,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type { UrlPreview } from "shared-types";
-import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
+import { UrlPreviewFetcher, imageFitsThumbnail } from "./UrlPreviewFetcher";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
 import { decryptFile } from "./DecryptFile";
@@ -739,5 +739,25 @@ describe("UrlPreviewFetcher", () => {
                 expect(revokeObjectUrl).toHaveBeenCalledTimes(1);
             });
         });
+    });
+});
+
+describe("imageFitsThumbnail", () => {
+    it.each([
+        [640, 640, true], // square album art
+        [982, 1000, true], // portrait photo
+        [130, 142, true], // exactly the box
+        [100, 142, true], // a third narrower than the box still keeps two thirds
+        [1200, 630, false], // the usual 1.91:1 Open Graph banner
+        [1280, 720, false], // 16:9 video still
+        [300, 74, false], // a wordmark
+        [100, 300, false], // a tall strip
+    ])("%ix%i fits: %s", (width, height, fits) => {
+        expect(imageFitsThumbnail({ width, height })).toBe(fits);
+    });
+
+    it("assumes an image of unknown size does not fit", () => {
+        expect(imageFitsThumbnail({})).toBe(false);
+        expect(imageFitsThumbnail({ width: 100 })).toBe(false);
     });
 });
