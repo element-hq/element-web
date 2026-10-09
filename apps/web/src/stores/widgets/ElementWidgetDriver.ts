@@ -41,6 +41,7 @@ import {
     type TimelineEvents,
     type Room,
     type MatrixClient,
+    UNSTABLE_ELEMENT_FUNCTIONAL_USERS,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -139,6 +140,10 @@ export class ElementWidgetDriver extends WidgetDriver {
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomEncryption).raw,
+            );
+            // So the call can ignore bots when picking who to ring and deciding whether the room is a DM
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name).raw,
             );
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
             // For the legacy membership type

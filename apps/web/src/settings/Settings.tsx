@@ -224,7 +224,8 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_disable_call_per_sender_encryption": IFeature;
+    "feature_element_call_react": IFeature;
+    "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
@@ -372,6 +373,7 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "Developer.elementCallMockComponent": IBaseSetting<boolean>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
@@ -598,12 +600,23 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
-    "feature_disable_call_per_sender_encryption": {
+    "feature_element_call_react": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        displayName: _td("labs|feature_disable_call_per_sender_encryption"),
+        displayName: _td("labs|feature_element_call_react"),
+        // A call that is already mounted with one embedding (widget/component) cannot be switched to the other.
+        controller: new ReloadOnChangeController(),
+        default: false,
+    },
+    "feature_matrixrtc_slots": {
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_matrixrtc_slots"),
+        description: _td("labs|feature_matrixrtc_slots_description"),
         default: false,
     },
     "feature_location_share_live": {
@@ -644,11 +657,13 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
+    // that people who already turned the lab on keep it, and only for as long as the lab exists.
     "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pdf_viewer"),
-        description: _td("labs|pdf_viewer_description"),
+        displayName: _td("labs|document_previews"),
+        description: _td("labs|document_previews_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -1539,5 +1554,12 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
+    },
+    "Developer.elementCallMockComponent": {
+        // With feature_element_call_react: render the mock Element Call component (HostBridge buttons, no
+        // media) instead of the real one. Used by Playwright and for development without a LiveKit backend.
+        supportedLevels: [SettingLevel.DEVICE],
+        displayName: _td("devtools|settings|elementCallMockComponent"),
+        default: false,
     },
 };

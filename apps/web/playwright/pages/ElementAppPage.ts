@@ -58,7 +58,8 @@ export class ElementAppPage {
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
         await this.page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
@@ -388,7 +389,7 @@ export class ElementAppPage {
 
         if (options?.confirmUnknownUser) {
             await expect(
-                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this chat?" }),
             ).toBeVisible();
             await dialogLocator.getByRole("button", { name: "Invite" }).click();
         }

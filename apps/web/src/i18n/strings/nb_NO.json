@@ -27,7 +27,6 @@
         "cancel": "Avbryt",
         "change": "Endre",
         "clear": "Tøm",
-        "click_to_copy": "Klikk for å kopiere",
         "close": "Lukk",
         "collapse": "Trekk sammen",
         "complete": "Fullført",
@@ -1611,7 +1610,6 @@
     },
     "member_list_back_action_label": "Medlemmer av rommet",
     "message_edit_dialog_title": "Meldingsredigeringer",
-    "migrating_crypto": "Hold deg fast. Vi oppdaterer %(brand)s for å gjøre kryptering raskere og mer pålitelig.",
     "mobile_guide": {
         "toast_accept": "Bruk app",
         "toast_description": "%(brand)s er eksperimentell på en mobil nettleser. For en bedre opplevelse og de nyeste funksjonene, bruk vår gratis app.",
@@ -3158,9 +3156,7 @@
         "show_thread_filter": "Vis:"
     },
     "threads_activity_centre": {
-        "header": "Trådaktivitet",
-        "no_rooms_with_threads_notifs": "Du har ikke rom med trådvarsler ennå.",
-        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
+        "header": "Trådaktivitet"
     },
     "time": {
         "date_at_time": "%(date)s klokken %(time)s",

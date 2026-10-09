@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import dotenv from "dotenv";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import webpack from "webpack";
@@ -105,6 +106,16 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // directory, so we don't have to rely on an index.js or similar file existing.
     const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
+    // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
+    // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
+    // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
+    // and is only loaded when a call renders on the React path. That holds for both the stylesheet itself
+    // (real path, as webpack resolves symlinks) and the wrapper that puts it in the `element-call` layer.
+    const elementCallComponentStylesheets = [
+        fs.realpathSync(fileURLToPath(import.meta.resolve("@element-hq/element-call-component/style.css"))),
+        path.resolve(__dirname, "src/components/views/voip/ElementCallComponent.css"),
+    ];
+
     return {
         ...development,
 
@@ -115,11 +126,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         bail: true,
 
         entry: {
-            bundle: "./src/vector/index.ts",
-            mobileguide: "./src/vector/mobile_guide/index.ts",
-            jitsi: "./src/vector/jitsi/index.ts",
-            usercontent: "./src/usercontent/index.ts",
-            serviceworker: {
+            "bundle": "./src/vector/index.ts",
+            "mobileguide": "./src/vector/mobile_guide/index.ts",
+            "jitsi": "./src/vector/jitsi/index.ts",
+            "usercontent": "./src/usercontent/index.ts",
+            "usercontent-pdf": "./src/usercontent/pdf/index.ts",
+            "serviceworker": {
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
             },
@@ -134,7 +146,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 cacheGroups: {
                     styles: {
                         name: "styles",
-                        test: /\.css$/,
+                        test: (module: webpack.Module): boolean => {
+                            const name = module.nameForCondition?.();
+                            return !!name && name.endsWith(".css") && !elementCallComponentStylesheets.includes(name);
+                        },
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
@@ -194,6 +209,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "react": getPackageRoot("react"),
                 "react-dom": getPackageRoot("react-dom"),
 
+                // The Element Call component (an ES module built by element-call) imports matrix-js-sdk by
+                // its package entry and `lib/*` build outputs; point those at the same `src/*` modules the
+                // rest of Element Web uses, or we end up with two copies of the SDK (and MatrixRTC sessions
+                // that Element Web does not recognise). Order matters: these must come before the prefix alias.
+                "matrix-js-sdk$": path.join(getPackageRoot("matrix-js-sdk"), "src", "matrix.ts"),
+                "matrix-js-sdk/lib": path.join(getPackageRoot("matrix-js-sdk"), "src"),
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
                 // and matrix-widget-api
@@ -242,6 +263,15 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    // The Element Call component bundles MediaPipe (background blur), whose WASM loader has an
+                    // `import(url)` fallback for module workers whose `importScripts` refuses to run. Webpack
+                    // cannot resolve an import of an expression and warns "Critical dependency: the request of
+                    // a dependency is an expression". The branch never runs on the main thread, where the
+                    // component runs, so the warning is noise: this rule stops webpack treating it as critical.
+                    test: /element-call-component[\\/]dist[\\/]element-call\.js$/,
+                    parser: { exprContextCritical: false },
+                },
                 {
                     // Match imports containing the ?raw query string
                     resourceQuery: /raw/,
@@ -298,7 +328,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            // `ident` names this options object, so it has to differ from the one the
+                            // .pcss rule below uses: sharing a name makes both rules run with whichever
+                            // plugin list was registered last, which sends plain CSS through
+                            // postcss-import.
+                            ident: "postcss-css",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
@@ -349,7 +383,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                         {
                             loader: "postcss-loader",
-                            ident: "postcss",
+                            ident: "postcss-pcss",
                             options: {
                                 sourceMap: true,
                                 postcssOptions: () => ({
@@ -584,7 +618,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
+                excludeChunks: ["mobileguide", "usercontent", "usercontent-pdf", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -628,6 +662,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 filename: "usercontent/index.html",
                 minify: false,
                 chunks: ["usercontent"],
+            }),
+
+            // This is the PDF viewer's usercontent target (see docs/usercontent.md)
+            new HtmlWebpackPlugin({
+                template: "./src/usercontent/pdf/index.html",
+                filename: "usercontent/pdf/index.html",
+                minify: false,
+                chunks: ["usercontent-pdf"],
             }),
 
             new HtmlWebpackInjectPreload({

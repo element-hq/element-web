@@ -599,7 +599,7 @@ test.describe("Room list sections", () => {
             await bot.createRoom({ name: "invited room", invite: [user.userId] });
             await expandInvitesSection(page);
 
-            await dragRoomToSection(page, "invited room", "Favourites");
+            await dragRoomToSection(page, "invited room", "Favourites", false);
 
             // The invited room stays in the Invites section
             await assertRoomInSection(page, "Invites", "invited room");

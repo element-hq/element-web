@@ -98,6 +98,7 @@ test.describe("Widget PIP", () => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,
                 invite: [bot.credentials!.userId],
+                room_version: "11",
             });
 
             // sets bot to Admin and user to Moderator

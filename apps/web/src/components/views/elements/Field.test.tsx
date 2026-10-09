@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import React from "react";
 import { fireEvent, render, screen } from "test-utils-rtl";
 
@@ -107,6 +107,27 @@ describe("Field", () => {
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
             expect(screen.queryByRole("tooltip")).toBeNull();
+        });
+    });
+
+    describe("Validation on change", () => {
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it("Should not validate after the field is unmounted", async () => {
+            // Given a field that validates on change
+            vi.useFakeTimers();
+            const onValidate = vi.fn().mockResolvedValue({ valid: true });
+            const { unmount } = render(<Field value="" onValidate={onValidate} />);
+
+            // When the value changes and the field is unmounted before the debounced validation runs
+            fireEvent.change(screen.getByRole("textbox"), { target: { value: "changed" } });
+            unmount();
+            await vi.runAllTimersAsync();
+
+            // Then the validation does not run
+            expect(onValidate).not.toHaveBeenCalled();
         });
     });
 });

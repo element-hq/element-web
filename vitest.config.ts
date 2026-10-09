@@ -44,17 +44,7 @@ export default defineConfig({
         include: /\.[cm]?tsx?$/,
     },
     test: {
-        projects: [
-            "{apps,modules,packages}/*/vitest.config.ts",
-            // Browser-mode tests for element-web. A separate top-level project rather than a
-            // nested one inside apps/web/vitest.config.ts, for the same reason as the
-            // shared-components exclusion below; nested projects should land in vitest v5
-            // (https://github.com/vitest-dev/vitest/pull/10846), at which point this can move.
-            "apps/web/vitest.browser.config.ts",
-            // We run shared-components separately for now as vitest lacks support for nested projects
-            // https://github.com/vitest-dev/vitest/issues/8544
-            "!packages/shared-components",
-        ],
+        projects: ["{apps,modules,packages}/*/vitest.config.ts"],
         coverage: {
             provider: "v8",
             include: ["{apps,modules,packages}/*/src/**/*.{cts,ts,tsx}"],

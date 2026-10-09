@@ -27,7 +27,6 @@
         "cancel": "Abbrechen",
         "change": "Ändern",
         "clear": "Löschen",
-        "click_to_copy": "Auswählen, um zu kopieren",
         "close": "Schließen",
         "collapse": "Reduzieren",
         "complete": "Abschließen",
@@ -1556,8 +1555,6 @@
         "notification_settings_beta_caption": "Wir stellen einen einfacheren Weg vor, deine Benachrichtigungseinstellungen zu ändern. Passe %(brand)s genau so an, wie du möchtest.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
-        "pdf_viewer": "PDFs öffnen",
-        "pdf_viewer_description": "PDF-Anhänge im rechten Panel lesen.",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "sliding_sync": "Sliding-Sync-Modus",
@@ -1686,7 +1683,6 @@
     },
     "member_list_back_action_label": "Chatmitglieder",
     "message_edit_dialog_title": "Nachrichtenänderungen",
-    "migrating_crypto": "Bleib dran. Wir aktualisieren%(brand)s, um die Verschlüsselung schneller und zuverlässiger zu machen.",
     "mobile_guide": {
         "toast_accept": "App verwenden",
         "toast_description": "%(brand)s ist in mobilen Browsern experimentell. Für eine bessere Erfahrung nutze unsere App.",
@@ -3283,9 +3279,7 @@
         "show_thread_filter": "Zeige:"
     },
     "threads_activity_centre": {
-        "header": "Thread-Aktivität",
-        "no_rooms_with_threads_notifs": "Es gibt keine Chats mit Thread-Benachrichtigungen.",
-        "no_rooms_with_unread_threads": "Es gibt keine Chats mit ungelesenen Threads."
+        "header": "Thread-Aktivität"
     },
     "time": {
         "date_at_time": "%(date)s um %(time)s",

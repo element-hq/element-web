@@ -49,7 +49,7 @@ describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: RoomContextType = {
         roomViewStore: SDKContextClass.instance.roomViewStore,
         roomLoading: true,
-        peekLoading: false,
+        peekAndSummaryLoading: false,
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
@@ -85,7 +85,6 @@ describe("<SendMessageComposer/>", () => {
         resizing: false,
         narrow: false,
         msc3946ProcessDynamicPredecessor: false,
-        canAskToJoin: false,
         promptAskToJoin: false,
         isRoomEncrypted: false,
     };
@@ -263,6 +262,24 @@ describe("<SendMessageComposer/>", () => {
             expect(container.textContent).toBe("");
         });
 
+        it("restores the draft when replaced by another composer for the same room in the same render", () => {
+            const { container, rerender, unmount } = render(<div key="rightPanel">{getRawComponent()}</div>, {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            });
+            addTextToComposer(container, "Notes from call");
+
+            rerender(<div key="main">{getRawComponent()}</div>);
+            expect(container.textContent).toBe("Notes from call");
+
+            // the replacement composer should persist the draft again when it unmounts
+            unmount();
+            expect(JSON.parse(localStorage.getItem("mx_cider_state_myfakeroom")!)).toStrictEqual({
+                parts: [{ type: "plain", text: "Notes from call" }],
+            });
+        });
+
         it("persists state correctly without replyToEvent onbeforeunload", () => {
             const { container } = getComponent();
 
@@ -403,18 +420,20 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
 
             await waitFor(() =>
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` }),
             );
         });
 
-        it("not to send chat effects on message sending for threads", () => {
+        it("not to send chat effects on message sending for threads", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -433,11 +452,18 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", "$yolo", {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                    "m.relates_to": {
+                        event_id: "$yolo",
+                        is_falling_back: true,
+                        rel_type: "m.thread",
+                    },
+                }),
+            );
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
         });

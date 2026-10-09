@@ -149,7 +149,7 @@ describe("Registration", function () {
         getComponent();
 
         await expect(
-            screen.findAllByText("Too many attempts in a short time. Wait some time before trying again."),
+            screen.findAllByText("Too many attempts in a short time. Wait a moment before trying again."),
         ).resolves.not.toHaveLength(0);
         expect(await screen.findByRole("button", { name: "Continue" })).toHaveAttribute("aria-disabled", "true");
     });

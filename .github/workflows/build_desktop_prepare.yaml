@@ -47,7 +47,7 @@ jobs:
     prepare:
         name: Prepare
         environment: ${{ inputs.nightly && 'packages.element.io' || '' }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             contents: read
         outputs:
@@ -70,7 +70,7 @@ jobs:
 
             - name: Fetch Element Web (from artifact)
               if: inputs.webapp-artifact != ''
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: ${{ inputs.webapp-artifact }}
                   path: apps/desktop/webapp

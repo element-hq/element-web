@@ -189,6 +189,7 @@ export function createTestClient(): MatrixClient {
         isRoomEncrypted: vi.fn().mockReturnValue(false),
         peekInRoom: vi.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
         stopPeeking: vi.fn(),
+        getRoomSummary: vi.fn().mockResolvedValue({ room_id: "!stub_room:matrix.org" }),
 
         getEventTimeline: vi.fn().mockResolvedValue([]),
         paginateEventTimeline: vi.fn().mockResolvedValue(undefined),
@@ -392,7 +393,6 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
-        session.getOldestMembership = () => undefined;
         session.getConsensusCallIntent = () => "video";
         return session;
     });
@@ -401,6 +401,8 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         stop: vi.fn(),
         getActiveRoomSession: vi.fn(),
         getRoomSession: mockGetRoomSession,
+        getRtcSlot: vi.fn(),
+        isSlotClosed: vi.fn(),
         on: eventEmitterMatrixRTCSessionManager.on.bind(eventEmitterMatrixRTCSessionManager),
         off: eventEmitterMatrixRTCSessionManager.off.bind(eventEmitterMatrixRTCSessionManager),
         removeListener: eventEmitterMatrixRTCSessionManager.removeListener.bind(eventEmitterMatrixRTCSessionManager),

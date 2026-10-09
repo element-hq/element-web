@@ -28,7 +28,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
         "complete": "Pabeigt",
@@ -1309,7 +1308,6 @@
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",
-    "migrating_crypto": "Uzgaidiet! Mēs atjauninām %(brand)s, lai šifrēšana būtu ātrāka un uzticamāka.",
     "mobile_guide": {
         "toast_accept": "Izmantot lietotni",
         "toast_description": "%(brand)s mobilajā tīmekļa pārlūkprogrammā ir eksperimentāls. Lai iegūtu labāku pieredzi un jaunāko funkcionalitāti, izmantojiet mūsu bezmaksas mobilo lietotni.",
@@ -2604,10 +2602,6 @@
             "other": "%(count)s atbildes"
         },
         "show_thread_filter": "Rādīt:"
-    },
-    "threads_activity_centre": {
-        "no_rooms_with_threads_notifs": "Jums vēl nav istabu ar pavedienu paziņojumiem.",
-        "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
     },
     "time": {
         "date_at_time": "%(date)s pulksten %(time)s",

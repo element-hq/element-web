@@ -26,6 +26,7 @@ import ActiveWidgetStore from "./stores/ActiveWidgetStore";
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from "./utils/StorageManager";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 import * as StorageAccess from "./utils/StorageAccess";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -133,13 +134,103 @@ function checkSessionLock(): void {
 class SessionLockStolenError extends Error {}
 
 interface ILoadSessionOpts {
+    /** Set to true to enable guest access tokens and auto-guest registrations. */
     enableGuest?: boolean;
+    /** Homeserver URL. Only used if `enableGuest` is true; defines the HS to register against. */
     guestHsUrl?: string;
+    /** Identity server URL. Only used if `enableGuest` is true; defines the IS to use. */
     guestIsUrl?: string;
+    /** If the stored session is a guest account, ignore it and don't load it. */
     ignoreGuest?: boolean;
+    /** Default display name to use when registering as a guest. */
     defaultDeviceDisplayName?: string;
+    /** The parameters read in at app load time from the URL. */
     urlParams?: URLParams;
+    /**
+     * Signal that is aborted if the server logs this session out while we are loading it (for example because the
+     * access token expired). If loading then fails, the error is ignored and `loadSession` resolves to `false`.
+     */
     abortSignal?: AbortSignal;
+}
+
+/**
+ * Get the homeserver URL to use for guest access.
+ *
+ * @returns the URL, or undefined if guest access is disabled or no homeserver URL was given.
+ */
+function getGuestHsUrl(opts: ILoadSessionOpts): string | undefined {
+    if (!opts.enableGuest) return undefined;
+    if (!opts.guestHsUrl) {
+        logger.warn("Cannot enable guest access: can't determine HS URL to use");
+        return undefined;
+    }
+    return opts.guestHsUrl;
+}
+
+/**
+ * Attempt to load the session, taking into account whether guest
+ * parameters were provided or the session lock had been used.
+ */
+async function tryLoadSession(opts: ILoadSessionOpts): Promise<boolean> {
+    const guestHsUrl = getGuestHsUrl(opts);
+    const guestCreds = opts.urlParams?.guest;
+
+    if (guestHsUrl && guestCreds?.guest_user_id && guestCreds.guest_access_token) {
+        logger.log("Using guest access credentials");
+        await doSetLoggedIn(
+            {
+                userId: guestCreds.guest_user_id,
+                accessToken: guestCreds.guest_access_token,
+                homeserverUrl: guestHsUrl,
+                identityServerUrl: opts.guestIsUrl,
+                guest: true,
+            },
+            true,
+            false,
+        );
+        return true;
+    }
+
+    if (await restoreSessionFromStorage({ ignoreGuest: Boolean(opts.ignoreGuest) })) {
+        return true;
+    }
+    if (sessionLockStolen) {
+        return false;
+    }
+
+    if (guestHsUrl) {
+        return registerAsGuest(guestHsUrl, opts.guestIsUrl, opts.defaultDeviceDisplayName);
+    }
+
+    // fall back to welcome screen
+    return false;
+}
+
+/**
+ * Handle an error thrown by {@link tryLoadSession}.
+ *
+ * @returns `false` to fall back to the welcome screen, or the result of {@link handleLoadSessionFailure}.
+ * @throws {@link LegacyCryptoStoreError} so that MatrixChat can show a dedicated error screen for it.
+ */
+async function handleLoadSessionError(e: unknown, opts: ILoadSessionOpts): Promise<boolean> {
+    // We may be aborted e.g. because our token expired, so don't show an error here
+    if (opts.abortSignal?.aborted) {
+        return false;
+    }
+
+    if (e instanceof LegacyCryptoStoreError) {
+        // This session predates the rust crypto stack and cannot be migrated. Let this
+        // propagate up to MatrixChat, which shows a dedicated error screen for it.
+        throw e;
+    }
+
+    // If we're aborting login because of a storage inconsistency, or the session lock was stolen while we were
+    // trying to start, we don't need to show the general failure dialog. Instead, just go back to welcome.
+    if (e instanceof AbortLoginAndRebuildStorage || sessionLockStolen) {
+        return false;
+    }
+
+    return handleLoadSessionFailure(e, opts);
 }
 
 /**
@@ -155,85 +246,15 @@ interface ILoadSessionOpts {
  * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
- * @param {object} [opts]
- * @param {object} [opts.fragmentQueryParams]: string->string map of the
- *     query-parameters extracted from the #-fragment of the starting URI.
- * @param {boolean} [opts.enableGuest]: set to true to enable guest access
- *     tokens and auto-guest registrations.
- * @param {string} [opts.guestHsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the HS to register against.
- * @param {string} [opts.guestIsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the IS to use.
- * @param {bool} [opts.ignoreGuest]: If the stored session is a guest account,
- *     ignore it and don't load it.
- * @param {string} [opts.defaultDeviceDisplayName]: Default display name to use
- *     when registering as a guest.
- * @returns {Promise} a promise which resolves when the above process completes.
+ * @returns A promise which resolves when the above process completes.
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
 export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
-        let enableGuest = opts.enableGuest || false;
-        const guestHsUrl = opts.guestHsUrl;
-        const guestIsUrl = opts.guestIsUrl;
-        const urlParams = opts.urlParams;
-        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-
-        if (enableGuest && !guestHsUrl) {
-            logger.warn("Cannot enable guest access: can't determine HS URL to use");
-            enableGuest = false;
-        }
-
-        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
-            logger.log("Using guest access credentials");
-            await doSetLoggedIn(
-                {
-                    userId: urlParams.guest.guest_user_id,
-                    accessToken: urlParams.guest.guest_access_token,
-                    homeserverUrl: guestHsUrl,
-                    identityServerUrl: guestIsUrl,
-                    guest: true,
-                },
-                true,
-                false,
-            );
-            return true;
-        }
-        const success = await restoreSessionFromStorage({
-            ignoreGuest: Boolean(opts.ignoreGuest),
-        });
-        if (success) {
-            return true;
-        }
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        if (enableGuest && guestHsUrl) {
-            return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
-        }
-
-        // fall back to welcome screen
-        return false;
+        return await tryLoadSession(opts);
     } catch (e) {
-        // We may be aborted e.g. because our token expired, so don't show an error here
-        if (opts.abortSignal?.aborted) {
-            return false;
-        }
-
-        if (e instanceof AbortLoginAndRebuildStorage) {
-            // If we're aborting login because of a storage inconsistency, we don't
-            // need to show the general failure dialog. Instead, just go back to welcome.
-            return false;
-        }
-
-        // likewise, if the session lock has been stolen while we've been trying to start
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        return handleLoadSessionFailure(e, opts);
+        return handleLoadSessionError(e, opts);
     }
 }
 
@@ -434,7 +455,19 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
     // Try to load the pickle key
     const userId = credentials.userId;
     const deviceId = credentials.deviceId;
-    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    let pickleKey: string | undefined;
+    try {
+        pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    } catch (e) {
+        logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        // Fall through and try to create a new one. This is assumed to not destroy anything because
+        // both callers of this function are fresh logins with a server-issued device ID and clear
+        // all storage around this point (onSuccessfulDelegatedAuthLogin before, setLoggedIn ->
+        // doSetLoggedIn after), so no data encrypted under a previous pickle key for this device
+        // survives.
+        // If creation also fails we end up with no pickle key and the tokens are stored unencrypted.
+    }
+
     if (!pickleKey) {
         // Create it if it did not exist
         pickleKey =
@@ -545,7 +578,7 @@ export interface IStoredSession {
  * @param storageKey key used to store the token, eg ACCESS_TOKEN_STORAGE_KEY
  * @returns Promise that resolves to token or undefined
  */
-async function getStoredToken(storageKey: string): Promise<string | undefined> {
+async function getStoredToken(storageKey: string): Promise<string | AESEncryptedSecretStoragePayload | undefined> {
     // A token at the fallback key was written because an IndexedDB write failed, and is cleared
     // again as soon as one succeeds. It is therefore always at least as new as whatever
     // IndexedDB holds, and must take precedence — otherwise a stale IndexedDB value shadows it
@@ -564,7 +597,7 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
         return fallbackToken;
     }
 
-    let token: string | undefined;
+    let token: string | AESEncryptedSecretStoragePayload | undefined;
     try {
         token = await StorageAccess.idbLoad("account", storageKey);
     } catch (e) {
@@ -637,6 +670,40 @@ async function abortLogin(): Promise<void> {
     }
 }
 
+/**
+ * Process a token which was loaded from storage by {@link getStoredToken} and decrypt if needed.
+ *
+ * {@link tryDecryptToken} only handles the encrypted case, so the two situations it used to absorb
+ * are decided here instead: a token persisted while no pickle key was available is stored as a
+ * plain string and is returned as-is, and an encrypted token with no pickle key to decrypt it is
+ * unrecoverable.
+ *
+ * @param pickleKey Pickle key for this session, or undefined if none could be read.
+ * @param token The token as it came out of storage.
+ * @param tokenName Name of the token, e.g. {@link ACCESS_TOKEN_NAME}.
+ *
+ * @returns the decrypted token.
+ * @throws if the token is encrypted but cannot be decrypted.
+ */
+async function processStoredToken(
+    pickleKey: string | undefined,
+    token: string | AESEncryptedSecretStoragePayload,
+    tokenName: string,
+): Promise<string> {
+    if (typeof token === "string") {
+        // Stored unencrypted, because there was no pickle key when it was persisted.
+        return token;
+    }
+
+    if (!pickleKey) {
+        // The token is encrypted and we have no way to read it. Keep this message stable: it is the
+        // signature support uses to identify this failure in rageshake logs.
+        throw new Error(`Error decrypting secret ${tokenName}: no pickle key found.`);
+    }
+
+    return tryDecryptToken(pickleKey, token, tokenName);
+}
+
 /** Attempt to restore the session from localStorage or indexeddb.
  *
  * If the credentials are found, and the session is successfully restored,
@@ -675,15 +742,21 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
             return false;
         }
 
-        const pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        let pickleKey: string | undefined;
+        try {
+            pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${userId}|${deviceId}`, e);
+        }
+
         if (pickleKey) {
             logger.log(`Got pickle key for ${userId}|${deviceId}`);
         } else {
             logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
-        const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_NAME);
+        const decryptedAccessToken = await processStoredToken(pickleKey, accessToken, ACCESS_TOKEN_NAME);
         const decryptedRefreshToken =
-            refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_NAME));
+            refreshToken && (await processStoredToken(pickleKey, refreshToken, REFRESH_TOKEN_NAME));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
@@ -783,8 +856,12 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 
     if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        credentials.pickleKey =
-            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        try {
+            credentials.pickleKey =
+                (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+        } catch (e) {
+            logger.error(`Failed to read pickle key for ${credentials.userId}|${credentials.deviceId}`, e);
+        }
     }
 
     return doSetLoggedIn(credentials, overwrite, false);

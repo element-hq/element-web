@@ -4,16 +4,17 @@ exports[`VerificationRequestToast > should render a cross-user verification 1`] 
 <div>
   <div>
     <div
-      class="mx_Toast_description"
+      class="_description"
     >
       @alice:domain (@other:user)
     </div>
     <div
       aria-live="off"
-      class="mx_Toast_buttons"
+      class="_buttons"
+      data-testid="toast-buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -22,7 +23,7 @@ exports[`VerificationRequestToast > should render a cross-user verification 1`] 
         Ignore
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="md"
         role="button"
@@ -39,21 +40,20 @@ exports[`VerificationRequestToast > should render a self-verification 1`] = `
 <div>
   <div>
     <div
-      class="mx_Toast_description"
+      class="_description"
     >
       my other device
-      <div
-        class="mx_Toast_detail"
-      >
+      <div>
         other_device from 1.1.1.1
       </div>
     </div>
     <div
       aria-live="off"
-      class="mx_Toast_buttons"
+      class="_buttons"
+      data-testid="toast-buttons"
     >
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -62,7 +62,7 @@ exports[`VerificationRequestToast > should render a self-verification 1`] = `
         Ignore
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="primary"
         data-size="md"
         role="button"
