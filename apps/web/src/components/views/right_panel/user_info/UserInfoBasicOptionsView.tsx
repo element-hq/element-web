@@ -28,6 +28,7 @@ const MessageButton = ({
 
     return (
         <MenuItem
+            // oxlint-disable-next-line jsx-a11y/no-redundant-roles - MenuItem implies role menuitem
             role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
@@ -57,6 +58,7 @@ export const UserInfoBasicOptionsView: React.FC<{
     if (!vm.isMe) {
         readReceiptButton = (
             <MenuItem
+                // oxlint-disable-next-line jsx-a11y/no-redundant-roles - MenuItem implies role menuitem
                 role="button"
                 onSelect={async (ev) => {
                     ev.preventDefault();
@@ -71,6 +73,7 @@ export const UserInfoBasicOptionsView: React.FC<{
         if (vm.showInsertPillButton) {
             insertPillButton = (
                 <MenuItem
+                    // oxlint-disable-next-line jsx-a11y/no-redundant-roles - MenuItem implies role menuitem
                     role="button"
                     onSelect={async (ev) => {
                         ev.preventDefault();
@@ -85,6 +88,7 @@ export const UserInfoBasicOptionsView: React.FC<{
         if (vm.showInviteButton && shouldShowComponent(UIComponent.InviteUsers)) {
             inviteUserButton = (
                 <MenuItem
+                    // oxlint-disable-next-line jsx-a11y/no-redundant-roles - MenuItem implies role menuitem
                     role="button"
                     onSelect={async (ev) => {
                         ev.preventDefault();
@@ -99,6 +103,7 @@ export const UserInfoBasicOptionsView: React.FC<{
 
     const shareUserButton = (
         <MenuItem
+            // oxlint-disable-next-line jsx-a11y/no-redundant-roles - MenuItem implies role menuitem
             role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();

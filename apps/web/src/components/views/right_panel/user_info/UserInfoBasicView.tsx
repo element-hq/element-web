@@ -36,7 +36,6 @@ export const UserInfoBasicView: React.FC<{
     if (vm.showDeactivateButton) {
         synapseDeactivateButton = (
             <MenuItem
-                role="button"
                 onSelect={async (ev) => {
                     ev.preventDefault();
                     vm.onSynapseDeactivate();
