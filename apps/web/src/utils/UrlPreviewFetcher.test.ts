@@ -167,6 +167,27 @@ describe("UrlPreviewFetcher", () => {
         expect(preview?.image).toBeUndefined();
     });
 
+    it.each([
+        [1200, 600, 478, 239], // wide banner, scaled down to the preview width
+        [500, 1000, 239, 478], // tall image, scaled down to the preview height
+        [128, 128, 128, 128], // small image, left alone
+        [undefined, undefined, 478, 478], // unknown size fills the box
+    ])("should scale a %sx%s image to %sx%s keeping its aspect ratio", async (w, h, width, height) => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:width": w,
+            "og:image:height": h,
+            "matrix:image:size": 10000,
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation(() => "https://example.org/image");
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.image?.width).toBe(width);
+        expect(preview?.image?.height).toBe(height);
+    });
+
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
