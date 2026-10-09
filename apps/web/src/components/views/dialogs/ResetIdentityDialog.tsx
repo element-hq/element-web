@@ -55,19 +55,49 @@ export function ResetIdentityDialog({
         onFinished();
     };
 
+    /**
+     * Close the dialog, or sign out if the button is "Sign out".
+     */
     const onCancelOrSignOut: () => void = () => {
-        // Normally, the cancel button will just close the dialog, but if there
-        // are no other viable verification methods, the only sensible option
-        // other than a reset is for the user to give up and sign out.
-        //
-        // If we are in `no_verification_method` mode, then we should have been
-        // supplied `onSignOut` but if that didn't happen for some reason, just
-        // close the dialog as normal.
-        if (onSignOut && variant === "no_verification_method") {
-            onSignOut();
-        } else {
-            onFinished();
+        // Wrap the implementation in a function returning a useless bool, to
+        // persuade the type checker to tell us if we missed a case of
+        // `variant`.
+
+        function impl(): boolean {
+            // Normally, the cancel button will just close the dialog, but if
+            // there are no other viable verification methods, the only sensible
+            // option other than a reset is for the user to give up and sign
+            // out.
+            switch (variant) {
+                case "compromised":
+                case "forgot":
+                case "sync_failed":
+                case "confirm": {
+                    onFinished();
+                    return true;
+                }
+                case "no_verification_method":
+                case "no_encrypted_rooms": {
+                    // If we are in one of the modes meaning we have no
+                    // verification methods, then we should have been supplied
+                    // `onSignOut`...
+                    if (onSignOut) {
+                        onSignOut();
+                    } else {
+                        // ... but if that didn't happen for some reason,
+                        // just close the dialog as normal.
+                        onFinished();
+                    }
+                    return true;
+                }
+            }
+
+            // We always return true within the switch, and have no return
+            // statement at the end, so if we miss a case in the switch we will
+            // see a type error.
         }
+
+        impl();
     };
 
     return (
