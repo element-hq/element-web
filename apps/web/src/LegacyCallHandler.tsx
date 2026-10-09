@@ -112,6 +112,9 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private shownSidebars = new Map<string, boolean>(); // callId (call) -> sidebar show
 
     private backgroundAudio = new BackgroundAudio();
+    // The ringtone gets an audio context of its own so that it can play on a different output device
+    // (for example the laptop speakers while calls stay on a headset) without rerouting other call sounds.
+    private ringtoneAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
     public constructor(private readonly sdkContext: SDKContextClass) {
@@ -336,7 +339,15 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         };
 
         const [urlPrefix, loop] = audioInfo[audioId];
-        const source = await this.backgroundAudio.pickFormatAndPlay(urlPrefix, ["mp3", "ogg"], loop);
+        const source =
+            audioId === AudioID.Ring
+                ? await this.ringtoneAudio.pickFormatAndPlay(
+                      urlPrefix,
+                      ["mp3", "ogg"],
+                      loop,
+                      SettingsStore.getValue("webrtc_ringtone_audiooutput"),
+                  )
+                : await this.backgroundAudio.pickFormatAndPlay(urlPrefix, ["mp3", "ogg"], loop);
         if (this.playingSources[audioId]) {
             logger.warn(`${logPrefix} Already playing audio ${audioId}!`);
         }
