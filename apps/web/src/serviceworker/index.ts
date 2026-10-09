@@ -11,6 +11,8 @@ import { idbLoad } from "../utils/StorageAccess";
 import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
 
+declare const self: ServiceWorkerGlobalScope;
+
 const serverSupportMap: {
     [serverUrl: string]: {
         supportsAuthedMedia: boolean;
@@ -18,16 +20,14 @@ const serverSupportMap: {
     };
 } = {};
 
-global.addEventListener("install", (event) => {
+self.addEventListener("install", (event) => {
     // We skipWaiting() to update the service worker more frequently, particularly in development environments.
-    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-    event.waitUntil(skipWaiting());
+    event.waitUntil(self.skipWaiting());
 });
 
-global.addEventListener("activate", (event) => {
+self.addEventListener("activate", (event) => {
     // We force all clients to be under our control, immediately. This could be old tabs.
-    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-    event.waitUntil(clients.claim());
+    event.waitUntil(self.clients.claim());
 });
 
 /**
@@ -40,7 +40,7 @@ const pendingUserInfoRequests = new Map<
 
 // Event handlers must be added during the initial evaluation of the worker script, so we register a single `message`
 // listener here and route each reply to the request awaiting it, rather than adding a listener per request.
-global.addEventListener("message", (event: MessageEvent) => {
+self.addEventListener("message", (event) => {
     const responseKey = event.data?.responseKey;
     if (typeof responseKey !== "string") return; // not a reply to one of our requests
     const handler = pendingUserInfoRequests.get(responseKey);
@@ -49,10 +49,7 @@ global.addEventListener("message", (event: MessageEvent) => {
     handler(event.data);
 });
 
-// @ts-expect-error - the service worker types conflict with the DOM types available through TypeScript. Many hours
-// have been spent trying to convince the type system that there's no actual conflict, but it has yet to work. Instead
-// of trying to make it do the thing, we force-cast to something close enough where we can (and ignore errors otherwise).
-global.addEventListener("fetch", (event: FetchEvent) => {
+self.addEventListener("fetch", (event) => {
     // This is the authenticated media (MSC3916) check, proxying what was unauthenticated to the authenticated variants.
 
     if (event.request.method !== "GET") {
@@ -86,8 +83,10 @@ global.addEventListener("fetch", (event: FetchEvent) => {
                 await new Promise<void>((resolve) => setTimeout(() => resolve(), Math.random() * 10));
 
                 // Locate the access token and homeserver url
-                // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-                const client = await global.clients.get(event.clientId);
+                const client = await self.clients.get(event.clientId);
+                if (!client) {
+                    throw new Error("No client found for request");
+                }
                 auth = await getAuthData(client);
 
                 // Is this request actually going to the homeserver?
@@ -136,9 +135,7 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
     );
 }
 
-// Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
-// unknown for now and force-cast it to something close enough later.
-async function getAuthData(client: unknown): Promise<{ accessToken: string; homeserver: string }> {
+async function getAuthData(client: Client): Promise<{ accessToken: string; homeserver: string }> {
     // Access tokens are encrypted at rest, so while we can grab the "access token", we'll need to do work to get the
     // real thing.
     // idbLoad is untyped; a token persisted with a pickle key is an encrypted payload, and one
@@ -183,10 +180,8 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
     }
 }
 
-// Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
-// unknown for now and force-cast it to something close enough inside the function.
 async function askClientForUserIdParams(
-    client: unknown,
+    client: Client,
 ): Promise<{ userId: string; deviceId: string; homeserver: string }> {
     return new Promise((resolve, reject) => {
         // Dev note: this uses postMessage, which is a highly insecure channel. postMessage is typically visible to other
@@ -215,7 +210,7 @@ async function askClientForUserIdParams(
         });
 
         // Ask the tab for the information we need. This is handled by WebPlatform.
-        (client as Window).postMessage({ responseKey, type: "userinfo" });
+        client.postMessage({ responseKey, type: "userinfo" });
     });
 }
 
