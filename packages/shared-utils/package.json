@@ -37,6 +37,7 @@
         "@types/sanitize-html": "2.16.1",
         "@types/node": "catalog:ts6",
         "@typescript/native": "catalog:",
+        "happy-dom": "^20.10.2",
         "typescript": "catalog:ts6",
         "unplugin-dts": "catalog:",
         "vite": "catalog:",

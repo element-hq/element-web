@@ -100,6 +100,7 @@
         "revoke": "Odwołaj",
         "save": "Zapisz",
         "search": "Szukaj",
+        "select_to_copy": "Kliknij, aby skopiować",
         "send_report": "Wyślij zgłoszenie",
         "set_avatar": "Ustaw zdjęcie profilowe",
         "share": "Udostępnij",
@@ -1544,6 +1545,8 @@
         "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
         "feature_element_call_react": "Renderuj Element Call jako komponent React zamiast widżetu",
+        "feature_matrixrtc_slots": "Wymagaj otwartych slotów MatrixRTC dla połączeń Element Call",
+        "feature_matrixrtc_slots_description": "Umożliwia rozpoczęcie połączenia Element Call lub dołączenie do niego tylko wtedy, gdy pokój zawiera prawidłowe zdarzenie slotu.",
         "feature_retention": {
             "description": "Automatycznie usuwaj wiadomości po upływie ustawionego czasu wygaśnięcia. Obecnie obsługiwane są tylko ustawienia czytania.",
             "disabled_sliding_sync": "Nie można ustawić czasu wygaśnięcia wiadomości, gdy opcja Sliding Sync jest włączona.",
@@ -1718,7 +1721,6 @@
     },
     "member_list_back_action_label": "Członkowie pokoju",
     "message_edit_dialog_title": "Edycje wiadomości",
-    "migrating_crypto": "Spokojnie. Aktualizujemy %(brand)s, aby szyfrowanie było szybsze i bardziej niezawodne.",
     "mobile_guide": {
         "toast_accept": "Użyj aplikacji",
         "toast_description": "%(brand)s jest eksperymentalne na przeglądarce mobilnej. Dla lepszego doświadczenia i najnowszych funkcji użyj naszej darmowej natywnej aplikacji.",
@@ -3503,15 +3505,15 @@
                 "many": "%(senderName)s dodał alternatywne adresy %(addresses)s dla tego czatu."
             },
             "alt_removed": {
-                "one": "%(senderName)s usunął alternatywny adres %(addresses)s pokoju.",
-                "few": "%(senderName)s usunął alternatywne adresy %(addresses)s pokoju.",
-                "many": "%(senderName)s usunął alternatywne adresy %(addresses)s pokoju."
+                "one": "%(senderName)s usunął alternatywny adres %(addresses)s dla tego czatu.",
+                "few": "%(senderName)s usunął alternatywne adresy %(addresses)s dla tego czatu.",
+                "many": "%(senderName)s usunął alternatywne adresy %(addresses)s dla tego czatu."
             },
-            "changed": "%(senderName)s zmienił adresy dla tego pokoju.",
-            "changed_alternative": "%(senderName)s zmienił alternatywne adresy dla tego pokoju.",
-            "changed_main_and_alternative": "%(senderName)s zmienił główne i alternatywne adresy dla tego pokoju.",
-            "removed": "%(senderName)s usunął główny adres tego pokoju.",
-            "set": "%(senderName)s ustawił główny adres dla tego pokoju na %(address)s."
+            "changed": "%(senderName)s zmienił adresy tego czatu.",
+            "changed_alternative": "%(senderName)s zmienił alternatywne adresy dla tego czatu.",
+            "changed_main_and_alternative": "%(senderName)s zmienił główny i alternatywny adres tego czatu.",
+            "removed": "%(senderName)s usunął główny adres tego czatu.",
+            "set": "%(senderName)s ustawił główny adres dla tego czatu na %(address)s."
         },
         "m.room.create": {
             "continuation": "Ten pokój jest kontynuacją innej rozmowy.",
@@ -4047,6 +4049,7 @@
         "camera_enabled": "Twoja kamera jest nadal włączona",
         "cannot_call_yourself_description": "Nie możesz wykonać połączenia do siebie.",
         "close_lobby": "Zamknij poczekalnię",
+        "close_slot_failed_title": "Nie można wyłączyć połączeń dla tego pokoju",
         "connecting": "Łączenie",
         "connection_lost": "Połączenie z serwerem zostało przerwane",
         "connection_lost_description": "Nie możesz wykonywać rozmów bez połączenia z serwerem.",
@@ -4102,6 +4105,7 @@
         "no_permission_conference": "Wymagane Uprawnienia",
         "no_permission_conference_description": "Nie posiadasz uprawnień do rozpoczęcia rozmowy grupowej w tym pokoju",
         "on_hold": "%(name)s na linii",
+        "open_slot_failed_title": "Nie udało się włączyć połączeń dla tego pokoju",
         "output_devices": "Urządzenia wyjściowe",
         "screenshare_monitor": "Udostępnij cały ekran",
         "screenshare_title": "Udostępnij zawartość",

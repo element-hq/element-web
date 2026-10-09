@@ -27,6 +27,7 @@
         "play": "Spela",
         "react": "Reagera",
         "remove": "Ta bort",
+        "remove_this_device": "Ta bort den här enheten",
         "reply": "Svara",
         "reply_in_thread": "Svara i tråd",
         "retry": "Försök igen",
@@ -93,6 +94,13 @@
     "emoji_picker": {
         "cancel_search_label": "Avbryt sökningen",
         "emoji_picker": "Emojiväljare"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Nedgradera antingen till <b>%(version)s</b> först eller ta bort den här enheten.",
+            "description": "%(brand)s uppdaterades från en gammal version och kan inte migrera ditt krypteringsarkiv till ett nytt format.",
+            "title": "Den här enheten kan inte användas"
+        }
     },
     "keyboard": {
         "shift": "Skift"

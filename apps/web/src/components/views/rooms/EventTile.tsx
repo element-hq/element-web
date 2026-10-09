@@ -36,6 +36,7 @@ import {
     TileErrorView,
     type EventTileRenderingMode,
 } from "@element-hq/web-shared-components";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -56,7 +57,6 @@ import PlatformPeg from "../../../PlatformPeg";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -548,7 +548,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const { permalinkCreator, mxEvent } = this.props;
         if (!permalinkCreator) return;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
-        await copyPlaintext(matrixToUrl);
+        await copyPlainTextToClipboard(matrixToUrl);
     };
 
     private readonly onRoomReceipt = (ev: MatrixEvent, room: Room): void => {

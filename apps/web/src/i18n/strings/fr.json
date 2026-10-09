@@ -929,6 +929,9 @@
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge"
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
+    "document_viewer": {
+        "title": "Document"
+    },
     "download_completed": "Téléchargement terminé",
     "empty_room": "Salon vide",
     "empty_room_was_name": "Salon vide (précédemment %(oldName)s)",
@@ -1008,7 +1011,7 @@
             "complete_action": "Compris",
             "complete_description": "Vous avez vérifié cet utilisateur avec succès.",
             "complete_title": "Vérifié !",
-            "confirm_identity_description": "Vérifier cet appareil pour configurer votre messagerie sécurisée",
+            "confirm_identity_description": "Choisissez comment vérifier afin de configurer votre messagerie sécurisée.",
             "confirm_identity_title": "Confirmez votre identité numérique",
             "confirm_the_emojis": "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre appareil.",
             "error_starting_description": "Nous n’avons pas pu démarrer une conversation avec l’autre utilisateur.",
@@ -1513,6 +1516,8 @@
         "click_for_info": "Plus d'informations",
         "config_only": "Votre fournisseur de compte doit activer cette option dans le fichier config.json.",
         "currently_experimental": "Actuellement expérimental.",
+        "document_previews": "Aperçus expérimentales de documents",
+        "document_previews_description": "Ouvrez les pièces jointes PDF et Markdown dans le panneau de droite.",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
@@ -1682,6 +1687,9 @@
         "share_type_prompt": "Quel type de localisation voulez-vous partager ?",
         "toggle_attribution": "Changer l’attribution"
     },
+    "markdown_viewer": {
+        "open": "Ouvrir le document Markdown"
+    },
     "member_list": {
         "count": {
             "one": "%(count)s Membre",
@@ -1695,7 +1703,6 @@
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
-    "migrating_crypto": "Accrochez-vous. Nous mettons à jour %(brand)s pour que le chiffrement soit plus rapide et plus fiable.",
     "mobile_guide": {
         "toast_accept": "Utiliser l’application",
         "toast_description": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
@@ -2504,7 +2511,7 @@
                 "breadcrumb_page": "Réinitialiser le chiffrement",
                 "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
                 "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
-                "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique ?",
+                "breadcrumb_title": "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité numérique.",
@@ -3442,14 +3449,14 @@
                 "other": "%(senderName)s a ajouté les adresses alternatives %(addresses)s pour ce salon."
             },
             "alt_removed": {
-                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s pour ce salon.",
-                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s pour ce salon."
+                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s de cette discussion.",
+                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s de cette discussion."
             },
-            "changed": "%(senderName)s a changé les adresses de ce salon.",
-            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de ce salon.",
-            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et les adresses alternatives pour ce salon.",
-            "removed": "%(senderName)s a supprimé l’adresse principale de ce salon.",
-            "set": "%(senderName)s a défini l’adresse principale pour ce salon comme %(address)s."
+            "changed": "%(senderName)s a changé les adresses de cette discussion.",
+            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de cette discussion.",
+            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et alternatives de cette discussion.",
+            "removed": "%(senderName)s a supprimé l’adresse principale de cette discussion.",
+            "set": "%(senderName)s a défini l’adresse principale pour cette discussion comme %(address)s."
         },
         "m.room.create": {
             "continuation": "Ce salon est la suite d’une autre discussion.",
