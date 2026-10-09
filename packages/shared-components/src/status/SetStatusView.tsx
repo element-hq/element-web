@@ -83,18 +83,28 @@ export type SetStatusViewProps = {
      * Ignored if the user already has a status set, as their existing status is shown instead.
      */
     initialCustomMode?: boolean;
+
+    /**
+     * If true, the status options open as a flyout to the side of the trigger instead of
+     * dropping down below it. Intended for use when this is rendered inside a menu popover
+     * (e.g. the user menu), so the options don't cover the rest of that menu.
+     *
+     * Defaults to false, which is appropriate for standalone contexts like the settings page,
+     * where there's no surrounding menu panel for the options to cover.
+     */
+    flyout?: boolean;
 };
 
 function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
     return (
         <>
             <span className={styles.dropdownEmoji}>{STATUSES[value].emoji}</span>
-            <span>{_t(STATUSES[value].textKey)}</span>
+            <span className={styles.optionLabel}>{_t(STATUSES[value].textKey)}</span>
         </>
     );
 }
 
-export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
+export function SetStatusView({ vm, initialCustomMode = false, flyout = false }: SetStatusViewProps): JSX.Element {
     const { userStatus, recentEmojis, disabled } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
 
@@ -166,6 +176,7 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
 
     return (
         <Dropdown<StatusValue>
+            className={flyout ? styles.statusDropdown : undefined}
             values={STATUS_KEYS}
             label={null}
             trigger={renderTrigger}
