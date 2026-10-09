@@ -2514,6 +2514,7 @@
                 "breadcrumb_description": "If you don't have access to any other verified devices and you don't have your recovery key, then you'll need to reset your digital identity to continue using the app.",
                 "breadcrumb_description_no_verification_method": "You don't have access to any other verified devices or a recovery key, so you'll need to reset your digital identity to continue using the app. ",
                 "breadcrumb_first_description": "Your account details, contacts, preferences, and chat list will be kept",
+                "breadcrumb_first_description_no_encrypted_devices": "It looks like you don't have any chats yet. If this is correct, you can safely proceed with resetting your digital identity",
                 "breadcrumb_fourth_description": "Any devices you're signed in to will need to be reconfirmed",
                 "breadcrumb_page": "Reset encryption",
                 "breadcrumb_second_description": "You'll lose any encrypted chat history that's stored only on the server",

@@ -19,9 +19,15 @@ import AuthPage from "../../views/auth/AuthPage";
 import SdkConfig from "../../../SdkConfig";
 import E2EIcon from "../../views/rooms/E2EIcon.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
+import { MatrixClient } from "matrix-js-sdk";
 
 interface IProps {
     onFinished: () => void;
+
+    /**
+     * True if the user has any encryted rooms.
+     */
+    anyEncryptedRooms?: boolean;
 }
 
 interface IState {
@@ -109,11 +115,19 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                             {skipButton}
                         </h1>
                         <div className="mx_CompleteSecurity_body">
-                            <SetupEncryptionBody onFinished={this.props.onFinished} allowLogout={true} />
+                            <SetupEncryptionBody
+                                onFinished={this.props.onFinished}
+                                allowLogout={true}
+                                anyEncryptedRooms={this.props.anyEncryptedRooms}
+                            />
                         </div>
                     </CompleteSecurityBody>
                 </Glass>
             </AuthPage>
         );
+    }
+
+    static anyEncryptedRooms(client: MatrixClient | null): boolean {
+        return !!client?.getRooms().some((room) => room.hasEncryptionStateEvent());
     }
 }

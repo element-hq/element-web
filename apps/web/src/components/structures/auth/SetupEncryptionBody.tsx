@@ -29,9 +29,11 @@ import ExternalLink from "../../views/elements/ExternalLink";
 import dispatcher from "../../../dispatcher/dispatcher";
 import E2EIcon from "../../views/rooms/E2EIcon.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
+import { ResetIdentityBodyVariant } from "../../views/settings/encryption/ResetIdentityBody.tsx";
 
 interface IProps {
     onFinished: () => void;
+
     /**
      * Offer the user an option to log out, instead of setting up encryption.
      *
@@ -42,6 +44,11 @@ interface IProps {
      * Defaults to `false` if omitted.
      */
     allowLogout?: boolean;
+
+    /**
+     * True if the user has any encryted rooms.
+     */
+    anyEncryptedRooms?: boolean;
 }
 
 interface IState {
@@ -139,9 +146,15 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             onSignOut: () => {
                 dispatcher.dispatch({ action: "logout" });
             },
-            variant: store.lostKeys() && this.props.allowLogout ? "no_verification_method" : "confirm",
+            variant: this.resetIdentityVariant(store, this.props.anyEncryptedRooms),
         });
     };
+
+    private resetIdentityVariant(store: SetupEncryptionStore, anyEncryptedRooms?: boolean): ResetIdentityBodyVariant {
+        const noVerificationMethod = store.lostKeys() && this.props.allowLogout;
+
+        return noVerificationMethod ? (anyEncryptedRooms ? "no_verification_method" : "no_encrypted_rooms") : "confirm";
+    }
 
     private onSignOutClick = (): void => {
         dispatcher.dispatch({ action: "logout" });

@@ -81,29 +81,30 @@ describe("ResetIdentityDialog", () => {
     });
 
     it("should show even softer warnings if logging in, with no encrypted chats", async () => {
-        // TODO: not implemented yet
-        //// When we are using the "no_encrypted_rooms" variant (we are
-        //// logging in, reset is the only viable option, and you have no
-        //// encrypted chats)
-        //mockClient();
-        //const dialog = render(
-        //    <ResetIdentityDialog onFinished={vi.fn()} onReset={vi.fn()} variant="no_encrypted_rooms" />
-        //);
-        //// Then we render with lots of warnings
-        //expectWarning(dialog, "you_need_to_reset");
-        //expectWarning(dialog, "you_dont_have_access");
-        //expectWarning(dialog, "dont_have_any_chats");
-        //// And we don't show the usual 3 warnings
-        //expectNoWarning(dialog, "chat_list_kept");
-        //expectNoWarning(dialog, "lose_encrypted_history");
-        //expectNoWarning(dialog, "identity_reset");
-        //
-        //// But we don't show the device reconfirmation warning because there are
-        //// no other devices.
-        //expectNoWarning(dialog, "devices_reconfirmed");
-        //
-        //// And we don't show the alert because there is no other choice
-        //expectNoWarning(dialog, "only_reset_if");
+        // When we are using the "no_encrypted_rooms" variant (we are
+        // logging in, reset is the only viable option, and you have no
+        // encrypted chats)
+        mockClient();
+        const dialog = render(
+            <ResetIdentityDialog onFinished={vi.fn()} onReset={vi.fn()} variant="no_encrypted_rooms" />,
+        );
+
+        // Then we render with lots of warnings
+        expectWarning(dialog, "you_need_to_reset");
+        expectWarning(dialog, "you_dont_have_access");
+        expectWarning(dialog, "dont_have_any_chats");
+
+        // And we don't show the usual 3 warnings
+        expectNoWarning(dialog, "chat_list_kept");
+        expectNoWarning(dialog, "lose_encrypted_history");
+        expectNoWarning(dialog, "identity_reset");
+
+        // But we don't show the device reconfirmation warning because there are
+        // no other devices.
+        expectNoWarning(dialog, "devices_reconfirmed");
+
+        // And we don't show the alert because there is no other choice
+        expectNoWarning(dialog, "only_reset_if");
     });
 
     it("should call onReset and onFinished when we click Continue", async () => {

@@ -2215,7 +2215,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     />
                 );
             case Views.COMPLETE_SECURITY:
-                return <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+                return (
+                    <CompleteSecurity
+                        onFinished={this.onCompleteSecurityE2eSetupFinished}
+                        anyEncryptedRooms={CompleteSecurity.anyEncryptedRooms(MatrixClientPeg.get())}
+                    />
+                );
             case Views.E2E_SETUP:
                 return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
             case Views.PENDING_CLIENT_START:

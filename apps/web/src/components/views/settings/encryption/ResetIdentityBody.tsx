@@ -56,7 +56,13 @@ interface ResetIdentityBodyProps {
  * a cross-signed device. When this variant is used, a "Sign out" button is displayed
  * instead of the normal cancel ("Go back") button.
  */
-export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm" | "no_verification_method";
+export type ResetIdentityBodyVariant =
+    | "compromised"
+    | "forgot"
+    | "sync_failed"
+    | "confirm"
+    | "no_verification_method"
+    | "no_encrypted_rooms";
 
 /**
  * User interface component allowing the user to reset their cryptographic identity.
@@ -77,20 +83,30 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
             description={descriptionForVariant(variant)}
         >
             <EncryptionCardEmphasisedContent>
-                <VisualList>
-                    <VisualListItem Icon={CheckCircle} success={true}>
-                        {_t("settings|encryption|advanced|breadcrumb_first_description")}
-                    </VisualListItem>
-                    <VisualListItem Icon={VisibilityOff}>
-                        {_t("settings|encryption|advanced|breadcrumb_second_description")}
-                    </VisualListItem>
-                    <VisualListItem Icon={Group}>
-                        {_t("settings|encryption|advanced|breadcrumb_third_description")}
-                    </VisualListItem>
-                    {destructiveForVariant(variant) && <VisualListItem Icon={Devices}>
-                        {_t("settings|encryption|advanced|breadcrumb_fourth_description")}
-                    </VisualListItem>}
-                </VisualList>
+                {variant === "no_encrypted_rooms" ? (
+                    <VisualList>
+                        <VisualListItem Icon={CheckCircle} success={true}>
+                            {_t("settings|encryption|advanced|breadcrumb_first_description_no_encrypted_devices")}
+                        </VisualListItem>
+                    </VisualList>
+                ) : (
+                    <VisualList>
+                        <VisualListItem Icon={CheckCircle} success={true}>
+                            {_t("settings|encryption|advanced|breadcrumb_first_description")}
+                        </VisualListItem>
+                        <VisualListItem Icon={VisibilityOff}>
+                            {_t("settings|encryption|advanced|breadcrumb_second_description")}
+                        </VisualListItem>
+                        <VisualListItem Icon={Group}>
+                            {_t("settings|encryption|advanced|breadcrumb_third_description")}
+                        </VisualListItem>
+                        {destructiveForVariant(variant) && (
+                            <VisualListItem Icon={Devices}>
+                                {_t("settings|encryption|advanced|breadcrumb_fourth_description")}
+                            </VisualListItem>
+                        )}
+                    </VisualList>
+                )}
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
             </EncryptionCardEmphasisedContent>
             {alertForVariant(variant)}
@@ -141,6 +157,7 @@ function titleForVariant(variant: ResetIdentityBodyVariant): string {
         case "forgot":
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
         case "no_verification_method":
+        case "no_encrypted_rooms":
             return _t("settings|encryption|advanced|breadcrumb_title_cant_confirm");
     }
 }
@@ -148,6 +165,7 @@ function titleForVariant(variant: ResetIdentityBodyVariant): string {
 function descriptionForVariant(variant: ResetIdentityBodyVariant): string | undefined {
     switch (variant) {
         case "no_verification_method":
+        case "no_encrypted_rooms":
             return _t("settings|encryption|advanced|breadcrumb_description_no_verification_method");
         case "confirm":
             return _t("settings|encryption|advanced|breadcrumb_description");
@@ -178,6 +196,7 @@ function cancelTextForVariant(variant: ResetIdentityBodyVariant): string {
         case "forgot":
             return _t("action|go_back");
         case "no_verification_method":
+        case "no_encrypted_rooms":
             return _t("action|sign_out_before_verify");
     }
 }
@@ -185,6 +204,7 @@ function cancelTextForVariant(variant: ResetIdentityBodyVariant): string {
 function destructiveForVariant(variant: ResetIdentityBodyVariant): boolean {
     switch (variant) {
         case "no_verification_method":
+        case "no_encrypted_rooms":
             return false;
         case "confirm":
         case "compromised":
