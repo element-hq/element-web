@@ -305,6 +305,11 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_body {
+    /* Underline the links posted in a message, but not pills. */
+    a:not([data-kind]):not(.mx_Pill) {
+        text-decoration: underline;
+    }
+
     pre {
         border: 1px solid transparent;
 
