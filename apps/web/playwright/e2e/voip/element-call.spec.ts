@@ -927,6 +927,9 @@ test.describe("Element Call", () => {
             await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
             await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
             expect(await page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+
+            // Sync long-polls still waiting on the server would otherwise fail once the test ends
+            await page.unrouteAll({ behavior: "ignoreErrors" });
         });
     });
 
