@@ -57,6 +57,8 @@ test.describe("Message links", () => {
     test("should linkify text inside a URL preview", async ({ page, user, app, room }) => {
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
+            // A preview without a site icon makes the client look for the site's favicon.ico too.
+            if (requestedPage === "https://example.org/favicon.ico") return route.fulfill({ status: 404 });
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
                 json: {
