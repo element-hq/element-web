@@ -18,6 +18,9 @@ import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPict
 describe("PictureInPictureDragger", () => {
     let renderResult: RenderResult;
 
+    // The dragger is portalled into the persisted element container, see getOrCreateMasterContainer
+    const getPipContainer = (): HTMLElement | null => document.getElementById("mx_PersistedElement_container");
+
     const mkContent1: Array<CreatePipChildren> = [
         () => {
             return <div>content 1</div>;
@@ -41,7 +44,7 @@ describe("PictureInPictureDragger", () => {
         });
 
         it("should render the PiP content", () => {
-            expect(renderResult.container).toMatchSnapshot("pip-content-1");
+            expect(getPipContainer()).toMatchSnapshot("pip-content-1");
         });
 
         describe("and rerendering PiP content 1", () => {
@@ -50,7 +53,7 @@ describe("PictureInPictureDragger", () => {
             });
 
             it("should not change the PiP content", () => {
-                expect(renderResult.container).toMatchSnapshot("pip-content-1");
+                expect(getPipContainer()).toMatchSnapshot("pip-content-1");
             });
         });
 
@@ -60,7 +63,7 @@ describe("PictureInPictureDragger", () => {
             });
 
             it("should update the PiP content", () => {
-                expect(renderResult.container).toMatchSnapshot();
+                expect(getPipContainer()).toMatchSnapshot();
             });
         });
     });
@@ -71,7 +74,7 @@ describe("PictureInPictureDragger", () => {
         });
 
         it("should render both contents", () => {
-            expect(renderResult.container).toMatchSnapshot();
+            expect(getPipContainer()).toMatchSnapshot();
         });
     });
 
