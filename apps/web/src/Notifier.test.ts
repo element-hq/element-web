@@ -22,6 +22,7 @@ import {
 import "vitest-canvas-mock";
 import {
     ClientEvent,
+    EventTimelineSet,
     type MatrixClient,
     Room,
     RoomEvent,
@@ -151,6 +152,7 @@ describe("Notifier", () => {
             decryptEventIfNeeded: vi.fn(),
             getRoom: vi.fn(),
             getPushActionsForEvent: vi.fn(),
+            getNotifTimelineSet: vi.fn().mockReturnValue(null),
             // Mock required because TextForEvent now evaluates supportsVoip for RTCNotification to trigger OS popups.
             // The true/false value is arbitrary here, as this test only verifies the in-app toast creation, not the OS text output.
             supportsVoip: vi.fn().mockReturnValue(true),
@@ -981,6 +983,26 @@ describe("Notifier", () => {
 
             notifier.evaluateEvent(eventFromOtherRoom);
             expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+        });
+
+        it("should add notifying events to the notification timeline set", () => {
+            const notifTimelineSet = new EventTimelineSet(undefined, { timelineSupport: true });
+            mockClient.getNotifTimelineSet.mockReturnValue(notifTimelineSet);
+
+            notifier.evaluateEvent(testEvent);
+            notifier.evaluateEvent(testEvent);
+            expect(notifTimelineSet.getLiveTimeline().getEvents()).toEqual([testEvent]);
+
+            mockClient.getPushActionsForEvent.mockReturnValue({ notify: false, tweaks: {} });
+            const silentEvent = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: "@a:b",
+                room: roomId,
+                content: {},
+            });
+            notifier.evaluateEvent(silentEvent);
+            expect(notifTimelineSet.getLiveTimeline().getEvents()).toEqual([testEvent]);
         });
 
         it("should a pop-up for thread event", async () => {

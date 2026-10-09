@@ -238,6 +238,13 @@
             "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
+        "notifications_view": {
+            "empty_description": "You have no visible notifications.",
+            "empty_heading": "You're all caught up",
+            "list_title": "Notification list",
+            "show_notifications": "Show notifications",
+            "show_rooms": "Show rooms"
+        },
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "room": {

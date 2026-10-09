@@ -619,6 +619,10 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         const actions = this.sdkContext.client.getPushActionsForEvent(ev);
 
         if (actions?.notify) {
+            // The js-sdk only feeds highlights to the notification timeline, and only from the raw
+            // sync, so non-highlight notifications and encrypted events never appear there live.
+            // Duplicates (by event id) are ignored.
+            this.sdkContext.client.getNotifTimelineSet()?.addLiveEvent(ev, { addToState: false });
             this.performCustomEventHandling(ev);
 
             const store = this.sdkContext.roomViewStore;

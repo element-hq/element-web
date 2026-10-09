@@ -6,12 +6,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useCallback, useContext } from "react";
-import { Flex, RoomListHeaderView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    Flex,
+    RoomListHeaderView,
+    useCreateAutoDisposedViewModel,
+    useViewModel,
+} from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListView } from "./RoomListView";
+import { NotificationListView } from "./NotificationListView";
 import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -65,6 +71,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     const vm = useCreateAutoDisposedViewModel(
         () => new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore }),
     );
+    const { isNotificationsViewActive } = useViewModel(vm);
 
     return (
         <Flex
@@ -79,7 +86,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView vm={vm} />
-            <RoomListView />
+            {isNotificationsViewActive ? <NotificationListView /> : <RoomListView />}
         </Flex>
     );
 };
