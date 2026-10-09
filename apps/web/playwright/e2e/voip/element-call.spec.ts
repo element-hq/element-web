@@ -886,6 +886,48 @@ test.describe("Element Call", () => {
             await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
             await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
         });
+
+        test("keeps a call that was just joined in the browser window", async ({ page, user, room, app }) => {
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+
+            // Element Call reports having joined before its membership has come back down the sync. On a
+            // first call, while the component is still being downloaded, the user can open the window in
+            // that gap. Hold back sync responses to keep the gap open for as long as the test needs.
+            let releaseSync!: () => void;
+            const syncHeld = new Promise<void>((resolve) => (releaseSync = resolve));
+            let holdSync = false;
+            await page.route(/\/_matrix\/client\/v3\/sync\b/, async (route) => {
+                const response = await route.fetch({ timeout: 0 });
+                if (holdSync) await syncHeld;
+                await route.fulfill({ response });
+            });
+
+            await app.viewRoomById(room.roomId);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+
+            holdSync = true;
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+            await page.getByTestId("document-pip-button").click();
+
+            // The call is in the window, and the room shows the timeline rather than a lobby
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+
+            // ...and stays there once the membership arrives
+            releaseSync();
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+            expect(await page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+        });
     });
 
     test.describe("Widget leak bug reproduction", { tag: ["@no-firefox", "@no-webkit"] }, () => {
