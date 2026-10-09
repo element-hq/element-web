@@ -341,7 +341,7 @@ describe("notifications", () => {
         });
 
         it("returns success if notification level is Notification", () => {
-            expect(notificationLevelToIndicator(NotificationLevel.Notification)).toEqual("success");
+            expect(notificationLevelToIndicator(NotificationLevel.Notification)).toEqual("accent");
         });
 
         it("returns critical if notification level is Highlight", () => {
