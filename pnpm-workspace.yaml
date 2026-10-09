@@ -26,8 +26,9 @@ catalog:
     "playwright-core": 1.63.0
     serve: 14.2.6
     # Compound
-    "@vector-im/compound-design-tokens": 11.2.0
-    "@vector-im/compound-web": 10.3.1
+    "@vector-im/compound-design-tokens": 11.3.0
+    # A git dependency until PortalRoot (element-hq/compound-web#562) is released
+    "@vector-im/compound-web": "github:element-hq/compound-web#86303371ea3443ce60d74a9eebaf7a85eaaf6bc1"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -79,6 +80,8 @@ allowBuilds:
     # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
     # pnpm matches git-hosted packages by repository URL, not by bare name.
     "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
+    # Compound until PortalRoot is released (see the catalog), built on install by its `prepare` script
+    "@vector-im/compound-web@git+https://github.com/element-hq/compound-web.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -140,9 +143,6 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    # Only one instance of LiveKit in the build: the Element Call component and
-    # Element Web must share it, E2EE workers included.
-    livekit-client: "^2.22.2"
     pretty-format@30>react-is: 19.3.0
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"

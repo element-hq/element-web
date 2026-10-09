@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@element-hq/element-call-component": "github:element-hq/element-call#main&path:/component",
+        "@element-hq/element-call-component": "github:element-hq/element-call#f322af2742d2f2a8c6293566fda5c6f1fe16b03d&path:/component",
         "@element-hq/element-web-module-api": "workspace:*",
         "@element-hq/element-web-shared-utils": "workspace:*",
         "@element-hq/web-shared-components": "workspace:*",
@@ -79,7 +79,6 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.18.0",
-        "livekit-client": "^2.22.2",
         "lodash": "npm:lodash-es@4.18.1",
         "maplibre-gl": "6.10.0",
         "matrix-encrypt-attachment": "^1.0.3",

@@ -32,6 +32,7 @@ import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
 import { CallStore } from "../stores/CallStore";
 import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
+import { DocumentPipStore } from "../stores/DocumentPipStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -76,6 +77,7 @@ export class SDKContextClass {
     protected _Notifier?: Notifier;
     protected _CallStore?: CallStore;
     protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
+    protected _DocumentPipStore?: DocumentPipStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -218,6 +220,11 @@ export class SDKContextClass {
             void this._LatestRtcNotificationEventStore.start();
         }
         return this._LatestRtcNotificationEventStore;
+    }
+
+    public get documentPipStore(): DocumentPipStore {
+        this._DocumentPipStore ??= new DocumentPipStore(this);
+        return this._DocumentPipStore;
     }
 
     public onLoggedOut(): void {

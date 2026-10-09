@@ -19,6 +19,7 @@
 
 import React, { type JSX, useEffect, useImperativeHandle } from "react";
 import { ElementCallMockView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { PortalRoot } from "@vector-im/compound-web";
 
 import { ElementCallMockViewModel } from "../../../viewmodels/voip/ElementCallMockViewModel";
 import {
@@ -49,6 +50,7 @@ const ElementCallMock = ({
     ref,
     theme,
     language,
+    portalRoot = null,
 }: ElementCallProps): JSX.Element => {
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -76,7 +78,12 @@ const ElementCallMock = ({
 
     useImperativeHandle(ref, () => vm.handle, [vm]);
 
-    return <ElementCallMockView vm={vm} />;
+    // As the real component does: whatever Compound floats over the mock goes where the host says
+    return (
+        <PortalRoot root={portalRoot}>
+            <ElementCallMockView vm={vm} />
+        </PortalRoot>
+    );
 };
 
 /**

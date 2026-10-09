@@ -647,6 +647,12 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
+    protected setDisconnected(): void {
+        super.setDisconnected();
+        // Only a connected call outlives having no members (see checkDestroy)
+        this.checkDestroy();
+    }
+
     public widgetGenerationParameters: WidgetGenerationParameters = {};
 
     /**
@@ -1117,8 +1123,13 @@ export class ElementCall extends Call {
 
     private checkDestroy = (): void => {
         // A call ceases to exist as soon as all participants leave and also the
-        // user isn't looking at it (for example, waiting in an empty lobby)
-        if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
+        // user isn't looking at it (for example, waiting in an empty lobby).
+        // A call the user is connected to is kept even when no membership is known yet: Element Call reports
+        // having joined before its membership comes back down the sync, and the call may meanwhile have left
+        // the room view (for a Picture-in-Picture window). Disconnecting checks again.
+        if (this.session.memberships.length === 0 && !this.presented && !this.connected && !this.room.isCallRoom()) {
+            this.destroy();
+        }
     };
 
     private readonly onMembershipChanged = (): void => {
