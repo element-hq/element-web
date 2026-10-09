@@ -55,6 +55,14 @@ describe("WebPlatform", () => {
             expect(navigator.serviceWorker.register).toHaveBeenCalled();
         });
 
+        it("listens for messages from the service worker before registering it", async () => {
+            const platform = new WebPlatform();
+            await platform["registerServiceWorkerPromise"];
+            expect(vi.mocked(navigator.serviceWorker.addEventListener).mock.invocationCallOrder[0]).toBeLessThan(
+                vi.mocked(navigator.serviceWorker.register).mock.invocationCallOrder[0],
+            );
+        });
+
         it("does not ask the service worker to claim the page when it is already in control", async () => {
             const platform = new WebPlatform();
             await platform["registerServiceWorkerPromise"];
