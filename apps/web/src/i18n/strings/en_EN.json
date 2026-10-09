@@ -1592,6 +1592,8 @@
         "video_rooms_faq2_answer": "Yes, the chat timeline is displayed alongside the video.",
         "video_rooms_faq2_question": "Can I use text chat alongside the video call?",
         "video_rooms_feedbackSubheading": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
+        "windows_screen_share_audio": "Share system audio on Windows",
+        "windows_screen_share_audio_description": "Add an option to the screen share picker to include all system audio. Audio from other applications is included even when sharing one window.",
         "wysiwyg_composer": "Rich text editor"
     },
     "labs_mjolnir": {
@@ -4006,6 +4008,8 @@
         "open_slot_failed_title": "Couldn't enable calls for this room",
         "output_devices": "Output devices",
         "screenshare_monitor": "Share entire screen",
+        "screenshare_system_audio": "Share system audio",
+        "screenshare_system_audio_warning": "Audio from all applications will be shared, even when sharing one window.",
         "screenshare_title": "Share content",
         "screenshare_window": "Application window",
         "show_sidebar_button": "Show sidebar",

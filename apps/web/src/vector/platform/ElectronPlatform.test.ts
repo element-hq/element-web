@@ -24,12 +24,14 @@ import Modal from "../../Modal";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "./ElectronPlatform";
 import ToastStore from "../../stores/ToastStore.ts";
+import SettingsStore from "../../settings/SettingsStore";
 
 vi.mock("../../rageshake/rageshake", () => ({
     flush: vi.fn(),
 }));
 
 describe("ElectronPlatform", () => {
+    const getSettingValue = vi.spyOn(SettingsStore, "getValue");
     const initialiseValues = vi.fn().mockReturnValue({
         protocol: "io.element.desktop",
         sessionId: "session-id",
@@ -58,6 +60,7 @@ describe("ElectronPlatform", () => {
     beforeEach(() => {
         window.electron = mockElectron;
         vi.clearAllMocks();
+        getSettingValue.mockReturnValue(false);
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
@@ -106,7 +109,7 @@ describe("ElectronPlatform", () => {
 
         // @ts-ignore mock
         vi.mocked(Modal.createDialog).mockReturnValue({
-            finished: new Promise((r) => r(["source"])),
+            finished: new Promise((r) => r([{ id: "source" }])),
         });
 
         let res: () => void;
@@ -119,14 +122,62 @@ describe("ElectronPlatform", () => {
         });
 
         const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        handler();
+        handler({}, { requestId: 42 });
 
         await waitForIPCSend;
 
         expect(event).toBeTruthy();
-        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker, {
+            showSystemAudioOption: false,
+        });
         // @ts-ignore mock
-        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
+        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 42,
+            sourceId: "source",
+            shareSystemAudio: false,
+        });
+    });
+
+    it("offers and returns system audio only after Windows Labs consent", async () => {
+        Object.defineProperty(window, "navigator", {
+            value: { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+            writable: true,
+        });
+        getSettingValue.mockReturnValue(true);
+        const platform = new ElectronPlatform();
+        Modal.createDialog = vi.fn().mockReturnValue({
+            finished: Promise.resolve([{ id: "window:1:0" }, true]),
+        });
+        // @ts-ignore mock
+        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(undefined);
+
+        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        await handler({}, { requestId: 7 });
+
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker, {
+            showSystemAudioOption: true,
+        });
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 7,
+            sourceId: "window:1:0",
+            shareSystemAudio: true,
+        });
+    });
+
+    it("returns request-aware cancellation without system audio", async () => {
+        const platform = new ElectronPlatform();
+        Modal.createDialog = vi.fn().mockReturnValue({ finished: Promise.resolve([]) });
+        // @ts-ignore mock
+        const call = vi.spyOn(platform.ipc, "call").mockResolvedValue(undefined);
+
+        const [, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        await handler({}, { requestId: 9 });
+
+        expect(call).toHaveBeenCalledWith("callDisplayMediaCallback", {
+            requestId: 9,
+            sourceId: null,
+            shareSystemAudio: false,
+        });
     });
 
     it("should show a toast when showToast is fired", async () => {

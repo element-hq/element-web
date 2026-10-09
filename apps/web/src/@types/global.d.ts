@@ -141,6 +141,10 @@ declare global {
         thumbnailURL: string;
     }
 
+    interface DesktopCapturerSourcePickerRequest {
+        requestId: number;
+    }
+
     interface GetSourcesOptions {
         types: Array<string>;
         thumbnailSize?: {

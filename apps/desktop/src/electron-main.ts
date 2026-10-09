@@ -39,7 +39,7 @@ import webContentsHandler from "./webcontents-handler.js";
 import * as updater from "./updater.js";
 import ProtocolHandler from "./protocol.js";
 import { _t, AppLocalization } from "./language-helper.js";
-import { setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { cancelDisplayMediaRequest, handleDisplayMediaRequest } from "./display-media.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
 import { handleWindowClose, revealMainWindow } from "./window-close.js";
@@ -369,7 +369,7 @@ app.on("ready", async () => {
     rendererRecovery = setupRendererRecovery(global.mainWindow);
 
     session.defaultSession.setDisplayMediaRequestHandler(
-        (_, callback) => {
+        (request, callback) => {
             if (process.env.XDG_SESSION_TYPE === "wayland") {
                 // On Wayland, calling getSources() opens the xdg-desktop-portal picker.
                 // The user can only select a single source there, so Electron will return an array with exactly one entry.
@@ -386,9 +386,8 @@ app.on("ready", async () => {
                         callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
                     });
             } else {
-                global.mainWindow?.webContents.send("openDesktopCapturerSourcePicker");
+                handleDisplayMediaRequest(request, callback);
             }
-            setDisplayMediaCallback(callback);
         },
         { useSystemPicker: true },
     ); // Use Mac OS 15+ native picker
@@ -411,6 +410,7 @@ app.on("activate", () => {
 
 function beforeQuit(): void {
     global.appQuitting = true;
+    cancelDisplayMediaRequest();
     global.mainWindow?.webContents.send("before-quit");
 }
 
