@@ -255,6 +255,18 @@ ipcMain.on("seshat", async function (_ev: IpcMainEvent, payload): Promise<void> 
             }
             break;
 
+        case "loadEventIds":
+            if (eventIndex === null) ret = [];
+            else {
+                try {
+                    ret = await eventIndex.loadEventIds(args[0]);
+                } catch (e) {
+                    sendError(payload.id, <Error>e);
+                    return;
+                }
+            }
+            break;
+
         case "loadCheckpoints":
             if (eventIndex === null) ret = [];
             else {

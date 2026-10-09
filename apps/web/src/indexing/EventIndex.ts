@@ -84,6 +84,10 @@ export default class EventIndex extends EventEmitter {
      */
     private needsInitialCheckpoints = false;
 
+    private retentionTimer: ReturnType<typeof setInterval> | null = null;
+    private retentionSweep: Promise<void> | null = null;
+    private readonly retentionRooms = new Set<Room>();
+
     private readonly logger;
 
     public constructor() {
@@ -127,6 +131,7 @@ export default class EventIndex extends EventEmitter {
         client.on(RoomEvent.Timeline, this.onRoomTimeline);
         client.on(RoomEvent.TimelineReset, this.onTimelineReset);
         client.on(RoomStateEvent.Events, this.onRoomStateEvent);
+        client.on(RoomEvent.RetentionChanged, this.onRetentionChanged);
     }
 
     /**
@@ -140,6 +145,75 @@ export default class EventIndex extends EventEmitter {
         client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
         client.removeListener(RoomEvent.TimelineReset, this.onTimelineReset);
         client.removeListener(RoomStateEvent.Events, this.onRoomStateEvent);
+        client.removeListener(RoomEvent.RetentionChanged, this.onRetentionChanged);
+    }
+
+    private onRetentionChanged = (room: Room): void => {
+        this.queueRetentionSweep([room]);
+    };
+
+    private startRetentionSweeps(): void {
+        if (this.retentionTimer !== null) return;
+        const client = MatrixClientPeg.safeGet();
+        this.retentionTimer = setInterval(() => this.queueRetentionSweep(client.getRooms()), 60 * 60 * 1000);
+        this.queueRetentionSweep(client.getRooms());
+    }
+
+    private stopRetentionSweeps(): void {
+        if (this.retentionTimer !== null) clearInterval(this.retentionTimer);
+        this.retentionTimer = null;
+        this.retentionRooms.clear();
+    }
+
+    private queueRetentionSweep(rooms: Room[]): void {
+        if (this.retentionTimer === null) return;
+        rooms.forEach((room) => this.retentionRooms.add(room));
+        this.retentionSweep ??= this.sweepRetentionRooms().finally(() => {
+            this.retentionSweep = null;
+        });
+    }
+
+    private async sweepRetentionRooms(): Promise<void> {
+        for (const room of this.retentionRooms) {
+            this.retentionRooms.delete(room);
+            try {
+                await this.removeExpiredEvents(room);
+            } catch (e) {
+                this.logger.warn("Error removing expired events from the index", e);
+            }
+        }
+    }
+
+    private async removeExpiredEvents(room: Room): Promise<void> {
+        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        const maxLifetime = room.getRetentionMaxLifetime();
+        if (!indexManager || maxLifetime === null) return;
+
+        const cutoff = Date.now() - maxLifetime;
+        const isCurrent = (): boolean => this.retentionTimer !== null && room.getRetentionMaxLifetime() === maxLifetime;
+        let fromEvent: string | undefined;
+        while (isCurrent()) {
+            const events = await indexManager.loadEventIds({
+                roomId: room.roomId,
+                limit: 100,
+                direction: Direction.Forward,
+                fromEvent,
+            });
+            for (const event of events) {
+                if (event.serverTs >= cutoff || !isCurrent()) return;
+                if (event.type === EventType.RoomMessage) {
+                    await indexManager.deleteEvent(event.eventId);
+                } else {
+                    fromEvent = event.eventId;
+                }
+            }
+            if (events.length < 100) return;
+        }
+    }
+
+    private isRetainedEvent(ev: MatrixEvent, roomId = ev.getRoomId()): boolean {
+        const maxLifetime = roomId ? MatrixClientPeg.safeGet().getRoom(roomId)?.getRetentionMaxLifetime() : null;
+        return ev.isState() || typeof maxLifetime !== "number" || ev.getTs() >= Date.now() - maxLifetime;
     }
 
     /**
@@ -381,7 +455,7 @@ export default class EventIndex extends EventEmitter {
     private async addLiveEventToIndex(ev: MatrixEvent): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
 
-        if (!indexManager || !this.isValidEvent(ev)) return;
+        if (!indexManager || !this.isValidEvent(ev) || !this.isRetainedEvent(ev)) return;
 
         const e = this.eventToJson(ev);
 
@@ -595,13 +669,14 @@ export default class EventIndex extends EventEmitter {
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
+            const retainedEvents = filteredEvents.filter((ev) => this.isRetainedEvent(ev, checkpoint.roomId));
 
             // Collect the redaction events, so we can delete the redacted events from the index.
             const redactionEvents = matrixEvents.filter((ev) => ev.isRedaction());
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
-            const events = filteredEvents.map((ev) => {
+            const events = retainedEvents.map((ev) => {
                 const e = this.eventToJson(ev);
 
                 let profile: IMatrixProfile = {};
@@ -640,7 +715,9 @@ export default class EventIndex extends EventEmitter {
                     }
                 }
 
-                const eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
+                const eventsAlreadyAdded =
+                    (await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint)) &&
+                    retainedEvents.length === filteredEvents.length;
 
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.
@@ -686,6 +763,7 @@ export default class EventIndex extends EventEmitter {
      * Start the crawler background task.
      */
     public startCrawler(): void {
+        this.startRetentionSweeps();
         if (this.crawler !== null) return;
         this.logger.debug("Starting crawler");
         this.crawlerFunc()
@@ -701,6 +779,7 @@ export default class EventIndex extends EventEmitter {
      * Stop the crawler background task.
      */
     public stopCrawler(): void {
+        this.stopRetentionSweeps();
         if (this.crawler === null) return;
         this.logger.debug("Stopping crawler");
         this.crawler.cancel();
@@ -716,6 +795,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         this.removeListeners();
         this.stopCrawler();
+        await this.retentionSweep;
         await indexManager?.closeEventIndex();
     }
 
