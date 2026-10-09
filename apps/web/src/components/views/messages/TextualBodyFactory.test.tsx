@@ -628,6 +628,11 @@ describe("<TextualBody />", () => {
             DMRoomMap.makeShared(defaultMatrixClient);
         });
 
+        afterEach(() => {
+            // Dismissing a preview is remembered per event in local storage, and the test events share IDs.
+            localStorage.clear();
+        });
+
         /** Render a message and wait for its previews to have been fetched and rendered. */
         const renderPreviews = async (body = `Visit ${link}`): Promise<ReturnType<typeof render>> => {
             const result = getComponent({ mxEvent: mkRoomTextMessage(body), showUrlPreview: true }, matrixClient);
@@ -676,6 +681,17 @@ describe("<TextualBody />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Open link" }));
 
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("hides the previews for this message when the close button is clicked", async () => {
+            const mxEvent = mkRoomTextMessage(`Visit ${link}`);
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
+            await screen.findByRole("link", { name: "Matrix" });
+
+            fireEvent.click(screen.getByRole("button", { name: "Close preview" }));
+
+            await waitFor(() => expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument());
+            expect(localStorage.getItem(`hide_preview_${mxEvent.getId()}`)).toBe("1");
         });
 
         it("expands the group when more previews are available than are shown", async () => {

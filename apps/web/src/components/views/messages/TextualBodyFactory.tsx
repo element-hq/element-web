@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -160,6 +160,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
+    // Stable so that the effect feeding the media preview view model does not re-run on every render.
+    const onDismiss = useCallback((): void => void urlPreviewVm.onHideClick(), [urlPreviewVm]);
+
     const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
         let content: MediaPreviewGroupEntryContent;
         if (preview.image === undefined) {
@@ -218,6 +221,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             new MediaPreviewGroupViewModel({
                 entries: previews.map(previewToEntry),
                 collapse,
+                onDismiss,
             }),
     );
 
@@ -294,8 +298,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         mediaPreviewVm.setProps({
             entries: previews.map(previewToEntry),
             collapse,
+            onDismiss,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, collapse, onDismiss, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
