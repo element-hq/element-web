@@ -300,7 +300,6 @@ class Store extends ElectronStore<StoreData> {
      * We need both `isEncryptionAvailable` and `isAsyncEncryptionAvailable` to be true to be able to encrypt secrets.
      */
     private async canEncrypt(): Promise<boolean> {
-        if (!safeStorage.isEncryptionAvailable()) return false;
         try {
             return await safeStorage.isAsyncEncryptionAvailable();
         } catch (e) {
