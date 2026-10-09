@@ -156,6 +156,11 @@ export class UrlPreviewFetcher {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
+        // MSC4448: a site logo the server identified as such beats guessing one from the image size.
+        if (typeof response["msc4448:site_logo"] === "string" && loadMedia) {
+            siteIcon = mediaFromMxc(response["msc4448:site_logo"], this.client).srcHttp ?? undefined;
+        }
+
         if (typeof response["og:image"] === "string" && loadMedia) {
             const mxcImageFull = response["og:image"];
             const media = mediaFromMxc(response["og:image"], this.client);
@@ -190,7 +195,7 @@ export class UrlPreviewFetcher {
                         playable,
                     };
                 }
-            } else if (media.srcHttp) {
+            } else if (media.srcHttp && !siteIcon) {
                 siteIcon = media.srcHttp;
             }
         }

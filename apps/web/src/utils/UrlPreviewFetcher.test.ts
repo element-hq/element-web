@@ -188,6 +188,69 @@ describe("UrlPreviewFetcher", () => {
         expect(preview?.image?.height).toBe(height);
     });
 
+    it("should use the MSC4448 site logo as the site icon", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "msc4448:site_logo": "mxc://example.org/logo",
+            "msc4448:site_logo:size": 1234,
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => {
+            expect(url).toEqual("mxc://example.org/logo");
+            return "https://example.org/logo/src";
+        });
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo/src");
+        expect(preview?.image).toBeUndefined();
+    });
+
+    it("should prefer the MSC4448 site logo over a small og:image", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:height": 16,
+            "og:image:width": 16,
+            "matrix:image:size": 100,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => `https://example.org/${url.split("/").pop()}`);
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo");
+        expect(preview?.image).toBeUndefined();
+    });
+
+    it("should keep the full-size image alongside the MSC4448 site logo", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:height": 128,
+            "og:image:width": 128,
+            "matrix:image:size": 10000,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => `https://example.org/${url.split("/").pop()}`);
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo");
+        expect(preview?.image?.mxcImageFull).toBe(IMAGE_MXC);
+    });
+
+    it("should not load the MSC4448 site logo when media is hidden", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        const preview = await fetcher.fetchPreview("https://example.org", false);
+        expect(preview?.siteIcon).toBeUndefined();
+        // eslint-disable-next-line no-restricted-properties
+        expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
+    });
+
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
