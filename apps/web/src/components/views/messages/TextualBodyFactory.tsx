@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -217,11 +217,20 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         };
     };
 
+    // The close button on the preview group hides every preview of this message, and the choice
+    // sticks across reloads, see `UrlPreviewGroupViewModel`.
+    const onDismiss = useCallback((): void => {
+        void urlPreviewVm.onHideClick().catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to hide previews", error);
+        });
+    }, [urlPreviewVm]);
+
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MediaPreviewGroupViewModel({
                 entries: previews.map(previewToEntry),
                 collapse,
+                onDismiss,
             }),
     );
 
@@ -298,8 +307,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         mediaPreviewVm.setProps({
             entries: previews.map(previewToEntry),
             collapse,
+            onDismiss,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, collapse, onDismiss, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {

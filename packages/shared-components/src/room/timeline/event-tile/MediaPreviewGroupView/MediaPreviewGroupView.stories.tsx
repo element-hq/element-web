@@ -166,6 +166,16 @@ export const LinkPreviewsWithSiteLogo: Story = {
     ]),
 };
 
+// Timeline link previews with the close button the user hides them with.
+export const LinkPreviewsDismissable: Story = {
+    args: {
+        vm: new MockViewModel<MediaPreviewGroupSnapshot>({
+            entries: [linkPreviewEntry, textLinkPreviewEntry],
+            onDismiss: () => ({}),
+        }),
+    },
+};
+
 export const Collapsed: Story = {
     args: withEntries([textEntry, imageEntry], { collapsed: true, hiddenCount: 3, onToggle: () => ({}) }),
 };

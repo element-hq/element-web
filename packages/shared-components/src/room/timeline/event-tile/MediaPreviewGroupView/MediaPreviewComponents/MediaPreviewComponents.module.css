@@ -45,6 +45,8 @@
     flex-grow: 1;
     min-width: 0;
     padding: var(--cpd-space-3x);
+    /* Keep the text clear of a dismiss button in the group's corner, when there is one. */
+    padding-inline-end: calc(var(--cpd-space-3x) + var(--MediaPreview-dismiss-inset, 0px));
 
     .header,
     .body {
