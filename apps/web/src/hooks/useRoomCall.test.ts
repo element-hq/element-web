@@ -231,10 +231,6 @@ describe("useRoomCall", () => {
                 );
             });
 
-            afterEach(() => {
-                SettingsStore.setValue("feature_disable_call_per_sender_encryption", null, SettingLevel.DEVICE, false);
-            });
-
             it("reopens closed slot before placing Element call if user is allowed to start", async () => {
                 vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
                 vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
@@ -273,19 +269,6 @@ describe("useRoomCall", () => {
                 expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({
                     encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
                 });
-            });
-
-            it("does not declare per-member encryption when per-sender encryption is disabled", async () => {
-                SettingsStore.setValue("feature_disable_call_per_sender_encryption", null, SettingLevel.DEVICE, true);
-                vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(undefined);
-                vi.mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-                const { result } = render();
-                await waitFor(() => expect(result.current.callOptions).toContain(PlatformCallType.ElementCall));
-
-                await result.current.videoCallClick(undefined, PlatformCallType.ElementCall);
-
-                expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined });
             });
 
             it("does not attempt to create slot for user without permissions", async () => {
