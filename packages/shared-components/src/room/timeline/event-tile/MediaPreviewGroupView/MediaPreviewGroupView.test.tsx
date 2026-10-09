@@ -22,7 +22,7 @@ import demoImage from "../../../../../static/wideImage.png";
 import demoVideo from "../../../../../static/videoPreviewDemo.webm?inline";
 import demoAudio from "../../../../../static/audioDemo.ogg";
 
-const { AllTypes, SingleText, Collapsed, Expanded } = composeStories(stories);
+const { AllTypes, SingleText, Collapsed, Expanded, Dismissable } = composeStories(stories);
 
 const icon = { icon: <span data-testid="icon">icon</span>, color: "rgb(66, 0, 166)" };
 
@@ -66,8 +66,9 @@ const secondTextEntry: MediaPreviewGroupEntry = {
 function renderGroup(
     entries: Array<MediaPreviewGroupEntry>,
     collapse?: MediaPreviewGroupSnapshot["collapse"],
+    onDismiss?: MediaPreviewGroupSnapshot["onDismiss"],
 ): ReturnType<typeof render> {
-    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse });
+    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse, onDismiss });
     return render(<MediaPreviewGroupPreview vm={vm} />);
 }
 
@@ -144,6 +145,25 @@ describe("MediaPreviewGroupPreview", () => {
         });
     });
 
+    describe("dismiss button", () => {
+        it("renders no dismiss button when the group cannot be dismissed", () => {
+            renderGroup([textEntry]);
+
+            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
+        });
+
+        it("dismisses the group when the close button is clicked", async () => {
+            const user = userEvent.setup();
+            const onDismiss = vi.fn();
+
+            renderGroup([textEntry], undefined, onDismiss);
+
+            await user.click(screen.getByRole("button", { name: "Close preview" }));
+
+            expect(onDismiss).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe("stories", () => {
         it("renders the single text story", () => {
             const { container } = render(<SingleText />);
@@ -171,6 +191,12 @@ describe("MediaPreviewGroupPreview", () => {
             render(<Expanded />);
 
             expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
+        });
+
+        it("renders the dismissable story", () => {
+            render(<Dismissable />);
+
+            expect(screen.getByRole("button", { name: "Close preview" })).toBeInTheDocument();
         });
     });
 });

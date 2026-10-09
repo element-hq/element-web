@@ -77,8 +77,9 @@ const audioEntry: MediaPreviewGroupEntry = {
 const withEntries = (
     entries: Array<MediaPreviewGroupEntry>,
     collapse?: MediaPreviewGroupSnapshot["collapse"],
+    onDismiss?: MediaPreviewGroupSnapshot["onDismiss"],
 ): { vm: MockViewModel<MediaPreviewGroupSnapshot> } => ({
-    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse }),
+    vm: new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse, onDismiss }),
 });
 
 const meta = {
@@ -133,4 +134,9 @@ export const Expanded: Story = {
         hiddenCount: 0,
         onToggle: () => ({}),
     }),
+};
+
+// URL previews in the timeline can be dismissed with the close button in the corner.
+export const Dismissable: Story = {
+    args: withEntries([textEntry, imageEntry], undefined, () => ({})),
 };
