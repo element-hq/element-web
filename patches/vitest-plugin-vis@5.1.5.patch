@@ -59,11 +59,11 @@ index 7d83a32a9bef2651ee261ec0dbcc48f3d4bb467c..4d74a92589d610f2098c1e6960d5d6f0
  
  //#endregion
 diff --git a/dist/client/snapshot/compare_image_snapshot.mjs b/dist/client/snapshot/compare_image_snapshot.mjs
-index 6dadb7f2bf021c2a8a2513a0c666ae38620d548c..238565eacbd5fff404bd92363d93fcb25db403b9 100644
+index 038a3e34ddacc2c853ee2f5ae13030261783a60f..fac32383e41e8ca63a1042505e4622e7bf5497d9 100644
 --- a/dist/client/snapshot/compare_image_snapshot.mjs
 +++ b/dist/client/snapshot/compare_image_snapshot.mjs
 @@ -5,9 +5,10 @@ import { alignImagesToSameSize } from "../image/align_images.mjs";
- import { prettifyOptions } from "./compare_image_snapshot.logic.mjs";
+ import { formatSnapshotPath, prettifyOptions } from "./compare_image_snapshot.logic.mjs";
  import { resolve } from "pathe";
  import dedent from "dedent";
 +import { recordArtifact } from "vitest";
