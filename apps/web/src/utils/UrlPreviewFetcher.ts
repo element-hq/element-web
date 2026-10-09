@@ -49,6 +49,8 @@ export function imageFitsThumbnail(image: { width?: number; height?: number }): 
  */
 export class UrlPreviewFetcher {
     private readonly cache = new Map<string, UrlPreview>();
+    // Map<site origin, the HTTP URL of its favicon.ico, or undefined if it has none>
+    private readonly faviconCache = new Map<string, Promise<string | undefined>>();
     // Map<the mxc:// url, the object url>
     private readonly decryptedObjectUrls = new Map<string, string>();
 
@@ -61,6 +63,7 @@ export class UrlPreviewFetcher {
 
     public clearCache(): void {
         this.cache.clear();
+        this.faviconCache.clear();
         this.dispose();
     }
 
@@ -222,6 +225,34 @@ export class UrlPreviewFetcher {
     }
 
     /**
+     * Find an icon for a site whose preview provides none, by asking the server to preview the site's
+     * `/favicon.ico`, the location browsers try when a page declares no icon. Any server which can
+     * preview an image URL can do this, so it needs no MSC4448 support. Cached per site.
+     * @param link The URL being previewed.
+     * @returns The HTTP URL of the icon, or undefined if the site has none.
+     */
+    private fetchFaviconFallback(link: string): Promise<string | undefined> {
+        const origin = new URL(link).origin;
+        let icon = this.faviconCache.get(origin);
+        if (!icon) {
+            icon = this.previewFavicon(origin);
+            this.faviconCache.set(origin, icon);
+        }
+        return icon;
+    }
+
+    private async previewFavicon(origin: string): Promise<string | undefined> {
+        try {
+            const response = await this.client.getUrlPreview(`${origin}/favicon.ico`, this.previewRequestTs);
+            const image = response?.["og:image"];
+            return typeof image === "string" ? (mediaFromMxc(image, this.client).srcHttp ?? undefined) : undefined;
+        } catch (error) {
+            logger.debug(`No favicon.ico for ${origin}: `, error);
+            return undefined;
+        }
+    }
+
+    /**
      * Fetch a preview for a single URL, returning a cached result if available.
      * @param link The URL to preview.
      * @param event The Matrix event to preview.
@@ -256,7 +287,13 @@ export class UrlPreviewFetcher {
             return null;
         }
 
-        const { image, siteIcon } = this.getPreviewImage(response, loadMedia);
+        const { image, siteIcon: providedIcon } = this.getPreviewImage(response, loadMedia);
+        let siteIcon = providedIcon;
+        // Without an icon from the server, a tile with no image, or a wide one the thumbnail would crop,
+        // has nothing good to show on the left: try the site's favicon.ico as a last resort.
+        if (loadMedia && siteIcon === undefined && (image === undefined || !imageFitsThumbnail(image))) {
+            siteIcon = await this.fetchFaviconFallback(link);
+        }
 
         const result = {
             link,

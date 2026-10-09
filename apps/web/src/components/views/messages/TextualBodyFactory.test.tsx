@@ -699,13 +699,39 @@ describe("<TextualBody />", () => {
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
-        it("shows a wide og:image anyway when the site has no logo", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+        it("shows a wide og:image anyway when the site has no logo at all", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation((url) =>
+                url.endsWith("/favicon.ico")
+                    ? Promise.reject(new Error("No favicon"))
+                    : Promise.resolve(ogData(ogImage)),
+            );
 
             await renderPreviews();
 
             const button = await screen.findByRole("button", { name: "View image" });
             expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+        });
+
+        it("shows the site's favicon.ico instead of a wide og:image when the server sends no logo", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation((url) =>
+                Promise.resolve(
+                    url.endsWith("/favicon.ico")
+                        ? ({
+                              "og:title": "favicon.ico",
+                              "og:image": "mxc://example.org/favicon",
+                          } as IPreviewUrlResponse)
+                        : ogData(ogImage),
+                ),
+            );
+
+            await renderPreviews();
+
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/favicon");
+            expect(matrixClient.getUrlPreview).toHaveBeenCalledWith(
+                "https://matrix.org/favicon.ico",
+                expect.any(Number),
+            );
         });
 
         it("shows the site logo guessed from a small og:image", async () => {

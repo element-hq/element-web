@@ -8,7 +8,7 @@
 import { vi, describe, it, expect, beforeAll, beforeEach, afterAll, afterEach, type Mock } from "vitest";
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixError, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type { UrlPreview } from "shared-types";
@@ -44,6 +44,11 @@ function getFetcher(showTooltips = false): {
         client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock },
         moduleApi,
     };
+}
+
+/** The `getUrlPreview` calls for pages, leaving out those for a site's favicon.ico. */
+function pagePreviewCalls(client: { getUrlPreview: Mock }): unknown[][] {
+    return client.getUrlPreview.mock.calls.filter(([url]) => !String(url).endsWith("/favicon.ico"));
 }
 
 /**
@@ -91,7 +96,7 @@ describe("UrlPreviewFetcher", () => {
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         await fetcher.fetchPreview("https://example.org", true);
         await fetcher.fetchPreview("https://example.org", true);
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        expect(pagePreviewCalls(client)).toHaveLength(1);
     });
 
     it("should re-fetch after clearCache is called", async () => {
@@ -100,7 +105,7 @@ describe("UrlPreviewFetcher", () => {
         await fetcher.fetchPreview("https://example.org", true);
         fetcher.clearCache();
         await fetcher.fetchPreview("https://example.org", true);
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(2);
+        expect(pagePreviewCalls(client)).toHaveLength(2);
     });
 
     it("should not process media when loadMedia is false", async () => {
@@ -249,6 +254,103 @@ describe("UrlPreviewFetcher", () => {
         expect(preview?.siteIcon).toBeUndefined();
         // eslint-disable-next-line no-restricted-properties
         expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
+    });
+
+    describe("favicon.ico fallback", () => {
+        const WIDE_IMAGE = {
+            "og:image": IMAGE_MXC,
+            "og:image:width": 1200,
+            "og:image:height": 630,
+            "matrix:image:size": 10000,
+        };
+        const FAVICON_PREVIEW = { "og:title": "favicon.ico", "og:image": "mxc://example.org/favicon" };
+
+        /** Answers page previews with `page` and favicon.ico previews with `favicon`. */
+        function getFetcherWithFavicon(page: Partial<IPreviewUrlResponse>, favicon: unknown = FAVICON_PREVIEW) {
+            const { fetcher, client } = getFetcher();
+            client.getUrlPreview.mockImplementation((url: string) =>
+                url.endsWith("/favicon.ico")
+                    ? favicon instanceof Error
+                        ? Promise.reject(favicon)
+                        : Promise.resolve(favicon)
+                    : Promise.resolve({ ...BASIC_PREVIEW_OGDATA, ...page }),
+            );
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockImplementation((url: string) => `https://example.org/${url.split("/").pop()}`);
+            return { fetcher, client };
+        }
+
+        it("should use the site's favicon.ico when the image is too wide for the thumbnail", async () => {
+            const { fetcher, client } = getFetcherWithFavicon(WIDE_IMAGE);
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/favicon.ico", 0);
+            expect(preview?.siteIcon).toBe("https://example.org/favicon");
+            expect(preview?.image?.mxcImageFull).toBe(IMAGE_MXC);
+        });
+
+        it("should use the site's favicon.ico when the preview has no image", async () => {
+            const { fetcher } = getFetcherWithFavicon({});
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(preview?.siteIcon).toBe("https://example.org/favicon");
+            expect(preview?.image).toBeUndefined();
+        });
+
+        it("should not try favicon.ico when the image fits the thumbnail", async () => {
+            const { fetcher, client } = getFetcherWithFavicon({ ...WIDE_IMAGE, "og:image:width": 630 });
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+            expect(preview?.siteIcon).toBeUndefined();
+        });
+
+        it("should not try favicon.ico when the server provided a site logo", async () => {
+            const { fetcher, client } = getFetcherWithFavicon({
+                ...WIDE_IMAGE,
+                "msc4448:site_logo": "mxc://example.org/logo",
+            });
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+            expect(preview?.siteIcon).toBe("https://example.org/logo");
+        });
+
+        it("should not try favicon.ico when media is hidden", async () => {
+            const { fetcher, client } = getFetcherWithFavicon(WIDE_IMAGE);
+            const preview = await fetcher.fetchPreview("https://example.org/page", false);
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+            expect(preview?.siteIcon).toBeUndefined();
+        });
+
+        it("should still return the preview when favicon.ico cannot be previewed", async () => {
+            const { fetcher } = getFetcherWithFavicon(
+                WIDE_IMAGE,
+                new MatrixError({ errcode: "M_NOT_FOUND", error: "Not found" }, 404),
+            );
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(preview?.title).toBe("This is an example!");
+            expect(preview?.siteIcon).toBeUndefined();
+        });
+
+        it("should ignore a favicon.ico preview without an image", async () => {
+            const { fetcher } = getFetcherWithFavicon(WIDE_IMAGE, { "og:title": "Not an icon" });
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+            expect(preview?.siteIcon).toBeUndefined();
+        });
+
+        it("should preview favicon.ico once per site", async () => {
+            const { fetcher, client } = getFetcherWithFavicon(WIDE_IMAGE);
+            await fetcher.fetchPreview("https://example.org/one", true);
+            await fetcher.fetchPreview("https://example.org/two", true);
+            const faviconCalls = client.getUrlPreview.mock.calls.filter(([url]) => url.endsWith("/favicon.ico"));
+            expect(faviconCalls).toHaveLength(1);
+        });
+
+        it("should forget favicons when the cache is cleared", async () => {
+            const { fetcher, client } = getFetcherWithFavicon(WIDE_IMAGE);
+            await fetcher.fetchPreview("https://example.org/one", true);
+            fetcher.clearCache();
+            await fetcher.fetchPreview("https://example.org/one", true);
+            const faviconCalls = client.getUrlPreview.mock.calls.filter(([url]) => url.endsWith("/favicon.ico"));
+            expect(faviconCalls).toHaveLength(2);
+        });
     });
 
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
