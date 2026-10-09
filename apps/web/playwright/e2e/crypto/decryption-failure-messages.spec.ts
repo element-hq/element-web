@@ -166,6 +166,8 @@ test.describe("Cryptography", function () {
 
                 // Alice accepts the invite
                 await app.acceptInvitedRoomByName("Test room");
+                // Wait until we're joined, otherwise Bob's messages may land before our join event
+                await expect(page.locator(`.mx_EventTile`).getByText("Alice joined the room")).toBeVisible();
 
                 // Bob sends an encrypted event and an undecryptable event
                 await bob.evaluate(
