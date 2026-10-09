@@ -149,7 +149,6 @@ describe("<SpaceCreateMenu />", () => {
             spinner: false,
             encryption: false,
             andView: true,
-            inlineErrors: true,
         });
 
         expect(createRoomSpy.mock.calls[0][1]?.createOpts).not.toHaveProperty("name");
