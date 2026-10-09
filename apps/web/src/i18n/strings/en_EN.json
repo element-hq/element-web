@@ -209,12 +209,15 @@
         "incorrect_password": "Incorrect password",
         "log_in_new_account": "<a>Log in</a> to your new account.",
         "logout_dialog": {
+            "back_to_app": "Take me back to the app",
             "check_recovery_key": "Check your recovery key",
             "check_recovery_key_title": "Make sure you have access to your recovery key before removing this device",
             "continue": "Continue to remove this device",
             "description": "Are you sure you want to remove this device?",
             "generate_recovery_key": "Generate new recovery key",
             "keep_access_description": "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.",
+            "key_active_description": "You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices.",
+            "key_active_title": "Your new recovery key is now active",
             "setup_key_backup_title": "You're about to lose access to your encrypted chats",
             "setup_secure_backup_description": "This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.",
             "skip_key_backup": "Remove this device anyway"

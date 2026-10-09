@@ -306,4 +306,18 @@ describe("<ChangeRecoveryKeyBody />", () => {
         await waitFor(() => expect(screen.getByText("Change recovery key?")).toBeInTheDocument());
         expect(screen.queryByRole("button", { name: "Back" })).not.toBeInTheDocument();
     });
+
+    it("should go straight to the new key when skipping the introduction", async () => {
+        render(
+            <ChangeRecoveryKeyBody
+                userHasRecoveryKey={false}
+                skipIntroduction={true}
+                onFinish={vi.fn()}
+                onCancelClick={vi.fn()}
+            />,
+            withClientContextRenderOptions(createTestClient()),
+        );
+        await waitFor(() => expect(screen.getByText("Save your recovery key somewhere safe")).toBeInTheDocument());
+        expect(screen.getByText("encoded private key")).toBeInTheDocument();
+    });
 });

@@ -26,6 +26,7 @@ import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
+import Spinner from "../../elements/Spinner";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration.ts";
@@ -98,6 +99,10 @@ interface ChangeRecoveryKeyBodyProps extends ChangeRecoveryKeyProps {
      * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
      */
     className?: string;
+    /**
+     * Skip the panel explaining what "recovery" is about, e.g. when the caller has already explained it.
+     */
+    skipIntroduction?: boolean;
 }
 
 /**
@@ -108,12 +113,13 @@ export function ChangeRecoveryKeyBody({
     onFinish,
     onCancelClick,
     className,
+    skipIntroduction = false,
 }: Readonly<ChangeRecoveryKeyBodyProps>): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
     // If the user is setting up recovery for the first time, we first show them a panel explaining what
     // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
-    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_flow" : "inform_user");
+    const [state, setState] = useState<State>(userHasRecoveryKey || skipIntroduction ? "save_key_flow" : "inform_user");
 
     const onCancelClickWrapper = useCallback(() => {
         logger.debug("ChangeRecoveryKey: user cancelled");
@@ -123,7 +129,7 @@ export function ChangeRecoveryKeyBody({
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
     // Waiting for the recovery key to be generated
-    if (!recoveryKey) return null;
+    if (!recoveryKey) return <Spinner />;
 
     let content: JSX.Element;
     switch (state) {
