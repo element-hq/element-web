@@ -5,11 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IContent } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type AccountDataEvents } from "matrix-js-sdk/src/types";
 
 import {
     MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
+    MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE,
     type MediaPreviewConfig,
     MediaPreviewValue,
 } from "../../@types/media_preview.ts";
@@ -19,12 +20,19 @@ import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 declare module "matrix-js-sdk/src/types" {
     interface RoomAccountDataEvents {
         [MEDIA_PREVIEW_ACCOUNT_DATA_TYPE]: MediaPreviewConfig;
+        [MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE]: MediaPreviewConfig;
     }
 }
 
 /**
- * Handles media preview settings provided by MSC4278.
+ * Handles media preview settings provided by MSC4278 / the `m.media_preview_config` module.
  * This uses both account-level and room-level account data.
+ *
+ * Both the stable (`m.media_preview_config`) and unstable (`io.element.msc4278.media_preview_config`)
+ * account data types are read, with the stable type preferred. Within a single level (global or room)
+ * only one of the two events is consulted: the stable one if present, otherwise the unstable one.
+ * Missing properties then fall back per-property from room to global to defaults, as the spec requires.
+ * New values are written to both types during the transition period, so older clients stay in sync.
  */
 export default class MediaPreviewConfigController extends MatrixClientBackedController {
     public static readonly default: AccountDataEvents[typeof MEDIA_PREVIEW_ACCOUNT_DATA_TYPE] = {
@@ -43,14 +51,26 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         };
     }
 
+    /**
+     * Read the media preview config content from a single source (the client for global,
+     * or a room for room-level), preferring the stable event type over the unstable one.
+     * The two event types are never merged with each other at the same level.
+     */
+    private static getContentFromSource(source: MatrixClient | Room | null | undefined): IContent {
+        const stableContent = source?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>();
+        if (stableContent) {
+            return stableContent;
+        }
+        return source?.getAccountData(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>() ?? {};
+    }
+
     public constructor() {
         super();
     }
 
     private getValue = (roomId?: string): MediaPreviewConfig => {
         const source = roomId ? this.client?.getRoom(roomId) : this.client;
-        const accountData =
-            source?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>() ?? {};
+        const accountData = MediaPreviewConfigController.getContentFromSource(source);
 
         const calculatedConfig = MediaPreviewConfigController.getValidSettingData(accountData);
 
@@ -96,11 +116,20 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         if (!this.client) {
             return false;
         }
+        // Write to both the stable and unstable types for now, so that older clients which only
+        // read the unstable type stay in sync. The unstable write can be dropped once enough
+        // clients read the stable type.
         if (roomId) {
-            await this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
+            await Promise.all([
+                this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue),
+                this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE, newValue),
+            ]);
             return true;
         }
-        await this.client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
+        await Promise.all([
+            this.client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue),
+            this.client.setAccountData(MEDIA_PREVIEW_UNSTABLE_ACCOUNT_DATA_TYPE, newValue),
+        ]);
         return true;
     }
 }
