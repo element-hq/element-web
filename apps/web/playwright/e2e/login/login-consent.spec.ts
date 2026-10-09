@@ -262,16 +262,23 @@ test.describe("Login", () => {
 
                     await page.reload();
 
-                    await expect
-                        .poll(() => page.evaluate(() => window.mxReactSdkConfig?.force_verification))
-                        .toBe(true);
-
                     // The session existed before enforcement was enabled, so it goes straight
                     // to the logged-in view rather than the verification screen
                     await expect(page.locator(".mx_MatrixChat")).toBeVisible();
                     await expect(
                         page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
                     ).not.toBeVisible();
+
+                    // To validate that the config actually changed (e.g. force_verification == true),
+                    // simulate as if the session was logged with force_verification == true and check
+                    // if the identity confirmation screen is now shown without the ability to skip
+                    await page.evaluate(() => localStorage.setItem("force_verification_on_at_login", "true"));
+                    await page.reload();
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
                 });
             });
 

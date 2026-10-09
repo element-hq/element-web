@@ -11,9 +11,6 @@ import { type SettingLevel } from "../src/settings/SettingLevel";
 
 declare global {
     interface Window {
-        mxReactSdkConfig: {
-            force_verification?: boolean;
-        };
         mxMatrixClientPeg: {
             get(): Matrix.MatrixClient;
         };
