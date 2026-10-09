@@ -31,13 +31,7 @@ export default class CustomComponentModule {
             (_props, originalComponent) => {
                 return originalComponent();
             },
-            {
-                renderAsInformationalMessage: true,
-                renderGroupSummary: {
-                    getSummary: (events) =>
-                        `Module grouped ${events.length} informational message${events.length === 1 ? "" : "s"}`,
-                },
-            },
+            { renderAsInformationalMessage: true },
         );
         this.api.customComponents.registerMessageRenderer(
             (evt) => typeof evt.content["org.example.group"] === "string",

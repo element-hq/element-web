@@ -142,7 +142,7 @@ test.describe("Custom Component API", () => {
             await expect(imageView).toBeVisible();
             await expect(imageView.getByLabel("Download")).toBeVisible();
         });
-        test("should hide avatar and sender profile when the renderAsInformationalMessage hint is set to true", async ({
+        test("should hide sender profile when the renderAsInformationalMessage hint is set to true", async ({
             page,
             room,
             app,
@@ -152,9 +152,11 @@ test.describe("Custom Component API", () => {
             await app.client.sendMessage(room.roomId, "Render as informational message");
 
             await app.timeline.scrollToBottom();
-            const eventList = page.locator(".mx_GenericEventListSummary").last();
-            const eventTile = eventList.locator(".mx_EventTile").last();
+            await expect(page.locator(".mx_GenericEventListSummary")).toHaveCount(0);
+            const eventTile = page.locator(".mx_EventTile").last();
             await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+            await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
+            await expect(page.getByText("Render as informational message")).toBeVisible();
         });
         test("should group custom messages without the informational hint", async ({ page, room, app }) => {
             await app.viewRoomById(room.roomId);
@@ -170,9 +172,10 @@ test.describe("Custom Component API", () => {
             await expect(page.getByText(/Module grouped alpha: 3 messages/)).toBeVisible();
             await page.getByRole("button", { name: "Expand" }).last().click();
             await expect(page.getByText("Grouped alpha 1", { exact: true })).toBeVisible();
+            await expect(page.getByText("Grouped alpha 2", { exact: true })).toBeVisible();
             await expect(page.getByText("Grouped alpha 3", { exact: true })).toBeVisible();
         });
-        test("should combine custom summaries by key with informational events", async ({ page, room, app }) => {
+        test("should keep informational-only messages outside custom summaries", async ({ page, room, app }) => {
             await app.viewRoomById(room.roomId);
             for (const group of ["alpha", "beta"]) {
                 for (let i = 1; i <= 3; i++) {
@@ -188,11 +191,10 @@ test.describe("Custom Component API", () => {
             await app.timeline.scrollToBottom();
             await expect(
                 page.getByText(/Module grouped alpha: 3 messages.*Module grouped beta: 3 messages/),
-            ).toHaveText(
-                /Module grouped alpha: 3 messages.*Module grouped beta: 3 messages.*Module grouped 1 informational message/,
-            );
+            ).toBeVisible();
+            await expect(page.getByText("Render as informational message")).toBeVisible();
         });
-        test("should hide avatar and sender profile when the renderSenderProfile hint is set to false", async ({
+        test("should hide sender profile when the renderSenderProfile hint is set to false", async ({
             page,
             room,
             app,
@@ -206,6 +208,7 @@ test.describe("Custom Component API", () => {
             await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
             await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
             await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
+            await expect(page.getByText("Render without sender profile")).toBeVisible();
         });
         test(
             "should render the next registered component if the filter function throws",
