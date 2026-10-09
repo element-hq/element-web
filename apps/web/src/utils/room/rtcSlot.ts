@@ -20,13 +20,10 @@ const assertSlotsEnabled = (): void => {
 
 /**
  * Determines the encryption to declare on the room's MatrixRTC slot: per-member encryption if the room
- * is encrypted and per-sender call encryption hasn't been disabled, otherwise none.
+ * is encrypted, otherwise none.
  */
-const getSlotEncryption = (room: Room): RtcSlotEncryptionContent | undefined => {
-    const usesPerMemberEncryption =
-        room.hasEncryptionStateEvent() && !SettingsStore.getValue("feature_disable_call_per_sender_encryption");
-    return usesPerMemberEncryption ? { type: RTC_SLOT_ENCRYPTION_PER_MEMBER } : undefined;
-};
+const getSlotEncryption = (room: Room): RtcSlotEncryptionContent | undefined =>
+    room.hasEncryptionStateEvent() ? { type: RTC_SLOT_ENCRYPTION_PER_MEMBER } : undefined;
 
 /**
  * Ensures the room's MatrixRTC slot is open, sending a state event to open (or create) it if needed.

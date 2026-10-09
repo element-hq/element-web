@@ -1308,7 +1308,6 @@
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",
-    "migrating_crypto": "Uzgaidiet! Mēs atjauninām %(brand)s, lai šifrēšana būtu ātrāka un uzticamāka.",
     "mobile_guide": {
         "toast_accept": "Izmantot lietotni",
         "toast_description": "%(brand)s mobilajā tīmekļa pārlūkprogrammā ir eksperimentāls. Lai iegūtu labāku pieredzi un jaunāko funkcionalitāti, izmantojiet mūsu bezmaksas mobilo lietotni.",
