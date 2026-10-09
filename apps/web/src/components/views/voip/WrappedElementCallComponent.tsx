@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type FC, lazy, Suspense, useCallback, useEffect, useMemo } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type FC, lazy, Suspense, useCallback, useContext, useEffect, useMemo } from "react";
 // Type-only: the component itself is loaded lazily below
 import type * as ElementCallComponent from "@element-hq/element-call-component";
 
@@ -14,9 +13,11 @@ import { ElementCall as ElementCallModel } from "../../../models/Call";
 import { CallStore } from "../../../stores/CallStore";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { type DocumentPipStore, DocumentPipStoreEvent } from "../../../stores/DocumentPipStore";
+import { DocumentPipStoreEvent } from "../../../stores/DocumentPipStore";
 import { getCurrentLanguage } from "../../../languageHandler";
 import { useTheme } from "../../../hooks/useTheme";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import Spinner from "../elements/Spinner";
 import { ElementWebHostBridge } from "./ElementWebHostBridge";
 
@@ -72,8 +73,8 @@ const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
 };
 
 /**
- * Wraps the Element Call component and constructs everything ElementCall needs.
- * from just: call + client.
+ * Wraps the Element Call component and constructs everything ElementCall needs from the call and
+ * the client and SDK contexts.
  * Rendered inside the persisted root, where it lives for the whole call regardless of which tile
  * (room view, floating PiP) is showing the call, or whether any is (browser Picture-in-Picture window):
  * so this is where anything that must keep following Element Web while the call runs,
@@ -84,10 +85,10 @@ const MarkReadyOnMount = ({ call }: { call: ElementCallModel }): null => {
  */
 export const WrappedElementCallComponent: FC<{
     call: ElementCallModel;
-    client: MatrixClient;
-    /** Where the call is shown in a browser Picture-in-Picture window, so the component can follow it there. */
-    documentPipStore: DocumentPipStore;
-}> = ({ call, client, documentPipStore }) => {
+}> = ({ call }) => {
+    const client = useMatrixClientContext();
+    // Where the call is shown in a browser Picture-in-Picture window, so the component can follow it there
+    const { documentPipStore } = useContext(SDKContext);
     // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
     const { effectiveTheme: theme } = useTheme();

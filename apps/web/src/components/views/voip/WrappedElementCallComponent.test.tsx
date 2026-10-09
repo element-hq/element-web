@@ -16,6 +16,8 @@ import {
     setUpClientRoomAndStores,
     cleanUpClientRoomAndStores,
     setupAsyncStoreWithClient,
+    clientAndSDKContextRenderOptions,
+    TestSDKContext,
 } from "test-utils";
 
 import { ElementCall } from "../../../models/Call";
@@ -62,7 +64,9 @@ describe("WrappedElementCallComponent", () => {
     });
 
     const renderWrapped = async (): Promise<HTMLElement> => {
-        render(<WrappedElementCallComponent call={call} client={client} documentPipStore={documentPipStore} />);
+        const sdkContext = new TestSDKContext();
+        sdkContext._DocumentPipStore = documentPipStore;
+        render(<WrappedElementCallComponent call={call} />, clientAndSDKContextRenderOptions(client, sdkContext));
         return await screen.findByTestId("element-call");
     };
 
