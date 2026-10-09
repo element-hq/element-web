@@ -10,7 +10,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Button, Text } from "@vector-im/compound-web";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
@@ -29,6 +31,7 @@ import { useHasOtherVerifiedDevices } from "../../../hooks/useHasOtherVerifiedDe
 import { EncryptionCard } from "../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../settings/encryption/EncryptionCardEmphasisedContent";
+import { type State as EncryptionState } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -63,14 +66,12 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(true);
     };
 
-    const onGoToSettings = (): void => {
-        // Open the user settings dialog to the encryption tab and start the flow to get recovery key
+    // Open the user settings dialog to the encryption tab in the given state
+    const onGoToSettings = (initialEncryptionState: EncryptionState): void => {
         const payload: OpenToTabPayload = {
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Encryption,
-            props: {
-                initialEncryptionState: "set_recovery_key",
-            },
+            props: { initialEncryptionState },
         };
         dis.dispatch(payload);
 
@@ -87,8 +88,40 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             return <Loading onFinished={onFinished} />;
 
         case BackupStatus.NO_CRYPTO:
-        case BackupStatus.BACKUP_ACTIVE:
             return <ConfirmLogout onFinished={onFinished} />;
+
+        case BackupStatus.BACKUP_ACTIVE:
+            // Only device, but recovery is set up: make sure the user still has their recovery key
+            return (
+                <BaseDialog
+                    contentId="mx_Dialog_content"
+                    hasCancel={true}
+                    onFinished={onFinished}
+                    className="mx_LogoutDialog"
+                    aria-label={_t("action|sign_out")}
+                >
+                    <EncryptionCard
+                        Icon={InfoIcon}
+                        title={_t("auth|logout_dialog|check_recovery_key_title")}
+                        className="mx_EncryptionCard_noBorder"
+                    >
+                        <EncryptionCardEmphasisedContent>
+                            <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
+                        </EncryptionCardEmphasisedContent>
+                        <EncryptionCardButtons>
+                            <Button destructive={true} onClick={onLogoutConfirm} Icon={DeleteIcon}>
+                                {_t("auth|logout_dialog|continue")}
+                            </Button>
+                            <Button kind="secondary" onClick={() => onGoToSettings("main")}>
+                                {_t("auth|logout_dialog|check_recovery_key")}
+                            </Button>
+                            <Button kind="tertiary" onClick={() => onGoToSettings("change_recovery_key")}>
+                                {_t("auth|logout_dialog|generate_recovery_key")}
+                            </Button>
+                        </EncryptionCardButtons>
+                    </EncryptionCard>
+                </BaseDialog>
+            );
 
         case BackupStatus.NO_BACKUP:
         case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
@@ -100,6 +133,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                     hasCancel={true}
                     onFinished={onFinished}
                     className="mx_LogoutDialog"
+                    aria-label={_t("action|sign_out")}
                 >
                     <EncryptionCard
                         Icon={ErrorIcon}
@@ -114,7 +148,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                             </Text>
                         </EncryptionCardEmphasisedContent>
                         <EncryptionCardButtons>
-                            <Button onClick={onGoToSettings} Icon={KeyIcon}>
+                            <Button onClick={() => onGoToSettings("set_recovery_key")} Icon={KeyIcon}>
                                 {_t("settings|encryption|recovery|set_up_recovery")}
                             </Button>
                             <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
@@ -153,8 +187,9 @@ function ConfirmLogout(props: SubComponentProps): JSX.Element {
     return (
         <QuestionDialog
             hasCancelButton={true}
-            title={_t("action|sign_out")}
-            description={_t("auth|logout_dialog|description")}
+            danger={true}
+            title={_t("auth|logout_dialog|description")}
+            description={_t("auth|logout_dialog|keep_access_description")}
             button={_t("action|sign_out")}
             onFinished={props.onFinished}
         />
