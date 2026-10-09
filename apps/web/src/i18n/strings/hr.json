@@ -1679,7 +1679,6 @@
     },
     "member_list_back_action_label": "Članovi sobe",
     "message_edit_dialog_title": "Uređivanje poruka",
-    "migrating_crypto": "Pričekajte. Ažuriramo %(brand)s kako bi šifriranje bilo brže i pouzdanije.",
     "mobile_guide": {
         "toast_accept": "Koristi se aplikacijom",
         "toast_description": "%(brand)s je u eksperimentalnoj fazi na mobilnom mrežnom pregledniku. Naša besplatna izvorna aplikacija pruža vam bolje iskustvo i najnovije značajke.",
