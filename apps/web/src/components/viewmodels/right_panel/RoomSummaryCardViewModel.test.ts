@@ -26,6 +26,7 @@ import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import * as hooks from "../../../hooks/useAccountData";
 import * as getTagsForRoomUtils from "../../../utils/room/getTagsForRoom";
+import { ModuleApi } from "../../../modules/Api";
 
 vi.mock("../../../utils/room/inviteToRoom", () => ({
     inviteToRoom: vi.fn(),
@@ -51,6 +52,8 @@ describe("useRoomSummaryCardViewModel", () => {
 
     afterEach(() => {
         vi.resetAllMocks();
+        ModuleApi.instance.extras.roomSummaryCardActionCallbacks = [];
+        ModuleApi.instance.extras.memberListHeaderActionCallbacks = [];
     });
 
     function render() {
@@ -69,6 +72,18 @@ describe("useRoomSummaryCardViewModel", () => {
         expect(result.current.isFavorite).toBe(false);
         expect(result.current.pinCount).toBe(0);
         expect(result.current.searchInputRef.current).toBe(null);
+    });
+
+    it("should return the module actions for the room", () => {
+        const action = { key: "action", label: "Module action", icon: () => null, onClick: vi.fn() };
+        const callback = vi.fn().mockReturnValue(action);
+        ModuleApi.instance.extras.addRoomSummaryCardActionCallback(callback);
+        // Member list header actions must not show up in the room info panel
+        ModuleApi.instance.extras.addMemberListHeaderActionCallback(() => ({ ...action, key: "other" }));
+        const { result } = render();
+
+        expect(result.current.moduleActions).toEqual([action]);
+        expect(callback).toHaveBeenCalledWith(room.roomId);
     });
 
     it("should handle room members click", () => {

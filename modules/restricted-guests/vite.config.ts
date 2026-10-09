@@ -21,6 +21,15 @@ export default mergeConfig(baseConfig, {
             formats: ["es"],
         },
     },
+    resolve: {
+        // nodePolyfills injects these shim imports into every file that uses Buffer, global or process, including
+        // workspace packages like shared-utils. Under pnpm those packages can't resolve the shims themselves, so
+        // point them at this module's copy.
+        alias: ["buffer", "global", "process"].map((shim) => ({
+            find: `vite-plugin-node-polyfills/shims/${shim}`,
+            replacement: fileURLToPath(import.meta.resolve(`vite-plugin-node-polyfills/shims/${shim}`)),
+        })),
+    },
     plugins: [
         importCSSSheet(),
         react(),
