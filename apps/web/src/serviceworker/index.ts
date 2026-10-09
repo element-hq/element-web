@@ -41,6 +41,13 @@ const pendingUserInfoRequests = new Map<
 // Event handlers must be added during the initial evaluation of the worker script, so we register a single `message`
 // listener here and route each reply to the request awaiting it, rather than adding a listener per request.
 self.addEventListener("message", (event) => {
+    if (event.data?.type === "claim") {
+        // Sent by a tab which loaded without us in control, e.g. after a hard reload. `activate` will not run again
+        // for that tab, so claim it here, otherwise its media requests would bypass us and go out unauthenticated.
+        event.waitUntil(self.clients.claim());
+        return;
+    }
+
     const responseKey = event.data?.responseKey;
     if (typeof responseKey !== "string") return; // not a reply to one of our requests
     const handler = pendingUserInfoRequests.get(responseKey);

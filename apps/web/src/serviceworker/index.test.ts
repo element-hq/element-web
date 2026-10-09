@@ -65,6 +65,12 @@ describe("serviceworker", () => {
         }),
     };
 
+    /** Stands in for the service worker's `clients`. */
+    const clients = {
+        get: vi.fn(async () => tab),
+        claim: vi.fn(async () => {}),
+    };
+
     beforeEach(() => {
         vi.clearAllMocks();
 
@@ -84,7 +90,7 @@ describe("serviceworker", () => {
             return new Response("media");
         });
         vi.stubGlobal("fetch", fetchSpy);
-        vi.stubGlobal("clients", { get: vi.fn().mockResolvedValue(tab) });
+        vi.stubGlobal("clients", clients);
 
         vi.spyOn(console, "error").mockImplementation(() => {});
         vi.spyOn(console, "log").mockImplementation(() => {});
@@ -140,6 +146,15 @@ describe("serviceworker", () => {
 
         expect(tab.postMessage).toHaveBeenCalled();
         expect(global.addEventListener).not.toHaveBeenCalled();
+    });
+
+    it("takes control of the tab when asked to claim it", () => {
+        const waitUntil = vi.fn();
+
+        emit("message", { data: { type: "claim" }, waitUntil });
+
+        expect(clients.claim).toHaveBeenCalled();
+        expect(waitUntil).toHaveBeenCalledWith(clients.claim.mock.results[0].value);
     });
 
     it("passes the request through unauthenticated when there is no access token stored", async () => {

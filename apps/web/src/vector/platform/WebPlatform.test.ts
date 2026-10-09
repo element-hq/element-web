@@ -21,17 +21,27 @@ import defaultDispatcher from "../../dispatcher/dispatcher.ts";
 import { Action } from "../../dispatcher/actions.ts";
 
 describe("WebPlatform", () => {
-    beforeEach(() => {
+    /** The active service worker, as resolved by `navigator.serviceWorker.ready`. */
+    const activeServiceWorker = { postMessage: vi.fn() };
+
+    /** Mock `navigator.serviceWorker`, with `controller` set to the service worker controlling the page, if any. */
+    function mockServiceWorkerContainer(controller: object | null): void {
         vi.spyOn(global, "navigator", "get").mockReturnValue({
             ...navigator,
-            // @ts-expect-error - mocking readonly object
             serviceWorker: {
                 register: vi.fn().mockResolvedValue({
                     update: vi.fn(),
                 }),
                 addEventListener: vi.fn(),
-            },
+                controller,
+                ready: Promise.resolve({ active: activeServiceWorker }),
+            } as unknown as ServiceWorkerContainer,
         });
+    }
+
+    beforeEach(() => {
+        activeServiceWorker.postMessage.mockClear();
+        mockServiceWorkerContainer(activeServiceWorker);
     });
 
     it("returns human readable name", () => {
@@ -43,6 +53,19 @@ describe("WebPlatform", () => {
         it("registers successfully", () => {
             new WebPlatform();
             expect(navigator.serviceWorker.register).toHaveBeenCalled();
+        });
+
+        it("does not ask the service worker to claim the page when it is already in control", async () => {
+            const platform = new WebPlatform();
+            await platform["registerServiceWorkerPromise"];
+            expect(activeServiceWorker.postMessage).not.toHaveBeenCalled();
+        });
+
+        it("asks the service worker to claim the page when it is not in control, e.g. after a hard reload", async () => {
+            mockServiceWorkerContainer(null);
+            const platform = new WebPlatform();
+            await platform["registerServiceWorkerPromise"];
+            expect(activeServiceWorker.postMessage).toHaveBeenCalledWith({ type: "claim" });
         });
 
         it("handles errors", async () => {

@@ -69,6 +69,13 @@ export default class WebPlatform extends BasePlatform {
 
         navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
         await registration.update();
+
+        // A hard reload loads the page without the service worker in control, so it would not see our media
+        // requests and they would go out unauthenticated. Ask the active service worker to take control of us.
+        if (!navigator.serviceWorker.controller) {
+            const { active } = await navigator.serviceWorker.ready;
+            active?.postMessage({ type: "claim" });
+        }
     }
 
     private handleServiceWorkerRegistrationError = (): void => {
