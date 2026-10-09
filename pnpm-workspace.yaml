@@ -26,7 +26,7 @@ catalog:
     "playwright-core": 1.63.0
     serve: 14.2.6
     # Compound
-    "@vector-im/compound-design-tokens": 10.2.1
+    "@vector-im/compound-design-tokens": 11.2.0
     "@vector-im/compound-web": 10.1.0
     # i18n
     matrix-web-i18n: 3.6.0
@@ -45,7 +45,7 @@ catalog:
     "@vitest/spy": 5.0.2
     "@vitest/ui": 5.0.2
     "@vitejs/plugin-react": 6.1.1
-    unplugin-dts: 1.1.1
+    unplugin-dts: 1.1.2
     # nx
     nx: 23.2.1
 
@@ -126,7 +126,7 @@ patchedDependencies:
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
     # Tweaks to record screenshot diffs as vitest artifacts
     vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
-    storybook-addon-vis@4: patches/storybook-addon-vis@4.2.8.patch
+    storybook-addon-vis@4: patches/storybook-addon-vis@4.3.1.patch
 
 peerDependencyRules:
     allowedVersions:

@@ -1,7 +1,7 @@
-diff --git a/dist/vis_annotation-DrDDbCAb.mjs b/dist/vis_annotation-DrDDbCAb.mjs
-index 7298afd96a6195508c85ca0360961f30079f6a1d..7618291b76414d3632b346fcc6ba06f6ec935586 100644
---- a/dist/vis_annotation-DrDDbCAb.mjs
-+++ b/dist/vis_annotation-DrDDbCAb.mjs
+diff --git a/dist/vis_annotation-BHBO0X19.mjs b/dist/vis_annotation-BHBO0X19.mjs
+index e076f7970df3a499058a3e77bf643a8834e9bca9..4cff006fba58f88bdf8ca9d9af025316e9eb21dd 100644
+--- a/dist/vis_annotation-BHBO0X19.mjs
++++ b/dist/vis_annotation-BHBO0X19.mjs
 @@ -23,7 +23,7 @@ function toMatchImageSnapshot$1(options) {
  	/* v8 ignore start: stub as success when not in a test (e.g. in a story) */
  	if (!test) return Promise.resolve();
@@ -11,7 +11,7 @@ index 7298afd96a6195508c85ca0360961f30079f6a1d..7618291b76414d3632b346fcc6ba06f6
  }
  
  //#endregion
-@@ -87,7 +87,7 @@ function toMatchImageSnapshot(subject, options) {
+@@ -103,7 +103,7 @@ function toMatchImageSnapshot(subject, options) {
  	/* v8 ignore start: stub as success when not in a test (e.g. in a story) */
  	if (!test) return Promise.resolve(success);
  	/* v8 ignore end */

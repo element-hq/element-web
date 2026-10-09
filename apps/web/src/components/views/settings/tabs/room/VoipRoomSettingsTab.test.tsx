@@ -9,14 +9,17 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
+import { describe, it, expect, beforeEach, afterEach, type Mock, vi } from "vitest";
+import { act, fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
 import { type MatrixClient, type Room, type MatrixEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
+import { RTC_SLOT_ENCRYPTION_PER_MEMBER } from "matrix-js-sdk/src/matrixrtc";
 import { mkStubRoom, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import { VoipRoomSettingsTab } from "./VoipRoomSettingsTab";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 
 describe("VoipRoomSettingsTab", () => {
     const roomId = "!room:example.com";
@@ -132,6 +135,164 @@ describe("VoipRoomSettingsTab", () => {
                         }),
                     ),
                 );
+            });
+        });
+
+        describe("slot handling", () => {
+            interface MockSlotSession {
+                ensureRtcSlotOpen: Mock;
+                ensureRtcSlotClosed: Mock;
+            }
+
+            /**
+             * Mocks the room's MatrixRTC session with the given slot status (`undefined` for no slot).
+             * @returns the mocked session for asserting on the slot methods.
+             */
+            const mockSlotSession = (slotStatus?: "open" | "closed"): MockSlotSession => {
+                const session: MockSlotSession = {
+                    ensureRtcSlotOpen: vi.fn().mockResolvedValue(undefined),
+                    ensureRtcSlotClosed: vi.fn().mockResolvedValue(undefined),
+                };
+                vi.mocked(cli.matrixRTC.getRoomSession).mockReturnValue(
+                    session as unknown as ReturnType<typeof cli.matrixRTC.getRoomSession>,
+                );
+                vi.mocked(cli.matrixRTC.isSlotClosed).mockReturnValue(
+                    slotStatus === undefined ? undefined : slotStatus === "closed",
+                );
+                return session;
+            };
+
+            beforeEach(() => {
+                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
+            });
+
+            afterEach(() => {
+                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+            });
+
+            it("opens/creates the slot when enabling Element calls", async () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                const session = mockSlotSession();
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                await waitFor(() => expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined }));
+                expect(session.ensureRtcSlotClosed).not.toHaveBeenCalled();
+            });
+
+            it("reopens the slot when enabling Element calls", async () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                const session = mockSlotSession("closed");
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                await waitFor(() => expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({ encryption: undefined }));
+                expect(session.ensureRtcSlotClosed).not.toHaveBeenCalled();
+            });
+
+            it("declares per-member encryption when opening the slot in an encrypted room", async () => {
+                vi.mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                const session = mockSlotSession();
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                await waitFor(() =>
+                    expect(session.ensureRtcSlotOpen).toHaveBeenCalledWith({
+                        encryption: { type: RTC_SLOT_ENCRYPTION_PER_MEMBER },
+                    }),
+                );
+            });
+
+            it("closes the slot when disabling Element calls", async () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
+                const session = mockSlotSession("open");
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                await waitFor(() => expect(session.ensureRtcSlotClosed).toHaveBeenCalled());
+                expect(session.ensureRtcSlotOpen).not.toHaveBeenCalled();
+            });
+
+            it("renders the switch as off when no slot has ever been created, even though power levels say enabled", () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
+                mockSlotSession();
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).not.toBeChecked();
+            });
+
+            it("does not touch the slot when the labs flag is disabled", async () => {
+                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                const session = mockSlotSession();
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                await waitFor(() =>
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        room.roomId,
+                        EventType.RoomPowerLevels,
+                        expect.anything(),
+                    ),
+                );
+                expect(session.ensureRtcSlotOpen).not.toHaveBeenCalled();
+                expect(session.ensureRtcSlotClosed).not.toHaveBeenCalled();
+            });
+
+            it("does not touch power levels or the slot when the user cannot send RTCSlot state events", () => {
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                    (eventType) => eventType !== EventType.RTCSlot,
+                );
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                const session = mockSlotSession();
+
+                const tab = renderTab();
+                fireEvent.click(getElementCallSwitch(tab));
+
+                expect(cli.sendStateEvent).not.toHaveBeenCalled();
+                expect(session.ensureRtcSlotOpen).not.toHaveBeenCalled();
+                expect(session.ensureRtcSlotClosed).not.toHaveBeenCalled();
+            });
+
+            it("disables the switch when the feature is on and the user cannot send RTCSlot state events", () => {
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                    (eventType) => eventType !== EventType.RTCSlot,
+                );
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).toBeDisabled();
+            });
+
+            it("does not disable the switch for missing RTCSlot permission when the feature is off", () => {
+                act(() => {
+                    SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+                });
+                vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
+                    (eventType) => eventType !== EventType.RTCSlot,
+                );
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).not.toBeDisabled();
+            });
+
+            it("renders the switch as off when the slot is closed, even though power levels say enabled", () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
+                mockSlotSession("closed");
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).not.toBeChecked();
             });
         });
     });
