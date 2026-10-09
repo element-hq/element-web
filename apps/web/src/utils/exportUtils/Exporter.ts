@@ -16,6 +16,7 @@ import escapeHTML from "escape-html";
 import { ExportType, type IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
+import { fetchAuthenticatedMedia } from "../authenticatedMedia.ts";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
@@ -230,7 +231,13 @@ export default abstract class Exporter {
                 if (!media.srcHttp) {
                     throw new Error("Cannot fetch without srcHttp");
                 }
-                const image = await fetch(media.srcHttp);
+                // Not a plain fetch of `srcHttp`: that URL is unauthenticated and relies on
+                // the service worker rewriting it, so an export from an uncontrolled page
+                // would 404 on a homeserver with authenticated media enabled. Deliberately
+                // NOT Media.downloadSource, which rejects a non-ok response - an export has
+                // always written whatever the server returned, and changing that here would
+                // be a separate decision from authenticating the request.
+                const image = await fetchAuthenticatedMedia(media.srcHttp, this.room.client);
                 blob = await image.blob();
             }
         } catch {

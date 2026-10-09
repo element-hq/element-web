@@ -22,6 +22,7 @@ import { GenericToast } from "@element-hq/web-shared-components";
 import SdkConfig from "../../SdkConfig.ts";
 import type { ActionPayload } from "../../dispatcher/payloads.ts";
 import * as SessionLock from "../../utils/SessionLock.ts";
+import { ensureServiceWorkerControl } from "../serviceWorkerControl.ts";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -68,6 +69,12 @@ export default class WebPlatform extends BasePlatform {
         }
 
         navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
+
+        // Before update(), which can wait on the network: an uncontrolled page cannot load
+        // authenticated media at all, and if regaining control needs a reload we want that
+        // to happen while the app is still starting rather than under the user's hands.
+        await ensureServiceWorkerControl(registration);
+
         await registration.update();
     }
 

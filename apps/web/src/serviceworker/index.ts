@@ -10,6 +10,7 @@ import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { idbLoad } from "../utils/StorageAccess";
 import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
+import { toAuthenticatedMediaUrl } from "../utils/authenticatedMedia";
 
 const serverSupportMap: {
     [serverUrl: string]: {
@@ -28,6 +29,22 @@ global.addEventListener("activate", (event) => {
     // We force all clients to be under our control, immediately. This could be old tabs.
     // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
     event.waitUntil(clients.claim());
+});
+
+// A page that loaded without a controller stays uncontrolled for its entire lifetime:
+// clients.claim() above runs only when a worker activates, and by the time such a page
+// loads this worker activated long ago. A hard reload is the common way to get there -
+// per spec it deliberately bypasses us - but registration can also have been slow, or
+// the worker unregistered by a browser setting or an extension.
+//
+// That page then has no way to load authenticated media it hands to the DOM: an
+// `<img src>` cannot carry an Authorization header, which is the whole reason we
+// intercept below. clients.claim() is not restricted to `activate`, so let the page ask
+// us to adopt it rather than leaving it broken. See ensureServiceWorkerControl.
+global.addEventListener("message", (event: MessageEvent) => {
+    if (event.data?.type !== "claimClients") return;
+    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
+    void clients.claim();
 });
 
 // @ts-expect-error - the service worker types conflict with the DOM types available through TypeScript. Many hours
@@ -82,7 +99,7 @@ global.addEventListener("fetch", (event: FetchEvent) => {
 
                 // If we have server support (and a means of authentication), rewrite the URL to use MSC3916 endpoints.
                 if (serverSupportMap[csApi].supportsAuthedMedia && auth.accessToken) {
-                    url.href = url.href.replace(/\/media\/v3\/(.*)\//, "/client/v1/media/$1/");
+                    url.href = toAuthenticatedMediaUrl(url.href);
                 } // else by default we make no changes
             } catch (err) {
                 // In case of some error, we stay safe by not adding the access-token to the request.

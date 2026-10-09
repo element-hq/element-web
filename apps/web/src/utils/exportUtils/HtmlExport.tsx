@@ -16,6 +16,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import { DateSeparatorView, EventPresentationProvider, I18nContext } from "@element-hq/web-shared-components";
 
 import Exporter from "./Exporter";
+import { fetchAuthenticatedMedia } from "../authenticatedMedia.ts";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Layout } from "../../settings/enums/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
@@ -68,7 +69,10 @@ export default class HTMLExporter extends Exporter {
         const avatarPath = "room.png";
         if (avatarUrl) {
             try {
-                const image = await fetch(avatarUrl);
+                // Avatars are media too: a plain fetch of this URL relies on the service
+                // worker rewriting it, so an export from an uncontrolled page loses every
+                // avatar against a homeserver with authenticated media enabled.
+                const image = await fetchAuthenticatedMedia(avatarUrl, this.room.client);
                 blob = await image.blob();
                 this.totalSize += blob.size;
                 this.addFile(avatarPath, blob);
@@ -255,7 +259,7 @@ export default class HTMLExporter extends Exporter {
             try {
                 const avatarUrl = this.getAvatarURL(event);
                 this.avatars.set(member.userId, true);
-                const image = await fetch(avatarUrl!);
+                const image = await fetchAuthenticatedMedia(avatarUrl!, this.room.client);
                 const blob = await image.blob();
                 this.addFile(this.getAvatarFilePath(member.userId), blob);
             } catch (err) {
