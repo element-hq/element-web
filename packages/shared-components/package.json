@@ -112,7 +112,7 @@
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
         "expect": "^30.5.1",
-        "oxfmt": "0.70.0",
+        "oxfmt": "0.72.0",
         "storybook": "10.5.8",
         "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",
