@@ -180,7 +180,7 @@ test.describe("'Turn on key storage' toast", () => {
 });
 
 test.describe("Verify this device toast", () => {
-    //This is also testing skipping verification, hence need to allow it
+    // This is also testing skipping verification, hence need to allow it
     test.use({
         config: {
             force_verification: false,
