@@ -285,7 +285,7 @@ export class Helpers {
     async assertNoTacIndicator() {
         // Assert by checking neither of the known indicators are visible first. This will wait
         // if it takes a little time to disappear, but the screenshot comparison won't.
-        await expect(this.getTacButton().locator("[data-indicator='success']")).not.toBeVisible();
+        await expect(this.getTacButton().locator("[data-indicator='accent']")).not.toBeVisible();
         await expect(this.getTacButton().locator("[data-indicator='critical']")).not.toBeVisible();
         await expect(this.getTacButton()).toMatchScreenshot("tac-no-indicator.png");
     }
@@ -294,7 +294,7 @@ export class Helpers {
      * Assert that the threads activity centre button has a notification indicator
      */
     assertNotificationTac() {
-        return expect(this.getTacButton().locator("[data-indicator='success']")).toBeVisible();
+        return expect(this.getTacButton().locator("[data-indicator='accent']")).toBeVisible();
     }
 
     /**

@@ -87,6 +87,7 @@ jobs:
               if: always()
               with:
                   name: vitest-blob-${{ matrix.runner }}
+                  overwrite: true # Overwrite any artifacts from previous runs (ie. flakes)
                   include-hidden-files: true
                   path: |
                       ./.vitest
@@ -181,6 +182,7 @@ jobs:
                   require-lockfile: true
 
             - run: pnpm vitest --merge-reports --reporter=html
+              if: always()
 
             - name: Upload HTML report
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
