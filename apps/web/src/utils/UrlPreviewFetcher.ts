@@ -11,7 +11,6 @@ import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
 import { mediaFromMxc } from "../customisations/Media";
-import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { decryptFile } from "./DecryptFile";
@@ -24,6 +23,25 @@ export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
 
+/** Size of the thumbnail box in the side-by-side preview tile, see `MediaPreviewComponents.module.css`. */
+const THUMBNAIL_WIDTH_PX = 130;
+const THUMBNAIL_HEIGHT_PX = 142;
+/** The least of an image that cropping it to the thumbnail box may keep for it to still be worth showing. */
+const MIN_THUMBNAIL_KEPT_FRACTION = 2 / 3;
+
+/**
+ * Whether a preview image survives being cropped to the thumbnail box, which is nearly square.
+ * `object-fit: cover` trims whichever axis overflows, so a wide banner loses most of its width.
+ * An image of unknown size is assumed not to fit.
+ */
+export function imageFitsThumbnail(image: { width?: number; height?: number }): boolean {
+    if (!image.width || !image.height) return false;
+    const imageAspect = image.width / image.height;
+    const boxAspect = THUMBNAIL_WIDTH_PX / THUMBNAIL_HEIGHT_PX;
+    const keptFraction = imageAspect > boxAspect ? boxAspect / imageAspect : imageAspect / boxAspect;
+    return keptFraction >= MIN_THUMBNAIL_KEPT_FRACTION;
+}
+
 /**
  * Handles fetching and parsing URL previews.
  * Maintains a cache of previously fetched previews; call `clearCache` when
@@ -31,6 +49,8 @@ export const MIN_IMAGE_SIZE_BYTES = 8192;
  */
 export class UrlPreviewFetcher {
     private readonly cache = new Map<string, UrlPreview>();
+    // Map<site origin, the HTTP URL of its favicon.ico, or undefined if it has none>
+    private readonly faviconCache = new Map<string, Promise<string | undefined>>();
     // Map<the mxc:// url, the object url>
     private readonly decryptedObjectUrls = new Map<string, string>();
 
@@ -43,6 +63,7 @@ export class UrlPreviewFetcher {
 
     public clearCache(): void {
         this.cache.clear();
+        this.faviconCache.clear();
         this.dispose();
     }
 
@@ -157,6 +178,11 @@ export class UrlPreviewFetcher {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
+        // MSC4448: a site logo the server identified as such beats guessing one from the image size.
+        if (typeof response["msc4448:site_logo"] === "string" && loadMedia) {
+            siteIcon = mediaFromMxc(response["msc4448:site_logo"], this.client).srcHttp ?? undefined;
+        }
+
         if (typeof response["og:image"] === "string" && loadMedia) {
             const mxcImageFull = response["og:image"];
             const media = mediaFromMxc(response["og:image"], this.client);
@@ -167,9 +193,15 @@ export class UrlPreviewFetcher {
             const imageType = typeof response["og:image:type"] === "string" ? response["og:image:type"] : undefined;
 
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
-                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
-                const height =
-                    thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
+                // Scale the declared size down to fit the preview box, keeping the aspect ratio. An image of
+                // unknown size is taken to fill the box.
+                let width = PREVIEW_WIDTH_PX;
+                let height = PREVIEW_WIDTH_PX;
+                if (declaredWidth && declaredHeight) {
+                    const scale = Math.min(1, PREVIEW_WIDTH_PX / declaredWidth, PREVIEW_WIDTH_PX / declaredHeight);
+                    width = Math.floor(declaredWidth * scale);
+                    height = Math.floor(declaredHeight * scale);
+                }
                 const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
                 const playable = !!response["og:video"] || !!response["og:video:type"] || !!response["og:audio"];
                 if (thumb) {
@@ -185,11 +217,39 @@ export class UrlPreviewFetcher {
                         playable,
                     };
                 }
-            } else if (media.srcHttp) {
+            } else if (media.srcHttp && !siteIcon) {
                 siteIcon = media.srcHttp;
             }
         }
         return { image, siteIcon };
+    }
+
+    /**
+     * Find an icon for a site whose preview provides none, by asking the server to preview the site's
+     * `/favicon.ico`, the location browsers try when a page declares no icon. Any server which can
+     * preview an image URL can do this, so it needs no MSC4448 support. Cached per site.
+     * @param link The URL being previewed.
+     * @returns The HTTP URL of the icon, or undefined if the site has none.
+     */
+    private fetchFaviconFallback(link: string): Promise<string | undefined> {
+        const origin = new URL(link).origin;
+        let icon = this.faviconCache.get(origin);
+        if (!icon) {
+            icon = this.previewFavicon(origin);
+            this.faviconCache.set(origin, icon);
+        }
+        return icon;
+    }
+
+    private async previewFavicon(origin: string): Promise<string | undefined> {
+        try {
+            const response = await this.client.getUrlPreview(`${origin}/favicon.ico`, this.previewRequestTs);
+            const image = response?.["og:image"];
+            return typeof image === "string" ? (mediaFromMxc(image, this.client).srcHttp ?? undefined) : undefined;
+        } catch (error) {
+            logger.debug(`No favicon.ico for ${origin}: `, error);
+            return undefined;
+        }
     }
 
     /**
@@ -227,7 +287,13 @@ export class UrlPreviewFetcher {
             return null;
         }
 
-        const { image, siteIcon } = this.getPreviewImage(response, loadMedia);
+        const { image, siteIcon: providedIcon } = this.getPreviewImage(response, loadMedia);
+        let siteIcon = providedIcon;
+        // Without an icon from the server, a tile with no image, or a wide one the thumbnail would crop,
+        // has nothing good to show on the left: try the site's favicon.ico as a last resort.
+        if (loadMedia && siteIcon === undefined && (image === undefined || !imageFitsThumbnail(image))) {
+            siteIcon = await this.fetchFaviconFallback(link);
+        }
 
         const result = {
             link,

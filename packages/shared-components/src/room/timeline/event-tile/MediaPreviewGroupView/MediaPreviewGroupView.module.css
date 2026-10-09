@@ -7,6 +7,7 @@
        would be squeezed into an ellipsis. */
     width: var(--MediaPreview-width);
     max-width: 100%;
+    position: relative;
 
     display: flex;
     flex-direction: column;
@@ -21,4 +22,18 @@
         color: var(--cpd-color-icon-accent-primary);
         font-weight: var(--cpd-font-weight-regular);
     }
+}
+
+/* Dismiss button in the top right corner, over the first tile. */
+.dismissButton {
+    position: absolute;
+    top: var(--cpd-space-2x);
+    right: var(--cpd-space-2x);
+    z-index: 1;
+}
+
+/* Reserve room for the button in the first tile only, which is the one it overlaps. The tile's text
+   content reads this variable, see `MediaPreviewComponents.module.css`. */
+.dismissable > :first-child {
+    --MediaPreview-dismiss-inset: var(--cpd-space-7x);
 }

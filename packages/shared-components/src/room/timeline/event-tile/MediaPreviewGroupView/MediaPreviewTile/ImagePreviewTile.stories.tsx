@@ -11,6 +11,7 @@ import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-desi
 
 import { ImagePreviewTile } from "./MediaPreviewTile";
 import demoImage from "../../../../../../static/wideImage.png";
+import siteLogo from "../../../../../../static/element.png";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/ImagePreviewTile",
@@ -80,5 +81,38 @@ export const ClickableImage: Story = {
 export const NoButtons: Story = {
     args: {
         buttons: [],
+    },
+};
+
+// Timeline link preview with a thumbnail.
+export const SideBySide: Story = {
+    args: {
+        layout: "side",
+        imageSize: "thumbnail",
+        imageOnClick: () => {},
+        header: "The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives",
+        headerUrl: "https://techcrunch.com/ai-future",
+        body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation and what it means for the years ahead.",
+        footer: "techcrunch.com",
+        icon: undefined,
+        buttons: [],
+    },
+};
+
+export const SideBySideWithButtons: Story = {
+    args: {
+        ...SideBySide.args,
+        buttons: [{ label: "Expand", icon: <ExpandIcon />, onClick: () => ({}) }],
+    },
+};
+
+// Timeline link preview showing the site's logo in place of a preview image.
+export const SideBySideLogo: Story = {
+    args: {
+        ...SideBySide.args,
+        image: siteLogo,
+        imageAlt: "techcrunch.com",
+        imageSize: "logo",
+        imageOnClick: undefined,
     },
 };

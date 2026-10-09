@@ -57,6 +57,8 @@ test.describe("Message links", () => {
     test("should linkify text inside a URL preview", async ({ page, user, app, room }) => {
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
+            // A preview without a site icon makes the client look for the site's favicon.ico too.
+            if (requestedPage === "https://example.org/favicon.ico") return route.fulfill({ status: 404 });
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
                 json: {
@@ -72,5 +74,26 @@ test.describe("Message links", () => {
                 .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
                 .getByRole("link", { name: "https://example.org/another-link" }),
         ).toBeVisible();
+    });
+    test("should hide a URL preview when it is closed", async ({ page, user, app, room }) => {
+        await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route) => {
+            return route.fulfill({
+                json: {
+                    "og:title": "A simple site",
+                    "og:description": "And with a brief description",
+                },
+            });
+        });
+        await page.goto(`#/room/${room.roomId}`);
+        const { event_id: eventId } = await app.client.sendMessage(room.roomId, "Check out https://example.org/");
+        const tile = page.locator(`.mx_EventTile[data-event-id="${eventId}"]`);
+        const preview = tile.getByRole("link", { name: "A simple site" });
+        await expect(preview).toBeVisible();
+
+        await tile.getByRole("button", { name: "Close preview" }).click();
+
+        await expect(preview).not.toBeVisible();
+        // The plain link in the message itself is unaffected.
+        await expect(tile.getByRole("link", { name: "https://example.org/" })).toBeVisible();
     });
 });

@@ -16,6 +16,7 @@ import {
 } from "./MediaPreviewGroupView";
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
 import demoImage from "../../../../../static/wideImage.png";
+import siteLogo from "../../../../../static/element.png";
 // Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
 // video controls draw a buffered-progress bar, so a clip that is still downloading when the snapshot
 // is taken makes the screenshot non-reproducible.
@@ -74,6 +75,29 @@ const audioEntry: MediaPreviewGroupEntry = {
     buttons,
 };
 
+const linkPreviewEntry: MediaPreviewGroupEntry = {
+    id: "https://techcrunch.com/ai-future",
+    type: "image",
+    layout: "side",
+    image: demoImage,
+    imageAlt: "Stacks of newspapers",
+    imageSize: "thumbnail",
+    header: "The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives",
+    headerUrl: "https://techcrunch.com/ai-future",
+    body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation.",
+    footer: "techcrunch.com",
+};
+
+const textLinkPreviewEntry: MediaPreviewGroupEntry = {
+    id: "https://matrix.org/",
+    type: "text",
+    layout: "side",
+    header: "Matrix",
+    headerUrl: "https://matrix.org/",
+    body: "An open network for secure, decentralised communication",
+    footer: "matrix.org",
+};
+
 const withEntries = (
     entries: Array<MediaPreviewGroupEntry>,
     collapse?: MediaPreviewGroupSnapshot["collapse"],
@@ -121,6 +145,35 @@ export const SingleVideo: Story = {
 
 export const SingleAudio: Story = {
     args: withEntries([audioEntry]),
+};
+
+// Timeline link previews: side layout.
+export const LinkPreviews: Story = {
+    args: withEntries([linkPreviewEntry, textLinkPreviewEntry]),
+};
+
+// Timeline link previews showing the site's logo (MSC4448) in place of a preview image.
+export const LinkPreviewsWithSiteLogo: Story = {
+    args: withEntries([
+        {
+            ...linkPreviewEntry,
+            image: siteLogo,
+            imageAlt: "techcrunch.com",
+            imageSize: "logo",
+            imageOnClick: undefined,
+        },
+        textLinkPreviewEntry,
+    ]),
+};
+
+// Timeline link previews with the close button the user hides them with.
+export const LinkPreviewsDismissable: Story = {
+    args: {
+        vm: new MockViewModel<MediaPreviewGroupSnapshot>({
+            entries: [linkPreviewEntry, textLinkPreviewEntry],
+            onDismiss: () => ({}),
+        }),
+    },
 };
 
 export const Collapsed: Story = {

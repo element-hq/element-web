@@ -25,12 +25,12 @@ import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom, mockClie
 import { getRoomContext } from "test-utils/room";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { TextualBodyFactory as TextualBody } from "./TextualBodyFactory";
+import Modal from "../../../Modal";
+import ImageView from "../elements/ImageView";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
-import Modal from "../../../Modal";
-import ImageView from "../elements/ImageView";
 import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
@@ -579,17 +579,20 @@ describe("<TextualBody />", () => {
             });
         });
 
-        it("should listen to showUrlPreview change", () => {
+        it("should listen to showUrlPreview change", async () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            vi.spyOn(matrixClient, "getUrlPreview").mockResolvedValue({
+                "og:title": "Matrix",
+                "og:type": "website",
+                "og:url": "https://matrix.org/",
+            });
 
             const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
+            expect(container.querySelector(".mx_TextualBody_urlPreviews")).toBeNull();
 
             getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            waitFor(() => {
-                // Asynchronous check since the VM needs to recalcuate.
-                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
-            });
+            // Asynchronous check since the VM needs to recalculate.
+            await waitFor(() => expect(container.querySelector(".mx_TextualBody_urlPreviews")).toBeTruthy());
         });
     });
     describe("url preview tiles", () => {
@@ -628,6 +631,12 @@ describe("<TextualBody />", () => {
             DMRoomMap.makeShared(defaultMatrixClient);
         });
 
+        // Closing the previews is remembered per event in local storage, which would otherwise leak into
+        // later tests that reuse the same event ID.
+        afterEach(() => {
+            localStorage.clear();
+        });
+
         /** Render a message and wait for its previews to have been fetched and rendered. */
         const renderPreviews = async (body = `Visit ${link}`): Promise<ReturnType<typeof render>> => {
             const result = getComponent({ mxEvent: mkRoomTextMessage(body), showUrlPreview: true }, matrixClient);
@@ -640,25 +649,43 @@ describe("<TextualBody />", () => {
 
             expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", link);
             expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
-        it("falls back to the site name when the preview has no description", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
+        it("shows the lowercased host of the link rather than the site name", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:site_name": "GitHub" }));
 
-            await renderPreviews();
+            await renderPreviews("Visit https://WWW.GitHub.com/element-hq/element-web");
 
-            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+            expect(screen.getByText("github.com")).toBeInTheDocument();
+            expect(screen.queryByText("GitHub")).not.toBeInTheDocument();
         });
 
-        it("renders a preview with an image and opens the lightbox when it is clicked", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
+        it("shows only the title and host when the preview has no description", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ "og:description": undefined }));
+
+            const { container } = await renderPreviews();
+
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+            expect(container.querySelector(".mx_TextualBody_urlPreviews")).not.toHaveTextContent(
+                "An open network for secure, decentralised communication",
+            );
+        });
+
+        const ogLogo = { "msc4448:site_logo": "mxc://example.org/logo", "msc4448:site_logo:size": 1234 };
+
+        it("shows a near-square og:image as the thumbnail and opens the lightbox when it is clicked", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, ...ogLogo, "og:image:width": 480, "og:image:height": 480 }),
+            );
             const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
 
             await renderPreviews();
 
-            fireEvent.click(screen.getByRole("button", { name: "View image" }));
-
+            const button = await screen.findByRole("button", { name: "View image" });
+            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+            fireEvent.click(button);
             expect(createDialog).toHaveBeenCalledWith(
                 ImageView,
                 expect.objectContaining({ src: "mxc://example.org/preview", name: "Thumbnail of Matrix" }),
@@ -668,14 +695,86 @@ describe("<TextualBody />", () => {
             );
         });
 
-        it("opens the previewed link in a new tab", async () => {
-            const open = vi.spyOn(window, "open").mockReturnValue(null);
+        it("shows the site logo instead of a wide og:image which the thumbnail would crop", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ ...ogImage, ...ogLogo }));
 
             await renderPreviews();
 
-            fireEvent.click(screen.getByRole("button", { name: "Open link" }));
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/logo");
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
 
-            expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        it("shows a wide og:image anyway when the site has no logo at all", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation((url) =>
+                url.endsWith("/favicon.ico")
+                    ? Promise.reject(new Error("No favicon"))
+                    : Promise.resolve(ogData(ogImage)),
+            );
+
+            await renderPreviews();
+
+            const button = await screen.findByRole("button", { name: "View image" });
+            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+        });
+
+        it("shows the site's favicon.ico instead of a wide og:image when the server sends no logo", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation((url) =>
+                Promise.resolve(
+                    url.endsWith("/favicon.ico")
+                        ? ({
+                              "og:title": "favicon.ico",
+                              "og:image": "mxc://example.org/favicon",
+                          } as IPreviewUrlResponse)
+                        : ogData(ogImage),
+                ),
+            );
+
+            await renderPreviews();
+
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/favicon");
+            expect(matrixClient.getUrlPreview).toHaveBeenCalledWith(
+                "https://matrix.org/favicon.ico",
+                expect.any(Number),
+            );
+        });
+
+        it("shows the site logo guessed from a small og:image", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, "og:image:width": 32, "og:image:height": 32, "matrix:image:size": 500 }),
+            );
+
+            await renderPreviews();
+
+            const logo = await screen.findByRole("img", { name: "matrix.org" });
+            expect(logo).toHaveAttribute("src", "mxc://example.org/preview");
+            expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        });
+
+        it("shows a text-only tile when the page has neither an image nor a logo", async () => {
+            await renderPreviews();
+
+            expect(screen.queryByRole("img")).not.toBeInTheDocument();
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+        });
+
+        it("links the title to the previewed page in a new tab and has no other buttons", async () => {
+            await renderPreviews();
+
+            expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("target", "_blank");
+            expect(screen.queryByRole("button", { name: "Open link" })).not.toBeInTheDocument();
+        });
+
+        it("hides the previews when the close button is clicked and remembers the choice", async () => {
+            const mxEvent = mkRoomTextMessage(`Visit ${link}`);
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
+            await screen.findByRole("link", { name: "Matrix" });
+
+            fireEvent.click(screen.getByRole("button", { name: "Close preview" }));
+
+            await waitFor(() => expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument());
+            expect(localStorage.getItem(`hide_preview_${mxEvent.getId()}`)).toBe("1");
         });
 
         it("expands the group when more previews are available than are shown", async () => {
