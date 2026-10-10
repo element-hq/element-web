@@ -156,7 +156,7 @@ overrides:
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.35.0
+    node-abi: 4.36.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
