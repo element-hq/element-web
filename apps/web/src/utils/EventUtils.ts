@@ -31,6 +31,7 @@ import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { ModuleApi } from "../modules/Api";
+import type { MessageGrouping } from "../modules/customComponentApi.ts";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -291,3 +292,21 @@ export const highlightEvent = (roomId: string, eventId: string): void => {
         metricsTrigger: undefined, // room doesn't change
     });
 };
+
+/** Default to showing the message as a regular message unless the hint is explicitly set to true. */
+export function hintAsInformationalMessage(mxEvent: MatrixEvent): boolean {
+    return ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.renderAsInformationalMessage === true;
+}
+
+/** Return the custom grouping for this event, if its renderer provides one. */
+export function hintCustomGroupSummary(mxEvent: MatrixEvent): MessageGrouping | null {
+    return ModuleApi.instance.customComponents.getGroupingForMessage(mxEvent);
+}
+
+/**
+ * Defaults to showing the sender profile unless the hint is explicitly false.
+ * This avoids breaking existing custom components that don't set this hint.
+ */
+export function hintHideSenderProfile(mxEvent: MatrixEvent): boolean {
+    return ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.renderSenderProfile === false;
+}

@@ -81,6 +81,7 @@ describe("ReplyTileViewModel", () => {
         vi.mocked(getEventDisplayInfo).mockReturnValue({
             hasRenderer: true,
             isInfoMessage: false,
+            hideSender: false,
             isBubbleMessage: false,
             isLeftAlignedBubbleMessage: false,
             noBubbleEvent: false,

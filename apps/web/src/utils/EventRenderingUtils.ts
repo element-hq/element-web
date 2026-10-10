@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     type MatrixEvent,
-    type IContent,
     type MatrixClient,
     EventType,
     MsgType,
@@ -19,12 +18,17 @@ import {
 
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
-import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
+import {
+    getMessageModerationState,
+    hintAsInformationalMessage,
+    hintHideSenderProfile,
+    isLocationEvent,
+    MessageModerationState,
+} from "./EventUtils";
 import { ElementCallEventType } from "../call-types";
 
 const calcIsInfoMessage = (
     eventType: EventType | string,
-    content: IContent,
     isBubbleMessage: boolean,
     isLeftAlignedBubbleMessage: boolean,
 ): boolean => {
@@ -49,6 +53,7 @@ export function getEventDisplayInfo(
     hideEvent?: boolean,
 ): {
     isInfoMessage: boolean;
+    hideSender: boolean;
     hasRenderer: boolean;
     isBubbleMessage: boolean;
     isLeftAlignedBubbleMessage: boolean;
@@ -88,7 +93,10 @@ export function getEventDisplayInfo(
         (eventType === EventType.RTCNotification ||
             eventType === EventType.CallInvite ||
             ElementCallEventType.matches(eventType));
-    let isInfoMessage = calcIsInfoMessage(eventType, content, isBubbleMessage, isLeftAlignedBubbleMessage);
+    let isInfoMessage =
+        calcIsInfoMessage(eventType, isBubbleMessage, isLeftAlignedBubbleMessage) ||
+        hintAsInformationalMessage(mxEvent);
+    const hideSender = hintHideSenderProfile(mxEvent);
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent =
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
@@ -139,6 +147,7 @@ export function getEventDisplayInfo(
     return {
         hasRenderer: !!factory,
         isInfoMessage,
+        hideSender,
         isBubbleMessage,
         isLeftAlignedBubbleMessage,
         noBubbleEvent,

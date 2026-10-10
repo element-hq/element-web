@@ -577,6 +577,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderSt
                 ...props.sender,
                 senderId: mxEvent.getSender() ?? undefined,
                 isEmote: mxEvent.getContent().msgtype === MsgType.Emote,
+                hideSender: displayInfo.hideSender || props.sender.hideSender,
             },
         };
     }

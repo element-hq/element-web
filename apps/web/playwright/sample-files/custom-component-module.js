@@ -27,6 +27,31 @@ export default class CustomComponentModule {
             { allowEditingEvent: false },
         );
         this.api.customComponents.registerMessageRenderer(
+            (evt) => evt.content.body === "Render as informational message",
+            (_props, originalComponent) => {
+                return originalComponent();
+            },
+            { renderAsInformationalMessage: true },
+        );
+        this.api.customComponents.registerMessageRenderer(
+            (evt) => typeof evt.content["org.example.group"] === "string",
+            (_props, originalComponent) => originalComponent(),
+            {
+                renderGroupSummary: {
+                    getKey: (evt) => String(evt.content["org.example.group"]),
+                    getSummary: (events) =>
+                        `Module grouped ${String(events[0].content["org.example.group"])}: ${events.length} messages`,
+                },
+            },
+        );
+        this.api.customComponents.registerMessageRenderer(
+            (evt) => evt.content.body === "Render without sender profile",
+            (_props, originalComponent) => {
+                return originalComponent();
+            },
+            { renderSenderProfile: false },
+        );
+        this.api.customComponents.registerMessageRenderer(
             (evt) => evt.content.body === "Fall through here",
             (props) => {
                 const body = props.mxEvent.content.body;
@@ -56,7 +81,9 @@ export default class CustomComponentModule {
             (_props, originalComponent) => {
                 return originalComponent();
             },
-            { allowDownloadingMedia: async (mxEvent) => mxEvent.content.body !== "bad.png" },
+            {
+                allowDownloadingMedia: async (mxEvent) => mxEvent.content.body !== "bad.png",
+            },
         );
 
         // Order is specific here to avoid this overriding the other renderers

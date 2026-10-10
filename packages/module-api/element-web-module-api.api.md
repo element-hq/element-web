@@ -203,6 +203,12 @@ export type CustomMessageComponentProps = {
 };
 
 // @alpha
+export interface CustomMessageGrouping {
+    getKey?: (mxEvent: MatrixEvent) => string;
+    getSummary: (events: readonly MatrixEvent[]) => string;
+}
+
+// @alpha
 export type CustomMessageRenderFunction = (
 props: CustomMessageComponentProps,
 originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element) => JSX.Element;
@@ -211,6 +217,9 @@ originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
+    renderAsInformationalMessage?: boolean;
+    renderSenderProfile?: boolean;
+    renderGroupSummary?: CustomMessageGrouping;
 };
 
 // @alpha

@@ -27,6 +27,8 @@ import RoomContext from "../../../contexts/RoomContext";
 import { arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectHasDiff } from "../../../utils/objects.ts";
 import Spoiler from "./Spoiler.tsx";
+import type { MessageGrouping } from "../../../modules/customComponentApi.ts";
+import { hintCustomGroupSummary } from "../../../utils/EventUtils.ts";
 
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
@@ -212,6 +214,7 @@ export default class EventListSummary extends React.Component<Props, State> {
         //  - or if the one of IUserEvents within userEvents have changed
         return (
             nextProps.events.length !== this.props.events.length ||
+            nextProps.events.some((event, index) => event !== this.props.events[index]) ||
             nextProps.events.length < this.props.threshold ||
             nextProps.layout !== this.props.layout ||
             arrayHasDiff(nextState.summaryMembers, this.state.summaryMembers) ||
@@ -670,14 +673,53 @@ export default class EventListSummary extends React.Component<Props, State> {
         };
     }
 
-    public render(): React.ReactNode {
-        const aggregate = this.getAggregate(this.state.userEvents);
-
-        // Sort types by order of lowest event index within sequence
+    private generateDefaultSummary(indices: readonly number[]): ReactNode {
+        const includedIndices = new Set(indices);
+        const userEvents: Record<string, IUserEvents[]> = {};
+        for (const [userId, events] of Object.entries(this.state.userEvents)) {
+            const remaining = events.filter((event) => includedIndices.has(event.index));
+            if (remaining.length) userEvents[userId] = remaining;
+        }
+        const aggregate = this.getAggregate(userEvents);
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
             (seq1, seq2) => aggregate.indices[seq1] - aggregate.indices[seq2],
         );
 
+        return this.generateSummary(aggregate.names, orderedTransitionSequences);
+    }
+
+    private generateGroupedSummary(): ReactNode {
+        const summaries: ReactNode[] = [];
+        let current: { grouping: MessageGrouping | null; events: MatrixEvent[]; indices: number[] } | null = null;
+
+        const finishCurrent = (): void => {
+            if (!current) return;
+            const customText = current.grouping?.summarize(current.events);
+            summaries.push(customText ?? this.generateDefaultSummary(current.indices));
+            current = null;
+        };
+
+        // Keep built-in descriptions in order around each custom summary.
+        this.props.events.forEach((event, index) => {
+            const grouping = hintCustomGroupSummary(event);
+            const sameGroup =
+                current &&
+                ((!current.grouping && !grouping) ||
+                    (current.grouping?.renderer === grouping?.renderer && current.grouping?.key === grouping?.key));
+            if (sameGroup && current) {
+                current.events.push(event);
+                current.indices.push(index);
+                return;
+            }
+            finishCurrent();
+            current = { grouping, events: [event], indices: [index] };
+        });
+        finishCurrent();
+
+        return jsxJoin(summaries, ", ");
+    }
+
+    public render(): React.ReactNode {
         return (
             <GenericEventListSummary
                 data-testid={this.props["data-testid"]}
@@ -688,7 +730,7 @@ export default class EventListSummary extends React.Component<Props, State> {
                 children={this.props.children}
                 summaryMembers={this.state.summaryMembers}
                 layout={this.props.layout}
-                summaryText={this.generateSummary(aggregate.names, orderedTransitionSequences)}
+                summaryText={this.generateGroupedSummary()}
             />
         );
     }

@@ -14,6 +14,7 @@ import React from "react";
 import { EventEmitter } from "node:events";
 import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import type { MatrixEvent as ModuleMatrixEvent } from "@element-hq/element-web-module-api";
 import { render, within } from "test-utils-rtl";
 import * as TestUtilsMatrix from "test-utils";
 import {
@@ -36,6 +37,8 @@ import DMRoomMap from "../../utils/DMRoomMap";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
+import { ModuleApi } from "../../modules/Api.ts";
+import { CustomComponentsApi } from "../../modules/customComponentApi.ts";
 
 vi.mock("../../utils/beacon", () => ({
     useBeacon: vi.fn(),
@@ -340,6 +343,103 @@ describe("MessagePanel", function () {
 
         const summaryTiles = container.getElementsByClassName("mx_GenericEventListSummary");
         expect(summaryTiles.length).toEqual(1);
+    });
+
+    it("groups custom messages without an informational hint by renderer and grouping key", function () {
+        const api = new CustomComponentsApi();
+        const summarize = vi.fn((events: readonly ModuleMatrixEvent[]) => {
+            return `${String(events[0].content.kind)}/${String(events[0].content.group)}: ${events.length} events`;
+        });
+        for (const kind of ["first", "second"]) {
+            api.registerMessageRenderer(
+                (event) => event.content.kind === kind,
+                () => <span>Custom message</span>,
+                {
+                    renderAsInformationalMessage: kind === "second",
+                    renderGroupSummary: {
+                        getKey: (event) => String(event.content.group),
+                        getSummary: summarize,
+                    },
+                },
+            );
+        }
+        const hintsSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getHintsForMessage")
+            .mockImplementation(api.getHintsForMessage.bind(api));
+        const groupingSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getGroupingForMessage")
+            .mockImplementation(api.getGroupingForMessage.bind(api));
+        const customEvents = [
+            ...Array.from({ length: 3 }, () => ({ kind: "first", group: "one" })),
+            ...Array.from({ length: 3 }, () => ({ kind: "first", group: "two" })),
+            ...Array.from({ length: 3 }, () => ({ kind: "second", group: "two" })),
+        ].map(({ kind, group }) => {
+            const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
+            event.event.content.kind = kind;
+            event.event.content.group = group;
+            return event;
+        });
+        const ordinaryMessage = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
+
+        const { container } = render(
+            getComponent({
+                events: [
+                    ...customEvents.slice(0, 3),
+                    ...mkMelsEventsOnly().slice(0, 3),
+                    ...customEvents.slice(3),
+                    ordinaryMessage,
+                ],
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        const [summary] = container.querySelectorAll(".mx_GenericEventListSummary_summary");
+        expect(container.querySelectorAll(".mx_GenericEventListSummary")).toHaveLength(1);
+        expect(container.getElementsByClassName("mx_EventTile")).toHaveLength(1);
+        expect(summary).toHaveTextContent("first/one: 3 events");
+        expect(summary).toHaveTextContent("first/two: 3 events");
+        expect(summary).toHaveTextContent("second/two: 3 events");
+        const text = summary.textContent!;
+        expect(text.indexOf("first/one")).toBeLessThan(text.indexOf("first/two"));
+        expect(text.indexOf("first/two")).toBeLessThan(text.indexOf("second/two"));
+        expect(summarize.mock.calls.every(([events]) => events.length === 3)).toBe(true);
+        expect(summarize).toHaveBeenCalledWith(
+            expect.arrayContaining([expect.objectContaining({ eventId: customEvents[0].getId(), sender: userId })]),
+        );
+        hintsSpy.mockRestore();
+        groupingSpy.mockRestore();
+    });
+
+    it("falls back to the built-in summary when a custom summary fails", function () {
+        const api = new CustomComponentsApi();
+        const getSummary = vi.fn((): string => {
+            throw new Error("summary failed");
+        });
+        api.registerMessageRenderer("m.room.message", () => <span>Custom message</span>, {
+            renderAsInformationalMessage: true,
+            renderGroupSummary: { getSummary },
+        });
+        const hintsSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getHintsForMessage")
+            .mockImplementation(api.getHintsForMessage.bind(api));
+        const groupingSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getGroupingForMessage")
+            .mockImplementation(api.getGroupingForMessage.bind(api));
+        const messages = Array.from({ length: 3 }, () =>
+            TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() }),
+        );
+
+        const { container } = render(
+            getComponent({ events: messages }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        expect(getSummary).toHaveBeenCalled();
+        expect(container.querySelector(".mx_GenericEventListSummary_summary")).toHaveTextContent(
+            "sent 3 hidden messages",
+        );
+        hintsSpy.mockRestore();
+        groupingSpy.mockRestore();
     });
 
     it("should insert the read-marker in the right place", function () {
