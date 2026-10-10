@@ -15,6 +15,7 @@ import { mkStubRoom, mockPlatformPeg, stubClient } from "test-utils";
 
 import type BasePlatform from "../BasePlatform";
 import SdkConfig from "../SdkConfig";
+import PlatformPeg from "../PlatformPeg";
 import { SettingLevel } from "./SettingLevel";
 import SettingsStore from "./SettingsStore";
 import { SETTINGS, type SettingKey } from "./Settings.tsx";
@@ -60,6 +61,15 @@ describe("SettingsStore", () => {
     beforeEach(() => {
         SdkConfig.reset();
         SettingsStore.reset();
+    });
+
+    it("reloads after changing the explicit links Labs flag", async () => {
+        const reload = vi.mocked(PlatformPeg.get()!.reload);
+        reload.mockClear();
+
+        await SettingsStore.setValue("feature_msc4550_explicit_links", null, SettingLevel.DEVICE, true);
+
+        expect(reload).toHaveBeenCalledOnce();
     });
 
     describe("getValueAt", () => {

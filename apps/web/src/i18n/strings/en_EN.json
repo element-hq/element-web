@@ -1528,6 +1528,8 @@
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
         "experimental_section": "Early previews",
+        "explicit_links": "Explicit links (MSC4550)",
+        "explicit_links_description": "Keep Markdown links to rooms and profiles as links, not pills.",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_element_call_react": "Render Element Call as a React component instead of a widget",
         "feature_matrixrtc_slots": "Require open MatrixRTC slots for Element Call calls",
