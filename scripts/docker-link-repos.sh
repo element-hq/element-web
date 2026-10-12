@@ -25,7 +25,7 @@ cd js-sdk
 # won't switch pnpm versions mid-process, so bypass the version check instead of
 # failing. Exported (not just a CLI flag) so it also applies to the nested
 # `pnpm build` spawned by js-sdk's `prepare` lifecycle script.
-export npm_config_pm_on_fail=ignore
+export NPM_CONFIG_PM_ON_FAIL=ignore
 pnpm install
 cd ../
 
