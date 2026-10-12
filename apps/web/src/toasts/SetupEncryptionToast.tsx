@@ -82,7 +82,7 @@ const shouldShowCloseButton = (state: DeviceStateForToast): boolean => {
 const getSetupCaption = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
-            return _t("action|continue");
+            return _t("encryption|create_recovery_key");
         case "verify_this_session":
             return _t("action|continue");
         case "key_storage_out_of_sync":
@@ -112,7 +112,7 @@ const getPrimaryButtonIcon = (
 const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
-            return _t("action|dismiss");
+            return _t("action|not_now");
         case "verify_this_session":
             return _t("encryption|verification|unverified_sessions_toast_reject");
         case "key_storage_out_of_sync":

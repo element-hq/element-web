@@ -58,7 +58,7 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
         case "missing_recovery_key":
             content = (
                 <Button size="md" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
-                    {_t("settings|encryption|recovery|set_up_recovery")}
+                    {_t("encryption|create_recovery_key")}
                 </Button>
             );
             break;
