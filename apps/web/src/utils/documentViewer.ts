@@ -9,7 +9,7 @@ import { type ComponentType, lazy } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type FileContent, type MediaEventContent } from "matrix-js-sdk/src/types";
 
-import { type DocumentMedia } from "../@types/document-viewer";
+import { type DocumentFile, type DocumentMedia } from "../@types/document-viewer";
 import { _t } from "../languageHandler";
 import { MediaEventHelper } from "./MediaEventHelper";
 import { isPdfMimetype } from "./pdfViewer";
@@ -71,6 +71,11 @@ export function documentViewerForEvent(mxEvent: MatrixEvent): DocumentViewer | u
     return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(file));
 }
 
+/** The viewer, if any, that can open this file. */
+export function documentViewerForFile(file: DocumentFile): DocumentViewer | undefined {
+    return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(file));
+}
+
 /**
  * Adapt an event's media to the handle a viewer wants, if some viewer can open it. `sourceBlob`
  * decrypts transparently, so the viewer never has to know whether the room is encrypted.
@@ -90,6 +95,16 @@ export function documentMediaForEvent(mxEvent: MatrixEvent, helper?: MediaEventH
 }
 
 /**
+ * Adapt a file to the handle a viewer wants, if some viewer can open it. The file has no MXC URI, so
+ * viewers keep no per-file state for it.
+ */
+export function documentMediaForFile(file: DocumentFile): DocumentMedia | undefined {
+    if (!documentViewerForFile(file)) return;
+
+    return { name: file.name, blob: file.blob };
+}
+
+/**
  * Open the given event's attachment in the right panel of the room it belongs to. The card picks the
  * viewer with {@link documentViewerForEvent}.
  *
@@ -100,5 +115,16 @@ export function openDocumentViewer(mxEvent: MatrixEvent): void {
     defaultDispatcher.dispatch<OpenDocumentViewerPayload>({
         action: Action.OpenDocumentViewer,
         event: mxEvent,
+    });
+}
+
+/**
+ * Open the given file in the right panel of the room currently being viewed. The card picks the viewer
+ * with {@link documentViewerForFile}.
+ */
+export function openDocumentViewerForFile(file: DocumentFile): void {
+    defaultDispatcher.dispatch<OpenDocumentViewerPayload>({
+        action: Action.OpenDocumentViewer,
+        file,
     });
 }

@@ -10,6 +10,7 @@ import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
+import { type DocumentFile } from "../../@types/document-viewer";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -27,6 +28,8 @@ export interface IRightPanelCardState {
     focusRoomSearch?: boolean;
     // document viewer: the m.file event whose attachment is being read
     documentViewerEvent?: MatrixEvent;
+    // document viewer: a file that does not come from an event. Not persisted, since it cannot be serialised.
+    documentViewerFile?: DocumentFile;
 }
 
 export interface IRightPanelCardStateStored {

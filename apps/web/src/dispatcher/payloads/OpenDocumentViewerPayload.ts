@@ -9,10 +9,20 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { type Action } from "../actions";
 import { type ActionPayload } from "../payloads";
+import { type DocumentFile } from "../../@types/document-viewer";
 
-export interface OpenDocumentViewerPayload extends ActionPayload {
+/** Open a file in the document viewer, from either an event's attachment or a {@link DocumentFile}. */
+export type OpenDocumentViewerPayload = ActionPayload & {
     action: Action.OpenDocumentViewer;
-
-    /** The event whose attachment should be opened in its document viewer. */
-    event: MatrixEvent;
-}
+} & (
+        | {
+              /** The event whose attachment should be opened in its document viewer. */
+              event: MatrixEvent;
+              file?: never;
+          }
+        | {
+              event?: never;
+              /** A file that does not come from an event. It opens in the room currently being viewed. */
+              file: DocumentFile;
+          }
+    );

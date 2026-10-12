@@ -490,5 +490,18 @@ describe("PdfViewer", () => {
             const stored = SettingsStore.getValue("pdfViewerState")["mxc://example.org/spec.pdf"];
             expect(Object.keys(stored).sort()).toEqual(["left", "page", "scale", "top", "updatedAt"]);
         });
+
+        it("keeps no reading position for a file that did not come from Matrix", async () => {
+            const setValue = vi.spyOn(SettingsStore, "setValue");
+            const { iframe, unmount } = await renderLoaded({ ...media(), uri: undefined });
+
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 12, scale: 150, left: 40, top: 260 },
+            } satisfies PdfUsercontentMessage);
+            unmount();
+
+            expect(setValue).not.toHaveBeenCalled();
+        });
     });
 });

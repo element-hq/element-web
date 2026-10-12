@@ -116,7 +116,7 @@ export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
 
             if (disposed) return;
 
-            const saved = getPdfViewerState(media.uri);
+            const saved = media.uri ? getPdfViewerState(media.uri) : undefined;
             const position = saved && { page: saved.page, scale: saved.scale, left: saved.left, top: saved.top };
 
             // Transferred, not copied.
@@ -147,7 +147,7 @@ export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
                 case "position":
                     // Positions before `loaded` predate the restore.
                     if (!isLoaded) return;
-                    setPdfViewerState(media.uri, message.position);
+                    if (media.uri) setPdfViewerState(media.uri, message.position);
                     break;
                 case "error":
                     fail(new Error(message.message));

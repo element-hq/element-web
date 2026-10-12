@@ -10,7 +10,14 @@ Please see LICENSE in the repository root for full details.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { documentMediaForEvent, documentViewerForEvent, openDocumentViewer } from "./documentViewer";
+import {
+    documentMediaForEvent,
+    documentMediaForFile,
+    documentViewerForEvent,
+    documentViewerForFile,
+    openDocumentViewer,
+    openDocumentViewerForFile,
+} from "./documentViewer";
 import { type MediaEventHelper } from "./MediaEventHelper";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -45,6 +52,24 @@ describe("documentViewerForEvent", () => {
 
         expect(viewer?.openLabel()).toBe("Open Markdown");
         expect(viewer?.Component).toBeDefined();
+    });
+});
+
+describe("documentViewerForFile", () => {
+    const blob = (): Promise<Blob> => Promise.resolve(new Blob());
+
+    it("offers nothing for a file no viewer can open", () => {
+        expect(documentViewerForFile({ mimetype: "text/plain", name: "notes.txt", blob })).toBeUndefined();
+    });
+
+    it("picks the PDF viewer for a PDF", () => {
+        expect(documentViewerForFile({ mimetype: "application/pdf", blob })?.openLabel()).toBe("Open PDF");
+    });
+
+    it("picks the Markdown viewer for a Markdown file, going by its name when the mimetype is generic", () => {
+        expect(documentViewerForFile({ mimetype: "text/plain", name: "README.md", blob })?.openLabel()).toBe(
+            "Open Markdown",
+        );
     });
 });
 
@@ -93,6 +118,22 @@ describe("documentMediaForEvent", () => {
     );
 });
 
+describe("documentMediaForFile", () => {
+    it("returns nothing for a file no viewer can open", () => {
+        expect(documentMediaForFile({ mimetype: "text/plain", blob: vi.fn() })).toBeUndefined();
+    });
+
+    it("hands the file's own blob function to the viewer, with no MXC URI to key on", () => {
+        const blob = vi.fn(() => Promise.resolve(new Blob()));
+
+        const media = documentMediaForFile({ mimetype: "application/pdf", name: "spec.pdf", blob });
+
+        expect(media).toEqual({ name: "spec.pdf", blob });
+        // Not fetched until the viewer asks for it.
+        expect(blob).not.toHaveBeenCalled();
+    });
+});
+
 describe("openDocumentViewer", () => {
     afterEach(() => {
         vi.restoreAllMocks();
@@ -105,5 +146,14 @@ describe("openDocumentViewer", () => {
         openDocumentViewer(mxEvent);
 
         expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenDocumentViewer, event: mxEvent });
+    });
+
+    it("dispatches the open action for a file", () => {
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const file = { mimetype: "application/pdf", name: "spec.pdf", blob: vi.fn() };
+
+        openDocumentViewerForFile(file);
+
+        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenDocumentViewer, file });
     });
 });
