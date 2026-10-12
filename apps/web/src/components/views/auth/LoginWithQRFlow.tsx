@@ -16,8 +16,9 @@ import classNames from "classnames";
 import {
     LockSolidIcon,
     MobileIcon,
+    PopOutIcon,
     QrCodeIcon,
-    WebBrowserIcon,
+    UserProfileSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -346,7 +347,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 main = (
                     <>
                         <BigIcon>
-                            <WebBrowserIcon />
+                            <UserProfileSolidIcon />
                         </BigIcon>
                         <Heading as="h1" size="sm" weight="semibold">
                             {_t("auth|qr_code_login|verification_uri_heading")}
@@ -364,6 +365,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                             rel="noreferrer noopener"
                             kind="primary"
                             size="lg"
+                            Icon={PopOutIcon}
                             // Not handleClick() as that would stop the link from opening
                             onClick={() => void this.props.onClick(Click.OpenVerificationUri)}
                         >
