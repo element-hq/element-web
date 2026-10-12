@@ -66,8 +66,10 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(true);
     };
 
-    // Open the user settings dialog to the encryption tab in the given state
-    const onGoToSettings = (initialEncryptionState: EncryptionState): void => {
+    /**
+     * Open the user settings dialog to the encryption tab in the given state, and close this dialog.
+     */
+    const openSettingsWithState = (initialEncryptionState: EncryptionState): void => {
         const payload: OpenToTabPayload = {
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Encryption,
@@ -112,10 +114,10 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                             <Button destructive={true} onClick={onLogoutConfirm} Icon={DeleteIcon}>
                                 {_t("auth|logout_dialog|continue")}
                             </Button>
-                            <Button kind="secondary" onClick={() => onGoToSettings("main")}>
+                            <Button kind="secondary" onClick={() => openSettingsWithState("main")}>
                                 {_t("auth|logout_dialog|check_recovery_key")}
                             </Button>
-                            <Button kind="tertiary" onClick={() => onGoToSettings("change_recovery_key")}>
+                            <Button kind="tertiary" onClick={() => openSettingsWithState("change_recovery_key")}>
                                 {_t("auth|logout_dialog|generate_recovery_key")}
                             </Button>
                         </EncryptionCardButtons>
@@ -148,7 +150,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                             </Text>
                         </EncryptionCardEmphasisedContent>
                         <EncryptionCardButtons>
-                            <Button onClick={() => onGoToSettings("set_recovery_key")} Icon={KeyIcon}>
+                            <Button onClick={() => openSettingsWithState("set_recovery_key")} Icon={KeyIcon}>
                                 {_t("settings|encryption|recovery|set_up_recovery")}
                             </Button>
                             <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
