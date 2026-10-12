@@ -61,10 +61,11 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
                   # Nothing to cache for the jobs that do not install
-                  cache: ${{ matrix.install != '' && 'pnpm' || '' }}
+                  cache: ${{ matrix.install != '' }}
+                  install: false
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'

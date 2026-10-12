@@ -2510,10 +2510,13 @@
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.",
+                "breadcrumb_description": "If you don't have access to any other verified devices and you don't have your recovery key, then you'll need to reset your digital identity to continue using the app.",
+                "breadcrumb_description_no_verification_method": "You don't have access to any other verified devices or a recovery key, so you'll need to reset your digital identity to continue using the app. ",
                 "breadcrumb_first_description": "Your account details, contacts, preferences, and chat list will be kept",
                 "breadcrumb_page": "Reset encryption",
-                "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
-                "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
+                "breadcrumb_second_description": "You'll lose any encrypted chat history that's stored only on the server",
+                "breadcrumb_third_description": "Other users will see that your digital identity has been reset",
                 "breadcrumb_title": "Can't confirm? You’ll need to reset your digital identity.",
                 "breadcrumb_title_cant_confirm": "You need to reset your digital identity",
                 "breadcrumb_title_compromised": "Are you sure you want to reset your digital identity?",
