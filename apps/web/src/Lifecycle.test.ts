@@ -884,6 +884,36 @@ describe("Lifecycle", () => {
         });
     });
 
+    describe("onLoggedOut()", () => {
+        beforeEach(() => {
+            // The temporary client clearStorage creates to delete the persistent stores
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+            initIdbMock();
+        });
+
+        it("should clear web storage", async () => {
+            localStorage.setItem("mx_user_id", userId);
+            sessionStorage.setItem("mx_fresh_login", "true");
+
+            await Lifecycle.onLoggedOut();
+
+            expect(localStorage.length).toBe(0);
+            expect(sessionStorage.length).toBe(0);
+        });
+
+        it("should keep session storage written while the stores are still being cleared", async () => {
+            // Deleting the stores takes a while (it waits for an IndexedDB worker), and the view has already
+            // moved on, so a login the user starts in the meantime stores its OAuth2 context in the gap.
+            mockClient.clearStores.mockImplementation(async () => {
+                sessionStorage.setItem("mx_oauth_state", JSON.stringify({ state: "abc" }));
+            });
+
+            await Lifecycle.onLoggedOut();
+
+            expect(sessionStorage.getItem("mx_oauth_state")).toEqual(JSON.stringify({ state: "abc" }));
+        });
+    });
+
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
