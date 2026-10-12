@@ -186,11 +186,11 @@ describe("SettingsStore", () => {
             ["no capability is advertised", {}, undefined],
             ["the stable capability is enabled", { "m.preview_url": { enabled: true } }, undefined],
             ["the unstable capability is enabled", { "io.element.msc4452.preview_url": { enabled: true } }, undefined],
-            ["the stable capability is disabled", { "m.preview_url": { enabled: false } }, "Disabled by homeserver"],
+            ["the stable capability is disabled", { "m.preview_url": { enabled: false } }, "Disabled by your account provider"],
             [
                 "the unstable capability is disabled",
                 { "io.element.msc4452.preview_url": { enabled: false } },
-                "Disabled by homeserver",
+                "Disabled by your account provider",
             ],
             [
                 "the stable capability is enabled and the unstable capability is disabled",
@@ -200,7 +200,7 @@ describe("SettingsStore", () => {
             [
                 "the stable capability is disabled and the unstable capability is enabled",
                 { "m.preview_url": { enabled: false }, "io.element.msc4452.preview_url": { enabled: true } },
-                "Disabled by homeserver",
+                "Disabled by your account provider",
             ],
         ])("has the expected disabled message when %s", (_desc, caps, expected) => {
             vi.mocked(client.getCachedCapabilities).mockReturnValue(caps);
