@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { LinkedText } from "@element-hq/web-shared-components";
-import { screen } from "test-utils-rtl";
+import { fireEvent, screen } from "test-utils-rtl";
 import { flushPromises, stubClient } from "test-utils";
 import type { I18nApi } from "@element-hq/web-shared-components";
 
@@ -54,6 +54,44 @@ describe("Modal", () => {
         expect(Modal.hasDialogs()).toBe(true);
         Modal.forceCloseAllModals();
         expect(Modal.hasDialogs()).toBe(false);
+    });
+
+    describe("clicking the background", () => {
+        const createDialog = (blockBackgroundClick?: boolean): Promise<unknown> =>
+            Modal.createDialog(
+                QuestionDialog,
+                {
+                    title: "Test dialog",
+                    description: "This is a test dialog",
+                    button: "Word",
+                },
+                undefined,
+                false,
+                false,
+                { blockBackgroundClick },
+            ).finished;
+
+        it("should close the dialog", async () => {
+            const finished = createDialog();
+            await flushPromises();
+
+            fireEvent.click(screen.getByTestId("dialog-background"));
+
+            await expect(finished).resolves.toEqual([]);
+            expect(Modal.hasDialogs()).toBe(false);
+        });
+
+        it("should not close the dialog if blockBackgroundClick is set", async () => {
+            const onFinished = vi.fn();
+            void createDialog(true).then(onFinished);
+            await flushPromises();
+
+            fireEvent.click(screen.getByTestId("dialog-background"));
+            await flushPromises();
+
+            expect(onFinished).not.toHaveBeenCalled();
+            expect(Modal.hasDialogs()).toBe(true);
+        });
     });
 
     it("open modals should be closed on logout", async () => {
