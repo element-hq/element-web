@@ -280,6 +280,9 @@ class Store extends ElectronStore<StoreData> {
      * We need both `isEncryptionAvailable` and `isAsyncEncryptionAvailable` to be true to be able to encrypt secrets.
      */
     private async canEncrypt(): Promise<boolean> {
+        // TODO: `isEncryptionAvailable` is removed in Electron 45/46. Before upgrading, find another way to spot a
+        // Mac with no usable keychain (e.g. a test `encryptStringAsync`), since `isAsyncEncryptionAvailable` still
+        // reports true there and every secret would become unstorable.
         if (!safeStorage.isEncryptionAvailable()) return false;
         try {
             return await safeStorage.isAsyncEncryptionAvailable();
