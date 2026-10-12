@@ -31,6 +31,7 @@ import {
 } from "test-utils";
 
 import MessagePanel, { shouldFormContinuation } from "./MessagePanel";
+import { MainGrouper } from "./grouper/MainGrouper";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { type RoomContextType, TimelineRenderingType } from "../../contexts/RoomContext";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -39,6 +40,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 import { ModuleApi } from "../../modules/Api.ts";
 import { CustomComponentsApi } from "../../modules/customComponentApi.ts";
+import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 
 vi.mock("../../utils/beacon", () => ({
     useBeacon: vi.fn(),
@@ -363,20 +365,17 @@ describe("MessagePanel", function () {
                 },
             );
         }
-        const hintsSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getHintsForMessage")
-            .mockImplementation(api.getHintsForMessage.bind(api));
-        const groupingSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getGroupingForMessage")
-            .mockImplementation(api.getGroupingForMessage.bind(api));
+        const renderInfoSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+            .mockImplementation(api.getMessageRenderInfo.bind(api));
         const customEvents = [
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "one" })),
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "two" })),
             ...Array.from({ length: 3 }, () => ({ kind: "second", group: "two" })),
         ].map(({ kind, group }) => {
             const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
-            event.event.content.kind = kind;
-            event.event.content.group = group;
+            event.event.content!.kind = kind;
+            event.event.content!.group = group;
             return event;
         });
         const ordinaryMessage = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
@@ -406,8 +405,66 @@ describe("MessagePanel", function () {
         expect(summarize).toHaveBeenCalledWith(
             expect.arrayContaining([expect.objectContaining({ eventId: customEvents[0].getId(), sender: userId })]),
         );
-        hintsSpy.mockRestore();
-        groupingSpy.mockRestore();
+        renderInfoSpy.mockRestore();
+    });
+
+    it("resolves grouping keys only when needed and rechecks changed events", function () {
+        const api = new CustomComponentsApi();
+        const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
+        event.event.content!.group = "first";
+        const getKey = vi.fn((moduleEvent: ModuleMatrixEvent) => String(moduleEvent.content.group));
+
+        expect(api.getMessageRenderInfo(event)).toBeNull();
+
+        const noGroupingApi = new CustomComponentsApi();
+        const filter = vi.fn(() => true);
+        noGroupingApi.registerMessageRenderer(filter, () => <span>Custom message</span>);
+        const noGroupingInfo = noGroupingApi.getMessageRenderInfo(event);
+        expect(noGroupingInfo?.hasGrouping).toBe(false);
+        expect(noGroupingInfo?.getGrouping()).toBeNull();
+        expect(filter).toHaveBeenCalledTimes(1);
+
+        const selector = vi.fn(() => true);
+        api.registerMessageRenderer(selector, () => <span>Custom message</span>, {
+            renderGroupSummary: { getKey, getSummary: () => "Grouped" },
+        });
+        const info = api.getMessageRenderInfo(event)!;
+        expect(selector).toHaveBeenCalledTimes(1);
+        expect(info.hasGrouping).toBe(true);
+        expect(getKey).not.toHaveBeenCalled();
+        expect(info.getGrouping()?.key).toBe("first");
+        expect(info.getGrouping()?.key).toBe("first");
+        expect(getKey).toHaveBeenCalledTimes(1);
+        expect(selector).toHaveBeenCalledTimes(1);
+        expect(api.getMessageRenderInfo(event)).not.toBeNull();
+
+        event.event.content!.group = "second";
+        expect(api.getMessageRenderInfo(event)?.getGrouping()?.key).toBe("second");
+        expect(getKey).toHaveBeenCalledTimes(2);
+    });
+
+    it("skips grouping checks when grouping is disabled", function () {
+        const canStartGroup = vi.spyOn(MainGrouper, "canStartGroup");
+        render(
+            getComponent({ events: mkMelsEventsOnly(), disableGrouping: true }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        expect(canStartGroup).not.toHaveBeenCalled();
+        canStartGroup.mockRestore();
+    });
+
+    it("uses a supplied renderer resolution for tile display hints", function () {
+        const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
+        const api = new CustomComponentsApi();
+        api.registerMessageRenderer("m.room.message", () => <span>Custom message</span>, {
+            renderAsInformationalMessage: true,
+        });
+        const info = api.getMessageRenderInfo(event);
+        const lookup = vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo");
+
+        expect(getEventDisplayInfo(client, event, false, undefined, info).isInfoMessage).toBe(true);
+        expect(lookup).not.toHaveBeenCalled();
+        lookup.mockRestore();
     });
 
     it("falls back to the built-in summary when a custom summary fails", function () {
@@ -419,12 +476,9 @@ describe("MessagePanel", function () {
             renderAsInformationalMessage: true,
             renderGroupSummary: { getSummary },
         });
-        const hintsSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getHintsForMessage")
-            .mockImplementation(api.getHintsForMessage.bind(api));
-        const groupingSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getGroupingForMessage")
-            .mockImplementation(api.getGroupingForMessage.bind(api));
+        const renderInfoSpy = vi
+            .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+            .mockImplementation(api.getMessageRenderInfo.bind(api));
         const messages = Array.from({ length: 3 }, () =>
             TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() }),
         );
@@ -438,8 +492,7 @@ describe("MessagePanel", function () {
         expect(container.querySelector(".mx_GenericEventListSummary_summary")).toHaveTextContent(
             "sent 3 hidden messages",
         );
-        hintsSpy.mockRestore();
-        groupingSpy.mockRestore();
+        renderInfoSpy.mockRestore();
     });
 
     it("should insert the read-marker in the right place", function () {

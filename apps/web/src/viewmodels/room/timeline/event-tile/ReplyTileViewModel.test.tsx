@@ -80,6 +80,7 @@ describe("ReplyTileViewModel", () => {
         vi.clearAllMocks();
         vi.mocked(getEventDisplayInfo).mockReturnValue({
             hasRenderer: true,
+            hasRendererForReplyChain: true,
             isInfoMessage: false,
             hideSender: false,
             isBubbleMessage: false,
