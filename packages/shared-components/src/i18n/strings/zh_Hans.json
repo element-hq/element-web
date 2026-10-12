@@ -27,6 +27,7 @@
         "play": "播放",
         "react": "反应",
         "remove": "移除",
+        "remove_this_device": "移除此设备",
         "reply": "回复",
         "reply_in_thread": "在消息列中回复",
         "retry": "重试",
@@ -92,6 +93,13 @@
     "emoji_picker": {
         "cancel_search_label": "取消搜索",
         "emoji_picker": "Emoji 选择器"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "请先降级到 <b>%(version)s</b> 或移除此设备。",
+            "description": "%(brand)s 是从过旧的版本更新而来，因此无法将加密存储迁移到新格式。",
+            "title": "此设备无法使用"
+        }
     },
     "left_panel": {
         "open_dial_pad": "打开拨号盘",

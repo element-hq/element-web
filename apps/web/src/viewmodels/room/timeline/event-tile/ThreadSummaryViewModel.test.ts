@@ -338,7 +338,7 @@ describe("ThreadSummaryViewModel", () => {
         room.emit(RoomEvent.Receipt);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
-        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+        expect(vm.getSnapshot().notificationIndicator).toBe("accent");
     });
 
     it("refreshes the notification indicator when an event of the room is decrypted", () => {
@@ -359,7 +359,7 @@ describe("ThreadSummaryViewModel", () => {
         room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => roomId } as MatrixEvent);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
-        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+        expect(vm.getSnapshot().notificationIndicator).toBe("accent");
     });
 
     it("rebinds thread listeners when the thread changes and removes them on dispose", () => {
