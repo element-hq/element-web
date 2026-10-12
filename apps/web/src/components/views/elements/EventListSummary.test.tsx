@@ -30,6 +30,12 @@ import { ModuleApi } from "../../../modules/Api.ts";
 import { CustomComponentsApi } from "../../../modules/customComponentApi.ts";
 
 describe("EventListSummary", function () {
+    const spiesToRestore: Array<{ mockRestore: () => void }> = [];
+    const trackSpy = <T extends { mockRestore: () => void }>(spy: T): T => {
+        spiesToRestore.push(spy);
+        return spy;
+    };
+
     const roomId = "!room:server.org";
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events: MatrixEvent[]) => {
@@ -139,12 +145,18 @@ describe("EventListSummary", function () {
         vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
     });
 
+    afterEach(() => {
+        for (const spy of spiesToRestore.splice(0)) {
+            spy.mockRestore();
+        }
+    });
+
     afterAll(() => {
         unmockClientPeg();
     });
 
     it("renders expanded events if there are less than props.threshold", function () {
-        const renderInfoSpy = vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo");
+        const renderInfoSpy = trackSpy(vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo"));
         const events = generateEvents([
             { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
         ]);
@@ -163,7 +175,6 @@ describe("EventListSummary", function () {
         expect(children[0]).toHaveTextContent("Expanded membership");
         expect(children).toMatchSnapshot();
         expect(renderInfoSpy).not.toHaveBeenCalled();
-        renderInfoSpy.mockRestore();
     });
 
     it("includes custom and built-in descriptions in one summary", function () {
@@ -171,9 +182,11 @@ describe("EventListSummary", function () {
         api.registerMessageRenderer("com.example.notice", () => <span>Notice</span>, {
             renderGroupSummary: { getSummary: (events) => `shared ${events.length} updates` },
         });
-        const renderInfoSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
-            .mockImplementation(api.getMessageRenderInfo.bind(api));
+        trackSpy(
+            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
+                api.getMessageRenderInfo.bind(api),
+            ),
+        );
         const joined = generateMembershipEvent("joined", {
             userId: "@user:some.domain",
             prevMembership: KnownMembership.Leave,
@@ -201,7 +214,6 @@ describe("EventListSummary", function () {
         expect(summary).toHaveTextContent("left");
         expect(summary.textContent!.indexOf("joined")).toBeLessThan(summary.textContent!.indexOf("left"));
         expect(summary.textContent!.indexOf("left")).toBeLessThan(summary.textContent!.indexOf("shared"));
-        renderInfoSpy.mockRestore();
     });
 
     it("looks up custom summaries only while collapsed", function () {
@@ -210,13 +222,12 @@ describe("EventListSummary", function () {
             { userId: "@user:some.domain", membership: KnownMembership.Leave },
             { userId: "@user:some.domain", membership: KnownMembership.Join },
         ]);
-        const renderInfoSpy = vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo");
+        const renderInfoSpy = trackSpy(vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo"));
         const { getByRole } = renderComponent({ events, startExpanded: true });
         expect(renderInfoSpy).not.toHaveBeenCalled();
 
         fireEvent.click(getByRole("button", { name: /collapse/i }));
         expect(renderInfoSpy).toHaveBeenCalledTimes(events.length);
-        renderInfoSpy.mockRestore();
     });
 
     it("renders expanded events if there are less than props.threshold for join and leave", function () {

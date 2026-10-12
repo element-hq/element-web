@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { EventEmitter } from "node:events";
 import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
@@ -49,6 +49,12 @@ vi.mock("../../utils/beacon", () => ({
 const roomId = "!roomId:server_name";
 
 describe("MessagePanel", function () {
+    const spiesToRestore: Array<{ mockRestore: () => void }> = [];
+    const trackSpy = <T extends { mockRestore: () => void }>(spy: T): T => {
+        spiesToRestore.push(spy);
+        return spy;
+    };
+
     const events = mkEvents();
     const userId = "@me:here";
     const client = getMockClientWithEventEmitter({
@@ -120,6 +126,12 @@ describe("MessagePanel", function () {
         sdkContext._client = client;
 
         DMRoomMap.makeShared(client);
+    });
+
+    afterEach(() => {
+        for (const spy of spiesToRestore.splice(0)) {
+            spy.mockRestore();
+        }
     });
 
     function mkEvents() {
@@ -365,9 +377,11 @@ describe("MessagePanel", function () {
                 },
             );
         }
-        const renderInfoSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
-            .mockImplementation(api.getMessageRenderInfo.bind(api));
+        trackSpy(
+            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
+                api.getMessageRenderInfo.bind(api),
+            ),
+        );
         const customEvents = [
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "one" })),
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "two" })),
@@ -405,7 +419,6 @@ describe("MessagePanel", function () {
         expect(summarize).toHaveBeenCalledWith(
             expect.arrayContaining([expect.objectContaining({ eventId: customEvents[0].getId(), sender: userId })]),
         );
-        renderInfoSpy.mockRestore();
     });
 
     it("resolves grouping keys only when needed and rechecks changed events", function () {
@@ -444,13 +457,12 @@ describe("MessagePanel", function () {
     });
 
     it("skips grouping checks when grouping is disabled", function () {
-        const canStartGroup = vi.spyOn(MainGrouper, "canStartGroup");
+        const canStartGroup = trackSpy(vi.spyOn(MainGrouper, "canStartGroup"));
         render(
             getComponent({ events: mkMelsEventsOnly(), disableGrouping: true }),
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         expect(canStartGroup).not.toHaveBeenCalled();
-        canStartGroup.mockRestore();
     });
 
     it("uses a supplied renderer resolution for tile display hints", function () {
@@ -460,11 +472,10 @@ describe("MessagePanel", function () {
             renderAsInfoMessage: true,
         });
         const info = api.getMessageRenderInfo(event);
-        const lookup = vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo");
+        const lookup = trackSpy(vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo"));
 
         expect(getEventDisplayInfo(client, event, false, undefined, info).isInfoMessage).toBe(true);
         expect(lookup).not.toHaveBeenCalled();
-        lookup.mockRestore();
     });
 
     it("falls back to the built-in summary when a custom summary fails", function () {
@@ -476,9 +487,11 @@ describe("MessagePanel", function () {
             renderAsInfoMessage: true,
             renderGroupSummary: { getSummary },
         });
-        const renderInfoSpy = vi
-            .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
-            .mockImplementation(api.getMessageRenderInfo.bind(api));
+        trackSpy(
+            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
+                api.getMessageRenderInfo.bind(api),
+            ),
+        );
         const messages = Array.from({ length: 3 }, () =>
             TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() }),
         );
@@ -492,7 +505,6 @@ describe("MessagePanel", function () {
         expect(container.querySelector(".mx_GenericEventListSummary_summary")).toHaveTextContent(
             "sent 3 hidden messages",
         );
-        renderInfoSpy.mockRestore();
     });
 
     it("should insert the read-marker in the right place", function () {
