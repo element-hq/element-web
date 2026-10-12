@@ -682,7 +682,12 @@ export default class EventListSummary extends React.Component<Props, State> {
             const entry = indexedUserEvents.get(index);
             if (!entry) continue;
             const [userId, event] = entry;
-            (userEvents[userId] ??= []).push(event);
+            let userEventsForUser = userEvents[userId];
+            if (!userEventsForUser) {
+                userEventsForUser = [];
+                userEvents[userId] = userEventsForUser;
+            }
+            userEventsForUser.push(event);
         }
         const aggregate = this.getAggregate(userEvents);
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(

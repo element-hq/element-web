@@ -45,7 +45,7 @@ function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): R
 
 // Wrap consecutive grouped events in a ListSummary
 export class MainGrouper extends BaseGrouper {
-    public static canStartGroup = function (
+    public static readonly canStartGroup = function (
         panel: MessagePanel,
         { event: ev, shouldShow, customRenderInfo }: WrappedEvent,
     ): boolean {
