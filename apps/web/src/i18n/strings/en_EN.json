@@ -992,6 +992,7 @@
         },
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
+        "recovery_key_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "recovery_method_removed": {
             "description_1": "This device has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this device which will re-encrypt this device's message history with a new recovery method.",
@@ -999,7 +1000,6 @@
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "set_up_recovery": "Back up your chats",
-        "set_up_recovery_toast_description": "Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.",
         "set_up_toast_title": "Set up Secure Backup",
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
@@ -2567,7 +2567,6 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then select Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
-                "description": "Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
                 "forgot_recovery_key": "Forgot recovery key?",

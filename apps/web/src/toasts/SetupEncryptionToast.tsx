@@ -127,7 +127,7 @@ const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
 const getDescription = (state: DeviceStateForToast): string | React.ReactNode => {
     switch (state) {
         case "set_up_recovery":
-            return _t("encryption|set_up_recovery_toast_description");
+            return _t("encryption|recovery_key_description");
         case "verify_this_session":
             return _t("encryption|verify_toast_description", undefined, {
                 a: (sub) => (

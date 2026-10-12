@@ -79,7 +79,7 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
                     label={_t("settings|encryption|recovery|title")}
                 />
             }
-            subHeading={_t("settings|encryption|recovery|description")}
+            subHeading={_t("encryption|recovery_key_description")}
             data-testid="recoveryPanel"
         >
             {content}
