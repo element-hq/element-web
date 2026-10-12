@@ -10,7 +10,7 @@ Please see LICENSE in the repository root for full details.
 import { describe, expect, it } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isPdfEvent } from "./pdfViewer";
+import { isPdfEvent, isPdfMimetype } from "./pdfViewer";
 
 function mkFileEvent(info?: Record<string, unknown>): MatrixEvent {
     return new MatrixEvent({
@@ -49,5 +49,17 @@ describe("isPdfEvent", () => {
         });
 
         expect(isPdfEvent(mxEvent)).toBe(false);
+    });
+});
+
+describe("isPdfMimetype", () => {
+    it.each([
+        ["a bare PDF mimetype", "application/pdf", true],
+        ["a PDF mimetype with parameters", "application/pdf; version=1.7", true],
+        ["an oddly cased PDF mimetype", "Application/PDF", true],
+        ["a non-PDF mimetype", "text/plain", false],
+        ["no mimetype", undefined, false],
+    ])("returns %s => %s", (_label, mimetype, expected) => {
+        expect(isPdfMimetype(mimetype)).toBe(expected);
     });
 });

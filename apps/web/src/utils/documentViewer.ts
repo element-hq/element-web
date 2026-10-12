@@ -7,13 +7,13 @@ Please see LICENSE in the repository root for full details.
 
 import { type ComponentType, lazy } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { type FileContent, type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { type DocumentMedia } from "../@types/document-viewer";
 import { _t } from "../languageHandler";
 import { MediaEventHelper } from "./MediaEventHelper";
-import { isPdfEvent } from "./pdfViewer";
-import { isMarkdownEvent } from "./markdownViewer";
+import { isPdfMimetype } from "./pdfViewer";
+import { isMarkdownFile } from "./markdownViewer";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import { type OpenDocumentViewerPayload } from "../dispatcher/payloads/OpenDocumentViewerPayload";
@@ -25,8 +25,8 @@ export interface DocumentViewerProps {
 
 /** A viewer for one kind of attachment, shown in the right panel. */
 export interface DocumentViewer {
-    /** Whether this viewer can open the event's attachment. */
-    matches: (mxEvent: MatrixEvent) => boolean;
+    /** Whether this viewer can open a file with the given mimetype and name. */
+    matches: (file: { mimetype?: string; name?: string }) => boolean;
     /** Label for the timeline action that opens the viewer, in the current language. */
     openLabel: () => string;
     /**
@@ -42,19 +42,19 @@ function lazyViewer(load: () => Promise<ComponentType<DocumentViewerProps>>): Co
 }
 
 /**
- * The viewers, in the order they are tried: the first whose `matches` accepts an event opens it.
+ * The viewers, in the order they are tried: the first whose `matches` accepts a file opens it.
  * Supporting another format is a matter of adding an entry here.
  */
 const DOCUMENT_VIEWERS: readonly DocumentViewer[] = [
     {
-        matches: isPdfEvent,
+        matches: ({ mimetype }) => isPdfMimetype(mimetype),
         openLabel: () => _t("pdf_viewer|open"),
         Component: lazyViewer(() =>
             import("../components/views/right_panel/PdfViewer").then((module) => module.PdfViewer),
         ),
     },
     {
-        matches: isMarkdownEvent,
+        matches: ({ mimetype, name }) => isMarkdownFile(mimetype, name),
         openLabel: () => _t("markdown_viewer|open"),
         Component: lazyViewer(() =>
             import("../components/views/right_panel/MarkdownViewer").then((module) => module.MarkdownViewer),
@@ -64,7 +64,11 @@ const DOCUMENT_VIEWERS: readonly DocumentViewer[] = [
 
 /** The viewer, if any, that can open this event's attachment. */
 export function documentViewerForEvent(mxEvent: MatrixEvent): DocumentViewer | undefined {
-    return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(mxEvent));
+    if (!MediaEventHelper.isEligible(mxEvent)) return;
+
+    const content = mxEvent.getContent<MediaEventContent & FileContent>();
+    const file = { mimetype: content.info?.mimetype, name: content.filename || content.body };
+    return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(file));
 }
 
 /**

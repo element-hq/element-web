@@ -21,20 +21,28 @@ const GENERIC_MIMETYPES = new Set(["text/plain", "application/octet-stream"]);
 const MARKDOWN_EXTENSIONS = [".md", ".markdown"];
 
 /**
- * Whether this event carries a Markdown file the viewer can open.
+ * Whether a file with this mimetype and name is a Markdown file the viewer can open.
  *
  * A Markdown mimetype is enough on its own. Failing that, a `.md` or `.markdown` file name counts when
  * the mimetype is missing or generic, since many senders never label Markdown as such. Parameters after
  * the type itself (`text/markdown; charset=utf-8`) are ignored.
  */
+export function isMarkdownFile(mimetype?: string, name?: string): boolean {
+    const baseMimetype = mimetype?.split(";")[0].trim().toLowerCase();
+    if (baseMimetype && MARKDOWN_MIMETYPES.has(baseMimetype)) return true;
+    if (baseMimetype && !GENERIC_MIMETYPES.has(baseMimetype)) return false;
+
+    const lowerName = (name ?? "").toLowerCase();
+    return MARKDOWN_EXTENSIONS.some((extension) => lowerName.endsWith(extension));
+}
+
+/**
+ * Whether this event carries a Markdown file the viewer can open. See {@link isMarkdownFile}; the
+ * `filename` field is preferred over the body as the file name.
+ */
 export function isMarkdownEvent(mxEvent: MatrixEvent): boolean {
     if (!MediaEventHelper.isEligible(mxEvent)) return false;
 
     const content = mxEvent.getContent<MediaEventContent & FileContent>();
-    const mimetype = content.info?.mimetype?.split(";")[0].trim().toLowerCase();
-    if (mimetype && MARKDOWN_MIMETYPES.has(mimetype)) return true;
-    if (mimetype && !GENERIC_MIMETYPES.has(mimetype)) return false;
-
-    const name = (content.filename || content.body || "").toLowerCase();
-    return MARKDOWN_EXTENSIONS.some((extension) => name.endsWith(extension));
+    return isMarkdownFile(content.info?.mimetype, content.filename || content.body);
 }
