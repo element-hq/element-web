@@ -673,6 +673,12 @@ export default class EventListSummary extends React.Component<Props, State> {
         };
     }
 
+    /**
+     * Generate the built-in summary for events at the given indices, preserving their event order.
+     * @param indices indices of events to include in the summary.
+     * @param indexedUserEvents user events indexed by their position in the original event list.
+     * @returns the summary text for those events.
+     */
     private generateDefaultSummary(
         indices: readonly number[],
         indexedUserEvents: Map<number, [string, IUserEvents]>,
@@ -697,6 +703,11 @@ export default class EventListSummary extends React.Component<Props, State> {
         return this.generateSummary(aggregate.names, orderedTransitionSequences);
     }
 
+    /**
+     * Generate summaries for consecutive groups of events, using custom summaries where available
+     * and the built-in summary for the remaining events.
+     * @returns the event list summary.
+     */
     private generateGroupedSummary(): ReactNode {
         const summaries: { index: number; summary: ReactNode }[] = [];
         const indexedUserEvents = new Map<number, [string, IUserEvents]>();
