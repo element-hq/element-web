@@ -12,7 +12,7 @@ import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 import { type JsonDocument, type JsonValue } from "shared-types";
 // Import these directly from shared-components to avoid circular deps
-import { _t, _td } from "@element-hq/web-shared-components";
+import { _t, _td, type FilterId } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import { type PdfViewerState } from "../@types/pdf-viewer.ts";
@@ -377,6 +377,7 @@ export interface Settings {
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
+    "RoomList.activeFilter": IBaseSetting<FilterId | null>;
     "RoomList.showSections": IBaseSetting<boolean>;
     "RoomList.showPeopleSection": IBaseSetting<boolean>;
     "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
@@ -1437,6 +1438,14 @@ export const SETTINGS: Settings = {
     "RoomList.SectionExpansionState": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: {},
+    },
+    /**
+     * Managed by the {@link RoomListViewModel}
+     * Store the primary filter selected in the room list so it survives a reload or relaunch
+     */
+    "RoomList.activeFilter": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: null,
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
