@@ -170,6 +170,44 @@ describe("SettingsStore", () => {
         });
     });
 
+    describe("urlPreviewsEnabled", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+            MatrixClientBackedController.matrixClient = client;
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it.each([
+            ["no capability is advertised", {}, undefined],
+            ["the stable capability is enabled", { "m.preview_url": { enabled: true } }, undefined],
+            ["the unstable capability is enabled", { "io.element.msc4452.preview_url": { enabled: true } }, undefined],
+            ["the stable capability is disabled", { "m.preview_url": { enabled: false } }, "Disabled by homeserver"],
+            [
+                "the unstable capability is disabled",
+                { "io.element.msc4452.preview_url": { enabled: false } },
+                "Disabled by homeserver",
+            ],
+            [
+                "the stable capability is enabled and the unstable capability is disabled",
+                { "m.preview_url": { enabled: true }, "io.element.msc4452.preview_url": { enabled: false } },
+                undefined,
+            ],
+            [
+                "the stable capability is disabled and the unstable capability is enabled",
+                { "m.preview_url": { enabled: false }, "io.element.msc4452.preview_url": { enabled: true } },
+                "Disabled by homeserver",
+            ],
+        ])("has the expected disabled message when %s", (_desc, caps, expected) => {
+            vi.mocked(client.getCachedCapabilities).mockReturnValue(caps);
+            expect(SettingsStore.disabledMessage("urlPreviewsEnabled")).toEqual(expected);
+        });
+    });
+
     describe("exportForRageshake", () => {
         it("should not export settings marked as non-exportable", async () => {
             await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, "Europe/London");
