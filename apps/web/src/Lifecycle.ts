@@ -348,7 +348,7 @@ export async function configureFromCompletedOAuthLogin({
         identityServerUrl,
         deviceId,
         userId,
-        isGuest,
+        guest: Boolean(isGuest),
     };
 
     logger.debug("Logged in via OAuth2 native flow");
