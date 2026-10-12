@@ -71,8 +71,8 @@ export function documentViewerForEvent(mxEvent: MatrixEvent): DocumentViewer | u
     return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(file));
 }
 
-/** The viewer, if any, that can open this file. */
-export function documentViewerForFile(file: DocumentFile): DocumentViewer | undefined {
+/** The viewer, if any, that can open a file with this mimetype and name. */
+export function documentViewerForFile(file: Pick<DocumentFile, "mimetype" | "name">): DocumentViewer | undefined {
     return DOCUMENT_VIEWERS.find((viewer) => viewer.matches(file));
 }
 

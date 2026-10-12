@@ -56,20 +56,16 @@ describe("documentViewerForEvent", () => {
 });
 
 describe("documentViewerForFile", () => {
-    const blob = (): Promise<Blob> => Promise.resolve(new Blob());
-
     it("offers nothing for a file no viewer can open", () => {
-        expect(documentViewerForFile({ mimetype: "text/plain", name: "notes.txt", blob })).toBeUndefined();
+        expect(documentViewerForFile({ mimetype: "text/plain", name: "notes.txt" })).toBeUndefined();
     });
 
     it("picks the PDF viewer for a PDF", () => {
-        expect(documentViewerForFile({ mimetype: "application/pdf", blob })?.openLabel()).toBe("Open PDF");
+        expect(documentViewerForFile({ mimetype: "application/pdf" })?.openLabel()).toBe("Open PDF");
     });
 
     it("picks the Markdown viewer for a Markdown file, going by its name when the mimetype is generic", () => {
-        expect(documentViewerForFile({ mimetype: "text/plain", name: "README.md", blob })?.openLabel()).toBe(
-            "Open Markdown",
-        );
+        expect(documentViewerForFile({ mimetype: "text/plain", name: "README.md" })?.openLabel()).toBe("Open Markdown");
     });
 });
 
