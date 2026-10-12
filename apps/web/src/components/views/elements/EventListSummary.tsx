@@ -755,7 +755,7 @@ export default class EventListSummary extends React.Component<Props, State> {
                 children={this.props.children}
                 summaryMembers={this.state.summaryMembers}
                 layout={this.props.layout}
-                summaryText={this.generateGroupedSummary()}
+                getSummaryText={() => this.generateGroupedSummary()}
             />
         );
     }
