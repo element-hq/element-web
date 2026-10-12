@@ -294,6 +294,19 @@ describe("Notifier", () => {
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
         });
 
+        it("creates a single desktop notification for an event added to the notification timeline set", () => {
+            // Like the js-sdk sync, re-emit the notification timeline set's events on the client
+            const notifTimelineSet = new EventTimelineSet(undefined, { timelineSupport: true });
+            notifTimelineSet.on(RoomEvent.Timeline, (...args) => mockClient.emit(RoomEvent.Timeline, ...args));
+            mockClient.getNotifTimelineSet.mockReturnValue(notifTimelineSet);
+
+            mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            emitLiveEvent(event);
+
+            expect(notifTimelineSet.getLiveTimeline().getEvents()).toEqual([event]);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(1);
+        });
+
         it("creates desktop notification when enabled", () => {
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
             emitLiveEvent(event);

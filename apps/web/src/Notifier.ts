@@ -520,6 +520,8 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.getSender() === this.sdkContext.client.getUserId()) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
+        // Events added to the notification timeline set were already evaluated from their room's timeline
+        if (data.timeline.getTimelineSet() === this.sdkContext.client.getNotifTimelineSet()) return;
 
         void this.sdkContext.client.decryptEventIfNeeded(ev);
 
