@@ -100,7 +100,7 @@ export function getEventDisplayInfo(
             ElementCallEventType.matches(eventType));
     let isInfoMessage =
         calcIsInfoMessage(eventType, isBubbleMessage, isLeftAlignedBubbleMessage) ||
-        renderInfo?.hints.renderAsInformationalMessage === true;
+        renderInfo?.hints.renderAsInfoMessage === true;
     const hideSender = renderInfo?.hints.renderSenderProfile === false;
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent =

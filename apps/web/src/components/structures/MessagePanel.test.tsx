@@ -357,7 +357,7 @@ describe("MessagePanel", function () {
                 (event) => event.content.kind === kind,
                 () => <span>Custom message</span>,
                 {
-                    renderAsInformationalMessage: kind === "second",
+                    renderAsInfoMessage: kind === "second",
                     renderGroupSummary: {
                         getKey: (event) => String(event.content.group),
                         getSummary: summarize,
@@ -457,7 +457,7 @@ describe("MessagePanel", function () {
         const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
         const api = new CustomComponentsApi();
         api.registerMessageRenderer("m.room.message", () => <span>Custom message</span>, {
-            renderAsInformationalMessage: true,
+            renderAsInfoMessage: true,
         });
         const info = api.getMessageRenderInfo(event);
         const lookup = vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo");
@@ -473,7 +473,7 @@ describe("MessagePanel", function () {
             throw new Error("summary failed");
         });
         api.registerMessageRenderer("m.room.message", () => <span>Custom message</span>, {
-            renderAsInformationalMessage: true,
+            renderAsInfoMessage: true,
             renderGroupSummary: { getSummary },
         });
         const renderInfoSpy = vi

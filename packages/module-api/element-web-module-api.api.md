@@ -217,7 +217,7 @@ originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
-    renderAsInformationalMessage?: boolean;
+    renderAsInfoMessage?: boolean;
     renderSenderProfile?: boolean;
     renderGroupSummary?: CustomMessageGrouping;
 };

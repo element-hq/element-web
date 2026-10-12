@@ -73,7 +73,7 @@ export type CustomMessageRenderHints = {
      * Should the event be formatted as an informational message.
      * Default is false.
      */
-    renderAsInformationalMessage?: boolean;
+    renderAsInfoMessage?: boolean;
     /**
      * Should the sender's profile be rendered for this event.
      * Default is true.

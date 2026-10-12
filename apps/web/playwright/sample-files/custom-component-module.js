@@ -31,7 +31,7 @@ export default class CustomComponentModule {
             (_props, originalComponent) => {
                 return originalComponent();
             },
-            { renderAsInformationalMessage: true },
+            { renderAsInfoMessage: true },
         );
         this.api.customComponents.registerMessageRenderer(
             (evt) => typeof evt.content["org.example.group"] === "string",

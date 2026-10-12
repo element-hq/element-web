@@ -142,7 +142,7 @@ test.describe("Custom Component API", () => {
             await expect(imageView).toBeVisible();
             await expect(imageView.getByLabel("Download")).toBeVisible();
         });
-        test("should hide sender profile when the renderAsInformationalMessage hint is set to true", async ({
+        test("should hide sender profile when the renderAsInfoMessage hint is set to true", async ({
             page,
             room,
             app,
@@ -152,8 +152,8 @@ test.describe("Custom Component API", () => {
             await app.client.sendMessage(room.roomId, "Render as informational message");
 
             await app.timeline.scrollToBottom();
-            await expect(page.locator(".mx_GenericEventListSummary")).toHaveCount(0);
-            const eventTile = page.locator(".mx_EventTile").last();
+            const eventTile = page.locator(".mx_EventTile").filter({ hasText: "Render as informational message" });
+            await expect(eventTile).toHaveCount(1);
             await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
             await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
             await expect(page.getByText("Render as informational message")).toBeVisible();
