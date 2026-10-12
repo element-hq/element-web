@@ -13,6 +13,7 @@ import { render, screen, act, cleanup, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type CallMembership } from "matrix-js-sdk/src/matrixrtc";
 import {
     enableCalls,
     setUpClientRoomAndStores,
@@ -250,6 +251,9 @@ describe("ElementCallAppTile", () => {
         await screen.findByText("Element Call (mock)");
         await user.click(screen.getByRole("button", { name: "notifyJoined" }));
         await waitFor(() => expect(call.connected).toBe(true));
+        // Someone else is in the call: a call left with nobody in it is destroyed on disconnect, which
+        // would unmount the component (log included) before the hang-up could be observed
+        call.session.memberships = [{} as CallMembership];
 
         await act(() => call.disconnect());
         expect(call.connected).toBe(false);
