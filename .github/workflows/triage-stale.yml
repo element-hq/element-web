@@ -9,7 +9,7 @@ permissions: {}
 jobs:
     close:
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             actions: write
             issues: write
@@ -36,7 +36,7 @@ jobs:
     draft-inactive-prs:
         name: Mark inactive X-Needs-Iteration PRs as draft
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             pull-requests: write
         steps:
@@ -81,7 +81,7 @@ jobs:
     remove_label:
         name: Remove X-Needs-Iteration label after new commits are pushed
         if: github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'X-Needs-Iteration')
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             pull-requests: write
         steps:

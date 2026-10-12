@@ -9,7 +9,7 @@ jobs:
         name: Build package
         environment: packages.element.io
         if: ${{ !startsWith(github.event.release.tag_name, 'module/') }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         env:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}

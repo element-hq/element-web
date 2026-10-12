@@ -130,11 +130,7 @@ describe("LatestRtcNotificationEventStore", () => {
         call.participants = new Map([[mkRoomMember("!my-room1:m.org", "@alice:m.org"), new Set()]]);
         // @ts-ignore
         call.session = {
-            getOldestMembership: () => {
-                return {
-                    eventId: callMembershipEvent.getId(),
-                };
-            },
+            memberships: [{ eventId: callMembershipEvent.getId() }],
         };
 
         const callStore = new EventEmitter() as unknown as CallStore;

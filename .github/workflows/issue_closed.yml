@@ -8,7 +8,7 @@ permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     tidy:
         name: Tidy closed issues
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
               id: main

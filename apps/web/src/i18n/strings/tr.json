@@ -27,7 +27,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
         "complete": "Tamamlandı",
@@ -1505,7 +1504,6 @@
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
-    "migrating_crypto": "Sıkı durun. Şifrelemeyi daha hızlı ve daha güvenilir hale getirmek için %(brand)s güncelliyoruz.",
     "mobile_guide": {
         "toast_accept": "Uygulamayı kullan",
         "toast_description": "%(brand)s mobil web tarayıcısında deneyseldir. Daha iyi bir deneyim ve en yeni özellikler için ücretsiz yerel uygulamamızı kullanın.",
@@ -2969,9 +2967,7 @@
         "show_thread_filter": "Göster:"
     },
     "threads_activity_centre": {
-        "header": "Mesaj dizileri etkinliği",
-        "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
+        "header": "Mesaj dizileri etkinliği"
     },
     "time": {
         "date_at_time": "%(date)s e %(time)s",

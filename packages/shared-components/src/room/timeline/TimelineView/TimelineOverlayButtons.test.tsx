@@ -45,7 +45,7 @@ const button = (name: string): HTMLElement => screen.getByRole("button", { name 
 const queryButton = (name: string): HTMLElement | null => screen.queryByRole("button", { name });
 
 const JUMP_TO_BOTTOM = "Scroll to most recent messages";
-const JUMP_READ_MARKER = "Jump to first unread message.";
+const JUMP_READ_MARKER = "Scroll to first unread message.";
 const MARK_ALL_READ = "Mark all as read";
 
 describe("<TimelineOverlayButtons />", () => {

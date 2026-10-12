@@ -34,7 +34,6 @@ function assertCommonCallParameters(
     expect(url.has("widgetId")).toEqual(true);
     expect(url.has("parentUrl")).toEqual(true);
 
-    expect(hash.get("perParticipantE2EE")).toEqual("false");
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
@@ -201,7 +200,7 @@ test.describe("Element Call", () => {
                 await expect(button).toBeInViewport({ timeout: 5000 });
                 // Room list should show that a call is ongoing
                 await expect(
-                    page.getByRole("option", { name: `Open room TestRoom with a ${callType} call.` }),
+                    page.getByRole("option", { name: `Open room TestRoom, ${callType} call in progress.` }),
                 ).toBeVisible();
                 // And test joining
                 await button.click();
@@ -468,7 +467,8 @@ test.describe("Element Call", () => {
         test("should be able to create and join a video room", async ({ page, user }) => {
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
                 .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("Test room");

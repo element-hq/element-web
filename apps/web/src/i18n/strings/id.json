@@ -27,7 +27,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
         "complete": "Selesai",
@@ -1609,7 +1608,6 @@
     },
     "member_list_back_action_label": "Anggota ruangan",
     "message_edit_dialog_title": "Editan pesan",
-    "migrating_crypto": "Bersabarlah. Kami sedang memperbarui Element untuk membuat enkripsi lebih cepat dan andal.",
     "mobile_guide": {
         "toast_accept": "Gunakan aplikasi",
         "toast_description": "%(brand)s bersifat eksperimental pada peramban web ponsel. Untuk pengalaman yang lebih baik dan fitur-fitur terkini, gunakan aplikasi natif gratis kami.",
@@ -3147,9 +3145,7 @@
         "show_thread_filter": "Tampilkan:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitas utas",
-        "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
+        "header": "Aktivitas utas"
     },
     "time": {
         "date_at_time": "%(date)s pada %(time)s",

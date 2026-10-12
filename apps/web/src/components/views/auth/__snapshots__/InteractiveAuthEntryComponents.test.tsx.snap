@@ -67,7 +67,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> > should render 1`] = `
         Go to your account to reset your digital identity
       </h2>
       <span>
-        You're about to go to your matrix.org account to reset your digital identity. Once you have completed reset on your account, please return here and click Retry.
+        You're about to go to your matrix.org account to reset your digital identity. Once you have completed reset on your account, please return here and select Retry.
       </span>
     </div>
     <div
@@ -117,7 +117,7 @@ exports[`<TermsAuthEntry/> > should render 1`] = `
     class="mx_InteractiveAuthEntryComponents"
   >
     <p>
-      Please review and accept the policies of this homeserver:
+      Please review and accept the policies of this account provider:
     </p>
     <label
       class="mx_InteractiveAuthEntryComponents_termsPolicy"

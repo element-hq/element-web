@@ -38,17 +38,43 @@ describe("ResetIdentityDialog", () => {
         expect(client.getCrypto()?.resetEncryption).toHaveBeenCalled();
     });
 
-    it("should call onFinished when we click Cancel", async () => {
+    it("should call onFinished when we click Go back", async () => {
         const client = mockClient();
 
         const onFinished = vi.fn();
         const onReset = vi.fn();
         const dialog = render(<ResetIdentityDialog onFinished={onFinished} onReset={onReset} variant="compromised" />);
 
-        await act(async () => dialog.getByRole("button", { name: "Cancel" }).click());
+        await act(async () => dialog.getByRole("button", { name: "Go back" }).click());
 
         expect(onFinished).toHaveBeenCalled();
 
+        expect(onReset).not.toHaveBeenCalled();
+        expect(client.getCrypto()?.resetEncryption).not.toHaveBeenCalled();
+    });
+
+    it("should call onSignOut when we click Sign out", async () => {
+        // Given we are in the "no_verification_method" variant
+        const client = mockClient();
+        const onFinished = vi.fn();
+        const onSignOut = vi.fn();
+        const onReset = vi.fn();
+        const dialog = render(
+            <ResetIdentityDialog
+                onFinished={onFinished}
+                onReset={onReset}
+                onSignOut={onSignOut}
+                variant="no_verification_method"
+            />,
+        );
+
+        // Then there is a "Sign out" button instead of "Go back"
+        // When we click it
+        await act(async () => dialog.getByRole("button", { name: "Sign out" }).click());
+
+        // Then onSignOut was called instead of onFinished
+        expect(onSignOut).toHaveBeenCalled();
+        expect(onFinished).not.toHaveBeenCalled();
         expect(onReset).not.toHaveBeenCalled();
         expect(client.getCrypto()?.resetEncryption).not.toHaveBeenCalled();
     });

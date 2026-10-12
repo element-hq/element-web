@@ -55,16 +55,17 @@ jobs:
                       install: normal
                       command: "lint:unused-settings"
         name: ${{ matrix.name }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
                   # Nothing to cache for the jobs that do not install
-                  cache: ${{ matrix.install != '' && 'pnpm' || '' }}
+                  cache: ${{ matrix.install != '' }}
+                  install: false
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'
@@ -93,7 +94,7 @@ jobs:
 
     zizmor:
         name: Zizmor Github Actions lint
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             security-events: write
         steps:
@@ -114,7 +115,8 @@ jobs:
                       allowed-hardcoded-keys: |
                           console_dev_note
                           labs|element_call_video_rooms
-                          labs|feature_disable_call_per_sender_encryption
+                          labs|feature_matrixrtc_slots
+                          labs|feature_matrixrtc_slots_description
                           voip|element_call
                           error|invalid_json
                           error|misconfigured
@@ -146,7 +148,7 @@ jobs:
         name: Static Analysis
         needs: [lint, i18n, zizmor]
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1

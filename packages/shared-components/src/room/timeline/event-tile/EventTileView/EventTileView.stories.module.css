@@ -389,14 +389,6 @@
     gap: var(--cpd-space-2x, 8px);
 }
 
-.storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions {
-    justify-content: flex-end;
-}
-
-.storyEventTile.storyOwnEvent.storyLayoutBubble .storyReactions > :last-child {
-    order: -1;
-}
-
 .contextMenu {
     display: none;
 }

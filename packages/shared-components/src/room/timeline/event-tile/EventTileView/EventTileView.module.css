@@ -67,6 +67,14 @@
     padding-top: 18px;
 }
 
+/* Controls that are hidden until the reader shows interest in the event are
+   revealed by hovering anywhere on it, not just the control's own row. The
+   shell owns the tile boundary, so it publishes the state and the slot
+   contents decide what to do with it. */
+.root:hover {
+    --event-tile-add-reaction-visibility: visible;
+}
+
 /* Line. */
 .line {
     position: relative;
@@ -941,6 +949,12 @@
 
     &.stateOwnEvent .slotFooter {
         justify-content: flex-end;
+
+        /* The footer is right-aligned, so the reactions row must put its
+           add-reaction control at the start. Left at the end it reserves space
+           between the reactions and the bubble edge even while hidden, and the
+           reactions stop short of the bubble. */
+        --event-tile-reactions-add-button-order: -1;
     }
 
     &.stateOwnEvent .slotThreadInfo {

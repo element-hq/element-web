@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
         "complete": "Concluir",
@@ -1603,7 +1602,6 @@
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições na mensagem",
-    "migrating_crypto": "Aguente firme. Estamos atualizando %(brand)s para tornar a criptografia mais rápida e confiável.",
     "mobile_guide": {
         "toast_accept": "Usar o aplicativo",
         "toast_description": "%(brand)s é experimental em um navegador da Web móvel. Para uma melhor experiência e os recursos mais recentes, use nosso aplicativo nativo gratuito.",
@@ -3130,9 +3128,7 @@
         "show_thread_filter": "Exibir:"
     },
     "threads_activity_centre": {
-        "header": "Atividade de tópicos",
-        "no_rooms_with_threads_notifs": "Você ainda não tem salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
+        "header": "Atividade de tópicos"
     },
     "time": {
         "date_at_time": "%(date)s às %(time)s",

@@ -43,8 +43,7 @@
     "icon_overlay": {
         "description_error": "Hiba",
         "description_notifications": {
-            "one": "%(count)s olvasatlan értesítése van.",
-            "other": "%(count)s olvasatlan értesítése van."
+            "%(count)s olvasatlan értesítése van.": "other"
         }
     },
     "menu": {

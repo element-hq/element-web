@@ -21,12 +21,12 @@ import {
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { logger } from "matrix-js-sdk/src/logger";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
-import { copyPlaintext } from "../../../../utils/strings";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration.ts";
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
@@ -298,7 +298,11 @@ function KeyPanel({ recoveryKey, onConfirmClick, onCancelClick }: KeyPanelProps)
                         {_t("settings|encryption|recovery|save_key_description")}
                     </Text>
                 </div>
-                <IconButton aria-label={_t("action|copy")} size="28px" onClick={() => copyPlaintext(recoveryKey)}>
+                <IconButton
+                    aria-label={_t("action|copy")}
+                    size="28px"
+                    onClick={() => copyPlainTextToClipboard(recoveryKey)}
+                >
                     <CopyIcon />
                 </IconButton>
             </div>
