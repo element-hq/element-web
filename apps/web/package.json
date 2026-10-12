@@ -79,7 +79,6 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.18.0",
-        "livekit-client": "^2.22.2",
         "lodash": "npm:lodash-es@4.18.1",
         "maplibre-gl": "6.10.0",
         "matrix-encrypt-attachment": "^1.0.3",
