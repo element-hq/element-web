@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX, type ReactNode, useCallback, useEffect, useRef } from "react";
-import { Text } from "@vector-im/compound-web";
+import { Text, UnreadCounter } from "@vector-im/compound-web";
 import { MentionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
 
@@ -24,18 +24,20 @@ import styles from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemV
  * A single notification (one event) in the notification list.
  */
 export interface NotificationListItem {
-    /** Unique id of the notification, the event id */
+    /** Unique id of the notification, the id of the oldest event of the group */
     id: string;
     /** The room the event belongs to */
     roomId: string;
     /** The display name of the room */
     roomName: string;
-    /** Text preview of the event, including the sender */
+    /** Text preview of the newest event, including the sender */
     preview: string;
-    /** Formatted timestamp of the event */
+    /** Formatted timestamp of the newest event */
     timestamp: string;
-    /** Whether the event mentions the user (highlight) */
+    /** Whether one of the events mentions the user (highlight) */
     isMention: boolean;
+    /** Number of consecutive events from the same sender in the room grouped in this item */
+    count: number;
 }
 
 export interface NotificationListViewSnapshot {
@@ -172,6 +174,15 @@ function NotificationListItemView({
                 [styles.lastItem]: isLastItem,
             })}
             align="stretch"
+            aria-label={
+                item.count > 1
+                    ? _t("room_list|notifications_view|a11y_group", {
+                          count: item.count,
+                          roomName: item.roomName,
+                          preview: item.preview,
+                      })
+                    : undefined
+            }
             tabIndex={tabIndex}
             onClick={onClick}
             onFocus={onFocus}
@@ -191,9 +202,12 @@ function NotificationListItemView({
                         <Text as="span" size="xs">
                             {item.timestamp}
                         </Text>
-                        {item.isMention && (
-                            <MentionIcon width="16px" height="16px" fill="var(--cpd-color-icon-accent-primary)" />
-                        )}
+                        <Flex align="center" gap="var(--cpd-space-1x)">
+                            {item.isMention && (
+                                <MentionIcon width="16px" height="16px" fill="var(--cpd-color-icon-accent-primary)" />
+                            )}
+                            {item.count > 1 && <UnreadCounter count={item.count} />}
+                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>

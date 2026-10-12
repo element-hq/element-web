@@ -6,7 +6,7 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render, screen } from "@test-utils";
+import { render, screen, within } from "@test-utils";
 import { describe, it, expect } from "vitest";
 import React from "react";
 
@@ -19,6 +19,12 @@ describe("NotificationListView", () => {
         render(<Default />);
         (await screen.findByRole("option", { name: /See you tomorrow/ })).click();
         expect(Default.args?.onItemClick).toHaveBeenCalledWith("$2");
+    });
+
+    it("summarises grouped notifications", async () => {
+        render(<Default />);
+        const option = await screen.findByRole("option", { name: /3 notifications in Design/ });
+        expect(within(option).getByText("3")).toBeInTheDocument();
     });
 
     it("renders the empty state", () => {

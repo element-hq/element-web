@@ -622,6 +622,8 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             // The js-sdk only feeds highlights to the notification timeline, and only from the raw
             // sync, so non-highlight notifications and encrypted events never appear there live.
             // Duplicates (by event id) are ignored.
+            // ponytail: drop once the js-sdk notification timeline set can hold every notification
+            // (`setNotifTimelineSet(set, { onlyHighlights: false })`, matrix-js-sdk feat/notif-timeline-all-notifications)
             this.sdkContext.client.getNotifTimelineSet()?.addLiveEvent(ev, { addToState: false });
             this.performCustomEventHandling(ev);
 

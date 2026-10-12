@@ -47,6 +47,7 @@ const meta = {
                 preview: "Alice: @bob can you look at the Figma?",
                 timestamp: "10:42",
                 isMention: true,
+                count: 3,
             },
             {
                 id: "$2",
@@ -55,6 +56,7 @@ const meta = {
                 preview: "See you tomorrow",
                 timestamp: "Yesterday",
                 isMention: false,
+                count: 1,
             },
         ],
         onItemClick: fn(),

@@ -7,15 +7,19 @@
 
 import {
     ClientEvent,
+    Direction,
     type EventTimelineSet,
+    type INotificationsResponse,
     type IRoomTimelineData,
     type MatrixClient,
     type MatrixEvent,
     MatrixEventEvent,
+    Method,
     type Room,
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { noUnsafeEventProps } from "matrix-js-sdk/src/utils";
 import {
     BaseViewModel,
     type NotificationListItem,
@@ -40,7 +44,7 @@ export interface Props {
 
 /**
  * View model for the notification list: one item per event of the client's notification timeline set,
- * which is fed live by /sync and back-paginated from /notifications.
+ * which is fed live by the Notifier and back-paginated from /notifications.
  */
 export class NotificationListViewModel
     extends BaseViewModel<NotificationListViewSnapshot, Props>
@@ -84,39 +88,41 @@ export class NotificationListViewModel
     };
 
     private readonly onDecrypted = (ev: MatrixEvent): void => {
-        if (this.snapshot.current.items.some((item) => item.id === ev.getId())) this.update();
+        if (this.timelineSet?.findEventById(ev.getId()!)) this.update();
     };
 
     private readonly update = (): void => {
         const events = this.timelineSet?.getLiveTimeline().getEvents() ?? [];
         const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
-        const items = events
-            .map((ev) => this.toItem(ev, showTwelveHour))
-            .filter((item): item is NotificationListItem => item !== null)
-            .reverse();
+        const items = groupConsecutive(events.filter((ev) => ev.getId() && ev.getRoomId()).reverse()).map((group) =>
+            this.toItem(group, showTwelveHour),
+        );
         this.snapshot.merge({ items });
     };
 
-    private toItem(ev: MatrixEvent, showTwelveHour: boolean): NotificationListItem | null {
-        const id = ev.getId();
-        const roomId = ev.getRoomId();
-        if (!id || !roomId) return null;
-        const preview = MessagePreviewStore.instance.generatePreviewForEvent(ev);
+    /**
+     * @param group - consecutive events of a sender in a room, newest first
+     */
+    private toItem(group: MatrixEvent[], showTwelveHour: boolean): NotificationListItem {
+        const newest = group[0];
+        const roomId = newest.getRoomId()!;
+        const preview = MessagePreviewStore.instance.generatePreviewForEvent(newest);
         return {
-            id,
+            // Clicking opens the room at the oldest event, to read the group in order
+            id: group[group.length - 1].getId()!,
             roomId,
             roomName: this.props.client.getRoom(roomId)?.name ?? roomId,
-            preview: preview ? `${getSenderName(ev)}: ${preview}` : getSenderName(ev),
-            timestamp: formatRelativeTime(new Date(ev.getTs()), showTwelveHour),
-            isMention: Boolean(this.props.client.getPushActionsForEvent(ev)?.tweaks.highlight),
+            preview: preview ? `${getSenderName(newest)}: ${preview}` : getSenderName(newest),
+            timestamp: formatRelativeTime(new Date(newest.getTs()), showTwelveHour),
+            isMention: group.some((ev) => this.props.client.getPushActionsForEvent(ev)?.tweaks.highlight),
+            count: group.length,
         };
     }
 
     public loadMore = (): void => {
         if (!this.timelineSet || !this.canLoadMore || this.snapshot.current.isLoading) return;
         this.snapshot.merge({ isLoading: true });
-        this.props.client
-            .paginateEventTimeline(this.timelineSet.getLiveTimeline(), { backwards: true, limit: PAGE_SIZE })
+        fetchAllNotifications(this.props.client, this.timelineSet, PAGE_SIZE)
             .then((hasMore) => {
                 this.canLoadMore = hasMore;
             })
@@ -139,4 +145,56 @@ export class NotificationListViewModel
             metricsTrigger: undefined,
         });
     };
+}
+
+/**
+ * Group events which directly follow each other in the same room (and thread) from the same sender.
+ * @param events - events, newest first
+ * @returns the groups, newest first, each with its events newest first
+ */
+export function groupConsecutive(events: MatrixEvent[]): MatrixEvent[][] {
+    const groups: MatrixEvent[][] = [];
+    for (const ev of events) {
+        const head = groups.at(-1)?.[0];
+        if (
+            head &&
+            head.getRoomId() === ev.getRoomId() &&
+            head.getSender() === ev.getSender() &&
+            head.threadRootId === ev.threadRootId
+        ) {
+            groups.at(-1)!.push(ev);
+        } else {
+            groups.push([ev]);
+        }
+    }
+    return groups;
+}
+
+/**
+ * Back-paginate the notification timeline set with every notification, not only highlights.
+ * Mirrors the notification branch of `MatrixClient.paginateEventTimeline`, which hard-codes `only=highlight`.
+ * ponytail: copy of js-sdk code, drop it for `paginateEventTimeline` once the js-sdk can include all notifications
+ * @returns whether there are more notifications to fetch
+ */
+async function fetchAllNotifications(
+    client: MatrixClient,
+    timelineSet: EventTimelineSet,
+    limit: number,
+): Promise<boolean> {
+    const timeline = timelineSet.getLiveTimeline();
+    const from = timeline.getPaginationToken(Direction.Backward);
+    const res = await client.http.authedRequest<INotificationsResponse>(Method.Get, "/notifications", {
+        limit: limit.toString(),
+        ...(from && from !== "end" && { from }),
+    });
+    const mapper = client.getEventMapper();
+    const events = res.notifications.filter(noUnsafeEventProps).map((notification) => {
+        const event = mapper(notification.event);
+        client.getPushDetailsForEvent(event, true);
+        event.event.room_id = notification.room_id;
+        return event;
+    });
+    timelineSet.addEventsToTimeline(events, true, false, timeline, res.next_token);
+    if (!res.next_token) timeline.setPaginationToken(null, Direction.Backward);
+    return Boolean(res.next_token);
 }
