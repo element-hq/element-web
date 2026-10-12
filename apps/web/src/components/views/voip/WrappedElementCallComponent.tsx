@@ -94,9 +94,12 @@ export const WrappedElementCallComponent: FC<{
     const { effectiveTheme: theme } = useTheme();
     // While the call's DOM is in the Picture-in-Picture window, its menus and tooltips must open there
     // too: Compound would otherwise float them into this document, the one window the call is not in.
+    // `undefined` leaves them in this document's body, as for any other Compound component; `null` is
+    // the component's "wait for the root" (a Picture-in-Picture window whose document is not there yet),
+    // so it must not be passed outside Picture-in-Picture, where it would hide them for good.
     const portalRootFor = useCallback(
-        (): HTMLElement | null =>
-            documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : null,
+        (): HTMLElement | null | undefined =>
+            documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : undefined,
         [documentPipStore, call],
     );
     const portalRoot = useEventEmitterState(documentPipStore, DocumentPipStoreEvent.Update, portalRootFor);

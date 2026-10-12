@@ -50,7 +50,7 @@ const ElementCallMock = ({
     ref,
     theme,
     language,
-    portalRoot = null,
+    portalRoot,
 }: ElementCallProps): JSX.Element => {
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -78,12 +78,10 @@ const ElementCallMock = ({
 
     useImperativeHandle(ref, () => vm.handle, [vm]);
 
-    // As the real component does: whatever Compound floats over the mock goes where the host says
-    return (
-        <PortalRoot root={portalRoot}>
-            <ElementCallMockView vm={vm} />
-        </PortalRoot>
-    );
+    // As the real component does: whatever Compound floats over the mock goes where the host says.
+    // With no root at all it goes into the document body, unwrapped; `null` is Compound's "not yet".
+    const view = <ElementCallMockView vm={vm} />;
+    return portalRoot === undefined ? view : <PortalRoot root={portalRoot}>{view}</PortalRoot>;
 };
 
 /**

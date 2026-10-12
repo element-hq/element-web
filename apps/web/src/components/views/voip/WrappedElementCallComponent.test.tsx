@@ -30,7 +30,11 @@ import { WrappedElementCallComponent } from "./WrappedElementCallComponent";
 vi.mock("./ElementCallMock", () => ({
     initializeElementCall: vi.fn().mockResolvedValue(undefined),
     ElementCall: ({ portalRoot }: { portalRoot?: HTMLElement | null }) => (
-        <div data-testid="element-call" data-portal-root={portalRoot?.id ?? "none"} />
+        // `undefined` (this document) and `null` (wait for a root) mean different things to the component
+        <div
+            data-testid="element-call"
+            data-portal-root={portalRoot === undefined ? "none" : portalRoot === null ? "pending" : portalRoot.id}
+        />
     ),
 }));
 
