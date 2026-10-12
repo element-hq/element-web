@@ -14,6 +14,17 @@ import { _t } from "../../languageHandler";
 import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
 
+declare const __webpack_public_path__: string | undefined;
+declare const __webpack_get_script_filename__: ((chunkId: string) => string) | undefined;
+
+// maplibre v6 derives its worker URL from `import.meta.url`, which webpack rewrites to a file:// path that maplibre
+// rejects, leaving maps blank. webpack.config.ts builds the worker as its own entry, `maplibre.worker`, in the hashed
+// bundle directory; the public path is the webapp root, so ask webpack for the entry's full filename.
+// Outside webpack (unit tests) neither global exists, and maplibre is mocked anyway.
+if (typeof __webpack_public_path__ === "string" && typeof __webpack_get_script_filename__ === "function") {
+    maplibregl.setWorkerUrl(__webpack_public_path__ + __webpack_get_script_filename__("maplibre.worker"));
+}
+
 export const createMap = (
     client: MatrixClient,
     interactive: boolean,
