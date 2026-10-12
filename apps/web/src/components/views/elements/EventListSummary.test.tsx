@@ -183,9 +183,9 @@ describe("EventListSummary", function () {
             renderGroupSummary: { getSummary: (events) => `shared ${events.length} updates` },
         });
         trackSpy(
-            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
-                api.getMessageRenderInfo.bind(api),
-            ),
+            vi
+                .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+                .mockImplementation(api.getMessageRenderInfo.bind(api)),
         );
         const joined = generateMembershipEvent("joined", {
             userId: "@user:some.domain",

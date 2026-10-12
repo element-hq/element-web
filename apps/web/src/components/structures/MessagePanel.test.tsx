@@ -378,9 +378,9 @@ describe("MessagePanel", function () {
             );
         }
         trackSpy(
-            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
-                api.getMessageRenderInfo.bind(api),
-            ),
+            vi
+                .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+                .mockImplementation(api.getMessageRenderInfo.bind(api)),
         );
         const customEvents = [
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "one" })),
@@ -488,9 +488,9 @@ describe("MessagePanel", function () {
             renderGroupSummary: { getSummary },
         });
         trackSpy(
-            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockImplementation(
-                api.getMessageRenderInfo.bind(api),
-            ),
+            vi
+                .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+                .mockImplementation(api.getMessageRenderInfo.bind(api)),
         );
         const messages = Array.from({ length: 3 }, () =>
             TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() }),
