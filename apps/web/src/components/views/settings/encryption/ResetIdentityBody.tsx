@@ -179,7 +179,13 @@ function descriptionForVariant(variant: ResetIdentityBodyVariant): string | unde
 function alertForVariant(variant: string): JSX.Element | undefined {
     switch (variant) {
         case "confirm":
-            return <Alert type="critical" title={_t("settings|encryption|advanced|breadcrumb_alert_cant_confirm")} />;
+            return (
+                <Alert
+                    className="mx_AlertNoIcon"
+                    type="critical"
+                    title={_t("settings|encryption|advanced|breadcrumb_alert_cant_confirm")}
+                />
+            );
         case "no_verification_method":
         case "compromised":
         case "sync_failed":
