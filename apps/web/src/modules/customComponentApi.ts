@@ -48,6 +48,13 @@ interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderH
     allowDownloadingMedia?: () => Promise<boolean>;
 }
 
+/** The selected renderer and hints for one event during a render pass. */
+export interface MessageRenderInfo {
+    hints: CustomMessageRenderHints;
+    hasGrouping: boolean;
+    getGrouping: () => MessageGrouping | null;
+}
+
 type ComposerPreviewRenderer = {
     filter: ComposerPreviewFilterFn;
     renderer: CustomComposerPreviewRenderFunction;
@@ -95,7 +102,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         props: CustomMessageComponentProps,
         originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
-        const moduleEv = getModuleMatrixEvent(props.mxEvent);
+        const moduleEv = this.registeredMessageRenderers.length ? getModuleMatrixEvent(props.mxEvent) : null;
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
         if (renderer) {
             try {
@@ -109,32 +116,47 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     /**
-     * Get hints about an message before rendering it.
+     * Resolve one event's custom renderer for reuse during a render pass.
      * @param mxEvent The message event being rendered.
-     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     * @returns The selected renderer's hints and lazy grouping, or null.
      */
-    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
+    public getMessageRenderInfo(mxEvent: MatrixEvent): MessageRenderInfo | null {
+        if (!this.registeredMessageRenderers.length) return null;
         const moduleEv = getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
-        if (renderer) {
-            return {
+        if (!moduleEv || !renderer) return null;
+
+        let resolvedGrouping: MessageGrouping | null | undefined;
+        return {
+            hints: {
                 ...renderer.hints,
                 // Convert from js-sdk style events to module events automatically.
                 allowDownloadingMedia: renderer.hints.allowDownloadingMedia
                     ? () => renderer.hints.allowDownloadingMedia!(moduleEv)
                     : undefined,
-            };
-        }
-        return null;
+            },
+            hasGrouping: !!renderer.hints.renderGroupSummary && !mxEvent.isRedacted(),
+            getGrouping: () => {
+                if (resolvedGrouping === undefined) {
+                    resolvedGrouping = this.createGrouping(mxEvent, moduleEv, renderer);
+                }
+                return resolvedGrouping;
+            },
+        };
     }
 
-    /** Get the custom grouping for an event, if its renderer provides one. */
-    public getGroupingForMessage(mxEvent: MatrixEvent): MessageGrouping | null {
-        if (mxEvent.isRedacted()) return null;
-        const moduleEv = getModuleMatrixEvent(mxEvent);
-        const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
-        const grouping = renderer?.hints.renderGroupSummary;
-        if (!moduleEv || !renderer || !grouping) return null;
+    /** Get hints about a message before rendering it. */
+    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
+        return this.getMessageRenderInfo(mxEvent)?.hints ?? null;
+    }
+
+    private createGrouping(
+        mxEvent: MatrixEvent,
+        moduleEv: ModuleMatrixEvent,
+        renderer: EventRenderer,
+    ): MessageGrouping | null {
+        const grouping = renderer.hints.renderGroupSummary;
+        if (!grouping || mxEvent.isRedacted()) return null;
 
         let key = "";
         try {

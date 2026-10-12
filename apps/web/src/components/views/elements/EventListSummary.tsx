@@ -28,7 +28,7 @@ import { arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectHasDiff } from "../../../utils/objects.ts";
 import Spoiler from "./Spoiler.tsx";
 import type { MessageGrouping } from "../../../modules/customComponentApi.ts";
-import { hintCustomGroupSummary } from "../../../utils/EventUtils.ts";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
@@ -48,7 +48,7 @@ function profileFieldChanged(prev?: string | null, value?: string | null): boole
     return (prev || undefined) !== (value || undefined);
 }
 
-interface IProps extends Omit<ComponentProps<typeof GenericEventListSummary>, "summaryText" | "summaryMembers"> {
+interface IProps extends Omit<ComponentProps<typeof GenericEventListSummary>, "getSummaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
     summaryLength?: number;
     // The maximum number of avatars to display in the summary
@@ -673,12 +673,16 @@ export default class EventListSummary extends React.Component<Props, State> {
         };
     }
 
-    private generateDefaultSummary(indices: readonly number[]): ReactNode {
-        const includedIndices = new Set(indices);
+    private generateDefaultSummary(
+        indices: readonly number[],
+        indexedUserEvents: Map<number, [string, IUserEvents]>,
+    ): ReactNode {
         const userEvents: Record<string, IUserEvents[]> = {};
-        for (const [userId, events] of Object.entries(this.state.userEvents)) {
-            const remaining = events.filter((event) => includedIndices.has(event.index));
-            if (remaining.length) userEvents[userId] = remaining;
+        for (const index of indices) {
+            const entry = indexedUserEvents.get(index);
+            if (!entry) continue;
+            const [userId, event] = entry;
+            (userEvents[userId] ??= []).push(event);
         }
         const aggregate = this.getAggregate(userEvents);
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
@@ -689,19 +693,29 @@ export default class EventListSummary extends React.Component<Props, State> {
     }
 
     private generateGroupedSummary(): ReactNode {
-        const summaries: ReactNode[] = [];
+        const summaries: { index: number; summary: ReactNode }[] = [];
+        const indexedUserEvents = new Map<number, [string, IUserEvents]>();
+        for (const [userId, events] of Object.entries(this.state.userEvents)) {
+            for (const event of events) indexedUserEvents.set(event.index, [userId, event]);
+        }
+        const defaultIndices: number[] = [];
         let current: { grouping: MessageGrouping | null; events: MatrixEvent[]; indices: number[] } | null = null;
 
         const finishCurrent = (): void => {
             if (!current) return;
             const customText = current.grouping?.summarize(current.events);
-            summaries.push(customText ?? this.generateDefaultSummary(current.indices));
+            if (customText) {
+                summaries.push({ index: current.indices[0], summary: customText });
+            } else {
+                defaultIndices.push(...current.indices);
+            }
             current = null;
         };
 
-        // Keep built-in descriptions in order around each custom summary.
+        // Aggregate built-in events together and order custom summaries by their first event.
         this.props.events.forEach((event, index) => {
-            const grouping = hintCustomGroupSummary(event);
+            const renderInfo = ModuleApi.instance.customComponents.getMessageRenderInfo(event);
+            const grouping = renderInfo?.hasGrouping ? renderInfo.getGrouping() : null;
             const sameGroup =
                 current &&
                 ((!current.grouping && !grouping) ||
@@ -716,7 +730,18 @@ export default class EventListSummary extends React.Component<Props, State> {
         });
         finishCurrent();
 
-        return jsxJoin(summaries, ", ");
+        if (defaultIndices.length) {
+            summaries.push({
+                index: defaultIndices[0],
+                summary: this.generateDefaultSummary(defaultIndices, indexedUserEvents),
+            });
+        }
+
+        summaries.sort((a, b) => a.index - b.index);
+        return jsxJoin(
+            summaries.map(({ summary }) => summary),
+            ", ",
+        );
     }
 
     public render(): React.ReactNode {
