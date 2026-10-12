@@ -1504,7 +1504,6 @@
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
-    "migrating_crypto": "Sıkı durun. Şifrelemeyi daha hızlı ve daha güvenilir hale getirmek için %(brand)s güncelliyoruz.",
     "mobile_guide": {
         "toast_accept": "Uygulamayı kullan",
         "toast_description": "%(brand)s mobil web tarayıcısında deneyseldir. Daha iyi bir deneyim ve en yeni özellikler için ücretsiz yerel uygulamamızı kullanın.",

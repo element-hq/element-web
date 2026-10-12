@@ -1602,7 +1602,6 @@
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições na mensagem",
-    "migrating_crypto": "Aguente firme. Estamos atualizando %(brand)s para tornar a criptografia mais rápida e confiável.",
     "mobile_guide": {
         "toast_accept": "Usar o aplicativo",
         "toast_description": "%(brand)s é experimental em um navegador da Web móvel. Para uma melhor experiência e os recursos mais recentes, use nosso aplicativo nativo gratuito.",

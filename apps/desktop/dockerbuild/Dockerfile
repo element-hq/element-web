@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.27-labs@sha256:ae9cc40df4eb5b6adcac0a49bdd8e43b6d29d81087fefae2ceb6fe248aab24c8
+# syntax=docker.io/docker/dockerfile:1.28-labs@sha256:ad43eec41369d9ef94412c0d1eb3203d12218d01da225afc92a3aeba3a0e7796
 # Docker image to facilitate building Element Desktop's native bits against Debian bookworm (glibc 2.36).
 # The resulting binaries are checked to require at most glibc 2.35,
 # so they run down to Ubuntu jammy (2.35) & Debian bookworm (2.36).

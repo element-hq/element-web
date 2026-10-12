@@ -105,6 +105,7 @@ describe("ElementWidgetDriver", () => {
             "org.matrix.msc2762.receive.state_event:m.room.create",
             "org.matrix.msc2762.receive.state_event:m.room.name",
             "org.matrix.msc2762.receive.state_event:m.room.member",
+            "org.matrix.msc2762.receive.state_event:io.element.functional_members",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",

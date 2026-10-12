@@ -96,6 +96,7 @@
         "revoke": "撤销",
         "save": "保存",
         "search": "搜索",
+        "select_to_copy": "选择以复制",
         "send_report": "发送举报",
         "set_avatar": "设置头像",
         "share": "分享",
@@ -1523,6 +1524,8 @@
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
         "feature_element_call_react": "将 Element Call 渲染为 React 组件而不是小部件。",
+        "feature_matrixrtc_slots": "基于 Element Call 的通话需要打开 MatrixRTC 插槽。",
+        "feature_matrixrtc_slots_description": "仅允许在房间中具有有效的插槽状态事件时开始或加入 Element Call 通话。",
         "feature_retention": {
             "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持为“已读消息”设置。",
             "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
@@ -1696,7 +1699,6 @@
     },
     "member_list_back_action_label": "房间成员",
     "message_edit_dialog_title": "消息编辑",
-    "migrating_crypto": "请稍候。我们正在更新 %(brand)s，以使加密更快、更可靠。",
     "mobile_guide": {
         "toast_accept": "使用 App",
         "toast_description": "%(brand)s 在移动 Web 浏览器上处于实验阶段。为了获得更好的体验和最新功能，请使用我们的免费原生应用。",
@@ -3430,14 +3432,13 @@
                 "other": "%(senderName)s 已为此聊天添加备选地址 %(addresses)s。"
             },
             "alt_removed": {
-                "one": "%(senderName)s 已移除此房间的备选地址 %(address)s。",
-                "other": "%(senderName)s 已移除此房间的备选地址 %(addresses)s。"
+                "other": "%(senderName)s 已为此聊天移除备选地址 %(addresses)s。"
             },
-            "changed": "%(senderName)s 更改了此房间的地址。",
-            "changed_alternative": "%(senderName)s 更改了此房间的备选地址。",
-            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备选地址。",
-            "removed": "%(senderName)s 已移除此房间的主地址。",
-            "set": "%(senderName)s 已将此房间的主地址设置为 %(address)s。"
+            "changed": "%(senderName)s 已为此聊天更改地址。",
+            "changed_alternative": "%(senderName)s 已为此聊天更改备选地址。",
+            "changed_main_and_alternative": "%(senderName)s 已为此聊天更改主要与备选地址。",
+            "removed": "%(senderName)s 已为此聊天移除主要地址。",
+            "set": "%(senderName)s 已将此聊天的主要地址设置为 %(address)s。"
         },
         "m.room.create": {
             "continuation": "此房间是另一个对话的延续。",
@@ -3898,6 +3899,7 @@
         "camera_enabled": "摄像头仍处于开启状态",
         "cannot_call_yourself_description": "你无法与自己通话。",
         "close_lobby": "关闭大厅",
+        "close_slot_failed_title": "无法为此房间禁用通话",
         "connecting": "正在连接",
         "connection_lost": "与服务器的连接已丢失",
         "connection_lost_description": "在未连接到服务器的情况下，你无法进行通话。",
@@ -3952,6 +3954,7 @@
         "no_permission_conference": "需要权限",
         "no_permission_conference_description": "你无权在此房间启动会议通话",
         "on_hold": "保留 %(name)s",
+        "open_slot_failed_title": "无法为此房间启用通话",
         "output_devices": "输出设备",
         "screenshare_monitor": "分享整个屏幕",
         "screenshare_title": "分享内容",

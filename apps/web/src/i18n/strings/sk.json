@@ -1625,7 +1625,6 @@
     },
     "member_list_back_action_label": "Členovia miestnosti",
     "message_edit_dialog_title": "Úpravy správy",
-    "migrating_crypto": "Ešte to vydržte. Aktualizujeme %(brand)s, aby bolo šifrovanie rýchlejšie a spoľahlivejšie.",
     "mobile_guide": {
         "toast_accept": "Použiť aplikáciu",
         "toast_description": "%(brand)s je v mobilnej verzii experimentálny. Ak chcete získať lepší zážitok a najnovšie funkcie, použite našu bezplatnú natívnu aplikáciu.",

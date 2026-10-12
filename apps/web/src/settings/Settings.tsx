@@ -224,8 +224,8 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_disable_call_per_sender_encryption": IFeature;
     "feature_element_call_react": IFeature;
+    "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
@@ -600,14 +600,6 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
-    "feature_disable_call_per_sender_encryption": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|feature_disable_call_per_sender_encryption"),
-        default: false,
-    },
     "feature_element_call_react": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -616,6 +608,15 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|feature_element_call_react"),
         // A call that is already mounted with one embedding (widget/component) cannot be switched to the other.
         controller: new ReloadOnChangeController(),
+        default: false,
+    },
+    "feature_matrixrtc_slots": {
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_matrixrtc_slots"),
+        description: _td("labs|feature_matrixrtc_slots_description"),
         default: false,
     },
     "feature_location_share_live": {
