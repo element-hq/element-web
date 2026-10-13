@@ -236,13 +236,6 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 headerUrl: preview.link,
                 body,
                 buttons: [
-                    {
-                        label: _t("timeline|url_preview|open_link"),
-                        icon: <PopOutIcon />,
-                        onClick: async () => {
-                            window.open(preview.link, "_blank", "noreferrer");
-                        },
-                    },
                     ...(allowRemoveUrlPreview
                         ? [
                               {
@@ -252,6 +245,13 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                               },
                           ]
                         : []),
+                    {
+                        label: _t("timeline|url_preview|open_link"),
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
                 ],
                 ...linkIcon(),
                 ...content,
