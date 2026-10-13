@@ -423,12 +423,13 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Clear app storage, called when logging out to perform data clean up.
+     * Clear platform-specific storage, called when logging out to perform data clean up.
+     *
+     * Web storage is not touched here: `Lifecycle.clearStorage` clears it as soon as the logout starts. This
+     * runs later, after the client's persistent stores have been deleted, by which time the user may already
+     * be signing in again, and clearing web storage then would drop the new session's state.
      */
-    public async clearStorage(): Promise<void> {
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-    }
+    public async clearStorage(): Promise<void> {}
 
     /**
      * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance
