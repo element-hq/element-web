@@ -73,7 +73,10 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+              with:
+                  cache: true
+                  install: false
 
             - name: Fetch layered build
               id: layered
@@ -156,15 +159,11 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
-                  cache: "pnpm"
-                  cache-dependency-path: pnpm-lock.yaml
-                  node-version: "lts/*"
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+                  cache: true
+                  install: true
+                  require-lockfile: true
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
@@ -209,15 +208,11 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
-                  cache: "pnpm"
-                  cache-dependency-path: pnpm-lock.yaml
-                  node-version: "lts/*"
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+                  cache: true
+                  install: true
+                  require-lockfile: true
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
@@ -311,17 +306,12 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-              if: needs.prepare.outputs.skip == 'false'
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               if: needs.prepare.outputs.skip == 'false'
               with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            - name: Install dependencies
-              if: needs.prepare.outputs.skip == 'false'
-              run: pnpm install --frozen-lockfile
+                  cache: true
+                  install: true
+                  require-lockfile: true
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: needs.prepare.outputs.skip == 'false'
