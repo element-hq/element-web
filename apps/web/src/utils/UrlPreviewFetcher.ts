@@ -6,7 +6,14 @@
  */
 
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    ClientPrefix,
+    type IPreviewUrlResponse,
+    type MatrixClient,
+    MatrixError,
+    type MatrixEvent,
+    Method,
+} from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
@@ -22,6 +29,9 @@ export const PREVIEW_WIDTH_PX = 478;
 export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
+
+/** MSC4448: Preview URL site logos, see https://github.com/matrix-org/matrix-spec-proposals/pull/4448 */
+const UNSTABLE_MSC4448_SITE_LOGO = "org.matrix.msc4448";
 
 /** Size of the thumbnail box in the side-by-side preview tile, see `MediaPreviewComponents.module.css`. */
 const THUMBNAIL_WIDTH_PX = 130;
@@ -253,6 +263,29 @@ export class UrlPreviewFetcher {
     }
 
     /**
+     * Fetch the server's preview of a link, asking for its MSC4448 site logo when the server supports that.
+     * The sdk's `getUrlPreview` cannot pass the extra parameter, so that case calls the endpoint directly, in
+     * the same way the sdk does.
+     * @param link The URL to preview.
+     */
+    private async getUrlPreview(link: string): Promise<IPreviewUrlResponse> {
+        if (!(await this.client.doesServerSupportUnstableFeature(UNSTABLE_MSC4448_SITE_LOGO))) {
+            return this.client.getUrlPreview(link, this.previewRequestTs);
+        }
+        // As the sdk does: bucket the timestamp to the minute, and drop the fragment as it cannot affect the preview.
+        const ts = Math.floor(this.previewRequestTs / 60000) * 60000;
+        const url = new URL(link);
+        url.hash = "";
+        return this.client.http.authedRequest<IPreviewUrlResponse>(
+            Method.Get,
+            "/media/preview_url",
+            { url: url.toString(), ts: ts.toString(), msc4448_include: "msc4448:site_logo" },
+            undefined,
+            { prefix: ClientPrefix.V1, priority: "low" },
+        );
+    }
+
+    /**
      * Fetch a preview for a single URL, returning a cached result if available.
      * @param link The URL to preview.
      * @param event The Matrix event to preview.
@@ -269,7 +302,7 @@ export class UrlPreviewFetcher {
 
         let response: IPreviewUrlResponse;
         try {
-            response = await this.client.getUrlPreview(link, this.previewRequestTs);
+            response = await this.getUrlPreview(link);
         } catch (error) {
             if (error instanceof MatrixError && error.httpStatus === 404) {
                 logger.debug("Failed to get URL preview: ", error);

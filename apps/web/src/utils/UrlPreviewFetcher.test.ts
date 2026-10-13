@@ -28,20 +28,29 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
+type MockClient = {
+    getUrlPreview: Mock;
+    mxcUrlToHttp: Mock;
+    doesServerSupportUnstableFeature: Mock;
+    http: { authedRequest: Mock };
+};
+
 function getFetcher(showTooltips = false): {
     fetcher: UrlPreviewFetcher;
-    client: { getUrlPreview: Mock; mxcUrlToHttp: Mock };
+    client: MockClient;
     moduleApi: { getPreview: Mock };
 } {
     const client = {
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
+        doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
+        http: { authedRequest: vi.fn() },
     } as unknown as MatrixClient;
     // By default no module handles the URL, so we fall through to the bundle/server logic.
     const moduleApi = { getPreview: vi.fn().mockResolvedValue(null) };
     return {
         fetcher: new UrlPreviewFetcher(client, 0, showTooltips, moduleApi as unknown as UrlPreviewApi),
-        client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock },
+        client: client as unknown as MockClient,
         moduleApi,
     };
 }
@@ -191,6 +200,42 @@ describe("UrlPreviewFetcher", () => {
         const preview = await fetcher.fetchPreview("https://example.org", true);
         expect(preview?.image?.width).toBe(width);
         expect(preview?.image?.height).toBe(height);
+    });
+
+    describe("asking for the MSC4448 site logo", () => {
+        it("should call the preview endpoint directly when the server supports MSC4448", async () => {
+            const { fetcher, client } = getFetcher();
+            client.doesServerSupportUnstableFeature.mockResolvedValue(true);
+            client.http.authedRequest.mockResolvedValue({
+                ...BASIC_PREVIEW_OGDATA,
+                "msc4448:site_logo": "mxc://example.org/logo",
+            });
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockImplementation((url: string) => `https://example.org/${url.split("/").pop()}`);
+
+            const preview = await fetcher.fetchPreview("https://example.org/page#section", true);
+
+            expect(client.doesServerSupportUnstableFeature).toHaveBeenCalledWith("org.matrix.msc4448");
+            expect(client.http.authedRequest).toHaveBeenCalledWith(
+                "GET",
+                "/media/preview_url",
+                { url: "https://example.org/page", ts: "0", msc4448_include: "msc4448:site_logo" },
+                undefined,
+                expect.objectContaining({ prefix: "/_matrix/client/v1" }),
+            );
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            expect(preview?.siteIcon).toBe("https://example.org/logo");
+        });
+
+        it("should use the sdk's getUrlPreview when the server does not support MSC4448", async () => {
+            const { fetcher, client } = getFetcher();
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+
+            await fetcher.fetchPreview("https://example.org/page", true);
+
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/page", 0);
+            expect(client.http.authedRequest).not.toHaveBeenCalled();
+        });
     });
 
     it("should use the MSC4448 site logo as the site icon", async () => {

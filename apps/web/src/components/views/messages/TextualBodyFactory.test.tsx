@@ -380,6 +380,7 @@ describe("<TextualBody />", () => {
                 removeListener: (): void => undefined,
                 isGuest: () => false,
                 mxcUrlToHttp: (s: string) => s,
+                doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom(room1Id, "room name", matrixClient));
             DMRoomMap.makeShared(defaultMatrixClient);
@@ -540,6 +541,7 @@ describe("<TextualBody />", () => {
                 getUrlPreview: (url: string) => new Promise(() => {}),
                 isGuest: () => false,
                 mxcUrlToHttp: (s: string) => s,
+                doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
             DMRoomMap.makeShared(defaultMatrixClient);
@@ -626,6 +628,7 @@ describe("<TextualBody />", () => {
                 getUrlPreview: vi.fn().mockResolvedValue(ogData()),
                 isGuest: () => false,
                 mxcUrlToHttp: (s: string) => s,
+                doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
             DMRoomMap.makeShared(defaultMatrixClient);
