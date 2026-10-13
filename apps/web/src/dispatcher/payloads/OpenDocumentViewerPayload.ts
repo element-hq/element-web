@@ -22,7 +22,7 @@ export type OpenDocumentViewerPayload = ActionPayload & {
           }
         | {
               event?: never;
-              /** A file that does not come from an event. It opens in the room currently being viewed. */
+              /** A document file. It opens in the room currently being viewed. */
               file: DocumentFile;
           }
     );

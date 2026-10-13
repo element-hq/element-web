@@ -242,7 +242,7 @@ describe("RightPanel", () => {
         await waitFor(() => expect(screen.getByRole("heading", { name: "README.md" })).toBeInTheDocument());
     });
 
-    it("renders the document viewer card, named after the file, for a file that does not come from an event", async () => {
+    it("renders the document viewer for a file that does not come from an event", async () => {
         const room = mkRoom(cli, "r1");
         cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
 

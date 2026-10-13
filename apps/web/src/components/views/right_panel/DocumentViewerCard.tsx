@@ -36,7 +36,10 @@ interface Props {
  * happens on every resize — does not hand the viewer a new `blob` identity and make it reload the file.
  */
 export function DocumentViewerCard({ mxEvent, file, onClose }: Props): JSX.Element {
-    const viewer = mxEvent ? documentViewerForEvent(mxEvent) : file && documentViewerForFile(file);
+    const viewer = useMemo(
+        () => (mxEvent ? documentViewerForEvent(mxEvent) : file && documentViewerForFile(file)),
+        [mxEvent, file],
+    );
     const media = useMemo(
         () => (mxEvent ? documentMediaForEvent(mxEvent) : file && documentMediaForFile(file)),
         [mxEvent, file],
