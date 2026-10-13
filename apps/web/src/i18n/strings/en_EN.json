@@ -3609,10 +3609,6 @@
             "in_reply_to": "<a>In reply to</a> <pill>",
             "in_reply_to_for_export": "In reply to <a>this message</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-            "dialog_title": "Add an Integration"
-        },
         "self_redaction": "Message deleted",
         "send_state_encrypting": "Encrypting your message…",
         "send_state_failed": "Failed to send",
