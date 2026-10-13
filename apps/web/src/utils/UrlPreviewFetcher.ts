@@ -18,7 +18,7 @@ import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
 import { mediaFromMxc } from "../customisations/Media";
-import { thumbSize } from "../ImageUtils";
+import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { decryptFile } from "./DecryptFile";
@@ -206,15 +206,12 @@ export class UrlPreviewFetcher {
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
                 // Scale the declared size down to fit the preview box, keeping the aspect ratio. An image of
                 // unknown size is taken to fill the box.
-                const { width, height } = thumbSize(
-                    declaredWidth,
-                    declaredHeight,
-                    PREVIEW_WIDTH_PX,
-                    PREVIEW_WIDTH_PX,
-                ) ?? {
-                    width: PREVIEW_WIDTH_PX,
-                    height: PREVIEW_WIDTH_PX,
-                };
+                const height =
+                    thumbHeight(declaredWidth, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
+                const width =
+                    declaredWidth && declaredHeight
+                        ? Math.floor((declaredWidth * height) / declaredHeight)
+                        : PREVIEW_WIDTH_PX;
                 const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
                 const playable = !!response["og:video"] || !!response["og:video:type"] || !!response["og:audio"];
                 if (thumb) {
