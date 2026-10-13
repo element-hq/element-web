@@ -7,6 +7,40 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /**
+ * Returns the size that an image of dimensions (fullWidth, fullHeight) will occupy
+ * if resized to fit inside a bounding box of size (thumbWidth, thumbHeight), keeping
+ * its aspect ratio. An image which already fits is not scaled up.
+ *
+ * Returns null if either dimension of the image is unknown.
+ */
+export function thumbSize(
+    fullWidth: number,
+    fullHeight: number,
+    thumbWidth: number,
+    thumbHeight: number,
+): { width: number; height: number };
+export function thumbSize(
+    fullWidth: number | undefined,
+    fullHeight: number | undefined,
+    thumbWidth: number,
+    thumbHeight: number,
+): { width: number; height: number } | null;
+export function thumbSize(
+    fullWidth: number | undefined,
+    fullHeight: number | undefined,
+    thumbWidth: number,
+    thumbHeight: number,
+): { width: number; height: number } | null {
+    if (!fullWidth || !fullHeight) {
+        // Cannot calculate the size for an image missing w/h in its metadata. We can't even
+        // log this because it's spammy
+        return null;
+    }
+    const scale = Math.min(1, thumbWidth / fullWidth, thumbHeight / fullHeight);
+    return { width: Math.floor(fullWidth * scale), height: Math.floor(fullHeight * scale) };
+}
+
+/**
  * Returns the actual height that an image of dimensions (fullWidth, fullHeight)
  * will occupy if resized to fit inside a thumbnail bounding box of size
  * (thumbWidth, thumbHeight).
@@ -33,22 +67,5 @@ export function thumbHeight(
     thumbWidth: number,
     thumbHeight: number,
 ): number | null {
-    if (!fullWidth || !fullHeight) {
-        // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
-        // log this because it's spammy
-        return null;
-    }
-    if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
-        // no scaling needs to be applied
-        return fullHeight;
-    }
-    const widthMulti = thumbWidth / fullWidth;
-    const heightMulti = thumbHeight / fullHeight;
-    if (widthMulti < heightMulti) {
-        // width is the dominant dimension so scaling will be fixed on that
-        return Math.floor(widthMulti * fullHeight);
-    } else {
-        // height is the dominant dimension so scaling will be fixed on that
-        return Math.floor(heightMulti * fullHeight);
-    }
+    return thumbSize(fullWidth, fullHeight, thumbWidth, thumbHeight)?.height ?? null;
 }
