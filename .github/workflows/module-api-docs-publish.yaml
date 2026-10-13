@@ -1,0 +1,33 @@
+name: Publish module API docs
+on:
+    workflow_dispatch: {}
+    push:
+        branches:
+            - "develop"
+        paths:
+            - "packages/module-api/**/*"
+
+permissions: {}
+
+jobs:
+    build:
+        name: Build module API docs
+        uses: ./.github/workflows/module-api-docs-build.yml
+
+    publish:
+        name: Publish module API docs
+        runs-on: ubuntu-latest
+        needs: build
+        environment: ModuleApi
+        steps:
+            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: module-api-docs
+                  path: typedoc
+
+            - name: 🚀 Deploy to Cloudflare Pages
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4
+              with:
+                  apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+                  accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+                  command: pages deploy typedoc --project-name=element-web-module-api
