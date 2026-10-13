@@ -134,6 +134,9 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
             },
+            // maplibre-gl v6 locates its worker via `import.meta.url`, which webpack inlines as a file:// path that
+            // maplibre rejects, leaving maps blank. Build the worker as its own entry instead; see utils/location/map.ts.
+            "maplibre.worker": "maplibre-gl/dist/maplibre-gl-worker.mjs",
             ...cssThemes,
         },
 
@@ -617,7 +620,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "usercontent-pdf", "jitsi", "serviceworker"],
+                excludeChunks: [
+                    "mobileguide",
+                    "usercontent",
+                    "usercontent-pdf",
+                    "jitsi",
+                    "serviceworker",
+                    "maplibre.worker",
+                ],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
