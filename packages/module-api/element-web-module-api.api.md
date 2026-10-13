@@ -167,6 +167,7 @@ export interface CustomComponentsApi {
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
+    registerSenderProfileBadge(renderer: CustomSenderProfileBadgeRenderFunction): void;
 }
 
 // @alpha
@@ -241,6 +242,15 @@ export type CustomRoomPreviewBarComponentProps = {
 export type CustomRoomPreviewBarRenderFunction = (
 props: CustomRoomPreviewBarComponentProps,
 originalComponent: (props: CustomRoomPreviewBarComponentProps) => JSX.Element) => JSX.Element;
+
+// @alpha
+export type CustomSenderProfileBadgeComponentProps = {
+    userId: string;
+};
+
+// @alpha
+export type CustomSenderProfileBadgeRenderFunction = (
+props: CustomSenderProfileBadgeComponentProps) => JSX.Element | null;
 
 // @public
 export interface DialogApiExtension {

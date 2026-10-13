@@ -20,7 +20,7 @@ import {
 } from "./DisambiguatedProfileView";
 import { MockViewModel } from "../../../../../core/viewmodel/MockViewModel";
 
-const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample } = composeStories(stories);
+const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample, WithBadge } = composeStories(stories);
 
 describe("DisambiguatedProfileView", () => {
     afterEach(() => {
@@ -84,6 +84,13 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         expect(screen.getByText("Eve")).toBeInTheDocument();
+    });
+
+    it("should display badges after the user identifier", () => {
+        render(<WithBadge />);
+
+        const badge = screen.getByText("Guest");
+        expect(getProfileContainer("Jim")).toContainElement(badge);
     });
 
     it("should display the MXID when provided", () => {

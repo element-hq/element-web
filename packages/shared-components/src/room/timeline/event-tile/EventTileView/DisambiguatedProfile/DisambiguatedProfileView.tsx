@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler, type ReactNode } from "react";
 import classNames from "classnames";
 import { Text, Tooltip } from "@vector-im/compound-web";
 
@@ -48,6 +48,11 @@ export interface DisambiguatedProfileViewSnapshot {
         emoji: string;
         text: string;
     };
+
+    /**
+     * Badges shown after the display name and user identifier, such as ones added by modules.
+     */
+    badges?: ReactNode[];
 }
 
 /**
@@ -83,6 +88,7 @@ interface DisambiguatedProfileViewProps {
  * A component to display a user's profile with optional disambiguation.
  * Shows the display name and optionally the MXID when disambiguation is needed
  * (e.g., when multiple users have the same display name).
+ * Badges from the snapshot, if any, are shown at the end.
  *
  * @example
  * ```tsx
@@ -91,7 +97,8 @@ interface DisambiguatedProfileViewProps {
  */
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const eventPresentationAttributes = useEventPresentationAttributes();
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus } = useViewModel(vm);
+    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus, badges } =
+        useViewModel(vm);
 
     const userStatusEmoji = userStatus && userStatus.emoji;
 
@@ -140,6 +147,7 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                     {displayIdentifier}
                 </span>
             )}
+            {badges && badges.length > 0 && <div className={styles.badges}>{badges}</div>}
         </div>
     );
 }

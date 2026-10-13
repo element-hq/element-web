@@ -24,6 +24,7 @@ const makeApi = (
         },
         i18n: {
             register: vi.fn(),
+            translate: vi.fn((key: string) => key),
         },
         profile: {
             value: profile,
@@ -31,6 +32,7 @@ const makeApi = (
         customComponents: {
             registerRoomPreviewBar: vi.fn(),
             registerLoginComponent: vi.fn(),
+            registerSenderProfileBadge: vi.fn(),
         },
         customisations: {
             registerShouldShowComponent: vi.fn(),
@@ -91,6 +93,17 @@ describe("RestrictedGuestsModule", () => {
             await module.load();
 
             expect(appConfig.sso_redirect_options.immediate).toBe(false);
+        });
+    });
+
+    describe("user profile badge", () => {
+        it("should show a guest badge only for users with the guest prefix", async () => {
+            const api = makeApi(VALID_CONFIG);
+            await new RestrictedGuestsModule(api).load();
+
+            const renderBadge = vi.mocked(api.customComponents.registerSenderProfileBadge).mock.calls[0][0];
+            expect(renderBadge({ userId: "@guest-jim:server" })?.props.label).toBe("guest_badge");
+            expect(renderBadge({ userId: "@alice:server" })).toBeNull();
         });
     });
 
