@@ -132,14 +132,13 @@ export class CreationGrouper extends BaseGrouper {
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1].event;
 
-        let summaryText: string;
-        const roomId = ev.getRoomId();
-        const creator = ev.sender?.name ?? ev.getSender();
-        if (roomId && DMRoomMap.shared().getUserIdForRoomId(roomId)) {
-            summaryText = _t("timeline|creation_summary_dm", { creator });
-        } else {
-            summaryText = _t("timeline|creation_summary_room", { creator });
-        }
+        const getSummaryText = (): string => {
+            const roomId = ev.getRoomId();
+            const creator = ev.sender?.name ?? ev.getSender();
+            return roomId && DMRoomMap.shared().getUserIdForRoomId(roomId)
+                ? _t("timeline|creation_summary_dm", { creator })
+                : _t("timeline|creation_summary_room", { creator });
+        };
 
         ret.push(<NewRoomIntro key="newroomintro" />);
 
@@ -149,7 +148,7 @@ export class CreationGrouper extends BaseGrouper {
                 events={this.events.map((e) => e.event)}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={ev.sender ? [ev.sender] : undefined}
-                summaryText={summaryText}
+                getSummaryText={getSummaryText}
                 layout={this.panel.props.layout}
             >
                 {eventTiles}

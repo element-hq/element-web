@@ -26,8 +26,8 @@ interface IProps {
     "startExpanded"?: boolean;
     // The list of room members for which to show avatars next to the summary
     "summaryMembers"?: RoomMember[];
-    // The text to show as the summary of this event list
-    "summaryText"?: ReactNode;
+    // Compute the summary only when the list is collapsed.
+    "getSummaryText": () => ReactNode;
     // An array of EventTiles to render when expanded
     "children": ReactNode[] | null;
     // Called when the event list expansion is toggled
@@ -44,7 +44,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     onToggle,
     startExpanded = false,
     summaryMembers,
-    summaryText,
+    getSummaryText,
     layout = Layout.Group,
     "data-testid": testId,
 }) => {
@@ -105,7 +105,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
                     <span className="mx_GenericEventListSummary_avatars" onClick={toggleExpanded}>
                         {avatars}
                     </span>
-                    <span className="mx_TextualEvent mx_GenericEventListSummary_summary">{summaryText}</span>
+                    <span className="mx_TextualEvent mx_GenericEventListSummary_summary">{getSummaryText()}</span>
                 </div>
             </div>
         );
