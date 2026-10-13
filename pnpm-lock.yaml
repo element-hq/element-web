@@ -172,8 +172,8 @@ catalogs:
       specifier: 1.5.0
       version: 1.5.0
     '@playwright/test':
-      specifier: 1.63.0
-      version: 1.63.0
+      specifier: 1.64.0
+      version: 1.64.0
     '@typescript/native':
       specifier: npm:typescript@7.0.2
       version: 7.0.2
@@ -205,8 +205,8 @@ catalogs:
       specifier: 3.6.0
       version: 3.6.0
     playwright-core:
-      specifier: 1.63.0
-      version: 1.63.0
+      specifier: 1.64.0
+      version: 1.64.0
     react:
       specifier: ^19.0.0
       version: 19.3.0
@@ -298,7 +298,7 @@ importers:
         version: 7.3.0(@nx/devkit@23.3.0)(@nx/js@23.3.0)(dotenv@18.0.6)(nx@23.2.1)(tslib@2.8.1)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       '@types/node':
         specifier: 25.9.3
         version: 25.9.3
@@ -316,7 +316,7 @@ importers:
         version: 3.30.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/441fe5accd0844fb9d8658dc4d2b1a37c1445e9a#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/b158c4fcd7d299a7b755442ba00d994588c37996#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.6.1(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
@@ -413,7 +413,7 @@ importers:
         version: 2.1.3
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       '@types/auto-launch':
         specifier: ^5.0.1
         version: 5.0.5(patch_hash=b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538)
@@ -486,7 +486,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -618,7 +618,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -748,7 +748,7 @@ importers:
         version: 1.7.1
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       '@principalstudio/html-webpack-inject-preload':
         specifier: ^1.2.7
         version: 1.2.7(html-webpack-plugin@5.6.8)(webpack@5.111.1)
@@ -847,7 +847,7 @@ importers:
         version: 5.0.2(vite@8.3.1)(vitest@5.0.2)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+        version: 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
       '@vitest/spy':
         specifier: 'catalog:'
         version: 5.0.2
@@ -904,7 +904,7 @@ importers:
         version: 0.72.0
       playwright-core:
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       postcss:
         specifier: 8.5.28
         version: 8.5.28
@@ -1202,7 +1202,7 @@ importers:
         version: 6.1.1(vite@8.3.1)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+        version: 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
       react:
         specifier: 'catalog:'
         version: 19.3.0
@@ -1278,10 +1278,10 @@ importers:
     dependencies:
       '@axe-core/playwright':
         specifier: ^4.10.1
-        version: 4.13.0(playwright-core@1.63.0)
+        version: 4.13.0(playwright-core@1.64.0)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       '@testcontainers/postgresql':
         specifier: ^12.0.0
         version: 12.2.0(supports-color@10.2.2)
@@ -1296,7 +1296,7 @@ importers:
         version: 2.1.0
       playwright-core:
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       strip-ansi:
         specifier: ^7.1.0
         version: 7.2.0
@@ -1415,7 +1415,7 @@ importers:
         version: 7.59.4(@types/node@25.9.3)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.63.0
+        version: 1.64.0
       '@storybook/addon-a11y':
         specifier: 10.5.5
         version: 10.5.5(storybook@10.5.8)
@@ -1469,7 +1469,7 @@ importers:
         version: 6.1.1(vite@8.3.1)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+        version: 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
       expect:
         specifier: ^30.5.1
         version: 30.5.2
@@ -4462,8 +4462,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@playwright/test@1.63.0':
-    resolution: {integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==}
+  '@playwright/test@1.64.0':
+    resolution: {integrity: sha512-oTN9FNYuN6bqQMwiho6jJKLCG2/QOYCixGXuCjRmzOq23eODeukuY2XiAVoVpAECbuezMt1MHQjAiQxK8F+Y+g==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -8273,8 +8273,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/441fe5accd0844fb9d8658dc4d2b1a37c1445e9a#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-ra2It+p7i4huetwBqTAJKDd7+/wnxY/0RbbL5LrP4YontExZkf3LwnadIPBetYxhAaOA7CWT/4Ptde7AJCKXzQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/441fe5accd0844fb9d8658dc4d2b1a37c1445e9a}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b158c4fcd7d299a7b755442ba00d994588c37996#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-1db3yjHIP7ZLjiS08rMcFtQcEEYbNG5am7kUFcP3USyA393rFI6zU6Y5TP0c+rH1GTYZJQWQq868x1V8lpJeog==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/b158c4fcd7d299a7b755442ba00d994588c37996}
     version: 0.0.0
 
   eslint-plugin-storybook@10.6.1:
@@ -9615,9 +9615,9 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40:
-    resolution: {gitHosted: true, integrity: sha512-wqKr1gqh61NBVnppXVabuWoJlhe4iI7YKgvxE884Gf7yYh7bf2JEblup3uVzokFe90s+9sDHVSWPTBouDO06YA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40}
-    version: 43.0.0
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792:
+    resolution: {gitHosted: true, integrity: sha512-K7JBFoVjdgmeG9T7jarcUPOkMMG3KP+rl3RixJNDIJCsgIbkCOELplZRccvbkzpYDp3r7TCkbGddXsoLEQ5x1w==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792}
+    version: 44.0.0
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -10320,13 +10320,13 @@ packages:
     resolution: {integrity: sha512-Oo/NZcSWccq8KyoG7gLE9fnltgHns+pNCjCAp/WmjsUySi+sX7y4z4Xqu4fVb42CDHzRPl33fjzT15V1wvcyhA==}
     engines: {node: '>=16.0.0'}
 
-  playwright-core@1.63.0:
-    resolution: {integrity: sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==}
+  playwright-core@1.64.0:
+    resolution: {integrity: sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==}
     engines: {node: '>=20'}
     hasBin: true
 
-  playwright@1.63.0:
-    resolution: {integrity: sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==}
+  playwright@1.64.0:
+    resolution: {integrity: sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -13013,10 +13013,10 @@ snapshots:
       is-potential-custom-element-name: 1.0.1
       lru-cache: 11.5.3
 
-  '@axe-core/playwright@4.13.0(playwright-core@1.63.0)':
+  '@axe-core/playwright@4.13.0(playwright-core@1.64.0)':
     dependencies:
       axe-core: 4.13.0
-      playwright-core: 1.63.0
+      playwright-core: 1.64.0
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -14822,11 +14822,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -16249,9 +16249,9 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@playwright/test@1.63.0':
+  '@playwright/test@1.64.0':
     dependencies:
-      playwright: 1.63.0
+      playwright: 1.64.0
 
   '@polka/url@1.0.0-next.29': {}
 
@@ -17110,7 +17110,7 @@ snapshots:
       storybook: 10.5.8(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
     optionalDependencies:
       '@vitest/browser': 4.1.11(vite@8.3.1)(vitest@5.0.2)
-      '@vitest/browser-playwright': 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+      '@vitest/browser-playwright': 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
       vitest: 5.0.2(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.2)(@vitest/coverage-v8@5.0.2)(@vitest/ui@5.0.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.1)
     transitivePeerDependencies:
       - react
@@ -17977,11 +17977,11 @@ snapshots:
       vite: 6.4.4(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.33.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vue: 3.5.43(@typescript/typescript6@6.0.2)
 
-  '@vitest/browser-playwright@5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)':
+  '@vitest/browser-playwright@5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)':
     dependencies:
       '@vitest/browser': 5.0.2(vite@8.3.1)(vitest@5.0.2)
       '@vitest/mocker': 5.0.2(vite@8.3.1)
-      playwright: 1.63.0
+      playwright: 1.64.0
       tinyrainbow: 3.2.0
       vitest: 5.0.2(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.2)(@vitest/coverage-v8@5.0.2)(@vitest/ui@5.0.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.1)
     transitivePeerDependencies:
@@ -20323,7 +20323,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/441fe5accd0844fb9d8658dc4d2b1a37c1445e9a#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/b158c4fcd7d299a7b755442ba00d994588c37996#path:/eslint: {}
 
   eslint-plugin-storybook@10.6.1(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
@@ -21755,7 +21755,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d633e7c1954a6b92597fbc3f8a95f183789a8d40:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7a46ada7f0cd71df8a890caafb44c791ac135792:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -22685,11 +22685,11 @@ snapshots:
       pvutils: 1.2.0
       tslib: 2.8.1
 
-  playwright-core@1.63.0: {}
+  playwright-core@1.64.0: {}
 
-  playwright@1.63.0:
+  playwright@1.64.0:
     dependencies:
-      playwright-core: 1.63.0
+      playwright-core: 1.64.0
 
   plist@3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7):
     dependencies:
@@ -25112,7 +25112,7 @@ snapshots:
       type-plus: 8.0.0-beta.12(@typescript/typescript6@6.0.2)
       vitest: 5.0.2(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.2)(@vitest/coverage-v8@5.0.2)(@vitest/ui@5.0.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.1)
     optionalDependencies:
-      '@vitest/browser-playwright': 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+      '@vitest/browser-playwright': 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - typescript
@@ -25136,7 +25136,7 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@types/node': 25.9.3
-      '@vitest/browser-playwright': 5.0.2(playwright@1.63.0)(vite@8.3.1)(vitest@5.0.2)
+      '@vitest/browser-playwright': 5.0.2(playwright@1.64.0)(vite@8.3.1)(vitest@5.0.2)
       '@vitest/coverage-v8': 5.0.2(@vitest/browser@5.0.2)(vitest@5.0.2)
       '@vitest/ui': 5.0.2(vitest@5.0.2)
       happy-dom: 20.14.5
