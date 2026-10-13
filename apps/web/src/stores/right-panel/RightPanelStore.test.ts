@@ -149,7 +149,7 @@ describe("RightPanelStore", () => {
         describe("DocumentViewer", () => {
             const documentCard = {
                 phase: RightPanelPhases.DocumentViewer,
-                state: { documentViewerEvent: { getId: () => "$document" } as unknown as MatrixEvent },
+                state: { documentViewer: { event: { getId: () => "$document" } as unknown as MatrixEvent } },
             };
 
             /** The viewers sit behind a lab, so the card is only valid while that is on. */
@@ -176,7 +176,7 @@ describe("RightPanelStore", () => {
                 defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event }, true);
 
                 expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.DocumentViewer);
-                expect(store.currentCardForRoom("!1:example.org").state?.documentViewerEvent).toBe(event);
+                expect(store.currentCardForRoom("!1:example.org").state?.documentViewer).toEqual({ event });
                 expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             });
 
@@ -188,22 +188,21 @@ describe("RightPanelStore", () => {
                 defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, file }, true);
 
                 expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.DocumentViewer);
-                expect(store.currentCardForRoom("!1:example.org").state?.documentViewerFile).toBe(file);
+                expect(store.currentCardForRoom("!1:example.org").state?.documentViewer).toEqual({ file });
                 expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             });
 
             it("does not restore a file card, since the file cannot be persisted", () => {
                 const fileCard = {
                     phase: RightPanelPhases.DocumentViewer,
-                    state: { documentViewerFile: { mimetype: "application/pdf", blob: vi.fn() } },
+                    state: { documentViewer: { file: { mimetype: "application/pdf", blob: vi.fn() } } },
                 };
                 const room = { findEventById: vi.fn(), getMember: vi.fn() } as unknown as Room;
 
                 const restored = convertToStatePanel(convertToStorePanel({ isOpen: true, history: [fileCard] }), room);
 
                 // With neither an event nor a file, the store drops the card on load.
-                expect(restored?.history[0].state?.documentViewerFile).toBeUndefined();
-                expect(restored?.history[0].state?.documentViewerEvent).toBeUndefined();
+                expect(restored?.history[0].state?.documentViewer).toBeUndefined();
             });
 
             it("keeps a card with an event to display", async () => {

@@ -188,7 +188,7 @@ describe("RightPanel", () => {
         await rpsUpdated;
 
         RightPanelStore.instance.setCard(
-            { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: pdfEvent } },
+            { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event: pdfEvent } } },
             true,
             "r1",
         );
@@ -233,7 +233,7 @@ describe("RightPanel", () => {
         await rpsUpdated;
 
         RightPanelStore.instance.setCard(
-            { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: markdownEvent } },
+            { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event: markdownEvent } } },
             true,
             "r1",
         );
@@ -266,7 +266,7 @@ describe("RightPanel", () => {
         RightPanelStore.instance.setCard(
             {
                 phase: RightPanelPhases.DocumentViewer,
-                state: { documentViewerFile: { mimetype: "application/pdf", name: "report.pdf", blob: vi.fn() } },
+                state: { documentViewer: { file: { mimetype: "application/pdf", name: "report.pdf", blob: vi.fn() } } },
             },
             true,
             "r1",
