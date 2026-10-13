@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -30,6 +30,8 @@ import { getMockClientWithEventEmitter, mockPlatformPeg } from "test-utils";
 
 import {
     DeviceListener,
+    CurrentDeviceEvents,
+    type DeviceState,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP,
     ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
     RECOVERY_ACCOUNT_DATA_KEY,
@@ -82,9 +84,11 @@ describe("DeviceListener", () => {
     let mockClient: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
 
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
+    });
 
+    beforeEach(() => {
         // don't litter the console with logs
         vi.spyOn(console, "debug").mockImplementation(() => {});
         vi.spyOn(console, "info").mockImplementation(() => {});
@@ -373,6 +377,41 @@ describe("DeviceListener", () => {
             expect(console.error).toHaveBeenCalledTimes(1);
         });
 
+        it("does not let an older recheck's result overwrite a newer one", async () => {
+            // Given the device is not verified, and the recheck that finds that out is stuck waiting
+            // for our own device keys, which is its last step before it sets the state.
+            mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+            mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({ trustCrossSignedDevices: true, crossSigningVerified: false }),
+            );
+            const deviceInfo = Promise.withResolvers<Map<string, Map<string, Device>>>();
+            mockCrypto!.getUserDeviceInfo.mockReturnValue(deviceInfo.promise);
+
+            const instance = await createAndStart();
+            const states: DeviceState[] = [];
+            instance.currentDeviceChangedEmitter.on(CurrentDeviceEvents.DeviceStateChanged, (state) =>
+                states.push(state),
+            );
+
+            // When the device becomes verified while that recheck is still running, and something
+            // asks for another recheck
+            mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({ trustCrossSignedDevices: true, crossSigningVerified: true }),
+            );
+            mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+            mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+            instance.recheck();
+            await flushPromises();
+
+            // ... and then the older recheck finishes, with its out-of-date result
+            deviceInfo.resolve(new Map());
+            await flushPromises();
+
+            // Then we end up with the newer recheck's result, not the older one's
+            expect(states).toEqual(["verify_this_session", "ok"]);
+            expect(instance.getDeviceState()).toBe("ok");
+        });
+
         describe("set up encryption", () => {
             const rooms = [{ roomId: "!room1" }, { roomId: "!room2" }] as unknown as Room[];
 
@@ -521,14 +560,15 @@ describe("DeviceListener", () => {
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
-                it("does not show an out-of-sync toast when the backup key is missing locally but backup is purposely disabled", async () => {
+                it("shows an out-of-sync toast when the backup key is missing locally, even if backup is purposely disabled", async () => {
                     mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+                    mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
                     mockCrypto!.getSessionBackupPrivateKey.mockResolvedValue(null);
                     mockKeyBackupFromServer(mockClient, false);
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
                 it("hides the out-of-sync toast after we receive the missing secrets", async () => {
@@ -1402,31 +1442,6 @@ describe("DeviceListener", () => {
         });
 
         describe("needs cross-signing reset", () => {
-            it("should not need resetting if cross-signing keys are present locally or in 4S, and user has 4S key", async () => {
-                const deviceListener = await createAndStart();
-                mockCrypto.getCrossSigningStatus.mockResolvedValue({
-                    publicKeysOnDevice: true,
-                    privateKeysInSecretStorage: false,
-                    privateKeysCachedLocally: {
-                        masterKey: true,
-                        selfSigningKey: true,
-                        userSigningKey: true,
-                    },
-                });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
-
-                mockCrypto.getCrossSigningStatus.mockResolvedValue({
-                    publicKeysOnDevice: true,
-                    privateKeysInSecretStorage: true,
-                    privateKeysCachedLocally: {
-                        masterKey: false,
-                        selfSigningKey: false,
-                        userSigningKey: false,
-                    },
-                });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
-            });
-
             it("should not need resetting if cross-signing keys are present locally and user forgot 4S key", async () => {
                 const deviceListener = await createAndStart();
                 mockCrypto.getCrossSigningStatus.mockResolvedValue({
@@ -1438,7 +1453,7 @@ describe("DeviceListener", () => {
                         userSigningKey: true,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(false);
             });
 
             it("should need resetting if cross-signing keys are missing locally and user forgot 4S key", async () => {
@@ -1452,7 +1467,7 @@ describe("DeviceListener", () => {
                         userSigningKey: false,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(true);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(true);
             });
 
             it("should need resetting if cross-signing keys are missing locally and in 4S key", async () => {
@@ -1466,7 +1481,7 @@ describe("DeviceListener", () => {
                         userSigningKey: false,
                     },
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(true);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset()).toBe(true);
             });
         });
     });

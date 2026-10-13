@@ -262,6 +262,12 @@ export default class EditorModel {
     }
 
     private onAutoComplete = ({ replaceParts, close, range }: ICallback): void => {
+        // Confirming a completion closes the autocomplete twice: once as part of the completion and
+        // once more by the wrapper afterwards. Reporting the second one would have the history
+        // manager record a second, identical state, costing the user an extra undo to reverse one
+        // completion.
+        if (!replaceParts && close && !this._autoComplete) return;
+
         let pos: DocumentPosition | undefined;
         if (replaceParts) {
             const autoCompletePartIdx = this.autoCompletePartIdx || 0;

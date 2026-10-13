@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export default class ExampleModule {
-    static moduleApiVersion = "^1.0.0";
+    static moduleApiVersion = "^2.0.0";
     constructor(api) {
         this.api = api;
 
@@ -19,6 +19,7 @@ export default class ExampleModule {
     }
     async load() {
         const brand = this.api.config.get("brand");
+        // oxlint-disable-next-line no-alert
         alert(this.api.i18n.translate("key", { brand }));
     }
 }

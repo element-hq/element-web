@@ -35,7 +35,6 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
         url.pathname = "/room/";
         // Set params for the sharable url
         url.searchParams.set("roomId", room.roomId);
-        if (room.hasEncryptionStateEvent()) url.searchParams.set("perParticipantE2EE", "true");
         for (const server of calculateRoomVia(room)) {
             url.searchParams.set("viaServers", server);
         }
@@ -67,7 +66,7 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
             showLinkModal();
         } else {
             // the room needs to be set to public or knock to generate a link
-            Modal.createDialog(JoinRuleDialog, {
+            void Modal.createDialog(JoinRuleDialog, {
                 room,
                 // If the user cannot invite the Knocking is not given as an option.
                 canInvite,

@@ -77,12 +77,12 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
 
             // The room is encrypted now.
             cli.removeListener(RoomStateEvent.Events, onRoomStateEvents);
-            updateE2EStatus();
+            void updateE2EStatus();
         };
 
         const onUserTrustStatusChanged = (userId: string, trustStatus: UserVerificationStatus): void => {
             if (userId !== props.member.userId) return;
-            updateE2EStatus();
+            void updateE2EStatus();
         };
 
         const { roomId } = props.member;
@@ -90,7 +90,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
             const isRoomEncrypted = cli.isRoomEncrypted(roomId);
             if (isRoomEncrypted) {
                 cli.on(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
-                updateE2EStatus();
+                void updateE2EStatus();
             } else {
                 // Listen for room to become encrypted
                 cli.on(RoomStateEvent.Events, onRoomStateEvents);

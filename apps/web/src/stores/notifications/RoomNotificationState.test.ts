@@ -95,6 +95,22 @@ describe("RoomNotificationState", () => {
         expect(listener).toHaveBeenCalled();
     });
 
+    it("does not update when a recomputation leaves the state unchanged", () => {
+        const roomNotifState = new RoomNotificationState(room, true);
+        const testEvent = {
+            getRoomId: () => room.roomId,
+        } as unknown as MatrixEvent;
+        room.getUnreadNotificationCount = vi.fn().mockReturnValue(1);
+        client.emit(MatrixEventEvent.Decrypted, testEvent);
+
+        // Only start listening once the count is already 1, so the second decryption recomputes
+        // exactly the state that is already published
+        const listener = vi.fn();
+        roomNotifState.addListener(NotificationStateEvents.Update, listener);
+        client.emit(MatrixEventEvent.Decrypted, testEvent);
+        expect(listener).not.toHaveBeenCalled();
+    });
+
     it("emits an Update event on marked unread room account data", () => {
         const roomNotifState = new RoomNotificationState(room, true);
         const listener = vi.fn();

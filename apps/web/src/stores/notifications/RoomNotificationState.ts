@@ -18,6 +18,7 @@ import { NotificationState } from "./NotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { NotificationLevel } from "./NotificationLevel";
+import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
     public constructor(
@@ -96,6 +97,16 @@ export class RoomNotificationState extends NotificationState implements IDestroy
      */
     public get isNotification(): boolean {
         return this.level === NotificationLevel.Notification;
+    }
+
+    /**
+     * True while the room is filed as low priority and has nothing to report beyond activity.
+     * Badge aggregates (the space panel, the Home button, the tab badge) leave such rooms out, so
+     * that a room the user has deliberately deprioritised cannot light up the wider app chrome:
+     * https://github.com/vector-im/element-web/issues/16836.
+     */
+    public get isLowPriorityActivity(): boolean {
+        return this.level === NotificationLevel.Activity && !!this.room.tags[DefaultTagID.LowPriority];
     }
 
     private handleLocalEchoUpdated = (): void => {

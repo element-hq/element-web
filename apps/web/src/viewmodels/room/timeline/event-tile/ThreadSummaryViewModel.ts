@@ -11,6 +11,7 @@ import { type MouseEvent } from "react";
 import {
     type MatrixClient,
     type MatrixEvent,
+    MatrixEventEvent,
     type NotificationCount,
     RoomEvent,
     type Room,
@@ -38,7 +39,6 @@ import PosthogTrackers from "../../../../PosthogTrackers";
 import { determineUnreadState } from "../../../../RoomNotifs";
 import { notificationLevelToIndicator } from "../../../../utils/notifications";
 import { mediaFromMxc } from "../../../../customisations/Media";
-import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { keepIfSame } from "../../../../utils/keepIfSame";
 import {
@@ -394,10 +394,7 @@ export class ThreadMessagePreviewViewModel
                     ) ?? undefined;
             }
 
-            title =
-                UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
-                    roomId: member.roomId,
-                }) ?? fallbackUserId;
+            title = member.userId ?? fallbackUserId;
         }
 
         return {
@@ -527,6 +524,7 @@ export class ThreadSummaryViewModel
         room.on(RoomEvent.Redaction, this.onNotificationChanged);
         room.on(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
         room.on(RoomEvent.MyMembership, this.onNotificationChanged);
+        room.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.listenerCleanups.push(() => {
             room.off(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
             room.off(RoomEvent.Receipt, this.onNotificationChanged);
@@ -534,6 +532,7 @@ export class ThreadSummaryViewModel
             room.off(RoomEvent.Redaction, this.onNotificationChanged);
             room.off(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
             room.off(RoomEvent.MyMembership, this.onNotificationChanged);
+            room.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         });
     }
 
@@ -557,6 +556,16 @@ export class ThreadSummaryViewModel
     };
 
     private readonly onNotificationChanged = (): void => {
+        this.updateNotificationSnapshot();
+    };
+
+    /**
+     * An event which has not been decrypted yet has no renderer, so it does not count towards the
+     * unread state. The room key often only turns up after the event itself, so re-evaluate the
+     * unread state once an event of this room is decrypted.
+     */
+    private readonly onEventDecrypted = (event: MatrixEvent): void => {
+        if (event.getRoomId() !== this.props.thread.room.roomId) return;
         this.updateNotificationSnapshot();
     };
 

@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach, afterEach, type Mocked } from "vitest";
 
 import React from "react";
-import { findByText, fireEvent, render, screen } from "test-utils-rtl";
+import { findByText, fireEvent, render, screen, within } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -443,6 +443,81 @@ describe("InviteDialog", () => {
         });
     });
 
+    describe("when the homeserver refuses an invite", () => {
+        const daveId = "@dave:example.org";
+        const erinId = "@erin:example.org";
+        const refused = "Not accepting invites:";
+        const alreadyInvited = "Already invited to the room:";
+
+        const report = () => within(document.querySelector<HTMLElement>(".mx_InviteDialog_multiInviterError")!);
+        const groups = () =>
+            Array.from(document.querySelectorAll<HTMLElement>(".mx_InviteDialog_multiInviterError_group"));
+
+        beforeEach(() => {
+            room.updateMyMembership(KnownMembership.Join);
+            mockClient.getProfileInfo.mockResolvedValue({});
+        });
+
+        it("should give way to the report of what was not sent", async () => {
+            mockClient.invite.mockRejectedValue(
+                new MatrixError({ errcode: "M_FORBIDDEN", error: "@bob:example.org is not accepting invites" }),
+            );
+            const onFinished = vi.fn();
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={onFinished} />);
+            await enterIntoSearchField(bobId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await expect(screen.findByText("Some invites were not sent")).resolves.toBeVisible();
+            expect(report().getByText(refused)).toBeVisible();
+            expect(onFinished).toHaveBeenCalledWith(true);
+        });
+
+        it("should state a shared reason once, not once per person", async () => {
+            mockClient.invite.mockRejectedValue(
+                new MatrixError({ errcode: "M_FORBIDDEN", error: "refused by policy" }),
+            );
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
+            await enterIntoSearchField(daveId);
+            await enterIntoSearchField(erinId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await expect(screen.findByText("Some invites were not sent")).resolves.toBeVisible();
+            expect(report().getAllByText(daveId).length).toBeGreaterThan(0);
+            expect(report().getAllByText(erinId).length).toBeGreaterThan(0);
+            expect(report().getAllByText(refused)).toHaveLength(1);
+        });
+
+        it("should put each reason above only the people it applies to", async () => {
+            mockClient.invite.mockImplementation((_roomId: string, userId: string) =>
+                Promise.reject(
+                    new MatrixError(
+                        userId === erinId
+                            ? { errcode: "IO.ELEMENT.ALREADY_INVITED", error: "already invited" }
+                            : { errcode: "M_FORBIDDEN", error: "refused by policy" },
+                    ),
+                ),
+            );
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={vi.fn()} />);
+            await enterIntoSearchField(daveId);
+            await enterIntoSearchField(erinId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await expect(screen.findByText("Some invites were not sent")).resolves.toBeVisible();
+            expect(report().getAllByText(refused)).toHaveLength(1);
+            expect(report().getAllByText(alreadyInvited)).toHaveLength(1);
+
+            const [first, second] = groups();
+            expect(within(first).getAllByText(daveId).length).toBeGreaterThan(0);
+            expect(within(first).queryByText(erinId)).toBeNull();
+            expect(first.textContent?.startsWith(refused)).toBe(true);
+            expect(within(second).getAllByText(erinId).length).toBeGreaterThan(0);
+            expect(second.textContent?.startsWith(alreadyInvited)).toBe(true);
+        });
+    });
+
     describe("when inviting a user with an unknown profile", () => {
         beforeEach(async () => {
             vi.mocked(startDmOnFirstMessage).mockClear();
@@ -500,7 +575,7 @@ describe("InviteDialog", () => {
             it("should show a warning when inviting by user id", async () => {
                 await enterIntoSearchField(aliceId);
                 await userEvent.click(screen.getByRole("button", { name: goButtonName }));
-                await screen.findByText("Confirm inviting them", { exact: false });
+                await screen.findByText("You don't have any chats with", { exact: false });
 
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledTimes(1);
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledWith(aliceId);
@@ -509,7 +584,7 @@ describe("InviteDialog", () => {
             it("should show a warning when inviting by email address", async () => {
                 await enterIntoSearchField("aaa@bbb");
                 await userEvent.click(screen.getByRole("button", { name: goButtonName }));
-                await screen.findByText("Confirm inviting them", { exact: false });
+                await screen.findByText("You don't have any chats with", { exact: false });
 
                 // We shouldn't call getUserVerificationStatus on an email address
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).not.toHaveBeenCalled();

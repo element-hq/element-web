@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, type JSHandle, type Page } from "@playwright/test";
+import { expect, test, type JSHandle, type Page } from "@playwright/test";
 import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import type {
@@ -260,7 +260,13 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
     if (discardKeys) {
         await page.getByRole("button", { name: "Remove this device anyway" }).click();
     } else {
-        await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
+        // Plain confirmation if there is another verified device, recovery key reminder if this is the only one.
+        // Scope to the dialog by its heading: the settings dialog behind it has a "Remove this device" button too.
+        await page
+            .getByRole("dialog")
+            .filter({ has: page.getByRole("heading", { name: /remov(e|ing) this device/ }) })
+            .getByRole("button", { name: /^(Remove this device|Continue to remove this device)$/ })
+            .click();
     }
 
     // Wait for the welcome page to load
@@ -312,22 +318,23 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    const encryptionTab = await app.settings.openUserSettings("Encryption");
+    return await test.step("enableKeyBackup", async () => {
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
-    if (!(await keyStorageToggle.isChecked())) {
-        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
-    }
+        const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
+        if (!(await keyStorageToggle.isChecked())) {
+            await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
+        }
 
-    await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
-    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+        await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
 
-    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
-    await encryptionTab.getByRole("button", { name: "Continue" }).click();
-    await encryptionTab.getByRole("textbox").fill(recoveryKey);
-    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
-    await app.settings.closeDialog();
-    return recoveryKey;
+        const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+        await encryptionTab.getByRole("button", { name: "Continue" }).click();
+        await encryptionTab.getByRole("textbox").fill(recoveryKey);
+        await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+        await app.settings.closeDialog();
+        return recoveryKey;
+    });
 }
 
 /**
@@ -469,7 +476,11 @@ export async function sendMessageInCurrentRoom(page: Page, message: string): Pro
  * @param isEncrypted - Whether the room should be encrypted
  */
 export async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
-    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
+    await page
+        .getByRole("navigation", { name: "Room list" })
+        .getByLabel("Room options")
+        .getByRole("button", { name: "New" })
+        .click();
     await page.getByRole("menuitem", { name: "New room" }).click();
 
     const dialog = page.locator(".mx_Dialog");
@@ -554,7 +565,7 @@ export const verifyApp = async (
 
     // Navigate to the DM created by Alice and accept the invite
     const oldRoomId = await bobElementApp.getCurrentRoomIdFromUrl();
-    await bobElementApp.viewRoomByName(aliceDisplayName);
+    await bobElementApp.viewInvitedRoomByName(aliceDisplayName);
     await bobElementApp.page.getByRole("button", { name: "Start chatting" }).click();
 
     // Bob accepts the verification request.

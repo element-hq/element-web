@@ -128,7 +128,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
 
         if (this.props.poll) {
             this.intervalId = window.setInterval(() => {
-                this.authLogic.poll();
+                void this.authLogic.poll();
             }, 2000);
         }
 
@@ -237,7 +237,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
     }
 
     private submitAuthDict = (authData: AuthDict): void => {
-        this.authLogic.submitAuthDict(authData);
+        void this.authLogic.submitAuthDict(authData);
     };
 
     private onPhaseChange = (newPhase: number): void => {

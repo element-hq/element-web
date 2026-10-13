@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Page } from "@playwright/test";
 import { type Visibility } from "matrix-js-sdk/src/matrix";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
@@ -24,7 +24,7 @@ test.describe("Room Header", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test.describe("with feature_notifications enabled", () => {
@@ -109,7 +109,7 @@ test.describe("Room Header", () => {
 
         const createVideoRoom = async (page: Page, app: ElementAppPage) => {
             const roomListHeader = page.getByTestId("room-list-header");
-            await roomListHeader.getByRole("button", { name: "New conversation" }).click();
+            await roomListHeader.getByRole("button", { name: "New" }).click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
 
             await page.getByRole("textbox", { name: "Name" }).type("Test video room");

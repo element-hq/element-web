@@ -40,8 +40,8 @@ function bundleSubject(baseUrl, bundle) {
     const fetcher = new rxjs.BehaviorSubject(Pending.of());
     bundleCache.set(bundle, fetcher);
 
-    fetch(new URL(`bundles/${bundle}/bundle.js.map`, baseUrl).toString()).then((res) => {
-        res.body.cancel(); /* Bail on the download immediately - it could be big! */
+    void fetch(new URL(`bundles/${bundle}/bundle.js.map`, baseUrl).toString()).then((res) => {
+        void res.body.cancel(); /* Bail on the download immediately - it could be big! */
         const status = res.ok;
         if (status) {
             fetcher.next(Success.of());
@@ -100,7 +100,7 @@ function fetchAsSubject(endpoint) {
     const fetcher = new rxjs.BehaviorSubject(Pending.of());
     fetchCache.set(endpoint, fetcher);
 
-    fetch(endpoint).then((res) => {
+    void fetch(endpoint).then((res) => {
         if (!res.ok) {
             fetcher.next(FetchError.of(`Failed to fetch endpoint ${endpoint}: ${res.status} ${res.statusText}`));
             return;

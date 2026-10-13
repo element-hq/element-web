@@ -37,7 +37,7 @@ interface UserIdentityWarningProps {
  * button to acknowledge the change.
  */
 export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }) => {
-    const { currentPrompt, dispatchAction } = useUserIdentityWarningViewModel(room, room.roomId);
+    const { currentPrompt, dispatchAction } = useUserIdentityWarningViewModel(room);
 
     if (!currentPrompt) return null;
 

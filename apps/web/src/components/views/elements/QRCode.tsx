@@ -31,7 +31,7 @@ const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
             return;
         }
         let cancelled = false;
-        toDataURL(data, { ...defaultOptions, ...options }).then((uri) => {
+        void toDataURL(data, { ...defaultOptions, ...options }).then((uri) => {
             if (cancelled) return;
             setUri(uri);
         });

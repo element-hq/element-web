@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type ReactElement, type RefAttributes, type HTMLAttributes } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import CommandProvider from "./CommandProvider";
 import RoomProvider from "./RoomProvider";
@@ -38,6 +39,19 @@ export interface ICompletion {
     // If provided, apply a LINK entity to the completion with the
     // data = { url: href }.
     href?: string;
+    /**
+     * For user completions only: a function that returns the user's status,
+     * or undefined if the feature is disabled, the user has no status, or it
+     * has not been fetched yet.
+     *
+     * This is a function so that the user status is read at the point that the user chooses the
+     * completion, by which point hopefully the user status has been fetched. We probably do not
+     * want to block accepting the completion on the status being fetched as this would be bad
+     * if the network was being flakey, and updating the user status in the pill after it was fetched
+     * would require a significant redesign of the rich text editor. This approach ought to be
+     * good enough in almost all cases.
+     */
+    getUserStatus?: () => UserStatus | undefined;
 }
 
 const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, CommandProvider, SpaceProvider];

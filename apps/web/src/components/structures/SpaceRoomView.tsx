@@ -19,6 +19,7 @@ import {
     UserProfileSolidIcon,
     VideoCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 
 import createRoom, { type IOpts } from "../../createRoom";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
@@ -26,7 +27,6 @@ import { Action } from "../../dispatcher/actions";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import * as Email from "../../email";
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
 import { useMyRoomMembership } from "../../hooks/useRoomMembers";
 import { useFeatureEnabled } from "../../hooks/useSettings";
@@ -486,7 +486,7 @@ const validateEmailRules = withValidation({
     rules: [
         {
             key: "email",
-            test: ({ value }) => !value || Email.looksValid(value),
+            test: ({ value }) => !value || emailLooksValid(value),
             invalid: () => _t("auth|email_field_label_invalid"),
         },
     ],
@@ -530,7 +530,7 @@ const SpaceSetupPrivateInvite: React.FC<{
             if (valid === false) {
                 // true/null are allowed
                 fieldRef.current!.focus();
-                fieldRef.current!.validate({ allowEmpty: true, focused: true });
+                void fieldRef.current!.validate({ allowEmpty: true, focused: true });
                 return;
             }
         }

@@ -22,10 +22,10 @@ import "../../res/css/_index.pcss";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("katex/dist/katex.css");
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("./localstorage-fix");
 
 // Patch a fake window.TouchEvent for re-resizable's unguarded `instanceof TouchEvent`.
@@ -120,7 +120,6 @@ async function start(): Promise<void> {
         loadLanguage,
         loadTheme,
         loadApp,
-        loadModules,
         loadPlugins,
         showError,
         showIncompatibleBrowser,
@@ -174,8 +173,6 @@ async function start(): Promise<void> {
         // await things settling so that any errors we have to render have features like i18n running
         await settled(loadThemePromise, loadLanguagePromise);
 
-        const loadModulesPromise = loadModules();
-        await settled(loadModulesPromise);
         const loadPluginsPromise = loadPlugins();
         await settled(loadPluginsPromise);
 
@@ -223,7 +220,6 @@ async function start(): Promise<void> {
         // assert things started successfully
         // ##################################
         await loadPluginsPromise;
-        await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
 

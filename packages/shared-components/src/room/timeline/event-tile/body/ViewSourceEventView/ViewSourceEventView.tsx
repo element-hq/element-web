@@ -14,6 +14,7 @@ import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import styles from "./ViewSourceEventView.module.css";
 
 export interface ViewSourceEventViewSnapshot {
@@ -68,6 +69,7 @@ export function ViewSourceEventView({
     expandedClassName,
     ref,
 }: Readonly<ViewSourceEventViewProps>): JSX.Element {
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const { expanded, preview, source } = useViewModel(vm);
     const _t = useI18n().translate;
     const toggleLabel = _t("devtools|toggle_event");
@@ -82,7 +84,7 @@ export function ViewSourceEventView({
     );
 
     return (
-        <span className={classes} ref={ref}>
+        <span className={classes} ref={ref} {...eventPresentationAttributes}>
             {expanded ? (
                 <pre className={styles.source}>{source}</pre>
             ) : (

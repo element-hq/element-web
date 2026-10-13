@@ -5,7 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { closeReleaseAnnouncement, createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    createNewInstance,
+    rejectToast,
+} from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -33,7 +37,7 @@ test.describe("History sharing", function () {
             await rejectToast(alicePage, "Notifications");
 
             // Close the release announcement about the new room list sections
-            await closeReleaseAnnouncement(alicePage, "Introducing Sections");
+            await closeReleaseAnnouncementIfExists(alicePage, "Introducing Sections");
 
             // Register a second user, and open it in a second instance of the app
             const bobCredentials = await homeserver.registerUser(`user_${testInfo.testId}_bob`, "password", "Bob");
@@ -58,15 +62,14 @@ test.describe("History sharing", function () {
             await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
             // Bob accepts the invite
-            await bobPage.getByRole("option", { name: "TestRoom" }).click();
-            await bobPage.getByRole("button", { name: "Accept" }).click();
+            await bobElementApp.acceptInvitedRoomByName("TestRoom");
 
             // Bob should now be able to decrypt the event
             await expect(bobPage.getByText("A message from Alice")).toBeVisible();
 
             // Mask message timestamps and exclude RR avatars from the screenshot. Bob sometimes sees Alice's RR on the
             // previous event, which is surprising but not what we're testing here.
-            const mask = [bobPage.locator(".mx_MessageTimestamp")];
+            const mask = [bobPage.getByTestId("event-tile-slot-timestamp")];
             await expect(bobPage.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "shared-history-invite-accepted.png",
                 {
@@ -123,8 +126,7 @@ test.describe("History sharing", function () {
         // Alice invites Bob, and Bob accepts
         const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
-        await bobPage.getByRole("option", { name: "TestRoom" }).click();
-        await bobPage.getByRole("button", { name: "Accept" }).click();
+        await bobElementApp.acceptInvitedRoomByName("TestRoom");
 
         // The room now defaults to "invited" history visibility, so we need to set it to "shared" first
         await aliceElementApp.client.sendStateEvent(roomId, "m.room.history_visibility", {
@@ -161,8 +163,7 @@ test.describe("History sharing", function () {
 
         // Alice now invites Charlie
         await aliceElementApp.inviteUserToCurrentRoom(charlieCredentials.userId, { confirmUnknownUser: true });
-        await charliePage.getByRole("option", { name: "TestRoom" }).click();
-        await charliePage.getByRole("button", { name: "Accept" }).click();
+        await charlieElementApp.acceptInvitedRoomByName("TestRoom");
 
         // Message1 should be visible
         // Message2 should be invisible

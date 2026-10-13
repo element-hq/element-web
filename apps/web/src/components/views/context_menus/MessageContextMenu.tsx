@@ -42,6 +42,7 @@ import {
     CopyIcon,
     TreeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -55,7 +56,7 @@ import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOpti
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-import { copyPlaintext, getSelectedText } from "../../../utils/strings";
+import { getSelectedText } from "../../../utils/strings";
 import ContextMenu, { toRightOf, type MenuProps } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
@@ -225,7 +226,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onResendReactionsClick = (): void => {
         for (const reaction of this.getUnsentReactions()) {
-            Resend.resend(MatrixClientPeg.safeGet(), reaction);
+            void Resend.resend(MatrixClientPeg.safeGet(), reaction);
         }
         this.closeMenu();
     };
@@ -278,7 +279,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onPinClick = (isPinned: boolean): void => {
         // Pin or unpin in background
-        PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        void PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
 
         this.closeMenu();
@@ -305,7 +306,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private onCopyLinkClick = (e: ButtonEvent): void => {
         e.preventDefault(); // So that we don't open the permalink
         if (!this.props.link) return;
-        copyPlaintext(this.props.link);
+        void copyPlainTextToClipboard(this.props.link);
         this.closeMenu();
     };
 
@@ -315,7 +316,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onCopyClick = (): void => {
-        copyPlaintext(getSelectedText());
+        void copyPlainTextToClipboard(getSelectedText());
         this.closeMenu();
     };
 

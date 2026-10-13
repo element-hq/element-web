@@ -160,7 +160,7 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
             this.setState(({ waitingUnignored }) => ({ waitingUnignored: [...waitingUnignored, userId] }));
-            MatrixClientPeg.safeGet().setIgnoredUsers(currentlyIgnoredUserIds);
+            await MatrixClientPeg.safeGet().setIgnoredUsers(currentlyIgnoredUserIds);
         }
     };
 
@@ -215,11 +215,11 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
     };
 
     private onAcceptAllInvitesClicked = (): void => {
-        this.manageInvites(true);
+        void this.manageInvites(true);
     };
 
     private onRejectAllInvitesClicked = (): void => {
-        this.manageInvites(false);
+        void this.manageInvites(false);
     };
 
     private renderIgnoredUsers(): JSX.Element {

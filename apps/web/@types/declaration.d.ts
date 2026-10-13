@@ -6,3 +6,5 @@
  */
 
 declare module "*.module.css";
+// Plain stylesheets are imported for their side effect (webpack extracts them), so they export nothing useful.
+declare module "*.css";

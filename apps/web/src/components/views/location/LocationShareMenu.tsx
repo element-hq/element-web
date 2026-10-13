@@ -63,7 +63,7 @@ const LocationShareMenu: React.FC<Props> = ({ menuPosition, onFinished, sender, 
             : shareLocation(matrixClient, roomId, shareType ?? LocationShareType.Own, relation, openMenu);
 
     const onLiveShareEnableSubmit = (): void => {
-        SettingsStore.setValue("feature_location_share_live", null, SettingLevel.DEVICE, true);
+        void SettingsStore.setValue("feature_location_share_live", null, SettingLevel.DEVICE, true);
     };
 
     const shouldAdvertiseLiveLabsFlag = shareType === LocationShareType.Live && !isLiveShareEnabled;

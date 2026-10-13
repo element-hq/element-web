@@ -19,7 +19,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "./ToastStore";
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 interface IState {
     deferredAction: ActionPayload | null;
@@ -42,12 +42,12 @@ class LifecycleStore extends AsyncStore<IState> {
     protected onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>): void {
         switch (payload.action) {
             case Action.DoAfterSyncPrepared:
-                this.updateState({
+                void this.updateState({
                     deferredAction: payload.deferred_action,
                 });
                 break;
             case "cancel_after_sync_prepared":
-                this.updateState({
+                void this.updateState({
                     deferredAction: null,
                 });
                 break;
@@ -55,7 +55,7 @@ class LifecycleStore extends AsyncStore<IState> {
                 if (payload.state === SyncState.Syncing && payload.prevState !== SyncState.Syncing) {
                     // We've reconnected to the server: update server version support
                     // This is async but we don't care about the result, so just fire & forget.
-                    checkServerVersions();
+                    void checkServerVersions();
                 }
 
                 if (payload.state !== "PREPARED") {
@@ -63,7 +63,7 @@ class LifecycleStore extends AsyncStore<IState> {
                 }
                 if (!this.state.deferredAction) break;
                 const deferredAction = Object.assign({}, this.state.deferredAction);
-                this.updateState({
+                void this.updateState({
                     deferredAction: null,
                 });
                 dis.dispatch(deferredAction);
@@ -71,7 +71,7 @@ class LifecycleStore extends AsyncStore<IState> {
             }
             case Action.ClientNotViable:
             case Action.OnLoggedOut:
-                this.reset();
+                void this.reset();
                 break;
         }
     }

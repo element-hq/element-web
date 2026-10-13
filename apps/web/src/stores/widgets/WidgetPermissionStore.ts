@@ -69,6 +69,6 @@ export class WidgetPermissionStore {
             currentValues.deny = currentValues.deny.filter((c) => c !== settingsKey);
         }
 
-        SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
+        void SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
     }
 }

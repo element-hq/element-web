@@ -27,6 +27,10 @@
         "yes": "Da"
     },
     "confirm_quit": "Jesi li siguran da želiš odustati?",
+    "download": {
+        "unable_to_open_description": "Datoteka se nije mogla otvoriti. Možda je premještena ili izbrisana.",
+        "unable_to_open_title": "Nije moguće otvoriti datoteku"
+    },
     "edit_menu": {
         "speech": "Govor",
         "speech_start_speaking": "Počnite govoriti",
@@ -54,6 +58,11 @@
         "services": "Usluge",
         "unhide": "Otkrij"
     },
+    "renderer_crash": {
+        "detail": "Zatvorite i ponovno otvorite aplikaciju kako biste nastavili. Ako se to nastavi događati, moglo bi pomoći ponovno pokretanje računala ili brisanje predmemorije aplikacije.",
+        "message": "%(brand)s se nekoliko puta oporavio od problema, ali se problem i dalje javlja, pa je prestao pokušavati.",
+        "title": "%(brand)s se stalno ruši"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Dodaj u rječnik",
         "copy_email": "Kopiraj e-adresu",
@@ -63,6 +72,10 @@
         "save_image_as": "Spremi sliku kao...",
         "save_image_as_error_description": "Spremanje slike nije uspjelo",
         "save_image_as_error_title": "Spremanje slike nije uspjelo"
+    },
+    "save_dialog": {
+        "all_files": "Sve datoteke",
+        "named_file_type": "%(extension)s datoteka"
     },
     "store": {
         "error": {

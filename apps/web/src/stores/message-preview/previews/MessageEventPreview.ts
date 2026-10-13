@@ -12,7 +12,7 @@ import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
-import { getHtmlText } from "../../../HtmlUtils";
+import { sanitizeHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
 
 export class MessageEventPreview implements Preview {
@@ -48,7 +48,7 @@ export class MessageEventPreview implements Preview {
         }
 
         if (hasHtml) {
-            const sanitised = getHtmlText(body.replace(/<br\/?>/gi, "\n")); // replace line breaks before removing them
+            const sanitised = sanitizeHtmlText(body.replace(/<br\/?>/gi, "\n")); // replace line breaks before removing them
             // run it through DOMParser to fixup encoded html entities
             body = new DOMParser().parseFromString(sanitised, "text/html").documentElement.textContent;
         }

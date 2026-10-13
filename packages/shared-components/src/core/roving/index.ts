@@ -25,3 +25,5 @@ export type {
     RovingGridRowResolver,
 } from "./RovingGridIndex";
 export { RovingTabIndexWrapper } from "./RovingTabIndexWrapper";
+export { Toolbar } from "./Toolbar";
+export type { ToolbarProps } from "./Toolbar";

@@ -6,7 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { NotificationCountType, type Room, RoomEvent, ThreadEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixEvent,
+    MatrixEventEvent,
+    NotificationCountType,
+    type Room,
+    RoomEvent,
+    ThreadEvent,
+} from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
@@ -41,6 +48,17 @@ export const useRoomThreadNotifications = (room: Room): NotificationLevel => {
         setNotificationLevel(NotificationLevel.None);
     }, [room]);
 
+    // An event which has not been decrypted yet has no renderer, so it does not count towards the
+    // unread state. The room key often only turns up after the event itself, so re-evaluate the
+    // notifications once an event of this room is decrypted.
+    const onEventDecrypted = useCallback(
+        (event: MatrixEvent) => {
+            if (event.getRoomId() !== room.roomId) return;
+            updateNotification();
+        },
+        [room.roomId, updateNotification],
+    );
+
     useEventEmitter(room, RoomEvent.UnreadNotifications, updateNotification);
     useEventEmitter(room, RoomEvent.Receipt, updateNotification);
     useEventEmitter(room, RoomEvent.Timeline, updateNotification);
@@ -49,6 +67,7 @@ export const useRoomThreadNotifications = (room: Room): NotificationLevel => {
     useEventEmitter(room, RoomEvent.MyMembership, updateNotification);
     useEventEmitter(room, ThreadEvent.New, updateNotification);
     useEventEmitter(room, ThreadEvent.Update, updateNotification);
+    useEventEmitter(room.client, MatrixEventEvent.Decrypted, onEventDecrypted);
 
     // Compute the notification once when mouting a room
     useEffect(() => {

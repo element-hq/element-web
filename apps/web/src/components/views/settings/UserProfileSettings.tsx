@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type ReactNode, useCallback, useEffect, useMemo, useState, useId } from "react";
+import React, { type ChangeEvent, type ReactNode, useCallback, useEffect, useState, useId } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
@@ -24,7 +24,6 @@ import AvatarSetting from "./AvatarSetting";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { formatBytes } from "../../../utils/FormattingUtils";
 import InlineSpinner from "../elements/InlineSpinner";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import CopyableText from "../elements/CopyableText";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -107,6 +106,8 @@ interface UserProfileSettingsProps {
     canSetDisplayName: boolean;
     // Whether the homeserver allows the user to set their avatar.
     canSetAvatar: boolean;
+    // If true, the status control starts in custom status mode, ready for the user to enter a custom status.
+    startCustomStatus?: boolean;
 }
 
 /**
@@ -116,6 +117,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
     externalAccountManagementUrl,
     canSetDisplayName,
     canSetAvatar,
+    startCustomStatus,
 }) => {
     const [avatarURL, setAvatarURL] = useState(OwnProfileStore.instance.avatarMxc);
     const [displayName, setDisplayName] = useState(OwnProfileStore.instance.displayName ?? "");
@@ -196,14 +198,6 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
         }
     }, [displayName, client]);
 
-    const userIdentifier = useMemo(
-        () =>
-            UserIdentifierCustomisations.getDisplayUserIdentifier(client.getSafeUserId(), {
-                withDisplayName: true,
-            }),
-        [client],
-    );
-
     const someFieldsDisabled = !canSetDisplayName || !canSetAvatar;
 
     return (
@@ -243,7 +237,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                                 <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>
                             )}
                         </EditInPlace>
-                        {userStatusEnabled && <SetStatusView vm={setStatusVM} />}
+                        {userStatusEnabled && <SetStatusView vm={setStatusVM} initialCustomMode={startCustomStatus} />}
                     </Flex>
                 </div>
                 {avatarError && (
@@ -253,7 +247,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                             : _t("settings|general|avatar_upload_error_text", { size: formatBytes(maxUploadSize) })}
                     </Alert>
                 )}
-                {userIdentifier && <UsernameBox username={userIdentifier} />}
+                <UsernameBox username={client.getSafeUserId()} />
                 <Flex gap="var(--cpd-space-4x)" className="mx_UserProfileSettings_profile_buttons">
                     {externalAccountManagementUrl && (
                         <ManageAccountButton externalAccountManagementUrl={externalAccountManagementUrl} />

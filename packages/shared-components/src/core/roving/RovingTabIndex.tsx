@@ -583,7 +583,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
 
     const ref = useCallback((node: T | null) => {
         if (node) {
-            nodeRef.current = node;
+            nodeRef.current = node; // oxlint-disable-line react/immutability
             context.dispatch({
                 type: RovingStateActionType.Register,
                 payload: { node },

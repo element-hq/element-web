@@ -120,7 +120,7 @@ export const usePermalinkMember = (
             }
         };
 
-        doProfileLookup();
+        void doProfileLookup();
     }, [context, member, shouldLookUpUser, targetRoom, userId]);
 
     return member;

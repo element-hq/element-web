@@ -152,7 +152,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
      * fields, in which case we can add some options to control it.
      */
     private validateOnChange = debounce(() => {
-        this.validate({
+        void this.validate({
             focused: true,
         });
     }, VALIDATION_THROTTLE_MS);
@@ -165,6 +165,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         };
 
         this.id = this.props.id || getId();
+    }
+
+    public componentWillUnmount(): void {
+        this.validateOnChange.cancel();
     }
 
     public focus(): void {
@@ -180,7 +184,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             focused: true,
         });
         if (this.props.validateOnFocus) {
-            this.validate({
+            void this.validate({
                 focused: true,
             });
         }
@@ -201,7 +205,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             focused: false,
         });
         if (this.props.validateOnBlur) {
-            this.validate({
+            void this.validate({
                 focused: false,
             });
         }

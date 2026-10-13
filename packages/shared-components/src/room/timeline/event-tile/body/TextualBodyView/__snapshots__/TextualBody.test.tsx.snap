@@ -4,6 +4,8 @@ exports[`TextualBodyView > renders caption messages with url previews 1`] = `
 <div>
   <div
     class="TextualBody-module_root TextualBody-module_caption"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div>
       Caption for the uploaded image.
@@ -21,6 +23,8 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
 <div>
   <div
     class="TextualBody-module_root TextualBody-module_emote"
+    data-event-density="default"
+    data-event-layout="group"
     dir="auto"
   >
     * 
@@ -57,6 +61,8 @@ exports[`TextualBodyView > renders the default message body 1`] = `
 <div>
   <div
     class="TextualBody-module_root TextualBody-module_text"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div>
       Hello, this is a textual message.
@@ -69,6 +75,8 @@ exports[`TextualBodyView > renders the notice branch 1`] = `
 <div>
   <div
     class="TextualBody-module_root TextualBody-module_notice"
+    data-event-density="default"
+    data-event-layout="group"
   >
     <div>
       This is a notice message.

@@ -13,7 +13,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { onSubmitPreventDefault } from "../../../utils/form.ts";
@@ -66,7 +65,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
     public componentDidMount(): void {
         const client = MatrixClientPeg.safeGet();
-        client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
+        void client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
         });
     }
@@ -76,9 +75,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         const room = client.getRoom(this.props.roomId);
         const isRoomPublishable = room && room.getJoinRule() !== JoinRule.Invite;
-        const canSetCanonicalAlias =
-            DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
-            this.props.canSetCanonicalAlias;
+        const canSetCanonicalAlias = this.props.canSetCanonicalAlias;
 
         let disabledMessage;
         if (!isRoomPublishable) {

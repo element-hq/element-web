@@ -14,6 +14,7 @@ import {
     MatrixError,
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 
 import AddThreepid, { type Binding, type ThirdPartyIdentifier } from "../../../AddThreepid";
 import { _t, UserFriendlyError } from "../../../languageHandler";
@@ -22,7 +23,6 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import Modal from "../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../dialogs/ErrorDialog";
 import Field from "../elements/Field";
-import { looksValid as emailLooksValid } from "../../../email";
 import CountryDropdown from "../auth/CountryDropdown";
 import { type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -120,7 +120,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: false,
                 label: "revoke",
                 errorTitle:
@@ -136,7 +136,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
         (e: ButtonEvent): void => {
             e.stopPropagation();
             e.preventDefault();
-            changeBinding({
+            void changeBinding({
                 bind: true,
                 label: "share",
                 errorTitle:

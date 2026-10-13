@@ -92,7 +92,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        this.complete(this.props.query, this.props.selection);
+        void this.complete(this.props.query, this.props.selection);
     }
 
     public componentWillUnmount(): void {
@@ -239,7 +239,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                     hide: false,
                 },
                 () => {
-                    this.complete(this.props.query, this.props.selection).then(() => {
+                    void this.complete(this.props.query, this.props.selection).then(() => {
                         resolve(this.countCompletions());
                     });
                 },
@@ -314,7 +314,11 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 });
 
                 return completions.length > 0 ? (
-                    <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
+                    <div
+                        key={completionResult.provider.getName()}
+                        className="mx_Autocomplete_ProviderSection"
+                        role="presentation"
+                    >
                         <div className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</div>
                         {completionResult.provider.renderCompletions(completions)}
                     </div>

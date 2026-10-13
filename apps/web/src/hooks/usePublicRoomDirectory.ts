@@ -128,7 +128,7 @@ export const usePublicRoomDirectory = (): {
     );
 
     useEffect(() => {
-        initProtocols();
+        void initProtocols();
     }, []);
 
     useEffect(() => {

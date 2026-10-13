@@ -74,7 +74,7 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
         // stopping in the middle of the logs.
         logger.log("Clear cache & reload clicked");
         this.context.stopClient();
-        this.context.store.deleteAllData().then(() => {
+        void this.context.store.deleteAllData().then(() => {
             PlatformPeg.get()?.reload();
         });
     };

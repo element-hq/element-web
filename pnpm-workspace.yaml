@@ -1,6 +1,5 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
-ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
@@ -23,25 +22,32 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.61.1
-    "playwright-core": 1.61.1
+    "@playwright/test": 1.64.0
+    "playwright-core": 1.64.0
+    serve: 14.2.6
     # Compound
-    "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.9.0
+    "@vector-im/compound-design-tokens": 11.2.0
+    "@vector-im/compound-web": 10.3.1
     # i18n
     matrix-web-i18n: 3.6.0
+    # emojibase
+    "@matrix-org/emojibase-bindings": 1.5.0
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.1.5
+    vite: 8.3.1
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.10
-    "@vitest/spy": 4.1.10
-    "@vitest/coverage-v8": 4.1.10
-    "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.4
-    unplugin-dts: 1.0.1
+    vitest: 5.0.2
+    "@vitest/coverage-v8": 5.0.2
+    "@vitest/browser-playwright": 5.0.2
+    "@vitest/browser": 5.0.2
+    "@vitest/spy": 5.0.2
+    "@vitest/ui": 5.0.2
+    "@vitejs/plugin-react": 6.1.1
+    unplugin-dts: 1.1.2
+    # nx
+    nx: 23.3.0
 
 catalogs:
     ts6:
@@ -57,10 +63,22 @@ packageExtensions:
         peerDependencies:
             # Silence warning
             vite: "^8.0.0"
+    "@vitest/mocker":
+        peerDependencies:
+            vite: "^8.0.0"
+    vitest:
+        peerDependencies:
+            vite: "^8.0.0"
 
 allowBuilds:
-    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
+    # Needed to make the git dependency in layered.sh happy
+    "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
+    "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
+    # Element Call's React component is a git dependency on the `component` directory of the
+    # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
+    # pnpm matches git-hosted packages by repository URL, not by bare name.
+    "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -82,6 +100,10 @@ allowBuilds:
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true
+    # Optionally builds itself from source if a specific environment variable is present, which we do not need
+    "@parcel/watcher": false
+    # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
+    pkcs11js: false
 
 patchedDependencies:
     # Workaround for missing types export
@@ -90,16 +112,8 @@ patchedDependencies:
     react-blurhash: patches/react-blurhash.patch
     # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
-    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
-    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
     # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
-    # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
-    await-lock: patches/await-lock.patch
-    # Workaround for global type mismatches
-    jest-fixed-jsdom: patches/jest-fixed-jsdom.patch
-    # Workaround for jsdom being super opinionated and making it hard to tweak global properties
-    jsdom: patches/jsdom.patch
     # Workaround for missing return types
     postcss-mixins: patches/postcss-mixins.patch
     # Workaround for some babel rules being false positively flagged
@@ -108,6 +122,11 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
+    # Tweaks to record screenshot diffs as vitest artifacts
+    vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
+    storybook-addon-vis@4: patches/storybook-addon-vis@4.3.1.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -115,47 +134,78 @@ peerDependencyRules:
         react-dom: "19"
         eslint: "8"
         vite: "8"
+        nx: "23"
 
 allowedDeprecatedVersions:
     eslint: "8"
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.8
+    pretty-format@30>react-is: 19.3.0
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001806
-    matrix-widget-api: "^1.17.0"
+    caniuse-lite: 1.0.30001810
+
+    # Make sure we only have one instance of the widget API in the build;
+    # failure to do so results in (unspecified) breakage in downstream builds
+    # cf https://github.com/element-hq/element-web/pull/31851
+    matrix-widget-api: "^1.20.0"
+
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.33.0
-    "@types/pg-pool": 2.0.7
+    node-abi: 4.37.0
+
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
     esbuild@<=0.27.4: 0.27.4
-    brace-expansion@>=5 <=5.0.5: ^5.0.6
-    ip-address@>=10 <10.1.1: ^10.1.1
-    yaml@>=2 <2.8.3: ^2.8.4
-    # https://github.com/advisories/GHSA-f38q-mgvj-vph7
-    protobufjs@7 <7.5.8: ^7.6.3
-    "@protobufjs/utf8@1 <1.1.1": ^1.1.1
-    # https://github.com/advisories/GHSA-vmh5-mc38-953g
-    # https://github.com/advisories/GHSA-vxpw-j846-p89q
-    # https://github.com/advisories/GHSA-hm92-r4w5-c3mj
-    # https://github.com/advisories/GHSA-p88m-4jfj-68fv
-    # https://github.com/advisories/GHSA-pr7r-676h-xcf6
-    # https://github.com/advisories/GHSA-35p6-xmwp-9g52
-    # https://github.com/advisories/GHSA-g8m3-5g58-fq7m
-    undici@7 <7.28.0: ^7.28.0
     # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
     # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
     # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    vite@5: ^6.4.3
-    vite@6 <6.4.3: ^6.4.3
-    # Workaround for https://github.com/electron/electron/issues/51619
-    yauzl: "^3.3.1"
+    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
+    vitepress>vite: ^6.4.3
+    # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
+    nx: "catalog:"
+    # https://github.com/advisories/GHSA-2p49-hgcm-8545
+    # https://github.com/advisories/GHSA-4vpr-x523-8j87
+    # https://github.com/advisories/GHSA-w27v-7q3p-w38r
+    svgo@3 <3.3.5: ^3.3.5
+    # https://github.com/advisories/GHSA-2p49-hgcm-8545
+    # https://github.com/advisories/GHSA-4vpr-x523-8j87
+    # https://github.com/advisories/GHSA-w27v-7q3p-w38r
+    svgo@4 <4.1.0: ^4.1.0
+    # https://github.com/advisories/GHSA-6w3j-5fw6-r9vr
+    # https://github.com/advisories/GHSA-gg4h-3hg2-grpc
+    joi@18 <18.2.4: ^18.2.4
+    # https://github.com/advisories/GHSA-6h8r-xr42-gp59
+    # https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+    # https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+    # https://github.com/advisories/GHSA-965w-775f-mr7g
+    # https://github.com/advisories/GHSA-x4fp-j954-r2f4
+    # https://github.com/advisories/GHSA-8344-3jmq-59r6
+    # https://github.com/advisories/GHSA-27p8-2357-5qqv
+    # https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+    # https://github.com/advisories/GHSA-4w3w-2rp5-g8jm
+    # https://github.com/advisories/GHSA-w2rr-34g9-rvrj
+    "@xmldom/xmldom@>=0.7.0 <=0.8.14": 0.8.15
+    # https://github.com/advisories/GHSA-2wm5-q62r-hmrv
+    colord@2 <2.9.4: ^2.9.4
+    # https://github.com/advisories/GHSA-px8p-9vwx-vf98
+    fflate@>=0.4.5 <0.4.9: 0.4.9
+    # https://github.com/advisories/GHSA-5jgf-p345-68v8
+    # https://github.com/advisories/GHSA-f65p-4m7j-42xc
+    # https://github.com/advisories/GHSA-fph4-wmhf-6fwf
+    # https://github.com/advisories/GHSA-jqff-g426-hqxp
+    fast-uri@3 <3.1.6: ^3.1.6
+    # https://github.com/advisories/GHSA-4mjr-xmp4-gh2g
+    # https://github.com/advisories/GHSA-x5fp-wj9c-mxmx
+    qs@6 <6.16.0: ^6.16.0
+    # https://github.com/advisories/GHSA-2883-xcg3-v3hh
+    js-yaml@3 <3.15.2: ^3.15.2
+    # https://github.com/advisories/GHSA-2883-xcg3-v3hh
+    js-yaml@4 <4.3.2: ^4.3.2
+
     # Convince api-extractor to use a newer Typescript version
     "unplugin-dts>typescript": "catalog:ts6"
     "@microsoft/api-extractor>typescript": "catalog:ts6"
@@ -168,6 +218,3 @@ minimumReleaseAgeExclude:
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
-    # Temporary for testing purposes
-    - "@typescript/*"
-    - typescript@7.0.2

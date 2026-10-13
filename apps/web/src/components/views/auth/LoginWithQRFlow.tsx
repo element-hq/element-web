@@ -264,34 +264,50 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 );
                 break;
             case Phase.ShowingQR: {
-                let steps: ReactNode[];
+                let steps: ReactNode;
                 if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                    steps = [
-                        _t("auth|qr_code_login|open_element_mobile_device", {
-                            brand: SdkConfig.get().brand,
-                        }),
-                        _t("auth|qr_code_login|tap_avatar_link_new_device", {
-                            linkNewDevice: <strong>{_t("settings|sessions|sign_in_with_qr")}</strong>,
-                        }),
-                        _t("auth|qr_code_login|choose_desktop_computer", {
-                            desktopComputer: <strong>{_t("auth|qr_code_login|desktop_computer")}</strong>,
-                        }),
-                        _t("auth|qr_code_login|select_ready_to_scan", {
-                            readyToScan: <strong>{_t("auth|qr_code_login|ready_to_scan")}</strong>,
-                        }),
-                        _t("auth|qr_code_login|follow_remaining_instructions"),
-                    ];
+                    steps = (
+                        <>
+                            <li>
+                                {_t("auth|qr_code_login|open_element_mobile_device", {
+                                    brand: SdkConfig.get().brand,
+                                })}
+                            </li>
+                            <li>
+                                {_t("auth|qr_code_login|tap_avatar_link_new_device", {
+                                    linkNewDevice: <strong>{_t("settings|sessions|sign_in_with_qr")}</strong>,
+                                })}
+                            </li>
+                            <li>
+                                {_t("auth|qr_code_login|choose_desktop_computer", {
+                                    desktopComputer: <strong>{_t("auth|qr_code_login|desktop_computer")}</strong>,
+                                })}
+                            </li>
+                            <li>
+                                {_t("auth|qr_code_login|select_ready_to_scan", {
+                                    readyToScan: <strong>{_t("auth|qr_code_login|ready_to_scan")}</strong>,
+                                })}
+                            </li>
+                            <li>{_t("auth|qr_code_login|follow_remaining_instructions")}</li>
+                        </>
+                    );
                 } else {
-                    steps = [
-                        _t("auth|qr_code_login|open_element_other_device", {
-                            brand: SdkConfig.get().brand,
-                        }),
-                        _t("auth|qr_code_login|select_qr_code", {
-                            scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
-                        }),
-                        _t("auth|qr_code_login|point_the_camera"),
-                        _t("auth|qr_code_login|follow_remaining_instructions"),
-                    ];
+                    steps = (
+                        <>
+                            <li>
+                                {_t("auth|qr_code_login|open_element_other_device", {
+                                    brand: SdkConfig.get().brand,
+                                })}
+                            </li>
+                            <li>
+                                {_t("auth|qr_code_login|select_qr_code", {
+                                    scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
+                                })}
+                            </li>
+                            <li>{_t("auth|qr_code_login|point_the_camera")}</li>
+                            <li>{_t("auth|qr_code_login|follow_remaining_instructions")}</li>
+                        </>
+                    );
                 }
 
                 main = (
@@ -308,11 +324,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                                 <Spinner />
                             )}
                         </div>
-                        <ol>
-                            {steps.map((step, i) => (
-                                <li key={this.props.intent + i}>{step}</li>
-                            ))}
-                        </ol>
+                        <ol>{steps}</ol>
                     </>
                 );
                 break;

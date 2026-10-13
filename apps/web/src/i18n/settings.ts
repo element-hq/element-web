@@ -42,6 +42,7 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
 
     await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
     // Adds a lot of noise to test runs, so disable logging there.
+    // oxlint-disable-next-line node/no-process-env
     if (process.env.NODE_ENV !== "test") {
         logger.log("set language to " + chosenLanguage);
     }

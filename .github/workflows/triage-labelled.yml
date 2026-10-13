@@ -13,7 +13,7 @@ permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     apply_Z-Labs_label:
         name: Add Z-Labs label for features behind labs flags
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-Maths') ||
             contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
@@ -39,7 +39,7 @@ jobs:
 
     apply_Help-Wanted_label:
         name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'good first issue') ||
             contains(github.event.issue.labels.*.name, 'Hacktoberfest')
@@ -56,7 +56,7 @@ jobs:
 
     move_needs_info_issues:
         name: X-Needs-Info issues to Need info column on triage board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
@@ -79,7 +79,7 @@ jobs:
 
     move_flakey_test_issues:
         name: Z-Flaky-Test issues to Sized for maintainer column on triage board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
         steps:
@@ -102,7 +102,7 @@ jobs:
 
     add_priority_design_issues_to_project:
         name: P1 X-Needs-Design to Design project board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
             (contains(github.event.issue.labels.*.name, 'S-Critical') &&
@@ -119,7 +119,7 @@ jobs:
 
     add_product_issues:
         name: X-Needs-Product to product project board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Product')
         steps:
@@ -130,7 +130,7 @@ jobs:
 
     Search_issues_to_board:
         name: Search issues to project board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
         steps:
@@ -141,7 +141,7 @@ jobs:
 
     voip:
         name: Add labelled issues to VoIP project board
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'Team: VoIP')
         steps:
@@ -152,7 +152,7 @@ jobs:
 
     crypto:
         name: Add labelled issues to Crypto project
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'Team: Crypto')
         steps:
@@ -163,7 +163,7 @@ jobs:
 
     tech_debt:
         name: Add labelled issues to tech debt project
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-Developer-Experience') ||
             contains(github.event.issue.labels.*.name, 'A-Documentation') ||

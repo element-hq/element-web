@@ -80,6 +80,12 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      */
     mxEvent?: MatrixEvent;
     /**
+     * Whether to keep rendering the given content when `mxEvent` is replaced by an edit,
+     * rather than switching to the edited content.
+     * @default false
+     */
+    ignoreReplacements?: boolean;
+    /**
      * Whether to strip reply fallbacks from the content before rendering.
      * @default false
      */
@@ -266,6 +272,7 @@ export class EventContentBodyViewModel
     private watchEvent(mxEvent?: MatrixEvent): void {
         if (this.watchedEvent === mxEvent) return;
         this.unwatchEvent();
+        if (this.props.ignoreReplacements) return;
         this.watchedEvent = mxEvent;
         this.watchedEvent?.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
     }

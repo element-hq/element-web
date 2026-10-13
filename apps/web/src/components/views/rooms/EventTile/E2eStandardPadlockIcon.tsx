@@ -22,14 +22,5 @@ interface E2eStandardPadlockIconProps {
  * Renders the standard end-to-end encryption padlock icon.
  */
 export function E2eStandardPadlockIcon({ icon, title }: Readonly<E2eStandardPadlockIconProps>): JSX.Element {
-    return (
-        <E2ePadlock
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-            title={title}
-            icon={icon}
-        />
-    );
+    return <E2ePadlock title={title} icon={icon} className="mx_E2ePadlock" />;
 }

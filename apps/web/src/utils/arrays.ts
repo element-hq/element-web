@@ -135,7 +135,7 @@ export function arrayTrimFill<T>(a: T[], len: number, seed: T[]): T[] {
  * @returns A copy of the array.
  */
 export function arrayFastClone<T>(a: T[]): T[] {
-    return a.slice(0, a.length);
+    return a.slice(0);
 }
 
 /**

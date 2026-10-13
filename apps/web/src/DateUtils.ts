@@ -28,15 +28,6 @@ export function getDaysArray(weekday: Intl.DateTimeFormatOptions["weekday"] = "s
     return [...Array(7).keys()].map((day) => dateTimeFormat.format(sunday + day * DAY_MS));
 }
 
-/**
- * Returns array of 12 month names, from January to December, internationalised to the user's language.
- * @param month - format desired "numeric" | "2-digit" | "long" | "short" | "narrow"
- */
-export function getMonthsArray(month: Intl.DateTimeFormatOptions["month"] = "short"): string[] {
-    const dateTimeFormat = new Intl.DateTimeFormat(getUserLanguage(), { month, timeZone: "UTC" });
-    return [...Array(12).keys()].map((m) => dateTimeFormat.format(Date.UTC(2021, m)));
-}
-
 // XXX: Ideally we could just specify `hour12: boolean` but it has issues on Chrome in the `en` locale
 // https://support.google.com/chrome/thread/29828561?hl=en
 export function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeFormatOptions {
@@ -250,19 +241,26 @@ export function formatFullDateNoDayNoTime(date: Date, locale?: string): string {
     }).format(date);
 }
 
-export function formatRelativeTime(date: Date, showTwelveHour = false): string {
+/**
+ * Formats a given date as a time if it falls within the current day, and as a short date otherwise.
+ * The year is included only when the date is not within the current year.
+ * @example 16:58, 25 Oct, 31 Oct 2020 in en-GB locale
+ * @param date - date object to format
+ * @param showTwelveHour - whether to use 12-hour rather than 24-hour time. Defaults to `false` (24 hour mode).
+ * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
+ */
+export function formatRelativeTime(date: Date, showTwelveHour = false, locale?: string): string {
+    const _locale = locale ?? getUserLanguage();
     const now = new Date();
     if (withinCurrentDay(date, now)) {
-        return formatTime(date, showTwelveHour);
-    } else {
-        const months = getMonthsArray();
-        let relativeDate = `${months[date.getMonth()]} ${date.getDate()}`;
-
-        if (!withinCurrentYear(date, now)) {
-            relativeDate += `, ${date.getFullYear()}`;
-        }
-        return relativeDate;
+        return formatTime(date, showTwelveHour, _locale);
     }
+    return new Intl.DateTimeFormat(_locale, {
+        month: "short",
+        day: "numeric",
+        year: withinCurrentYear(date, now) ? undefined : "numeric",
+        timeZone: getUserTimezone(),
+    }).format(date);
 }
 
 /**

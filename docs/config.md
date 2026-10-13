@@ -118,7 +118,7 @@ instance. As of writing those settings are not fully documented, however a few a
     }
     ```
     These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
-    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/apps/web/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -170,7 +170,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
 19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
 20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
 21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
-22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key). Defaults to true.
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -400,8 +400,8 @@ The VoIP and Jitsi options are:
       the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
       It is a misconfiguration if its set to true while `element_call.disable` is also true!
       Defaults to `false`.
-    - `disabled`: A boolean flag specifying whether Element Call should be disabled.
-      If it is disabled `element_call.use_exclusively` has no effect!
+    - `disable`: A boolean flag specifying whether Element Call should be disabled.
+      If `true`, `element_call.use_exclusively` has no effect!
       Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
@@ -597,8 +597,6 @@ Currently, the following UI feature flags are supported:
 ## Modules
 
 `modules`: An optional array of module paths to load at runtime. Each entry is a URL or path to a JavaScript module entry point that will be dynamically imported when Element Web starts.
-
-**Note:** This is separate from the build-time module system configured via `build_config.yaml`. Runtime modules are loaded dynamically from the paths specified in `config.json`, while build-time modules are bundled during compilation.
 
 **Example:**
 

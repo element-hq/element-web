@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 
-import * as Email from "../../../email";
 import AddThreepid from "../../../AddThreepid";
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -56,7 +56,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
 
     private onSubmit = (): void => {
         const emailAddress = this.state.emailAddress;
-        if (!Email.looksValid(emailAddress)) {
+        if (!emailLooksValid(emailAddress)) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("settings|general|error_invalid_email"),
                 description: _t("settings|general|error_invalid_email_detail"),
@@ -71,7 +71,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                     description: _t("auth|set_email|verification_pending_description"),
                     button: _t("action|continue"),
                 });
-                finished.then(([ok]) => this.onEmailDialogFinished(ok));
+                void finished.then(([ok]) => this.onEmailDialogFinished(ok));
             },
             (err) => {
                 this.setState({ emailBusy: false });
@@ -120,7 +120,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                         description: message,
                         button: _t("action|continue"),
                     });
-                    finished.then(([ok]) => this.onEmailDialogFinished(ok));
+                    void finished.then(([ok]) => this.onEmailDialogFinished(ok));
                 } else {
                     logger.error("Unable to verify email address: " + err);
                     Modal.createDialog(ErrorDialog, {
@@ -159,12 +159,17 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 </div>
                 <div className="mx_Dialog_buttons">
                     <input
-                        className="mx_Dialog_primary"
+                        className="mx_LegacyDialogButton mx_Dialog_primary"
                         type="submit"
                         value={_t("action|continue")}
                         onClick={this.onSubmit}
                     />
-                    <input type="submit" value={_t("action|skip")} onClick={this.onCancelled} />
+                    <input
+                        className="mx_LegacyDialogButton"
+                        type="submit"
+                        value={_t("action|skip")}
+                        onClick={this.onCancelled}
+                    />
                 </div>
             </BaseDialog>
         );

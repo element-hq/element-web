@@ -1,0 +1,14 @@
+.tile {
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 14px;
+
+    max-width: 100%;
+    overflow: clip;
+    background: var(--cpd-color-bg-subtle-secondary);
+
+    .below {
+        display: flex;
+        margin: var(--cpd-space-3x);
+        gap: var(--cpd-space-2x);
+    }
+}

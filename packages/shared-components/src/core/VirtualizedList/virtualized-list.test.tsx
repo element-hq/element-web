@@ -165,6 +165,7 @@ const groupedVariant: ListTestVariant = {
                 <div
                     className="mx_group_header"
                     data-testid={`group-header-${header.id}`}
+                    // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                     tabIndex={context.tabIndexKey === header.id ? 0 : -1}
                     onFocus={(e) => onFocus(header, e)}
                 >

@@ -101,13 +101,6 @@ export default withMermaid({
                 text: "Build",
                 items: [
                     {
-                        text: "Web",
-                        items: [
-                            { text: "Customisations", link: "/customisations" },
-                            { text: "Deprecated Modules", link: "/deprecated-modules" },
-                        ],
-                    },
-                    {
                         text: "Desktop",
                         items: [
                             { text: "Native Node modules", link: "/native-node-modules" },
@@ -158,7 +151,7 @@ export default withMermaid({
                     { text: "Iconography", link: "/icons" },
                     { text: "Local echo", link: "/local-echo-dev" },
                     { text: "Media", link: "/media-handling" },
-                    { text: "Room List Store", link: "/room-list-store" },
+                    { text: "Room List", link: "/room-list" },
                     { text: "Scrolling", link: "/scrolling" },
                     { text: "Usercontent", link: "/usercontent" },
                     { text: "Widget layouts", link: "/widget-layouts" },

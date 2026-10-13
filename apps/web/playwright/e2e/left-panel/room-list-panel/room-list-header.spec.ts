@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../element-web-test";
 import { getHeaderSection } from "./utils";
@@ -17,14 +17,14 @@ test.describe("Header section of the room list", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
+        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("should render the header section", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const roomListHeader = getHeaderSection(page);
         await expect(roomListHeader).toMatchScreenshot("room-list-header.png");
 
-        const composeMenu = roomListHeader.getByRole("button", { name: "New conversation" });
+        const composeMenu = roomListHeader.getByRole("button", { name: "New" });
         await composeMenu.click();
 
         await expect(page.getByRole("menu")).toMatchScreenshot("room-list-header-compose-menu.png");
@@ -49,7 +49,7 @@ test.describe("Header section of the room list", () => {
         await expect(roomListHeader).toMatchScreenshot("room-list-space-header.png");
 
         await expect(roomListHeader.getByRole("heading", { name: "MySpace" })).toBeVisible();
-        await expect(roomListHeader.getByRole("button", { name: "New conversation" })).toBeVisible();
+        await expect(roomListHeader.getByRole("button", { name: "New" })).toBeVisible();
 
         const spaceMenu = roomListHeader.getByRole("button", { name: "Open space menu" });
         await spaceMenu.click();

@@ -22,6 +22,7 @@ describe("formatSeconds", () => {
         expect(formatSeconds(60 * 60 * 3 + 60 * 0 + 55)).toBe("03:00:55");
         expect(formatSeconds(60 * 60 * 3 + 60 * 31 + 0)).toBe("03:31:00");
         expect(formatSeconds(-(60 * 60 * 3 + 60 * 31 + 0))).toBe("-03:31:00");
+        expect(formatSeconds(60 * 60 * 1 + 60 * 3 + 0, { hoursMinLength: 1, minutesMinLength: 1 })).toBe("1:03:00");
     });
 
     it("correctly formats time without hours", () => {
@@ -29,6 +30,7 @@ describe("formatSeconds", () => {
         expect(formatSeconds(60 * 60 * 0 + 60 * 0 + 55)).toBe("00:55");
         expect(formatSeconds(60 * 60 * 0 + 60 * 31 + 0)).toBe("31:00");
         expect(formatSeconds(-(60 * 60 * 0 + 60 * 31 + 0))).toBe("-31:00");
+        expect(formatSeconds(60 * 60 * 0 + 60 * 3 + 0, { hoursMinLength: 1, minutesMinLength: 1 })).toBe("3:00");
     });
 });
 

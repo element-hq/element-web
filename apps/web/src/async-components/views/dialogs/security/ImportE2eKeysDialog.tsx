@@ -85,10 +85,9 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
 
     private onFormSubmit = (ev: React.FormEvent): boolean => {
         ev.preventDefault();
-        // noinspection JSIgnoredPromiseFromCall
         const file = this.file.current?.files?.[0];
         if (file) {
-            this.startImport(file, this.state.passphrase);
+            void this.startImport(file, this.state.passphrase);
         }
         return false;
     };
@@ -175,12 +174,17 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
                     </div>
                     <div className="mx_Dialog_buttons">
                         <input
-                            className="mx_Dialog_primary"
+                            className="mx_LegacyDialogButton mx_Dialog_primary"
                             type="submit"
                             value={_t("action|import")}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
-                        <button onClick={this.onCancelClick} disabled={disableForm}>
+                        <button
+                            onClick={this.onCancelClick}
+                            disabled={disableForm}
+                            className="mx_LegacyDialogButton"
+                            type="button"
+                        >
                             {_t("action|cancel")}
                         </button>
                     </div>

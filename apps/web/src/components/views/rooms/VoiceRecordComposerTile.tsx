@@ -23,7 +23,7 @@ import RecordingPlayback, { PlaybackLayout } from "../audio_messages/RecordingPl
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
-import NotificationBadge from "./NotificationBadge";
+import { NotificationBadge } from "./NotificationBadge/NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -109,7 +109,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         try {
-            // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
             const content = createVoiceMessageContent(
                 upload.mxc,
                 this.state.recorder.contentType,
@@ -133,7 +132,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 });
             }
 
-            doMaybeLocalRoomAction(
+            // we don't care if it fails, it'll get queued.
+            void doMaybeLocalRoomAction(
                 this.props.room.roomId,
                 (actualRoomId: string) => MatrixClientPeg.safeGet().sendMessage(actualRoomId, content),
                 this.props.room.client,
@@ -204,8 +204,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             logger.error("Error starting recording: ", e);
             accessError();
 
-            // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
-            VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
+            // if this goes wrong we don't want it to affect the call stack
+            void VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
         }
     };
 

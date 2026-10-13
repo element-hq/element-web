@@ -153,8 +153,7 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
         } else {
-            // noinspection JSIgnoredPromiseFromCall
-            managers.getPrimaryManager()?.open(room);
+            void managers.getPrimaryManager()?.open(room);
         }
     };
 

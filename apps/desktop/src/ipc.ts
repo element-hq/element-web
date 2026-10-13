@@ -9,8 +9,8 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
-import Store, { clearDataAndRelaunch } from "./store.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
+import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
 
 let focusHandlerAttached = false;
@@ -52,6 +52,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
 
     const args = payload.args || [];
     let ret: any;
+    let error: string | { message: string; name?: string } | undefined;
 
     switch (payload.name) {
         case "getUpdateFeedUrl":
@@ -110,19 +111,37 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
 
         case "getPickleKey":
             try {
-                ret = await store.getSecret(`${args[0]}|${args[1]}`);
-            } catch {
-                // if an error is thrown (e.g. we can't initialise safeStorage),
-                // then return null, which means the default pickle key will be used
-                ret = null;
+                ret = (await store.getSecret(`${args[0]}|${args[1]}`)) ?? null;
+            } catch (e) {
+                // An error is thrown if we can't initialise safeStorage, or if a stored secret exists
+                // but can't be decrypted this launch (SafeStorageDecryptionError, e.g. the OS keychain
+                // is temporarily unavailable). Report this to the renderer as an error rather than as
+                // an absent pickle key: the two need very different handling. An absent key means a
+                // new one can safely be created, whereas here we must NOT destroy the existing secret
+                // (see createPickleKey below) and the read may well succeed if retried once the
+                // keychain is readable again. See element-web#32521 / #32715.
+                console.error("Failed to get pickle key", e);
+                error = {
+                    name: e instanceof Error ? e.name : "Error",
+                    message: e instanceof Error ? e.message : String(e),
+                };
             }
             break;
 
         case "createPickleKey":
             try {
-                const pickleKey = await randomArray(32);
-                await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
-                ret = pickleKey;
+                // Never overwrite a pickle key that already exists but is currently undecryptable.
+                // Overwriting it with a freshly-generated key would turn a transient keychain failure
+                // into permanent session and encryption-key loss. Preserve it so the existing session
+                // can be restored on a later launch once the keychain is readable again.
+                if (await store.isSecretUndecryptable(`${args[0]}|${args[1]}`)) {
+                    console.warn("Refusing to overwrite an existing undecryptable pickle key; preserving it");
+                    ret = null;
+                } else {
+                    const pickleKey = await randomArray(32);
+                    await store.setSecret(`${args[0]}|${args[1]}`, pickleKey);
+                    ret = pickleKey;
+                }
             } catch (e) {
                 console.error("Failed to create pickle key", e);
                 ret = null;
@@ -137,21 +156,26 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }
             break;
         case "getDesktopCapturerSources":
-            ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
-                id: source.id,
-                name: source.name,
-                thumbnailURL: source.thumbnail.toDataURL(),
-            }));
+            try {
+                ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
+                    id: source.id,
+                    name: source.name,
+                    thumbnailURL: source.thumbnail.toDataURL(),
+                }));
+            } catch (e) {
+                console.error("Failed to get desktop capturer sources", e);
+                ret = [];
+            }
             break;
         case "callDisplayMediaCallback":
-            getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
             break;
 
         case "clearStorage":
-            await clearDataAndRelaunch(global.mainWindow.webContents.session);
-            return; // the app is about to stop, we don't need to reply to the IPC
+            await clearData(global.mainWindow.webContents.session);
+            ret = null;
+            break;
 
         case "breadcrumbs": {
             if (process.platform === "darwin") {
@@ -173,7 +197,8 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                             },
                         });
                         if (r.avatarUrl) {
-                            void fetch(r.avatarUrl)
+                            void global.mainWindow?.webContents.session
+                                .fetch(r.avatarUrl)
                                 .then((resp) => {
                                     if (!resp.ok) return;
                                     return resp.arrayBuffer();
@@ -215,6 +240,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
     global.mainWindow?.webContents.send("ipcReply", {
         id: payload.id,
         reply: ret,
+        error,
     });
 });
 

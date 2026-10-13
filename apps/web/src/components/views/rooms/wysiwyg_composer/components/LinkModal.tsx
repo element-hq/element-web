@@ -114,7 +114,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                     {isEditing && (
                         <button
                             type="button"
-                            className="danger"
+                            className="mx_LegacyDialogButton danger"
                             onClick={() => {
                                 composer.removeLinks();
                                 onFinished();

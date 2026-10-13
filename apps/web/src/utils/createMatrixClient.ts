@@ -10,17 +10,12 @@ import {
     type MatrixClient,
     createClient,
     type ICreateClientOpts,
-    MemoryCryptoStore,
     MemoryStore,
-    IndexedDBCryptoStore,
     IndexedDBStore,
-    LocalStorageCryptoStore,
     RoomNameType,
     type RoomNameState,
     EventTimelineSet,
     EventTimeline,
-    type OAuth2,
-    TokenRefresher,
 } from "matrix-js-sdk/src/matrix";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -119,17 +114,12 @@ function roomNameGenerator(_: string, state: RoomNameState): string | null {
  * Create a new matrix client from credentials with all the options needed.
  *
  * @param creds The credentials to create the client with
- * @param oauth The OAuth2 instance for OAuth2-native sessions
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export function createClientWithCreds(creds: IMatrixClientCreds, oauth?: OAuth2): MatrixClient {
-    let tokenRefreshFunction: ICreateClientOpts["tokenRefreshFunction"];
-    if (creds.refreshToken && oauth) {
-        const tokenRefresher = new TokenRefresher(oauth, persistTokens.bind(null, creds.pickleKey));
-        tokenRefreshFunction = tokenRefresher?.tokenRefreshFunction;
-    } else {
-        logger.debug("No refresh token was supplied: access token will not be refreshed");
+export function createClientWithCreds(creds: IMatrixClientCreds, oauthClientId?: string): MatrixClient {
+    if (creds.refreshToken && !oauthClientId) {
+        logger.warn("Have a refresh token but no stored OAuth2 client ID: tokens will not be refreshed");
     }
 
     const opts: ICreateClientOpts = {
@@ -137,10 +127,10 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauth?: OAuth2)
         idBaseUrl: creds.identityServerUrl,
         accessToken: creds.accessToken,
         refreshToken: creds.refreshToken,
-        tokenRefreshFunction,
+        onTokenRefresh: persistTokens.bind(null, creds.pickleKey),
+        oauthClientId,
         userId: creds.userId,
         deviceId: creds.deviceId,
-        pickleKey: creds.pickleKey,
         timelineSupport: true,
         forceTURN: !SettingsStore.getValue("webRtcAllowPeerToPeer"),
         fallbackICEServerAllowed: !!SettingsStore.getValue("fallbackICEServerAllowed"),
@@ -176,10 +166,10 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauth?: OAuth2)
  * Create a new matrix client, with the persistent stores set up appropriately
  * (using localstorage/indexeddb, etc)
  *
- * @param {Object} opts  options to pass to Matrix.createClient. This will be
- *    extended with `sessionStore` and `store` members.
+ * @param opts - options to pass to Matrix.createClient. This will be
+ *    extended with `store` and `useAuthorizationHeader` members.
  *
- * @returns {MatrixClient} the newly-created MatrixClient
+ * @returns the newly-created MatrixClient
  */
 export function createMatrixClient(opts: ICreateClientOpts): MatrixClient {
     const storeOpts: Partial<ICreateClientOpts> = {
@@ -195,14 +185,6 @@ export function createMatrixClient(opts: ICreateClientOpts): MatrixClient {
         });
     } else if (localStorage) {
         storeOpts.store = new MemoryStore({ localStorage });
-    }
-
-    if (indexedDB) {
-        storeOpts.cryptoStore = new IndexedDBCryptoStore(indexedDB, "matrix-js-sdk:crypto");
-    } else if (localStorage) {
-        storeOpts.cryptoStore = new LocalStorageCryptoStore(localStorage);
-    } else {
-        storeOpts.cryptoStore = new MemoryCryptoStore();
     }
 
     return createClient({

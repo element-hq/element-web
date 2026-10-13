@@ -66,6 +66,15 @@ describe("buildTitleBarCss", () => {
         expect(css).not.toContain("aria-hidden");
     });
 
+    it("does not turn whole screens into drag regions (#34661)", () => {
+        // Regression guard: these screens cover the window, and the controls drawn on them keep the
+        // default app-region of `none` — so they never subtract from the region and their clicks
+        // become window drags instead. That left the device verification screen and the splash
+        // screen's sign-out button reachable only by keyboard. The band is the drag handle.
+        expect(css).not.toMatch(/\.mx_AuthPage[^{]*\{[^}]*-webkit-app-region:\s*drag/);
+        expect(css).not.toMatch(/\.mx_MatrixChat_splash[^{]*\{[^}]*-webkit-app-region:\s*drag/);
+    });
+
     it("keeps floating portal overlays clickable within the band", () => {
         // Compound menus/tooltips render in body-level portals and can open anywhere, incl. the band.
         expect(css).toMatch(/\[data-radix-popper-content-wrapper\][^{]*\{[^}]*-webkit-app-region:\s*no-drag/);

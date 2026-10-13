@@ -19,8 +19,10 @@ test.describe("Message links", () => {
         test(`should linkify a regular link '${link}'`, async ({ page, user, app, room }) => {
             await page.goto(`#/room/${room.roomId}`);
             // Needs to be unformatted so we test linkifing
-            await app.client.sendMessage(room.roomId, `Check out ${link}`);
-            const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: link });
+            const { event_id: eventId } = await app.client.sendMessage(room.roomId, `Check out ${link}`);
+            const linkElement = page
+                .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
+                .getByRole("link", { name: link });
             await app.timeline.scrollToBottom();
             await expect(linkElement).toBeVisible();
         });
@@ -28,22 +30,28 @@ test.describe("Message links", () => {
     test("should NOT linkify a bare domain", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
-        await app.client.sendMessage(room.roomId, `Check out example.org`);
-        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "example.org" });
+        const { event_id: eventId } = await app.client.sendMessage(room.roomId, `Check out example.org`);
+        const linkElement = page
+            .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
+            .getByRole("link", { name: "example.org" });
         await expect(linkElement).not.toBeVisible();
     });
     test("should linkify a User ID", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
-        await app.client.sendMessage(room.roomId, `Check out @bob:example.org`);
-        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "@bob:example.org" });
+        const { event_id: eventId } = await app.client.sendMessage(room.roomId, `Check out @bob:example.org`);
+        const linkElement = page
+            .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
+            .getByRole("link", { name: "@bob:example.org" });
         await expect(linkElement).toHaveAttribute("href", `https://matrix.to/#/@bob:example.org`);
     });
     test("should linkify a Room alias", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
-        await app.client.sendMessage(room.roomId, "Check out #aroom:example.org");
-        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "#aroom:example.org" });
+        const { event_id: eventId } = await app.client.sendMessage(room.roomId, "Check out #aroom:example.org");
+        const linkElement = page
+            .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
+            .getByRole("link", { name: "#aroom:example.org" });
         await expect(linkElement).toHaveAttribute("href", "https://matrix.to/#/#aroom:example.org");
     });
     test("should linkify text inside a URL preview", async ({ page, user, app, room }) => {
@@ -58,9 +66,11 @@ test.describe("Message links", () => {
             });
         });
         await page.goto(`#/room/${room.roomId}`);
-        await app.client.sendMessage(room.roomId, "Check out https://example.org/");
+        const { event_id: eventId } = await app.client.sendMessage(room.roomId, "Check out https://example.org/");
         await expect(
-            page.locator(".mx_EventTile_last").getByRole("link", { name: "https://example.org/another-link" }),
+            page
+                .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
+                .getByRole("link", { name: "https://example.org/another-link" }),
         ).toBeVisible();
     });
 });

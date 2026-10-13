@@ -5,18 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import {
+    _t,
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
-    type UrlPreview,
-    UrlPreviewGroupView,
     useCreateAutoDisposedViewModel,
+    MediaPreviewGroupPreview,
     useViewModel,
+    linkIcon,
+    type MediaPreviewGroupEntry,
+    type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
+import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -26,15 +30,20 @@ import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-ti
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { getParentEventId } from "../../../utils/Reply";
 import Modal from "../../../Modal";
-import SettingsStore from "../../../settings/SettingsStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
-import EditMessageComposer from "../rooms/EditMessageComposer";
-import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
-import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
+import {
+    UrlPreviewGroupViewModel,
+    type UrlPreviewKind,
+} from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { type RoomMessageEventContent } from "../../../../@types/url-preview";
+import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
+import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -63,7 +72,15 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
+    const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
+
+    let urlPreviewKind: UrlPreviewKind;
+
+    if (urlPreviewBundleEnabled)
+        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
+    else urlPreviewKind = "fetchonly";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -102,6 +119,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                moduleUrlPreviewApi: ModuleApi.instance.urlPreviews,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;
@@ -124,11 +142,131 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 },
                 visible: props.showUrlPreview ?? false,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundleEnabled,
+                urlPreviewKind,
             }),
     );
 
-    const { previews } = useViewModel(urlPreviewVm);
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(urlPreviewVm);
+
+    // Memoised because it feeds the media preview view model from an effect: a fresh object on every
+    // render would notify subscribers on every render.
+    const collapse = useMemo(
+        () =>
+            overPreviewLimit
+                ? {
+                      collapsed: previewsLimited,
+                      hiddenCount: totalPreviewCount - previews.length,
+                      onToggle: () => void urlPreviewVm.onTogglePreviewLimit(),
+                  }
+                : undefined,
+        [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
+    );
+
+    const allowRemoveUrlPreview =
+        props.mxEvent.getSender() === client.getUserId() &&
+        urlPreviewBundleEnabled &&
+        content["com.beeper.linkpreviews"] !== undefined;
+
+    const removeUrlPreview = useCallback(
+        async (url: string): Promise<void> => {
+            const messageContent = props.mxEvent.getContent() as RoomMessageEventContent;
+            const newContent: RoomMessageEventContent = {
+                ...messageContent,
+                "com.beeper.linkpreviews": messageContent["com.beeper.linkpreviews"]?.filter(
+                    (entry) => entry.matched_url !== url,
+                ),
+            };
+            const editContent: RoomMessageEventContent = {
+                ...messageContent,
+                "body": `* ${messageContent.body}`,
+                "m.new_content": newContent,
+                "m.relates_to": {
+                    rel_type: RelationType.Replace,
+                    event_id: props.mxEvent.getId()!,
+                },
+            };
+
+            if (props.mxEvent.threadRootId) {
+                await client.sendMessage(props.mxEvent.getRoomId()!, props.mxEvent.threadRootId, editContent);
+            } else {
+                await client.sendMessage(props.mxEvent.getRoomId()!, editContent);
+            }
+        },
+        [client, props.mxEvent],
+    );
+
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            if (preview.image === undefined) {
+                content = {
+                    type: "text",
+                };
+            } else {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "banner",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
+                    },
+                };
+            }
+
+            let body: string;
+            if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+            else body = preview.description!;
+
+            return {
+                id: preview.link,
+                header: preview.title,
+                headerUrl: preview.link,
+                body,
+                buttons: [
+                    {
+                        label: _t("timeline|url_preview|open_link"),
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                    ...(allowRemoveUrlPreview
+                        ? [
+                              {
+                                  label: _t("timeline|url_preview|close"),
+                                  icon: <CloseIcon />,
+                                  onClick: () => void removeUrlPreview(preview.link),
+                              },
+                          ]
+                        : []),
+                ],
+                ...linkIcon(),
+                ...content,
+            };
+        },
+        [allowRemoveUrlPreview, removeUrlPreview],
+    );
+
+    const mediaPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new MediaPreviewGroupViewModel({
+                entries: previews.map(previewToEntry),
+                collapse,
+            }),
+    );
 
     useEffect(() => {
         textualBodyVm.setId(props.id);
@@ -206,8 +344,17 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [bundleContent, urlPreviewVm]);
 
     useEffect(() => {
-        urlPreviewVm.setUrlBundlesEnabled(urlPreviewBundleEnabled);
-    }, [urlPreviewBundleEnabled, urlPreviewVm]);
+        void urlPreviewVm.setUrlPreviewKind(urlPreviewKind).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to setUrlPreviewKind", error);
+        });
+    }, [urlPreviewKind, urlPreviewVm]);
+
+    useEffect(() => {
+        mediaPreviewVm.setProps({
+            entries: previews.map(previewToEntry),
+            collapse,
+        });
+    }, [previews, previewToEntry, collapse, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
@@ -218,63 +365,22 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     }, [props.mxEvent, previews]);
 
     if (props.editState) {
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-
-        return isWysiwygComposerEnabled ? (
-            <EditWysiwygComposer editorStateTransfer={props.editState} className="mx_EventTile_content" />
-        ) : (
-            <EditMessageComposer editState={props.editState} className="mx_EventTile_content" />
+        return (
+            <EditMessageComposerWrapper
+                editState={props.editState}
+                className="mx_EventTile_content"
+                mxClient={client}
+                showUrlPreview={props.showUrlPreview ?? false}
+            />
         );
     }
-
-    const messageContent = props.mxEvent.getContent() as RoomMessageEventContent;
-    const allowRemoveUrlPreview =
-        props.mxEvent.getSender() === client.getUserId() &&
-        urlPreviewBundleEnabled &&
-        messageContent["com.beeper.linkpreviews"] !== undefined;
 
     return (
         <TextualBodyView
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={
-                <UrlPreviewGroupView
-                    vm={urlPreviewVm}
-                    className="mx_TextualBody_urlPreviews"
-                    removeUrlPreview={
-                        allowRemoveUrlPreview
-                            ? async (url) => {
-                                  const newContent: RoomMessageEventContent = {
-                                      ...messageContent,
-                                      "com.beeper.linkpreviews": messageContent["com.beeper.linkpreviews"]?.filter(
-                                          (entry) => entry.matched_url !== url,
-                                      ),
-                                  };
-                                  const editContent: RoomMessageEventContent = {
-                                      ...messageContent,
-                                      "body": `* ${messageContent.body}`,
-                                      "m.new_content": newContent,
-                                      "m.relates_to": {
-                                          rel_type: RelationType.Replace,
-                                          event_id: props.mxEvent.getId()!,
-                                      },
-                                  };
-
-                                  if (props.mxEvent.threadRootId) {
-                                      await client.sendMessage(
-                                          props.mxEvent.getRoomId()!,
-                                          props.mxEvent.threadRootId,
-                                          editContent,
-                                      );
-                                  } else {
-                                      await client.sendMessage(props.mxEvent.getRoomId()!, editContent);
-                                  }
-                              }
-                            : undefined
-                    }
-                />
-            }
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} className="mx_TextualBody_urlPreviews" />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );

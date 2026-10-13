@@ -11,7 +11,7 @@ import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/
 import { logger } from "matrix-js-sdk/src/logger";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
-import { Button } from "@vector-im/compound-web";
+import { Button, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -94,7 +94,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     private onUsePassphraseClick = async (): Promise<void> => {
         const store = SetupEncryptionStore.sharedInstance();
-        store.usePassPhrase();
+        await store.usePassPhrase();
     };
 
     private onVerifyClick = (): void => {
@@ -110,9 +110,9 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             member: cli.getUser(userId) ?? undefined,
         });
 
-        verificationFinished.then(async () => {
+        void verificationFinished.then(async () => {
             const request = await requestPromise;
-            request.cancel();
+            void request.cancel();
             this.props.onFinished();
         });
     };
@@ -136,7 +136,10 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
-            variant: store.lostKeys() ? "no_verification_method" : "confirm",
+            onSignOut: () => {
+                dispatcher.dispatch({ action: "logout" });
+            },
+            variant: store.lostKeys() && this.props.allowLogout ? "no_verification_method" : "confirm",
         });
     };
 
@@ -177,6 +180,14 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <DevicesIcon /> {_t("encryption|verification|use_another_device")}
                     </Button>
                 );
+            } else {
+                verifyButton = (
+                    <Tooltip label={_t("encryption|verification|no_other_devices")}>
+                        <Button kind="primary" disabled={true}>
+                            <DevicesIcon /> {_t("encryption|verification|use_another_device")}
+                        </Button>
+                    </Tooltip>
+                );
             }
 
             let useRecoveryKeyButton;
@@ -186,13 +197,31 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         {_t("encryption|verification|use_recovery_key")}
                     </Button>
                 );
+            } else {
+                useRecoveryKeyButton = (
+                    <Tooltip label={_t("encryption|verification|no_recovery_key")}>
+                        <Button disabled={true}>{_t("encryption|verification|use_recovery_key")}</Button>
+                    </Tooltip>
+                );
             }
+
+            // The "Can't confirm?" button is secondary if there is a better way
+            // to become verified available. If it's the only non-disabled
+            // button, it is primary.
+            const deviceOrRecoveryAvailable = store.keyInfo || store.hasDevicesToVerifyAgainst;
+            const cantConfirmKind = deviceOrRecoveryAvailable ? "secondary" : "primary";
+
+            const cantConfirmButton = (
+                <Button kind={cantConfirmKind} onClick={this.onCantConfirmClick}>
+                    {_t("encryption|verification|cant_confirm")}
+                </Button>
+            );
 
             let signOutButton;
             if (this.props.allowLogout) {
                 signOutButton = (
                     <Button kind="tertiary" onClick={this.onSignOutClick}>
-                        {_t("action|sign_out")}
+                        {_t("action|sign_out_before_verify")}
                     </Button>
                 );
             }
@@ -214,9 +243,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     <EncryptionCardButtons>
                         {verifyButton}
                         {useRecoveryKeyButton}
-                        <Button kind="secondary" onClick={this.onCantConfirmClick}>
-                            {_t("encryption|verification|cant_confirm")}
-                        </Button>
+                        {cantConfirmButton}
                         {signOutButton}
                     </EncryptionCardButtons>
                 </EncryptionCard>

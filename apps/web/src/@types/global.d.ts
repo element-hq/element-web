@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // eslint-disable-next-line no-restricted-imports
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 
-import type { ModuleLoader } from "@element-hq/element-web-module-api";
+import type { ModuleLoader, X509Api } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
 import type ContentMessages from "../ContentMessages";
 import { type IMatrixClientPeg } from "../MatrixClientPeg";
@@ -131,6 +131,8 @@ declare global {
         // Settings
         setSettingValue(settingName: string, value: any): Promise<void>;
         getSettingValue(settingName: string): Promise<any>;
+        // X.509 hardware key IPC
+        x509?: X509Api;
     }
 
     interface DesktopCapturerSource {

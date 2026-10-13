@@ -114,7 +114,7 @@ const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProp
     const disconnect = useCallback(
         (ev: ButtonEvent) => {
             ev.preventDefault();
-            call.disconnect();
+            void call.disconnect();
         },
         [call],
     );

@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Vissza",
+        "cancel": "Mégse",
         "click": "Kattintson",
         "close": "Bezárás",
         "collapse": "Összecsukás",
@@ -15,23 +16,27 @@
         "go": "Kezdés",
         "hide": "Elrejtés",
         "invite": "Meghívás",
-        "new_conversation": "Új beszélgetés",
+        "new_conversation": "Új",
         "new_room": "Új szoba",
         "new_section": "Új szakasz",
         "new_video_room": "Új videószoba",
+        "no": "Nem",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
         "pin": "Kitűzés",
         "play": "Lejátszás",
         "react": "Reakció",
         "remove": "Eltávolítás",
+        "remove_this_device": "Eszköz eltávolítása",
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
         "retry": "Újra",
+        "save": "Mentés",
         "search": "Keresés",
         "start_chat": "Csevegés indítása",
         "unpin": "Kitűzés megszüntetése",
-        "view_source": "Forrás megjelenítése"
+        "view_source": "Forrás megjelenítése",
+        "yes": "Igen"
     },
     "common": {
         "attachment": "Melléklet",
@@ -41,8 +46,57 @@
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
     },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Összes törlése",
+            "collapse": "Webcímelőnézetek összecsukása",
+            "failed": "Nem sikerült az előnézet lekérése",
+            "loading": "Előnézet lekérése…",
+            "remove": "Webcímelőnézet eltávolítása"
+        }
+    },
     "devtools": {
+        "custom_themes": {
+            "add": "Egyéni téma hozzáadása",
+            "downloading": "Egyéni téma letöltése…",
+            "error_already_installed": "Már van telepítve ilyen nevű téma.",
+            "error_downloading": "Hiba a téma letöltése során",
+            "error_invalid": "Érvénytelen témaséma.",
+            "error_save_failed": "Nem sikerült a változtatás mentése. A háttérben még befejeződhet.",
+            "help": "Adja meg az alkalmazandó egyéni téma webcímét.",
+            "installed_heading": "Telepített egyéni témák",
+            "refresh": "Téma újbóli letöltése",
+            "url_label": "Egyéni téma webcíme"
+        },
         "toggle_event": "esemény be/ki"
+    },
+    "document_viewer": {
+        "error_load": "Nem sikerült a fájl betöltése.",
+        "loading": "Dokumentum betöltése…"
+    },
+    "emoji": {
+        "categories": "Kategóriák",
+        "category_activities": "Tevékenységek",
+        "category_animals_nature": "Állatok és természet",
+        "category_flags": "Zászlók",
+        "category_food_drink": "Étel és ital",
+        "category_frequently_used": "Gyakran használt",
+        "category_objects": "Tárgyak",
+        "category_smileys_people": "Mosolyok és emberek",
+        "category_symbols": "Szimbólumok",
+        "category_travel_places": "Utazás és helyek",
+        "quick_reactions": "Gyors reakciók"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Keresés megszakítása",
+        "emoji_picker": "Emodzsiválasztó"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Először álljon vissza erre a verzióra: <b>%(version)s</b>, vagy távolítsa el ezt az eszközt.",
+            "description": "Az %(brand)s egy nagyon régi verzióról frissült, és a titkosítási tárolója nem költöztethető át az új formátumra.",
+            "title": "Ez az eszköz nem használható"
+        }
     },
     "keyboard": {
         "shift": "Shift"
@@ -56,7 +110,6 @@
             "clear_status": "Törlés",
             "create_an_account": "Fiók létrehozása",
             "got_an_account": "Van már fiókja?",
-            "manage_account": "Fiók kezelése",
             "sign_in": "Bejelentkezés",
             "title": "Felhasználói menü"
         }
@@ -64,8 +117,17 @@
     "notifications": {
         "all_messages": "Összes üzenet",
         "default_settings": "Alapértelmezett beállításoknak megfelelően",
+        "mark_all_read": "Összes megjelölése olvasottként",
         "mentions_keywords": "Említések és kulcsszavak",
+        "message_didnt_send": "Az üzenet nem lett elküldve. Információkért jelölje ki.",
         "mute_room": "Szoba némítása"
+    },
+    "pdf_viewer": {
+        "page_label": "%(page)s. oldal / %(total)s",
+        "page_number": "Oldalszám",
+        "zoom": "Nagyítás",
+        "zoom_in": "Nagyítás",
+        "zoom_out": "Kicsinyítés"
     },
     "release_announcement": {
         "room_list_section_close": "Rendben",
@@ -81,11 +143,15 @@
             "shared": "Az új tagok látják az előzményeket",
             "world_readable": "Bárki láthatja az előzményeket"
         },
-        "jump_to_date": "Ugrás időpontra",
+        "jump_read_marker": "Görgetés az első olvasatlan üzenethez.",
+        "jump_to_bottom_button": "Görgetés a legfrissebb üzenetekhez",
+        "jump_to_date": "Görgetés időpontra",
         "jump_to_date_beginning": "A szoba kezdete",
         "jump_to_date_prompt": "Idő kiválasztása az ugráshoz",
+        "knock_sent": "Csatlakozási kérés elküldve",
         "pinned_message_badge": "Kitűzött üzenet",
         "status_bar": {
+            "contact_account_provider": "Kapcsolatfelvétel a fiókszolgáltatóval",
             "delete_all": "Összes törlése",
             "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
             "exceeded_resource_limit_title": "Az üzenet nem került elküldésre, mert ez a Matrix-kiszolgáló túllépte az erőforráskorlátot.",
@@ -116,12 +182,12 @@
             "drag_start": "A(z) %(source)s húzása",
             "invitation": "%(roomName)s szoba meghívásának megnyitása.",
             "mention": {
-                "one": "%(roomName)s szoba megnyitása 1 megemlítéssel.",
-                "other": "%(roomName)s szoba megnyitása %(count)s megemlítéssel."
+                "%(roomName)s szoba megnyitása 1 megemlítéssel.": "one",
+                "%(roomName)s szoba megnyitása %(count)s megemlítéssel.": "other"
             },
             "unread": {
-                "one": "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
-                "other": "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
+                "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.": "one",
+                "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel.": "other"
             },
             "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel.",
             "video_call": "Szoba megnyitása videóhívással itt: %(roomName)s",
@@ -175,6 +241,10 @@
         },
         "room_options": "Szobabeállítások",
         "section_created": "Szakasz létrehozva",
+        "section_creation": {
+            "description": "A szakaszok csak Önre vonatkoznak",
+            "label": "Szakasz neve"
+        },
         "section_header": {
             "edit_section": "Szakasz szerkesztése",
             "more_options": "További beállítások",
@@ -195,11 +265,23 @@
         },
         "unread_messages": "Olvasatlan üzenetek"
     },
+    "status": {
+        "set_status": {
+            "away": "Távol",
+            "be_right_back": "Hamarosan visszatér",
+            "choose_emoji": "Emodzsiválasztó",
+            "custom": "Egyéni…",
+            "focus_time": "Fókuszidő",
+            "in_a_meeting": "Találkozón",
+            "on_the_road": "Útközben",
+            "set_status_prompt": "Mi a helyzete?"
+        }
+    },
     "terms": {
         "tac_button": "Általános Szerződési Feltételek elolvasása"
     },
     "threads": {
-        "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről, amely már rendelkezik kapcsolattal"
+        "error_start_thread_existing_relation": "Ebből az üzenetből nem indíthat üzenetszálat."
     },
     "time": {
         "about_day_ago": "egy napja",
@@ -222,6 +304,24 @@
             "declined": {
                 "call_declined": "Hívás elutasítva",
                 "call_declined_by_us": "Elutasított egy hívást"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s hívást indított",
+                    "join_button": "Csatlakozás"
+                },
+                "dm": {
+                    "call_started": "A hívás elindult",
+                    "title": "A hívás folyamatban"
+                },
+                "room": {
+                    "title": "A csoportos hívás folyamatban"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "A csoportos hívás véget ért"
+                }
             },
             "video_call_title": "Videóhívás",
             "voice_call_title": "Hanghívás"
@@ -257,7 +357,7 @@
             "enabled_dm": "Az itt található üzenetek végpontok közti titkosítással rendelkeznek. Ellenőrizze %(displayName)s felhasználót a profilján – kattintson a profilképére.",
             "enabled_local": "Az üzenetek ebben a beszélgetésben végponti titkosítással lesznek védve.",
             "parameters_changed": "Néhány titkosítási paraméter megváltozott.",
-            "state_enabled": "Az ebben a szobában lévő üzenetek és állapotesemények végpontok közötti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak kattintson a profilképére.",
+            "state_enabled": "A szobában lévő üzenetek és állapotesemények végpontok közti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak kattintson a profilképére.",
             "unsupported": "A szobában használt titkosítás nem támogatott."
         },
         "mab": {
@@ -276,13 +376,13 @@
         "pending_moderation": "Moderálásra váró üzenet",
         "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
         "url_preview": {
-            "close": "Előnézet bezárása",
-            "open_link": "Hivatkozás megnyitása",
             "show_n_more": {
-                "one": "%(count)s további előnézet megjelenítése",
-                "other": "%(count)s további előnézet megjelenítése"
+                "%(count)s további előnézet megjelenítése": "other"
             },
-            "view_image": "Kép megtekintése"
+            "view_audio": "Hang megtekintése",
+            "view_file": "Fájl megtekintése",
+            "view_image": "Kép megtekintése",
+            "view_video": "Videó megtekintése"
         }
     },
     "user_menu": {
@@ -291,6 +391,24 @@
         "open_home": "Kezdőlap",
         "open_security": "Biztonság és adatvédelem",
         "open_settings": "Összes beállítás"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Érvényben lévő konfiguráció",
+            "configuration": "Konfiguráció",
+            "in_call": "hívásban",
+            "in_lobby": "váróban",
+            "log_label": "HostBridge napló",
+            "mute_audio": "Hang némítása",
+            "mute_video": "Videó némítása",
+            "no_participants": "Senki sincs ebben a hívásban",
+            "participants": "Résztvevők",
+            "status": "%(roomId)s · intent: %(intent)s · %(state)s · téma: %(theme)s · nyelv: %(language)s",
+            "title": "Element Call (szimulált)",
+            "unknown_room": "Ismeretlen %(roomId)s szoba",
+            "unmute_audio": "Hang visszahangosítása",
+            "unmute_video": "Videó visszahangosítása"
+        }
     },
     "widget": {
         "context_menu": {

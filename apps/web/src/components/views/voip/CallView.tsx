@@ -10,7 +10,7 @@ import React, { type FC, useContext, useEffect, type AriaRole, useCallback } fro
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
-import AppTile from "../elements/AppTile";
+import { CallAppTile } from "./CallAppTile";
 import { CallStore } from "../../../stores/CallStore";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
@@ -30,7 +30,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state
-        call.clean();
+        void call.clean();
     }, [call]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
@@ -44,7 +44,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
 
     return (
         <div className="mx_CallView" role={role}>
-            <AppTile
+            <CallAppTile
                 app={call.widget}
                 room={room}
                 userId={sdkContext.client?.credentials.userId ?? undefined}

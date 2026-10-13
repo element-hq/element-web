@@ -32,7 +32,7 @@ export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): Use
         const ignoredUsers = cli.getIgnoredUsers();
         const index = ignoredUsers.indexOf(member.userId);
         if (index !== -1) ignoredUsers.splice(index, 1);
-        cli.setIgnoredUsers(ignoredUsers);
+        void cli.setIgnoredUsers(ignoredUsers);
     }, [cli, member]);
 
     const ignore = useCallback(async () => {
@@ -47,7 +47,7 @@ export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): Use
         if (confirmed) {
             const ignoredUsers = cli.getIgnoredUsers();
             ignoredUsers.push(member.userId);
-            cli.setIgnoredUsers(ignoredUsers);
+            await cli.setIgnoredUsers(ignoredUsers);
         }
     }, [cli, member]);
 
@@ -74,7 +74,7 @@ export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): Use
         if (isIgnored) {
             unignore();
         } else {
-            ignore();
+            void ignore();
         }
     };
 

@@ -21,17 +21,17 @@ export interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "r
      * The number of positions to pad the minutes part.
      *
      * @example
-     * If minutesMaxLength = 1, the clock will show 5:31 instead of 05:31.
+     * If minutesMinLength = 1, the clock will show 5:31 instead of 05:31.
      */
-    minutesMaxLength?: number;
+    minutesMinLength?: number;
 
     /**
      * The number of positions to pad the hour part.
      *
      * @example
-     * If hoursMaxLength = 1, the clock will show 1:05:31 instead of 01:05:31.
+     * If hoursMinLength = 1, the clock will show 1:05:31 instead of 01:05:31.
      */
-    hoursMaxLength?: number;
+    hoursMinLength?: number;
 }
 
 /**
@@ -44,7 +44,7 @@ export interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "r
  * <Clock seconds={125} />
  * ```
  */
-export function Clock({ seconds, className, minutesMaxLength, hoursMaxLength, ...rest }: Props): JSX.Element {
+export function Clock({ seconds, className, minutesMinLength, hoursMinLength, ...rest }: Props): JSX.Element {
     // Memoize current second to avoid recalculating the duration when seconds changes slightly (e.g. 1.2 -> 1.3)
     const currentSecond = useMemo(() => Math.floor(seconds), [seconds]);
     const duration = useMemo(() => calculateDuration(currentSecond), [currentSecond]);
@@ -57,8 +57,8 @@ export function Clock({ seconds, className, minutesMaxLength, hoursMaxLength, ..
             {...rest}
         >
             {formatSeconds(seconds, {
-                minutesMaxLength,
-                hoursMaxLength,
+                minutesMinLength,
+                hoursMinLength,
             })}
         </time>
     );

@@ -53,7 +53,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         // require & validate the space name field
         if (spaceNameField.current && !(await spaceNameField.current.validate({ allowEmpty: false }))) {
             spaceNameField.current.focus();
-            spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            void spaceNameField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
@@ -64,7 +64,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
             !(await spaceAliasField.current.validate({ allowEmpty: true }))
         ) {
             spaceAliasField.current.focus();
-            spaceAliasField.current.validate({ allowEmpty: true, focused: true });
+            void spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             setBusy(false);
             return;
         }

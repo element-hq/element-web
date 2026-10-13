@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig, devices, type Project } from "@playwright/test";
 import fs, { globSync } from "node:fs";
-import path, { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Options } from "./playwright/element-web-test.ts";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const chromeProject = {
     ...devices["Desktop Chrome"],
@@ -85,7 +85,7 @@ export default defineConfig<Options>({
     },
     webServer: {
         command: process.env.WEBAPP_PATH
-            ? `npx serve -p 8080 -L ${process.env.WEBAPP_PATH}`
+            ? `pnpm exec serve -p 8080 -L ${process.env.WEBAPP_PATH}`
             : "docker run --rm -p 8080:80 ghcr.io/element-hq/element-web:develop",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,

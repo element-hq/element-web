@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, describe, it, beforeEach, vi } from "vitest";
 import { fs as memfs, vol } from "memfs";
-import { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { getBuildConfig } from "./build-config.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 vi.mock("node:fs", () => ({ default: memfs }));
 

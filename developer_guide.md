@@ -110,11 +110,10 @@ You'll need to do this in each new terminal you open before building Element.
 
 ## Running the tests
 
-There are a number of application-level tests in the `tests` directory; these
-are designed to run with Jest and JSDOM. To run them
+There are a number of application-level tests; these are designed to run with Vitest. To run them
 
 ```
-pnpm test
+pnpm test:unit
 ```
 
 ### End-to-End tests

@@ -1,0 +1,647 @@
+/*
+Copyright 2025 Element Creations Ltd.
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, beforeAll, afterEach, type Mocked } from "vitest";
+import {
+    type MatrixClient,
+    type Device,
+    HistoryVisibility,
+    Preset,
+    RoomType,
+    JoinRule,
+    RoomVersionStability,
+} from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { act } from "test-utils-rtl";
+import {
+    stubClient,
+    setupAsyncStoreWithClient,
+    mockPlatformPeg,
+    getMockClientWithEventEmitter,
+    mkRoom,
+} from "test-utils";
+
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import WidgetStore from "./stores/WidgetStore";
+import WidgetUtils from "./utils/WidgetUtils";
+import { JitsiCall, ElementCall } from "./models/Call";
+import createRoom, {
+    checkUserIsAllowedToChangeEncryption,
+    canEncryptToAllUsers,
+    waitForRoomEncryption,
+} from "./createRoom";
+import { ElementCallMemberEventType } from "./call-types";
+import DMRoomMap from "./utils/DMRoomMap";
+import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
+import SdkConfig from "./SdkConfig";
+
+/**
+ * This should be the same as
+ * { POWER_LEVEL_EVENTS_DEFAULT, [ElementCallMemberEventType.name]: 0 }
+ * to get the most regression coverage we provide the string based snapshot here.
+ */
+const POWER_LEVELS_WITH_CALL_MEMBER = {
+    // Default events power levels we always expect
+    "m.room.avatar": 50,
+    "m.room.canonical_alias": 50,
+    "m.room.encryption": 100,
+    "m.room.history_visibility": 100,
+    "m.room.name": 50,
+    "m.room.power_levels": 100,
+    "m.room.server_acl": 100,
+    "m.room.tombstone": 100,
+    // Custom rtc.member event we expect to be 0
+    [ElementCallMemberEventType.name]: 0,
+};
+
+describe("createRoom", () => {
+    mockPlatformPeg();
+
+    let client: Mocked<MatrixClient>;
+    beforeEach(() => {
+        stubClient();
+        client = vi.mocked(MatrixClientPeg.safeGet());
+        DMRoomMap.makeShared(client);
+    });
+
+    afterEach(() => {
+        vi.clearAllMocks();
+        SdkConfig.reset();
+    });
+
+    it("creates a private room", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PrivateChat } });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("creates a private room with encryption", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PrivateChat }, encryption: true });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        algorithm: "m.megolm.v1.aes-sha2",
+                    },
+                },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("creates a private room with state event encryption", async () => {
+        // When we create a room with state encryption and details like name,
+        // topic, avatar
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {
+            name: "Super-Secret Super-colliding Super Room",
+            topic: "super **Topic**",
+            avatar: "http://example.com/myavatar.png",
+        });
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+
+        // And the room name, topic and avatar are set later
+        expect(client.setRoomName).toHaveBeenCalledWith("!1:example.org", "Super-Secret Super-colliding Super Room");
+
+        expect(client.setRoomTopic).toHaveBeenCalledWith(
+            "!1:example.org",
+            "super **Topic**",
+            "super <strong>Topic</strong>",
+        );
+
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            "!1:example.org",
+            "m.room.avatar",
+            { url: "http://example.com/myavatar.png" },
+            "",
+        );
+    });
+
+    it("creates a private room with state event encryption - file avatar", async () => {
+        // When we create a room with state encryption and a file avatar
+        client.uploadContent.mockResolvedValue({ content_uri: "mxc://foo.png" });
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {
+            avatar: new File([], "myfile.png"),
+        });
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+
+        // And the avatar is set later
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            "!1:example.org",
+            "m.room.avatar",
+            { url: "mxc://foo.png" },
+            "",
+        );
+    });
+
+    it("creates a private room with state event encryption - no details", async () => {
+        // When we create a room with state encryption and no further room
+        // details
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {});
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+
+        // And the room name, topic and avatar were not set since we didn't
+        // supply them
+        expect(client.setRoomName).not.toHaveBeenCalled();
+        expect(client.setRoomTopic).not.toHaveBeenCalled();
+        expect(client.sendStateEvent).not.toHaveBeenCalled();
+    });
+
+    it("cancels room creation if we time out before getting state events", async () => {
+        // We are not testing createRoom here, just waitForRoomEncryption, which is used
+        // inside. This allows us to pass in a shorter waitTime.
+
+        // Create a mock room that provides the needed methods
+        const { room_id: roomId } = await client.createRoom({});
+        const room = client.getRoom(roomId)!;
+        room.getLiveTimeline = vi
+            .fn()
+            .mockReturnValue({ getState: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }) });
+
+        // Call waitForRoomEncryption with a small timeout ans expect an error
+        const error = new Error("Timed out while waiting for room to enable encryption");
+        await expect(waitForRoomEncryption(room, 1)).rejects.toThrow(error);
+    });
+
+    it("creates a private room in a space", async () => {
+        const roomId = await createRoom(client, { roomType: RoomType.Space });
+        const parentSpace = client.getRoom(roomId!)!;
+        client.createRoom.mockClear();
+
+        await createRoom(client, { parentSpace, createOpts: { preset: Preset.PrivateChat } });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("creates a public room", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PublicChat } });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "public_chat",
+            visibility: "private",
+            initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("creates a public room with a topic", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PublicChat }, topic: "My topic" });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "public_chat",
+            visibility: "private",
+            topic: "My topic",
+            initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("creates a public room in a space", async () => {
+        const roomId = await createRoom(client, { roomType: RoomType.Space });
+        const parentSpace = client.getRoom(roomId!)!;
+        client.createRoom.mockClear();
+
+        await createRoom(client, { parentSpace, createOpts: { preset: Preset.PublicChat } });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "public_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
+            ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
+        });
+    });
+
+    it("sets up Jitsi video rooms correctly", async () => {
+        setupAsyncStoreWithClient(WidgetStore.instance, client);
+        vi.spyOn(WidgetUtils, "waitForRoomWidget").mockResolvedValue();
+        const createCallSpy = vi.spyOn(JitsiCall, "create");
+
+        await createRoom(client, { roomType: RoomType.ElementVideo });
+
+        const [
+            [
+                {
+                    power_level_content_override: {
+                        events: {
+                            "im.vector.modular.widgets": widgetPower,
+                            [JitsiCall.MEMBER_EVENT_TYPE]: callMemberPower,
+                        },
+                    },
+                },
+            ],
+        ] = client.createRoom.mock.calls as any; // no good type
+
+        // and should have actually set it up
+        expect(createCallSpy).toHaveBeenCalled();
+
+        // All members should be able to update their connected devices
+        expect(callMemberPower).toEqual(0);
+        // widget should be immutable for admins
+        expect(widgetPower).toEqual(100);
+    });
+
+    it("sets up Element video rooms correctly", async () => {
+        const createCallSpy = vi.spyOn(ElementCall, "create");
+
+        await createRoom(client, { roomType: RoomType.UnstableCall });
+
+        const callMemberPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallMemberEventType.name];
+
+        // and should have actually set it up
+        expect(createCallSpy).toHaveBeenCalled();
+
+        // All members should be able to update their connected devices
+        expect(callMemberPower).toEqual(0);
+    });
+
+    it("doesn't create calls in non-video-rooms", async () => {
+        const createJitsiCallSpy = vi.spyOn(JitsiCall, "create");
+        const createElementCallSpy = vi.spyOn(ElementCall, "create");
+
+        await createRoom(client, {});
+
+        expect(createJitsiCallSpy).not.toHaveBeenCalled();
+        expect(createElementCallSpy).not.toHaveBeenCalled();
+    });
+
+    it("correctly sets up MSC3401 power levels", async () => {
+        await createRoom(client, {});
+
+        const callMemberPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallMemberEventType.name];
+
+        expect(callMemberPower).toBe(0);
+    });
+
+    it("should upload avatar if one is passed", async () => {
+        client.uploadContent.mockResolvedValue({ content_uri: "mxc://foobar" });
+        const avatar = new File([], "avatar.png");
+        await createRoom(client, { avatar });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    {
+                        content: {
+                            url: "mxc://foobar",
+                        },
+                        type: "m.room.avatar",
+                    },
+                ]),
+            }),
+        );
+    });
+
+    it("should strip self-invite", async () => {
+        await createRoom(client, { dmUserId: client.getSafeUserId() });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.not.objectContaining({
+                invite: expect.any(Array),
+            }),
+        );
+    });
+
+    it("should set history visibility to invited for DMs", async () => {
+        await createRoom(client, { dmUserId: "@bob:example.org" });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                ]),
+            }),
+        );
+    });
+
+    it("should respect an explicit history visibility override", async () => {
+        await createRoom(client, {
+            createOpts: { preset: Preset.PrivateChat },
+            historyVisibility: HistoryVisibility.Shared,
+        });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    { type: "m.room.history_visibility", content: { history_visibility: "shared" } },
+                ]),
+            }),
+        );
+    });
+
+    describe("room versions", () => {
+        afterEach(() => {
+            vi.clearAllMocks();
+        });
+        it("should use the correct room version for knocking when default does not support it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "1",
+                    available: {
+                        [PreferredRoomVersions.KnockRooms]: RoomVersionStability.Stable,
+                        "1": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { joinRule: JoinRule.Knock });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    room_version: PreferredRoomVersions.KnockRooms,
+                }),
+            );
+        });
+        it("should use the default room version for knocking when default supports it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "12",
+                    available: {
+                        [PreferredRoomVersions.KnockRooms]: RoomVersionStability.Stable,
+                        "12": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { joinRule: JoinRule.Knock });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    room_version: expect.anything(),
+                }),
+            );
+        });
+        it("should use the correct room version for restricted join rules when default does not support it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "1",
+                    available: {
+                        [PreferredRoomVersions.RestrictedRooms]: RoomVersionStability.Stable,
+                        "1": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.Restricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    room_version: PreferredRoomVersions.RestrictedRooms,
+                }),
+            );
+        });
+        it("should use the default room version for restricted join rules when default supports it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "12",
+                    available: {
+                        [PreferredRoomVersions.RestrictedRooms]: RoomVersionStability.Stable,
+                        "12": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.Restricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    room_version: expect.anything(),
+                }),
+            );
+        });
+    });
+});
+
+describe("canEncryptToAllUsers", () => {
+    const user1Id = "@user1:example.com";
+    const user2Id = "@user2:example.com";
+
+    const devices = new Map([
+        ["DEV1", {} as unknown as Device],
+        ["DEV2", {} as unknown as Device],
+    ]);
+
+    let client: Mocked<MatrixClient>;
+    let cryptoApi: Mocked<CryptoApi>;
+
+    beforeAll(() => {
+        client = vi.mocked(stubClient());
+        cryptoApi = vi.mocked(client.getCrypto()!);
+    });
+
+    it("should return true if userIds is empty", async () => {
+        cryptoApi.getUserDeviceInfo.mockResolvedValue(new Map());
+        const result = await canEncryptToAllUsers(client, []);
+        expect(result).toBe(true);
+    });
+
+    it("should return true if download keys does not return any user", async () => {
+        cryptoApi.getUserDeviceInfo.mockResolvedValue(new Map());
+        const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
+        expect(result).toBe(true);
+    });
+
+    it("should return false if none of the users has a device", async () => {
+        cryptoApi.getUserDeviceInfo.mockResolvedValue(
+            new Map([
+                [user1Id, new Map()],
+                [user2Id, new Map()],
+            ]),
+        );
+        const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
+        expect(result).toBe(false);
+    });
+
+    it("should return false if some of the users don't have a device", async () => {
+        cryptoApi.getUserDeviceInfo.mockResolvedValue(
+            new Map([
+                [user1Id, new Map()],
+                [user2Id, devices],
+            ]),
+        );
+        const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
+        expect(result).toBe(false);
+    });
+
+    it("should return true if all users have a device", async () => {
+        cryptoApi.getUserDeviceInfo.mockResolvedValue(
+            new Map([
+                [user1Id, devices],
+                [user2Id, devices],
+            ]),
+        );
+        const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
+        expect(result).toBe(true);
+    });
+});
+
+describe("checkUserIsAllowedToChangeEncryption()", () => {
+    const mockClient = getMockClientWithEventEmitter({
+        doesServerForceEncryptionForPreset: vi.fn(),
+        getClientWellKnown: vi.fn().mockReturnValue({}),
+    });
+    beforeEach(() => {
+        mockClient.doesServerForceEncryptionForPreset.mockClear().mockResolvedValue(false);
+        mockClient.getClientWellKnown.mockClear().mockReturnValue({});
+    });
+
+    it("should allow changing when neither server nor well known force encryption", async () => {
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: true,
+        });
+
+        expect(mockClient.doesServerForceEncryptionForPreset).toHaveBeenCalledWith(Preset.PrivateChat);
+    });
+
+    it("should not allow changing when server forces encryption", async () => {
+        mockClient.doesServerForceEncryptionForPreset.mockResolvedValue(true);
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: false,
+            forcedValue: true,
+        });
+    });
+
+    it("should not allow changing when well-known force_disable is true", async () => {
+        mockClient.getClientWellKnown.mockReturnValue({
+            "io.element.e2ee": {
+                force_disable: true,
+            },
+        });
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: false,
+            forcedValue: false,
+        });
+    });
+
+    it("should not allow changing when server forces enabled and wk forces disabled encryption", async () => {
+        mockClient.getClientWellKnown.mockReturnValue({
+            "io.element.e2ee": {
+                force_disable: true,
+            },
+        });
+        mockClient.doesServerForceEncryptionForPreset.mockResolvedValue(true);
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual(
+            // server's forced enable takes precedence
+            { allowChange: false, forcedValue: true },
+        );
+    });
+});
+
+interface RoomDetails {
+    name?: string;
+    topic?: string;
+    avatar?: string | File;
+}
+
+/**
+ * Call createRoom passing in stateEncryption: true, and set up the returned
+ * room to return true when hasEncryptionStateEvent is called, to avoid
+ * createRoom stalling forever waiting for an m.room.encryption event to arrive.
+ */
+async function createRoomWithStateEncryption(client: MatrixClient, roomDetails: RoomDetails) {
+    const oldCreateRoom = client.createRoom;
+
+    // @ts-ignore Replacing createRoom
+    client.createRoom = async (options) => {
+        const { room_id: roomId } = await oldCreateRoom(options);
+        const room = client.getRoom(roomId);
+        room!.hasEncryptionStateEvent = () => true;
+        return {
+            room_id: roomId,
+        };
+    };
+
+    // When we create a room asking for state encryption
+    await act(
+        async () =>
+            await createRoom(client, {
+                createOpts: {
+                    preset: Preset.PrivateChat,
+                },
+                encryption: true,
+                stateEncryption: true,
+                ...roomDetails,
+            }),
+    );
+    return oldCreateRoom;
+}

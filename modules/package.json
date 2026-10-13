@@ -9,7 +9,8 @@
         "test:playwright:screenshots": "nx test:playwright:screenshots --"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "workspace:*"
+        "@element-hq/element-web-playwright-common": "workspace:*",
+        "serve": "catalog:"
     },
     "private": true
 }

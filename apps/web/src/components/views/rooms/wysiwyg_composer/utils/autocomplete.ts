@@ -80,12 +80,18 @@ function getCSSProperties({
     url,
     initialLetter,
     id = "",
+    userStatusEmoji,
 }: {
     url: string;
     initialLetter?: string;
     id: string;
+    userStatusEmoji?: string;
 }): string {
     const cssProperties = [`--avatar-background: url(${url})`, `--avatar-letter: '${initialLetter}'`];
+
+    if (userStatusEmoji) {
+        cssProperties.push(`--user-status: '${CSS.escape(userStatusEmoji)}'`);
+    }
 
     const textColor = Avatar.getAvatarTextColor(id);
     if (textColor) {
@@ -135,6 +141,7 @@ export function getMentionAttributes(
                 url: avatarUrl,
                 initialLetter,
                 id: mentionedMember.userId,
+                userStatusEmoji: completion.getUserStatus?.()?.emoji,
             }),
         );
     } else if (completion.type === "room") {

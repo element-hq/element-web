@@ -11,6 +11,7 @@ export default class SettingsModule {
         this.api = api;
     }
     async load() {
+        // oxlint-disable-next-line no-alert
         alert(this.api.settings.getValue("language"));
     }
 }

@@ -15,6 +15,7 @@ import {
     TweakName,
     EventStatus,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { IPushRule, Room, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { NotificationLevel } from "./stores/notifications/NotificationLevel";
@@ -278,6 +279,16 @@ export function determineUnreadState(
     }
 
     if (getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute) {
+        return { symbol: null, count: 0, level: NotificationLevel.None, invited: false };
+    }
+
+    // A room we are no longer in has nothing left to read, and whatever count it was holding when we
+    // left can never be cleared, so it would sit there for good. Our own member event is what says so:
+    // getMyMembership() cannot tell a room we have left apart from one we have yet to hear about, and
+    // treating the second as the first would blank a badge that is only late. The knock case above is
+    // also a leave, which is why this comes after it.
+    const myMembership = room.getMember(room.myUserId)?.membership;
+    if (myMembership === KnownMembership.Leave || myMembership === KnownMembership.Ban) {
         return { symbol: null, count: 0, level: NotificationLevel.None, invited: false };
     }
 

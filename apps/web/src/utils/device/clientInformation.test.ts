@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { vi, describe, it, expect, afterAll, afterEach, beforeEach } from "vitest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { getMockClientWithEventEmitter } from "test-utils";
 
@@ -78,7 +78,7 @@ describe("getDeviceClientInformation()", () => {
         getAccountData: vi.fn(),
     });
 
-    beforeEach(() => {
+    afterEach(() => {
         vi.resetAllMocks();
     });
 

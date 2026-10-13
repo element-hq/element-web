@@ -32,7 +32,7 @@ const showPickerDialog = (
     onFinished: (config?: ValidatedServerConfig) => void,
 ): void => {
     const { finished } = Modal.createDialog(ServerPickerDialog, { title, serverConfig });
-    finished.then(([config]) => onFinished(config));
+    void finished.then(([config]) => onFinished(config));
 };
 
 const onHelpClick = (): void => {

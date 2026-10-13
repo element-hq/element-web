@@ -43,6 +43,7 @@ export default class Waveform extends React.PureComponent<IProps> {
                     });
                     return (
                         <span
+                            // oxlint-disable-next-line react/no-array-index-key
                             key={i}
                             style={
                                 {

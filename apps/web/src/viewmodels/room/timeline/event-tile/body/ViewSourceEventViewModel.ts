@@ -91,7 +91,7 @@ export class ViewSourceEventViewModel
         this.removeDecryptionListener();
 
         const { cli, mxEvent } = this.props;
-        cli.decryptEventIfNeeded(mxEvent);
+        void cli.decryptEventIfNeeded(mxEvent);
 
         if (!mxEvent.isBeingDecrypted()) return;
 

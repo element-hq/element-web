@@ -22,6 +22,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
+import { showSpaceSettings } from "../../../utils/space";
 
 interface IProps {
     room: Room;
@@ -76,7 +77,13 @@ export default function RoomTopic({ room, className }: IProps): JSX.Element {
                                 kind="primary_outline"
                                 onClick={() => {
                                     modal.close();
-                                    dis.dispatch({ action: "open_room_settings" });
+                                    // SpaceRoomView renders this component for spaces too, and a space
+                                    // has its own settings dialog.
+                                    if (room.isSpaceRoom()) {
+                                        showSpaceSettings(room);
+                                    } else {
+                                        dis.dispatch({ action: "open_room_settings" });
+                                    }
                                 }}
                             >
                                 {_t("room|edit_topic")}

@@ -29,7 +29,7 @@ interface IState {
 export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new BreadcrumbsStore();
-        instance.start();
+        void instance.start();
         return instance;
     })();
 

@@ -17,7 +17,14 @@ import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
-import { EventPresentationProvider, type EventDensity, type EventLayout, I18nApi, I18nContext } from "../src";
+import {
+    EventPresentationProvider,
+    type EventDensity,
+    type EventLayout,
+    I18nApi,
+    I18nContext,
+    LinkedTextContext,
+} from "../src";
 import { setLanguage } from "../src/core/i18n/i18n";
 import { type StoryContext } from "storybook/internal/csf";
 import { DragDropProvider } from "@dnd-kit/react";
@@ -161,6 +168,14 @@ const withI18nProvider: Decorator = (Story) => {
     );
 };
 
+const withLinkedTextProvider: Decorator = (Story) => {
+    return (
+        <LinkedTextContext.Provider value={{}}>
+            <Story />
+        </LinkedTextContext.Provider>
+    );
+};
+
 const withEventPresentationProvider: Decorator = (Story, context) => {
     return (
         <EventPresentationProvider
@@ -210,6 +225,7 @@ const preview: Preview = {
         withEventPresentationProvider,
         withTooltipProvider,
         withI18nProvider,
+        withLinkedTextProvider,
         withDragDropProvider,
     ],
     parameters: {

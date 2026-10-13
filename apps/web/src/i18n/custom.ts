@@ -8,11 +8,12 @@
 import { logger } from "matrix-js-sdk/src/logger";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
 import _ from "lodash";
-import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import { KEY_SEPARATOR, registerTranslations } from "@element-hq/web-shared-components";
+import { type Translation } from "matrix-web-i18n";
 
 import SdkConfig from "../SdkConfig";
-import { ModuleRunner } from "../modules/ModuleRunner";
+
+export type TranslationStringsObject = { [lang: string]: { [key: string]: Translation } };
 
 let cachedCustomTranslations: TranslationStringsObject | undefined;
 let cachedCustomTranslationsExpire = 0; // zero to trigger expiration right away
@@ -30,9 +31,6 @@ export async function registerCustomTranslations({
 }: {
     testOnlyIgnoreCustomTranslationsCache?: boolean;
 } = {}): Promise<void> {
-    const moduleTranslations = ModuleRunner.instance.allTranslations;
-    doRegisterTranslations(moduleTranslations);
-
     const lookupUrl = SdkConfig.get().custom_translations_url;
     if (!lookupUrl) return; // easy - nothing to do
 

@@ -42,6 +42,7 @@ export default class Spoiler extends React.Component<IProps, IState> {
             <button
                 className={"mx_EventTile_spoiler" + (this.state.visible ? " visible" : "")}
                 onClick={this.toggleVisible}
+                type="button"
             >
                 {reason}
                 &nbsp;

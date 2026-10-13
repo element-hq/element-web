@@ -12,7 +12,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/vitest";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { waitFor } from "test-utils-rtl";
 import { mkStubRoom, stubClient } from "test-utils";
 

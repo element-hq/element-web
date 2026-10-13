@@ -74,7 +74,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
 
     private onMoueUp = (): void => {
         if (this.props.roomId) {
-            SettingsStore.setValue(
+            void SettingsStore.setValue(
                 "ircDisplayNameWidth",
                 this.props.roomId,
                 SettingLevel.ROOM_DEVICE,

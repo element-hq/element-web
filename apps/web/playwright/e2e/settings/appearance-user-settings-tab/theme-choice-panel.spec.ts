@@ -73,24 +73,28 @@ test.describe("Appearance user settings tab", () => {
         });
 
         test.describe("custom theme", () => {
-            test.use({
-                labsFlags: ["feature_custom_themes"],
-            });
-
-            test("should render the custom theme section", { tag: "@screenshot" }, async ({ page, app, util }) => {
-                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
+            test.beforeEach(async ({ util }) => {
+                // Adding/removing a custom theme now happens through the devtools "Custom themes"
+                // tool, which requires an open room rather than the appearance tab, so close the
+                // tab opened by the parent describe's beforeEach and switch to a room instead.
+                await util.closeAppearanceTab();
+                await util.createAndDisplayRoom();
             });
 
             test(
-                "should be able to add and remove a custom theme",
+                "should be able to add and remove a custom theme via devtools",
                 { tag: "@screenshot" },
                 async ({ page, app, util }) => {
                     await util.addCustomTheme();
 
+                    await util.openAppearanceTab();
                     await expect(util.getCustomTheme()).not.toBeChecked();
                     await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
+                    await util.closeAppearanceTab();
 
                     await util.removeCustomTheme();
+
+                    await util.openAppearanceTab();
                     await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
                 },
             );
@@ -100,6 +104,8 @@ test.describe("Appearance user settings tab", () => {
                 { tag: "@screenshot" },
                 async ({ page, app, user, util }) => {
                     await util.addCustomTheme();
+
+                    await util.openAppearanceTab();
                     await util.getCustomTheme().click();
                     await util.closeAppearanceTab();
 

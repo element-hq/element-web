@@ -11,7 +11,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { createTestClient } from "test-utils";
 
-import { getMockedRooms } from "../../../test/unit-tests/stores/room-list-v3/skip-list/getMockedRooms";
+import { getMockedRooms } from "../../stores/room-list-v3/skip-list/__mocks__";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { compareRoomsByRecency, sortRoomsByRecency } from "./sortRoomsByRecency";
 

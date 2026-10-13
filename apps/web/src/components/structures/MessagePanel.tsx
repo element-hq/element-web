@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler, useContext } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -18,12 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
-import {
-    DateSeparatorView,
-    ReadMarker,
-    TimelineSeparator,
-    useCreateAutoDisposedViewModel,
-} from "@element-hq/web-shared-components";
+import { ReadMarker, TimelineSeparator, type EventTileRenderingMode } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -49,6 +44,8 @@ import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { ModuleApi } from "../../modules/Api";
+import type { MessageRenderInfo } from "../../modules/customComponentApi";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
 import { type BaseGrouper } from "./grouper/BaseGrouper";
@@ -56,23 +53,11 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
-import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import { isEligibleForSpecialReceipt } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
-import { SDKContext } from "../../contexts/SDKContext.ts";
+import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
-
-/**
- * Creates and auto-disposes the DateSeparatorViewModel for message panel rendering.
- */
-function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
-    const sdkContext = useContext(SDKContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
-    );
-    return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
-}
 
 /**
  * Indicates which separator (if any) should be rendered between timeline events.
@@ -194,6 +179,9 @@ interface IProps {
 
     // which layout to use
     layout?: Layout;
+
+    // which shape to use
+    shape?: EventTileRenderingMode;
 
     permalinkCreator?: RoomPermalinkCreator;
     editState?: EditorStateTransfer;
@@ -483,15 +471,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: Implement granular (per-room) hide options
-    public shouldShowEvent(mxEv: MatrixEvent, forceHideEvents = false): boolean {
+    public shouldShowEvent(ev: WrappedEvent, forceHideEvents = false): boolean {
         if (this.props.hideThreadedMessages && this.props.room) {
-            const { shouldLiveInRoom } = this.props.room.eventShouldLiveIn(mxEv, this.props.events);
+            const { shouldLiveInRoom } = this.props.room.eventShouldLiveIn(ev.event, this.props.events);
             if (!shouldLiveInRoom) {
                 return false;
             }
         }
 
-        if (MatrixClientPeg.safeGet().isUserIgnored(mxEv.getSender()!)) {
+        if (MatrixClientPeg.safeGet().isUserIgnored(ev.event.getSender()!)) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
@@ -499,14 +487,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return true;
         }
 
-        if (!haveRendererForEvent(mxEv, MatrixClientPeg.safeGet(), this.showHiddenEvents)) {
+        if (!haveRendererForEvent(ev.event, MatrixClientPeg.safeGet(), this.showHiddenEvents, ev.customRenderInfo)) {
             return false; // no tile = no show
         }
 
         // Always show highlighted event
-        if (this.props.highlightedEventId === mxEv.getId()) return true;
+        if (this.props.highlightedEventId === ev.event.getId()) return true;
 
-        return !shouldHideEvent(mxEv, this.context);
+        return !shouldHideEvent(ev.event, this.context);
     }
 
     public readMarkerForEvent(eventId: string, isLastEvent: boolean): ReactNode {
@@ -632,7 +620,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // a local echo, to manage the read-marker.
         let lastShownEvent: MatrixEvent | undefined;
         const events: WrappedEvent[] = this.props.events.map((event) => {
-            return { event, shouldShow: this.shouldShowEvent(event) };
+            const renderInfo = ModuleApi.instance.customComponents.getMessageRenderInfo(event);
+            return {
+                event,
+                shouldShow: this.shouldShowEvent({ event, customRenderInfo: renderInfo }),
+                customRenderInfo: renderInfo,
+            };
         });
 
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
@@ -703,7 +696,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
 
             for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
+                if (!this.props.disableGrouping && Grouper.canStartGroup(this, wrappedEvent)) {
                     grouper = new Grouper(
                         this,
                         wrappedEvent,
@@ -768,7 +761,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 const separatorRoomId = this.props.room.roomId;
                 ret.push(
                     <li key={`${separatorRoomId}-${ts1}`}>
-                        <DateSeparatorWrapper key={`${separatorRoomId}-${ts1}`} roomId={separatorRoomId} ts={ts1} />
+                        <DateSeparatorWrapper
+                            key={`${separatorRoomId}-${ts1}`}
+                            roomId={separatorRoomId}
+                            ts={ts1}
+                            className="mx_TimelineSeparator"
+                        />
                     </li>,
                 );
             } else if (wantsSeparator === SeparatorKind.LateEvent) {
@@ -793,7 +791,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             lastInSection =
                 willWantSeparator === SeparatorKind.Date ||
                 mxEv.getSender() !== nextEv.getSender() ||
-                getEventDisplayInfo(cli, nextEv, this.showHiddenEvents).isInfoMessage ||
+                getEventDisplayInfo(cli, nextEv, this.showHiddenEvents, undefined, nextEvent?.customRenderInfo)
+                    .isInfoMessage ||
                 !shouldFormContinuation(mxEv, nextEv, cli, this.showHiddenEvents, this.context.timelineRenderingType);
         }
 
@@ -816,6 +815,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 ref={this.collectEventTile.bind(this, eventId)}
                 alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                 mxEvent={mxEv}
+                shape={this.props.shape}
                 continuation={continuation}
                 isRedacted={mxEv.isRedacted()}
                 replacingEventId={mxEv.replacingEventId()}
@@ -918,16 +918,16 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
         let lastShownEventId: string | undefined;
-        for (const event of this.props.events) {
-            if (this.shouldShowEvent(event)) {
-                lastShownEventId = event.getId();
+        for (const wrappedEvent of events) {
+            if (this.shouldShowEvent(wrappedEvent)) {
+                lastShownEventId = wrappedEvent.event.getId();
             }
             if (!lastShownEventId) {
                 continue;
             }
 
             const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            const newReceipts = this.getReadReceiptsForEvent(event);
+            const newReceipts = this.getReadReceiptsForEvent(wrappedEvent.event);
             if (!newReceipts) continue;
             receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
 
@@ -1105,6 +1105,7 @@ export interface WrappedEvent {
     event: MatrixEvent;
     shouldShow?: boolean;
     lastSuccessfulWeSent?: boolean;
+    customRenderInfo?: MessageRenderInfo | null;
 }
 
 // all the grouper classes that we use, ordered by priority

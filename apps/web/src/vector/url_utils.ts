@@ -28,8 +28,15 @@ export function parseQsFromFragment(url: Location | URL): { location: string; pa
         };
     }
 
+    let location = main;
+    try {
+        location = decodeURIComponent(main);
+    } catch {
+        // The fragment has a malformed percent-encoding, which we leave as it is rather than failing to load
+    }
+
     return {
-        location: decodeURIComponent(main),
+        location,
         params: query ? new URLSearchParams(query) : undefined,
     };
 }
