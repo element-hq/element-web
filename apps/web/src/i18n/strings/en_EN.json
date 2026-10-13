@@ -2573,10 +2573,8 @@
                 "set_up_recovery_confirm_button": "Finish set up",
                 "set_up_recovery_confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
                 "set_up_recovery_confirm_title": "Enter your recovery key to confirm",
-                "set_up_recovery_description": "Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘%(changeRecoveryKeyButton)s’.",
                 "set_up_recovery_save_key_description": "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.",
                 "set_up_recovery_save_key_title": "Save your recovery key somewhere safe",
-                "set_up_recovery_secondary_description": "After selecting Continue, we'll generate a recovery key for you.",
                 "title": "Backup"
             },
             "title": "Encryption"

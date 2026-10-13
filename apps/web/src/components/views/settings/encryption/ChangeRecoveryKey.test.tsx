@@ -48,32 +48,13 @@ describe("<ChangeRecoveryKey />", () => {
     }
 
     describe("flow to set up a recovery key", () => {
-        it("should display information about the recovery key", async () => {
-            const user = userEvent.setup();
-
-            const onCancelClick = vi.fn();
-            const { asFragment } = renderComponent(false, vi.fn(), onCancelClick);
-            await waitFor(() =>
-                expect(
-                    screen.getByText(
-                        "Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.",
-                    ),
-                ).toBeInTheDocument(),
-            );
-            expect(asFragment()).toMatchSnapshot();
-
-            await user.click(screen.getByRole("button", { name: "Cancel" }));
-            expect(onCancelClick).toHaveBeenCalled();
-        });
-
         it("should display the recovery key", async () => {
             const user = userEvent.setup();
 
             const onCancelClick = vi.fn();
             const { asFragment } = renderComponent(false, vi.fn(), onCancelClick);
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
 
-            expect(screen.getByText("Save your recovery key somewhere safe")).toBeInTheDocument();
+            await waitFor(() => expect(screen.getByText("Save your recovery key somewhere safe")).toBeInTheDocument());
             expect(screen.getByText("encoded private key")).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
 
@@ -92,8 +73,7 @@ describe("<ChangeRecoveryKey />", () => {
 
             const onFinish = vi.fn();
             const { asFragment } = renderComponent(false, onFinish);
-            // Display the recovery key to save
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
             // Display the form to confirm the recovery key
             await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
 
@@ -130,8 +110,7 @@ describe("<ChangeRecoveryKey />", () => {
 
             const onFinish = vi.fn();
             renderComponent(false, onFinish);
-            // Display the recovery key to save
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
             // Display the form to confirm the recovery key
             await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
 
@@ -155,8 +134,7 @@ describe("<ChangeRecoveryKey />", () => {
 
             const onFinish = vi.fn();
             renderComponent(false, onFinish);
-            // Display the recovery key to save
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
             // Display the form to confirm the recovery key
             await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
 
@@ -180,8 +158,6 @@ describe("<ChangeRecoveryKey />", () => {
             const user = userEvent.setup();
             const { getByRole, getByText, getByTitle } = renderComponent(false);
 
-            // Display the recovery key to save
-            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
             // Display the form to confirm the recovery key
             await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
 
@@ -222,8 +198,6 @@ describe("<ChangeRecoveryKey />", () => {
             const user = userEvent.setup();
             const { getByRole, getByText, getByTitle } = renderComponent(false);
 
-            // Display the recovery key to save
-            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
             // Display the form to confirm the recovery key
             await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
 
