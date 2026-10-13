@@ -260,7 +260,13 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
     if (discardKeys) {
         await page.getByRole("button", { name: "Remove this device anyway" }).click();
     } else {
-        await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
+        // Plain confirmation if there is another verified device, recovery key reminder if this is the only one.
+        // Scope to the dialog by its heading: the settings dialog behind it has a "Remove this device" button too.
+        await page
+            .getByRole("dialog")
+            .filter({ has: page.getByRole("heading", { name: /remov(e|ing) this device/ }) })
+            .getByRole("button", { name: /^(Remove this device|Continue to remove this device)$/ })
+            .click();
     }
 
     // Wait for the welcome page to load
