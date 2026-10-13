@@ -132,6 +132,7 @@ describe("useRoomCall", () => {
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
             );
         });
+
         it("Allows Element Call if transport is provided by client discovery", async () => {
             vi.mocked(client.cachedRtcTransports.get).mockReturnValue([
                 {
