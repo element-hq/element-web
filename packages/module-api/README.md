@@ -1,5 +1,7 @@
 # @element-hq/element-web-module-api
 
+[API documentation](https://element-web-module-api.element.dev)
+
 API surface for extending Element Web in a safe & predictable way.
 
 This project is still in early development but aims to replace matrix-react-sdk-module-api and Element Web deprecated customisations.

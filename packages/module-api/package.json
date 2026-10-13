@@ -32,6 +32,7 @@
     "scripts": {
         "prepack": "nx build",
         "lint:types": "nx lint:types",
+        "build:doc": "nx typedoc",
         "test:unit": "vitest",
         "coverage": "pnpm test:unit --coverage",
         "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info"
@@ -46,6 +47,8 @@
         "matrix-widget-api": "^1.17.0",
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
+        "typedoc": "^0.28.16",
+        "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
         "unplugin-dts": "catalog:",
         "vite": "catalog:",

@@ -20,6 +20,18 @@
             "dependsOn": ["^start"],
             "continuous": true
         },
+        "typedoc": {
+            "cache": true,
+            "command": "typedoc",
+            "inputs": [
+                "src",
+                "{projectRoot}/typedoc.json",
+                "{projectRoot}/typedoc-plugin-deprecated-last.js",
+                "{projectRoot}/README.md"
+            ],
+            "outputs": ["{projectRoot}/typedoc"],
+            "options": { "cwd": "packages/module-api" }
+        },
         "lint:types": {
             "command": "pnpm exec tsc --noEmit",
             "options": { "cwd": "packages/module-api" }

@@ -1,0 +1,21 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["src/index.ts"],
+    "plugin": ["typedoc-plugin-missing-exports", "./typedoc-plugin-deprecated-last.js"],
+    "out": "typedoc",
+    "name": "@element-hq/element-web-module-api",
+    "includeVersion": true,
+    "excludeExternals": true,
+    "readme": "README.md",
+    "categorizeByGroup": true,
+    "groupOrder": ["*", "Deprecated"],
+    "navigation": {
+        "includeGroups": true
+    },
+    "sourceLinkTemplate": "https://github.com/element-hq/element-web/blob/develop/{path}#L{line}",
+    "externalSymbolLinkMappings": {
+        "@types/react": {
+            "*": "https://react.dev/"
+        }
+    }
+}

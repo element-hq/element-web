@@ -28,7 +28,9 @@ export default {
             ],
             ignoreBinaries: ["awk", "printf"],
         },
-        "packages/module-api": {},
+        "packages/module-api": {
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!typedoc-plugin-deprecated-last.js!"],
+        },
         "apps/web": {
             entry: [
                 "src/serviceworker/index.ts!",
