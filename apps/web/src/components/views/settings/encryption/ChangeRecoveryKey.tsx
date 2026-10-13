@@ -36,11 +36,10 @@ import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 /**
  * The possible states of the component.
- * - `inform_user`: The user is informed about the recovery key.
  * - `save_key_flow`: A new generated recovery key is displayed to the user and they are asked to save it.
  * - `confirm_key_flow`: The user is asked to confirm the new recovery key.
  */
-type State = "inform_user" | "save_key_flow" | "confirm_key_flow";
+type State = "save_key_flow" | "confirm_key_flow";
 
 interface ChangeRecoveryKeyProps {
     /**
@@ -69,9 +68,7 @@ export function ChangeRecoveryKey({
 }: ChangeRecoveryKeyProps): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
-    // If the user is setting up recovery for the first time, we first show them a panel explaining what
-    // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
-    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_flow" : "inform_user");
+    const [state, setState] = useState<State>("save_key_flow");
 
     const onCancelClickWrapper = useCallback(() => {
         logger.debug("ChangeRecoveryKey: user cancelled");
@@ -85,15 +82,6 @@ export function ChangeRecoveryKey({
 
     let content: JSX.Element;
     switch (state) {
-        case "inform_user":
-            // Show a panel explaining what "recovery" is for, and what a recovery key does.
-            content = (
-                <InformationPanel
-                    onContinueClick={() => setState("save_key_flow")}
-                    onCancelClick={onCancelClickWrapper}
-                />
-            );
-            break;
         case "save_key_flow":
             // Show a generated recovery key and ask the user to save it.
             content = (
@@ -205,13 +193,6 @@ type Labels = {
  */
 function getLabels(state: State, userHasRecoveryKey: boolean): Labels {
     switch (state) {
-        case "inform_user":
-            return {
-                title: _t("settings|encryption|recovery|set_up_recovery"),
-                description: _t("settings|encryption|recovery|set_up_recovery_description", {
-                    changeRecoveryKeyButton: _t("settings|encryption|recovery|change_recovery_key"),
-                }),
-            };
         case "save_key_flow":
             return userHasRecoveryKey
                 ? {
@@ -233,36 +214,6 @@ function getLabels(state: State, userHasRecoveryKey: boolean): Labels {
                       description: _t("settings|encryption|recovery|set_up_recovery_confirm_description"),
                   };
     }
-}
-
-interface InformationPanelProps {
-    /**
-     * Called when the continue button is clicked.
-     */
-    onContinueClick: MouseEventHandler<HTMLButtonElement>;
-    /**
-     * Called when the cancel button is clicked.
-     */
-    onCancelClick: MouseEventHandler<HTMLButtonElement>;
-}
-
-/**
- * The panel to display information about the recovery key.
- */
-function InformationPanel({ onContinueClick, onCancelClick }: InformationPanelProps): JSX.Element {
-    return (
-        <>
-            <Text as="span" weight="medium" className="mx_InformationPanel_description">
-                {_t("settings|encryption|recovery|set_up_recovery_secondary_description")}
-            </Text>
-            <EncryptionCardButtons>
-                <Button onClick={onContinueClick}>{_t("action|continue")}</Button>
-                <Button kind="tertiary" onClick={onCancelClick}>
-                    {_t("action|cancel")}
-                </Button>
-            </EncryptionCardButtons>
-        </>
-    );
 }
 
 interface KeyPanelProps {

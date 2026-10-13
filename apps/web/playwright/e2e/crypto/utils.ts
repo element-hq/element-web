@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, type JSHandle, type Page } from "@playwright/test";
+import { expect, test, type JSHandle, type Page } from "@playwright/test";
 import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import type {
@@ -312,22 +312,23 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    const encryptionTab = await app.settings.openUserSettings("Encryption");
+    return await test.step("enableKeyBackup", async () => {
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
-    if (!(await keyStorageToggle.isChecked())) {
-        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
-    }
+        const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
+        if (!(await keyStorageToggle.isChecked())) {
+            await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
+        }
 
-    await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
-    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+        await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
 
-    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
-    await encryptionTab.getByRole("button", { name: "Continue" }).click();
-    await encryptionTab.getByRole("textbox").fill(recoveryKey);
-    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
-    await app.settings.closeDialog();
-    return recoveryKey;
+        const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+        await encryptionTab.getByRole("button", { name: "Continue" }).click();
+        await encryptionTab.getByRole("textbox").fill(recoveryKey);
+        await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+        await app.settings.closeDialog();
+        return recoveryKey;
+    });
 }
 
 /**
