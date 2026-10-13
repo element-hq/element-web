@@ -9,6 +9,7 @@ import type { UIComponent, CustomisationsApi as ICustomisationsApi } from "@elem
 
 export class CustomisationsApi implements ICustomisationsApi {
     private shouldShowComponentFunctions = new Set<(component: UIComponent) => boolean | void>();
+    private shouldViewOngoingCallFunctions = new Set<(roomId: string) => boolean | void>();
 
     /**
      * Method to register a callback which can affect whether a given component is drawn or not.
@@ -27,6 +28,31 @@ export class CustomisationsApi implements ICustomisationsApi {
     public shouldShowComponent(component: UIComponent): boolean | void {
         for (const fn of this.shouldShowComponentFunctions) {
             const v = fn(component);
+            if (typeof v === "boolean") {
+                return v;
+            }
+        }
+    }
+
+    /**
+     * Method to register a callback deciding whether opening or joining a room with an ongoing call shows the call
+     * lobby instead of the timeline.
+     * @param fn - the callback, if it returns true the call is shown, if false the timeline is shown.
+     *   If undefined will defer to the next callback, ultimately falling through to `false` if none return true.
+     *   The next callback is decided in FIFO call order to this register function.
+     */
+    public registerShouldViewOngoingCall(fn: (this: void, roomId: string) => boolean | void): void {
+        this.shouldViewOngoingCallFunctions.add(fn);
+    }
+
+    /**
+     * Method to check whether, according to any registered modules, the ongoing call of a room should be shown
+     * instead of the timeline.
+     * @param roomId - the id of the room to check
+     */
+    public shouldViewOngoingCall(roomId: string): boolean | void {
+        for (const fn of this.shouldViewOngoingCallFunctions) {
+            const v = fn(roomId);
             if (typeof v === "boolean") {
                 return v;
             }

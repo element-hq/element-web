@@ -289,6 +289,20 @@ export class RoomViewStore extends EventEmitter {
                         isDM: !!DMRoomMap.shared().getUserIdForRoomId(room.roomId),
                         isSpace: room.isSpaceRoom(),
                     });
+
+                    // Joining the viewed room may land the user in its ongoing call, as when opening it
+                    if (
+                        this.state.roomId === room.roomId &&
+                        !this.state.viewingCall &&
+                        this.shouldViewOngoingCall(room)
+                    ) {
+                        this.dis.dispatch<ViewRoomPayload>({
+                            action: Action.ViewRoom,
+                            room_id: room.roomId,
+                            view_call: true,
+                            metricsTrigger: undefined,
+                        });
+                    }
                 });
 
                 break;
@@ -370,6 +384,8 @@ export class RoomViewStore extends EventEmitter {
                 if (payload.room_id === this.state.roomId) viewingCall = this.state.viewingCall;
                 // Always view the call in video rooms
                 else if (room && isVideoRoom(room)) viewingCall = true;
+                // Land in the ongoing call when a module asks for it
+                else if (room && this.shouldViewOngoingCall(room)) viewingCall = true;
                 // Otherwise, only view if actively connected
                 else viewingCall = CallStore.instance.getActiveCall(payload.room_id) !== null;
             }
@@ -806,6 +822,18 @@ export class RoomViewStore extends EventEmitter {
 
     public isViewingCall(): boolean {
         return this.state.viewingCall;
+    }
+
+    /**
+     * Whether the user should see the ongoing call of a joined room instead of its timeline, as decided by modules.
+     * Showing the call of a room the user isn't in would start the call for a non-member.
+     */
+    private shouldViewOngoingCall(room: Room): boolean {
+        return (
+            room.getMyMembership() === KnownMembership.Join &&
+            room.client.matrixRTC.getRoomSession(room).memberships.length > 0 &&
+            (ModuleApi.instance.customisations.shouldViewOngoingCall(room.roomId) ?? false)
+        );
     }
 
     /**

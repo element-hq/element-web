@@ -38,6 +38,7 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { CallStore } from "../../../stores/CallStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { ModuleApi } from "../../../modules/Api";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -137,4 +138,24 @@ describe("CallView", () => {
         });
         expect(onClose).not.toHaveBeenCalled();
     });
+
+    it.each([
+        [true, 1],
+        [undefined, 0],
+    ])(
+        "when the module hook returns %s, closes the lobby %i time(s) once everyone left the call",
+        async (shouldViewOngoingCall, closeCount) => {
+            vi.spyOn(ModuleApi.instance.customisations, "shouldViewOngoingCall").mockReturnValue(shouldViewOngoingCall);
+            const onClose = vi.fn();
+            act(() => {
+                call.participants = new Map([[alice, new Set(["a"])]]);
+            });
+            await renderView(undefined, onClose);
+
+            act(() => {
+                call.participants = new Map();
+            });
+            expect(onClose).toHaveBeenCalledTimes(closeCount);
+        },
+    );
 });

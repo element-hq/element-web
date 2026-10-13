@@ -14,6 +14,7 @@ import AuthFooter from "./AuthFooter.tsx";
 import style from "./style.css" with { type: "css" };
 import { initEmailInvitation } from "./email-invitation/index.ts";
 import { GuestBadge } from "./GuestBadge.tsx";
+import { isGuest } from "./isGuest.ts";
 
 const GUEST_INVISIBLE_COMPONENTS = [
     "UIComponent.sendInvites",
@@ -79,6 +80,9 @@ class RestrictedGuestsModule implements Module {
 
         // Register the email invitation feature (for inviting guests to rooms via email)
         initEmailInvitation(this.api, this.config);
+
+        // Guests opening or joining a room with an ongoing call land in the call lobby
+        this.api.customisations.registerShouldViewOngoingCall(this.shouldViewOngoingCall);
     }
 
     /**
@@ -88,12 +92,19 @@ class RestrictedGuestsModule implements Module {
      * @returns true, if the user should see the component
      */
     public readonly shouldShowComponent = (component: string): boolean => {
-        const profile = this.api.profile.value;
-        if (this.config && (profile.isGuest || profile.userId?.startsWith(this.config.guest_user_prefix))) {
+        if (this.config && isGuest(this.api, this.config)) {
             return !GUEST_INVISIBLE_COMPONENTS.includes(component);
         }
 
         return true;
+    };
+
+    /**
+     * Returns true for guests, so that they land in the call lobby of a room with an ongoing call.
+     * Returns undefined otherwise, to let Element Web or other modules decide.
+     */
+    public readonly shouldViewOngoingCall = (): true | undefined => {
+        return (this.config && isGuest(this.api, this.config)) || undefined;
     };
 }
 
