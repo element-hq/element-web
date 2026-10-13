@@ -579,14 +579,14 @@ describe("<TextualBody />", () => {
             });
         });
 
-        it("should listen to showUrlPreview change", () => {
+        it("should listen to showUrlPreview change", async () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
 
             const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
             getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            waitFor(() => {
+            await waitFor(() => {
                 // Asynchronous check since the VM needs to recalcuate.
                 expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
             });

@@ -876,7 +876,7 @@ describe("Lifecycle", () => {
 
     describe("logout()", () => {
         it("should call logout on the client", async () => {
-            logout();
+            await logout();
 
             await flushPromises();
 

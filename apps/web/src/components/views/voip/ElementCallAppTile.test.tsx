@@ -41,9 +41,9 @@ describe("ElementCallAppTile", () => {
     let call: ElementCall;
     let viewedRoomId: string | null;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         ({ client, room } = setUpClientRoomAndStores());
-        setupAsyncStoreWithClient(CallStore.instance, client);
+        await setupAsyncStoreWithClient(CallStore.instance, client);
 
         viewedRoomId = room.roomId;
         sdkContext = new TestSDKContext();

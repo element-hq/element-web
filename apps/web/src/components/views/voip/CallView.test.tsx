@@ -51,7 +51,7 @@ describe("CallView", () => {
     let call: MockedCall;
     let widget: Widget;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         useMockMediaDevices();
 
         stubClient();
@@ -70,8 +70,8 @@ describe("CallView", () => {
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        setupAsyncStoreWithClient(CallStore.instance, client);
-        setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
+        await setupAsyncStoreWithClient(CallStore.instance, client);
+        await setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
         MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);

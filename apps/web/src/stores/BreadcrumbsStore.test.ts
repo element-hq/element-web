@@ -21,9 +21,9 @@ describe("BreadcrumbsStore", () => {
     let store: BreadcrumbsStore;
     const client: MatrixClient = createTestClient();
 
-    beforeEach(() => {
+    beforeEach(async () => {
         store = BreadcrumbsStore.instance;
-        setupAsyncStoreWithClient(store, client);
+        await setupAsyncStoreWithClient(store, client);
         vi.spyOn(SettingsStore, "setValue").mockImplementation(() => Promise.resolve());
         vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
     });
