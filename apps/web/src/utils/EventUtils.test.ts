@@ -179,8 +179,8 @@ describe("EventUtils", () => {
             type: EventType.RoomMessage,
             sender: userId,
             content: {
-                "msgtype": MsgType.Text,
-                "body": "Hello",
+                msgtype: MsgType.Text,
+                body: "Hello",
                 ["m.relates_to"]: {
                     rel_type: RelationType.Replace,
                     event_id: "1",
@@ -192,8 +192,8 @@ describe("EventUtils", () => {
             type: EventType.RoomMessage,
             sender: userId,
             content: {
-                "msgtype": MsgType.Text,
-                "body": "Hello",
+                msgtype: MsgType.Text,
+                body: "Hello",
                 ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
                     event_id: "1",

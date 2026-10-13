@@ -659,8 +659,8 @@ export function mkMessage({
         ...opts,
         type: "m.room.message",
         content: {
-            "msgtype": "m.text",
-            "body": message,
+            msgtype: "m.text",
+            body: message,
             ...(format && formattedMsg ? { format, formatted_body: formattedMsg } : {}),
             ["m.relates_to"]: relatesTo,
         },
