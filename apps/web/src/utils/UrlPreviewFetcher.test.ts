@@ -227,6 +227,17 @@ describe("UrlPreviewFetcher", () => {
             expect(preview?.siteIcon).toBe("https://example.org/logo");
         });
 
+        it("should use the sdk's getUrlPreview when the MSC4448 check fails", async () => {
+            const { fetcher, client } = getFetcher();
+            client.doesServerSupportUnstableFeature.mockRejectedValue(new Error("No versions for you"));
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+
+            expect(preview?.title).toBe("This is an example!");
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/page", 0);
+        });
+
         it("should use the sdk's getUrlPreview when the server does not support MSC4448", async () => {
             const { fetcher, client } = getFetcher();
             client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);

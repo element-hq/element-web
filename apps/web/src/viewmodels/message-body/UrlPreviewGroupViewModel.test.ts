@@ -185,7 +185,9 @@ describe("UrlPreviewGroupViewModel", () => {
             '<a href="https://example.org">Test</a><a href="https://example.org">Test</a><a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
         expect(vm.getSnapshot()).toMatchSnapshot();
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        // One preview of the page; the site's favicon.ico is previewed separately as the page has no image.
+        const pagePreviews = client.getUrlPreview.mock.calls.filter(([url]) => !String(url).endsWith("/favicon.ico"));
+        expect(pagePreviews).toHaveLength(1);
     });
     it("should ignore failed previews", async () => {
         const { vm, client } = getViewModel();

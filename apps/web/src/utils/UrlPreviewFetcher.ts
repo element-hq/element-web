@@ -263,13 +263,26 @@ export class UrlPreviewFetcher {
     }
 
     /**
+     * Whether the server advertises MSC4448 site logos. A failure to find out is no reason to go without
+     * previews altogether, so it counts as unsupported.
+     */
+    private async supportsSiteLogo(): Promise<boolean> {
+        try {
+            return await this.client.doesServerSupportUnstableFeature(UNSTABLE_MSC4448_SITE_LOGO);
+        } catch (error) {
+            logger.debug("Could not check for MSC4448 support, not asking for site logos: ", error);
+            return false;
+        }
+    }
+
+    /**
      * Fetch the server's preview of a link, asking for its MSC4448 site logo when the server supports that.
      * The sdk's `getUrlPreview` cannot pass the extra parameter, so that case calls the endpoint directly, in
      * the same way the sdk does.
      * @param link The URL to preview.
      */
     private async getUrlPreview(link: string): Promise<IPreviewUrlResponse> {
-        if (!(await this.client.doesServerSupportUnstableFeature(UNSTABLE_MSC4448_SITE_LOGO))) {
+        if (!(await this.supportsSiteLogo())) {
             return this.client.getUrlPreview(link, this.previewRequestTs);
         }
         // As the sdk does: bucket the timestamp to the minute, and drop the fragment as it cannot affect the preview.
