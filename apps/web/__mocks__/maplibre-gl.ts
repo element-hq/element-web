@@ -48,6 +48,7 @@ export const Marker = vi.fn().mockImplementation(function () {
 });
 export { LngLat, LngLatBounds, NavigationControl };
 export const AttributionControl = MockAttributionControl;
+export const setWorkerUrl = vi.fn();
 
 export default {
     Map,
