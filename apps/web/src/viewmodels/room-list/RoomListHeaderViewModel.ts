@@ -16,7 +16,7 @@ import {
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import PosthogTrackers from "../../PosthogTrackers";
 import { Action } from "../../dispatcher/actions";
-import { getMetaSpaceName, type MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
+import { getMetaSpaceName, MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import type SpaceStore from "../../stores/spaces/SpaceStore";
 import {
     shouldShowSpaceSettings,
@@ -69,13 +69,6 @@ export class RoomListHeaderViewModel
             this.onVideoRoomsFeatureFlagChange,
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
-
-        const settingsNotificationsRef = SettingsStore.watchSetting(
-            "feature_notifications",
-            null,
-            this.onNotificationsFeatureFlagChange,
-        );
-        this.disposables.track(() => SettingsStore.unwatchSetting(settingsNotificationsRef));
 
         const settingsShowSectionsRef = SettingsStore.watchSetting(
             "RoomList.showSections",
@@ -145,21 +138,6 @@ export class RoomListHeaderViewModel
         this.snapshot.merge({
             canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
         });
-    };
-
-    /**
-     * Handles notifications feature flag change events.
-     */
-    private readonly onNotificationsFeatureFlagChange = (): void => {
-        const displayNotificationsToggle = SettingsStore.getValue("feature_notifications");
-        this.snapshot.merge({
-            displayNotificationsToggle,
-            isNotificationsViewActive: displayNotificationsToggle && this.snapshot.current.isNotificationsViewActive,
-        });
-    };
-
-    public toggleNotificationsView = (): void => {
-        this.snapshot.merge({ isNotificationsViewActive: !this.snapshot.current.isNotificationsViewActive });
     };
 
     /**
@@ -314,8 +292,6 @@ function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient):
     return {
         activeSortOption,
         isMessagePreviewEnabled,
-        displayNotificationsToggle: SettingsStore.getValue("feature_notifications"),
-        isNotificationsViewActive: false,
         ...computeHeaderSpaceState(spaceStore, matrixClient),
     };
 }
@@ -365,6 +341,7 @@ function computeHeaderSpaceState(
 
     return {
         title,
+        isNotificationsViewActive: spaceStore.activeSpace === MetaSpace.Notifications,
         canCreateRoom,
         canCreateVideoRoom,
         displaySpaceMenu,

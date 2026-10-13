@@ -33,7 +33,6 @@ const RoomListHeaderViewWrapperImpl = ({
     createSection,
     collapseOrExpandSections,
     closeSectionReleaseAnnouncement,
-    toggleNotificationsView,
     ...rest
 }: RoomListHeaderProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -49,7 +48,6 @@ const RoomListHeaderViewWrapperImpl = ({
         createSection,
         collapseOrExpandSections,
         closeSectionReleaseAnnouncement,
-        toggleNotificationsView,
     });
     return <RoomListHeaderView vm={vm} />;
 };
@@ -73,7 +71,6 @@ const meta = {
         createSection: fn(),
         collapseOrExpandSections: fn(),
         closeSectionReleaseAnnouncement: fn(),
-        toggleNotificationsView: fn(),
     },
     parameters: {
         design: {
@@ -107,9 +104,11 @@ export const LongTitle: Story = {
     },
 };
 
-export const NotificationsToggle: Story = {
+export const NotificationsView: Story = {
     args: {
-        displayNotificationsToggle: true,
+        title: "Notifications",
+        isNotificationsViewActive: true,
+        collapseSections: "collapse",
     },
 };
 

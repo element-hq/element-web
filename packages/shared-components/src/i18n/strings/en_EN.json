@@ -245,9 +245,7 @@
             },
             "empty_description": "You have no visible notifications.",
             "empty_heading": "You're all caught up",
-            "list_title": "Notification list",
-            "show_notifications": "Show notifications",
-            "show_rooms": "Show rooms"
+            "list_title": "Notification list"
         },
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",

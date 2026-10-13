@@ -65,7 +65,17 @@ import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
-const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms];
+const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Notifications, MetaSpace.Orphans, MetaSpace.VideoRooms];
+
+/**
+ * The enabled meta spaces, in order. The notifications meta space follows its labs flag rather than the sidebar setting.
+ */
+const getEnabledMetaSpaces = (): MetaSpace[] => {
+    const enabled = SettingsStore.getValue("Spaces.enabledMetaSpaces");
+    return metaSpaceOrder.filter((k) =>
+        k === MetaSpace.Notifications ? SettingsStore.getValue("feature_notifications") : enabled[k],
+    );
+};
 
 const MAX_SUGGESTED_ROOMS = 20;
 
@@ -151,6 +161,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
         SettingsStore.monitorSetting("Spaces.allRoomsInHome", null);
         SettingsStore.monitorSetting("Spaces.enabledMetaSpaces", null);
+        SettingsStore.monitorSetting("feature_notifications", null);
         SettingsStore.monitorSetting("Spaces.showPeopleInSpace", null);
         SettingsStore.monitorSetting("feature_dynamic_room_predecessors", null);
     }
@@ -438,6 +449,10 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
     public isRoomInSpace(space: SpaceKey, roomId: string, includeDescendantSpaces = true): boolean {
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             return true;
+        }
+        if (space === MetaSpace.Notifications) {
+            // Rooms are opened from the notification list: don't switch away from it
+            return this.enabledMetaSpaces.includes(MetaSpace.Notifications);
         }
         if (space === MetaSpace.VideoRooms) {
             return !!this.matrixClient?.getRoom(roomId)?.isCallRoom();
@@ -1125,8 +1140,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         this.matrixClient.on(ClientEvent.AccountData, this.onAccountData);
 
         const oldMetaSpaces = this._enabledMetaSpaces;
-        const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
+        this._enabledMetaSpaces = getEnabledMetaSpaces();
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1143,7 +1157,9 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         const valid =
             lastSpaceId &&
             (ModuleApi.instance.extras.spacePanelItems.has(lastSpaceId) ||
-                (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]));
+                (!isMetaSpace(lastSpaceId)
+                    ? this.matrixClient.getRoom(lastSpaceId)
+                    : this._enabledMetaSpaces.includes(lastSpaceId)));
         if (valid) {
             // don't context switch here as it may break permalinks
             this.setActiveSpace(lastSpaceId, false);
@@ -1239,16 +1255,20 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                         break;
                     }
 
-                    case "Spaces.enabledMetaSpaces": {
-                        const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = metaSpaceOrder.filter((k) => newValue[k]);
+                    case "Spaces.enabledMetaSpaces":
+                    case "feature_notifications": {
+                        const enabledMetaSpaces = getEnabledMetaSpaces();
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadHomeEnabled = this.enabledMetaSpaces.some((s) => s === MetaSpace.Home);
                             this._enabledMetaSpaces = enabledMetaSpaces;
                             const hasHomeEnabled = this.enabledMetaSpaces.some((s) => s === MetaSpace.Home);
 
                             // if a metaspace currently being viewed was removed, go to another one
-                            if (isMetaSpace(this.activeSpace) && !newValue[this.activeSpace]) {
+                            if (isMetaSpace(this.activeSpace) && !enabledMetaSpaces.includes(this.activeSpace)) {
+                                // The notifications meta space contains no room, so it must be left explicitly
+                                if (this.activeSpace === MetaSpace.Notifications) {
+                                    this.goToFirstSpace();
+                                }
                                 this.switchSpaceIfNeeded();
                             }
                             this.rebuildMetaSpaces();

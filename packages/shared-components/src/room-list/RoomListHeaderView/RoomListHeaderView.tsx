@@ -7,13 +7,7 @@
 
 import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
-import {
-    CollapseAllIcon,
-    ExpandAllIcon,
-    ChatIcon,
-    NotificationsIcon,
-    RoomIcon,
-} from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CollapseAllIcon, ExpandAllIcon, ChatIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -80,11 +74,8 @@ export interface RoomListHeaderViewSnapshot {
      */
     displaySectionReleaseAnnouncement: boolean;
     /**
-     * Whether to display the button switching between the room list and the notification list
-     */
-    displayNotificationsToggle?: boolean;
-    /**
-     * Whether the notification list is displayed instead of the room list
+     * Whether the notification list is displayed instead of the room list.
+     * Room list options (sorting, previews, sections) are then hidden.
      */
     isNotificationsViewActive?: boolean;
 }
@@ -138,10 +129,6 @@ export interface RoomListHeaderViewActions {
      * Close the section release announcement
      */
     closeSectionReleaseAnnouncement: () => void;
-    /**
-     * Switch between the room list and the notification list
-     */
-    toggleNotificationsView: () => void;
 }
 
 /**
@@ -174,7 +161,6 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
         areSectionsEnabled,
         canCreateRoom,
         canCreateVideoRoom,
-        displayNotificationsToggle,
         isNotificationsViewActive,
     } = useViewModel(vm);
     const canOnlyStartChat = !areSectionsEnabled && !canCreateRoom && !canCreateVideoRoom;
@@ -195,26 +181,8 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                     {displaySpaceMenu && <SpaceMenuView vm={vm} />}
                 </Flex>
                 <Flex align="center" gap="var(--cpd-space-2x)">
-                    {displayNotificationsToggle && (
-                        <IconButton
-                            size="28px"
-                            style={{ padding: "4px" }}
-                            onClick={() => vm.toggleNotificationsView()}
-                            tooltip={
-                                isNotificationsViewActive
-                                    ? _t("room_list|notifications_view|show_rooms")
-                                    : _t("room_list|notifications_view|show_notifications")
-                            }
-                        >
-                            {isNotificationsViewActive ? (
-                                <RoomIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-                            ) : (
-                                <NotificationsIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-                            )}
-                        </IconButton>
-                    )}
-                    <OptionMenuView vm={vm} />
-                    {areSectionsEnabled && collapseSections && (
+                    {!isNotificationsViewActive && <OptionMenuView vm={vm} />}
+                    {!isNotificationsViewActive && areSectionsEnabled && collapseSections && (
                         <IconButton
                             size="28px"
                             style={{ padding: "4px" }}

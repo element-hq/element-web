@@ -6,12 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useCallback, useContext } from "react";
-import {
-    Flex,
-    RoomListHeaderView,
-    useCreateAutoDisposedViewModel,
-    useViewModel,
-} from "@element-hq/web-shared-components";
+import { Flex, RoomListHeaderView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
@@ -26,6 +21,7 @@ import { type IState as IRovingTabIndexState } from "../../../../accessibility/R
 import { RoomListHeaderViewModel } from "../../../../viewmodels/room-list/RoomListHeaderViewModel";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../../contexts/SDKContext.ts";
+import { MetaSpace } from "../../../../stores/spaces";
 
 type RoomListPanelProps = {
     /**
@@ -71,7 +67,6 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     const vm = useCreateAutoDisposedViewModel(
         () => new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore }),
     );
-    const { isNotificationsViewActive } = useViewModel(vm);
 
     return (
         <Flex
@@ -86,7 +81,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView vm={vm} />
-            {isNotificationsViewActive ? <NotificationListView /> : <RoomListView />}
+            {activeSpace === MetaSpace.Notifications ? <NotificationListView /> : <RoomListView />}
         </Flex>
     );
 };

@@ -118,20 +118,15 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().canCreateVideoRoom).toBe(false);
         });
 
-        it("should show the notifications toggle only when feature_notifications is enabled", () => {
+        it("should flag the notifications view when the notifications meta space is active", () => {
+            vi.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Home);
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            expect(vm.getSnapshot().displayNotificationsToggle).toBe(false);
-            vm.dispose();
-
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName: string) => settingName === "feature_notifications",
-            );
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            expect(vm.getSnapshot().displayNotificationsToggle).toBe(true);
             expect(vm.getSnapshot().isNotificationsViewActive).toBe(false);
 
-            vm.toggleNotificationsView();
+            vi.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Notifications);
+            sdkContext.spaceStore.emit(UPDATE_SELECTED_SPACE);
             expect(vm.getSnapshot().isNotificationsViewActive).toBe(true);
+            expect(vm.getSnapshot().title).toBe("Notifications");
         });
 
         it("should show alphabetical sort option when RoomList.preferredSorting is Alphabetic", () => {
