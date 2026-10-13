@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { KnownMembership, MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { sleep } from "matrix-js-sdk/src/utils";
 import EventEmitter from "node:events";
 import type * as NodeEvents from "node:events";
@@ -456,6 +457,72 @@ describe("RoomViewStore", function () {
         await untilDispatch(Action.ViewRoom, dis);
 
         expect(call.presented).toEqual(true);
+    });
+
+    describe("when a module asks to view ongoing calls", () => {
+        let call: Call;
+
+        beforeEach(async () => {
+            call = { presented: false } as Call;
+            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+            vi.spyOn(CallStore.instance, "getActiveCall").mockReturnValue(null);
+            await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+            vi.spyOn(ModuleApi.instance.customisations, "shouldViewOngoingCall").mockReturnValue(true);
+            vi.spyOn(mockClient.matrixRTC, "getRoomSession").mockReturnValue({
+                memberships: [{}],
+            } as unknown as MatrixRTCSession);
+        });
+
+        afterEach(() => {
+            // The fake call session would otherwise reach the CallStore set up by the next test
+            vi.mocked(mockClient.matrixRTC.getRoomSession).mockRestore();
+            vi.mocked(ModuleApi.instance.customisations.shouldViewOngoingCall).mockRestore();
+        });
+
+        const viewRoom = async (): Promise<void> => {
+            dis.dispatch<ViewRoomPayload>({ action: Action.ViewRoom, room_id: roomId, metricsTrigger: undefined });
+            await untilDispatch(Action.ViewRoom, dis);
+        };
+
+        it("views the ongoing call of a joined room", async () => {
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(true);
+            expect(call.presented).toBe(true);
+        });
+
+        it.each([
+            [
+                "the module doesn't ask for it",
+                () => vi.mocked(ModuleApi.instance.customisations.shouldViewOngoingCall).mockReturnValue(undefined),
+            ],
+            [
+                "there is no ongoing call",
+                () =>
+                    vi
+                        .mocked(mockClient.matrixRTC.getRoomSession)
+                        .mockReturnValue({ memberships: [] } as unknown as MatrixRTCSession),
+            ],
+            [
+                "the user hasn't joined the room",
+                () => vi.mocked(room.getMyMembership).mockReturnValueOnce(KnownMembership.Knock),
+            ],
+        ])("shows the timeline when %s", async (_case, arrange) => {
+            arrange();
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(false);
+        });
+
+        it("views the ongoing call once the user joins the viewed room", async () => {
+            vi.mocked(room.getMyMembership).mockReturnValueOnce(KnownMembership.Invite);
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(false);
+
+            dis.dispatch({ action: Action.JoinRoomReady, roomId, metricsTrigger: undefined });
+            await expect(untilDispatch(Action.ViewRoom, dis)).resolves.toEqual(
+                expect.objectContaining({ room_id: roomId, view_call: true }),
+            );
+            expect(roomViewStore.isViewingCall()).toBe(true);
+        });
     });
 
     it("opens a voice-intent call directly in picture-in-picture rather than maximised", async () => {

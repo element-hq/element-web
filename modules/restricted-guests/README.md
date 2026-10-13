@@ -33,6 +33,10 @@ The homeserver must run the Synapse restricted-guests module, which provides the
 
 Restricted guests (users whose ID starts with `guest_user_prefix`) get a "Guest" badge next to their name: on their messages in the timeline, in replies and in the member list. Regular Matrix guests don't get the badge. This uses the module API `registerSenderProfileBadge`.
 
+## Joining an ongoing call
+
+When a guest opens or joins a room where a call is ongoing, they land in the call lobby instead of the timeline, as if they had clicked the call in the timeline. If the call ends while they are still in the lobby, they go back to the timeline.
+
 ## Facilitating how users can obtain the room link
 
 If you want to make it more obvious to users how to copy the link, you can modify the link a user gets from "Copy link" in the right sidebar by using `permalink_prefix` in config.json. If you don't do that, users will have to copy the URL from the address bar.

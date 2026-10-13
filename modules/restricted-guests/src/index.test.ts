@@ -36,6 +36,7 @@ const makeApi = (
         },
         customisations: {
             registerShouldShowComponent: vi.fn(),
+            registerShouldViewOngoingCall: vi.fn(),
         },
         extras: {
             addRoomSummaryCardActionCallback: vi.fn(),
@@ -57,9 +58,10 @@ describe("RestrictedGuestsModule", () => {
             expect(api.i18n.register).not.toHaveBeenCalled();
             expect(api.customComponents.registerRoomPreviewBar).not.toHaveBeenCalled();
             expect(api.extras.addRoomSummaryCardActionCallback).not.toHaveBeenCalled();
+            expect(api.customisations.registerShouldViewOngoingCall).not.toHaveBeenCalled();
         });
 
-        it("should register the translations, components and email invitation with a valid config", async () => {
+        it("should register the translations, components, email invitation and ongoing call view with a valid config", async () => {
             const api = makeApi(VALID_CONFIG);
 
             const module = new RestrictedGuestsModule(api);
@@ -72,6 +74,7 @@ describe("RestrictedGuestsModule", () => {
             // The email invitation adds the "Invite guests" action to the room info and the member list
             expect(api.extras.addRoomSummaryCardActionCallback).toHaveBeenCalled();
             expect(api.extras.addMemberListHeaderActionCallback).toHaveBeenCalled();
+            expect(api.customisations.registerShouldViewOngoingCall).toHaveBeenCalledWith(module.shouldViewOngoingCall);
         });
 
         it("should throw on an invalid config", async () => {
@@ -131,6 +134,22 @@ describe("RestrictedGuestsModule", () => {
 
             expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(false);
             expect(module.shouldShowComponent("UIComponent.filterContainer")).toBe(true);
+        });
+    });
+
+    describe("shouldViewOngoingCall", () => {
+        it("should land guests in the ongoing call", async () => {
+            const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, { userId: "@guest-jim:server" }));
+            await module.load();
+
+            expect(module.shouldViewOngoingCall()).toBe(true);
+        });
+
+        it("should let Element Web decide for regular users", async () => {
+            const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, { userId: "@alice:server" }));
+            await module.load();
+
+            expect(module.shouldViewOngoingCall()).toBeUndefined();
         });
     });
 });

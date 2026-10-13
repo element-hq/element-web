@@ -62,4 +62,12 @@ export interface CustomisationsApi {
      *   If undefined will defer to next callback, ultimately falling through to `true` if none return false.
      */
     registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+
+    /**
+     * Method to register a callback deciding whether opening or joining a room with an ongoing call shows the call
+     * lobby instead of the timeline. While in the lobby, the user goes back to the timeline if the call ends.
+     * @param fn - the callback, if it returns true the call is shown, if false the timeline is shown.
+     *   If undefined will defer to next callback, ultimately falling through to `false` if none return true.
+     */
+    registerShouldViewOngoingCall(fn: (this: void, roomId: string) => boolean | void): void;
 }

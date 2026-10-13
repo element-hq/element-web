@@ -187,6 +187,7 @@ export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<
 // @alpha
 export interface CustomisationsApi {
     registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+    registerShouldViewOngoingCall(fn: (this: void, roomId: string) => boolean | void): void;
 }
 
 // @alpha
