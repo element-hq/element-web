@@ -15,28 +15,31 @@ import { render, screen, act, fireEvent } from "test-utils-rtl";
 import { stubClient, withClientContextRenderOptions } from "test-utils";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, test, expect, beforeEach, afterEach } from "vitest";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { ShareDialog } from "./ShareDialog";
 import { UIFeature } from "../../../settings/UIFeature";
-import * as StringsModule from "../../../utils/strings";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
+
+vi.mock("@element-hq/element-web-shared-utils", async () => ({
+    ...(await vi.importActual("@element-hq/element-web-shared-utils")),
+    copyPlainTextToClipboard: vi.fn(),
+}));
 
 describe("ShareDialog", () => {
     let client: MatrixClient;
     let room: Room;
-    const copyTextFunc = vi.fn();
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room("!1:example.org", client, "@alice:example.org");
-        vi.spyOn(StringsModule, "copyPlaintext").mockImplementation(copyTextFunc);
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
         vi.useRealTimers();
-        copyTextFunc.mockClear();
+        vi.mocked(copyPlainTextToClipboard).mockClear();
     });
 
     function renderComponent(target: Room | RoomMember | URL) {
@@ -62,7 +65,7 @@ describe("ShareDialog", () => {
         expect(asFragment()).toMatchSnapshot();
 
         await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
-        expect(copyTextFunc).toHaveBeenCalledWith(url);
+        expect(copyPlainTextToClipboard).toHaveBeenCalledWith(url);
     });
 
     it("should render a share dialog for a room", async () => {
@@ -76,7 +79,7 @@ describe("ShareDialog", () => {
         expect(asFragment()).toMatchSnapshot();
 
         await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
-        expect(copyTextFunc).toHaveBeenCalledWith(expectedURL);
+        expect(copyPlainTextToClipboard).toHaveBeenCalledWith(expectedURL);
 
         // Click on the checkbox to link to the most recent message
         await userEvent.click(screen.getByRole("checkbox", { name: "Link to most recent message" }));
@@ -99,7 +102,7 @@ describe("ShareDialog", () => {
         expect(asFragment()).toMatchSnapshot();
 
         await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
-        expect(copyTextFunc).toHaveBeenCalledWith(expectedURL);
+        expect(copyPlainTextToClipboard).toHaveBeenCalledWith(expectedURL);
 
         // Click on the checkbox to link to the room
         await userEvent.click(screen.getByRole("checkbox", { name: "Link to selected message" }));
@@ -113,7 +116,7 @@ describe("ShareDialog", () => {
 
         renderComponent(room);
         fireEvent.click(screen.getByRole("button", { name: "Copy link" }));
-        // Move after `copyPlaintext`
+        // Move after `copyPlainTextToClipboard`
         await vi.advanceTimersToNextTimerAsync();
         expect(screen.getByRole("button", { name: "Link copied" })).toBeInTheDocument();
 

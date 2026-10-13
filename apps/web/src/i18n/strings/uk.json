@@ -98,6 +98,7 @@
         "revoke": "Відкликати",
         "save": "Зберегти",
         "search": "Пошук",
+        "select_to_copy": "Виберіть, щоб скопіювати",
         "send_report": "Надіслати звіт",
         "set_avatar": "Установити зображення профілю",
         "share": "Поділитись",
@@ -931,6 +932,9 @@
         "widget_screenshots": "Увімкнути знімки екрана віджетів для підтримуваних віджетів"
     },
     "dialog_close_label": "Закрити діалогове вікно",
+    "document_viewer": {
+        "title": "Документ"
+    },
     "download_completed": "Завантаження завершено",
     "empty_room": "Порожня кімната",
     "empty_room_was_name": "Порожня кімната (були %(oldName)s)",
@@ -1010,7 +1014,7 @@
             "complete_action": "Зрозуміло",
             "complete_description": "Ви успішно звірили цього користувача.",
             "complete_title": "Звірено!",
-            "confirm_identity_description": "Верифікуйте цей пристрій, щоб налаштувати безпечний обмін повідомленнями.",
+            "confirm_identity_description": "Оберіть спосіб звіряння, щоб налаштувати безпечний обмін повідомленнями.",
             "confirm_identity_title": "Звірте свою цифрову ідентичність",
             "confirm_the_emojis": "Підтвердьте, що емодзі нижче збігаються з тими, які показані на вашому іншому пристрої.",
             "error_starting_description": "Ми не змогли розпочати бесіду з іншим користувачем.",
@@ -1516,6 +1520,8 @@
         "click_for_info": "Докладніше",
         "config_only": "Постачальник облікового запису повинен увімкнути це у файлі config.json.",
         "currently_experimental": "Наразі експериментально.",
+        "document_previews": "Експериментальний попередній перегляд документів",
+        "document_previews_description": "Відкривати вкладення у форматі PDF та Markdown на правій панелі.",
         "dynamic_room_predecessors": "Попередники динамічної кімнати",
         "dynamic_room_predecessors_description": "Увімкнути MSC3946 (для підтримки архівів пізніх кімнат)",
         "element_call_video_rooms": "Відео кімнати Element Call",
@@ -1528,6 +1534,8 @@
         "extended_profiles_msc_support": "Вимагає, щоб ваш сервер підтримував MSC4133",
         "feature_disable_call_per_sender_encryption": "Вимкнути шифрування для кожного відправника для Element Call",
         "feature_element_call_react": "Рендеринг Element Call як компонента React замість віджета",
+        "feature_matrixrtc_slots": "Вимагати відкритих слотів MatrixRTC для викликів Element Call",
+        "feature_matrixrtc_slots_description": "Дозволяє розпочинати або приєднуватися до викликів Element Call, якщо у кімнаті є дійсна подія стану слота.",
         "feature_retention": {
             "description": "Автоматично вилучати повідомлення з кімнати, коли вони досягають налаштованого періоду зберігання. Наразі підтримуються лише налаштування читання.",
             "disabled_sliding_sync": "Правила тривалості збереження неможливо ввімкнути, якщо увімкнено Sliding Sync.",
@@ -1685,6 +1693,9 @@
         "share_type_prompt": "Який вид місцеперебування поширити?",
         "toggle_attribution": "Перемкнути атрибуцію"
     },
+    "markdown_viewer": {
+        "open": "Відкрити Markdown"
+    },
     "member_list": {
         "count": {
             "one": "%(count)s учасник",
@@ -1699,7 +1710,6 @@
     },
     "member_list_back_action_label": "Учасники кімнати",
     "message_edit_dialog_title": "Редагування повідомлення",
-    "migrating_crypto": "Тримайтеся міцно. Ми оновлюємо %(brand)s, щоб зробити шифрування швидшим і надійнішим.",
     "mobile_guide": {
         "toast_accept": "Використовувати застосунок",
         "toast_description": "%(brand)s у мобільних браузерах ще випробовується. Поки що кращі враження й новіші функції — у нашому вільному мобільному застосунку.",
@@ -2514,8 +2524,9 @@
                 "breadcrumb_page": "Скинути шифрування",
                 "breadcrumb_second_description": "Ви втратите історію повідомлень, яка зберігається лише на сервері",
                 "breadcrumb_third_description": "Вам потрібно буде верифікувати всі наявні пристрої та контакти ще раз",
-                "breadcrumb_title": "Ви впевнені, що хочете скинути свою цифрову ідентичність?",
+                "breadcrumb_title": "Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність.",
                 "breadcrumb_title_cant_confirm": "Вам потрібно скинути налаштування вашої цифрової ідентичності",
+                "breadcrumb_title_compromised": "Ви впевнені, що хочете скинути свою цифрову ідентичність?",
                 "breadcrumb_title_forgot": "Забули ключ відновлення? Вам потрібно скинути свою цифрову ідентичність.",
                 "breadcrumb_title_sync_failed": "Не вдалося синхронізувати сховище ключів. Вам потрібно скинути свою цифрову ідентичність.",
                 "breadcrumb_warning": "Робіть це, лише якщо ви впевнені, що ваш обліковий запис скомпрометований.",
@@ -3464,14 +3475,15 @@
                 "many": "%(senderName)s додає альтернативні адреси %(addresses)s для цієї бесіди."
             },
             "alt_removed": {
-                "other": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати.",
-                "one": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати."
+                "one": "%(senderName)s вилучає альтернативну адресу %(addresses)s для цієї бесіди.",
+                "few": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї бесіди.",
+                "many": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї бесіди."
             },
-            "changed": "%(senderName)s змінює адреси для цієї кімнати.",
-            "changed_alternative": "%(senderName)s змінює альтернативні адреси для цієї кімнати.",
-            "changed_main_and_alternative": "%(senderName)s змінює головні та альтернативні адреси для цієї кімнати.",
-            "removed": "%(senderName)s вилучає основу адресу цієї кімнати.",
-            "set": "%(senderName)s встановлює основною адресою цієї кімнати %(address)s."
+            "changed": "%(senderName)s змінює адреси для цієї бесіди.",
+            "changed_alternative": "%(senderName)s змінює альтернативні адреси для цієї бесіди.",
+            "changed_main_and_alternative": "%(senderName)s змінює основну та альтернативну адреси для цієї бесіди.",
+            "removed": "%(senderName)s вилучає основу адресу цієї бесіди.",
+            "set": "%(senderName)s встановлює %(address)s основною адресою цієї бесіди."
         },
         "m.room.create": {
             "continuation": "Ця кімната — продовження іншої розмови.",
@@ -3980,6 +3992,7 @@
         "camera_enabled": "Ваша камера досі увімкнена",
         "cannot_call_yourself_description": "Ви не можете подзвонити самим собі.",
         "close_lobby": "Закрити зону очікування",
+        "close_slot_failed_title": "Не вдалося вимкнути виклики для цієї кімнати",
         "connecting": "З'єднання",
         "connection_lost": "Втрачено зʼєднання з сервером",
         "connection_lost_description": "Неможливо здійснювати виклики без з'єднання з сервером.",
@@ -4035,6 +4048,7 @@
         "no_permission_conference": "Потрібен дозвіл",
         "no_permission_conference_description": "У вас немає дозволу, щоб розпочати груповий виклик у цій кімнаті",
         "on_hold": "%(name)s очікує",
+        "open_slot_failed_title": "Не вдалося ввімкнути виклики для цієї кімнати",
         "output_devices": "Пристрої виводу",
         "screenshare_monitor": "Поділитися всім екраном",
         "screenshare_title": "Поділитися вмістом",

@@ -19,7 +19,7 @@ exports[`WidgetPipView > detects back click action 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon_j097f_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -75,7 +75,7 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon_j097f_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -131,7 +131,7 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon_j097f_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -187,7 +187,7 @@ exports[`WidgetPipView > renders 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon_j097f_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg

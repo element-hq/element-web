@@ -1622,7 +1622,6 @@
     },
     "member_list_back_action_label": "Aelodau'r ystafell",
     "message_edit_dialog_title": "Golygiadau neges",
-    "migrating_crypto": "Arhoswch... Rydym yn diweddaru %(brand)s i wneud amgryptio yn gyflymach ac yn fwy dibynadwy.",
     "mobile_guide": {
         "toast_accept": "Defnyddiwch yr ap",
         "toast_description": "Mae %(brand)s yn arbrofol ar borwr gwe symudol. I gael profiad gwell a'r nodweddion diweddaraf, defnyddiwch ein app brodorol rhad ac am ddim.",

@@ -13,15 +13,16 @@ import { render, screen, waitFor } from "test-utils-rtl";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 import { createTestClient, withClientContextRenderOptions } from "test-utils";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { ChangeRecoveryKey } from "./ChangeRecoveryKey";
-import { copyPlaintext } from "../../../../utils/strings";
 import Modal from "../../../../Modal";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import { DeviceListener } from "../../../../device-listener";
 
-vi.mock("../../../../utils/strings", () => ({
-    copyPlaintext: vi.fn(),
+vi.mock("@element-hq/element-web-shared-utils", async () => ({
+    ...(await vi.importActual("@element-hq/element-web-shared-utils")),
+    copyPlainTextToClipboard: vi.fn(),
 }));
 
 afterEach(() => {
@@ -78,7 +79,7 @@ describe("<ChangeRecoveryKey />", () => {
 
             // Test copy button
             await user.click(screen.getByRole("button", { name: "Copy" }));
-            expect(copyPlaintext).toHaveBeenCalled();
+            expect(copyPlainTextToClipboard).toHaveBeenCalled();
 
             await user.click(screen.getByRole("button", { name: "Cancel" }));
             expect(onCancelClick).toHaveBeenCalled();

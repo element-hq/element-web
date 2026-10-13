@@ -78,7 +78,7 @@ class RestrictedGuestsModule implements Module {
     public readonly shouldShowComponent = (component: string): boolean => {
         const profile = this.api.profile.value;
         if (this.config && (profile.isGuest || profile.userId?.startsWith(this.config.guest_user_prefix))) {
-            return GUEST_INVISIBLE_COMPONENTS.includes(component);
+            return !GUEST_INVISIBLE_COMPONENTS.includes(component);
         }
 
         return true;

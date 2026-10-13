@@ -27,6 +27,7 @@
         "play": "Odtwórz",
         "react": "Dodaj reakcję",
         "remove": "Usuń",
+        "remove_this_device": "Usuń to urządzenie",
         "reply": "Odpowiedz",
         "reply_in_thread": "Odpowiedz w wątku",
         "retry": "Ponów",
@@ -94,6 +95,13 @@
     "emoji_picker": {
         "cancel_search_label": "Anuluj wyszukiwanie",
         "emoji_picker": "Selektor emoji"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Najpierw przejdź na wersję <b>%(version)s</b> albo usuń to urządzenie.",
+            "description": "%(brand)s został zaktualizowany z bardzo starej wersji i nie może przenieść magazynu szyfrowania na nowy format.",
+            "title": "Nie można użyć tego urządzenia"
+        }
     },
     "keyboard": {
         "shift": "Shift"
