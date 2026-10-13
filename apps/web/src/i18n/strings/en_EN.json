@@ -2560,6 +2560,7 @@
             "key_storage": {
                 "allow_key_storage": "Allow key storage",
                 "description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity. <a>Learn more</a>",
+                "recovery_requires_key_storage": "Key storage must be turned on to set up recovery",
                 "title": "Key storage"
             },
             "recovery": {
