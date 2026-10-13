@@ -32,6 +32,16 @@
     .userStatus {
         margin-inline-start: 5px;
     }
+
+    /* One line tall with the badges centered in it, so badges stay centered on the name whatever they start with */
+    .badges {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--cpd-space-1x);
+        block-size: 1lh;
+        margin-inline-start: var(--cpd-space-2x);
+        vertical-align: top;
+    }
 }
 
 .disambiguatedProfile[data-event-density="compact"] {

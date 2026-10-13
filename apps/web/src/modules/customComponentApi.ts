@@ -19,8 +19,10 @@ import type {
     CustomLoginRenderFunction,
     CustomComposerPreviewRenderFunction,
     CustomComposerPreviewComponentProps,
+    CustomSenderProfileBadgeRenderFunction,
+    CustomSenderProfileBadgeComponentProps,
 } from "@element-hq/element-web-module-api";
-import type React from "react";
+import React from "react";
 import { getModuleMatrixEvent } from "./models/Event";
 
 type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRenderer"]>[0];
@@ -63,6 +65,7 @@ type ComposerPreviewRenderer = {
 export class CustomComponentsApi implements ICustomComponentsApi {
     private readonly registeredMessageRenderers: EventRenderer[] = [];
     private readonly registeredComposerPreviewRenderers: ComposerPreviewRenderer[] = [];
+    private readonly registeredSenderProfileBadgeRenderers: CustomSenderProfileBadgeRenderFunction[] = [];
 
     public registerMessageRenderer(
         eventTypeOrFilter: EventTypeOrFilter,
@@ -242,5 +245,26 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             }
         }
         return null;
+    }
+
+    public registerSenderProfileBadge(renderer: CustomSenderProfileBadgeRenderFunction): void {
+        this.registeredSenderProfileBadgeRenderers.push(renderer);
+    }
+
+    /**
+     * Render the badges shown next to a user's name, such as a message sender in the timeline or a room member.
+     * @param props Props to be passed to each badge renderer.
+     * @returns The badges returned by the registered renderers, skipping empty and failing ones.
+     */
+    public renderSenderProfileBadges(props: CustomSenderProfileBadgeComponentProps): React.JSX.Element[] {
+        return this.registeredSenderProfileBadgeRenderers.flatMap((renderer, index) => {
+            try {
+                const badge = renderer({ ...props });
+                return badge ? [React.createElement(React.Fragment, { key: index }, badge)] : [];
+            } catch (ex) {
+                logger.warn("Sender profile badge failed to render", ex);
+                return [];
+            }
+        });
     }
 }

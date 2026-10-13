@@ -29,6 +29,10 @@ Guests join a room by knocking. If the room isn't already "Ask to join", the inv
 
 The homeserver must run the Synapse restricted-guests module, which provides the `/_synapse/client/invite_guests` endpoint used to send the invites.
 
+## Guest badge
+
+Restricted guests (users whose ID starts with `guest_user_prefix`) get a "Guest" badge next to their name: on their messages in the timeline, in replies and in the member list. Regular Matrix guests don't get the badge. This uses the module API `registerSenderProfileBadge`.
+
 ## Facilitating how users can obtain the room link
 
 If you want to make it more obvious to users how to copy the link, you can modify the link a user gets from "Copy link" in the right sidebar by using `permalink_prefix` in config.json. If you don't do that, users will have to copy the URL from the address bar.

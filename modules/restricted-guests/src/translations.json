@@ -115,5 +115,8 @@
     },
     "invitation_email_dialog_error_line_2": {
         "en": "Please try again."
+    },
+    "guest_badge": {
+        "en": "Guest"
     }
 }

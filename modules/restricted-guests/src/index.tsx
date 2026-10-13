@@ -13,6 +13,7 @@ import RoomPreviewBar from "./RoomPreviewBar.tsx";
 import AuthFooter from "./AuthFooter.tsx";
 import style from "./style.css" with { type: "css" };
 import { initEmailInvitation } from "./email-invitation/index.ts";
+import { GuestBadge } from "./GuestBadge.tsx";
 
 const GUEST_INVISIBLE_COMPONENTS = [
     "UIComponent.sendInvites",
@@ -61,6 +62,13 @@ class RestrictedGuestsModule implements Module {
             </RoomPreviewBar>
         ));
         this.api.customisations.registerShouldShowComponent(this.shouldShowComponent);
+
+        // Show a "Guest" badge next to the names of restricted guests
+        this.api.customComponents.registerSenderProfileBadge(({ userId }) =>
+            this.config && userId.startsWith(this.config.guest_user_prefix) ? (
+                <GuestBadge label={this.api.i18n.translate("guest_badge")} />
+            ) : null,
+        );
 
         // Login component customisations (for no guest support)
         this.api.customComponents.registerLoginComponent((props, OriginalComponent) => (

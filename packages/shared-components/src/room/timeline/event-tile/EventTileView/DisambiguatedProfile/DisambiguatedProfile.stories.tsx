@@ -7,6 +7,7 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
+import { Badge } from "@vector-im/compound-web";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -44,6 +45,7 @@ const meta = {
             status: { control: "string" },
             emoji: { control: "string" },
         },
+        badges: { control: false },
     },
     args: {
         displayName: "Alice",
@@ -108,5 +110,18 @@ export const FullExample: Story = {
             emoji: "🏝️",
             text: "On holiday",
         },
+    },
+};
+
+export const WithBadge: Story = {
+    args: {
+        displayName: "Jim",
+        displayIdentifier: "@guest-jim:example.org",
+        colorClass: "mx_Username_color2",
+        badges: [
+            <Badge key="guest" kind="grey">
+                Guest
+            </Badge>,
+        ],
     },
 };
