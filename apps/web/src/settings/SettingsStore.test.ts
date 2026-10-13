@@ -186,7 +186,11 @@ describe("SettingsStore", () => {
             ["no capability is advertised", {}, undefined],
             ["the stable capability is enabled", { "m.preview_url": { enabled: true } }, undefined],
             ["the unstable capability is enabled", { "io.element.msc4452.preview_url": { enabled: true } }, undefined],
-            ["the stable capability is disabled", { "m.preview_url": { enabled: false } }, "Disabled by your account provider"],
+            [
+                "the stable capability is disabled",
+                { "m.preview_url": { enabled: false } },
+                "Disabled by your account provider",
+            ],
             [
                 "the unstable capability is disabled",
                 { "io.element.msc4452.preview_url": { enabled: false } },
