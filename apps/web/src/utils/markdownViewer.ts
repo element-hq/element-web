@@ -5,11 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type FileContent, type MediaEventContent } from "matrix-js-sdk/src/types";
-
-import { MediaEventHelper } from "./MediaEventHelper";
-
 export const MARKDOWN_MIMETYPES = new Set(["text/markdown", "text/x-markdown"]);
 
 /**
@@ -34,15 +29,4 @@ export function isMarkdownFile(mimetype?: string, name?: string): boolean {
 
     const lowerName = (name ?? "").toLowerCase();
     return MARKDOWN_EXTENSIONS.some((extension) => lowerName.endsWith(extension));
-}
-
-/**
- * Whether this event carries a Markdown file the viewer can open. See {@link isMarkdownFile}; the
- * `filename` field is preferred over the body as the file name.
- */
-export function isMarkdownEvent(mxEvent: MatrixEvent): boolean {
-    if (!MediaEventHelper.isEligible(mxEvent)) return false;
-
-    const content = mxEvent.getContent<MediaEventContent & FileContent>();
-    return isMarkdownFile(content.info?.mimetype, content.filename || content.body);
 }

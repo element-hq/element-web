@@ -11,12 +11,12 @@ Please see LICENSE files in the repository root for full details.
  */
 export interface DocumentPreviewFile {
     /**
-     * Resolves the file contents. Called when the preview loads the file; if it rejects, the preview
-     * shows an error.
+     * A function that resolves to the a Blob of the file. If this rejects, the document
+     * preview will show a generic error.
      */
     blob: () => Promise<Blob>;
     /**
-     * The file name, shown as the title of the preview.
+     * The file name, shown as the title of the preview. If absent,
      */
     name?: string;
 }
@@ -29,14 +29,15 @@ export interface DocumentPreviewFile {
 export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
 
 /**
- * API for showing files in Element Web's document previews.
+ * API for showing in-app document previews.
  * @alpha Subject to change.
  */
 export interface DocumentPreviewApi {
     /**
      * Get a function that opens files of the given mimetype in a document preview.
+     *
      * @param mimetype - The mimetype of the files to open, e.g. `application/pdf`.
-     * @returns The function, or null if Element Web cannot preview files of this mimetype.
+     * @returns The function, or null if the file cannot be previewed.
      * @alpha Subject to change.
      */
     getPreviewOpener(mimetype: string): DocumentPreviewOpener | null;
