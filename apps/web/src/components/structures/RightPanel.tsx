@@ -281,20 +281,10 @@ export default class RightPanel extends React.Component<Props, IState> {
 
             case RightPanelPhases.DocumentViewer:
                 if (!!cardState?.documentViewer) {
-                    if ('event' in cardState.documentViewer) {
-                        card = (
-                            <DocumentViewerCard
-                                mxEvent={cardState.documentViewer.event}
-                                onClose={this.onClose}
-                            />
-                        );
-                    } else if ('file' in cardState.documentViewer) {
-                        card = (
-                            <DocumentViewerCard
-                                file={cardState.documentViewer.file}
-                                onClose={this.onClose}
-                            />
-                        );
+                    if ("event" in cardState.documentViewer) {
+                        card = <DocumentViewerCard mxEvent={cardState.documentViewer.event} onClose={this.onClose} />;
+                    } else if ("file" in cardState.documentViewer) {
+                        card = <DocumentViewerCard file={cardState.documentViewer.file} onClose={this.onClose} />;
                     }
                 }
                 break;

@@ -397,9 +397,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 // viewer that was left open rather than restoring it on the next load.
                 if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
                 if (!card.state?.documentViewer) {
-                    logger.warn(
-                        "removed card from right panel because of missing documentViewer in card state",
-                    );
+                    logger.warn("removed card from right panel because of missing documentViewer in card state");
                 }
                 return !!card.state?.documentViewer;
         }

@@ -27,7 +27,7 @@ export interface IRightPanelCardState {
     // room summary
     focusRoomSearch?: boolean;
     // document viewer: Either an event or file that's been attached.
-    documentViewer?: {event: MatrixEvent}|{file: DocumentFile};
+    documentViewer?: { event: MatrixEvent } | { file: DocumentFile };
 }
 
 export interface IRightPanelCardStateStored {
@@ -87,7 +87,8 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        documentViewerEventId: state?.documentViewer && 'event' in state.documentViewer ? state.documentViewer.event.getId() : undefined,
+        documentViewerEventId:
+            state?.documentViewer && "event" in state.documentViewer ? state.documentViewer.event.getId() : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -96,7 +97,8 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
 function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room): IRightPanelCard {
     const stateStored = panelStateStore.state ?? {};
     const documentViewerEvent = !!stateStored?.documentViewerEventId
-        ? room.findEventById(stateStored.documentViewerEventId) : undefined;
+        ? room.findEventById(stateStored.documentViewerEventId)
+        : undefined;
     const state: IRightPanelCardState = {
         widgetId: stateStored.widgetId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
@@ -109,7 +111,7 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        documentViewer: documentViewerEvent ? {event: documentViewerEvent} : undefined
+        documentViewer: documentViewerEvent ? { event: documentViewerEvent } : undefined,
     };
 
     return { state: state, phase: panelStateStore.phase };
