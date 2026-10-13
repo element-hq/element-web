@@ -72,20 +72,9 @@
     line-height: inherit;
 }
 
-.bodyLink,
-.bodyAction {
+.bodyLink {
     color: inherit;
     text-decoration: inherit;
-}
-
-.bodyAction {
-    appearance: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font: inherit;
-    padding: 0;
-    text-align: inherit;
 }
 
 .emoteSender {
