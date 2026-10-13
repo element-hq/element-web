@@ -1522,7 +1522,6 @@
         "experimental_description": "想体验实验性功能？试试我们正在开发的最新创意。这些功能尚未最终确定；它们可能不稳定，可能会改变，也可能被完全放弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
-        "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
         "feature_element_call_react": "将 Element Call 渲染为 React 组件而不是小部件。",
         "feature_matrixrtc_slots": "基于 Element Call 的通话需要打开 MatrixRTC 插槽。",
         "feature_matrixrtc_slots_description": "仅允许在房间中具有有效的插槽状态事件时开始或加入 Element Call 通话。",
@@ -2500,10 +2499,13 @@
         "enable_markdown_description": "在消息开头输入 <code>/plain</code> 以临时禁用 Markdown。",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "仅当你无法访问其它已登录的设备并且丢失了恢复密钥时才重置数字身份。",
+                "breadcrumb_description": "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。",
+                "breadcrumb_description_no_verification_method": "你没有其它已验证的设备或恢复密钥，因此你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
                 "breadcrumb_page": "重置加密",
-                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的消息历史",
-                "breadcrumb_third_description": "你将需要再次验证所有现有设备与联系人",
+                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的加密聊天历史",
+                "breadcrumb_third_description": "其他用户将会看到你已重置数字身份。",
                 "breadcrumb_title": "无法确认？你需要重置数字身份。",
                 "breadcrumb_title_cant_confirm": "你需要重置数字身份",
                 "breadcrumb_title_compromised": "你确定要重置数字身份？",

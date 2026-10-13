@@ -120,6 +120,19 @@ describe("useRoomCall", () => {
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
             );
         });
+
+        it("should allow Element Call if the transport only has a url", async () => {
+            vi.mocked(client.cachedRtcTransports.get).mockReturnValue([
+                { type: "livekit", url: "wss://sfu.example.org" },
+            ]);
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+
+            const { result } = render();
+            await waitFor(() =>
+                expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
+            );
+        });
+
         it("Allows Element Call if transport is provided by client discovery", async () => {
             vi.mocked(client.cachedRtcTransports.get).mockReturnValue([
                 {
