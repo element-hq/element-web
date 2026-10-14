@@ -22,11 +22,4 @@
         align-self: flex-start;
         margin: var(--cpd-space-3x);
     }
-
-    /* Icon shown in place of the media. The icon box sizes itself from this height. */
-    .sideIcon {
-        align-self: flex-start;
-        height: 40px;
-        margin: var(--cpd-space-3x) 0 var(--cpd-space-3x) var(--cpd-space-3x);
-    }
 }

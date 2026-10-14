@@ -15,7 +15,6 @@ import {
     type MediaPreviewGroupSnapshot,
 } from "./MediaPreviewGroupView";
 import { MockViewModel } from "../../../../core/viewmodel/MockViewModel";
-import { linkIcon } from "./icons";
 import demoImage from "../../../../../static/wideImage.png";
 import siteLogo from "../../../../../static/element.png";
 // Inlined as a data URI, and short enough to be buffered in full the moment it is decoded: the native
@@ -93,7 +92,6 @@ const textLinkPreviewEntry: MediaPreviewGroupEntry = {
     id: "https://matrix.org/",
     type: "text",
     layout: "side",
-    ...linkIcon(),
     header: "Matrix",
     headerUrl: "https://matrix.org/",
     body: "An open network for secure, decentralised communication",

@@ -15,7 +15,6 @@ import {
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,
-    linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
@@ -202,10 +201,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 imageSize: "logo",
             };
         } else {
-            // Neither an image nor a logo: fall back to the generic link icon.
             content = {
                 type: "text",
-                ...linkIcon(),
             };
         }
 
