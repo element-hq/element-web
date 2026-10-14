@@ -99,6 +99,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
 
+            // Assert that any reply chain has finished loading
+            await expect(locator.getByRole("progressbar", { name: "Loading…" })).toHaveCount(0);
+
             if (monospace) {
                 // Assert that the monospace timer is visible
                 await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", '"Fira Code"');
