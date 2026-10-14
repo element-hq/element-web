@@ -22,8 +22,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.63.0
-    "playwright-core": 1.63.0
+    "@playwright/test": 1.64.0
+    "playwright-core": 1.64.0
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 11.2.0
@@ -47,7 +47,7 @@ catalog:
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.1.2
     # nx
-    nx: 23.2.1
+    nx: 23.3.0
 
 catalogs:
     ts6:
@@ -141,9 +141,6 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    # Only one instance of LiveKit in the build: the Element Call component and
-    # Element Web must share it, E2EE workers included.
-    livekit-client: "^2.22.2"
     pretty-format@30>react-is: 19.3.0
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
@@ -152,11 +149,11 @@ overrides:
     # Make sure we only have one instance of the widget API in the build;
     # failure to do so results in (unspecified) breakage in downstream builds
     # cf https://github.com/element-hq/element-web/pull/31851
-    matrix-widget-api: "^1.18.0"
+    matrix-widget-api: "^1.20.0"
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.35.0
+    node-abi: 4.37.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0

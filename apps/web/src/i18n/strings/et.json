@@ -1500,7 +1500,6 @@
         "experimental_description": "Soovid katsetada? Proovi meie uusimaid arendusmõtteid. Need funktsionaalsused pole üldsegi veel valmis, nad võivad toimida puudulikult, võivad muutuda või sootuks lõpetamata jääda. <a>Lisateavet leiad siit</a>.",
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
-        "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
         "feature_retention": {
             "description": "Selle seadistusega saad jututoast sõnumeid automaatselt eemaldada etteantud ajavahemiku möödumisel. Hetkel on toetatud vaid lugemise seadistused.",
             "disabled_sliding_sync": "Kui järkjärgulise sünkroonimine on kasutusel, siis sõnumise säilitamise reegleid ei saa sisse lülitada.",

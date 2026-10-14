@@ -1543,7 +1543,6 @@
         "experimental_description": "Chcesz poeksperymentować? Wypróbuj nasze najnowsze pomysły w trakcie rozwoju. Przedstawione funkcje nie zostały w pełni ukończone; mogą być niestabilne; mogą się zmienić lub zostać kompletnie porzucone. <a>Dowiedz się więcej</a>.",
         "experimental_section": "Wczesny podgląd",
         "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
-        "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
         "feature_element_call_react": "Renderuj Element Call jako komponent React zamiast widżetu",
         "feature_matrixrtc_slots": "Wymagaj otwartych slotów MatrixRTC dla połączeń Element Call",
         "feature_matrixrtc_slots_description": "Umożliwia rozpoczęcie połączenia Element Call lub dołączenie do niego tylko wtedy, gdy pokój zawiera prawidłowe zdarzenie slotu.",
@@ -2545,10 +2544,11 @@
         "enable_markdown_description": "Rozpocznij wiadomość z <code>/plain</code>, aby nie zawierała markdownu.",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania.",
                 "breadcrumb_first_description": "Dane konta, kontakty, preferencje i lista czatów zostaną zachowane",
                 "breadcrumb_page": "Resetuj szyfrowanie",
-                "breadcrumb_second_description": "Stracisz całą historię wiadomości przechowywaną na serwerze",
-                "breadcrumb_third_description": "Konieczne będzie ponowne zweryfikowanie wszystkich istniejących urządzeń i kontaktów",
+                "breadcrumb_second_description": "Stracisz dostęp do całej historii wiadomości, która jest przechowywana na serwerze",
+                "breadcrumb_third_description": "Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana",
                 "breadcrumb_title": "Nie możesz potwierdzić? Zresetuj swoją tożsamość cyfrową.",
                 "breadcrumb_title_cant_confirm": "Musisz zresetować swoją tożsamość cyfrową",
                 "breadcrumb_title_compromised": "Czy na pewno chcesz zresetować swoją tożsamość cyfrową?",

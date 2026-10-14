@@ -1514,7 +1514,6 @@
         "experimental_description": "Experimentierfreudig? Probiere unsere neuesten, sich in Entwicklung befindlichen Ideen aus. Diese Funktionen sind nicht final; Sie könnten instabil sein, sich verändern oder sogar ganz entfernt werden. <a>Erfahre mehr</a>.",
         "experimental_section": "Frühe Vorschauen",
         "extended_profiles_msc_support": "Erfordert die Unterstützung von MSC4133 durch den Server",
-        "feature_disable_call_per_sender_encryption": "Verschlüsselung per-sender für Element Anruf abschalten",
         "feature_retention": {
             "description": "Entfernt Nachrichten automatisch aus einem Chat, sobald die konfigurierte Aufbewahrungsfrist erreicht ist. Unterstützt derzeit nur das Lesen der Einstellungen.",
             "disabled_sliding_sync": "Die Aufbewahrungsfrist kann nicht aktiviert werden, solange Sliding Sync aktiviert ist.",

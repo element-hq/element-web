@@ -27,6 +27,10 @@
         "yes": "Da"
     },
     "confirm_quit": "Jesi li siguran da želiš odustati?",
+    "download": {
+        "unable_to_open_description": "Datoteka se nije mogla otvoriti. Možda je premještena ili izbrisana.",
+        "unable_to_open_title": "Nije moguće otvoriti datoteku"
+    },
     "edit_menu": {
         "speech": "Govor",
         "speech_start_speaking": "Počnite govoriti",
@@ -68,6 +72,10 @@
         "save_image_as": "Spremi sliku kao...",
         "save_image_as_error_description": "Spremanje slike nije uspjelo",
         "save_image_as_error_title": "Spremanje slike nije uspjelo"
+    },
+    "save_dialog": {
+        "all_files": "Sve datoteke",
+        "named_file_type": "%(extension)s datoteka"
     },
     "store": {
         "error": {
