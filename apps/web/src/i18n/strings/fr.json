@@ -2511,8 +2511,8 @@
             "advanced": {
                 "breadcrumb_first_description": "Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés",
                 "breadcrumb_page": "Réinitialiser le chiffrement",
-                "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
-                "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
+                "breadcrumb_second_description": "Vous perdrez tout l'historique des discussions chiffrées stockées uniquement sur le serveur.",
+                "breadcrumb_third_description": "Les autres utilisateurs verront que votre identité numérique a été réinitialisée.",
                 "breadcrumb_title": "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
                 "breadcrumb_title_compromised": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique?",
@@ -2569,10 +2569,8 @@
                 "set_up_recovery_confirm_button": "Terminer la configuration",
                 "set_up_recovery_confirm_description": "Saisissez la clé de récupération affichée sur l’écran précédent pour terminer la configuration de la récupération.",
                 "set_up_recovery_confirm_title": "Saisissez votre clé de récupération pour confirmer",
-                "set_up_recovery_description": "Le stockage de vos clés est protégé par une clé de récupération. Si vous avez besoin d'une nouvelle clé de récupération après la création, vous pouvez la recréer en sélectionnant « %(changeRecoveryKeyButton)s ».",
                 "set_up_recovery_save_key_description": "Recopier cette clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe, une note chiffrée ou un coffre-fort physique.",
                 "set_up_recovery_save_key_title": "Enregistrez votre clé de récupération dans un endroit sûr",
-                "set_up_recovery_secondary_description": "Après avoir cliqué sur continuer, nous allons générer une clé de récupération pour vous.",
                 "title": "Sauvegarde"
             },
             "title": "Chiffrement"

@@ -1989,11 +1989,6 @@
         "emoji_autocomplete": "Sugerir emojis mientras escribes",
         "enable_markdown": "Activar Markdown",
         "enable_markdown_description": "Empieza tu mensaje con <code>/plain</code> para enviarlo sin markdown.",
-        "encryption": {
-            "recovery": {
-                "set_up_recovery_secondary_description": "Después de hacer clic en continuar te generaremos una clave de recuperación."
-            }
-        },
         "general": {
             "account_management_section": "Gestión de la cuenta",
             "account_section": "Cuenta",
