@@ -2441,10 +2441,8 @@
                 "set_up_recovery_confirm_button": "Selesaikan penyiapan",
                 "set_up_recovery_confirm_description": "Masukkan kunci pemulihan yang ditunjukkan pada layar sebelumnya untuk menyelesaikan penyiapan pemulihan.",
                 "set_up_recovery_confirm_title": "Masukkan kunci pemulihan Anda untuk mengonfirmasi",
-                "set_up_recovery_description": "Penyimpanan kunci Anda dilindungi oleh kunci pemulihan. Jika Anda memerlukan kunci pemulihan baru setelah penyiapan, Anda dapat membuatnya kembali dengan memilih '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Catatlah kunci pemulihan ini di tempat yang aman, seperti pengelola kata sandi, catatan terenkripsi, atau brankas fisik.",
                 "set_up_recovery_save_key_title": "Simpan kunci pemulihan Anda di tempat yang aman",
-                "set_up_recovery_secondary_description": "Setelah mengeklik lanjutkan, kami akan membuat kunci pemulihan untuk Anda.",
                 "title": "Pemulihan"
             },
             "title": "Enkripsi"

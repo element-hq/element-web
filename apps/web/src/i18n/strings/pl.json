@@ -2605,10 +2605,8 @@
                 "set_up_recovery_confirm_button": "Zakończ konfigurację",
                 "set_up_recovery_confirm_description": "Wprowadź klucz przywracania pokazany na poprzednim ekranie, aby zakończyć konfigurowanie przywracania.",
                 "set_up_recovery_confirm_title": "Wprowadź klucz przywracania, aby potwierdzić",
-                "set_up_recovery_description": "Magazyn kluczy jest chroniony przez klucz przywracania. Jeśli po skonfigurowaniu potrzebujesz klucza przywracania, wygeneruj go zaznaczając ‘%(changeRecoveryKeyButton)s’.",
                 "set_up_recovery_save_key_description": "Zapisz ten klucz przywracania w bezpiecznym miejscu, takim jak menedżer haseł, notatka szyfrowana lub sejf.",
                 "set_up_recovery_save_key_title": "Zapisz klucz przywracania w bezpiecznym miejscu",
-                "set_up_recovery_secondary_description": "Klikając przycisk Kontynuuj, wygenerujemy dla Ciebie klucz przywracania.",
                 "title": "Kopia zapasowa"
             },
             "title": "Szyfrowanie"

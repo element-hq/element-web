@@ -2572,10 +2572,8 @@
                 "set_up_recovery_confirm_button": "Slutför inställningen",
                 "set_up_recovery_confirm_description": "Ange återställningsnyckeln som visas på föregående skärm för att slutföra inställningen av återställningen.",
                 "set_up_recovery_confirm_title": "Ange din återställningsnyckel för att bekräfta",
-                "set_up_recovery_description": "Din nyckellagring skyddas av en återställningsnyckel. Om du behöver en ny återställningsnyckel efter installationen kan du återskapa den genom att välja ”%(changeRecoveryKeyButton)s”.",
                 "set_up_recovery_save_key_description": "Skriv ner den här återställningsnyckeln någonstans säkert, som en lösenordshanterare, krypterad anteckning eller ett fysiskt kassaskåp.",
                 "set_up_recovery_save_key_title": "Spara din återställningsnyckel på ett säkert ställe",
-                "set_up_recovery_secondary_description": "När du har klickat på Fortsätt genererar vi en återställningsnyckel åt dig.",
                 "title": "Säkerhetskopiering"
             },
             "title": "Kryptering"

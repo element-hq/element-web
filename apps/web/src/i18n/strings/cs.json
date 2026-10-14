@@ -2517,10 +2517,8 @@
                 "set_up_recovery_confirm_button": "Dokončete nastavení",
                 "set_up_recovery_confirm_description": "Zadejte obnovovací klíč zobrazený na předchozí obrazovce a dokončete nastavení obnovy.",
                 "set_up_recovery_confirm_title": "Pro potvrzení zadejte klíč pro obnovení",
-                "set_up_recovery_description": "Vaše úložiště klíčů je chráněno klíčem pro obnovení. Pokud potřebujete nový klíč pro obnovení po nastavení, můžete jej znovu vytvořit výběrem '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Tento klíč pro obnovení si zapište na bezpečné místo, jako je správce hesel, šifrovaná poznámka nebo fyzický trezor.",
                 "set_up_recovery_save_key_title": "Uložte si klíč pro obnovení na bezpečném místě",
-                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovat vám vygenerujeme obnovovací klíč.",
                 "title": "Zálohování"
             },
             "title": "Šifrování"
