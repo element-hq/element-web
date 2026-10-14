@@ -1225,6 +1225,9 @@ export async function waitForLogoutCleanup(): Promise<void> {
 export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
     logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
 
+    // Clear this before awaiting anything, so that we cannot wipe data stored for a login started in the meantime
+    window.sessionStorage?.clear();
+
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
         const language = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
@@ -1256,8 +1259,6 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
             }
         }
     }
-
-    window.sessionStorage?.clear();
 
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({
