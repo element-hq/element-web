@@ -2607,10 +2607,8 @@
                 "set_up_recovery_confirm_button": "Završi postavljanje",
                 "set_up_recovery_confirm_description": "Unesite ključ za oporavak prikazan na prethodnom zaslonu kako biste dovršili postavljanje oporavka.",
                 "set_up_recovery_confirm_title": "Unesite svoj ključ za oporavak kako biste potvrdili",
-                "set_up_recovery_description": "Vaša pohrana ključeva zaštićena je ključem za oporavak. Ako vam je potreban novi ključ za oporavak nakon postavljanja, možete ga ponovno izraditi tako da odaberete %(changeRecoveryKeyButton)s.",
                 "set_up_recovery_save_key_description": "Zapišite ovaj ključ za oporavak i čuvajte ga na sigurnom mjestu, poput upravitelja zaporki, šifrirane bilješke ili fizičkog sefa.",
                 "set_up_recovery_save_key_title": "Spremite svoj ključ za oporavak na sigurno mjesto",
-                "set_up_recovery_secondary_description": "Nakon što odaberete Nastavi, generirat ćemo vam ključ za oporavak.",
                 "title": "Sigurnosna kopija"
             },
             "title": "Šifriranje"

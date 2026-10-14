@@ -2462,10 +2462,8 @@
                 "set_up_recovery_confirm_button": "Gorffen adfer",
                 "set_up_recovery_confirm_description": "Rhowch yr allwedd adfer sy'n cael ei ddangos ar y sgrin flaenorol i orffen osod yr adfer.",
                 "set_up_recovery_confirm_title": "Rhowch eich allwedd adfer i gadarnhau",
-                "set_up_recovery_description": "Mae eich storfa allweddi wedi'i diogelu gan allwedd adfer. Os oes angen allwedd adfer newydd arnoch ar ôl gosod, gallwch ei hail-greu trwy ddewis ‘%(changeRecoveryKeyButton)s’.",
                 "set_up_recovery_save_key_description": "Ysgrifennwch yr allwedd adfer hon yn rhywle diogel, fel rheolwr cyfrinair, nodyn wedi'i amgryptio, neu mewn man dan glo.",
                 "set_up_recovery_save_key_title": "Cadwch eich allwedd adfer yn rhywle diogel",
-                "set_up_recovery_secondary_description": "Ar ôl clicio parhau, byddwn yn cynhyrchu allwedd adfer i chi.",
                 "title": "Adfer"
             },
             "title": "Amgryptio"

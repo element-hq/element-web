@@ -2053,10 +2053,8 @@
                 "set_up_recovery_confirm_button": "完成設定",
                 "set_up_recovery_confirm_description": "輸入上個畫面顯示的復原金鑰，以完成復原設定。",
                 "set_up_recovery_confirm_title": "輸入您的復原金鑰以確認",
-                "set_up_recovery_description": "您的金鑰儲存空間受復原金鑰保護。若在設定完成後需要新的復原金鑰，可透過選擇「%(changeRecoveryKeyButton)s」重新建立。",
                 "set_up_recovery_save_key_description": "將此復原金鑰謄寫在安全的地方，例如密碼管理器、加密筆記或實體保險箱。",
                 "set_up_recovery_save_key_title": "將您的復原金鑰保存在安全的地方",
-                "set_up_recovery_secondary_description": "點擊繼續後，我們將產生還原金鑰給您。",
                 "title": "復原"
             }
         },

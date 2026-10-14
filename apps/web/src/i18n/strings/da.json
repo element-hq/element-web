@@ -2104,8 +2104,7 @@
                 "list_first": "Du vil ikke kunne se historikken for krypterede beskeder på nye enheder"
             },
             "recovery": {
-                "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet.",
-                "set_up_recovery_description": "Din nøgleopbevaring er beskyttet af en genoprettelsesnøgle. Hvis du har brug for en ny genoprettelsesnøgle efter opsætningen, kan du genskabe den ved at vælge '%(changeRecoveryKeyButton)s'."
+                "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet."
             }
         },
         "general": {
