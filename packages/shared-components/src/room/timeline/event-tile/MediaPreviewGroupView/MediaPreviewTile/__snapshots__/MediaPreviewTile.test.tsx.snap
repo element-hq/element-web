@@ -226,11 +226,25 @@ exports[`MediaPreviewTile > renders the icon and text content without any media 
 </div>
 `;
 
-exports[`MediaPreviewTile > side layout > renders the text content with its footer and without the icon 1`] = `
+exports[`MediaPreviewTile > side layout > renders the text content with its footer and the icon in place of media 1`] = `
 <div>
   <div
     class="MediaPreviewTile-module_tile MediaPreviewTile-module_tileSide"
   >
+    <div
+      class="MediaPreviewTile-module_sideIcon"
+    >
+      <div
+        class="MediaPreviewComponents-module_icon"
+      >
+        <span
+          data-testid="icon"
+          style="color: rgb(66, 0, 166);"
+        >
+          icon
+        </span>
+      </div>
+    </div>
     <div
       class="MediaPreviewComponents-module_textContent MediaPreviewComponents-module_textContentSide"
     >

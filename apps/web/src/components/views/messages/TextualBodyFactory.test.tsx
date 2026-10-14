@@ -647,13 +647,17 @@ describe("<TextualBody />", () => {
             return result;
         };
 
-        it("renders a preview without an image as a text tile", async () => {
-            await renderPreviews();
+        /** The generic link icon: `linkIcon()` colours it with the decorative text token. */
+        const linkIconSelector = 'svg[style*="decorative-4"]';
+
+        it("renders a preview without an image as a text tile with the link icon", async () => {
+            const { container } = await renderPreviews();
 
             expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", link);
             expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
             expect(screen.getByText("matrix.org")).toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+            expect(container.querySelector(linkIconSelector)).toBeInTheDocument();
         });
 
         it("shows the lowercased host of the link rather than the site name", async () => {
@@ -755,11 +759,12 @@ describe("<TextualBody />", () => {
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
-        it("shows a text-only tile when the page has neither an image nor a logo", async () => {
-            await renderPreviews();
+        it("shows a text-only tile with the link icon when the page has neither an image nor a logo", async () => {
+            const { container } = await renderPreviews();
 
             expect(screen.queryByRole("img")).not.toBeInTheDocument();
             expect(screen.getByText("matrix.org")).toBeInTheDocument();
+            expect(container.querySelector(linkIconSelector)).toBeInTheDocument();
         });
 
         it("links the title to the previewed page in a new tab and has no other buttons", async () => {

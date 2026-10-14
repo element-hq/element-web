@@ -33,9 +33,15 @@ export function MediaPreviewTile(props: MediaPreviewTileProps): JSX.Element {
     const buttons = props.buttons && props.buttons.length !== 0 && <Buttons buttons={props.buttons} />;
 
     if (props.layout === "side") {
+        // The icon stands in for the media, so it only shows when there is none.
+        const icon = props.icon && (
+            <div className={styles.sideIcon}>
+                <Icon icon={props.icon} onClick={props.onClick} color={props.color} />
+            </div>
+        );
         return (
             <div className={classNames(styles.tile, styles.tileSide)}>
-                {props.children}
+                {props.children ?? icon}
                 <TextContent {...props} />
                 {buttons && <div className={styles.sideButtons}>{buttons}</div>}
             </div>

@@ -10,6 +10,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DocumentIcon, ExpandIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { TextPreviewTile } from "./MediaPreviewTile";
+import { linkIcon } from "../icons";
 
 const meta = {
     title: "Room/Timeline/MediaPreviewGroupView/MediaPreviewTile/TextPreviewTile",
@@ -68,7 +69,8 @@ export const SideBySide: Story = {
         headerUrl: "https://techcrunch.com/ai-future",
         body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation.",
         footer: "techcrunch.com",
-        icon: undefined,
+        ...linkIcon(),
+        onClick: undefined,
         buttons: [],
     },
 };

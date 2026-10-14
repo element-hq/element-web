@@ -135,14 +135,20 @@ describe("MediaPreviewTile", () => {
             footer: "matrix.org",
         } as const;
 
-        it("renders the text content with its footer and without the icon", () => {
+        it("renders the text content with its footer and the icon in place of media", () => {
             const { container } = render(<MediaPreviewTile {...sideProps} />);
 
             expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", "https://matrix.org/");
             expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
             expect(screen.getByText("matrix.org")).toBeInTheDocument();
-            expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+            expect(screen.getByTestId("icon")).toBeInTheDocument();
             expect(container).toMatchSnapshot();
+        });
+
+        it("renders no icon when there is none to show", () => {
+            render(<MediaPreviewTile {...sideProps} icon={undefined} />);
+
+            expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
         });
 
         it("renders the given media before the text content", () => {
@@ -155,6 +161,7 @@ describe("MediaPreviewTile", () => {
             const tile = container.firstElementChild!;
             expect(tile.children[0]).toBe(screen.getByTestId("media"));
             expect(tile.children[1]).toContainElement(screen.getByText("Matrix"));
+            expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
         });
 
         it("renders the buttons when there are any", async () => {
