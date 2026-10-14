@@ -27,7 +27,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
         "complete": "Selesai",
@@ -1458,7 +1457,6 @@
         "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>.",
         "experimental_section": "Pratinjau awal",
         "extended_profiles_msc_support": "Memerlukan server Anda untuk mendukung MSC4133",
-        "feature_disable_call_per_sender_encryption": "Nonaktifkan enkripsi per pengirim untuk Element Call",
         "feature_wysiwyg_composer_description": "Menggunakan teks kaya daripada Markdown dalam komposer pesan.",
         "group_developer": "Pengembang",
         "group_encryption": "Enkripsi",
@@ -1609,7 +1607,6 @@
     },
     "member_list_back_action_label": "Anggota ruangan",
     "message_edit_dialog_title": "Editan pesan",
-    "migrating_crypto": "Bersabarlah. Kami sedang memperbarui Element untuk membuat enkripsi lebih cepat dan andal.",
     "mobile_guide": {
         "toast_accept": "Gunakan aplikasi",
         "toast_description": "%(brand)s bersifat eksperimental pada peramban web ponsel. Untuk pengalaman yang lebih baik dan fitur-fitur terkini, gunakan aplikasi natif gratis kami.",
@@ -2444,10 +2441,8 @@
                 "set_up_recovery_confirm_button": "Selesaikan penyiapan",
                 "set_up_recovery_confirm_description": "Masukkan kunci pemulihan yang ditunjukkan pada layar sebelumnya untuk menyelesaikan penyiapan pemulihan.",
                 "set_up_recovery_confirm_title": "Masukkan kunci pemulihan Anda untuk mengonfirmasi",
-                "set_up_recovery_description": "Penyimpanan kunci Anda dilindungi oleh kunci pemulihan. Jika Anda memerlukan kunci pemulihan baru setelah penyiapan, Anda dapat membuatnya kembali dengan memilih '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Catatlah kunci pemulihan ini di tempat yang aman, seperti pengelola kata sandi, catatan terenkripsi, atau brankas fisik.",
                 "set_up_recovery_save_key_title": "Simpan kunci pemulihan Anda di tempat yang aman",
-                "set_up_recovery_secondary_description": "Setelah mengeklik lanjutkan, kami akan membuat kunci pemulihan untuk Anda.",
                 "title": "Pemulihan"
             },
             "title": "Enkripsi"
@@ -3147,9 +3142,7 @@
         "show_thread_filter": "Tampilkan:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitas utas",
-        "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
+        "header": "Aktivitas utas"
     },
     "time": {
         "date_at_time": "%(date)s pada %(time)s",

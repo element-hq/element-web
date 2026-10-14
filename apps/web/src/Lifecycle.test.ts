@@ -670,6 +670,42 @@ describe("Lifecycle", () => {
             expect(MatrixClientPeg.start).toHaveBeenCalled();
         });
 
+        it("should not let a logout which is still clearing storage wipe the new session", async () => {
+            // Hold the logout at its last step, which clears localStorage
+            const platformCleared = Promise.withResolvers<void>();
+            mockPlatform.clearStorage = vi.fn(async () => {
+                await platformCleared.promise;
+                localStorage.clear();
+            });
+
+            const loggedOut = Lifecycle.onLoggedOut();
+            const loggedIn = setLoggedIn(credentials);
+            // Give the login every chance to persist its session before the logout finishes
+            await Promise.race([loggedIn, new Promise((resolve) => setTimeout(resolve, 100))]);
+            platformCleared.resolve();
+            await Promise.all([loggedOut, loggedIn]);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should still log in after a logout failed to clear storage", async () => {
+            mockPlatform.clearStorage = vi.fn().mockRejectedValue(new Error("storage broke"));
+
+            await expect(Lifecycle.onLoggedOut()).rejects.toThrow("storage broke");
+            await setLoggedIn(credentials);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should not let a logout which is still clearing storage wipe sessionStorage written meanwhile", async () => {
+            const loggedOut = Lifecycle.onLoggedOut();
+            // Like an OAuth login storing the context it needs when the issuer sends us back
+            sessionStorage.setItem("mx_oidc_test", "value");
+            await loggedOut;
+
+            expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
+        });
+
         describe("after a soft-logout", () => {
             beforeEach(async () => {
                 await setLoggedIn(credentials);
@@ -876,7 +912,7 @@ describe("Lifecycle", () => {
 
     describe("logout()", () => {
         it("should call logout on the client", async () => {
-            logout();
+            await logout();
 
             await flushPromises();
 

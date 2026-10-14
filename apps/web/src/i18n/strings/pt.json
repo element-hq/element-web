@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click_to_copy": "Clica para copiar",
         "close": "Fechar",
         "collapse": "Colapsar",
         "complete": "Completo",
@@ -1355,7 +1354,6 @@
         "experimental_description": "Estás a sentir-te experimental? Experimenta as nossas ideias mais recentes em desenvolvimento. Estas funcionalidades não estão finalizadas; podem ser instáveis, podem ser alteradas ou podem ser completamente abandonadas. <a>Sabe mais em</a>.",
         "experimental_section": "Pré-visualizações antecipadas",
         "extended_profiles_msc_support": "Requer que o teu servidor suporte MSC4133",
-        "feature_disable_call_per_sender_encryption": "Desativar a cifragem por remetente na Element Call",
         "feature_wysiwyg_composer_description": "Utiliza texto rico em vez de Markdown no compositor de mensagens.",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Encriptação",
@@ -1506,7 +1504,6 @@
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições de mensagens",
-    "migrating_crypto": "Aguenta firme. Estamos a atualizar o Element para tornar a encriptação mais rápida e mais fiável.",
     "mobile_guide": {
         "toast_accept": "Utiliza a aplicação",
         "toast_description": "%(brand)s é experimental num navegador da Web móvel. Para obteres uma melhor experiência e as funcionalidades mais recentes, utiliza a nossa aplicação nativa gratuita.",
@@ -2306,10 +2303,8 @@
                 "set_up_recovery_confirm_button": "Concluir configuração",
                 "set_up_recovery_confirm_description": "Digite a chave de recuperação mostrada na tela anterior para concluir a configuração da recuperação.",
                 "set_up_recovery_confirm_title": "Introduza a sua chave de recuperação para confirmar",
-                "set_up_recovery_description": "O armazenamento da sua chave está protegido por uma chave de recuperação. Se precisar de uma nova chave de recuperação após a configuração, pode recriá-la selecionando '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Anote essa chave de recuperação em algum lugar seguro, como um gerenciador de senhas, uma nota criptografada ou um cofre físico.",
                 "set_up_recovery_save_key_title": "Guarda a tua chave de recuperação num local seguro",
-                "set_up_recovery_secondary_description": "Depois de clicares em continuar, iremos gerar uma chave de recuperação para ti.",
                 "title": "Recuperação"
             },
             "title": "Encriptação"
@@ -2978,9 +2973,7 @@
         "show_thread_filter": "Mostrar:"
     },
     "threads_activity_centre": {
-        "header": "Atividade de tópicos",
-        "no_rooms_with_threads_notifs": "Ainda não tens salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
+        "header": "Atividade de tópicos"
     },
     "time": {
         "date_at_time": "%(date)s às %(time)s",

@@ -120,7 +120,7 @@ describe("InviteDialog", () => {
         "[Invite:Recents] Excluding @alice:example.org from recents",
     );
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockClient = getMockClientWithEventEmitter({
             getCrypto: vi.fn().mockReturnValue({
                 getUserVerificationStatus: vi
@@ -168,7 +168,7 @@ describe("InviteDialog", () => {
         vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
-        room.addLiveEvents(
+        await room.addLiveEvents(
             [
                 mkMessage({
                     msg: "Hello",

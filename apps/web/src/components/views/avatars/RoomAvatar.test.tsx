@@ -39,8 +39,8 @@ describe("RoomAvatar", () => {
         vi.spyOn(AvatarModule, "defaultAvatarUrlForString");
     });
 
-    afterAll(() => {
-        SettingsStore.setValue(
+    afterAll(async () => {
+        await SettingsStore.setValue(
             "mediaPreviewConfig",
             null,
             SettingLevel.ACCOUNT,
@@ -94,8 +94,8 @@ describe("RoomAvatar", () => {
         ]);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
     });
-    it("should not render an invite avatar if the user has disabled it", () => {
-        SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+    it("should not render an invite avatar if the user has disabled it", async () => {
+        await SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
             invite_avatars: MediaPreviewValue.Off,
         });
         const room = new Room("!room:example.com", client, client.getSafeUserId());

@@ -32,6 +32,14 @@ test.describe("Cryptography", function () {
     test.describe("decryption failure messages", () => {
         test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
 
+        // This test logs in again and skips verification to check how undecryptable
+        // history is shown, so opt out of the (now default) forced verification.
+        test.use({
+            config: {
+                force_verification: false,
+            },
+        });
+
         test(
             "should handle device-relative historical messages",
             { tag: "@screenshot" },
@@ -166,6 +174,8 @@ test.describe("Cryptography", function () {
 
                 // Alice accepts the invite
                 await app.acceptInvitedRoomByName("Test room");
+                // Wait until we're joined, otherwise Bob's messages may land before our join event
+                await expect(page.locator(`.mx_EventTile`).getByText("Alice joined the room")).toBeVisible();
 
                 // Bob sends an encrypted event and an undecryptable event
                 await bob.evaluate(

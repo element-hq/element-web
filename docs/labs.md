@@ -72,14 +72,9 @@ Enables support for video rooms that use Element Call rather than Jitsi, and cau
 
 This flag will not have any effect unless `feature_video_rooms` is also enabled.
 
-## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
+## MatrixRTC call slots (`feature_matrixrtc_slots`) [In Development]
 
-The default for embedded Element Call in Element Web is per-participant encryption.
-This labs flag disables encryption for embedded Element Call in encrypted rooms.
-
-Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
-
-This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
+Only allows starting or joining Element Call calls with a valid slot state event in the room.
 
 ## Enable the notifications panel in the room header (`feature_notifications`)
 

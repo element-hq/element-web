@@ -113,7 +113,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         }
 
         // Check the status of the seek bar
-        expect(await page.getByRole("region", { name: "Audio player" }).getByRole("slider").count()).toBeGreaterThan(0);
+        await expect(
+            page.locator(".mx_EventTile").last().getByRole("slider", { name: "Audio seek bar" }),
+        ).toBeVisible();
 
         // Enable IRC layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);

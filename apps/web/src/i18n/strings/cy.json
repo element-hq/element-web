@@ -29,7 +29,6 @@
         "cancel": "Canslo",
         "change": "Newid",
         "clear": "Clirio",
-        "click_to_copy": "Clicio i gopïo",
         "close": "Cau",
         "collapse": "Cau",
         "complete": "Wedi cwblhau",
@@ -1471,7 +1470,6 @@
         "experimental_description": "Teimlo'n arbrofol? Rhowch gynnig ar ein syniadau diweddaraf sy'n cael eu datblygu. Nid yw'r nodweddion hyn yn derfynol; gallant fod yn ansefydlog, gallant newid, neu gallant gael eu gollwng yn gyfan gwbl. <a>Dysgu rhagor</a>.",
         "experimental_section": "Rhagolygon cynnar",
         "extended_profiles_msc_support": "Mae angen i'ch gweinydd gefnogi MSC4133",
-        "feature_disable_call_per_sender_encryption": "Analluogi amgryptio fesul anfonwr ar gyfer Element Call",
         "feature_wysiwyg_composer_description": "Defnyddiwch destun cyfoethog yn lle Markdown yng nghyfansoddwr y neges.",
         "group_developer": "Datblygwr",
         "group_encryption": "Amgryptio",
@@ -1623,7 +1621,6 @@
     },
     "member_list_back_action_label": "Aelodau'r ystafell",
     "message_edit_dialog_title": "Golygiadau neges",
-    "migrating_crypto": "Arhoswch... Rydym yn diweddaru %(brand)s i wneud amgryptio yn gyflymach ac yn fwy dibynadwy.",
     "mobile_guide": {
         "toast_accept": "Defnyddiwch yr ap",
         "toast_description": "Mae %(brand)s yn arbrofol ar borwr gwe symudol. I gael profiad gwell a'r nodweddion diweddaraf, defnyddiwch ein app brodorol rhad ac am ddim.",
@@ -2465,10 +2462,8 @@
                 "set_up_recovery_confirm_button": "Gorffen adfer",
                 "set_up_recovery_confirm_description": "Rhowch yr allwedd adfer sy'n cael ei ddangos ar y sgrin flaenorol i orffen osod yr adfer.",
                 "set_up_recovery_confirm_title": "Rhowch eich allwedd adfer i gadarnhau",
-                "set_up_recovery_description": "Mae eich storfa allweddi wedi'i diogelu gan allwedd adfer. Os oes angen allwedd adfer newydd arnoch ar ôl gosod, gallwch ei hail-greu trwy ddewis ‘%(changeRecoveryKeyButton)s’.",
                 "set_up_recovery_save_key_description": "Ysgrifennwch yr allwedd adfer hon yn rhywle diogel, fel rheolwr cyfrinair, nodyn wedi'i amgryptio, neu mewn man dan glo.",
                 "set_up_recovery_save_key_title": "Cadwch eich allwedd adfer yn rhywle diogel",
-                "set_up_recovery_secondary_description": "Ar ôl clicio parhau, byddwn yn cynhyrchu allwedd adfer i chi.",
                 "title": "Adfer"
             },
             "title": "Amgryptio"
@@ -3191,9 +3186,7 @@
         "show_thread_filter": "Dangos:"
     },
     "threads_activity_centre": {
-        "header": "Gweithgaredd edafedd",
-        "no_rooms_with_threads_notifs": "Nid oes gennych chi ystafelloedd gyda hysbysiadau edafedd eto.",
-        "no_rooms_with_unread_threads": "Nid oes gennych chi ystafelloedd ag edafedd heb eu darllen eto."
+        "header": "Gweithgaredd edafedd"
     },
     "time": {
         "date_at_time": "%(date)s am %(time)s",

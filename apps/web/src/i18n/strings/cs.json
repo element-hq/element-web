@@ -27,7 +27,6 @@
         "cancel": "Storno",
         "change": "Změnit",
         "clear": "Smazat",
-        "click_to_copy": "Kliknutím zkopírujte",
         "close": "Zavřít",
         "collapse": "Sbalit",
         "complete": "Dokončit",
@@ -1497,7 +1496,6 @@
         "experimental_description": "Rádi experimentujete? Vyzkoušejte naše nejnovější nápady ve vývoji. Tyto funkce nejsou dokončeny; mohou být nestabilní, mohou se změnit nebo mohou být zcela vypuštěny. <a>Zjistěte více</a>.",
         "experimental_section": "Předběžné ukázky",
         "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
-        "feature_disable_call_per_sender_encryption": "Zakázat šifrování podle odesílatele pro Element Call",
         "feature_user_status": {
             "description": "Umožňuje zobrazit a nastavit aktuální stav.",
             "display_name": "Stav uživatele",
@@ -1656,7 +1654,6 @@
     },
     "member_list_back_action_label": "Členové místnosti",
     "message_edit_dialog_title": "Úpravy zpráv",
-    "migrating_crypto": "Vydržte. Aktualizujeme %(brand)s, aby bylo šifrování rychlejší a spolehlivější.",
     "mobile_guide": {
         "toast_accept": "Použijte aplikaci",
         "toast_description": "%(brand)s je experimentální v mobilním webovém prohlížeči. Chcete-li získat lepší zážitek a nejnovější funkce, použijte naši bezplatnou nativní aplikaci.",
@@ -2520,10 +2517,8 @@
                 "set_up_recovery_confirm_button": "Dokončete nastavení",
                 "set_up_recovery_confirm_description": "Zadejte obnovovací klíč zobrazený na předchozí obrazovce a dokončete nastavení obnovy.",
                 "set_up_recovery_confirm_title": "Pro potvrzení zadejte klíč pro obnovení",
-                "set_up_recovery_description": "Vaše úložiště klíčů je chráněno klíčem pro obnovení. Pokud potřebujete nový klíč pro obnovení po nastavení, můžete jej znovu vytvořit výběrem '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Tento klíč pro obnovení si zapište na bezpečné místo, jako je správce hesel, šifrovaná poznámka nebo fyzický trezor.",
                 "set_up_recovery_save_key_title": "Uložte si klíč pro obnovení na bezpečném místě",
-                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovat vám vygenerujeme obnovovací klíč.",
                 "title": "Zálohování"
             },
             "title": "Šifrování"
@@ -3242,9 +3237,7 @@
         "show_thread_filter": "Zobrazit:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vláken",
-        "no_rooms_with_threads_notifs": "Zatím nemáte k dispozici místnosti s upozorněními na vlákna.",
-        "no_rooms_with_unread_threads": "Zatím nemáte místnosti s nepřečtenými vlákny."
+        "header": "Aktivita vláken"
     },
     "time": {
         "date_at_time": "%(date)s v %(time)s",

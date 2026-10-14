@@ -30,12 +30,10 @@ describe("<CallGuestLinkButton />", () => {
     let modalResolve: (value: unknown[] | PromiseLike<unknown[]>) => void;
     let room: Room;
 
-    const targetUnencrypted =
+    const target =
         "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&viaServers=example.org";
-    const targetEncrypted =
-        "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&perParticipantE2EE=true&viaServers=example.org";
     const expectedShareDialogProps = {
-        target: targetEncrypted,
+        target,
         customTitle: "Conference invite link",
         subtitle: "Link for external users to join the call without a matrix account:",
     };
@@ -184,8 +182,6 @@ describe("<CallGuestLinkButton />", () => {
         getComponent(room);
         const modalSpy = vi.spyOn(Modal, "createDialog");
         fireEvent.click(getByLabelText(document.body, _t("voip|get_call_link")));
-        // const target =
-        //     "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&perParticipantE2EE=true&viaServers=example.org";
         expect(modalSpy).toHaveBeenCalled();
         const arg0 = modalSpy.mock.calls[0][0];
         const arg1 = modalSpy.mock.calls[0][1] as any;
@@ -195,7 +191,7 @@ describe("<CallGuestLinkButton />", () => {
             customTitle: "Conference invite link",
             subtitle: _t("share|share_call_subtitle"),
         });
-        expect(arg1.target.toString()).toEqual(targetEncrypted);
+        expect(arg1.target.toString()).toEqual(target);
     });
 
     it("share dialog has correct link in an unencrypted room", () => {
@@ -207,7 +203,7 @@ describe("<CallGuestLinkButton />", () => {
         const modalSpy = vi.spyOn(Modal, "createDialog");
         fireEvent.click(getByLabelText(document.body, _t("voip|get_call_link")));
         const arg1 = modalSpy.mock.calls[0][1] as any;
-        expect(arg1.target.toString()).toEqual(targetUnencrypted);
+        expect(arg1.target.toString()).toEqual(target);
     });
 
     describe("<JoinRuleDialog />", () => {

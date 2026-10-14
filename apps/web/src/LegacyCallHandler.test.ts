@@ -284,7 +284,7 @@ describe("LegacyCallHandler", () => {
     });
 
     it("should move calls between rooms when remote asserted identity changes", async () => {
-        callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
+        await callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
 
         // We placed the call in Alice's room so it should start off there
         expect(callHandler.getCallForRoom(NATIVE_ROOM_ALICE)).toBe(fakeCall);
@@ -451,7 +451,7 @@ describe("LegacyCallHandler without third party protocols", () => {
     });
 
     it("should still start a native call", async () => {
-        callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
+        await callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
 
         // Check that a call was started: its room on the protocol level
         expect(fakeCall).not.toBeNull();

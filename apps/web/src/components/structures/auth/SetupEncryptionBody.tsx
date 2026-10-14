@@ -136,7 +136,10 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
-            variant: store.lostKeys() ? "no_verification_method" : "confirm",
+            onSignOut: () => {
+                dispatcher.dispatch({ action: "logout" });
+            },
+            variant: store.lostKeys() && this.props.allowLogout ? "no_verification_method" : "confirm",
         });
     };
 
@@ -202,7 +205,12 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 );
             }
 
-            const cantConfirmKind = store.keyInfo ? "secondary" : "primary";
+            // The "Can't confirm?" button is secondary if there is a better way
+            // to become verified available. If it's the only non-disabled
+            // button, it is primary.
+            const deviceOrRecoveryAvailable = store.keyInfo || store.hasDevicesToVerifyAgainst;
+            const cantConfirmKind = deviceOrRecoveryAvailable ? "secondary" : "primary";
+
             const cantConfirmButton = (
                 <Button kind={cantConfirmKind} onClick={this.onCantConfirmClick}>
                     {_t("encryption|verification|cant_confirm")}

@@ -577,10 +577,10 @@ describe("Rageshakes", () => {
         expect(mockElement.click).toHaveBeenCalledWith();
     });
 
-    it("should notify progress", () => {
+    it("should notify progress", async () => {
         const progressCallback = vi.fn();
 
-        collectBugReport({ progressCallback });
+        await collectBugReport({ progressCallback });
 
         expect(progressCallback).toHaveBeenCalled();
     });

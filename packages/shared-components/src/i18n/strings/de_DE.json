@@ -113,8 +113,6 @@
         "mute_room": "Chat stummschalten"
     },
     "pdf_viewer": {
-        "error_load": "PDF konnte nicht geladen werden.",
-        "loading": "PDF wird geladen …",
         "page_label": "Seite %(page)s von %(total)s",
         "page_number": "Seitenzahl"
     },
