@@ -118,6 +118,28 @@ describe("<CheckRecoveryKey />", () => {
         expect(screen.getByRole("button", { name: "Continue" })).not.toHaveAttribute("aria-disabled", "true");
     });
 
+    it("should not accept any key if the key description has no MAC", async () => {
+        vi.spyOn(console, "error").mockReturnValue(undefined);
+        // `checkKey` resolves true for any key when there is no MAC
+        vi.mocked(matrixClient.secretStorage.getKey).mockResolvedValue(["keyId", {}] as any);
+        vi.spyOn(Modal, "createDialog");
+        const onFinish = vi.fn();
+        renderComponent(onFinish);
+
+        await userEvent.type(screen.getByTitle("Enter recovery key"), recoveryKey);
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        await waitFor(() =>
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({
+                    title: "Failed to check the recovery key",
+                }),
+            ),
+        );
+        expect(onFinish).not.toHaveBeenCalled();
+    });
+
     it("should go back", async () => {
         const onCancelClick = vi.fn();
         renderComponent(vi.fn(), onCancelClick);
