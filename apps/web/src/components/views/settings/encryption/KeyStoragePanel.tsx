@@ -24,17 +24,17 @@ import { openDeleteKeyStorageDialog } from "../../dialogs/DeleteKeyStorageDialog
  */
 export const KeyStoragePanel: React.FC = () => {
     const matrixClient = useMatrixClientContext();
-    const { isEnabled, setEnabled, loading, busy } = useKeyStoragePanelViewModel();
+    const { isEnabled, enable, loading, busy } = useKeyStoragePanelViewModel();
 
     const onKeyBackupChange = useCallback(
         (e: FormEvent<HTMLInputElement>) => {
             if (e.currentTarget.checked) {
-                void setEnabled(true);
+                void enable();
             } else {
-                void openDeleteKeyStorageDialog(matrixClient);
+                openDeleteKeyStorageDialog(matrixClient);
             }
         },
-        [setEnabled, matrixClient],
+        [enable, matrixClient],
     );
 
     if (loading) {
@@ -61,7 +61,14 @@ export const KeyStoragePanel: React.FC = () => {
             <Root className="mx_KeyStoragePanel_toggleRow">
                 <InlineField
                     name="keyStorage"
-                    control={<ToggleControl name="keyStorage" checked={isEnabled} onChange={onKeyBackupChange} />}
+                    control={
+                        <ToggleControl
+                            name="keyStorage"
+                            checked={isEnabled}
+                            disabled={busy}
+                            onChange={onKeyBackupChange}
+                        />
+                    }
                 >
                     <Label>{_t("settings|encryption|key_storage|allow_key_storage")}</Label>
                 </InlineField>
