@@ -17,8 +17,10 @@ import {
     type MatrixEvent,
     type IJoinRoomOpts,
     type RoomSummary,
+    type MatrixClient,
+    RoomEvent,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
@@ -51,6 +53,7 @@ import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
+import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -155,6 +158,8 @@ export class RoomViewStore extends EventEmitter {
     // this is defacto always assigned as `resetDispatcher` is called in the constructor.
     private dis!: MatrixDispatcher;
     private dispatchToken?: string;
+    /* Matrix client instance */
+    private client?: MatrixClient;
 
     public constructor(
         dis: MatrixDispatcher,
@@ -307,8 +312,17 @@ export class RoomViewStore extends EventEmitter {
 
                 break;
             }
+            case Action.OnLoggedIn:
+                // Only the main store listens, otherwise each locked store would join the room again
+                if (!this.lockedToRoomId) {
+                    this.client = (payload as OnLoggedInPayload).client;
+                    this.client.on(RoomEvent.MyMembership, this.onMyMembership);
+                }
+                break;
             case Action.ClientNotViable:
             case Action.OnLoggedOut:
+                this.client?.off(RoomEvent.MyMembership, this.onMyMembership);
+                this.client = undefined;
                 this.reset();
                 break;
             case "reply_to_event":
@@ -862,6 +876,21 @@ export class RoomViewStore extends EventEmitter {
             )
             .finally(() => this.setState({ promptAskToJoin: false }));
     }
+
+    /**
+     * Joins a room as soon as a knock on it is accepted, so the user doesn't have to accept the resulting invite.
+     * If the join fails, the invite stays and the user can still accept it manually.
+     */
+    private onMyMembership = async (room: Room, membership: Membership, prevMembership?: Membership): Promise<void> => {
+        if (!this.client || membership !== KnownMembership.Invite || prevMembership !== KnownMembership.Knock) return;
+        if (!SettingsStore.getValue("feature_ask_to_join")) return;
+
+        try {
+            await this.client.joinRoom(room.roomId);
+        } catch (err) {
+            logger.error("Failed to join room after the knock was accepted", err);
+        }
+    };
 
     /**
      * Cancels a request to join a room by sending a leave request.

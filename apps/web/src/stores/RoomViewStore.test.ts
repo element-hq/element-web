@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { KnownMembership, MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixError, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { sleep } from "matrix-js-sdk/src/utils";
 import EventEmitter from "node:events";
@@ -818,6 +818,50 @@ describe("RoomViewStore", function () {
                 description: error.message,
                 title: "Failed to cancel",
             });
+        });
+    });
+
+    describe("accepted knock", () => {
+        const login = () => dis.dispatch({ action: Action.OnLoggedIn, client: mockClient }, true);
+        beforeEach(() => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_ask_to_join",
+            );
+        });
+        afterEach(() => {
+            // The client is shared between tests, so drop the listener of this test's store
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("joins the room when the knock is accepted", () => {
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId);
+        });
+
+        it("does not join when ask to join is disabled", () => {
+            vi.mocked(SettingsStore.getValue).mockReturnValue(false);
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
+        });
+
+        it.each([
+            [KnownMembership.Invite, undefined],
+            [KnownMembership.Invite, KnownMembership.Leave],
+            [KnownMembership.Join, KnownMembership.Knock],
+        ])("does not join on %s with previous membership %s", (membership, prevMembership) => {
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, membership, prevMembership);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
+        });
+
+        it("stops listening once logged out", () => {
+            login();
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
         });
     });
 });
