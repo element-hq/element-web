@@ -66,9 +66,8 @@ const secondTextEntry: MediaPreviewGroupEntry = {
 function renderGroup(
     entries: Array<MediaPreviewGroupEntry>,
     collapse?: MediaPreviewGroupSnapshot["collapse"],
-    onDismiss?: MediaPreviewGroupSnapshot["onDismiss"],
 ): ReturnType<typeof render> {
-    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse, onDismiss });
+    const vm = new MockViewModel<MediaPreviewGroupSnapshot>({ entries, collapse });
     return render(<MediaPreviewGroupPreview vm={vm} />);
 }
 
@@ -145,25 +144,6 @@ describe("MediaPreviewGroupPreview", () => {
         });
     });
 
-    describe("dismiss button", () => {
-        it("closes the group when clicked", async () => {
-            const user = userEvent.setup();
-            const onDismiss = vi.fn();
-
-            renderGroup([textEntry], undefined, onDismiss);
-
-            await user.click(screen.getByRole("button", { name: "Close preview" }));
-
-            expect(onDismiss).toHaveBeenCalledTimes(1);
-        });
-
-        it("is not shown for a group that cannot be dismissed", () => {
-            renderGroup([textEntry]);
-
-            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
-        });
-    });
-
     describe("stories", () => {
         it("renders the single text story", () => {
             const { container } = render(<SingleText />);
@@ -193,10 +173,10 @@ describe("MediaPreviewGroupPreview", () => {
             expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
         });
 
-        it("renders the dismissable link previews story", () => {
+        it("renders the dismissable link previews story with a close button per preview", () => {
             render(<LinkPreviewsDismissable />);
 
-            expect(screen.getByRole("button", { name: "Close preview" })).toBeInTheDocument();
+            expect(screen.getAllByRole("button", { name: "Close preview" })).toHaveLength(2);
         });
     });
 });

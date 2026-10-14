@@ -45,7 +45,7 @@
     flex-grow: 1;
     min-width: 0;
     padding: var(--cpd-space-3x);
-    /* Keep the text clear of a dismiss button in the group's corner, when there is one. */
+    /* Keep the text clear of a dismiss button in the tile's corner, when there is one. */
     padding-inline-end: calc(var(--cpd-space-3x) + var(--MediaPreview-dismiss-inset, 0px));
 
     .header,
@@ -110,6 +110,14 @@
 .buttonGroup {
     display: flex;
     gap: 12px;
+}
+
+/* Dismiss button in the top right corner of the tile, which is positioned. */
+.dismissButton {
+    position: absolute;
+    top: var(--cpd-space-2x);
+    right: var(--cpd-space-2x);
+    z-index: 1;
 }
 
 .button {

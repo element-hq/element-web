@@ -769,15 +769,26 @@ describe("<TextualBody />", () => {
             expect(screen.queryByRole("button", { name: "Open link" })).not.toBeInTheDocument();
         });
 
-        it("hides the previews when the close button is clicked and remembers the choice", async () => {
-            const mxEvent = mkRoomTextMessage(`Visit ${link}`);
+        it("hides only the closed preview and remembers the choice", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockImplementation(async (url: string) =>
+                ogData({ "og:title": `Preview of ${url}`, "og:url": url }),
+            );
+            const mxEvent = mkRoomTextMessage("Visit https://one.example.com/ and https://two.example.com/");
             getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
-            await screen.findByRole("link", { name: "Matrix" });
+            await screen.findByRole("link", { name: "Preview of https://one.example.com/" });
+            await screen.findByRole("link", { name: "Preview of https://two.example.com/" });
 
-            fireEvent.click(screen.getByRole("button", { name: "Close preview" }));
+            fireEvent.click(screen.getAllByRole("button", { name: "Close preview" })[0]);
 
-            await waitFor(() => expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument());
-            expect(localStorage.getItem(`hide_preview_${mxEvent.getId()}`)).toBe("1");
+            await waitFor(() =>
+                expect(
+                    screen.queryByRole("link", { name: "Preview of https://one.example.com/" }),
+                ).not.toBeInTheDocument(),
+            );
+            expect(screen.getByRole("link", { name: "Preview of https://two.example.com/" })).toBeInTheDocument();
+            expect(localStorage.getItem(`hide_preview_${mxEvent.getId()}`)).toBe(
+                JSON.stringify(["https://one.example.com/"]),
+            );
         });
 
         it("expands the group when more previews are available than are shown", async () => {

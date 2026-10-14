@@ -7,8 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import React, { type JSX } from "react";
 import classNames from "classnames";
-import { Button, IconButton } from "@vector-im/compound-web";
-import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import { Button } from "@vector-im/compound-web";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import { useI18n } from "../../../../core/i18n/i18nContext";
 import styles from "./MediaPreviewGroupView.module.css";
@@ -143,6 +142,11 @@ export type MediaPreviewGroupEntryBase = {
      * buttons to add to the right of the tile
      */
     buttons?: MediaPreviewEntryButton[];
+    /**
+     * Invoked when the user closes this entry with the button at its top right.
+     * Omit for an entry that cannot be dismissed, such as an attachment.
+     */
+    onDismiss?: () => void;
 } & Partial<MediaPreviewIcon>;
 
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
@@ -175,11 +179,6 @@ export interface MediaPreviewGroupSnapshot {
      * omit is not collapsible
      */
     collapse?: MediaPreviewGroupCollapse;
-    /**
-     * Invoked when the user closes the group with the button at its top right.
-     * Omit for a group that cannot be dismissed, such as a message's attachments.
-     */
-    onDismiss?: () => void;
 }
 
 export type MediaPreviewGroupViewModel = ViewModel<MediaPreviewGroupSnapshot>;
@@ -202,31 +201,13 @@ function CollapseToggle({ collapsed, hiddenCount, onToggle }: MediaPreviewGroupC
     );
 }
 
-function DismissButton({ onDismiss }: { onDismiss: () => void }): JSX.Element {
-    const { translate: _t } = useI18n();
-
-    return (
-        <IconButton
-            className={styles.dismissButton}
-            kind="secondary"
-            size="28px"
-            onClick={onDismiss}
-            aria-label={_t("timeline|url_preview|close")}
-        >
-            <CloseIcon />
-        </IconButton>
-    );
-}
-
 export function MediaPreviewGroupPreview({ vm, className }: MediaPreviewGroupPreviewProps): JSX.Element | null {
-    const { entries, collapse, onDismiss } = useViewModel(vm);
+    const { entries, collapse } = useViewModel(vm);
 
     if (entries.length === 0) return null;
 
-    // The dismiss button comes after the tiles so that the first tile stays the container's first child,
-    // which is what the stylesheet uses to keep that tile's text clear of the button.
     return (
-        <div className={classNames(className, styles.container, { [styles.dismissable]: onDismiss !== undefined })}>
+        <div className={classNames(className, styles.container)}>
             {entries.map((entry) => {
                 switch (entry.type) {
                     case "text":
@@ -240,7 +221,6 @@ export function MediaPreviewGroupPreview({ vm, className }: MediaPreviewGroupPre
                 }
             })}
             {collapse && <CollapseToggle {...collapse} />}
-            {onDismiss && <DismissButton onDismiss={onDismiss} />}
         </div>
     );
 }

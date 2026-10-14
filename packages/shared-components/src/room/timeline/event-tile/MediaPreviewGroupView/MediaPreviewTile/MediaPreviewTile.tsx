@@ -17,6 +17,7 @@ import styles from "./MediaPreviewTile.module.css";
 import {
     Audio,
     Buttons,
+    DismissButton,
     Icon,
     Image,
     LeftGroup,
@@ -31,19 +32,29 @@ export interface MediaPreviewTileProps extends MediaPreviewGroupEntryBase {
 
 export function MediaPreviewTile(props: MediaPreviewTileProps): JSX.Element {
     const buttons = props.buttons && props.buttons.length !== 0 && <Buttons buttons={props.buttons} />;
+    const dismiss = props.onDismiss && <DismissButton onDismiss={props.onDismiss} />;
+    // The modifier makes the text keep clear of the dismiss button.
+    const dismissable = { [styles.tileDismissable]: props.onDismiss !== undefined };
 
     if (props.layout === "side") {
         return (
-            <div className={classNames(styles.tile, styles.tileSide)}>
+            <div className={classNames(styles.tile, styles.tileSide, dismissable)}>
                 {props.children}
                 <TextContent {...props} />
                 {buttons && <div className={styles.sideButtons}>{buttons}</div>}
+                {dismiss}
             </div>
         );
     }
 
     return (
-        <div className={classNames(styles.tile, props.children ? styles.tileWithAbove : styles.tileWithoutAbove)}>
+        <div
+            className={classNames(
+                styles.tile,
+                props.children ? styles.tileWithAbove : styles.tileWithoutAbove,
+                dismissable,
+            )}
+        >
             {props.children}
             <div className={styles.below}>
                 <LeftGroup>
@@ -52,6 +63,7 @@ export function MediaPreviewTile(props: MediaPreviewTileProps): JSX.Element {
                 </LeftGroup>
                 {buttons}
             </div>
+            {dismiss}
         </div>
     );
 }

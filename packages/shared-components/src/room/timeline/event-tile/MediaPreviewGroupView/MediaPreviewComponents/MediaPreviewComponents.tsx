@@ -8,6 +8,8 @@ Please see LICENSE in the repository root for full details.
 import React, { type JSX, useEffect, useState, type ReactNode } from "react";
 import styles from "./MediaPreviewComponents.module.css";
 import classNames from "classnames";
+import { IconButton } from "@vector-im/compound-web";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { type ImageSize, type MediaPreviewEntryButton, type MediaPreviewLayout } from "../MediaPreviewGroupView";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
@@ -104,6 +106,25 @@ export function Buttons({ buttons }: { buttons: Array<MediaPreviewEntryButton> }
                 </button>
             ))}
         </div>
+    );
+}
+
+/**
+ * Close button in the top right corner of a tile.
+ */
+export function DismissButton({ onDismiss }: { onDismiss: () => void }): JSX.Element {
+    const { translate: _t } = useI18n();
+
+    return (
+        <IconButton
+            className={styles.dismissButton}
+            kind="secondary"
+            size="28px"
+            onClick={onDismiss}
+            aria-label={_t("timeline|url_preview|close")}
+        >
+            <CloseIcon />
+        </IconButton>
     );
 }
 

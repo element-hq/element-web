@@ -168,6 +168,31 @@ describe("MediaPreviewTile", () => {
             expect(onClick).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe("dismiss button", () => {
+        it("closes the tile when clicked", async () => {
+            const user = userEvent.setup();
+            const onDismiss = vi.fn();
+
+            render(<MediaPreviewTile {...textProps} layout="side" onDismiss={onDismiss} />);
+
+            await user.click(screen.getByRole("button", { name: "Close preview" }));
+
+            expect(onDismiss).toHaveBeenCalledTimes(1);
+        });
+
+        it("is also offered in the stacked layout", () => {
+            render(<MediaPreviewTile {...textProps} onDismiss={vi.fn()} />);
+
+            expect(screen.getByRole("button", { name: "Close preview" })).toBeInTheDocument();
+        });
+
+        it("is not shown for a tile that cannot be dismissed", () => {
+            render(<MediaPreviewTile {...textProps} layout="side" />);
+
+            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
+        });
+    });
 });
 
 describe("TextPreviewTile", () => {

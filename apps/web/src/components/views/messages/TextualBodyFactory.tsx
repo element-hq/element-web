@@ -43,6 +43,12 @@ import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
+/** Footer of a link preview: the link's host, e.g. "github.com". Site name if the link cannot be parsed. */
+function previewHost(preview: UrlPreview): string {
+    if (!URL.canParse(preview.link)) return preview.siteName;
+    return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
+}
+
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
     if (msgtype === MsgType.Notice) {
         return "mx_MNoticeBody mx_EventTile_content";
@@ -158,79 +164,73 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    // Footer: the link's host, e.g. "github.com". Site name if the link cannot be parsed.
-    const previewHost = (preview: UrlPreview): string => {
-        if (!URL.canParse(preview.link)) return preview.siteName;
-        return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
-    };
-
     // Side layout: image left, title/description/host right. The title is the link, so no button.
     //
     // The page's Open Graph image is shown when cropping it to the thumbnail box keeps most of it.
     // Otherwise (a wide banner, say) the site's logo (MSC4448) stands in, as a cropped sliver of a banner
     // says less than a logo does. A page with neither gets a text-only tile.
-    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
-        let content: MediaPreviewGroupEntryContent;
-        if (preview.image !== undefined && (imageFitsThumbnail(preview.image) || preview.siteIcon === undefined)) {
-            content = {
-                type: "image",
-                image: preview.image.imageFull,
-                imageAlt: preview.title,
-                imageSize: "thumbnail",
-                imageOnClick: () => {
-                    Modal.createDialog(
-                        ImageView,
-                        {
-                            src: preview.image!.imageFull, // full-res URL
-                            name: `Thumbnail of ${preview.title}`,
-                            width: preview.image?.width,
-                            height: preview.image?.height,
-                            fileSize: preview.image?.fileSize,
-                        },
-                        "mx_Dialog_lightbox",
-                        undefined,
-                        true,
-                    );
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            if (preview.image !== undefined && (imageFitsThumbnail(preview.image) || preview.siteIcon === undefined)) {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "thumbnail",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
+                    },
+                };
+            } else if (preview.siteIcon !== undefined) {
+                content = {
+                    type: "image",
+                    image: preview.siteIcon,
+                    imageAlt: previewHost(preview),
+                    imageSize: "logo",
+                };
+            } else {
+                content = {
+                    type: "text",
+                };
+            }
+
+            return {
+                id: preview.link,
+                layout: "side",
+                header: preview.title,
+                headerUrl: preview.link,
+                body: preview.description?.trim() ?? "",
+                footer: previewHost(preview),
+                // Closing a preview hides just that one, and the choice sticks across reloads.
+                onDismiss: () => {
+                    void urlPreviewVm.onHideClick(preview.link).catch((error) => {
+                        logger.warn("UrlPreviewViewModel failed to hide preview", error);
+                    });
                 },
+                ...content,
             };
-        } else if (preview.siteIcon !== undefined) {
-            content = {
-                type: "image",
-                image: preview.siteIcon,
-                imageAlt: previewHost(preview),
-                imageSize: "logo",
-            };
-        } else {
-            content = {
-                type: "text",
-            };
-        }
-
-        return {
-            id: preview.link,
-            layout: "side",
-            header: preview.title,
-            headerUrl: preview.link,
-            body: preview.description?.trim() ?? "",
-            footer: previewHost(preview),
-            ...content,
-        };
-    };
-
-    // The close button on the preview group hides every preview of this message, and the choice
-    // sticks across reloads, see `UrlPreviewGroupViewModel`.
-    const onDismiss = useCallback((): void => {
-        void urlPreviewVm.onHideClick().catch((error) => {
-            logger.warn("UrlPreviewViewModel failed to hide previews", error);
-        });
-    }, [urlPreviewVm]);
+        },
+        [urlPreviewVm],
+    );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MediaPreviewGroupViewModel({
                 entries: previews.map(previewToEntry),
                 collapse,
-                onDismiss,
             }),
     );
 
@@ -307,9 +307,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         mediaPreviewVm.setProps({
             entries: previews.map(previewToEntry),
             collapse,
-            onDismiss,
         });
-    }, [previews, collapse, onDismiss, mediaPreviewVm]);
+    }, [previews, collapse, previewToEntry, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
