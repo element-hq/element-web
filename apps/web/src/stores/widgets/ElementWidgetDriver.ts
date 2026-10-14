@@ -147,7 +147,8 @@ export class ElementWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name).raw,
             );
             this.allowedCapabilities.add(
-                WidgetEventCapability.forStateEvent(EventDirection.Send, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name, "").raw,
+                WidgetEventCapability.forStateEvent(EventDirection.Send, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name, "")
+                    .raw,
             );
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
             // For the legacy membership type
