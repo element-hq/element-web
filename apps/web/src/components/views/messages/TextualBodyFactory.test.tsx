@@ -791,6 +791,17 @@ describe("<TextualBody />", () => {
             );
         });
 
+        it("should listen to showUrlPreview change", async () => {
+            const ev = mkRoomTextMessage(`Visit ${link}`);
+
+            const { rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
+            expect(matrixClient.getUrlPreview).not.toHaveBeenCalled();
+            expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument();
+
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
+            await expect(screen.findByRole("link", { name: "Matrix" })).resolves.toHaveAttribute("href", link);
+        });
+
         it("expands the group when more previews are available than are shown", async () => {
             vi.mocked(matrixClient.getUrlPreview).mockImplementation(async (url: string) =>
                 ogData({ "og:title": `Preview of ${url}`, "og:url": url }),

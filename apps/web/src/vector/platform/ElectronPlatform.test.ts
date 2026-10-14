@@ -287,7 +287,7 @@ describe("ElectronPlatform", () => {
         it("gets available spellcheck languages", () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();
-            platform.getAvailableSpellCheckLanguages();
+            void platform.getAvailableSpellCheckLanguages();
 
             const [channel, { name }] = mockElectron.send.mock.calls[0];
             expect(channel).toEqual("ipcCall");
@@ -299,7 +299,7 @@ describe("ElectronPlatform", () => {
         it("makes correct ipc call to get pickle key", () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();
-            platform.getPickleKey(userId, deviceId);
+            void platform.getPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
             expect(name).toEqual("getPickleKey");
@@ -335,7 +335,7 @@ describe("ElectronPlatform", () => {
         it("makes correct ipc call to create pickle key", () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();
-            platform.createPickleKey(userId, deviceId);
+            void platform.createPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
             expect(name).toEqual("createPickleKey");
@@ -345,7 +345,7 @@ describe("ElectronPlatform", () => {
         it("makes correct ipc call to destroy pickle key", () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();
-            platform.destroyPickleKey(userId, deviceId);
+            void platform.destroyPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
             expect(name).toEqual("destroyPickleKey");

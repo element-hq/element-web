@@ -543,7 +543,6 @@ export default defineConfig({
                 "no-unsafe-optional-chaining": "off",
                 "typescript/no-empty-object-type": "off",
                 "typescript/unbound-method": "off",
-                "typescript/no-floating-promises": "off",
                 "vitest/require-mock-type-parameters": "off",
                 "vitest/no-disabled-tests": "off",
                 "vitest/no-conditional-expect": "off",
