@@ -2452,10 +2452,8 @@
                 "set_up_recovery_confirm_button": "Fullfør oppsettet",
                 "set_up_recovery_confirm_description": "Skriv inn gjenopprettingsnøkkelen som ble vist på forrige skjermbilde for å fullføre konfigureringen av gjenopprettingen.",
                 "set_up_recovery_confirm_title": "Skriv inn gjenopprettingsnøkkelen din for å bekrefte",
-                "set_up_recovery_description": "Nøkkeloppbevaringen er beskyttet av en gjenopprettingsnøkkel. Hvis du trenger en ny gjenopprettingsnøkkel etter oppsett, kan du opprette den på nytt ved å velge «%(changeRecoveryKeyButton)s».",
                 "set_up_recovery_save_key_description": "Skriv ned denne gjenopprettingsnøkkelen et trygt sted, for eksempel en passordbehandler, et kryptert notat eller en fysisk safe.",
                 "set_up_recovery_save_key_title": "Du bør lagre din gjenopprettingsnøkkelen på et trygt sted",
-                "set_up_recovery_secondary_description": "Etter å ha klikket fortsett, genererer vi en gjenopprettingsnøkkel for deg.",
                 "title": "Gjenoppretting"
             },
             "title": "Kryptering"

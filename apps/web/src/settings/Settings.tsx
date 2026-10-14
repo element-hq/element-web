@@ -1159,7 +1159,9 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|inline_url_previews_default"),
         default: true,
         controller: new RequiresSettingsController([UIFeature.URLPreviews], false, (c) => {
-            if (c["io.element.msc4452.preview_url"]?.enabled !== false) {
+            // Prefer the stable capability, falling back to the unstable MSC4452 prefix for older servers.
+            const previewUrlCapability = c["m.preview_url"] ?? c["io.element.msc4452.preview_url"];
+            if (previewUrlCapability?.enabled !== false) {
                 // If the capability is not listed, or explicitly true then do not disable.
                 return false;
             }

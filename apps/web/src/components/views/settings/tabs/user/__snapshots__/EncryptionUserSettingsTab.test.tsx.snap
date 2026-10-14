@@ -661,17 +661,62 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           <h2
             class="_typography _font-heading-sm-semibold"
           >
-            Get recovery key
+            Save your recovery key somewhere safe
           </h2>
           <span>
-            Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
+            Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
           </span>
         </div>
-        <span
-          class="_typography _font-body-md-medium mx_InformationPanel_description"
+        <div
+          class="mx_KeyPanel"
         >
-          After selecting Continue, we'll generate a recovery key for you.
-        </span>
+          <span
+            class="_typography _font-body-md-medium"
+          >
+            Recovery key
+          </span>
+          <div>
+            <span
+              class="_typography _font-body-md-regular mx_KeyPanel_key"
+              data-testid="recoveryKey"
+            >
+              encoded private key
+            </span>
+            <span
+              class="_typography _font-body-sm-regular"
+            >
+              Do not share this with anyone!
+            </span>
+          </div>
+          <button
+            aria-label="Copy"
+            class="_icon-button"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 28px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
         <div
           class="mx_EncryptionCard_buttons"
         >

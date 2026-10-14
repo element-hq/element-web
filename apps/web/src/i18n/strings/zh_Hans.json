@@ -207,7 +207,12 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
+            "check_recovery_key": "检查恢复密钥",
+            "check_recovery_key_title": "确保你移除此设备前拥有恢复密钥",
+            "continue": "继续移除此设备",
             "description": "你确定要移除此设备？",
+            "generate_recovery_key": "生成新的恢复密钥",
+            "keep_access_description": "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。",
             "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
             "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
@@ -2562,10 +2567,8 @@
                 "set_up_recovery_confirm_button": "完成设置",
                 "set_up_recovery_confirm_description": "请输入上一屏幕显示的恢复密钥以完成恢复设置。",
                 "set_up_recovery_confirm_title": "输入恢复密钥以确认",
-                "set_up_recovery_description": "你的密钥存储受恢复密钥保护。如果设置后需要新的恢复密钥，可以选择“%(changeRecoveryKeyButton)s”重新创建。",
                 "set_up_recovery_save_key_description": "请将此恢复密钥保存到安全的地方，例如密码管理器、加密笔记或物理保险箱。",
                 "set_up_recovery_save_key_title": "保存恢复密钥到安全的地方",
-                "set_up_recovery_secondary_description": "点选“继续”将生成恢复密钥。",
                 "title": "备份"
             },
             "title": "加密"

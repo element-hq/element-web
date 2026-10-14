@@ -2484,10 +2484,8 @@
                 "set_up_recovery_confirm_button": "Dokončiť nastavenie",
                 "set_up_recovery_confirm_description": "Zadajte kľúč na obnovenie zobrazený na predchádzajúcej obrazovke a dokončite nastavenie obnovy.",
                 "set_up_recovery_confirm_title": "Na potvrdenie zadajte kľúč na obnovenie",
-                "set_up_recovery_description": "Vaše úložisko kľúčov je chránené kľúčom na obnovenie. Ak po nastavení potrebujete nový kľúč na obnovenie, môžete ho znova vytvoriť výberom „%(changeRecoveryKeyButton)s“.",
                 "set_up_recovery_save_key_description": "Zapíšte si tento kľúč na obnovenie na bezpečné miesto, napríklad do správcu hesiel, zašifrovanej poznámky alebo fyzického trezoru.",
                 "set_up_recovery_save_key_title": "Uložte kľúč na obnovenie na bezpečné miesto",
-                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovať vám vygenerujeme kľúč na obnovenie.",
                 "title": "Obnovenie"
             },
             "title": "Šifrovanie"

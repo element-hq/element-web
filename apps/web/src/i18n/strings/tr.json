@@ -2293,10 +2293,8 @@
                 "set_up_recovery_confirm_button": "Kurulumu tamamla",
                 "set_up_recovery_confirm_description": "Kurtarma işlemini tamamlamak için önceki ekranda gösterilen kurtarma anahtarını girin.",
                 "set_up_recovery_confirm_title": "Onaylamak için kurtarma anahtarınızı girin",
-                "set_up_recovery_description": "Anahtar depolama alanınız bir kurtarma anahtarı ile korunur. Kurulumdan sonra yeni bir kurtarma anahtarına ihtiyacınız varsa, '%(changeRecoveryKeyButton)s' seçeneğini seçerek yeniden oluşturabilirsiniz.",
                 "set_up_recovery_save_key_description": "Bu kurtarma anahtarını şifre yöneticisi, şifreli not veya fiziksel kasa gibi güvenli bir yere kaydedin.",
                 "set_up_recovery_save_key_title": "Kurtarma anahtarınızı güvenli bir yere kaydedin",
-                "set_up_recovery_secondary_description": "Devam'a tıkladıktan sonra, sizin için bir kurtarma anahtarı oluşturacağız.",
                 "title": "Kurtarma"
             },
             "title": "Şifreleme"

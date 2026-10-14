@@ -22,8 +22,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.63.0
-    "playwright-core": 1.63.0
+    "@playwright/test": 1.64.0
+    "playwright-core": 1.64.0
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 11.2.0
@@ -47,7 +47,7 @@ catalog:
     "@vitejs/plugin-react": 6.1.1
     unplugin-dts: 1.1.2
     # nx
-    nx: 23.2.1
+    nx: 23.3.0
 
 catalogs:
     ts6:
@@ -153,7 +153,7 @@ overrides:
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.35.0
+    node-abi: 4.37.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0
