@@ -2546,11 +2546,12 @@
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
-                "description": "Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:",
+                "description": "You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.",
                 "list_first": "You will not have encrypted message history on new devices",
                 "list_second": "You will lose access to your encrypted messages if you're not signed in to any devices",
-                "title": "Turn off and delete key storage?"
+                "title": "Are you sure you want to delete key storage?"
             },
+            "delete_key_storage_title": "Are you sure you want to delete key storage?",
             "device_not_verified_button": "Verify this device",
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",
