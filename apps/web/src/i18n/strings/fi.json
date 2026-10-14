@@ -2037,7 +2037,6 @@
                 "set_up_recovery": "Hanki palautusavain",
                 "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
                 "set_up_recovery_save_key_title": "Tallenna palautusavain turvalliseen paikkaan",
-                "set_up_recovery_secondary_description": "Kun napsautat Jatka, sinulle luodaan palautusavain.",
                 "title": "Varmuuskopio"
             },
             "title": "Salaus"

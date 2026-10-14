@@ -2521,10 +2521,8 @@
                 "set_up_recovery_confirm_button": "Lõpeta seadistamine",
                 "set_up_recovery_confirm_description": "Taastamise seadistamise lõpetamiseks palun sisesta eelmises vaates näidatud taastevõti.",
                 "set_up_recovery_confirm_title": "Kinnitamiseks sisesta oma taastevõti",
-                "set_up_recovery_description": "Sinu krüptovõtmete hoidlat kaitseb taastevõti. Kui peale seadistamist peaksid vajama uut taastevõtit, siis saad ta uuesti luua valikust „%(changeRecoveryKeyButton)s“.",
                 "set_up_recovery_save_key_description": "Palun märgi see taastevõti üles ja hoia teda turvaliselt, näiteks digitaalses salasõnalaekas, krüptitud märkmetes või vana kooli seifis.",
                 "set_up_recovery_save_key_title": "Salvesta oma taastevõti turvalisel viisil",
-                "set_up_recovery_secondary_description": "Kui klõpsid nuppu „Jätka“, loome me sulle uue taastevõtme.",
                 "title": "Varundus"
             },
             "title": "Krüptimine"
