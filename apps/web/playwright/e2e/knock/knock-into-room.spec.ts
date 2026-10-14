@@ -79,10 +79,7 @@ test.describe("Knock Into Room", () => {
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
-        // Alice have to accept invitation in order to join the room.
-        // It will be not needed when homeserver implements auto accept knock requests.
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
-
+        // Alice joins automatically once her knock is accepted
         await expect(
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
@@ -118,10 +115,7 @@ test.describe("Knock Into Room", () => {
         // bot invites Alice
         await bot.inviteUser(room.roomId, user.userId);
 
-        // Alice have to accept invitation in order to join the room.
-        // It will be not needed when homeserver implements auto accept knock requests.
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
-
+        // Alice joins automatically once her knock is accepted
         await expect(
             page.getByText(
                 "Alice requested to join, was granted access, joined, was removed, requested to join, " +
@@ -168,10 +162,7 @@ test.describe("Knock Into Room", () => {
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
-        // Alice have to accept invitation in order to join the room.
-        // It will be not needed when homeserver implements auto accept knock requests.
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
-
+        // Alice joins automatically once her knock is accepted
         await expect(
             page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
@@ -214,16 +205,52 @@ test.describe("Knock Into Room", () => {
         // bot invites Alice
         await bot.inviteUser(room.roomId, user.userId);
 
-        // Alice have to accept invitation in order to join the room.
-        // It will be not needed when homeserver implements auto accept knock requests.
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
-
+        // Alice joins automatically once her knock is accepted
         await expect(
             page.getByText(
                 "Alice requested to join, was granted access, joined, was banned, was unbanned, " +
                     "requested to join, was granted access, and joined",
             ),
         ).toBeVisible();
+    });
+
+    test("should join the room when the knock is approved while viewing another room", async ({
+        page,
+        app,
+        user,
+        bot,
+        room,
+    }) => {
+        await app.client.createRoom({ name: "Other" });
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+
+        await app.viewRoomByName("Other");
+        await expect(page.getByRole("banner").getByRole("heading", { name: "Other" })).toBeVisible();
+
+        // bot waits for knock request from Alice
+        await waitForRoom(page, bot, room.roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getContent()?.membership === "knock" &&
+                    e.getContent()?.displayname === "Alice",
+            );
+        });
+
+        // bot invites Alice
+        await bot.inviteUser(room.roomId, user.userId);
+
+        // Alice joins without opening the room
+        await app.client.awaitRoomMembership(room.roomId, "join");
+
+        await app.viewRoomByName("Cybersecurity");
+        await expect(page.getByText("Alice requested to join, was granted access, and joined")).toBeVisible();
+        await expect(roomPreviewBar).not.toBeVisible();
     });
 
     test("should knock into the room and knock is cancelled by user himself", async ({ page, app, bot, room }) => {
