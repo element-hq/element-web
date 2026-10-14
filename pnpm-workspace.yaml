@@ -79,8 +79,6 @@ allowBuilds:
     # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
     # pnpm matches git-hosted packages by repository URL, not by bare name.
     "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
-    # Compound until PortalRoot is released (see the catalog), built on install by its `prepare` script
-    "@vector-im/compound-web@git+https://github.com/element-hq/compound-web.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
