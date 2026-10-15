@@ -410,6 +410,30 @@ test.describe("Room list", () => {
             await app.viewRoomByName("Other");
             await expect(peekableRoom).not.toBeVisible();
         });
+
+        test("should show a previewed room below the fold", async ({ page, app, bot }) => {
+            // Enough favourites to push the Chats section below the visible area
+            await page.setViewportSize({ width: 1280, height: 560 });
+            for (let i = 0; i < 10; i++) {
+                const roomId = await app.client.createRoom({ name: `favourite${i}` });
+                await app.client.evaluate(async (client, roomId) => {
+                    await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
+                }, roomId);
+            }
+
+            // Not world readable, so the client can't peek and the room list item comes from the room summary
+            // @ts-ignore Visibility enum is not accessible
+            const summaryRoomId = await bot.createRoom({ name: "Summary room", visibility: "public" });
+
+            const roomListView = getRoomList(page);
+            await expect(roomListView.getByRole("button", { name: "Open room favourite9" })).toBeVisible();
+            await app.viewRoomById(summaryRoomId);
+            await expect(page.getByRole("button", { name: "Join the discussion" })).toBeVisible();
+
+            await app.scrollListToBottom(roomListView);
+            await expect(roomListView.getByRole("button", { name: "Open room Summary room" })).toBeVisible();
+            await expect(page.getByText("Something went wrong!")).not.toBeVisible();
+        });
     });
 
     test.describe("Notification decoration", () => {
