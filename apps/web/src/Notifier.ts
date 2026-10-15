@@ -520,6 +520,8 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.getSender() === this.sdkContext.client.getUserId()) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
+        // Events added to the notification timeline set were already evaluated from their room's timeline
+        if (data.timeline.getTimelineSet() === this.sdkContext.client.getNotifTimelineSet()) return;
 
         void this.sdkContext.client.decryptEventIfNeeded(ev);
 
@@ -619,6 +621,12 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         const actions = this.sdkContext.client.getPushActionsForEvent(ev);
 
         if (actions?.notify) {
+            // The js-sdk only feeds highlights to the notification timeline, and only from the raw
+            // sync, so non-highlight notifications and encrypted events never appear there live.
+            // Duplicates (by event id) are ignored.
+            // ponytail: drop once the js-sdk notification timeline set can hold every notification
+            // (`setNotifTimelineSet(set, { onlyHighlights: false })`, matrix-js-sdk feat/notif-timeline-all-notifications)
+            this.sdkContext.client.getNotifTimelineSet()?.addLiveEvent(ev, { addToState: false });
             this.performCustomEventHandling(ev);
 
             const store = this.sdkContext.roomViewStore;

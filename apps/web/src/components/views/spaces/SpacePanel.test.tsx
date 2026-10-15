@@ -166,6 +166,20 @@ describe("<SpacePanel />", () => {
         spySettingsStore.mockRestore();
     });
 
+    it("should show the notifications metaspace under Home and select it on click", () => {
+        sdkContext.spaceStore.enabledMetaSpaces.splice(0, Infinity, MetaSpace.Home, MetaSpace.Notifications);
+        render(<SpacePanel />);
+
+        const tree = screen.getByRole("tree", { name: "Spaces" });
+        const labels = within(tree)
+            .getAllByRole("button", { name: /^(Home|Notifications)$/ })
+            .map((button) => button.getAttribute("aria-label"));
+        expect(labels).toEqual(["Home", "Notifications"]);
+
+        fireEvent.click(within(tree).getByRole("button", { name: "Notifications" }));
+        expect(sdkContext.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.Notifications);
+    });
+
     describe("create new space button", () => {
         it("renders create space button when UIComponent.CreateSpaces component should be shown", () => {
             render(<SpacePanel />);
