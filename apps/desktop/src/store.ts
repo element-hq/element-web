@@ -134,9 +134,32 @@ class StorageWriter {
  * main process on the OS keychain.
  */
 class SafeStorageWriter extends StorageWriter {
+    /**
+     * The most recent `set()` call for each key which is still encrypting. Because encryption is
+     * asynchronous, a `set()` can finish after a later `set()` or `delete()` of the same key; it
+     * checks this map before writing so that it never overwrites the newer call's result.
+     */
+    private readonly pendingSets = new Map<string, object>();
+
     public async set(key: string, secret: string): Promise<void> {
-        const ciphertext = await safeStorage.encryptStringAsync(secret);
-        this.store.set(this.getKey(key), ciphertext.toString("base64"));
+        const storeKey = this.getKey(key);
+        const token = {};
+        this.pendingSets.set(storeKey, token);
+        try {
+            const ciphertext = await safeStorage.encryptStringAsync(secret);
+            // A later set() or delete() of this key has been called while we were encrypting, so
+            // our value is already out of date: drop it rather than overwrite the newer one.
+            if (this.pendingSets.get(storeKey) !== token) return;
+            this.store.set(storeKey, ciphertext.toString("base64"));
+        } finally {
+            if (this.pendingSets.get(storeKey) === token) this.pendingSets.delete(storeKey);
+        }
+    }
+
+    public delete(key: string): void {
+        // Supersede any set() of this key which is still encrypting, so it can't recreate the secret.
+        this.pendingSets.delete(this.getKey(key));
+        super.delete(key);
     }
 
     public async get(key: string): Promise<string | undefined> {

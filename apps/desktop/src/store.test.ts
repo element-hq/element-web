@@ -155,6 +155,62 @@ describe("Store secret encryption (safeStorage)", () => {
         await expect(store.getSecret(KEY)).resolves.toBeUndefined();
     });
 
+    describe("concurrent writes to the same key", () => {
+        /**
+         * Make the next encryptStringAsync call wait until the returned function is called, so a
+         * test can finish other writes while that one is still encrypting.
+         */
+        const holdNextEncryption = (): (() => void) => {
+            let release!: () => void;
+            const released = new Promise<void>((resolve) => (release = resolve));
+            vi.mocked(safeStorage.encryptStringAsync).mockImplementationOnce(async (plaintext: string) => {
+                await released;
+                return Buffer.from(PREFIX + plaintext, "utf8");
+            });
+            return release;
+        };
+
+        it("keeps the later secret when an earlier set finishes encrypting last", async () => {
+            const release = holdNextEncryption();
+            const first = store.setSecret(KEY, "first");
+            const second = store.setSecret(KEY, "second");
+            await second;
+            release();
+            await first;
+
+            expect(backing.get(STORED_KEY)).toBe(encrypted("second"));
+        });
+
+        it("does not recreate a secret deleted while it was still being encrypted", async () => {
+            const release = holdNextEncryption();
+            const set = store.setSecret(KEY, "s3cr3t");
+            await store.deleteSecret(KEY);
+            release();
+            await set;
+
+            expect(backing.has(STORED_KEY)).toBe(false);
+        });
+
+        it("stores a secret set after a delete which superseded an earlier set", async () => {
+            const release = holdNextEncryption();
+            const first = store.setSecret(KEY, "first");
+            await store.deleteSecret(KEY);
+            await store.setSecret(KEY, "second");
+            release();
+            await first;
+
+            await expect(store.getSecret(KEY)).resolves.toBe("second");
+        });
+
+        it("still stores later secrets after an encryption fails", async () => {
+            vi.mocked(safeStorage.encryptStringAsync).mockRejectedValueOnce(new Error("keychain unavailable"));
+            await expect(store.setSecret(KEY, "first")).rejects.toThrow("keychain unavailable");
+
+            await store.setSecret(KEY, "second");
+            await expect(store.getSecret(KEY)).resolves.toBe("second");
+        });
+    });
+
     it("throws SafeStorageDecryptionError when the stored secret cannot be decrypted", async () => {
         await store.setSecret(KEY, "s3cr3t");
         // Simulate a transient keychain failure (e.g. keychain locked / ACL invalidated by re-sign).
