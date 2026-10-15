@@ -60,6 +60,6 @@ describe("MKeyVerificationRequestView", () => {
         render(<MKeyVerificationRequestView vm={vm} ref={ref} />);
 
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
-        expect(ref.current).toHaveTextContent("Alice wants to verify");
+        expect(ref.current).toMatchTextContent(/Alice wants to verify/);
     });
 });

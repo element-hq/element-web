@@ -85,7 +85,7 @@ export default defineConfig<Options>({
     },
     webServer: {
         command: process.env.WEBAPP_PATH
-            ? `npx serve -p 8080 -L ${process.env.WEBAPP_PATH}`
+            ? `pnpm exec serve -p 8080 -L ${process.env.WEBAPP_PATH}`
             : "docker run --rm -p 8080:80 ghcr.io/element-hq/element-web:develop",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,

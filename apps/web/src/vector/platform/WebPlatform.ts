@@ -18,7 +18,7 @@ import { Action } from "../../dispatcher/actions";
 import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import { _t } from "../../languageHandler";
 import ToastStore from "../../stores/ToastStore.ts";
-import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import { GenericToast } from "@element-hq/web-shared-components";
 import SdkConfig from "../../SdkConfig.ts";
 import type { ActionPayload } from "../../dispatcher/payloads.ts";
 import * as SessionLock from "../../utils/SessionLock.ts";

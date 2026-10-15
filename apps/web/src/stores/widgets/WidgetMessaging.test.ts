@@ -30,6 +30,7 @@ import {
     RoomStateEvent,
     type RoomState,
     type Room,
+    type Thread,
 } from "matrix-js-sdk/src/matrix";
 import {
     ClientWidgetApi,
@@ -328,6 +329,38 @@ describe("WidgetMessaging", () => {
 
             client.emit(ClientEvent.Event, event);
             expect(messaging.feedEvent).toHaveBeenCalledWith(event.getEffectiveEvent());
+        });
+
+        it("feeds thread replies to the widget", () => {
+            const reply = mkEvent({
+                event: true,
+                id: "$event-idReply",
+                type: "m.room.message",
+                user: "@alice:example.org",
+                content: {
+                    "body": "in the thread",
+                    "m.relates_to": { event_id: "$event-id1", rel_type: "m.thread" },
+                },
+                room: "!1:example.org",
+            });
+            const room = client.getRoom("!1:example.org")!;
+            vi.mocked(room.findEventById).mockImplementation((id) => (id === "$event-id1" ? event1 : undefined));
+            room.getThread = vi.fn((id: string) =>
+                id === "$event-id1"
+                    ? ({ id, liveTimeline: { getEvents: (): MatrixEvent[] => [reply] } } as unknown as Thread)
+                    : null,
+            );
+
+            // The room's timeline has moved on past the root, but the reply is in the thread's timeline
+            client.emit(ClientEvent.Event, event2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent());
+            client.emit(ClientEvent.Event, reply);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(reply.getEffectiveEvent());
+
+            // ...and only once
+            client.emit(ClientEvent.Event, reply);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
         });
 
         it("feeds incoming event that is not in timeline but relates to unknown parent to the widget", async () => {

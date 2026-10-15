@@ -11,7 +11,7 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
-import type { Filter, FilterKey } from "./skip-list/filters";
+import type { AnyFilter, Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -36,17 +36,9 @@ import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
-import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
-import { TagFilter } from "./skip-list/filters/TagFilter";
+import { SectionFilter } from "./skip-list/filters/SectionFilter";
 import { filterBoolean } from "../../utils/arrays";
-import {
-    CHATS_TAG,
-    createSection,
-    deleteSection,
-    editSection,
-    getOrderedReorderableSections,
-    reorderSection,
-} from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedSectionTags, reorderSection } from "./section";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
@@ -103,14 +95,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private filterByFilterKey: Map<FilterKey, Filter> = new Map();
 
     /**
-     * Maps section tags to their corresponding tag filters, used to determine which rooms belong in which sections.
-     */
-    private readonly filterByTag: Map<string, Filter> = new Map();
-
-    /**
      * Defines the display order of sections.
      */
     private sortedTags: string[] = [];
+
+    /** Works out which section a room belongs to. Rebuilt when the sections change. */
+    private sectionFilter?: SectionFilter;
+
+    /** The room that was open the last time the filters were applied to every room. */
+    private lastFilteredRoomId?: string | null;
 
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
@@ -129,13 +122,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             this.onActiveSpaceChanged();
         });
         SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
-        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
-        this.loadCustomSections();
+        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onSectionsChange());
 
         SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
             this.onActivityIsUnreadChange(Boolean(newValue)),
         );
-        SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
+        // Both settings change which sections exist: disabling sections altogether also forces
+        // "RoomList.showPeopleSection" off, see its RequiresSettingsController.
+        SettingsStore.watchSetting("RoomList.showSections", null, () => this.onSectionsChange());
+        SettingsStore.watchSetting("RoomList.showPeopleSection", null, () => this.onSectionsChange());
+
         SettingsStore.watchSetting("Spaces.showPeopleInSpace", null, (_settingName, roomId) => {
             if (roomId === SDKContextClass.instance.spaceStore.activeSpace) this.onActiveSpaceChanged();
         });
@@ -251,6 +247,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
+        this.loadSections();
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
@@ -299,7 +296,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
             case "RoomListActions.tagRoom.success": {
                 // Tag change initiated by the local user, so surface the "chat moved" toast.
-                this.emit(ROOM_TAGGED_EVENT);
+                if (payload.result?.showToast) this.emit(ROOM_TAGGED_EVENT);
                 break;
             }
 
@@ -500,16 +497,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Get the list of filters to be used in the skip list, including the tag filters for sectioning.
+     * Get the list of filters to be used in the skip list, including the section filter.
      */
-    private getSkipListFilters(): Filter[] {
-        const tagsToExclude = this.sortedTags.filter((tag) => tag !== CHATS_TAG);
-        const tagFilters = this.sortedTags.map((tag) =>
-            tag === CHATS_TAG ? new ExcludeTagsFilter(tagsToExclude) : new TagFilter(tag),
-        );
-        this.sortedTags.forEach((tag, index) => this.filterByTag.set(tag, tagFilters[index]));
-
-        return [...this.filterByFilterKey.values(), ...tagFilters];
+    private getSkipListFilters(): AnyFilter[] {
+        if (!this.sectionFilter) this.sectionFilter = new SectionFilter(this.sortedTags);
+        return [...this.filterByFilterKey.values(), this.sectionFilter];
     }
 
     /**
@@ -520,7 +512,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private getSections(filterKeys?: FilterKey[]): Section[] {
         return this.sortedTags
             .map((tag) => {
-                const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys ?? [])]);
+                // The key of a section's filter is the section tag itself, see SectionFilter.
+                const filters = filterBoolean([tag, ...(filterKeys ?? [])]);
 
                 return {
                     tag,
@@ -531,12 +524,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Handle changes to the order of custom sections.
-     * Reloads the custom sections, updates the skip list filters to reflect the new order and emits an update.
+     * Handle changes to which sections are displayed or to the order they are displayed in.
+     * Reloads the sections, updates the skip list filters to reflect the new sections and emits an update.
      * Emit {@link LISTS_UPDATE_EVENT}.
      */
-    private onOrderedCustomSectionsChange(): void {
-        this.loadCustomSections();
+    private onSectionsChange(): void {
+        this.loadSections();
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
@@ -554,7 +547,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Does not emit an event.
      */
     public updateRoomSkipList(): void {
-        this.roomSkipList?.useNewFilters(this.getSkipListFilters());
+        if (!this.roomSkipList) return;
+        // UnreadFilter is the only filter that depends on which room is open, so there is
+        // nothing to redo unless that room changed.
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        if (currentRoomId === this.lastFilteredRoomId) return;
+        this.lastFilteredRoomId = currentRoomId;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
     }
 
     /**
@@ -619,13 +618,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Load the custom sections from the settings store and update the sorted tags.
+     * Load the sections to display from the settings store and update the sorted tags.
      */
-    private loadCustomSections(): void {
-        // Favourite is pinned to the top and LowPriority to the bottom. Everything in between
-        // (custom sections + Chats) is user-reorderable.
-        const reorderable = getOrderedReorderableSections();
-        this.sortedTags = [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
+    private loadSections(): void {
+        this.sortedTags = getOrderedSectionTags();
+        this.sectionFilter = undefined;
     }
 }
 

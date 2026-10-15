@@ -14,20 +14,16 @@ concurrency:
 jobs:
     build:
         name: GitHub Pages
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
-                  package_json_file: package.json
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              with:
-                  cache: "pnpm"
-                  cache-dependency-path: pnpm-lock.yaml
-                  node-version: "lts/*"
+                  cache: true
+                  install: false
 
             - name: Fetch layered build
               run: ./scripts/layered.sh
@@ -44,7 +40,7 @@ jobs:
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             pages: write
             id-token: write
@@ -52,4 +48,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+              uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

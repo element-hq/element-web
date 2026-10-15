@@ -25,7 +25,7 @@ exports[`<UnpinAllDialog /> > should render 1`] = `
       </h1>
     </div>
     <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      class="_typography _font-body-md-regular"
     >
       Make sure that you really want to remove all pinned messages. This action can’t be undone.
     </span>
@@ -33,7 +33,7 @@ exports[`<UnpinAllDialog /> > should render 1`] = `
       class="mx_UnpinAllDialog_buttons"
     >
       <button
-        class="_button_1nw83_8 _destructive_1nw83_110"
+        class="_button _destructive"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -42,7 +42,7 @@ exports[`<UnpinAllDialog /> > should render 1`] = `
         Continue
       </button>
       <button
-        class="_button_1nw83_8"
+        class="_button"
         data-kind="tertiary"
         data-size="lg"
         role="button"

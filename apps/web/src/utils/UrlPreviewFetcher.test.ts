@@ -5,11 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { vi, describe, it, expect, beforeAll, afterAll, type Mock } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterAll, afterEach, type Mock } from "vitest";
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
+
+import type { UrlPreview } from "shared-types";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
+import { decryptFile } from "./DecryptFile";
+
+vi.mock("./DecryptFile", () => ({ decryptFile: vi.fn() }));
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -20,18 +28,37 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
-function getFetcher(): {
+function getFetcher(showTooltips = false): {
     fetcher: UrlPreviewFetcher;
     client: { getUrlPreview: Mock; mxcUrlToHttp: Mock };
+    moduleApi: { getPreview: Mock };
 } {
     const client = {
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     } as unknown as MatrixClient;
+    // By default no module handles the URL, so we fall through to the bundle/server logic.
+    const moduleApi = { getPreview: vi.fn().mockResolvedValue(null) };
     return {
-        fetcher: new UrlPreviewFetcher(client, 0, false),
+        fetcher: new UrlPreviewFetcher(client, 0, showTooltips, moduleApi as unknown as UrlPreviewApi),
         client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock },
+        moduleApi,
     };
+}
+
+/**
+ * Build the message event a bundled preview is attached to. Only the body is used
+ * by the fetcher itself, the rest is handed to the module API.
+ */
+function mkMessageEvent(body: string): MatrixEvent {
+    return new MatrixEvent({
+        type: "m.room.message",
+        content: { msgtype: "m.text", body },
+        event_id: "$event-id",
+        room_id: "!room:example.org",
+        sender: "@alice:example.org",
+        origin_server_ts: 0,
+    });
 }
 
 describe("UrlPreviewFetcher", () => {
@@ -231,6 +258,7 @@ describe("UrlPreviewFetcher", () => {
         };
 
         const BASIC_BODY = "Check out https://example.org/page";
+        const BASIC_EVENT = mkMessageEvent(BASIC_BODY);
 
         const IMAGE_BUNDLE: UnstableBundledUrlPreviewSingle = {
             ...BASIC_BUNDLE,
@@ -239,6 +267,17 @@ describe("UrlPreviewFetcher", () => {
             "og:image:width": 500,
             "og:image:height": 400,
             "matrix:image:size": 10000,
+        };
+
+        /** The UrlPreview.image that IMAGE_BUNDLE resolves to once the media is mocked. */
+        const IMAGE_PREVIEW: NonNullable<UrlPreview["image"]> = {
+            imageThumb: "https://example.org/image/thumb",
+            imageFull: "https://example.org/image/src",
+            imageType: "image/png",
+            mxcImageFull: IMAGE_MXC,
+            width: 500,
+            height: 400,
+            playable: false,
         };
 
         function mockMedia(client: { mxcUrlToHttp: Mock }): void {
@@ -252,7 +291,7 @@ describe("UrlPreviewFetcher", () => {
 
         it("should map basic bundle fields without an image", async () => {
             const { fetcher, client } = getFetcher();
-            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_BODY);
+            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_EVENT);
             expect(preview).toEqual({
                 link: "https://example.org/page",
                 title: "Bundled title",
@@ -269,16 +308,15 @@ describe("UrlPreviewFetcher", () => {
             const { fetcher } = getFetcher();
             const preview = await fetcher.previewFromBundle(
                 { "matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
-                BASIC_BODY,
+                BASIC_EVENT,
             );
             expect(preview!.title).toEqual("https://example.org/page");
             expect(preview!.showTooltipOnLink).toBe(false);
         });
 
         it("should set showTooltipOnLink when tooltips are enabled and title differs from the URL", async () => {
-            const { client } = getFetcher();
-            const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
-            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_BODY);
+            const { fetcher } = getFetcher(true);
+            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_EVENT);
             expect(preview!.showTooltipOnLink).toBe(true);
         });
 
@@ -286,24 +324,22 @@ describe("UrlPreviewFetcher", () => {
         // the resolved title, so a missing og:title still shows a tooltip even though the displayed
         // title falls back to the matched_url.
         it("should set showTooltipOnLink when tooltips are enabled and og:title is absent", async () => {
-            const { client } = getFetcher();
-            const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
+            const { fetcher } = getFetcher(true);
             const preview = await fetcher.previewFromBundle(
                 { "matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
-                BASIC_BODY,
+                BASIC_EVENT,
             );
             expect(preview!.showTooltipOnLink).toBe(true);
         });
 
         it("should not set showTooltipOnLink when tooltips are enabled but og:title equals the URL", async () => {
-            const { client } = getFetcher();
-            const fetcher = new UrlPreviewFetcher(client as unknown as MatrixClient, 0, true);
+            const { fetcher } = getFetcher(true);
             const preview = await fetcher.previewFromBundle(
                 {
                     "matched_url": "https://example.org/page",
                     "og:title": "https://example.org/page",
                 },
-                BASIC_BODY,
+                BASIC_EVENT,
             );
             expect(preview!.showTooltipOnLink).toBe(false);
         });
@@ -311,30 +347,52 @@ describe("UrlPreviewFetcher", () => {
         it("should include the image when all image fields are present", async () => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
-            const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_BODY);
-            expect(preview!.image).toEqual({
-                imageThumb: "https://example.org/image/thumb",
-                imageFull: "https://example.org/image/src",
-                imageType: "image/png",
-                mxcImageFull: IMAGE_MXC,
-                width: 500,
-                height: 400,
-                playable: false,
-            });
+            const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_EVENT);
+            expect(preview!.image).toEqual(IMAGE_PREVIEW);
         });
 
-        it.each<Partial<UnstableBundledUrlPreviewSingle>>([
-            { "og:image": undefined },
-            { "og:image:type": undefined },
-            { "og:image:width": undefined },
-            { "og:image:height": undefined },
-            // Non-numeric dimensions are ignored (bundle values are trusted as-is).
-            { "og:image:width": "500" as unknown as number },
-        ])("should omit the image when image metadata is incomplete %s", async (override) => {
+        it("should omit the image when there is no og:image", async () => {
             const { fetcher, client } = getFetcher();
             mockMedia(client);
-            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, ...override }, BASIC_BODY);
+            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, "og:image": undefined }, BASIC_EVENT);
             expect(preview!.image).toBeUndefined();
+        });
+
+        // The type and dimensions are optional on UrlPreview.image, and the tiles only need
+        // imageThumb to render, so a bundle that omits them still gets a preview image. This
+        // matches fetchPreview, which shows an image even when the server omits these fields.
+        it.each<[keyof UnstableBundledUrlPreviewSingle, Partial<NonNullable<UrlPreview["image"]>>]>([
+            ["og:image:type", { imageType: undefined }],
+            ["og:image:width", { width: undefined }],
+            ["og:image:height", { height: undefined }],
+        ])("should still include the image when %s is absent", async (field, expected) => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle({ ...IMAGE_BUNDLE, [field]: undefined }, BASIC_EVENT);
+            expect(preview!.image).toEqual({ ...IMAGE_PREVIEW, ...expected });
+        });
+
+        // The sender controls the bundle, so a dimension that is not a number is dropped rather
+        // than passed through as a string. The image itself is still shown.
+        it("should ignore non-numeric image dimensions", async () => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle(
+                { ...IMAGE_BUNDLE, "og:image:width": {} as unknown as number },
+                BASIC_EVENT,
+            );
+            expect(preview!.image).toEqual({ ...IMAGE_PREVIEW, width: undefined });
+        });
+
+        // A numeric string is still usable, so it is parsed rather than dropped.
+        it("should parse image dimensions given as numeric strings", async () => {
+            const { fetcher, client } = getFetcher();
+            mockMedia(client);
+            const preview = await fetcher.previewFromBundle(
+                { ...IMAGE_BUNDLE, "og:image:width": "500" as unknown as number },
+                BASIC_EVENT,
+            );
+            expect(preview!.image).toEqual(IMAGE_PREVIEW);
         });
 
         it("should omit the image when the media mxc URL is malformed", async () => {
@@ -342,7 +400,7 @@ describe("UrlPreviewFetcher", () => {
             // A malformed/unresolvable mxc yields no HTTP URL.
             // eslint-disable-next-line no-restricted-properties
             client.mxcUrlToHttp.mockReturnValue(null);
-            const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_BODY);
+            const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_EVENT);
             expect(preview!.image).toBeUndefined();
             // The rest of the preview is still returned.
             expect(preview?.title).toEqual("Bundled title");
@@ -355,7 +413,7 @@ describe("UrlPreviewFetcher", () => {
                     ...BASIC_BUNDLE,
                     matched_url: "https://sub.example.com:8443/some/path?q=1",
                 },
-                "Check out https://sub.example.com:8443/some/path?q=1",
+                mkMessageEvent("Check out https://sub.example.com:8443/some/path?q=1"),
             );
             expect(preview?.siteName).toEqual("sub.example.com");
         });
@@ -378,23 +436,224 @@ describe("UrlPreviewFetcher", () => {
                     "og:url": url as string,
                     "matched_url": url as string,
                 },
-                "Check out " + url,
+                mkMessageEvent("Check out " + url),
             );
             expect(preview).toBeNull();
         });
 
         it("should reject urls not present in the event body", async () => {
             const { fetcher } = getFetcher();
-            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, "No urls in here");
+            const preview = await fetcher.previewFromBundle(BASIC_BUNDLE, mkMessageEvent("No urls in here"));
             expect(preview).toBeNull();
+        });
+
+        it("should pass the whole event to the module API", async () => {
+            const { fetcher, moduleApi } = getFetcher();
+            await fetcher.previewFromBundle(BASIC_BUNDLE, BASIC_EVENT);
+            expect(moduleApi.getPreview).toHaveBeenCalledWith("https://example.org/page", BASIC_EVENT);
+        });
+
+        it("should use the preview from the module API in preference to the bundle", async () => {
+            const { fetcher, client, moduleApi } = getFetcher();
+            const modulePreview = {
+                link: "https://example.org/page",
+                title: "Module title",
+                siteName: "module.example.org",
+                showTooltipOnLink: false,
+            };
+            moduleApi.getPreview.mockResolvedValue(modulePreview);
+            const preview = await fetcher.previewFromBundle(IMAGE_BUNDLE, BASIC_EVENT);
+            expect(preview).toBe(modulePreview);
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            // eslint-disable-next-line no-restricted-properties
+            expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
         });
 
         it("should fetch bundle from server if only matched_url is present", async () => {
             const { fetcher, client } = getFetcher();
             client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-            const preview = await fetcher.previewFromBundle({ matched_url: BASIC_BUNDLE.matched_url }, BASIC_BODY);
+            const preview = await fetcher.previewFromBundle({ matched_url: BASIC_BUNDLE.matched_url }, BASIC_EVENT);
             expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
             expect(preview).not.toBeNull();
+        });
+
+        it("should not fetch bundle from server when server fallback is disallowed", async () => {
+            const { fetcher, client } = getFetcher();
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+            const preview = await fetcher.previewFromBundle(
+                { matched_url: BASIC_BUNDLE.matched_url },
+                BASIC_EVENT,
+                false,
+                false,
+            );
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            expect(preview).toBeNull();
+        });
+
+        // In an encrypted room the preview image is sent as an attachment rather than as a plain
+        // mxc:// URL, so it has to be downloaded and decrypted client-side before it can be shown.
+        describe("with an encrypted image", () => {
+            const ENCRYPTED_FILE = {
+                url: "mxc://example.org/encrypted",
+                iv: "iv",
+                hashes: { sha256: "sha256" },
+                v: "v2",
+                key: { alg: "A256CTR", ext: true, k: "k", key_ops: ["encrypt", "decrypt"], kty: "oct" },
+            } as EncryptedFile;
+
+            const ENCRYPTED_BUNDLE: UnstableBundledUrlPreviewSingle = {
+                ...BASIC_BUNDLE,
+                "og:image:type": "image/png",
+                "og:image:width": 500,
+                "og:image:height": 400,
+                "beeper:image:encryption": ENCRYPTED_FILE,
+            };
+
+            let createObjectUrl: Mock;
+            let revokeObjectUrl: Mock;
+
+            beforeEach(() => {
+                let next = 0;
+                createObjectUrl = vi.fn(() => `blob:decrypted-${next++}`);
+                revokeObjectUrl = vi.fn();
+                vi.spyOn(URL, "createObjectURL").mockImplementation(createObjectUrl);
+                vi.spyOn(URL, "revokeObjectURL").mockImplementation(revokeObjectUrl);
+                vi.mocked(decryptFile).mockResolvedValue(new Blob(["decrypted"]));
+            });
+
+            afterEach(() => {
+                vi.mocked(decryptFile).mockReset();
+                vi.mocked(URL.createObjectURL).mockRestore();
+                vi.mocked(URL.revokeObjectURL).mockRestore();
+            });
+
+            it("should decrypt the image and use its object URL for both sizes", async () => {
+                const { fetcher, client } = getFetcher();
+                const preview = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                expect(decryptFile).toHaveBeenCalledWith(ENCRYPTED_FILE);
+                expect(preview!.image).toEqual({
+                    // There is no server-side thumbnail for an attachment, so the full image is
+                    // used for both.
+                    imageThumb: "blob:decrypted-0",
+                    imageFull: "blob:decrypted-0",
+                    imageType: "image/png",
+                    mxcImageFull: ENCRYPTED_FILE.url,
+                    width: 500,
+                    height: 400,
+                    playable: false,
+                });
+                // The encrypted attachment is never resolved as a plain mxc:// URL.
+                // eslint-disable-next-line no-restricted-properties
+                expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
+            });
+
+            // Decrypting downloads the media eagerly, which is exactly what hiding media is meant
+            // to avoid, so the rest of the preview is returned without an image.
+            it("should not decrypt the image when media is hidden", async () => {
+                const { fetcher } = getFetcher();
+                const preview = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, false);
+
+                expect(decryptFile).not.toHaveBeenCalled();
+                expect(preview!.image).toBeUndefined();
+                expect(preview!.title).toEqual("Bundled title");
+            });
+
+            it("should omit the image when the decryption fails", async () => {
+                const { fetcher } = getFetcher();
+                vi.mocked(decryptFile).mockRejectedValue(new Error("Forced test failure"));
+
+                const preview = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                expect(preview!.image).toBeUndefined();
+                // The textual part of the preview is still usable.
+                expect(preview!.title).toEqual("Bundled title");
+                expect(createObjectUrl).not.toHaveBeenCalled();
+            });
+
+            // The same preview is re-rendered on every timeline update, so decrypting once per
+            // render would download the image over and over.
+            it("should reuse the object URL when the same image is previewed again", async () => {
+                const { fetcher } = getFetcher();
+                const first = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+                const second = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                expect(decryptFile).toHaveBeenCalledTimes(1);
+                expect(createObjectUrl).toHaveBeenCalledTimes(1);
+                expect(second!.image!.imageFull).toEqual(first!.image!.imageFull);
+            });
+
+            it("should prefer the encrypted image over a plain og:image", async () => {
+                const { fetcher, client } = getFetcher();
+                mockMedia(client);
+                const preview = await fetcher.previewFromBundle(
+                    { ...ENCRYPTED_BUNDLE, "og:image": IMAGE_MXC },
+                    BASIC_EVENT,
+                    true,
+                );
+
+                expect(preview!.image!.imageFull).toEqual("blob:decrypted-0");
+                expect(preview!.image!.mxcImageFull).toEqual(ENCRYPTED_FILE.url);
+                // eslint-disable-next-line no-restricted-properties
+                expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
+            });
+
+            it("should still include the image when the bundle omits its dimensions", async () => {
+                const { fetcher } = getFetcher();
+                const preview = await fetcher.previewFromBundle(
+                    {
+                        ...ENCRYPTED_BUNDLE,
+                        "og:image:type": undefined,
+                        "og:image:width": undefined,
+                        "og:image:height": undefined,
+                    },
+                    BASIC_EVENT,
+                    true,
+                );
+
+                expect(preview!.image).toEqual({
+                    imageThumb: "blob:decrypted-0",
+                    imageFull: "blob:decrypted-0",
+                    imageType: undefined,
+                    mxcImageFull: ENCRYPTED_FILE.url,
+                    width: undefined,
+                    height: undefined,
+                    playable: false,
+                });
+            });
+
+            // Object URLs pin the decrypted blob in memory until they are revoked.
+            it("should revoke the object URLs it created when disposed", async () => {
+                const { fetcher } = getFetcher();
+                await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                fetcher.dispose();
+
+                expect(revokeObjectUrl).toHaveBeenCalledWith("blob:decrypted-0");
+            });
+
+            it("should revoke the object URLs and decrypt again after clearCache", async () => {
+                const { fetcher } = getFetcher();
+                await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                fetcher.clearCache();
+                expect(revokeObjectUrl).toHaveBeenCalledWith("blob:decrypted-0");
+
+                const preview = await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+                expect(decryptFile).toHaveBeenCalledTimes(2);
+                expect(preview!.image!.imageFull).toEqual("blob:decrypted-1");
+            });
+
+            // Revoking twice would hand a stale URL to revokeObjectURL.
+            it("should not revoke the same object URL twice", async () => {
+                const { fetcher } = getFetcher();
+                await fetcher.previewFromBundle(ENCRYPTED_BUNDLE, BASIC_EVENT, true);
+
+                fetcher.revokeObjectUrls();
+                fetcher.revokeObjectUrls();
+
+                expect(revokeObjectUrl).toHaveBeenCalledTimes(1);
+            });
         });
     });
 });

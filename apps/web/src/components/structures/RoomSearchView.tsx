@@ -283,6 +283,7 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
         if (!permalinkCreator) {
             permalinkCreator = new RoomPermalinkCreator(room);
             permalinkCreator.start();
+            // oxlint-disable-next-line react/immutability
             permalinkCreators.set(roomId, permalinkCreator);
         }
 

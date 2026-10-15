@@ -8,6 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import { defineProject } from "vitest/config";
 
 export default defineProject({
+    oxc: {
+        include: /\.[cm]?tsx?$/,
+    },
     test: {
         include: ["src/**/*.test.ts"],
         environment: "node",

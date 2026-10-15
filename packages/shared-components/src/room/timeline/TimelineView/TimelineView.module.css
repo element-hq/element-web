@@ -32,6 +32,7 @@
     position: relative;
     list-style: none;
     margin: 0;
+    padding: 0;
 }
 
 /* Rows are positioned absolutely, stacked by TanStack rather than by normal document flow.

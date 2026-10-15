@@ -13,6 +13,7 @@ import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/loc
 
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import MemberAvatar from "../avatars/MemberAvatar";
+import { _t } from "../../../i18n";
 
 interface Props {
     id?: string;
@@ -67,6 +68,7 @@ const Marker = ({ id, roomMember, useMemberColor, tooltip, ref }: Props): JSX.El
             className={classNames("mx_Marker", memberColorClass, {
                 mx_Marker_defaultColor: !memberColorClass,
             })}
+            aria-label={_t("location_sharing|map_marker")}
         >
             <OptionalTooltip tooltip={tooltip}>
                 <div className="mx_Marker_border">

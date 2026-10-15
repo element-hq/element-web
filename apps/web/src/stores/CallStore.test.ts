@@ -37,8 +37,8 @@ describe("CallStore", () => {
         vi.restoreAllMocks();
     });
 
-    it("constructs one call for one MatrixRTC session", () => {
-        setupAsyncStoreWithClient(CallStore.instance, client);
+    it("constructs one call for one MatrixRTC session", async () => {
+        await setupAsyncStoreWithClient(CallStore.instance, client);
         const getSpy = vi.spyOn(ElementCall, "get");
 
         // Simulate another user starting a new MatrixRTC session

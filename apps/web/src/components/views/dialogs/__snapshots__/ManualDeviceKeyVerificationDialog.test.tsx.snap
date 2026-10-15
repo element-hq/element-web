@@ -22,7 +22,7 @@ exports[`ManualDeviceKeyVerificationDialog > should render correctly 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify session
+        Verify device
       </h1>
     </div>
     <div
@@ -78,18 +78,18 @@ exports[`ManualDeviceKeyVerificationDialog > should render correctly 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
-          class="cancel"
+          class="mx_LegacyDialogButton cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >
           Cancel
         </button>
         <button
-          class="mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary"
           data-testid="dialog-primary-button"
           type="button"
         >
-          Verify session
+          Verify device
         </button>
       </span>
     </div>

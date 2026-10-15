@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import type { Sorter, SortingAlgorithm } from "./sorters";
-import type { Filter, FilterKey } from "./filters";
+import type { AnyFilter, FilterKey } from "./filters";
 import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
 import { Level } from "./Level";
@@ -25,7 +25,7 @@ export class RoomSkipList implements Iterable<Room> {
 
     public constructor(
         private sorter: Sorter,
-        private filters: Filter[] = [],
+        private filters: AnyFilter[] = [],
     ) {}
 
     private reset(): void {
@@ -81,7 +81,7 @@ export class RoomSkipList implements Iterable<Room> {
      * Change the filters used by the skip list.
      * This will apply the new filters to all existing nodes.
      */
-    public useNewFilters(filters: Filter[]): void {
+    public useNewFilters(filters: AnyFilter[]): void {
         this.filters = filters;
         for (const node of this.roomNodeMap.values()) {
             node.applyFilters(this.filters);
@@ -152,7 +152,13 @@ export class RoomSkipList implements Iterable<Room> {
          * node.
          *
          * We start at the top most level and move downwards ...
+         *
+         * Every node in a level is also present in the level below it, so
+         * each level carries on from the predecessor found in the level
+         * above instead of starting again at the head.
          */
+        let predecessor: RoomNode | null = null;
+
         for (let j = this.levels.length - 1; j >= 0; --j) {
             const level = this.levels[j];
 
@@ -160,8 +166,10 @@ export class RoomSkipList implements Iterable<Room> {
              * If the head is undefined, that means this level is empty.
              * So mark it as such in insertionNodes and skip over this
              * level.
+             * predecessor is always null here, since a node in the level
+             * above would also be in this one.
              */
-            if (!level.head) {
+            if (!level?.head) {
                 insertionNodes[j] = null;
                 continue;
             }
@@ -171,8 +179,8 @@ export class RoomSkipList implements Iterable<Room> {
              * All we need to do is find the node that is smaller or
              * equal to the node that we wish to insert.
              */
-            let current = level.head;
-            let previous: RoomNode | null = null;
+            let previous: RoomNode | null = predecessor;
+            let current: RoomNode | undefined = predecessor ? predecessor.next[j] : level.head;
             while (current) {
                 if (this.sorter.comparator(current.room, room) < 0) {
                     previous = current;
@@ -187,25 +195,41 @@ export class RoomSkipList implements Iterable<Room> {
              * This is exactly what we need to track in insertionNodes!
              */
             insertionNodes[j] = previous;
+            predecessor = previous;
         }
 
         /**
          * We're done with difficult part, now we just need to do the
          * actual node insertion.
+         *
+         * Whether our new node should be present in a level
+         * is decided by coin toss.
+         * We work the height out up front so that a level can be added
+         * once the list outgrows the levels it was seeded with.
          */
-        for (const [level, node] of insertionNodes.entries()) {
+        let height = 1;
+        const maxLevels = this.maxLevels;
+        while (height < maxLevels && shouldPromote()) ++height;
+
+        for (let level = 0; level < height; ++level) {
+            if (!this.levels[level]) this.levels[level] = new Level(level);
             /**
-             * Whether our new node should be present in a level
-             * is decided by coin toss.
+             * A level that didn't exist during the search has no
+             * insertionNodes entry and is empty, so the new node becomes
+             * its head.
              */
-            if (level === 0 || shouldPromote()) {
-                const levelObj = this.levels[level];
-                if (node) levelObj.insertAfter(node, newNode);
-                else levelObj.insertAtHead(newNode);
-            } else {
-                break;
-            }
+            const node = insertionNodes[level] ?? null;
+            if (node) this.levels[level].insertAfter(node, newNode);
+            else this.levels[level].insertAtHead(newNode);
         }
+    }
+
+    /**
+     * The largest number of levels this list will use, kept in step with its size so the
+     * search doesn't look at more and more nodes as rooms are added after the seed.
+     */
+    private get maxLevels(): number {
+        return Math.max(1, Math.ceil(Math.log2(this.size + 1)));
     }
 
     public [Symbol.iterator](): SortedRoomIterator {

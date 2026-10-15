@@ -172,7 +172,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
                 {isEditing ? this.editSourceContent() : this.viewSourceContent()}
                 {!isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.onEdit()} type="button">
+                        <button onClick={() => this.onEdit()} className="mx_LegacyDialogButton" type="button">
                             {_t("action|edit")}
                         </button>
                     </div>

@@ -223,8 +223,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         const wellKnown = this.matrixClient?.getClientWellKnown();
         const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
         if (foci !== undefined) {
-            if (Array.isArray(foci))
-                return foci; // Contents assumed to be valid Transports
+            if (Array.isArray(foci)) return foci; // Contents assumed to be valid Transports
             else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
         }
         return [];

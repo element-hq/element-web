@@ -123,6 +123,7 @@ describe("<SpacePanel />", () => {
         isVersionSupported: vi.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
         getAuthMetadata: vi.fn().mockRejectedValue(new Error("Legacy auth")),
+        getSyncState: vi.fn().mockReturnValue("SYNCING"),
     } as unknown as MatrixClient;
     const sdkContext = new TestSDKContext();
     const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);

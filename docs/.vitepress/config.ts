@@ -101,13 +101,6 @@ export default withMermaid({
                 text: "Build",
                 items: [
                     {
-                        text: "Web",
-                        items: [
-                            { text: "Customisations", link: "/customisations" },
-                            { text: "Deprecated Modules", link: "/deprecated-modules" },
-                        ],
-                    },
-                    {
                         text: "Desktop",
                         items: [
                             { text: "Native Node modules", link: "/native-node-modules" },

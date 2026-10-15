@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
         "complete": "Concluir",
@@ -1329,7 +1328,6 @@
             "preparing": "Preparando convites..."
         },
         "recents_section": "Conversas recentes",
-        "room_failed_partial": "Nós enviamos aos outros, mas as pessoas abaixo não puderam ser convidadas para <RoomName/>",
         "room_failed_partial_title": "Alguns convites não puderam ser enviados",
         "room_failed_title": "Falha ao convidar usuários para %(roomName)s",
         "send_link_prompt": "Ou envie o link do convite",
@@ -1444,7 +1442,6 @@
         "bridge_state_workspace": "Espaço de trabalho: <networkLink/>",
         "click_for_info": "Clique para mais informações",
         "currently_experimental": "Atualmente experimental.",
-        "custom_themes": "Permite adicionar temas personalizados",
         "dynamic_room_predecessors": "Predecessores de salas dinâmicas",
         "dynamic_room_predecessors_description": "Habilitar MSC3946 (para dar suporte a arquivos de chat para quem chegar mais tarde)",
         "element_call_video_rooms": "Salas de vídeo Element Call",
@@ -1453,7 +1450,6 @@
         "experimental_description": "Está se sentindo experimental? Experimente nossas últimas ideias em desenvolvimento. Esses recursos não estão finalizados; eles podem ser instáveis, podem mudar ou podem ser descartados completamente.<a> Saiba mais</a> .",
         "experimental_section": "Pré-visualizações antecipadas",
         "extended_profiles_msc_support": "Requer que seu servidor ofereça suporte ao MSC4133",
-        "feature_disable_call_per_sender_encryption": "Desativar a criptografia por remetente para Element Call",
         "feature_wysiwyg_composer_description": "Use rich text em vez de Markdown no compositor de mensagens.",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Criptografia",
@@ -1463,7 +1459,6 @@
         "group_profile": "Perfil",
         "group_rooms": "Salas",
         "group_spaces": "Espaços",
-        "group_themes": "Temas",
         "group_threads": "Tópicos",
         "group_ui": "Interface do usuário",
         "group_voip": "Voz e vídeo",
@@ -1538,8 +1533,6 @@
     "language_dropdown_label": "Menu suspenso de idiomas",
     "leave_room_dialog": {
         "last_person_warning": "Você é a única pessoa aqui. Se você sair, ninguém poderá se juntar no futuro, inclusive você.",
-        "leave_room_question": "Tem certeza de que deseja sair da sala '%(roomName)s'?",
-        "leave_space_question": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",
         "room_leave_admin_warning": "Você é o único administrador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_leave_mod_warning": "Você é o único moderador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_rejoin_warning": "Esta sala não é pública. Você não poderá entrar novamente sem um convite.",
@@ -1608,7 +1601,6 @@
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições na mensagem",
-    "migrating_crypto": "Aguente firme. Estamos atualizando %(brand)s para tornar a criptografia mais rápida e confiável.",
     "mobile_guide": {
         "toast_accept": "Usar o aplicativo",
         "toast_description": "%(brand)s é experimental em um navegador da Web móvel. Para uma melhor experiência e os recursos mais recentes, use nosso aplicativo nativo gratuito.",
@@ -1942,7 +1934,6 @@
         "join_button_account": "Inscrever-se",
         "join_failed_needs_invite": "Para ver %(roomName)s, você precisa de um convite",
         "join_the_discussion": "Participar da discussão",
-        "join_title": "Entre na sala para participar",
         "join_title_account": "Participar da conversa com uma conta",
         "joining": "Juntando-se…",
         "joining_room": "Entrando na sala…",
@@ -2349,11 +2340,6 @@
             "custom_font_description": "Defina o nome de uma fonte instalada no seu sistema e o %(brand)s tentará usá-la.",
             "custom_font_name": "Nome da fonte do sistema",
             "custom_font_size": "Usar tamanho personalizado",
-            "custom_theme_add": "Adicionar tema personalizado",
-            "custom_theme_downloading": "Baixando tema personalizado...",
-            "custom_theme_error_downloading": "Erro ao baixar o tema",
-            "custom_theme_help": "Insira o URL de um tema personalizado que você deseja aplicar.",
-            "custom_theme_invalid": "Esquema inválido de tema.",
             "dialog_title": "<strong>Configurações:</strong> Aparência",
             "font_size": "Tamanho da fonte",
             "font_size_default": "%(fontSize)s (padrão)",
@@ -2439,10 +2425,8 @@
                 "set_up_recovery_confirm_button": "Concluir a configuração",
                 "set_up_recovery_confirm_description": "Digite a chave de recuperação mostrada na tela anterior para concluir a configuração da recuperação.",
                 "set_up_recovery_confirm_title": "Digite sua chave de recuperação para confirmar",
-                "set_up_recovery_description": "Seu armazenamento de chaves é protegido por uma chave de recuperação. Se precisar de uma nova chave de recuperação após a configuração, você pode recriá-la selecionando '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Anote essa chave de recuperação em algum lugar seguro, como um gerenciador de senhas, uma nota criptografada ou um cofre físico.",
                 "set_up_recovery_save_key_title": "Salve sua chave de recuperação",
-                "set_up_recovery_secondary_description": "Depois de clicar em continuar, geraremos uma chave de recuperação para você.",
                 "title": "Recuperação"
             },
             "title": "Criptografia"
@@ -3141,9 +3125,7 @@
         "show_thread_filter": "Exibir:"
     },
     "threads_activity_centre": {
-        "header": "Atividade de tópicos",
-        "no_rooms_with_threads_notifs": "Você ainda não tem salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
+        "header": "Atividade de tópicos"
     },
     "time": {
         "date_at_time": "%(date)s às %(time)s",

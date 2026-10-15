@@ -10,9 +10,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, vi } from "vitest";
 
-import { roomAliasEventListeners, userIdEventListeners } from "./Linkify";
+import { roomAliasEventListeners, transformTags, userIdEventListeners } from "./Linkify";
 import dispatcher from "./dispatcher/dispatcher";
 import { Action } from "./dispatcher/actions";
+import * as permalinkUtils from "./utils/permalinks/Permalinks";
 
 describe("linkify-matrix", () => {
     describe("roomalias plugin", () => {
@@ -52,5 +53,19 @@ describe("linkify-matrix", () => {
                 }),
             );
         });
+    });
+
+    it("keeps application permalinks local", () => {
+        const permalinkSpy = vi
+            .spyOn(permalinkUtils, "tryTransformPermalinkToLocalHref")
+            .mockReturnValue("#/room/!room:server");
+
+        const result = transformTags.a("a", { href: "https://matrix.to/#/!room:server" });
+
+        expect(result.attribs).toEqual({
+            href: "https://matrix.to/#/!room:server",
+            rel: "noreferrer noopener",
+        });
+        permalinkSpy.mockRestore();
     });
 });

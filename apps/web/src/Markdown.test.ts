@@ -174,3 +174,17 @@ describe("Markdown parser test", () => {
         });
     });
 });
+
+describe("Markdown soft breaks", () => {
+    const wrapped = "First line\nsecond line\n\nNext paragraph";
+
+    it("turns soft breaks into line breaks by default, as messages want", () => {
+        expect(new Markdown(wrapped).toHTML()).toEqual("<p>First line<br />second line</p>\n<p>Next paragraph</p>\n");
+    });
+
+    it("keeps soft breaks as newlines when asked, as a wrapped document wants", () => {
+        expect(new Markdown(wrapped).toHTML({ hardSoftBreaks: false })).toEqual(
+            "<p>First line\nsecond line</p>\n<p>Next paragraph</p>\n",
+        );
+    });
+});

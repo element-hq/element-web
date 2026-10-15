@@ -55,13 +55,5 @@ export function E2eMessageSharedIconAdapter({
         vm.setKeyForwardingUserId(keyForwardingUserId);
     }, [keyForwardingUserId, vm]);
 
-    return (
-        <E2eMessageSharedIconView
-            vm={vm}
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-        />
-    );
+    return <E2eMessageSharedIconView vm={vm} className="mx_E2ePadlock" />;
 }

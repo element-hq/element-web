@@ -27,7 +27,6 @@
         "cancel": "Avbryt",
         "change": "Endre",
         "clear": "Tøm",
-        "click_to_copy": "Klikk for å kopiere",
         "close": "Lukk",
         "collapse": "Trekk sammen",
         "complete": "Fullført",
@@ -1335,7 +1334,6 @@
             "preparing": "Forbereder invitasjoner..."
         },
         "recents_section": "Nylige samtaler",
-        "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
         "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",
         "room_failed_title": "Kunne ikke invitere brukere til %(roomName)s",
         "send_link_prompt": "Eller send invitasjonslenke",
@@ -1450,7 +1448,6 @@
         "bridge_state_workspace": "Arbeidsområde: <networkLink/>",
         "click_for_info": "Klikk for mer info",
         "currently_experimental": "For tiden eksperimentell.",
-        "custom_themes": "Støtte for å legge til tilpassede temaer",
         "dynamic_room_predecessors": "Dynamiske romforgjengere",
         "dynamic_room_predecessors_description": "Aktiver MSC3946 (for å støtte sent ankomne romarkiver)",
         "element_call_video_rooms": "Element Call videorom",
@@ -1461,7 +1458,6 @@
         "experimental_description": "Er du litt vågal? Prøv ut de nyeste ideene våre under utvikling. Disse funksjonene er ikke ferdigutviklet; de kan være ustabile, endres eller droppes helt. <a>Finn ut mer</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
         "extended_profiles_msc_support": "Krever at serveren din støtter MSC4133",
-        "feature_disable_call_per_sender_encryption": "Deaktiver kryptering per avsender for Element Call",
         "feature_wysiwyg_composer_description": "Bruk rik tekst i stedet for Markdown i meldingsskriveren.",
         "group_developer": "Utvikler",
         "group_encryption": "Kryptering",
@@ -1471,7 +1467,6 @@
         "group_profile": "Profil",
         "group_rooms": "Rom",
         "group_spaces": "Områder",
-        "group_themes": "Temaer",
         "group_threads": "Tråder",
         "group_ui": "Brukergrensesnitt",
         "group_voip": "Stemme og video",
@@ -1546,8 +1541,6 @@
     "language_dropdown_label": "Språk-nedfallsmeny",
     "leave_room_dialog": {
         "last_person_warning": "Du er den eneste personen her. Hvis du forlater rommet, vil ingen kunne bli med i det i fremtiden, inkludert deg.",
-        "leave_room_question": "Er du sikker på at du vil forlate rommet '%(roomName)s'?",
-        "leave_space_question": "Er du sikker på at du vil forlate området '%(spaceName)s'?",
         "room_leave_admin_warning": "Du er den eneste administratoren i dette rommet. Hvis du forlater rommet, vil ingen kunne endre rominnstillinger eller utføre andre viktige handlinger.",
         "room_leave_mod_warning": "Du er den eneste moderatoren i dette rommet. Hvis du forlater rommet, vil ingen kunne endre rominnstillinger eller utføre andre viktige handlinger.",
         "room_rejoin_warning": "Dette rommet er ikke offentlig. Du vil ikke kunne bli med igjen uten en invitasjon.",
@@ -1616,7 +1609,6 @@
     },
     "member_list_back_action_label": "Medlemmer av rommet",
     "message_edit_dialog_title": "Meldingsredigeringer",
-    "migrating_crypto": "Hold deg fast. Vi oppdaterer %(brand)s for å gjøre kryptering raskere og mer pålitelig.",
     "mobile_guide": {
         "toast_accept": "Bruk app",
         "toast_description": "%(brand)s er eksperimentell på en mobil nettleser. For en bedre opplevelse og de nyeste funksjonene, bruk vår gratis app.",
@@ -1965,7 +1957,6 @@
         "join_button_account": "Registrer deg",
         "join_failed_needs_invite": "For å se %(roomName)s, trenger du en invitasjon",
         "join_the_discussion": "Bli med i diskusjonen",
-        "join_title": "Bli med på rommet for å delta",
         "join_title_account": "Bli med i samtalen med en konto",
         "joining": "Blir med …",
         "joining_room": "Blir med i rommet …",
@@ -2376,11 +2367,6 @@
             "custom_font_description": "Angi navnet på en skrifttype som er installert på systemet ditt, og %(brand)s vil forsøke å bruke den.",
             "custom_font_name": "Systemskrifttypenavn",
             "custom_font_size": "Bruk tilpasset størrelse",
-            "custom_theme_add": "Legg til egendefinert tema",
-            "custom_theme_downloading": "Laster ned tilpasset tema...",
-            "custom_theme_error_downloading": "Feil ved nedlasting av tema",
-            "custom_theme_help": "Skriv inn URL-adressen til et egendefinert tema du vil bruke.",
-            "custom_theme_invalid": "Ugyldig temaskjema.",
             "dialog_title": "<strong>Innstillinger:</strong> Utseende",
             "font_size": "Skriftstørrelse",
             "font_size_default": "%(fontSize)s (standard)",
@@ -2466,10 +2452,8 @@
                 "set_up_recovery_confirm_button": "Fullfør oppsettet",
                 "set_up_recovery_confirm_description": "Skriv inn gjenopprettingsnøkkelen som ble vist på forrige skjermbilde for å fullføre konfigureringen av gjenopprettingen.",
                 "set_up_recovery_confirm_title": "Skriv inn gjenopprettingsnøkkelen din for å bekrefte",
-                "set_up_recovery_description": "Nøkkeloppbevaringen er beskyttet av en gjenopprettingsnøkkel. Hvis du trenger en ny gjenopprettingsnøkkel etter oppsett, kan du opprette den på nytt ved å velge «%(changeRecoveryKeyButton)s».",
                 "set_up_recovery_save_key_description": "Skriv ned denne gjenopprettingsnøkkelen et trygt sted, for eksempel en passordbehandler, et kryptert notat eller en fysisk safe.",
                 "set_up_recovery_save_key_title": "Du bør lagre din gjenopprettingsnøkkelen på et trygt sted",
-                "set_up_recovery_secondary_description": "Etter å ha klikket fortsett, genererer vi en gjenopprettingsnøkkel for deg.",
                 "title": "Gjenoppretting"
             },
             "title": "Kryptering"
@@ -3169,9 +3153,7 @@
         "show_thread_filter": "Vis:"
     },
     "threads_activity_centre": {
-        "header": "Trådaktivitet",
-        "no_rooms_with_threads_notifs": "Du har ikke rom med trådvarsler ennå.",
-        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
+        "header": "Trådaktivitet"
     },
     "time": {
         "date_at_time": "%(date)s klokken %(time)s",

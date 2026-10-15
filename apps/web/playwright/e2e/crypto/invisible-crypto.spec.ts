@@ -40,7 +40,7 @@ test.describe("Invisible cryptography", () => {
 
         /* should show an error for a message from a previously verified device */
         await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
-        const lastTile = page.locator(".mx_EventTile_last");
+        const lastTile = page.locator(".mx_EventTile").last();
         await expect(lastTile).toContainText("Sender's verified digital identity was reset");
     });
 });

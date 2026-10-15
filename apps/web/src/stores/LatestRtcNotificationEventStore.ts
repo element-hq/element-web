@@ -105,13 +105,14 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
     private async findAndSetNotificationEvent(call: ElementCall, roomId: string): Promise<void> {
         const room = this.getRoom(roomId);
         // Since we're running this logic as the call just started, this membership
-        // event corresponds to the person who started the call.
-        // The rtc notification event corresponding to this ongoing call will have
-        // a reference relation to this membership event.
-        const callMembershipEventId = call.session.getOldestMembership()?.eventId;
+        // event probably (but not necessarily! TODO: do something more robust)
+        // corresponds to the person who started the call.
+        // The rtc notification event corresponding to this ongoing call will
+        // hopefully have a reference relation to this membership event.
+        const oldestActiveMembership = call.session.memberships.at(0);
 
-        if (callMembershipEventId) {
-            const eventId = await getNotificationEventId(room, callMembershipEventId);
+        if (oldestActiveMembership) {
+            const eventId = await getNotificationEventId(room, oldestActiveMembership.eventId);
             this.eventIdMap.set(roomId, eventId);
             this.emit(LatestRtcNotificationEventUpdate, roomId, eventId);
         }

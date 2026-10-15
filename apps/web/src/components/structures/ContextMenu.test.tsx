@@ -27,8 +27,8 @@ describe("ContextMenu", () => {
     } as DOMRect;
 
     beforeEach(() => {
-        window.scrollX = 31;
-        window.scrollY = 41;
+        vi.spyOn(window, "scrollX", "get").mockImplementation(() => 31);
+        vi.spyOn(window, "scrollY", "get").mockImplementation(() => 41);
         UIStore.instance.windowWidth = 1280;
     });
 

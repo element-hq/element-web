@@ -54,6 +54,30 @@ describe("KeyboardShortcutUtils", () => {
         expect(file.KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
     });
 
+    it("shows the room list panel shortcuts without binding them", async () => {
+        const { KeyBindingAction } = await getFile();
+        const utils = await getUtils();
+        const { defaultBindingsProvider } = await import("../KeyBindingsDefaults");
+
+        const panelActions = [
+            KeyBindingAction.ToggleRoomListPanel,
+            KeyBindingAction.ShrinkRoomListPanel,
+            KeyBindingAction.GrowRoomListPanel,
+            KeyBindingAction.CollapseRoomListPanel,
+            KeyBindingAction.ExpandRoomListPanel,
+        ];
+
+        for (const action of panelActions) {
+            expect(utils.getKeyboardShortcutValue(action)).toBeDefined();
+            expect(utils.getKeyboardShortcutDisplayName(action)).toBeDefined();
+        }
+        // React-resizable-panels handles the keys, so we must not bind them ourselves.
+        const boundActions = defaultBindingsProvider.getRoomListBindings!().map((binding) => binding.action);
+        for (const action of panelActions) {
+            expect(boundActions).not.toContain(action);
+        }
+    });
+
     describe("correctly filters shortcuts", () => {
         it("when on web and not on macOS", async () => {
             mockKeyboardShortcuts({

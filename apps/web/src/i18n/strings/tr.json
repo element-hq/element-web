@@ -27,7 +27,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
         "complete": "Tamamlandı",
@@ -1233,7 +1232,6 @@
         "name_mxid_share_room": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu odayı paylaş</a> kullanarak davet edin.",
         "name_mxid_share_space": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu alanı paylaş</a> kullanarak davet edin.",
         "recents_section": "Güncel Sohbetler",
-        "room_failed_partial": "Başkalarına davetler iletilmekle beraber, aşağıdakiler <RoomName/> odasına davet edilemedi",
         "room_failed_partial_title": "Bazı davetler gönderilemiyor",
         "room_failed_title": "Kullanıcılar %(roomName)s adresine davet edilemedi",
         "send_link_prompt": "Veya davet bağlantısı gönder",
@@ -1347,7 +1345,6 @@
         "bridge_state_workspace": "Çalışma alanı: <networkLink/>",
         "click_for_info": "Daha fazla bilgi için tıklayın",
         "currently_experimental": "Şu anda deneysel.",
-        "custom_themes": "Özel temaların eklenmesini destekleyin",
         "dynamic_room_predecessors": "Dinamik oda öncülleri",
         "dynamic_room_predecessors_description": "MSC3946 etkinleştir (geç gelen oda arşivlerini desteklemek için)",
         "element_call_video_rooms": "Element Çağrısı video odaları",
@@ -1356,7 +1353,6 @@
         "experimental_description": "Deneysel mi hissediyorsunuz? Geliştirme aşamasındaki en son fikirlerimizi deneyin. Bu özellikler nihai değildir; kararsız olabilirler, değişebilirler veya tamamen kaldırılabilirler. <a>Daha fazla bilgi için</a>.",
         "experimental_section": "Erken önizlemeler",
         "extended_profiles_msc_support": "Sunucunuzun MSC4133 desteklemesini gerektirir",
-        "feature_disable_call_per_sender_encryption": "Element Call için gönderen başına şifrelemeyi devre dışı bırakın",
         "feature_wysiwyg_composer_description": "Mesaj oluşturucu olarak Markdown yerine zengin metin kullanın.",
         "group_developer": "Geliştirici",
         "group_encryption": "Şifreleme",
@@ -1366,7 +1362,6 @@
         "group_profile": "Profil",
         "group_rooms": "Odalar",
         "group_spaces": "Alanlar",
-        "group_themes": "Temalar",
         "group_threads": "Mesaj dizileri",
         "group_ui": "Kullanıcı arayüzü",
         "group_voip": "Ses & Video",
@@ -1441,8 +1436,6 @@
     "language_dropdown_label": "Dil Açılır Listesi",
     "leave_room_dialog": {
         "last_person_warning": "Buradaki tek kişi sensin. Ayrılırsanız, gelecekte siz de dahil olmak üzere hiç kimse katılamaz.",
-        "leave_room_question": "'%(roomName)s' odasından ayrılmak istediğinize emin misiniz ?",
-        "leave_space_question": "'%(spaceName)s' alanından ayrılmak istediğinizden emin misiniz?",
         "room_leave_admin_warning": "Bu odadaki tek yönetici sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_leave_mod_warning": "Bu odadaki tek moderatör sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_rejoin_warning": "Bu oda herkese açık değildir. Davetiye olmadan tekrar katılamazsınız.",
@@ -1510,7 +1503,6 @@
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
-    "migrating_crypto": "Sıkı durun. Şifrelemeyi daha hızlı ve daha güvenilir hale getirmek için %(brand)s güncelliyoruz.",
     "mobile_guide": {
         "toast_accept": "Uygulamayı kullan",
         "toast_description": "%(brand)s mobil web tarayıcısında deneyseldir. Daha iyi bir deneyim ve en yeni özellikler için ücretsiz yerel uygulamamızı kullanın.",
@@ -1837,7 +1829,6 @@
         "join_button_account": "Kayıt Ol",
         "join_failed_needs_invite": "%(roomName)s görüntülemek için bir davetiyeye ihtiyacınız var",
         "join_the_discussion": "Tartışmaya katılın",
-        "join_title": "Sohbete başlamak için odaya katılın",
         "join_title_account": "Konuşmaya bir hesapla katıl",
         "joining": "Katılınıyor…",
         "joining_room": "Odaya katılıyor…",
@@ -2227,11 +2218,6 @@
             "custom_font_description": "Sisteminizde yüklü bir yazı tipinin adını ayarlayın &%(brand)s onu kullanmaya çalışacaktır.",
             "custom_font_name": "Sistem yazı tipi adı",
             "custom_font_size": "Özel boyut kullan",
-            "custom_theme_add": "Özel tema ekle",
-            "custom_theme_downloading": "Özel tema indiriliyor…",
-            "custom_theme_error_downloading": "Tema indirilirken hata oluştu",
-            "custom_theme_help": "Uygulamak istediğiniz özel temanın URL'sini girin.",
-            "custom_theme_invalid": "Geçersiz tema taslağı.",
             "dialog_title": "<strong>Ayarlar:</strong> Görünüm",
             "font_size": "Yazı boyutu",
             "font_size_default": "%(fontSize)s (varsayılan)",
@@ -2307,10 +2293,8 @@
                 "set_up_recovery_confirm_button": "Kurulumu tamamla",
                 "set_up_recovery_confirm_description": "Kurtarma işlemini tamamlamak için önceki ekranda gösterilen kurtarma anahtarını girin.",
                 "set_up_recovery_confirm_title": "Onaylamak için kurtarma anahtarınızı girin",
-                "set_up_recovery_description": "Anahtar depolama alanınız bir kurtarma anahtarı ile korunur. Kurulumdan sonra yeni bir kurtarma anahtarına ihtiyacınız varsa, '%(changeRecoveryKeyButton)s' seçeneğini seçerek yeniden oluşturabilirsiniz.",
                 "set_up_recovery_save_key_description": "Bu kurtarma anahtarını şifre yöneticisi, şifreli not veya fiziksel kasa gibi güvenli bir yere kaydedin.",
                 "set_up_recovery_save_key_title": "Kurtarma anahtarınızı güvenli bir yere kaydedin",
-                "set_up_recovery_secondary_description": "Devam'a tıkladıktan sonra, sizin için bir kurtarma anahtarı oluşturacağız.",
                 "title": "Kurtarma"
             },
             "title": "Şifreleme"
@@ -2980,9 +2964,7 @@
         "show_thread_filter": "Göster:"
     },
     "threads_activity_centre": {
-        "header": "Mesaj dizileri etkinliği",
-        "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
+        "header": "Mesaj dizileri etkinliği"
     },
     "time": {
         "date_at_time": "%(date)s e %(time)s",

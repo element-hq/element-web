@@ -41,17 +41,17 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               id: pnpm
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version-file: apps/desktop/.node-version
-                  cache: "pnpm"
+                  cache: true
+                  install: false
 
             - name: Install Deps
               run: "pnpm install --frozen-lockfile --filter element-desktop"
 
-            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: ${{ inputs.artifact }}
                   path: apps/desktop/dist
@@ -82,7 +82,7 @@ jobs:
               env:
                   # We need sudo on Linux as it is installed in /opt/
                   RUN_AS: ${{ runner.os == 'Linux' && 'sudo -E' || '' }}
-                  PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
+                  PNPM_PATH: ${{ steps.pnpm.outputs.bin-dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
             - name: Run tests

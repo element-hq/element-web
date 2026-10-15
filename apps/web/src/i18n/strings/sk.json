@@ -29,7 +29,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
         "complete": "Dokončiť",
@@ -1347,7 +1346,6 @@
             "preparing": "Príprava pozvánok..."
         },
         "recents_section": "Nedávne konverzácie",
-        "room_failed_partial": "Ostatným sme pozvánky poslali, ale nižšie uvedené osoby nemohli byť pozvané do <RoomName/>",
         "room_failed_partial_title": "Niektoré pozvánky nebolo možné odoslať",
         "room_failed_title": "Nepodarilo pozvať používateľov do %(roomName)s",
         "send_link_prompt": "Alebo pošlite pozvánku",
@@ -1464,7 +1462,6 @@
         "bridge_state_workspace": "Pracovný priestor: <networkLink/>",
         "click_for_info": "Kliknite pre viac informácií",
         "currently_experimental": "V súčasnosti experimentálne.",
-        "custom_themes": "Umožniť pridávať vlastný vzhľad",
         "dynamic_room_predecessors": "Predchodcovia dynamickej miestnosti",
         "dynamic_room_predecessors_description": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
         "element_call_video_rooms": "Element Call video miestnosti",
@@ -1475,7 +1472,6 @@
         "experimental_description": "Chcete experimentovať? Vyskúšajte naše najnovšie nápady vo vývojovom štádiu. Tieto funkcie nie sú dokončené; môžu byť nestabilné, môžu sa zmeniť alebo môžu byť úplne zrušené. <a>Zistiť viac</a>.",
         "experimental_section": "Predbežné ukážky",
         "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
-        "feature_disable_call_per_sender_encryption": "Zakázať šifrovanie pre jednotlivých odosielateľov pre Element Call",
         "feature_wysiwyg_composer_description": "Použiť rozšírený text namiesto Markdown v správach.",
         "group_developer": "Vývojárske",
         "group_encryption": "Šifrovanie",
@@ -1485,7 +1481,6 @@
         "group_profile": "Profil",
         "group_rooms": "Miestnosti",
         "group_spaces": "Priestory",
-        "group_themes": "Vzhľad",
         "group_threads": "Vlákna",
         "group_ui": "Používateľské rozhranie",
         "group_voip": "Zvuk a video",
@@ -1560,8 +1555,6 @@
     "language_dropdown_label": "Rozbaľovací zoznam jazykov",
     "leave_room_dialog": {
         "last_person_warning": "Ste tu jediný človek. Ak odídete, nikto sa už v budúcnosti nebude môcť pripojiť do tejto miestnosti, vrátane vás.",
-        "leave_room_question": "Ste si istí, že chcete opustiť miestnosť '%(roomName)s'?",
-        "leave_space_question": "Ste si istí, že chcete opustiť priestor '%(spaceName)s'?",
         "room_leave_admin_warning": "Ste jediný správca v tejto miestnosti. Ak odídete, nikto nebude môcť zmeniť nastavenia miestnosti alebo podniknúť ďalšie dôležité kroky.",
         "room_leave_mod_warning": "Ste jediným moderátorom v tejto miestnosti. Ak odídete, nikto nebude môcť zmeniť nastavenia miestnosti alebo podniknúť ďalšie dôležité kroky.",
         "room_rejoin_warning": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu.",
@@ -1631,7 +1624,6 @@
     },
     "member_list_back_action_label": "Členovia miestnosti",
     "message_edit_dialog_title": "Úpravy správy",
-    "migrating_crypto": "Ešte to vydržte. Aktualizujeme %(brand)s, aby bolo šifrovanie rýchlejšie a spoľahlivejšie.",
     "mobile_guide": {
         "toast_accept": "Použiť aplikáciu",
         "toast_description": "%(brand)s je v mobilnej verzii experimentálny. Ak chcete získať lepší zážitok a najnovšie funkcie, použite našu bezplatnú natívnu aplikáciu.",
@@ -1991,7 +1983,6 @@
         "join_button_account": "Zaregistrovať sa",
         "join_failed_needs_invite": "Na zobrazenie %(roomName)s potrebujete pozvánku",
         "join_the_discussion": "Pripojiť sa k diskusii",
-        "join_title": "Pripojte sa k miestnosti a zúčastnite sa",
         "join_title_account": "Pripojte sa ku konverzácii pomocou účtu",
         "joining": "Pripájanie…",
         "joining_room": "Pripájanie do miestnosti …",
@@ -2408,11 +2399,6 @@
             "custom_font_description": "Nastavte názov písma, ktoré máte nainštalované na vašom systéme & %(brand)s sa ho pokúsi použiť.",
             "custom_font_name": "Názov systémového písma",
             "custom_font_size": "Použiť vlastnú veľkosť",
-            "custom_theme_add": "Pridať vlastnú tému",
-            "custom_theme_downloading": "Sťahovanie vlastnej témy...",
-            "custom_theme_error_downloading": "Chyba pri sťahovaní témy",
-            "custom_theme_help": "Zadajte adresu URL vlastnej témy, ktorú chcete použiť.",
-            "custom_theme_invalid": "Neplatná schéma vzhľadu.",
             "dialog_title": "<strong>Nastavenia:</strong> Vzhľad",
             "font_size": "Veľkosť písma",
             "font_size_default": "%(fontSize)s (predvolené)",
@@ -2498,10 +2484,8 @@
                 "set_up_recovery_confirm_button": "Dokončiť nastavenie",
                 "set_up_recovery_confirm_description": "Zadajte kľúč na obnovenie zobrazený na predchádzajúcej obrazovke a dokončite nastavenie obnovy.",
                 "set_up_recovery_confirm_title": "Na potvrdenie zadajte kľúč na obnovenie",
-                "set_up_recovery_description": "Vaše úložisko kľúčov je chránené kľúčom na obnovenie. Ak po nastavení potrebujete nový kľúč na obnovenie, môžete ho znova vytvoriť výberom „%(changeRecoveryKeyButton)s“.",
                 "set_up_recovery_save_key_description": "Zapíšte si tento kľúč na obnovenie na bezpečné miesto, napríklad do správcu hesiel, zašifrovanej poznámky alebo fyzického trezoru.",
                 "set_up_recovery_save_key_title": "Uložte kľúč na obnovenie na bezpečné miesto",
-                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovať vám vygenerujeme kľúč na obnovenie.",
                 "title": "Obnovenie"
             },
             "title": "Šifrovanie"
@@ -3207,9 +3191,7 @@
         "show_thread_filter": "Zobraziť:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vlákien",
-        "no_rooms_with_threads_notifs": "Zatiaľ nemáte miestnosti s upozorneniami na vlákna.",
-        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
+        "header": "Aktivita vlákien"
     },
     "time": {
         "date_at_time": "%(date)s o %(time)s",

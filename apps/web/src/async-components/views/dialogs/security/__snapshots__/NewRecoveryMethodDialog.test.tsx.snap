@@ -54,14 +54,14 @@ exports[`<NewRecoveryMethodDialog /> > when key backup is disabled 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
-          class="cancel"
+          class="mx_LegacyDialogButton cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >
           Go to Settings
         </button>
         <button
-          class="mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary"
           data-testid="dialog-primary-button"
           type="button"
         >
@@ -140,7 +140,7 @@ exports[`<NewRecoveryMethodDialog /> > when key backup is enabled 1`] = `
       A new Security Phrase and key for Secure Messages have been detected.
     </p>
     <p>
-      This session is encrypting history using the new recovery method.
+      This device is encrypting history using the new recovery method.
     </p>
     <strong
       class="warning"
@@ -154,14 +154,14 @@ exports[`<NewRecoveryMethodDialog /> > when key backup is enabled 1`] = `
         class="mx_Dialog_buttons_row"
       >
         <button
-          class="cancel"
+          class="mx_LegacyDialogButton cancel"
           data-testid="dialog-cancel-button"
           type="button"
         >
           Go to Settings
         </button>
         <button
-          class="mx_Dialog_primary"
+          class="mx_LegacyDialogButton mx_Dialog_primary"
           data-testid="dialog-primary-button"
           type="button"
         >

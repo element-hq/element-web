@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ListIteratee, type Many, sortBy } from "lodash";
+import { sortBy } from "lodash";
 import {
     EventType,
     RoomType,
@@ -96,11 +96,7 @@ const validOrder = (order?: string): string | undefined => {
 };
 
 // For sorting space children using a validated `order`, `origin_server_ts`, `room_id`
-export const getChildOrder = (
-    order: string | undefined,
-    ts: number,
-    roomId: string,
-): Array<Many<ListIteratee<unknown>>> => {
+export const getChildOrder = (order: string | undefined, ts: number, roomId: string): Array<string | number> => {
     return [validOrder(order) ?? NaN, ts, roomId]; // NaN has lodash sort it at the end in asc
 };
 

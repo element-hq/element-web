@@ -11,7 +11,7 @@ export function snakeToCamel(s: string): string {
 }
 
 export class SnakedObject<T = Record<string, any>> {
-    private fallbackWarnings = new Set<string>();
+    private static fallbackWarnings = new Set<string>();
 
     public constructor(private obj: T) {}
 
@@ -21,11 +21,11 @@ export class SnakedObject<T = Record<string, any>> {
 
         const fallbackKey = altCaseName ?? snakeToCamel(key);
         const fallback = this.obj[<K>fallbackKey];
-        if (!!fallback && !this.fallbackWarnings.has(fallbackKey)) {
-            this.fallbackWarnings.add(fallbackKey);
-            console.warn(`Using deprecated camelCase config ${fallbackKey}`);
+        if (!!fallback && !SnakedObject.fallbackWarnings.has(fallbackKey)) {
+            SnakedObject.fallbackWarnings.add(fallbackKey);
             console.warn(
-                "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
+                `Using deprecated camelCase config ${fallbackKey}\n` +
+                    "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
             );
         }
         return fallback;
@@ -34,5 +34,13 @@ export class SnakedObject<T = Record<string, any>> {
     // Make JSON.stringify() pretend that everything is fine
     public toJSON(): T {
         return this.obj;
+    }
+
+    /**
+     * Clear our record of warnings we have emitted about using a camelCase
+     * fallback. Likely only useful for tests.
+     */
+    public static resetFallbackWarnings(): void {
+        SnakedObject.fallbackWarnings.clear();
     }
 }

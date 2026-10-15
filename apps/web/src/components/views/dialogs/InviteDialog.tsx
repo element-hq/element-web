@@ -13,13 +13,13 @@ import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { debounce, uniqBy } from "lodash";
 import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
@@ -578,7 +578,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return;
             }
             if (
-                Email.looksValid(term) &&
+                emailLooksValid(term) &&
                 this.canInviteThirdParty() &&
                 SettingsStore.getValue(UIFeature.IdentityServer)
             ) {
@@ -737,7 +737,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 continue;
             }
 
-            if (Email.looksValid(address)) {
+            if (emailLooksValid(address)) {
                 if (this.canInviteThirdParty([...this.state.targets, ...toAdd])) {
                     toAdd.push(new ThreepidMember(address));
                 } else {
@@ -1071,7 +1071,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (!this.state.filterText) return false;
 
         return this.parseFilter(this.state.filterText).some((address: string) => {
-            return Email.looksValid(address);
+            return emailLooksValid(address);
         });
     }
 

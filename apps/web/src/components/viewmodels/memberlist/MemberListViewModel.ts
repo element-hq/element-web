@@ -24,7 +24,6 @@ import { throttle } from "lodash";
 
 import { type RoomMember } from "../../../models/rooms/RoomMember";
 import { mediaFromMxc } from "../../../customisations/Media";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { type PresenceState } from "../../../models/rooms/PresenceState";
@@ -68,10 +67,7 @@ export function getPending3PidInvites(room: Room, searchQuery?: string): Member[
 }
 
 export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
-    const displayUserId =
-        UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
-            roomId: member.roomId,
-        }) ?? member.userId;
+    const displayUserId = member.userId;
 
     const mxcAvatarURL = member.getMxcAvatarUrl();
     const avatarThumbnailUrl =
@@ -186,6 +182,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
             ),
         [sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
     );
+    // Drop any pending trailing call so it cannot run after unmount or against a stale room
+    useEffect(() => () => loadMembers.cancel(), [loadMembers]);
 
     const isPresenceEnabled = useMemo(
         () => sdkContext.memberListStore.isPresenceEnabled(),

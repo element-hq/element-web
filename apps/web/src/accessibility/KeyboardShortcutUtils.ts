@@ -64,6 +64,38 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
             },
             displayName: _td("keyboard|search"),
         },
+        // The room list panel keys below are handled by react-resizable-panels inside
+        // SeparatorView, so they need no mirroring in KeyBindingDefaults.
+        [KeyBindingAction.ToggleRoomListPanel]: {
+            default: {
+                key: Key.ENTER,
+            },
+            displayName: _td("keyboard|room_list_panel_toggle"),
+        },
+        [KeyBindingAction.ShrinkRoomListPanel]: {
+            default: {
+                key: Key.ARROW_LEFT,
+            },
+            displayName: _td("keyboard|room_list_panel_shrink"),
+        },
+        [KeyBindingAction.GrowRoomListPanel]: {
+            default: {
+                key: Key.ARROW_RIGHT,
+            },
+            displayName: _td("keyboard|room_list_panel_grow"),
+        },
+        [KeyBindingAction.CollapseRoomListPanel]: {
+            default: {
+                key: Key.HOME,
+            },
+            displayName: _td("keyboard|room_list_panel_collapse"),
+        },
+        [KeyBindingAction.ExpandRoomListPanel]: {
+            default: {
+                key: Key.END,
+            },
+            displayName: _td("keyboard|room_list_panel_expand"),
+        },
     };
 
     if (PlatformPeg.get()?.overrideBrowserShortcuts()) {

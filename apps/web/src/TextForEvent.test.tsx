@@ -28,17 +28,11 @@ import { createTestClient, stubClient } from "test-utils";
 import { hasText, textForEvent } from "./TextForEvent";
 import SettingsStore from "./settings/SettingsStore";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import UserIdentifierCustomisations from "./customisations/UserIdentifier";
 import { getSenderName } from "./utils/event/getSenderName";
 import { ElementCallEventType } from "./call-types";
 import Spoiler from "./components/views/elements/Spoiler";
 
 vi.mock("./settings/SettingsStore");
-vi.mock("./customisations/UserIdentifier", () => ({
-    default: {
-        getDisplayUserIdentifier: vi.fn().mockImplementation((userId) => userId),
-    },
-}));
 
 function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: string[]): MatrixEvent {
     return new MatrixEvent({
@@ -201,12 +195,6 @@ describe("TextForEvent", () => {
             vi.mocked(SettingsStore.getValue).mockReturnValue(true);
         });
 
-        beforeEach(() => {
-            vi.mocked(UserIdentifierCustomisations.getDisplayUserIdentifier)
-                .mockClear()
-                .mockImplementation((userId) => userId);
-        });
-
         it("returns falsy when no users have changed power level", () => {
             const event = mockPowerEvent({
                 users: {
@@ -326,7 +314,7 @@ describe("TextForEvent", () => {
             [
                 "room alias didn't change",
                 {
-                    result: "@a changed the addresses for this room.",
+                    result: "@a changed the addresses for this chat.",
                 },
             ],
             [
@@ -334,35 +322,35 @@ describe("TextForEvent", () => {
                 {
                     alias: "banana",
                     prevAlias: "apple",
-                    result: "@a set the main address for this room to banana.",
+                    result: "@a set the main address for this chat to banana.",
                 },
             ],
             [
                 "room alias was added",
                 {
                     alias: "banana",
-                    result: "@a set the main address for this room to banana.",
+                    result: "@a set the main address for this chat to banana.",
                 },
             ],
             [
                 "room alias was removed",
                 {
                     prevAlias: "apple",
-                    result: "@a removed the main address for this room.",
+                    result: "@a removed the main address for this chat.",
                 },
             ],
             [
                 "added an alt alias",
                 {
                     altAliases: ["canteloupe"],
-                    result: "@a added alternative address canteloupe for this room.",
+                    result: "@a added alternative address canteloupe for this chat.",
                 },
             ],
             [
                 "added multiple alt aliases",
                 {
                     altAliases: ["canteloupe", "date"],
-                    result: "@a added the alternative addresses canteloupe, date for this room.",
+                    result: "@a added the alternative addresses canteloupe, date for this chat.",
                 },
             ],
             [
@@ -370,7 +358,7 @@ describe("TextForEvent", () => {
                 {
                     altAliases: ["canteloupe"],
                     prevAltAliases: ["canteloupe", "date"],
-                    result: "@a removed alternative address date for this room.",
+                    result: "@a removed alternative address date for this chat.",
                 },
             ],
             [
@@ -378,7 +366,7 @@ describe("TextForEvent", () => {
                 {
                     altAliases: ["canteloupe", "elderberry"],
                     prevAltAliases: ["canteloupe", "date"],
-                    result: "@a changed the alternative addresses for this room.",
+                    result: "@a changed the alternative addresses for this chat.",
                 },
             ],
             [
@@ -387,7 +375,7 @@ describe("TextForEvent", () => {
                     alias: "banana",
                     prevAlias: "apple",
                     altAliases: ["canteloupe"],
-                    result: "@a changed the main and alternative addresses for this room.",
+                    result: "@a changed the main and alternative addresses for this chat.",
                 },
             ],
         ];
@@ -625,7 +613,7 @@ describe("TextForEvent", () => {
                         }),
                         mockClient,
                     ),
-                ).toMatchInlineSnapshot(`"Member is no longer interested in joining"`);
+                ).toMatchInlineSnapshot(`"Member withdrew their request to join"`);
             });
 
             it("should handle a denied knock", () => {
@@ -640,7 +628,7 @@ describe("TextForEvent", () => {
                         }),
                         mockClient,
                     ),
-                ).toMatchInlineSnapshot(`"Member rejected Member's request to join"`);
+                ).toMatchInlineSnapshot(`"Member rejected the request to join from Member"`);
             });
 
             it("should fall back to the plain invite copy when the ask to join labs flag is disabled", () => {

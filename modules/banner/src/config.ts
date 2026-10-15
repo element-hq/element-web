@@ -30,6 +30,8 @@ const MenuConfig = z.object({
     logo_href: z.optional(z.url()),
 });
 
+export type MenuConfig = z.infer<typeof MenuConfig>;
+
 const StaticConfig = z.extend(MenuConfig, {
     type: z.literal("static"),
 
@@ -85,16 +87,16 @@ export type UniventionConfig = z.infer<typeof UniventionConfig>;
 
 export const ModuleConfig = z.object({
     /**
-     * The URL of the portal logo.svg file.
+     * The URL of the logo to show in the banner.
      * @example `https://example.com/logo.svg`
      */
     logo_url: z.url(),
 
     /**
-     * The URL of the portal.
+     * The URL to linkify the logo + title heading with.
      * @example `https://example.com`
      */
-    logo_link_url: z.url(),
+    heading_href: z.url(),
 
     /**
      * The title to show to the right of the Logo

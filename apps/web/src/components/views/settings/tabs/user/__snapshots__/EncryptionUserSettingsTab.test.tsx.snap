@@ -1,0 +1,746 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<EncryptionUserSettingsTab /> > should display a verify button when the encryption is not set up 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection mx_SettingsSection_newUi"
+      >
+        <div
+          class="mx_SettingsSection_header"
+        >
+          <h2
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
+          >
+            Device not verified
+          </h2>
+          <div
+            class="mx_SettingsSubheader"
+          >
+            <span
+              class="mx_SettingsSubheader_error"
+            >
+              <svg
+                fill="currentColor"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+              You need to verify this device in order to view your encryption settings.
+            </span>
+          </div>
+        </div>
+        <button
+          class="_button _has-icon"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 18q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 16V5q0-.824.587-1.412A1.93 1.93 0 0 1 4 3h16q.824 0 1.413.587Q22 4.176 22 5v11q0 .824-.587 1.413A1.93 1.93 0 0 1 20 18zm0-2h16V5H4zm-2 5a.97.97 0 0 1-.712-.288A.97.97 0 0 1 1 20q0-.424.288-.712A.97.97 0 0 1 2 19h20q.424 0 .712.288.288.287.288.712 0 .424-.288.712A.97.97 0 0 1 22 21z"
+            />
+          </svg>
+          Verify this device
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> > should display the change recovery key panel when the user clicks on the change recovery button 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <nav
+        class="_breadcrumb"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Back"
+          class="_icon-button"
+          data-kind="secondary"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m13.3 17.3-4.6-4.6a.9.9 0 0 1-.213-.325A1.1 1.1 0 0 1 8.425 12q0-.2.062-.375A.9.9 0 0 1 8.7 11.3l4.6-4.6a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7L10.8 12l3.9 3.9a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </div>
+        </button>
+        <ol
+          class="_pages"
+        >
+          <li>
+            <a
+              class="_link"
+              data-kind="primary"
+              data-size="sm"
+              rel="noreferrer noopener"
+              role="button"
+              tabindex="0"
+            >
+              Encryption
+            </a>
+          </li>
+          <li>
+            <span
+              aria-current="page"
+              class="_last-page"
+            >
+              Change recovery key
+            </span>
+          </li>
+        </ol>
+      </nav>
+      <div
+        class="mx_EncryptionCard mx_ChangeRecoveryKey"
+      >
+        <div
+          class="mx_EncryptionCard_header"
+        >
+          <div
+            class="_big-icon"
+            data-kind="primary"
+            data-size="lg"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.475 16.9A5.86 5.86 0 0 1 7 18q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q2.026 0 3.537 1.15Q12.05 8.3 12.65 10h7.95q.2 0 .387.075.189.075.338.225l1.025 1.025a1 1 0 0 1 .2.288q.075.162.075.362t-.062.375a1.1 1.1 0 0 1-.188.325l-2.25 2.575a.97.97 0 0 1-1.038.313 1 1 0 0 1-.337-.188L17 14l-1.3 1.3q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L13 14h-.35a5.8 5.8 0 0 1-2.175 2.9m-4.887-3.487Q6.175 14 7 14q.824 0 1.412-.588Q9 12.826 9 12t-.588-1.412A1.93 1.93 0 0 0 7 10q-.824 0-1.412.588A1.93 1.93 0 0 0 5 12q0 .825.588 1.412"
+              />
+            </svg>
+          </div>
+          <h2
+            class="_typography _font-heading-sm-semibold"
+          >
+            Change recovery key?
+          </h2>
+          <span>
+            Write down this new recovery key somewhere safe. Then select Continue to confirm the change.
+          </span>
+        </div>
+        <div
+          class="mx_KeyPanel"
+        >
+          <span
+            class="_typography _font-body-md-medium"
+          >
+            Recovery key
+          </span>
+          <div>
+            <span
+              class="_typography _font-body-md-regular mx_KeyPanel_key"
+              data-testid="recoveryKey"
+            >
+              encoded private key
+            </span>
+            <span
+              class="_typography _font-body-sm-regular"
+            >
+              Do not share this with anyone!
+            </span>
+          </div>
+          <button
+            aria-label="Copy"
+            class="_icon-button"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 28px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div
+          class="mx_EncryptionCard_buttons"
+        >
+          <button
+            class="_button"
+            data-kind="primary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Continue
+          </button>
+          <button
+            class="_button"
+            data-kind="tertiary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> > should display the identity needs reset panel when the user's identity needs resetting 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection mx_SettingsSection_newUi"
+      >
+        <div
+          class="mx_SettingsSection_header"
+        >
+          <h2
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
+          >
+            Your key storage is out of sync.
+          </h2>
+          <div
+            class="mx_SettingsSubheader"
+          >
+            <span
+              class="mx_SettingsSubheader_error"
+            >
+              <svg
+                fill="currentColor"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+              You have to reset your digital identity in order to ensure access to your chat history
+            </span>
+          </div>
+        </div>
+        <div>
+          <button
+            class="_button"
+            data-kind="primary"
+            data-size="md"
+            role="button"
+            tabindex="0"
+          >
+            Continue with reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> > should display the recovery out of sync panel when secrets are not cached 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection mx_SettingsSection_newUi"
+        data-testid="recoveryPanel"
+      >
+        <div
+          class="mx_SettingsSection_header"
+        >
+          <h2
+            class="_typography _font-heading-sm-semibold mx_SettingsHeader"
+          >
+            Backup
+          </h2>
+          <div
+            class="mx_SettingsSubheader"
+          >
+            Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.
+            <span
+              class="mx_SettingsSubheader_error"
+            >
+              <svg
+                fill="currentColor"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+              Your key storage is out of sync. Select one of the buttons below to fix the problem.
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_RecoveryPanelOutOfSync"
+        >
+          <button
+            class="_button"
+            data-kind="secondary"
+            data-size="md"
+            role="button"
+            tabindex="0"
+          >
+            Forgot recovery key?
+          </button>
+          <button
+            class="_button _has-icon"
+            data-kind="primary"
+            data-size="md"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="20"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 5 12q0-.825.588-1.412A1.93 1.93 0 0 1 7 10q.824 0 1.412.588Q9 11.175 9 12t-.588 1.412A1.93 1.93 0 0 1 7 14m0 4q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q1.676 0 3.037.825A6.2 6.2 0 0 1 12.2 9h8.375q.2 0 .387.075.188.075.338.225l2 2q.15.15.212.325.063.175.063.375t-.062.375a.9.9 0 0 1-.213.325l-3.175 3.175a1 1 0 0 1-.3.2q-.175.075-.35.1a.8.8 0 0 1-.35-.025.9.9 0 0 1-.325-.175L17.5 15l-1.425 1.075a.95.95 0 0 1-.887.15.9.9 0 0 1-.288-.15L13.375 15H12.2a6.2 6.2 0 0 1-2.162 2.175Q8.675 18 7 18m0-2q1.4 0 2.463-.85A4.03 4.03 0 0 0 10.875 13H14l1.45 1.025L17.5 12.5l1.775 1.375L21.15 12l-1-1h-9.275a4.03 4.03 0 0 0-1.412-2.15Q8.4 8 7 8 5.35 8 4.175 9.175T3 12t1.175 2.825T7 16"
+              />
+            </svg>
+            Enter recovery key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel when the user clicks on the reset cryptographic identity panel 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <nav
+        class="_breadcrumb"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Back"
+          class="_icon-button"
+          data-kind="secondary"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m13.3 17.3-4.6-4.6a.9.9 0 0 1-.213-.325A1.1 1.1 0 0 1 8.425 12q0-.2.062-.375A.9.9 0 0 1 8.7 11.3l4.6-4.6a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7L10.8 12l3.9 3.9a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </div>
+        </button>
+        <ol
+          class="_pages"
+        >
+          <li>
+            <a
+              class="_link"
+              data-kind="primary"
+              data-size="sm"
+              rel="noreferrer noopener"
+              role="button"
+              tabindex="0"
+            >
+              Encryption
+            </a>
+          </li>
+          <li>
+            <span
+              aria-current="page"
+              class="_last-page"
+            >
+              Reset encryption
+            </span>
+          </li>
+        </ol>
+      </nav>
+      <div
+        class="mx_EncryptionCard"
+      >
+        <div
+          class="mx_EncryptionCard_header"
+        >
+          <div
+            class="_big-icon"
+            data-kind="primary"
+            data-size="lg"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 15q-1.65 0-2.825-1.175T8 11t1.175-2.825T12 7t2.825 1.175T16 11t-1.175 2.825T12 15"
+              />
+              <path
+                d="M19.528 18.583A9.96 9.96 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.98 9.98 0 0 0 12 22a9.98 9.98 0 0 0 7.528-3.417M8.75 16.388q-1.373.332-2.709.95a8 8 0 1 1 11.918 0 14.7 14.7 0 0 0-2.709-.95A13.8 13.8 0 0 0 12 16q-1.65 0-3.25.387"
+              />
+            </svg>
+          </div>
+          <h2
+            class="_typography _font-heading-sm-semibold"
+          >
+            Are you sure you want to reset your digital identity?
+          </h2>
+        </div>
+        <div
+          class="_flex mx_EncryptionCard_emphasisedContent"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        >
+          <ul
+            class="_visual-list"
+          >
+            <li
+              class="_visual-list-item"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon _visual-list-item-icon-success"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+                />
+              </svg>
+              Your account details, contacts, preferences, and chat list will be kept
+            </li>
+            <li
+              class="_visual-list-item"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m16.1 13.3-1.45-1.45q.225-1.175-.675-2.2t-2.325-.8L10.2 7.4q.424-.2.863-.3A4.2 4.2 0 0 1 12 7q1.875 0 3.188 1.312Q16.5 9.625 16.5 11.5q0 .5-.1.938t-.3.862m3.2 3.15-1.45-1.4a11 11 0 0 0 1.688-1.588A9 9 0 0 0 20.8 11.5q-1.25-2.524-3.588-4.013Q14.875 6 12 6q-.724 0-1.425.1a10 10 0 0 0-1.375.3L7.65 4.85A11.1 11.1 0 0 1 12 4q3.575 0 6.425 1.887T22.7 10.8a.8.8 0 0 1 .1.313q.025.188.025.387a2 2 0 0 1-.125.7 10.9 10.9 0 0 1-3.4 4.25m-.2 5.45-3.5-3.45q-.874.274-1.762.413Q12.95 19 12 19q-3.575 0-6.425-1.887T1.3 12.2a.8.8 0 0 1-.1-.312 3 3 0 0 1 0-.763.8.8 0 0 1 .1-.3Q1.825 9.7 2.55 8.75A13.3 13.3 0 0 1 4.15 7L2.075 4.9a.93.93 0 0 1-.275-.688q0-.412.3-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275l17 17q.275.275.288.688a.93.93 0 0 1-.288.712.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275M5.55 8.4q-.725.65-1.325 1.425A9 9 0 0 0 3.2 11.5q1.25 2.524 3.588 4.012T12 17q.5 0 .975-.062.475-.063.975-.138l-.9-.95q-.274.075-.525.113A3.5 3.5 0 0 1 12 16q-1.875 0-3.187-1.312Q7.5 13.375 7.5 11.5q0-.274.038-.525.037-.25.112-.525z"
+                />
+              </svg>
+              You'll lose any encrypted chat history that's stored only on the server
+            </li>
+            <li
+              class="_visual-list-item"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 17.2q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 9 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.162 1.087Q17 16.35 17 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 15 20H3q-.824 0-1.412-.587A1.93 1.93 0 0 1 1 18zM21 20h-2.55q.274-.45.413-.962Q19 18.525 19 18v-1q0-1.1-.613-2.113-.612-1.012-1.737-1.737 1.275.15 2.4.512 1.125.363 2.1.888.9.5 1.375 1.112T23 17v1q0 .824-.587 1.413A1.93 1.93 0 0 1 21 20M9 12q-1.65 0-2.825-1.175T5 8t1.175-2.825T9 4t2.825 1.175T13 8t-1.175 2.825T9 12m10-4q0 1.65-1.175 2.825T15 12q-.275 0-.7-.062a6 6 0 0 1-.7-.138 6 6 0 0 0 1.037-1.775Q15 9.05 15 8t-.363-2.025A6 6 0 0 0 13.6 4.2a3 3 0 0 1 .7-.163Q14.65 4 15 4q1.65 0 2.825 1.175T19 8M3 18h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q4.85 15.675 3.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q11 8.826 11 8q0-.824-.588-1.412A1.93 1.93 0 0 0 9 6q-.825 0-1.412.588A1.93 1.93 0 0 0 7 8q0 .825.588 1.412Q8.175 10 9 10"
+                />
+              </svg>
+              Other users will see that your digital identity has been reset
+            </li>
+          </ul>
+          <span>
+            Only do this if you believe your account has been compromised.
+          </span>
+        </div>
+        <div
+          class="mx_EncryptionCard_buttons"
+        >
+          <button
+            aria-disabled="false"
+            class="_button _destructive"
+            data-kind="primary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Continue
+          </button>
+          <button
+            class="_button"
+            data-kind="tertiary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Go back
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key when the user clicks on the set up recovery key button 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <nav
+        class="_breadcrumb"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Back"
+          class="_icon-button"
+          data-kind="secondary"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m13.3 17.3-4.6-4.6a.9.9 0 0 1-.213-.325A1.1 1.1 0 0 1 8.425 12q0-.2.062-.375A.9.9 0 0 1 8.7 11.3l4.6-4.6a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7L10.8 12l3.9 3.9a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </div>
+        </button>
+        <ol
+          class="_pages"
+        >
+          <li>
+            <a
+              class="_link"
+              data-kind="primary"
+              data-size="sm"
+              rel="noreferrer noopener"
+              role="button"
+              tabindex="0"
+            >
+              Encryption
+            </a>
+          </li>
+          <li>
+            <span
+              aria-current="page"
+              class="_last-page"
+            >
+              Get recovery key
+            </span>
+          </li>
+        </ol>
+      </nav>
+      <div
+        class="mx_EncryptionCard mx_ChangeRecoveryKey"
+      >
+        <div
+          class="mx_EncryptionCard_header"
+        >
+          <div
+            class="_big-icon"
+            data-kind="primary"
+            data-size="lg"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.475 16.9A5.86 5.86 0 0 1 7 18q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q2.026 0 3.537 1.15Q12.05 8.3 12.65 10h7.95q.2 0 .387.075.189.075.338.225l1.025 1.025a1 1 0 0 1 .2.288q.075.162.075.362t-.062.375a1.1 1.1 0 0 1-.188.325l-2.25 2.575a.97.97 0 0 1-1.038.313 1 1 0 0 1-.337-.188L17 14l-1.3 1.3q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L13 14h-.35a5.8 5.8 0 0 1-2.175 2.9m-4.887-3.487Q6.175 14 7 14q.824 0 1.412-.588Q9 12.826 9 12t-.588-1.412A1.93 1.93 0 0 0 7 10q-.824 0-1.412.588A1.93 1.93 0 0 0 5 12q0 .825.588 1.412"
+              />
+            </svg>
+          </div>
+          <h2
+            class="_typography _font-heading-sm-semibold"
+          >
+            Save your recovery key somewhere safe
+          </h2>
+          <span>
+            Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
+          </span>
+        </div>
+        <div
+          class="mx_KeyPanel"
+        >
+          <span
+            class="_typography _font-body-md-medium"
+          >
+            Recovery key
+          </span>
+          <div>
+            <span
+              class="_typography _font-body-md-regular mx_KeyPanel_key"
+              data-testid="recoveryKey"
+            >
+              encoded private key
+            </span>
+            <span
+              class="_typography _font-body-sm-regular"
+            >
+              Do not share this with anyone!
+            </span>
+          </div>
+          <button
+            aria-label="Copy"
+            class="_icon-button"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 28px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div
+          class="mx_EncryptionCard_buttons"
+        >
+          <button
+            class="_button"
+            data-kind="primary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Continue
+          </button>
+          <button
+            class="_button"
+            data-kind="tertiary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

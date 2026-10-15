@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { expect, type Locator, type Page } from "@playwright/test";
+import { errors, expect, type Locator, type Page } from "@playwright/test";
 
 /**
  * Assert that no toasts exist.
@@ -118,6 +118,11 @@ export async function rejectToastIfExists(
 }
 
 /**
+ * How long to try clicking a button on a toast which is not required to exist, in ms.
+ */
+const OPTIONAL_TOAST_CLICK_TIMEOUT = 2000;
+
+/**
  * Find the toast with the supplied title and click a button on it.
  *
  * Only works if this toast is at the top of the stack of toasts.
@@ -137,7 +142,8 @@ export async function rejectToastIfExists(
  * @param required - If true, fail the test (throw an exception) if the
  *                   toast is not visible. Otherwise, just return after
  *                   `timeout` if the toast is not visible.
- * @returns true if the toast was found and the button was clicked, or false if the toast was not found (always returns true if `required` is true).
+ * @returns true if the toast was found and the button was clicked, or false if the toast was not found or
+ *          disappeared before it could be clicked (always returns true if `required` is true).
  */
 async function clickToastButton(
     page: Page,
@@ -153,9 +159,21 @@ async function clickToastButton(
         toast = await getToastIfExists(page, title, timeout);
     }
 
-    if (toast) {
-        await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
+    if (!toast) return false;
+
+    const buttonLocator = toast.getByTestId("toast-buttons").locator(`button[data-kind="${button}"]`);
+    if (required) {
+        await buttonLocator.click();
         return true;
     }
-    return false;
+
+    // The toast may disappear between finding it and clicking it, e.g. one still on its way out after an earlier
+    // dismissal. The locator would then never match again, so don't let the click wait for the whole test timeout.
+    try {
+        await buttonLocator.click({ timeout: OPTIONAL_TOAST_CLICK_TIMEOUT });
+    } catch (e) {
+        if (e instanceof errors.TimeoutError && !(await toast.isVisible())) return false;
+        throw e;
+    }
+    return true;
 }

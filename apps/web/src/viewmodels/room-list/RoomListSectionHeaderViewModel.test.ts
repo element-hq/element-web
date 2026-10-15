@@ -67,7 +67,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(snapshot.isExpanded).toBe(true);
     });
 
-    it("should toggle expanded state on click", () => {
+    it("should toggle expanded state on click", async () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
@@ -76,18 +76,18 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
         expect(vm.isExpanded).toBe(true);
 
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
         expect(vm.getSnapshot().isExpanded).toBe(false);
         expect(onToggleExpanded).toHaveBeenCalledWith(false);
 
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(true);
         expect(vm.getSnapshot().isExpanded).toBe(true);
         expect(onToggleExpanded).toHaveBeenCalledWith(true);
     });
 
-    it("should track expanded state per space", () => {
+    it("should track expanded state per space", async () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
@@ -96,7 +96,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         // Default space: collapse
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
 
         // Switch to a different space: should default to expanded
@@ -104,14 +104,26 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(true);
 
         // Collapse in the new space
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(true);
 
         // Switch to the other space: should still be collapsed
         vm.setSpace("!space:server");
         expect(vm.isExpanded).toBe(false);
+    });
+
+    it("should start the Invites section collapsed", () => {
+        // The section appears on its own when an invitation arrives, so it must not push the list down
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: DefaultTagID.Invite,
+            title: "Invites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        expect(vm.getSnapshot().isExpanded).toBe(false);
     });
 
     it("should initialize expanded state from the persisted setting", () => {
@@ -127,7 +139,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.getSnapshot().isExpanded).toBe(false);
     });
 
-    it("should persist the expanded state at the device level on click", () => {
+    it("should persist the expanded state at the device level on click", async () => {
         const setValue = vi.spyOn(SettingsStore, "setValue");
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
@@ -136,7 +148,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             onToggleExpanded,
         });
 
-        vm.onClick();
+        await vm.onClick();
 
         expect(setValue).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
             "!space:server": { "m.favourite": false },
@@ -162,9 +174,11 @@ describe("RoomListSectionHeaderViewModel", () => {
 
     describe("displaySectionMenu", () => {
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, false],
+            [DefaultTagID.DM, false],
             ["element.io.section.custom", true],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
@@ -178,11 +192,25 @@ describe("RoomListSectionHeaderViewModel", () => {
     });
 
     describe("canBeReordered", () => {
+        const customTag = "element.io.section.custom";
+
+        beforeEach(() => {
+            // A header is only rendered for a custom section that exists in the settings
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.CustomSectionData") return { [customTag]: { tag: customTag, name: "A" } };
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+        });
+
         it.each([
+            [DefaultTagID.Invite, false],
             [DefaultTagID.Favourite, false],
             [DefaultTagID.LowPriority, false],
             [CHATS_TAG, true],
-            ["element.io.section.custom", true],
+            [DefaultTagID.DM, true],
+            [customTag, true],
+            ["element.io.section.deleted", false],
         ])("should be %s for tag %s", (tag, expected) => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag,
@@ -191,6 +219,37 @@ describe("RoomListSectionHeaderViewModel", () => {
                 onToggleExpanded,
             });
             expect(vm.getSnapshot().canBeReordered).toBe(expected);
+        });
+    });
+
+    describe("acceptedRoomKind", () => {
+        function makeViewModel(tag: string, showPeopleSection = true): RoomListSectionHeaderViewModel {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showPeopleSection") return showPeopleSection;
+                if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+                return null;
+            });
+            return new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+        }
+
+        it.each([
+            [DefaultTagID.DM, "dm"],
+            [CHATS_TAG, "nonDm"],
+            [DefaultTagID.Invite, "none"],
+            [DefaultTagID.Favourite, "any"],
+            [DefaultTagID.LowPriority, "any"],
+            ["element.io.section.custom", "any"],
+        ])("should be %s for tag %s when the People section is shown", (tag, expected) => {
+            expect(makeViewModel(tag).getSnapshot().acceptedRoomKind).toBe(expected);
+        });
+
+        it("should let the Chats section accept any room when the People section is hidden", () => {
+            expect(makeViewModel(CHATS_TAG, false).getSnapshot().acceptedRoomKind).toBe("any");
         });
     });
 
@@ -346,6 +405,37 @@ describe("RoomListSectionHeaderViewModel", () => {
             expect(vm.getSnapshot().isUnread).toBe(true);
         });
 
+        it("should collapse the Invites section once its invitations are gone", async () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: DefaultTagID.Invite,
+                title: "Invites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            await vm.onClick();
+            expect(vm.getSnapshot().isExpanded).toBe(true);
+
+            // The last invitation was accepted or rejected
+            vm.setRooms([]);
+
+            // Closed again, so the next invitation makes the section appear collapsed
+            expect(vm.getSnapshot().isExpanded).toBe(false);
+        });
+
+        it("should leave an expanded section expanded when it empties", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            vm.setRooms([]);
+
+            // Only the Invites section is collapsed on emptying
+            expect(vm.getSnapshot().isExpanded).toBe(true);
+        });
+
         it("should subscribe to new rooms and unsubscribe from removed rooms", () => {
             const room2 = mkRoom(matrixClient, "!room2:server");
             const notificationState2 = new RoomNotificationState(room2, false);
@@ -495,21 +585,35 @@ describe("RoomListSectionHeaderViewModel", () => {
                 );
             });
 
-            it("should aggregate an invitation from any room", () => {
-                vi.spyOn(notificationState, "invited", "get").mockReturnValue(true);
+            it("should report invitations as a count rather than an icon", () => {
+                const room2 = mkRoom(matrixClient, "!room2:server");
+                const notificationState2 = new RoomNotificationState(room2, false);
+                for (const state of [notificationState, notificationState2]) {
+                    // An invitation reports neither a mention nor a notification
+                    vi.spyOn(state, "invited", "get").mockReturnValue(true);
+                    vi.spyOn(state, "isMention", "get").mockReturnValue(false);
+                    vi.spyOn(state, "isNotification", "get").mockReturnValue(false);
+                }
+                vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
+                    .mockReturnValueOnce(notificationState)
+                    .mockReturnValue(notificationState2);
 
                 const vm = new RoomListSectionHeaderViewModel({
-                    tag: "m.favourite",
-                    title: "Favourites",
+                    tag: DefaultTagID.Invite,
+                    title: "Invites",
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
-                vm.setRooms([room]);
+                vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
                     expect.objectContaining({
                         hasAnyNotificationOrActivity: true,
-                        invited: true,
+                        // Counted as a notification so that the collapsed header renders the badge
+                        isNotification: true,
+                        count: 2,
+                        // The count is shown on its own, without the invitation icon
+                        invited: false,
                     }),
                 );
             });

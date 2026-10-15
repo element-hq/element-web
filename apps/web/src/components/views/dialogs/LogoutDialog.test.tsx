@@ -56,11 +56,46 @@ describe("LogoutDialog", () => {
         expect(rendered.container).toMatchSnapshot();
     });
 
-    it("shows a regular dialog if backups and recovery are working", async () => {
-        mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
-        mockCrypto.isSecretStorageReady.mockResolvedValue(true);
-        const rendered = renderComponent();
-        await expect(rendered.findByText("Are you sure you want to remove this device?")).resolves.toBeVisible();
+    describe("when this is the only device and backups and recovery are working", () => {
+        beforeEach(() => {
+            mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+            mockCrypto.isSecretStorageReady.mockResolvedValue(true);
+            vi.spyOn(dispatch, "dispatch").mockImplementation(() => {});
+        });
+
+        it("reminds the user to check their recovery key", async () => {
+            const rendered = renderComponent();
+            await rendered.findByText("Make sure you have access to your recovery key before removing this device");
+            expect(rendered.container).toMatchSnapshot();
+        });
+
+        it("logs out on continue", async () => {
+            const onFinished = vi.fn();
+            renderComponent({ onFinished });
+            fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
+            expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
+            expect(onFinished).toHaveBeenCalledWith(true);
+        });
+
+        it("opens settings to generate a new recovery key", async () => {
+            renderComponent();
+            fireEvent.click(await screen.findByRole("button", { name: "Generate new recovery key" }));
+            expect(dispatch.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+                props: { initialEncryptionState: "change_recovery_key" },
+            });
+        });
+
+        it("opens settings to check the recovery key", async () => {
+            renderComponent();
+            fireEvent.click(await screen.findByRole("button", { name: "Check your recovery key" }));
+            expect(dispatch.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+                props: { initialEncryptionState: "main" },
+            });
+        });
     });
 
     it("shows a regular dialog if the user has another verified device", async () => {
@@ -88,7 +123,11 @@ describe("LogoutDialog", () => {
         mockCrypto.getDeviceVerificationStatus.mockResolvedValue(new DeviceVerificationStatus({ signedByOwner: true }));
 
         const rendered = renderComponent();
-        await expect(rendered.findByText("Are you sure you want to remove this device?")).resolves.toBeVisible();
+        await expect(
+            rendered.findByText(
+                "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.",
+            ),
+        ).resolves.toBeVisible();
     });
 
     it("prompts user to set up recovery if backups are enabled but recovery isn't", async () => {

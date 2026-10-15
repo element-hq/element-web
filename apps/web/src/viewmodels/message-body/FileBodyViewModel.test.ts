@@ -18,6 +18,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { FileBodyViewModel } from "./FileBodyViewModel";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { openDocumentViewer } from "../../utils/documentViewer";
 
 const mockDownload = vi.fn();
 
@@ -29,6 +30,11 @@ vi.mock("../../utils/FileDownloader", () => ({
     }),
 }));
 
+vi.mock("../../utils/documentViewer", async (importOriginal) => ({
+    ...(await importOriginal<typeof import("../../utils/documentViewer")>()),
+    openDocumentViewer: vi.fn(),
+}));
+
 vi.mock("../../customisations/Media", () => ({
     mediaFromContent: vi.fn((content: { file?: unknown; url?: string }) => ({
         isEncrypted: !!content.file,
@@ -38,7 +44,13 @@ vi.mock("../../customisations/Media", () => ({
 
 describe("FileBodyViewModel", () => {
     const mkMediaEvent = (
-        content: Partial<{ body: string; msgtype: string; url: string; file: Record<string, unknown> }>,
+        content: Partial<{
+            body: string;
+            msgtype: string;
+            url: string;
+            file: Record<string, unknown>;
+            info: Record<string, unknown>;
+        }>,
     ): MatrixEvent =>
         new MatrixEvent({
             room_id: "!room:server",
@@ -76,6 +88,7 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
+            documentPreviewsEnabled: false,
             ...overrides,
         });
 
@@ -308,5 +321,130 @@ describe("FileBodyViewModel", () => {
         await vm.onDownloadClick();
 
         expect(vm.getSnapshot().state).toBe(FileBodyViewState.UNENCRYPTED);
+    });
+
+    describe("open in viewer", () => {
+        const pdf = { info: { mimetype: "application/pdf" } };
+
+        /** The lab flag is read by the view and handed in, so a test just sets it directly. */
+        const createPdfVm = (
+            overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
+        ): FileBodyViewModel => createVm({ documentPreviewsEnabled: true, ...overrides });
+
+        it("does not offer the viewer while the lab is off", () => {
+            const vm = createPdfVm({
+                documentPreviewsEnabled: false,
+                mxEvent: mkMediaEvent(pdf),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+            expect(vm.getSnapshot().showInlineDownload).toBe(false);
+        });
+
+        it("offers the viewer for a PDF shown as a file in the timeline", () => {
+            const vm = createPdfVm({
+                mxEvent: mkMediaEvent(pdf),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open PDF" });
+        });
+
+        it("offers the viewer for an encrypted PDF, which decrypts on open", () => {
+            const vm = createPdfVm({
+                mxEvent: mkMediaEvent({ ...pdf, file: { url: "mxc://server/file" } }),
+                mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot()).toMatchObject({
+                state: FileBodyViewState.DECRYPTION_PENDING,
+                showOpen: true,
+            });
+        });
+
+        it.each([
+            ["a non-PDF mimetype", { info: { mimetype: "text/plain" } }],
+            ["no mimetype at all", {}],
+        ])("does not offer the viewer for %s", (_label, content) => {
+            const vm = createPdfVm({
+                mxEvent: mkMediaEvent(content),
+                showFileInfo: true,
+                timelineRenderingType: TimelineRenderingType.Room,
+            });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("does not offer the viewer in the download-only panels", () => {
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("does not offer the viewer in an export", () => {
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
+
+            expect(vm.getSnapshot().showOpen).toBeUndefined();
+        });
+
+        it("does not offer the viewer without a media helper to fetch the bytes", () => {
+            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
+
+            expect(vm.getSnapshot().showOpen).toBe(false);
+        });
+
+        it("opens the viewer for its own event on click", () => {
+            const mxEvent = mkMediaEvent(pdf);
+            const vm = createPdfVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
+
+            vm.onOpenClick();
+
+            expect(openDocumentViewer).toHaveBeenCalledWith(mxEvent);
+        });
+
+        describe("for Markdown", () => {
+            const markdown = { body: "README.md", info: { mimetype: "text/markdown" } };
+
+            it("offers the Markdown viewer while the lab is on", () => {
+                const vm = createVm({
+                    documentPreviewsEnabled: true,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open Markdown" });
+            });
+
+            it("does not offer the Markdown viewer while the lab is off", () => {
+                const vm = createVm({
+                    documentPreviewsEnabled: false,
+                    mxEvent: mkMediaEvent(markdown),
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                expect(vm.getSnapshot().showOpen).toBe(false);
+            });
+
+            it("opens the Markdown viewer for its own event on click", () => {
+                const mxEvent = mkMediaEvent(markdown);
+                const vm = createVm({
+                    documentPreviewsEnabled: true,
+                    mxEvent,
+                    showFileInfo: true,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+
+                vm.onOpenClick();
+
+                expect(openDocumentViewer).toHaveBeenCalledWith(mxEvent);
+            });
+        });
     });
 });

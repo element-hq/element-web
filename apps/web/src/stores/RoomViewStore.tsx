@@ -10,17 +10,20 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, type Room, type MatrixEvent, type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixError,
+    JoinRule,
+    type Room,
+    type MatrixEvent,
+    type IJoinRoomOpts,
+    type RoomSummary,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
 // oxlint-disable-next-line no-restricted-imports
 import EventEmitter from "events";
-import {
-    RoomViewLifecycle,
-    type ViewRoomOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -48,7 +51,6 @@ import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -113,8 +115,10 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
-
-    viewRoomOpts: ViewRoomOpts;
+    /**
+     * The summary of the room being viewed, if one was fetched because the client doesn't know the room.
+     */
+    roomSummary?: RoomSummary;
 }
 
 const INITIAL_STATE: State = {
@@ -136,7 +140,6 @@ const INITIAL_STATE: State = {
     wasContextSwitch: false,
     viewingCall: false,
     promptAskToJoin: false,
-    viewRoomOpts: { buttons: [] },
 };
 
 type Listener = (isActive: boolean) => void;
@@ -191,6 +194,8 @@ export class RoomViewStore extends EventEmitter {
 
         const lastRoomId = this.state.roomId;
         this.state = Object.assign(this.state, newState);
+        // A summary only describes the room it was fetched for.
+        if (lastRoomId !== this.state.roomId) this.state.roomSummary = undefined;
         if (!this.lockedToRoomId && lastRoomId !== this.state.roomId) {
             if (lastRoomId) this.emitForRoom(lastRoomId, false);
             if (this.state.roomId) this.emitForRoom(this.state.roomId, true);
@@ -327,10 +332,6 @@ export class RoomViewStore extends EventEmitter {
             }
             case Action.CancelAskToJoin: {
                 this.cancelAskToJoin(payload as CancelAskToJoinPayload);
-                break;
-            }
-            case Action.RoomLoaded: {
-                this.setViewRoomOpts();
                 break;
             }
         }
@@ -698,6 +699,23 @@ export class RoomViewStore extends EventEmitter {
         return this.state.roomId;
     }
 
+    /**
+     * Keep the summary of the room being viewed.
+     * @param roomId The id of the room the summary was fetched for. The summary is ignored if this room isn't open.
+     * @param summary The summary of the room.
+     */
+    public setRoomSummary(roomId: string, summary: RoomSummary | undefined): void {
+        if (roomId !== this.state.roomId) return;
+        this.setState({ roomSummary: summary });
+    }
+
+    /**
+     * The summary of the room being viewed, if one was fetched.
+     */
+    public getRoomSummary(): RoomSummary | undefined {
+        return this.state.roomSummary;
+    }
+
     public getThreadId(): string | null {
         return this.state.threadId;
     }
@@ -773,6 +791,15 @@ export class RoomViewStore extends EventEmitter {
         return this.state.shouldPeek;
     }
 
+    /**
+     * Servers which are known to know about the room currently being viewed.
+     *
+     * @returns the via servers, which may be empty if we reached the room without any.
+     */
+    public getViaServers(): string[] {
+        return this.state.viaServers;
+    }
+
     public getWasContextSwitch(): boolean {
         return this.state.wasContextSwitch;
     }
@@ -823,26 +850,6 @@ export class RoomViewStore extends EventEmitter {
                     description: err.message,
                 }),
             );
-    }
-
-    /**
-     * Gets the current state of the 'viewRoomOpts' property.
-     *
-     * @returns {ViewRoomOpts} The value of the 'viewRoomOpts' property.
-     */
-    public getViewRoomOpts(): ViewRoomOpts {
-        return this.state.viewRoomOpts;
-    }
-
-    /**
-     * Invokes the view room lifecycle to set the view room options.
-     *
-     * @returns {void}
-     */
-    private setViewRoomOpts(): void {
-        const viewRoomOpts: ViewRoomOpts = { buttons: [] };
-        ModuleRunner.instance.invoke(RoomViewLifecycle.ViewRoom, viewRoomOpts, this.getRoomId());
-        this.setState({ viewRoomOpts });
     }
 
     /**

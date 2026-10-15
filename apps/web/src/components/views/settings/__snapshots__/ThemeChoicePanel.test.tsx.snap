@@ -1,0 +1,577 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root"
+      >
+        <div
+          class="_inline-field"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-1"
+                name="systemTheme"
+                role="switch"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label"
+              for="radix-react-use-id-1"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                checked=""
+                class="_input"
+                id="radix-react-use-id-2"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-2"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-3"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-3"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-4"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-4"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-5"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="custom-Alice theme"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-5"
+            >
+              Alice theme
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme section 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root"
+      >
+        <div
+          class="_inline-field"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-1"
+                name="systemTheme"
+                role="switch"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label"
+              for="radix-react-use-id-1"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                checked=""
+                class="_input"
+                id="radix-react-use-id-2"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-2"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-3"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-3"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-4"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-4"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-5"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="custom-Alice theme"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-5"
+            >
+              Alice theme
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root"
+      >
+        <div
+          class="_inline-field"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-1"
+                name="systemTheme"
+                role="switch"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label"
+              for="radix-react-use-id-1"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                checked=""
+                class="_input"
+                id="radix-react-use-id-2"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-2"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-3"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-3"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                class="_input"
+                id="radix-react-use-id-4"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-react-use-id-4"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;

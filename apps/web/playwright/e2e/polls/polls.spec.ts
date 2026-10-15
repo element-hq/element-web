@@ -293,7 +293,7 @@ test.describe("Polls", () => {
 
             // Take snapshots of poll on ThreadView
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']").first()).toBeVisible();
+            await expect(page.locator(".mx_ThreadView .mx_EventTile").first()).toBeVisible();
             await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
                 "ThreadView_with_a_poll_on_bubble_layout.png",
                 {
@@ -306,7 +306,7 @@ test.describe("Polls", () => {
             );
 
             await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-            await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='group']").first()).toBeVisible();
+            await expect(page.locator(".mx_ThreadView .mx_EventTile").first()).toBeVisible();
 
             await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
                 "ThreadView_with_a_poll_on_group_layout.png",

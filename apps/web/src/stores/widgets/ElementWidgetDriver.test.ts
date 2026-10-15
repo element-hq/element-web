@@ -31,17 +31,11 @@ import {
     OpenIDRequestState,
     type IOpenIDUpdate,
 } from "matrix-widget-api";
-import {
-    type ApprovalOpts,
-    type CapabilitiesOpts,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import { mkEvent, stubClient } from "test-utils";
 
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
@@ -97,6 +91,8 @@ describe("ElementWidgetDriver", () => {
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
             "org.matrix.msc4515.rtc_transports",
+            "org.matrix.msc4533.rtc_livekit_get_token",
+            "org.matrix.msc4533.rtc_livekit_delegate_delayed_leave",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -111,6 +107,7 @@ describe("ElementWidgetDriver", () => {
             "org.matrix.msc2762.receive.state_event:m.room.create",
             "org.matrix.msc2762.receive.state_event:m.room.name",
             "org.matrix.msc2762.receive.state_event:m.room.member",
+            "org.matrix.msc2762.receive.state_event:io.element.functional_members",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
@@ -159,42 +156,6 @@ describe("ElementWidgetDriver", () => {
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
 
-    it("approves capabilities via module api", async () => {
-        const driver = mkDefaultDriver();
-
-        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
-
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo, requested) => {
-            if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
-                (opts as CapabilitiesOpts).approvedCapabilities = requested;
-            }
-        });
-
-        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
-        expect(approvedCapabilities).toEqual(requestedCapabilities);
-    });
-
-    it("approves identity via module api", async () => {
-        const driver = mkDefaultDriver();
-
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
-                (opts as ApprovalOpts).approved = true;
-            }
-        });
-
-        const listener = vi.fn();
-        const observer = new SimpleObservable<IOpenIDUpdate>();
-        observer.onUpdate(listener);
-        await driver.askOpenID(observer);
-
-        const openIdUpdate: IOpenIDUpdate = {
-            state: OpenIDRequestState.Allowed,
-            token: await client.getOpenIdToken(),
-        };
-        expect(listener).toHaveBeenCalledWith(openIdUpdate);
-    });
-
     it("approves capabilities via new widget lifecycle API", async () => {
         const driver = mkDefaultDriver();
 
@@ -206,48 +167,10 @@ describe("ElementWidgetDriver", () => {
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
 
-    it("falls back to legacy module API when new API returns undefined for capabilities", async () => {
-        const driver = mkDefaultDriver();
-
-        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
-
-        vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveCapabilities").mockResolvedValue(undefined);
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo, requested) => {
-            if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
-                (opts as CapabilitiesOpts).approvedCapabilities = requested;
-            }
-        });
-
-        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
-        expect(approvedCapabilities).toEqual(requestedCapabilities);
-    });
-
     it("approves identity via new widget lifecycle API", async () => {
         const driver = mkDefaultDriver();
 
         vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(true);
-
-        const listener = vi.fn();
-        const observer = new SimpleObservable<IOpenIDUpdate>();
-        observer.onUpdate(listener);
-        await driver.askOpenID(observer);
-
-        const openIdUpdate: IOpenIDUpdate = {
-            state: OpenIDRequestState.Allowed,
-            token: await client.getOpenIdToken(),
-        };
-        expect(listener).toHaveBeenCalledWith(openIdUpdate);
-    });
-
-    it("falls back to legacy module API when new API returns false for identity", async () => {
-        const driver = mkDefaultDriver();
-
-        vi.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(false);
-        vi.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
-                (opts as ApprovalOpts).approved = true;
-            }
-        });
 
         const listener = vi.fn();
         const observer = new SimpleObservable<IOpenIDUpdate>();
@@ -499,6 +422,64 @@ describe("ElementWidgetDriver", () => {
             await expect(driver.getRtcTransports()).resolves.toEqual({ rtc_transports: transports });
 
             expect(client.waitForClientWellKnown).toHaveBeenCalled();
+        });
+    });
+
+    describe("getRtcLivekitToken", () => {
+        let driver: WidgetDriver;
+        const request = {
+            server_name: "example.org",
+            url: "wss://livekit.example.org",
+            room_id: "!1:example.org",
+            slot_id: "m.call",
+            member_id: "member-id",
+        };
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets a LiveKit token from the homeserver", async () => {
+            client._unstable_getLivekitToken.mockResolvedValue({ jwt: "the-jwt" });
+
+            await expect(driver.getRtcLivekitToken(request)).resolves.toEqual({ jwt: "the-jwt" });
+            expect(client._unstable_getLivekitToken).toHaveBeenCalledWith(request);
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_FORBIDDEN", error: "Not in room" }, 403);
+            client._unstable_getLivekitToken.mockRejectedValue(error);
+
+            await expect(driver.getRtcLivekitToken(request)).rejects.toBe(error);
+        });
+    });
+
+    describe("delegateRtcLivekitDelayedLeave", () => {
+        let driver: WidgetDriver;
+        const request = {
+            url: "wss://livekit.example.org",
+            room_id: "!1:example.org",
+            slot_id: "m.call",
+            member_id: "member-id",
+            delay_id: "delay-id",
+        };
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("delegates the delayed leave event to the homeserver", async () => {
+            client._unstable_delegateDelayedLeave.mockResolvedValue({});
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).resolves.toEqual({});
+            expect(client._unstable_delegateDelayedLeave).toHaveBeenCalledWith(request);
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Unrecognized request" }, 404);
+            client._unstable_delegateDelayedLeave.mockRejectedValue(error);
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).rejects.toBe(error);
         });
     });
 

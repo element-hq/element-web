@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect } from "vitest";
 
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore, { type IToast } from "./ToastStore";
 
 describe("ToastStore", () => {

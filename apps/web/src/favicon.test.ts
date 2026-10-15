@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import "vitest-canvas-mock";
 
 import Favicon from "./favicon";
@@ -17,10 +17,13 @@ vi.useFakeTimers();
 
 describe("Favicon", () => {
     beforeEach(() => {
-        vi.restoreAllMocks();
         document.getElementsByTagName("head")[0]?.remove();
         const head = document.createElement("head");
         window.document.documentElement.prepend(head);
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     it("should create a link element if one doesn't yet exist", () => {

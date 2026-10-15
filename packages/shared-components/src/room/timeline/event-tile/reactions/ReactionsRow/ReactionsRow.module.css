@@ -28,6 +28,9 @@
 
 .addReactionButton {
     all: unset;
+    /* The host decides where the control sits. Own-message bubbles put it at
+       the start so the reactions stay flush with the bubble edge. */
+    order: var(--event-tile-reactions-add-button-order, 0);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -37,7 +40,9 @@
     margin-inline: var(--cpd-space-1x);
     border-radius: var(--cpd-space-1x);
     color: var(--cpd-color-icon-secondary);
-    visibility: hidden;
+    /* Hidden until the host says the event is hovered. Standalone hosts that
+       set nothing keep the row-scoped fallback below. */
+    visibility: var(--event-tile-add-reaction-visibility, hidden);
     cursor: pointer;
 }
 

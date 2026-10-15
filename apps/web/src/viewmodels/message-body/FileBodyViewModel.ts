@@ -27,6 +27,7 @@ import { FileDownloader } from "../../utils/FileDownloader";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
 
 export interface FileBodyViewModelProps {
     mxEvent: MatrixEvent;
@@ -36,6 +37,8 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
+    /** Whether the document previews lab is on. Read by the view, so this model needs no settings access. */
+    documentPreviewsEnabled: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -153,6 +156,17 @@ export class FileBodyViewModel
             : undefined;
         const fileInfoIcon = showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined;
         const downloadLabel = showDownload ? downloadLabelForFile(content, true) : undefined;
+        // Offer a viewer wherever the file is presented as a file, i.e. not in an export and not in
+        // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
+        const viewer =
+            showFileInfo && !props.forExport && !!props.mediaEventHelper && props.documentPreviewsEnabled
+                ? documentViewerForEvent(props.mxEvent)
+                : undefined;
+        const showOpen = !!viewer;
+        const openLabel = viewer?.openLabel();
+        // Once the row carries an action for opening, downloading needs to be an action too rather than
+        // staying hidden behind a click on the file name.
+        const showInlineDownload = showOpen;
         const downloadTitle = showDownload
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
             : undefined;
@@ -180,6 +194,9 @@ export class FileBodyViewModel
                 showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
+                showOpen,
+                openLabel,
+                showInlineDownload,
             };
         }
 
@@ -194,6 +211,9 @@ export class FileBodyViewModel
                 downloadLabel,
                 downloadTitle: downloadTitle,
                 downloadHref: media.srcHttp,
+                showOpen,
+                openLabel,
+                showInlineDownload,
             };
         }
 
@@ -268,6 +288,8 @@ export class FileBodyViewModel
             name: this.fileName,
         });
     };
+
+    public onOpenClick = (): void => openDocumentViewer(this.props.mxEvent);
 
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 
