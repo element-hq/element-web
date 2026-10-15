@@ -174,32 +174,11 @@ interface ILoadSessionOpts {
  */
 export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
-        let enableGuest = opts.enableGuest || false;
+        const enableGuest = opts.enableGuest || false;
         const guestHsUrl = opts.guestHsUrl;
         const guestIsUrl = opts.guestIsUrl;
-        const urlParams = opts.urlParams;
         const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-        if (enableGuest && !guestHsUrl) {
-            logger.warn("Cannot enable guest access: can't determine HS URL to use");
-            enableGuest = false;
-        }
-
-        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
-            logger.log("Using guest access credentials");
-            await doSetLoggedIn(
-                {
-                    userId: urlParams.guest.guest_user_id,
-                    accessToken: urlParams.guest.guest_access_token,
-                    homeserverUrl: guestHsUrl,
-                    identityServerUrl: guestIsUrl,
-                    guest: true,
-                },
-                true,
-                false,
-            );
-            return true;
-        }
         const success = await restoreSessionFromStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
         });

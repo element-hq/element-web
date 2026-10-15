@@ -51,10 +51,4 @@ describe("parseUrlParameters", () => {
         expect(parsed.params.oauth2?.code).toEqual("foobar");
         expect(parsed.params.oauth2?.state).toEqual("barfoo");
     });
-
-    it("should parse guest parameters", () => {
-        const u = new URL("https://app.element.io?foo=bar#/room/!roomId:server?guest_access_token=foobar");
-        const parsed = parseAppUrl(u);
-        expect(parsed.params.guest?.guest_access_token).toEqual("foobar");
-    });
 });

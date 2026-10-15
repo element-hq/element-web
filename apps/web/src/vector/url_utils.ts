@@ -69,11 +69,6 @@ const urlParameterConfig = {
         keys: ["defaultUsername"],
         location: "fragment",
     },
-    // XXX: Fragment params seemingly relating to 3pid invites, though the code in the area doubts they are ever specified
-    guest: {
-        keys: ["guest_user_id", "guest_access_token"],
-        location: "fragment",
-    },
 } as const satisfies Record<
     string,
     {
