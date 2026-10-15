@@ -297,7 +297,13 @@ export class RoomListViewModel
             }
             this.roomItemViewModels.clear();
             this.previewItem?.dispose();
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.dispose();
+            }
+            this.roomSectionHeaderViewModels.clear();
         });
+
+        this.disposables.track(() => clearTimeout(this.toastRef));
 
         // A room may already be open when the list is created
         this.onRoomViewStoreUpdate();
