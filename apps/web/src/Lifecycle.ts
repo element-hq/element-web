@@ -173,23 +173,6 @@ function getGuestHsUrl(opts: ILoadSessionOpts): string | undefined {
  */
 async function tryLoadSession(opts: ILoadSessionOpts): Promise<boolean> {
     const guestHsUrl = getGuestHsUrl(opts);
-    const guestCreds = opts.urlParams?.guest;
-
-    if (guestHsUrl && guestCreds?.guest_user_id && guestCreds.guest_access_token) {
-        logger.log("Using guest access credentials");
-        await doSetLoggedIn(
-            {
-                userId: guestCreds.guest_user_id,
-                accessToken: guestCreds.guest_access_token,
-                homeserverUrl: guestHsUrl,
-                identityServerUrl: opts.guestIsUrl,
-                guest: true,
-            },
-            true,
-            false,
-        );
-        return true;
-    }
 
     if (await restoreSessionFromStorage({ ignoreGuest: Boolean(opts.ignoreGuest) })) {
         return true;
