@@ -8,7 +8,7 @@
 import { type Page } from "@playwright/test";
 import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
-import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
+import type { AccountDataEvents, Visibility } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
@@ -422,8 +422,7 @@ test.describe("Room list", () => {
             }
 
             // Not world readable, so the client can't peek and the room list item comes from the room summary
-            // @ts-ignore Visibility enum is not accessible
-            const summaryRoomId = await bot.createRoom({ name: "Summary room", visibility: "public" });
+            const summaryRoomId = await bot.createRoom({ name: "Summary room", visibility: "public" as Visibility });
 
             const roomListView = getRoomList(page);
             await expect(roomListView.getByRole("button", { name: "Open room favourite9" })).toBeVisible();
