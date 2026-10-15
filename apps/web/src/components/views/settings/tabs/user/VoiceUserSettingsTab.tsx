@@ -26,6 +26,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SdkConfig from "../../../../../SdkConfig";
+import { BackgroundAudio } from "../../../../../audio/BackgroundAudio";
 
 interface IState {
     mediaDevices: IMediaDevices | null;
@@ -36,6 +37,7 @@ interface IState {
     audioEchoCancellation: boolean;
     audioNoiseSuppression: boolean;
     enableLegacyCallsVoip: boolean;
+    ringtoneAudioOutput: string;
 }
 
 /**
@@ -69,6 +71,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
             audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation(),
             audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression(),
             enableLegacyCallsVoip: SettingsStore.getValue("enableLegacyCallsVoip"),
+            ringtoneAudioOutput: SettingsStore.getValue("webrtc_ringtone_audiooutput"),
         };
     }
 
@@ -125,6 +128,11 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         }
     };
 
+    private setRingtoneAudioOutput = async (deviceId: string): Promise<void> => {
+        this.setState({ ringtoneAudioOutput: deviceId });
+        await SettingsStore.setValue("webrtc_ringtone_audiooutput", null, SettingLevel.DEVICE, deviceId);
+    };
+
     private changeWebRtcMethod = (p2p: boolean): void => {
         this.context.setForceTURN(!p2p);
     };
@@ -152,6 +160,27 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                 onChange={(e) => this.setDevice(e.target.value, kind)}
             >
                 {this.renderDeviceOptions(devices, kind)}
+            </Field>
+        );
+    }
+
+    private renderRingtoneDropdown(): ReactNode {
+        // Choosing an output device for the ringtone relies on AudioContext.setSinkId, so don't offer
+        // a choice that would have no effect.
+        if (!BackgroundAudio.supportsSinkId()) return null;
+
+        const devices = this.state.mediaDevices?.[MediaDeviceKindEnum.AudioOutput].slice(0);
+        if (!devices?.length) return null;
+
+        const defaultDevice = MediaDeviceHandler.getDefaultDevice(devices);
+        return (
+            <Field
+                element="select"
+                label={_t("settings|voip|ringtone_output")}
+                value={this.state.ringtoneAudioOutput || defaultDevice}
+                onChange={(e) => void this.setRingtoneAudioOutput(e.target.value)}
+            >
+                {this.renderDeviceOptions(devices, MediaDeviceKindEnum.AudioOutput)}
             </Field>
         );
     }
@@ -184,6 +213,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         let requestButton: ReactNode | undefined;
         let speakerDropdown: ReactNode | undefined;
         let microphoneDropdown: ReactNode | undefined;
+        let ringtoneDropdown: ReactNode | undefined;
 
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
@@ -205,6 +235,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                 MediaDeviceKindEnum.AudioOutput,
                 _t("settings|voip|audio_output"),
             ) || <p>{_t("settings|voip|audio_output_empty")}</p>;
+            ringtoneDropdown = this.renderRingtoneDropdown();
             microphoneDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("common|microphone")) || (
                 <p>{_t("settings|voip|audio_input_empty")}</p>
             );
@@ -264,6 +295,13 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         {requestButton}
                         {microphoneDropdown}
                     </SettingsSection>
+                    {ringtoneDropdown && (
+                        // The ringtone is used for Element Call as well as legacy calls, so it lives outside the
+                        // legacy settings.
+                        <SettingsSection heading={_t("settings|voip|ringtone_section")}>
+                            {ringtoneDropdown}
+                        </SettingsSection>
+                    )}
                     {allowLegacyCalls && (
                         <SettingsSection heading={_t("common|legacy_voice_and_video_settings")}>
                             {elementCallEnabled && (

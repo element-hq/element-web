@@ -357,6 +357,7 @@ describe("LegacyCallHandler without third party protocols", () => {
         suspend: vi.fn(),
         resume: vi.fn(),
         createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
+        setSinkId: vi.fn().mockResolvedValue(undefined),
         currentTime: 1337,
     };
 
@@ -448,6 +449,35 @@ describe("LegacyCallHandler without third party protocols", () => {
         await callHandler.play(AudioID.Ring);
         await callHandler.silenceCall("call123");
         expect(mockAudioBufferSourceNode.stop).toHaveBeenCalled();
+    });
+
+    it("should play the ringtone on the output device chosen for it", async () => {
+        vi.stubGlobal(
+            "AudioContext",
+            class {
+                public setSinkId(): void {}
+            },
+        );
+        const originalGetValue = SettingsStore.getValue;
+        const getValueSpy = vi
+            .spyOn(SettingsStore, "getValue")
+            .mockImplementation((settingName, ...rest) =>
+                settingName === "webrtc_ringtone_audiooutput" ? "speakers" : originalGetValue(settingName, ...rest),
+            );
+        fetchMock.get("end:/media/ringback.mp3", { body: new Blob(["1", "2", "3", "4"], { type: "audio/mpeg" }) });
+
+        try {
+            await callHandler.play(AudioID.Ring);
+            expect(mockAudioContext.setSinkId).toHaveBeenCalledWith("speakers");
+
+            // Other call sounds are left on the default output.
+            mockAudioContext.setSinkId.mockClear();
+            await callHandler.play(AudioID.Ringback);
+            expect(mockAudioContext.setSinkId).not.toHaveBeenCalled();
+        } finally {
+            getValueSpy.mockRestore();
+            vi.unstubAllGlobals();
+        }
     });
 
     it("should still start a native call", async () => {
