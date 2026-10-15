@@ -44,7 +44,7 @@ catalog:
     "@vitest/browser": 5.0.3
     "@vitest/spy": 5.0.3
     "@vitest/ui": 5.0.3
-    "@vitejs/plugin-react": 6.1.1
+    "@vitejs/plugin-react": 6.1.2
     unplugin-dts: 1.1.2
     # nx
     nx: 23.3.0
