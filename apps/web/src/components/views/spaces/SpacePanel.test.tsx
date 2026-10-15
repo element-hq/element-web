@@ -25,6 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import UnwrappedSpacePanel from "./SpacePanel";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -203,6 +204,32 @@ describe("<SpacePanel />", () => {
         await drop(room1);
 
         expect(sdkContext.spaceStore.moveRootSpace).toHaveBeenCalledWith(0, 1);
+    });
+
+    describe("module items", () => {
+        afterEach(() => {
+            ModuleApi.instance.extras.spacePanelItems.clear();
+            ModuleApi.instance.extras.visibleRoomBySpaceKey.clear();
+        });
+
+        it("switches to a module space that lists rooms", async () => {
+            const onSelected = vi.fn();
+            ModuleApi.instance.extras.setSpacePanelItem("mod", { label: "Mod", onSelected });
+            ModuleApi.instance.extras.getVisibleRoomBySpaceKey("mod", () => []);
+            render(<SpacePanel />);
+            fireEvent.click(await screen.findByRole("button", { name: "Mod" }));
+            expect(sdkContext.spaceStore.setActiveSpace).toHaveBeenCalledWith("mod");
+            expect(onSelected).toHaveBeenCalled();
+        });
+
+        it("does not switch space for a module item that only acts", async () => {
+            const onSelected = vi.fn();
+            ModuleApi.instance.extras.setSpacePanelItem("dialler", { label: "Dialler", onSelected });
+            render(<SpacePanel />);
+            fireEvent.click(await screen.findByRole("button", { name: "Dialler" }));
+            expect(sdkContext.spaceStore.setActiveSpace).not.toHaveBeenCalledWith("dialler");
+            expect(onSelected).toHaveBeenCalled();
+        });
     });
 
     it("should be able to open the user menu via dispatcher", async () => {
