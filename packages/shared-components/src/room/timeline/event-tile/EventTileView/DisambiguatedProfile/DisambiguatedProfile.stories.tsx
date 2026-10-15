@@ -125,3 +125,24 @@ export const WithBadge: Story = {
         ],
     },
 };
+
+export const WithLongNameAndBadge: Story = {
+    args: {
+        displayName: "A very long display name that does not fit",
+        displayIdentifier: "@guest-k4wmagvpdjkrk8zez6hs4aq:example.org",
+        colorClass: "mx_Username_color2",
+        emphasizeDisplayName: true,
+        badges: [
+            <Badge key="guest" kind="grey">
+                Guest
+            </Badge>,
+        ],
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: "250px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+};

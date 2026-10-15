@@ -102,7 +102,7 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
 
     const userStatusEmoji = userStatus && userStatus.emoji;
 
-    const displayNameClasses = classNames(colorClass, {
+    const displayNameClasses = classNames(styles.displayName, colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
@@ -127,27 +127,30 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
             tabIndex={vm.onClick ? 0 : undefined}
             {...eventPresentationAttributes}
         >
-            <span className={displayNameClasses} dir="auto">
-                {displayName}
-            </span>
-            {userStatus && (
-                <Tooltip description={userStatus.text} maxWidth="30ch" maxLines={1}>
-                    <Text
-                        as="span"
-                        size="md"
-                        className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
-                    >
-                        {userStatusEmoji}
-                    </Text>
-                </Tooltip>
-            )}
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
-            {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
-                    {displayIdentifier}
+            {/* mx_DisambiguatedProfile_content is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_content */}
+            <div className={classNames("mx_DisambiguatedProfile_content", styles.content)}>
+                <span className={displayNameClasses} dir="auto">
+                    {displayName}
                 </span>
-            )}
-            {badges && badges.length > 0 && <div className={styles.badges}>{badges}</div>}
+                {userStatus && (
+                    <Tooltip description={userStatus.text} maxWidth="30ch" maxLines={1}>
+                        <Text
+                            as="span"
+                            size="md"
+                            className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
+                        >
+                            {userStatusEmoji}
+                        </Text>
+                    </Tooltip>
+                )}
+                {badges && badges.length > 0 && <div className={styles.badges}>{badges}</div>}
+                {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+                {displayIdentifier && (
+                    <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                        {displayIdentifier}
+                    </span>
+                )}
+            </div>
         </div>
     );
 }

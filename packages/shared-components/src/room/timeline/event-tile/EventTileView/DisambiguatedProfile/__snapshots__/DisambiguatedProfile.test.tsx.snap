@@ -9,12 +9,16 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
     role="button"
     tabindex="0"
   >
-    <span
-      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Alice
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Alice
+      </span>
+    </div>
   </div>
 </div>
 `;
@@ -29,22 +33,26 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
     tabindex="0"
     title="Eve (@eve:matrix.org)"
   >
-    <span
-      class="mx_Username_color5 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Eve
-    </span>
-    <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_DisambiguatedProfile_userStatus DisambiguatedProfile-module_userStatus"
-    >
-      🏝️
-    </span>
-    <span
-      class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
-    >
-      @eve:matrix.org
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName mx_Username_color5 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Eve
+      </span>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_DisambiguatedProfile_userStatus DisambiguatedProfile-module_userStatus"
+      >
+        🏝️
+      </span>
+      <span
+        class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
+      >
+        @eve:matrix.org
+      </span>
+    </div>
   </div>
 </div>
 `;
@@ -58,17 +66,21 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
     role="button"
     tabindex="0"
   >
-    <span
-      class="mx_Username_color1 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Alice
-    </span>
-    <span
-      class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
-    >
-      @alice:example.org
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName mx_Username_color1 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Alice
+      </span>
+      <span
+        class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
+      >
+        @alice:example.org
+      </span>
+    </div>
   </div>
 </div>
 `;
@@ -82,12 +94,16 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
     role="button"
     tabindex="0"
   >
-    <span
-      class="mx_Username_color3 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Bob
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName mx_Username_color3 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Bob
+      </span>
+    </div>
   </div>
 </div>
 `;
@@ -101,12 +117,16 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
     role="button"
     tabindex="0"
   >
-    <span
-      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Charlie
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Charlie
+      </span>
+    </div>
   </div>
 </div>
 `;
@@ -121,12 +141,16 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
     tabindex="0"
     title="Diana (@diana:example.org)"
   >
-    <span
-      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-      dir="auto"
+    <div
+      class="mx_DisambiguatedProfile_content DisambiguatedProfile-module_content"
     >
-      Diana
-    </span>
+      <span
+        class="DisambiguatedProfile-module_displayName DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+        dir="auto"
+      >
+        Diana
+      </span>
+    </div>
   </div>
 </div>
 `;

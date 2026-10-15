@@ -39,12 +39,16 @@ exports[`ReplyChain > should call setQuoteExpanded if chain is longer than 2 lin
                 role="button"
                 tabindex="0"
               >
-                <span
-                  class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-                  dir="auto"
+                <div
+                  class="mx_DisambiguatedProfile_content _content"
                 >
-                  @userId:matrix.org
-                </span>
+                  <span
+                    class="_displayName mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                    dir="auto"
+                  >
+                    @userId:matrix.org
+                  </span>
+                </div>
               </div>
             </div>
             <div
