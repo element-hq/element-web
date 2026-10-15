@@ -27,7 +27,7 @@ catalog:
     serve: 14.2.6
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
-    "@vector-im/compound-web": "^10.4.0"
+    "@vector-im/compound-web": "10.4.0"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
