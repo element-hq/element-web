@@ -190,6 +190,7 @@ export default defineConfig({
         "element-web/require-lodash-cancel": "error",
         "element-web/no-subscribe-after-await": "error",
         "element-web/no-leaked-class-timer": "error",
+        "element-web/no-leaked-emitter-listener": "error",
         "react-web-api/no-leaked-event-listener": "error",
         "react-web-api/no-leaked-fetch": "error",
         "react-web-api/no-leaked-intersection-observer": "error",
