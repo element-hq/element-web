@@ -48,6 +48,8 @@ catalog:
     unplugin-dts: 1.1.2
     # nx
     nx: 23.3.0
+    # oxc
+    oxlint: 1.87.0
 
 catalogs:
     ts6:
