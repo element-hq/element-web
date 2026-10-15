@@ -188,6 +188,7 @@ export default defineConfig({
 
         // Catch work which outlives the component, hook or disposable class which started it
         "element-web/require-lodash-cancel": "error",
+        "element-web/no-subscribe-after-await": "error",
         "react-web-api/no-leaked-event-listener": "error",
         "react-web-api/no-leaked-fetch": "error",
         "react-web-api/no-leaked-intersection-observer": "error",

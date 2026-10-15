@@ -1789,8 +1789,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
 
-        const shouldForceVerification = await this.shouldForceVerification();
-
         const crypto = cli.getCrypto();
         if (crypto) {
             crypto.globalBlacklistUnverifiedDevices = SettingsStore.getValueAt(
@@ -1808,6 +1806,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 },
             );
         }
+
+        const shouldForceVerification = await this.shouldForceVerification();
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
         // Will be moved to a pre-login flow as well
