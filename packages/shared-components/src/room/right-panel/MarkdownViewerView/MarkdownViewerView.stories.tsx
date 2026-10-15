@@ -63,8 +63,11 @@ const meta = {
     },
     args: {
         status: "loading",
-        html: "",
+        content: "",
         onContentClick: fn(),
+        onFormatChange: fn(),
+        format: "rendered",
+        canToggleFormat: true,
     },
 } satisfies Meta<typeof MarkdownViewerStory>;
 
@@ -76,12 +79,23 @@ export const Loading: Story = {};
 export const Ready: Story = {
     args: {
         status: "ready",
-        html: sampleHtml,
+        content: sampleHtml,
     },
 };
 
 export const ErrorState: Story = {
     args: {
         status: "error",
+    },
+};
+
+export const Plaintext: Story = {
+    args: {
+        status: "ready",
+        content: <pre>
+            <code>Some textSome textSome textSome textSome textSome textSome textSome textSome text</code>
+            <code>More text</code>
+        </pre>,
+        format: "plain",
     },
 };
