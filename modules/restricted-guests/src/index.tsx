@@ -50,11 +50,11 @@ class RestrictedGuestsModule implements Module {
             throw new Error(`Errors in module configuration for "${ModuleName}"`);
         }
 
-        const appConfig = this.api.config.get();
-        if (appConfig.sso_redirect_options?.immediate) {
-            console.warn(`${ModuleName} found incompatible option 'sso_redirect_options.immediate', turning it off.`);
-            appConfig.sso_redirect_options.immediate = false;
-        }
+        // const appConfig = this.api.config.get();
+        //  if (appConfig.sso_redirect_options?.immediate) {
+        //      console.warn(`${ModuleName} found incompatible option 'sso_redirect_options.immediate', turning it off.`);
+        //      appConfig.sso_redirect_options.immediate = false;
+        //  }
 
         // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
