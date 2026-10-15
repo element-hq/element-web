@@ -57,10 +57,15 @@ describe("EmailInvitationFormDialog", () => {
 
         // The join rule change must be confirmed too
         expect(sendButton).toHaveAttribute("aria-disabled", "true");
+        // Enter on the empty input does not send yet, nor remove an email
+        await userEvent.type(input, "{Enter}");
+        expect(onSubmit).not.toHaveBeenCalled();
+        expect(screen.getAllByRole("button", { name: "action|delete" })).toHaveLength(2);
         await userEvent.click(screen.getByRole("checkbox", { name: "Change room access to Ask to join" }));
         expect(sendButton).toHaveAttribute("aria-disabled", "false");
 
-        await userEvent.click(sendButton);
+        // Enter on the empty input sends the invitations
+        await userEvent.type(input, "{Enter}");
         expect(onSubmit).toHaveBeenCalledWith({
             emails: ["alice@example.com", "bob@example.com"],
             hasToChangeJoinRule: true,
