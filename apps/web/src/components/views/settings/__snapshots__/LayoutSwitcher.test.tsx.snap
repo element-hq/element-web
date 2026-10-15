@@ -79,12 +79,16 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     role="button"
                     tabindex="0"
                   >
-                    <span
-                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-                      dir="auto"
+                    <div
+                      class="mx_DisambiguatedProfile_content _content"
                     >
-                      Alice
-                    </span>
+                      <span
+                        class="_displayName mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                        dir="auto"
+                      >
+                        Alice
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -187,12 +191,16 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     role="button"
                     tabindex="0"
                   >
-                    <span
-                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-                      dir="auto"
+                    <div
+                      class="mx_DisambiguatedProfile_content _content"
                     >
-                      Alice
-                    </span>
+                      <span
+                        class="_displayName mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                        dir="auto"
+                      >
+                        Alice
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -319,12 +327,16 @@ exports[`<LayoutSwitcher /> > should render 1`] = `
                     role="button"
                     tabindex="0"
                   >
-                    <span
-                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
-                      dir="auto"
+                    <div
+                      class="mx_DisambiguatedProfile_content _content"
                     >
-                      Alice
-                    </span>
+                      <span
+                        class="_displayName mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                        dir="auto"
+                      >
+                        Alice
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div

@@ -89,7 +89,7 @@ describe("ReplyTileView", () => {
             presentation: { layout: "irc", density: "compact" },
         });
 
-        const profile = screen.getByText("Alice").parentElement;
+        const profile = screen.getByText("Alice").closest(".mx_DisambiguatedProfile_content")?.parentElement;
         expect(profile).toHaveAttribute("data-event-layout", "group");
         expect(profile).toHaveAttribute("data-event-density", "default");
     });

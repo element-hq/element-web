@@ -1490,6 +1490,15 @@
         line-height: normal;
     }
 
+    /* Center the profile parts directly in the row above, without the profile's own flex wrapper */
+    .slotSender :global(.mx_DisambiguatedProfile_content) {
+        display: contents;
+
+        &::before {
+            content: none;
+        }
+    }
+
     .slotAvatar {
         position: absolute;
         inset: 8px auto auto 8px;

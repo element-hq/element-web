@@ -70,7 +70,8 @@ describe("DisambiguatedProfileView", () => {
     }
 
     const getProfileContainer = (displayName: string): HTMLDivElement => {
-        const profileContainer = screen.getByText(displayName).closest("div");
+        const profileContainer = screen.getByText(displayName).closest(".mx_DisambiguatedProfile_content")
+            ?.parentElement as HTMLDivElement | null | undefined;
         if (!profileContainer) {
             throw new Error("Expected profile container to exist");
         }
@@ -189,7 +190,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("User With Tooltip").closest("div")).toHaveAttribute(
+        expect(getProfileContainer("User With Tooltip")).toHaveAttribute(
             "title",
             "User With Tooltip (@user:example.org)",
         );

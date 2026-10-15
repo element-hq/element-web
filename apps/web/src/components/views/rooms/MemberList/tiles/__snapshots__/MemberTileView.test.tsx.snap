@@ -45,12 +45,16 @@ exports[`MemberTileView > RoomMemberTileView > should display an verified E2EIco
             tabindex="0"
             title="@userId:matrix.org (@userId:matrix.org)"
           >
-            <span
-              class=""
-              dir="auto"
+            <div
+              class="mx_DisambiguatedProfile_content _content"
             >
-              @userId:matrix.org
-            </span>
+              <span
+                class="_displayName"
+                dir="auto"
+              >
+                @userId:matrix.org
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -126,12 +130,16 @@ exports[`MemberTileView > RoomMemberTileView > should display an warning E2EIcon
             tabindex="0"
             title="@userId:matrix.org (@userId:matrix.org)"
           >
-            <span
-              class=""
-              dir="auto"
+            <div
+              class="mx_DisambiguatedProfile_content _content"
             >
-              @userId:matrix.org
-            </span>
+              <span
+                class="_displayName"
+                dir="auto"
+              >
+                @userId:matrix.org
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -207,12 +215,16 @@ exports[`MemberTileView > RoomMemberTileView > should not display an E2EIcon whe
             tabindex="0"
             title="@userId:matrix.org (@userId:matrix.org)"
           >
-            <span
-              class=""
-              dir="auto"
+            <div
+              class="mx_DisambiguatedProfile_content _content"
             >
-              @userId:matrix.org
-            </span>
+              <span
+                class="_displayName"
+                dir="auto"
+              >
+                @userId:matrix.org
+              </span>
+            </div>
           </div>
         </div>
       </div>
