@@ -726,6 +726,7 @@ export function mkStubRoom(
         // MSC4428: in a room without member keys every stable ID is its own user ID.
         getMyStableId: vi.fn().mockReturnValue(client?.getUserId() ?? "@userId:matrix.org"),
         getUserIdForStableId: vi.fn().mockReturnValue(undefined),
+        getMemberUserId: vi.fn((stableId: string) => stableId),
         getStableIdForUserId: vi.fn().mockReturnValue(undefined),
         resolveMemberIdentity: vi.fn((id: string) => ({ stableId: id, userId: undefined })),
         applyMemberInfo: vi.fn(),
