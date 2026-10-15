@@ -237,3 +237,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(CallStoreEvent.TransportsUpdated, transports);
     };
 }
+
+// Modules end calls they placed through here (Call.disconnect). Lazy:
+// the singleton starts on first access and must not do so at import time.
+Object.defineProperty(window, "mxCallStore", { get: () => CallStore.instance });
