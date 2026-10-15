@@ -2546,10 +2546,8 @@
                 "set_up_recovery_confirm_button": "Einrichtung abschließen",
                 "set_up_recovery_confirm_description": "Gib den auf dem vorherigen Bildschirm angezeigten Wiederherstellungsschlüssel ein, um die Einrichtung abzuschließen.",
                 "set_up_recovery_confirm_title": "Gib zur Bestätigung deinen Wiederherstellungsschlüssel ein",
-                "set_up_recovery_description": "Dein Schlüsselspeicher wird durch einen Wiederherstellungsschlüssel geschützt. Wenn du nach der Einrichtung einen neuen Wiederherstellungsschlüssel benötigst, kannst du durch Auswahl von „%(changeRecoveryKeyButton)s“ einen neuen erzeugen.",
                 "set_up_recovery_save_key_description": "Notiere diesen Wiederherstellungsschlüssel an einem sicheren Ort, etwa in einem Passwort-Manager, einer verschlüsselten Notiz oder einem Safe.",
                 "set_up_recovery_save_key_title": "Bewahre deinen Wiederherstellungsschlüssel sicher auf",
-                "set_up_recovery_secondary_description": "Nachdem du „Weiter“ ausgewählt hast, erzeugen wir einen Wiederherstellungsschlüssel für dich.",
                 "title": "Backup"
             },
             "title": "Verschlüsselung"

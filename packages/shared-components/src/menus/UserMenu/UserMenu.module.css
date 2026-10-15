@@ -88,6 +88,10 @@
     isolation: isolate;
 }
 
+.avatarWithStatus {
+    box-shadow: 0 0 0 2px var(--cpd-color-bg-canvas-default);
+}
+
 .iconStatusEmoji {
     position: relative;
     z-index: -1;

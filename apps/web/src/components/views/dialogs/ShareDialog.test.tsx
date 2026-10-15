@@ -121,7 +121,9 @@ describe("ShareDialog", () => {
         expect(screen.getByRole("button", { name: "Link copied" })).toBeInTheDocument();
 
         // 2 sec after the button should be back to normal
-        act(() => vi.advanceTimersByTime(2000));
+        act(() => {
+            vi.advanceTimersByTime(2000);
+        });
         expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument();
     });
 

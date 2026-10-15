@@ -26,7 +26,11 @@ interface JoinCallViewProps {
 
 const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClose }) => {
     const sdkContext = useContext(SDKContext);
-    useTypedEventEmitter(call, CallEvent.Close, onClose);
+    useTypedEventEmitter(call, CallEvent.Close, () => {
+        // A call that is no longer presented closes because the user is already leaving its room, so there is nothing
+        // to stop viewing: doing so anyway would bring them back, from inside the room switch's own dispatch.
+        if (call.presented) onClose();
+    });
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state

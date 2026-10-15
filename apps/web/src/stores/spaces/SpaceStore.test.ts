@@ -1347,12 +1347,12 @@ describe("SpaceStore", () => {
     });
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {
-        beforeAll(() => {
+        beforeAll(async () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "Spaces.allRoomsInHome",
             );
             // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
+            await sdkContext.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1381,13 +1381,13 @@ describe("SpaceStore", () => {
             expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
         });
 
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
+        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", async () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
             const store = new SpaceStore(defaultDispatcher, sdkContext);
             sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
+            await setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1400,13 +1400,13 @@ describe("SpaceStore", () => {
     });
 
     describe("when feature_dynamic_room_predecessors is enabled", () => {
-        beforeAll(() => {
+        beforeAll(async () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) =>
                     settingName === "Spaces.allRoomsInHome" || settingName === "feature_dynamic_room_predecessors",
             );
             // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
+            await sdkContext.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1435,13 +1435,13 @@ describe("SpaceStore", () => {
             expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
         });
 
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
+        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", async () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
             const store = new SpaceStore(defaultDispatcher, sdkContext);
             sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
+            await setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);

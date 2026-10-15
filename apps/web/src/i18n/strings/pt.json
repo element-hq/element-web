@@ -2303,10 +2303,8 @@
                 "set_up_recovery_confirm_button": "Concluir configuração",
                 "set_up_recovery_confirm_description": "Digite a chave de recuperação mostrada na tela anterior para concluir a configuração da recuperação.",
                 "set_up_recovery_confirm_title": "Introduza a sua chave de recuperação para confirmar",
-                "set_up_recovery_description": "O armazenamento da sua chave está protegido por uma chave de recuperação. Se precisar de uma nova chave de recuperação após a configuração, pode recriá-la selecionando '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Anote essa chave de recuperação em algum lugar seguro, como um gerenciador de senhas, uma nota criptografada ou um cofre físico.",
                 "set_up_recovery_save_key_title": "Guarda a tua chave de recuperação num local seguro",
-                "set_up_recovery_secondary_description": "Depois de clicares em continuar, iremos gerar uma chave de recuperação para ti.",
                 "title": "Recuperação"
             },
             "title": "Encriptação"

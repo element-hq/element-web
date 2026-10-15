@@ -79,8 +79,8 @@ async function connect(call: Call, widgetApi: Mocked<ClientWidgetApi>, startWidg
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionConnect();
-    await Promise.all([...(startWidget ? [call.start()] : []), runTimers()]);
+    const sessionPromise = sessionConnect();
+    await Promise.all([...(startWidget ? [call.start()] : []), runTimers(), sessionPromise]);
 }
 
 async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promise<void> {
@@ -94,10 +94,10 @@ async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promi
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionDisconnect();
+    const sessionPromise = sessionDisconnect();
     const promise = call.disconnect();
-    runTimers();
-    await promise;
+    const timersPromise = runTimers();
+    await Promise.all([promise, timersPromise, sessionPromise]);
 }
 
 const cleanUpCallAndWidget = (call: Call, widget: Widget) => {

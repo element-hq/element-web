@@ -57,8 +57,8 @@ describe("MPollBody", () => {
         vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
     });
 
-    it("finds no votes if there are none", () => {
-        expect(allVotes(newVoteRelations([]))).toEqual([]);
+    it("finds no votes if there are none", async () => {
+        expect(allVotes(await newVoteRelations([]))).toEqual([]);
     });
 
     it("renders a loader while responses are still loading", async () => {
@@ -489,7 +489,7 @@ describe("MPollBody", () => {
             responseEvent("@fa:example.com", "poutine", 18),
         ];
 
-        expect(runFindTopAnswer(votes)).toEqual("Poutine");
+        expect(await runFindTopAnswer(votes)).toEqual("Poutine");
     });
 
     it("finds all top answers when there is a draw", async () => {
@@ -498,11 +498,11 @@ describe("MPollBody", () => {
             responseEvent("@ab:example.com", "pizza", 17),
             responseEvent("@fa:example.com", "poutine", 18),
         ];
-        expect(runFindTopAnswer(votes)).toEqual("Italian, Pizza and Poutine");
+        expect(await runFindTopAnswer(votes)).toEqual("Italian, Pizza and Poutine");
     });
 
     it("is silent about the top answer if there are no votes", async () => {
-        expect(runFindTopAnswer([])).toEqual("");
+        expect(await runFindTopAnswer([])).toEqual("");
     });
 
     it("shows disabled radio buttons if the poll is ended", async () => {
@@ -703,9 +703,10 @@ describe("MPollBody", () => {
 
         await setupRoomWithPollEvents([pollEvent], [], ends, mockClient);
         const poll = mockClient.getRoom(pollEvent.getRoomId()!)!.polls.get(pollEvent.getId()!)!;
-        // start fetching, dont await
-        poll.getResponses();
+        // start fetching, only await once the pending state has been checked
+        const responsesProm = poll.getResponses();
         expect(isPollEnded(pollEvent, mockClient)).toBe(false);
+        await responsesProm;
     });
 
     it("Displays edited content and new answer IDs if the poll has been edited", async () => {
@@ -872,14 +873,18 @@ describe("MPollBody", () => {
     });
 });
 
-function newVoteRelations(relationEvents: Array<MatrixEvent>): Relations {
+async function newVoteRelations(relationEvents: Array<MatrixEvent>): Promise<Relations> {
     return newRelations(relationEvents, M_POLL_RESPONSE.name, [M_POLL_RESPONSE.altName!]);
 }
 
-function newRelations(relationEvents: Array<MatrixEvent>, eventType: string, altEventTypes?: string[]): Relations {
+async function newRelations(
+    relationEvents: Array<MatrixEvent>,
+    eventType: string,
+    altEventTypes?: string[],
+): Promise<Relations> {
     const voteRelations = new Relations("m.reference", eventType, mockClient, altEventTypes);
     for (const ev of relationEvents) {
-        voteRelations.addEvent(ev);
+        await voteRelations.addEvent(ev);
     }
     return voteRelations;
 }
@@ -1059,7 +1064,7 @@ async function runIsPollEnded(ends: MatrixEvent[]) {
     return isPollEnded(pollEvent, mockClient);
 }
 
-function runFindTopAnswer(votes: MatrixEvent[]) {
+async function runFindTopAnswer(votes: MatrixEvent[]): Promise<string> {
     const pollEvent = new MatrixEvent({
         event_id: "$mypoll",
         room_id: "#myroom:example.com",
@@ -1067,7 +1072,7 @@ function runFindTopAnswer(votes: MatrixEvent[]) {
         content: newPollStart(),
     });
 
-    return findTopAnswer(pollEvent, newVoteRelations(votes));
+    return findTopAnswer(pollEvent, await newVoteRelations(votes));
 }
 
 let EVENT_ID = 0;

@@ -167,10 +167,10 @@ describe("<EditMessageComposer/>", () => {
     });
 
     describe("createEditContent", () => {
-        it("sends plaintext messages correctly", () => {
+        it("sends plaintext messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(11, true);
-            model.update("hello world", "insertText", documentOffset);
+            await model.update("hello world", "insertText", documentOffset);
 
             const content = createEditContent(model, editedEvent);
 
@@ -190,10 +190,10 @@ describe("<EditMessageComposer/>", () => {
             });
         });
 
-        it("sends markdown messages correctly", () => {
+        it("sends markdown messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(13, true);
-            model.update("hello *world*", "insertText", documentOffset);
+            await model.update("hello *world*", "insertText", documentOffset);
 
             const content = createEditContent(model, editedEvent);
 
@@ -217,10 +217,10 @@ describe("<EditMessageComposer/>", () => {
             });
         });
 
-        it("strips /me from messages and marks them as m.emote accordingly", () => {
+        it("strips /me from messages and marks them as m.emote accordingly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(22, true);
-            model.update("/me blinks __quickly__", "insertText", documentOffset);
+            await model.update("/me blinks __quickly__", "insertText", documentOffset);
 
             const content = createEditContent(model, editedEvent);
 
@@ -244,10 +244,10 @@ describe("<EditMessageComposer/>", () => {
             });
         });
 
-        it("allows emoting with non-text parts", () => {
+        it("allows emoting with non-text parts", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(16, true);
-            model.update("/me ✨sparkles✨", "insertText", documentOffset);
+            await model.update("/me ✨sparkles✨", "insertText", documentOffset);
             expect(model.parts.length).toEqual(4); // Emoji count as non-text
 
             const content = createEditContent(model, editedEvent);
@@ -268,11 +268,11 @@ describe("<EditMessageComposer/>", () => {
             });
         });
 
-        it("allows sending double-slash escaped slash commands correctly", () => {
+        it("allows sending double-slash escaped slash commands correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(32, true);
 
-            model.update("//dev/null is my favourite place", "insertText", documentOffset);
+            await model.update("//dev/null is my favourite place", "insertText", documentOffset);
 
             const content = createEditContent(model, editedEvent);
 
