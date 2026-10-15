@@ -50,7 +50,8 @@ env:
     NUM_RUNNERS: ${{ github.event_name == 'schedule' && 1 || 4 }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     prepare:
