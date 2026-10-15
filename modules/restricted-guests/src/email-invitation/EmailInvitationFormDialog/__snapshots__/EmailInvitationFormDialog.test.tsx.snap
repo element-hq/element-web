@@ -326,6 +326,7 @@ exports[`EmailInvitationFormDialog > submits the entered emails and the join rul
               role="button"
               style="--cpd-icon-button-size: 16px;"
               tabindex="0"
+              type="button"
             >
               <div
                 class="_indicator-icon_j097f_17"
@@ -375,6 +376,7 @@ exports[`EmailInvitationFormDialog > submits the entered emails and the join rul
               role="button"
               style="--cpd-icon-button-size: 16px;"
               tabindex="0"
+              type="button"
             >
               <div
                 class="_indicator-icon_j097f_17"
@@ -419,6 +421,7 @@ exports[`EmailInvitationFormDialog > submits the entered emails and the join rul
               role="button"
               style="--cpd-icon-button-size: 16px;"
               tabindex="0"
+              type="button"
             >
               <div
                 class="_indicator-icon_j097f_17"
