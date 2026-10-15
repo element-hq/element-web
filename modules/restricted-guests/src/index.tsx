@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
+import { UIComponent, type Module, type Api, type ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
 import { name as ModuleName } from "../package.json";
@@ -16,13 +16,13 @@ import { initEmailInvitation } from "./email-invitation/index.ts";
 import { GuestBadge } from "./GuestBadge.tsx";
 import { isGuest } from "./isGuest.ts";
 
-const GUEST_INVISIBLE_COMPONENTS = [
-    "UIComponent.sendInvites",
-    "UIComponent.roomCreation",
-    "UIComponent.spaceCreation",
-    "UIComponent.exploreRooms",
-    "UIComponent.roomOptionsMenu",
-    "UIComponent.addIntegrations",
+const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
+    UIComponent.InviteUsers,
+    UIComponent.CreateRooms,
+    UIComponent.CreateSpaces,
+    UIComponent.ExploreRooms,
+    UIComponent.RoomOptionsMenu,
+    UIComponent.AddIntegrations,
 ];
 
 class RestrictedGuestsModule implements Module {
@@ -91,7 +91,7 @@ class RestrictedGuestsModule implements Module {
      * @param component - the name of the component that is checked
      * @returns true, if the user should see the component
      */
-    public readonly shouldShowComponent = (component: string): boolean => {
+    public readonly shouldShowComponent = (component: UIComponent): boolean => {
         if (this.config && isGuest(this.api, this.config)) {
             return !GUEST_INVISIBLE_COMPONENTS.includes(component);
         }
