@@ -141,6 +141,9 @@ describe("TextForEvent", () => {
         let mockClient: Mocked<MatrixClient>;
         const mockRoom = {
             getMember: vi.fn(),
+            // MSC4428: no mapping, so every stable ID is its own user ID.
+            getUserIdForStableId: vi.fn(),
+            currentState: { getStateEvents: vi.fn() },
         } as unknown as Mocked<Room>;
 
         const userA = {
@@ -456,6 +459,8 @@ describe("TextForEvent", () => {
 
             vi.mocked(mockClient.getRoom).mockReturnValue({
                 name: "Test room",
+                getUserIdForStableId: vi.fn(),
+                currentState: { getStateEvents: vi.fn() },
             } as unknown as Room);
 
             callEvent = {

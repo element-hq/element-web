@@ -8,8 +8,10 @@
 
 import React, { useState, type JSX, type PropsWithChildren } from "react";
 import { Button } from "@vector-im/compound-web";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { memberUserId } from "../../../utils/stableIds";
+
 import PowerSelector from "../elements/PowerSelector";
 import { _t } from "../../../languageHandler";
 import SettingsFieldset from "./SettingsFieldset";
@@ -23,10 +25,16 @@ import QuestionDialog from "../dialogs/QuestionDialog";
  */
 interface PowerLevelSelectorProps {
     /**
-     * The power levels of the users
-     * The key is the user id and the value is the power level
+     * The power levels of the users.
+     * The key is the member's stable ID (MSC4428), which in a room without member keys is
+     * their user ID, and the value is the power level.
      */
     userLevels: Record<string, number>;
+    /**
+     * The room these power levels belong to, used to resolve the stable IDs above to the
+     * users behind them.
+     */
+    room: Room;
     /**
      * Whether the user can change the power levels of other users
      */
@@ -37,10 +45,10 @@ interface PowerLevelSelectorProps {
     currentUserLevel: number;
     /**
      * The callback when the apply button is clicked
-     * @param value - new power level for the user
-     * @param userId - the user id
+     * @param value - new power level for the member
+     * @param stableId - the member's stable ID, as keyed in `userLevels`
      */
-    onClick: (value: number, userId: string) => void;
+    onClick: (value: number, stableId: string) => void;
     /**
      * Filter the users to display
      * @param user
@@ -54,6 +62,7 @@ interface PowerLevelSelectorProps {
 
 export function PowerLevelSelector({
     userLevels,
+    room,
     canChangeLevels,
     currentUserLevel,
     onClick,
@@ -61,7 +70,6 @@ export function PowerLevelSelector({
     title,
     children,
 }: PropsWithChildren<PowerLevelSelectorProps>): JSX.Element | null {
-    const matrixClient = useMatrixClientContext();
     const [currentPowerLevel, setCurrentPowerLevel] = useState<{ value: number; userId: string } | null>(null);
 
     // If the power level has changed, we need to enable the apply button
@@ -92,7 +100,10 @@ export function PowerLevelSelector({
                 // We only want to display users with a valid power level aka an integer
                 if (!Number.isInteger(userLevels[userId])) return;
 
-                const isMe = userId === matrixClient.getUserId();
+                // `userId` is a stable ID: show the user it resolves to, which in a room
+                // without member keys is the same string it has always been.
+                const label = memberUserId(room, userId) ?? userId;
+                const isMe = userId === room.getMyStableId();
                 // If I can change levels, I can change the level of anyone with a lower level than mine
                 const canChange = canChangeLevels && (userLevels[userId] < currentUserLevel || isMe);
 
@@ -103,7 +114,7 @@ export function PowerLevelSelector({
                     <PowerSelector
                         value={userLevel}
                         disabled={!canChange}
-                        label={userId}
+                        label={label}
                         key={userId}
                         maxValue={currentUserLevel}
                         onChange={async (value) => {

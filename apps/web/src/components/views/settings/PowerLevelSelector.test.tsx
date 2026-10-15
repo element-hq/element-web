@@ -13,6 +13,7 @@ import { vi, describe, it, expect } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { stubClient } from "test-utils";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { PowerLevelSelector } from "./PowerLevelSelector";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -21,6 +22,7 @@ describe("PowerLevelSelector", () => {
     const matrixClient = stubClient();
 
     const currentUser = matrixClient.getUserId()!;
+    const room = new Room("!room:server.org", matrixClient, currentUser);
     const userLevels = {
         [currentUser]: 100,
         "@alice:server.org": 50,
@@ -32,6 +34,7 @@ describe("PowerLevelSelector", () => {
             <MatrixClientContext.Provider value={matrixClient}>
                 <PowerLevelSelector
                     userLevels={userLevels}
+                    room={room}
                     canChangeLevels={true}
                     currentUserLevel={userLevels[currentUser]}
                     title="title"

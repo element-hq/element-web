@@ -31,6 +31,7 @@ import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { ModuleApi } from "../modules/Api";
+import { isEventSentByMe } from "./stableIds";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -75,7 +76,7 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
         mxEvent.status !== null ||
         mxEvent.isRedacted() ||
         mxEvent.isRelation(RelationType.Replace) ||
-        mxEvent.getSender() !== matrixClient.getUserId()
+        !isEventSentByMe(matrixClient, mxEvent)
     ) {
         return false;
     }

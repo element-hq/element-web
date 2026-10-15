@@ -98,12 +98,16 @@ const getReactionGroups = (reactions?: Relations | null): ReactionGroup[] =>
         }))
         .filter(({ events }) => events.length > 0) ?? [];
 
-const getMyReactions = (reactions: Relations | null | undefined, userId?: string): MatrixEvent[] | null => {
-    if (!reactions || !userId) {
+/**
+ * @param stableId - our stable ID (MSC4428) in the room: annotations are grouped by the
+ *     sender's stable ID, which in a room with member keys is not a user ID.
+ */
+const getMyReactions = (reactions: Relations | null | undefined, stableId?: string): MatrixEvent[] | null => {
+    if (!reactions || !stableId) {
         return null;
     }
 
-    const myReactions = reactions.getAnnotationsBySender()?.[userId];
+    const myReactions = reactions.getAnnotationsBySender()?.[stableId];
     if (!myReactions) {
         return null;
     }
@@ -132,7 +136,7 @@ export function ReactionsRowAdapter({
     reactions,
 }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
-    const userId = roomContext.room?.client.getUserId() ?? undefined;
+    const userId = roomContext.room?.getMyStableId();
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
     const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);

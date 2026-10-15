@@ -46,6 +46,8 @@ describe("EventUtils", () => {
     const roomId = "!room:server";
     const mockClient = getMockClientWithEventEmitter({
         getUserId: vi.fn().mockReturnValue(userId),
+        // Needed to resolve stable IDs (MSC4428); this client knows no rooms.
+        getRoom: vi.fn().mockReturnValue(null),
     });
 
     beforeEach(() => {

@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
 import { RoomNotifState, getRoomNotifsState } from "./RoomNotifs";
+import { isEventSentByMe } from "./utils/stableIds";
 
 /**
  * Returns true if this event arriving in a room should affect the room's
@@ -22,7 +23,7 @@ import { RoomNotifState, getRoomNotifsState } from "./RoomNotifs";
  * @returns {boolean} True if the given event should affect the unread message count
  */
 export function eventTriggersUnreadCount(client: MatrixClient, ev: MatrixEvent): boolean {
-    if (ev.getSender() === client.getSafeUserId()) {
+    if (isEventSentByMe(client, ev)) {
         return false;
     }
 

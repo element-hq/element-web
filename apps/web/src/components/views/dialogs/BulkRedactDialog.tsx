@@ -43,7 +43,7 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
             ...eventsToRedact,
             ...timeline.getEvents().filter(
                 (event) =>
-                    event.getSender() === member.userId &&
+                    event.getStableId() === member.stableId &&
                     !event.isRedacted() &&
                     !event.isRedaction() &&
                     event.getType() !== EventType.RoomCreate &&

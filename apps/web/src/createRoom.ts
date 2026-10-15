@@ -49,6 +49,7 @@ import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { SDKContextClass } from "./contexts/SDKContextClass.ts";
 import SdkConfig from "./SdkConfig";
+import SettingsStore from "./settings/SettingsStore";
 
 // we define a number of interfaces which take their names from the js-sdk
 export interface IOpts {
@@ -240,6 +241,16 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     }
 
     const defaultRoomVersion = (await client.getCapabilities())["m.room_versions"]?.default ?? "1";
+
+    // Rooms whose members are identified by a member key rather than a user ID (MSC4430).
+    // The room version is unstable, so this is behind a lab and a server support check;
+    // it covers DMs too, since those come through here with `dmUserId` set.
+    if (
+        SettingsStore.getValue("feature_msc4430_member_keys") &&
+        (await client.doesServerSupportUnstableFeature("org.matrix.msc4430"))
+    ) {
+        createOpts.room_version = PreferredRoomVersions.MemberKeyRooms;
+    }
 
     if (
         opts.joinRule === JoinRule.Knock &&

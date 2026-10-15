@@ -218,3 +218,12 @@ minimumReleaseAgeExclude:
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
+
+supportedArchitectures:
+    os:
+        - darwin
+        - linux
+    cpu:
+        - arm64
+    libc:
+        - glibc

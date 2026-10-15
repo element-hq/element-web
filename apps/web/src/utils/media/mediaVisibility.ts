@@ -92,12 +92,14 @@ export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): 
     const mediaPreviewSetting = SettingsStore.getValue("mediaPreviewConfig", roomId);
     const eventVisibility = SettingsStore.getValue("showMediaEventIds");
 
+    // The sender is named by stable ID (MSC4428), so compare against our own stable ID
+    // in this room rather than our user ID.
     return computeMediaVisibility(
         mediaPreviewSetting,
         eventVisibility,
-        client.getUserId() ?? undefined,
+        client.getRoom(roomId)?.getMyStableId() ?? client.getUserId() ?? undefined,
         eventId,
-        mxEvent.getSender(),
+        mxEvent.getStableId(),
         isRoomPrivate(client, roomId),
     );
 }

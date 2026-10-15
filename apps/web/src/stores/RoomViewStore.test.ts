@@ -532,6 +532,7 @@ describe("RoomViewStore", function () {
                 if (userId === memberUserId) {
                     const member = mkRoomMember(roomId, userId, KnownMembership.Invite);
                     member.events.member!.getSender = () => `@bob:${bobsServer}`;
+                    member.events.member!.getStableId = () => `@bob:${bobsServer}`;
                     return member;
                 }
                 return null;

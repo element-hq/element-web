@@ -235,6 +235,7 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
+    "feature_msc4430_member_keys": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
@@ -774,6 +775,22 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
+        default: false,
+    },
+    "feature_msc4430_member_keys": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("labs|member_keys"),
+        description: _td("labs|member_keys_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_msc4430_member_keys",
+            defaultWatchManager,
+            [["org.matrix.msc4430"]],
+            undefined,
+            _td("labs|member_keys_unsupported"),
+        ),
         default: false,
     },
     "feature_user_status": {

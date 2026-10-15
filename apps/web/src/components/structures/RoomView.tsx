@@ -143,6 +143,7 @@ import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-t
 import { ModuleApi } from "../../modules/Api.ts";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { isEventSentByMe, memberUserId } from "../../utils/stableIds";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1410,7 +1411,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.handleEffects(ev);
         }
 
-        if (this.context.client && ev.getSender() !== this.context.client.getSafeUserId()) {
+        if (this.context.client && !isEventSentByMe(this.context.client, ev)) {
             // update unread count when scrolled up
             if (!this.state.search && this.state.atEndOfLiveTimeline) {
                 // no change
@@ -1846,9 +1847,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const myMember = room.getMember(ownUserId);
         const memberEvent = myMember?.events.member;
-        const senderId = memberEvent?.getSender();
+        if (memberEvent?.getContent().membership !== KnownMembership.Invite) return;
 
-        if (memberEvent?.getContent().membership === KnownMembership.Invite) return senderId;
+        // The inviter is named by stable ID (MSC4428), and an invite carries no
+        // member_info, so this falls back to the server's claim in their member event.
+        const inviterStableId = memberEvent.getStableId();
+        return inviterStableId === undefined ? undefined : memberUserId(room, inviterStableId);
     }
 
     private onDeclineAndBlockButtonClicked = async (): Promise<void> => {

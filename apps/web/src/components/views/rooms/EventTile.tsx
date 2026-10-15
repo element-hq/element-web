@@ -114,6 +114,7 @@ import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-t
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
 import { UnreadNotificationBadgeViewModel } from "../../../viewmodels/room/notification-badge/UnreadNotificationBadgeViewModel";
+import { isEventSentByMe } from "../../../utils/stableIds";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -878,8 +879,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
         const threadState = this.threadState;
-        // Use `getSender()` because searched events might not have a proper `sender`.
-        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+        const isOwnEvent = !!this.props.mxEvent && isEventSentByMe(MatrixClientPeg.safeGet(), this.props.mxEvent);
 
         return {
             hasPinnedMessageBadge,

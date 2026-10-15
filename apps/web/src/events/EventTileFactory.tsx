@@ -59,6 +59,7 @@ import { ViewSourceEventViewModel } from "../viewmodels/room/timeline/event-tile
 import { ElementCallEventType } from "../call-types";
 import { RootCallTileViewModel } from "../viewmodels/room/timeline/event-tile/call/RootCallTileViewModel";
 import { SDKContext } from "../contexts/SDKContext";
+import { isEventSentByMe } from "../utils/stableIds";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -311,7 +312,7 @@ export function pickFactory(
         const content = mxEvent.getContent();
         if (content?.msgtype === MsgType.KeyVerificationRequest) {
             const me = cli.getUserId();
-            if (mxEvent.getSender() !== me && content["to"] !== me) {
+            if (!isEventSentByMe(cli, mxEvent) && content["to"] !== me) {
                 return noEventFactoryFactory(); // not for/from us
             } else {
                 // override the factory

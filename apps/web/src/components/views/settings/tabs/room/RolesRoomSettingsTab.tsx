@@ -345,6 +345,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                 <PowerLevelSelector
                     title={_t("room_settings|permissions|privileged_users_section")}
                     userLevels={userLevels}
+                    room={room}
                     canChangeLevels={canChangeLevels}
                     currentUserLevel={currentUserLevel}
                     onClick={this.onUserPowerLevelChanged}
@@ -358,6 +359,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                 <PowerLevelSelector
                     title={_t("room_settings|permissions|muted_users_section")}
                     userLevels={userLevels}
+                    room={room}
                     canChangeLevels={canChangeLevels}
                     currentUserLevel={currentUserLevel}
                     onClick={this.onUserPowerLevelChanged}

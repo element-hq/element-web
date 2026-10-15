@@ -16,14 +16,14 @@ import { makePollStartEvent } from "test-utils";
 import { PollStartEventPreview } from "./PollStartEventPreview";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
-vi.spyOn(MatrixClientPeg, "get").mockReturnValue({
+const mockClient = {
     getUserId: () => "@me:example.com",
     getSafeUserId: () => "@me:example.com",
-} as unknown as MatrixClient);
-vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue({
-    getUserId: () => "@me:example.com",
-    getSafeUserId: () => "@me:example.com",
-} as unknown as MatrixClient);
+    // Needed to resolve stable IDs (MSC4428); this client knows no rooms.
+    getRoom: () => null,
+} as unknown as MatrixClient;
+vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
 describe("PollStartEventPreview", () => {
     it("shows the question for a poll I created", async () => {

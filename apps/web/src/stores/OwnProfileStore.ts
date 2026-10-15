@@ -207,8 +207,12 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     };
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {
-        const myUserId = MatrixClientPeg.safeGet().getUserId();
-        if (ev.getType() === EventType.RoomMember && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
+        if (ev.getType() !== EventType.RoomMember) return;
+        // Members are identified by stable ID (MSC4428), which in a room with member keys
+        // is not our user ID.
+        const client = MatrixClientPeg.safeGet();
+        const myStableId = client.getRoom(ev.getRoomId())?.getMyStableId() ?? client.getUserId();
+        if (ev.getStableId() === myStableId && ev.getStateKey() === myStableId) {
             await this.onProfileUpdate();
         }
     };

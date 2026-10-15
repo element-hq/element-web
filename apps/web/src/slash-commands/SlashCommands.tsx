@@ -162,12 +162,15 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
-                const ev = cli.getRoom(roomId)?.currentState.getStateEvents(EventType.RoomMember, cli.getSafeUserId());
+                // Member state is keyed by stable ID (MSC4428), both to read and to write.
+                const room = cli.getRoom(roomId);
+                const stableId = room?.getMyStableId() ?? cli.getSafeUserId();
+                const ev = room?.currentState.getStateEvents(EventType.RoomMember, stableId);
                 const content: RoomMemberEventContent = {
                     ...(ev ? ev.getContent() : { membership: KnownMembership.Join }),
                     displayname: args,
                 };
-                return success(cli.sendStateEvent(roomId, EventType.RoomMember, content, cli.getSafeUserId()));
+                return success(cli.sendStateEvent(roomId, EventType.RoomMember, content, stableId));
             }
             return reject(this.getUsage());
         },
@@ -202,7 +205,8 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const room = cli.getRoom(roomId);
-            const userId = cli.getSafeUserId();
+            // Member state is keyed by stable ID (MSC4428), both to read and to write.
+            const userId = room?.getMyStableId() ?? cli.getSafeUserId();
 
             let promise = Promise.resolve(args ?? null);
             if (!args) {

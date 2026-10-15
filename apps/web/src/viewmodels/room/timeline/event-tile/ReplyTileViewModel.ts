@@ -238,7 +238,9 @@ export class ReplyTileViewModel
      */
     private getSenderSnapshot(): ReplyTileSenderViewSnapshot | undefined {
         const member = this.props.mxEvent.sender;
-        const userId = this.props.mxEvent.getSender() ?? member?.userId;
+        // Prefer the member's resolved user ID: the event names its sender by stable ID
+        // (MSC4428), which in a room with member keys is an opaque key.
+        const userId = member?.userId ?? this.props.mxEvent.getSender();
         if (!member && !userId) return undefined;
         const isEmote = this.props.mxEvent.getContent().msgtype === MsgType.Emote;
 

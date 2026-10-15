@@ -871,11 +871,13 @@ function textForRedactedPollAndMessageEvent(ev: MatrixEvent, client: MatrixClien
     let message = _t("timeline|self_redaction");
     const unsigned = ev.getUnsigned();
     const redactedBecauseUserId = unsigned?.redacted_because?.sender;
-    if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
+    if (redactedBecauseUserId && redactedBecauseUserId !== ev.getStableId()) {
         const room = client.getRoom(ev.getRoomId());
         const sender = room?.getMember(redactedBecauseUserId);
         message = _t("timeline|redaction", {
-            name: sender?.name || redactedBecauseUserId,
+            // The redactor is named by stable ID (MSC4428); resolve it rather than
+            // falling back to an opaque member key.
+            name: sender?.name || room?.getUserIdForStableId(redactedBecauseUserId) || redactedBecauseUserId,
         });
     }
 
