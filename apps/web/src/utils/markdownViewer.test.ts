@@ -10,7 +10,7 @@ Please see LICENSE in the repository root for full details.
 import { describe, expect, it } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isMarkdownEvent } from "./markdownViewer";
+import { isMarkdownEvent, isPlainFile } from "./markdownViewer";
 
 function mkFileEvent(info?: Record<string, unknown>, body = "README.md", filename?: string): MatrixEvent {
     return new MatrixEvent({
@@ -35,26 +35,30 @@ describe("isMarkdownEvent", () => {
         ["an oddly cased Markdown mimetype", "Text/Markdown", true],
         ["a PDF mimetype", "application/pdf", false],
     ])("returns %s => %s", (_label, mimetype, expected) => {
-        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.txt"))).toBe(expected);
+        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.pdf"))).toBe(expected);
     });
 
     it.each([
         ["no mimetype", undefined],
         ["a plain text mimetype", "text/plain"],
         ["an octet-stream mimetype", "application/octet-stream"],
-    ])("falls back to a .md file name when the sender gave %s", (_label, mimetype) => {
+        ["a log mimetype", "text/x-log"],
+    ])("falls back to the file name when the sender gave %s", (_label, mimetype) => {
         expect(isMarkdownEvent(mkFileEvent({ mimetype }, "README.md"))).toBe(true);
         expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.MARKDOWN"))).toBe(true);
-        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.txt"))).toBe(false);
+        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.txt"))).toBe(true);
+        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "console.LOG"))).toBe(true);
+        expect(isMarkdownEvent(mkFileEvent({ mimetype }, "notes.pdf"))).toBe(false);
     });
 
     it("prefers the filename field over the body for the extension", () => {
         expect(isMarkdownEvent(mkFileEvent(undefined, "a caption", "README.md"))).toBe(true);
-        expect(isMarkdownEvent(mkFileEvent(undefined, "README.md", "notes.txt"))).toBe(false);
+        expect(isMarkdownEvent(mkFileEvent(undefined, "README.md", "notes.pdf"))).toBe(false);
     });
 
     it("does not trust the file name when the mimetype says something else", () => {
         expect(isMarkdownEvent(mkFileEvent({ mimetype: "application/pdf" }, "README.md"))).toBe(false);
+        expect(isMarkdownEvent(mkFileEvent({ mimetype: "application/pdf" }, "notes.txt"))).toBe(false);
     });
 
     it("returns false for an event that is not media at all", () => {
@@ -66,5 +70,18 @@ describe("isMarkdownEvent", () => {
         });
 
         expect(isMarkdownEvent(mxEvent)).toBe(false);
+    });
+});
+
+describe("isPlainFile", () => {
+    it.each([
+        ["notes.txt", true],
+        ["console.log", true],
+        ["CONSOLE.LOG", true],
+        ["README.md", false],
+        ["notes.txt.pdf", false],
+        [undefined, false],
+    ])("returns %s => %s", (name, expected) => {
+        expect(isPlainFile(name)).toBe(expected);
     });
 });

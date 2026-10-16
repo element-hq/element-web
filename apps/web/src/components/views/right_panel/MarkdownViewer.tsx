@@ -7,11 +7,17 @@ Please see LICENSE in the repository root for full details.
 
 import React, { type JSX, type MouseEvent, useCallback, useEffect, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MarkdownViewerView, type MarkdownViewerStatus } from "@element-hq/web-shared-components";
+import escapeHtml from "escape-html";
+import {
+    MarkdownViewerView,
+    type MarkdownViewerFormat,
+    type MarkdownViewerStatus,
+} from "@element-hq/web-shared-components";
 
 import { type DocumentMedia } from "../../../@types/document-viewer";
 import { renderMarkdown } from "../../../utils/renderMarkdown";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
+import { isPlainFile } from "../../../utils/markdownViewer";
 
 const loggerMarkdown = logger.getChild("MarkdownViewer");
 
@@ -22,19 +28,24 @@ const loggerMarkdown = logger.getChild("MarkdownViewer");
 const MAX_MARKDOWN_BYTES = 2 * 1024 * 1024;
 
 /**
- * Renders a Markdown attachment.
+ * Renders a Markdown or plain text attachment.
  *
  * Loads the file, renders it to sanitized HTML and hands that to the view. Links to rooms, users and
  * messages are followed within the app, as they are in the timeline; the sanitizer already makes every
  * other link open in a new tab.
+ *
+ * Plain text files, and Markdown files the user has switched to the plain format, are shown as their
+ * escaped source text instead.
  */
 export function MarkdownViewer({ media }: { media: DocumentMedia }): JSX.Element {
+    const isPlaintextOnly = isPlainFile(media.name);
     const [status, setStatus] = useState<MarkdownViewerStatus>("loading");
-    const [html, setHtml] = useState("");
+    const [content, setContent] = useState<string|JSX.Element>("");
+    const [format, setFormat] = useState<MarkdownViewerFormat>("rendered");
 
     useEffect(() => {
         setStatus("loading");
-        setHtml("");
+        setContent("");
 
         let disposed = false;
 
@@ -60,7 +71,13 @@ export function MarkdownViewer({ media }: { media: DocumentMedia }): JSX.Element
 
             if (disposed) return;
 
-            setHtml(renderMarkdown(text));
+            if (format === "plain" || isPlaintextOnly) {
+                // The view inserts this as HTML, so the text must be escaped to stay inert.
+                setContent(<pre>{text.split("\n").map(t => <code>{t}</code>)}</pre>);
+            } else {
+                setContent(renderMarkdown(text));
+            }
+
             setStatus("ready");
         };
 
@@ -74,7 +91,7 @@ export function MarkdownViewer({ media }: { media: DocumentMedia }): JSX.Element
         return () => {
             disposed = true;
         };
-    }, [media]);
+    }, [media, format, isPlaintextOnly]);
 
     const onContentClick = useCallback((event: MouseEvent<HTMLDivElement>): void => {
         const link = (event.target as HTMLElement).closest("a");
@@ -87,5 +104,14 @@ export function MarkdownViewer({ media }: { media: DocumentMedia }): JSX.Element
         }
     }, []);
 
-    return <MarkdownViewerView status={status} html={html} onContentClick={onContentClick} />;
+    return (
+        <MarkdownViewerView
+            status={status}
+            content={content}
+            onContentClick={onContentClick}
+            format={isPlaintextOnly ? "plain" : format}
+            canToggleFormat={!isPlaintextOnly}
+            onFormatChange={setFormat}
+        />
+    );
 }
