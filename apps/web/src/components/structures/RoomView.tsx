@@ -698,9 +698,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             // A permalink needs a fresh position; a locally restored event keeps its saved offset.
-            newState.initialEventPixelOffset = storeInitialEventId
-                ? undefined
-                : this.state.initialEventPixelOffset;
+            newState.initialEventPixelOffset = storeInitialEventId ? undefined : this.state.initialEventPixelOffset;
 
             const thread = initialEvent?.getThread();
             // Handle the use case of a link to a thread message
