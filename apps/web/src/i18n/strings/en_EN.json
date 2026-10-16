@@ -76,6 +76,7 @@
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
+        "not_now": "Not now",
         "ok": "OK",
         "open": "Open",
         "pin": "Pin",
@@ -956,6 +957,7 @@
         "confirm_encryption_setup_body": "Select the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
         "continue_with_reset": "Continue with reset",
+        "create_recovery_key": "Create recovery key",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
         "cross_signing_room_verified": "Everyone in this room is verified",
         "cross_signing_room_warning": "Someone is using an unknown device",
@@ -992,6 +994,7 @@
         },
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
+        "recovery_key_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "recovery_method_removed": {
             "description_1": "This device has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this device which will re-encrypt this device's message history with a new recovery method.",
@@ -999,7 +1002,6 @@
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "set_up_recovery": "Back up your chats",
-        "set_up_recovery_toast_description": "Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.",
         "set_up_toast_title": "Set up Secure Backup",
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
@@ -2558,6 +2560,7 @@
             "key_storage": {
                 "allow_key_storage": "Allow key storage",
                 "description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity. <a>Learn more</a>",
+                "recovery_requires_key_storage": "Key storage must be turned on to set up recovery",
                 "title": "Key storage"
             },
             "recovery": {
@@ -2567,7 +2570,6 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then select Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
-                "description": "Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
                 "forgot_recovery_key": "Forgot recovery key?",
@@ -3614,10 +3616,6 @@
             "error_loading": "Can't load the message this replies to. It may not exist, or you may not have permission to see it.",
             "in_reply_to": "<a>In reply to</a> <pill>",
             "in_reply_to_for_export": "In reply to <a>this message</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
-            "dialog_title": "Add an Integration"
         },
         "self_redaction": "Message deleted",
         "send_state_encrypting": "Encrypting your message…",

@@ -8,7 +8,8 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
-permissions: {}
+permissions:
+    contents: read
 jobs:
     buildx:
         name: Docker Buildx
@@ -17,6 +18,7 @@ jobs:
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+            contents: read
         env:
             TEST_TAG: ghcr.io/element-hq/element-web:test
             TEST_TAG_MODULES: ghcr.io/element-hq/element-web/modules:test

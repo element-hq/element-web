@@ -70,7 +70,8 @@ on:
                 required: false
                 description: "List of targets to build"
                 default: "squirrel msi"
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: Build Windows ${{ inputs.arch }}
@@ -121,6 +122,10 @@ jobs:
               run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Install and configure eSigner CKA
+              id: install-cka
+              # Allow the step to fail if signing is not required e.g. for PRs,
+              # so that we can still build and test the app without signing.
+              continue-on-error: ${{ inputs.sign == '' }}
               run: |
                   Set-StrictMode -Version 'Latest'
 
@@ -187,6 +192,9 @@ jobs:
 
             - name: Check app was signed successfully
               working-directory: apps/desktop
+              # Allow the step to fail if setting up the CKA failed (e.g. for PRs),
+              # so that we can still build and test the app without signing.
+              continue-on-error: ${{ steps.install-cka.outcome != 'success' }}
               run: |
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `

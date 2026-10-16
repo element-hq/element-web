@@ -944,7 +944,6 @@
             "warning": "Jika Anda tidak menghapus metode pemulihan, sebuah penyerang mungkin mencoba mengakses akun Anda. Ubah kata sandi akun Anda dan segera tetapkan metode pemulihan baru di Pengaturan."
         },
         "set_up_recovery": "Siapkan pemulihan",
-        "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
@@ -2430,7 +2429,6 @@
                 "change_recovery_key": "Ubah kunci pemulihan",
                 "change_recovery_key_description": "Tuliskan kunci pemulihan baru ini di tempat yang aman. Kemudian klik Lanjutkan untuk mengonfirmasi perubahan.",
                 "change_recovery_key_title": "Ubah kunci pemulihan?",
-                "description": "Pulihkan identitas kriptografi dan riwayat pesan Anda dengan kunci pemulihan jika Anda kehilangan semua perangkat yang ada.",
                 "enter_key_error": "Kunci pemulihan yang Anda masukkan salah.",
                 "enter_recovery_key": "Masukkan kunci pemulihan",
                 "forgot_recovery_key": "Lupa kunci pemulihan?",
