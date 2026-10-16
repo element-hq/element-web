@@ -1,74 +1,74 @@
 {
-    "name": "element-web-monorepo",
-    "version": "0.0.0",
-    "description": "Element: the future of secure communication",
-    "author": "New Vector Ltd.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/element-hq/element-web"
-    },
-    "license": "SEE LICENSE IN README.md",
-    "type": "module",
-    "scripts": {
-        "i18n": "pnpm -r i18n",
-        "i18n:sort": "pnpm -r i18n:sort",
-        "i18n:lint": "pnpm -r i18n:lint",
-        "lint": "pnpm -r --workspace-concurrency=1 lint:types && pnpm lint:fmt && pnpm lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
-        "lint:fmt": "oxfmt --check",
-        "lint:fmt:fix": "oxfmt",
-        "lint:js": "nx run-many -t lint:prepare -p && oxlint",
-        "lint:js:fix": "oxlint --fix",
-        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
-        "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
-        "lint:unused-settings": "node scripts/find-unused-settings.ts",
-        "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
-        "docs:dev": "vitepress dev docs",
-        "docs:build": "vitepress build docs",
-        "docs:preview": "vitepress preview docs",
-        "test:unit": "nx run-many -t test:unit:prepare -p && vitest run",
-        "coverage:diff": "diff-cover --config-file diff-cover.toml apps/web/coverage/lcov.info packages/shared-components/coverage/lcov.info coverage/lcov.info"
-    },
-    "devDependencies": {
-        "@action-validator/cli": "^0.6.0",
-        "@action-validator/core": "^0.6.0",
-        "@nx-tools/nx-container": "^7.2.1",
-        "@playwright/test": "catalog:",
-        "@types/node": "25",
-        "@typescript/native": "catalog:",
-        "@vitest/coverage-v8": "catalog:",
-        "@vitest/ui": "catalog:",
-        "cronstrue": "^3.0.0",
-        "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
-        "eslint-plugin-element-web": "workspace:*",
-        "eslint-plugin-react-web-api": "^5.24.2",
-        "eslint-plugin-storybook": "^10.4.6",
-        "husky": "^9.0.0",
-        "knip": "6.38.0",
-        "lint-staged": "^17.0.0",
-        "lodash": "^4.17.21",
-        "mermaid": "^12.0.0",
-        "minimist": "^1.2.6",
-        "nx": "catalog:",
-        "oxfmt": "0.72.0",
-        "oxlint": "catalog:",
-        "oxlint-tsgolint": "^7.0.0",
-        "typescript": "catalog:ts6",
-        "vitepress": "^1.6.4",
-        "vitepress-plugin-mermaid": "^2.0.17",
-        "vitest": "catalog:",
-        "yaml": "^2.3.3"
-    },
-    "engines": {
-        "node": ">=22.18"
-    },
-    "devEngines": {
-        "packageManager": {
-            "name": "pnpm",
-            "version": "12.11.2",
-            "onFail": "download"
-        }
-    },
-    "private": true,
-    "nx": {}
+  "name": "element-web-monorepo",
+  "version": "0.0.0",
+  "description": "Element: the future of secure communication",
+  "author": "New Vector Ltd.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/element-hq/element-web"
+  },
+  "license": "SEE LICENSE IN README.md",
+  "type": "module",
+  "scripts": {
+    "i18n": "pnpm -r i18n",
+    "i18n:sort": "pnpm -r i18n:sort",
+    "i18n:lint": "pnpm -r i18n:lint",
+    "lint": "pnpm -r --workspace-concurrency=1 lint:types && pnpm lint:fmt && pnpm lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
+    "lint:fmt": "oxfmt --check",
+    "lint:fmt:fix": "oxfmt",
+    "lint:js": "nx run-many -t lint:prepare -p && oxlint",
+    "lint:js:fix": "oxlint --fix",
+    "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
+    "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
+    "lint:unused-settings": "node scripts/find-unused-settings.ts",
+    "install:git-hooks": "husky",
+    "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "test:unit": "nx run-many -t test:unit:prepare -p && vitest run",
+    "coverage:diff": "diff-cover --config-file diff-cover.toml apps/web/coverage/lcov.info packages/shared-components/coverage/lcov.info coverage/lcov.info"
+  },
+  "devDependencies": {
+    "@action-validator/cli": "^0.6.0",
+    "@action-validator/core": "^0.6.0",
+    "@nx-tools/nx-container": "^7.2.1",
+    "@playwright/test": "catalog:",
+    "@types/node": "25",
+    "@typescript/native": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "cronstrue": "^3.0.0",
+    "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
+    "eslint-plugin-storybook": "^10.4.6",
+    "husky": "^9.0.0",
+    "knip": "6.38.0",
+    "lint-staged": "^17.0.0",
+    "lodash": "^4.17.21",
+    "mermaid": "^12.0.0",
+    "minimist": "^1.2.6",
+    "nx": "catalog:",
+    "oxfmt": "0.72.0",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "^7.0.0",
+    "typescript": "catalog:ts6",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vitest": "catalog:",
+    "yaml": "^2.3.3",
+    "eslint-plugin-element-web": "workspace:*",
+    "eslint-plugin-react-web-api": "^5.24.2"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.11.2",
+      "onFail": "download"
+    }
+  },
+  "private": true,
+  "nx": {}
 }

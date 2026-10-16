@@ -209,7 +209,12 @@
         "incorrect_password": "Felaktigt lösenord",
         "log_in_new_account": "<a>Logga in</a> i ditt nya konto.",
         "logout_dialog": {
+            "check_recovery_key": "Kontrollera din återställningsnyckel",
+            "check_recovery_key_title": "Se till att du har åtkomst till din återställningsnyckel innan du tar bort den här enheten.",
+            "continue": "Fortsätt att ta bort den här enheten",
             "description": "Är du säker på att du vill ta bort den här enheten?",
+            "generate_recovery_key": "Skapa en ny återställningsnyckel",
+            "keep_access_description": "Se till att du alltid har tillgång till en annan verifierad enhet eller din återställningsnyckel för att undvika att förlora din krypterade chatthistorik.",
             "setup_key_backup_title": "Du kommer att förlora åtkomsten till dina krypterade meddelanden",
             "setup_secure_backup_description": "Det här är din enda enhet. Om du tar bort den behöver du en återställningsnyckel för att bekräfta din digitala identitet och återställa dina krypterade chattar nästa gång du loggar in.",
             "skip_key_backup": "Ta bort den här enheten ändå"
@@ -994,7 +999,6 @@
             "warning": "Om du inte tog bort återställningsmetoden kan en angripare försöka komma åt ditt konto. Byt ditt kontolösenord och ställ in en ny återställningsmetod omedelbart i inställningarna."
         },
         "set_up_recovery": "Säkerhetskopiera dina chattar",
-        "set_up_recovery_toast_description": "Dina chattar säkerhetskopieras automatiskt. Du behöver din återställningsnyckel för att återställa dem om du förlorar alla dina enheter.",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
         "turn_on_key_storage": "Slå på nyckellagring",
         "turn_on_key_storage_description": "Detta gör att du kan se din chatthistorik på alla nya enheter och krävs för säkerhetskopiering av chattar och digital identitet.",
@@ -1748,7 +1752,7 @@
         "create_room": "Skapa en gruppchatt",
         "explore_rooms": "Utforska offentliga rum",
         "has_avatar_label": "Fantastiskt, det kommer att hjälpa folk att veta att det är du",
-        "intro_byline": "Äg dina konversationer.",
+        "intro_byline": "Own your conversations.",
         "intro_welcome": "Välkommen till %(appName)s",
         "no_avatar_label": "Lägg till en bild för att folk ska veta att det är du.",
         "send_dm": "Skicka ett direktmeddelande",
@@ -2561,7 +2565,6 @@
                 "change_recovery_key": "Byt återställningsnyckel",
                 "change_recovery_key_description": "Spara ner den här nya återställningsnyckeln på ett säkert ställe. Klicka sedan på Fortsätt för att bekräfta ändringen.",
                 "change_recovery_key_title": "Byt återställningsnyckel?",
-                "description": "Dina chattar säkerhetskopieras automatiskt. Du behöver din återställningsnyckel för att återställa dem om du förlorar alla dina enheter.",
                 "enter_key_error": "Återställningsnyckeln du angav är inte korrekt.",
                 "enter_recovery_key": "Ange återställningsnyckel",
                 "forgot_recovery_key": "Glömt återställningsnyckeln?",

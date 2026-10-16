@@ -792,7 +792,6 @@
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
         "set_up_recovery": "Varmuuskopioi keskustelusi",
-        "set_up_recovery_toast_description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
         "verification": {
             "accepting": "Hyväksytään…",
@@ -2028,7 +2027,6 @@
                 "change_recovery_confirm_title": "Anna uusi palautusavain",
                 "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
-                "description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",

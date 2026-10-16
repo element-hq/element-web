@@ -434,6 +434,10 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections[0].roomIds[0]).toBe(previewRoomId);
                 expect(viewModel.getRoomItemViewModel(previewRoomId)?.getSnapshot().name).toBe("Knock room");
 
+                // The placeholder room has the same pending event ordering as the client's rooms,
+                // so the unread checks below the fold can read its pending events
+                expect(() => (viewModel as any).previewRoom.getPendingEvents()).not.toThrow();
+
                 // The user has knocked, so the room is now in the room list
                 const knockRoom = mkStubRoom(previewRoomId, "Knock room", matrixClient);
                 vi.mocked(knockRoom.getMyMembership).mockReturnValue(KnownMembership.Knock);

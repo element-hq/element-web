@@ -31,7 +31,6 @@ export const enum TextualBodyViewKind {
 export const enum TextualBodyViewBodyWrapperKind {
     NONE = "NONE",
     LINK = "LINK",
-    ACTION = "ACTION",
 }
 
 export interface TextualBodyViewSnapshot {
@@ -51,10 +50,6 @@ export interface TextualBodyViewSnapshot {
      * Href used when `bodyWrapper` is `LINK`.
      */
     bodyLinkHref?: string;
-    /**
-     * Accessible label used when `bodyWrapper` is `ACTION`.
-     */
-    bodyActionAriaLabel?: string;
     /**
      * Whether to render the edited marker.
      */
@@ -95,10 +90,6 @@ export interface TextualBodyViewActions {
      * Runs in the bubble phase so that interactive children (e.g. pills) can handle their own clicks first.
      */
     onRootClick?: MouseEventHandler<HTMLDivElement>;
-    /**
-     * Activation handler used when `bodyWrapper` is `ACTION`.
-     */
-    onBodyActionClick?: MouseEventHandler<HTMLButtonElement>;
     /**
      * Click handler for the edited marker.
      */
@@ -153,7 +144,7 @@ function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): Rea
  * Renders a textual message body for timeline events.
  *
  * The view supports text, notice, emote, and caption layouts, optional
- * link or action wrappers, edited and moderation markers, and appended
+ * link wrapper, edited and moderation markers, and appended
  * URL previews.
  */
 export function TextualBodyView({
@@ -169,7 +160,6 @@ export function TextualBodyView({
         kind,
         bodyWrapper = TextualBodyViewBodyWrapperKind.NONE,
         bodyLinkHref,
-        bodyActionAriaLabel,
         showEditedMarker,
         editedMarkerText,
         editedMarkerAriaLabel,
@@ -239,17 +229,6 @@ export function TextualBodyView({
             <a href={bodyLinkHref} className={styles.bodyLink}>
                 {renderedBody}
             </a>
-        );
-    } else if (bodyWrapper === TextualBodyViewBodyWrapperKind.ACTION) {
-        renderedBody = (
-            <button
-                type="button"
-                aria-label={bodyActionAriaLabel}
-                className={styles.bodyAction}
-                onClick={vm.onBodyActionClick}
-            >
-                {renderedBody}
-            </button>
         );
     }
 

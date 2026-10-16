@@ -31,14 +31,12 @@ const TextualBodyViewWrapperImpl = ({
     urlPreviews,
     className,
     onRootClick,
-    onBodyActionClick,
     onEditedMarkerClick,
     onEmoteSenderClick,
     ...snapshotProps
 }: WrapperProps): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {
         onRootClick: onRootClick ?? fn(),
-        onBodyActionClick: onBodyActionClick ?? fn(),
         onEditedMarkerClick: onEditedMarkerClick ?? fn(),
         onEmoteSenderClick: onEmoteSenderClick ?? fn(),
     });
@@ -72,7 +70,6 @@ const TEXTUAL_BODY_VIEW_KIND_OPTIONS = [
 const TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS = [
     TextualBodyViewBodyWrapperKind.NONE,
     TextualBodyViewBodyWrapperKind.LINK,
-    TextualBodyViewBodyWrapperKind.ACTION,
 ];
 
 const meta = {
@@ -101,7 +98,6 @@ const meta = {
         showPendingModerationMarker: false,
         pendingModerationText: "(Visible to you while moderation is pending)",
         emoteSenderName: "Alice",
-        bodyActionAriaLabel: "Open starter link",
     },
 } satisfies Meta<typeof TextualBodyViewWrapper>;
 
@@ -185,13 +181,6 @@ export const HighlightLink: Story = {
     args: {
         bodyWrapper: TextualBodyViewBodyWrapperKind.LINK,
         bodyLinkHref: "https://example.org/#/room/!room:example.org/$event",
-    },
-};
-
-export const StarterLink: Story = {
-    args: {
-        bodyWrapper: TextualBodyViewBodyWrapperKind.ACTION,
-        body: <div>Launch the integration flow.</div>,
     },
 };
 
