@@ -223,6 +223,40 @@ describe("RoomView", () => {
         return ref.current!;
     };
 
+    it("returns to the live timeline when a highlighted event link is cleared", async () => {
+        const event = new MatrixEvent({
+            event_id: "$linked-event",
+            room_id: room.roomId,
+            sender: "@alice:example.org",
+            type: EventType.RoomMessage,
+            content: { msgtype: "m.text", body: "Linked event" },
+            origin_server_ts: 1,
+        });
+        await room.addLiveEvents([event], { addToState: false });
+        const instance = await getRoomViewInstance();
+
+        await act(async () => {
+            await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                event_id: event.getId(),
+                highlighted: true,
+                metricsTrigger: undefined,
+            });
+        });
+        await waitFor(() => expect(instance.state.initialEventId).toBe(event.getId()));
+
+        await act(async () => {
+            await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+            });
+        });
+        await waitFor(() => expect(instance.state.initialEventId).toBeUndefined());
+        expect(instance.state.isInitialEventHighlighted).toBe(false);
+    });
+
     it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
         stores.multiRoomViewStore.getRoomViewStoreForRoom = vi.fn().mockReturnValue(stores.roomViewStore);
 
