@@ -38,6 +38,21 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     }
 }
 
+/**
+ * Whether the error, or anything in its `cause` chain, is Vitest failing to deliver a console message because the
+ * test file's worker was already shutting down. This is a race inside Vitest
+ * (https://github.com/vitest-dev/vitest/issues/11153): every test passes, only the log line is lost.
+ */
+function isConsoleLogTeardownError(error: unknown): boolean {
+    for (let current = error; current && typeof current === "object"; current = (current as Error).cause) {
+        const { name, message } = current as Error;
+        if (name === "EnvironmentTeardownError" && message?.includes('Closing rpc while "onUserConsoleLog"')) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export default defineConfig({
     oxc: {
         // Configure the ts loader to handle all the files we may throw at it
@@ -64,5 +79,11 @@ export default defineConfig({
             reporter: [["lcov"]],
         },
         reporters,
+        onUnhandledError(error) {
+            if (isConsoleLogTeardownError(error)) {
+                console.warn("Ignoring Vitest console teardown race:", error.message);
+                return false;
+            }
+        },
     },
 });
