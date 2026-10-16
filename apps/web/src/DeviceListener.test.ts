@@ -46,6 +46,8 @@ import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "./PosthogAnalytics";
+import { shouldShowComponent } from "./customisations/helpers/UIComponents";
+import { UIComponent } from "./settings/UIFeature";
 
 vi.mock("./dispatcher/dispatcher", () => ({
     default: {
@@ -54,6 +56,8 @@ vi.mock("./dispatcher/dispatcher", () => ({
         unregister: vi.fn(),
     },
 }));
+
+vi.mock("./customisations/helpers/UIComponents", () => ({ shouldShowComponent: vi.fn() }));
 
 vi.mock("./SecurityManager", () => ({
     isSecretStorageBeingAccessed: vi.fn(),
@@ -94,6 +98,8 @@ describe("DeviceListener", () => {
         vi.spyOn(console, "info").mockImplementation(() => {});
         vi.spyOn(console, "warn").mockImplementation(() => {});
         vi.spyOn(console, "error").mockImplementation(() => {});
+
+        vi.mocked(shouldShowComponent).mockReturnValue(true);
 
         // spy on various toasts' hide and show functions
         // easier than mocking
@@ -1354,6 +1360,17 @@ describe("DeviceListener", () => {
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("set_up_recovery");
+            });
+
+            it("does not show the 'set up recovery' toast if a module hides it", async () => {
+                mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+                vi.mocked(shouldShowComponent).mockReturnValue(false);
+
+                await createAndStart();
+
+                expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.SetUpRecoveryToast);
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
+                expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
             });
 
             it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
