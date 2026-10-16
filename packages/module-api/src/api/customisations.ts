@@ -49,6 +49,11 @@ export const enum UIComponent {
      * Components that lead the user to room options menu.
      */
     RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+
+    /**
+     * Release announcements highlighting new features.
+     */
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
 }
 
 /**
