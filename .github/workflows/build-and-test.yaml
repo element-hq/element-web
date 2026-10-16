@@ -125,6 +125,7 @@ jobs:
             actions: read
             issues: read
             pull-requests: read
+            contents: read
         strategy:
             fail-fast: false
             matrix:
