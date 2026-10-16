@@ -73,6 +73,8 @@ describe("RestrictedGuestsModule", () => {
             await module.load();
 
             expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.SetUpRecoveryToast)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.NotificationsToast)).toBe(false);
             expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(true);
         });
     });
