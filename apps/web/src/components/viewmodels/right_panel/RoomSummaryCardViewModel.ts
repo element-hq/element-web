@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     EventType,
     type HistoryVisibility,
@@ -14,6 +14,7 @@ import {
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 import { type UserStatus } from "@element-hq/web-shared-components";
+import { type RoomAction } from "@element-hq/element-web-module-api";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -44,6 +45,8 @@ import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
 import { useDmMember } from "../../views/avatars/WithPresenceIndicator";
 import { useUserStatus } from "../../../hooks/useUserStatus";
+import { ModuleApi } from "../../../modules/Api";
+import { getRoomActions } from "../../../modules/ExtrasApi";
 
 export interface RoomSummaryCardState {
     isDirectMessage: boolean;
@@ -84,6 +87,10 @@ export interface RoomSummaryCardState {
      * value to check if we disable invite button or not
      */
     canInviteToState: boolean;
+    /**
+     * Actions added by modules to the room info panel
+     */
+    moduleActions: RoomAction[];
     /**
      * Getting the number of pinned messages in the room, next to the pin button
      */
@@ -185,6 +192,10 @@ export function useRoomSummaryCardViewModel(
     const pinCount = usePinnedEvents(room).length;
     // value to check if the user can invite to the room
     const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
+    const moduleActions = useMemo(
+        () => getRoomActions(ModuleApi.instance.extras.roomSummaryCardActionCallbacks, room.roomId),
+        [room.roomId],
+    );
 
     const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => getTagsForRoom(room));
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
@@ -280,6 +291,7 @@ export function useRoomSummaryCardViewModel(
         alias,
         isFavorite,
         canInviteToState,
+        moduleActions,
         searchInputRef,
         pinCount,
         onRoomMembersClick,

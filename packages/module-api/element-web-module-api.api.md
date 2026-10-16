@@ -66,6 +66,13 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
 }
 
 // @alpha
+export interface AuthedRequestOpts {
+    body?: unknown;
+    prefix?: string;
+    queryParams?: Record<string, string>;
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -97,6 +104,8 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly http: HttpApi;
 }
 
 // @public
@@ -158,6 +167,7 @@ export interface CustomComponentsApi {
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
+    registerSenderProfileBadge(renderer: CustomSenderProfileBadgeRenderFunction): void;
 }
 
 // @alpha
@@ -177,6 +187,7 @@ export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<
 // @alpha
 export interface CustomisationsApi {
     registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+    registerShouldViewOngoingCall(fn: (this: void, roomId: string) => boolean | void): void;
 }
 
 // @alpha
@@ -233,6 +244,15 @@ export type CustomRoomPreviewBarRenderFunction = (
 props: CustomRoomPreviewBarComponentProps,
 originalComponent: (props: CustomRoomPreviewBarComponentProps) => JSX.Element) => JSX.Element;
 
+// @alpha
+export type CustomSenderProfileBadgeComponentProps = {
+    userId: string;
+};
+
+// @alpha
+export type CustomSenderProfileBadgeRenderFunction = (
+props: CustomSenderProfileBadgeComponentProps) => JSX.Element | null;
+
 // @public
 export interface DialogApiExtension {
     openDialog<M, P extends object>(initialOptions: DialogOptions, dialog: ComponentType<P & DialogProps<M>>, props: P): DialogHandle<M>;
@@ -266,7 +286,9 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addMemberListHeaderActionCallback(cb: RoomActionCallback): void;
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomSummaryCardActionCallback(cb: RoomActionCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
@@ -290,6 +312,14 @@ export interface HardwareKey {
 // @alpha
 export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
+// @alpha
+export interface HttpApi {
+    authedRequest<T>(method: HttpMethod, path: string, opts?: AuthedRequestOpts): Promise<T>;
+}
+
+// @alpha
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
 // @public
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
@@ -301,6 +331,9 @@ export interface I18nApi {
 
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
+
+// @public
+export type JoinRule = "public" | "invite" | "knock" | "restricted" | "private";
 
 // @alpha
 export type LocationRenderFunction = () => JSX.Element;
@@ -396,10 +429,29 @@ export interface RichVariables {
 
 // @public
 export interface Room {
+    canChangeJoinRule: () => boolean;
+    canInvite: () => boolean;
     getLastActiveTimestamp: () => number;
+    getPermalink: () => string;
     id: string;
+    joinRule: Watchable<JoinRule>;
     name: Watchable<string>;
+    setJoinRule: (joinRule: JoinRule) => Promise<void>;
+    supportsKnock: () => boolean;
 }
+
+// @alpha
+export interface RoomAction {
+    disabled?: boolean;
+    disabledTooltip?: string;
+    icon: ComponentType<SVGAttributes<SVGElement>>;
+    key: string;
+    label: string;
+    onClick: () => void;
+}
+
+// @alpha
+export type RoomActionCallback = (roomId: string) => RoomAction | undefined;
 
 // @alpha
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
@@ -472,7 +524,10 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
-    RoomOptionsMenu = "UIComponent.roomOptionsMenu"
+    NotificationsToast = "UIComponent.notificationsToast",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
+    RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+    SetUpRecoveryToast = "UIComponent.setUpRecoveryToast"
 }
 
 // @alpha

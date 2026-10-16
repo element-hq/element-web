@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler, type ReactNode } from "react";
 import classNames from "classnames";
 import { Text, Tooltip } from "@vector-im/compound-web";
 
@@ -48,6 +48,11 @@ export interface DisambiguatedProfileViewSnapshot {
         emoji: string;
         text: string;
     };
+
+    /**
+     * Badges shown after the display name and user identifier, such as ones added by modules.
+     */
+    badges?: ReactNode[];
 }
 
 /**
@@ -83,6 +88,7 @@ interface DisambiguatedProfileViewProps {
  * A component to display a user's profile with optional disambiguation.
  * Shows the display name and optionally the MXID when disambiguation is needed
  * (e.g., when multiple users have the same display name).
+ * Badges from the snapshot, if any, are shown at the end.
  *
  * @example
  * ```tsx
@@ -91,11 +97,12 @@ interface DisambiguatedProfileViewProps {
  */
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const eventPresentationAttributes = useEventPresentationAttributes();
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus } = useViewModel(vm);
+    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus, badges } =
+        useViewModel(vm);
 
     const userStatusEmoji = userStatus && userStatus.emoji;
 
-    const displayNameClasses = classNames(colorClass, {
+    const displayNameClasses = classNames(styles.displayName, colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
@@ -120,26 +127,30 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
             tabIndex={vm.onClick ? 0 : undefined}
             {...eventPresentationAttributes}
         >
-            <span className={displayNameClasses} dir="auto">
-                {displayName}
-            </span>
-            {userStatus && (
-                <Tooltip description={userStatus.text} maxWidth="30ch" maxLines={1}>
-                    <Text
-                        as="span"
-                        size="md"
-                        className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
-                    >
-                        {userStatusEmoji}
-                    </Text>
-                </Tooltip>
-            )}
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
-            {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
-                    {displayIdentifier}
+            {/* mx_DisambiguatedProfile_content is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_content */}
+            <div className={classNames("mx_DisambiguatedProfile_content", styles.content)}>
+                <span className={displayNameClasses} dir="auto">
+                    {displayName}
                 </span>
-            )}
+                {userStatus && (
+                    <Tooltip description={userStatus.text} maxWidth="30ch" maxLines={1}>
+                        <Text
+                            as="span"
+                            size="md"
+                            className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
+                        >
+                            {userStatusEmoji}
+                        </Text>
+                    </Tooltip>
+                )}
+                {badges && badges.length > 0 && <div className={styles.badges}>{badges}</div>}
+                {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+                {displayIdentifier && (
+                    <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                        {displayIdentifier}
+                    </span>
+                )}
+            </div>
         </div>
     );
 }

@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { KnownMembership, MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixError, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { sleep } from "matrix-js-sdk/src/utils";
 import EventEmitter from "node:events";
 import type * as NodeEvents from "node:events";
@@ -148,6 +149,7 @@ describe("RoomViewStore", function () {
             getRoomSession() {
                 return new (class extends EventEmitter {
                     memberships = [];
+                    ensureRecalculateSessionMembers = vi.fn().mockResolvedValue(undefined);
                 })();
             }
         })(),
@@ -456,6 +458,84 @@ describe("RoomViewStore", function () {
         await untilDispatch(Action.ViewRoom, dis);
 
         expect(call.presented).toEqual(true);
+    });
+
+    describe("when a module asks to view ongoing calls", () => {
+        let call: Call;
+
+        beforeEach(async () => {
+            call = { presented: false } as Call;
+            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+            vi.spyOn(CallStore.instance, "getActiveCall").mockReturnValue(null);
+            await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+            vi.spyOn(ModuleApi.instance.customisations, "shouldViewOngoingCall").mockReturnValue(true);
+            vi.spyOn(mockClient.matrixRTC, "getRoomSession").mockReturnValue({
+                memberships: [{}],
+                ensureRecalculateSessionMembers: vi.fn().mockResolvedValue(undefined),
+            } as unknown as MatrixRTCSession);
+        });
+
+        afterEach(() => {
+            // The fake call session would otherwise reach the CallStore set up by the next test
+            vi.mocked(mockClient.matrixRTC.getRoomSession).mockRestore();
+            vi.mocked(ModuleApi.instance.customisations.shouldViewOngoingCall).mockRestore();
+        });
+
+        const viewRoom = async (): Promise<void> => {
+            dis.dispatch<ViewRoomPayload>({ action: Action.ViewRoom, room_id: roomId, metricsTrigger: undefined });
+            await untilDispatch(Action.ViewRoom, dis);
+        };
+
+        it("views the ongoing call of a joined room", async () => {
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(true);
+            expect(call.presented).toBe(true);
+        });
+
+        it.each([
+            [
+                "the module doesn't ask for it",
+                () => vi.mocked(ModuleApi.instance.customisations.shouldViewOngoingCall).mockReturnValue(undefined),
+            ],
+            [
+                "there is no ongoing call",
+                () =>
+                    vi
+                        .mocked(mockClient.matrixRTC.getRoomSession)
+                        .mockReturnValue({ memberships: [] } as unknown as MatrixRTCSession),
+            ],
+            [
+                "the user hasn't joined the room",
+                () => vi.mocked(room.getMyMembership).mockReturnValueOnce(KnownMembership.Knock),
+            ],
+        ])("shows the timeline when %s", async (_case, arrange) => {
+            arrange();
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(false);
+        });
+
+        it("views the ongoing call once the user joins the viewed room", async () => {
+            // The memberships of a just-joined room are only known once recalculated
+            const session = {
+                memberships: [] as unknown[],
+                ensureRecalculateSessionMembers: vi.fn(async () => {
+                    session.memberships = [{}];
+                }),
+            };
+            vi.mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(session as unknown as MatrixRTCSession);
+            vi.mocked(room.getMyMembership).mockReturnValueOnce(KnownMembership.Invite);
+            await viewRoom();
+            expect(roomViewStore.isViewingCall()).toBe(false);
+
+            dis.dispatch({ action: Action.OnLoggedIn, client: mockClient }, true);
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Join, KnownMembership.Invite);
+            await expect(untilDispatch(Action.ViewRoom, dis)).resolves.toEqual(
+                expect.objectContaining({ room_id: roomId, view_call: true }),
+            );
+            expect(roomViewStore.isViewingCall()).toBe(true);
+            // The client is shared between tests, so drop the listener of this test's store
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
+        });
     });
 
     it("opens a voice-intent call directly in picture-in-picture rather than maximised", async () => {
@@ -778,6 +858,50 @@ describe("RoomViewStore", function () {
                 description: error.message,
                 title: "Failed to cancel",
             });
+        });
+    });
+
+    describe("accepted knock", () => {
+        const login = () => dis.dispatch({ action: Action.OnLoggedIn, client: mockClient }, true);
+        beforeEach(() => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_ask_to_join",
+            );
+        });
+        afterEach(() => {
+            // The client is shared between tests, so drop the listener of this test's store
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("joins the room when the knock is accepted", () => {
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId);
+        });
+
+        it("does not join when ask to join is disabled", () => {
+            vi.mocked(SettingsStore.getValue).mockReturnValue(false);
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
+        });
+
+        it.each([
+            [KnownMembership.Invite, undefined],
+            [KnownMembership.Invite, KnownMembership.Leave],
+            [KnownMembership.Join, KnownMembership.Knock],
+        ])("does not join on %s with previous membership %s", (membership, prevMembership) => {
+            login();
+            mockClient.emit(RoomEvent.MyMembership, room, membership, prevMembership);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
+        });
+
+        it("stops listening once logged out", () => {
+            login();
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Invite, KnownMembership.Knock);
+            expect(mockClient.joinRoom).not.toHaveBeenCalled();
         });
     });
 });

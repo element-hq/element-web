@@ -15,6 +15,7 @@ import { type MouseEvent } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
+import { ModuleApi } from "../../../../modules/Api";
 
 /**
  * Information about a member for disambiguation purposes.
@@ -75,7 +76,8 @@ export interface DisambiguatedProfileViewModelProps {
 
 /**
  * ViewModel for the disambiguated profile, providing the current state of the component.
- * It computes pre-rendered values for the View including color classes, display identifiers, and tooltips.
+ * It computes pre-rendered values for the View including color classes, display identifiers, tooltips, and badges
+ * registered by modules.
  */
 export class DisambiguatedProfileViewModel
     extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
@@ -115,6 +117,10 @@ export class DisambiguatedProfileViewModel
             }
         }
 
+        const badges = mxid
+            ? ModuleApi.instance.customComponents.renderSenderProfileBadges({ userId: mxid })
+            : undefined;
+
         return {
             displayName,
             colorClass,
@@ -122,6 +128,7 @@ export class DisambiguatedProfileViewModel
             title,
             emphasizeDisplayName,
             userStatus,
+            badges: badges,
         };
     };
 

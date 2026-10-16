@@ -307,6 +307,85 @@ for (const auth of ["mas", "legacy"] as const) {
                             ).not.toBeVisible();
                         },
                     );
+
+                    test("should land guests in the ongoing call once their knock is accepted", async ({
+                        page,
+                        request,
+                        guestHomeserver,
+                    }) => {
+                        guestHomeserver.setRequest(request);
+                        // The room lives on the guest homeserver so that the guest can knock on it without federation
+                        const host = await guestHomeserver.registerUser("host", "pAs5w0rD!", "Host");
+                        const { room_id: roomId } = await guestHomeserver.csApi.request<{ room_id: string }>(
+                            "POST",
+                            "/v3/createRoom",
+                            host.accessToken,
+                            {
+                                name: "Call room",
+                                preset: "public_chat",
+                                initial_state: [
+                                    { type: "m.room.join_rules", state_key: "", content: { join_rule: "knock" } },
+                                ],
+                            },
+                        );
+
+                        // Fake an ongoing call
+                        await guestHomeserver.csApi.request(
+                            "PUT",
+                            `/v3/rooms/${encodeURIComponent(roomId)}/state/org.matrix.msc3401.call.member/${encodeURIComponent(`_${host.userId}_BOTDEVICE_m.call`)}`,
+                            host.accessToken,
+                            {
+                                application: "m.call",
+                                call_id: "",
+                                device_id: "BOTDEVICE",
+                                expires: 180000000,
+                                foci_preferred: [
+                                    {
+                                        livekit_alias: roomId,
+                                        livekit_service_url: "https://example.org",
+                                        type: "livekit",
+                                    },
+                                ],
+                                focus_active: { focus_selection: "oldest_membership", type: "livekit" },
+                                scope: "m.room",
+                            },
+                        );
+
+                        // Reload, as only changing the hash could leave the preview bar of the previous room in place
+                        await page.goto(`/#/room/${roomId}`);
+                        await page.reload();
+                        await page.getByRole("button", { name: "Join as guest", exact: true }).click();
+                        const dialog = page.getByRole("dialog");
+                        await dialog.getByPlaceholder("Name").fill("Jim");
+                        const registration = page.waitForResponse((r) => r.url().includes("/register_guest"));
+                        await dialog.getByRole("button", { name: "Continue as guest" }).click();
+                        const { userId: guestId } = (await (await registration).json()) as { userId: string };
+
+                        await page.getByRole("button", { name: "Request to join" }).click();
+                        await expect(page.getByText("Request to join sent")).toBeVisible();
+
+                        // Wait for the knock to reach the room before accepting it
+                        await expect
+                            .poll(async () => {
+                                const member = await guestHomeserver.csApi
+                                    .request<{ membership: string }>(
+                                        "GET",
+                                        `/v3/rooms/${encodeURIComponent(roomId)}/state/m.room.member/${encodeURIComponent(guestId)}`,
+                                        host.accessToken,
+                                    )
+                                    .catch(() => undefined);
+                                return member?.membership;
+                            })
+                            .toBe("knock");
+                        await guestHomeserver.csApi.request(
+                            "POST",
+                            `/v3/rooms/${encodeURIComponent(roomId)}/invite`,
+                            host.accessToken,
+                            { user_id: guestId },
+                        );
+
+                        await expect(page.locator(".mx_CallView")).toBeVisible();
+                    });
                 } else {
                     test("should show the module login ux", { tag: ["@screenshot"] }, async ({ page }) => {
                         const button = page.getByRole("button", { name: "Join as guest", exact: true });

@@ -9,10 +9,19 @@ Please see LICENSE files in the repository root for full details.
 
 /** Disambiguated profile needs to have a different layout in the member tile */
 .mx_MemberTileView .mx_DisambiguatedProfile {
-    /* Name and the user status emoji share the first row (with the name truncating and the emoji always visible)
-       Disambiguated MXID gets a full row below. */
+    /* Name, user status emoji and badges share the first row (with the name truncating and the emoji and badges
+       always visible). Disambiguated MXID gets a full row below. */
     display: grid;
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: minmax(0, max-content) max-content max-content 1fr;
+
+    /* Let the grid lay out the profile parts directly */
+    .mx_DisambiguatedProfile_content {
+        display: contents;
+
+        &::before {
+            content: none;
+        }
+    }
 
     .mx_DisambiguatedProfile_userStatus {
         margin-inline-start: var(--cpd-space-0-5x);
@@ -26,7 +35,7 @@ Please see LICENSE files in the repository root for full details.
         overflow: hidden;
     }
 
-    span:not(.mx_DisambiguatedProfile_mxid) {
+    .mx_DisambiguatedProfile_content > span:not(.mx_DisambiguatedProfile_mxid) {
         /**
         In a member tile, this span element is a grid child and so
         we need the following for text overflow to work.

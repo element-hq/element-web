@@ -396,6 +396,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
         session.getConsensusCallIntent = () => "video";
+        session.ensureRecalculateSessionMembers = () => Promise.resolve();
         return session;
     });
     return {

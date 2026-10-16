@@ -7,13 +7,33 @@
 
 .disambiguatedProfile {
     color: var(--cpd-color-text-primary);
+    /* Inline-block with overflow hidden sits on the line by its bottom edge, which the sender row height relies on */
     display: inline-block;
+    max-width: 100%;
     font: var(--cpd-font-body-md-regular);
     padding-block: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
+
+    /* Flex so the display name truncates first, keeping the status and badges visible */
+    .content {
+        display: flex;
+        align-items: baseline;
+
+        /* Empty text in the profile font, so the row keeps the same height and baseline as an inline line */
+        &::before {
+            content: "\200b" / "";
+        }
+    }
+
+    .displayName {
+        /* Clip only horizontally: with line-height 1 the box is shorter than the glyphs and would cut descenders */
+        overflow-x: clip;
+        min-width: 0;
+        text-overflow: ellipsis;
+    }
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
@@ -27,10 +47,26 @@
         color: var(--cpd-color-text-secondary);
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .userStatus {
+        flex-shrink: 0;
         margin-inline-start: 5px;
+    }
+
+    /* One line tall with the badges centered in it, so badges stay centered on the name whatever they start with */
+    .badges {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--cpd-space-1x);
+        flex-shrink: 0;
+        align-self: center;
+        block-size: 1lh;
+        margin-inline-start: var(--cpd-space-2x);
+        /* Used by the bubble and IRC layouts, which are not flex */
+        vertical-align: top;
     }
 }
 
@@ -43,6 +79,14 @@
     max-width: var(--event-tile-bubble-line-max-width, 70%);
     line-height: var(--event-tile-bubble-line-height, 1.125rem);
     white-space: normal;
+
+    .content {
+        display: contents;
+
+        &::before {
+            content: none;
+        }
+    }
 
     .disambiguatedProfile_displayName {
         white-space: nowrap;
@@ -64,6 +108,14 @@
     padding-block: 1px;
     display: inline-block;
     line-height: 1.125rem;
+
+    .content {
+        display: contents;
+
+        &::before {
+            content: none;
+        }
+    }
 
     &:hover {
         overflow: visible;

@@ -70,6 +70,7 @@ describe("<RoomSummaryCard />", () => {
         alias: "",
         isFavorite: false,
         canInviteToState: true,
+        moduleActions: [],
         pinCount: 0,
         searchInputRef: { current: null },
         onUpdateSearchInput: vi.fn(),
@@ -217,6 +218,25 @@ describe("<RoomSummaryCard />", () => {
         fireEvent.click(getByText(_t("action|invite")));
 
         expect(vmDefaultValues.onInviteToRoomClick).toHaveBeenCalled();
+    });
+
+    it("renders the module invite actions next to the invite button", () => {
+        const onClick = vi.fn();
+        vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            ...vmDefaultValues,
+            // The module alone decides whether its action is disabled
+            canInviteToState: false,
+            moduleActions: [
+                { key: "action", label: "Module action", icon: () => null, onClick },
+                { key: "disabled", label: "Disabled action", icon: () => null, onClick, disabled: true },
+            ],
+        });
+        getComponent();
+
+        fireEvent.click(screen.getByRole("menuitem", { name: "Module action" }));
+
+        expect(onClick).toHaveBeenCalled();
+        expect(screen.getByRole("menuitem", { name: "Disabled action" })).toBeDisabled();
     });
 
     it("fires favourite dispatch on button click", () => {

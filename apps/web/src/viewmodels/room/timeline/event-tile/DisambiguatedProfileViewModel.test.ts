@@ -5,9 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { vi, describe, it, expect } from "vitest";
+// @vitest-environment happy-dom
+
+import React from "react";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
+import { ModuleApi } from "../../../../modules/Api";
 
 describe("DisambiguatedProfileViewModel", () => {
     const member = {
@@ -36,6 +40,7 @@ describe("DisambiguatedProfileViewModel", () => {
             displayIdentifier: "@alice:example.org",
             title: "Alice (@alice:example.org)",
             emphasizeDisplayName: true,
+            badges: [],
         });
     });
 
@@ -158,5 +163,32 @@ describe("DisambiguatedProfileViewModel", () => {
         vm.setMember("Fallback", member);
 
         expect(subscriber).toHaveBeenCalledTimes(1);
+    });
+
+    describe("badges", () => {
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it("should include module badges for the user", () => {
+            const badges = [React.createElement("span", { key: "guest" }, "Guest")];
+            const renderBadges = vi
+                .spyOn(ModuleApi.instance.customComponents, "renderSenderProfileBadges")
+                .mockReturnValue(badges);
+
+            const vm = new DisambiguatedProfileViewModel({ member, fallbackName: "Fallback" });
+
+            expect(renderBadges).toHaveBeenCalledWith({ userId: "@alice:example.org" });
+            expect(vm.getSnapshot().badges).toBe(badges);
+        });
+
+        it("should not include badges when there is no member", () => {
+            const renderBadges = vi.spyOn(ModuleApi.instance.customComponents, "renderSenderProfileBadges");
+
+            const vm = new DisambiguatedProfileViewModel({ member: null, fallbackName: "Fallback" });
+
+            expect(renderBadges).not.toHaveBeenCalled();
+            expect(vm.getSnapshot().badges).toBeUndefined();
+        });
     });
 });

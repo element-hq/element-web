@@ -28,6 +28,46 @@ export interface AccountDataApi {
 }
 
 /**
+ * The HTTP method of a request.
+ * @alpha Subject to change.
+ */
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+/**
+ * Options for {@link HttpApi.authedRequest}.
+ * @alpha Subject to change.
+ */
+export interface AuthedRequestOpts {
+    /**
+     * The path prefix, e.g. `/_synapse/client`. Defaults to `/_matrix/client/v3`.
+     */
+    prefix?: string;
+    /**
+     * Query string parameters.
+     */
+    queryParams?: Record<string, string>;
+    /**
+     * The JSON body of the request.
+     */
+    body?: unknown;
+}
+
+/**
+ * Send HTTP requests to the user's homeserver.
+ * @alpha Subject to change.
+ */
+export interface HttpApi {
+    /**
+     * Send a request to the user's homeserver, authenticated with the access token of the current session.
+     * @param method - The HTTP method
+     * @param path - The path of the endpoint, after the prefix
+     * @param opts - The prefix, query parameters and body of the request
+     * @returns the parsed JSON response
+     */
+    authedRequest<T>(method: HttpMethod, path: string, opts?: AuthedRequestOpts): Promise<T>;
+}
+
+/**
  * Access some limited functionality from the SDK.
  * @public
  */
@@ -42,6 +82,12 @@ export interface ClientApi {
      * Use this to modify account data on the homeserver.
      */
     accountData: AccountDataApi;
+
+    /**
+     * Use this to send HTTP requests to the homeserver.
+     * @alpha Subject to change.
+     */
+    readonly http: HttpApi;
 
     /**
      * Fetch room by id from SDK.

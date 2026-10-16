@@ -17,8 +17,10 @@ import {
     type MatrixEvent,
     type IJoinRoomOpts,
     type RoomSummary,
+    type MatrixClient,
+    RoomEvent,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
@@ -51,6 +53,7 @@ import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
+import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -155,6 +158,8 @@ export class RoomViewStore extends EventEmitter {
     // this is defacto always assigned as `resetDispatcher` is called in the constructor.
     private dis!: MatrixDispatcher;
     private dispatchToken?: string;
+    /* Matrix client instance */
+    private client?: MatrixClient;
 
     public constructor(
         dis: MatrixDispatcher,
@@ -293,8 +298,17 @@ export class RoomViewStore extends EventEmitter {
 
                 break;
             }
+            case Action.OnLoggedIn:
+                // Only the main store listens, otherwise each locked store would join the room again
+                if (!this.lockedToRoomId) {
+                    this.client = (payload as OnLoggedInPayload).client;
+                    this.client.on(RoomEvent.MyMembership, this.onMyMembership);
+                }
+                break;
             case Action.ClientNotViable:
             case Action.OnLoggedOut:
+                this.client?.off(RoomEvent.MyMembership, this.onMyMembership);
+                this.client = undefined;
                 this.reset();
                 break;
             case "reply_to_event":
@@ -370,6 +384,8 @@ export class RoomViewStore extends EventEmitter {
                 if (payload.room_id === this.state.roomId) viewingCall = this.state.viewingCall;
                 // Always view the call in video rooms
                 else if (room && isVideoRoom(room)) viewingCall = true;
+                // Land in the ongoing call when a module asks for it
+                else if (room && this.shouldViewOngoingCall(room)) viewingCall = true;
                 // Otherwise, only view if actively connected
                 else viewingCall = CallStore.instance.getActiveCall(payload.room_id) !== null;
             }
@@ -810,6 +826,35 @@ export class RoomViewStore extends EventEmitter {
     }
 
     /**
+     * Joining the viewed room may land the user in its ongoing call, as when opening it.
+     */
+    private async viewOngoingCallOnJoin(room: Room): Promise<void> {
+        if (this.state.roomId !== room.roomId) return;
+        // Call memberships are computed asynchronously, and the session of a just-joined room may not have them yet
+        await room.client.matrixRTC.getRoomSession(room).ensureRecalculateSessionMembers();
+
+        if (this.state.roomId !== room.roomId || this.state.viewingCall || !this.shouldViewOngoingCall(room)) return;
+        this.dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+    }
+
+    /**
+     * Whether the user should see the ongoing call of a joined room instead of its timeline, as decided by modules.
+     * Showing the call of a room the user isn't in would start the call for a non-member.
+     */
+    private shouldViewOngoingCall(room: Room): boolean {
+        return (
+            room.getMyMembership() === KnownMembership.Join &&
+            room.client.matrixRTC.getRoomSession(room).memberships.length > 0 &&
+            (ModuleApi.instance.customisations.shouldViewOngoingCall(room.roomId) ?? false)
+        );
+    }
+
+    /**
      * Gets the current state of the 'promptForAskToJoin' property.
      *
      * @returns {boolean} The value of the 'promptForAskToJoin' property.
@@ -835,6 +880,23 @@ export class RoomViewStore extends EventEmitter {
             )
             .finally(() => this.setState({ promptAskToJoin: false }));
     }
+
+    /**
+     * Joins a room as soon as a knock on it is accepted, so the user doesn't have to accept the resulting invite.
+     * If the join fails, the invite stays and the user can still accept it manually.
+     * Once the viewed room is joined, lands the user in its ongoing call if modules ask for it.
+     */
+    private onMyMembership = async (room: Room, membership: Membership, prevMembership?: Membership): Promise<void> => {
+        if (membership === KnownMembership.Join) return this.viewOngoingCallOnJoin(room);
+        if (!this.client || membership !== KnownMembership.Invite || prevMembership !== KnownMembership.Knock) return;
+        if (!SettingsStore.getValue("feature_ask_to_join")) return;
+
+        try {
+            await this.client.joinRoom(room.roomId);
+        } catch (err) {
+            logger.error("Failed to join room after the knock was accepted", err);
+        }
+    };
 
     /**
      * Cancels a request to join a room by sending a leave request.

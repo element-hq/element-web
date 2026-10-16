@@ -10,6 +10,10 @@
             "options": { "cwd": "modules/restricted-guests" },
             "dependsOn": ["^build"]
         },
+        "test:unit": {
+            "command": "vitest run",
+            "options": { "cwd": "modules/restricted-guests" }
+        },
         "lint:types": {
             "command": "tsc --noEmit",
             "options": {

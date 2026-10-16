@@ -223,6 +223,29 @@ export type CustomComposerPreviewComponentProps = {
 export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<CustomComposerPreviewComponentProps>;
 
 /**
+ * Properties for a badge shown next to a user's name, such as a message sender in the timeline or a room member.
+ * @alpha Subject to change.
+ */
+export type CustomSenderProfileBadgeComponentProps = {
+    /**
+     * The Matrix ID of the user.
+     */
+    userId: string;
+};
+
+/**
+ * Function used to render a badge next to a user's name, such as a message sender in the timeline or a room member.
+ * Return null to show no badge for this user.
+ * @alpha Subject to change.
+ */
+export type CustomSenderProfileBadgeRenderFunction = (
+    /**
+     * Properties for the badge to be rendered.
+     */
+    props: CustomSenderProfileBadgeComponentProps,
+) => JSX.Element | null;
+
+/**
  * API for inserting custom components into Element.
  * @alpha Subject to change.
  */
@@ -314,4 +337,21 @@ export interface CustomComponentsApi {
         filterFn: (composerText: string, roomId: string) => boolean,
         renderer: CustomComposerPreviewRenderFunction,
     ): void;
+
+    /**
+     * Register a renderer for a badge shown next to a user's name, such as a message sender in the timeline or
+     * a room member.
+     *
+     * Multiple renderers may be registered; all non-null results are shown in registration order.
+     * A renderer that throws is skipped and the error is logged.
+     *
+     * @param renderer - The render function for the badge.
+     * @example
+     * ```
+     *  customComponents.registerSenderProfileBadge(({ userId }) => {
+     *      return userId.startsWith("@bot-") ? <Badge kind="grey">Bot</Badge> : null;
+     *  });
+     * ```
+     */
+    registerSenderProfileBadge(renderer: CustomSenderProfileBadgeRenderFunction): void;
 }

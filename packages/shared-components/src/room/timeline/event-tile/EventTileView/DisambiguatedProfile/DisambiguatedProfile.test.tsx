@@ -20,7 +20,7 @@ import {
 } from "./DisambiguatedProfileView";
 import { MockViewModel } from "../../../../../core/viewmodel/MockViewModel";
 
-const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample } = composeStories(stories);
+const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample, WithBadge } = composeStories(stories);
 
 describe("DisambiguatedProfileView", () => {
     afterEach(() => {
@@ -70,7 +70,8 @@ describe("DisambiguatedProfileView", () => {
     }
 
     const getProfileContainer = (displayName: string): HTMLDivElement => {
-        const profileContainer = screen.getByText(displayName).closest("div");
+        const profileContainer = screen.getByText(displayName).closest(".mx_DisambiguatedProfile_content")
+            ?.parentElement as HTMLDivElement | null | undefined;
         if (!profileContainer) {
             throw new Error("Expected profile container to exist");
         }
@@ -84,6 +85,13 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         expect(screen.getByText("Eve")).toBeInTheDocument();
+    });
+
+    it("should display badges after the user identifier", () => {
+        render(<WithBadge />);
+
+        const badge = screen.getByText("Guest");
+        expect(getProfileContainer("Jim")).toContainElement(badge);
     });
 
     it("should display the MXID when provided", () => {
@@ -182,7 +190,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("User With Tooltip").closest("div")).toHaveAttribute(
+        expect(getProfileContainer("User With Tooltip")).toHaveAttribute(
             "title",
             "User With Tooltip (@user:example.org)",
         );

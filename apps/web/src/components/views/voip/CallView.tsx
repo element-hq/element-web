@@ -8,13 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type FC, useContext, useEffect, type AriaRole, useCallback } from "react";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
 import { CallAppTile } from "./CallAppTile";
 import { CallStore } from "../../../stores/CallStore";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 interface JoinCallViewProps {
     room: Room;
@@ -31,6 +32,22 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
         // to stop viewing: doing so anyway would bring them back, from inside the room switch's own dispatch.
         if (call.presented) onClose();
     });
+
+    // A module may have landed the user in this call because it was ongoing: leave the lobby once everyone is gone
+    const onParticipants = (
+        participants: Map<RoomMember, Set<string>>,
+        prevParticipants: Map<RoomMember, Set<string>>,
+    ): void => {
+        if (
+            participants.size === 0 &&
+            prevParticipants.size > 0 &&
+            !call.connected &&
+            ModuleApi.instance.customisations.shouldViewOngoingCall(room.roomId)
+        ) {
+            onClose();
+        }
+    };
+    useTypedEventEmitter(call, CallEvent.Participants, onParticipants);
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state

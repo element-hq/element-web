@@ -23,4 +23,15 @@ describe("CustomisationsApi", () => {
         expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBe(true);
         expect(shouldShowComponent).toHaveBeenCalledWith("UIComponent.roomCreation");
     });
+
+    it("should use the first shouldViewOngoingCall callback returning a boolean", () => {
+        expect(api.shouldViewOngoingCall("!room:example.org")).toBeUndefined();
+
+        const undecided = vi.fn().mockReturnValue(undefined);
+        api.registerShouldViewOngoingCall(undecided);
+        api.registerShouldViewOngoingCall(() => true);
+        api.registerShouldViewOngoingCall(() => false);
+        expect(api.shouldViewOngoingCall("!room:example.org")).toBe(true);
+        expect(undecided).toHaveBeenCalledWith("!room:example.org");
+    });
 });
