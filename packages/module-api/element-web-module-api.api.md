@@ -524,8 +524,10 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
+    NotificationsToast = "UIComponent.notificationsToast",
     ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
-    RoomOptionsMenu = "UIComponent.roomOptionsMenu"
+    RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+    SetUpRecoveryToast = "UIComponent.setUpRecoveryToast"
 }
 
 // @alpha
