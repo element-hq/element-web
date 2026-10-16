@@ -74,6 +74,7 @@
         "new_video_room": "新视频房间",
         "next": "下一个",
         "no": "否",
+        "not_now": "暂不",
         "ok": "确定",
         "open": "打开",
         "pin": "置顶",
@@ -952,6 +953,7 @@
         "confirm_encryption_setup_body": "点选以下按钮确认加密设置。",
         "confirm_encryption_setup_title": "确认加密设置",
         "continue_with_reset": "继续重置",
+        "create_recovery_key": "创建恢复密钥",
         "cross_signing_room_normal": "此房间已端到端加密",
         "cross_signing_room_verified": "此房间中的每个成员都已验证",
         "cross_signing_room_warning": "有人正在使用未知设备",
@@ -988,6 +990,7 @@
         },
         "pinned_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
+        "recovery_key_description": "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥恢复备份并保留数字身份。",
         "recovery_method_removed": {
             "description_1": "此设备检测到你的安全口令与安全消息密钥已被移除。",
             "description_2": "如果不慎执行了此操作，你可以为此会话设置安全消息传递，它将使用新的恢复方法重新加密此设备的消息历史。",
@@ -995,7 +998,6 @@
             "warning": "如果你未移除恢复方法，攻击者可能正在尝试访问你的账户。请立即在“设置”中更改你的账户密码并设置新的恢复方法。"
         },
         "set_up_recovery": "备份聊天",
-        "set_up_recovery_toast_description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
         "set_up_toast_title": "设置安全备份",
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
@@ -2547,6 +2549,7 @@
             "key_storage": {
                 "allow_key_storage": "允许密钥存储",
                 "description": "这将允许你在任意新设备上查看聊天历史，这对备份聊天和数字身份是必需的。<a>了解更多</a>",
+                "recovery_requires_key_storage": "必须启用密钥存储才能设置恢复。",
                 "title": "密钥存储"
             },
             "recovery": {
@@ -2556,7 +2559,6 @@
                 "change_recovery_key": "更改恢复密钥",
                 "change_recovery_key_description": "在安全的地方记下新的恢复密钥。点选“继续”按钮以确认更改。",
                 "change_recovery_key_title": "更改恢复密钥？",
-                "description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",

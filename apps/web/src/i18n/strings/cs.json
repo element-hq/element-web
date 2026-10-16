@@ -974,7 +974,6 @@
             "warning": "Pokud jste způsob obnovy neodstranili vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "set_up_recovery": "Zálohujte své chaty",
-        "set_up_recovery_toast_description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "turn_on_key_storage": "Zapnout úložiště klíčů",
         "turn_on_key_storage_description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity.",
@@ -2506,7 +2505,6 @@
                 "change_recovery_key": "Změnit klíč pro obnovení",
                 "change_recovery_key_description": "Zapište si tento nový klíč pro obnovení na bezpečné místo. Poté klikněte na tlačítko Pokračovat a potvrďte změnu.",
                 "change_recovery_key_title": "Změnit klíč pro obnovení?",
-                "description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
                 "enter_key_error": "Zadaný klíč pro obnovení není správný.",
                 "enter_recovery_key": "Zadejte klíč pro obnovení",
                 "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",

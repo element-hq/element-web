@@ -886,7 +886,6 @@
             "warning": "Se não tiveres removido o método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
         "set_up_recovery": "Configurar a recuperação",
-        "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
         "unable_to_setup_keys_error": "Não é possível configurar as chaves",
         "verification": {
@@ -2292,7 +2291,6 @@
                 "change_recovery_key": "Altera a chave de recuperação",
                 "change_recovery_key_description": "Anota esta nova chave de recuperação num local seguro. Em seguida, clica em Continuar para confirmar a alteração.",
                 "change_recovery_key_title": "Alterar a chave de recuperação?",
-                "description": "Recupera a tua identidade criptográfica e o histórico de mensagens com uma chave de recuperação, caso tenhas perdido todos os teus dispositivos existentes.",
                 "enter_key_error": "A chave de recuperação inserida não está correta.",
                 "enter_recovery_key": "Insira a chave de recuperação",
                 "forgot_recovery_key": "Esqueceu-se da chave de recuperação?",

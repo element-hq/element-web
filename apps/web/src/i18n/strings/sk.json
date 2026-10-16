@@ -952,7 +952,6 @@
             "warning": "Ak ste neodstránili spôsob obnovenia vy, je možné, že útočník sa pokúša dostať k vášmu účtu. Radšej si ihneď zmeňte vaše heslo a nastavte si nový spôsob obnovenia v Nastaveniach."
         },
         "set_up_recovery": "Nastaviť obnovenie",
-        "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
         "turn_on_key_storage": "Zapnúť úložisko kľúčov",
         "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
@@ -2473,7 +2472,6 @@
                 "change_recovery_key": "Zmeniť kľúč na obnovenie",
                 "change_recovery_key_description": "Zapíšte si tento nový kľúč na obnovenie niekde na bezpečné miesto. Potom kliknite na tlačidlo Pokračovať a potvrďte zmenu.",
                 "change_recovery_key_title": "Zmeniť kľúč na obnovenie?",
-                "description": "Ak ste stratili všetky existujúce zariadenia, obnovte svoju kryptografickú identitu a históriu správ pomocou kľúča na obnovenie.",
                 "enter_key_error": "Zadaný kľúč na obnovenie nie je správny.",
                 "enter_recovery_key": "Zadajte kľúč na obnovenie",
                 "forgot_recovery_key": "Zabudli ste kľúč na obnovenie?",

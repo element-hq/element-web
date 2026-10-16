@@ -939,7 +939,6 @@
             "warning": "Se você não excluiu a opção de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina imediatamente uma nova opção de recuperação nas Configurações."
         },
         "set_up_recovery": "Configurar a recuperação",
-        "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_title": "Configurar o backup online",
         "turn_on_key_storage": "Ativar o armazenamento de chaves",
         "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
@@ -2414,7 +2413,6 @@
                 "change_recovery_key": "Alterar chave de recuperação",
                 "change_recovery_key_description": "Anote esta nova chave de recuperação em algum lugar seguro. Então clique em Continue para confirmar a alteração.",
                 "change_recovery_key_title": "Alterar a chave de recuperação?",
-                "description": "Recupere sua identidade criptográfica e histórico de mensagens com uma chave de recuperação se você tiver perdido todos os seus dispositivos existentes.",
                 "enter_key_error": "A chave de recuperação que você inseriu não está correta.",
                 "enter_recovery_key": "Insira a chave de recuperação",
                 "forgot_recovery_key": "Esqueceu a chave de recuperação?",

@@ -988,7 +988,6 @@
             "warning": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen, Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein."
         },
         "set_up_recovery": "Deine Chats sichern",
-        "set_up_recovery_toast_description": "Deine Chats werden automatisch gesichert. Wenn du alle deine Geräte verlierst, brauchst du deinen Wiederherstellungsschlüssel, um sie wiederherzustellen.",
         "set_up_toast_title": "Backup einrichten",
         "turn_on_key_storage": "Schlüsselspeicher einschalten",
         "turn_on_key_storage_description": "So kannst du deinen Chatverlauf auf allen neuen Geräten sehen. Erforderlich für die Sicherung von Chats und digitaler Identität.",
@@ -2535,7 +2534,6 @@
                 "change_recovery_key": "Wiederherstellungsschlüssel ändern",
                 "change_recovery_key_description": "Notiere diesen neuen Wiederherstellungsschlüssel an einem sicheren Ort. Wähle anschließend „Weiter“, um die Änderung zu bestätigen.",
                 "change_recovery_key_title": "Wiederherstellungsschlüssel ändern?",
-                "description": "Deine Chats werden automatisch gesichert. Wenn du alle deine Geräte verlierst, brauchst du deinen Wiederherstellungsschlüssel, um sie wiederherzustellen.",
                 "enter_key_error": "Der eingegebene Wiederherstellungsschlüssel ist nicht korrekt.",
                 "enter_recovery_key": "Gib den Wiederherstellungsschlüssel ein",
                 "forgot_recovery_key": "Wiederherstellungsschlüssel vergessen?",
