@@ -98,18 +98,51 @@ global.addEventListener("fetch", (event: FetchEvent) => {
     );
 });
 
+// One in-flight `/versions` check per server, shared by concurrent media requests: a room full of thumbnails would
+// otherwise send one `/versions` request each while the cache is empty.
+const serverSupportChecks: { [serverUrl: string]: Promise<void> | undefined } = {};
+
 async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: string): Promise<void> {
     // only update if we don't know about it, or if the data is stale
     if (serverSupportMap[clientApiUrl]?.cacheExpiryTimeMs > new Date().getTime()) {
         return; // up to date
     }
 
-    const config = fetchConfigForToken(accessToken);
-    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
+    serverSupportChecks[clientApiUrl] ??= checkServerSupport(clientApiUrl, accessToken).finally(() => {
+        serverSupportChecks[clientApiUrl] = undefined;
+    });
+    return serverSupportChecks[clientApiUrl];
+}
+
+async function checkServerSupport(clientApiUrl: string, accessToken?: string): Promise<void> {
+    const versionsUrl = `${clientApiUrl}/_matrix/client/versions`;
+    let response = await fetch(versionsUrl, fetchConfigForToken(accessToken));
+    if (!response.ok && accessToken) {
+        // `/versions` does not require authentication, and authenticated media support is a property of the server,
+        // not of the user. A token the server rejects (typically an expired access token read from storage before the
+        // app has refreshed it) must not decide the answer, so ask again without it.
+        console.warn(
+            `[ServiceWorker] /versions for '${clientApiUrl}' returned ${response.status} with a token; retrying without one`,
+        );
+        discardBody(response);
+        response = await fetch(versionsUrl);
+    }
+
+    // Never cache a failed check: a response without a list of versions would read as "no authenticated media" and
+    // send every media request to the legacy endpoints (which fail on servers that enforce authenticated media)
+    // until the cache expires. Throwing leaves the map untouched, so the next media request checks again.
+    if (!response.ok) {
+        discardBody(response);
+        throw new Error(`SW: /versions for '${clientApiUrl}' returned ${response.status}; not caching server support`);
+    }
+    const versions = await response.json();
+    if (!Array.isArray(versions?.versions)) {
+        throw new TypeError(`SW: /versions for '${clientApiUrl}' has no list of versions; not caching server support`);
+    }
     console.log(`[ServiceWorker] /versions response for '${clientApiUrl}': ${JSON.stringify(versions)}`);
 
     serverSupportMap[clientApiUrl] = {
-        supportsAuthedMedia: Boolean(versions?.versions?.includes("v1.11")),
+        supportsAuthedMedia: versions.versions.includes("v1.11"),
         cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
     console.log(
@@ -198,6 +231,11 @@ async function askClientForUserIdParams(
         // Ask the tab for the information we need. This is handled by WebPlatform.
         (client as Window).postMessage({ responseKey, type: "userinfo" });
     });
+}
+
+// Release the connection behind a response whose body we are not going to read.
+function discardBody(response: Response): void {
+    response.body?.cancel().catch(() => {});
 }
 
 function fetchConfigForToken(accessToken?: string): RequestInit | undefined {
