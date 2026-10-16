@@ -1,3 +1,15 @@
+Changes in [1.12.32](https://github.com/element-hq/element-web/releases/tag/v1.12.32) (2026-10-16)
+==================================================================================================
+## Security
+
+* Remove support for NEB starter links in messages. Fixes GHSA-x2rg-2g77-mx2w
+* Remove support for guest_access_token & guest_user_id. Fixes GHSA-c88w-7h6p-27xr
+
+## 🐛 Bug Fixes
+
+* Fix crash when preview room is under the fold ([#35500](https://github.com/element-hq/element-web/pull/35500)).
+
+
 Changes in [1.12.31](https://github.com/element-hq/element-web/releases/tag/v1.12.31) (2026-10-13)
 ==================================================================================================
 ## ✨ Features
