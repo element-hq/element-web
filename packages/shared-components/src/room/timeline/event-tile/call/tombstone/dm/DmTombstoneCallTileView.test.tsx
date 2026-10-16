@@ -12,10 +12,29 @@ import { render } from "@test-utils";
 
 import * as Stories from "./DmTombstoneCallTileView.stories";
 
-const { IncomingVideoDeclined, OutgoingVideoDeclined, VideoEnded, VoiceEnded } = composeStories(Stories);
+const {
+    IncomingVideoDeclined,
+    OutgoingVideoDeclined,
+    VideoEnded,
+    VoiceEnded,
+    OutgoingVoiceFailed,
+    IncomingVideoFailed,
+} = composeStories(Stories);
 
 describe("DmTombstoneCallTileView", () => {
     describe("renders the tile", () => {
+        it("OutgoingVoiceFailed", () => {
+            const { container } = render(<OutgoingVoiceFailed />);
+            expect(container.textContent).toContain("unreachable (SIP 404)");
+            expect(container).toMatchSnapshot();
+        });
+
+        it("IncomingVideoFailed", () => {
+            const { container } = render(<IncomingVideoFailed />);
+            expect(container.textContent).toContain("busy");
+            expect(container).toMatchSnapshot();
+        });
+
         it("IncomingVideoDeclined", () => {
             const { container } = render(<IncomingVideoDeclined />);
             expect(container).toMatchSnapshot();
