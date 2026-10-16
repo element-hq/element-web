@@ -30,7 +30,8 @@ on:
                 type: string
                 required: false
                 description: "Additional arguments to pass to playwright, for e.g. skipping specific tests"
-permissions: {}
+permissions:
+    contents: read
 jobs:
     test:
         name: Test ${{ inputs.project }}
