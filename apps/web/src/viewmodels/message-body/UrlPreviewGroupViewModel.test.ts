@@ -103,6 +103,11 @@ function getViewModel({
 }
 
 describe("UrlPreviewGroupViewModel", () => {
+    // Closed previews are remembered per event in local storage, and every test uses the same event ID.
+    afterEach(() => {
+        localStorage.clear();
+    });
+
     it("should return no previews by default", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchSnapshot();
     });
@@ -185,7 +190,9 @@ describe("UrlPreviewGroupViewModel", () => {
             '<a href="https://example.org">Test</a><a href="https://example.org">Test</a><a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
         expect(vm.getSnapshot()).toMatchSnapshot();
-        expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
+        // One preview of the page; the site's favicon.ico is previewed separately as the page has no image.
+        const pagePreviews = client.getUrlPreview.mock.calls.filter(([url]) => !String(url).endsWith("/favicon.ico"));
+        expect(pagePreviews).toHaveLength(1);
     });
     it("should ignore failed previews", async () => {
         const { vm, client } = getViewModel();
@@ -227,11 +234,45 @@ describe("UrlPreviewGroupViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        await vm.onHideClick();
+        await vm.onHideClick("https://example.org");
         expect(vm.getSnapshot()).toMatchSnapshot();
 
         await vm.onShowClick();
         expect(vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should hide only the closed preview and remember it", async () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockImplementation(async (url: string) => ({ ...BASIC_PREVIEW_OGDATA, "og:url": url }));
+        const msg = document.createElement("div");
+        msg.innerHTML = '<a href="https://example.org">One</a> <a href="https://example.com">Two</a>';
+        await vm.updateEventElement(msg);
+        expect(vm.getSnapshot().previews.map((p) => p.link)).toEqual(["https://example.org", "https://example.com"]);
+
+        await vm.onHideClick("https://example.org");
+
+        expect(vm.getSnapshot().previews.map((p) => p.link)).toEqual(["https://example.com"]);
+        expect(vm.getSnapshot().totalPreviewCount).toBe(1);
+        expect(localStorage.getItem("hide_preview_$id")).toBe(JSON.stringify(["https://example.org"]));
+
+        // A fresh view model for the same event, as after a reload, keeps it closed.
+        const { vm: reloaded, client: reloadedClient } = getViewModel();
+        reloadedClient.getUrlPreview.mockImplementation(async (url: string) => ({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:url": url,
+        }));
+        await reloaded.updateEventElement(msg);
+        expect(reloaded.getSnapshot().previews.map((p) => p.link)).toEqual(["https://example.com"]);
+    });
+    it("should keep every preview hidden when the older all-or-nothing flag is stored", async () => {
+        localStorage.setItem("hide_preview_$id", "1");
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+        const msg = document.createElement("div");
+        msg.innerHTML = '<a href="https://example.org">Test</a>';
+        await vm.updateEventElement(msg);
+
+        expect(vm.isPreviewHiddenByUser).toBe(true);
+        expect(vm.getSnapshot().previews).toEqual([]);
     });
     it("should hide a preview if the message requests it", async () => {
         const { vm, client } = getViewModel({
