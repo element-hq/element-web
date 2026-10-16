@@ -22,6 +22,8 @@ interface EmailInvitationFormViewModelProps {
     room: Room;
     /** Module configuration */
     config: ModuleConfig;
+    /** The invite link to copy to the clipboard */
+    inviteLink?: string;
     /** Close the dialog without sending the invitations */
     closeDialog: () => void;
     /** Called with the emails to invite and whether the join rule must change, when the user sends the invitations. */
@@ -44,7 +46,7 @@ export class EmailInvitationFormViewModel
             emails: [],
             canSendInvitations: false,
             hasAccessToChatHistory: false,
-            canCopyLinkToClipboard: props.config.allow_copy_invite_link,
+            canCopyLinkToClipboard: Boolean(props.inviteLink),
             displayCopyTooltip: false,
             isJoinRuleChangeConfirmed: false,
             isJoinRuleChangeRequired: props.room.joinRule.value !== "knock",
@@ -109,8 +111,11 @@ export class EmailInvitationFormViewModel
 
     public copyLinkToClipboard = async (): Promise<void> => {
         clearTimeout(this.copyTooltipTimeout);
-        // Copy the room permalink to the clipboard
-        await copyPlainTextToClipboard(this.props.room.getPermalink());
+        // If the invite link is not available, do nothing
+        if (!this.props.inviteLink) return;
+
+        // Copy the invite link to the clipboard
+        await copyPlainTextToClipboard(this.props.inviteLink);
         // Display the tooltip for 5 seconds
         this.snapshot.merge({ displayCopyTooltip: true });
         this.copyTooltipTimeout = setTimeout(() => this.snapshot.merge({ displayCopyTooltip: false }), 5000);

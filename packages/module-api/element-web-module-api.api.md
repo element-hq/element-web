@@ -432,7 +432,6 @@ export interface Room {
     canChangeJoinRule: () => boolean;
     canInvite: () => boolean;
     getLastActiveTimestamp: () => number;
-    getPermalink: () => string;
     id: string;
     joinRule: Watchable<JoinRule>;
     name: Watchable<string>;

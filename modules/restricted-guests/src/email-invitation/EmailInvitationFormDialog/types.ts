@@ -31,7 +31,7 @@ export interface EmailInvitationFormViewSnapshot {
     emails: Email[];
     /** True when every email is valid and, if needed, the join rule change is confirmed. */
     canSendInvitations: boolean;
-    /** Whether the "copy link" button is shown. */
+    /** Whether the "copy link" button is shown, i.e. an invite link was fetched from the homeserver. */
     canCopyLinkToClipboard: boolean;
     /** Whether the "copied" tooltip is shown after copying the link. */
     displayCopyTooltip: boolean;
@@ -49,7 +49,7 @@ export interface EmailInvitationFormViewActions {
     removeEmail(index: number): void;
     /** Submit the emails to invite and whether the join rule must change. */
     sendInvitations(): void;
-    /** Copy the room link to the clipboard. */
+    /** Copy the invite link to the clipboard. */
     copyLinkToClipboard(): Promise<void>;
     /** Close the dialog. */
     closeDialog(): void;

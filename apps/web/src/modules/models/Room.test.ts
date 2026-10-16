@@ -31,13 +31,6 @@ describe("Room", () => {
         expect(room.getLastActiveTimestamp()).toStrictEqual(sdkRoom.getLastActiveTimestamp());
     });
 
-    it("should return a shareable permalink for the sdk room", () => {
-        const cli = stubClient();
-        const sdkRoom = mkRoom(cli, "!foo:m.org");
-        const room = new Room(sdkRoom);
-        expect(room.getPermalink()).toStrictEqual("https://matrix.to/#/!foo:m.org");
-    });
-
     it("should send a join rules state event when setting the join rule", async () => {
         const cli = stubClient();
         const sdkRoom = mkRoom(cli, "!foo:m.org");

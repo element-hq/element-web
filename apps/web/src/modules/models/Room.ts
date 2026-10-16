@@ -15,7 +15,6 @@ import {
     type Room as SdkRoom,
 } from "matrix-js-sdk/src/matrix";
 
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { canInviteTo } from "../../utils/room/canInviteTo";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../utils/PreferredRoomVersions";
 
@@ -69,12 +68,6 @@ export class Room implements IRoom {
 
     public supportsKnock(): boolean {
         return doesRoomVersionSupport(this.sdkRoom.getVersion(), PreferredRoomVersions.KnockRooms);
-    }
-
-    public getPermalink(): string {
-        const permalinkCreator = new RoomPermalinkCreator(this.sdkRoom);
-        permalinkCreator.load();
-        return permalinkCreator.forShareableRoom();
     }
 
     public get id(): string {

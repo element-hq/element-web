@@ -21,6 +21,8 @@ interface EmailInvitationFormDialogProps extends DialogProps<EmailInvitationForm
     room: Room;
     /** Module configuration */
     config: ModuleConfig;
+    /** The invite link to copy to the clipboard */
+    inviteLink?: string;
 }
 
 /**
@@ -36,11 +38,12 @@ export function EmailInvitationFormDialog({
     api,
     config,
     room,
+    inviteLink,
     onCancel,
     onSubmit,
 }: Readonly<EmailInvitationFormDialogProps>): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(
-        () => new EmailInvitationFormViewModel({ api, config, room, closeDialog: onCancel, onSubmit }),
+        () => new EmailInvitationFormViewModel({ api, config, room, closeDialog: onCancel, onSubmit, inviteLink }),
     );
     return (
         // The module bundles its own copies of shared-components and compound-web, so the I18nContext and

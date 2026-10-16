@@ -31,7 +31,7 @@ export const ModuleConfig = z.object({
     skip_single_sign_on: z._default(z.boolean(), false),
     /**
      * If true, a copy invite link button will be shown in the email invitation dialog.
-     * This link will be a direct link to the room, which can be shared with other users.
+     * The invite link is fetched from the homeserver, and the button is hidden if that fails.
      * @defaultValue `false`
      */
     allow_copy_invite_link: z._default(z.boolean(), false),
