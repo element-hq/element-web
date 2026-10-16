@@ -51,6 +51,12 @@ export interface IEventAndProfile {
     profile: IMatrixProfile;
 }
 
+export interface IIndexedEvent {
+    eventId: string;
+    type: "m.room.message" | "m.room.name" | "m.room.topic";
+    serverTs: number;
+}
+
 export interface ILoadArgs {
     roomId: string;
     limit: number;
@@ -269,6 +275,24 @@ export default abstract class BaseEventIndexManager {
      * historic profile of the sender.
      */
     public async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Load the IDs, types and timestamps of a room's indexed events, ordered by timestamp.
+     *
+     * @param  {object} args Arguments object for the method.
+     * @param  {string} args.roomId The ID of the room.
+     * @param  {number} args.limit The maximum number of events to return.
+     * @param  {string} args.fromEvent The ID of a previously returned event
+     * that is still indexed. Loading continues after it.
+     * @param  {string} args.direction "b" (default) for newest first, "f" for
+     * oldest first.
+     *
+     * @returns {Promise<[IIndexedEvent]>} A promise that will resolve to the
+     * room's indexed events.
+     */
+    public async loadEventIds(args: ILoadArgs): Promise<IIndexedEvent[]> {
         throw new Error("Unimplemented");
     }
 
