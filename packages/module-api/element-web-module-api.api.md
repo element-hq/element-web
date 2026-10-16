@@ -499,6 +499,7 @@ export const enum UIComponent {
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
     PublicRooms = "UIComponent.publicRooms",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
