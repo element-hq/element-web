@@ -333,7 +333,7 @@ describe("<UserInfo />", () => {
                 // call to client.getUserId returns undefined, which will not match member.userId
                 renderComponent();
 
-                expect(screen.getByRole("button", { name: "Ignore" })).toBeInTheDocument();
+                expect(screen.getByRole("menuitem", { name: "Ignore" })).toBeInTheDocument();
             });
 
             it("shows a modal before ignoring the user", async () => {
@@ -347,7 +347,7 @@ describe("<UserInfo />", () => {
                     mockClient.getIgnoredUsers.mockReturnValue([]);
                     renderComponent();
 
-                    await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+                    await userEvent.click(screen.getByRole("menuitem", { name: "Ignore" }));
                     expect(modalSpy).toHaveBeenCalled();
                     expect(mockClient.setIgnoredUsers).toHaveBeenLastCalledWith([member.userId]);
                 } finally {
@@ -366,7 +366,7 @@ describe("<UserInfo />", () => {
                     mockClient.getIgnoredUsers.mockReturnValue([]);
                     renderComponent();
 
-                    await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+                    await userEvent.click(screen.getByRole("menuitem", { name: "Ignore" }));
                     expect(modalSpy).toHaveBeenCalled();
                     expect(mockClient.setIgnoredUsers).not.toHaveBeenCalled();
                 } finally {
@@ -379,7 +379,7 @@ describe("<UserInfo />", () => {
                 mockClient.getIgnoredUsers.mockReturnValue([member.userId]);
                 renderComponent();
 
-                await userEvent.click(screen.getByRole("button", { name: "Unignore" }));
+                await userEvent.click(screen.getByRole("menuitem", { name: "Unignore" }));
                 expect(mockClient.setIgnoredUsers).toHaveBeenCalledWith([]);
             });
         });
@@ -423,7 +423,7 @@ describe("<UserInfo />", () => {
                 room: mockRoom,
             });
 
-            await expect(screen.findByRole("button", { name: "Deactivate user" })).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("menuitem", { name: "Deactivate user" })).resolves.toBeInTheDocument();
             if (screen.queryAllByRole("progressbar").length) {
                 await act(() => waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar")));
             }
