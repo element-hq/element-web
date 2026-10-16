@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback } from "react";
-import { InlineField, InlineSpinner, Label, Link, Root, ToggleControl } from "@vector-im/compound-web";
+import { InlineSpinner, Link, Root, SettingsToggleInput } from "@vector-im/compound-web";
 
 import type { FormEvent } from "react";
 import { SettingsSection } from "../shared/SettingsSection";
@@ -63,12 +63,15 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
             })}
         >
             <Root className="mx_KeyStoragePanel_toggleRow">
-                <InlineField
+                <SettingsToggleInput
                     name="keyStorage"
-                    control={<ToggleControl name="keyStorage" checked={isEnabled} onChange={onKeyBackupChange} />}
-                >
-                    <Label>{_t("settings|encryption|key_storage|allow_key_storage")}</Label>
-                </InlineField>
+                    checked={isEnabled}
+                    onChange={onKeyBackupChange}
+                    label={_t("settings|encryption|key_storage|allow_key_storage")}
+                    helpMessage={
+                        isEnabled ? undefined : _t("settings|encryption|key_storage|recovery_requires_key_storage")
+                    }
+                />
                 {busy && <InlineSpinner />}
             </Root>
         </SettingsSection>

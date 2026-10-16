@@ -13,7 +13,8 @@ env:
     # This must be set for fetchdep.sh to get the right branch
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: "Build on ${{ matrix.image }}"
@@ -47,14 +48,18 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
-                  cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
+                  cache: ${{ runner.os != 'Windows' }}
+                  install: false
 
             - name: Fetch layered build
               id: layered
+              env:
+                  # pnpm 12 on Windows breaks running scripts after switching to the pnpm version a git dependency pins
+                  PNPM_CONFIG_PM_ON_FAIL: ignore
               run: |
                   ./scripts/layered.sh
                   VERSION=$(scripts/get-version-from-git.sh)

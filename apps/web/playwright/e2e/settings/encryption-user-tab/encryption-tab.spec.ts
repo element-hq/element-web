@@ -172,7 +172,7 @@ test.describe("Encryption tab", () => {
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Then click outside the dialog and restart
-            await page.locator("li").filter({ hasText: "Encryption" }).click({ force: true });
+            await page.getByRole("heading", { name: "Settings" }).click({ force: true, position: { x: 0, y: 0 } });
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Finally we actually continue

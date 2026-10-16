@@ -32,27 +32,27 @@ describe("VoiceRecordingStore", () => {
         [room3Id]: undefined,
     };
 
-    const mkStore = (): VoiceRecordingStore => {
+    const mkStore = async (): Promise<VoiceRecordingStore> => {
         const store = new VoiceRecordingStore();
-        store.start();
+        await store.start();
         return store;
     };
 
     describe("startRecording()", () => {
-        it("throws when roomId is falsy", () => {
-            const store = mkStore();
+        it("throws when roomId is falsy", async () => {
+            const store = await mkStore();
             expect(() => store.startRecording(undefined)).toThrow("Recording must be associated with a room");
         });
 
-        it("throws when room already has a recording", () => {
-            const store = mkStore();
+        it("throws when room already has a recording", async () => {
+            const store = await mkStore();
             // @ts-ignore
             store.storeState = state;
             expect(() => store.startRecording(room2Id)).toThrow("A recording is already in progress");
         });
 
         it("creates and adds recording to state", async () => {
-            const store = mkStore();
+            const store = await mkStore();
             const result = store.startRecording(room2Id);
 
             await flushPromises();
@@ -64,7 +64,7 @@ describe("VoiceRecordingStore", () => {
 
     describe("disposeRecording()", () => {
         it("destroys recording for a room if it exists in state", async () => {
-            const store = mkStore();
+            const store = await mkStore();
             // @ts-ignore
             store.storeState = state;
 
@@ -74,7 +74,7 @@ describe("VoiceRecordingStore", () => {
         });
 
         it("removes room from state when it has a recording", async () => {
-            const store = mkStore();
+            const store = await mkStore();
             // @ts-ignore
             store.storeState = state;
 
@@ -84,7 +84,7 @@ describe("VoiceRecordingStore", () => {
         });
 
         it("removes room from state when it has a falsy recording", async () => {
-            const store = mkStore();
+            const store = await mkStore();
             // @ts-ignore
             store.storeState = state;
 

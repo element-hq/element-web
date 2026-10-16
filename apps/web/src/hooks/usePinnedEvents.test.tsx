@@ -65,8 +65,8 @@ describe("useFetchedPinnedEvents", () => {
         await waitFor(() => expect(result.current).toHaveLength(1));
         expect(result.current[0].getContent().body).toBe("original");
 
-        act(() => {
-            room.addLiveEvents([edit(pinnedEventId, "$edit:server")], { addToState: false });
+        await act(async () => {
+            await room.addLiveEvents([edit(pinnedEventId, "$edit:server")], { addToState: false });
         });
 
         await waitFor(() => expect(result.current[0].getContent().body).toBe("edited"));
@@ -76,8 +76,8 @@ describe("useFetchedPinnedEvents", () => {
         const { result } = renderHook(() => useFetchedPinnedEvents(room, pinnedIds), { wrapper });
         await waitFor(() => expect(result.current).toHaveLength(1));
 
-        act(() => {
-            room.addLiveEvents([edit("$somethingElse:server", "$edit2:server")], { addToState: false });
+        await act(async () => {
+            await room.addLiveEvents([edit("$somethingElse:server", "$edit2:server")], { addToState: false });
         });
 
         // Wait long enough that an edit would have been applied, then confirm none was.

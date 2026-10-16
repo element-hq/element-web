@@ -26,6 +26,7 @@ import ActiveWidgetStore from "./stores/ActiveWidgetStore";
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from "./utils/StorageManager";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 import * as StorageAccess from "./utils/StorageAccess";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -133,13 +134,103 @@ function checkSessionLock(): void {
 class SessionLockStolenError extends Error {}
 
 interface ILoadSessionOpts {
+    /** Set to true to enable guest access tokens and auto-guest registrations. */
     enableGuest?: boolean;
+    /** Homeserver URL. Only used if `enableGuest` is true; defines the HS to register against. */
     guestHsUrl?: string;
+    /** Identity server URL. Only used if `enableGuest` is true; defines the IS to use. */
     guestIsUrl?: string;
+    /** If the stored session is a guest account, ignore it and don't load it. */
     ignoreGuest?: boolean;
+    /** Default display name to use when registering as a guest. */
     defaultDeviceDisplayName?: string;
+    /** The parameters read in at app load time from the URL. */
     urlParams?: URLParams;
+    /**
+     * Signal that is aborted if the server logs this session out while we are loading it (for example because the
+     * access token expired). If loading then fails, the error is ignored and `loadSession` resolves to `false`.
+     */
     abortSignal?: AbortSignal;
+}
+
+/**
+ * Get the homeserver URL to use for guest access.
+ *
+ * @returns the URL, or undefined if guest access is disabled or no homeserver URL was given.
+ */
+function getGuestHsUrl(opts: ILoadSessionOpts): string | undefined {
+    if (!opts.enableGuest) return undefined;
+    if (!opts.guestHsUrl) {
+        logger.warn("Cannot enable guest access: can't determine HS URL to use");
+        return undefined;
+    }
+    return opts.guestHsUrl;
+}
+
+/**
+ * Attempt to load the session, taking into account whether guest
+ * parameters were provided or the session lock had been used.
+ */
+async function tryLoadSession(opts: ILoadSessionOpts): Promise<boolean> {
+    const guestHsUrl = getGuestHsUrl(opts);
+    const guestCreds = opts.urlParams?.guest;
+
+    if (guestHsUrl && guestCreds?.guest_user_id && guestCreds.guest_access_token) {
+        logger.log("Using guest access credentials");
+        await doSetLoggedIn(
+            {
+                userId: guestCreds.guest_user_id,
+                accessToken: guestCreds.guest_access_token,
+                homeserverUrl: guestHsUrl,
+                identityServerUrl: opts.guestIsUrl,
+                guest: true,
+            },
+            true,
+            false,
+        );
+        return true;
+    }
+
+    if (await restoreSessionFromStorage({ ignoreGuest: Boolean(opts.ignoreGuest) })) {
+        return true;
+    }
+    if (sessionLockStolen) {
+        return false;
+    }
+
+    if (guestHsUrl) {
+        return registerAsGuest(guestHsUrl, opts.guestIsUrl, opts.defaultDeviceDisplayName);
+    }
+
+    // fall back to welcome screen
+    return false;
+}
+
+/**
+ * Handle an error thrown by {@link tryLoadSession}.
+ *
+ * @returns `false` to fall back to the welcome screen, or the result of {@link handleLoadSessionFailure}.
+ * @throws {@link LegacyCryptoStoreError} so that MatrixChat can show a dedicated error screen for it.
+ */
+async function handleLoadSessionError(e: unknown, opts: ILoadSessionOpts): Promise<boolean> {
+    // We may be aborted e.g. because our token expired, so don't show an error here
+    if (opts.abortSignal?.aborted) {
+        return false;
+    }
+
+    if (e instanceof LegacyCryptoStoreError) {
+        // This session predates the rust crypto stack and cannot be migrated. Let this
+        // propagate up to MatrixChat, which shows a dedicated error screen for it.
+        throw e;
+    }
+
+    // If we're aborting login because of a storage inconsistency, or the session lock was stolen while we were
+    // trying to start, we don't need to show the general failure dialog. Instead, just go back to welcome.
+    if (e instanceof AbortLoginAndRebuildStorage || sessionLockStolen) {
+        return false;
+    }
+
+    return handleLoadSessionFailure(e, opts);
 }
 
 /**
@@ -155,85 +246,15 @@ interface ILoadSessionOpts {
  * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
- * @param {object} [opts]
- * @param {object} [opts.fragmentQueryParams]: string->string map of the
- *     query-parameters extracted from the #-fragment of the starting URI.
- * @param {boolean} [opts.enableGuest]: set to true to enable guest access
- *     tokens and auto-guest registrations.
- * @param {string} [opts.guestHsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the HS to register against.
- * @param {string} [opts.guestIsUrl]: homeserver URL. Only used if enableGuest
- *     is true; defines the IS to use.
- * @param {bool} [opts.ignoreGuest]: If the stored session is a guest account,
- *     ignore it and don't load it.
- * @param {string} [opts.defaultDeviceDisplayName]: Default display name to use
- *     when registering as a guest.
- * @returns {Promise} a promise which resolves when the above process completes.
+ * @returns A promise which resolves when the above process completes.
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
 export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
-        let enableGuest = opts.enableGuest || false;
-        const guestHsUrl = opts.guestHsUrl;
-        const guestIsUrl = opts.guestIsUrl;
-        const urlParams = opts.urlParams;
-        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-
-        if (enableGuest && !guestHsUrl) {
-            logger.warn("Cannot enable guest access: can't determine HS URL to use");
-            enableGuest = false;
-        }
-
-        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
-            logger.log("Using guest access credentials");
-            await doSetLoggedIn(
-                {
-                    userId: urlParams.guest.guest_user_id,
-                    accessToken: urlParams.guest.guest_access_token,
-                    homeserverUrl: guestHsUrl,
-                    identityServerUrl: guestIsUrl,
-                    guest: true,
-                },
-                true,
-                false,
-            );
-            return true;
-        }
-        const success = await restoreSessionFromStorage({
-            ignoreGuest: Boolean(opts.ignoreGuest),
-        });
-        if (success) {
-            return true;
-        }
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        if (enableGuest && guestHsUrl) {
-            return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
-        }
-
-        // fall back to welcome screen
-        return false;
+        return await tryLoadSession(opts);
     } catch (e) {
-        // We may be aborted e.g. because our token expired, so don't show an error here
-        if (opts.abortSignal?.aborted) {
-            return false;
-        }
-
-        if (e instanceof AbortLoginAndRebuildStorage) {
-            // If we're aborting login because of a storage inconsistency, we don't
-            // need to show the general failure dialog. Instead, just go back to welcome.
-            return false;
-        }
-
-        // likewise, if the session lock has been stolen while we've been trying to start
-        if (sessionLockStolen) {
-            return false;
-        }
-
-        return handleLoadSessionFailure(e, opts);
+        return handleLoadSessionError(e, opts);
     }
 }
 
@@ -327,7 +348,7 @@ export async function configureFromCompletedOAuthLogin({
         identityServerUrl,
         deviceId,
         userId,
-        isGuest,
+        guest: Boolean(isGuest),
     };
 
     logger.debug("Logged in via OAuth2 native flow");
@@ -882,6 +903,9 @@ async function doSetLoggedIn(
         " freshLogin: " + credentials.freshLogin,
     );
 
+    // A logout which is still clearing storage would wipe the session we are about to persist
+    await waitForLogoutCleanup();
+
     if (clearStorageEnabled) {
         await clearStorage();
     }
@@ -956,10 +980,10 @@ async function doSetLoggedIn(
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
 
-    if (isFreshLogin && !credentials.guest) {
+    if (isFreshLogin && !credentials.guest && SdkConfig.get("force_verification")) {
         // For newly registered users, set a flag so that we force them to verify,
         // (we don't want to force users with existing sessions to verify though)
-        localStorage.setItem("must_verify_device", "true");
+        localStorage.setItem("force_verification_on_at_login", "true");
     }
 
     return client;
@@ -1154,10 +1178,8 @@ export async function onLoggedOut(): Promise<void> {
     // that can occur when components try to use a null client.
     dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
-    await clearStorage({ deleteEverything: true });
-    clearUploadedMediaCache();
-    await PlatformPeg.get()?.clearStorage();
-    SettingsStore.reset();
+    loggedOutStorageCleared = clearLoggedOutStorage();
+    await loggedOutStorageCleared;
 
     // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
@@ -1173,11 +1195,38 @@ export async function onLoggedOut(): Promise<void> {
 }
 
 /**
+ * Promise of the latest run of {@link clearLoggedOutStorage}.
+ */
+let loggedOutStorageCleared: Promise<void> | undefined;
+
+async function clearLoggedOutStorage(): Promise<void> {
+    await clearStorage({ deleteEverything: true });
+    clearUploadedMediaCache();
+    await PlatformPeg.get()?.clearStorage();
+    SettingsStore.reset();
+}
+
+/**
+ * Wait for a recent logout to finish clearing storage, if it is still running.
+ * Call this before storing anything for a new login to avoid it possibly getting corrupted.
+ */
+export async function waitForLogoutCleanup(): Promise<void> {
+    try {
+        await loggedOutStorageCleared;
+    } catch {
+        // onLoggedOut reports its own errors
+    }
+}
+
+/**
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
     logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
+
+    // Clear this before awaiting anything, so that we cannot wipe data stored for a login started in the meantime
+    window.sessionStorage?.clear();
 
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
@@ -1210,8 +1259,6 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
             }
         }
     }
-
-    window.sessionStorage?.clear();
 
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({

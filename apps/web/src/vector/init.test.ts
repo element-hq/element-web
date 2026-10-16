@@ -81,7 +81,10 @@ describe("loadApp", () => {
     });
 
     it("should pass onTokenLoginCompleted which strips searchParams & fragment to MatrixChat", async () => {
-        const spy = vi.spyOn(window.history, "replaceState");
+        // Don't actually change the URL: happy-dom fires hashchange for replaceState, unlike browsers, which would
+        // route the new hash and leave a stray event to race against later tests
+        // https://github.com/capricorn86/happy-dom/issues/2479
+        const spy = vi.spyOn(window.history, "replaceState").mockImplementation(() => {});
 
         await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));

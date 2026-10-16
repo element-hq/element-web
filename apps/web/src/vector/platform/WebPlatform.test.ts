@@ -267,6 +267,14 @@ describe("WebPlatform", () => {
         expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
     });
 
+    it("should not clear sessionStorage when clearing its storage", async () => {
+        // Logging out has already cleared it, and a new login may have started using it since
+        sessionStorage.setItem("mx_oidc_test", "value");
+        await new WebPlatform().clearStorage();
+        expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
+        sessionStorage.removeItem("mx_oidc_test");
+    });
+
     describe("getOAuthCallbackUrl()", () => {
         it("should not include the 'updated' query param in the redirect URI", () => {
             Object.defineProperty(window, "location", {

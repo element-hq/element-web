@@ -96,6 +96,7 @@
         "revoke": "撤销",
         "save": "保存",
         "search": "搜索",
+        "select_to_copy": "选择以复制",
         "send_report": "发送举报",
         "set_avatar": "设置头像",
         "share": "分享",
@@ -206,7 +207,12 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
+            "check_recovery_key": "检查恢复密钥",
+            "check_recovery_key_title": "确保你移除此设备前拥有恢复密钥",
+            "continue": "继续移除此设备",
             "description": "你确定要移除此设备？",
+            "generate_recovery_key": "生成新的恢复密钥",
+            "keep_access_description": "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。",
             "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
             "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
@@ -1521,8 +1527,9 @@
         "experimental_description": "想体验实验性功能？试试我们正在开发的最新创意。这些功能尚未最终确定；它们可能不稳定，可能会改变，也可能被完全放弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
-        "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
         "feature_element_call_react": "将 Element Call 渲染为 React 组件而不是小部件。",
+        "feature_matrixrtc_slots": "基于 Element Call 的通话需要打开 MatrixRTC 插槽。",
+        "feature_matrixrtc_slots_description": "仅允许在房间中具有有效的插槽状态事件时开始或加入 Element Call 通话。",
         "feature_retention": {
             "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持为“已读消息”设置。",
             "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
@@ -1696,7 +1703,6 @@
     },
     "member_list_back_action_label": "房间成员",
     "message_edit_dialog_title": "消息编辑",
-    "migrating_crypto": "请稍候。我们正在更新 %(brand)s，以使加密更快、更可靠。",
     "mobile_guide": {
         "toast_accept": "使用 App",
         "toast_description": "%(brand)s 在移动 Web 浏览器上处于实验阶段。为了获得更好的体验和最新功能，请使用我们的免费原生应用。",
@@ -2498,10 +2504,13 @@
         "enable_markdown_description": "在消息开头输入 <code>/plain</code> 以临时禁用 Markdown。",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "仅当你无法访问其它已登录的设备并且丢失了恢复密钥时才重置数字身份。",
+                "breadcrumb_description": "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。",
+                "breadcrumb_description_no_verification_method": "你没有其它已验证的设备或恢复密钥，因此你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
                 "breadcrumb_page": "重置加密",
-                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的消息历史",
-                "breadcrumb_third_description": "你将需要再次验证所有现有设备与联系人",
+                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的加密聊天历史",
+                "breadcrumb_third_description": "其他用户将会看到你已重置数字身份。",
                 "breadcrumb_title": "无法确认？你需要重置数字身份。",
                 "breadcrumb_title_cant_confirm": "你需要重置数字身份",
                 "breadcrumb_title_compromised": "你确定要重置数字身份？",
@@ -2558,10 +2567,8 @@
                 "set_up_recovery_confirm_button": "完成设置",
                 "set_up_recovery_confirm_description": "请输入上一屏幕显示的恢复密钥以完成恢复设置。",
                 "set_up_recovery_confirm_title": "输入恢复密钥以确认",
-                "set_up_recovery_description": "你的密钥存储受恢复密钥保护。如果设置后需要新的恢复密钥，可以选择“%(changeRecoveryKeyButton)s”重新创建。",
                 "set_up_recovery_save_key_description": "请将此恢复密钥保存到安全的地方，例如密码管理器、加密笔记或物理保险箱。",
                 "set_up_recovery_save_key_title": "保存恢复密钥到安全的地方",
-                "set_up_recovery_secondary_description": "点选“继续”将生成恢复密钥。",
                 "title": "备份"
             },
             "title": "加密"
@@ -3430,14 +3437,13 @@
                 "other": "%(senderName)s 已为此聊天添加备选地址 %(addresses)s。"
             },
             "alt_removed": {
-                "one": "%(senderName)s 已移除此房间的备选地址 %(address)s。",
-                "other": "%(senderName)s 已移除此房间的备选地址 %(addresses)s。"
+                "other": "%(senderName)s 已为此聊天移除备选地址 %(addresses)s。"
             },
-            "changed": "%(senderName)s 更改了此房间的地址。",
-            "changed_alternative": "%(senderName)s 更改了此房间的备选地址。",
-            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备选地址。",
-            "removed": "%(senderName)s 已移除此房间的主地址。",
-            "set": "%(senderName)s 已将此房间的主地址设置为 %(address)s。"
+            "changed": "%(senderName)s 已为此聊天更改地址。",
+            "changed_alternative": "%(senderName)s 已为此聊天更改备选地址。",
+            "changed_main_and_alternative": "%(senderName)s 已为此聊天更改主要与备选地址。",
+            "removed": "%(senderName)s 已为此聊天移除主要地址。",
+            "set": "%(senderName)s 已将此聊天的主要地址设置为 %(address)s。"
         },
         "m.room.create": {
             "continuation": "此房间是另一个对话的延续。",
@@ -3898,6 +3904,7 @@
         "camera_enabled": "摄像头仍处于开启状态",
         "cannot_call_yourself_description": "你无法与自己通话。",
         "close_lobby": "关闭大厅",
+        "close_slot_failed_title": "无法为此房间禁用通话",
         "connecting": "正在连接",
         "connection_lost": "与服务器的连接已丢失",
         "connection_lost_description": "在未连接到服务器的情况下，你无法进行通话。",
@@ -3952,6 +3959,7 @@
         "no_permission_conference": "需要权限",
         "no_permission_conference_description": "你无权在此房间启动会议通话",
         "on_hold": "保留 %(name)s",
+        "open_slot_failed_title": "无法为此房间启用通话",
         "output_devices": "输出设备",
         "screenshare_monitor": "分享整个屏幕",
         "screenshare_title": "分享内容",

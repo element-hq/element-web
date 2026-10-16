@@ -39,7 +39,7 @@ describe("userStatus utils", () => {
         });
 
         it("sets the user status with valid input", async () => {
-            setUserStatus(client, { emoji: "🐳", text: "Feeling a little blue" });
+            await setUserStatus(client, { emoji: "🐳", text: "Feeling a little blue" });
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", {
                 emoji: "🐳",

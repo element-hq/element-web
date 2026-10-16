@@ -16,7 +16,7 @@ index 039bff8..39d31ff 100644
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index 7032b66..104bd75 100644
+index 7032b66..b8140c8 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
 @@ -321,7 +321,24 @@ class Virtualizer {
@@ -45,7 +45,31 @@ index 7032b66..104bd75 100644
            if (item) {
              anchor = [item.key, this.getScrollOffset() - item.start];
            }
-@@ -913,9 +930,19 @@ class Virtualizer {
+@@ -443,7 +460,23 @@ class Virtualizer {
+         });
+         this.unsubs.push(
+           this.options.observeElementRect(this, (rect) => {
++            var _a2;
++            // With anchorTo: "end", keep an end-pinned viewport pinned when the
++            // scroll element shrinks, as resizeItem does when an item grows. The
++            // browser keeps scrollTop, so the end would otherwise drop below the
++            // fold. Judge "pinned" against the size before this change, and never
++            // scroll past the element's real end, except while a clamped write
++            // waits for the sizer (the DOM end is stale then; the retry lands it).
++            // Element-web patch, pending upstream.
++            const prevSize = this.scrollRect !== null ? this.getSize() : null;
++            const wasAtEnd = prevSize !== null && this.options.anchorTo === "end" && ((_a2 = this.scrollState) == null ? void 0 : _a2.behavior) !== "smooth" && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
+             this.scrollRect = rect;
++            if (wasAtEnd && prevSize > this.getSize()) {
++              const shrink = prevSize - this.getSize();
++              this.applyScrollAdjustment(
++                this._clampedAdjustment !== null ? shrink : Math.min(shrink, this.getDistanceFromEnd())
++              );
++            }
+             this.maybeNotify();
+           })
+         );
+@@ -913,9 +946,19 @@ class Virtualizer {
        const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
        const delta = size - itemSize;
        if (delta !== 0) {
@@ -67,7 +91,7 @@ index 7032b66..104bd75 100644
          const isFirstMeasure = !this.itemSizeCache.has(key);
          const defaultShouldAdjust = isFirstMeasure ? (
            // First measurement: compensate any item whose top sits above the
-@@ -928,9 +955,12 @@ class Virtualizer {
+@@ -928,9 +971,12 @@ class Virtualizer {
            // below — e.g. a streaming chat message growing at its bottom)
            // changes size *below* the anchor point, so shifting scrollTop by the
            // delta would drag the viewport downward on every growth (#1218).
@@ -83,7 +107,7 @@ index 7032b66..104bd75 100644
          );
          const shouldAdjustScroll = ((_c = this.scrollState) == null ? void 0 : _c.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(
            // The callback expects a VirtualItem; build one lazily only
-@@ -1197,16 +1227,19 @@ class Virtualizer {
+@@ -1197,16 +1243,19 @@ class Virtualizer {
        this._iosDeferredAdjustment += delta;
        return false;
      } else {

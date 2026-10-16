@@ -18,8 +18,14 @@
         margin-inline: 0;
     }
     max-width: 300px;
-    /* Override menu defaults */
-    padding-block: 0 !important;
+    /*
+     * Awful, brittle hack to remove padding from the menu which is now added on the content child
+     * This probably ought to be a parameter to the compound component if we sometimes don't want padding.
+     */
+    > [role="none"] {
+        padding-block: 0;
+        --cpd-menu-padding-block-end: 0;
+    }
     section.profile {
         margin-left: var(--cpd-space-6x);
         margin-right: var(--cpd-space-6x);
@@ -80,6 +86,10 @@
     align-items: center;
     /* Keeps the emoji background's negative z-index inside this wrapper */
     isolation: isolate;
+}
+
+.avatarWithStatus {
+    box-shadow: 0 0 0 2px var(--cpd-color-bg-canvas-default);
 }
 
 .iconStatusEmoji {

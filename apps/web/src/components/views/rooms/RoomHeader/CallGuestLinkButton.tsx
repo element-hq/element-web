@@ -35,7 +35,6 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
         url.pathname = "/room/";
         // Set params for the sharable url
         url.searchParams.set("roomId", room.roomId);
-        if (room.hasEncryptionStateEvent()) url.searchParams.set("perParticipantE2EE", "true");
         for (const server of calculateRoomVia(room)) {
             url.searchParams.set("viaServers", server);
         }

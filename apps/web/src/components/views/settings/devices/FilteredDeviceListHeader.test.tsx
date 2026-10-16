@@ -16,10 +16,10 @@ import FilteredDeviceListHeader from "./FilteredDeviceListHeader";
 
 describe("<FilteredDeviceListHeader />", () => {
     const defaultProps = {
-        "selectedDeviceCount": 0,
-        "isAllSelected": false,
-        "toggleSelectAll": vi.fn(),
-        "children": <div>test</div>,
+        selectedDeviceCount: 0,
+        isAllSelected: false,
+        toggleSelectAll: vi.fn(),
+        children: <div>test</div>,
         ["data-testid"]: "test123",
     };
     const getComponent = (props = {}) => <FilteredDeviceListHeader {...defaultProps} {...props} />;

@@ -278,7 +278,7 @@ test.describe("Room list filters and sort", () => {
 
                 // Even though favourite room is read (because we have it open), it is still shown because it is
                 // the current room.
-                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
+                await expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
             });
         });
 
