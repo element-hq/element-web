@@ -294,20 +294,6 @@ export class RoomViewStore extends EventEmitter {
                         isDM: !!DMRoomMap.shared().getUserIdForRoomId(room.roomId),
                         isSpace: room.isSpaceRoom(),
                     });
-
-                    // Joining the viewed room may land the user in its ongoing call, as when opening it
-                    if (
-                        this.state.roomId === room.roomId &&
-                        !this.state.viewingCall &&
-                        this.shouldViewOngoingCall(room)
-                    ) {
-                        this.dis.dispatch<ViewRoomPayload>({
-                            action: Action.ViewRoom,
-                            room_id: room.roomId,
-                            view_call: true,
-                            metricsTrigger: undefined,
-                        });
-                    }
                 });
 
                 break;
@@ -839,6 +825,23 @@ export class RoomViewStore extends EventEmitter {
     }
 
     /**
+     * Joining the viewed room may land the user in its ongoing call, as when opening it.
+     */
+    private async viewOngoingCallOnJoin(room: Room): Promise<void> {
+        if (this.state.roomId !== room.roomId) return;
+        // Call memberships are computed asynchronously, and the session of a just-joined room may not have them yet
+        await room.client.matrixRTC.getRoomSession(room).ensureRecalculateSessionMembers();
+
+        if (this.state.roomId !== room.roomId || this.state.viewingCall || !this.shouldViewOngoingCall(room)) return;
+        this.dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+    }
+
+    /**
      * Whether the user should see the ongoing call of a joined room instead of its timeline, as decided by modules.
      * Showing the call of a room the user isn't in would start the call for a non-member.
      */
@@ -880,8 +883,10 @@ export class RoomViewStore extends EventEmitter {
     /**
      * Joins a room as soon as a knock on it is accepted, so the user doesn't have to accept the resulting invite.
      * If the join fails, the invite stays and the user can still accept it manually.
+     * Once the viewed room is joined, lands the user in its ongoing call if modules ask for it.
      */
     private onMyMembership = async (room: Room, membership: Membership, prevMembership?: Membership): Promise<void> => {
+        if (membership === KnownMembership.Join) return this.viewOngoingCallOnJoin(room);
         if (!this.client || membership !== KnownMembership.Invite || prevMembership !== KnownMembership.Knock) return;
         if (!SettingsStore.getValue("feature_ask_to_join")) return;
 

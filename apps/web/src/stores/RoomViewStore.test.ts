@@ -149,6 +149,7 @@ describe("RoomViewStore", function () {
             getRoomSession() {
                 return new (class extends EventEmitter {
                     memberships = [];
+                    ensureRecalculateSessionMembers = vi.fn().mockResolvedValue(undefined);
                 })();
             }
         })(),
@@ -470,6 +471,7 @@ describe("RoomViewStore", function () {
             vi.spyOn(ModuleApi.instance.customisations, "shouldViewOngoingCall").mockReturnValue(true);
             vi.spyOn(mockClient.matrixRTC, "getRoomSession").mockReturnValue({
                 memberships: [{}],
+                ensureRecalculateSessionMembers: vi.fn().mockResolvedValue(undefined),
             } as unknown as MatrixRTCSession);
         });
 
@@ -513,15 +515,26 @@ describe("RoomViewStore", function () {
         });
 
         it("views the ongoing call once the user joins the viewed room", async () => {
+            // The memberships of a just-joined room are only known once recalculated
+            const session = {
+                memberships: [] as unknown[],
+                ensureRecalculateSessionMembers: vi.fn(async () => {
+                    session.memberships = [{}];
+                }),
+            };
+            vi.mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(session as unknown as MatrixRTCSession);
             vi.mocked(room.getMyMembership).mockReturnValueOnce(KnownMembership.Invite);
             await viewRoom();
             expect(roomViewStore.isViewingCall()).toBe(false);
 
-            dis.dispatch({ action: Action.JoinRoomReady, roomId, metricsTrigger: undefined });
+            dis.dispatch({ action: Action.OnLoggedIn, client: mockClient }, true);
+            mockClient.emit(RoomEvent.MyMembership, room, KnownMembership.Join, KnownMembership.Invite);
             await expect(untilDispatch(Action.ViewRoom, dis)).resolves.toEqual(
                 expect.objectContaining({ room_id: roomId, view_call: true }),
             );
             expect(roomViewStore.isViewingCall()).toBe(true);
+            // The client is shared between tests, so drop the listener of this test's store
+            dis.dispatch({ action: Action.OnLoggedOut }, true);
         });
     });
 
