@@ -994,7 +994,6 @@
             "warning": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages."
         },
         "set_up_recovery": "Sauvegardez vos discussions",
-        "set_up_recovery_toast_description": "Vos conversations sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "turn_on_key_storage": "Activer le stockage des clés",
         "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
@@ -2558,7 +2557,6 @@
                 "change_recovery_key": "Changer la clé de récupération",
                 "change_recovery_key_description": "Notez cette nouvelle clé de récupération dans un endroit sûr. Cliquez ensuite sur Continuer pour confirmer la modification.",
                 "change_recovery_key_title": "Changer la clé de récupération ?",
-                "description": "Vos discussions sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
                 "enter_key_error": "La clé de récupération que vous avez saisie est incorrecte.",
                 "enter_recovery_key": "Saisir la clé de récupération",
                 "forgot_recovery_key": "Clé de récupération oubliée ?",
