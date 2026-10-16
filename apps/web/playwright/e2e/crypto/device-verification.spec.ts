@@ -199,107 +199,44 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
     });
 
-    test.describe("With force_verification off", () => {
-        // These tests skip verification at login so it can verify from settings instead,
-        // so opt out of the (now default) forced verification.
-        test.use({ config: { force_verification: false } });
+    test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey!;
 
-        test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
-            const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey!;
+        await logIntoElement(page, credentials);
 
-            await logIntoElement(page, credentials);
+        /* Dismiss "Verify this device" */
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
 
-            /* Dismiss "Verify this device" */
-            const authPage = page.locator(".mx_AuthPage");
-            await authPage.getByRole("button", { name: "Skip verification for now" }).click();
-            await authPage.getByRole("button", { name: "I'll verify later" }).click();
-            await page.waitForSelector(".mx_MatrixChat");
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
 
-            const settings = await app.settings.openUserSettings("Encryption");
-            await settings.getByRole("button", { name: "Verify this device" }).click();
-            await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
-        });
+    test("After cancelling verify with another device, I can try again #29882", async ({ page, app, credentials }) => {
+        // Regression test for https://github.com/element-hq/element-web/issues/29882
 
-        test("After cancelling verify with another device, I can try again #29882", async ({
-            page,
-            app,
-            credentials,
-        }) => {
-            // Regression test for https://github.com/element-hq/element-web/issues/29882
+        // Log in without verifying
+        await logIntoElement(page, credentials);
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
 
-            // Log in without verifying
-            await logIntoElement(page, credentials);
-            const authPage = page.locator(".mx_AuthPage");
-            await authPage.getByRole("button", { name: "Skip verification for now" }).click();
-            await authPage.getByRole("button", { name: "I'll verify later" }).click();
-            await page.waitForSelector(".mx_MatrixChat");
+        // Start to verify with "Use another device" but cancel
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await page.getByRole("button", { name: "Use another device" }).click();
+        await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Close dialog" }).click();
 
-            // Start to verify with "Use another device" but cancel
-            const settings = await app.settings.openUserSettings("Encryption");
-            await settings.getByRole("button", { name: "Verify this device" }).click();
-            await page.getByRole("button", { name: "Use another device" }).click();
-            await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Close dialog" }).click();
+        // Start again
+        await settings.getByRole("button", { name: "Verify this device" }).click();
 
-            // Start again
-            await settings.getByRole("button", { name: "Verify this device" }).click();
-
-            // We should be offered to use another device again.
-            // (In the bug, we were immediately told that verification has been cancelled.)
-            await expect(page.getByRole("button", { name: "Use another device" })).toBeVisible();
-        });
-
-        test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, app }) => {
-            /* Log in but don't verify the device */
-            await logIntoElement(page, credentials);
-            const authPage = page.locator(".mx_AuthPage");
-            await authPage.getByRole("button", { name: "Skip verification for now" }).click();
-            await authPage.getByRole("button", { name: "I'll verify later" }).click();
-
-            await page.waitForSelector(".mx_MatrixChat");
-            const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId()!);
-
-            /* Create an encrypted room so the "Verify this device" toast appears */
-            await app.client.createRoom({
-                initial_state: [
-                    {
-                        type: "m.room.encryption",
-                        state_key: "",
-                        content: { algorithm: "m.megolm.v1.aes-sha2" },
-                    },
-                ],
-            });
-
-            /* Now initiate a verification request from the *bot* device. */
-            const botVerificationRequest = await aliceBotClient.evaluateHandle(
-                async (client, { userId, deviceId }) => {
-                    return client.getCrypto()!.requestDeviceVerification(userId, deviceId);
-                },
-                { userId: credentials.userId, deviceId: elementDeviceId },
-            );
-
-            /* Check the toast for the incoming request */
-            const toast = await getToast(page, "Verification requested");
-            // it should contain the device ID of the requesting device
-            await expect(toast.getByText(`${aliceBotClient.credentials!.deviceId} from `)).toBeVisible();
-            // Accept
-            await toast.getByRole("button", { name: "Start verification" }).click();
-
-            /* Click 'Start' to start SAS verification */
-            await page.getByRole("button", { name: "Start" }).click();
-
-            /* on the bot side, wait for the verifier to exist ... */
-            const verifier = await awaitVerifier(botVerificationRequest);
-            // ... confirm ...
-            void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier!.verify());
-            // ... and then check the emoji match
-            await doTwoWaySasVerification(page, verifier);
-
-            /* And we're all done! */
-            const infoDialog = page.locator(".mx_InfoDialog");
-            await infoDialog.getByRole("button", { name: "They match" }).click();
-            await expect(infoDialog.getByText("Device verified")).toBeVisible();
-            await infoDialog.getByRole("button", { name: "Got it" }).click();
-        });
+        // We should be offered to use another device again.
+        // (In the bug, we were immediately told that verification has been cancelled.)
+        await expect(page.getByRole("button", { name: "Use another device" })).toBeVisible();
     });
 
     /** Helper for the three tests above which verify by recovery key */
@@ -331,6 +268,59 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // The backup decryption key should be in cache also, as we got it directly from the 4S
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     }
+
+    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, app }) => {
+        /* Log in but don't verify the device */
+        await logIntoElement(page, credentials);
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+
+        await page.waitForSelector(".mx_MatrixChat");
+        const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId()!);
+
+        /* Create an encrypted room so the "Verify this device" toast appears */
+        await app.client.createRoom({
+            initial_state: [
+                {
+                    type: "m.room.encryption",
+                    state_key: "",
+                    content: { algorithm: "m.megolm.v1.aes-sha2" },
+                },
+            ],
+        });
+
+        /* Now initiate a verification request from the *bot* device. */
+        const botVerificationRequest = await aliceBotClient.evaluateHandle(
+            async (client, { userId, deviceId }) => {
+                return client.getCrypto()!.requestDeviceVerification(userId, deviceId);
+            },
+            { userId: credentials.userId, deviceId: elementDeviceId },
+        );
+
+        /* Check the toast for the incoming request */
+        const toast = await getToast(page, "Verification requested");
+        // it should contain the device ID of the requesting device
+        await expect(toast.getByText(`${aliceBotClient.credentials!.deviceId} from `)).toBeVisible();
+        // Accept
+        await toast.getByRole("button", { name: "Start verification" }).click();
+
+        /* Click 'Start' to start SAS verification */
+        await page.getByRole("button", { name: "Start" }).click();
+
+        /* on the bot side, wait for the verifier to exist ... */
+        const verifier = await awaitVerifier(botVerificationRequest);
+        // ... confirm ...
+        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier!.verify());
+        // ... and then check the emoji match
+        await doTwoWaySasVerification(page, verifier);
+
+        /* And we're all done! */
+        const infoDialog = page.locator(".mx_InfoDialog");
+        await infoDialog.getByRole("button", { name: "They match" }).click();
+        await expect(infoDialog.getByText("Device verified")).toBeVisible();
+        await infoDialog.getByRole("button", { name: "Got it" }).click();
+    });
 });
 
 /** Extract the qrcode out of an on-screen html element */

@@ -29,7 +29,7 @@ export const DEFAULTS = {
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
     show_labs_settings: false,
-    force_verification: true,
+    force_verification: false,
     enable_client_well_known_lookups: true,
 
     jitsi: {
