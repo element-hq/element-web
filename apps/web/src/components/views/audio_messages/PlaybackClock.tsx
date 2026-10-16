@@ -50,6 +50,10 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
         this.props.playback.clockInfo.liveData.onUpdate(this.onTimeUpdate);
     }
 
+    public componentWillUnmount(): void {
+        this.props.playback.off(UPDATE_EVENT, this.onPlaybackUpdate);
+    }
+
     private onPlaybackUpdate = (ev: PlaybackState): void => {
         // Convert Decoding -> Stopped because we don't care about the distinction here
         if (ev === PlaybackState.Decoding) ev = PlaybackState.Stopped;
