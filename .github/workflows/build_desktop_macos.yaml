@@ -61,7 +61,8 @@ on:
                 required: false
                 description: "List of targets to build"
                 default: "dmg zip"
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: Build macOS Universal

@@ -885,7 +885,6 @@
             "warning": "Kurtarma yöntemini kaldırmadıysanız, bir saldırgan hesabınıza erişmeye çalışıyor olabilir. Hesap parolanızı değiştirin ve Ayarlar'da hemen yeni bir kurtarma yöntemi belirleyin."
         },
         "set_up_recovery": "Kurtarmayı ayarlayın",
-        "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
         "set_up_toast_title": "Güvenli Yedekleme kur",
         "unable_to_setup_keys_error": "Anahtarlar ayarlanamıyor",
         "verification": {
@@ -2282,7 +2281,6 @@
                 "change_recovery_key": "Kurtarma anahtarını değiştir",
                 "change_recovery_key_description": "Bu yeni kurtarma anahtarını güvenli bir yere kaydedin. Ardından değişikliği onaylamak için Devam'a tıklayın.",
                 "change_recovery_key_title": "Kurtarma anahtarını değiştir?",
-                "description": "Mevcut tüm cihazlarınızı kaybettiyseniz, kurtarma anahtarıyla şifreleme kimliğinizi ve mesaj geçmişinizi kurtarın.",
                 "enter_key_error": "Girdiğiniz kurtarma anahtarı doğru değil.",
                 "enter_recovery_key": "Kurtarma anahtarını girin",
                 "forgot_recovery_key": "Kurtarma anahtarınızı mı unuttunuz?",

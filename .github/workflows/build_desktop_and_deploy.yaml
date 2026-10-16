@@ -41,7 +41,8 @@ run-name: Element ${{ inputs.mode != 'release' && github.event_name != 'release'
 concurrency: ${{ github.workflow }}
 env:
     R2_BUCKET: ${{ vars.R2_BUCKET }}
-permissions: {} # Uses ELEMENT_BOT_TOKEN
+permissions:
+    contents: read
 jobs:
     prepare:
         uses: ./.github/workflows/build_desktop_prepare.yaml
@@ -49,8 +50,6 @@ jobs:
         if: |
             github.event_name != 'release' ||
             !startsWith(github.event.release.tag_name, 'module/')
-        permissions:
-            contents: read
         with:
             config: element.io/${{ inputs.mode || (github.event_name == 'release' && 'release') || 'nightly' }}
             version: ${{ (inputs.mode != 'release' && github.event_name != 'release') && 'develop' || '' }}
@@ -83,6 +82,8 @@ jobs:
             matrix:
                 arch: [x64, arm64]
         uses: ./.github/workflows/build_desktop_windows.yaml
+        permissions:
+            contents: read
         secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true

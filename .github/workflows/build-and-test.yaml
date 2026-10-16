@@ -50,7 +50,8 @@ env:
     NUM_RUNNERS: ${{ github.event_name == 'schedule' && 1 || 4 }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     prepare:
@@ -124,6 +125,7 @@ jobs:
             actions: read
             issues: read
             pull-requests: read
+            contents: read
         strategy:
             fail-fast: false
             matrix:
@@ -328,8 +330,9 @@ jobs:
                       --config=playwright-merge.config.ts \
                       ./all-blob-reports
               env:
-                  # Only pass creds to the flaky-reporter on main branch runs, or in merge queues (knowing these may be false positives)
-                  GITHUB_TOKEN: ${{ case(github.event_name == 'merge_group' || github.ref_name == 'develop', secrets.ELEMENT_BOT_TOKEN, '') }}
+                  # Only pass creds to the flaky-reporter on main branch runs, or in develop merge queues (knowing these may be false positives).
+                  # Staging merge queues are skipped as they lack fixes already landed on develop.
+                  GITHUB_TOKEN: ${{ case((github.event_name == 'merge_group' && github.event.merge_group.base_ref == 'refs/heads/develop') || github.ref_name == 'develop', secrets.ELEMENT_BOT_TOKEN, '') }}
                   PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('Playwright Report PR-{0}', env.PR_NUMBER), 'Playwright Report') }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected

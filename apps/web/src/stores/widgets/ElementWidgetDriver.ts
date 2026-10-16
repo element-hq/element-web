@@ -27,6 +27,10 @@ import {
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
     type IRtcTransportsResult,
+    type IRtcLivekitGetTokenFromWidgetRequestData,
+    type IRtcLivekitGetTokenFromWidgetResponseData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -119,6 +123,8 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitGetToken);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitDelegateDelayedLeave);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -752,6 +758,31 @@ export class ElementWidgetDriver extends WidgetDriver {
             // Re-throw to turn the error into a widget error response
             throw e;
         }
+    }
+
+    /**
+     * Obtains a JWT for a LiveKit SFU on the widget's behalf by calling the
+     * homeserver's `/rtc/livekit/get_token` endpoint (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async getRtcLivekitToken(
+        data: IRtcLivekitGetTokenFromWidgetRequestData,
+    ): Promise<IRtcLivekitGetTokenFromWidgetResponseData> {
+        // Errors are re-thrown so that MatrixErrors reach the widget as matrix_api_error details
+        return { ...(await MatrixClientPeg.safeGet()._unstable_getLivekitToken(data)) };
+    }
+
+    /**
+     * Hands a MatrixRTC session's delayed leave event over to the homeserver on
+     * the widget's behalf by calling `/rtc/livekit/delegate_delayed_leave` (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async delegateRtcLivekitDelayedLeave(
+        data: IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    ): Promise<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData> {
+        // Errors are re-thrown so that the widget can detect homeservers without support (M_UNRECOGNIZED)
+        await MatrixClientPeg.safeGet()._unstable_delegateDelayedLeave(data);
+        return {};
     }
 
     public async readEventRelations(

@@ -14,7 +14,8 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     lint:
@@ -97,6 +98,7 @@ jobs:
         runs-on: ubuntu-26.04
         permissions:
             security-events: write
+            contents: read
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -137,6 +139,7 @@ jobs:
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
+            contents: read
         with:
             hardcoded-words: "Element"
             packageManager: pnpm

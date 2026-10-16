@@ -78,6 +78,8 @@ export default defineConfig({
                 "@vector-im/compound-web",
                 "react-virtuoso",
                 "react-resizable-panels",
+                "react/jsx-runtime",
+                "html-react-parser",
             ],
             plugins: [
                 esmExternalRequirePlugin({

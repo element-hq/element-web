@@ -160,7 +160,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: new Room(roomId, client, userId),
         };
         const vm = new WidgetContextMenuViewModel(props);
-        vm.onStreamAudioClick();
+        await vm.onStreamAudioClick();
         await expect(livestream.startJitsiAudioLivestream).toHaveBeenCalled();
         expect(props.onFinished).toHaveBeenCalled();
     });

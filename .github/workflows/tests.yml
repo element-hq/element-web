@@ -25,7 +25,8 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {}
+permissions:
+    contents: read
 
 jobs:
     vitest:

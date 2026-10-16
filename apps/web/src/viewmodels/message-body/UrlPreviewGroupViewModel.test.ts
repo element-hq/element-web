@@ -116,7 +116,7 @@ describe("UrlPreviewGroupViewModel", () => {
     });
     it("should preview nested URLs but ignore some element types", async () => {
         const { vm, client } = getViewModel();
-        vm.onTogglePreviewLimit();
+        await vm.onTogglePreviewLimit();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         const msg = document.createElement("div");
         msg.innerHTML = `

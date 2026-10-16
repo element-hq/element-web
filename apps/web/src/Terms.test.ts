@@ -190,7 +190,7 @@ describe("Terms", function () {
 
 describe("dialogTermsInteractionCallback", () => {
     it("should render a dialog with the expected terms", async () => {
-        dialogTermsInteractionCallback(
+        void dialogTermsInteractionCallback(
             [
                 {
                     service: new Service(SERVICE_TYPES.IS, "http://base_url", "access_token"),

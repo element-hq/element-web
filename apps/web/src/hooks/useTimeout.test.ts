@@ -29,7 +29,9 @@ describe("useTimeout", () => {
         });
 
         rerender({ handler: second });
-        act(() => vi.advanceTimersByTime(1000));
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
 
         expect(first).not.toHaveBeenCalled();
         expect(second).toHaveBeenCalledTimes(1);
@@ -62,9 +64,13 @@ describe("useInterval", () => {
             initialProps: { handler: first },
         });
 
-        act(() => vi.advanceTimersByTime(1000));
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
         rerender({ handler: second });
-        act(() => vi.advanceTimersByTime(2000));
+        act(() => {
+            vi.advanceTimersByTime(2000);
+        });
         unmount();
         vi.advanceTimersByTime(1000);
 
