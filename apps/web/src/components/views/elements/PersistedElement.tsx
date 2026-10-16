@@ -79,8 +79,15 @@ export default class PersistedElement extends React.Component<IProps> {
     private child?: HTMLDivElement;
 
     private static rootMap: Record<string, [root: Root, container: Element]> = {};
-    // The PersistedElements currently mounted for each persistKey, so that a change made from outside
-    // (see `detach`) can be pushed to them.
+    // The PersistedElements mounted for each persistKey, in mount order.
+    // On unmount: empty set -> leaving for good (hide it)
+    // The set holds the next position -> moving to another placeholder (dont hide it)
+    //
+    // The app does not move the tree as a clean unmount -> hide -> mount -> show. The old and new placeholders
+    // overlap, and the old one can re-render after the new one has mounted. Enforcing an order across RoomView
+    // and PipContainer would be a bigger and more fragile refactor.
+    // Coping with it here has less footguns, is more stable.
+    // (see `detach` for more context)
     private static instances = new Map<string, Set<PersistedElement>>();
     // The positioned child of each persistKey's tree, for when no PersistedElement is mounted.
     private static children = new Map<string, HTMLDivElement>();

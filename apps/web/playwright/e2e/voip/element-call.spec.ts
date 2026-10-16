@@ -586,10 +586,9 @@ test.describe("Element Call", () => {
                     const header = page.locator(".mx_RoomHeader");
 
                     await openAndJoinCall(page);
-                    // In a call there is nothing to start, so the call buttons make way for taking the call
-                    // out of the room view. The React embedding offers only the browser's own
-                    // Picture-in-Picture window (screenshots are taken on Chrome, which has the API); the
-                    // widget embedding offers only minimising into Element Web's floating PiP.
+                    // During a call the header call buttons are not needed.
+                    // We replace them with a PiP button. The React embedding offers the browser (S) PiP.
+                    // The widget embedding offers only minimising into Element Web's floating PiP.
                     await expect(header.getByRole("button", { name: "Video call" })).toHaveCount(0);
                     await expect(header.getByRole("button", { name: "Voice call" })).toHaveCount(0);
                     await expect(header.getByTestId("document-pip-button")).toHaveCount(embedding === "react" ? 1 : 0);
@@ -765,7 +764,7 @@ test.describe("Element Call", () => {
             await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
         });
 
-        test("has its tooltips styled by Element Web's Compound", async ({ page, user, room, app }) => {
+        test("has its tooltips styled by Element Web's Compound", async ({ page, room, app }) => {
             await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
             await app.viewRoomById(room.roomId);
 
@@ -781,7 +780,7 @@ test.describe("Element Call", () => {
             const callRoot = page.locator("[data-element-call-root]");
             const microphone = callRoot.getByRole("switch", { name: /microphone/ });
             const label = page.getByText(/^(Mute|Unmute) microphone$/);
-            // The bubble around the label is what the stylesheet clips; it carries no role of its own
+            // clip-path is the fingerprint of Compound's "invisible" rule (confirms it gets styled by EW)
             const tooltip = label.locator("..");
             await expect(label).toBeAttached();
             await expect(callRoot.getByText(/^(Mute|Unmute) microphone$/)).toHaveCount(0);
@@ -842,7 +841,9 @@ test.describe("Element Call", () => {
             },
         });
 
-        test("moves the call into a browser window and back", async ({ page, user, room, app }) => {
+        test("moves the call into a browser window and back", async ({ page, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
             test.skip(
                 !(await page.evaluate(() => "documentPictureInPicture" in window)),
                 "This browser has no Document Picture-in-Picture API",
@@ -861,8 +862,6 @@ test.describe("Element Call", () => {
 
             // In a call: the browser PiP button, and no button to start another call
             const documentPip = page.getByTestId("document-pip-button");
-            await expect(documentPip).toBeVisible();
-            await expect(page.getByRole("button", { name: "Video call" })).toHaveCount(0);
 
             await documentPip.click();
             // The component's DOM left this document for the browser's window; the room shows the
@@ -888,15 +887,26 @@ test.describe("Element Call", () => {
         });
 
         test("keeps a call that was just joined in the browser window", async ({ page, user, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
             test.skip(
                 !(await page.evaluate(() => "documentPictureInPicture" in window)),
                 "This browser has no Document Picture-in-Picture API",
             );
             const mock = page.getByRole("region", { name: "Element Call (mock)" });
 
-            // Element Call reports having joined before its membership has come back down the sync. On a
-            // first call, while the component is still being downloaded, the user can open the window in
-            // that gap. Hold back sync responses to keep the gap open for as long as the test needs.
+            // Element Web treats the element call component as joined based on the target state.
+            // (clicking join button -> treat the call as joined)
+            // But the RTCSession joined state only appears after the event has been synced:
+            //  - EC loads
+            //  - EC initialisez
+            //  - EC send membership event
+            //  - hs syncs memberhsip event
+            //
+            // On a first call, while the component is still being downloaded, there is a high chance, the user can open the window in
+            // that gap. (first download can take >2-3s)
+            // This has resulted in a broken expecience. This regression test reproduces this condition
+            // by holding back sync responses to construct: open pip while in this "gap".
             let releaseSync!: () => void;
             const syncHeld = new Promise<void>((resolve) => (releaseSync = resolve));
             let holdSync = false;

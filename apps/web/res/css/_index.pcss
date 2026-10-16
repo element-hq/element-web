@@ -6,10 +6,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
-/*
- * `normalize` and `compound-legacy` are declared first because they come from the call component's
- * stylesheet (see `ElementCallComponent.css`), which loads lazily. Declared here, Element Call's element
- * reset and base styles stay below `compound-web`, as they are in Element Call itself.
+ * The layers mix EC layers (normalize, compound-legacy) and EW layers (the others).
+ * This looks unique/unexpected. The choice that made this a requirement is:
+ * Share compound styles EC and EW. Don't bundle twice -> lower target size.
+ *
+ * The details:
+ *  - We load `ElementCallComponent.css` lazily. So the styles end up "on top" of EW (css order).
+ *  - EC relies on `normalize`. (note: The css reset is scoped to the EC component via css selectors)
+ * - `compount-web` styles are required for EC as it does not bundle them again (target size).
+ *
+ * This is the conflict that requires the layers. (EC `normalize` vs EW `compound-web`)
+ * The layers make sure that inside EC, EW's compount-web get applied after the reset.
  */
 @layer normalize, compound-legacy, compound-tokens, compound-web, shared-components, app-web;
 
