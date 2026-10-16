@@ -11,6 +11,14 @@ import { sanitizeHtml, sanitizeHtmlText } from "./index";
 import { MATRIX_FORMATTING_TAGS } from "./sanitizeHtmlParams";
 
 describe("sanitizeHtml", () => {
+    it("preserves only the unstable explicit-link attribute on anchors", () => {
+        const safe = sanitizeHtml(
+            '<a href="matrix:u/alice:example.org" data-org.matrix.msc4550.link="ignored" data-mx-link>DM me</a>',
+        );
+        expect(safe).toContain('data-org.matrix.msc4550.link="ignored"');
+        expect(safe).not.toContain("data-mx-link");
+        expect(sanitizeHtml("<span data-org.matrix.msc4550.link>text</span>")).toBe("<span>text</span>");
+    });
     it("allows Element Web formatting tags", () => {
         const selfClosingTags = new Set(["br", "hr", "img"]);
         const html = MATRIX_FORMATTING_TAGS.map((tag) =>
