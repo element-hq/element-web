@@ -15,6 +15,7 @@ import {
     type MatrixClient,
     type MatrixEvent,
     PushRuleKind,
+    RelationType,
     type Room,
 } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
@@ -754,6 +755,145 @@ describe("<TextualBody />", () => {
         it("ignores bundled-only in an unencrypted room", () => {
             enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
             expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
+        });
+    });
+
+    describe("removing bundled url previews", () => {
+        const currentUser = "@user:example.com";
+        const bundleOne = {
+            "matched_url": "https://example.org/1",
+            "og:title": "Bundled one",
+            "og:description": "First bundled preview",
+            "og:url": "https://example.org/1",
+        };
+        const bundleTwo = {
+            "matched_url": "https://example.org/2",
+            "og:title": "Bundled two",
+            "og:description": "Second bundled preview",
+            "og:url": "https://example.org/2",
+        };
+
+        let matrixClient: MockedObject<MatrixClient>;
+        let bundleFeatureEnabled: boolean;
+
+        const mkBundledMessage = ({ sender = currentUser, bundles = [bundleOne] } = {}): MatrixEvent =>
+            mkEvent({
+                type: "m.room.message",
+                room: room1Id,
+                user: sender,
+                content: {
+                    "body": "Visit https://example.org/1 and https://example.org/2",
+                    "msgtype": "m.text",
+                    "com.beeper.linkpreviews": bundles,
+                },
+                event: true,
+            });
+
+        const renderBundled = (mxEvent: MatrixEvent): ReturnType<typeof render> =>
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
+
+        beforeEach(() => {
+            setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            bundleFeatureEnabled = true;
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                setting === "feature_msc4095_url_preview_bundle" ? bundleFeatureEnabled : original(setting, ...rest),
+            );
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: (roomId: string | undefined) => (roomId === room1Id ? defaultRoom : null),
+                getRooms: () => [defaultRoom],
+                getAccountData: (): MatrixEvent | undefined => undefined,
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+                getUserId: () => currentUser,
+                getUrlPreview: vi.fn().mockResolvedValue({ "og:title": "Fetched", "og:url": "https://example.org/1" }),
+                sendMessage: vi.fn().mockResolvedValue({ event_id: "$edit:example.com" }),
+                ...mockClientPushProcessor(),
+            });
+            DMRoomMap.makeShared(matrixClient);
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it("adds a close button to each preview when the current user sent a bundled preview", async () => {
+            renderBundled(mkBundledMessage({ bundles: [bundleOne, bundleTwo] }));
+
+            await screen.findByRole("link", { name: "Bundled one" });
+            expect(screen.getAllByRole("button", { name: "Close preview" })).toHaveLength(2);
+        });
+
+        it("edits the message to strip the closed preview from the bundle", async () => {
+            const ev = mkBundledMessage();
+            renderBundled(ev);
+
+            fireEvent.click(await screen.findByRole("button", { name: "Close preview" }));
+
+            expect(matrixClient.sendMessage).toHaveBeenCalledWith(
+                room1Id,
+                expect.objectContaining({
+                    "body": "* Visit https://example.org/1 and https://example.org/2",
+                    "m.new_content": expect.objectContaining({
+                        "com.beeper.linkpreviews": [],
+                    }),
+                    "m.relates_to": {
+                        rel_type: RelationType.Replace,
+                        event_id: ev.getId(),
+                    },
+                }),
+            );
+        });
+
+        it("only removes the preview whose close button was clicked", async () => {
+            renderBundled(mkBundledMessage({ bundles: [bundleOne, bundleTwo] }));
+
+            await screen.findByRole("link", { name: "Bundled two" });
+            fireEvent.click(screen.getAllByRole("button", { name: "Close preview" })[1]);
+
+            expect(matrixClient.sendMessage).toHaveBeenCalledWith(
+                room1Id,
+                expect.objectContaining({
+                    "m.new_content": expect.objectContaining({
+                        "com.beeper.linkpreviews": [bundleOne],
+                    }),
+                }),
+            );
+        });
+
+        it("sends the edit into the thread when the event is threaded", async () => {
+            const ev = mkBundledMessage();
+            vi.spyOn(ev, "threadRootId", "get").mockReturnValue("$threadroot:example.com");
+            renderBundled(ev);
+
+            fireEvent.click(await screen.findByRole("button", { name: "Close preview" }));
+
+            expect(matrixClient.sendMessage).toHaveBeenCalledWith(
+                room1Id,
+                "$threadroot:example.com",
+                expect.objectContaining({
+                    "m.relates_to": {
+                        rel_type: RelationType.Replace,
+                        event_id: ev.getId(),
+                    },
+                }),
+            );
+        });
+
+        it("does not add a close button when the event was sent by another user", async () => {
+            renderBundled(mkBundledMessage({ sender: "@someone-else:example.com" }));
+
+            await screen.findByRole("link", { name: "Bundled one" });
+            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
+        });
+
+        it("does not add a close button when the URL preview bundle feature is disabled", async () => {
+            bundleFeatureEnabled = false;
+            renderBundled(mkBundledMessage());
+
+            // Previews still render, fetched from the server instead of the bundle.
+            await screen.findAllByRole("link", { name: "Fetched" });
+            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
         });
     });
 });
