@@ -17,7 +17,6 @@ import { type ModuleConfig } from "../../config";
 const renderDialog = (allowCopyInviteLink = false): RenderResult & { onSubmit: () => void; onCancel: () => void } => {
     const room = {
         joinRule: { value: "invite", watch: vi.fn(), unwatch: vi.fn() },
-        getPermalink: vi.fn(),
     } as unknown as Room;
     const onSubmit = vi.fn();
     const onCancel = vi.fn();
@@ -27,6 +26,7 @@ const renderDialog = (allowCopyInviteLink = false): RenderResult & { onSubmit: (
             api={mockApi}
             room={room}
             config={{ allow_copy_invite_link: allowCopyInviteLink } as ModuleConfig}
+            inviteLink={allowCopyInviteLink ? "https://example.org/invite" : undefined}
             onSubmit={onSubmit}
             onCancel={onCancel}
         />,

@@ -30,7 +30,6 @@ const makeViewModel = (
     const room = {
         joinRule: { value: joinRule, watch: vi.fn(), unwatch: vi.fn() },
         setJoinRule: vi.fn(),
-        getPermalink: vi.fn().mockReturnValue("https://matrix.to/#/!room:example.org"),
     } as unknown as Room;
 
     const onSubmit = vi.fn();
@@ -40,6 +39,7 @@ const makeViewModel = (
         api: {} as Api,
         room,
         config: { allow_copy_invite_link: allowCopyInviteLink } as ModuleConfig,
+        inviteLink: allowCopyInviteLink ? "https://example.org/invite" : undefined,
         closeDialog,
         onSubmit,
     });
@@ -138,12 +138,12 @@ describe("EmailInvitationFormViewModel", () => {
         });
     });
 
-    it("should copy the room link and show the tooltip for 5 seconds", async () => {
+    it("should copy the invite link and show the tooltip for 5 seconds", async () => {
         vi.useFakeTimers();
         const { vm } = makeViewModel("knock", true);
 
         await vm.copyLinkToClipboard();
-        expect(copyPlainTextToClipboard).toHaveBeenCalledWith("https://matrix.to/#/!room:example.org");
+        expect(copyPlainTextToClipboard).toHaveBeenCalledWith("https://example.org/invite");
         expect(vm.getSnapshot().displayCopyTooltip).toBe(true);
 
         vi.advanceTimersByTime(5000);

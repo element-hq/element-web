@@ -40,8 +40,10 @@ export function initEmailInvitation(api: Api, config: ModuleConfig): void {
                     return;
                 }
 
+                const inviteLink = config.allow_copy_invite_link ? await fetchInviteLink(api, room) : undefined;
+
                 // Ask the user for the emails to invite, and whether they want to change the join rule
-                const { finished } = showInvitationFormDialog(api, room, config);
+                const { finished } = showInvitationFormDialog(api, room, config, inviteLink);
 
                 const { ok, model } = await finished;
                 if (!ok || !model) return;
@@ -78,22 +80,48 @@ export function initEmailInvitation(api: Api, config: ModuleConfig): void {
 }
 
 /**
+ * Fetches the invite link for the given room from the server.
+ * @param api - Module API
+ * @param room - The room to fetch the invite link for
+ * @returns A promise that resolves to the invite link, or undefined if the request fails
+ */
+async function fetchInviteLink(api: Api, room: Room): Promise<string | undefined> {
+    try {
+        const body = await api.client.http.authedRequest<{ invite_url: string }>("POST", "/invite_guests/link", {
+            prefix: "/_synapse/client",
+            body: { room_id: room.id },
+        });
+        return body.invite_url;
+    } catch (e) {
+        console.error("Failed to fetch invite link", e);
+        return Promise.resolve(undefined);
+    }
+}
+
+/**
  * Opens the form where the user enters the emails to invite and, if needed, confirms the join rule change.
  *
  * @param api - Module API
  * @param room - The room to invite guests to
  * @param config - Module configuration
+ * @param inviteLink - The invite link to copy to the clipboard
  */
-function showInvitationFormDialog(api: Api, room: Room, config: ModuleConfig): DialogHandle<EmailInvitationFormResult> {
+function showInvitationFormDialog(
+    api: Api,
+    room: Room,
+    config: ModuleConfig,
+    inviteLink?: string,
+): DialogHandle<EmailInvitationFormResult> {
     return api.openDialog(
         {
             title: api.i18n.translate("invitation_email_dialog_title", { roomName: room.name.value }),
         },
         EmailInvitationFormDialog,
         {
-            api: api,
+            api,
             room,
-            config: config,
+            config,
+            inviteLink: inviteLink,
         },
     );
 }

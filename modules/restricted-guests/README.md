@@ -41,7 +41,7 @@ When a guest opens or joins a room where a call is ongoing, they land in the cal
 
 If you want to make it more obvious to users how to copy the link, you can modify the link a user gets from "Copy link" in the right sidebar by using `permalink_prefix` in config.json. If you don't do that, users will have to copy the URL from the address bar.
 
-Setting `allow_copy_invite_link` also adds a "Copy invite link" button to the email invitation dialog. That link uses `permalink_prefix` too.
+Setting `allow_copy_invite_link` also adds a "Copy invite link" button to the email invitation dialog. The link is fetched from the homeserver's `/_synapse/client/invite_guests/link` endpoint, provided by the Synapse restricted-guests module. If the request fails, the button isn't shown.
 
 ## Development
 

@@ -54,9 +54,4 @@ export interface Room {
      * @returns last active timestamp
      */
     getLastActiveTimestamp: () => number;
-    /**
-     * Get a shareable link to this room, using the permalink prefix configured in element-web.
-     * @returns the permalink of the room
-     */
-    getPermalink: () => string;
 }
