@@ -149,6 +149,11 @@ interface IPreventShrinkingState {
     offsetNode: HTMLElement;
 }
 
+interface IScrollAnchorSnapshot {
+    token: string;
+    top: number;
+}
+
 export default class ScrollPanel extends React.Component<IProps> {
     // noinspection JSUnusedLocalSymbols
     public static defaultProps = {
@@ -182,6 +187,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private bottomGrowth!: number;
     private minListHeight!: number;
     private heightUpdateInProgress = false;
+    private trackedNodeViewportTop: number | null = null;
     public divScroll: HTMLDivElement | null = null;
 
     public static contextType = SDKContext;
@@ -199,7 +205,19 @@ export default class ScrollPanel extends React.Component<IProps> {
         this.checkScroll();
     }
 
-    public componentDidUpdate(): void {
+    public getSnapshotBeforeUpdate(): IScrollAnchorSnapshot | null {
+        // Capture the tile position before React inserts events above it.
+        const token = this.scrollState.trackedScrollToken;
+        const node = token && this.getTrackedNode();
+        return node
+            ? { token, top: node.getBoundingClientRect().top - this.getScrollNode().getBoundingClientRect().top }
+            : null;
+    }
+
+    public componentDidUpdate(_prevProps: IProps, _prevState: unknown, snapshot: IScrollAnchorSnapshot | null): void {
+        if (snapshot && snapshot.token === this.scrollState.trackedScrollToken) {
+            this.trackedNodeViewportTop = snapshot.top;
+        }
         // after adding event tiles, we may need to tweak the scroll (either to
         // keep at the bottom of the timeline, or to maintain the view after
         // adding events to the top).
@@ -534,6 +552,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         };
         this.bottomGrowth = 0;
         this.minListHeight = 0;
+        this.trackedNodeViewportTop = null;
         this.scrollTimeout = new Timer(100);
         this.heightUpdateInProgress = false;
     };
@@ -629,6 +648,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private saveScrollState(): void {
         if (this.props.stickyBottom && this.isAtBottom()) {
             this.scrollState = { stuckAtBottom: true };
+            this.trackedNodeViewportTop = null;
             debuglog("saved stuckAtBottom state");
             return;
         }
@@ -672,6 +692,18 @@ export default class ScrollPanel extends React.Component<IProps> {
             bottomOffset: bottomOffset,
             pixelOffset: bottomOffset - viewportBottom, //needed for restoring the scroll position when coming back to the room
         };
+        this.trackedNodeViewportTop = node.getBoundingClientRect().top - scrollNode.getBoundingClientRect().top;
+    }
+
+    private restoreTrackedNodePosition(node: HTMLElement): void {
+        const scrollNode = this.getScrollNode();
+        const top = node.getBoundingClientRect().top - scrollNode.getBoundingClientRect().top;
+        if (this.trackedNodeViewportTop !== null && top !== this.trackedNodeViewportTop) {
+            const delta = top - this.trackedNodeViewportTop;
+            debuglog("restoring tracked tile position", { token: this.scrollState.trackedScrollToken, delta });
+            scrollNode.scrollBy(0, delta);
+        }
+        this.trackedNodeViewportTop = node.getBoundingClientRect().top - scrollNode.getBoundingClientRect().top;
     }
 
     private async restoreSavedScrollState(): Promise<void> {
@@ -694,6 +726,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                 if (itemlist && itemlist.style.height !== newHeight) {
                     itemlist.style.height = newHeight;
                 }
+                this.restoreTrackedNodePosition(trackedNode);
                 debuglog("balancing height because messages below viewport grew by", bottomDiff);
             }
         }
@@ -766,6 +799,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                 // yield out of date values and cause a jump
                 // when setting it
                 sn.scrollBy(0, topDiff);
+                this.restoreTrackedNodePosition(trackedNode);
                 debuglog("updateHeight to", { newHeight, topDiff });
             }
         }
