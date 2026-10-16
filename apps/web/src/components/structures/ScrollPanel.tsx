@@ -218,6 +218,11 @@ export default class ScrollPanel extends React.Component<IProps> {
 
         this.context?.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
 
+        if (this.unfillDebouncer) {
+            clearTimeout(this.unfillDebouncer);
+            this.unfillDebouncer = null;
+        }
+
         this.divScroll = null;
     }
 
