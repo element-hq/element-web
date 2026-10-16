@@ -697,8 +697,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 if (this.unmounted) return;
             }
 
-            // If we have an initial event, we want to reset the event pixel offset to ensure it ends up visible
-            newState.initialEventPixelOffset = undefined;
+            // A permalink needs a fresh position; a locally restored event keeps its saved offset.
+            newState.initialEventPixelOffset = storeInitialEventId
+                ? undefined
+                : this.state.initialEventPixelOffset;
 
             const thread = initialEvent?.getThread();
             // Handle the use case of a link to a thread message
@@ -714,7 +716,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             } else {
                 newState.initialEventId = initialEventId;
                 newState.isInitialEventHighlighted = this.roomViewStore.isInitialEventHighlighted();
-                newState.initialEventScrollIntoView = this.roomViewStore.initialEventScrollIntoView();
+                newState.initialEventScrollIntoView = storeInitialEventId
+                    ? this.roomViewStore.initialEventScrollIntoView()
+                    : this.state.initialEventScrollIntoView;
             }
         } else {
             newState.isInitialEventHighlighted = false;
@@ -782,6 +786,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 if (roomScrollState) {
                     newState.initialEventId = roomScrollState.focussedEvent;
                     newState.initialEventPixelOffset = roomScrollState.pixelOffset;
+                    // An undefined flag scrolls to the saved event without treating it as a permalink jump.
+                    if (roomScrollState.focussedEvent) newState.initialEventScrollIntoView = undefined;
                 }
             }
         }
