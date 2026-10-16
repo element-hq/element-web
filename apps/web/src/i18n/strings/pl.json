@@ -1001,7 +1001,6 @@
             "warning": "Jeśli nie usunąłeś metody odzyskiwania, atakujący może próbować dostać się na Twoje konto. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "set_up_recovery": "Utwórz kopię zapasową swoich czatów",
-        "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
@@ -2594,7 +2593,6 @@
                 "change_recovery_key": "Zmień klucz przywracania",
                 "change_recovery_key_description": "Zapisz nowy klucz przywracania w bezpiecznym miejscu. Następnie kliknij Kontynuuj, aby zastosować zmiany.",
                 "change_recovery_key_title": "Zmienić klucz przywracania?",
-                "description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
                 "enter_key_error": "Wprowadzony klucz przywracania nie jest poprawny.",
                 "enter_recovery_key": "Wprowadź klucz przywracania",
                 "forgot_recovery_key": "Zapomniałeś klucza przywracania?",

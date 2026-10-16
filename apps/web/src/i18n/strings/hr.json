@@ -1001,7 +1001,6 @@
             "warning": "Ako niste uklonili način oporavka, napadač možda pokušava pristupiti vašem računu. Odmah u postavkama promijenite zaporku računa i postavite nov način oporavka."
         },
         "set_up_recovery": "Napravite sigurnosnu kopiju svojih razgovora",
-        "set_up_recovery_toast_description": "Vaši se razgovori automatski sigurnosno kopiraju. Trebat će vam ključ za oporavak da biste ih vratili ako izgubite sve uređaje.",
         "set_up_toast_title": "Postavljanje zaštićene sigurnosne kopije",
         "turn_on_key_storage": "Uključi pohranu ključeva",
         "turn_on_key_storage_description": "To će vam omogućiti pregled povijesti razgovora na bilo kojem novom uređaju i potrebno je za sigurnosno kopiranje razgovora i digitalnog identiteta.",
@@ -2596,7 +2595,6 @@
                 "change_recovery_key": "Promjena ključa za oporavak",
                 "change_recovery_key_description": "Zapišite ovaj novi ključ za oporavak na sigurno mjesto. Zatim odaberite Nastavi kako biste potvrdili promjenu.",
                 "change_recovery_key_title": "Želite li promijeniti ključ za oporavak?",
-                "description": "Vaši se razgovori automatski sigurnosno kopiraju. Trebat će vam ključ za oporavak da biste ih vratili ako izgubite sve uređaje.",
                 "enter_key_error": "Ključ za oporavak koji ste unijeli nije ispravan.",
                 "enter_recovery_key": "Unesi ključ za oporavak",
                 "forgot_recovery_key": "Zaboravili ste ključ za oporavak?",

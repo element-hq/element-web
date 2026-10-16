@@ -956,7 +956,6 @@
             "warning": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
         },
         "set_up_recovery": "대화 백업하기",
-        "set_up_recovery_toast_description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
         "set_up_toast_title": "보안 백업 설정",
         "turn_on_key_storage": "키 저장 기능 켜기",
         "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
@@ -2439,7 +2438,6 @@
                 "change_recovery_key": "복구 키 변경",
                 "change_recovery_key_description": "이 새로운 복구 키를 안전한 곳에 기록해 두십시오. 그런 다음 계속을 클릭하여 변경 사항을 확인하십시오.",
                 "change_recovery_key_title": "복구 키 변경하시겠습니까?",
-                "description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
                 "enter_key_error": "입력하신 복구 키가 올바르지 않습니다.",
                 "enter_recovery_key": "복구 키 확인",
                 "forgot_recovery_key": "복구 키를 잊으셨나요?",
