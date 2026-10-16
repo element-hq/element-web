@@ -254,12 +254,17 @@ export type DialogProps<M> = {
 
 // @alpha
 export interface DocumentPreviewApi {
-    getPreviewOpener(mimetype: string): DocumentPreviewOpener | null;
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
 }
 
 // @alpha
 export interface DocumentPreviewFile {
     blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
     name?: string;
 }
 

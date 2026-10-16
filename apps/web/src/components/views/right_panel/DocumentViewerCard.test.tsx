@@ -9,7 +9,7 @@ Please see LICENSE in the repository root for full details.
 
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen } from "test-utils-rtl";
+import { act, render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { EventType, type MatrixClient, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 
@@ -69,6 +69,23 @@ describe("DocumentViewerCard", () => {
 
         await user.click(screen.getByRole("button", { name: "Close" }));
         expect(onClose).toHaveBeenCalledOnce();
+    });
+
+    it("shows an error when the attachment is redacted while the card is open", async () => {
+        const mxEvent = mkFileEvent();
+
+        render(
+            <DocumentViewerCard mxEvent={mxEvent} onClose={vi.fn()} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        expect(await screen.findByRole("status")).toHaveTextContent("Loading document");
+
+        act(() => {
+            mxEvent.makeRedacted(mxEvent, new Room(mxEvent.getRoomId()!, client, client.getSafeUserId()));
+        });
+
+        expect(screen.getByRole("heading", { name: "Document" })).toBeInTheDocument();
+        expect(screen.getByRole("alert")).toHaveTextContent("Unable to load this file.");
     });
 
     describe("for a file that does not come from an event", () => {

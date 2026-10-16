@@ -33,9 +33,9 @@ export default class DocumentPreviewModule {
      * @param {() => Promise<Blob>} blob Resolves to the file contents
      */
     async previewOrUpload(view, mimetype, name, blob) {
-        const openPreview = this.api.documentPreviews.getPreviewOpener(mimetype);
+        const openPreview = this.api.documentPreviews.getPreviewOpener({ mimetype, name });
         if (openPreview) {
-            openPreview({ blob, name });
+            openPreview({ blob });
             return;
         }
 

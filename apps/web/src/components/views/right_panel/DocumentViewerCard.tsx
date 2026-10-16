@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { type JSX, Suspense, useMemo } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, Suspense, useMemo, useReducer } from "react";
+import { type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { DocumentViewerView } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard";
@@ -20,6 +20,7 @@ import {
 } from "../../../utils/documentViewer";
 import { _t } from "../../../languageHandler";
 import { type DocumentFile } from "../../../@types/document-viewer";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface Props {
     /** The event whose attachment to show. Takes precedence over `file`. */
@@ -36,10 +37,14 @@ interface Props {
  * happens on every resize — does not hand the viewer a new `blob` identity and make it reload the file.
  */
 export function DocumentViewerCard({ mxEvent, file, onClose }: Props): JSX.Element {
-    const viewer = useMemo(
-        () => (mxEvent ? documentViewerForEvent(mxEvent) : file && documentViewerForFile(file)),
-        [mxEvent, file],
-    );
+    // Redaction strips the event in place, so nothing else re-renders the card. The update is only
+    // scheduled here, and the render runs once the content has gone.
+    const [, forceUpdate] = useReducer((count: number) => count + 1, 0);
+    useTypedEventEmitter(mxEvent, MatrixEventEvent.BeforeRedaction, forceUpdate);
+
+    // Not memoised, so it is checked again after a redaction. It is a lookup in a fixed list, so the
+    // viewer's component stays the same between renders.
+    const viewer = mxEvent ? documentViewerForEvent(mxEvent) : file && documentViewerForFile(file);
     const media = useMemo(
         () => (mxEvent ? documentMediaForEvent(mxEvent) : file && documentMediaForFile(file)),
         [mxEvent, file],

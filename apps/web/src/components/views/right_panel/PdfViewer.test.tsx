@@ -154,6 +154,16 @@ describe("PdfViewer", () => {
             expect(iframe.port.postMessage).toHaveBeenCalledWith(load, [load.data]);
         });
 
+        it("gives each file without a URI its own iframe", () => {
+            const { rerender } = render(<PdfViewer media={{ ...media("a.pdf"), uri: undefined }} />);
+            const first = screen.getByTestId("pdf-iframe");
+
+            rerender(<PdfViewer media={{ ...media("b.pdf"), uri: undefined }} />);
+
+            // Otherwise the old iframe could still be showing the first file.
+            expect(screen.getByTestId("pdf-iframe")).not.toBe(first);
+        });
+
         it("does not send the document again if the iframe says it is ready twice", async () => {
             const { iframe } = await renderLoaded();
             const again: FakeIframe = { window: iframe.window, port: fakePort() };
