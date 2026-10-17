@@ -20,6 +20,9 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { MediaEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
+/**
+ * A file viewer that is registered by the file viewer module api
+ */
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
     match: FileViewerMatcher;
