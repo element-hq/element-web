@@ -43,7 +43,7 @@ export class FileViewerApi implements IFileViewerApi {
     }
 
     public getViewersFor(event: MediaHandle): RegisteredFileViewer[] {
-        // if in the unlikely senario where there are multiple viewers for the
+        // in the unlikely scenario where there are multiple viewers for the
         // same media tile, order them by ID so it is not completely random
         return Array.from(this.viewers.values())
             .filter((viewer) => viewer.match(event))
