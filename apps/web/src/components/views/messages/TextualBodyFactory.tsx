@@ -168,7 +168,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const previewToEntry = useCallback(
         (preview: UrlPreview): MediaPreviewGroupEntry => {
             let content: MediaPreviewGroupEntryContent;
-            // file opening buttons will only apply to links with bundles
+            // offer file viewer buttons for every link preview, whether it came from a bundle or the server
             const mediaHandle = remoteMediaOfPreview(preview);
             const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
             const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
