@@ -21,6 +21,9 @@ export interface FileViewerCardProps extends FileViewerCardState {
     onClose: () => void;
 }
 
+/**
+ * Right panel card for a file viewer registered through the file viewer module api
+ */
 export function FileViewerCard({ viewer, media, mxEvent, onClose }: FileViewerCardProps): JSX.Element {
     const Viewer = viewer.render;
     return (

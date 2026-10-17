@@ -66,6 +66,9 @@ export class FileViewerApi implements IFileViewerApi {
     }
 }
 
+/**
+ * convert a matrix event to UploadedMedia
+ */
 export function uploadedMediaOfEvent(mxEvent: MatrixEvent, helper?: MediaEventHelper): UploadedMedia | undefined {
     if (!helper) {
         if (!MediaEventHelper.isEligible(mxEvent)) return;
