@@ -15,6 +15,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { shouldImageFallbackToFileBody } from "../../../utils/media/imageEvents";
 
 type Props = Readonly<{
     initialEvent: MatrixEvent;
@@ -37,15 +38,9 @@ function isImageEvent(ev: MatrixEvent): boolean {
     const c = ev.getContent<ImageContent>();
     if (c?.msgtype !== MsgType.Image) return false;
 
-    // We use the security fallback from MImageBody: some events claim to be images but must be rendered as files.
-    // Encrypted events use file, if the mimetype is not allowed and no safe thumbnail, MImageBody
-    // falls back to MFileBody, so we should not include them in image navigation.
-    const isEncrypted = Boolean((c as any)?.file);
-    const mimetype = c.info?.mimetype ?? "";
-    const hasThumbnail = Boolean(c.info?.thumbnail_info);
-
-    if (isEncrypted && !isMimeTypeAllowed(mimetype) && !hasThumbnail) return false;
-    return true;
+    // Some events claim to be images but are rendered as files for security; those cannot be
+    // navigated to as images. Shared with the image body so the two cannot drift apart.
+    return !shouldImageFallbackToFileBody(c, Boolean(c.file));
 }
 
 function eventToName(ev: MatrixEvent): string {
