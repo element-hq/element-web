@@ -945,7 +945,6 @@
             "warning": "Hvis det ikke var deg som fjernet gjenopprettingsmetoden, kan det være en hacker som prøver å få tilgang til kontoen din. Bytt passordet for kontoen din og angi en ny gjenopprettingsmetode øyeblikkelig i Innstillinger."
         },
         "set_up_recovery": "Sett opp gjenoppretting",
-        "set_up_recovery_toast_description": "Generer en gjenopprettingsnøkkel som kan brukes til å gjenopprette den krypterte meldingshistorikken i tilfelle du mister tilgangen til enhetene dine.",
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
         "turn_on_key_storage": "Slå på nøkkeloppbevaring",
         "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
@@ -1458,7 +1457,6 @@
         "experimental_description": "Er du litt vågal? Prøv ut de nyeste ideene våre under utvikling. Disse funksjonene er ikke ferdigutviklet; de kan være ustabile, endres eller droppes helt. <a>Finn ut mer</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
         "extended_profiles_msc_support": "Krever at serveren din støtter MSC4133",
-        "feature_disable_call_per_sender_encryption": "Deaktiver kryptering per avsender for Element Call",
         "feature_wysiwyg_composer_description": "Bruk rik tekst i stedet for Markdown i meldingsskriveren.",
         "group_developer": "Utvikler",
         "group_encryption": "Kryptering",
@@ -1610,7 +1608,6 @@
     },
     "member_list_back_action_label": "Medlemmer av rommet",
     "message_edit_dialog_title": "Meldingsredigeringer",
-    "migrating_crypto": "Hold deg fast. Vi oppdaterer %(brand)s for å gjøre kryptering raskere og mer pålitelig.",
     "mobile_guide": {
         "toast_accept": "Bruk app",
         "toast_description": "%(brand)s er eksperimentell på en mobil nettleser. For en bedre opplevelse og de nyeste funksjonene, bruk vår gratis app.",
@@ -2443,7 +2440,6 @@
                 "change_recovery_key": "Endre gjenopprettingsnøkkel",
                 "change_recovery_key_description": "",
                 "change_recovery_key_title": "Vil du endre gjenopprettingsnøkkel?",
-                "description": "Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine eksisterende enheter.",
                 "enter_key_error": "Gjenopprettingsnøkkelen du skrev inn er ikke riktig.",
                 "enter_recovery_key": "Skriv inn gjenopprettingsnøkkel",
                 "forgot_recovery_key": "Glemt gjenopprettingsnøkkelen?",
@@ -2454,10 +2450,8 @@
                 "set_up_recovery_confirm_button": "Fullfør oppsettet",
                 "set_up_recovery_confirm_description": "Skriv inn gjenopprettingsnøkkelen som ble vist på forrige skjermbilde for å fullføre konfigureringen av gjenopprettingen.",
                 "set_up_recovery_confirm_title": "Skriv inn gjenopprettingsnøkkelen din for å bekrefte",
-                "set_up_recovery_description": "Nøkkeloppbevaringen er beskyttet av en gjenopprettingsnøkkel. Hvis du trenger en ny gjenopprettingsnøkkel etter oppsett, kan du opprette den på nytt ved å velge «%(changeRecoveryKeyButton)s».",
                 "set_up_recovery_save_key_description": "Skriv ned denne gjenopprettingsnøkkelen et trygt sted, for eksempel en passordbehandler, et kryptert notat eller en fysisk safe.",
                 "set_up_recovery_save_key_title": "Du bør lagre din gjenopprettingsnøkkelen på et trygt sted",
-                "set_up_recovery_secondary_description": "Etter å ha klikket fortsett, genererer vi en gjenopprettingsnøkkel for deg.",
                 "title": "Gjenoppretting"
             },
             "title": "Kryptering"

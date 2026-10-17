@@ -39,8 +39,8 @@ describe("useProfileInfo", () => {
 
         const { result } = render();
 
-        act(() => {
-            result.current.search({ query });
+        await act(async () => {
+            await result.current.search({ query });
         });
 
         await waitFor(() => {
@@ -54,8 +54,8 @@ describe("useProfileInfo", () => {
 
         const { result } = render();
 
-        act(() => {
-            result.current.search({ query });
+        await act(async () => {
+            await result.current.search({ query });
         });
 
         await waitFor(() => expect(result.current.ready).toBe(true));
@@ -69,8 +69,8 @@ describe("useProfileInfo", () => {
         for (const query of queries) {
             const { result } = render();
 
-            act(() => {
-                result.current.search({ query });
+            await act(async () => {
+                await result.current.search({ query });
             });
 
             await waitFor(() => expect(result.current.ready).toBe(true));
@@ -87,8 +87,8 @@ describe("useProfileInfo", () => {
 
         const { result } = render();
 
-        act(() => {
-            result.current.search({ query });
+        await act(async () => {
+            await result.current.search({ query });
         });
 
         await waitFor(() => expect(result.current.ready).toBe(true));
@@ -102,8 +102,8 @@ describe("useProfileInfo", () => {
 
         const { result } = render();
 
-        act(() => {
-            result.current.search({ query });
+        await act(async () => {
+            await result.current.search({ query });
         });
 
         await waitFor(() => expect(result.current.ready).toBe(true));

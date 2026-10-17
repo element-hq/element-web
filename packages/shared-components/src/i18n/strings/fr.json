@@ -27,6 +27,7 @@
         "play": "Lecture",
         "react": "Réagir",
         "remove": "Supprimer",
+        "remove_this_device": "Supprimer cet appareil",
         "reply": "Répondre",
         "reply_in_thread": "Répondre dans le fil de discussion",
         "retry": "Réessayer",
@@ -73,6 +74,10 @@
         },
         "toggle_event": "Source de l'événement"
     },
+    "document_viewer": {
+        "error_load": "Impossible de charger ce fichier.",
+        "loading": "Chargement du document…"
+    },
     "emoji": {
         "categories": "Catégories",
         "category_activities": "Activités",
@@ -89,6 +94,13 @@
     "emoji_picker": {
         "cancel_search_label": "Annuler la recherche",
         "emoji_picker": "Sélecteur d'emoji"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Veuillez soit revenir à la version <b>%(version)s</b>, soit supprimer cet appareil.",
+            "description": "%(brand)s a été mis à jour à partir d'une version très ancienne et ne peut pas migrer votre coffre de chiffrement vers un nouveau format.",
+            "title": "Cet appareil ne peut pas être utilisé"
+        }
     },
     "keyboard": {
         "shift": "Maj"
@@ -143,6 +155,7 @@
         "knock_sent": "Demande d’accès envoyée",
         "pinned_message_badge": "Message épinglé",
         "status_bar": {
+            "contact_account_provider": "Contacter le fournisseur de compte",
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit_description": "Veuillez contacter votre administrateur pour continuer à utiliser le service.",
             "exceeded_resource_limit_title": "Votre message n'a pas pu être envoyé car ce service a dépassé sa limite de ressources.",
@@ -342,7 +355,7 @@
             "error_invalid": "Fichier invalide"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s a changé l'avatar de la discussion en <img/>",
+            "changed_img": "%(senderDisplayName)s a changé l'avatar du salon pour <img/>",
             "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
         },
         "m.room.encryption": {

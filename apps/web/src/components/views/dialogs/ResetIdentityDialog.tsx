@@ -10,6 +10,7 @@ import React, { type JSX } from "react";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ResetIdentityBody, type ResetIdentityBodyVariant } from "../settings/encryption/ResetIdentityBody";
+import BaseDialog from "./BaseDialog";
 
 interface ResetIdentityDialogProps {
     /**
@@ -71,7 +72,9 @@ export function ResetIdentityDialog({
 
     return (
         <MatrixClientContext.Provider value={matrixClient}>
-            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onCancelOrSignOut} variant={variant} />
+            <BaseDialog fixedWidth={true} hasCancel={false}>
+                <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onCancelOrSignOut} variant={variant} />
+            </BaseDialog>
         </MatrixClientContext.Provider>
     );
 }

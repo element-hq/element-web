@@ -125,13 +125,14 @@ export const setupRoomWithPollEvents = async (
     existingRoom?: Room,
 ): Promise<Room> => {
     const room = existingRoom || new Room(pollStartEvents[0].getRoomId()!, mockClient, mockClient.getSafeUserId());
-    room.processPollEvents([...pollStartEvents, ...relationEvents, ...endEvents]);
 
     // set redaction allowed for current user only
     // poll end events are validated against this
     vi.spyOn(room.currentState, "maySendRedactionForEvent").mockImplementation((_evt: MatrixEvent, id: string) => {
         return id === mockClient.getSafeUserId();
     });
+
+    await room.processPollEvents([...pollStartEvents, ...relationEvents, ...endEvents]);
 
     // wait for events to process on room
     await flushPromises();

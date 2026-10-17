@@ -34,7 +34,7 @@ test.describe("Logout tests", () => {
         ).toBeVisible();
     });
 
-    test("If backup is set up show standard confirm", async ({ page, app }) => {
+    test("If recovery is set up remind the user to check their recovery key", async ({ page, app }) => {
         await enableKeyBackup(app);
 
         await createRoom(page, "E2e room", true);
@@ -48,7 +48,11 @@ test.describe("Logout tests", () => {
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
-        await expect(currentDialogLocator.getByText("Are you sure you want to Remove this device?")).toBeVisible();
+        await expect(
+            currentDialogLocator.getByRole("heading", {
+                name: "Make sure you have access to your recovery key before removing this device",
+            }),
+        ).toBeVisible();
     });
 
     test("Ask to set up recovery on logout even if not in encrypted room", async ({ page, app }) => {

@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { type JSX } from "react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { stubClient, mkStubRoom, mkEvent } from "test-utils";
@@ -280,6 +280,49 @@ describe("EventContentBodyViewModel", () => {
         vm.setEventContent(undefined, { body: "Updated", msgtype: MsgType.Text });
 
         expect(vm.getSnapshot().body).toBe("Updated");
+    });
+
+    describe("when the event is replaced", () => {
+        const mkReplacedEvent = (): MatrixEvent => {
+            const event = mkEvent({
+                event: true,
+                type: "m.room.message",
+                room: "!room:example.com",
+                user: "@alice:example.com",
+                content: defaultContent,
+            });
+            vi.spyOn(event, "getContent").mockReturnValue({ body: "Edited", msgtype: MsgType.Text });
+            return event;
+        };
+
+        beforeEach(() => {
+            mockedCombineRenderers.mockReturnValue(() => vi.fn());
+            mockedBodyToNode.mockImplementation((content) => ({
+                strippedBody: content.body,
+                formattedBody: undefined,
+                emojiBodyElements: undefined,
+                className: "mx_EventTile_body",
+            }));
+        });
+
+        it("renders the edited content", () => {
+            const event = mkReplacedEvent();
+            const vm = new EventContentBodyViewModel(defaultProps({ mxEvent: event }));
+            expect(vm.getSnapshot().body).toBe("Hello world");
+
+            event.emit(MatrixEventEvent.Replaced, event);
+
+            expect(vm.getSnapshot().body).toBe("Edited");
+        });
+
+        it("keeps the given content when ignoreReplacements is set", () => {
+            const event = mkReplacedEvent();
+            const vm = new EventContentBodyViewModel(defaultProps({ mxEvent: event, ignoreReplacements: true }));
+
+            event.emit(MatrixEventEvent.Replaced, event);
+
+            expect(vm.getSnapshot().body).toBe("Hello world");
+        });
     });
 
     it("doesn't emit updates when setters are called with unchanged values", () => {

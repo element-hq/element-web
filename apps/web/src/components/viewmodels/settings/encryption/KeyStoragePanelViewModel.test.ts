@@ -34,7 +34,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
         act(() => {
-            result.current.setEnabled(true);
+            void result.current.setEnabled(true);
         });
         expect(result.current.isEnabled).toBe(true);
         expect(result.current.busy).toBe(true);

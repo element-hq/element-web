@@ -952,7 +952,6 @@
             "warning": "Ak ste neodstránili spôsob obnovenia vy, je možné, že útočník sa pokúša dostať k vášmu účtu. Radšej si ihneď zmeňte vaše heslo a nastavte si nový spôsob obnovenia v Nastaveniach."
         },
         "set_up_recovery": "Nastaviť obnovenie",
-        "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
         "turn_on_key_storage": "Zapnúť úložisko kľúčov",
         "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
@@ -1472,7 +1471,6 @@
         "experimental_description": "Chcete experimentovať? Vyskúšajte naše najnovšie nápady vo vývojovom štádiu. Tieto funkcie nie sú dokončené; môžu byť nestabilné, môžu sa zmeniť alebo môžu byť úplne zrušené. <a>Zistiť viac</a>.",
         "experimental_section": "Predbežné ukážky",
         "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
-        "feature_disable_call_per_sender_encryption": "Zakázať šifrovanie pre jednotlivých odosielateľov pre Element Call",
         "feature_wysiwyg_composer_description": "Použiť rozšírený text namiesto Markdown v správach.",
         "group_developer": "Vývojárske",
         "group_encryption": "Šifrovanie",
@@ -1625,7 +1623,6 @@
     },
     "member_list_back_action_label": "Členovia miestnosti",
     "message_edit_dialog_title": "Úpravy správy",
-    "migrating_crypto": "Ešte to vydržte. Aktualizujeme %(brand)s, aby bolo šifrovanie rýchlejšie a spoľahlivejšie.",
     "mobile_guide": {
         "toast_accept": "Použiť aplikáciu",
         "toast_description": "%(brand)s je v mobilnej verzii experimentálny. Ak chcete získať lepší zážitok a najnovšie funkcie, použite našu bezplatnú natívnu aplikáciu.",
@@ -2475,7 +2472,6 @@
                 "change_recovery_key": "Zmeniť kľúč na obnovenie",
                 "change_recovery_key_description": "Zapíšte si tento nový kľúč na obnovenie niekde na bezpečné miesto. Potom kliknite na tlačidlo Pokračovať a potvrďte zmenu.",
                 "change_recovery_key_title": "Zmeniť kľúč na obnovenie?",
-                "description": "Ak ste stratili všetky existujúce zariadenia, obnovte svoju kryptografickú identitu a históriu správ pomocou kľúča na obnovenie.",
                 "enter_key_error": "Zadaný kľúč na obnovenie nie je správny.",
                 "enter_recovery_key": "Zadajte kľúč na obnovenie",
                 "forgot_recovery_key": "Zabudli ste kľúč na obnovenie?",
@@ -2486,10 +2482,8 @@
                 "set_up_recovery_confirm_button": "Dokončiť nastavenie",
                 "set_up_recovery_confirm_description": "Zadajte kľúč na obnovenie zobrazený na predchádzajúcej obrazovke a dokončite nastavenie obnovy.",
                 "set_up_recovery_confirm_title": "Na potvrdenie zadajte kľúč na obnovenie",
-                "set_up_recovery_description": "Vaše úložisko kľúčov je chránené kľúčom na obnovenie. Ak po nastavení potrebujete nový kľúč na obnovenie, môžete ho znova vytvoriť výberom „%(changeRecoveryKeyButton)s“.",
                 "set_up_recovery_save_key_description": "Zapíšte si tento kľúč na obnovenie na bezpečné miesto, napríklad do správcu hesiel, zašifrovanej poznámky alebo fyzického trezoru.",
                 "set_up_recovery_save_key_title": "Uložte kľúč na obnovenie na bezpečné miesto",
-                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovať vám vygenerujeme kľúč na obnovenie.",
                 "title": "Obnovenie"
             },
             "title": "Šifrovanie"

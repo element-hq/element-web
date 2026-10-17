@@ -236,9 +236,14 @@ test.describe("Sliding Sync", () => {
         const roomNames = ["Room to Join", "Room to Reject", "Room to Rescind"];
         const roomRescind = await bot.evaluate(
             async (client, { roomNames, clientUserId }) => {
-                const rooms = await Promise.all(roomNames.map((name) => client.createRoom({ name })));
-                await Promise.all(rooms.map((room) => client.invite(room.room_id, clientUserId)));
-                return rooms[2].room_id;
+                // Create rooms & invite sequentially as the invites are ordered by recency
+                const roomIds: string[] = [];
+                for (const name of roomNames) {
+                    const { room_id: roomId } = await client.createRoom({ name });
+                    await client.invite(roomId, clientUserId);
+                    roomIds.push(roomId);
+                }
+                return roomIds[2];
             },
             { roomNames, clientUserId },
         );

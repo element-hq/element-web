@@ -25,12 +25,12 @@ describe("RoomNotificationStateStore", function () {
     let client: MatrixClient;
     let dis: MatrixDispatcher;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         client = createTestClient();
         dis = new MatrixDispatcher();
         store = RoomNotificationStateStore.testInstance(dis);
         store.emit = vi.fn();
-        setupAsyncStoreWithClient(store, client);
+        await setupAsyncStoreWithClient(store, client);
     });
 
     afterEach(() => {

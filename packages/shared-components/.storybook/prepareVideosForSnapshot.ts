@@ -21,10 +21,10 @@ export async function prepareVideosForSnapshot(canvasElement: HTMLElement): Prom
 
     await Promise.all(
         videos.map((video) =>
-            waitFor(() => {
-                expect(video.readyState).toBe(video.HAVE_ENOUGH_DATA);
-                expect(video.buffered.length).toBe(1);
-                expect(video.buffered.end(0)).toBeGreaterThanOrEqual(video.duration);
+            waitFor(async () => {
+                await expect(video.readyState).toBe(video.HAVE_ENOUGH_DATA);
+                await expect(video.buffered.length).toBe(1);
+                await expect(video.buffered.end(0)).toBeGreaterThanOrEqual(video.duration);
             }),
         ),
     );

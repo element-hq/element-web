@@ -423,12 +423,11 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Clear app storage, called when logging out to perform data clean up.
+     * Clear any storage specific to this platform, called when logging out to perform data clean up.
+     * localStorage and sessionStorage have already been cleared by then, and must not be cleared again as a new
+     * login may have started using them in the meantime.
      */
-    public async clearStorage(): Promise<void> {
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-    }
+    public async clearStorage(): Promise<void> {}
 
     /**
      * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance
