@@ -10,6 +10,28 @@ import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
+import type { MediaHandle } from "@element-hq/element-web-module-api";
+import { type RegisteredFileViewer, uploadedMediaOfEvent, remoteMediaOfPreview } from "../../modules/FileViewerApi";
+import { ModuleApi } from "../../modules/Api";
+import { type UrlPreview } from "shared-types";
+
+/**
+ * State of the file viewer card.
+ */
+export interface FileViewerCardState {
+    /**
+     * Viewer in use of viewing
+     */
+    viewer: RegisteredFileViewer;
+    /**
+     * The media that is being viewed
+     */
+    media: MediaHandle;
+    /**
+     * The event the media being viewed is from
+     */
+    mxEvent: MatrixEvent;
+}
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -27,6 +49,8 @@ export interface IRightPanelCardState {
     focusRoomSearch?: boolean;
     // document viewer: the m.file event whose attachment is being read
     documentViewerEvent?: MatrixEvent;
+    // file viewer: its fields are only valid together, so they are grouped into one optional object
+    fileViewer?: FileViewerCardState;
 }
 
 export interface IRightPanelCardStateStored {
@@ -42,6 +66,11 @@ export interface IRightPanelCardStateStored {
     initialEventScrollIntoView?: boolean;
     // document viewer
     documentViewerEventId?: string;
+    // file viewer
+    fileViewerId?: string;
+    fileViewerSourceEventId?: string;
+    // only present if file viewer is viewing remote content (from a URL preview)
+    fileViewerUrlPreview?: UrlPreview;
 }
 
 export interface IRightPanelCard {
@@ -87,6 +116,9 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
         documentViewerEventId: state?.documentViewerEvent?.getId(),
+        fileViewerId: state?.fileViewer?.viewer.options.id,
+        fileViewerSourceEventId: state?.fileViewer?.mxEvent.getId(),
+        fileViewerUrlPreview: state?.fileViewer?.media.type === "remote" ? state.fileViewer.media.preview : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -110,6 +142,18 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             ? room.findEventById(stateStored.documentViewerEventId)
             : undefined,
     };
+
+    if (stateStored.fileViewerId && stateStored.fileViewerSourceEventId) {
+        const viewer = ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId);
+        const mxEvent = room.client.getRoom(room.roomId)?.findEventById(stateStored.fileViewerSourceEventId);
+
+        if (viewer && mxEvent) {
+            const media = stateStored.fileViewerUrlPreview
+                ? remoteMediaOfPreview(stateStored.fileViewerUrlPreview)
+                : uploadedMediaOfEvent(mxEvent);
+            if (media) state.fileViewer = { viewer, media, mxEvent };
+        }
+    }
 
     return { state: state, phase: panelStateStore.phase };
 }

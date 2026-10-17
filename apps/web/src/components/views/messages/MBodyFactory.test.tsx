@@ -35,6 +35,8 @@ import {
 } from "./MBodyFactory";
 import { TimelineRenderingType } from "../../../contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { FileDownloader } from "../../../utils/FileDownloader";
 
@@ -112,17 +114,20 @@ describe("MBodyFactory", () => {
 
     /**
      * Render a media body inside the contexts it needs: the room context, whose rendering type
-     * decides which body is picked, and the linked text context the preview tile reads.
+     * decides which body is picked, the linked text context the preview tile reads, and the SDK
+     * context the preview tile takes the right panel store from.
      */
     const renderInRoomContext = (node: ReactNode, timelineRenderingType: TimelineRenderingType): RenderResult =>
         // Wrapped in a fragment because `renderMBody` can return null, which `render` itself rejects.
         render(<>{node}</>, {
             wrapper: ({ children }) => (
-                <LinkedTextContext.Provider value={{}}>
-                    <ScopedRoomContextProvider {...({ timelineRenderingType } as any)}>
-                        {children}
-                    </ScopedRoomContextProvider>
-                </LinkedTextContext.Provider>
+                <SDKContext.Provider value={new SDKContextClass()}>
+                    <LinkedTextContext.Provider value={{}}>
+                        <ScopedRoomContextProvider {...({ timelineRenderingType } as any)}>
+                            {children}
+                        </ScopedRoomContextProvider>
+                    </LinkedTextContext.Provider>
+                </SDKContext.Provider>
             ),
         });
 
