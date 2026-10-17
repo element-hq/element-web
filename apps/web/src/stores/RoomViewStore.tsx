@@ -382,8 +382,10 @@ export class RoomViewStore extends EventEmitter {
                     call = CallStore.instance.getCall(payload.room_id)!;
                 }
 
-                // Custom case where we start voice calls in pip
-                if (payload.voiceOnly ?? false) {
+                // Custom case where we start voice calls in pip. Joining a call that is already in progress
+                // (the header's Join button) opens it maximised so that the lobby isn't squeezed into the pip,
+                // unless the lobby is skipped (as when answering from the incoming call toast).
+                if ((payload.voiceOnly ?? false) && (call.participants.size === 0 || payload.skipLobby)) {
                     viewingCall = false;
                     ActiveWidgetStore.instance.setWidgetPersistence(call.widget.id, room.roomId, true);
                 }

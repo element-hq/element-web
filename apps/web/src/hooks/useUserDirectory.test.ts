@@ -45,8 +45,8 @@ describe("useUserDirectory", () => {
         const query = "Bob";
         const { result } = render();
 
-        act(() => {
-            result.current.search({ limit: 1, query });
+        await act(async () => {
+            await result.current.search({ limit: 1, query });
         });
         await waitFor(() => {
             expect(result.current.ready).toBe(true);
@@ -60,8 +60,8 @@ describe("useUserDirectory", () => {
         const query = "";
         const { result } = render();
 
-        act(() => {
-            result.current.search({ limit: 1, query });
+        await act(async () => {
+            await result.current.search({ limit: 1, query });
         });
         await waitFor(() => expect(result.current.ready).toBe(true));
 
@@ -77,8 +77,8 @@ describe("useUserDirectory", () => {
 
         const { result } = render();
 
-        act(() => {
-            result.current.search({ limit: 1, query });
+        await act(async () => {
+            await result.current.search({ limit: 1, query });
         });
         await waitFor(() => expect(result.current.ready).toBe(true));
 

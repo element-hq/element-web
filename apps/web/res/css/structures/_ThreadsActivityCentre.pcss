@@ -77,9 +77,15 @@
     /* Override compound's default 340px cap */
     max-inline-size: 444px;
     inline-size: 444px;
-    /* Override compound FloatingMenu's padding-block; we handle our own spacing via the
-       tabs + rows containers. */
-    padding-block: 0;
+    /*
+     * Awful, brittle hack to remove padding from the menu which is now added on the content child
+     * This probably ought to be a parameter to the compound component if we sometimes don't want padding.
+     */
+    > [role="none"] {
+        padding-block: 0;
+
+        --cpd-menu-padding-block-end: 0;
+    }
 
     .mx_ThreadsActivityCentre_tabs {
         /* Override NavBar's default block margin to match the Figma design */

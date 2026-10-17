@@ -42,6 +42,7 @@ import {
     CopyIcon,
     TreeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -55,7 +56,7 @@ import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOpti
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-import { copyPlaintext, getSelectedText } from "../../../utils/strings";
+import { getSelectedText } from "../../../utils/strings";
 import ContextMenu, { toRightOf, type MenuProps } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
@@ -305,7 +306,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private onCopyLinkClick = (e: ButtonEvent): void => {
         e.preventDefault(); // So that we don't open the permalink
         if (!this.props.link) return;
-        void copyPlaintext(this.props.link);
+        void copyPlainTextToClipboard(this.props.link);
         this.closeMenu();
     };
 
@@ -315,7 +316,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onCopyClick = (): void => {
-        void copyPlaintext(getSelectedText());
+        void copyPlainTextToClipboard(getSelectedText());
         this.closeMenu();
     };
 

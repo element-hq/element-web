@@ -93,6 +93,18 @@ describe("SendWysiwygComposer", () => {
         );
     };
 
+    /**
+     * Wait until the composer can be typed into. Being editable is not enough: the effect that places the
+     * cursor at the end of the content may not have run yet, and if it runs after the test has typed, it
+     * moves the cursor somewhere the composer model does not expect. It focuses the composer when done.
+     */
+    const waitForComposerReady = async (): Promise<void> => {
+        await waitFor(() => {
+            expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true");
+            expect(screen.getByRole("textbox")).toHaveFocus();
+        });
+    };
+
     it("Should render WysiwygComposer when isRichTextEnabled is at true", async () => {
         // When
         customRender(vi.fn(), vi.fn(), false, true);
@@ -225,7 +237,7 @@ describe("SendWysiwygComposer", () => {
             it("Should display or not placeholder when editor content change", async () => {
                 // When
                 customRender(vi.fn(), vi.fn(), false, isRichTextEnabled, "my placeholder");
-                await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+                await waitForComposerReady();
                 screen.getByRole("textbox").innerHTML = "f";
                 fireEvent.input(screen.getByRole("textbox"), {
                     data: "f",
@@ -260,7 +272,7 @@ describe("SendWysiwygComposer", () => {
 
             beforeEach(async () => {
                 customRender(vi.fn(), vi.fn(), false, isRichTextEnabled);
-                await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+                await waitForComposerReady();
                 emojiButton = screen.getByLabelText("Emoji");
             });
 
@@ -335,7 +347,7 @@ describe("SendWysiwygComposer", () => {
         ({ isRichTextEnabled }) => {
             it.each([
                 [E2EStatus.Verified, "Everyone in this room is verified"],
-                [E2EStatus.Warning, "Someone is using an unknown session"],
+                [E2EStatus.Warning, "Someone is using an unknown device"],
                 [undefined, undefined],
             ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedLabel) => {
                 // When

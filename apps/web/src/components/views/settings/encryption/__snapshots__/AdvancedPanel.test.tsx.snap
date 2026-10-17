@@ -102,7 +102,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display a spinner wh
     role="button"
     tabindex="0"
   >
-    Reset cryptographic identity
+    Reset digital identity
   </button>
 </div>
 `;
@@ -194,7 +194,7 @@ exports[`<AdvancedPanel /> > <EncryptionDetails /> > should display the device k
     role="button"
     tabindex="0"
   >
-    Reset cryptographic identity
+    Reset digital identity
   </button>
 </div>
 `;

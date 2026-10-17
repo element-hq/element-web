@@ -109,6 +109,17 @@ describe("<NewTimelinePanel />", () => {
         vmState.setRows(items);
     };
 
+    /** A row for `mxEvent`, carrying the event as the view model's rows do. */
+    const eventRow = (mxEvent: MatrixEvent, extra: Partial<TimelineItem> = {}): TimelineItem =>
+        ({
+            key: mxEvent.getId()!,
+            kind: "event",
+            event: mxEvent,
+            continuation: false,
+            lastInSection: true,
+            ...extra,
+        }) as TimelineItem;
+
     beforeEach(() => {
         vi.restoreAllMocks();
         tileProps.current = [];
@@ -121,8 +132,8 @@ describe("<NewTimelinePanel />", () => {
         room.getUnfilteredTimelineSet().addLiveEvent(event, { addToState: false });
     });
 
-    it("draws a row for a message in the room", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+    it("draws the event the row carries", () => {
+        withItems([eventRow(event)]);
 
         renderPanel();
 
@@ -130,14 +141,32 @@ describe("<NewTimelinePanel />", () => {
         expect(tileProps.current[0].mxEvent).toBe(event);
     });
 
-    it("skips a row whose event is no longer in the room instead of failing", () => {
-        withItems([{ key: "$gone", kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+    it("draws a row whose event the room no longer has", () => {
+        // A gappy sync resets the room's timeline, dropping every loaded event; the rows the view
+        // model last published still hold theirs, and are drawn until it publishes new ones.
+        const gone = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "gone", event: true });
+        expect(room.findEventById(gone.getId()!)).toBeUndefined();
+        withItems([eventRow(gone)]);
 
         renderPanel();
 
-        // The row is simply absent; rendering the rest of the timeline still succeeded.
-        expect(screen.queryByTestId("event-row")).toBeNull();
-        expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
+        expect(tileProps.current[0].mxEvent).toBe(gone);
+    });
+
+    it("passes the row's send state to the tile", () => {
+        withItems([eventRow(event, { sendState: "failed" })]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBe("failed");
+    });
+
+    it("gives a delivered message no send state", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBeUndefined();
     });
 
     it('labels the read marker "New"', () => {
@@ -174,7 +203,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("falls back to the modern layout when IRC is selected", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel({ layout: Layout.IRC });
 
@@ -182,7 +211,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("passes the message layout through unchanged", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel({ layout: Layout.Bubble });
 
@@ -193,10 +222,7 @@ describe("<NewTimelinePanel />", () => {
         const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
         room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
         const editState = new EditorStateTransfer(event);
-        withItems([
-            { key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
-            { key: other.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
-        ]);
+        withItems([eventRow(event), eventRow(other)]);
 
         renderPanel({ editState });
 
@@ -214,7 +240,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("lets tiles look up relations, so reactions can render", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel();
 

@@ -14,7 +14,8 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     lint:
@@ -61,10 +62,11 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: ./.github/actions/setup-node-pnpm
+            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
                   # Nothing to cache for the jobs that do not install
-                  cache: ${{ matrix.install != '' && 'pnpm' || '' }}
+                  cache: ${{ matrix.install != '' }}
+                  install: false
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'
@@ -96,6 +98,7 @@ jobs:
         runs-on: ubuntu-26.04
         permissions:
             security-events: write
+            contents: read
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -114,7 +117,8 @@ jobs:
                       allowed-hardcoded-keys: |
                           console_dev_note
                           labs|element_call_video_rooms
-                          labs|feature_disable_call_per_sender_encryption
+                          labs|feature_matrixrtc_slots
+                          labs|feature_matrixrtc_slots_description
                           voip|element_call
                           error|invalid_json
                           error|misconfigured
@@ -135,6 +139,7 @@ jobs:
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
+            contents: read
         with:
             hardcoded-words: "Element"
             packageManager: pnpm

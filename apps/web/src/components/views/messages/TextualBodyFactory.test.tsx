@@ -583,19 +583,6 @@ describe("<TextualBody />", () => {
                 expect(node).toHaveAttribute("href", links[index]);
             });
         });
-
-        it("should listen to showUrlPreview change", () => {
-            const ev = mkRoomTextMessage("Visit https://matrix.org/");
-
-            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
-
-            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            waitFor(() => {
-                // Asynchronous check since the VM needs to recalcuate.
-                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
-            });
-        });
     });
     describe("url preview tiles", () => {
         const link = "https://matrix.org/";
@@ -713,6 +700,17 @@ describe("<TextualBody />", () => {
                     fileViewerSourceEvent: mxEvent,
                 },
             });
+         });
+
+        it("should listen to showUrlPreview change", async () => {
+            const ev = mkRoomTextMessage(`Visit ${link}`);
+
+            const { rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
+            expect(matrixClient.getUrlPreview).not.toHaveBeenCalled();
+            expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument();
+
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
+            await expect(screen.findByRole("link", { name: "Matrix" })).resolves.toHaveAttribute("href", link);
         });
 
         it("expands the group when more previews are available than are shown", async () => {

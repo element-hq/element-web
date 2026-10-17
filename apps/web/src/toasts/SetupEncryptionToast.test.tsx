@@ -57,7 +57,7 @@ describe("SetupEncryptionToast", () => {
             act(() => showToast("set_up_recovery"));
 
             const user = userEvent.setup();
-            await user.click(await screen.findByRole("button", { name: "Dismiss" }));
+            await user.click(await screen.findByRole("button", { name: "Not now" }));
 
             expect(DeviceListener.sharedInstance().recordRecoveryDisabled).toHaveBeenCalled();
             expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();

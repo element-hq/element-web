@@ -321,6 +321,8 @@ export function createTestClient(): MatrixClient {
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
         _unstable_getRTCTransports: vi.fn(),
+        _unstable_getLivekitToken: vi.fn(),
+        _unstable_delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
             get: vi.fn().mockReturnValue([]),
@@ -401,6 +403,8 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         stop: vi.fn(),
         getActiveRoomSession: vi.fn(),
         getRoomSession: mockGetRoomSession,
+        getRtcSlot: vi.fn(),
+        isSlotClosed: vi.fn(),
         on: eventEmitterMatrixRTCSessionManager.on.bind(eventEmitterMatrixRTCSessionManager),
         off: eventEmitterMatrixRTCSessionManager.off.bind(eventEmitterMatrixRTCSessionManager),
         removeListener: eventEmitterMatrixRTCSessionManager.removeListener.bind(eventEmitterMatrixRTCSessionManager),
@@ -657,8 +661,8 @@ export function mkMessage({
         ...opts,
         type: "m.room.message",
         content: {
-            "msgtype": "m.text",
-            "body": message,
+            msgtype: "m.text",
+            body: message,
             ...(format && formattedMsg ? { format, formatted_body: formattedMsg } : {}),
             ["m.relates_to"]: relatesTo,
         },

@@ -41,7 +41,8 @@ run-name: Element ${{ inputs.mode != 'release' && github.event_name != 'release'
 concurrency: ${{ github.workflow }}
 env:
     R2_BUCKET: ${{ vars.R2_BUCKET }}
-permissions: {} # Uses ELEMENT_BOT_TOKEN
+permissions:
+    contents: read
 jobs:
     prepare:
         uses: ./.github/workflows/build_desktop_prepare.yaml
@@ -49,8 +50,6 @@ jobs:
         if: |
             github.event_name != 'release' ||
             !startsWith(github.event.release.tag_name, 'module/')
-        permissions:
-            contents: read
         with:
             config: element.io/${{ inputs.mode || (github.event_name == 'release' && 'release') || 'nightly' }}
             version: ${{ (inputs.mode != 'release' && github.event_name != 'release') && 'develop' || '' }}
@@ -83,6 +82,8 @@ jobs:
             matrix:
                 arch: [x64, arm64]
         uses: ./.github/workflows/build_desktop_windows.yaml
+        permissions:
+            contents: read
         secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true
@@ -124,7 +125,7 @@ jobs:
         environment: ${{ needs.prepare.outputs.deploy == 'true' && 'packages.element.io' || '' }}
         steps:
             - name: Download artifacts
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
 
             - name: Prepare artifacts for deployment
               run: |
@@ -298,7 +299,7 @@ jobs:
                   aws-region: ${{ env.AWS_REGION }}
 
             - name: Download artifacts
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   pattern: win-*
 

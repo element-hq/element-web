@@ -72,6 +72,7 @@ describe("Lifecycle", () => {
             setNotifTimelineSet: vi.fn(),
             getRooms: vi.fn().mockReturnValue([]),
             matrixRTC: { on: vi.fn(), off: vi.fn() },
+            whoami: vi.fn(),
         });
         // stub this
         vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
@@ -181,7 +182,6 @@ describe("Lifecycle", () => {
             const prom = Lifecycle.loadSession({
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
-                urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
                 abortSignal: abortController.signal,
             });
             abortController.abort();
@@ -643,6 +643,31 @@ describe("Lifecycle", () => {
         });
     });
 
+    describe("configureFromCompletedOAuthLogin()", () => {
+        beforeEach(() => {
+            initIdbMock();
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it.each([
+            [true, "true"],
+            [undefined, "false"],
+        ])("should forward is_guest=%s from whoami as the guest flag", async (isGuest, stored) => {
+            mockClient.whoami.mockResolvedValue({ user_id: userId, device_id: deviceId, is_guest: isGuest });
+
+            const creds = await Lifecycle.configureFromCompletedOAuthLogin({
+                accessToken,
+                refreshToken,
+                homeserverUrl,
+                identityServerUrl,
+                clientId: "test-client-id",
+            });
+
+            expect(creds.guest).toBe(isGuest === true);
+            expect(localStorage.getItem("mx_is_guest")).toBe(stored);
+        });
+    });
+
     describe("setLoggedIn()", () => {
         beforeEach(() => {
             initIdbMock();
@@ -668,6 +693,42 @@ describe("Lifecycle", () => {
             await setLoggedIn(credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
+        });
+
+        it("should not let a logout which is still clearing storage wipe the new session", async () => {
+            // Hold the logout at its last step, which clears localStorage
+            const platformCleared = Promise.withResolvers<void>();
+            mockPlatform.clearStorage = vi.fn(async () => {
+                await platformCleared.promise;
+                localStorage.clear();
+            });
+
+            const loggedOut = Lifecycle.onLoggedOut();
+            const loggedIn = setLoggedIn(credentials);
+            // Give the login every chance to persist its session before the logout finishes
+            await Promise.race([loggedIn, new Promise((resolve) => setTimeout(resolve, 100))]);
+            platformCleared.resolve();
+            await Promise.all([loggedOut, loggedIn]);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should still log in after a logout failed to clear storage", async () => {
+            mockPlatform.clearStorage = vi.fn().mockRejectedValue(new Error("storage broke"));
+
+            await expect(Lifecycle.onLoggedOut()).rejects.toThrow("storage broke");
+            await setLoggedIn(credentials);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should not let a logout which is still clearing storage wipe sessionStorage written meanwhile", async () => {
+            const loggedOut = Lifecycle.onLoggedOut();
+            // Like an OAuth login storing the context it needs when the issuer sends us back
+            sessionStorage.setItem("mx_oidc_test", "value");
+            await loggedOut;
+
+            expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
         });
 
         describe("after a soft-logout", () => {
@@ -876,7 +937,7 @@ describe("Lifecycle", () => {
 
     describe("logout()", () => {
         it("should call logout on the client", async () => {
-            logout();
+            await logout();
 
             await flushPromises();
 

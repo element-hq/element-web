@@ -19,14 +19,13 @@ export const useWindowWidth = (): number => {
     const [width, setWidth] = React.useState(UIStore.instance.windowWidth);
 
     React.useEffect(() => {
-        UIStore.instance.on(UI_EVENTS.Resize, () => {
+        const onResize = (): void => {
             setWidth(UIStore.instance.windowWidth);
-        });
+        };
+        UIStore.instance.on(UI_EVENTS.Resize, onResize);
 
         return () => {
-            UIStore.instance.removeListener(UI_EVENTS.Resize, () => {
-                setWidth(UIStore.instance.windowWidth);
-            });
+            UIStore.instance.removeListener(UI_EVENTS.Resize, onResize);
         };
     }, []);
 

@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect } from "vitest";
 
-import { looksValid } from "./email";
+import { emailLooksValid } from "./email";
 
-describe("looksValid", () => {
+describe("emailLooksValid", () => {
     it.each([
         ["", false],
         ["alice", false],
@@ -21,6 +21,6 @@ describe("looksValid", () => {
         ["a@b.org", true],
         ["alice@example.com", true],
     ])("for »%s« should return %s", (value: string, expected: boolean) => {
-        expect(looksValid(value)).toBe(expected);
+        expect(emailLooksValid(value)).toBe(expected);
     });
 });

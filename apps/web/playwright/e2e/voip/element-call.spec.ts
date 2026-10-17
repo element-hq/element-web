@@ -34,7 +34,6 @@ function assertCommonCallParameters(
     expect(url.has("widgetId")).toEqual(true);
     expect(url.has("parentUrl")).toEqual(true);
 
-    expect(hash.get("perParticipantE2EE")).toEqual("false");
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
@@ -215,19 +214,9 @@ test.describe("Element Call", () => {
                 expect(hash.get("intent")).toEqual(expectedIntent);
                 expect(hash.get("skipLobby")).toEqual(null);
 
-                // pip layout check
-                switch (callType) {
-                    case "voice": {
-                        const pipContainer = page.getByTestId("widget-pip-container");
-                        await expect(pipContainer).toBeVisible();
-                        break;
-                    }
-                    case "video": {
-                        const pipContainer = page.getByTestId("widget-pip-container");
-                        await expect(pipContainer).not.toBeVisible();
-                        break;
-                    }
-                }
+                // Joining a call in progress always opens it maximised, never in PiP (only starting a
+                // voice call does that)
+                await expect(page.getByTestId("widget-pip-container")).not.toBeVisible();
             });
         });
 
@@ -292,6 +281,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });
@@ -452,6 +444,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_dm_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });

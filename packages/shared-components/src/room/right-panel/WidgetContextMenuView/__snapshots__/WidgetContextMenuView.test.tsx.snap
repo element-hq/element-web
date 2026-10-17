@@ -13,6 +13,8 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu with all options
     aria-label="context menu trigger button"
     class="_icon-button_1215g_8"
     data-kind="primary"
+    data-radix-popper-align="start"
+    data-radix-popper-side="right"
     data-state="open"
     id="radix-react-use-id-2"
     inert=""
@@ -22,7 +24,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu with all options
     type="button"
   >
     <div
-      class="_indicator-icon_147l5_17"
+      class="_indicator-icon_j097f_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
@@ -54,6 +56,8 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu without only bas
     aria-label="context menu trigger button"
     class="_icon-button_1215g_8"
     data-kind="primary"
+    data-radix-popper-align="start"
+    data-radix-popper-side="right"
     data-state="open"
     id="radix-react-use-id-2"
     inert=""
@@ -63,7 +67,7 @@ exports[`<WidgetContextMenuView /> > renders widget contextmenu without only bas
     type="button"
   >
     <div
-      class="_indicator-icon_147l5_17"
+      class="_indicator-icon_j097f_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
