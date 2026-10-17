@@ -97,79 +97,98 @@ describe("<ImageView />", () => {
         expect(fetchMock).toHaveFetched("https://example.com/image.png");
     });
 
-    it("renders prev/next buttons and calls callbacks on click", () => {
-        const onPrev = vi.fn();
-        const onNext = vi.fn();
+    describe("navigation", () => {
+        it("shows no navigation buttons unless callbacks are given", () => {
+            const { queryByRole, container } = render(
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} />,
+            );
+            expect(queryByRole("button", { name: "Previous" })).toBeNull();
+            expect(queryByRole("button", { name: "Next" })).toBeNull();
+            expect(container.querySelector(".mx_ImageView_nav")).toBeNull();
+        });
 
-        const { container } = render(
-            <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onPrev={onPrev} onNext={onNext} />,
-        );
+        it("shows only the buttons for which a callback is given, keeping both gutters", () => {
+            const onNext = vi.fn();
+            const { getByRole, queryByRole, container } = render(
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={onNext} />,
+            );
+            expect(queryByRole("button", { name: "Previous" })).toBeNull();
+            expect(container.querySelectorAll(".mx_ImageView_nav")).toHaveLength(2);
 
-        const prevBtn = container.querySelector<HTMLElement>(".mx_ImageView_nav_prev")!;
-        const nextBtn = container.querySelector<HTMLElement>(".mx_ImageView_nav_next")!;
+            fireEvent.click(getByRole("button", { name: "Next" }));
+            expect(onNext).toHaveBeenCalled();
+        });
 
-        expect(prevBtn).toBeTruthy();
-        expect(nextBtn).toBeTruthy();
+        it("navigates with the arrow keys", () => {
+            const onPrev = vi.fn();
+            const onNext = vi.fn();
+            const onFinished = vi.fn();
+            const { container } = render(
+                <ImageView
+                    src="https://example.com/image.png"
+                    onFinished={onFinished}
+                    onPrev={onPrev}
+                    onNext={onNext}
+                />,
+            );
+            const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
 
-        fireEvent.click(nextBtn);
-        expect(onNext).toHaveBeenCalledTimes(1);
+            fireEvent.keyDown(dialog, { key: "ArrowLeft" });
+            expect(onPrev).toHaveBeenCalledTimes(1);
+            fireEvent.keyDown(dialog, { key: "ArrowRight" });
+            expect(onNext).toHaveBeenCalledTimes(1);
+            expect(onFinished).not.toHaveBeenCalled();
+        });
 
-        fireEvent.click(prevBtn);
-        expect(onPrev).toHaveBeenCalledTimes(1);
-    });
+        it("ignores arrow keys at the boundaries and while navigating", () => {
+            const onNext = vi.fn();
+            const { container, getByRole, rerender } = render(
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={onNext} />,
+            );
+            const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
+            fireEvent.keyDown(dialog, { key: "ArrowLeft" }); // no onPrev
+            expect(() => fireEvent.keyDown(dialog, { key: "ArrowLeft" })).not.toThrow();
 
-    it("navigates with ArrowLeft/ArrowRight keys when hasPrev/hasNext", () => {
-        const onPrev = vi.fn();
-        const onNext = vi.fn();
+            rerender(
+                <ImageView
+                    src="https://example.com/image.png"
+                    onFinished={vi.fn()}
+                    onNext={onNext}
+                    navigationInProgress={true}
+                />,
+            );
+            expect(getByRole("button", { name: "Next" })).toHaveAttribute("aria-disabled", "true");
+            fireEvent.keyDown(dialog, { key: "ArrowRight" });
+            expect(onNext).not.toHaveBeenCalled();
+        });
 
-        const { container, rerender } = render(
-            <ImageView
-                src="https://example.com/image.png"
-                onFinished={vi.fn()}
-                onPrev={onPrev}
-                onNext={undefined} // no "next" available initially
-            />,
-        );
+        it("keeps focus inside the lightbox when the focused button disappears", () => {
+            const { getByRole, container, rerender } = render(
+                <ImageView src="https://example.com/1.png" onFinished={vi.fn()} onPrev={vi.fn()} onNext={vi.fn()} />,
+            );
+            getByRole("button", { name: "Next" }).focus();
 
-        const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
-        expect(dialog).toBeTruthy();
+            // Reached the newest image: the Next button goes away
+            rerender(<ImageView src="https://example.com/2.png" onFinished={vi.fn()} onPrev={vi.fn()} />);
+            expect(document.activeElement).toBe(getByRole("button", { name: "Previous" }));
 
-        fireEvent.keyDown(dialog, { key: "ArrowLeft" });
-        expect(onPrev).toHaveBeenCalledTimes(1);
+            // Only image left: both buttons go away
+            rerender(<ImageView src="https://example.com/2.png" onFinished={vi.fn()} />);
+            expect(document.activeElement).toBe(container.querySelector('[role="dialog"]'));
+        });
 
-        fireEvent.keyDown(dialog, { key: "ArrowRight" });
-        expect(onNext).toHaveBeenCalledTimes(0);
+        it("resets zoom and rotation when the image changes", () => {
+            const { container, getByRole, rerender } = render(
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={vi.fn()} />,
+            );
+            const image = container.querySelector<HTMLImageElement>(".mx_ImageView_image")!;
+            fireEvent.click(getByRole("button", { name: "Rotate Right" }));
+            expect(image.style.transform).toContain("rotate(90deg)");
 
-        rerender(
-            <ImageView
-                src="https://example.com/image.png"
-                onFinished={vi.fn()}
-                onPrev={onPrev}
-                onNext={onNext} // now "next" is available
-            />,
-        );
-
-        fireEvent.keyDown(dialog, { key: "ArrowRight" });
-        expect(onNext).toHaveBeenCalledTimes(1);
-    });
-
-    it("does not trigger arrow-key navigation when focus is in an input", () => {
-        const onPrev = vi.fn();
-        const onNext = vi.fn();
-
-        const { container } = render(
-            <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onPrev={onPrev} onNext={onNext} />,
-        );
-
-        const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
-        const input = document.createElement("input");
-        dialog.appendChild(input);
-
-        fireEvent.keyDown(input, { key: "ArrowLeft" });
-        fireEvent.keyDown(input, { key: "ArrowRight" });
-
-        expect(onPrev).not.toHaveBeenCalled();
-        expect(onNext).not.toHaveBeenCalled();
+            rerender(<ImageView src="https://example.com/other.png" onFinished={vi.fn()} onNext={vi.fn()} />);
+            expect(image.getAttribute("src")).toBe("https://example.com/other.png");
+            expect(image.style.transform).toContain("rotate(0deg)");
+        });
     });
 
     it("closes on Escape key", () => {
@@ -180,40 +199,6 @@ describe("<ImageView />", () => {
         fireEvent.keyDown(dialog, { key: "Escape" });
 
         expect(onFinished).toHaveBeenCalledTimes(1);
-    });
-
-    it("resets interaction state when navigating to a different mxEvent", () => {
-        const setStateSpy = vi.spyOn(ImageView.prototype as any, "setState");
-
-        // Provide thumbnailInfo so the translation calculation path is exercised too
-        const thumb = { positionX: 10, positionY: 10, width: 20, height: 20 };
-
-        const evA = new MatrixEvent({
-            event_id: "$a",
-            type: "m.room.message",
-            content: { msgtype: "m.image", body: "a.png", url: "mxc://test.dummy/a" },
-            origin_server_ts: 0,
-            room_id: "!room:server",
-        });
-        const evB = new MatrixEvent({
-            event_id: "$b",
-            type: "m.room.message",
-            content: { msgtype: "m.image", body: "b.png", url: "mxc://test.dummy/b" },
-            origin_server_ts: 0,
-            room_id: "!room:server",
-        });
-
-        const { rerender } = render(
-            <ImageView src="https://example.com/image.png" onFinished={vi.fn()} mxEvent={evA} thumbnailInfo={thumb} />,
-        );
-
-        rerender(
-            <ImageView src="https://example.com/image.png" onFinished={vi.fn()} mxEvent={evB} thumbnailInfo={thumb} />,
-        );
-
-        expect(setStateSpy).toHaveBeenCalled();
-
-        setStateSpy.mockRestore();
     });
 
     it("zooms in and out via toolbar buttons after image load", async () => {

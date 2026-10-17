@@ -20,50 +20,32 @@ $button-gap: var(--cpd-space-3x);
     flex-direction: column;
 }
 
+.mx_ImageView_content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: calc(100% - var(--image-view-panel-height));
+}
+
 .mx_ImageView_image_wrapper {
     pointer-events: initial;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1;
+    min-width: 0;
     height: 100%;
     overflow: hidden;
-    position: relative;
 }
 
+/* Gutter on either side of the image holding the previous/next button, so the buttons never cover the image */
 .mx_ImageView_nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 20;
     pointer-events: initial;
-
-    --icon-size: 24px;
-    padding: calc(($button-size - var(--icon-size)) / 2);
-    border-radius: 999px;
-    background: rgb(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-
-    transition: background 120ms ease;
-
-    &:hover {
-        background: rgb(0, 0, 0, 0.5);
-    }
-
-    &:focus-visible {
-        outline: 2px solid rgb(255, 255, 255, 0.6);
-        outline-offset: 2px;
-    }
-    svg {
-        color: $lightbox-fg-color;
-    }
-}
-
-.mx_ImageView_nav_prev {
-    left: 16px;
-}
-
-.mx_ImageView_nav_next {
-    right: 16px;
+    flex: 0 0 auto;
+    width: var(--cpd-space-20x);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_ImageView_image {

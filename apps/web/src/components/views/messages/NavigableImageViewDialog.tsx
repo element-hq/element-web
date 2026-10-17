@@ -320,6 +320,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
             }}
             onPrev={hasPrev ? onPrev : undefined}
             onNext={hasNext ? onNext : undefined}
+            navigationInProgress={isPaginating}
         />
     );
 }
