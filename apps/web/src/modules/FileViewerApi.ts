@@ -18,6 +18,7 @@ import type { UrlPreview } from "shared-types";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { MediaEventContent } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/src/logger";
 
 export type RegisteredFileViewer = {
     render: FileViewerRenderFunction;
@@ -46,7 +47,14 @@ export class FileViewerApi implements IFileViewerApi {
         // in the unlikely scenario where there are multiple viewers for the
         // same media tile, order them by ID so it is not completely random
         return Array.from(this.viewers.values())
-            .filter((viewer) => viewer.match(event))
+            .filter((viewer) => {
+                try {
+                    return viewer.match(event);
+                } catch (e) {
+                    logger.error(`FileViewerApi matcher from ${viewer.options.id} failed. Reason: ${e}`)
+                    return false;
+                }
+            })
             .sort((a, b) => a.options.id.localeCompare(b.options.id));
     }
 
