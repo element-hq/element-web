@@ -69,8 +69,6 @@ export interface IRightPanelCardStateStored {
     // file viewer
     fileViewerId?: string;
     fileViewerSourceEventId?: string;
-    // what room is the event from?
-    fileViewerSourceRoomId?: string;
     // only present if file viewer is viewing remote content (from a URL preview)
     fileViewerUrlPreview?: UrlPreview;
 }
@@ -120,7 +118,6 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         documentViewerEventId: state?.documentViewerEvent?.getId(),
         fileViewerId: state?.fileViewer?.viewer.options.id,
         fileViewerSourceEventId: state?.fileViewer?.mxEvent.getId(),
-        fileViewerSourceRoomId: state?.fileViewer?.mxEvent.getRoomId(),
         fileViewerUrlPreview: state?.fileViewer?.media.type === "remote" ? state.fileViewer.media.preview : undefined,
     };
 
@@ -146,11 +143,9 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
     };
 
-    if (stateStored.fileViewerId && stateStored.fileViewerSourceRoomId && stateStored.fileViewerSourceEventId) {
+    if (stateStored.fileViewerId && stateStored.fileViewerSourceEventId) {
         const viewer = ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId);
-        const mxEvent = room.client
-            .getRoom(stateStored.fileViewerSourceRoomId)
-            ?.findEventById(stateStored.fileViewerSourceEventId);
+        const mxEvent = room.client.getRoom(room.roomId)?.findEventById(stateStored.fileViewerSourceEventId);
 
         if (viewer && mxEvent) {
             const media = stateStored.fileViewerUrlPreview
