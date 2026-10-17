@@ -39,6 +39,7 @@ import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Spinner from "../elements/Spinner";
 import { PollOption } from "../polls/PollOption";
+import { isEventSentByMe } from "../../../utils/stableIds";
 
 interface IState {
     poll?: Poll;
@@ -287,7 +288,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         if (newEvents.length > 0) {
             for (const mxEvent of newEvents) {
-                if (mxEvent.getSender() === this.context.getUserId()) {
+                if (isEventSentByMe(this.context, mxEvent)) {
                     newSelected = null;
                 }
             }

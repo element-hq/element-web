@@ -102,7 +102,9 @@ describe("RoomView", () => {
 
         const roomName = (expect.getState().currentTestName ?? "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
 
-        room = new Room(`!${roomName}:example.org`, cli, "@alice:example.org");
+        // The room must belong to the syncing user: "is this my event?" is answered
+        // against the room's own member, not the client's user ID.
+        room = new Room(`!${roomName}:example.org`, cli, cli.getSafeUserId());
         vi.spyOn(room, "findPredecessor");
         room.getPendingEvents = () => [];
         rooms = new Map();
@@ -697,7 +699,7 @@ describe("RoomView", () => {
         });
 
         it("hides the right panel chat when returning to a room that previously showed a call", async () => {
-            const room2 = new Room(`!roomswitchtest:example.org`, cli, "@alice:example.org");
+            const room2 = new Room(`!roomswitchtest:example.org`, cli, cli.getSafeUserId());
             rooms.set(room2.roomId, room2);
             await mountRoomView();
 
@@ -1084,7 +1086,7 @@ describe("RoomView", () => {
         });
 
         it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-            const room2 = new Room(`!roomswitchtest:example.org`, cli, "@alice:example.org");
+            const room2 = new Room(`!roomswitchtest:example.org`, cli, cli.getSafeUserId());
             rooms.set(room2.roomId, room2);
 
             room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
@@ -1383,7 +1385,7 @@ describe("RoomView", () => {
     });
 
     it("should not change room when editing event in a room displayed in module", async () => {
-        const room2 = new Room("!room2:example.org", cli, "@alice:example.org");
+        const room2 = new Room("!room2:example.org", cli, cli.getSafeUserId());
         rooms.set(room2.roomId, room2);
         room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
         room2.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);

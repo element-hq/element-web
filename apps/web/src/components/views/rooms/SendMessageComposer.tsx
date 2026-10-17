@@ -315,7 +315,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             if (events[i].getType() === EventType.RoomMessage) {
                 let shouldReact = true;
                 const lastMessage = events[i];
-                const userId = MatrixClientPeg.safeGet().getSafeUserId();
+                // Annotations are grouped by the sender's stable ID (MSC4428).
+                const userId = this.props.room.getMyStableId();
                 const messageReactions = this.props.room.relations.getChildEventsForEvent(
                     lastMessage.getId()!,
                     RelationType.Annotation,

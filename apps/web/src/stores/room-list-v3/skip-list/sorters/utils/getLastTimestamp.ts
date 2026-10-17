@@ -9,6 +9,7 @@ import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js
 
 import { EffectiveMembership, getEffectiveMembership } from "../../../../../utils/membership";
 import * as Unread from "../../../../../Unread";
+import { isEventSentBy } from "../../../../../utils/stableIds";
 
 function shouldCauseReorder(event: MatrixEvent): boolean {
     const type = event.getType();
@@ -48,10 +49,11 @@ export const getLastTimestamp = (r: Room, userId: string): number => {
         // are we'll at least have our own membership event to go off of.
         const effectiveMembership = getEffectiveMembership(r.getMyMembership());
         if (effectiveMembership !== EffectiveMembership.Join) {
+            // Member state is keyed by stable ID (MSC4428), not by user ID.
             const membershipEvent = r
                 .getLiveTimeline()
                 .getState(EventTimeline.FORWARDS)
-                ?.getStateEvents(EventType.RoomMember, userId);
+                ?.getStateEvents(EventType.RoomMember, r.resolveMemberIdentity(userId).stableId);
             if (membershipEvent && !Array.isArray(membershipEvent)) {
                 return membershipEvent.getTs();
             }
@@ -62,7 +64,7 @@ export const getLastTimestamp = (r: Room, userId: string): number => {
             if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
             if (
-                (ev.getSender() === userId && shouldCauseReorder(ev)) ||
+                (isEventSentBy(r, ev, userId) && shouldCauseReorder(ev)) ||
                 Unread.eventTriggersUnreadCount(r.client, ev)
             ) {
                 return ev.getTs();

@@ -25,6 +25,17 @@ export class PreferredRoomVersions {
      */
     public static readonly RestrictedRooms = "9";
 
+    /**
+     * The room version to use when creating rooms whose members are identified by a
+     * per-room member key rather than by their user ID.
+     *
+     * Unstable: gated behind the `feature_msc4430_member_keys` lab and the server
+     * advertising `org.matrix.msc4430`.
+     *
+     * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4430
+     */
+    public static readonly MemberKeyRooms = "org.matrix.msc4430.12";
+
     private constructor() {
         // readonly, static, class
     }

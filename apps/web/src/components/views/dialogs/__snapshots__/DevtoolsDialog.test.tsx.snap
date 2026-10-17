@@ -122,6 +122,12 @@ exports[`DevtoolsDialog > renders the devtools dialog 1`] = `
         >
           Explore sticky state
         </button>
+        <button
+          class="mx_LegacyDialogButton mx_DevTools_button"
+          type="button"
+        >
+          Explore member info (MSC4428)
+        </button>
       </div>
       <div>
         <h2

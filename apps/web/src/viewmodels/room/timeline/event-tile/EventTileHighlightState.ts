@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import { isEventSentByMe } from "../../../../utils/stableIds";
 
 /** Inputs for deriving EventTile highlight display state. */
 export interface EventTileHighlightStateInput {
@@ -50,7 +51,7 @@ export function shouldHighlightEventTile({
     }
 
     // Don't show self-highlights from another of our clients.
-    if (mxEvent.getSender() === cli.credentials.userId) {
+    if (isEventSentByMe(cli, mxEvent)) {
         return false;
     }
 

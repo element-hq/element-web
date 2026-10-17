@@ -56,6 +56,7 @@ import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
 import { ModuleApi } from "../modules/Api";
 import ActiveWidgetStore from "./ActiveWidgetStore";
+import { memberUserId } from "../utils/stableIds";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -614,7 +615,10 @@ export class RoomViewStore extends EventEmitter {
         if (room?.getMyMembership() === KnownMembership.Invite) {
             const myMember = room.getMember(cli.getSafeUserId());
             const inviteEvent = myMember ? myMember.events.member : null;
-            return inviteEvent?.getSender();
+            const inviterStableId = inviteEvent?.getStableId();
+            // The inviter is named by stable ID (MSC4428), and an invite carries no
+            // member_info, so this falls back to the server's claim in their member event.
+            return inviterStableId === undefined ? undefined : memberUserId(room, inviterStableId);
         }
     }
 

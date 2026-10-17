@@ -22,9 +22,14 @@ export function getRedactedBodyViewModelProps(mxEvent: MatrixEvent, showTwelveHo
     const redactingMember = redactingUserId ? redactingRoom?.getMember(redactingUserId) : undefined;
 
     const text =
-        !redactingUserId || redactingUserId === mxEvent.getSender()
+        !redactingUserId || redactingUserId === mxEvent.getStableId()
             ? _t("timeline|self_redaction")
-            : _t("timeline|redaction", { name: redactingMember?.name ?? redactingUserId });
+            : _t("timeline|redaction", {
+                  // `redactingUserId` is the redactor's stable ID, so fall back to the
+                  // user ID it resolves to rather than showing an opaque member key.
+                  name:
+                      redactingMember?.name ?? redactingRoom?.getUserIdForStableId(redactingUserId) ?? redactingUserId,
+              });
 
     const redactionTs = redactedBecause?.origin_server_ts;
     const tooltip = redactionTs
