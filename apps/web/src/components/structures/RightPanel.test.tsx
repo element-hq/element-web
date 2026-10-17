@@ -283,9 +283,11 @@ describe("RightPanel", () => {
             {
                 phase: RightPanelPhases.FileViewer,
                 state: {
-                    fileViewer: viewer,
-                    fileViewerMedia: { type: "uploaded", name: "spec.pdf", blob: vi.fn() },
-                    fileViewerSourceEvent: fileEvent,
+                    fileViewer: {
+                        viewer,
+                        media: { type: "uploaded", name: "spec.pdf", blob: vi.fn() },
+                        mxEvent: fileEvent,
+                    },
                 },
             },
             true,

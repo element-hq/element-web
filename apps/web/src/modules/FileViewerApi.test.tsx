@@ -14,7 +14,7 @@ import type { FileViewerOptions, MediaHandle } from "@element-hq/element-web-mod
 import type { UrlPreview } from "shared-types";
 import { stubClient } from "test-utils";
 
-import { FileViewerApi, remoteMediaOfPreview, uploadedMediaOfEvent } from "./FileViewerApi";
+import { FileViewerApi, mediaHandleId, remoteMediaOfPreview, uploadedMediaOfEvent } from "./FileViewerApi";
 import { type MediaEventHelper } from "../utils/MediaEventHelper";
 
 const PDF: MediaHandle = { type: "uploaded", name: "spec.pdf", mimetype: "application/pdf", blob: vi.fn() };
@@ -130,5 +130,29 @@ describe("remoteMediaOfPreview", () => {
             type: "remote",
             preview: { ...preview, image: undefined },
         });
+    });
+});
+
+describe("mediaHandleId", () => {
+    const preview: UrlPreview = {
+        link: "https://example.org/a.pdf",
+        title: "A",
+        siteName: "example.org",
+        showTooltipOnLink: false,
+    };
+
+    it("tells apart the uploaded file and each link preview of an event", () => {
+        const event = mkFileEvent();
+        const ids = [
+            mediaHandleId(PDF, event),
+            mediaHandleId({ type: "remote", preview }, event),
+            mediaHandleId({ type: "remote", preview: { ...preview, link: "https://example.org/b.pdf" } }, event),
+        ];
+
+        expect(new Set(ids).size).toBe(3);
+    });
+
+    it("gives the same media from the same event the same ID", () => {
+        expect(mediaHandleId(PDF, mkFileEvent())).toBe(mediaHandleId(PDF, mkFileEvent()));
     });
 });

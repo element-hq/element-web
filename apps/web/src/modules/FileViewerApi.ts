@@ -88,3 +88,18 @@ export function remoteMediaOfPreview(preview: UrlPreview): RemoteMedia | undefin
         },
     };
 }
+
+/**
+ * Returns a unique ID for the media
+ * @param media the media to identify
+ * @param mxEvent the event the media comes from
+ */
+export function mediaHandleId(media: MediaHandle, mxEvent: MatrixEvent): string {
+    switch (media.type) {
+        case "remote":
+            return `remote:${mxEvent.getId()}:${media.preview.link}`;
+        case "uploaded":
+            // An event carries at most one uploaded file
+            return `uploaded:${mxEvent.getId()}`;
+    }
+}

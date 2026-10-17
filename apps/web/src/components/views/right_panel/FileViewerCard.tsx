@@ -9,32 +9,25 @@ import React, { type JSX } from "react";
 import type { MediaHandle } from "@element-hq/element-web-module-api";
 import BaseCard from "./BaseCard";
 import ErrorBoundary from "../elements/ErrorBoundary";
-import type { RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import { mediaHandleId, type RegisteredFileViewer } from "../../../modules/FileViewerApi";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import type RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import type { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
-
-export interface FileViewerCardState {
-    /**
-     * Viewer in use of viewing
-     */
-    viewer: RegisteredFileViewer;
-    /**
-     * The media that is being viewed
-     */
-    media: MediaHandle;
-}
+import type { FileViewerCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 
 export interface FileViewerCardProps extends FileViewerCardState {
     /** called when the card is closed */
     onClose: () => void;
 }
 
-export function FileViewerCard({ viewer, media, onClose }: FileViewerCardProps): JSX.Element {
+export function FileViewerCard({ viewer, media, mxEvent, onClose }: FileViewerCardProps): JSX.Element {
+    const Viewer = viewer.render;
     return (
-        <BaseCard onClose={onClose} header={viewer.options.cardHeader(media)}>
-            <ErrorBoundary>{viewer && viewer.render({ media, onClose })}</ErrorBoundary>
+        <BaseCard key={mediaHandleId(media, mxEvent)} onClose={onClose} header={viewer.options.cardHeader(media)}>
+            <ErrorBoundary>
+                <Viewer media={media} onClose={onClose} />
+            </ErrorBoundary>
         </BaseCard>
     );
 }
@@ -64,9 +57,7 @@ export function fileViewerOpenButton({
             rightPanelStore.setCard({
                 phase: RightPanelPhases.FileViewer,
                 state: {
-                    fileViewer: viewer,
-                    fileViewerMedia: media,
-                    fileViewerSourceEvent: mxEvent,
+                    fileViewer: { viewer, media, mxEvent },
                 },
             }),
     };

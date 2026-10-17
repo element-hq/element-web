@@ -397,12 +397,10 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 return !!card.state?.documentViewerEvent;
 
             case RightPanelPhases.FileViewer:
-                if (!card.state?.fileViewer || !card.state?.fileViewerMedia || !card.state?.fileViewerSourceEvent) {
-                    logger.warn(
-                        "removed card from right panel because of missing fileViewer, fileViewerMedia and/or fileViewerSourceEvent in card state",
-                    );
+                if (!card.state?.fileViewer) {
+                    logger.warn("removed card from right panel because of missing fileViewer in card state");
                 }
-                return !(!card.state?.fileViewer || !card.state?.fileViewerMedia || !card.state?.fileViewerSourceEvent);
+                return !!card.state?.fileViewer;
         }
         return true;
     }

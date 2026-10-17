@@ -201,12 +201,14 @@ describe("RightPanelStore", () => {
         });
         describe("FileViewer", () => {
             const fileViewerState = {
-                fileViewer: { options: { id: "test-viewer" } } as RegisteredFileViewer,
-                fileViewerMedia: { type: "uploaded", name: "spec.pdf", blob: vi.fn() } as MediaHandle,
-                fileViewerSourceEvent: {
-                    getId: () => "$file",
-                    getRoomId: () => "!1:example.org",
-                } as unknown as MatrixEvent,
+                fileViewer: {
+                    viewer: { options: { id: "test-viewer" } } as RegisteredFileViewer,
+                    media: { type: "uploaded", name: "spec.pdf", blob: vi.fn() } as MediaHandle,
+                    mxEvent: {
+                        getId: () => "$file",
+                        getRoomId: () => "!1:example.org",
+                    } as unknown as MatrixEvent,
+                },
             };
 
             it("keeps a card with a viewer, media and source event", async () => {
@@ -217,20 +219,13 @@ describe("RightPanelStore", () => {
                 expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.FileViewer);
             });
 
-            it.each(["fileViewer", "fileViewerMedia", "fileViewerSourceEvent"] as const)(
-                "drops a card without %s",
-                async (missing) => {
-                    await viewRoom("!1:example.org");
+            it("drops a card without file viewer state", async () => {
+                await viewRoom("!1:example.org");
 
-                    store.setCard(
-                        { phase: RightPanelPhases.FileViewer, state: { ...fileViewerState, [missing]: undefined } },
-                        true,
-                        "!1:example.org",
-                    );
+                store.setCard({ phase: RightPanelPhases.FileViewer, state: {} }, true, "!1:example.org");
 
-                    expect(store.roomPhaseHistory).toEqual([]);
-                },
-            );
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
         });
         it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");

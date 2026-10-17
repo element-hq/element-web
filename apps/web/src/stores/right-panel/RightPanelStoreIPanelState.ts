@@ -15,6 +15,24 @@ import { type RegisteredFileViewer, uploadedMediaOfEvent, remoteMediaOfPreview }
 import { ModuleApi } from "../../modules/Api";
 import { type UrlPreview } from "shared-types";
 
+/**
+ * State of the file viewer card.
+ */
+export interface FileViewerCardState {
+    /**
+     * Viewer in use of viewing
+     */
+    viewer: RegisteredFileViewer;
+    /**
+     * The media that is being viewed
+     */
+    media: MediaHandle;
+    /**
+     * The event the media being viewed is from
+     */
+    mxEvent: MatrixEvent;
+}
+
 export interface IRightPanelCardState {
     member?: RoomMember | User;
     verificationRequest?: VerificationRequest;
@@ -31,10 +49,8 @@ export interface IRightPanelCardState {
     focusRoomSearch?: boolean;
     // document viewer: the m.file event whose attachment is being read
     documentViewerEvent?: MatrixEvent;
-    // file viewer
-    fileViewer?: RegisteredFileViewer;
-    fileViewerSourceEvent?: MatrixEvent;
-    fileViewerMedia?: MediaHandle;
+    // file viewer: its fields are only valid together, so they are grouped into one optional object
+    fileViewer?: FileViewerCardState;
 }
 
 export interface IRightPanelCardStateStored {
@@ -102,10 +118,10 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
         documentViewerEventId: state?.documentViewerEvent?.getId(),
-        fileViewerId: state?.fileViewer?.options.id,
-        fileViewerSourceEventId: state?.fileViewerSourceEvent?.getId(),
-        fileViewerSourceRoomId: state?.fileViewerSourceEvent?.getRoomId(),
-        fileViewerUrlPreview: state?.fileViewerMedia?.type === "remote" ? state.fileViewerMedia.preview : undefined,
+        fileViewerId: state?.fileViewer?.viewer.options.id,
+        fileViewerSourceEventId: state?.fileViewer?.mxEvent.getId(),
+        fileViewerSourceRoomId: state?.fileViewer?.mxEvent.getRoomId(),
+        fileViewerUrlPreview: state?.fileViewer?.media.type === "remote" ? state.fileViewer.media.preview : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -128,20 +144,20 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         documentViewerEvent: !!stateStored?.documentViewerEventId
             ? room.findEventById(stateStored.documentViewerEventId)
             : undefined,
-        fileViewer: stateStored?.fileViewerId
-            ? ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId)
-            : undefined,
     };
 
-    if (stateStored?.fileViewerSourceRoomId && stateStored.fileViewerSourceEventId) {
-        state.fileViewerSourceEvent = room.client
+    if (stateStored.fileViewerId && stateStored.fileViewerSourceRoomId && stateStored.fileViewerSourceEventId) {
+        const viewer = ModuleApi.instance.fileViewer.getViewerById(stateStored.fileViewerId);
+        const mxEvent = room.client
             .getRoom(stateStored.fileViewerSourceRoomId)
             ?.findEventById(stateStored.fileViewerSourceEventId);
 
-        if (state.fileViewerSourceEvent)
-            state.fileViewerMedia = stateStored.fileViewerUrlPreview
+        if (viewer && mxEvent) {
+            const media = stateStored.fileViewerUrlPreview
                 ? remoteMediaOfPreview(stateStored.fileViewerUrlPreview)
-                : uploadedMediaOfEvent(state.fileViewerSourceEvent);
+                : uploadedMediaOfEvent(mxEvent);
+            if (media) state.fileViewer = { viewer, media, mxEvent };
+        }
     }
 
     return { state: state, phase: panelStateStore.phase };

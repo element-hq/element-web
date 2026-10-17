@@ -74,7 +74,7 @@ describe("RightPanelStoreIPanelState", () => {
             history: [
                 {
                     phase: RightPanelPhases.FileViewer,
-                    state: { fileViewer: VIEWER, fileViewerMedia: media, fileViewerSourceEvent: fileEvent },
+                    state: { fileViewer: { viewer: VIEWER, media, mxEvent: fileEvent } },
                 },
             ],
         });
@@ -89,9 +89,7 @@ describe("RightPanelStoreIPanelState", () => {
                 {
                     phase: RightPanelPhases.FileViewer,
                     state: {
-                        fileViewer: VIEWER,
-                        fileViewerMedia: { type: "remote", preview: PREVIEW },
-                        fileViewerSourceEvent: fileEvent,
+                        fileViewer: { viewer: VIEWER, media: { type: "remote", preview: PREVIEW }, mxEvent: fileEvent },
                     },
                 },
             ],
@@ -108,11 +106,11 @@ describe("RightPanelStoreIPanelState", () => {
     it("restores a card viewing an uploaded file from the source event", () => {
         const media: MediaHandle = { type: "uploaded", name: "spec.pdf", blob: vi.fn() };
 
-        const state = roundTrip(media)?.history[0].state;
+        const fileViewer = roundTrip(media)?.history[0].state?.fileViewer;
 
-        expect(state?.fileViewer).toBe(VIEWER);
-        expect(state?.fileViewerSourceEvent).toBe(fileEvent);
-        expect(state?.fileViewerMedia).toMatchObject({
+        expect(fileViewer?.viewer).toBe(VIEWER);
+        expect(fileViewer?.mxEvent).toBe(fileEvent);
+        expect(fileViewer?.media).toMatchObject({
             type: "uploaded",
             name: "spec.pdf",
             mimetype: "application/pdf",
@@ -121,23 +119,30 @@ describe("RightPanelStoreIPanelState", () => {
     });
 
     it("restores a card viewing a URL preview from the stored preview", () => {
-        const state = roundTrip({ type: "remote", preview: PREVIEW })?.history[0].state;
+        const fileViewer = roundTrip({ type: "remote", preview: PREVIEW })?.history[0].state?.fileViewer;
 
-        expect(state?.fileViewerSourceEvent).toBe(fileEvent);
-        expect(state?.fileViewerMedia).toEqual({ type: "remote", preview: { ...PREVIEW, image: undefined } });
+        expect(fileViewer?.mxEvent).toBe(fileEvent);
+        expect(fileViewer?.media).toEqual({ type: "remote", preview: { ...PREVIEW, image: undefined } });
     });
 
-    it("restores no media when the source event can no longer be found", () => {
+    it("restores no card when the source event can no longer be found", () => {
         vi.mocked(room.findEventById).mockReturnValue(undefined);
 
-        const state = roundTrip({ type: "uploaded", name: "spec.pdf", blob: vi.fn() })?.history[0].state;
-
-        expect(state?.fileViewer).toBe(VIEWER);
-        expect(state?.fileViewerSourceEvent).toBeUndefined();
-        expect(state?.fileViewerMedia).toBeUndefined();
+        expect(
+            roundTrip({ type: "uploaded", name: "spec.pdf", blob: vi.fn() })?.history[0].state?.fileViewer,
+        ).toBeUndefined();
     });
 
-    it("restores no viewer when the module that registered it is gone", () => {
+    it("restores no card when the source event no longer has an attachment", () => {
+        fileEvent.getContent().msgtype = MsgType.Text;
+        delete fileEvent.getContent().url;
+
+        expect(
+            roundTrip({ type: "uploaded", name: "spec.pdf", blob: vi.fn() })?.history[0].state?.fileViewer,
+        ).toBeUndefined();
+    });
+
+    it("restores no card when the module that registered the viewer is gone", () => {
         vi.mocked(ModuleApi.instance.fileViewer.getViewerById).mockReturnValue(undefined);
 
         expect(roundTrip({ type: "remote", preview: PREVIEW })?.history[0].state?.fileViewer).toBeUndefined();

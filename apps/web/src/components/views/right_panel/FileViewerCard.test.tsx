@@ -7,7 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import React from "react";
+import React, { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
@@ -21,6 +21,11 @@ import type RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "../../../test/test-utils";
 
 const MEDIA: MediaHandle = { type: "uploaded", name: "spec.pdf", mimetype: "application/pdf", blob: vi.fn() };
+const OTHER_MEDIA: MediaHandle = { type: "uploaded", name: "notes.pdf", mimetype: "application/pdf", blob: vi.fn() };
+
+function mkEvent(eventId: string): MatrixEvent {
+    return { getId: () => eventId } as unknown as MatrixEvent;
+}
 
 function mkViewer(render: (props: FileViewerProps) => React.JSX.Element): RegisteredFileViewer {
     return {
@@ -53,7 +58,7 @@ describe("FileViewerCard", () => {
         ));
 
         render(
-            <FileViewerCard viewer={viewer} media={MEDIA} onClose={onClose} />,
+            <FileViewerCard viewer={viewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={onClose} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
@@ -72,12 +77,72 @@ describe("FileViewerCard", () => {
         const viewer = mkViewer(() => <CrashingViewer />);
 
         render(
-            <FileViewerCard viewer={viewer} media={MEDIA} onClose={vi.fn()} />,
+            <FileViewerCard viewer={viewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={vi.fn()} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         expect(screen.getByRole("heading", { name: "Viewing spec.pdf" })).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Something went wrong!" })).toBeInTheDocument();
+    });
+
+    it("resets the viewer's state when another file is opened", async () => {
+        const user = userEvent.setup();
+        const viewer = mkViewer(function PagedViewer() {
+            const [page, setPage] = useState(1);
+            return <button onClick={() => setPage(page + 1)}>{`Page ${page}`}</button>;
+        });
+
+        const { rerender } = render(
+            <FileViewerCard viewer={viewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={vi.fn()} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        await user.click(screen.getByRole("button", { name: "Page 1" }));
+        expect(screen.getByRole("button", { name: "Page 2" })).toBeInTheDocument();
+
+        rerender(<FileViewerCard viewer={viewer} media={OTHER_MEDIA} mxEvent={mkEvent("$other")} onClose={vi.fn()} />);
+
+        expect(screen.getByRole("heading", { name: "Viewing notes.pdf" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Page 1" })).toBeInTheDocument();
+    });
+
+    it("switches between viewers that use different hooks", () => {
+        const oneHookViewer = mkViewer(function OneHookViewer() {
+            const [label] = useState("One hook");
+            return <p>{label}</p>;
+        });
+        const twoHookViewer = mkViewer(function TwoHookViewer() {
+            const [first] = useState("Two");
+            const [second] = useState("hooks");
+            return <p>{`${first} ${second}`}</p>;
+        });
+
+        const { rerender } = render(
+            <FileViewerCard viewer={oneHookViewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={vi.fn()} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        expect(screen.getByText("One hook")).toBeInTheDocument();
+
+        rerender(<FileViewerCard viewer={twoHookViewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={vi.fn()} />);
+
+        expect(screen.getByText("Two hooks")).toBeInTheDocument();
+    });
+
+    it("recovers from a crashed viewer when another file is opened", () => {
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        const viewer = mkViewer(({ media }) => {
+            if (media.type === "uploaded" && media.name === "spec.pdf") throw new Error("viewer crashed");
+            return <p>Viewer working</p>;
+        });
+
+        const { rerender } = render(
+            <FileViewerCard viewer={viewer} media={MEDIA} mxEvent={mkEvent("$file")} onClose={vi.fn()} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        expect(screen.getByRole("heading", { name: "Something went wrong!" })).toBeInTheDocument();
+
+        rerender(<FileViewerCard viewer={viewer} media={OTHER_MEDIA} mxEvent={mkEvent("$other")} onClose={vi.fn()} />);
+
+        expect(screen.getByText("Viewer working")).toBeInTheDocument();
     });
 });
 
@@ -96,7 +161,7 @@ describe("fileViewerOpenButton", () => {
 
         expect(rightPanelStore.setCard).toHaveBeenCalledWith({
             phase: RightPanelPhases.FileViewer,
-            state: { fileViewer: viewer, fileViewerMedia: MEDIA, fileViewerSourceEvent: mxEvent },
+            state: { fileViewer: { viewer, media: MEDIA, mxEvent } },
         });
     });
 });
