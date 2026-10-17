@@ -14,6 +14,7 @@ import { CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { _t } from "../../../languageHandler";
 import TrophyIcon from "../../../../res/img/element-icons/trophy.svg?react";
 import StyledRadioButton from "../elements/StyledRadioButton";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 type PollOptionContentProps = {
     answer: PollAnswerSubevent;
@@ -40,14 +41,17 @@ interface PollOptionProps extends PollOptionContentProps {
     optionNumber: number;
     isEnded?: boolean;
     isChecked?: boolean;
+    isBusy?: boolean;
     onOptionSelected?: (id: string) => void;
     children?: ReactNode;
+    maxSelections?: number;
 }
 
 const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
     pollId,
     isChecked,
     isEnded,
+    isBusy,
     optionNumber,
     isWinner,
     voteCount,
@@ -55,6 +59,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
     children,
     answer,
     onOptionSelected,
+    maxSelections,
 }) => {
     let ariaLabel: string;
 
@@ -77,15 +82,36 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
         });
     }
 
+    const isMultiSelect = maxSelections && maxSelections > 1;
+
+    if (isMultiSelect) {
+        return (
+            <StyledCheckbox
+                className="mx_PollOption_live-option"
+                name={`poll_answer_select-${pollId}`}
+                value={answer.id}
+                checked={isChecked}
+                disabled={isEnded || isBusy}
+                aria-label={ariaLabel}
+                onChange={() => onOptionSelected?.(answer.id)}
+                onClick={(event) => event.stopPropagation()}
+                icon={isChecked ? <CheckIcon /> : undefined}
+            >
+                <div aria-hidden="true">{children}</div>
+            </StyledCheckbox>
+        );
+    }
+
     return (
         <StyledRadioButton
             className="mx_PollOption_live-option"
             name={`poll_answer_select-${pollId}`}
             value={answer.id}
             checked={isChecked}
-            disabled={isEnded}
+            disabled={isEnded || isBusy}
             aria-label={ariaLabel}
             onChange={() => onOptionSelected?.(answer.id)}
+            onClick={(event) => event.stopPropagation()}
             icon={isChecked ? <CheckIcon /> : undefined}
         >
             <div aria-hidden="true">{children}</div>
@@ -102,12 +128,15 @@ export const PollOption: React.FC<PollOptionProps> = ({
     displayVoteCount,
     isEnded,
     isChecked,
+    isBusy,
     onOptionSelected,
+    maxSelections,
 }) => {
     const cls = classNames({
         mx_PollOption: true,
         mx_PollOption_checked: isChecked,
         mx_PollOption_ended: isEnded,
+        mx_PollOption_busy: isBusy,
     });
     const isWinner = isEnded && isChecked;
     const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount) / totalVoteCount);
@@ -121,10 +150,12 @@ export const PollOption: React.FC<PollOptionProps> = ({
                 optionNumber={optionNumber}
                 isChecked={isChecked}
                 isEnded={isEnded}
+                isBusy={isBusy}
                 isWinner={isWinner}
                 voteCount={voteCount}
                 displayVoteCount={displayVoteCount}
                 onOptionSelected={onOptionSelected}
+                maxSelections={maxSelections}
             >
                 <PollOptionContent
                     isWinner={isWinner}
