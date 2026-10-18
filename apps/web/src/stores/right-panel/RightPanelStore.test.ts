@@ -188,6 +188,25 @@ describe("RightPanelStore", () => {
                 expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
             });
 
+            it("does not restore a PDF viewer card after a session restart", async () => {
+                await setPdfViewerLab(true);
+                await viewRoom("!1:example.org");
+
+                // Open the PDF viewer
+                store.setCard(pdfCard, true, "!1:example.org");
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
+
+                // Retrieve what was saved to settings — pdfViewerEventId must be absent
+                // so that on next load the card is filtered out and the panel closes cleanly.
+                const stored = SettingsStore.getValue("RightPanel.phases", "!1:example.org");
+                const history = stored?.history ?? [];
+                const pdfCards = history.filter(
+                    (c: { phase: string; state: Record<string, unknown> }) =>
+                        c.phase === RightPanelPhases.PdfViewer && !!c.state?.pdfViewerEventId,
+                );
+                expect(pdfCards).toHaveLength(0);
+            });
+
             it("drops an otherwise valid card while the lab is off", async () => {
                 await setPdfViewerLab(false);
                 await viewRoom("!1:example.org");
