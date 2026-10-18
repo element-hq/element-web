@@ -59,6 +59,13 @@ function computeImageEventsFromTimeline(t: EventTimeline | null, initialEvent: M
     return events.filter(isImageEvent);
 }
 
+/**
+ * Lightbox dialog for an `m.image` event that can step to the previous (older) and next (newer)
+ * image in the same room, paginating further back in the room's history when needed.
+ *
+ * Wraps {@link ImageView}, passing it `onPrevious`/`onNext` handlers only while a neighbouring
+ * image exists, so the navigation buttons disappear at either end.
+ */
 export default function NavigableImageViewDialog(props: Props): React.ReactNode {
     const client = MatrixClientPeg.safeGet();
     const roomId = props.initialEvent.getRoomId();
