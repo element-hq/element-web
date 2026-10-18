@@ -347,8 +347,8 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
-                if (isKeyChangeInProgress) {
-                    // Don't allow repeated attempts.
+                if (!isKeyValid || isKeyChangeInProgress) {
+                    // Guard against Enter key bypassing the disabled button when the key is invalid.
                     return;
                 }
                 setIsKeyChangeInProgress(true);

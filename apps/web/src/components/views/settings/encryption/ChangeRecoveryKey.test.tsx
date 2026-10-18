@@ -122,6 +122,22 @@ describe("<ChangeRecoveryKey />", () => {
             expect(onFinish).toHaveBeenCalledWith();
         });
 
+        it("should not submit when Enter is pressed with an invalid recovery key", async () => {
+            vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
+            const onFinish = vi.fn();
+            renderComponent(false, onFinish);
+            await waitFor(() => userEvent.click(screen.getByRole("button", { name: "Continue" })));
+            await waitFor(() => userEvent.click(screen.getByRole("button", { name: "Continue" })));
+            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const input = screen.getByTitle("Enter recovery key");
+            await userEvent.type(input, "wrong recovery key{enter}");
+
+            // onFinish must not have been called — the Enter key should not bypass the disabled button
+            expect(onFinish).not.toHaveBeenCalled();
+        });
+
         it("should reset key backup if needed", async () => {
             vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(true);
 
