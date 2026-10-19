@@ -2936,10 +2936,6 @@
             "in_reply_to": "<a>回覆給</a> <pill>",
             "in_reply_to_for_export": "回覆<a>此訊息</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "您即將被帶到第三方網站，以便您可以驗證帳戶來使用 %(integrationsUrl)s。請問您要繼續嗎？",
-            "dialog_title": "新增整合器"
-        },
         "self_redaction": "訊息已刪除",
         "send_state_encrypting": "正在加密您的訊息…",
         "send_state_failed": "傳送失敗",

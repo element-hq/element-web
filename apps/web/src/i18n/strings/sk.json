@@ -3465,10 +3465,6 @@
             "in_reply_to": "<a>Odpoveď na</a> <pill>",
             "in_reply_to_for_export": "V odpovedi na <a>túto správu</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Budete presmerovaní na stránku tretej strany, aby ste mohli overiť svoj účet na použitie s %(integrationsUrl)s. Chcete pokračovať?",
-            "dialog_title": "Pridať integráciu"
-        },
         "self_redaction": "Správa vymazaná",
         "send_state_encrypting": "Šifrovanie vašej správy…",
         "send_state_failed": "Nepodarilo sa odoslať",

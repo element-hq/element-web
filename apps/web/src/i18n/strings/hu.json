@@ -3563,10 +3563,6 @@
             "in_reply_to": "<a>Válasz neki</a> <pill>",
             "in_reply_to_for_export": "Válasz erre az <a>üzenetre</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Hitelesítés céljából egy harmadik félhez lesz irányítva (%(integrationsUrl)s). Folytatja?",
-            "dialog_title": "Integráció hozzáadása"
-        },
         "self_redaction": "Üzenet törölve",
         "send_state_encrypting": "Üzenet titkosítása…",
         "send_state_failed": "Küldés sikertelen",

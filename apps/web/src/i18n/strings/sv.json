@@ -76,6 +76,7 @@
         "new_video_room": "Nytt videorum",
         "next": "Nästa",
         "no": "Nej",
+        "not_now": "Inte nu",
         "ok": "OK",
         "open": "Öppna",
         "pin": "Häftstift",
@@ -956,6 +957,7 @@
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
         "confirm_encryption_setup_title": "Bekräfta krypteringsinställning",
         "continue_with_reset": "Fortsätt med återställningen",
+        "create_recovery_key": "Skapa återställningsnyckel",
         "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
         "cross_signing_room_verified": "Alla i det här rummet är verifierade",
         "cross_signing_room_warning": "Någon använder en okänd session",
@@ -992,6 +994,7 @@
         },
         "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) digitala identitet återställdes. <a>Läs mer</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s användarkonto återställdes. <a>Läs mer</a>",
+        "recovery_key_description": "Dina chattar säkerhetskopieras automatiskt med end-to-end-kryptering. För att återställa denna säkerhetskopia och behålla din digitala identitet när du förlorar åtkomst till alla dina enheter behöver du din återställningsnyckel.",
         "recovery_method_removed": {
             "description_1": "Den här enheten har upptäckt att din säkerhetsfras och nyckel för säkra meddelanden har tagits bort.",
             "description_2": "Om du gjorde detta av misstag kan du konfigurera Säkra meddelanden på den här enheten, vilket kommer att kryptera enhetens meddelandehistorik med en ny återställningsmetod.",
@@ -2556,6 +2559,7 @@
             "key_storage": {
                 "allow_key_storage": "Tillåt nyckellagring",
                 "description": "Detta gör att du kan se din chatthistorik på alla nya enheter och krävs för säkerhetskopiering av chattar och digital identitet. <a>Läs mer</a>",
+                "recovery_requires_key_storage": "Nyckellagring måste vara aktiverad för att konfigurera återställning",
                 "title": "Nyckellagring"
             },
             "recovery": {
@@ -3611,10 +3615,6 @@
             "error_loading": "Det går inte att ladda det inlägg som detta svar avser. Det kanske inte finns, eller så har du kanske inte behörighet att se det.",
             "in_reply_to": "<a>Som svar på</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>detta meddelande</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Du kommer att skickas till en tredjepartswebbplats så att du kan autentisera ditt konto för användning med %(integrationsUrl)s. Vill du fortsätta?",
-            "dialog_title": "Lägg till integration"
         },
         "self_redaction": "Meddelande raderat",
         "send_state_encrypting": "Krypterar ditt meddelande …",

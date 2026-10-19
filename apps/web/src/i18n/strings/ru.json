@@ -3562,10 +3562,6 @@
             "in_reply_to": "<a>В ответ на</a> <pill>",
             "in_reply_to_for_export": "В ответ на <a>это сообщение</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Вы будете перенаправлены на внешний сайт, чтобы войти в свою учётную запись для использования с %(integrationsUrl)s. Продолжить?",
-            "dialog_title": "Добавить интеграцию"
-        },
         "self_redaction": "Сообщение удалено",
         "send_state_encrypting": "Шифрование сообщения…",
         "send_state_failed": "Не удалось отправить",

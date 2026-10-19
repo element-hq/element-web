@@ -1982,10 +1982,6 @@
             "tooltip": "Žinutė buvo ištrinta %(date)s"
         },
         "redaction": "Žinutė, ištrinta %(name)s",
-        "scalar_starter_link": {
-            "dialog_description": "Jūs būsite nukreipti į trečiosios šalies svetainę, kad galėtumėte patvirtinti savo paskyrą naudojimui su %(integrationsUrl)s. Ar norite tęsti?",
-            "dialog_title": "Pridėti Integraciją"
-        },
         "self_redaction": "Žinutė ištrinta",
         "send_state_failed": "Nepavyko išsiųsti",
         "send_state_sent": "Jūsų žinutė išsiųsta",

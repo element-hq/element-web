@@ -3635,10 +3635,6 @@
             "in_reply_to": "<a>У відповідь на</a> <pill>",
             "in_reply_to_for_export": "У відповідь на <a>це повідомлення</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Ви будете спрямовані до стороннього сайту, щоб автентифікувати використання облікового запису в %(integrationsUrl)s. Продовжити?",
-            "dialog_title": "Додати інтеграцію"
-        },
         "self_redaction": "Повідомлення видалено",
         "send_state_encrypting": "Шифрування повідомлення…",
         "send_state_failed": "Не вдалося надіслати",
