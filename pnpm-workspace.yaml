@@ -49,7 +49,7 @@ catalog:
     # nx
     nx: 23.3.0
     # oxc
-    oxlint: 1.87.0
+    oxlint: 1.88.0
 
 catalogs:
     ts6:
