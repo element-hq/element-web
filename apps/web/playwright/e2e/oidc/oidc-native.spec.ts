@@ -99,9 +99,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
 
             await page.goto("http://localhost:8080");
-            await expect(
-                page.getByText("For security, this session has been removed. Please sign in again."),
-            ).toBeVisible();
+            await expect(page.getByText("This device was removed. Sign in again to continue.")).toBeVisible();
             await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
 
             await expect.poll(() => page.evaluate(() => Object.keys(localStorage))).toHaveLength(0);
@@ -131,6 +129,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Log in again
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
+        await expect(page.getByText("Continue to Element?")).toBeVisible();
         await page.getByRole("button", { name: "Continue" }).click();
 
         // We should be in
@@ -223,6 +222,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 // Log in again
                 await page.goto("/#/login");
                 await page.getByRole("button", { name: "Continue" }).click();
+                await expect(page.getByText("Continue to Element?")).toBeVisible();
                 await page.getByRole("button", { name: "Continue" }).click();
 
                 // We should be in, and not able to dismiss the verify dialog

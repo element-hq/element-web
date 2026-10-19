@@ -140,7 +140,7 @@ exports[`<NewRecoveryMethodDialog /> > when key backup is enabled 1`] = `
       A new Security Phrase and key for Secure Messages have been detected.
     </p>
     <p>
-      This session is encrypting history using the new recovery method.
+      This device is encrypting history using the new recovery method.
     </p>
     <strong
       class="warning"

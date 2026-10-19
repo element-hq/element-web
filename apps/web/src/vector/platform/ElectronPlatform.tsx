@@ -494,13 +494,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        try {
-            return await this.ipc.call("getPickleKey", userId, deviceId);
-        } catch {
-            // if we can't connect to the password storage, assume there's no
-            // pickle key
-            return null;
-        }
+        return (await this.ipc.call("getPickleKey", userId, deviceId)) ?? null;
     }
 
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {

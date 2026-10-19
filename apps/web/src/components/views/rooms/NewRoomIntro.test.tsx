@@ -122,7 +122,7 @@ describe("NewRoomIntro", () => {
             vi.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
         });
 
-        function addTopicToRoom(topic: string) {
+        async function addTopicToRoom(topic: string) {
             const topicEvent = mkEvent({
                 type: "m.room.topic",
                 room: roomId,
@@ -134,23 +134,23 @@ describe("NewRoomIntro", () => {
                 event: true,
             });
 
-            room.addLiveEvents([topicEvent], { addToState: true });
+            await room.addLiveEvents([topicEvent], { addToState: true });
         }
 
-        it("should render the topic", () => {
-            addTopicToRoom("Test topic");
+        it("should render the topic", async () => {
+            await addTopicToRoom("Test topic");
             renderNewRoomIntro(client, room);
             expect(screen.getByText("Test topic")).toBeVisible();
         });
 
-        it("should render a link in the topic", () => {
-            addTopicToRoom("This is a link: https://matrix.org/");
+        it("should render a link in the topic", async () => {
+            await addTopicToRoom("This is a link: https://matrix.org/");
             renderNewRoomIntro(client, room);
             expect(screen.getByTestId("topic")).toMatchSnapshot();
         });
 
-        it("should be able to add a topic", () => {
-            addTopicToRoom("Test topic");
+        it("should be able to add a topic", async () => {
+            await addTopicToRoom("Test topic");
             vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
             vi.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "maySendStateEvent").mockReturnValue(
                 true,

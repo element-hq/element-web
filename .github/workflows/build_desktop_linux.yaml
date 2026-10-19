@@ -57,7 +57,8 @@ env:
     # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro. Debian bookworm (2.36) and newer are a superset.
     # Currently, our newest linked glibc version is 2.34 in the prebuilt Seshat binaries, Electron only links against 2.25.
     MAX_GLIBC: 2.34
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: Build Linux ${{ inputs.arch }}
@@ -87,7 +88,7 @@ jobs:
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
 
-            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: ${{ inputs.prepare-artifact-name }}
                   path: apps/desktop

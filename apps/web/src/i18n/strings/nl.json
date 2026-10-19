@@ -27,7 +27,6 @@
         "cancel": "Annuleer",
         "change": "Wijzig",
         "clear": "Wis",
-        "click_to_copy": "Klik om te kopiëren",
         "close": "Sluiten",
         "collapse": "Invouwen",
         "complete": "Voltooien",
@@ -2525,10 +2524,6 @@
             "error_loading": "Kan de gebeurtenis waarop gereageerd was niet laden. Wellicht bestaat die niet, of je hebt geen toestemming die te bekijken.",
             "in_reply_to": "<a>Als antwoord op</a> <pill>",
             "in_reply_to_for_export": "In antwoord op <a>dit bericht</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Je wordt zo dadelijk naar een derdepartijwebsite gebracht zodat je de account kunt legitimeren voor gebruik met %(integrationsUrl)s. Wil je doorgaan?",
-            "dialog_title": "Voeg een integratie toe"
         },
         "self_redaction": "Bericht verwijderd",
         "send_state_failed": "Versturen is mislukt",

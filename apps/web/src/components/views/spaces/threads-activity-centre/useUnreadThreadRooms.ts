@@ -91,6 +91,7 @@ export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRoo
             }),
         [doUpdate],
     );
+    useEffect(() => () => scheduleUpdate.cancel(), [scheduleUpdate]);
 
     // Listen to sync events to update the result
     useEventEmitter(mxClient, ClientEvent.Sync, scheduleUpdate);

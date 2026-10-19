@@ -20,12 +20,14 @@
         "new_room": "Нова кімната",
         "new_section": "Новий розділ",
         "new_video_room": "Нова відеокімната",
+        "no": "Ні",
         "open_menu": "Відкрити меню",
         "pause": "Призупинити",
         "pin": "Закріпити",
         "play": "Відтворити",
         "react": "Відреагувати",
         "remove": "Вилучити",
+        "remove_this_device": "Вилучити цей пристрій",
         "reply": "Відповісти",
         "reply_in_thread": "Відповісти в гілці",
         "retry": "Повторити спробу",
@@ -33,7 +35,8 @@
         "search": "Пошук",
         "start_chat": "Розпочати бесіду",
         "unpin": "Відкріпити",
-        "view_source": "Переглянути джерело"
+        "view_source": "Переглянути джерело",
+        "yes": "Так"
     },
     "common": {
         "attachment": "Вкладення",
@@ -72,6 +75,10 @@
         },
         "toggle_event": "Джерело події"
     },
+    "document_viewer": {
+        "error_load": "Не вдалося завантажити цей файл.",
+        "loading": "Завантаження документа…"
+    },
     "emoji": {
         "categories": "Категорії",
         "category_activities": "Діяльність",
@@ -88,6 +95,13 @@
     "emoji_picker": {
         "cancel_search_label": "Скасувати пошук",
         "emoji_picker": "Панель емоджі"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Будь ласка, спочатку перейдіть на попередню версію <b>%(version)s</b> або вилучте цей пристрій.",
+            "description": "%(brand)s оновлено з дуже старої версії, тому неможливо перенести сховище даних шифрування у новий формат.",
+            "title": "Цей пристрій не можна використовувати"
+        }
     },
     "keyboard": {
         "shift": "Shift"
@@ -114,10 +128,11 @@
         "mute_room": "Вимкнути сповіщення кімнати"
     },
     "pdf_viewer": {
-        "error_load": "Не вдалося завантажити PDF-файл.",
-        "loading": "Завантаження PDF-файлу…",
         "page_label": "Сторінка %(page)s з %(total)s",
-        "page_number": "Номер сторінки"
+        "page_number": "Номер сторінки",
+        "zoom": "Масштаб",
+        "zoom_in": "Збільшити",
+        "zoom_out": "Зменшити"
     },
     "release_announcement": {
         "room_list_section_close": "ОК",
@@ -141,6 +156,7 @@
         "knock_sent": "Запит на приєднання надіслано",
         "pinned_message_badge": "Закріплене повідомлення",
         "status_bar": {
+            "contact_account_provider": "Зв'язатися з постачальником облікового запису",
             "delete_all": "Видалити все",
             "exceeded_resource_limit_description": "Зверніться до постачальника вашого облікового запису, щоб продовжити користуватися службою.",
             "exceeded_resource_limit_title": "Ваше повідомлення не надіслано, оскільки ця служба перевищила ліміт ресурсів.",
@@ -343,7 +359,7 @@
             "error_invalid": "Недійсний файл"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s змінює аватар бесіди на <img/>",
+            "changed_img": "%(senderDisplayName)s змінює аватар кімнати на <img/>",
             "removed": "%(senderDisplayName)s вилучає аватар кімнати."
         },
         "m.room.encryption": {
@@ -389,6 +405,26 @@
         "open_home": "Головна",
         "open_security": "Безпека та приватність",
         "open_settings": "Усі налаштування"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Ефективна конфігурація",
+            "configuration": "Конфігурація",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "під час виклику",
+            "in_lobby": "у черзі на приєднання",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "Журнал HostBridge",
+            "mute_audio": "Вимкнути звук аудіо",
+            "mute_video": "Вимкнути звук відео",
+            "no_participants": "Ніхто не бере участі в цьому виклику",
+            "participants": "Учасники",
+            "status": "%(roomId)s · намір %(intent)s · %(state)s · тема %(theme)s · мова %(language)s",
+            "title": "Element Call (тестовий)",
+            "unknown_room": "Невідома кімната %(roomId)s",
+            "unmute_audio": "Увімкнути звук аудіо",
+            "unmute_video": "Увімкнути звук відео"
+        }
     },
     "widget": {
         "context_menu": {

@@ -64,6 +64,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         this.eventContentBodyViewModel = new EventContentBodyViewModel({
             mxEvent: event,
             content: mxEventContent,
+            // Each entry shows one version of the message, so must not switch to the latest edit
+            ignoreReplacements: true,
             highlights: [],
             stripReply: true,
             renderTooltipsForAmbiguousLinks: true,

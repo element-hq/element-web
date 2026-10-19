@@ -87,7 +87,9 @@ describe("RoomAvatarViewModel", () => {
 
         // 4. With presence, public room, video room and low priority, low priority takes precedence
         room.tags[DefaultTagID.LowPriority] = {};
-        act(() => room.emit(RoomEvent.Tags, new MatrixEvent(), room));
+        act(() => {
+            room.emit(RoomEvent.Tags, new MatrixEvent(), room);
+        });
         rerender(room);
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.LowPriority);
     });

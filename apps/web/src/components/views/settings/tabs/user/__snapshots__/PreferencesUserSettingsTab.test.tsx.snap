@@ -1586,7 +1586,7 @@ exports[`PreferencesUserSettingsTab > should render 1`] = `
                     class="_message _help-message mx_MediaPreviewAccountSetting_RadioHelp"
                     id="radix-react-use-id-7"
                   >
-                    A hidden media can always be shown by tapping on it
+                    Hidden media can always be shown by selecting it
                   </span>
                   <div
                     class="_inline-field mx_MediaPreviewAccountSetting_Radio"
@@ -1719,7 +1719,7 @@ exports[`PreferencesUserSettingsTab > should render 1`] = `
                       class="_message _help-message"
                       id="radix-react-use-id-9"
                     >
-                      Your server does not implement this feature.
+                      Your account provider does not offer this feature.
                     </span>
                   </div>
                 </div>
