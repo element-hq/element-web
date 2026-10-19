@@ -361,8 +361,24 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
         [offsetForKey, virtualizer],
     );
 
-    // ─── Requests from outside the view ────────────────────────────────────────
-    useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(ref, () => ({ scrollNow }), [scrollNow]);
+    // ─── Requests from outside the view: the app's keyboard shortcuts ──────────
+    // Page up/down: move by the number of rows on screen and put the row landed on at the top.
+    const scrollByPage = useCallback(
+        (direction: -1 | 1): void => {
+            const range = virtualizer.range;
+            const last = itemsRef.current.length - 1;
+            if (!range || last < 0) return;
+            const pageSize = Math.max(1, range.endIndex - range.startIndex);
+            const index = Math.max(0, Math.min(range.startIndex + direction * pageSize, last));
+            const info = virtualizer.getOffsetForIndex(index, "start");
+            if (info) virtualizer.scrollToOffset(info[0]);
+        },
+        [virtualizer],
+    );
+    useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(ref, () => ({ scrollByPage, scrollNow }), [
+        scrollByPage,
+        scrollNow,
+    ]);
 
     const virtualItems = virtualizer.getVirtualItems();
 

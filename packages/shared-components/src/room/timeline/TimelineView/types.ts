@@ -99,8 +99,18 @@ export interface NavigationAnchor {
  */
 export type ImmediateScroll = (anchor: NavigationAnchor) => void;
 
-/** Controls the view exposes through its `ref`, for driving it from outside. */
+/**
+ * Controls the view exposes through its `ref`: paging for the app's page up/down shortcuts,
+ * and the immediate scroll that the view model's jump actions take. Everything here only
+ * moves the viewport over what is already loaded; fetching more history stays with the view
+ * model, which the view asks in the usual way once the scroll reaches an end.
+ */
 export interface TimelineViewHandle {
+    /**
+     * Move by a page of messages: `-1` towards older messages, `1` towards newer ones. A
+     * page is as many rows as are currently on screen.
+     */
+    scrollByPage(direction: -1 | 1): void;
     /**
      * Scroll to a loaded row straight away. This is the same handle the view gives the view
      * model's actions, so an outside caller can drive those actions too, e.g.

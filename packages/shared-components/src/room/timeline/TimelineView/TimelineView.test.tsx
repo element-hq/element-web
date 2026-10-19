@@ -44,6 +44,7 @@ type Actions = {
     onJumpToReadMarker: ReturnType<typeof vi.fn>;
     onMarkAllAsRead: ReturnType<typeof vi.fn>;
     onJumpToLive: ReturnType<typeof vi.fn>;
+    onJumpToStart: ReturnType<typeof vi.fn>;
 };
 
 interface FakeVm {
@@ -65,6 +66,7 @@ function makeFakeVm(initial: Partial<TimelineViewSnapshot> = {}): FakeVm {
         onJumpToReadMarker: vi.fn(),
         onMarkAllAsRead: vi.fn(),
         onJumpToLive: vi.fn(),
+        onJumpToStart: vi.fn(),
     };
     // vi.fn() carries a constructable signature that trips assignability to the
     // ViewModel's action method types, so cast the assembled object.
@@ -282,6 +284,35 @@ describe("<TimelineView />", () => {
             await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalled());
             return { handle: ref.current!, scroller, actions };
         }
+
+        it("pages up and down by the number of rows on screen", async () => {
+            const { handle, scroller, actions } = await renderWithHandle();
+            // The view reports the visible range as [first, last] row indices; a page is the
+            // difference, and the row landed on goes to the top.
+            const [first, last] = actions.onVisibleRangeChanged.mock.calls.at(-1)! as [number, number];
+            const pageSize = last - first;
+            expect(pageSize).toBeGreaterThan(1);
+
+            act(() => handle.scrollByPage(-1));
+            await waitFor(() => expect(scroller.scrollTop).toBe((first - pageSize) * ROW_HEIGHT));
+
+            act(() => handle.scrollByPage(1));
+            await waitFor(() => expect(scroller.scrollTop).toBe(first * ROW_HEIGHT));
+        });
+
+        it("does not take focus when the shortcut comes from outside the timeline", async () => {
+            const { handle } = await renderWithHandle();
+            // As when the reader presses page up with the caret in the composer.
+            const outside = document.createElement("button");
+            document.body.appendChild(outside);
+            outside.focus();
+
+            act(() => handle.scrollByPage(-1));
+
+            await waitFor(() => expect(screen.getByTestId("timeline-scroller").scrollTop).toBeLessThan(900));
+            expect(document.activeElement).toBe(outside);
+            outside.remove();
+        });
 
         it("scrolls straight to a loaded row through scrollNow", async () => {
             const { handle, scroller } = await renderWithHandle();
