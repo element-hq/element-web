@@ -128,7 +128,7 @@
         "node": ">=20.0.0"
     },
     "peerDependencies": {
-        "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "@vector-im/compound-web": "^8.3.5 || ^9.0.0 || ^10.0.0",
         "react-dom": "catalog:",
         "react": "catalog:"
     }
