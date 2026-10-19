@@ -201,6 +201,16 @@ export interface TimelineViewActions {
     onMarkAllAsRead(): void;
 
     /**
+     * Navigate to the start of the room.
+     *
+     * `scrollNow` is invoked synchronously when the window already reaches the start.
+     * Otherwise the VM reloads the window at the start and the scroll happens via
+     * `pendingAnchor` after the load. If the start cannot be loaded, the VM goes to the
+     * top of the loaded window instead.
+     */
+    onJumpToStart(scrollNow: ImmediateScroll): void;
+
+    /**
      * Navigate to the live end of the timeline.
      *
      * `scrollNow` is invoked synchronously when the window already reaches
