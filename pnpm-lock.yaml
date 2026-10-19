@@ -319,7 +319,7 @@ importers:
         version: 3.30.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/4b73ce68e36dffb530eb7aa73f5e5976efebb140#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -627,7 +627,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -970,7 +970,7 @@ importers:
         version: 5.6.1(clean-css@5.3.3)(cssnano@7.1.9)(csso@5.0.5)(esbuild@0.27.4)(html-minifier-terser@6.1.0)(lightningcss@1.33.0)(postcss@8.5.28)(uglify-js@3.19.3)(webpack@5.111.1)
       testcontainers:
         specifier: ^12.0.0
-        version: 12.2.0(supports-color@10.2.2)
+        version: 12.2.1(supports-color@10.2.2)
       typescript:
         specifier: catalog:ts6
         version: '@typescript/typescript6@6.0.2'
@@ -1134,7 +1134,7 @@ importers:
         version: 19.3.0
       testcontainers:
         specifier: ^12.0.1
-        version: 12.2.0(supports-color@10.2.2)
+        version: 12.2.1(supports-color@10.2.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1308,7 +1308,7 @@ importers:
         version: 1.64.0
       '@testcontainers/postgresql':
         specifier: ^12.0.0
-        version: 12.2.0(supports-color@10.2.2)
+        version: 12.2.1(supports-color@10.2.2)
       glob:
         specifier: ^13.0.5
         version: 13.0.6
@@ -1326,7 +1326,7 @@ importers:
         version: 7.2.0
       testcontainers:
         specifier: ^12.0.0
-        version: 12.2.0(supports-color@10.2.2)
+        version: 12.2.1(supports-color@10.2.2)
       wait-on:
         specifier: ^9.0.4
         version: 9.5.1(debug@4.4.3)(supports-color@10.2.2)
@@ -5790,8 +5790,8 @@ packages:
   '@tanstack/virtual-core@3.19.1':
     resolution: {integrity: sha512-l2WWYlRblIesvv/iEs/5OIVQvr8EML3Wh4pxmdROlDrd5L9/J8Vk26MfTCOp2kA6CM5Ve0SDkPX5uupyrfA2AA==}
 
-  '@testcontainers/postgresql@12.2.0':
-    resolution: {integrity: sha512-14oNBbKdqIkWTiw8XwP6YqWnuBebiij8m4fF03WTSHvNt5FfvQpGTLwIV3p07UpDnqWRFvY50YFzbiYdB+SWuA==}
+  '@testcontainers/postgresql@12.2.1':
+    resolution: {integrity: sha512-MIbI5KjZ9M4SY4+xzxg/w4ZLBeV+Jd6ognXoWn7dh/mhIhBbn7ss0MiZHNg2XbCbu03BW9YQ9+H9xW8PFkJWaA==}
 
   '@testing-library/dom@10.4.2':
     resolution: {integrity: sha512-yzr2S9HyAIdhz2/6qHgbs665Q7PKVcDF05vsOlHPxG1mo36gKVesdYVeDLnXgfjJ03CrKRk08knc6+E/9m8v2Q==}
@@ -8435,8 +8435,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/4b73ce68e36dffb530eb7aa73f5e5976efebb140#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-rkIqQ7D9K/uvc4t94g5mf4cB97Uyy0Rc28xFXfluK0U5OuVoeEJFHzGAD6FW1VFQjF0YjIiK6pYn78TnFm04UA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/4b73ce68e36dffb530eb7aa73f5e5976efebb140}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-UwlEFO4pr3HOqzZKsFopcShSX8nXsardiHD+YU57gmNtRUu1Fs1MDh1mCkdPLIQJBbEHJ4wRKRYZ0qYP1Ps0AA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.26.5:
@@ -9778,8 +9778,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b:
-    resolution: {gitHosted: true, integrity: sha512-V0mh60LZl66E8ML25kChddATv4zyHGfBMiIUBj6I2YsR9Ah4desyCB3GKDgyoJe+xAP6knCbsMfdV63wV5s0/A==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
+    resolution: {gitHosted: true, integrity: sha512-NdtGKGAj5lpmWP9zuchVEA5Ddj+kqDeGQzkGT+3Izk5rplJlYSmlMUV85kF3aOn8g1Sn2yfdo9W7IAOwNf568w==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a}
     version: 44.0.0
     engines: {node: '>=22.0.0'}
 
@@ -12070,8 +12070,8 @@ packages:
   tersify@4.0.8:
     resolution: {integrity: sha512-8SP19qXCXiWztbyJLqmCwstqtZg7F5grbSov3yh8C+fyqHgKyfMaI/c5DCMKIGDkpoKX8cIz9ZqJxN7zZDtQcQ==}
 
-  testcontainers@12.2.0:
-    resolution: {integrity: sha512-Pd0c2eU0DdIuK+Pb3c+vmBUdKjDLgxZmPecQGESFAKyn5LTqSaSw8l7htfMlLwabb/QsUILe6XkxMJw8Ly/ThA==}
+  testcontainers@12.2.1:
+    resolution: {integrity: sha512-JfbCyOvLdzatwgqUI3AvYCwRW0P5mCkKQVBPO8U5qSH1efC2kHvnfWmi9VHloy1rAFG2MEqWZObRH4bq0gU1kQ==}
     engines: {node: '>= 22.22'}
 
   text-decoder@1.2.7:
@@ -14987,11 +14987,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -17617,9 +17617,9 @@ snapshots:
 
   '@tanstack/virtual-core@3.19.1(patch_hash=e4a0d401e27388e874fdaee2af4e710c7c9deeb53a4e021b768f6fe78b87b985)': {}
 
-  '@testcontainers/postgresql@12.2.0(supports-color@10.2.2)':
+  '@testcontainers/postgresql@12.2.1(supports-color@10.2.2)':
     dependencies:
-      testcontainers: 12.2.0(supports-color@10.2.2)
+      testcontainers: 12.2.1(supports-color@10.2.2)
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -20661,7 +20661,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/4b73ce68e36dffb530eb7aa73f5e5976efebb140#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
@@ -22106,7 +22106,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/7c8166e03d4b74c914e91a4c170c339cf2cb909b:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -25037,7 +25037,7 @@ snapshots:
       acorn: 8.19.0
       unpartial: 1.0.8
 
-  testcontainers@12.2.0(supports-color@10.2.2):
+  testcontainers@12.2.1(supports-color@10.2.2):
     dependencies:
       '@balena/dockerignore': 1.0.2
       '@types/dockerode': 4.0.1
