@@ -92,6 +92,8 @@ export const unmockClientPeg = () => {
  */
 export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     getUserId: vi.fn<MatrixClient["getUserId"]>().mockReturnValue(userId),
+    // Needed to resolve stable IDs (MSC4428); override in tests which have a room.
+    getRoom: vi.fn<MatrixClient["getRoom"]>().mockReturnValue(null),
     getDomain: vi.fn<MatrixClient["getDomain"]>().mockReturnValue(userId.split(":")[1]),
     getSafeUserId: vi.fn<MatrixClient["getSafeUserId"]>().mockReturnValue(userId),
     getUser: vi.fn<MatrixClient["getUser"]>().mockReturnValue(new User(userId)),

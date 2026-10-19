@@ -76,6 +76,7 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { CardContext } from "../right_panel/context";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { isEventSentByMe } from "../../../utils/stableIds";
 
 interface IReplyInThreadButton {
     mxEvent: MatrixEvent;
@@ -408,7 +409,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-        const me = cli.getUserId();
         const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
         delete other.getRelationsForEvent;
         delete other.permalinkCreator;
@@ -577,7 +577,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let reportEventButton: JSX.Element | undefined;
-        if (mxEvent.getSender() !== me) {
+        if (!isEventSentByMe(cli, mxEvent)) {
             reportEventButton = (
                 <IconizedContextMenuOption
                     icon={<ErrorSolidIcon />}

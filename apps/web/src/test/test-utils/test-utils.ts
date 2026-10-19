@@ -580,6 +580,8 @@ export function mkRoomMember(
 ): RoomMember {
     return {
         userId,
+        // MSC4428: without member keys a member's stable ID is their user ID.
+        stableId: userId,
         membership,
         name: userId,
         rawDisplayName: userId,
@@ -587,6 +589,7 @@ export function mkRoomMember(
         events: {
             member: {
                 getSender: () => undefined,
+                getStableId: () => undefined,
                 getPrevContent: () => prevMemberContent,
             },
         },
@@ -720,6 +723,13 @@ export function mkStubRoom(
         getLiveTimeline: vi.fn().mockReturnValue(stubTimeline),
         getLastLiveEvent: vi.fn().mockReturnValue(undefined),
         getLastActiveTimestamp: vi.fn().mockReturnValue(1183140000),
+        // MSC4428: in a room without member keys every stable ID is its own user ID.
+        getMyStableId: vi.fn().mockReturnValue(client?.getUserId() ?? "@userId:matrix.org"),
+        getUserIdForStableId: vi.fn().mockReturnValue(undefined),
+        getMemberUserId: vi.fn((stableId: string) => stableId),
+        getStableIdForUserId: vi.fn().mockReturnValue(undefined),
+        resolveMemberIdentity: vi.fn((id: string) => ({ stableId: id, userId: undefined })),
+        applyMemberInfo: vi.fn(),
         getMember: vi.fn().mockReturnValue({
             userId: "@member:domain.bla",
             name: "Member",

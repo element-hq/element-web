@@ -10,13 +10,17 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DefaultTagID, type TagID } from "../../room-list-v3/skip-list/tag";
+import { isEventSentByMe } from "../../../utils/stableIds";
 
 export function isSelf(event: MatrixEvent): boolean {
-    const selfUserId = MatrixClientPeg.safeGet().getSafeUserId();
+    const client = MatrixClientPeg.safeGet();
     if (event.getType() === "m.room.member") {
-        return event.getStateKey() === selfUserId;
+        // State keys are stable IDs (MSC4428), which in a room with member keys are not
+        // user IDs.
+        const room = client.getRoom(event.getRoomId());
+        return event.getStateKey() === (room?.getMyStableId() ?? client.getSafeUserId());
     }
-    return event.getSender() === selfUserId;
+    return isEventSentByMe(client, event);
 }
 
 export function shouldPrefixMessagesIn(roomId: string, tagId?: TagID): boolean {

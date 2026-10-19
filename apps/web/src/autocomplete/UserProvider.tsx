@@ -162,14 +162,15 @@ export default class UserProvider extends AutocompleteProvider {
         const lastSpoken: Record<string, number> = {};
 
         for (const event of events) {
-            lastSpoken[event.getSender()!] = event.getTs();
+            // Keyed by stable ID (MSC4428), to match RoomMember.stableId below.
+            lastSpoken[event.getStableId()!] = event.getTs();
         }
 
         const currentUserId = MatrixClientPeg.safeGet().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
         this.users = this.users.concat(this.room.getMembersWithMembership(KnownMembership.Invite));
 
-        this.users = sortBy(this.users, (member) => 1e20 - lastSpoken[member.userId] || 1e20);
+        this.users = sortBy(this.users, (member) => 1e20 - lastSpoken[member.stableId] || 1e20);
 
         this.matcher.setObjects(this.users);
     }

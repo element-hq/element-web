@@ -12,6 +12,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { type Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
+import { senderUserId } from "./stableIds";
 
 export const compareMembers =
     (
@@ -68,7 +69,9 @@ export function buildActivityScores(cli: MatrixClient): { [userId: string]: IAct
     const events = joinedRooms(cli)
         .flatMap((room) => takeRight(room.getLiveTimeline().getEvents(), maxMessagesConsidered))
         .filter((ev) => ev.getTs() > earliestAgeConsidered);
-    const senderEvents = groupBy(events, (ev) => ev.getSender());
+    // Scores are per user and aggregated across rooms, so group by the user behind the
+    // sender rather than by their stable ID, which differs from room to room.
+    const senderEvents = groupBy(events, (ev) => senderUserId(cli, ev));
     // If the iteratee in mapValues returns undefined that key will be removed from the resultant object
     return mapValues(senderEvents, (events) => {
         if (!events.length) return;

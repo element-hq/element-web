@@ -56,7 +56,8 @@ describe("ReactionEventPreview", () => {
 
         it("should use 'You' for your own reactions", () => {
             const cli = MatrixClientPeg.safeGet();
-            const room = new Room(roomId, cli, userId);
+            // The room must belong to the syncing user for "is this mine?" to work.
+            const room = new Room(roomId, cli, cli.getSafeUserId());
             vi.mocked(cli.getRoom).mockReturnValue(room);
 
             const message = mkEvent({
@@ -93,7 +94,8 @@ describe("ReactionEventPreview", () => {
 
         it("should use display name for your others' reactions", () => {
             const cli = MatrixClientPeg.safeGet();
-            const room = new Room(roomId, cli, userId);
+            // The room must belong to the syncing user for "is this mine?" to work.
+            const room = new Room(roomId, cli, cli.getSafeUserId());
             vi.mocked(cli.getRoom).mockReturnValue(room);
 
             const message = mkEvent({

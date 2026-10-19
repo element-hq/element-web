@@ -48,6 +48,7 @@ import ToastStore from "./stores/ToastStore";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { type MatrixDispatcher } from "./dispatcher/dispatcher.ts";
+import { isEventSentByMe } from "./utils/stableIds";
 
 /*
  * Dispatches:
@@ -518,7 +519,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         if (removed) return; // only notify for new events, not removed ones
         if (!data.liveEvent || !!toStartOfTimeline) return; // only notify for new things, not old.
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.getSender() === this.sdkContext.client.getUserId()) return;
+        if (isEventSentByMe(this.sdkContext.client, ev)) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
 
         void this.sdkContext.client.decryptEventIfNeeded(ev);
@@ -570,8 +571,9 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             const room = cli.getRoom(roomId);
             if (room?.getMyMembership() !== KnownMembership.Invite) continue;
 
-            const ev = room.currentState.getStateEvents(EventType.RoomMember, cli.getSafeUserId());
-            if (!ev || ev.getSender() === cli.getUserId()) continue;
+            // Member state is keyed by stable ID (MSC4428), not by user ID.
+            const ev = room.currentState.getStateEvents(EventType.RoomMember, room.getMyStableId());
+            if (!ev || isEventSentByMe(cli, ev)) continue;
 
             this.evaluateEvent(ev);
         }

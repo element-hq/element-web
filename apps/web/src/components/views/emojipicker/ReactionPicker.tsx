@@ -70,8 +70,10 @@ class ReactionPicker extends React.Component<IProps, IState> {
         if (!this.props.reactions) {
             return {};
         }
-        const userId = MatrixClientPeg.safeGet().getSafeUserId();
-        const myAnnotations = this.props.reactions.getAnnotationsBySender()?.[userId] ?? new Set<MatrixEvent>();
+        // Annotations are grouped by the sender's stable ID (MSC4428), not their user ID.
+        const cli = MatrixClientPeg.safeGet();
+        const myStableId = cli.getRoom(this.props.mxEvent.getRoomId())?.getMyStableId() ?? cli.getSafeUserId();
+        const myAnnotations = this.props.reactions.getAnnotationsBySender()?.[myStableId] ?? new Set<MatrixEvent>();
         return Object.fromEntries(
             [...myAnnotations]
                 .filter((event) => !event.isRedacted())

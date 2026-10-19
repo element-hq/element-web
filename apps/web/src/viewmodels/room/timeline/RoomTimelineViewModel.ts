@@ -34,6 +34,7 @@ import { haveRendererForEvent, pickFactory } from "../../../events/EventTileFact
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { clearRoomNotification } from "../../../utils/notifications";
+import { isEventSentByMe } from "../../../utils/stableIds";
 
 const DEBUG_TIMELINE = false;
 
@@ -445,7 +446,7 @@ export class RoomTimelineViewModel
 
                 const atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
                 // Accumulate unread count only for messages from other users.
-                if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
+                if (!this.isAtBottom && !isEventSentByMe(this.opts.client, event)) {
                     this.unreadMessageCount++;
                 }
                 this.baseItems = items;

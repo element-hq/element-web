@@ -55,6 +55,7 @@ import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
 import { isEligibleForSpecialReceipt } from "../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
 import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
+import { isEventSentByMe, senderUserId } from "../../utils/stableIds";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -479,7 +480,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        if (MatrixClientPeg.safeGet().isUserIgnored(ev.event.getSender()!)) {
+        // The ignore list names users, but the event names its sender by stable ID.
+        if (MatrixClientPeg.safeGet().isUserIgnored(senderUserId(MatrixClientPeg.safeGet(), ev.event) ?? "")) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
@@ -628,8 +630,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             };
         });
 
-        const userId = MatrixClientPeg.safeGet().getSafeUserId();
-
         let foundLastSuccessfulEvent = false;
         let lastShownNonLocalEchoIndex = -1;
         // Find the indices of the last successful event we sent and the last non-local-echo events shown
@@ -648,7 +648,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 // If we are not sender of this last successful event eligible for special receipt then we stop here
                 // As we do not want to render our sent receipt if there are more receipts below it and events sent
                 // by other users get a synthetic read receipt for their sent events.
-                if (event.getSender() === userId) {
+                if (isEventSentByMe(MatrixClientPeg.safeGet(), event)) {
                     events[i].lastSuccessfulWeSent = true;
                 }
             }
