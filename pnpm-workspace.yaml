@@ -143,7 +143,7 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.3.0
+    pretty-format@30>react-is: 19.3.1
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001810
