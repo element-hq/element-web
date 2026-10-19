@@ -187,20 +187,20 @@ catalogs:
       specifier: 6.1.2
       version: 6.1.2
     '@vitest/browser':
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
     '@vitest/browser-playwright':
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
     '@vitest/coverage-v8':
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
     '@vitest/spy':
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
     '@vitest/ui':
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -235,8 +235,8 @@ catalogs:
       specifier: 5.2.0
       version: 5.2.0
     vitest:
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
   ts6:
     typescript:
       specifier: npm:@typescript/typescript6@6.0.2
@@ -310,10 +310,10 @@ importers:
         version: typescript@7.0.2
       '@vitest/coverage-v8':
         specifier: 'catalog:'
-        version: 5.0.3(@vitest/browser@5.0.3)(vitest@5.0.3)
+        version: 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
       '@vitest/ui':
         specifier: 'catalog:'
-        version: 5.0.3(vitest@5.0.3)
+        version: 5.0.5(vitest@5.0.5)
       cronstrue:
         specifier: ^3.0.0
         version: 3.30.0
@@ -370,7 +370,7 @@ importers:
         version: 2.0.17(mermaid@12.1.0)(vitepress@1.6.4)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
       yaml:
         specifier: ^2.3.3
         version: 2.9.1
@@ -479,7 +479,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
     optionalDependencies:
       graphene-pk11:
         specifier: ^2.3.6
@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -627,7 +627,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -751,7 +751,7 @@ importers:
         version: link:../../packages/playwright-common
       '@fetch-mock/vitest':
         specifier: ^0.2.18
-        version: 0.2.18(vitest@5.0.3)
+        version: 0.2.18(vitest@5.0.5)
       '@peculiar/webcrypto':
         specifier: ^1.4.3
         version: 1.7.1
@@ -772,7 +772,7 @@ importers:
         version: 10.4.2
       '@testing-library/jest-dom':
         specifier: ^7.0.0
-        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.3)
+        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5)
       '@testing-library/react':
         specifier: ^16.0.0
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)
@@ -853,13 +853,13 @@ importers:
         version: typescript@7.0.2
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 5.0.3(vite@8.3.4)(vitest@5.0.3)
+        version: 5.0.5(vite@8.3.4)(vitest@5.0.5)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
+        version: 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
       '@vitest/spy':
         specifier: 'catalog:'
-        version: 5.0.3
+        version: 5.0.5
       babel-loader:
         specifier: ^10.0.0
         version: 10.1.1(@babel/core@7.29.7)(webpack@5.111.1)
@@ -982,10 +982,10 @@ importers:
         version: 5.2.0(@typescript/typescript6@6.0.2)(rollup@4.64.2)(supports-color@10.2.2)(vite@8.3.4)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
       vitest-canvas-mock:
         specifier: ^1.1.4
-        version: 1.2.0(vitest@5.0.3)
+        version: 1.2.0(vitest@5.0.5)
       webpack:
         specifier: ^5.89.0
         version: 5.111.1(clean-css@5.3.3)(cssnano@7.1.9)(csso@5.0.5)(esbuild@0.27.4)(html-minifier-terser@6.1.0)(lightningcss@1.33.0)(postcss@8.5.28)(svgo@4.1.0)(uglify-js@3.19.3)(webpack-cli@7.2.3)
@@ -1046,13 +1046,13 @@ importers:
         version: link:../../packages/module-api
       '@fetch-mock/vitest':
         specifier: ^0.2.18
-        version: 0.2.18(vitest@5.0.3)
+        version: 0.2.18(vitest@5.0.5)
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.2
       '@testing-library/jest-dom':
         specifier: ^7.0.0
-        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.3)
+        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5)
       '@testing-library/react':
         specifier: ^16.3.2
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)
@@ -1165,7 +1165,7 @@ importers:
         version: 8.3.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   modules/widget-toggles:
     dependencies:
@@ -1211,7 +1211,7 @@ importers:
         version: 6.1.2(vite@8.3.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
+        version: 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
       react:
         specifier: 'catalog:'
         version: 19.3.0
@@ -1229,7 +1229,7 @@ importers:
         version: 5.2.0(rollup@4.64.2)(supports-color@10.2.2)(typescript@7.0.2)(vite@8.3.4)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   packages/eslint-plugin-element-web:
     devDependencies:
@@ -1244,7 +1244,7 @@ importers:
         version: '@typescript/typescript6@6.0.2'
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   packages/module-api:
     dependencies:
@@ -1296,7 +1296,7 @@ importers:
         version: 8.3.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   packages/playwright-common:
     dependencies:
@@ -1345,7 +1345,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   packages/shared-components:
     dependencies:
@@ -1430,7 +1430,7 @@ importers:
         version: link:../playwright-common
       '@fetch-mock/vitest':
         specifier: ^0.2.18
-        version: 0.2.18(vitest@5.0.3)
+        version: 0.2.18(vitest@5.0.5)
       '@fontsource/inter':
         specifier: 'catalog:'
         version: 5.3.0
@@ -1451,7 +1451,7 @@ importers:
         version: 10.5.5(@types/react-dom@19.3.0)(@types/react@19.3.0)(esbuild@0.27.4)(rollup@4.64.2)(storybook@10.5.8)(vite@8.3.4)(webpack@5.111.1)
       '@storybook/addon-vitest':
         specifier: 10.5.5
-        version: 10.5.5(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.3)
+        version: 10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.5)
       '@storybook/icons':
         specifier: ^2.0.0
         version: 2.1.0(react@19.3.0)
@@ -1493,7 +1493,7 @@ importers:
         version: 6.1.2(vite@8.3.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
+        version: 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
       expect:
         specifier: ^30.5.1
         version: 30.5.2
@@ -1508,7 +1508,7 @@ importers:
         version: 10.5.8(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
       storybook-addon-vis:
         specifier: ^4.0.0
-        version: 4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.3)
+        version: 4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.5)
       typedoc:
         specifier: ^0.28.16
         version: 0.28.20(@typescript/typescript6@6.0.2)
@@ -1532,7 +1532,7 @@ importers:
         version: 0.28.0(rollup@4.64.2)(vite@8.3.4)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   packages/shared-types:
     devDependencies:
@@ -1572,7 +1572,7 @@ importers:
         version: 8.3.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
 packages:
 
@@ -6465,27 +6465,27 @@ packages:
       vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
-  '@vitest/browser-playwright@5.0.3':
-    resolution: {integrity: sha512-rYBHwIFL/ZtI6dl0rbrAatScXCrvX+TL2BX2AGOigkC1Y6u3rIWw8KMQJJMS4drSa1ksMCmZU2wpgwdE7kqu3g==}
+  '@vitest/browser-playwright@5.0.5':
+    resolution: {integrity: sha512-lcdThFUUcMV9mGGV1SUiZXPxfjgW4CssA7o3STxzh8WK0tT2r526kc12tZIBRZfoLMwkhxjLmMXkWXONzdsDQw==}
     peerDependencies:
       playwright: '*'
-      vitest: 5.0.3
+      vitest: 5.0.5
 
   '@vitest/browser@4.1.11':
     resolution: {integrity: sha512-bwMovvAeuTFOK5kIFevw4VEf+1gVEICv4SYK4k3knJOxl6b1zEWud8mYKD73e1B0odAn174h1MofURy2TPWf3w==}
     peerDependencies:
       vitest: 4.1.11
 
-  '@vitest/browser@5.0.3':
-    resolution: {integrity: sha512-7KHIkVA/gTRxQV9qPa9qLK+g5INZG6iRrlwXSFG5EKsOomW3UzzW7wsdt1Yp5PufzQ43lniuONlb4lUVCC2qSg==}
+  '@vitest/browser@5.0.5':
+    resolution: {integrity: sha512-IDMoZX/iZ8rkilw7weaSgN8tJ7iZ9hUv0wYoKXyiyjWjWFwLSWAY707DcVTgxTYOudWC1E3HA9LYn7kVa9a7uQ==}
     peerDependencies:
-      vitest: 5.0.3
+      vitest: 5.0.5
 
-  '@vitest/coverage-v8@5.0.3':
-    resolution: {integrity: sha512-+klsyz7BvT1vCU28Zkfzms1Ia78XD0V41U3FUtRaa3S+vOr/EXvK1O6BvVD7l1RzEjm6SONR2aybOvDDf9u0mQ==}
+  '@vitest/coverage-v8@5.0.5':
+    resolution: {integrity: sha512-4KpkGdIrSqBihx/JyP/e+S+IKB98etg1XDQiLAxksLfcShnwi1VReGeOT9NI43hLHbknosKp/1CCLn9Zgcs8mg==}
     peerDependencies:
-      '@vitest/browser': 5.0.3
-      vitest: 5.0.3
+      '@vitest/browser': 5.0.5
+      vitest: 5.0.5
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
@@ -6512,10 +6512,10 @@ packages:
       vite:
         optional: true
 
-  '@vitest/mocker@5.0.3':
-    resolution: {integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==}
+  '@vitest/mocker@5.0.5':
+    resolution: {integrity: sha512-xLL3lkDegJZw+MGoGaCCsFayDZthGgpAtr3Vziyfc4p7xH89K7KRPcRBBh/kEYm0Aqkt5DtTmkYpBtRV/FrHZg==}
     peerDependencies:
-      msw: ^2.4.9
+      msw: ^2.4.9 || ^3.0.0
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       msw:
@@ -6529,8 +6529,8 @@ packages:
   '@vitest/pretty-format@4.1.11':
     resolution: {integrity: sha512-yiZzPbGTS9Sr/JpFl8zHrcIkAofNbFV6k21vIgQN/cY/oxZeXhJv5sc/MBJ5jFKWmWs+oJHw0UXLZjmf931+Vw==}
 
-  '@vitest/pretty-format@5.0.3':
-    resolution: {integrity: sha512-3hr5eV5z2ff0l2Q1vaKQbB4j3M3tElw8stDokEOTqXJB3Es5VrT8gBRIMY59gGuFp8Y61sWlWFK1aNUH5dHDYw==}
+  '@vitest/pretty-format@5.0.5':
+    resolution: {integrity: sha512-24sSdIlMA9DVPXnYiB9siwU0bTd887Y9jX3+vabztCSsvHwo7ipvJ/a2L3Rljw8+2rK1f5fCj3h5U9I/Jsqgbw==}
 
   '@vitest/spy@3.2.4':
     resolution: {integrity: sha512-vAfasCOe6AIK70iP5UD11Ac4siNUNJ9i/9PZ3NKx07sG6sUxeag1LWdNrMWeKKYBLlzuK+Gn65Yd5nyL6ds+nw==}
@@ -6538,13 +6538,13 @@ packages:
   '@vitest/spy@4.1.11':
     resolution: {integrity: sha512-apNa/prQy2qCeywhnixOHPRCgGNhvg7T4Dapfl1GahLp/R+uhBm5cPyFoNVyqsNd2h1nJxL6BqqdIjiABL60YA==}
 
-  '@vitest/spy@5.0.3':
-    resolution: {integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==}
+  '@vitest/spy@5.0.5':
+    resolution: {integrity: sha512-lwJRExuH417257Q5wv9QYugN9IMJkoxcrKrYxGPQkBzl7wlNpTUxD/5yNX4ESKVUIShKPgkGchYPFMWOOk0wzw==}
 
-  '@vitest/ui@5.0.3':
-    resolution: {integrity: sha512-9dfvqDBvSbHM6y9YVXxAypkl2z7mrWozK/JFo237qI0cj/3M/kzDKiVZqzi3TE54Ler7Jditud7OMBZCyUvRHA==}
+  '@vitest/ui@5.0.5':
+    resolution: {integrity: sha512-dCoGUOdgmCaSB2g+WQ/spPCBkytAWdNUkFSXY4z+eYp2d8JEOY8v0uDRaJTG9qf/kTlTVZ4CuYMYMz/f1HS/qQ==}
     peerDependencies:
-      vitest: 5.0.3
+      vitest: 5.0.5
 
   '@vitest/utils@3.2.4':
     resolution: {integrity: sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA==}
@@ -6552,8 +6552,8 @@ packages:
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
 
-  '@vitest/utils@5.0.3':
-    resolution: {integrity: sha512-77fDTZv8eu1CzlIfgPU2yrl5MXSUaUAOvgdZEeVm3X3WIxUubIX2SforqS6176lT32HCF6uBVMYVqfHxw7o6eg==}
+  '@vitest/utils@5.0.5':
+    resolution: {integrity: sha512-/rBu7gzLDQI/SC79Tn98b5DwOgaHU/Gt4I9OVeP3YofzNaYtbImRCOJQmT1S6vOJg9gEIlWC+r3QxKkjuSa1nQ==}
 
   '@volar/language-core@2.4.28':
     resolution: {integrity: sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==}
@@ -9778,8 +9778,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
-    resolution: {gitHosted: true, integrity: sha512-NdtGKGAj5lpmWP9zuchVEA5Ddj+kqDeGQzkGT+3Izk5rplJlYSmlMUV85kF3aOn8g1Sn2yfdo9W7IAOwNf568w==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85:
+    resolution: {gitHosted: true, integrity: sha512-zB4gN4+eTeH6p075GVAwQCa1ZW4RwYU9RSHI9expIQR+s+ZMMMfSWTAc8jGT5poFg+sulKE8mZ0VR4+mqAlaPw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85}
     version: 44.0.0
     engines: {node: '>=22.0.0'}
 
@@ -10213,8 +10213,8 @@ packages:
     resolution: {integrity: sha512-nK28WOo+QIjBkDduTINE4JkF/UJJKyf2EJxvJKfblDpyg0Q+pkOHNTL0Qwy6NP6FhE/EnzV73BxxqcJaXY9anw==}
     engines: {node: '>= 0.4'}
 
-  obug@2.2.1:
-    resolution: {integrity: sha512-XrsrhT5sybtKI6wakr2SPOlGZWWYbUXZ7a0jT8/QOeAPau+1X/bSegNe5YR75oJmEZQbKningirmGOEJCIk61Q==}
+  obug@3.0.0:
+    resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
 
   on-finished@2.4.1:
@@ -12100,8 +12100,8 @@ packages:
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
-  tinybench@6.2.1:
-    resolution: {integrity: sha512-IAbQaPJIIdhVxi0mqy9lez1wEwje0UQf9F1vwtbelEG5Nbgn0nPOxCvU+mNeNS9gyJTAhrHp74CbUaSynQpZcQ==}
+  tinybench@6.2.2:
+    resolution: {integrity: sha512-nIZ2N2dFpjBsg2hgitKu7mA+FvsIJuGJOwysRngmVRRmWgR/UyPjwJj8c/fT/dhm8EkHnF5EOogRf+0Z2qrimA==}
     engines: {node: '>=20.0.0'}
 
   tinyexec@1.2.4:
@@ -12639,20 +12639,20 @@ packages:
       '@vitest/browser-webdriverio':
         optional: true
 
-  vitest@5.0.3:
-    resolution: {integrity: sha512-xMw97S3rjdtj5dkVat7jCsqWBpvchs3RlpQctUqwJD0KkERk40vz2fJ77lDwW/Vzh/pk18eItYAzkodhSes3jQ==}
+  vitest@5.0.5:
+    resolution: {integrity: sha512-cPODOMF8YnkiiYtDdHo6n4wWmBrOBBbOIYH2d33M4l3CdNn72h+qMmO6uXffUN6A5AZFXNND/d+krS9mgkXRfg==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
       '@types/node': 25.9.3
-      '@vitest/browser-playwright': 5.0.3
-      '@vitest/browser-preview': 5.0.3
+      '@vitest/browser-playwright': 5.0.5
+      '@vitest/browser-preview': 5.0.5
       '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
-      '@vitest/coverage-istanbul': 5.0.3
-      '@vitest/coverage-v8': 5.0.3
-      '@vitest/ui': 5.0.3
+      '@vitest/coverage-istanbul': 5.0.5
+      '@vitest/coverage-v8': 5.0.5
+      '@vitest/ui': 5.0.5
       happy-dom: '*'
       jsdom: '*'
       vite: ^6.4.0 || ^7.0.0 || ^8.0.0
@@ -14987,11 +14987,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -15222,10 +15222,10 @@ snapshots:
     optionalDependencies:
       '@noble/hashes': 1.8.0
 
-  '@fetch-mock/vitest@0.2.18(vitest@5.0.3)':
+  '@fetch-mock/vitest@0.2.18(vitest@5.0.5)':
     dependencies:
       fetch-mock: 12.6.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   '@figspec/components@2.1.0': {}
 
@@ -17412,15 +17412,15 @@ snapshots:
       - vite
       - webpack
 
-  '@storybook/addon-vitest@10.5.5(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.3)':
+  '@storybook/addon-vitest@10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.5)':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/icons': 2.1.0(react@19.3.0)
       storybook: 10.5.8(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
     optionalDependencies:
-      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.3)
-      '@vitest/browser-playwright': 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.5)
+      '@vitest/browser-playwright': 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
     transitivePeerDependencies:
       - react
 
@@ -17646,7 +17646,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.3)':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5)':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.2
@@ -17656,7 +17656,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
@@ -18286,20 +18286,20 @@ snapshots:
       vite: 6.4.4(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.33.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vue: 3.5.43(@typescript/typescript6@6.0.2)
 
-  '@vitest/browser-playwright@5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)':
+  '@vitest/browser-playwright@5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)':
     dependencies:
-      '@vitest/browser': 5.0.3(vite@8.3.4)(vitest@5.0.3)
-      '@vitest/mocker': 5.0.3(vite@8.3.4)
+      '@vitest/browser': 5.0.5(vite@8.3.4)(vitest@5.0.5)
+      '@vitest/mocker': 5.0.5(vite@8.3.4)
       playwright: 1.64.0
       tinyrainbow: 3.2.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
     transitivePeerDependencies:
       - bufferutil
       - msw
       - utf-8-validate
       - vite
 
-  '@vitest/browser@4.1.11(vite@8.3.4)(vitest@5.0.3)':
+  '@vitest/browser@4.1.11(vite@8.3.4)(vitest@5.0.5)':
     dependencies:
       '@blazediff/core': 1.9.1
       '@vitest/mocker': 4.1.11(vite@8.3.4)
@@ -18308,7 +18308,7 @@ snapshots:
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
       ws: 8.22.0
     transitivePeerDependencies:
       - bufferutil
@@ -18316,17 +18316,17 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/browser@5.0.3(vite@8.3.4)(vitest@5.0.3)':
+  '@vitest/browser@5.0.5(vite@8.3.4)(vitest@5.0.5)':
     dependencies:
       '@blazediff/core': 1.10.0
-      '@vitest/mocker': 5.0.3(vite@8.3.4)
-      '@vitest/ui': 5.0.3(vitest@5.0.3)
-      '@vitest/utils': 5.0.3
+      '@vitest/mocker': 5.0.5(vite@8.3.4)
+      '@vitest/ui': 5.0.5(vitest@5.0.5)
+      '@vitest/utils': 5.0.5
       magic-string: 1.4.3
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
       ws: 8.22.0
     transitivePeerDependencies:
       - bufferutil
@@ -18334,19 +18334,19 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@5.0.3(@vitest/browser@5.0.3)(vitest@5.0.3)':
+  '@vitest/coverage-v8@5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/istanbul-lib-coverage': 1.0.2
       '@vitest/istanbul-lib-report': 1.0.2
       ast-v8-to-istanbul: 1.0.7
       magicast: 0.5.5
-      obug: 2.2.1
+      obug: 3.0.0
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
     optionalDependencies:
-      '@vitest/browser': 5.0.3(vite@8.3.4)(vitest@5.0.3)
+      '@vitest/browser': 5.0.5(vite@8.3.4)(vitest@5.0.5)
 
   '@vitest/expect@3.2.4':
     dependencies:
@@ -18370,10 +18370,10 @@ snapshots:
     optionalDependencies:
       vite: 8.3.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
 
-  '@vitest/mocker@5.0.3(vite@8.3.4)':
+  '@vitest/mocker@5.0.5(vite@8.3.4)':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.0.3
+      '@vitest/spy': 5.0.5
       estree-walker: 3.0.3
       magic-string: 1.4.3
     optionalDependencies:
@@ -18387,7 +18387,7 @@ snapshots:
     dependencies:
       tinyrainbow: 3.2.0
 
-  '@vitest/pretty-format@5.0.3':
+  '@vitest/pretty-format@5.0.5':
     dependencies:
       tinyrainbow: 3.2.0
 
@@ -18397,17 +18397,17 @@ snapshots:
 
   '@vitest/spy@4.1.11': {}
 
-  '@vitest/spy@5.0.3': {}
+  '@vitest/spy@5.0.5': {}
 
-  '@vitest/ui@5.0.3(vitest@5.0.3)':
+  '@vitest/ui@5.0.5(vitest@5.0.5)':
     dependencies:
-      '@vitest/utils': 5.0.3
+      '@vitest/utils': 5.0.5
       fflate: 0.8.3
       flatted: 3.4.4
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
   '@vitest/utils@3.2.4':
     dependencies:
@@ -18421,9 +18421,9 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.2.0
 
-  '@vitest/utils@5.0.3':
+  '@vitest/utils@5.0.5':
     dependencies:
-      '@vitest/pretty-format': 5.0.3
+      '@vitest/pretty-format': 5.0.5
       convert-source-map: 2.0.0
       tinyrainbow: 3.2.0
 
@@ -22106,7 +22106,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -22660,7 +22660,7 @@ snapshots:
       has-symbols: 1.1.0
       object-keys: 1.1.1
 
-  obug@2.2.1: {}
+  obug@3.0.0: {}
 
   on-finished@2.4.1:
     dependencies:
@@ -24622,19 +24622,19 @@ snapshots:
 
   std-env@4.3.0: {}
 
-  storybook-addon-vis@4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.3):
+  storybook-addon-vis@4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.5):
     dependencies:
-      '@storybook/addon-vitest': 10.5.5(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.3)
+      '@storybook/addon-vitest': 10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.5.8)(vitest@5.0.5)
       '@storybook/icons': 2.1.0(react@19.3.0)
-      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.3)
+      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.5)
       glob: 13.0.6
       is-ci: 4.1.0
       memoize: 11.0.0
       pathe: 2.0.3
       storybook: 10.5.8(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
       type-plus: 8.0.0-beta.12(@typescript/typescript6@6.0.2)
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
-      vitest-plugin-vis: 5.1.7(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.0.3)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest-plugin-vis: 5.1.7(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.0.5)
     transitivePeerDependencies:
       - '@vitest/browser-playwright'
       - '@vitest/browser-webdriverio'
@@ -25086,7 +25086,7 @@ snapshots:
 
   tiny-invariant@1.3.3: {}
 
-  tinybench@6.2.1: {}
+  tinybench@6.2.2: {}
 
   tinyexec@1.2.4: {}
 
@@ -25600,15 +25600,15 @@ snapshots:
       - universal-cookie
       - yaml
 
-  vitest-canvas-mock@1.2.0(vitest@5.0.3):
+  vitest-canvas-mock@1.2.0(vitest@5.0.5):
     dependencies:
       cssfontparser: 1.2.1
       moo-color: 1.0.3
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
 
-  vitest-plugin-vis@5.1.7(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.3)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.0.3):
+  vitest-plugin-vis@5.1.7(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.0.5):
     dependencies:
-      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.3)
+      '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.5)
       dedent: 1.7.2(babel-plugin-macros@3.1.0)
       glob: 13.0.6
       is-ci: 4.1.0
@@ -25619,25 +25619,25 @@ snapshots:
       rimraf: 6.1.3
       ssim.js: 3.5.0
       type-plus: 8.0.0-beta.12(@typescript/typescript6@6.0.2)
-      vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4)
     optionalDependencies:
-      '@vitest/browser-playwright': 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
+      '@vitest/browser-playwright': 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
     transitivePeerDependencies:
       - babel-plugin-macros
       - typescript
 
-  vitest@5.0.3(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4):
+  vitest@5.0.5(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@8.3.4):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.3(vite@8.3.4)
+      '@vitest/mocker': 5.0.5(vite@8.3.4)
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
       magic-string: 1.4.3
-      obug: 2.2.1
+      obug: 3.0.0
       picomatch: 4.0.7
       std-env: 4.3.0
-      tinybench: 6.2.1
+      tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
       vite: 8.3.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
@@ -25645,9 +25645,9 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@types/node': 25.9.3
-      '@vitest/browser-playwright': 5.0.3(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.3)
-      '@vitest/coverage-v8': 5.0.3(@vitest/browser@5.0.3)(vitest@5.0.3)
-      '@vitest/ui': 5.0.3(vitest@5.0.3)
+      '@vitest/browser-playwright': 5.0.5(playwright@1.64.0)(vite@8.3.4)(vitest@5.0.5)
+      '@vitest/coverage-v8': 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
+      '@vitest/ui': 5.0.5(vitest@5.0.5)
       happy-dom: 20.14.5
       jsdom: 30.1.2(@noble/hashes@1.8.0)
     transitivePeerDependencies:
