@@ -61,7 +61,7 @@ test.describe("New timeline", () => {
         await expect(timelineRow(page, second.event_id)).toContainText("And a second message");
     });
 
-    test("puts a message sent from the composer at the live end", async ({ page, app, user }) => {
+    test("scrolls to the live end to show a message sent while scrolled up", async ({ page, app, user }) => {
         const roomId = await app.client.createRoom({ name: "Composer send" });
         // Comfortably more than fills the panel, so the timeline has to scroll down to
         // the new message rather than it happening to fit already.
@@ -71,13 +71,20 @@ test.describe("New timeline", () => {
 
         await app.viewRoomById(roomId);
         await expect(page.locator(".mx_NewTimelinePanel")).toBeVisible();
+        // Leave the live end, so only the composer's scroll-to-bottom request can bring the
+        // reader back: the timeline does not follow new messages while scrolled up.
+        await timelineScroller(page).hover();
+        await page.mouse.wheel(0, -3000);
+        await expect(page.getByRole("button", { name: "Scroll to most recent messages" })).toBeVisible();
 
         const composer = app.getComposerField();
         await composer.fill("Sent from the composer");
         await composer.press("Enter");
 
-        // The message the composer sent is drawn in the timeline.
-        await expect(page.locator(".mx_TimelineView_tile", { hasText: "Sent from the composer" })).toHaveCount(1);
+        const sent = page.locator(".mx_TimelineView_tile", { hasText: "Sent from the composer" });
+        await expect(sent).toHaveCount(1);
+        await expectAtLiveEnd(page);
+        await expect(sent).toBeInViewport();
     });
 
     test("scrolls back to the live end from the jump-to-bottom button", async ({ page, app, user }) => {
@@ -103,6 +110,36 @@ test.describe("New timeline", () => {
         await expect(timelineRow(page, newest.event_id)).toHaveCount(1);
         // Back at the live end, so the button has nothing left to do.
         await expect(jumpToBottom).not.toBeVisible();
+    });
+
+    test("pages the timeline from the composer without moving focus out of it", async ({ page, app, user }) => {
+        const roomId = await app.client.createRoom({ name: "Paging" });
+        for (let i = 1; i <= 20; i++) {
+            await app.client.sendMessage(roomId, `Message ${i}. ${"Padding. ".repeat(30)}`);
+        }
+        const newest = await app.client.sendMessage(roomId, "The newest message");
+
+        await app.viewRoomById(roomId);
+        // Visible once the first load has placed the timeline and lifted its loading cover.
+        await expect(timelineRow(page, newest.event_id)).toBeVisible();
+        const composer = app.getComposerField();
+        await composer.click();
+        const scrollTop = (): Promise<number> => timelineScroller(page).evaluate((el) => el.scrollTop);
+        const beforePageUp = await scrollTop();
+
+        // Page Up in the composer scrolls the timeline and leaves focus in the composer.
+        await page.keyboard.press("PageUp");
+
+        await expect.poll(scrollTop).toBeLessThan(beforePageUp);
+        await expect(timelineRow(page, newest.event_id)).not.toBeInViewport();
+        await expect(composer).toBeFocused();
+
+        // Page Down moves back down, still without leaving the composer. A page is the number of
+        // rows on screen, so it need not land exactly where Page Up started.
+        const afterPageUp = await scrollTop();
+        await page.keyboard.press("PageDown");
+        await expect.poll(scrollTop).toBeGreaterThan(afterPageUp);
+        await expect(composer).toBeFocused();
     });
 
     test("loads older history when the reader scrolls to the top", async ({ page, app, user }) => {
