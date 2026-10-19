@@ -930,8 +930,8 @@ importers:
         specifier: 12.1.2
         version: 12.1.2(patch_hash=30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0)(postcss@8.5.30)
       postcss-nested:
-        specifier: 8.0.1
-        version: 8.0.1(postcss@8.5.30)
+        specifier: 9.0.0
+        version: 9.0.0(postcss@8.5.30)
       postcss-preset-env:
         specifier: 11.6.1
         version: 11.6.1(postcss@8.5.30)
@@ -10742,8 +10742,8 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  postcss-nested@8.0.1:
-    resolution: {integrity: sha512-PvSIwDVh1NTw939iu4FBK+oeZfSm0cbErFAjXCTPiStammzobBNE2SiQNezy8Xp+Oud2uLXaLpTauv3UdxWjbQ==}
+  postcss-nested@9.0.0:
+    resolution: {integrity: sha512-cYlRG8MiABEAPvxMj1ms9Ame0Xi31AlSe0pY9I61dhUOKUZ6PQU/4i0WdVetUYKlowi3552nnbjhdYYbf2o7UA==}
     engines: {node: ^22.0.0 || ^24.0.0 || >= 26.0.0}
     peerDependencies:
       postcss: ^8.2.14
@@ -23184,7 +23184,7 @@ snapshots:
       icss-utils: 5.1.0(postcss@8.5.30)
       postcss: 8.5.30
 
-  postcss-nested@8.0.1(postcss@8.5.30):
+  postcss-nested@9.0.0(postcss@8.5.30):
     dependencies:
       postcss: 8.5.30
       postcss-selector-parser: 7.1.6
