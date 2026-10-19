@@ -86,9 +86,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        // Do not persist the PDF viewer across sessions — the PDF must be re-fetched
-        // and restoring a stale reference leaves a blank right panel after restart.
-        pdfViewerEventId: undefined,
+        pdfViewerEventId: !!state?.pdfViewerEvent?.getId() ? state.pdfViewerEvent.getId() : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
