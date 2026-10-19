@@ -485,6 +485,59 @@ describe("RoomTimelineViewModel", () => {
         });
     });
 
+    describe("jumping to a message asked for after opening", () => {
+        it("highlights a loaded message and scrolls straight to it", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const scrollNow = vi.fn();
+
+            vm.jumpToEvent("$a", scrollNow);
+
+            expect(scrollNow).toHaveBeenCalledWith({ targetKey: "$a", align: "center" });
+            expect(vm.getSnapshot().highlightedEventId).toBe("$a");
+        });
+
+        it("loads around a message that is not loaded, then highlights and centres it", async () => {
+            seedTimeline([makeMessage("$y"), makeMessage("$z")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const tw = (vm as any).timelineWindow;
+            const old = makeMessage("$old");
+            let loaded = false;
+            const load = vi.spyOn(tw, "load").mockImplementation(async () => {
+                loaded = true;
+            });
+            vi.spyOn(tw, "paginate").mockResolvedValue(false);
+            vi.spyOn(tw, "canPaginate").mockReturnValue(false);
+            vi.spyOn(tw, "getEvents").mockImplementation(() =>
+                loaded ? [old] : [makeMessage("$y"), makeMessage("$z")],
+            );
+            const scrollNow = vi.fn();
+
+            vm.jumpToEvent("$old", scrollNow);
+
+            await vi.waitFor(() =>
+                expect(vm.getSnapshot().pendingAnchor).toEqual({ targetKey: "$old", align: "center" }),
+            );
+            expect(load).toHaveBeenCalledWith("$old", expect.any(Number));
+            expect(vm.getSnapshot().highlightedEventId).toBe("$old");
+            expect(scrollNow).not.toHaveBeenCalled();
+        });
+
+        it("drops the highlight without moving", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel("$a");
+            vm.onAnchorReached();
+            expect(vm.getSnapshot().highlightedEventId).toBe("$a");
+
+            vm.clearHighlight();
+
+            expect(vm.getSnapshot().highlightedEventId).toBeNull();
+            expect(vm.getSnapshot().pendingAnchor).toBeNull();
+        });
+    });
+
     describe("read marker", () => {
         it("offers a jump when there are unread messages below the viewport", async () => {
             seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);

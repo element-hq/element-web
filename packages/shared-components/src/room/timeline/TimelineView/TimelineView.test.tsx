@@ -12,7 +12,7 @@ import { describe, it, expect, vi } from "vitest";
 import { page } from "vitest/browser";
 
 import { TimelineView } from "./TimelineView";
-import type { TimelineItem, TimelineViewModel, TimelineViewSnapshot } from "./types";
+import type { TimelineItem, TimelineViewHandle, TimelineViewModel, TimelineViewSnapshot } from "./types";
 
 const baseSnapshot: TimelineViewSnapshot = {
     items: [],
@@ -260,6 +260,44 @@ describe("<TimelineView />", () => {
                 await page.viewport(width, height);
             }
             expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("ref handle", () => {
+        // Thirty 40px rows in a 300px viewport: 1200px of content, 900px of scroll range, and
+        // the first load lands at the bottom.
+        async function renderWithHandle(
+            initial: Partial<TimelineViewSnapshot> = {},
+        ): Promise<{ handle: TimelineViewHandle; scroller: HTMLElement; actions: Actions }> {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30), ...initial });
+            const ref = React.createRef<TimelineViewHandle>();
+            render(
+                <div style={{ height: VIEWPORT_HEIGHT, width: 320 }}>
+                    <TimelineView vm={vm} renderItem={renderItem} ref={ref} />
+                </div>,
+            );
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0));
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalled());
+            return { handle: ref.current!, scroller, actions };
+        }
+
+        it("scrolls straight to a loaded row through scrollNow", async () => {
+            const { handle, scroller } = await renderWithHandle();
+
+            act(() => handle.scrollNow({ targetKey: "evt-0", align: "start" }));
+
+            await waitFor(() => expect(scroller.scrollTop).toBe(0));
+        });
+
+        it("exposes the same immediate scroll the overlay buttons hand to the view model", async () => {
+            const { handle, actions } = await renderWithHandle({ isAtBottom: false });
+            const jumpToBottom = await screen.findByRole("button", { name: "Scroll to most recent messages" });
+
+            await userEvent.setup().click(jumpToBottom);
+
+            expect(actions.onJumpToLive.mock.calls[0][0]).toBe(handle.scrollNow);
         });
     });
 });

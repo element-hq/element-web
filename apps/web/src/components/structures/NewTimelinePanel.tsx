@@ -11,6 +11,7 @@ import {
     useCreateAutoDisposedViewModel,
     useViewModel,
     type TimelineItem,
+    type TimelineViewHandle,
     ReadMarker,
 } from "@element-hq/web-shared-components";
 import { InlineSpinner } from "@vector-im/compound-web";
@@ -31,7 +32,16 @@ import type { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 
 interface NewTimelinePanelProps {
     room: Room;
+    /** The message to show highlighted. A change after mount jumps to it, as a permalink does. */
     highlightedEventId?: string;
+    /**
+     * Whether `highlightedEventId` still has to be scrolled into view. RoomView clears it
+     * once we report the jump through `onEventScrolledIntoView`, and sets it again when the
+     * same message is asked for again, so a second click on it jumps too. Unset means true.
+     */
+    eventScrollIntoView?: boolean;
+    /** Called once we have gone to `highlightedEventId`. */
+    onEventScrolledIntoView?: (eventId?: string) => void;
     /**
      * How messages are laid out. RoomView watches this setting for us, so a change
      * arrives here as a new prop.
@@ -147,6 +157,8 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
 export function NewTimelinePanel({
     room,
     highlightedEventId,
+    eventScrollIntoView,
+    onEventScrolledIntoView,
     layout,
     hidden,
     permalinkCreator,
@@ -247,13 +259,39 @@ export function NewTimelinePanel({
         ],
     );
 
+    const viewRef = useRef<TimelineViewHandle>(null);
+
+    // RoomView asks for a message after the timeline is open (a pinned message, a link to this
+    // room) by changing `highlightedEventId`, or by setting `eventScrollIntoView` again for the
+    // same one. The message the panel mounted with was loaded when the view model was created,
+    // so that one is only reported, not jumped to.
+    const lastRequestRef = useRef<{ eventId?: string; scrollIntoView: boolean } | null>(null);
+    useEffect(() => {
+        const scrollIntoView = eventScrollIntoView ?? true;
+        const last = lastRequestRef.current;
+        lastRequestRef.current = { eventId: highlightedEventId, scrollIntoView };
+        if (last && last.eventId === highlightedEventId && last.scrollIntoView === scrollIntoView) return;
+        const view = viewRef.current;
+        if (!highlightedEventId) {
+            // The highlighted message was dropped: back to the live end, as the old timeline does.
+            if (last?.eventId) {
+                vm.clearHighlight();
+                if (view) vm.onJumpToLive(view.scrollNow);
+            }
+            return;
+        }
+        if (!scrollIntoView) return;
+        if (last !== null && view) vm.jumpToEvent(highlightedEventId, view.scrollNow);
+        onEventScrolledIntoView?.(highlightedEventId);
+    }, [vm, highlightedEventId, eventScrollIntoView, onEventScrolledIntoView]);
+
     return (
         <div
             className={classNames("mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper", {
                 mx_NewTimelinePanel_hidden: hidden,
             })}
         >
-            <TimelineView vm={vm} renderItem={renderItem} />
+            <TimelineView ref={viewRef} vm={vm} renderItem={renderItem} />
         </div>
     );
 }
