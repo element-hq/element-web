@@ -63,7 +63,7 @@ fetchMock.mockGlobal();
 fetchMock.catch(404);
 setupLanguageMock();
 
-setLanguage("en");
+await setLanguage("en");
 setMissingEntryGenerator((key) => key.split("|", 2)[1]);
 
 // Set up a stub module API (so the i18n API exists)

@@ -23,7 +23,6 @@
         "cancel": "Anuloje",
         "change": "Ndërroje",
         "clear": "Spastroje",
-        "click_to_copy": "Klikoni që të kopjohet",
         "close": "Mbylle",
         "collapse": "Tkurre",
         "complete": "E plotë",
@@ -2753,10 +2752,6 @@
             "error_loading": "S’arrihet të ngarkohet akti të cilit iu përgjigj, ose nuk ekziston, ose s’keni leje ta shihni.",
             "in_reply_to": "<a>Në Përgjigje të</a> <pill>",
             "in_reply_to_for_export": "Në përgjigje të <a>këtij mesazhi</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Ju ndan një hap nga shpënia te një sajt palë e tretë, që kështu të mund të mirëfilltësoni llogarinë tuaj me %(integrationsUrl)s. Doni të vazhdohet?",
-            "dialog_title": "Shtoni një Integrim"
         },
         "self_redaction": "Mesazhi u fshi",
         "send_state_encrypting": "Po fshehtëzohet meszhi juaj…",

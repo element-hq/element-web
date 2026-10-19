@@ -111,6 +111,48 @@ describe("EditHistoryMessage", () => {
         expect(timestampDisposeSpy).toHaveBeenCalled();
     });
 
+    it("keeps showing the original content of the base event after it is replaced", () => {
+        const event = mkEvent({
+            event: true,
+            id: "$event",
+            room: roomId,
+            user: "@alice:example.com",
+            type: "m.room.message",
+            content: {
+                msgtype: MsgType.Text,
+                body: "Message",
+            },
+        });
+        const edit = mkEvent({
+            event: true,
+            id: "$edit",
+            room: roomId,
+            user: "@alice:example.com",
+            type: "m.room.message",
+            content: {
+                "msgtype": MsgType.Text,
+                "body": "* Massage",
+                "m.new_content": {
+                    msgtype: MsgType.Text,
+                    body: "Massage",
+                },
+                "m.relates_to": {
+                    rel_type: "m.replace",
+                    event_id: "$event",
+                },
+            },
+        });
+
+        const { getByText, queryByText } = renderComponent({ mxEvent: event, isBaseEvent: true });
+
+        act(() => {
+            event.makeReplaced(edit);
+        });
+
+        expect(getByText("Message")).toBeInTheDocument();
+        expect(queryByText("Massage")).toBeNull();
+    });
+
     it("renders diffs for previous edits and formats emotes with the sender name", () => {
         const previousEdit = mkEvent({
             event: true,

@@ -65,7 +65,7 @@ export class MockedCall extends Call {
     }
 
     public static create(room: Room, id: string) {
-        room.addLiveEvents(
+        void room.addLiveEvents(
             [
                 mkEvent({
                     event: true,
@@ -104,7 +104,7 @@ export class MockedCall extends Call {
 
     public destroy() {
         // Terminate the call for good measure
-        this.room.addLiveEvents(
+        void this.room.addLiveEvents(
             [
                 mkEvent({
                     event: true,
@@ -140,6 +140,8 @@ export function enableCalls(): { enabledSettings: Set<string> } {
     vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
         if (settingName.startsWith("feature_")) return enabledSettings.has(settingName);
         if (settingName === "activeCallRoomIds") return [];
+        // Never load the real Element Call component in unit tests
+        if (settingName === "Developer.elementCallMockComponent") return true;
         return undefined;
     });
     return { enabledSettings };
@@ -189,7 +191,6 @@ export function setUpClientRoomAndStores(): {
 
     const roomSession = new MockEventEmitter({
         memberships: [],
-        getOldestMembership: vi.fn().mockReturnValue(undefined),
         getConsensusCallIntent: vi.fn().mockReturnValue(undefined),
         room,
     }) as unknown as Mocked<MatrixRTCSession>;
@@ -209,12 +210,12 @@ export function setUpClientRoomAndStores(): {
             skey: stateKey,
             content: content as IContent,
         });
-        room.addLiveEvents([event], { addToState: true });
+        await room.addLiveEvents([event], { addToState: true });
         return { event_id: event.getId()! };
     });
 
-    setupAsyncStoreWithClient(WidgetStore.instance, client);
-    setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
+    void setupAsyncStoreWithClient(WidgetStore.instance, client);
+    void setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
     return { client, room, alice, bob, carol, roomSession };
 }

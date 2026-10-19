@@ -17,7 +17,7 @@ import { LatestRtcNotificationEventStore } from "./LatestRtcNotificationEventSto
 import { type ElementCall, type Call } from "../models/Call";
 
 describe("LatestRtcNotificationEventStore", () => {
-    it("should populate map from timeline on start", () => {
+    it("should populate map from timeline on start", async () => {
         const cli = stubClient();
 
         const event1 = mkEvent({
@@ -64,14 +64,14 @@ describe("LatestRtcNotificationEventStore", () => {
 
         const store = new LatestRtcNotificationEventStore(callStore);
         vi.spyOn(store, "matrixClient", "get").mockReturnValue(cli);
-        store.start();
-        vi.waitFor(() => {
+        await store.start();
+        await vi.waitFor(() => {
             expect(store.getLatestEventId("!my-room1:m.org")).toStrictEqual("event-1");
             expect(store.getLatestEventId("!my-room2:m.org")).toStrictEqual("event-2");
         });
     });
 
-    it("should wait for rtc notification event when a call begins", () => {
+    it("should wait for rtc notification event when a call begins", async () => {
         const cli = stubClient();
 
         // This is the last notification event in the timeline
@@ -130,11 +130,7 @@ describe("LatestRtcNotificationEventStore", () => {
         call.participants = new Map([[mkRoomMember("!my-room1:m.org", "@alice:m.org"), new Set()]]);
         // @ts-ignore
         call.session = {
-            getOldestMembership: () => {
-                return {
-                    eventId: callMembershipEvent.getId(),
-                };
-            },
+            memberships: [{ eventId: callMembershipEvent.getId() }],
         };
 
         const callStore = new EventEmitter() as unknown as CallStore;
@@ -145,22 +141,24 @@ describe("LatestRtcNotificationEventStore", () => {
 
         const store = new LatestRtcNotificationEventStore(callStore);
         vi.spyOn(store, "matrixClient", "get").mockReturnValue(cli);
-        store.start();
+        await store.start();
 
         // No calls in the room yet
         expect(store.getLatestEventId("!my-room1:m.org")).toBeUndefined();
 
         // Let's say a new call starts
-        callStore.emit(CallStoreEvent.Call, call, room);
+        const roomOn = vi.spyOn(room, "on");
+        callStore.emit(CallStoreEvent.Call, call, room.roomId);
 
         // The correct notification event hasn't come in yet, so still undefined.
         expect(store.getLatestEventId("!my-room1:m.org")).toBeUndefined();
 
         // Notification event comes in
+        await vi.waitFor(() => expect(roomOn).toHaveBeenCalledWith(RoomEvent.Timeline, expect.any(Function)));
         room.emit(RoomEvent.Timeline, newNotificationEvent);
 
         // Should update the event id in store
-        vi.waitFor(() => {
+        await vi.waitFor(() => {
             expect(store.getLatestEventId("!my-room1:m.org")).toStrictEqual("event-2");
         });
     });

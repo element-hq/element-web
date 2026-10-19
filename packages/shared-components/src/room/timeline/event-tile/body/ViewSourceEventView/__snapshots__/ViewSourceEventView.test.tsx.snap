@@ -13,7 +13,7 @@ exports[`ViewSourceEventView > renders the default story 1`] = `
       { "type": m.room.message }
     </code>
     <button
-      aria-label="toggle event"
+      aria-label="Event source"
       class="ViewSourceEventView-module_toggle"
       type="button"
     >
@@ -53,7 +53,7 @@ exports[`ViewSourceEventView > renders the expanded story 1`] = `
 }
     </pre>
     <button
-      aria-label="toggle event"
+      aria-label="Event source"
       class="ViewSourceEventView-module_toggle"
       type="button"
     >

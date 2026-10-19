@@ -64,7 +64,7 @@ export function doesRoomHaveUnreadMessages(room: Room, includeThreads: boolean):
     return false;
 }
 
-function doesTimelineHaveUnreadMessages(room: Room, timeline: Array<MatrixEvent>): boolean {
+export function doesTimelineHaveUnreadMessages(room: Room, timeline: Array<MatrixEvent>): boolean {
     // The room is a space, let's ignore it
     if (room.isSpaceRoom()) return false;
 

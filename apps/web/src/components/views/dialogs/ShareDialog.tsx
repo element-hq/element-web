@@ -12,11 +12,11 @@ import { Room, RoomMember, MatrixEvent, User } from "matrix-js-sdk/src/matrix";
 import { Checkbox, Button } from "@vector-im/compound-web";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../languageHandler";
 import QRCode from "../elements/QRCode";
 import { RoomPermalinkCreator, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
-import { copyPlaintext } from "../../../utils/strings";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import { type XOR } from "../../../@types/common";
@@ -139,7 +139,7 @@ export function ShareDialog({ target, customTitle, onFinished, permalinkCreator 
                     Icon={isCopied ? CheckIcon : LinkIcon}
                     onClick={async () => {
                         clearTimeout(timeoutIdRef.current);
-                        await copyPlaintext(url);
+                        await copyPlainTextToClipboard(url);
                         setIsCopied(true);
                         timeoutIdRef.current = setTimeout(() => setIsCopied(false), 2000);
                     }}

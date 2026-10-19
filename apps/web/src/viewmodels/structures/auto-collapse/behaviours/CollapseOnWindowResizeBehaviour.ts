@@ -68,6 +68,8 @@ export class CollapseOnWindowResizeBehaviour extends BaseCollapseBehaviour {
     public dispose = (): void => {
         UIStore.instance.off(UI_EVENTS.WidthIncreased, this.onWindowWidthIncreased);
         UIStore.instance.off(UI_EVENTS.WidthDecreased, this.onWindowWidthDecreased);
+        this.onWindowWidthIncreased.cancel();
+        this.onWindowWidthDecreased.cancel();
     };
 
     public static shouldStartCollapsed(): boolean {

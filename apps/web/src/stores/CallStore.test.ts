@@ -15,6 +15,7 @@ import {
     cleanUpClientRoomAndStores,
     setupAsyncStoreWithClient,
     enableCalls,
+    flushPromises,
 } from "test-utils";
 
 import { ElementCall } from "../models/Call";
@@ -37,8 +38,8 @@ describe("CallStore", () => {
         vi.restoreAllMocks();
     });
 
-    it("constructs one call for one MatrixRTC session", () => {
-        setupAsyncStoreWithClient(CallStore.instance, client);
+    it("constructs one call for one MatrixRTC session", async () => {
+        await setupAsyncStoreWithClient(CallStore.instance, client);
         const getSpy = vi.spyOn(ElementCall, "get");
 
         // Simulate another user starting a new MatrixRTC session
@@ -75,14 +76,25 @@ describe("CallStore", () => {
             if (key === "enable_client_well_known_lookups") return false;
             return sdkConfigGet(key, altCaseName);
         });
+        client.cachedRtcTransports.wait.mockRejectedValue(new Error("transports unavailable"));
         client.cachedRtcTransports.get.mockReturnValue([{ type: "type-a", some_data: "value" }]);
         client.getClientWellKnown.mockReturnValue({
             "org.matrix.msc4143.rtc_foci": [{ type: "type-c", other_data: "bar" }],
         });
         await setupAsyncStoreWithClient(CallStore.instance, client);
+        await flushPromises();
         // Only the modern endpoint contributes; the legacy well-known fallback is skipped entirely.
         expect(CallStore.instance.getConfiguredRTCTransports()).toEqual([{ type: "type-a", some_data: "value" }]);
         expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
         expect(client.getClientWellKnown).not.toHaveBeenCalled();
+    });
+
+    it("falls back to client well-known when fetching transports fails, ignoring well-known errors", async () => {
+        client.cachedRtcTransports.wait.mockRejectedValue(new Error("transports unavailable"));
+        client.waitForClientWellKnown.mockRejectedValue(new Error("well-known unavailable"));
+        await setupAsyncStoreWithClient(CallStore.instance, client);
+        // The lookup is not awaited by onReady, so let it settle. An unhandled rejection would fail the test.
+        await flushPromises();
+        expect(client.waitForClientWellKnown).toHaveBeenCalled();
     });
 });

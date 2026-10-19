@@ -35,13 +35,13 @@ exports[`<UploadConfirmDialog /> > should display image preview 1`] = `
           class="mx_UploadConfirmDialog_previewInner"
         >
           <div
-            class="_container_b6h8l_1"
+            class="_container"
           >
             <div
-              class="_tile_1vd22_1"
+              class="_tile"
             >
               <div
-                class="_image_13lno_85 _tallBannerImage_13lno_109"
+                class="_image _tallBannerImage"
               >
                 <img
                   alt="image.png"
@@ -49,13 +49,13 @@ exports[`<UploadConfirmDialog /> > should display image preview 1`] = `
                 />
               </div>
               <div
-                class="_below_1vd22_9"
+                class="_below"
               >
                 <div
-                  class="_leftGroup_13lno_11"
+                  class="_leftGroup"
                 >
                   <div
-                    class="_icon_13lno_32"
+                    class="_icon"
                   >
                     <svg
                       fill="currentColor"
@@ -71,15 +71,15 @@ exports[`<UploadConfirmDialog /> > should display image preview 1`] = `
                     </svg>
                   </div>
                   <div
-                    class="_textContent_13lno_27"
+                    class="_textContent"
                   >
                     <div
-                      class="_header_13lno_1"
+                      class="_header"
                     >
                       image.png
                     </div>
                     <p
-                      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
+                      class="_typography _font-body-md-regular _container _body"
                     >
                       124 KB
                     </p>

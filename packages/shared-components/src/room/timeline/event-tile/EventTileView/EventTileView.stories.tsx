@@ -1680,6 +1680,15 @@ export const ThreadGroup: Story = {
     args: Thread.args,
 };
 
+export const ThreadBubbleSelected: Story = {
+    name: "Thread - Bubble - Selected",
+    tags: visualTags,
+    globals: bubbleGlobals,
+    // Selected rather than hovered: Storybook's userEvent cannot trigger CSS
+    // :hover, and selection paints the same background.
+    args: { ...Thread.args, state: { selected: true } },
+};
+
 export const NotificationGroup: Story = {
     name: "Notification - Group",
     tags: visualTags,

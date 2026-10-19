@@ -38,6 +38,7 @@ import * as createMatrixClientModule from "./utils/createMatrixClient";
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 describe("Lifecycle", () => {
+    const realLocalStorage = localStorage;
     const homeserverUrl = "https://domain";
     const identityServerUrl = "https://is.org";
     const userId = "@alice:domain";
@@ -71,6 +72,7 @@ describe("Lifecycle", () => {
             setNotifTimelineSet: vi.fn(),
             getRooms: vi.fn().mockReturnValue([]),
             matrixRTC: { on: vi.fn(), off: vi.fn() },
+            whoami: vi.fn(),
         });
         // stub this
         vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
@@ -81,11 +83,21 @@ describe("Lifecycle", () => {
         localStorage.clear();
         sessionStorage.clear();
 
+        // Spy on the real localStorage rather than replacing it: `getItem` returns what was
+        // actually written, and `expect(localStorage.setItem).toHaveBeenCalledWith(...)` works.
+        vi.spyOn(localStorage, "getItem");
+        vi.spyOn(localStorage, "setItem");
+        vi.spyOn(localStorage, "removeItem");
+        vi.spyOn(localStorage, "clear");
+
         localStorage.setItem("mx_oidc_client_id", "test-client-id");
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
+        // undo any `vi.stubGlobal("localStorage", ...)` a test installed. Note we cannot use
+        // vi.unstubAllGlobals() here: that would also drop globals stubbed by the shared setup.
+        vi.stubGlobal("localStorage", realLocalStorage);
     });
 
     /**
@@ -170,7 +182,6 @@ describe("Lifecycle", () => {
             const prom = Lifecycle.loadSession({
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
-                urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
                 abortSignal: abortController.signal,
             });
             abortController.abort();
@@ -181,8 +192,6 @@ describe("Lifecycle", () => {
     });
 
     describe("restoreSessionFromStorage()", () => {
-        const realLocalStorage = localStorage;
-
         beforeEach(() => {
             initIdbMock();
 
@@ -196,10 +205,6 @@ describe("Lifecycle", () => {
                 // @ts-ignore allow bad mock
                 { finished: Promise.resolve([true]) },
             );
-        });
-
-        afterEach(() => {
-            vi.stubGlobal("localStorage", realLocalStorage);
         });
 
         it("should return false when localStorage is not available", async () => {
@@ -638,6 +643,31 @@ describe("Lifecycle", () => {
         });
     });
 
+    describe("configureFromCompletedOAuthLogin()", () => {
+        beforeEach(() => {
+            initIdbMock();
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it.each([
+            [true, "true"],
+            [undefined, "false"],
+        ])("should forward is_guest=%s from whoami as the guest flag", async (isGuest, stored) => {
+            mockClient.whoami.mockResolvedValue({ user_id: userId, device_id: deviceId, is_guest: isGuest });
+
+            const creds = await Lifecycle.configureFromCompletedOAuthLogin({
+                accessToken,
+                refreshToken,
+                homeserverUrl,
+                identityServerUrl,
+                clientId: "test-client-id",
+            });
+
+            expect(creds.guest).toBe(isGuest === true);
+            expect(localStorage.getItem("mx_is_guest")).toBe(stored);
+        });
+    });
+
     describe("setLoggedIn()", () => {
         beforeEach(() => {
             initIdbMock();
@@ -649,16 +679,6 @@ describe("Lifecycle", () => {
             vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
             vi.spyOn(mockPlatform, "createPickleKey");
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         const refreshToken = "test-refresh-token";
@@ -673,6 +693,42 @@ describe("Lifecycle", () => {
             await setLoggedIn(credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
+        });
+
+        it("should not let a logout which is still clearing storage wipe the new session", async () => {
+            // Hold the logout at its last step, which clears localStorage
+            const platformCleared = Promise.withResolvers<void>();
+            mockPlatform.clearStorage = vi.fn(async () => {
+                await platformCleared.promise;
+                localStorage.clear();
+            });
+
+            const loggedOut = Lifecycle.onLoggedOut();
+            const loggedIn = setLoggedIn(credentials);
+            // Give the login every chance to persist its session before the logout finishes
+            await Promise.race([loggedIn, new Promise((resolve) => setTimeout(resolve, 100))]);
+            platformCleared.resolve();
+            await Promise.all([loggedOut, loggedIn]);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should still log in after a logout failed to clear storage", async () => {
+            mockPlatform.clearStorage = vi.fn().mockRejectedValue(new Error("storage broke"));
+
+            await expect(Lifecycle.onLoggedOut()).rejects.toThrow("storage broke");
+            await setLoggedIn(credentials);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should not let a logout which is still clearing storage wipe sessionStorage written meanwhile", async () => {
+            const loggedOut = Lifecycle.onLoggedOut();
+            // Like an OAuth login storing the context it needs when the issuer sends us back
+            sessionStorage.setItem("mx_oidc_test", "value");
+            await loggedOut;
+
+            expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
         });
 
         describe("after a soft-logout", () => {
@@ -881,7 +937,7 @@ describe("Lifecycle", () => {
 
     describe("logout()", () => {
         it("should call logout on the client", async () => {
-            logout();
+            await logout();
 
             await flushPromises();
 
@@ -892,16 +948,6 @@ describe("Lifecycle", () => {
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         it("should replace the current login with a new one", async () => {

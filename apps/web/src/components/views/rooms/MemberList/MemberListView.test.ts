@@ -13,8 +13,9 @@ import { act } from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { waitFor, fireEvent } from "test-utils-rtl";
 import { filterConsole, mkThirdPartyInviteEvent } from "test-utils";
-import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember, type RoomState, MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
+import { MemberListStore } from "../../../../stores/MemberListStore";
 import { type Rendered, renderMemberList } from "./__mocks__";
 
 vi.mock("../../../../customisations/helpers/UIComponents", () => ({
@@ -157,6 +158,19 @@ describe("MemberListView and MemberlistHeaderView", () => {
             const preventDefaultSpy = vi.spyOn(submitEvent, "preventDefault");
             fireEvent(form!, submitEvent);
             expect(preventDefaultSpy).toHaveBeenCalled();
+        });
+
+        it("does not reload members after unmount", async () => {
+            const { root, client, memberListRoom } = rendered;
+            const loadMemberListSpy = vi.spyOn(MemberListStore.prototype, "loadMemberList");
+            // Called within the throttle window of the initial load, so this schedules a trailing reload
+            act(() => {
+                client.emit(RoomStateEvent.Update, { roomId: memberListRoom.roomId } as RoomState);
+            });
+            root.unmount();
+            await new Promise((resolve) => setTimeout(resolve, 600));
+            expect(loadMemberListSpy).not.toHaveBeenCalled();
+            loadMemberListSpy.mockRestore();
         });
     });
 

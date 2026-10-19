@@ -59,7 +59,7 @@ describe("<AdvancedPanel />", () => {
             const onResetIdentityClick = vi.fn();
             await renderAdvancedPanel(onResetIdentityClick);
 
-            const resetIdentityButton = screen.getByRole("button", { name: "Reset cryptographic identity" });
+            const resetIdentityButton = screen.getByRole("button", { name: "Reset digital identity" });
             await user.click(resetIdentityButton);
 
             expect(onResetIdentityClick).toHaveBeenCalled();

@@ -70,7 +70,7 @@ export interface WidgetPipViewProps {
      */
     // In the future the avatar component can/should also become a shared component.
     // It would then be accessible in the shared component package and we could remove this prop.
-    RoomAvatar: React.FC<{ size: string }>;
+    RoomAvatar: React.FC<{ className?: string; size: string }>;
 }
 
 /**
@@ -97,8 +97,8 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
                 >
                     <ChevronLeftIcon />
                 </IconButton>
-                <RoomAvatar size="20px" />
-                {snapshot.roomName}
+                <RoomAvatar className={styles.avatar} size="20px" />
+                <span className={styles.name}>{snapshot.roomName}</span>
             </div>
             <div className={styles.roundedCornerContainer}>
                 <vm.persistentAppComponent persistentWidgetId={snapshot.widgetId} persistentRoomId={snapshot.roomId} />
