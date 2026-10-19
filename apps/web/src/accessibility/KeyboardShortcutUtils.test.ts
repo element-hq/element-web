@@ -78,6 +78,38 @@ describe("KeyboardShortcutUtils", () => {
         }
     });
 
+    describe("the new timeline's message navigation", () => {
+        const withNewTimeline = async (enabled: boolean): Promise<void> => {
+            const SettingsStore = (await import("../settings/SettingsStore")).default;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(((name: string) =>
+                name === "feature_new_timeline" ? enabled : false) as typeof SettingsStore.getValue);
+        };
+
+        it("is listed but handled by the timeline itself while the Labs new timeline is on", async () => {
+            await withNewTimeline(true);
+            const { KeyBindingAction } = await getFile();
+            const utils = await getUtils();
+            const { defaultBindingsProvider } = await import("../KeyBindingsDefaults");
+
+            expect(utils.getKeyboardShortcutValue(KeyBindingAction.PrevMessage)).toEqual({ key: "ArrowUp" });
+            expect(utils.getKeyboardShortcutValue(KeyBindingAction.NextMessage)).toEqual({ key: "ArrowDown" });
+            expect(utils.getKeyboardShortcutDisplayName(KeyBindingAction.NextMessage)).toBeDefined();
+            // The timeline handles the arrow keys itself, so nothing binds them.
+            const bound = defaultBindingsProvider.getRoomBindings!().map((binding) => binding.action);
+            expect(bound).not.toContain(KeyBindingAction.PrevMessage);
+            expect(bound).not.toContain(KeyBindingAction.NextMessage);
+        });
+
+        it("is not shown with the old timeline, which has no such keys", async () => {
+            await withNewTimeline(false);
+            const { KeyBindingAction } = await getFile();
+            const utils = await getUtils();
+
+            expect(utils.getKeyboardShortcutValue(KeyBindingAction.PrevMessage)).toBeUndefined();
+            expect(utils.getKeyboardShortcutValue(KeyBindingAction.NextMessage)).toBeUndefined();
+        });
+    });
+
     describe("correctly filters shortcuts", () => {
         it("when on web and not on macOS", async () => {
             mockKeyboardShortcuts({
