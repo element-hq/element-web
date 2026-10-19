@@ -56,7 +56,6 @@ async function settleNewSession(page: Page): Promise<void> {
  *  - its unnecassary to restart a new playwright session just for this test.
  */
 async function testCSSLayering(page: Page) {
-
     // Checks that Element Web layers the stylesheets correctly when Element Call is embedded as
     // a React component.
     //  - Element Call ships a CSS reset (its `normalize` layer) that zeroes btn margins.
@@ -165,7 +164,6 @@ for (const embedding of ["widget", "react"] as const) {
                         timeout: 15_000,
                     });
                 }
-
 
                 if (embedding === "react") {
                     testCSSLayering(page);
