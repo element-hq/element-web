@@ -2409,10 +2409,6 @@
             "in_reply_to": "<a>Sem svar til</a> <pill>",
             "in_reply_to_for_export": "Sem svar við <a>þessum skilaboðum</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Verið er að beina þér á utanaðkomandi vefsvæði til að auðkenna aðganginn þinn til notkunar með %(integrationsUrl)s. Viltu halda áfram?",
-            "dialog_title": "Bæta við samþættingu"
-        },
         "self_redaction": "Skilaboðum eytt",
         "send_state_failed": "Mistókst að senda",
         "send_state_sent": "Skilaboðin þín voru send",

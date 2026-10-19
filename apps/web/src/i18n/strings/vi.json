@@ -2717,10 +2717,6 @@
             "in_reply_to": "Trả lời <a>In reply to</a> <pill>",
             "in_reply_to_for_export": "Để trả lời <a>tin nhắn này</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Bạn sắp được đưa đến trang web của bên thứ ba để bạn có thể xác thực tài khoản của mình để sử dụng với %(integrationsUrl)s. Bạn có muốn tiếp tục không?",
-            "dialog_title": "Thêm tích hợp"
-        },
         "self_redaction": "Tin nhắn đã xóa",
         "send_state_encrypting": "Đang mã hóa tin nhắn…",
         "send_state_failed": "Gửi thất bại",

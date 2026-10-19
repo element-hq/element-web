@@ -2786,7 +2786,7 @@
             "rule_room_one_to_one": "一对一聊天中的消息",
             "rule_roomnotif": "包含 @room 的提及",
             "rule_suppress_notices": "由机器人发送的消息",
-            "rule_tombstone": "当房间升级时。",
+            "rule_tombstone": "当房间升级时",
             "show_message_desktop_notification": "在桌面通知中显示消息内容",
             "voip": "音频与视频通话"
         },
@@ -3593,10 +3593,6 @@
             "error_loading": "无法加载此回复下的消息。该消息可能不存在或你无权查看。",
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "你将被带到第三方网站，以便验证你的账户是否可用于 %(integrationsUrl)s。是否继续？",
-            "dialog_title": "添加集成"
         },
         "self_redaction": "消息已被删除",
         "send_state_encrypting": "正在解密消息…",

@@ -3516,10 +3516,6 @@
             "in_reply_to": "<a>Vastuseks kasutajale</a> <pill>",
             "in_reply_to_for_export": "Vastuseks <a>sellele sõnumile</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Sind juhatatakse kolmanda osapoole veebisaiti, kus sa saad autentida oma kontoga %(integrationsUrl)s kasutamiseks. Kas sa soovid jätkata?",
-            "dialog_title": "Lisa lõiming"
-        },
         "self_redaction": "Sõnum on kustutatud",
         "send_state_encrypting": "Krüptin sinu sõnumit…",
         "send_state_failed": "Saatmine ei õnnestunud",

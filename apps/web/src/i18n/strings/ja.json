@@ -2690,10 +2690,6 @@
             "in_reply_to": "<pill>への<a>返信</a>",
             "in_reply_to_for_export": "<a>このメッセージ</a>への返信"
         },
-        "scalar_starter_link": {
-            "dialog_description": "%(integrationsUrl)sで使用するアカウントを認証するため、外部サイトに移動します。続行してよろしいですか？",
-            "dialog_title": "統合を追加"
-        },
         "self_redaction": "メッセージが削除されました",
         "send_state_encrypting": "メッセージを暗号化しています…",
         "send_state_failed": "送信に失敗しました",

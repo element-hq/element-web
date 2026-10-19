@@ -3425,10 +3425,6 @@
             "in_reply_to": "<a>Som svar på</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>denne meldingen</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Du er i ferd med å bli ført til et tredjeparts nettsted slik at du kan autentisere kontoen din for bruk med%(integrationsUrl)s. Ønsker du å fortsette?",
-            "dialog_title": "Legg til en integrering"
-        },
         "self_redaction": "Meldingen ble slettet",
         "send_state_encrypting": "Krypterer meldingen din …",
         "send_state_failed": "Kunne ikke sende",

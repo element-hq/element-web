@@ -3456,10 +3456,6 @@
             "in_reply_to": "<a>Yn ymateb i</a><pill>",
             "in_reply_to_for_export": "Yn ymateb i'r <a>neges hon</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Rydych ar fin cael eich tywys i wefan trydydd parti er mwyn i chi allu dilysu'ch cyfrif i'w ddefnyddio gyda %(integrationsUrl)s. Ydych chi am barhau?",
-            "dialog_title": "Ychwanegu Integreiddiad"
-        },
         "self_redaction": "Neges wedi'i dileu",
         "send_state_encrypting": "Wrthi'n amgryptio'ch neges…",
         "send_state_failed": "Methwyd anfon",

@@ -2939,10 +2939,6 @@
             "in_reply_to": "<a>In risposta a</a> <pill>",
             "in_reply_to_for_export": "In risposta a <a>questo messaggio</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Stai per essere portato in un sito di terze parti per autenticare il tuo account da usare con %(integrationsUrl)s. Vuoi continuare?",
-            "dialog_title": "Aggiungi un'integrazione"
-        },
         "self_redaction": "Messaggio eliminato",
         "send_state_encrypting": "Crittazione del tuo messaggio…",
         "send_state_failed": "Invio fallito",

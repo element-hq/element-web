@@ -3235,10 +3235,6 @@
             "in_reply_to": "<a>Cevap olarak</a> <pill>",
             "in_reply_to_for_export": "<a>bu mesaja</a> yanıt olarak"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
-            "dialog_title": "Entegrasyon ekleyin"
-        },
         "self_redaction": "Mesaj silindi",
         "send_state_encrypting": "Mesajınız şifreleniyor...",
         "send_state_failed": "Gönderilemedi",
