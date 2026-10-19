@@ -2,7 +2,7 @@
 # Context must be the root of the monorepo
 
 # PNPM source
-FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.12.1@sha256:150c9372f3a6d02039f11dc7d1f6070896567038968c97bbb224e3b03ee3cbcc AS pnpm
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.14.0@sha256:71202ae73719148f6b6e129ca1e9fa3ceabbc9a037dc34800715606f2b5290a1 AS pnpm
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:25f3016fcdae6b5d65bd9bcb4064b7e4198ec8d49493fa40d73f9b463d04fb15 AS builder
