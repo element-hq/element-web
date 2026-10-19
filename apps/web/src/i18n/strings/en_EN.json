@@ -1501,6 +1501,8 @@
         "shift": "Shift",
         "space": "Space",
         "switch_to_space": "Switch to space by number",
+        "timeline_navigate_down": "Navigate down in the timeline",
+        "timeline_navigate_up": "Navigate up in the timeline",
         "toggle_hidden_events": "Toggle hidden event visibility",
         "toggle_microphone_mute": "Toggle microphone mute",
         "toggle_right_panel": "Toggle right panel",
