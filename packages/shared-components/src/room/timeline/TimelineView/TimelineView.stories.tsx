@@ -62,6 +62,7 @@ const TimelineViewWrapperImpl = ({
     onJumpToReadMarker,
     onMarkAllAsRead,
     onJumpToLive,
+    onJumpToStart,
     ...snapshot
 }: TimelineStoryProps): JSX.Element => {
     const vm = useMockedViewModel(snapshot, {
@@ -73,6 +74,7 @@ const TimelineViewWrapperImpl = ({
         onJumpToReadMarker,
         onMarkAllAsRead,
         onJumpToLive,
+        onJumpToStart,
     });
     return (
         <div style={{ height: "400px", border: "1px solid #ccc" }}>
@@ -110,6 +112,7 @@ const meta = {
         onJumpToReadMarker: fn(),
         onMarkAllAsRead: fn(),
         onJumpToLive: fn(),
+        onJumpToStart: fn(),
     },
     decorators: [
         (Story) => (

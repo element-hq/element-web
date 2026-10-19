@@ -15,6 +15,7 @@ import {
     NotificationCountType,
     ReceiptType,
     RoomStateEvent,
+    type EventTimeline,
     type IRoomTimelineData,
     type MatrixClient,
     type MatrixEvent,
@@ -133,8 +134,13 @@ const PAGINATE_DECRYPT_WAIT_MS = 500;
  * - `live`      — scroll to the live end of the room.
  * - `permalink` — centre on `eventId` and highlight it.
  * - `restore`   — scroll to the saved `eventId` without highlighting.
+ * - `start`     — scroll to the start of the room; `eventId` is its `m.room.create` event.
  */
-type LoadTarget = { kind: "live" } | { kind: "permalink"; eventId: string } | { kind: "restore"; eventId: string };
+type LoadTarget =
+    | { kind: "live" }
+    | { kind: "permalink"; eventId: string }
+    | { kind: "restore"; eventId: string }
+    | { kind: "start"; eventId: string };
 
 /**
  * What the room timeline publishes to its view: the shared snapshot, plus the per-message detail
@@ -235,6 +241,13 @@ export class RoomTimelineViewModel
 
     /** Set while a {@link load} is running; see {@link scheduleRebuild}. */
     private loading = false;
+
+    /**
+     * Identifies the most recent jump the reader asked for (start, live end, read marker). A
+     * jump that waits on the server checks it is still the latest before acting; see
+     * {@link requestJump}.
+     */
+    private latestJump: object = {};
 
     /** A jump asked for while a {@link load} was running, run once it finishes. Only the newest is kept. */
     private queuedJump: ((scroll: ImmediateScroll) => void) | null = null;
@@ -768,9 +781,8 @@ export class RoomTimelineViewModel
         try {
             await this.timelineWindow.load(sdkLoadTarget, INITIAL_SIZE);
             if (this.isDisposed) return;
-            // Gather enough messages to fill the window before we show anything. Only a permalink
-            // needs messages on both sides of its target; see fillInitialWindow.
-            await this.fillInitialWindow(target.kind === "permalink" ? sdkLoadTarget : undefined);
+            // Gather enough messages to fill the window before we show anything; see fillInitialWindow.
+            await this.fillInitialWindow(target);
             if (this.isDisposed) return;
             const windowEvents = this.timelineWindow.getEvents();
             debug(
@@ -816,6 +828,10 @@ export class RoomTimelineViewModel
                     RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, null);
                     // No anchor needed — fall through to live-end logic below.
                 }
+            } else if (target.kind === "start") {
+                // The start of the room: its first row at the top, skipping a loading spinner.
+                const firstKey = items.find((i) => i.kind !== "loading")?.key;
+                if (firstKey) pendingAnchor = { targetKey: firstKey, align: "start" };
             }
 
             if (!pendingAnchor && items.length > 0 && !this.timelineWindow.canPaginate(Direction.Forward)) {
@@ -864,10 +880,11 @@ export class RoomTimelineViewModel
      * before anything is shown.
      *
      * Which way we fetch depends on where we are starting:
-     *  - **Opening a permalink** (`centreOn` set): the message has to sit in the middle, so it
-     *    needs messages on both sides — we aim for about half the target each way. Without the
-     *    newer half it would be the last message in the list, and "centre" would put it at the
-     *    bottom of the screen instead.
+     *  - **Opening a permalink**: the message has to sit in the middle, so it needs messages
+     *    on both sides — we aim for about half the target each way. Without the newer half it
+     *    would be the last message in the list, and "centre" would put it at the bottom of the
+     *    screen instead.
+     *  - **The start of the room**: nothing is older, so only newer messages are needed.
      *  - **Anywhere else**: we start at the newest message, so only older ones are needed.
      *
      * Usually this costs nothing: opening a permalink already fetches the messages around it,
@@ -876,14 +893,18 @@ export class RoomTimelineViewModel
      * do not display cannot hold up the first paint — we show what we have, and the reader's
      * first scroll fetches more in the normal way.
      */
-    private async fillInitialWindow(centreOn: string | undefined): Promise<void> {
+    private async fillInitialWindow(target: LoadTarget): Promise<void> {
         const MAX_FILL_REQUESTS_PER_DIRECTION = 2;
+        const centreOn = target.kind === "permalink" ? target.eventId : undefined;
         const perDirectionTarget = centreOn ? Math.ceil(MIN_INITIAL_EVENTS / 2) : MIN_INITIAL_EVENTS;
+        const directions =
+            target.kind === "permalink"
+                ? [Direction.Backward, Direction.Forward]
+                : target.kind === "start"
+                  ? [Direction.Forward]
+                  : [Direction.Backward];
 
-        for (const direction of [Direction.Backward, Direction.Forward]) {
-            // Unanchored loads only need history above the bottom-anchored view.
-            if (!centreOn && direction === Direction.Forward) break;
-
+        for (const direction of directions) {
             let requests = 0;
             while (
                 requests < MAX_FILL_REQUESTS_PER_DIRECTION &&
@@ -1066,11 +1087,12 @@ export class RoomTimelineViewModel
     // ── Overlay button actions ───────────────────────────────────────
 
     /**
-     * Run a jump the reader asked for. If a load is running, the jump waits until it
-     * finishes and then works from the messages that load loaded, not the ones it was
-     * replacing. A newer jump replaces one that is waiting.
+     * Run a jump the reader asked for, and make it the latest one. If a load is running, the
+     * jump waits until it finishes and then works from the messages that load loaded, not the
+     * ones it was replacing. A newer jump replaces one that is waiting.
      */
     private requestJump(jump: (scroll: ImmediateScroll) => void, scrollNow: ImmediateScroll): void {
+        this.latestJump = {};
         if (this.loading) {
             this.queuedJump = jump;
             return;
@@ -1128,6 +1150,59 @@ export class RoomTimelineViewModel
         const newItems = this.buildItems(); // removes the read-marker item
         this.mergeSnapshot({ items: newItems, canJumpToReadMarker: false }, "mark-all-as-read");
     };
+
+    public onJumpToStart = (scrollNow: ImmediateScroll): void => {
+        this.requestJump(this.jumpToStart, scrollNow);
+    };
+
+    private jumpToStart = (scrollNow: ImmediateScroll): void => {
+        const createEventId = this.opts.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getId();
+        const reachesStart =
+            !this.timelineWindow.canPaginate(Direction.Backward) ||
+            this.timelineWindow.getEvents().some((e) => e.getId() === createEventId);
+        debug(`[TimelineVM] onJumpToStart — createEventId=${createEventId}, reachesStart=${reachesStart}`);
+        if (reachesStart || !createEventId) {
+            // Already loaded, or nothing to load around: go to the top of what we have. Reaching
+            // it loads older history, as scrolling there would.
+            const firstKey = this.firstDisplayedKey();
+            if (firstKey) scrollNow({ targetKey: firstKey, align: "start" });
+            return;
+        }
+        void this.loadStart(createEventId);
+    };
+
+    /** The first row that is not a loading spinner. */
+    private firstDisplayedKey(): string | undefined {
+        return this.snapshot.current.items.find((i) => i.kind !== "loading")?.key;
+    }
+
+    /**
+     * Load the window around the room's create event and anchor to its top. The context is
+     * fetched first so that if the server refuses it, because the room's history visibility
+     * hides events from before we joined, the current window is kept and we go to its top.
+     */
+    private async loadStart(createEventId: string): Promise<void> {
+        const jump = this.latestJump;
+        let timeline: EventTimeline | null | undefined;
+        try {
+            timeline = await this.opts.client.getEventTimeline(
+                this.opts.room.getUnfilteredTimelineSet(),
+                createEventId,
+            );
+        } catch (e) {
+            logger.warn(`[TimelineVM] onJumpToStart — could not load the start of the room`, e);
+        }
+        // Drop it if the reader has asked for another jump while we waited.
+        if (this.isDisposed || jump !== this.latestJump) return;
+        if (!timeline) {
+            const firstKey = this.firstDisplayedKey();
+            if (firstKey) {
+                this.mergeSnapshot({ pendingAnchor: { targetKey: firstKey, align: "start" } }, "jump-to-start");
+            }
+            return;
+        }
+        await this.load({ kind: "start", eventId: createEventId });
+    }
 
     /**
      * Go to a message and highlight it, as opening a permalink does. For a message asked for
