@@ -1129,6 +1129,29 @@ export class RoomTimelineViewModel
         this.mergeSnapshot({ items: newItems, canJumpToReadMarker: false }, "mark-all-as-read");
     };
 
+    /**
+     * Go to a message and highlight it, as opening a permalink does. For a message asked for
+     * after the timeline is open, such as a pinned message or a link to this room. Scrolls
+     * straight there when it is loaded, otherwise loads the window around it.
+     */
+    public jumpToEvent(eventId: string, scrollNow: ImmediateScroll): void {
+        this.requestJump((scroll) => {
+            debug(`[TimelineVM] jumpToEvent — ${eventId}`);
+            if (this.snapshot.current.items.some((i) => i.key === eventId)) {
+                this.mergeSnapshot({ highlightedEventId: eventId }, "jump-to-event");
+                scroll({ targetKey: eventId, align: "center" });
+            } else {
+                void this.load({ kind: "permalink", eventId });
+            }
+        }, scrollNow);
+    }
+
+    /** Drop the highlight from the message last jumped to, without moving. */
+    public clearHighlight(): void {
+        if (this.snapshot.current.highlightedEventId === null) return;
+        this.mergeSnapshot({ highlightedEventId: null }, "clear-highlight");
+    }
+
     public onJumpToLive = (scrollNow: ImmediateScroll): void => {
         this.requestJump(this.jumpToLive, scrollNow);
     };
