@@ -615,7 +615,7 @@ describe("ElementWidgetDriver", () => {
 
             expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
                 roomId,
-                { delay: 2000 },
+                2000,
                 null,
                 EventType.RoomMessage,
                 {},
@@ -634,7 +634,7 @@ describe("ElementWidgetDriver", () => {
 
             expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
                 roomId,
-                { delay: 2000 },
+                2000,
                 EventType.RoomTopic,
                 {},
                 "",
@@ -770,7 +770,7 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
                 roomId,
                 2000,
-                { delay: 1000 },
+                1000,
                 null,
                 EventType.RoomMessage,
                 {},
