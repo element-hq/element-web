@@ -325,10 +325,10 @@ importers:
         version: link:packages/eslint-plugin-element-web
       eslint-plugin-react-web-api:
         specifier: ^5.24.2
-        version: 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+        version: 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       eslint-plugin-storybook:
         specifier: ^10.4.6
-        version: 10.6.1(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+        version: 10.6.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -627,7 +627,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -3022,8 +3022,8 @@ packages:
     resolution: {integrity: sha512-EriSTlt5OC9/7SXkRSCAhfSxxoSUgBm33OH+IkwbdpgoqsSsUg7y3uh+IICI/Qg4BBWr3U2i39RpmycbxMq4ew==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
-  '@eslint-react/ast@5.26.5':
-    resolution: {integrity: sha512-6oplvZs6FSY8D21BHeWVOvSH6x2/H53BULcqHK81K/s0B0Sr2STn+JnXYFjsmk8Wz+j0n/LRhuOaVhFOKbst0w==}
+  '@eslint-react/ast@5.28.0':
+    resolution: {integrity: sha512-5S7dVeJU0/HuDBz3I1dw2KfC1KCAfCnqcb4AuI0TUJqmobx1od1CzxAcUYMzo7XcfbuAZ49S07pS6xP4B28u0A==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -3032,8 +3032,8 @@ packages:
       eslint:
         optional: true
 
-  '@eslint-react/core@5.26.5':
-    resolution: {integrity: sha512-Fa7gAPJzvV+hnEa8UBvDCpYXv/4n20r9wbG+nK55QZz4DoPkC5+AnsvAuhec9sesD4V+kPVbMz8cLDsOKLLJUw==}
+  '@eslint-react/core@5.28.0':
+    resolution: {integrity: sha512-jEejxEq9RSOEG9wR9CwexoMz3rFlA41lbB0pc+b2pEWo++nzIdoIbTpx/2ZLlbDUPMWFplmhpFm6yGBzDlYo8Q==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -3042,8 +3042,8 @@ packages:
       eslint:
         optional: true
 
-  '@eslint-react/eslint@5.26.5':
-    resolution: {integrity: sha512-s+x7cThaUeDC9eCQKWYyxStEYKAydsJz3BH8SpLdvjIE7jS0tmBYPe76AJ38XlYqTi8A20sJgFHAk0tb4xOm0Q==}
+  '@eslint-react/eslint@5.28.0':
+    resolution: {integrity: sha512-I2yu+ZSKldNMVNuskiL8keHonmBZlkMNR6+muOiJEipo7pGHH9IKNJkT3gDDpLyWPqSSVdIsRCSJB8fDHjChfQ==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -3052,8 +3052,8 @@ packages:
       eslint:
         optional: true
 
-  '@eslint-react/shared@5.26.5':
-    resolution: {integrity: sha512-VsBPYZZdJPzWGjxqJWgOUFcictXY6uoTKTleJz5jV3Bx0ibTUixfHp2cxBzcU1BMl/3gbUfpdQmBIWYl3z/RLw==}
+  '@eslint-react/shared@5.28.0':
+    resolution: {integrity: sha512-vYSnFU+cMeAm/9camJwbXvvUf3pZescfS8DN5OtMK+dr6400Ws+KDpgRmN4tuiFwxoO5wOL21ZNhu8XIaGASEQ==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -3062,8 +3062,8 @@ packages:
       eslint:
         optional: true
 
-  '@eslint-react/var@5.26.5':
-    resolution: {integrity: sha512-uiXuKWNDv8/+jVubIepmovC7K5Hs+9kZJrHokwc8bJcAe++eTpTN6XOoioiIgkWy2oRNjXy2bemgbzaw7e+paQ==}
+  '@eslint-react/var@5.28.0':
+    resolution: {integrity: sha512-OiX8G8oWt7YJx4NePQziUBit8IICcjuRoKCTAeWPLMKTp0XiALo+3nXTgVQuVa31wRNQmJ8rRbcFCkgjjeg5lA==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -8439,8 +8439,8 @@ packages:
     resolution: {gitHosted: true, integrity: sha512-UwlEFO4pr3HOqzZKsFopcShSX8nXsardiHD+YU57gmNtRUu1Fs1MDh1mCkdPLIQJBbEHJ4wRKRYZ0qYP1Ps0AA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8}
     version: 0.0.0
 
-  eslint-plugin-react-web-api@5.26.5:
-    resolution: {integrity: sha512-LMUD7pIXvajuT0MKZYgY0f9bE6shi/OZOzOS2Zt5wBmZxX8wZZAegehmafD9BbXgOf/zhQ9cVW7v1btR5eaaxA==}
+  eslint-plugin-react-web-api@5.28.0:
+    resolution: {integrity: sha512-51khPB97tS+fWxyyTR2KNGR3r+oewt4dHD0XczccK1+Wk8XqVkYtPk9jB8OagnFq80SqozTa/TvxTQtLkh5ixQ==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: '*'
@@ -8449,8 +8449,8 @@ packages:
       eslint:
         optional: true
 
-  eslint-plugin-storybook@10.6.1:
-    resolution: {integrity: sha512-XBmXuQcI0wzxMYc0rWKIiydvUxgS+GzLesO1YK1adnj97LhMqqsnlalbM+nXfQo1JoH2F2CI12sAH9/dAC99Dw==}
+  eslint-plugin-storybook@10.6.2:
+    resolution: {integrity: sha512-lECiiizxoE03N/AujmGN0I/yLuDPweTFuQYowkWhtPHD0bWlc2qYCJxG8HbiGulA9nnALXiaZXFW8t1r8EFBKw==}
     peerDependencies:
       eslint: '>=8'
 
@@ -9778,8 +9778,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
-    resolution: {gitHosted: true, integrity: sha512-NdtGKGAj5lpmWP9zuchVEA5Ddj+kqDeGQzkGT+3Izk5rplJlYSmlMUV85kF3aOn8g1Sn2yfdo9W7IAOwNf568w==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85:
+    resolution: {gitHosted: true, integrity: sha512-zB4gN4+eTeH6p075GVAwQCa1ZW4RwYU9RSHI9expIQR+s+ZMMMfSWTAc8jGT5poFg+sulKE8mZ0VR4+mqAlaPw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85}
     version: 44.0.0
     engines: {node: '>=22.0.0'}
 
@@ -12202,8 +12202,8 @@ packages:
     resolution: {integrity: sha512-JfJeIHke7y2egdGGgRAvpCwYFUsHlM2gPcrVOxFkznt/4uzQ7HFmvE63iFHVLBJNDuyDOQgijDK/tXH/f6Msjg==}
     engines: {node: '>=6.10'}
 
-  ts-pattern@5.9.1:
-    resolution: {integrity: sha512-HoMFgSPl87sKcGa5lIF4CZ46V2A1zFz1yduPZO8KtFv3es4G8C5/m1m4ypQQ6/gsj+242bYT3MITuvMeLzk/RA==}
+  ts-pattern@5.9.2:
+    resolution: {integrity: sha512-qAf+7M7Jjk7uebZeIo9uEzyintfuRtgHdzM9dqxRKcMi2dt76Ec+FH2wW3bnU9TuGLkZIJLoLs7cCQnU7Tu8ig==}
 
   tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
@@ -14987,11 +14987,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -15133,7 +15133,7 @@ snapshots:
 
   '@eslint-community/regexpp@4.12.2': {}
 
-  '@eslint-react/ast@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
+  '@eslint-react/ast@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/typescript-estree': 8.71.2(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
@@ -15144,22 +15144,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-react/core@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
+  '@eslint-react/core@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
     dependencies:
-      '@eslint-react/ast': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/eslint': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/shared': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/var': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/ast': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/eslint': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/shared': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/var': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      ts-pattern: 5.9.1
+      ts-pattern: 5.9.2
       typescript: '@typescript/typescript6@6.0.2'
     optionalDependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-react/eslint@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
+  '@eslint-react/eslint@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
@@ -15169,11 +15169,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-react/shared@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
+  '@eslint-react/shared@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
     dependencies:
-      '@eslint-react/eslint': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/eslint': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      ts-pattern: 5.9.1
+      ts-pattern: 5.9.2
       typescript: '@typescript/typescript6@6.0.2'
       zod: 4.6.5
     optionalDependencies:
@@ -15181,14 +15181,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-react/var@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
+  '@eslint-react/var@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)':
     dependencies:
-      '@eslint-react/ast': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/eslint': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/ast': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/eslint': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       '@typescript-eslint/scope-manager': 8.71.2
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      ts-pattern: 5.9.1
+      ts-pattern: 5.9.2
       typescript: '@typescript/typescript6@6.0.2'
     optionalDependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -20663,23 +20663,23 @@ snapshots:
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/8be229a438dc363972bdae5f6198607998a851d8#path:/eslint: {}
 
-  eslint-plugin-react-web-api@5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
+  eslint-plugin-react-web-api@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
-      '@eslint-react/ast': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/core': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/eslint': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/shared': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      '@eslint-react/var': 5.26.5(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/ast': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/core': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/eslint': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/shared': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
+      '@eslint-react/var': 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
-      ts-pattern: 5.9.1
+      ts-pattern: 5.9.2
       typescript: '@typescript/typescript6@6.0.2'
     optionalDependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-storybook@10.6.1(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
+  eslint-plugin-storybook@10.6.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/types': 8.71.2
       '@typescript-eslint/utils': 8.71.2(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
@@ -22106,7 +22106,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0ec2d7a9c2781ed83fd8bdd200ee04633484d90a:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -25161,7 +25161,7 @@ snapshots:
 
   ts-dedent@2.3.0: {}
 
-  ts-pattern@5.9.1: {}
+  ts-pattern@5.9.2: {}
 
   tsconfig-paths@4.2.0:
     dependencies:
