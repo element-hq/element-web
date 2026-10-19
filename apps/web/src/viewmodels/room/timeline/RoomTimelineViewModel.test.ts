@@ -457,6 +457,34 @@ describe("RoomTimelineViewModel", () => {
         });
     });
 
+    describe("a jump asked for while a load is running", () => {
+        it("waits for the load, then works from the messages it loaded", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);
+            room.addAccountData([
+                new MatrixEvent({ type: EventType.FullyRead, room_id: ROOM_ID, content: { event_id: "$b" } }),
+            ]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const tw = (vm as any).timelineWindow;
+            let release!: () => void;
+            vi.spyOn(tw, "load").mockImplementationOnce(() => new Promise<void>((resolve) => (release = resolve)));
+            // A reload of the live end that has not finished yet.
+            const reload: Promise<void> = (vm as any).load({ kind: "live" });
+            const scrollNow = vi.fn();
+
+            vm.onJumpToReadMarker(scrollNow);
+
+            // Not worked out from the window the load is about to replace.
+            expect(scrollNow).not.toHaveBeenCalled();
+            release();
+            await reload;
+            // Run once the load is done, through the anchor rather than the view's immediate
+            // scroll, as the view has not drawn the rows that load published yet.
+            expect(vm.getSnapshot().pendingAnchor).toEqual(expect.objectContaining({ targetKey: "read-marker" }));
+            expect(scrollNow).not.toHaveBeenCalled();
+        });
+    });
+
     describe("read marker", () => {
         it("offers a jump when there are unread messages below the viewport", async () => {
             seedTimeline([makeMessage("$a"), makeMessage("$b"), makeMessage("$c")]);
