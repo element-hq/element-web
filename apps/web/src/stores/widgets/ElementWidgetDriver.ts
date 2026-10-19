@@ -529,12 +529,13 @@ export class ElementWidgetDriver extends WidgetDriver {
                     invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
                     // "*" means every device, which the server expands for plaintext sends
                     // but we have to for encrypted ones
-                    const deviceIds =
-                        deviceId === "*"
-                            ? [...((await crypto.getUserDeviceInfo([userId], true)).get(userId)?.keys() ?? [])]
-                            : [deviceId];
-                    for (const deviceId of deviceIds) {
-                        invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    let deviceIds = [deviceId];
+                    if (deviceId === "*") {
+                        const devices = await crypto.getUserDeviceInfo([userId], true);
+                        deviceIds = [...(devices.get(userId)?.keys() ?? [])];
+                    }
+                    for (const id of deviceIds) {
+                        invertedContentMap[stringifiedContent].push({ userId, deviceId: id });
                     }
                 }
             }
