@@ -3556,10 +3556,6 @@
             "in_reply_to": "<a>Antwort auf</a> <pill>",
             "in_reply_to_for_export": "Antwort auf <a>diese Nachricht</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Um dein Konto für die Verwendung von %(integrationsUrl)s zu authentifizieren, wirst du jetzt auf die Website eines Drittanbieters weitergeleitet. Möchtest du fortfahren?",
-            "dialog_title": "Eine Integration hinzufügen"
-        },
         "self_redaction": "Nachricht gelöscht",
         "send_state_encrypting": "Verschlüssele deine Nachricht …",
         "send_state_failed": "Fehler beim Senden",

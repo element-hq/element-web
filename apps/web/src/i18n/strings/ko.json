@@ -3422,10 +3422,6 @@
             "in_reply_to": "<a>관련 대화</a> <pill>",
             "in_reply_to_for_export": "<a>이 메시지</a>에 대한 답장"
         },
-        "scalar_starter_link": {
-            "dialog_description": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?",
-            "dialog_title": "통합 추가"
-        },
         "self_redaction": "메시지가 삭제됨",
         "send_state_encrypting": "메시지를 암호화 중…",
         "send_state_failed": "전송 실패",

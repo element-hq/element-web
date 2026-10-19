@@ -3604,10 +3604,6 @@
             "in_reply_to": "<a>En réponse à</a> <pill>",
             "in_reply_to_for_export": "En réponse à <a>ce message</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Vous êtes sur le point d’accéder à un site tiers afin de pouvoir vous identifier pour utiliser %(integrationsUrl)s. Voulez-vous continuer ?",
-            "dialog_title": "Ajouter une intégration"
-        },
         "self_redaction": "Message supprimé",
         "send_state_encrypting": "Chiffrement de votre message…",
         "send_state_failed": "Échec de l’envoi",

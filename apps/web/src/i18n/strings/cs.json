@@ -3511,10 +3511,6 @@
             "in_reply_to": "<a>V odpovědi na</a> <pill>",
             "in_reply_to_for_export": "V odpovědi na <a>tuto zprávu</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Budete přesměrováni na stránku třetí strany k ověření svého účtu pro používání s %(integrationsUrl)s. Chcete pokračovat?",
-            "dialog_title": "Přidat začlenění"
-        },
         "self_redaction": "Zpráva smazána",
         "send_state_encrypting": "Šifrování zprávy…",
         "send_state_failed": "Odeslání se nezdařilo",

@@ -3659,10 +3659,6 @@
             "in_reply_to": "<a>W odpowiedzi do</a> <pill>",
             "in_reply_to_for_export": "W odpowiedzi do <a>tej wiadomości</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Za chwilę zostaniesz przekierowany/a na zewnętrzną stronę w celu powiązania Twojego konta z %(integrationsUrl)s. Czy chcesz kontynuować?",
-            "dialog_title": "Dodaj integrację"
-        },
         "self_redaction": "Wiadomość usunięta",
         "send_state_encrypting": "Szyfrowanie Twojej wiadomości…",
         "send_state_failed": "Nie udało się wysłać",

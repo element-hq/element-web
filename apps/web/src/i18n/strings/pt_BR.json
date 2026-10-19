@@ -3397,10 +3397,6 @@
             "in_reply_to": "<a>Em resposta a</a> <pill>",
             "in_reply_to_for_export": "Em resposta a <a>esta mensagem</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Você será redirecionado para um site de terceiros para poder autenticar a sua conta, tendo em vista usar o serviço %(integrationsUrl)s. Deseja prosseguir?",
-            "dialog_title": "Adicionar uma integração"
-        },
         "self_redaction": "Mensagem apagada",
         "send_state_encrypting": "Criptografando sua mensagem...",
         "send_state_failed": "Falhou a enviar",

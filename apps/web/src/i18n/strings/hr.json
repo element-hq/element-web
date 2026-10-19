@@ -3661,10 +3661,6 @@
             "in_reply_to": "<a>Kao odgovor na</a> <pill>",
             "in_reply_to_for_export": "Kao odgovor na <a>ovu poruku</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Bit ćete preusmjereni na mrežno mjesto treće strane kako biste mogli potvrditi autentičnost svog računa za korištenje s %(integrationsUrl)s. Želite li nastaviti?",
-            "dialog_title": "Dodaj integraciju"
-        },
         "self_redaction": "Poruka je izbrisana",
         "send_state_encrypting": "Poruka se šifrira…",
         "send_state_failed": "Slanje nije uspjelo",

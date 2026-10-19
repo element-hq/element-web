@@ -3414,10 +3414,6 @@
             "in_reply_to": "<a>Membalas ke</a> <pill>",
             "in_reply_to_for_export": "Membalas ke <a>pesan ini</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?",
-            "dialog_title": "Tambahkan sebuah Integrasi"
-        },
         "self_redaction": "Pesan dihapus",
         "send_state_encrypting": "Mengenkripsi pesan Anda…",
         "send_state_failed": "Gagal untuk dikirim",

@@ -2920,10 +2920,6 @@
             "in_reply_to": "<a>Ho valin'ny</a><pilule>",
             "in_reply_to_for_export": "Ho valin'ny<a> ity hafatra ity</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Efa hoentina any amin'ny tranokalan'ny antoko fahatelo ianao mba hahafahanao manamarina ny kaontinao hampiasaina%(integrationsUrl)s .Te hanohy ve ianao?",
-            "dialog_title": "Ampio ny fampidirana"
-        },
         "self_redaction": "Voafafa ny hafatra",
         "send_state_encrypting": "Manidy ny hafatrao…",
         "send_state_failed": "Tsy nahomby ny fandefasana",
