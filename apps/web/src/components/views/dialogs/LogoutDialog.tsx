@@ -125,11 +125,11 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                 <EncryptionCard
                     Icon={CheckCircleIcon}
                     success={true}
-                    title={_t("auth|logout_dialog|key_active_title")}
+                    title={_t("settings|encryption|recovery|key_active_title")}
                     className="mx_EncryptionCard_noBorder"
                 >
                     <EncryptionCardEmphasisedContent>
-                        <Text>{_t("auth|logout_dialog|key_active_description")}</Text>
+                        <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
                     </EncryptionCardEmphasisedContent>
                     <EncryptionCardButtons>
                         <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
