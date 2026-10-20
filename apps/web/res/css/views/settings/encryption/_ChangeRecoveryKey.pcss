@@ -61,8 +61,9 @@
     }
 }
 
-/* Also used by CheckRecoveryKey */
-.mx_KeyForm {
+/* Used by ChangeRecoveryKeyBody and CheckRecoveryKey, which both render the form in an
+   EncryptionCard. */
+.mx_EncryptionCard .mx_KeyForm {
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-8x);
