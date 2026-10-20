@@ -881,6 +881,7 @@ describe("Notifier", () => {
                             device_id: "DEVICE",
                         },
                     },
+                    ["hashed_id_XXXAAAAA"],
                     "hashed_id_XXXAAAAA",
                 ),
             ];

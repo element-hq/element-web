@@ -81,7 +81,7 @@ function doesCallHaveOtherParticipants(notificationEvent: MatrixEvent, participa
  * ring-time device's (a SIP bridge publishes into the call as it dials).
  */
 function callStartTs(call: ElementCall, props: Props, fromAnswer: boolean): number | undefined {
-    if (!fromAnswer) return call.session.getOldestMembership()?.createdTs();
+    if (!fromAnswer) return call.session.memberships.at(0)?.createdTs();
     const progress = getInviteProgress(props.mxEvent, props.getRelationsForEvent);
     const connectedTs = getConnectedTs(progress);
     // The other side reports its progress: it is in the call when it says so

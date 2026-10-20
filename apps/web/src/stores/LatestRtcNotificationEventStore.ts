@@ -108,7 +108,7 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
         // event corresponds to the person who started the call.
         // The rtc notification event corresponding to this ongoing call will have
         // a reference relation to this membership event.
-        const callMembershipEventId = call.session.getOldestMembership()?.eventId;
+        const callMembershipEventId = call.session.memberships.at(0)?.eventId;
 
         if (callMembershipEventId) {
             const eventId = await getNotificationEventId(room, callMembershipEventId);

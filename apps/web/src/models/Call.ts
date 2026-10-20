@@ -746,7 +746,7 @@ export class ElementCall extends Call {
         }
 
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+        const oldestCallMember = client.matrixRTC.getRoomSession(room).memberships.at(0);
         const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
         if (isDM) {
             if (hasCallStarted) {
@@ -773,7 +773,6 @@ export class ElementCall extends Call {
     ): { intent?: UserIntent; config: ElementCallConfiguration } {
         const { intent, returnToLobby, skipLobby } = ElementCall.getRoomIntent(client, roomId, opts);
         const config: ElementCallConfiguration = {
-            perParticipantE2EE: !!ElementCall.getWidgetData(client, roomId, {}, {}).perParticipantE2EE,
             // on EW we do not want the gradient EC background.
             background: BackgroundStyle.Solid,
             allowIceFallback: !!SettingsStore.getValue("fallbackICEServerAllowed"),

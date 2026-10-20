@@ -129,9 +129,6 @@ export class MockedCall extends EventEmitter {
         const memberships = (this.memberships ?? [["@caller:m.org", this.createdTs]]).map(
             ([sender, ts]) => ({ sender, createdTs: () => ts }) as CallMembership,
         );
-        return {
-            memberships,
-            getOldestMembership: (): CallMembership | undefined => memberships[0],
-        } as MatrixRTCSession;
+        return { memberships } as MatrixRTCSession;
     }
 }
