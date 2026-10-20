@@ -154,7 +154,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
      * @param delta - The difference the user requests
      * Changes to minimum 1 and maximum the number of non-empty option fields
      */
-    private readonly onMaxSelectionsChange = (delta: number): void => {
+    private onMaxSelectionsChange = (delta: number): void => {
         const newValue = validateMaxSelections(this.state.options, this.state.maxSelections + delta);
         this.setState({ maxSelections: newValue });
     };
