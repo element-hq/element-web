@@ -72,8 +72,14 @@ export const Commands = [
         command: "spoiler",
         args: "<message>",
         description: _td("slash_command|spoiler"),
-        runFn: function (cli, roomId, threadId, message = "") {
-            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
+        runFn: function (cli, roomId, threadId, message) {
+            if (!message?.trim()) {
+                return reject(this.getUsage());
+            }
+            // forceHTML ensures we always get an HTML string even for plain text,
+            // so the spoiler span is never left with unescaped content.
+            const htmlMessage = htmlSerializeFromMdIfNeeded(message, { forceHTML: true });
+            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${htmlMessage}</span>`));
         },
         category: CommandCategories.messages,
     }),

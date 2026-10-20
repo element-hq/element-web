@@ -259,8 +259,8 @@ test.describe("Room list filters and sort", () => {
                 await bot.sendMessage(unReadDmId, "Hello!");
                 await bot.sendMessage(unReadRoomId, "Hello!");
 
-                // Turn the "Unreads" filter on
-                await primaryFilters.getByRole("option", { name: "Unreads" }).click();
+                // Turn the "Unread" filter on
+                await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                 const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
                 const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
@@ -278,7 +278,7 @@ test.describe("Room list filters and sort", () => {
 
                 // Even though favourite room is read (because we have it open), it is still shown because it is
                 // the current room.
-                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
+                await expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
             });
         });
 
@@ -345,7 +345,7 @@ test.describe("Room list filters and sort", () => {
         );
 
         [
-            { filter: "Unreads", action: "Show all chats" },
+            { filter: "Unread", action: "Show all chats" },
             { filter: "Mentions", action: "See all activity" },
             { filter: "Invites", action: "See all activity" },
         ].forEach(({ filter, action }) => {

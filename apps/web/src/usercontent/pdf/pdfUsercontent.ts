@@ -216,6 +216,9 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
 
     eventBus.on("pagechanging", ({ pageNumber }: { pageNumber: number }) => post({ type: "page", page: pageNumber }));
 
+    // Fires for every zoom step, wheel gesture and re-fit; pdf.js reports 1 as 100%.
+    eventBus.on("scalechanging", ({ scale }: { scale: number }) => post({ type: "scale", scale: scale * 100 }));
+
     eventBus.on("updateviewarea", ({ location }: { location?: PdfLocation | null }) => {
         if (!isRestored || !location) return;
 

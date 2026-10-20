@@ -305,7 +305,7 @@ describe("TimelinePanel", () => {
                     // Ensure this setting is supported, otherwise it will use the default value.
                     client.isVersionSupported.mockImplementation(async (v) => v === "v1.4");
                     MatrixClientBackedController.matrixClient = client;
-                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
+                    await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 });
 
                 afterEach(() => {
@@ -487,7 +487,7 @@ describe("TimelinePanel", () => {
             // ScrollPanel has no chance of working in jsdom, so we've no choice
             // but to do some shady stuff to trigger the fill callback by hand
             const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
-            scrollPanel.props.onFillRequest!(true);
+            await scrollPanel.props.onFillRequest!(true);
 
             await waitFor(() => expectEvents(container, [events[0], events[1]]));
         });

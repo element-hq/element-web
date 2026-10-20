@@ -164,24 +164,24 @@ exports[`<ExportDialog /> > renders export dialog 1`] = `
       </span>
     </div>
     <form
-      class="_root_1o4d9_17"
+      class="_root"
     >
       <div
-        class="_inline-field_1o4d9_33 mx_ExportDialog_attachments-checkbox"
+        class="_inline-field mx_ExportDialog_attachments-checkbox"
       >
         <div
-          class="_inline-field-control_1o4d9_45"
+          class="_inline-field-control"
         >
           <div
-            class="_container_153f2_10"
+            class="_container"
           >
             <input
-              class="_input_153f2_18"
+              class="_input"
               id="include-attachments"
               type="checkbox"
             />
             <div
-              class="_ui_153f2_19"
+              class="_ui"
             >
               <svg
                 aria-hidden="true"
@@ -199,10 +199,10 @@ exports[`<ExportDialog /> > renders export dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_1o4d9_39"
+          class="_inline-field-body"
         >
           <label
-            class="_label_1o4d9_60"
+            class="_label"
             for="include-attachments"
           >
             Include Attachments

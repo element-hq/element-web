@@ -6,15 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type PropsWithChildren } from "react";
-import classNames from "classnames";
 import { IconButton } from "@vector-im/compound-web";
 import { MinusIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
+import { DocumentViewerView, type DocumentViewerStatus } from "../DocumentViewerView";
 import styles from "./PdfViewerView.module.css";
 
-/** The document lifecycle state presented by the PDF viewer shell. */
-export type PdfViewerStatus = "loading" | "ready" | "error";
+/** The document lifecycle state presented by the PDF viewer. */
+export type PdfViewerStatus = DocumentViewerStatus;
 
 /** Controlled state and host integration points for {@link PdfViewerView}. */
 export interface PdfViewerViewProps {
@@ -40,11 +40,21 @@ export interface PdfViewerViewProps {
     onZoomIn: () => void;
     /** Called when the user presses the zoom-out button. */
     onZoomOut: () => void;
+    /** The current zoom level as a percentage. Omitted until the host reports one. */
+    zoomPercent?: number;
     /** Optional CSS class for the outer element. */
     className?: string;
 }
 
-/** The shell around a PDF viewer: toolbar and status overlays. `children` is the document surface. */
+/** A whole-number percentage in the user's locale, e.g. "150%". */
+function formatZoomPercent(zoomPercent: number, language: string): string {
+    return new Intl.NumberFormat(language, { style: "percent", maximumFractionDigits: 0 }).format(zoomPercent / 100);
+}
+
+/**
+ * A PDF viewer on the shared {@link DocumentViewerView} shell: the page and zoom controls, with
+ * `children` as the document surface.
+ */
 export function PdfViewerView({
     status,
     currentPage,
@@ -58,87 +68,83 @@ export function PdfViewerView({
     onPageSubmit,
     onZoomIn,
     onZoomOut,
+    zoomPercent,
     className,
 }: Readonly<PropsWithChildren<PdfViewerViewProps>>): JSX.Element {
-    const { translate: _t } = useI18n();
+    const { translate: _t, language } = useI18n();
+
+    const toolbar =
+        pageCount > 0 ? (
+            <>
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        onPageSubmit();
+                    }}
+                >
+                    {/* A fieldset carries the implicit `group` role. */}
+                    <fieldset
+                        className={styles.pageForm}
+                        aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
+                    >
+                        <input
+                            aria-label={_t("pdf_viewer|page_number")}
+                            className={styles.pageInput}
+                            data-testid="pdf-page-input"
+                            inputMode="numeric"
+                            onBlur={onPageInputBlur}
+                            onChange={(event) => onPageInputChange(event.target.value)}
+                            onFocus={onPageInputFocus}
+                            onKeyDown={(event) => {
+                                if (event.key !== "Escape") return;
+
+                                onPageInputCancel();
+                                // Blur ends the edit the same way clicking away does.
+                                event.currentTarget.blur();
+                            }}
+                            value={pageInput}
+                        />
+                        <span aria-hidden="true" className={styles.pageSeparator}>
+                            |
+                        </span>
+                        <span className={styles.pageTotal} data-testid="pdf-page-total">
+                            {pageCount}
+                        </span>
+                    </fieldset>
+                </form>
+                <fieldset className={styles.zoomControls} aria-label={_t("pdf_viewer|zoom")}>
+                    <IconButton
+                        size="28px"
+                        aria-label={_t("pdf_viewer|zoom_out")}
+                        tooltip={_t("pdf_viewer|zoom_out")}
+                        data-testid="pdf-zoom-out"
+                        onClick={onZoomOut}
+                    >
+                        <MinusIcon />
+                    </IconButton>
+                    {zoomPercent !== undefined ? (
+                        <span className={styles.zoomLevel} data-testid="pdf-zoom-level">
+                            {formatZoomPercent(zoomPercent, language)}
+                        </span>
+                    ) : null}
+                    <IconButton
+                        size="28px"
+                        aria-label={_t("pdf_viewer|zoom_in")}
+                        tooltip={_t("pdf_viewer|zoom_in")}
+                        data-testid="pdf-zoom-in"
+                        onClick={onZoomIn}
+                    >
+                        <PlusIcon />
+                    </IconButton>
+                </fieldset>
+            </>
+        ) : undefined;
 
     return (
-        <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
-            {pageCount > 0 ? (
-                <div className={styles.toolbar}>
-                    <form
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            onPageSubmit();
-                        }}
-                    >
-                        {/* A fieldset carries the implicit `group` role. */}
-                        <fieldset
-                            className={styles.pageForm}
-                            aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
-                        >
-                            <input
-                                aria-label={_t("pdf_viewer|page_number")}
-                                className={styles.pageInput}
-                                data-testid="pdf-page-input"
-                                inputMode="numeric"
-                                onBlur={onPageInputBlur}
-                                onChange={(event) => onPageInputChange(event.target.value)}
-                                onFocus={onPageInputFocus}
-                                onKeyDown={(event) => {
-                                    if (event.key !== "Escape") return;
-
-                                    onPageInputCancel();
-                                    // Blur ends the edit the same way clicking away does.
-                                    event.currentTarget.blur();
-                                }}
-                                value={pageInput}
-                            />
-                            <span aria-hidden="true" className={styles.pageSeparator}>
-                                |
-                            </span>
-                            <span className={styles.pageTotal} data-testid="pdf-page-total">
-                                {pageCount}
-                            </span>
-                        </fieldset>
-                    </form>
-                    <fieldset className={styles.zoomControls} aria-label={_t("pdf_viewer|zoom")}>
-                        <IconButton
-                            size="28px"
-                            aria-label={_t("pdf_viewer|zoom_out")}
-                            tooltip={_t("pdf_viewer|zoom_out")}
-                            data-testid="pdf-zoom-out"
-                            onClick={onZoomOut}
-                        >
-                            <MinusIcon />
-                        </IconButton>
-                        <IconButton
-                            size="28px"
-                            aria-label={_t("pdf_viewer|zoom_in")}
-                            tooltip={_t("pdf_viewer|zoom_in")}
-                            data-testid="pdf-zoom-in"
-                            onClick={onZoomIn}
-                        >
-                            <PlusIcon />
-                        </IconButton>
-                    </fieldset>
-                </div>
-            ) : null}
-            <div className={styles.body}>
-                <div className={styles.surface} data-testid="pdf-surface">
-                    {children}
-                </div>
-                {status === "loading" ? (
-                    <div className={styles.message} role="status" aria-live="polite">
-                        {_t("pdf_viewer|loading")}
-                    </div>
-                ) : null}
-                {status === "error" ? (
-                    <div className={classNames(styles.message, styles.error)} role="alert">
-                        {_t("pdf_viewer|error_load")}
-                    </div>
-                ) : null}
+        <DocumentViewerView status={status} toolbar={toolbar} className={className}>
+            <div className={styles.surface} data-testid="pdf-surface">
+                {children}
             </div>
-        </div>
+        </DocumentViewerView>
     );
 }

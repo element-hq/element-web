@@ -231,6 +231,81 @@ describe("NotificationSettings", () => {
         ]);
     });
 
+    describe("legacy mention rules", () => {
+        // Removed from the spec in Matrix v1.17 (MSC4210); servers may or may not still serve them
+        const legacyMentionRuleIds: string[] = [
+            RuleId.ContainsUserName,
+            RuleId.ContainsDisplayName,
+            RuleId.AtRoomNotification,
+        ];
+        const withoutLegacyMentionRules = (pushRules: IPushRules): IPushRules => ({
+            ...pushRules,
+            global: {
+                ...pushRules.global,
+                content: pushRules.global.content?.filter((rule) => !legacyMentionRuleIds.includes(rule.rule_id)),
+                override: pushRules.global.override?.filter((rule) => !legacyMentionRuleIds.includes(rule.rule_id)),
+            },
+        });
+
+        it("parses the mention settings from the intentional rules when the legacy rules are absent", async () => {
+            const pushRules = withoutLegacyMentionRules(
+                (await import("./__mocks__/pushrules_default_new.json")) as IPushRules,
+            );
+            const model = toNotificationSettings(pushRules, true);
+            expect(model.mentions).toEqual({ user: true, room: true, keywords: true });
+        });
+
+        it("does not write the legacy rules when the server does not serve them", async () => {
+            const pushRules = withoutLegacyMentionRules(
+                (await import("./__mocks__/pushrules_default_new.json")) as IPushRules,
+            );
+            const model = toNotificationSettings(pushRules, true);
+
+            const unchanged = reconcileNotificationSettings(pushRules, model, true);
+            expect(unchanged.updated.map((rule) => rule.rule_id)).not.toEqual(
+                expect.arrayContaining(legacyMentionRuleIds),
+            );
+
+            const changes = reconcileNotificationSettings(
+                pushRules,
+                { ...model, mentions: { ...model.mentions, user: false, room: false } },
+                true,
+            );
+            expect(changes.added).toHaveLength(0);
+            expect(changes.deleted).toHaveLength(0);
+            expect(changes.updated).toEqual([
+                expect.objectContaining({
+                    kind: PushRuleKind.Override,
+                    rule_id: RuleId.IsUserMention,
+                    actions: StandardActions.ACTION_DONT_NOTIFY,
+                }),
+                expect.objectContaining({
+                    kind: PushRuleKind.Override,
+                    rule_id: RuleId.IsRoomMention,
+                    actions: StandardActions.ACTION_DONT_NOTIFY,
+                }),
+            ]);
+        });
+
+        it("keeps writing the legacy rules while the server serves them", async () => {
+            const pushRules = (await import("./__mocks__/pushrules_default_new.json")) as IPushRules;
+            const model = toNotificationSettings(pushRules, true);
+
+            const changes = reconcileNotificationSettings(
+                pushRules,
+                { ...model, mentions: { ...model.mentions, user: false, room: false } },
+                true,
+            );
+            expect(changes.updated.map((rule) => rule.rule_id)).toEqual([
+                RuleId.IsUserMention,
+                RuleId.ContainsDisplayName,
+                RuleId.ContainsUserName,
+                RuleId.IsRoomMention,
+                RuleId.AtRoomNotification,
+            ]);
+        });
+    });
+
     it("keeps the ids of two keywords that differ only by a leading dot apart", async () => {
         const pushRules = (await import("./__mocks__/pushrules_default.json")) as IPushRules;
         const model = { ...DefaultNotificationSettings, keywords: ["banana", ".banana"] };

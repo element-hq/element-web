@@ -36,7 +36,7 @@ exports[`messageForConnectionError > should match snapshot for ConnectionError 1
 
 exports[`messageForConnectionError > should match snapshot for MatrixError M_NOT_FOUND 1`] = `
 <DocumentFragment>
-  There was a problem communicating with the homeserver, please try again later.(M_NOT_FOUND)
+  Something went wrong. Please try again later.(M_NOT_FOUND)
 </DocumentFragment>
 `;
 
@@ -60,7 +60,7 @@ exports[`messageForConnectionError > should match snapshot for mixed content err
 
 exports[`messageForConnectionError > should match snapshot for unknown error 1`] = `
 <DocumentFragment>
-  There was a problem communicating with the homeserver, please try again later.
+  Something went wrong. Please try again later.
 </DocumentFragment>
 `;
 
@@ -74,12 +74,12 @@ exports[`messageForLoginError > should match snapshot for M_RESOURCE_LIMIT_EXCEE
 <DocumentFragment>
   <div>
     <div>
-      This homeserver has exceeded one of its resource limits.
+      This service has exceeded one of its resource limits.
     </div>
     <div
       class="mx_Login_smallError"
     >
-      Please contact your service administrator to continue using this service.
+      Please contact your account provider to continue using this service.
     </div>
   </div>
 </DocumentFragment>
@@ -93,7 +93,7 @@ exports[`messageForLoginError > should match snapshot for M_USER_DEACTIVATED 1`]
 
 exports[`messageForLoginError > should match snapshot for unknown error 1`] = `
 <DocumentFragment>
-  There was a problem communicating with the homeserver, please try again later. (HTTP 400)
+  Something went wrong. Please try again later. (HTTP 400)
 </DocumentFragment>
 `;
 
@@ -106,7 +106,7 @@ exports[`messageForResourceLimitError > should match snapshot for admin contact 
       rel="noreferrer noopener"
       target="_blank"
     >
-      contact your service administrator
+      contact your account provider
     </a>
      to continue using this service.
   </span>
@@ -115,7 +115,7 @@ exports[`messageForResourceLimitError > should match snapshot for admin contact 
 
 exports[`messageForResourceLimitError > should match snapshot for monthly_active_user 1`] = `
 <DocumentFragment>
-  This homeserver has hit its Monthly Active User limit.
+  This service has hit its Monthly Active User limit.
 </DocumentFragment>
 `;
 
@@ -123,10 +123,10 @@ exports[`messageForSyncError > should match snapshot for M_RESOURCE_LIMIT_EXCEED
 <DocumentFragment>
   <div>
     <div>
-      This homeserver has exceeded one of its resource limits.
+      This service has exceeded one of its resource limits.
     </div>
     <div>
-      Please contact your service administrator to continue using this service.
+      Please contact your account provider to continue using this service.
     </div>
   </div>
 </DocumentFragment>
@@ -135,7 +135,7 @@ exports[`messageForSyncError > should match snapshot for M_RESOURCE_LIMIT_EXCEED
 exports[`messageForSyncError > should match snapshot for other errors 1`] = `
 <DocumentFragment>
   <div>
-    Unable to connect to Homeserver. Retrying…
+    Unable to connect. Retrying…
   </div>
 </DocumentFragment>
 `;

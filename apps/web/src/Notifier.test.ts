@@ -451,8 +451,8 @@ describe("Notifier", () => {
             { event: { is_silenced: false }, count: 1 },
             { event: undefined, count: 1 },
         ];
-        it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
-            mockClient.setAccountData(accountDataEventKey, event!);
+        it.each(testCases)("does not dispatch when notifications are silenced", async ({ event, count }) => {
+            await mockClient.setAccountData(accountDataEventKey, event!);
             notifier.displayPopupNotification(testEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(count);
         });
@@ -603,13 +603,13 @@ describe("Notifier", () => {
             { event: { is_silenced: false }, count: 1 },
             { event: undefined, count: 1 },
         ];
-        it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
+        it.each(testCases)("does not dispatch when notifications are silenced", async ({ event, count }) => {
             // It's not ideal to only look at whether this function has been called
             // but avoids starting to look into DOM stuff
             notifier.getSoundForRoom = vi.fn();
 
-            mockClient.setAccountData(accountDataEventKey, event!);
-            notifier.playAudioNotification(testEvent, testRoom);
+            await mockClient.setAccountData(accountDataEventKey, event!);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(notifier.getSoundForRoom).toHaveBeenCalledTimes(count);
         });
     });
@@ -623,14 +623,14 @@ describe("Notifier", () => {
     describe("playAudioNotification throttle (macOS wake-from-sleep stacking)", () => {
         let playSpy: MockInstance;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             vi.useFakeTimers();
             vi.setSystemTime(0);
 
             // Ensure notifications are not silenced so we exercise the throttle,
             // not the silencing gate.
             accountDataStore = {};
-            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            await mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
 
             // Default sound path (no custom room sound).
             vi.spyOn(notifier, "getSoundForRoom").mockReturnValue(null);
@@ -701,7 +701,7 @@ describe("Notifier", () => {
         });
 
         it("does not play, and does not arm the throttle, when notifications are silenced", async () => {
-            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+            await mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
 
             await notifier.playAudioNotification(testEvent, testRoom);
             await notifier.playAudioNotification(testEvent, testRoom);
@@ -711,7 +711,7 @@ describe("Notifier", () => {
 
             // ...and the silenced calls did NOT arm the throttle: once un-silenced, the next event plays
             // immediately (a regression arming the throttle on silenced events would suppress this).
-            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            await mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
             await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
         });
@@ -860,29 +860,22 @@ describe("Notifier", () => {
             });
         });
 
-        it("should not show toast when group call is already connected", () => {
+        it("should not show toast when group call is already connected", async () => {
             const members = [
-                new CallMembership(
+                await CallMembership.parseFromEvent(
                     mkEvent({
                         event: true,
                         room: testRoom.roomId,
                         user: userId,
                         type: EventType.GroupCallMemberPrefix,
-                        content: {},
-                    }),
-                    {
-                        // TODO: Once https://github.com/matrix-org/matrix-js-sdk/pull/5134 is merged this can be MembershipKind.Session
-                        kind: "session" as any,
-                        data: {
+                        content: {
                             call_id: "123",
                             application: "m.call",
                             focus_active: { type: "livekit", focus_selection: "oldest_membership" },
                             foci_preferred: [],
                             device_id: "DEVICE",
                         },
-                    },
-                    ["hashed_id_XXXAAAAA"],
-                    "hashed_id_XXXAAAAA",
+                    }),
                 ),
             ];
 

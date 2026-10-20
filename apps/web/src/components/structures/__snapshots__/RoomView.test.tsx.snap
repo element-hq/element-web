@@ -6,11 +6,11 @@ exports[`RoomView > for a local room > in state CREATING should match the snapsh
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+        class="_avatar mx_BaseAvatar _avatar-imageless"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -27,12 +27,12 @@ exports[`RoomView > for a local room > in state CREATING should match the snapsh
         type="button"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
             aria-level="1"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+            class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
             dir="auto"
             role="heading"
           >
@@ -56,7 +56,7 @@ exports[`RoomView > for a local room > in state CREATING should match the snapsh
         >
           <svg
             aria-label="Loading…"
-            class="_icon_1855a_18"
+            class="_icon"
             data-testid="spinner"
             fill="currentColor"
             height="1em"
@@ -90,11 +90,11 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+        class="_avatar mx_BaseAvatar _avatar-imageless"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -111,12 +111,12 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
         type="button"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
             aria-level="1"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+            class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
             dir="auto"
             role="heading"
           >
@@ -137,7 +137,7 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
         class="mx_RoomView_timeline"
       >
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -152,7 +152,7 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -167,12 +167,12 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                     />
                   </svg>
                   <div
-                    class="_title_1mzk4_34"
+                    class="_title"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_1mzk4_35"
+                    class="_subtitle"
                   >
                     <span>
                        
@@ -185,7 +185,7 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                  class="_avatar mx_BaseAvatar _avatar-imageless"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -213,12 +213,12 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
       </div>
       <div
         aria-labelledby="react-use-id-1"
-        class="_banner_n7ud0_8"
+        class="_banner"
         data-type="critical"
         role="status"
       >
         <div
-          class="_icon_n7ud0_50"
+          class="_icon"
         >
           <svg
             fill="currentColor"
@@ -234,20 +234,20 @@ exports[`RoomView > for a local room > in state ERROR > should match the snapsho
           </svg>
         </div>
         <div
-          class="_content_n7ud0_38"
+          class="_content"
         >
           <p
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _title_mcq5y_24"
+            class="_typography _font-body-md-medium _title"
             id="react-use-id-1"
           >
             Could not start a chat with this user
           </p>
         </div>
         <div
-          class="_actions_n7ud0_61"
+          class="_actions"
         >
           <button
-            class="_button_1nw83_8 _primaryAction_mcq5y_20 _has-icon_1nw83_60"
+            class="_button _primaryAction _has-icon"
             data-kind="primary"
             data-size="md"
             role="button"
@@ -286,11 +286,11 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+        class="_avatar mx_BaseAvatar _avatar-imageless"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -307,12 +307,12 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
         type="button"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
             aria-level="1"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+            class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
             dir="auto"
             role="heading"
           >
@@ -333,7 +333,7 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
         class="mx_RoomView_timeline"
       >
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -348,7 +348,7 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent"
+                  class="_container mx_EventTileBubble mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -363,12 +363,12 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                     />
                   </svg>
                   <div
-                    class="_title_1mzk4_34"
+                    class="_title"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_1mzk4_35"
+                    class="_subtitle"
                   >
                     <span>
                        
@@ -381,7 +381,7 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                  class="_avatar mx_BaseAvatar _avatar-imageless"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -611,14 +611,14 @@ exports[`RoomView > for a local room > in state NEW > should match the snapshot 
               <button
                 aria-label="Attachment"
                 aria-labelledby="react-use-id-2"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 role="button"
                 style="--cpd-icon-button-size: 26px;"
                 tabindex="0"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -673,11 +673,11 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
-        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+        class="_avatar mx_BaseAvatar _avatar-imageless"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -694,12 +694,12 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
         type="button"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
             aria-level="1"
-            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+            class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
             dir="auto"
             role="heading"
           >
@@ -738,7 +738,7 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
         class="mx_RoomView_timeline"
       >
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
           tabindex="-1"
         >
           <div
@@ -750,7 +750,7 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
               style="height: 400px;"
             >
               <div
-                class="_container_1mzk4_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
+                class="_container mx_EventTileBubble mx_cryptoEvent _content"
               >
                 <svg
                   data-state="supported"
@@ -765,12 +765,12 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
                   />
                 </svg>
                 <div
-                  class="_title_1mzk4_34"
+                  class="_title"
                 >
                   Encryption enabled
                 </div>
                 <div
-                  class="_subtitle_1mzk4_35"
+                  class="_subtitle"
                 >
                   Messages in this chat will be end-to-end encrypted.
                 </div>
@@ -781,7 +781,7 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                  class="_avatar mx_BaseAvatar _avatar-imageless"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -992,14 +992,14 @@ exports[`RoomView > for a local room > in state NEW > that is encrypted > should
               <button
                 aria-label="Attachment"
                 aria-labelledby="react-use-id-2"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="primary"
                 role="button"
                 style="--cpd-icon-button-size: 26px;"
                 tabindex="0"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -1065,7 +1065,7 @@ exports[`RoomView > invites > renders an invite room 1`] = `
         </h3>
         <p>
           <span
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1104,7 +1104,7 @@ exports[`RoomView > invites > renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_1nw83_8 _destructive_1nw83_110"
+          class="_button _destructive"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -1141,13 +1141,13 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1164,12 +1164,12 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -1184,14 +1184,14 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1211,14 +1211,14 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1238,14 +1238,14 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-3"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1265,14 +1265,14 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-4"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1290,7 +1290,7 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -1300,14 +1300,14 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
           </div>
         </header>
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1318,7 +1318,7 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -1377,7 +1377,7 @@ exports[`RoomView > should hide the header when hideHeader=true 1`] = `
         data-layout="group"
       >
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1388,7 +1388,7 @@ exports[`RoomView > should hide the header when hideHeader=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -1619,14 +1619,14 @@ exports[`RoomView > should hide the header when hideHeader=true 1`] = `
                 <button
                   aria-label="Attachment"
                   aria-labelledby="react-use-id-2"
-                  class="_icon-button_1215g_8"
+                  class="_icon-button"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
-                    class="_indicator-icon_147l5_17"
+                    class="_indicator-icon"
                     style="--cpd-icon-button-size: 100%;"
                   >
                     <svg
@@ -1696,13 +1696,13 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1719,12 +1719,12 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -1739,14 +1739,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1766,14 +1766,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1793,14 +1793,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-3"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1820,14 +1820,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-4"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1845,7 +1845,7 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -1855,14 +1855,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
           </div>
         </header>
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -1873,7 +1873,7 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           data-testid="timeline"
         >
           <div
-            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -2104,14 +2104,14 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
                 <button
                   aria-label="Attachment"
                   aria-labelledby="react-use-id-7"
-                  class="_icon-button_1215g_8"
+                  class="_icon-button"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
-                    class="_indicator-icon_147l5_17"
+                    class="_indicator-icon"
                     style="--cpd-icon-button-size: 100%;"
                   >
                     <svg
@@ -2181,13 +2181,13 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -2204,12 +2204,12 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -2224,14 +2224,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2251,14 +2251,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2278,14 +2278,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-3"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2305,14 +2305,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-4"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2330,7 +2330,7 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -2340,14 +2340,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
           </div>
         </header>
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -2358,7 +2358,7 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           data-testid="timeline"
         >
           <div
-            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -2589,14 +2589,14 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
                 <button
                   aria-label="Attachment"
                   aria-labelledby="react-use-id-7"
-                  class="_icon-button_1215g_8"
+                  class="_icon-button"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
-                    class="_indicator-icon_147l5_17"
+                    class="_indicator-icon"
                     style="--cpd-icon-button-size: 100%;"
                   >
                     <svg
@@ -2666,13 +2666,13 @@ exports[`RoomView > should not display the timeline when the room encryption is 
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2689,12 +2689,12 @@ exports[`RoomView > should not display the timeline when the room encryption is 
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -2709,14 +2709,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2736,14 +2736,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2763,14 +2763,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-3"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2790,14 +2790,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-4"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2815,7 +2815,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -2825,14 +2825,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
           </div>
         </header>
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -2887,13 +2887,13 @@ exports[`RoomView > should not display the timeline when the room encryption is 
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2910,12 +2910,12 @@ exports[`RoomView > should not display the timeline when the room encryption is 
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -2948,14 +2948,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2975,14 +2975,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3002,14 +3002,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-4"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3029,14 +3029,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-5"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3054,7 +3054,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -3064,14 +3064,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
           </div>
         </header>
         <div
-          class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_AuxPanel"
+          class="_scrollbar mx_AutoHideScrollbar mx_AuxPanel"
           role="region"
           tabindex="-1"
         >
@@ -3082,7 +3082,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           data-testid="timeline"
         >
           <div
-            class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
             tabindex="-1"
           >
             <div
@@ -3323,14 +3323,14 @@ exports[`RoomView > should not display the timeline when the room encryption is 
                 <button
                   aria-label="Attachment"
                   aria-labelledby="react-use-id-8"
-                  class="_icon-button_1215g_8"
+                  class="_icon-button"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
-                    class="_indicator-icon_147l5_17"
+                    class="_indicator-icon"
                     style="--cpd-icon-button-size: 100%;"
                   >
                     <svg
@@ -3430,13 +3430,13 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+            class="_avatar mx_BaseAvatar _avatar-imageless"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -3453,12 +3453,12 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
             type="button"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
                 aria-level="1"
-                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                class="_typography _font-body-lg-semibold mx_RoomHeader_heading"
                 dir="auto"
                 role="heading"
               >
@@ -3473,14 +3473,14 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
           <button
             aria-label="Chat"
             aria-labelledby="react-use-id-1"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3500,14 +3500,14 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="react-use-id-2"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3527,14 +3527,14 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="react-use-id-3"
-            class="_icon-button_1215g_8"
+            class="_icon-button"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
             tabindex="0"
           >
             <div
-              class="_indicator-icon_147l5_17"
+              class="_indicator-icon"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -3552,7 +3552,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
             </div>
           </button>
           <div
-            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+            class="_typography _font-body-sm-medium"
           >
             <div
               aria-label="0 members"
@@ -3562,7 +3562,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_va14e_109"
+                class="_stacked-avatars"
               />
               0
             </div>
@@ -3593,7 +3593,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
                    
                   <svg
                     aria-label="Loading…"
-                    class="_icon_1855a_18"
+                    class="_icon"
                     data-testid="spinner"
                     fill="currentColor"
                     height="1em"
@@ -3635,7 +3635,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
               >
                 <p
                   aria-level="1"
-                  class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+                  class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
                   role="heading"
                 >
                   Chat
@@ -3643,7 +3643,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
               </div>
               <button
                 aria-labelledby="react-use-id-5"
-                class="_icon-button_1215g_8"
+                class="_icon-button"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
                 role="button"
@@ -3651,7 +3651,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
                 tabindex="0"
               >
                 <div
-                  class="_indicator-icon_147l5_17"
+                  class="_indicator-icon"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -3672,7 +3672,7 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
               class="mx_TimelineCard_timeline"
             >
               <div
-                class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+                class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
                 tabindex="-1"
               >
                 <div
@@ -3890,14 +3890,14 @@ exports[`RoomView > video rooms > should render joined video room view 1`] = `
                     <button
                       aria-label="Attachment"
                       aria-labelledby="react-use-id-7"
-                      class="_icon-button_1215g_8"
+                      class="_icon-button"
                       data-kind="primary"
                       role="button"
                       style="--cpd-icon-button-size: 26px;"
                       tabindex="0"
                     >
                       <div
-                        class="_indicator-icon_147l5_17"
+                        class="_indicator-icon"
                         style="--cpd-icon-button-size: 100%;"
                       >
                         <svg

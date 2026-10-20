@@ -9,7 +9,7 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from "react
 import { logger } from "matrix-js-sdk/src/logger";
 import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-components";
 
-import { type PdfMedia } from "../../../@types/pdf-viewer";
+import { type DocumentMedia } from "../../../@types/document-viewer";
 import { flushPdfViewerState, getPdfViewerState, setPdfViewerState } from "../../../utils/pdfViewerState";
 import {
     type PdfHostMessage,
@@ -51,7 +51,7 @@ function hasPdfHeader(data: Uint8Array): boolean {
  * owns the toolbar, and remembers the reading position per MXC URI. Messages from the iframe are
  * validated before use.
  */
-export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
+export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     /** The app's end of the channel the iframe hands over with `ready`. */
     const portRef = useRef<MessagePort | null>(null);
@@ -59,6 +59,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [pageInput, setPageInput] = useState("1");
+    const [zoomPercent, setZoomPercent] = useState<number>();
     // Don't overwrite the page box while it is being typed in.
     const isEditingPageRef = useRef(false);
     // Escape blurs the box, and blur commits, so the cancellation must survive into the blur.
@@ -77,6 +78,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
         setStatus("loading");
         setCurrentPage(1);
         setPageCount(0);
+        setZoomPercent(undefined);
 
         let disposed = false;
         let isLoaded = false;
@@ -138,6 +140,9 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
                     break;
                 case "page":
                     setCurrentPage(message.page);
+                    break;
+                case "scale":
+                    setZoomPercent(message.scale);
                     break;
                 case "position":
                     // Positions before `loaded` predate the restore.
@@ -241,6 +246,7 @@ export function PdfViewer({ media }: { media: PdfMedia }): JSX.Element {
             onPageSubmit={commitPageInput}
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}
+            zoomPercent={zoomPercent}
         >
             {/* Keyed on the file so a new document gets a fresh iframe. `src` is set by the effect above. */}
             <iframe

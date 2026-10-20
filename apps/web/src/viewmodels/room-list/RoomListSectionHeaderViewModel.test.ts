@@ -67,7 +67,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(snapshot.isExpanded).toBe(true);
     });
 
-    it("should toggle expanded state on click", () => {
+    it("should toggle expanded state on click", async () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
@@ -76,18 +76,18 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
         expect(vm.isExpanded).toBe(true);
 
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
         expect(vm.getSnapshot().isExpanded).toBe(false);
         expect(onToggleExpanded).toHaveBeenCalledWith(false);
 
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(true);
         expect(vm.getSnapshot().isExpanded).toBe(true);
         expect(onToggleExpanded).toHaveBeenCalledWith(true);
     });
 
-    it("should track expanded state per space", () => {
+    it("should track expanded state per space", async () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
@@ -96,7 +96,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
 
         // Default space: collapse
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
 
         // Switch to a different space: should default to expanded
@@ -104,9 +104,9 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(true);
 
         // Collapse in the new space
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(false);
-        vm.onClick();
+        await vm.onClick();
         expect(vm.isExpanded).toBe(true);
 
         // Switch to the other space: should still be collapsed
@@ -139,7 +139,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.getSnapshot().isExpanded).toBe(false);
     });
 
-    it("should persist the expanded state at the device level on click", () => {
+    it("should persist the expanded state at the device level on click", async () => {
         const setValue = vi.spyOn(SettingsStore, "setValue");
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
@@ -148,7 +148,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             onToggleExpanded,
         });
 
-        vm.onClick();
+        await vm.onClick();
 
         expect(setValue).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
             "!space:server": { "m.favourite": false },
@@ -405,14 +405,14 @@ describe("RoomListSectionHeaderViewModel", () => {
             expect(vm.getSnapshot().isUnread).toBe(true);
         });
 
-        it("should collapse the Invites section once its invitations are gone", () => {
+        it("should collapse the Invites section once its invitations are gone", async () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: DefaultTagID.Invite,
                 title: "Invites",
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
-            vm.onClick();
+            await vm.onClick();
             expect(vm.getSnapshot().isExpanded).toBe(true);
 
             // The last invitation was accepted or rejected

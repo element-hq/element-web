@@ -35,7 +35,7 @@ exports[`AppTile > destroys non-persisted right panel widget on room change 1`] 
         </div>
         <button
           aria-labelledby="react-use-id-2"
-          class="_icon-button_1215g_8"
+          class="_icon-button"
           data-kind="secondary"
           data-testid="base-card-close-button"
           role="button"
@@ -43,7 +43,7 @@ exports[`AppTile > destroys non-persisted right panel widget on room change 1`] 
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -106,7 +106,7 @@ exports[`AppTile > for a pinned widget > should render 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -115,7 +115,7 @@ exports[`AppTile > for a pinned widget > should render 1`] = `
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -222,7 +222,7 @@ exports[`AppTile > for a pinned widget > should render permission request 1`] = 
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -231,7 +231,7 @@ exports[`AppTile > for a pinned widget > should render permission request 1`] = 
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -329,7 +329,7 @@ exports[`AppTile > for a pinned widget > should render permission request 1`] = 
           </div>
           <div>
             <span
-              class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+              class="_avatar mx_BaseAvatar _avatar-imageless"
               data-color="1"
               data-testid="avatar-img"
               data-type="round"
@@ -417,7 +417,7 @@ exports[`AppTile > preserves non-persisted widget on container move 1`] = `
               <span>
                 <span
                   aria-label="Avatar"
-                  class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
+                  class="_avatar mx_BaseAvatar mx_WidgetAvatar"
                   data-color="1"
                   data-testid="avatar-img"
                   data-type="round"
@@ -426,7 +426,7 @@ exports[`AppTile > preserves non-persisted widget on container move 1`] = `
                 >
                   <img
                     alt=""
-                    class="_image_va14e_43"
+                    class="_image"
                     data-type="round"
                     height="20px"
                     loading="lazy"
@@ -525,7 +525,7 @@ exports[`AppTile > preserves non-persisted widget on container move 1`] = `
                  
                 <svg
                   aria-label="Loading…"
-                  class="_icon_1855a_18"
+                  class="_icon"
                   data-testid="spinner"
                   fill="currentColor"
                   height="1em"

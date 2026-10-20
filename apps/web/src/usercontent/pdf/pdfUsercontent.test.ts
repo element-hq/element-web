@@ -625,6 +625,19 @@ describe("PDF usercontent", () => {
             expect(activeViewer().decreaseScale).toHaveBeenCalledWith({ drawingDelay: 400 });
         });
 
+        it("reports the zoom level as a percentage whenever it changes", async () => {
+            const iframe = fakeIframe();
+            await openDocument(iframe);
+
+            activeViewer().eventBus.dispatch("scalechanging", { scale: 1.5, presetValue: undefined });
+            activeViewer().eventBus.dispatch("scalechanging", { scale: 0.8, presetValue: "page-width" });
+
+            expect(iframe.posted().filter((message) => message.type === "scale")).toEqual([
+                { type: "scale", scale: 150 },
+                { type: "scale", scale: 80 },
+            ]);
+        });
+
         it("ignores wheel events that are not a zoom gesture", async () => {
             const iframe = fakeIframe();
             await openDocument(iframe);

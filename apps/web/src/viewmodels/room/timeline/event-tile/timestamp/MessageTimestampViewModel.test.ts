@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { vi, describe, it, expect, afterEach } from "vitest";
+import { vi, describe, it, expect, afterEach, beforeEach } from "vitest";
 
 import * as DateUtils from "../../../../../DateUtils";
 import { MessageTimestampViewModel } from "./MessageTimestampViewModel";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 vi.mock("../../../../../settings/SettingsStore");
 
@@ -17,6 +18,15 @@ describe("MessageTimestampViewModel", () => {
     const nowDate = new Date("2021-12-17T08:09:00.000Z");
     const HOUR_MS = 3600000;
     const DAY_MS = HOUR_MS * 24;
+    const mockSettings: Record<string, string | null> = {
+        language: "en-US",
+    };
+
+    beforeEach(() => {
+        vi.spyOn(SettingsStore, "getValue")
+            .mockReset()
+            .mockImplementation((settingName) => mockSettings[settingName] ?? null);
+    });
 
     afterEach(() => {
         vi.restoreAllMocks();

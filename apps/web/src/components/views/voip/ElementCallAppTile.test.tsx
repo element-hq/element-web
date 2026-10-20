@@ -41,9 +41,9 @@ describe("ElementCallAppTile", () => {
     let call: ElementCall;
     let viewedRoomId: string | null;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         ({ client, room } = setUpClientRoomAndStores());
-        setupAsyncStoreWithClient(CallStore.instance, client);
+        await setupAsyncStoreWithClient(CallStore.instance, client);
 
         viewedRoomId = room.roomId;
         sdkContext = new TestSDKContext();
@@ -130,7 +130,7 @@ describe("ElementCallAppTile", () => {
         await renderTile();
         const shown = JSON.parse((await screen.findByLabelText("Effective configuration")).textContent!);
         expect(shown.intent).toBe("start_call");
-        expect(shown.config).toMatchObject({ skipLobby: true, background: "solid", perParticipantE2EE: false });
+        expect(shown.config).toMatchObject({ skipLobby: true, background: "solid" });
     });
 
     it("passes Element Web's theme to the component, and keeps it current", async () => {

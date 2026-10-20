@@ -79,6 +79,7 @@ export class ResizerViewModel
                 callStore,
             ),
         );
+        this.disposables.track(() => this.onLeftPanelResize.cancel());
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {

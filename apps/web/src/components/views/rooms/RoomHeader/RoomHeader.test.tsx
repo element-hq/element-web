@@ -750,7 +750,7 @@ describe("RoomHeader", () => {
     });
 
     describe("public room", () => {
-        it("shows a globe", () => {
+        it("shows a globe", async () => {
             const joinRuleEvent = new MatrixEvent({
                 type: EventType.RoomJoinRules,
                 content: { join_rule: JoinRule.Public },
@@ -758,7 +758,7 @@ describe("RoomHeader", () => {
                 state_key: "",
                 room_id: room.roomId,
             });
-            room.addLiveEvents([joinRuleEvent], { addToState: true });
+            await room.addLiveEvents([joinRuleEvent], { addToState: true });
 
             render(<RoomHeader room={room} />, getWrapper());
 

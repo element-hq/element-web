@@ -27,7 +27,6 @@
         "cancel": "Annulla",
         "change": "Cambia",
         "clear": "Svuota",
-        "click_to_copy": "Clicca per copiare",
         "close": "Chiudi",
         "collapse": "Riduci",
         "complete": "Completa",
@@ -1228,7 +1227,6 @@
         "element_call_video_rooms": "Stanze video di Element Call",
         "experimental_description": "Ti senti di sperimentare? Prova le nostre ultime idee in sviluppo. Queste funzioni non sono complete; potrebbero essere instabili, cambiare o essere scartate. <a>Maggiori informazioni</a>.",
         "experimental_section": "Anteprime",
-        "feature_disable_call_per_sender_encryption": "Disattiva la crittografia per mittente in Element Call",
         "feature_wysiwyg_composer_description": "Usa il rich text invece del Markdown nel compositore di messaggi.",
         "group_developer": "Sviluppatore",
         "group_encryption": "Crittografia",
@@ -1370,7 +1368,6 @@
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
-    "migrating_crypto": "Tieni duro. Stiamo aggiornando %(brand)s per rendere la crittografia più veloce e affidabile.",
     "mobile_guide": {
         "toast_accept": "Usa l'app",
         "toast_description": "%(brand)s è sperimentale su un browser web mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",
@@ -2941,10 +2938,6 @@
             "error_loading": "Impossibile caricare l'evento a cui si è risposto, o non esiste o non hai il permesso di visualizzarlo.",
             "in_reply_to": "<a>In risposta a</a> <pill>",
             "in_reply_to_for_export": "In risposta a <a>questo messaggio</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Stai per essere portato in un sito di terze parti per autenticare il tuo account da usare con %(integrationsUrl)s. Vuoi continuare?",
-            "dialog_title": "Aggiungi un'integrazione"
         },
         "self_redaction": "Messaggio eliminato",
         "send_state_encrypting": "Crittazione del tuo messaggio…",

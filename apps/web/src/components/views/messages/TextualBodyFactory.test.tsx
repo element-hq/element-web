@@ -33,6 +33,8 @@ import Modal from "../../../Modal";
 import ImageView from "../elements/ImageView";
 import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import SettingsStore from "../../../settings/SettingsStore";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
@@ -89,6 +91,7 @@ const mkFormattedMessage = (body: string, formattedBody: string): MatrixEvent =>
 describe("<TextualBody />", () => {
     afterEach(() => {
         vi.spyOn(global.Math, "random").mockRestore();
+        vi.restoreAllMocks();
     });
 
     let defaultRoom: Room;
@@ -291,6 +294,21 @@ describe("<TextualBody />", () => {
             expect(content.innerHTML).toMatchSnapshot();
         });
 
+        it("clicking a linkified MXID shows the user without navigating away from the room", () => {
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const hash = window.location.hash;
+            const ev = mkRoomTextMessage("Chat with @user:example.com");
+            getComponent({ mxEvent: ev });
+
+            fireEvent.click(screen.getByRole("link", { name: "@user:example.com" }));
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.ViewUser,
+                member: expect.objectContaining({ userId: "@user:example.com" }),
+            });
+            expect(window.location.hash).toBe(hash);
+        });
+
         it("should pillify an MXID permalink", () => {
             const ev = mkRoomTextMessage("Chat with https://matrix.to/#/@user:example.com");
             const { container } = getComponent({ mxEvent: ev });
@@ -420,6 +438,19 @@ describe("<TextualBody />", () => {
             expect(content).toMatchSnapshot();
         });
 
+        it("clicking a user pill shows the user without navigating away from the room", () => {
+            const dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const hash = window.location.hash;
+            const ev = mkFormattedMessage("Hey User", 'Hey <a href="https://matrix.to/#/@user:server">Member</a>');
+            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+
+            // Click the anchor itself, as happy-dom follows links on clicks to their children before React can prevent it
+            fireEvent.click(container.querySelector("a.mx_UserPill")!);
+
+            expect(dispatchSpy).toHaveBeenCalledWith(expect.objectContaining({ action: Action.ViewUser }));
+            expect(window.location.hash).toBe(hash);
+        });
+
         it("pills do not appear in code blocks", () => {
             const ev = mkFormattedMessage(
                 "`@room`\n```\n@room\n```",
@@ -547,19 +578,6 @@ describe("<TextualBody />", () => {
                 expect(node).toHaveAttribute("href", links[index]);
             });
         });
-
-        it("should listen to showUrlPreview change", () => {
-            const ev = mkRoomTextMessage("Visit https://matrix.org/");
-
-            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
-
-            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            waitFor(() => {
-                // Asynchronous check since the VM needs to recalcuate.
-                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
-            });
-        });
     });
     describe("url preview tiles", () => {
         const link = "https://matrix.org/";
@@ -645,6 +663,17 @@ describe("<TextualBody />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Open link" }));
 
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("should listen to showUrlPreview change", async () => {
+            const ev = mkRoomTextMessage(`Visit ${link}`);
+
+            const { rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
+            expect(matrixClient.getUrlPreview).not.toHaveBeenCalled();
+            expect(screen.queryByRole("link", { name: "Matrix" })).not.toBeInTheDocument();
+
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
+            await expect(screen.findByRole("link", { name: "Matrix" })).resolves.toHaveAttribute("href", link);
         });
 
         it("expands the group when more previews are available than are shown", async () => {

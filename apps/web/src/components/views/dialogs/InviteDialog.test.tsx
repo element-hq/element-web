@@ -121,7 +121,7 @@ describe("InviteDialog", () => {
         "[Invite:Recents] Excluding @alice:example.org from recents",
     );
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockClient = getMockClientWithEventEmitter({
             getCrypto: vi.fn().mockReturnValue({
                 getUserVerificationStatus: vi
@@ -171,7 +171,7 @@ describe("InviteDialog", () => {
         vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
-        room.addLiveEvents(
+        await room.addLiveEvents(
             [
                 mkMessage({
                     msg: "Hello",
@@ -644,7 +644,7 @@ describe("InviteDialog", () => {
             it("should show a warning when inviting by user id", async () => {
                 await enterIntoSearchField(aliceId);
                 await userEvent.click(screen.getByRole("button", { name: goButtonName }));
-                await screen.findByText("Confirm inviting them", { exact: false });
+                await screen.findByText("You don't have any chats with", { exact: false });
 
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledTimes(1);
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledWith(aliceId);
@@ -653,7 +653,7 @@ describe("InviteDialog", () => {
             it("should show a warning when inviting by email address", async () => {
                 await enterIntoSearchField("aaa@bbb");
                 await userEvent.click(screen.getByRole("button", { name: goButtonName }));
-                await screen.findByText("Confirm inviting them", { exact: false });
+                await screen.findByText("You don't have any chats with", { exact: false });
 
                 // We shouldn't call getUserVerificationStatus on an email address
                 expect(vi.mocked(mockClient.getCrypto()!.getUserVerificationStatus)).not.toHaveBeenCalled();

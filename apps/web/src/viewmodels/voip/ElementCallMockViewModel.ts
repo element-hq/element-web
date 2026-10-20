@@ -13,7 +13,12 @@ import {
 } from "@element-hq/web-shared-components";
 import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixRTCSession, MatrixRTCSessionEvent, type SessionMembershipData } from "matrix-js-sdk/src/matrixrtc";
+import {
+    isUnstableLivekitTransport,
+    type MatrixRTCSession,
+    MatrixRTCSessionEvent,
+    type SessionMembershipData,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import { CallStore } from "../../stores/CallStore";
 import { _t } from "../../languageHandler";
@@ -48,9 +53,7 @@ const MOCK_MEMBERSHIP_EXPIRY_MS = 10 * 60 * 1000;
  * `playwright/sample-files/fake-element-call.html` does).
  */
 const mockMembership = (deviceId: string): SessionMembershipData => {
-    const configured = CallStore.instance
-        .getConfiguredRTCTransports()
-        .filter((t) => t.type === "livekit" && "livekit_service_url" in t);
+    const configured = CallStore.instance.getConfiguredRTCTransports().filter(isUnstableLivekitTransport);
     const fociPreferred =
         configured.length > 0
             ? configured.map((t) => ({ ...t, livekit_alias: "element-call-mock" }))

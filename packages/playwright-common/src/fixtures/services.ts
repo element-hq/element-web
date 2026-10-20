@@ -126,8 +126,9 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
 
     synapseConfig: [{}, { scope: "worker" }],
     _homeserver: [
-        async ({ logger }, use) => {
-            const container = new SynapseContainer().withLogConsumer(logger.getConsumer("synapse"));
+        async ({}, use) => {
+            // The log consumer is attached by `homeserver`, as testcontainers only keeps the last one registered.
+            const container = new SynapseContainer();
             await use(container);
         },
         { scope: "worker" },
@@ -162,7 +163,13 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
         homeserver.setRequest(request);
         await logger.onTestStarted(context);
         await use(context);
+        try {
+            await homeserver.onTestFinished(testInfo);
+        } catch (e) {
+            // The test itself passed, so the logger would not attach the logs which explain this failure
+            await logger.attachLogs(testInfo);
+            throw e;
+        }
         await logger.onTestFinished(testInfo);
-        await homeserver.onTestFinished(testInfo);
     },
 });

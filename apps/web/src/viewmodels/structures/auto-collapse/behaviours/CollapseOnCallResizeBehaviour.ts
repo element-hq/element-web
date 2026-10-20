@@ -57,6 +57,7 @@ export class CollapseOnCallResizeBehaviour extends BaseCollapseBehaviour {
 
     public dispose = (): void => {
         this.callStore.off(CallStoreEvent.ConnectedCalls, this.onCallConnected);
+        window.clearTimeout(this.callStartedTimeout);
     };
 }
 

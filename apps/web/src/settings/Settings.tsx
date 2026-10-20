@@ -224,8 +224,8 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_disable_call_per_sender_encryption": IFeature;
     "feature_element_call_react": IFeature;
+    "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
@@ -600,14 +600,6 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
-    "feature_disable_call_per_sender_encryption": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|feature_disable_call_per_sender_encryption"),
-        default: false,
-    },
     "feature_element_call_react": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -616,6 +608,15 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|feature_element_call_react"),
         // A call that is already mounted with one embedding (widget/component) cannot be switched to the other.
         controller: new ReloadOnChangeController(),
+        default: false,
+    },
+    "feature_matrixrtc_slots": {
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_matrixrtc_slots"),
+        description: _td("labs|feature_matrixrtc_slots_description"),
         default: false,
     },
     "feature_location_share_live": {
@@ -656,11 +657,13 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
+    // that people who already turned the lab on keep it, and only for as long as the lab exists.
     "feature_pdf_viewer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pdf_viewer"),
-        description: _td("labs|pdf_viewer_description"),
+        displayName: _td("labs|document_previews"),
+        description: _td("labs|document_previews_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -1156,7 +1159,9 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|inline_url_previews_default"),
         default: true,
         controller: new RequiresSettingsController([UIFeature.URLPreviews], false, (c) => {
-            if (c["io.element.msc4452.preview_url"]?.enabled !== false) {
+            // Prefer the stable capability, falling back to the unstable MSC4452 prefix for older servers.
+            const previewUrlCapability = c["m.preview_url"] ?? c["io.element.msc4452.preview_url"];
+            if (previewUrlCapability?.enabled !== false) {
                 // If the capability is not listed, or explicitly true then do not disable.
                 return false;
             }
