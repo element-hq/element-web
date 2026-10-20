@@ -291,7 +291,7 @@ export function KeyForm({
     submitButtonLabel,
     cancelButtonLabel = _t("action|cancel"),
     errorLabel = _t("settings|encryption|recovery|enter_key_error"),
-}: KeyFormProps): JSX.Element {
+}: Readonly<KeyFormProps>): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

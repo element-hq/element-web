@@ -80,7 +80,8 @@ describe("<CheckRecoveryKey />", () => {
     });
 
     it("should accept the passphrase if the key was set up with one", async () => {
-        const passphrase = { algorithm: "m.pbkdf2", salt: "salt", iterations: 1, bits: 256 };
+        // A non-default key length, to check that `bits` is honoured in the derivation
+        const passphrase = { algorithm: "m.pbkdf2", salt: "salt", iterations: 1, bits: 128 };
         vi.mocked(matrixClient.secretStorage.getKey).mockResolvedValue(["keyId", { ...keyCheck, passphrase }] as any);
         const onFinish = vi.fn();
         renderComponent(onFinish);
@@ -90,9 +91,57 @@ describe("<CheckRecoveryKey />", () => {
 
         await waitFor(() => expect(onFinish).toHaveBeenCalled());
         expect(matrixClient.secretStorage.checkKey).toHaveBeenCalledWith(
-            await deriveRecoveryKeyFromPassphrase("my passphrase", "salt", 1),
+            await deriveRecoveryKeyFromPassphrase("my passphrase", "salt", 1, 128),
             { ...keyCheck, passphrase },
         );
+    });
+
+    it("should show an error dialog if there is no key to check against", async () => {
+        vi.spyOn(console, "error").mockReturnValue(undefined);
+        vi.mocked(matrixClient.secretStorage.getKey).mockResolvedValue(null);
+        vi.spyOn(Modal, "createDialog");
+        const onFinish = vi.fn();
+        renderComponent(onFinish);
+
+        await userEvent.type(screen.getByTitle("Enter recovery key"), recoveryKey);
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        await waitFor(() =>
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({
+                    title: "Failed to check the recovery key",
+                }),
+            ),
+        );
+        expect(onFinish).not.toHaveBeenCalled();
+        // The key was not checked, so it must not be marked as incorrect
+        expect(screen.queryByText("Incorrect recovery key")).not.toBeInTheDocument();
+        // Dismiss the error dialog, as it would block dialogs in later tests
+        await userEvent.click(screen.getByRole("button", { name: "OK" }));
+    });
+
+    it("should show an error dialog if checking the key fails", async () => {
+        vi.spyOn(console, "error").mockReturnValue(undefined);
+        vi.mocked(matrixClient.secretStorage.checkKey).mockRejectedValue(new Error("Unknown algorithm"));
+        vi.spyOn(Modal, "createDialog");
+        const onFinish = vi.fn();
+        renderComponent(onFinish);
+
+        await userEvent.type(screen.getByTitle("Enter recovery key"), recoveryKey);
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        await waitFor(() =>
+            expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                title: "Failed to check the recovery key",
+                description: "Error: Unknown algorithm",
+            }),
+        );
+        expect(onFinish).not.toHaveBeenCalled();
+        // The key may well be right, so it must not be marked as incorrect
+        expect(screen.queryByText("Incorrect recovery key")).not.toBeInTheDocument();
+        // Dismiss the error dialog, as it would block dialogs in later tests
+        await userEvent.click(screen.getByRole("button", { name: "OK" }));
     });
 
     it("should show an error dialog if the key cannot be checked", async () => {

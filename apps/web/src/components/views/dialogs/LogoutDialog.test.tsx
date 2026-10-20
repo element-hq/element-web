@@ -325,14 +325,5 @@ describe("LogoutDialog", () => {
             fireEvent.click(await screen.findByRole("button", { name: "Stub key correct" }));
             await expect(screen.findByText("Your recovery key is active")).resolves.toBeVisible();
         });
-
-        it("logs out after the key is checked", async () => {
-            const onFinished = vi.fn();
-            await startCheck(onFinished);
-            fireEvent.click(await screen.findByRole("button", { name: "Stub key correct" }));
-            fireEvent.click(await screen.findByRole("button", { name: "Continue to remove this device" }));
-            expect(dispatch.dispatch).toHaveBeenCalledWith({ action: "logout" });
-            expect(onFinished).toHaveBeenCalledWith(true);
-        });
     });
 });

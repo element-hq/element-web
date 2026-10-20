@@ -34,7 +34,7 @@ interface CheckRecoveryKeyProps {
 /**
  * Lets the user check that the recovery key they have saved is their current one.
  */
-export function CheckRecoveryKey({ onFinish, onCancelClick, className }: CheckRecoveryKeyProps): JSX.Element {
+export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonly<CheckRecoveryKeyProps>): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     return (
@@ -67,11 +67,13 @@ export function CheckRecoveryKey({ onFinish, onCancelClick, className }: CheckRe
 /**
  * Whether the given input unlocks the default secret storage key, either as a recovery key or,
  * for keys set up with a passphrase, as that passphrase.
- * Rejects if the key description cannot be read, or has no MAC to check against.
+ * Rejects if there is no key to check against, its description cannot be read or has no MAC,
+ * or the check itself fails.
  */
 async function isCurrentRecoveryKey(client: MatrixClient, input: string): Promise<boolean> {
     const keyTuple = await client.secretStorage.getKey();
-    if (!keyTuple) return false;
+    // "Incorrect key" would be misleading when there is no key to check against
+    if (!keyTuple) throw new Error("The recovery key cannot be checked, as there is no default secret storage key");
     const [, keyInfo] = keyTuple;
     // Without a MAC, `checkKey` accepts any key (allowed by the spec, and written by js-sdk in early 2020)
     if (!keyInfo.mac) throw new Error("The recovery key cannot be checked, as its description has no MAC");
@@ -79,11 +81,15 @@ async function isCurrentRecoveryKey(client: MatrixClient, input: string): Promis
     const inputToKey = makeInputToKey(keyInfo);
     const attempts = keyInfo.passphrase ? [{ recoveryKey: input }, { passphrase: input }] : [{ recoveryKey: input }];
     for (const keyParams of attempts) {
+        let key: Uint8Array<ArrayBuffer>;
         try {
-            if (await client.secretStorage.checkKey(await inputToKey(keyParams), keyInfo)) return true;
+            key = await inputToKey(keyParams);
         } catch {
             // Not a well-formed recovery key; try the next form, if any
+            continue;
         }
+        // Failures past this point are errors to surface, not an incorrect key
+        if (await client.secretStorage.checkKey(key, keyInfo)) return true;
     }
     return false;
 }
