@@ -11,6 +11,8 @@ import React, { type ComponentType, type JSX, type ReactNode, useCallback, useCo
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import PopInIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-in";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
@@ -28,6 +30,7 @@ import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStore
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall";
+import { useDocumentPip } from "../../../../hooks/room/useDocumentPip";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
 import { useFeatureEnabled } from "../../../../hooks/useSettings.ts";
@@ -146,6 +149,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         showVoiceCallButton,
         showVideoCallButton,
     } = useRoomCall(room);
+    const documentPip = useDocumentPip(room);
     const threadNotifications = useRoomThreadNotifications(room);
     const globalNotificationState = useGlobalNotificationState();
 
@@ -164,13 +168,23 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         [callOptions, voiceCallClick],
     );
 
-    const toggleCallButton = (
+    const toggleCallButton = !documentPip.available ? (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
             <IconButton onClick={toggleCall}>
                 <VideoCallIcon />
             </IconButton>
         </Tooltip>
-    );
+    ) : undefined;
+
+    // ...and the browser's, a window of its own that can leave the browser. Only the Element Call React
+    // component can be moved there, so this is only offered when the call is rendered that way.
+    const documentPipButton = documentPip.available ? (
+        <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
+            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+                {documentPip.active ? <PopInIcon /> : <PopOutIcon />}
+            </IconButton>
+        </Tooltip>
+    ) : undefined;
 
     const joinCallButton = (
         <Tooltip
@@ -261,9 +275,13 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     );
     let videoCallButton: JSX.Element | undefined = startVideoCallButton;
     let voiceCallButton: JSX.Element | undefined = startVoiceCallButton;
+    let pipButton: JSX.Element | undefined;
     if (isConnectedToCall) {
+        // In a call there is nothing to start: the two buttons are the two ways of taking the call out of
+        // the room view
         videoCallButton = toggleCallButton;
         voiceCallButton = undefined;
+        pipButton = documentPipButton;
     } else if (isViewingCall) {
         videoCallButton = closeLobbyButton;
         voiceCallButton = undefined;
@@ -272,6 +290,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     // A module's option keeps the button even where Element Web has nothing to offer
     if (!showVideoCallButton && moduleCallOptions.length === 0) {
         videoCallButton = undefined;
+        pipButton = undefined;
     }
 
     if (!showVoiceCallButton && moduleCallOptions.length === 0) {
@@ -294,6 +313,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
                 joinCallButton
             ) : (
                 <>
+                    {!isVideoRoom && pipButton}
                     {!isVideoRoom && videoCallButton}
                     {!isVideoRoom && voiceCallButton}
                 </>

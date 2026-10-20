@@ -27,6 +27,7 @@ import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../..
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import { getOrCreateMasterContainer, getPersistKey } from "../views/elements/PersistedElement";
 import WidgetUtils from "../../utils/WidgetUtils";
+import { DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 
 /** Above the persisted elements that are not PiPs (101) */
 const PIP_Z_BASE = 200;
@@ -95,6 +96,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
+        this.context.documentPipStore.on(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     public componentDidUpdate(): void {
@@ -113,6 +115,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
+        this.context.documentPipStore.off(DocumentPipStoreEvent.Update, this.onDocumentPipChanges);
     }
 
     /**
@@ -251,6 +254,10 @@ class PipContainerInner extends React.Component<IProps, IState> {
         this.updateShowWidgetInPip();
     };
 
+    private onDocumentPipChanges = (): void => {
+        this.updateShowWidgetInPip();
+    };
+
     private updateCalls = (): void => {
         if (!this.state.viewedRoomId) return;
         const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
@@ -313,15 +320,18 @@ class PipContainerInner extends React.Component<IProps, IState> {
         // A widget is shown as a persistent app (in a floating pip container) only
         // if it is not visible on screen: either because we are viewing a
         // different room OR because it is in none of the possible containers of
-        // the room view. Sanity check the room - the widget may have been
-        // destroyed between render cycles, and thus no room is associated anymore.
+        // the room view. A call showing in a browser Picture-in-Picture window (see
+        // DocumentPipStore) is on screen already, in a window of its own. Sanity check
+        // the room - the widget may have been destroyed between render cycles, and thus
+        // no room is associated anymore.
         const pipWidgets = ActiveWidgetStore.instance
             .getPersistentWidgets()
             .filter(
                 ({ widgetId, roomId }) =>
                     roomId !== null &&
                     this.context.client?.getRoom(roomId) &&
-                    (viewedRoomId !== roomId || !ActiveWidgetStore.instance.isDocked(widgetId, roomId)),
+                    (viewedRoomId !== roomId || !ActiveWidgetStore.instance.isDocked(widgetId, roomId)) &&
+                    !this.context.documentPipStore.isShowingWidget(widgetId, roomId),
             );
         this.setState({ pipWidgets });
     }
