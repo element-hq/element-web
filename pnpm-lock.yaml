@@ -494,8 +494,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.10
       '@element-hq/element-call-component':
-        specifier: github:element-hq/element-call-experiment#2afbe83ed&path:/component
-        version: git+https://github.com/element-hq/element-call-experiment.git#2afbe83edb2a626f2d99cb923cb2577fb2b6d367&path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
+        specifier: github:element-hq/element-call-experiment#9eaa08abe&path:/component
+        version: git+https://github.com/element-hq/element-call-experiment.git#9eaa08abec0a49107e8f9840c889c6d0db9122e0&path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -2810,8 +2810,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@git+https://github.com/element-hq/element-call-experiment.git#2afbe83edb2a626f2d99cb923cb2577fb2b6d367&path:/component':
-    resolution: {commit: 2afbe83edb2a626f2d99cb923cb2577fb2b6d367, path: /component, repo: https://github.com/element-hq/element-call-experiment.git, type: git}
+  '@element-hq/element-call-component@git+https://github.com/element-hq/element-call-experiment.git#9eaa08abec0a49107e8f9840c889c6d0db9122e0&path:/component':
+    resolution: {commit: 9eaa08abec0a49107e8f9840c889c6d0db9122e0, path: /component, repo: https://github.com/element-hq/element-call-experiment.git, type: git}
     version: 0.0.0
     peerDependencies:
       '@vector-im/compound-design-tokens': ^11.0.0
@@ -15033,7 +15033,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@git+https://github.com/element-hq/element-call-experiment.git#2afbe83edb2a626f2d99cb923cb2577fb2b6d367&path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@git+https://github.com/element-hq/element-call-experiment.git#9eaa08abec0a49107e8f9840c889c6d0db9122e0&path:/component(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
