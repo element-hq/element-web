@@ -14,7 +14,7 @@ import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from 
 import type { TimelineItem, TimelineViewHandle } from "@element-hq/web-shared-components";
 import { createTestClient, mkMessage, TestSDKContext } from "test-utils";
 
-import { NewTimelinePanel } from "./NewTimelinePanel";
+import { NewTimelinePanel, type NewTimelinePanelHandle } from "./NewTimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -26,10 +26,11 @@ const USER_ID = "@alice:example.org";
 // The virtualised TimelineView needs real layout, which this environment has none
 // of, and it has its own tests in shared-components. Stand in a stub that simply
 // draws every row, so these tests cover how this panel renders each kind of row,
-// and that hands out a fake scroll handle so what the panel passes on can be checked.
+// and that hands out a fake scroll handle so the panel's own handle can be checked.
 const { rowsRendered, viewHandle } = vi.hoisted(() => ({
     rowsRendered: { current: [] as unknown[] },
     viewHandle: {
+        scrollByPage: vi.fn(),
         scrollNow: vi.fn(),
     },
 }));
@@ -88,6 +89,9 @@ const { vmSpies } = vi.hoisted(() => ({
         setShowReadReceipts: vi.fn(),
         constructorOpts: [] as Record<string, unknown>[],
         onJumpToLive: vi.fn(),
+        onJumpToStart: vi.fn(),
+        onJumpToReadMarker: vi.fn(),
+        onMarkAllAsRead: vi.fn(),
         jumpToEvent: vi.fn(),
         clearHighlight: vi.fn(),
     },
@@ -104,6 +108,9 @@ vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
         public subscribe = (): (() => void) => (): void => {};
         public getSnapshot = (): Record<string, unknown> => vmState.snapshot;
         public onJumpToLive = vmSpies.onJumpToLive;
+        public onJumpToStart = vmSpies.onJumpToStart;
+        public onJumpToReadMarker = vmSpies.onJumpToReadMarker;
+        public onMarkAllAsRead = vmSpies.onMarkAllAsRead;
         public jumpToEvent = vmSpies.jumpToEvent;
         public clearHighlight = vmSpies.clearHighlight;
     },
@@ -339,6 +346,65 @@ describe("<NewTimelinePanel />", () => {
             );
 
             expect(vmSpies.setShowReadReceipts).toHaveBeenLastCalledWith(true);
+        });
+    });
+
+    describe("keyboard shortcuts from RoomView", () => {
+        const renderWithHandle = (): NewTimelinePanelHandle => {
+            const ref = React.createRef<NewTimelinePanelHandle>();
+            withItems([]);
+            renderPanel({ ref });
+            return ref.current!;
+        };
+
+        // KeyBindingsManager reads `key` and the modifier flags off the event.
+        const keyDown = (init: KeyboardEventInit): KeyboardEvent => new KeyboardEvent("keydown", init);
+
+        it("pages the view up and down", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "PageUp" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(-1);
+
+            handle.handleScrollKey(keyDown({ key: "PageDown" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(1);
+        });
+
+        it("jumps to the live end, to the read marker, and forgets the read marker on request", () => {
+            const handle = renderWithHandle();
+
+            handle.jumpToLiveTimeline();
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.jumpToReadMarker();
+            expect(vmSpies.onJumpToReadMarker).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.forgetReadMarker();
+            expect(vmSpies.onMarkAllAsRead).toHaveBeenCalled();
+        });
+
+        it("goes to the start of the room for ctrl+home, and to the live end for ctrl+end", () => {
+            const handle = renderWithHandle();
+
+            // Either end may need loading first, so both go through the view model, handed
+            // the view's own scroll for when they do not.
+            handle.handleScrollKey(keyDown({ key: "Home", ctrlKey: true }));
+            expect(vmSpies.onJumpToStart).toHaveBeenCalledWith(viewHandle.scrollNow);
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
+
+            handle.handleScrollKey(keyDown({ key: "End", ctrlKey: true }));
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+        });
+
+        it("leaves keys that are not timeline shortcuts alone", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "Home" }));
+            handle.handleScrollKey(keyDown({ key: "a" }));
+
+            expect(viewHandle.scrollByPage).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToStart).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
         });
     });
 
