@@ -61,7 +61,12 @@ function computeImageEventsFromTimeline(t: EventTimeline | null, initialEvent: M
 
 /**
  * Lightbox dialog for an `m.image` event that can step to the previous (older) and next (newer)
- * image in the same room, paginating further back in the room's history when needed.
+ * image in the same timeline, paginating further back in the history when needed.
+ *
+ * The collection navigated is the images of the timeline the event was opened from: the room's
+ * main timeline, or, for a reply inside a thread, that thread. Only `m.image` events are included
+ * (an image thread root opened from the main timeline navigates the room's images). Videos, files
+ * and other media are not part of the collection as they never open in the lightbox.
  *
  * Wraps {@link ImageView}, passing it `onPrevious`/`onNext` handlers only while a neighbouring
  * image exists, so the navigation buttons disappear at either end.
@@ -110,7 +115,11 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                 return;
             }
 
-            const timelineSet = room.getUnfilteredTimelineSet?.();
+            // A reply inside a thread lives in the thread's timeline, not the room's, so navigate
+            // the thread's images. A thread root is part of the main timeline and navigates the room.
+            const thread = props.initialEvent.getThread?.();
+            const timelineSet =
+                thread && !props.initialEvent.isThreadRoot ? thread.timelineSet : room.getUnfilteredTimelineSet?.();
             const evId = props.initialEvent.getId();
 
             if (!timelineSet || !evId) {
