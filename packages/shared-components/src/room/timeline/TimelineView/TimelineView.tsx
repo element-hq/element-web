@@ -5,13 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState, type JSX } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState, type JSX } from "react";
 import classNames from "classnames";
 import { useVirtualizer, type VirtualItem, type Virtualizer } from "@tanstack/react-virtual";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { AnchorAlign, ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
+import type { AnchorAlign, ImmediateScroll, TimelineItem, TimelineViewHandle, TimelineViewProps } from "./types";
 import { BACKWARD_LOADING_KEY, FORWARD_LOADING_KEY } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
 import styles from "./TimelineView.module.css";
@@ -98,7 +98,7 @@ const REVEAL_TIMEOUT_MS = 1000;
  */
 type Phase = "init" | "placing" | "live";
 
-export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
+export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
 
     // The effects and callbacks below run outside React's render — from scroll events and
@@ -360,6 +360,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         },
         [offsetForKey, virtualizer],
     );
+
+    // ─── Requests from outside the view ────────────────────────────────────────
+    useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(ref, () => ({ scrollNow }), [scrollNow]);
 
     const virtualItems = virtualizer.getVirtualItems();
 
