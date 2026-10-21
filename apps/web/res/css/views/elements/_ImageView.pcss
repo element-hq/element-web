@@ -20,13 +20,32 @@ $button-gap: var(--cpd-space-3x);
     flex-direction: column;
 }
 
+.mx_ImageView_content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: calc(100% - var(--image-view-panel-height));
+}
+
 .mx_ImageView_image_wrapper {
     pointer-events: initial;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1;
+    min-width: 0;
     height: 100%;
     overflow: hidden;
+}
+
+/* Gutter on either side of the image holding the previous/next button, so the buttons never cover the image */
+.mx_ImageView_nav {
+    pointer-events: initial;
+    flex: 0 0 auto;
+    width: var(--cpd-space-20x);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_ImageView_image {
