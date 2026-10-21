@@ -55,12 +55,19 @@ describe("<ChangeRecoveryKeyDialog />", () => {
         expect(screen.getByRole("dialog", { name: "Change recovery key" })).toBeInTheDocument();
     });
 
-    it("finishes with true when the key is changed", async () => {
+    it("shows the confirmation screen when the key is changed, and finishes with true on Done", async () => {
         const onFinished = vi.fn();
-        renderComponent(false, onFinished);
+        const { asFragment } = renderComponent(false, onFinished);
         await userEvent.click(screen.getByRole("button", { name: "Stub finish" }));
+
+        expect(screen.getByText("Your backup is now fully set up")).toBeInTheDocument();
+        expect(onFinished).not.toHaveBeenCalled();
+        expect(asFragment()).toMatchSnapshot();
+
+        await userEvent.click(screen.getByRole("button", { name: "Done" }));
         expect(onFinished).toHaveBeenCalledWith(true);
     });
+
 
     it("finishes with false when the body is cancelled", async () => {
         const onFinished = vi.fn();
