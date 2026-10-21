@@ -16,12 +16,15 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
+import { ToastContext, type ToastRack } from "@element-hq/web-shared-components";
+
 import { EncryptionUserSettingsTab, type State } from "./EncryptionUserSettingsTab";
 import Modal from "../../../../../Modal";
 import { DeviceListener } from "../../../../../device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
+    let toastRack: { displayToast: ReturnType<typeof vi.fn> };
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -47,7 +50,13 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     function renderComponent(props: { initialState?: State } = {}) {
-        return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
+        toastRack = { displayToast: vi.fn().mockReturnValue(() => {}) };
+        return render(
+            <ToastContext.Provider value={toastRack as unknown as ToastRack}>
+                <EncryptionUserSettingsTab {...props} />
+            </ToastContext.Provider>,
+            withClientContextRenderOptions(matrixClient),
+        );
     }
 
     it("should display a verify button when the encryption is not set up", async () => {
@@ -72,6 +81,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         renderComponent();
         await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
     });
+
 
     it("should not display the recovery panel when key storage is not enabled", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
