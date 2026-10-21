@@ -2558,6 +2558,8 @@
                 "title": "Key storage"
             },
             "recovery": {
+                "backup_set_up_hint": "To change your recovery key, go to <b>Settings → Encryption → Backup</b>",
+                "backup_set_up_title": "Your backup is now fully set up",
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
                 "change_recovery_confirm_title": "Enter your new recovery key",
