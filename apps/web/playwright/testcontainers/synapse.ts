@@ -17,5 +17,10 @@ const DOCKER_IMAGE =
 export class SynapseContainer extends BaseSynapseContainer {
     public constructor() {
         super(DOCKER_IMAGE);
+        // Synapse advertises the `m.preview_url` capability based on `url_preview_enabled`, and the client hides
+        // URL previews when it is disabled. Tests mock the preview responses, so block every IP range to ensure
+        // Synapse never fetches a real URL.
+        this.withConfigField("url_preview_enabled", true);
+        this.withConfigField("url_preview_ip_range_blacklist", ["0.0.0.0/0", "::/0"]);
     }
 }
