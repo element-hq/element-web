@@ -208,6 +208,7 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
+            "back_to_app": "返回 app",
             "check_recovery_key": "检查恢复密钥",
             "check_recovery_key_title": "确保你移除此设备前拥有恢复密钥",
             "continue": "继续移除此设备",
@@ -627,7 +628,7 @@
         "mode_plain": "隐藏文字格式化选项",
         "mode_rich_text": "显示文字格式化选项",
         "no_perms_notice": "你无权在此房间发送消息",
-        "placeholder": "发送消息…",
+        "placeholder": "发送未加密消息…",
         "placeholder_encrypted": "发送加密消息…",
         "placeholder_reply": "发送回复…",
         "placeholder_reply_encrypted": "发送加密回复…",
@@ -2562,6 +2563,7 @@
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
+                "key_active_title": "你的新恢复密钥现已激活",
                 "key_storage_warning": "你的密钥存储不同步。点选以下按钮修复此问题。",
                 "save_key_description": "不要与任何人分享！",
                 "save_key_title": "恢复密钥",
@@ -3597,7 +3599,7 @@
         "self_redaction": "消息已被删除",
         "send_state_encrypting": "正在解密消息…",
         "send_state_failed": "发送失败",
-        "send_state_sending": "发送消息…",
+        "send_state_sending": "正在发送消息…",
         "send_state_sent": "消息已发送",
         "summary": {
             "banned": {
