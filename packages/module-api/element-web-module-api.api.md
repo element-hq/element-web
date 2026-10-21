@@ -487,9 +487,9 @@ export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<
 
 // @alpha
 export interface UserCertificate {
-    // (undocumented)
     certificate: CertificateInfo;
     chain: string;
+    chainValidTo: Date;
 }
 
 // @public
@@ -577,6 +577,7 @@ export type X509IpcErrorCode =
 | "MODULE_NOT_LOADED"
 | "KEY_NOT_FOUND"
 | "CERTIFICATE_NOT_FOUND"
+| "CERTIFICATE_INVALID"
 | "PRIVATE_KEY_NOT_FOUND"
 /**
 * `signData` was called before `logIntoKey`, or the session was invalidated since.
