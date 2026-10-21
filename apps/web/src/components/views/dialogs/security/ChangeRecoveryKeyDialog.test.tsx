@@ -68,6 +68,13 @@ describe("<ChangeRecoveryKeyDialog />", () => {
         expect(onFinished).toHaveBeenCalledWith(true);
     });
 
+    it("shows the key-active confirmation for the change-key variant", async () => {
+        renderComponent(true);
+        await userEvent.click(screen.getByRole("button", { name: "Stub finish" }));
+
+        expect(screen.getByText("Your new recovery key is now active")).toBeInTheDocument();
+        expect(screen.queryByText("To change your recovery key, go to", { exact: false })).not.toBeInTheDocument();
+    });
 
     it("finishes with false when the body is cancelled", async () => {
         const onFinished = vi.fn();
