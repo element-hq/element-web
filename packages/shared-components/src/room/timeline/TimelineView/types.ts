@@ -104,6 +104,9 @@ export type ImmediateScroll = (anchor: NavigationAnchor) => void;
  * and the immediate scroll that the view model's jump actions take. Everything here only
  * moves the viewport over what is already loaded; fetching more history stays with the view
  * model, which the view asks in the usual way once the scroll reaches an end.
+ *
+ * Moving between messages one at a time (arrow up/down, home/end) is not here: the view
+ * handles those keys itself.
  */
 export interface TimelineViewHandle {
     /**
