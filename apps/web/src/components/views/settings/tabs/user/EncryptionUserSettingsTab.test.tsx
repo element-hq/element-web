@@ -84,7 +84,6 @@ describe("<EncryptionUserSettingsTab />", () => {
         await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
     });
 
-
     it("should not display the recovery panel when key storage is not enabled", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
@@ -153,6 +152,38 @@ describe("<EncryptionUserSettingsTab />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should show a confirmation toast when the recovery key is set up", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "set_recovery_key" });
+
+        // Walk the whole recovery key flow: save the generated key, then confirm it.
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Finish set up" }));
+
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        expect(displayedToastText()).toContain("Backup is now fully set up");
+    });
+
+    it("should show a key-active confirmation toast when the recovery key is changed", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "change_recovery_key" });
+
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Confirm new recovery key" }));
+
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        expect(displayedToastText()).toContain("Your new recovery key is now active");
+    });
+
+    /** Render the node passed to the mock toast rack and return its text. */
+    function displayedToastText(): string {
+        return render(<div>{toastRack.displayToast.mock.calls[0][0]}</div>).container.textContent ?? "";
+    }
 
     it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
