@@ -65,10 +65,6 @@ export default {
                 // count tests as entry points. NewTimelinePanel picks it up in a follow-up PR,
                 // at which point this line can go.
                 "src/viewmodels/room/timeline/RoomTimelineViewModel.ts!",
-                // Only its own tests import this so far. The "Set up recovery" toast picks it
-                // up in a follow-up PR (https://github.com/element-hq/element-web/issues/35524),
-                // at which point this line can go.
-                "src/components/views/dialogs/security/ChangeRecoveryKeyDialog.tsx!",
             ],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
