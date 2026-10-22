@@ -31,12 +31,14 @@ export async function isRoomEncrypted(room: Room, cryptoApi: CryptoApi): Promise
     return await cryptoApi.isEncryptionEnabledInRoom(room.roomId);
 }
 
-// Hook to simplify watching whether a Matrix room is encrypted, returns null if room is undefined or the state is loading
+// Hook to simplify watching whether a Matrix room is encrypted, returns null if room is undefined
 export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | null {
     const encryptionStateEvent: MatrixEvent | undefined = useRoomState(
         room,
         (roomState) => roomState.getStateEvents(EventType.RoomEncryption)?.[0],
     );
+    // Seed with the state event rather than null, so we don't flash "not encrypted" while the
+    // async crypto check below is still resolving.
     return useAsyncMemo(
         async () => {
             const crypto = cli.getCrypto();
@@ -45,6 +47,6 @@ export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | null {
             return isRoomEncrypted(room, crypto);
         },
         [room, encryptionStateEvent],
-        null,
+        room ? Boolean(encryptionStateEvent) : null,
     );
 }
