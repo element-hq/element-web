@@ -367,7 +367,9 @@ const SpacePanel: React.FC = () => {
     const sdkContext = useContext(SDKContext);
     const client = sdkContext.client!;
     const [dragging, setDragging] = useState(false);
-    const [isPanelCollapsed, setPanelCollapsed] = useState(true);
+    const [isPanelCollapsed, setPanelCollapsed] = useState<boolean>(() =>
+        SettingsStore.getValue("Spaces.isPanelCollapsed"),
+    );
     const ref = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
@@ -399,6 +401,11 @@ const SpacePanel: React.FC = () => {
     useEffect(() => {
         userMenuVm.setExpanded(!isPanelCollapsed);
     }, [userMenuVm, isPanelCollapsed]);
+
+    // Persist the collapsed state so the panel is restored as the user left it.
+    useEffect(() => {
+        void SettingsStore.setValue("Spaces.isPanelCollapsed", null, SettingLevel.DEVICE, isPanelCollapsed);
+    }, [isPanelCollapsed]);
 
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
