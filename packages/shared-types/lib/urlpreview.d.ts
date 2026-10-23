@@ -104,8 +104,8 @@ export interface UrlPreviewGroupViewSnapshot {
 export interface UrlPreviewGroupViewActions {
     /** Invoked when the preview limit toggle is clicked. */
     onTogglePreviewLimit: () => void;
-    /** Invoked when the hide-preview action is clicked. */
-    onHideClick: () => Promise<void>;
+    /** Invoked when the user closes the preview of `link`. */
+    onHideClick: (link: string) => Promise<void>;
     /** Invoked when a preview image is clicked. */
     onImageClick: (preview: UrlPreview) => void;
 }

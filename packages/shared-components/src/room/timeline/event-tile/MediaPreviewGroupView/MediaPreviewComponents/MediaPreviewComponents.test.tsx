@@ -69,6 +69,31 @@ describe("MediaPreviewComponents", () => {
             expect(link).toHaveAttribute("target", "_blank");
         });
 
+        it("renders the footer below the body when there is one", () => {
+            render(<TextContent header="Matrix" body="A description" footer="matrix.org" />);
+
+            const body = screen.getByText("A description");
+            const footer = screen.getByText("matrix.org");
+            expect(body.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        });
+
+        it("renders no body element when the body is empty", () => {
+            const { container } = render(<TextContent header="Matrix" body="" footer="matrix.org" />);
+
+            expect(container.firstElementChild!.children).toHaveLength(2);
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+        });
+
+        it("uses a different class for the side layout", () => {
+            const { container, rerender } = render(<TextContent header="Matrix" body="A description" />);
+            const stackedClass = container.firstElementChild!.className;
+
+            rerender(<TextContent header="Matrix" body="A description" layout="side" />);
+
+            expect(container.firstElementChild!.className).not.toEqual(stackedClass);
+            expect(container.firstElementChild!.className).toContain(stackedClass);
+        });
+
         it("renders the header and body together as text content", () => {
             render(<TextContent header="example.com" headerUrl="https://example.com/page" body="A page" />);
 
@@ -105,6 +130,12 @@ describe("MediaPreviewComponents", () => {
 
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(screen.getByTestId("icon")).toHaveStyle({ color: "rgb(66, 0, 166)" });
+        });
+
+        it("leaves the icon untinted when no colour is given", () => {
+            render(<Icon icon={<span data-testid="icon">icon</span>} />);
+
+            expect(screen.getByTestId("icon")).not.toHaveAttribute("style");
         });
     });
 
@@ -179,6 +210,31 @@ describe("MediaPreviewComponents", () => {
 
                 // The stale validity state is for the old source, so nothing is shown for the new one.
                 expect(container).toBeEmptyDOMElement();
+            });
+
+            it("uses a dedicated class for the thumbnail size", async () => {
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="banner" />,
+                );
+                await waitForImage(container);
+                const bannerClass = container.firstElementChild!.className;
+
+                rerender(<Image image={demoImage} imageAlt="A wide demo image" imageSize="thumbnail" />);
+
+                expect(container.firstElementChild!.className).not.toEqual(bannerClass);
+            });
+
+            it("uses a dedicated class for the logo size and leaves the logo unclickable", async () => {
+                const { container, rerender } = render(
+                    <Image image={demoImage} imageAlt="A wide demo image" imageSize="thumbnail" />,
+                );
+                await waitForImage(container);
+                const thumbnailClass = container.firstElementChild!.className;
+
+                rerender(<Image image={demoImage} imageAlt="A wide demo image" imageSize="logo" />);
+
+                expect(container.firstElementChild!.className).not.toEqual(thumbnailClass);
+                expect(screen.queryByRole("button")).not.toBeInTheDocument();
             });
 
             it("distinguishes banner and full sizes by class", async () => {

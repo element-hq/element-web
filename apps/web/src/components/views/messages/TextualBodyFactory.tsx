@@ -5,22 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
-    _t,
     EventContentBodyView,
     TextualBodyView,
     type TextualBodyContentElement,
     useCreateAutoDisposedViewModel,
     MediaPreviewGroupPreview,
     useViewModel,
-    linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
+import { imageFitsThumbnail } from "../../../utils/UrlPreviewFetcher";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -39,11 +38,16 @@ import {
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
-import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
+
+/** Footer of a link preview: the link's host, e.g. "github.com". Site name if the link cannot be parsed. */
+function previewHost(preview: UrlPreview): string {
+    if (!URL.canParse(preview.link)) return preview.siteName;
+    return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
+}
 
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
     if (msgtype === MsgType.Notice) {
@@ -160,58 +164,67 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
-        let content: MediaPreviewGroupEntryContent;
-        if (preview.image === undefined) {
-            content = {
-                type: "text",
-            };
-        } else {
-            content = {
-                type: "image",
-                image: preview.image.imageFull,
-                imageAlt: preview.title,
-                imageSize: "banner",
-                imageOnClick: () => {
-                    Modal.createDialog(
-                        ImageView,
-                        {
-                            src: preview.image!.imageFull, // full-res URL
-                            name: `Thumbnail of ${preview.title}`,
-                            width: preview.image?.width,
-                            height: preview.image?.height,
-                            fileSize: preview.image?.fileSize,
-                        },
-                        "mx_Dialog_lightbox",
-                        undefined,
-                        true,
-                    );
-                },
-            };
-        }
-
-        let body: string;
-        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
-        else body = preview.description!;
-
-        return {
-            id: preview.link,
-            header: preview.title,
-            headerUrl: preview.link,
-            body,
-            buttons: [
-                {
-                    label: _t("timeline|url_preview|open_link"),
-                    icon: <PopOutIcon />,
-                    onClick: async () => {
-                        window.open(preview.link, "_blank", "noreferrer");
+    // Side layout: image left, title/description/host right. The title is the link, so no button.
+    //
+    // The page's Open Graph image is shown when cropping it to the thumbnail box keeps most of it.
+    // Otherwise (a wide banner, say) the site's logo (MSC4448) stands in, as a cropped sliver of a banner
+    // says less than a logo does. A page with neither gets a text-only tile.
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            if (preview.image !== undefined && (imageFitsThumbnail(preview.image) || preview.siteIcon === undefined)) {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "thumbnail",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
                     },
+                };
+            } else if (preview.siteIcon !== undefined) {
+                content = {
+                    type: "image",
+                    image: preview.siteIcon,
+                    imageAlt: previewHost(preview),
+                    imageSize: "logo",
+                };
+            } else {
+                content = {
+                    type: "text",
+                };
+            }
+
+            return {
+                id: preview.link,
+                layout: "side",
+                header: preview.title,
+                headerUrl: preview.link,
+                body: preview.description?.trim() ?? "",
+                footer: previewHost(preview),
+                // Closing a preview hides just that one, and the choice sticks across reloads.
+                onDismiss: () => {
+                    void urlPreviewVm.onHideClick(preview.link).catch((error) => {
+                        logger.warn("UrlPreviewViewModel failed to hide preview", error);
+                    });
                 },
-            ],
-            ...linkIcon(),
-            ...content,
-        };
-    };
+                ...content,
+            };
+        },
+        [urlPreviewVm],
+    );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
@@ -295,7 +308,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             entries: previews.map(previewToEntry),
             collapse,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, collapse, previewToEntry, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
