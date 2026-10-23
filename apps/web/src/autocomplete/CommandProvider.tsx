@@ -88,7 +88,7 @@ export default class CommandProvider extends AutocompleteProvider {
                         <TextualCompletion
                             title={`/${usedAlias || result.command}`}
                             subtitle={result.args}
-                            description={_t(result.description)}
+                            description={result.getDescription()}
                         />
                     ),
                     range: range!,
