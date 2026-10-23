@@ -89,7 +89,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                 }
                 const childLogger = logger.getChild("[enable key storage]");
                 childLogger.info("User requested enabling key storage");
-                let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
+                const currentKeyBackup = await crypto.checkKeyBackupAndEnable();
                 if (currentKeyBackup) {
                     logger.info(
                         `Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`,
@@ -99,17 +99,13 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     if (currentKeyBackup.trustInfo.trusted || currentKeyBackup.trustInfo.matchesDecryptionKey) {
                         logger.info("Existing key backup can be used");
                     } else {
-                        logger.warn("Existing key backup cannot be used, creating new backup");
                         // There aren't any *usable* backups, so we need to create a new one.
-                        currentKeyBackup = null;
+                        // `resetKeyBackup` will delete the existing backup.
+                        logger.warn("Existing key backup cannot be used, creating new backup");
+                        await resetKeyBackupAndWait(crypto);
                     }
                 } else {
                     logger.info("No existing key backup versions are present, creating new backup");
-                }
-
-                // If there is no usable key backup on the server, create one.
-                // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
-                if (currentKeyBackup === null) {
                     await resetKeyBackupAndWait(crypto);
                 }
 
