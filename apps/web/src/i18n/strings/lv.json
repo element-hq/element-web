@@ -2864,10 +2864,6 @@
             "in_reply_to": "<a>Atbildē uz</a> <pill>",
             "in_reply_to_for_export": "Atbildot uz <a>šo ziņu</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Jūs tiksiet novirzīts uz trešās puses vietni, lai jūs varētu autentificēt savu kontu %(integrationsUrl)s lietošanai. Vai vēlaties turpināt?",
-            "dialog_title": "Pievienot integrāciju"
-        },
         "self_redaction": "Ziņa ir izdzēsta",
         "send_state_encrypting": "Ziņas šifrēšana...",
         "send_state_failed": "Neizdevās nosūtīt",

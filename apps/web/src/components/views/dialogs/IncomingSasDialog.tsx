@@ -75,6 +75,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             this.props.verifier.cancel(new Error("User cancel"));
         }
         this.props.verifier.removeListener(VerifierEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.removeListener(VerifierEvent.Cancel, this.onVerifierCancel);
     }
 
     private async fetchOpponentProfile(): Promise<void> {

@@ -52,6 +52,7 @@ export class SpaceNotificationState extends NotificationState {
 
     public destroy(): void {
         super.destroy();
+        this.calculateTotalState.cancel();
         for (const state of Object.values(this.states)) {
             state.off(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
         }

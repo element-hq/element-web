@@ -72,6 +72,7 @@ describe("Lifecycle", () => {
             setNotifTimelineSet: vi.fn(),
             getRooms: vi.fn().mockReturnValue([]),
             matrixRTC: { on: vi.fn(), off: vi.fn() },
+            whoami: vi.fn(),
         });
         // stub this
         vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
@@ -181,7 +182,6 @@ describe("Lifecycle", () => {
             const prom = Lifecycle.loadSession({
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
-                urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
                 abortSignal: abortController.signal,
             });
             abortController.abort();
@@ -640,6 +640,31 @@ describe("Lifecycle", () => {
                 // written a token of its own to idb and thereby proved the copy is spare
                 expect(localStorage.getItem("mx_access_token")).toBeNull();
             });
+        });
+    });
+
+    describe("configureFromCompletedOAuthLogin()", () => {
+        beforeEach(() => {
+            initIdbMock();
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it.each([
+            [true, "true"],
+            [undefined, "false"],
+        ])("should forward is_guest=%s from whoami as the guest flag", async (isGuest, stored) => {
+            mockClient.whoami.mockResolvedValue({ user_id: userId, device_id: deviceId, is_guest: isGuest });
+
+            const creds = await Lifecycle.configureFromCompletedOAuthLogin({
+                accessToken,
+                refreshToken,
+                homeserverUrl,
+                identityServerUrl,
+                clientId: "test-client-id",
+            });
+
+            expect(creds.guest).toBe(isGuest === true);
+            expect(localStorage.getItem("mx_is_guest")).toBe(stored);
         });
     });
 

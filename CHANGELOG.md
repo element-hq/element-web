@@ -1,3 +1,61 @@
+Changes in [1.12.32](https://github.com/element-hq/element-web/releases/tag/v1.12.32) (2026-10-16)
+==================================================================================================
+## Security
+
+* Remove support for NEB starter links in messages. Fixes GHSA-x2rg-2g77-mx2w
+* Remove support for guest_access_token & guest_user_id. Fixes GHSA-c88w-7h6p-27xr
+
+## 🐛 Bug Fixes
+
+* Fix crash when preview room is under the fold ([#35500](https://github.com/element-hq/element-web/pull/35500)).
+
+
+Changes in [1.12.31](https://github.com/element-hq/element-web/releases/tag/v1.12.31) (2026-10-13)
+==================================================================================================
+## ✨ Features
+
+* Do not allow skip device verification by default ([#35259](https://github.com/element-hq/element-web/pull/35259)). Contributed by @mxandreas.
+* Collection of EN string changes, Pt. 2 ([#35289](https://github.com/element-hq/element-web/pull/35289)). Contributed by @dbkr.
+* Show messages local echos in the new timeline ([#35269](https://github.com/element-hq/element-web/pull/35269)). Contributed by @langleyd.
+* Update wording of crypto stuff during sign-in ([#35239](https://github.com/element-hq/element-web/pull/35239)). Contributed by @andybalaam.
+* Add a Markdown viewer for .md attachments in the right panel ([#35203](https://github.com/element-hq/element-web/pull/35203)). Contributed by @ZacksBot.
+* Improve invite button UX in member list ([#35270](https://github.com/element-hq/element-web/pull/35270)). Contributed by @florianduros.
+* Collection of EN string changes, Pt.1 ([#35115](https://github.com/element-hq/element-web/pull/35115)). Contributed by @dbkr.
+* Show the open room in the room list before joining it ([#35207](https://github.com/element-hq/element-web/pull/35207)). Contributed by @florianduros.
+* Offer 'Sign out' on the verification page instead of 'Remove this device' ([#35211](https://github.com/element-hq/element-web/pull/35211)). Contributed by @andybalaam.
+* Move PDF viewer page controls left and zoom controls right, and show the zoom level ([#35229](https://github.com/element-hq/element-web/pull/35229)). Contributed by @ZacksBot.
+* Element call as a react component ([#34935](https://github.com/element-hq/element-web/pull/34935)). Contributed by @toger5.
+* Show but disable unusable verification buttons ([#35204](https://github.com/element-hq/element-web/pull/35204)). Contributed by @andybalaam.
+* Improve knocking workflow ([#35140](https://github.com/element-hq/element-web/pull/35140)). Contributed by @florianduros.
+* Pdf viewer zoom buttons ([#35145](https://github.com/element-hq/element-web/pull/35145)). Contributed by @ZacksBot.
+* Render PDFs in a usercontent iframe ([#35067](https://github.com/element-hq/element-web/pull/35067)). Contributed by @ZacksBot.
+*  Add cross-room thread panels to Threads Activity Centre ([#32851](https://github.com/element-hq/element-web/pull/32851)). Contributed by @nathanael-h.
+* User status in RTE (wysiwyg) composer ([#35139](https://github.com/element-hq/element-web/pull/35139)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix blank maps by bundling the maplibre-gl worker explicitly ([#35442](https://github.com/element-hq/element-web/pull/35442)). Contributed by @RiotRobot.
+* [Backport staging] Revert "Do not allow skip device verification by default (#35259)" ([#35345](https://github.com/element-hq/element-web/pull/35345)). Contributed by @RiotRobot.
+* [Backport staging] Fix Debian control file Maintainer field ([#35344](https://github.com/element-hq/element-web/pull/35344)). Contributed by @RiotRobot.
+* Log getPickleKey() failures consistently ([#34955](https://github.com/element-hq/element-web/pull/34955)). Contributed by @hughns.
+* Fix message draft getting lost when a call ends ([#35261](https://github.com/element-hq/element-web/pull/35261)). Contributed by @t3chguy.
+* Fix clicks on pills closing the RoomView ([#35266](https://github.com/element-hq/element-web/pull/35266)). Contributed by @t3chguy.
+* Align own-message reactions with the bubble edge ([#35074](https://github.com/element-hq/element-web/pull/35074)). Contributed by @langleyd.
+* Reveal the add-reaction control when hovering anywhere on an event ([#35177](https://github.com/element-hq/element-web/pull/35177)). Contributed by @langleyd.
+* Accept dropped files in the right panel's chat timeline ([#35254](https://github.com/element-hq/element-web/pull/35254)). Contributed by @ara4n.
+* Only dismiss the incoming call toast when its own events are redacted ([#35238](https://github.com/element-hq/element-web/pull/35238)). Contributed by @ara4n.
+* Fix thread panel actions incorrectly triggering thread open ([#35263](https://github.com/element-hq/element-web/pull/35263)). Contributed by @t3chguy.
+* Fall back to origin\_server\_ts in call tombstone tiles without sender\_ts ([#35186](https://github.com/element-hq/element-web/pull/35186)). Contributed by @ara4n.
+* Add `no-cache` header to /usercontent/ in default nginx config ([#35237](https://github.com/element-hq/element-web/pull/35237)). Contributed by @t3chguy.
+* Keep an incoming call ringing when a call in another room ends ([#35222](https://github.com/element-hq/element-web/pull/35222)). Contributed by @ara4n.
+* Keep thread reactions visible when hovering the message ([#35171](https://github.com/element-hq/element-web/pull/35171)). Contributed by @langleyd.
+* Stop escaping a plain text message which has no markdown in it when editing ([#34638](https://github.com/element-hq/element-web/pull/34638)). Contributed by @hayaksi1.
+* Stop presenting a PiP call when the widget closes it ([#35179](https://github.com/element-hq/element-web/pull/35179)). Contributed by @ara4n.
+* Fix edited message text being clipped when it contains a wide code block ([#35169](https://github.com/element-hq/element-web/pull/35169)). Contributed by @langleyd.
+* Fix spotlight alias text and notification badge in high contrast mode and deflake test ([#35037](https://github.com/element-hq/element-web/pull/35037)). Contributed by @langleyd.
+* Notify when you are invited to a room ([#34665](https://github.com/element-hq/element-web/pull/34665)). Contributed by @hayaksi1.
+
+
 Changes in [1.12.30](https://github.com/element-hq/element-web/releases/tag/v1.12.30) (2026-09-29)
 ==================================================================================================
 ## 🦖 Deprecations

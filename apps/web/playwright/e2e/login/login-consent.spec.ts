@@ -150,11 +150,16 @@ test.describe("Login", () => {
             await selectHomeserver(page, homeserver.baseUrl);
 
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
+            // The Sign in button is disabled whilst the homeserver is checked, wait for it to finish transitioning
+            // back to its enabled colours, otherwise axe may flag the intermediate colours as having too low contrast
+            const signInButton = page.getByRole("button", { name: "Sign in" });
+            await expect(signInButton).toBeEnabled();
+            await expect.poll(() => signInButton.evaluate((el) => el.getAnimations().length)).toBe(0);
             await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
             await page.getByPlaceholder("Password").fill(credentials.password!);
-            await page.getByRole("button", { name: "Sign in" }).click();
+            await signInButton.click();
 
             await expect(page).toHaveURL(/\/#\/home$/);
         });

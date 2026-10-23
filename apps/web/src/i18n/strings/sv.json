@@ -76,6 +76,7 @@
         "new_video_room": "Nytt videorum",
         "next": "Nästa",
         "no": "Nej",
+        "not_now": "Inte nu",
         "ok": "OK",
         "open": "Öppna",
         "pin": "Häftstift",
@@ -209,7 +210,13 @@
         "incorrect_password": "Felaktigt lösenord",
         "log_in_new_account": "<a>Logga in</a> i ditt nya konto.",
         "logout_dialog": {
+            "back_to_app": "Ta mig tillbaka till appen",
+            "check_recovery_key": "Kontrollera din återställningsnyckel",
+            "check_recovery_key_title": "Se till att du har åtkomst till din återställningsnyckel innan du tar bort den här enheten.",
+            "continue": "Fortsätt att ta bort den här enheten",
             "description": "Är du säker på att du vill ta bort den här enheten?",
+            "generate_recovery_key": "Skapa en ny återställningsnyckel",
+            "keep_access_description": "Se till att du alltid har tillgång till en annan verifierad enhet eller din återställningsnyckel för att undvika att förlora din krypterade chatthistorik.",
             "setup_key_backup_title": "Du kommer att förlora åtkomsten till dina krypterade meddelanden",
             "setup_secure_backup_description": "Det här är din enda enhet. Om du tar bort den behöver du en återställningsnyckel för att bekräfta din digitala identitet och återställa dina krypterade chattar nästa gång du loggar in.",
             "skip_key_backup": "Ta bort den här enheten ändå"
@@ -678,7 +685,7 @@
     },
     "create_section_dialog": {
         "add_rooms": "Lägg till chattar",
-        "create_section": "Skapa avsnitt",
+        "create_section": "Skapa sektion",
         "empty_list_text": "Inga chattar hittades",
         "list_title": "Föreslagen",
         "placeholder": "Sök i dina chattar",
@@ -951,6 +958,7 @@
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
         "confirm_encryption_setup_title": "Bekräfta krypteringsinställning",
         "continue_with_reset": "Fortsätt med återställningen",
+        "create_recovery_key": "Skapa återställningsnyckel",
         "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
         "cross_signing_room_verified": "Alla i det här rummet är verifierade",
         "cross_signing_room_warning": "Någon använder en okänd session",
@@ -987,6 +995,7 @@
         },
         "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) digitala identitet återställdes. <a>Läs mer</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s användarkonto återställdes. <a>Läs mer</a>",
+        "recovery_key_description": "Dina chattar säkerhetskopieras automatiskt med end-to-end-kryptering. För att återställa denna säkerhetskopia och behålla din digitala identitet när du förlorar åtkomst till alla dina enheter behöver du din återställningsnyckel.",
         "recovery_method_removed": {
             "description_1": "Den här enheten har upptäckt att din säkerhetsfras och nyckel för säkra meddelanden har tagits bort.",
             "description_2": "Om du gjorde detta av misstag kan du konfigurera Säkra meddelanden på den här enheten, vilket kommer att kryptera enhetens meddelandehistorik med en ny återställningsmetod.",
@@ -994,7 +1003,6 @@
             "warning": "Om du inte tog bort återställningsmetoden kan en angripare försöka komma åt ditt konto. Byt ditt kontolösenord och ställ in en ny återställningsmetod omedelbart i inställningarna."
         },
         "set_up_recovery": "Säkerhetskopiera dina chattar",
-        "set_up_recovery_toast_description": "Dina chattar säkerhetskopieras automatiskt. Du behöver din återställningsnyckel för att återställa dem om du förlorar alla dina enheter.",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
         "turn_on_key_storage": "Slå på nyckellagring",
         "turn_on_key_storage_description": "Detta gör att du kan se din chatthistorik på alla nya enheter och krävs för säkerhetskopiering av chattar och digital identitet.",
@@ -1748,7 +1756,7 @@
         "create_room": "Skapa en gruppchatt",
         "explore_rooms": "Utforska offentliga rum",
         "has_avatar_label": "Fantastiskt, det kommer att hjälpa folk att veta att det är du",
-        "intro_byline": "Äg dina konversationer.",
+        "intro_byline": "Own your conversations.",
         "intro_welcome": "Välkommen till %(appName)s",
         "no_avatar_label": "Lägg till en bild för att folk ska veta att det är du.",
         "send_dm": "Skicka ett direktmeddelande",
@@ -2552,6 +2560,7 @@
             "key_storage": {
                 "allow_key_storage": "Tillåt nyckellagring",
                 "description": "Detta gör att du kan se din chatthistorik på alla nya enheter och krävs för säkerhetskopiering av chattar och digital identitet. <a>Läs mer</a>",
+                "recovery_requires_key_storage": "Nyckellagring måste vara aktiverad för att konfigurera återställning",
                 "title": "Nyckellagring"
             },
             "recovery": {
@@ -2561,10 +2570,11 @@
                 "change_recovery_key": "Byt återställningsnyckel",
                 "change_recovery_key_description": "Spara ner den här nya återställningsnyckeln på ett säkert ställe. Klicka sedan på Fortsätt för att bekräfta ändringen.",
                 "change_recovery_key_title": "Byt återställningsnyckel?",
-                "description": "Dina chattar säkerhetskopieras automatiskt. Du behöver din återställningsnyckel för att återställa dem om du förlorar alla dina enheter.",
                 "enter_key_error": "Återställningsnyckeln du angav är inte korrekt.",
                 "enter_recovery_key": "Ange återställningsnyckel",
                 "forgot_recovery_key": "Glömt återställningsnyckeln?",
+                "key_active_description": "Du kan använda din återställningsnyckel för att bekräfta nya enheter eller återställa dina krypterade chattar om du förlorar åtkomst till alla dina enheter.",
+                "key_active_title": "Din nya återställningsnyckel är nu aktiv",
                 "key_storage_warning": "Din säkerhetskopiering är inte synkroniserad. Klicka på knappen nedan för att åtgärda problemet.",
                 "save_key_description": "Dela inte detta med någon!",
                 "save_key_title": "Återställningsnyckel",
@@ -2977,7 +2987,7 @@
         "show_join_leave": "Visa gå med/lämna-meddelanden (inbjudningar/borttagningar/banningar påverkas inte)",
         "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_nsfw_content": "Visa NSFW-innehåll",
-        "show_people_sections": "Visa Personer som ett avsnitt",
+        "show_people_sections": "Visa Personer som en sektion",
         "show_read_receipts": "Visa läskvitton som skickats av andra användare",
         "show_redaction_placeholder": "Visa en platshållare för borttagna meddelanden",
         "show_sections": "Visa sektioner",
@@ -3608,10 +3618,6 @@
             "error_loading": "Det går inte att ladda det inlägg som detta svar avser. Det kanske inte finns, eller så har du kanske inte behörighet att se det.",
             "in_reply_to": "<a>Som svar på</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>detta meddelande</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Du kommer att skickas till en tredjepartswebbplats så att du kan autentisera ditt konto för användning med %(integrationsUrl)s. Vill du fortsätta?",
-            "dialog_title": "Lägg till integration"
         },
         "self_redaction": "Meddelande raderat",
         "send_state_encrypting": "Krypterar ditt meddelande …",

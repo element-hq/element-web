@@ -68,7 +68,7 @@
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/emojibase-bindings": "catalog:",
         "@matrix-org/spec": "^1.7.0",
-        "@tanstack/react-virtual": "3.14.13",
+        "@tanstack/react-virtual": "3.14.16",
         "@vector-im/compound-design-tokens": "catalog:",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
@@ -82,7 +82,7 @@
         "matrix-web-i18n": "catalog:",
         "react-blurhash": "^0.3.0",
         "react-merge-refs": "^3.0.2",
-        "react-resizable-panels": "4.14.1",
+        "react-resizable-panels": "4.14.4",
         "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^1.0.0"
     },
@@ -112,7 +112,7 @@
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
         "expect": "^30.5.1",
-        "oxfmt": "0.72.0",
+        "oxfmt": "0.73.0",
         "storybook": "10.5.8",
         "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",
@@ -128,7 +128,7 @@
         "node": ">=20.0.0"
     },
     "peerDependencies": {
-        "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "@vector-im/compound-web": "^8.3.5 || ^9.0.0 || ^10.0.0",
         "react-dom": "catalog:",
         "react": "catalog:"
     }

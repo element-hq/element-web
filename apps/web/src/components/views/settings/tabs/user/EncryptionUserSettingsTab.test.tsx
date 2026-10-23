@@ -136,7 +136,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
-        const button = await waitFor(() => screen.getByRole("button", { name: "Get recovery key" }));
+        const button = await waitFor(() => screen.getByRole("button", { name: "Create recovery key" }));
         await user.click(button);
         await waitFor(() =>
             expect(screen.getByRole("heading", { name: "Save your recovery key somewhere safe" })).toBeInTheDocument(),

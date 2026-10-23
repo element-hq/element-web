@@ -950,7 +950,6 @@
             "warning": "Os na wnaethoch chi ddileu'r dull adfer, mae'n bosibl bod ymosodwr yn ceisio cael mynediad i'ch cyfrif. Newidiwch eich cyfrinair cyfrif a gosodwch ddull adfer newydd ar unwaith yn y Gosodiadau."
         },
         "set_up_recovery": "Gosod  adfer",
-        "set_up_recovery_toast_description": "Cynhyrchwch allwedd adfer y mae modd ei defnyddio i adfer hanes eich neges wedi'i hamgryptio rhag ofn i chi golli mynediad i'ch dyfeisiau.",
         "set_up_toast_title": "Gosod Copi Wrth Gefn Diogel",
         "turn_on_key_storage": "Troi storfa allweddi ymlaen",
         "turn_on_key_storage_description": "Cadwch eich hunaniaeth cryptograffig a'ch allweddi neges yn ddiogel ar y gweinydd. Bydd hyn yn caniatáu ichi weld hanes eich neges ar unrhyw ddyfeisiau newydd. %1$s.",
@@ -2451,7 +2450,6 @@
                 "change_recovery_key": "Newid allwedd adfer",
                 "change_recovery_key_description": "Ysgrifennwch yr allwedd adfer newydd hon yn rhywle diogel. Yna cliciwch Parhau i gadarnhau'r newid.",
                 "change_recovery_key_title": "Newid allwedd adfer?",
-                "description": "Adfer eich hunaniaeth cryptograffig a hanes neges gydag allwedd adfer os ydych chi wedi colli'ch holl ddyfeisiau presennol.",
                 "enter_key_error": "Nid yw'r allwedd adfer a roesoch yn gywir.",
                 "enter_recovery_key": "Rhowch allwedd adfer",
                 "forgot_recovery_key": "Wedi anghofio allwedd adfer?",
@@ -3457,10 +3455,6 @@
             "error_loading": "Methu llwytho&#39;r digwyddiad yr atebwyd iddo; naill ai nid yw&#39;n bodoli neu nid oes gennych ganiatâd i&#39;w weld.",
             "in_reply_to": "<a>Yn ymateb i</a><pill>",
             "in_reply_to_for_export": "Yn ymateb i'r <a>neges hon</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Rydych ar fin cael eich tywys i wefan trydydd parti er mwyn i chi allu dilysu'ch cyfrif i'w ddefnyddio gyda %(integrationsUrl)s. Ydych chi am barhau?",
-            "dialog_title": "Ychwanegu Integreiddiad"
         },
         "self_redaction": "Neges wedi'i dileu",
         "send_state_encrypting": "Wrthi'n amgryptio'ch neges…",

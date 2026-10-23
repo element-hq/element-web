@@ -945,7 +945,6 @@
             "warning": "Hvis det ikke var deg som fjernet gjenopprettingsmetoden, kan det være en hacker som prøver å få tilgang til kontoen din. Bytt passordet for kontoen din og angi en ny gjenopprettingsmetode øyeblikkelig i Innstillinger."
         },
         "set_up_recovery": "Sett opp gjenoppretting",
-        "set_up_recovery_toast_description": "Generer en gjenopprettingsnøkkel som kan brukes til å gjenopprette den krypterte meldingshistorikken i tilfelle du mister tilgangen til enhetene dine.",
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
         "turn_on_key_storage": "Slå på nøkkeloppbevaring",
         "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
@@ -2441,7 +2440,6 @@
                 "change_recovery_key": "Endre gjenopprettingsnøkkel",
                 "change_recovery_key_description": "",
                 "change_recovery_key_title": "Vil du endre gjenopprettingsnøkkel?",
-                "description": "Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine eksisterende enheter.",
                 "enter_key_error": "Gjenopprettingsnøkkelen du skrev inn er ikke riktig.",
                 "enter_recovery_key": "Skriv inn gjenopprettingsnøkkel",
                 "forgot_recovery_key": "Glemt gjenopprettingsnøkkelen?",
@@ -3426,10 +3424,6 @@
             "error_loading": "Kan ikke laste inn hendelsen som ble besvart, enten eksisterer den ikke eller du har ikke tillatelse til å se den.",
             "in_reply_to": "<a>Som svar på</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>denne meldingen</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Du er i ferd med å bli ført til et tredjeparts nettsted slik at du kan autentisere kontoen din for bruk med%(integrationsUrl)s. Ønsker du å fortsette?",
-            "dialog_title": "Legg til en integrering"
         },
         "self_redaction": "Meldingen ble slettet",
         "send_state_encrypting": "Krypterer meldingen din …",

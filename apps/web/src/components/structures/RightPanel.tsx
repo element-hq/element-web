@@ -88,6 +88,7 @@ export default class RightPanel extends React.Component<Props, IState> {
     public componentWillUnmount(): void {
         this.context?.removeListener(RoomStateEvent.Members, this.onRoomStateMember);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.delayedUpdate.cancel();
     }
 
     public static getDerivedStateFromProps(props: Props): Partial<IState> {

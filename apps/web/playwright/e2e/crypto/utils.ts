@@ -326,7 +326,7 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
             await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
         }
 
-        await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
+        await encryptionTab.getByRole("button", { name: "Create recovery key" }).click();
 
         const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
         await encryptionTab.getByRole("button", { name: "Continue" }).click();

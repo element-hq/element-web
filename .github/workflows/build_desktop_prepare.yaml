@@ -42,7 +42,8 @@ on:
             deploy:
                 description: "Whether the build should be deployed to production"
                 value: ${{ inputs.deploy }}
-permissions: {}
+permissions:
+    contents: read
 jobs:
     prepare:
         name: Prepare
