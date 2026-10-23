@@ -290,6 +290,7 @@ export interface Settings {
     "webRtcAllowPeerToPeer": IBaseSetting<boolean>;
     "enableLegacyCallsVoip": IBaseSetting<boolean>;
     "webrtc_audiooutput": IBaseSetting<string>;
+    "webrtc_ringtone_audiooutput": IBaseSetting<string>;
     "webrtc_audioinput": IBaseSetting<string>;
     "webrtc_videoinput": IBaseSetting<string>;
     "webrtc_audio_autoGainControl": IBaseSetting<boolean>;
@@ -1020,6 +1021,10 @@ export const SETTINGS: Settings = {
         invertedSettingName: "webRtcForceTURN",
     },
     "webrtc_audiooutput": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "default",
+    },
+    "webrtc_ringtone_audiooutput": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: "default",
     },
