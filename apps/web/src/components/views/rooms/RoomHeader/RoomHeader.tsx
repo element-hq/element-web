@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useContext, useState } from "react";
+import React, { type ComponentType, type JSX, type ReactNode, useCallback, useContext, useState } from "react";
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
@@ -56,6 +56,77 @@ import { LocalRoom } from "../../../../models/LocalRoom.ts";
 import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 import { useUserStatus } from "../../../../hooks/useUserStatus.ts";
 import { SDKContext } from "../../../../contexts/SDKContext.ts";
+import { ModuleApi } from "../../../../modules/Api.ts";
+import { useModuleRoomCallOptions } from "../../../../modules/ExtrasApi.ts";
+
+interface CallMenuItem {
+    key: string;
+    label: string;
+    children?: ReactNode;
+    onClick: (ev: React.MouseEvent) => void;
+}
+
+/**
+ * A voice or video call button: a plain button with one way of calling, a menu with several.
+ */
+function CallButton({
+    items,
+    disabledReason,
+    label,
+    menuTitle,
+    Icon,
+}: {
+    items: CallMenuItem[];
+    disabledReason: string | null;
+    label: string;
+    menuTitle: string;
+    Icon: ComponentType<React.SVGAttributes<SVGElement>>;
+}): JSX.Element {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const disabled = items.length === 0;
+    const iconWithTooltip = (
+        <Tooltip label={(disabled && disabledReason) || label}>
+            <Icon />
+        </Tooltip>
+    );
+    if (items.length > 1) {
+        return (
+            <Menu
+                open={menuOpen}
+                onOpenChange={setMenuOpen}
+                title={menuTitle}
+                trigger={<IconButton aria-label={label}>{iconWithTooltip}</IconButton>}
+                side="left"
+                align="start"
+            >
+                {items.map((item) => (
+                    <MenuItem
+                        key={item.key}
+                        label={item.label}
+                        aria-label={item.label}
+                        children={item.children}
+                        className="mx_RoomHeader_videoCallOption"
+                        onClick={(ev) => {
+                            setMenuOpen(false);
+                            item.onClick(ev);
+                        }}
+                        Icon={Icon}
+                        onSelect={() => {} /* Dummy handler since we want the click event.*/}
+                    />
+                ))}
+            </Menu>
+        );
+    }
+    return (
+        <IconButton
+            disabled={disabled}
+            aria-label={(disabled && disabledReason) || label}
+            onClick={(ev) => items[0]?.onClick(ev)}
+        >
+            {iconWithTooltip}
+        </IconButton>
+    );
+}
 
 function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: JSX.Element }): JSX.Element {
     const sdkContext = useContext(SDKContext);
@@ -129,135 +200,58 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         </Tooltip>
     );
 
-    const videoCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
-            <VideoCallIcon />
-        </Tooltip>
-    );
+    const moduleCallOptions = useModuleRoomCallOptions(ModuleApi.instance.extras, room.roomId, memberCount);
 
-    const voiceCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|voice_call")}>
-            <VoiceCallIcon />
-        </Tooltip>
-    );
-
-    const [videoMenuOpen, setVideoMenuOpen] = useState(false);
-
-    const onVideoOpenChange = useCallback(
-        (newOpen: boolean) => {
-            if (!videoCallDisabledReason) setVideoMenuOpen(newOpen);
-        },
-        [videoCallDisabledReason],
-    );
-
-    const [voiceMenuOpen, setVoiceMenuOpen] = useState(false);
-
-    const onVoiceOpenChange = useCallback(
-        (newOpen: boolean) => {
-            if (!voiceCallDisabledReason) setVoiceMenuOpen(newOpen);
-        },
-        [voiceCallDisabledReason],
-    );
+    // Element Web's own ways of calling, dropped while they are disabled or a module's option
+    // says it is the only way to reach the room's members, plus the modules'
+    const ownCallsHidden = moduleCallOptions.some((option) => option.exclusive);
+    const videoCallItems: CallMenuItem[] = [
+        ...(videoCallDisabledReason || ownCallsHidden
+            ? []
+            : callOptions.map((option) => ({
+                  key: String(option),
+                  ...getPlatformCallTypeProps(option),
+                  onClick: (ev: React.MouseEvent) => videoCallClick(ev, option),
+              }))),
+        ...moduleCallOptions.map((option, i) => ({
+            key: `module-${i}`,
+            label: option.label,
+            onClick: () => option.onSelect(true),
+        })),
+    ];
+    const voiceCallItems: CallMenuItem[] = [
+        ...(voiceCallDisabledReason || ownCallsHidden
+            ? []
+            : callOptions.map((option) => ({
+                  key: String(option),
+                  ...getPlatformCallTypeProps(option),
+                  onClick: (ev: React.MouseEvent) => voiceCallClick(ev, option),
+              }))),
+        ...moduleCallOptions.map((option, i) => ({
+            key: `module-${i}`,
+            label: option.label,
+            onClick: () => option.onSelect(false),
+        })),
+    ];
 
     const startVideoCallButton = (
-        <>
-            {/* Can be either a menu or just a button depending on the number of call options.*/}
-            {callOptions.length > 1 ? (
-                <Menu
-                    open={videoMenuOpen}
-                    onOpenChange={onVideoOpenChange}
-                    title={_t("voip|video_call_using")}
-                    trigger={
-                        <IconButton
-                            disabled={!!videoCallDisabledReason}
-                            aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
-                        >
-                            {videoCallIconWithTooltip}
-                        </IconButton>
-                    }
-                    side="left"
-                    align="start"
-                >
-                    {callOptions.map((option) => {
-                        const { label, children } = getPlatformCallTypeProps(option);
-                        return (
-                            <MenuItem
-                                key={option}
-                                label={label}
-                                aria-label={label}
-                                children={children}
-                                className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => {
-                                    setVideoMenuOpen(false);
-                                    videoCallClick(ev, option);
-                                }}
-                                Icon={VideoCallIcon}
-                                onSelect={() => {} /* Dummy handler since we want the click event.*/}
-                            />
-                        );
-                    })}
-                </Menu>
-            ) : (
-                <IconButton
-                    disabled={!!videoCallDisabledReason}
-                    aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
-                    onClick={videoClick}
-                >
-                    {videoCallIconWithTooltip}
-                </IconButton>
-            )}
-        </>
+        <CallButton
+            items={videoCallItems}
+            disabledReason={videoCallDisabledReason}
+            label={_t("voip|video_call")}
+            menuTitle={_t("voip|video_call_using")}
+            Icon={VideoCallIcon}
+        />
     );
     const startVoiceCallButton = (
-        <>
-            {/* Can be either a menu or just a button depending on the number of call options.*/}
-            {callOptions.length > 1 ? (
-                <Menu
-                    open={voiceMenuOpen}
-                    onOpenChange={onVoiceOpenChange}
-                    title={_t("voip|voice_call_using")}
-                    trigger={
-                        <IconButton
-                            disabled={!!voiceCallDisabledReason}
-                            aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
-                        >
-                            {voiceCallIconWithTooltip}
-                        </IconButton>
-                    }
-                    side="left"
-                    align="start"
-                >
-                    {callOptions.map((option) => {
-                        const { label, children } = getPlatformCallTypeProps(option);
-                        return (
-                            <MenuItem
-                                key={option}
-                                label={label}
-                                aria-label={label}
-                                children={children}
-                                className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => {
-                                    setVoiceMenuOpen(false);
-                                    voiceCallClick(ev, option);
-                                }}
-                                Icon={VoiceCallIcon}
-                                onSelect={() => {} /* Dummy handler since we want the click event.*/}
-                            />
-                        );
-                    })}
-                </Menu>
-            ) : (
-                <IconButton
-                    disabled={!!voiceCallDisabledReason}
-                    aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
-                    onClick={voiceClick}
-                >
-                    {voiceCallIconWithTooltip}
-                </IconButton>
-            )}
-        </>
+        <CallButton
+            items={voiceCallItems}
+            disabledReason={voiceCallDisabledReason}
+            label={_t("voip|voice_call")}
+            menuTitle={_t("voip|voice_call_using")}
+            Icon={VoiceCallIcon}
+        />
     );
-
     const closeLobbyButton = (
         <Tooltip label={_t("voip|close_lobby")}>
             <IconButton onClick={toggleCall}>
@@ -275,11 +269,12 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
         voiceCallButton = undefined;
     }
 
-    if (!showVideoCallButton) {
+    // A module's option keeps the button even where Element Web has nothing to offer
+    if (!showVideoCallButton && moduleCallOptions.length === 0) {
         videoCallButton = undefined;
     }
 
-    if (!showVoiceCallButton) {
+    if (!showVoiceCallButton && moduleCallOptions.length === 0) {
         voiceCallButton = undefined;
     }
 
