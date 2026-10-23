@@ -38,6 +38,7 @@ import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
+import { CalendarEventTile } from "../components/views/calendar/CalendarEvent";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -214,6 +215,7 @@ export const CallStartedEventFactory: Factory = (ref, props) => {
 export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEventWrappedView ref={ref} {...props} />;
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEventWrappedView ref={ref} {...props} />;
 export const RoomCreateEventFactory: Factory = (_ref, props) => <RoomPredecessorTile {...props} />;
+export const CalendarEventFactory: Factory = (_ref, props) => <CalendarEventTile {...props} />;
 
 const EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomMessage, MessageEventFactory], // note that verification requests are handled in pickFactory()
@@ -245,6 +247,7 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomTombstone, TextualEventFactory],
     [EventType.RoomJoinRules, TextualEventFactory],
     [EventType.RoomGuestAccess, TextualEventFactory],
+    [EventType.UnstableCalendarEvent, CalendarEventFactory],
 ]);
 
 for (const evType of ElementCallEventType.names) {
@@ -573,6 +576,13 @@ export function haveRendererForEvent(
         const newlyStarted = Object.keys(mxEvent.getPrevContent()).length === 0;
         // Only interested in events that mark the start of a non-room call
         return newlyStarted && typeof intent === "string" && intent !== GroupCallIntent.Room;
+    } else if (handler === CalendarEventFactory) {
+        // Later events with the same state key replace a calendar event, so only the current one gets a tile.
+        // Showing the older ones too would suggest the event happens several times.
+        const currentEvent = matrixClient
+            .getRoom(mxEvent.getRoomId())
+            ?.currentState.getStateEvents(mxEvent.getType(), mxEvent.getStateKey() ?? "");
+        return !currentEvent || currentEvent.getId() === mxEvent.getId();
     } else if (handler === JSONEventFactory) {
         return false;
     } else {

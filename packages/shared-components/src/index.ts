@@ -24,6 +24,8 @@ export * from "./menus/UserMenu";
 export * from "./notifications/NotificationBadgeView";
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/EventPresentation";
+export * from "./room/calendar/CreateCalendarEventView";
+export * from "./room/timeline/event-tile/body/CalendarEventView";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
 export * from "./room/timeline/event-tile/body/HiddenBodyView";
 export * from "./room/timeline/event-tile/body/HiddenMediaPlaceholder";

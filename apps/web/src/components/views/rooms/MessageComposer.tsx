@@ -108,6 +108,7 @@ interface IState {
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
     showStickersButton: boolean;
+    showCalendarEventButton: boolean;
     showPollsButton: boolean;
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
@@ -159,6 +160,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isStickerPickerOpen: false,
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
+            showCalendarEventButton: SettingsStore.getValue("feature_msc4569_calendar"),
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
             initialComposerContent: initialComposerContent,
@@ -726,6 +728,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     isRichTextEnabled={this.state.isRichTextEnabled}
                                     onComposerModeClick={this.onRichTextToggle}
                                     toggleButtonMenu={this.toggleButtonMenu}
+                                    showCalendarEventButton={this.state.showCalendarEventButton}
                                 />
                             )}
                             {showSendButton && (

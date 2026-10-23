@@ -238,6 +238,8 @@ export interface Settings {
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
+    // Implements https://github.com/matrix-org/matrix-spec-proposals/pull/4569
+    "feature_msc4569_calendar": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -456,6 +458,15 @@ export const SETTINGS: Settings = {
         // Requires a reload since this setting is cached in EventUtils
         controller: new ReloadOnChangeController(),
         displayName: _td("labs|msc3531_hide_messages_pending_moderation"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_msc4569_calendar": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|feature_msc4569_calendar|display_name"),
+        description: _td("labs|feature_msc4569_calendar|description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

@@ -14,6 +14,7 @@ import { EventType, type MatrixClient, MatrixEvent, MsgType, Room, type RoomMemb
 import { createTestClient, mkEvent, withClientContextRenderOptions } from "test-utils";
 
 import {
+    haveRendererForEvent,
     JSONEventFactory,
     MessageEventFactory,
     pickFactory,
@@ -409,5 +410,55 @@ describe("renderTile", () => {
 
         expect(getByText("Alice changed the room avatar to")).toBeInTheDocument();
         expect(getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
+    });
+});
+
+describe("haveRendererForEvent", () => {
+    describe("for calendar events", () => {
+        let client: MatrixClient;
+        let room: Room;
+
+        const makeCalendarEvent = (id: string, stateKey = "event-uid"): MatrixEvent =>
+            new MatrixEvent({
+                type: EventType.UnstableCalendarEvent,
+                event_id: id,
+                state_key: stateKey,
+                room_id: roomId,
+                sender: "@alice:example.com",
+                content: {},
+            });
+
+        beforeEach(() => {
+            client = createTestClient();
+            room = new Room(roomId, client, client.getSafeUserId());
+            vi.mocked(client.getRoom).mockReturnValue(room);
+        });
+
+        it("renders the current calendar event", () => {
+            const current = makeCalendarEvent("$current");
+            room.currentState.setStateEvents([current]);
+
+            expect(haveRendererForEvent(current, client, false)).toBe(true);
+        });
+
+        it("does not render a calendar event that a later one replaced", () => {
+            const old = makeCalendarEvent("$old");
+            room.currentState.setStateEvents([old, makeCalendarEvent("$new")]);
+
+            expect(haveRendererForEvent(old, client, false)).toBe(false);
+        });
+
+        it("renders calendar events with other state keys independently", () => {
+            const first = makeCalendarEvent("$first", "first-uid");
+            room.currentState.setStateEvents([first, makeCalendarEvent("$second", "second-uid")]);
+
+            expect(haveRendererForEvent(first, client, false)).toBe(true);
+        });
+
+        it("renders a calendar event when the room state is unknown", () => {
+            vi.mocked(client.getRoom).mockReturnValue(null);
+
+            expect(haveRendererForEvent(makeCalendarEvent("$event"), client, false)).toBe(true);
+        });
     });
 });

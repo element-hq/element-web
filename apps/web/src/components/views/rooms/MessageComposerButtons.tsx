@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import {
+    EventType,
     type IEventRelation,
     type Room,
     type MatrixClient,
@@ -17,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, type ReactElement, type ReactNode, useContext } from "react";
 import {
+    CalendarIcon,
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
@@ -32,6 +34,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import { LocationButton } from "../location";
 import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
+import { CreateCalendarEventDialog } from "../dialogs/CreateCalendarEventDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import IconizedContextMenu, {
@@ -57,6 +60,8 @@ interface IProps {
     showLocationButton: boolean;
     showPollsButton: boolean;
     showStickersButton: boolean;
+    /** Whether to show the button to create an MSC4569 calendar event. */
+    showCalendarEventButton: boolean;
     toggleButtonMenu: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
@@ -102,6 +107,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
+            props.showCalendarEventButton ? calendarEventButton(room, props.relation) : null,
         ];
     } else {
         mainButtons = [
@@ -121,6 +127,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
+            props.showCalendarEventButton ? calendarEventButton(room, props.relation) : null,
         ];
     }
 
@@ -202,6 +209,51 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
 
 function pollButton(room: Room, relation?: IEventRelation): ReactElement {
     return <PollButton key="polls" room={room} relation={relation} />;
+}
+
+function calendarEventButton(room: Room, relation?: IEventRelation): ReactElement {
+    return <CalendarEventButton key="calendarEvent" room={room} relation={relation} />;
+}
+
+interface CalendarEventButtonProps {
+    room: Room;
+    relation?: IEventRelation;
+}
+
+/**
+ * Opens the dialog to create an MSC4569 calendar event, which is a state event of the room.
+ */
+function CalendarEventButton({ room, relation }: CalendarEventButtonProps): ReactElement | null {
+    const closeOverflowMenu = useContext(OverflowMenuContext);
+
+    // State events belong to the room, not to a thread.
+    if (relation?.rel_type === THREAD_RELATION_TYPE.name) return null;
+
+    const onClick = (): void => {
+        closeOverflowMenu?.();
+        const canSend = room.currentState.maySendStateEvent(
+            EventType.UnstableCalendarEvent,
+            room.client.getSafeUserId(),
+        );
+        if (!canSend) {
+            Modal.createDialog(ErrorDialog, {
+                title: _t("composer|calendar_event_no_perms_title"),
+                description: _t("composer|calendar_event_no_perms_description"),
+            });
+        } else {
+            Modal.createDialog(CreateCalendarEventDialog, { room });
+        }
+    };
+
+    return (
+        <CollapsibleButton
+            className="mx_MessageComposer_button"
+            onClick={onClick}
+            title={_t("composer|calendar_event")}
+        >
+            <CalendarIcon />
+        </CollapsibleButton>
+    );
 }
 
 interface IPollButtonProps {

@@ -606,6 +606,9 @@
             "user_a11y": "User Autocomplete",
             "user_description": "Users"
         },
+        "calendar_event": "Calendar event",
+        "calendar_event_no_perms_description": "You do not have permission to create calendar events in this room.",
+        "calendar_event_no_perms_title": "Permission Required",
         "close_sticker_picker": "Hide stickers",
         "edit_composer_label": "Edit message",
         "format_bold": "Bold",
@@ -653,6 +656,9 @@
     "console_dev_note": "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!",
     "console_scam_warning": "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!",
     "console_wait": "Wait!",
+    "create_calendar_event_dialog": {
+        "title": "Create calendar event"
+    },
     "create_room": {
         "action_create_room": "Create room",
         "action_create_video_room": "Create video room",
@@ -1540,6 +1546,10 @@
         "feature_element_call_react": "Render Element Call as a React component instead of a widget",
         "feature_matrixrtc_slots": "Require open MatrixRTC slots for Element Call calls",
         "feature_matrixrtc_slots_description": "Only allows starting or joining Element Call calls with a valid slot state event in the room.",
+        "feature_msc4569_calendar": {
+            "description": "Create calendar events in rooms and show them in the timeline (MSC4569).",
+            "display_name": "Calendar events"
+        },
         "feature_retention": {
             "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
             "disabled_sliding_sync": "Retention policy cannot be enabled while Sliding Sync is enabled.",
@@ -3354,6 +3364,31 @@
         "short_seconds": "%(value)ss"
     },
     "timeline": {
+        "calendar_event": {
+            "recurrence": {
+                "custom": "Repeats",
+                "daily": {
+                    "one": "Every day",
+                    "other": "Every %(count)s days"
+                },
+                "monthly": {
+                    "one": "Every month",
+                    "other": "Every %(count)s months"
+                },
+                "weekly": {
+                    "one": "Every week",
+                    "other": "Every %(count)s weeks"
+                },
+                "weekly_on_days": {
+                    "one": "Every week on %(days)s",
+                    "other": "Every %(count)s weeks on %(days)s"
+                },
+                "yearly": {
+                    "one": "Every year",
+                    "other": "Every %(count)s years"
+                }
+            }
+        },
         "context_menu": {
             "collapse_reply_thread": "Collapse reply thread",
             "external_url": "Source URL",

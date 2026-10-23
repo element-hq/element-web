@@ -1,0 +1,1009 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CalendarEventView > renders the AllDay story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Dec
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        25
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Company holiday
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Friday, 25 December 2026
+               · 
+              All day
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the Cancelled story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title CalendarEventView-module_cancelled"
+        >
+          Some event
+        </p>
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
+          data-kind="red"
+        >
+          Cancelled
+        </span>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the Default story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Some event
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the InvitedYou story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary CalendarEventView-module_sender"
+      >
+        <span>
+          <span
+            style="padding: 0 var(--cpd-space-1-5x); border-radius: var(--cpd-space-4x); background-color: var(--cpd-color-bg-subtle-primary); color: var(--cpd-color-text-primary);"
+          >
+            Alice
+          </span>
+           invited you
+        </span>
+      </div>
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Some event
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 12 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q20 16.35 20 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20H6q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q7.85 15.675 6.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q14 8.826 14 8q0-.824-.588-1.412A1.93 1.93 0 0 0 12 6q-.825 0-1.412.588A1.93 1.93 0 0 0 10 8q0 .825.588 1.412Q11.175 10 12 10"
+            />
+          </svg>
+          <p
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            3 participants
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the Recurring story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Daily standup
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              09:30 – 09:45
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              Every weekday
+            </p>
+          </div>
+        </div>
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 12 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q20 16.35 20 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20H6q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q7.85 15.675 6.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q14 8.826 14 8q0-.824-.588-1.412A1.93 1.93 0 0 0 12 6q-.825 0-1.412.588A1.93 1.93 0 0 0 10 8q0 .825.588 1.412Q11.175 10 12 10"
+            />
+          </svg>
+          <p
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            6 participants
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the Tentative story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Some event
+        </p>
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
+          data-kind="grey"
+        >
+          Tentative
+        </span>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the WithCallLink story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Some event
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_actions"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <a
+        class="_button_1nw83_8 _has-icon_1nw83_60"
+        data-kind="primary"
+        data-size="md"
+        href="https://call.element.io/room/#/planning"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+          />
+        </svg>
+        Join call
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the WithDetails story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Quarterly planning
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19.35q3.05-2.8 4.525-5.088Q18 11.976 18 10.2q0-2.725-1.738-4.462Q14.526 4 12 4T7.738 5.737Q6 7.476 6 10.2q0 1.775 1.475 4.063Q8.95 16.549 12 19.35m0 1.975a2.1 2.1 0 0 1-.7-.125 1.8 1.8 0 0 1-.625-.375A39 39 0 0 1 7.8 17.9q-1.25-1.425-2.087-2.762-.838-1.338-1.275-2.575Q4 11.325 4 10.2q0-3.75 2.412-5.975T12 2t5.587 2.225T20 10.2q0 1.125-.437 2.363-.438 1.237-1.275 2.574A22 22 0 0 1 16.2 17.9a39 39 0 0 1-2.875 2.925 1.8 1.8 0 0 1-.625.375 2.1 2.1 0 0 1-.7.125M12 12q.825 0 1.412-.588Q14 10.826 14 10t-.588-1.412A1.93 1.93 0 0 0 12 8q-.825 0-1.412.588A1.93 1.93 0 0 0 10 10q0 .825.588 1.412Q11.175 12 12 12"
+            />
+          </svg>
+          <p
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            Meeting room 2, London office
+          </p>
+        </div>
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 12 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q20 16.35 20 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20H6q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q7.85 15.675 6.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q14 8.826 14 8q0-.824-.588-1.412A1.93 1.93 0 0 0 12 6q-.825 0-1.412.588A1.93 1.93 0 0 0 10 8q0 .825.588 1.412Q11.175 10 12 10"
+            />
+          </svg>
+          <p
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            1 participant
+          </p>
+        </div>
+      </div>
+      <p
+        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary CalendarEventView-module_description"
+      >
+        Agenda:
+- Review last quarter
+- Agree goals for the next one
+      </p>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_actions"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <a
+        aria-label="Open link"
+        class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
+        data-kind="secondary"
+        data-size="md"
+        href="https://example.org/planning"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+          />
+        </svg>
+      </a>
+      <a
+        class="_button_1nw83_8 _has-icon_1nw83_60"
+        data-kind="primary"
+        data-size="md"
+        href="https://call.element.io/room/#/planning"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+          />
+        </svg>
+        Join call
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CalendarEventView > renders the WithLink story 1`] = `
+<div>
+  <div
+    class="Flex-module_flex CalendarEventView-module_root"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-hidden="true"
+      class="Flex-module_flex CalendarEventView-module_dateBadge"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="CalendarEventView-module_dateBadgeMonth"
+      >
+        Jan
+      </span>
+      <span
+        class="CalendarEventView-module_dateBadgeDay"
+      >
+        15
+      </span>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="Flex-module_flex CalendarEventView-module_header"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 CalendarEventView-module_title"
+        >
+          Some event
+        </p>
+      </div>
+      <div
+        class="Flex-module_flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex CalendarEventView-module_detail"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            aria-hidden="true"
+            class="CalendarEventView-module_detailIcon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M22 11.915c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10 10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              Wednesday, 15 January 2020
+               · 
+              13:00 – 14:00
+            </p>
+            <p
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 CalendarEventView-module_secondary"
+            >
+              America/New_York
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="Flex-module_flex CalendarEventView-module_actions"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <a
+        aria-label="Open link"
+        class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
+        data-kind="secondary"
+        data-size="md"
+        href="https://example.org/planning"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+`;

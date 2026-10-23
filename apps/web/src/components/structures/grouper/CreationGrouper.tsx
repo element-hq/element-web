@@ -23,7 +23,8 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
-// the first non-state event, beacon_info event or membership event which is not regarding the sender of the `m.room.create` event
+// the first non-state event, beacon_info event, calendar event or membership event which is not regarding the sender of
+// the `m.room.create` event
 
 /**
  * Creates and auto-disposes the DateSeparatorViewModel for creation-group rendering.
@@ -59,9 +60,9 @@ export class CreationGrouper extends BaseGrouper {
             return false;
         }
 
-        // beacons are not part of room creation configuration
+        // beacons and calendar events are not part of room creation configuration
         // should be shown in timeline
-        if (M_BEACON_INFO.matches(eventType)) {
+        if (M_BEACON_INFO.matches(eventType) || eventType === EventType.UnstableCalendarEvent) {
             return false;
         }
 

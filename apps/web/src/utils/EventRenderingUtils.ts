@@ -97,7 +97,8 @@ export function getEventDisplayInfo(
         !isBubbleMessage &&
         (eventType === EventType.RTCNotification ||
             eventType === EventType.CallInvite ||
-            ElementCallEventType.matches(eventType));
+            ElementCallEventType.matches(eventType) ||
+            eventType === EventType.UnstableCalendarEvent);
     let isInfoMessage =
         calcIsInfoMessage(eventType, isBubbleMessage, isLeftAlignedBubbleMessage) ||
         renderInfo?.hints.renderAsInfoMessage === true;

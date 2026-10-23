@@ -59,6 +59,21 @@
             "remove": "Remove URL preview"
         }
     },
+    "create_calendar_event": {
+        "all_day_label": "All day",
+        "create_failed": "Couldn't create the event. Try again.",
+        "date_label": "Date",
+        "date_missing": "Choose a date",
+        "description_label": "Description",
+        "end_before_start": "The event must end after it starts",
+        "end_label": "End",
+        "link_invalid": "Enter a web address starting with https:// or http://",
+        "link_label": "Link",
+        "start_label": "Start",
+        "time_zone_help": "Times are in %(timeZone)s",
+        "title_label": "Title",
+        "title_missing": "Enter a title"
+    },
     "devtools": {
         "custom_themes": {
             "add": "Add custom theme",
@@ -304,6 +319,20 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "calendar_event": {
+            "all_day": "All day",
+            "cancelled": "Cancelled",
+            "invited_you": "<sender/> invited you",
+            "join_call": "Join call",
+            "n_participants": {
+                "one": "%(count)s participant",
+                "other": "%(count)s participants"
+            },
+            "open_link": "Open link",
+            "scheduled": "<sender/> scheduled an event",
+            "tentative": "Tentative",
+            "untitled": "Untitled event"
+        },
         "call_tile": {
             "declined": {
                 "call_declined": "Call declined",

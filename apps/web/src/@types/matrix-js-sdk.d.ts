@@ -16,6 +16,7 @@ import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "./invite-rules.ts";
+import type { JSCalendarEventContent } from "../viewmodels/message-body/calendar/JSCalendarEvent.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
@@ -44,6 +45,9 @@ declare module "matrix-js-sdk/src/types" {
         // Element custom state events
         "im.vector.web.settings": Record<string, any>;
         "org.matrix.room.preview_urls": { disable: boolean };
+
+        // MSC4569 calendar events
+        "de.connect2x.msc4569.jscalendar.event": JSCalendarEventContent;
 
         // XXX unspecced usages of `m.room.*` events
         "m.room.plumbing": {

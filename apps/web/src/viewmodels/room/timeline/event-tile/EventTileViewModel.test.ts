@@ -8,6 +8,7 @@
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect } from "vitest";
+import { EventType } from "matrix-js-sdk/src/matrix";
 import { mkEvent, stubClient } from "test-utils";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -431,6 +432,42 @@ describe("EventTileViewModel", () => {
         });
         expect(snapshot.sender.profileMode).toBe("clickable");
         expect(snapshot.sender.viewUserOnClick).toBe(true);
+    });
+
+    it("hides the avatar and sender profile for calendar events", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                event: {
+                    eventType: EventType.UnstableCalendarEvent,
+                    isState: true,
+                },
+                display: {
+                    isLeftAlignedBubbleMessage: true,
+                },
+            }),
+        );
+
+        expect(snapshot.sender.profileState).toEqual({
+            avatarSize: null,
+            needsSenderProfile: false,
+        });
+        expect(snapshot.sender.profileMode).toBe("hidden");
+    });
+
+    it("renders calendar events as left-aligned bubbles rather than info messages", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: EventType.UnstableCalendarEvent,
+            skey: "a8df6573-0474-496d-8496-033ad45d7fea",
+            user: "@alice:example.org",
+            content: {},
+        });
+
+        expect(getEventDisplayInfo(matrixClient, event, false)).toMatchObject({
+            isLeftAlignedBubbleMessage: true,
+            isInfoMessage: false,
+        });
     });
 
     it("carries pure sender render inputs", () => {

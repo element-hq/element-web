@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { EventType } from "matrix-js-sdk/src/matrix";
+
 import { ElementCallEventType } from "../../../../call-types";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { Layout } from "../../../../settings/enums/Layout";
@@ -117,7 +119,9 @@ export function getEventTileSenderProfileState({
         (continuation && timelineRenderingType !== TimelineRenderingType.File) ||
         isCallInvite ||
         ElementCallEventType.matches(eventType) ||
-        isRtcNotification
+        isRtcNotification ||
+        // Calendar events name their sender inside the tile.
+        eventType === EventType.UnstableCalendarEvent
     ) {
         return { avatarSize: null, needsSenderProfile: false };
     }
