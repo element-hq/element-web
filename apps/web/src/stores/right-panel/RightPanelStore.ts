@@ -94,12 +94,17 @@ export default class RightPanelStore extends ReadyWatchingStore {
             }
 
             case Action.OpenDocumentViewer: {
-                const { event } = <OpenDocumentViewerPayload>payload;
-                this.setCard(
-                    { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: event } },
-                    true,
-                    event.getRoomId(),
-                );
+                const { event, file } = <OpenDocumentViewerPayload>payload;
+                if (event) {
+                    this.setCard(
+                        { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event } } },
+                        true,
+                        event.getRoomId(),
+                    );
+                } else {
+                    // A file has no room of its own, so it opens in the room being viewed.
+                    this.setCard({ phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { file } } }, true);
+                }
                 break;
             }
 
@@ -391,10 +396,10 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 // Also drop a card stored before the lab was turned off, so disabling it closes any
                 // viewer that was left open rather than restoring it on the next load.
                 if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
-                if (!card.state?.documentViewerEvent) {
-                    logger.warn("removed card from right panel because of missing documentViewerEvent in card state");
+                if (!card.state?.documentViewer) {
+                    logger.warn("removed card from right panel because of missing documentViewer in card state");
                 }
-                return !!card.state?.documentViewerEvent;
+                return !!card.state?.documentViewer;
         }
         return true;
     }
