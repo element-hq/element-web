@@ -5,8 +5,31 @@
             "layers": [
                 {
                     "glass": false,
+                    "hidden-specializations": [
+                        {
+                            "value": false
+                        },
+                        {
+                            "appearance": "dark",
+                            "value": true
+                        }
+                    ],
                     "image-name": "element.png",
                     "name": "element"
+                },
+                {
+                    "glass": false,
+                    "hidden-specializations": [
+                        {
+                            "value": true
+                        },
+                        {
+                            "appearance": "dark",
+                            "value": false
+                        }
+                    ],
+                    "image-name": "element-dark.png",
+                    "name": "element-dark"
                 }
             ],
             "name": "Figma",
