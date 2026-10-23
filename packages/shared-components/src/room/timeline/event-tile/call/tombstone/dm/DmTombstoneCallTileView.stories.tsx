@@ -100,3 +100,19 @@ export const OutgoingVideoDeclined: Story = {
         isCallDeclined: true,
     },
 };
+
+export const OutgoingVoiceFailed: Story = {
+    args: {
+        type: CallType.Voice,
+        callDirection: CallDirection.Outgoing,
+        failureReason: "unreachable (SIP 404)",
+    },
+};
+
+export const IncomingVideoFailed: Story = {
+    args: {
+        type: CallType.Video,
+        callDirection: CallDirection.Incoming,
+        failureReason: "busy",
+    },
+};
