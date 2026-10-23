@@ -19,6 +19,8 @@ import { I18nContext } from "../../../core/i18n/i18nContext";
 const defaultProps: MarkdownViewerViewProps = {
     status: "loading",
     html: "",
+    format: "rendered",
+    onFormatChange: vi.fn(),
 };
 
 const renderView = (props: Partial<MarkdownViewerViewProps> = {}): ReturnType<typeof render> =>
@@ -73,5 +75,33 @@ describe("MarkdownViewerView", () => {
         await user.click(screen.getByRole("link", { name: "A link" }));
 
         expect(onContentClick).toHaveBeenCalledOnce();
+    });
+
+    it("offers the format switch only for a ready document that can be toggled", () => {
+        const { rerender } = renderView({ status: "loading", canToggleFormat: true });
+        expect(screen.queryByRole("radio", { name: "Plain text" })).not.toBeInTheDocument();
+
+        rerender(<MarkdownViewerView {...defaultProps} status="ready" html="<p>Hi</p>" />);
+        expect(screen.queryByRole("radio", { name: "Plain text" })).not.toBeInTheDocument();
+
+        rerender(<MarkdownViewerView {...defaultProps} status="ready" html="<p>Hi</p>" canToggleFormat />);
+        expect(screen.getByRole("radio", { name: "Rendered" })).toBeChecked();
+        expect(screen.getByRole("radio", { name: "Plain text" })).not.toBeChecked();
+    });
+
+    it("asks the host to change format when the user picks another one", async () => {
+        const user = userEvent.setup();
+        const onFormatChange = vi.fn();
+        renderView({ status: "ready", html: "<p>Hi</p>", canToggleFormat: true, onFormatChange });
+
+        await user.click(screen.getByRole("radio", { name: "Plain text" }));
+
+        expect(onFormatChange).toHaveBeenCalledWith("plain");
+    });
+
+    it("marks the document with the format it is shown in", () => {
+        renderView({ status: "ready", html: "<pre>Hi</pre>", format: "plain" });
+
+        expect(screen.getByTestId("markdown-content")).toHaveAttribute("data-format", "plain");
     });
 });
