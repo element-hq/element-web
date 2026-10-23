@@ -14,15 +14,88 @@ import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { filterConsole, mkEvent } from "test-utils";
 import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 beforeAll(initOnce, 10000);
 
 describe("createMessageContent", () => {
-    const message = "<em><b>hello</b> world</em>";
-
     afterEach(() => {
         vi.resetAllMocks();
     });
+
+    it("should omit explicit-link markers when the Labs flag is disabled", async () => {
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+        expect("formatted_body" in content && content.formatted_body).not.toContain("data-org.matrix.msc4550.link");
+    });
+
+    it("should remove supplied explicit-link markers when the Labs flag is disabled", async () => {
+        const content = await createMessageContent(
+            '<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link>DM me</a>',
+            true,
+            {},
+        );
+        expect("formatted_body" in content && content.formatted_body).not.toContain("data-org.matrix.msc4550.link");
+    });
+
+    it("marks authored Markdown links in the rich-text composer", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links" || setting === "MessageComposerInput.useMarkdown",
+        );
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+        if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
+        expect(content.formatted_body).toContain('data-org.matrix.msc4550.link=""');
+    });
+
+    it("should leave Markdown unformatted when Markdown is disabled", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+        const content = await createMessageContent("[DM me](https://matrix.to/#/@alice:example.org)", false, {});
+
+        expect(content).toEqual({
+            msgtype: MsgType.Text,
+            body: "[DM me](https://matrix.to/#/@alice:example.org)",
+        });
+    });
+
+    it("retains explicit links in replacement content", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        const editedEvent = mkEvent({
+            type: "m.room.message",
+            room: "!room:example.org",
+            user: "@sender:example.org",
+            content: { msgtype: "m.text", body: "Original message" },
+            event: true,
+        });
+        const content = await createMessageContent(
+            '<a href="matrix:u/alice:example.org" data-org.matrix.msc4550.link>DM me</a>',
+            true,
+            { editedEvent },
+        );
+        if (!("m.new_content" in content)) throw new Error("Expected a replacement message");
+        expect(content["m.new_content"]).toHaveProperty(
+            "formatted_body",
+            '<a href="matrix:u/alice:example.org" data-org.matrix.msc4550.link="">DM me</a>',
+        );
+    });
+    it("marks authored rich-text links while retaining mentions", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        const content = await createMessageContent(
+            '<a href="https://matrix.to/#/@alice:example.org">DM me</a> ' +
+                '<a href="https://matrix.to/#/@bob:example.org" data-mention-type="user">Bob</a>',
+            true,
+            {},
+        );
+        if (!("formatted_body" in content)) throw new Error("Expected a formatted message");
+        const document = new DOMParser().parseFromString(content.formatted_body!, "text/html");
+        const anchors = document.querySelectorAll("a");
+        expect(anchors[0].hasAttribute("data-org.matrix.msc4550.link")).toBe(true);
+        expect(anchors[1].hasAttribute("data-org.matrix.msc4550.link")).toBe(false);
+    });
+    const message = "<em><b>hello</b> world</em>";
 
     describe("Richtext composer input", () => {
         filterConsole(
