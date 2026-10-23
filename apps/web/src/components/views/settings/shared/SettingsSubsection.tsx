@@ -56,7 +56,7 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
             })}
         >
             {typeof heading === "string" ? (
-                <SettingsSubsectionHeading heading={heading} as={`h${level}`} />
+                <SettingsSubsectionHeading as={`h${level}`}>{heading}</SettingsSubsectionHeading>
             ) : (
                 <>{heading}</>
             )}
