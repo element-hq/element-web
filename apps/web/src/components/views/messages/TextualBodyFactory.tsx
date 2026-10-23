@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import {
     _t,
     EventContentBodyView,
@@ -38,8 +38,10 @@ import {
 } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import PlatformPeg from "../../../PlatformPeg";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
 
@@ -160,58 +162,103 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
-        let content: MediaPreviewGroupEntryContent;
-        if (preview.image === undefined) {
-            content = {
-                type: "text",
+    const allowRemoveUrlPreview =
+        props.mxEvent.getSender() === client.getUserId() &&
+        urlPreviewBundleEnabled &&
+        content["com.beeper.linkpreviews"] !== undefined;
+
+    const removeUrlPreview = useCallback(
+        async (url: string): Promise<void> => {
+            const messageContent = props.mxEvent.getContent() as RoomMessageEventContent;
+            const newContent: RoomMessageEventContent = {
+                ...messageContent,
+                "com.beeper.linkpreviews": messageContent["com.beeper.linkpreviews"]?.filter(
+                    (entry) => entry.matched_url !== url,
+                ),
             };
-        } else {
-            content = {
-                type: "image",
-                image: preview.image.imageFull,
-                imageAlt: preview.title,
-                imageSize: "banner",
-                imageOnClick: () => {
-                    Modal.createDialog(
-                        ImageView,
-                        {
-                            src: preview.image!.imageFull, // full-res URL
-                            name: `Thumbnail of ${preview.title}`,
-                            width: preview.image?.width,
-                            height: preview.image?.height,
-                            fileSize: preview.image?.fileSize,
-                        },
-                        "mx_Dialog_lightbox",
-                        undefined,
-                        true,
-                    );
+            const editContent: RoomMessageEventContent = {
+                ...messageContent,
+                "body": `* ${messageContent.body}`,
+                "m.new_content": newContent,
+                "m.relates_to": {
+                    rel_type: RelationType.Replace,
+                    event_id: props.mxEvent.getId()!,
                 },
             };
-        }
 
-        let body: string;
-        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
-        else body = preview.description!;
+            if (props.mxEvent.threadRootId) {
+                await client.sendMessage(props.mxEvent.getRoomId()!, props.mxEvent.threadRootId, editContent);
+            } else {
+                await client.sendMessage(props.mxEvent.getRoomId()!, editContent);
+            }
+        },
+        [client, props.mxEvent],
+    );
 
-        return {
-            id: preview.link,
-            header: preview.title,
-            headerUrl: preview.link,
-            body,
-            buttons: [
-                {
-                    label: _t("timeline|url_preview|open_link"),
-                    icon: <PopOutIcon />,
-                    onClick: async () => {
-                        window.open(preview.link, "_blank", "noreferrer");
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            if (preview.image === undefined) {
+                content = {
+                    type: "text",
+                };
+            } else {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "banner",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
                     },
-                },
-            ],
-            ...linkIcon(),
-            ...content,
-        };
-    };
+                };
+            }
+
+            let body: string;
+            if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+            else body = preview.description!;
+
+            return {
+                id: preview.link,
+                header: preview.title,
+                headerUrl: preview.link,
+                body,
+                buttons: [
+                    ...(allowRemoveUrlPreview
+                        ? [
+                              {
+                                  label: _t("timeline|url_preview|close"),
+                                  icon: <CloseIcon />,
+                                  onClick: () => void removeUrlPreview(preview.link),
+                              },
+                          ]
+                        : []),
+                    {
+                        label: _t("timeline|url_preview|open_link"),
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                ],
+                ...linkIcon(),
+                ...content,
+            };
+        },
+        [allowRemoveUrlPreview, removeUrlPreview],
+    );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
@@ -290,12 +337,24 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         });
     }, [mediaVisible, urlPreviewVm]);
 
+    const bundleContent = content["com.beeper.linkpreviews"];
+
+    useEffect(() => {
+        void urlPreviewVm.onBundleContentChanged();
+    }, [bundleContent, urlPreviewVm]);
+
+    useEffect(() => {
+        void urlPreviewVm.setUrlPreviewKind(urlPreviewKind).catch((error) => {
+            logger.warn("UrlPreviewViewModel failed to setUrlPreviewKind", error);
+        });
+    }, [urlPreviewKind, urlPreviewVm]);
+
     useEffect(() => {
         mediaPreviewVm.setProps({
             entries: previews.map(previewToEntry),
             collapse,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, previewToEntry, collapse, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
