@@ -2563,6 +2563,7 @@
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
+                "key_active_description": "如果你无法访问所有设备，可以使用恢复密钥以确认新设备或恢复加密聊天。",
                 "key_active_title": "你的新恢复密钥现已激活",
                 "key_storage_warning": "你的密钥存储不同步。点选以下按钮修复此问题。",
                 "save_key_description": "不要与任何人分享！",
