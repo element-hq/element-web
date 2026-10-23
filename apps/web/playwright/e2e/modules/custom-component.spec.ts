@@ -158,6 +158,51 @@ test.describe("Custom Component API", () => {
             await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
             await expect(page.getByText("Render as informational message")).toBeVisible();
         });
+        test(
+            "should render formatted informational text at the size of a name-change event",
+            { tag: "@screenshot" },
+            async ({ page, room, app, user }) => {
+                await app.viewRoomById(room.roomId);
+                const formattedEvent = await app.client.sendMessage(room.roomId, {
+                    msgtype: "m.notice",
+                    body: "Render as **informational** message",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "Render as <strong>informational</strong> message",
+                });
+                const nameChange = await app.client.sendStateEvent(
+                    room.roomId,
+                    "m.room.member",
+                    { membership: "join", displayname: "Manny Renamed" },
+                    user.userId,
+                );
+
+                await app.timeline.scrollToBottom();
+                const nameChangeTile = page.locator(`[data-event-id="${nameChange.event_id}"]`);
+                const formattedTile = page.locator(`[data-event-id="${formattedEvent.event_id}"]`);
+                const nameChangeBody = nameChangeTile.getByTestId("event-tile-slot-body").locator(".mx_TextualEvent");
+                const formattedBody = formattedTile.getByTestId("event-tile-slot-body").locator(".mx_EventTile_body");
+
+                await expect(nameChangeBody).toContainText("display name to Manny Renamed");
+                await expect(formattedBody).toBeVisible();
+                await expect(formattedBody.locator("strong")).toHaveText("informational");
+                await expect(nameChangeTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+                await expect(formattedTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+                await expect(formattedBody).toHaveClass(/markdown-body/);
+
+                const nameChangeTypography = await nameChangeBody.evaluate((element) => {
+                    const style = getComputedStyle(element);
+                    return { fontSize: style.fontSize, letterSpacing: style.letterSpacing };
+                });
+                await expect(formattedBody).toHaveCSS("font-size", nameChangeTypography.fontSize);
+                await expect(formattedBody).toHaveCSS("letter-spacing", nameChangeTypography.letterSpacing);
+
+                await page.mouse.move(0, 0);
+                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                    "informational-markdown-typography.png",
+                    screenshotOptions(page),
+                );
+            },
+        );
         test("should group custom messages without the informational hint", async ({ page, room, app }) => {
             await app.viewRoomById(room.roomId);
             for (let i = 1; i <= 3; i++) {
