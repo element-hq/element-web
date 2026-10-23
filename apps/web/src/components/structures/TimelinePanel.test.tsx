@@ -50,6 +50,7 @@ import TimelinePanel from "./TimelinePanel";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
 import ScrollPanel from "./ScrollPanel";
+import MessagePanel from "./MessagePanel";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../../settings/SettingLevel";
@@ -441,10 +442,53 @@ describe("TimelinePanel", () => {
         expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(events[1].getId());
     });
 
+    it("scrolls to a linked event only once after loading it in Strict Mode", async () => {
+        const client = MatrixClientPeg.safeGet();
+        const room = mkRoom(client, "roomId");
+        const events = mockEvents(room);
+        const [timeline, timelineSet] = mkTimeline(room, events);
+        const props = { ...getProps(room, events), timelineSet };
+        vi.spyOn(timelineSet, "getTimelineForEvent").mockImplementation((eventId) => (eventId ? null : timeline));
+        vi.mocked(client.getEventTimeline).mockResolvedValue(timeline);
+        const callbacks: FrameRequestCallback[] = [];
+        const frameSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+            callbacks.push(callback);
+            return callbacks.length;
+        });
+        const scrollSpy = vi.spyOn(MessagePanel.prototype, "scrollToEvent");
+
+        try {
+            const { rerender } = render(
+                <React.StrictMode>
+                    <TimelinePanel {...props} />
+                </React.StrictMode>,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+            callbacks.forEach((callback) => callback(0));
+
+            props.eventId = events[1].getId();
+            rerender(
+                <React.StrictMode>
+                    <TimelinePanel {...props} />
+                </React.StrictMode>,
+            );
+
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledOnce());
+            expect(scrollSpy).toHaveBeenCalledOnce();
+            expect(scrollSpy).toHaveBeenCalledWith(events[1].getId(), undefined, 0.5);
+            callbacks.forEach((callback) => callback(0));
+            expect(scrollSpy).toHaveBeenCalledOnce();
+        } finally {
+            frameSpy.mockRestore();
+            scrollSpy.mockRestore();
+        }
+    });
+
     it("should scroll the event into view again when the same event is re-requested", () => {
         const client = MatrixClientPeg.safeGet();
         const room = mkRoom(client, "roomId");
         const events = mockEvents(room);
+        const loadSpy = vi.spyOn(TimelineWindow.prototype, "load");
 
         const props = {
             ...getProps(room, events),
@@ -455,16 +499,20 @@ describe("TimelinePanel", () => {
 
         const { rerender } = render(<TimelinePanel {...props} />);
         expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(1);
+        expect(loadSpy).toHaveBeenCalledTimes(1);
 
-        // RoomView clears the flag once the jump has landed, so the event stays put on re-render.
+        // RoomView clears the flag once the jump has landed. Do not reload the
+        // timeline, as that can move the event away from the new scroll position.
         props.eventScrollIntoView = false;
         rerender(<TimelinePanel {...props} />);
         expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(1);
+        expect(loadSpy).toHaveBeenCalledTimes(1);
 
         // Clicking the same permalink a second time asks for the very same event again.
         props.eventScrollIntoView = true;
         rerender(<TimelinePanel {...props} />);
         expect(props.onEventScrolledIntoView).toHaveBeenCalledTimes(2);
+        expect(loadSpy).toHaveBeenCalledTimes(2);
     });
 
     it("paginates", async () => {

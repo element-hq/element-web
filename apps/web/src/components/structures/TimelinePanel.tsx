@@ -345,12 +345,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const differentEventId = prevProps.eventId != this.props.eventId;
         const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;
-        // Both directions matter. The flag is cleared once a jump has landed, so clicking the same
-        // permalink again flips it back to true and has to jump afresh. An unset prop means true,
-        // matching the default in loadTimeline.
-        const differentScrollIntoView =
-            (prevProps.eventScrollIntoView ?? true) !== (this.props.eventScrollIntoView ?? true);
-        if (differentEventId || differentHighlightedEventId || differentScrollIntoView) {
+        // Clearing the flag after a jump must not reload the timeline: that can move the
+        // event away after it has been scrolled into view. A later false-to-true change
+        // means the same permalink was opened again and does need another jump.
+        const scrollRequestedAgain =
+            prevProps.eventScrollIntoView === false && (this.props.eventScrollIntoView ?? true);
+        if (differentEventId || differentHighlightedEventId || scrollRequestedAgain) {
             logger.log(
                 `TimelinePanel switching to eventId ${this.props.eventId} (was ${prevProps.eventId}), ` +
                     `scrollIntoView: ${this.props.eventScrollIntoView} (was ${prevProps.eventScrollIntoView})`,
@@ -1407,40 +1407,23 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     private scrollIntoView(eventId?: string, pixelOffset?: number, offsetBase?: number): void {
-        const doScroll = (): void => {
-            if (!this.messagePanel.current) return;
-            if (eventId) {
-                debuglog(
-                    "TimelinePanel scrolling to eventId " +
-                        eventId +
-                        " at position " +
-                        offsetBase! * 100 +
-                        "% + " +
-                        pixelOffset,
-                );
-                this.messagePanel.current.scrollToEvent(eventId, pixelOffset, offsetBase);
-            } else {
-                debuglog("TimelinePanel scrolling to bottom");
-                this.messagePanel.current.scrollToBottom();
-            }
-        };
-
-        debuglog("TimelinePanel scheduling scroll to event");
+        debuglog("TimelinePanel scrolling into view");
         this.props.onEventScrolledIntoView?.(eventId);
-        // Ensure the correct scroll position pre render, if the messages have already been loaded to DOM,
-        // to avoid it jumping around
-        doScroll();
-
-        // Ensure the correct scroll position post render for correct behaviour.
-        //
-        // requestAnimationFrame runs our code immediately after the DOM update but before the next repaint.
-        //
-        // If the messages have just been loaded for the first time, this ensures we'll repeat setting the
-        // correct scroll position after React has re-rendered the TimelinePanel and MessagePanel and
-        // updated the DOM.
-        window.requestAnimationFrame(() => {
-            doScroll();
-        });
+        if (!this.messagePanel.current) return;
+        if (eventId) {
+            debuglog(
+                "TimelinePanel scrolling to eventId " +
+                    eventId +
+                    " at position " +
+                    offsetBase! * 100 +
+                    "% + " +
+                    pixelOffset,
+            );
+            this.messagePanel.current.scrollToEvent(eventId, pixelOffset, offsetBase);
+        } else {
+            debuglog("TimelinePanel scrolling to bottom");
+            this.messagePanel.current.scrollToBottom();
+        }
     }
 
     /**
