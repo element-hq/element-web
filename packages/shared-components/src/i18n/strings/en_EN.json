@@ -238,6 +238,15 @@
             "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
+        "notifications_view": {
+            "a11y_group": {
+                "one": "%(count)s notification in %(roomName)s: %(preview)s",
+                "other": "%(count)s notifications in %(roomName)s: %(preview)s"
+            },
+            "empty_description": "You have no visible notifications.",
+            "empty_heading": "You're all caught up",
+            "list_title": "Notification list"
+        },
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "room": {

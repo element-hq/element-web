@@ -104,6 +104,14 @@ export const LongTitle: Story = {
     },
 };
 
+export const NotificationsView: Story = {
+    args: {
+        title: "Notifications",
+        isNotificationsViewActive: true,
+        collapseSections: "collapse",
+    },
+};
+
 export const CollapseSections: Story = {
     args: {
         collapseSections: "collapse",
