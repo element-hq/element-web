@@ -9,7 +9,6 @@
 import {
     type Capability,
     EventDirection,
-    type IOpenIDCredentials,
     type IOpenIDUpdate,
     type ISendDelayedEventDetails,
     type ISendEventDetails,
@@ -49,8 +48,6 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import Modal from "../../Modal";
-import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
@@ -58,11 +55,10 @@ import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { approveWidgetCapabilities } from "./WidgetCapabilityApproval";
+import { approveWidgetOpenId } from "./WidgetOpenIdApproval";
 import { readRoomTimeline } from "./readRoomTimeline";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
-import { ModuleApi } from "../../modules/Api";
-import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 import SdkConfig from "../../SdkConfig.ts";
@@ -594,47 +590,19 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
-        // Try the new module API first, then fall back to legacy path
-        const approved = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
-            toWidgetDescriptor(this.forWidget, this.inRoomId),
-        );
-
-        if (approved) {
-            return observer.update({
+        const allowed = await approveWidgetOpenId({
+            widget: this.forWidget,
+            widgetKind: this.forWidgetKind,
+            roomId: this.inRoomId,
+            onPrompt: () => observer.update({ state: OpenIDRequestState.PendingUserConfirmation }),
+        });
+        if (!allowed) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({
                 state: OpenIDRequestState.Allowed,
                 token: await MatrixClientPeg.safeGet().getOpenIdToken(),
             });
-        }
-
-        const oidcState = SDKContextClass.instance.widgetPermissionStore.getOIDCState(
-            this.forWidget,
-            this.forWidgetKind,
-            this.inRoomId,
-        );
-
-        const getToken = (): Promise<IOpenIDCredentials> => {
-            return MatrixClientPeg.safeGet().getOpenIdToken();
-        };
-
-        if (oidcState === OIDCState.Denied) {
-            return observer.update({ state: OpenIDRequestState.Blocked });
-        }
-        if (oidcState === OIDCState.Allowed) {
-            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-        }
-
-        observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
-
-        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
-            widget: this.forWidget,
-            widgetKind: this.forWidgetKind,
-            inRoomId: this.inRoomId,
-        });
-        const [confirm] = await finished;
-        if (!confirm) {
-            observer.update({ state: OpenIDRequestState.Blocked });
-        } else {
-            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
         }
     }
 
