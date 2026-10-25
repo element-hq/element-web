@@ -520,6 +520,12 @@ importers:
       '@matrix-org/emojibase-bindings':
         specifier: 'catalog:'
         version: 1.5.0
+      '@matrix-widget-tools/compat-wrapper':
+        specifier: link:../../../matrix-widget-tools-sdk/packages/widget-compat-wrapper
+        version: link:../../../matrix-widget-tools-sdk/packages/widget-compat-wrapper
+      '@matrix-widget-tools/widget-host-bindings':
+        specifier: link:../../../matrix-widget-tools-sdk/packages/widget-host-bindings
+        version: link:../../../matrix-widget-tools-sdk/packages/widget-host-bindings
       '@sentry/browser':
         specifier: ^11.0.0
         version: 11.5.0

@@ -76,6 +76,7 @@ export default {
             ignoreDependencies: [
                 // Embedded into webapp
                 "@element-hq/element-call-embedded",
+                "@matrix-widget-tools/compat-wrapper",
 
                 // Used by matrix-js-sdk, which means we have to include them as a
                 // dependency so that // we can run `tsc` (since we import the typescript

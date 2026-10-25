@@ -46,6 +46,8 @@
         "@fontsource/inter": "catalog:",
         "@formatjs/intl-segmenter": "^12.0.0",
         "@matrix-org/analytics-events": "^0.38.0",
+        "@matrix-widget-tools/compat-wrapper": "link:../../../matrix-widget-tools-sdk/packages/widget-compat-wrapper",
+        "@matrix-widget-tools/widget-host-bindings": "link:../../../matrix-widget-tools-sdk/packages/widget-host-bindings",
         "@matrix-org/emojibase-bindings": "catalog:",
         "@sentry/browser": "^11.0.0",
         "@types/png-chunks-extract": "^1.0.2",

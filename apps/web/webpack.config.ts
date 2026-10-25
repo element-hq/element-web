@@ -106,6 +106,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     // directory, so we don't have to rely on an index.js or similar file existing.
     const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
+    // The MSC4412 widget host bindings are shipped as TypeScript source (their package entry is `src/index.ts`),
+    // so they go through babel like our own code. Real path, as webpack resolves pnpm symlinks.
+    const widgetHostBindingsSrcDir = fs.realpathSync(
+        path.dirname(fileURLToPath(import.meta.resolve("@matrix-widget-tools/widget-host-bindings"))),
+    );
+
     // The Element Call component's stylesheet is not scoped to the component: it carries a `normalize` layer,
     // `:root` variables and its own copy of the compound design tokens. Folded into the app-wide `styles`
     // chunk it would restyle Element Web for every user, so it stays with the component's own (lazy) chunk
@@ -297,6 +303,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         // path, these could be anywhere thanks to linking. We must also not
                         // include node modules inside these modules, so we add 'src'.
                         if (f.startsWith(jsSdkSrcDir)) return true;
+                        if (f.startsWith(widgetHostBindingsSrcDir)) return true;
 
                         // Some of the syntax in this package is not understood by
                         // either webpack or our babel setup.
@@ -448,6 +455,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         name: "opus-decoderWorker.min.[hash:7].[ext]",
                         outputPath: ".",
                     },
+                },
+                {
+                    // The widget host bindings import their wasm module with a `?url` query (the Vite convention)
+                    // and load it themselves by URL, so emit it as a plain asset instead of letting
+                    // `experiments.asyncWebAssembly` instantiate it.
+                    test: /\.wasm$/,
+                    resourceQuery: /url/,
+                    type: "asset/resource",
                 },
                 {
                     // The decoderWorker wants to load its own wasm, rather than have webpack do it.
@@ -713,6 +728,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
                     { from: "media/**", context: path.resolve(__dirname, "res/") },
                     { from: "config.json", noErrorOnMissing: true },
+                    // Compat wrapper for legacy (matrix-widget-api) widgets on the MSC4412 widget host
+                    {
+                        from: "**",
+                        context: path.join(getPackageRoot("@matrix-widget-tools/compat-wrapper"), "dist"),
+                        to: path.join(__dirname, "webapp", "widgets", "compat-wrapper"),
+                    },
                     // Element Call embedded widget
                     {
                         from: "**",

@@ -81,6 +81,11 @@ allowBuilds:
     # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
     # pnpm matches git-hosted packages by repository URL, not by bare name.
     "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
+    # The MSC4412 widget host bindings and the legacy-widget compat wrapper are git dependencies on the
+    # matrix-widget-tools-sdk repository; their `prepare` scripts build the uniffi/wasm bindings and the
+    # wrapper page on install.
+    "@matrix-widget-tools/widget-host-bindings@git+https://github.com/element-hq/matrix-widget-tools-sdk.git": true
+    "@matrix-widget-tools/compat-wrapper@git+https://github.com/element-hq/matrix-widget-tools-sdk.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
