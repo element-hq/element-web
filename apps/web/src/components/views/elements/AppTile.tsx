@@ -44,6 +44,7 @@ import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import { type IWidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/IWidgetMessaging";
+import { isWidgetHostEligible, WidgetHostMessaging } from "../../../stores/widgets/host/WidgetHostMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -167,7 +168,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.messaging = WidgetMessagingStore.instance.getMessaging(this.widget, props.room?.roomId);
         if (this.messaging === undefined) {
             try {
-                this.messaging = new WidgetMessaging(this.widget, props);
+                this.messaging = this.createMessaging(props);
                 WidgetMessagingStore.instance.storeMessaging(this.widget, props.room?.roomId, this.messaging);
             } catch (e) {
                 logger.error("Failed to construct widget", e);
@@ -271,6 +272,17 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.onUserLeftRoom();
         }
     };
+
+    /**
+     * Creates the communication channel for the widget: on the MSC4412 widget host when the labs
+     * flag is on and the widget qualifies, otherwise on matrix-widget-api.
+     */
+    private createMessaging(props: IProps): IWidgetMessaging {
+        if (isWidgetHostEligible(props.app, props.room)) {
+            return new WidgetHostMessaging(props.app as IApp, props);
+        }
+        return new WidgetMessaging(this.widget, props);
+    }
 
     private determineInitialRequiresClientState(): boolean {
         try {
@@ -444,7 +456,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         try {
             WidgetMessagingStore.instance.stopMessaging(this.widget, this.props.room?.roomId);
-            this.messaging = new WidgetMessaging(this.widget, newProps);
+            this.messaging = this.createMessaging(newProps);
             WidgetMessagingStore.instance.storeMessaging(this.widget, this.props.room?.roomId, this.messaging);
             this.setupMessagingListeners();
             this.startWidget();

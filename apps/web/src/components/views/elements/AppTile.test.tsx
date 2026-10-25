@@ -32,6 +32,7 @@ import { type Container, WidgetLayoutStore } from "../../../stores/widgets/Widge
 import AppsDrawer from "../rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { WidgetHostMessaging } from "../../../stores/widgets/host/WidgetHostMessaging";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { ModuleApi } from "../../../modules/Api";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -41,6 +42,11 @@ vi.mock("../../../../res/img/element-icons/room/default_video.svg", () => ({ def
 vi.mock("../../../../res/img/element-icons/room/default_cal.svg", () => ({ default: "image-file-stub" }));
 vi.mock("../../../../res/img/element-icons/room/default_doc.svg", () => ({ default: "image-file-stub" }));
 vi.mock("../../../../res/img/element-icons/room/default_clock.svg", () => ({ default: "image-file-stub" }));
+
+// The MSC4412 host loads its wasm bindings on start; never do that under test
+vi.mock("../../../stores/widgets/host/bindings", () => ({
+    loadWidgetHostBindings: () => new Promise(() => {}),
+}));
 
 vi.mock("../../../stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -529,6 +535,41 @@ describe("AppTile", () => {
             );
             await waitForElementToBeRemoved(() => queryByRole("progressbar"));
             expect(asFragment()).toMatchSnapshot();
+        });
+    });
+
+    describe("with the MSC4412 widget host enabled", () => {
+        beforeEach(() => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
+                if (name === "feature_msc4412_widget_host") return true;
+                return realGetValue(name, roomId);
+            });
+        });
+
+        it("embeds room widgets through the compat wrapper on the MSC4412 host", async () => {
+            // A widget of its own, so that no persisted element of an earlier test is reused
+            const app = { ...app1, id: "msc4412" };
+            render(<AppTile key={app.id} app={app} room={r1} />, clientAndSDKContextRenderOptions(cli, sdkContext));
+
+            const messaging = WidgetMessagingStore.instance.getMessaging(new ElementWidget(app), r1.roomId);
+            expect(messaging).toBeInstanceOf(WidgetHostMessaging);
+            // Room widgets render their iframe through a persisted element outside the React tree
+            // (and persisted elements of earlier tests may still be around)
+            const iframe = (): HTMLIFrameElement | undefined =>
+                [...document.querySelectorAll("iframe")].find((el) => el.src.includes("/widgets/compat-wrapper/"));
+            await waitFor(() => expect(iframe()).toBeDefined());
+            expect(iframe()!.src).toContain("/widgets/compat-wrapper/?legacy_widget_url=");
+        });
+
+        it("keeps account widgets on matrix-widget-api", async () => {
+            render(
+                <AppTile key={app1.id} app={app1} userWidget={true} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
+
+            const messaging = WidgetMessagingStore.instance.getMessaging(new ElementWidget(app1), undefined);
+            expect(messaging).toBeDefined();
+            expect(messaging).not.toBeInstanceOf(WidgetHostMessaging);
         });
     });
 });
