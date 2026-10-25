@@ -43,23 +43,22 @@ import {
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
-    type Room,
     type MatrixClient,
     UNSTABLE_ELEMENT_FUNCTIONAL_USERS,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
-import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
+import { approveWidgetCapabilities } from "./WidgetCapabilityApproval";
+import { readRoomTimeline } from "./readRoomTimeline";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ModuleApi } from "../../modules/Api";
@@ -67,14 +66,6 @@ import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 import SdkConfig from "../../SdkConfig.ts";
-
-function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
-    return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
-}
-
-function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]): void {
-    localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
-}
 
 const normalizeTurnServer = ({ urls, username, credential }: IClientTurnServer): ITurnServer => ({
     uris: urls,
@@ -251,53 +242,13 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     public async validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
-        // Check to see if any capabilities aren't automatically accepted (such as sticker pickers
-        // allowing stickers to be sent). If there are excess capabilities to be approved, the user
-        // will be prompted to accept them.
-        const diff = iterableDiff(requested, this.allowedCapabilities);
-        const missing = new Set(diff.removed); // "removed" is "in A (requested) but not in B (allowed)"
-        const allowedSoFar = new Set(this.allowedCapabilities);
-        getRememberedCapabilitiesForWidget(this.forWidget).forEach((cap) => {
-            allowedSoFar.add(cap);
-            missing.delete(cap);
-        });
-
-        // Try the new module API first, then fall back to legacy paths
-        const approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
-            toWidgetDescriptor(this.forWidget, this.inRoomId),
+        return approveWidgetCapabilities({
+            widget: this.forWidget,
+            widgetKind: this.forWidgetKind,
+            roomId: this.inRoomId,
             requested,
-        );
-        if (approved) {
-            approved.forEach((cap) => {
-                allowedSoFar.add(cap);
-                missing.delete(cap);
-            });
-        }
-
-        // TODO: Do something when the widget requests new capabilities not yet asked for
-        let rememberApproved = false;
-        if (missing.size > 0) {
-            try {
-                const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
-                    requestedCapabilities: missing,
-                    widgetKind: this.forWidgetKind,
-                }).finished;
-                result?.approved?.forEach((cap) => allowedSoFar.add(cap));
-                rememberApproved = !!result?.remember;
-            } catch (e) {
-                logger.error("Non-fatal error getting capabilities: ", e);
-            }
-        }
-
-        // discard all previously allowed capabilities if they are not requested
-        // TODO: this results in an unexpected behavior when this function is called during the capabilities renegotiation of MSC2974 that will be resolved later.
-        const allAllowed = new Set(iterableIntersection(allowedSoFar, requested));
-
-        if (rememberApproved) {
-            setRememberedCapabilitiesForWidget(this.forWidget, Array.from(allAllowed));
-        }
-
-        return allAllowed;
+            preApproved: this.allowedCapabilities,
+        });
     }
 
     private getSendEventTarget(roomId: string | null = null): { client: MatrixClient; roomId: string } {
@@ -589,25 +540,6 @@ export class ElementWidgetDriver extends WidgetDriver {
      * @returns A generator that emits events.
      * @yields IRoomEvents from the room timeline
      */
-    private *readRoomTimelineIterator(
-        room: Room,
-        eventType: string,
-        msgtype: string | undefined,
-        stateKey: string | undefined,
-        limit: number,
-        since: string | undefined,
-    ): Generator<IRoomEvent, void, void> {
-        let resultCount: number = 0;
-        const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
-        for (let ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
-            if (ev.getType() !== eventType) continue;
-            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
-            yield ev.getEffectiveEvent() as IRoomEvent;
-            resultCount++;
-        }
-    }
-
     /**
      * Reads all events of the given type, and optionally `msgtype` (if applicable/defined),
      * the user has access to. The widget API will have already verified that the widget is
@@ -635,7 +567,9 @@ export class ElementWidgetDriver extends WidgetDriver {
         limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (room === null) return [];
-        return [...this.readRoomTimelineIterator(room, eventType, msgtype, stateKey, limit, since)];
+        return [...readRoomTimeline(room, { eventType, msgtype, stateKey, limit, since })].map(
+            (ev) => ev.getEffectiveEvent() as IRoomEvent,
+        );
     }
 
     /**
