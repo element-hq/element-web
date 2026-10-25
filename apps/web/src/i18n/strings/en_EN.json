@@ -1540,6 +1540,8 @@
         "feature_element_call_react": "Render Element Call as a React component instead of a widget",
         "feature_matrixrtc_slots": "Require open MatrixRTC slots for Element Call calls",
         "feature_matrixrtc_slots_description": "Only allows starting or joining Element Call calls with a valid slot state event in the room.",
+        "feature_msc4412_widget_host": "Run widgets on the MSC4412 widget host",
+        "feature_msc4412_widget_host_description": "Embeds room widgets through the Rust-based MSC4412 widget host and a compatibility wrapper for existing widgets. Element Call, Jitsi, sticker pickers and modal widgets keep using the current implementation.",
         "feature_retention": {
             "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
             "disabled_sliding_sync": "Retention policy cannot be enabled while Sliding Sync is enabled.",

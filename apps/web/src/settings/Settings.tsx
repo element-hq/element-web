@@ -225,6 +225,7 @@ export interface Settings {
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
     "feature_element_call_react": IFeature;
+    "feature_msc4412_widget_host": IFeature;
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
@@ -607,6 +608,17 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|feature_element_call_react"),
         // A call that is already mounted with one embedding (widget/component) cannot be switched to the other.
+        controller: new ReloadOnChangeController(),
+        default: false,
+    },
+    "feature_msc4412_widget_host": {
+        isFeature: true,
+        labsGroup: LabGroup.Widgets,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_msc4412_widget_host"),
+        description: _td("labs|feature_msc4412_widget_host_description"),
+        // A running widget cannot be moved between the two host implementations.
         controller: new ReloadOnChangeController(),
         default: false,
     },
