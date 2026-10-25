@@ -14,7 +14,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { EnhancedMap } from "../../utils/maps";
 import WidgetUtils from "../../utils/WidgetUtils";
-import { type WidgetMessaging } from "./WidgetMessaging";
+import { type IWidgetMessaging } from "./IWidgetMessaging";
 
 export enum WidgetMessagingStoreEvent {
     StoreMessaging = "store_messaging",
@@ -33,7 +33,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
         return instance;
     })();
 
-    private widgetMap = new EnhancedMap<string, WidgetMessaging>(); // <widget UID, messaging>
+    private widgetMap = new EnhancedMap<string, IWidgetMessaging>(); // <widget UID, messaging>
 
     public constructor() {
         super(defaultDispatcher);
@@ -52,7 +52,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
         this.widgetMap.clear();
     }
 
-    public storeMessaging(widget: Widget, roomId: string | undefined, messaging: WidgetMessaging): void {
+    public storeMessaging(widget: Pick<Widget, "id">, roomId: string | undefined, messaging: IWidgetMessaging): void {
         this.stopMessaging(widget, roomId);
         const uid = WidgetUtils.calcWidgetUid(widget.id, roomId);
         this.widgetMap.set(uid, messaging);
@@ -60,11 +60,11 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(WidgetMessagingStoreEvent.StoreMessaging, uid, messaging);
     }
 
-    public stopMessaging(widget: Widget, roomId: string | undefined): void {
+    public stopMessaging(widget: Pick<Widget, "id">, roomId: string | undefined): void {
         this.stopMessagingByUid(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
-    public getMessaging(widget: Widget, roomId: string | undefined): WidgetMessaging | undefined {
+    public getMessaging(widget: Pick<Widget, "id">, roomId: string | undefined): IWidgetMessaging | undefined {
         return this.widgetMap.get(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
@@ -83,9 +83,9 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Gets the widget messaging class for a given widget UID.
      * @param {string} widgetUid The widget UID.
-     * @returns {ClientWidgetApi} The widget API, or a falsy value if not found.
+     * @returns The widget messaging, or undefined if not found.
      */
-    public getMessagingForUid(widgetUid: string): WidgetMessaging | undefined {
+    public getMessagingForUid(widgetUid: string): IWidgetMessaging | undefined {
         return this.widgetMap.get(widgetUid);
     }
 }

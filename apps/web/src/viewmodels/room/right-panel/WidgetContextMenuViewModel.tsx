@@ -29,7 +29,7 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { isAppWidget } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { type IWidgetMessaging } from "../../../stores/widgets/IWidgetMessaging";
 import dis from "../../../dispatcher/dispatcher";
 
 const checkRevokeButtonState = (
@@ -56,7 +56,7 @@ export class WidgetContextMenuViewModel
     private _roomId: string | undefined;
     private _room: Room | undefined;
     private _cli: MatrixClient;
-    private _widgetMessaging: WidgetMessaging | undefined;
+    private _widgetMessaging: IWidgetMessaging | undefined;
 
     public constructor(props: WidgetContextMenuViewModelProps) {
         const { app, cli, room, roomId, userWidget, showUnpin, menuDisplayed, trigger, onDeleteClick } = props;
@@ -97,7 +97,7 @@ export class WidgetContextMenuViewModel
 
         const showSnapshotButton =
             SettingsStore.getValue("enableWidgetScreenshots") &&
-            !!widgetMessaging?.widgetApi?.hasCapability(MatrixCapabilities.Screenshots);
+            !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots);
 
         let showMoveButtons: [boolean, boolean] = [false, false];
         if (showUnpin) {

@@ -45,7 +45,7 @@ import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
-import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
+import { type IWidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/IWidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
 // From the component package's `api` entry point, which carries the types and enums without the
 // component: `BackgroundStyle` is needed as a value here, on the widget path, where the component
@@ -237,7 +237,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi | null> {
         const messagingStore = WidgetMessagingStore.instance;
         const startTime = performance.now();
-        let messaging: WidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
+        let messaging: IWidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
         // The widget might still be initializing, so wait for it in an async
         // event loop. We need the messaging to be both present and started
         // (have a connected widget API), so register listeners for both cases.
@@ -258,7 +258,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
             // be abandoned and replaced by an entirely new messaging object
             // while we were waiting for the original one to start. We need to
             // react to store updates in either case.
-            const onStoreMessaging = (uid: string, m: WidgetMessaging): void => {
+            const onStoreMessaging = (uid: string, m: IWidgetMessaging): void => {
                 if (uid === this.widgetUid) {
                     messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
                     messaging = m; // Check the new messaging object on the next iteration of the loop

@@ -500,10 +500,9 @@ describe("AppTile", () => {
                     off: () => {},
                     prepare: async () => {},
                     stop: () => {},
-                    widgetApi: {
-                        hasCapability: (capability: ElementWidgetCapabilities): boolean => {
-                            return !(capability === ElementWidgetCapabilities.RequiresClient);
-                        },
+                    isStarted: true,
+                    hasCapability: (capability: ElementWidgetCapabilities): boolean => {
+                        return !(capability === ElementWidgetCapabilities.RequiresClient);
                     },
                 } as unknown as WidgetMessaging;
 

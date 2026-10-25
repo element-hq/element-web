@@ -18,7 +18,7 @@ import React, {
     type ReactNode,
 } from "react";
 import classNames from "classnames";
-import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -42,7 +42,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
+import { ElementWidget, WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import { type IWidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/IWidgetMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -152,9 +153,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframeParent: HTMLElement | null = null; // parent div of the iframe
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
-    private messaging?: WidgetMessaging;
-    // The widget API whose events we are listening to, which the messaging hands us when it starts
-    private listenedWidgetApi: ClientWidgetApi | null = null;
+    private messaging?: IWidgetMessaging;
     private dispatcherRef?: string;
     private unmounted = false;
 
@@ -277,9 +276,9 @@ export default class AppTile extends React.Component<IProps, IState> {
         try {
             const widget = new ElementWidget(this.props.app);
             const messaging = WidgetMessagingStore.instance.getMessaging(widget, this.props.room?.roomId);
-            if (messaging?.widgetApi) {
+            if (messaging?.isStarted) {
                 // Load value from existing API to prevent resetting the requiresClient value on layout changes.
-                return messaging.widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
+                return messaging.hasCapability(ElementWidgetCapabilities.RequiresClient);
             }
         } catch {
             // fallback to true
@@ -424,35 +423,20 @@ export default class AppTile extends React.Component<IProps, IState> {
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
 
         // The messaging can outlive this tile, e.g. while another container keeps the widget alive,
-        // so stop listening to it and to its widget API rather than relying on it to stop
-        if (this.listenedWidgetApi) this.onMessagingStop(this.listenedWidgetApi);
+        // so stop listening to it rather than relying on it to stop
         this.stopMessagingListeners();
     }
 
     private setupMessagingListeners(): void {
-        this.messaging?.on(WidgetMessagingEvent.Start, this.onMessagingStart);
-        this.messaging?.on(WidgetMessagingEvent.Stop, this.onMessagingStop);
+        this.messaging?.on(WidgetMessagingEvent.Ready, this.onWidgetReady);
+        // emits when the capabilities have been set up or changed
+        this.messaging?.on(WidgetMessagingEvent.CapabilitiesChanged, this.updateRequiresClient);
     }
 
     private stopMessagingListeners(): void {
-        this.messaging?.off(WidgetMessagingEvent.Start, this.onMessagingStart);
-        this.messaging?.off(WidgetMessagingEvent.Stop, this.onMessagingStop);
+        this.messaging?.off(WidgetMessagingEvent.Ready, this.onWidgetReady);
+        this.messaging?.off(WidgetMessagingEvent.CapabilitiesChanged, this.updateRequiresClient);
     }
-
-    private readonly onMessagingStart = (widgetApi: ClientWidgetApi): void => {
-        this.listenedWidgetApi = widgetApi;
-        widgetApi.on("ready", this.onWidgetReady);
-        widgetApi.on("error:preparing", this.updateRequiresClient);
-        // emits when the capabilities have been set up or changed
-        widgetApi.on("capabilitiesNotified", this.updateRequiresClient);
-    };
-
-    private readonly onMessagingStop = (widgetApi: ClientWidgetApi): void => {
-        if (this.listenedWidgetApi === widgetApi) this.listenedWidgetApi = null;
-        widgetApi.off("ready", this.onWidgetReady);
-        widgetApi.off("error:preparing", this.updateRequiresClient);
-        widgetApi.off("capabilitiesNotified", this.updateRequiresClient);
-    };
 
     private resetWidget(newProps: IProps): void {
         this.messaging?.stop();
@@ -564,7 +548,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private updateRequiresClient = (): void => {
         this.setState({
-            requiresClient: !!this.messaging?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
+            requiresClient: this.messaging?.hasCapability(ElementWidgetCapabilities.RequiresClient) ?? false,
         });
     };
 
@@ -573,7 +557,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             case "m.sticker":
                 if (
                     payload.widgetId === this.props.app.id &&
-                    this.messaging?.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)
+                    this.messaging?.hasCapability(MatrixCapabilities.StickerSending)
                 ) {
                     dis.dispatch({
                         action: "post_sticker_message",

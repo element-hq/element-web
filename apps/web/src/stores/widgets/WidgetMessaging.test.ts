@@ -47,7 +47,7 @@ import { waitFor } from "test-utils-rtl";
 import { stubClient, mkRoom, mkEvent } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { ElementWidget, WidgetMessaging } from "./WidgetMessaging";
+import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "./WidgetMessaging";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import SettingsStore from "../../settings/SettingsStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -219,6 +219,48 @@ describe("WidgetMessaging", () => {
         } finally {
             settingsSpy.mockRestore();
         }
+    });
+
+    it("emits Ready once the widget is ready", () => {
+        const onReady = vi.fn();
+        widget.on(WidgetMessagingEvent.Ready, onReady);
+        findLast(messaging.once.mock.calls, ([eventName]) => eventName === "ready")![1]();
+        expect(onReady).toHaveBeenCalledTimes(1);
+    });
+
+    it("emits CapabilitiesChanged when capabilities are notified or setup fails", () => {
+        const onChanged = vi.fn();
+        widget.on(WidgetMessagingEvent.CapabilitiesChanged, onChanged);
+        findLast(messaging.on.mock.calls, ([eventName]) => eventName === "capabilitiesNotified")![1]();
+        findLast(messaging.on.mock.calls, ([eventName]) => eventName === "error:preparing")![1]();
+        expect(onChanged).toHaveBeenCalledTimes(2);
+    });
+
+    it("reports capabilities and the started state through the messaging", () => {
+        messaging.hasCapability.mockImplementation((cap) => cap === MatrixCapabilities.Screenshots);
+        expect(widget.isStarted).toBe(true);
+        expect(widget.hasCapability(MatrixCapabilities.Screenshots)).toBe(true);
+        expect(widget.hasCapability(MatrixCapabilities.AlwaysOnScreen)).toBe(false);
+    });
+
+    it("is not started and holds no capabilities before start", () => {
+        const app: IApp = {
+            id: "other",
+            creatorUserId: "@alice:example.org",
+            type: "example",
+            url: "https://example.org",
+            roomId: "!1:example.org",
+        };
+        const fresh = new WidgetMessaging(new ElementWidget(app), {
+            app,
+            room: mkRoom(client, "!1:example.org"),
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+        });
+        expect(fresh.isStarted).toBe(false);
+        expect(fresh.hasCapability(MatrixCapabilities.Screenshots)).toBe(false);
     });
 
     describe("feed event", () => {

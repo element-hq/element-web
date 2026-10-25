@@ -7,7 +7,6 @@
  */
 
 import {
-    type Room,
     type MatrixEvent,
     MatrixEventEvent,
     type MatrixClient,
@@ -38,6 +37,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../../languageHandler";
 import { getUserLanguage } from "../../i18n/settings";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
+import {
+    type IWidgetMessaging,
+    WidgetMessagingEvent,
+    type WidgetMessagingEventMap,
+    type WidgetMessagingOptions,
+} from "./IWidgetMessaging";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
@@ -138,32 +143,6 @@ export class ElementWidget extends Widget {
     }
 }
 
-export enum WidgetMessagingEvent {
-    Start = "start",
-    Stop = "stop",
-}
-
-interface WidgetMessagingEventMap {
-    [WidgetMessagingEvent.Start]: (widgetApi: ClientWidgetApi) => void;
-    [WidgetMessagingEvent.Stop]: (widgetApi: ClientWidgetApi) => void;
-}
-
-interface WidgetMessagingOptions {
-    app: IWidget;
-    room?: Room; // without a room it is a user widget
-    userId: string;
-    creatorUserId: string;
-    waitForIframeLoad: boolean;
-    userWidget: boolean;
-    /**
-     * If defined this async method will be called when the widget requests to become sticky.
-     * It will only become sticky once the returned promise resolves.
-     * This is useful because: Widget B is sticky. Making widget A sticky will kill widget B immediately.
-     * This promise allows to do Widget B related cleanup before Widget A becomes sticky. (e.g. hangup a Voip call)
-     */
-    stickyPromise?: () => Promise<void>;
-}
-
 /**
  * A running instance of a widget, associated with an iframe and an active communication
  * channel. Instances must be tracked by WidgetMessagingStore, as only one WidgetMessaging
@@ -178,7 +157,57 @@ interface WidgetMessagingOptions {
  *   Matrix client to the widget on the widget's behalf.
  * @see {@link WidgetMessagingStore} for the store that holds these instances.
  */
-export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
+export { WidgetMessagingEvent };
+
+/**
+ * Fetches an integration manager token for a widget hosted by the integration manager, if any.
+ * Errors are non-fatal: the widget then loads without a token.
+ */
+export async function fetchScalarTokenIfNeeded(widgetUrl: string): Promise<string | undefined> {
+    try {
+        if (WidgetUtils.isScalarUrl(widgetUrl)) {
+            const managers = IntegrationManagers.sharedInstance();
+            if (managers.hasManager()) {
+                // TODO: Pick the right manager for the widget
+                const defaultManager = managers.getPrimaryManager();
+                if (defaultManager && WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
+                    const scalar = defaultManager.getScalarClient();
+                    return await scalar.getScalarToken();
+                }
+            }
+        }
+    } catch (e) {
+        // All errors are non-fatal
+        logger.error("Error preparing widget communications: ", e);
+    }
+    return undefined;
+}
+
+/**
+ * The values substituted for the template variables (`$matrix_user_id` and friends) of a widget URL.
+ */
+export function buildWidgetTemplateParams(
+    client: MatrixClient,
+    roomId: string | undefined,
+    theme: string,
+): ITemplateParams {
+    return {
+        widgetRoomId: roomId,
+        currentUserId: client.getUserId()!,
+        userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
+        userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
+        clientId: ELEMENT_CLIENT_ID,
+        clientTheme: theme,
+        clientLanguage: getUserLanguage(),
+        deviceId: client.getDeviceId() ?? undefined,
+        baseUrl: client.baseUrl,
+    };
+}
+
+export class WidgetMessaging
+    extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap>
+    implements IWidgetMessaging
+{
     private client: MatrixClient;
     private iframe: HTMLIFrameElement | null = null;
     private scalarToken?: string;
@@ -219,6 +248,14 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         return this._widgetApi;
     }
 
+    public get isStarted(): boolean {
+        return this._widgetApi !== null;
+    }
+
+    public hasCapability(capability: string): boolean {
+        return this._widgetApi?.hasCapability(capability) ?? false;
+    }
+
     /**
      * The URL to use in the iframe
      */
@@ -234,17 +271,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private runUrlTemplate(opts = { asPopout: false }): string {
-        const defaults: ITemplateParams = {
-            widgetRoomId: this.roomId,
-            currentUserId: this.client.getUserId()!,
-            userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
-            userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
-            clientId: ELEMENT_CLIENT_ID,
-            clientTheme: this.themeWatcher.getEffectiveTheme(),
-            clientLanguage: getUserLanguage(),
-            deviceId: this.client.getDeviceId() ?? undefined,
-            baseUrl: this.client.baseUrl,
-        };
+        const defaults = buildWidgetTemplateParams(this.client, this.roomId, this.themeWatcher.getEffectiveTheme());
         const templated = this.widget.getCompleteUrl(defaults, opts?.asPopout);
 
         const parsed = new URL(templated);
@@ -267,6 +294,10 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // in HTTP, but URL parsers encode them anyways.
         return parsed.toString().replace(/%24/g, "$");
     }
+
+    private onCapabilitiesChanged = (): void => {
+        this.emit(WidgetMessagingEvent.CapabilitiesChanged);
+    };
 
     private onThemeChange = (theme: string): void => {
         void this.widgetApi?.updateTheme({ name: theme });
@@ -312,7 +343,10 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
             // Theme may have changed while messaging was starting
             this.onThemeChange(this.themeWatcher.getEffectiveTheme());
+            this.emit(WidgetMessagingEvent.Ready);
         });
+        this.widgetApi.on("error:preparing", this.onCapabilitiesChanged);
+        this.widgetApi.on("capabilitiesNotified", this.onCapabilitiesChanged);
         this.widgetApi.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
 
         // When widgets are listening to events, we need to make sure they're only
@@ -462,22 +496,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
 
     public async prepare(): Promise<void> {
         if (this.scalarToken) return;
-        try {
-            if (WidgetUtils.isScalarUrl(this.widget.templateUrl)) {
-                const managers = IntegrationManagers.sharedInstance();
-                if (managers.hasManager()) {
-                    // TODO: Pick the right manager for the widget
-                    const defaultManager = managers.getPrimaryManager();
-                    if (defaultManager && WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
-                        const scalar = defaultManager.getScalarClient();
-                        this.scalarToken = await scalar.getScalarToken();
-                    }
-                }
-            }
-        } catch (e) {
-            // All errors are non-fatal
-            logger.error("Error preparing widget communications: ", e);
-        }
+        this.scalarToken = await fetchScalarTokenIfNeeded(this.widget.templateUrl);
     }
 
     /**

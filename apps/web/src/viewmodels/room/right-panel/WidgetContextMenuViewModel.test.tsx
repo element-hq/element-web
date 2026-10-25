@@ -65,8 +65,9 @@ describe("WidgetContextMenuViewModel", () => {
             on: () => {},
             off: () => {},
             stop: () => {},
+            hasCapability: vi.fn(),
             widgetApi: {
-                hasCapability: vi.fn(),
+                takeScreenshot: vi.fn(),
             },
         } as unknown as WidgetMessaging;
         vi.spyOn(WidgetMessagingStore.instance, "getMessagingForUid").mockReturnValue(mockMessaging);
