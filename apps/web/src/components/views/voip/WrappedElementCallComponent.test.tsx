@@ -46,9 +46,9 @@ describe("WrappedElementCallComponent", () => {
     let call: ElementCall;
     let documentPipStore: DocumentPipStore & { isShowing: ReturnType<typeof vi.fn>; pipWindow: Window | null };
 
-    beforeEach(() => {
+    beforeEach(async () => {
         ({ client, room } = setUpClientRoomAndStores());
-        setupAsyncStoreWithClient(CallStore.instance, client);
+        await setupAsyncStoreWithClient(CallStore.instance, client);
         ElementCall.create(room);
         const maybeCall = CallStore.instance.getCall(room.roomId);
         if (!(maybeCall instanceof ElementCall)) throw new Error("Failed to create call");
@@ -86,13 +86,17 @@ describe("WrappedElementCallComponent", () => {
 
         documentPipStore.isShowing.mockImplementation((c) => c === call);
         documentPipStore.pipWindow = { document: { body: pipBody } } as unknown as Window;
-        act(() => documentPipStore.emit(DocumentPipStoreEvent.Update));
+        act(() => {
+            documentPipStore.emit(DocumentPipStoreEvent.Update);
+        });
         expect(elementCall).toHaveAttribute("data-portal-root", "pip-body");
 
         // Back again once the window closes
         documentPipStore.isShowing.mockReturnValue(false);
         documentPipStore.pipWindow = null;
-        act(() => documentPipStore.emit(DocumentPipStoreEvent.Update));
+        act(() => {
+            documentPipStore.emit(DocumentPipStoreEvent.Update);
+        });
         expect(elementCall).toHaveAttribute("data-portal-root", "none");
     });
 });

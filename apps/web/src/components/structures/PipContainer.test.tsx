@@ -225,7 +225,9 @@ describe("PipContainer", () => {
 
             // Closing the window hands the widget back to the floating PiP
             isShowingWidget.mockReturnValue(false);
-            act(() => sdkContext.documentPipStore.emit(DocumentPipStoreEvent.Update));
+            act(() => {
+                sdkContext.documentPipStore.emit(DocumentPipStoreEvent.Update);
+            });
             await screen.findByTestId("widget-pip-container");
         });
     });

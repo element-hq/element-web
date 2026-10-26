@@ -166,7 +166,7 @@ for (const embedding of ["widget", "react"] as const) {
                 }
 
                 if (embedding === "react") {
-                    testCSSLayering(page);
+                    await testCSSLayering(page);
                 }
 
                 // Bob leaves; Alice sees him go
