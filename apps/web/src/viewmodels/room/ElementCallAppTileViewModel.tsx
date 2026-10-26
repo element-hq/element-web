@@ -18,7 +18,10 @@ import { type IWidget } from "matrix-widget-api";
 
 import type { CSSProperties, FC, ReactNode, RefObject } from "react";
 import type { SDKContextClass } from "../../contexts/SDKContextClass";
-import PersistedElement, { getPersistKey } from "../../components/views/elements/PersistedElement";
+import PersistedElement, {
+    DEFAULT_PERSISTED_Z_INDEX,
+    getPersistKey,
+} from "../../components/views/elements/PersistedElement";
 import { WrappedElementCallComponent } from "../../components/views/voip/WrappedElementCallComponent";
 import ActiveWidgetStore from "../../stores/ActiveWidgetStore";
 import { type IApp, isAppWidget } from "../../stores/WidgetStore";
@@ -31,7 +34,7 @@ import { type ActionPayload } from "../../dispatcher/payloads";
 
 // For persisted apps in PiP we want the zIndex to be higher than for other persisted apps (100),
 // otherwise the PiP view is drawn UNDER another persistent app when dragged around. Same as AppTile.
-const Z_INDEX_DOCKED = 9;
+const Z_INDEX_DOCKED = DEFAULT_PERSISTED_Z_INDEX;
 const Z_INDEX_MINI = 101;
 
 /**

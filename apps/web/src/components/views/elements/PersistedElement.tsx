@@ -17,6 +17,16 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export const getPersistKey = (appId: string): string => "widget_" + appId;
 
+/**
+ * The z-index a persisted element sits at unless its owner asks for another:
+ *  - above the room content
+ *  - below Element Web's floating PiP (the floating one is higher 101 so it is drawn over the
+ * other persisted elements while dragged), dialogs and menus.
+ *
+ * The exact 9 is historic. anything between 1 - 100 should work.
+ */
+export const DEFAULT_PERSISTED_Z_INDEX = 9;
+
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
@@ -48,7 +58,7 @@ interface IProps {
     // the same DOM container.
     persistKey: string;
 
-    // z-index for the element. Defaults to 9.
+    // z-index for the element. Defaults to `DEFAULT_PERSISTED_Z_INDEX` (9).
     zIndex?: number;
 
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
@@ -160,8 +170,8 @@ export default class PersistedElement extends React.Component<IProps> {
         if (instances?.size) {
             for (const instance of instances) instance.updateChild();
         } else {
-            // Nothing is placing the child: it is either filling its host, or hidden as an unmounted
-            // PersistedElement leaves it.
+            // No PersistedElement is mounted to place the child over its placeholder, so there is no
+            // parent to pass: styleChild then fills the host while detached and hides the child otherwise.
             const child = PersistedElement.children.get(persistKey);
             if (child) PersistedElement.styleChild(child, persistKey, undefined, undefined);
         }
@@ -273,7 +283,8 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
         if (!child) return;
-        // A detached child is showing in its own window, whatever this document does
+        // The Picture-in-Picture sate (defined by it being "detached") will overwrite `visible`
+        // for the child (the actual persistent Element content. e.g. the element call component)
         child.style.display = visible || PersistedElement.isDetached(this.props.persistKey) ? "block" : "none";
     }
 
@@ -285,6 +296,11 @@ export default class PersistedElement extends React.Component<IProps> {
     /**
      * Places the child: over the placeholder `parent` it belongs to, or filling its host while detached.
      * Without either it is left hidden, since there is nowhere for it to be.
+     *
+     * @param child - The persisted DOM tree's container.
+     * @param parent - The placeholder of the mounted PersistedElement.
+     * @param zIndex - The `zIndex` prop of that PersistedElement. Defaults to `DEFAULT_PERSISTED_Z_INDEX`.
+     * DEFAULT_PERSISTED_Z_INDEX, allows it to be above the UI but below a potential PiP PersistedElement.
      */
     private static styleChild(
         child: HTMLDivElement,
@@ -292,7 +308,7 @@ export default class PersistedElement extends React.Component<IProps> {
         parent: HTMLDivElement | undefined,
         zIndex: number | undefined,
     ): void {
-        const z = isNullOrUndefined(zIndex) ? 9 : zIndex;
+        const z = isNullOrUndefined(zIndex) ? DEFAULT_PERSISTED_Z_INDEX : zIndex;
         if (PersistedElement.isDetached(persistKey)) {
             // Alone in its window, the tree has nothing to be stacked against, and a z-index here would
             // put it over what gets portalled into that window's body after it: menus, tooltips.
