@@ -92,11 +92,10 @@ export const WrappedElementCallComponent: FC<{
     // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
     const { effectiveTheme: theme } = useTheme();
-    // While the call's DOM is in the Picture-in-Picture window, its menus and tooltips must open there
-    // too: Compound would otherwise float them into this document, the one window the call is not in.
-    // `undefined` leaves them in this document's body, as for any other Compound component; `null` is
-    // the component's "wait for the root" (a Picture-in-Picture window whose document is not there yet),
-    // so it must not be passed outside Picture-in-Picture, where it would hide them for good.
+    // The portal root types have meaning:
+    //  - HTMLElement: (tooltips render in EC) everything ready. render floating items in the Elemnet Call OS PiP
+    //  - undefined: (tooltips render in main document/chat) no custom root so the root is the main window
+    //  - null: (tooltips dont renders) "wait for root" menus and tooltips wait for it instead of falling back to the body.
     const portalRootFor = useCallback(
         (): HTMLElement | null | undefined =>
             documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : undefined,

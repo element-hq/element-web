@@ -35,12 +35,12 @@ export const useDocumentPip = (
     const { documentPipStore } = useContext(SDKContext);
     const call = useCall(room.roomId);
     const connected = useConnectionState(call) === ConnectionState.Connected;
-    const reactComponent = useSettingValue("feature_element_call_react");
+    const usingReactComponent = useSettingValue("feature_element_call_react");
     const shownCall = useEventEmitterState(documentPipStore, DocumentPipStoreEvent.Update, () => documentPipStore.call);
 
     const elementCall = call instanceof ElementCall ? call : null;
     const active = elementCall !== null && shownCall === elementCall;
-    const available = DocumentPipStore.isSupported && reactComponent && connected && elementCall !== null;
+    const available = DocumentPipStore.isSupported && usingReactComponent && connected && elementCall !== null;
 
     const toggle = useCallback((): void => {
         if (elementCall === null) return;
