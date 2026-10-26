@@ -307,6 +307,15 @@ describe("getUserCertificate", () => {
         });
     });
 
+    it("fails when an intermediate is unparseable", async () => {
+        await writeChain(aliceLeafPem, "-----BEGIN CERTIFICATE-----\ncoyotes!\n-----END CERTIFICATE-----\n");
+
+        await expect(x509.getUserCertificate()).resolves.toMatchObject({
+            ok: false,
+            error: { code: "CERTIFICATE_INVALID" },
+        });
+    });
+
     describe("chainValidTo", () => {
         it("returns the leaf's validTo when there are no intermediates", async () => {
             await writeChain(aliceLeafPem);
