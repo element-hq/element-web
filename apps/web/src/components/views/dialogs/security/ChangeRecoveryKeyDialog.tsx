@@ -8,8 +8,6 @@ Please see LICENSE in the repository root for full details.
 import React, { type JSX } from "react";
 
 import { _t } from "../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { ChangeRecoveryKeyBody } from "../../settings/encryption/ChangeRecoveryKeyBody";
 import BaseDialog from "../BaseDialog";
 
@@ -35,7 +33,6 @@ export function ChangeRecoveryKeyDialog({
     userHasRecoveryKey,
     onFinished,
 }: Readonly<ChangeRecoveryKeyDialogProps>): JSX.Element {
-    const matrixClient = MatrixClientPeg.safeGet();
     return (
         <BaseDialog
             onFinished={onFinished}
@@ -45,14 +42,12 @@ export function ChangeRecoveryKeyDialog({
                     : _t("settings|encryption|recovery|set_up_recovery")
             }
         >
-            <MatrixClientContext.Provider value={matrixClient}>
-                <ChangeRecoveryKeyBody
-                    userHasRecoveryKey={userHasRecoveryKey}
-                    className="mx_EncryptionCard_noBorder"
-                    onFinish={() => onFinished(true)}
-                    onCancelClick={() => onFinished(false)}
-                />
-            </MatrixClientContext.Provider>
+            <ChangeRecoveryKeyBody
+                userHasRecoveryKey={userHasRecoveryKey}
+                className="mx_EncryptionCard_noBorder"
+                onFinish={() => onFinished(true)}
+                onCancelClick={() => onFinished(false)}
+            />
         </BaseDialog>
     );
 }
