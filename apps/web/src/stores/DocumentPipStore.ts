@@ -31,8 +31,10 @@ type EventHandlerMap = {
 /** The size a new Picture-in-Picture window opens at; the user can resize it from there. */
 const DEFAULT_WINDOW_SIZE = { width: 640, height: 360 };
 
+/** State of the OS Picture-in-Picture window right now, and where it came from. */
 interface Shown {
     call: ElementCall;
+    /** reference back to the call's persistedElement DOM tree. */
     persistKey: string;
     pipWindow: Window;
     /**
@@ -70,7 +72,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
      * Counts requests to open a window. Opening waits for the browser, and a request overtaken in the
      * meantime by another `open` or by `close` must not install itself once its window arrives.
      */
-    private openRequest = 0;
+    private openCloseRequestIndex = 0;
 
     /** The call currently shown in a Picture-in-Picture window, if any. */
     public get call(): ElementCall | null {
@@ -108,7 +110,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         }
 
         this.close();
-        const request = ++this.openRequest;
+        const requestIndex = ++this.openCloseRequestIndex;
         let pipWindow: Window;
         try {
             pipWindow = await window.documentPictureInPicture!.requestWindow(DEFAULT_WINDOW_SIZE);
@@ -117,7 +119,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
             return;
         }
         // Overtaken while the browser was opening the window, or the call ended in the meantime
-        if (request !== this.openRequest || !PersistedElement.isMounted(persistKey)) {
+        if (requestIndex !== this.openCloseRequestIndex || !PersistedElement.isMounted(persistKey)) {
             pipWindow.close();
             return;
         }
@@ -153,7 +155,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
      * window that is still being opened.
      */
     public close(): void {
-        this.openRequest++;
+        this.openCloseRequestIndex++;
         const shown = this.shown;
         if (!shown) return;
         this.release(shown);
@@ -169,9 +171,11 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
     };
 
     private onRoomViewChanged = (): void => {
-        // The user wants the call in the room view again
+        // RoomViewStore updates on any change, most of them are unrelated to the window
         const roomViewStore = this.sdkContext.roomViewStore;
-        if (this.shown && roomViewStore.isViewingCall() && roomViewStore.getRoomId() === this.shown.call.roomId) {
+        if (this.shown && roomViewStore.getRoomId() === this.shown.call.roomId && roomViewStore.isViewingCall()) {
+            // The user opened the call view (a `ViewRoom` with `view_call`):
+            // they want the call in the room view again, so the OS PiP window needs to go (close).
             this.close();
         }
     };
@@ -190,7 +194,8 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         // Back to where it came from. A call that filled the room view returns there, provided it is still
         // running and the user is still in that room (and did not just open the call view themselves, which
         // is what closed the window); otherwise Element Web's floating PiP picks it up, as it does for a
-        // call that was floating there before.
+        // call that was floating there before. Viewing the same room with `view_call` set is how the call
+        // view is opened (see `RoomViewStore`'s handling of `view_call`); only that flag changes here.
         if (
             !shown.fromPipView &&
             shown.call.connected &&
