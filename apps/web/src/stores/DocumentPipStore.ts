@@ -32,7 +32,7 @@ type EventHandlerMap = {
 const DEFAULT_WINDOW_SIZE = { width: 640, height: 360 };
 
 /** State of the OS Picture-in-Picture window right now, and where it came from. */
-interface Shown {
+interface DocumentPiPState {
     call: ElementCall;
     /** reference back to the call's persistedElement DOM tree. */
     persistKey: string;
@@ -67,7 +67,8 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
         return typeof window !== "undefined" && window.documentPictureInPicture !== undefined;
     }
 
-    private shown: Shown | null = null;
+    /** `null` means its current not shown. !== null -> the PiP window is shown */
+    private documentPipState: DocumentPiPState | null = null;
     /**
      * Counts requests to open a window. Opening waits for the browser, and a request overtaken in the
      * meantime by another `open` or by `close` must not install itself once its window arrives.
@@ -76,21 +77,21 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
 
     /** The call currently shown in a Picture-in-Picture window, if any. */
     public get call(): ElementCall | null {
-        return this.shown?.call ?? null;
+        return this.documentPipState?.call ?? null;
     }
 
     /** The Picture-in-Picture window, while a call is shown in one. */
     public get pipWindow(): Window | null {
-        return this.shown?.pipWindow ?? null;
+        return this.documentPipState?.pipWindow ?? null;
     }
 
     public isShowing(call: Call | null): boolean {
-        return call !== null && this.shown?.call === call;
+        return call !== null && this.documentPipState?.call === call;
     }
 
     /** Whether the call identified by this (virtual) widget is in the Picture-in-Picture window. */
     public isShowingWidget(widgetId: string, roomId: string | null): boolean {
-        return this.shown !== null && this.shown.call.widget.id === widgetId && this.shown.call.roomId === roomId;
+        return this.documentPipState !== null && this.documentPipState.call.widget.id === widgetId && this.documentPipState.call.roomId === roomId;
     }
 
     /**
@@ -99,8 +100,8 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
      */
     public async open(call: ElementCall): Promise<void> {
         if (!DocumentPipStore.isSupported) return;
-        if (this.shown?.call === call) {
-            this.shown.pipWindow.focus();
+        if (this.documentPipState?.call === call) {
+            this.documentPipState.pipWindow.focus();
             return;
         }
         const persistKey = getPersistKey(WidgetUtils.getWidgetUid(call.widget));
@@ -129,7 +130,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
 
         prepareDocument(pipWindow.document);
         PersistedElement.detach(persistKey, pipWindow.document.body);
-        this.shown = { call, persistKey, pipWindow, fromPipView };
+        this.documentPipState = { call, persistKey, pipWindow, fromPipView };
 
         pipWindow.addEventListener("pagehide", this.onWindowClosed);
         call.on(CallEvent.ConnectionState, this.onConnectionState);
@@ -156,14 +157,14 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
      */
     public close(): void {
         this.openCloseRequestIndex++;
-        const shown = this.shown;
+        const shown = this.documentPipState;
         if (!shown) return;
         this.release(shown);
         shown.pipWindow.close();
     }
 
     private onWindowClosed = (): void => {
-        if (this.shown) this.release(this.shown);
+        if (this.documentPipState) this.release(this.documentPipState);
     };
 
     private onConnectionState = (state: ConnectionState): void => {
@@ -173,7 +174,7 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
     private onRoomViewChanged = (): void => {
         // RoomViewStore updates on any change, most of them are unrelated to the window
         const roomViewStore = this.sdkContext.roomViewStore;
-        if (this.shown && roomViewStore.getRoomId() === this.shown.call.roomId && roomViewStore.isViewingCall()) {
+        if (this.documentPipState && roomViewStore.getRoomId() === this.documentPipState.call.roomId && roomViewStore.isViewingCall()) {
             // The user opened the call view (a `ViewRoom` with `view_call`):
             // they want the call in the room view again, so the OS PiP window needs to go (close).
             this.close();
@@ -181,30 +182,29 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
     };
 
     /** Detaches from the window and puts the call back where it came from; idempotent. */
-    private release(shown: Shown): void {
-        if (this.shown !== shown) return;
-        this.shown = null;
-        shown.pipWindow.removeEventListener("pagehide", this.onWindowClosed);
-        shown.call.off(CallEvent.ConnectionState, this.onConnectionState);
+    private release(state: DocumentPiPState): void {
+        if (this.documentPipState !== state) return;
+        this.documentPipState = null;
+        state.pipWindow.removeEventListener("pagehide", this.onWindowClosed);
+        state.call.off(CallEvent.ConnectionState, this.onConnectionState);
         const roomViewStore = this.sdkContext.roomViewStore;
         roomViewStore.off(UPDATE_EVENT, this.onRoomViewChanged);
-        PersistedElement.reattach(shown.persistKey);
+        PersistedElement.reattach(state.persistKey);
         this.emit(DocumentPipStoreEvent.Update);
 
-        // Back to where it came from. A call that filled the room view returns there, provided it is still
-        // running and the user is still in that room (and did not just open the call view themselves, which
-        // is what closed the window); otherwise Element Web's floating PiP picks it up, as it does for a
-        // call that was floating there before. Viewing the same room with `view_call` set is how the call
-        // view is opened (see `RoomViewStore`'s handling of `view_call`); only that flag changes here.
+        // Back to where it came from. A call that filled the room view returns there.
+        // A call that reached Docuement PiP from the Element Web's floating PiP returns it into the EW PiP.
+        // Viewing the same room (Action.ViewRoom) with `view_call` set, is how the call view is opened.
+        // (see `RoomViewStore`'s handling of `view_call`);
         if (
-            !shown.fromPipView &&
-            shown.call.connected &&
-            roomViewStore.getRoomId() === shown.call.roomId &&
+            !state.fromPipView &&
+            state.call.connected &&
+            roomViewStore.getRoomId() === state.call.roomId &&
             !roomViewStore.isViewingCall()
         ) {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: shown.call.roomId,
+                room_id: state.call.roomId,
                 metricsTrigger: undefined,
                 view_call: true,
             });
