@@ -30,10 +30,18 @@ import { WrappedElementCallComponent } from "./WrappedElementCallComponent";
 vi.mock("./ElementCallMock", () => ({
     initializeElementCall: vi.fn().mockResolvedValue(undefined),
     ElementCall: ({ portalRoot }: { portalRoot?: HTMLElement | null }) => (
-        // `undefined` (this document) and `null` (wait for a root) mean different things to the component
+        // `undefined` (no root: unwrapped) and `null` (wait for a root) mean different things to the component
         <div
             data-testid="element-call"
-            data-portal-root={portalRoot === undefined ? "none" : portalRoot === null ? "pending" : portalRoot.id}
+            data-portal-root={
+                portalRoot === undefined
+                    ? "none"
+                    : portalRoot === null
+                      ? "pending"
+                      : portalRoot === document.body
+                        ? "document-body"
+                        : portalRoot.id
+            }
         />
     ),
 }));
@@ -76,7 +84,7 @@ describe("WrappedElementCallComponent", () => {
 
     it("leaves the component's floating parts in this document while the call is here", async () => {
         const elementCall = await renderWrapped();
-        expect(elementCall).toHaveAttribute("data-portal-root", "none");
+        expect(elementCall).toHaveAttribute("data-portal-root", "document-body");
     });
 
     it("sends the component's floating parts into the Picture-in-Picture window with the call", async () => {
@@ -97,6 +105,6 @@ describe("WrappedElementCallComponent", () => {
         act(() => {
             documentPipStore.emit(DocumentPipStoreEvent.Update);
         });
-        expect(elementCall).toHaveAttribute("data-portal-root", "none");
+        expect(elementCall).toHaveAttribute("data-portal-root", "document-body");
     });
 });

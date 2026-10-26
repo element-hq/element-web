@@ -92,13 +92,14 @@ export const WrappedElementCallComponent: FC<{
     // Real component or mock: independent of the widget-vs-React choice CallAppTile makes.
     const ElementCall = useSettingValue("Developer.elementCallMockComponent") ? MockElementCall : RealElementCall;
     const { effectiveTheme: theme } = useTheme();
-    // The portal root types have meaning:
-    //  - HTMLElement: (tooltips render in EC) everything ready. render floating items in the Elemnet Call OS PiP
-    //  - undefined: (tooltips render in main document/chat) no custom root so the root is the main window
-    //  - null: (tooltips dont renders) "wait for root" menus and tooltips wait for it instead of falling back to the body.
+    // Where the component renders its menus and tooltips:
+    //  - the OS PiP window's body while the call is shown there
+    //  - null while that window is not ready yet: menus and tooltips wait for it instead of falling back to the body
+    //  - this document's body otherwise. Never undefined: the component only wraps its tree in a Compound
+    //    `PortalRoot` when it is given a root, so switching between undefined and a root remounts (reloads) the call.
     const portalRootFor = useCallback(
-        (): HTMLElement | null | undefined =>
-            documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : undefined,
+        (): HTMLElement | null =>
+            documentPipStore.isShowing(call) ? (documentPipStore.pipWindow?.document.body ?? null) : document.body,
         [documentPipStore, call],
     );
     const portalRoot = useEventEmitterState(documentPipStore, DocumentPipStoreEvent.Update, portalRootFor);

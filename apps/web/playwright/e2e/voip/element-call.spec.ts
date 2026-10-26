@@ -573,6 +573,38 @@ test.describe("Element Call", () => {
                 }
             });
 
+            test("should keep the same call running when it comes back from PiP into the room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+                await expect(pipContainer).toBeVisible();
+
+                // Viewing a room with an active call docks the call into its call view again
+                await app.viewRoomByName("TestRoom");
+                await expect(pipContainer).not.toBeVisible();
+                await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+
+                if (embedding === "react") {
+                    // The very same component instance docks again: a remount would start it (and its log) afresh
+                    await expect(reactCall(page).getByText(/in call/)).toBeVisible();
+                    await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
+                        "→ setAlwaysOnScreen(true)",
+                    );
+                } else {
+                    // The iframe is not reloaded: the fake call is still in the call rather than back at its lobby
+                    const callFrame = page.locator('iframe[title="Element Call"]').contentFrame();
+                    await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+                }
+            });
+
             test(
                 "should show the header buttons for taking the call out of the room view",
                 { tag: "@screenshot" },
@@ -858,6 +890,8 @@ test.describe("Element Call", () => {
 
             // In a call: the browser PiP button, and no button to start another call
             const documentPip = page.getByTestId("document-pip-button");
+            // Tag the mock's DOM so we can tell, once it is back, whether React kept it or rendered it anew
+            await mock.evaluate((el) => el.setAttribute("data-test-before-pip", ""));
 
             await documentPip.click();
             // The component's DOM left this document for the browser's window; the room shows the
@@ -880,6 +914,19 @@ test.describe("Element Call", () => {
             await expect(mock).toBeVisible();
             await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
             await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+            // ...as the very same component instance: it did not reload on the way there or back
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
+
+            // Bringing it back from inside Element Web does not reload it either
+            await documentPip.click();
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await page.getByRole("button", { name: "Bring call back into this window" }).click();
+            await expect(mock).toBeVisible();
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
         });
 
         test("keeps a call that was just joined in the browser window", async ({ page, user, room, app }) => {
