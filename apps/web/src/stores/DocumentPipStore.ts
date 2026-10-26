@@ -91,7 +91,11 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
 
     /** Whether the call identified by this (virtual) widget is in the Picture-in-Picture window. */
     public isShowingWidget(widgetId: string, roomId: string | null): boolean {
-        return this.documentPipState !== null && this.documentPipState.call.widget.id === widgetId && this.documentPipState.call.roomId === roomId;
+        return (
+            this.documentPipState !== null &&
+            this.documentPipState.call.widget.id === widgetId &&
+            this.documentPipState.call.roomId === roomId
+        );
     }
 
     /**
@@ -174,7 +178,11 @@ export class DocumentPipStore extends TypedEventEmitter<DocumentPipStoreEvent, E
     private onRoomViewChanged = (): void => {
         // RoomViewStore updates on any change, most of them are unrelated to the window
         const roomViewStore = this.sdkContext.roomViewStore;
-        if (this.documentPipState && roomViewStore.getRoomId() === this.documentPipState.call.roomId && roomViewStore.isViewingCall()) {
+        if (
+            this.documentPipState &&
+            roomViewStore.getRoomId() === this.documentPipState.call.roomId &&
+            roomViewStore.isViewingCall()
+        ) {
             // The user opened the call view (a `ViewRoom` with `view_call`):
             // they want the call in the room view again, so the OS PiP window needs to go (close).
             this.close();
