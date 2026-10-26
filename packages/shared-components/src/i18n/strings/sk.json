@@ -3,25 +3,50 @@
         "seek_bar_label": "Panel vyhľadávania zvuku"
     },
     "action": {
+        "back": "Späť",
+        "cancel": "Zrušiť",
+        "click": "Vybrať",
+        "close": "Zavrieť",
+        "collapse": "Zbaliť",
         "delete": "Vymazať",
         "dismiss": "Zamietnuť",
+        "download": "Stiahnuť",
+        "edit": "Upraviť",
         "explore_rooms": "Preskúmať miestnosti",
+        "go": "Prejsť",
+        "hide": "Skryť",
         "invite": "Pozvať",
-        "new_conversation": "Nová konverzácia",
+        "new_conversation": "Nová",
         "new_room": "Nová miestnosť",
+        "new_section": "Nová sekcia",
         "new_video_room": "Nová video miestnosť",
+        "no": "Nie",
         "open_menu": "Otvoriť ponuku",
         "pause": "Pozastaviť",
+        "pin": "Pripnúť",
         "play": "Prehrať",
+        "react": "Reagovať",
+        "remove": "Odstrániť",
+        "remove_this_device": "Odstrániť toto zariadenie",
+        "reply": "Odpovedať",
+        "reply_in_thread": "Odpovedať vo vlákne",
         "retry": "Skúsiť znova",
+        "save": "Uložiť",
         "search": "Hľadať",
-        "start_chat": "Začať konverzáciu"
+        "start_chat": "Začať konverzáciu",
+        "unpin": "Odopnúť",
+        "view_source": "Zobraziť zdroj",
+        "yes": "Áno"
     },
     "common": {
+        "attachment": "Príloha",
         "preferences": "Predvoľby"
     },
     "left_panel": {
         "open_dial_pad": "Otvoriť číselník"
+    },
+    "notifications": {
+        "all_messages": "Všetky správy"
     },
     "room": {
         "context_menu": {
@@ -43,11 +68,20 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Otvoriť miestnosť %(roomName)s"
+        },
+        "appearance": "Vzhľad",
+        "empty": {
+            "no_chats": "Zatiaľ žiadne konverzácie",
+            "no_invites": "Nemáte žiadne neprečítané pozvánky",
+            "no_rooms": "Zatiaľ ešte nie ste v žiadnej miestnosti"
+        },
         "open_space_menu": "Otvoriť ponuku priestoru",
         "room_options": "Možnosti miestnosti",
         "sort": "Zoradiť",
         "sort_type": {
-            "activity": "Aktivita",
+            "activity": "Najnovšia aktivita",
             "atoz": "A-Z"
         },
         "space_menu": {
