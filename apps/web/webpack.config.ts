@@ -229,6 +229,10 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
 
+                // The widget host bindings are babel-ed from wherever pnpm links them; the helper imports
+                // babel injects must resolve to our copy of the runtime, not one next to the package.
+                "@babel/runtime": getPackageRoot("@babel/runtime"),
+
                 // Make shared-components imports resolve to EW deps
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
