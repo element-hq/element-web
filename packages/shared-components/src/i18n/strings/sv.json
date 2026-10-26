@@ -18,7 +18,7 @@
         "invite": "Bjud in",
         "new_conversation": "Ny",
         "new_room": "Nytt rum",
-        "new_section": "Nytt avsnitt",
+        "new_section": "Ny sektion",
         "new_video_room": "Nytt videorum",
         "no": "Nej",
         "open_menu": "Öppna meny",
@@ -135,7 +135,7 @@
     },
     "release_announcement": {
         "room_list_section_close": "OK",
-        "room_list_section_description": "Gruppera dina chattar i olika avsnitt för att hålla ordning på konversationerna och göra det enkelt att hitta rätt.",
+        "room_list_section_description": "Gruppera dina chattar i olika sektioner för att hålla ordning på konversationerna och göra det enkelt att hitta rätt.",
         "room_list_section_title": "Presentation Sektioner"
     },
     "room": {

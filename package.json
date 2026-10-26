@@ -50,7 +50,7 @@
         "mermaid": "^12.0.0",
         "minimist": "^1.2.6",
         "nx": "catalog:",
-        "oxfmt": "0.72.0",
+        "oxfmt": "0.73.0",
         "oxlint": "catalog:",
         "oxlint-tsgolint": "^7.0.0",
         "typescript": "catalog:ts6",
@@ -65,7 +65,7 @@
     "devEngines": {
         "packageManager": {
             "name": "pnpm",
-            "version": "12.11.2",
+            "version": "12.14.0",
             "onFail": "download"
         }
     },

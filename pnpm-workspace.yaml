@@ -38,18 +38,18 @@ catalog:
     vite: 8.3.4
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 5.0.3
-    "@vitest/coverage-v8": 5.0.3
-    "@vitest/browser-playwright": 5.0.3
-    "@vitest/browser": 5.0.3
-    "@vitest/spy": 5.0.3
-    "@vitest/ui": 5.0.3
+    vitest: 5.0.5
+    "@vitest/coverage-v8": 5.0.5
+    "@vitest/browser-playwright": 5.0.5
+    "@vitest/browser": 5.0.5
+    "@vitest/spy": 5.0.5
+    "@vitest/ui": 5.0.5
     "@vitejs/plugin-react": 6.1.2
     unplugin-dts: 1.1.2
     # nx
     nx: 23.3.0
     # oxc
-    oxlint: 1.87.0
+    oxlint: 1.88.0
 
 catalogs:
     ts6:
@@ -155,7 +155,7 @@ overrides:
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.37.0
+    node-abi: 4.38.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0

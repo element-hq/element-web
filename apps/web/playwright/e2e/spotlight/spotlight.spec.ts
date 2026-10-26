@@ -432,7 +432,11 @@ test.describe("Spotlight", () => {
                         ],
                     });
                     await bot2.createRoom({ name: `${room1.name} annex`, visibility: "public" as Visibility });
-                    await bot1.sendMessage(room1.roomId, `Hey ${user.displayName}`);
+                    await bot1.sendMessage(room1.roomId, {
+                        "msgtype": "m.text",
+                        "body": `Hey ${user.displayName}`,
+                        "m.mentions": { user_ids: [user.userId] },
+                    });
 
                     // room1 is already open (see room1 fixture); navigate away from it so it
                     // shows up in the "recently viewed" section (the current room is excluded from it).
