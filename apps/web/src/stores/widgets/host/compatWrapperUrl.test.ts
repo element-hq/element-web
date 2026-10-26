@@ -27,15 +27,18 @@ describe("buildCompatWrapperUrl", () => {
         expect(url.origin + url.pathname).toBe(`${window.location.origin}/widgets/compat-wrapper/`);
         expect(url.searchParams.get("legacy_widget_url")).toBe(app.url);
         expect(url.searchParams.get("legacy_widget_id")).toBe("widget-1");
+        expect(url.searchParams.get("legacy_widget_name")).toBe("widget-1");
         expect(url.searchParams.get("legacy_wait_for_iframe_load")).toBe("true");
         expect(url.searchParams.get("legacy_widget_data")).toBeNull();
         expect(url.searchParams.get("client_origin")).toBe(window.location.origin);
     });
 
-    it("passes widget data and the waitForIframeLoad flag through", () => {
+    it("passes the name, widget data and the waitForIframeLoad flag through", () => {
         const url = new URL(
-            buildCompatWrapperUrl({ ...app, waitForIframeLoad: false, data: { title: "Notes & more" } }),
+            buildCompatWrapperUrl({ ...app, name: "Notes", waitForIframeLoad: false, data: { title: "Notes & more" } }),
         );
+
+        expect(url.searchParams.get("legacy_widget_name")).toBe("Notes");
 
         expect(url.searchParams.get("legacy_wait_for_iframe_load")).toBe("false");
         expect(JSON.parse(url.searchParams.get("legacy_widget_data")!)).toEqual({ title: "Notes & more" });

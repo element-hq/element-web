@@ -30,6 +30,7 @@ export function buildCompatWrapperUrl(app: IApp, opts: { scalarToken?: string } 
 
     wrapper.searchParams.set("legacy_widget_url", legacyUrl);
     wrapper.searchParams.set("legacy_widget_id", app.id);
+    wrapper.searchParams.set("legacy_widget_name", app.name ?? app.id);
     wrapper.searchParams.set("legacy_wait_for_iframe_load", String(app.waitForIframeLoad !== false));
     if (app.data && Object.keys(app.data).length > 0) {
         wrapper.searchParams.set("legacy_widget_data", JSON.stringify(app.data));
