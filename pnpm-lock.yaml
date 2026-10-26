@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -744,8 +744,8 @@ importers:
         specifier: ^7.12.7
         version: 7.29.7(@babel/core@7.29.7)(supports-color@10.2.2)
       '@element-hq/element-call-embedded':
-        specifier: 0.28.0
-        version: 0.28.0
+        specifier: 0.26.1
+        version: 0.26.1
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2820,8 +2820,8 @@ packages:
       react: ^19
       react-dom: ^19
 
-  '@element-hq/element-call-embedded@0.28.0':
-    resolution: {integrity: sha512-wM5tLXrSCLbveGlvQg1Pj6dNAp75mhJe2Zr3Vb8dtK6z9tuuFMcsn1q1Gjy1KYWQdzBzKK2wLc1O8H7DzYZRHQ==}
+  '@element-hq/element-call-embedded@0.26.1':
+    resolution: {integrity: sha512-0zAC8Qh+xNLTqiC7yiosu2NQ7Fw36xR7Gimgmp2WZjTbiPf8b7DmYOBZk0sWFzYbrHHZTeB2wWPDmS3TgYq51g==}
 
   '@emnapi/core@1.11.2':
     resolution: {integrity: sha512-TC8MkTuZUtcTSiFeuC0ksCh9QIJ5+F21MvZ4Wn4ORfYaFJ/0dsiudv5tVkejgwZlwQ39jL9WWDe2lz8x0WglOA==}
@@ -15025,7 +15025,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/61b08bd037a3b987f267e2e8ac47002c75d59d85)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
@@ -15033,7 +15033,7 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  '@element-hq/element-call-embedded@0.28.0': {}
+  '@element-hq/element-call-embedded@0.26.1': {}
 
   '@emnapi/core@1.11.2':
     dependencies:
