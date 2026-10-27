@@ -54,7 +54,7 @@ export class FileViewerApi implements IFileViewerApi {
                 try {
                     return viewer.match(event);
                 } catch (e) {
-                    logger.error(`FileViewerApi matcher from ${viewer.options.id} failed. Reason: ${e}`)
+                    logger.error(`FileViewerApi matcher from ${viewer.options.id} failed. Reason: ${e}`);
                     return false;
                 }
             })
@@ -87,18 +87,28 @@ export function uploadedMediaOfEvent(mxEvent: MatrixEvent, helper?: MediaEventHe
 
 /**
  *
- * The image URL is removed from the UrlPreview, but if
- * an image is in the bundle, it will still be in the preview.additionalBundleContent
+ * The image URL is removed from the UrlPreview, there is no way to access the image in RemoteMedia
  */
 // This is because an encrypted image cannot be restored
 // immediately without making any requests, for uniform behaviour
 // in encrypted and unencrypted rooms, remove image for both of them
 export function remoteMediaOfPreview(preview: UrlPreview): RemoteMedia | undefined {
+    const {
+        "beeper:image:encryption": _image_encryption,
+        "og:image:type": _image_type,
+        "og:image:width": _image_width,
+        "og:image:height": _image_height,
+        "og:image": _image_url,
+        "matrix:image:size": _image_size,
+        ...additionalBundleContent
+    } = preview.additionalBundleContent ?? {};
+    const { image: _image, ...previewStripped } = preview;
+
     return {
         type: "remote",
         preview: {
-            ...preview,
-            image: undefined,
+            ...previewStripped,
+            additionalBundleContent,
         },
     };
 }

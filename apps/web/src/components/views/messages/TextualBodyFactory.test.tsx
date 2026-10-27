@@ -700,7 +700,7 @@ describe("<TextualBody />", () => {
                     fileViewerSourceEvent: mxEvent,
                 },
             });
-         });
+        });
 
         it("should listen to showUrlPreview change", async () => {
             const ev = mkRoomTextMessage(`Visit ${link}`);

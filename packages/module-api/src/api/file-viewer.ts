@@ -22,6 +22,8 @@ export type FileViewerMatcher = (media: MediaHandle) => boolean;
 
 /**
  * a file that is given only by a URL, e.g. a PDF file uploaded to a 3rd party site
+ *
+ * all preview image information have been removed from UrlPreview
  * @alpha Subject to change.
  */
 export type RemoteMedia = {
