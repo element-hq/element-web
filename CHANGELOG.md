@@ -1,3 +1,40 @@
+Changes in [1.12.33](https://github.com/element-hq/element-web/releases/tag/v1.12.33) (2026-10-27)
+==================================================================================================
+## ✨ Features
+
+* Copy changes for "set up recovery" ([#35437](https://github.com/element-hq/element-web/pull/35437)). Contributed by @richvdh.
+* Fix calls respawning from error screen on room switch. ([#35470](https://github.com/element-hq/element-web/pull/35470)). Contributed by @toger5.
+* Split `ChangeRecoveryKeyBody` out of `ChangeRecoveryKey` ([#35403](https://github.com/element-hq/element-web/pull/35403)). Contributed by @kaylendog.
+* Use a dialog to prompt the user about their recovery key when logging out ([#35398](https://github.com/element-hq/element-web/pull/35398)). Contributed by @kaylendog.
+* Remove introductory screen from "create recovery key" flow ([#35451](https://github.com/element-hq/element-web/pull/35451)). Contributed by @richvdh.
+* Don't allow to skip device verification by default ([#35364](https://github.com/element-hq/element-web/pull/35364)). Contributed by @mxandreas.
+* Remodel "Can't confirm" dialog to match designs ([#35375](https://github.com/element-hq/element-web/pull/35375)). Contributed by @andybalaam.
+* Drop support for migrating libolm sessions ([#35138](https://github.com/element-hq/element-web/pull/35138)). Contributed by @Half-Shot.
+* Update `Pill` and `PillInput` design ([#35370](https://github.com/element-hq/element-web/pull/35370)). Contributed by @florianduros.
+* Offer 'Sign out' on the identity reset page if there is no other option ([#35307](https://github.com/element-hq/element-web/pull/35307)). Contributed by @andybalaam.
+* Put user status below the avatar ([#35328](https://github.com/element-hq/element-web/pull/35328)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Update Electron to pick up patches ([#35573](https://github.com/element-hq/element-web/pull/35573)). Contributed by @t3chguy.
+* Expand the device wildcard when a widget sends an encrypted to-device message ([#35183](https://github.com/element-hq/element-web/pull/35183)). Contributed by @ara4n.
+* Keep opening voice-only calls in PiP when the lobby is skipped ([#35495](https://github.com/element-hq/element-web/pull/35495)). Contributed by @Johennes.
+* Fix /spoiler command not converting markdown to HTML ([#35103](https://github.com/element-hq/element-web/pull/35103)). Contributed by @jasonjose007.
+* Open a call that is already in progress maximised, even for voice ([#35443](https://github.com/element-hq/element-web/pull/35443)). Contributed by @ara4n.
+* Fix guest login in oidc flow ([#35432](https://github.com/element-hq/element-web/pull/35432)). Contributed by @florianduros.
+* Avoid unhandled promise rejection from CallStore.onReady() ([#34861](https://github.com/element-hq/element-web/pull/34861)). Contributed by @hughns.
+* Add border around user profile avatar ([#35460](https://github.com/element-hq/element-web/pull/35460)). Contributed by @dbkr.
+* Fix PiP drag bar when displaying over widgets ([#35395](https://github.com/element-hq/element-web/pull/35395)). Contributed by @mgcm.
+* Feed thread replies to widgets ([#35444](https://github.com/element-hq/element-web/pull/35444)). Contributed by @ara4n.
+* Ensure 'Can't confirm?' is primary only if no other options are available ([#35406](https://github.com/element-hq/element-web/pull/35406)). Contributed by @andybalaam.
+* Fix restricted guest module showing excluded UI elements ([#35412](https://github.com/element-hq/element-web/pull/35412)). Contributed by @florianduros.
+* Update compound-web to 10.3.1 ([#35390](https://github.com/element-hq/element-web/pull/35390)). Contributed by @dbkr.
+* Run DeviceListener rechecks one at a time ([#35053](https://github.com/element-hq/element-web/pull/35053)). Contributed by @langleyd.
+* Keep the new timeline at the bottom when its viewport changes height ([#35374](https://github.com/element-hq/element-web/pull/35374)). Contributed by @langleyd.
+* Stop writing removed legacy mention rules from the Labs notification settings ([#35035](https://github.com/element-hq/element-web/pull/35035)). Contributed by @barodeur.
+* Ellipsise long names in widget picture-in-picture view ([#35329](https://github.com/element-hq/element-web/pull/35329)). Contributed by @robintown.
+
+
 Changes in [1.12.32](https://github.com/element-hq/element-web/releases/tag/v1.12.32) (2026-10-16)
 ==================================================================================================
 ## Security
