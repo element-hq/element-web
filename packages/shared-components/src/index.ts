@@ -11,6 +11,7 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./core/AvatarWithDetails";
+export * from "./core/Chromahash";
 export * from "./core/MemberAvatar/MemberAvatarView.tsx";
 export * from "./core/EmojiPicker";
 export * from "./core/FacePile/FacePileView.tsx";

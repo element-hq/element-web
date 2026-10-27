@@ -143,6 +143,26 @@ describe("ImageReplyBodyView", () => {
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
+    it("prefers the chromahash over the blurhash placeholder", () => {
+        const { container } = render(
+            <ImageReplyBodyView
+                src="https://example.org/image.png"
+                alt="Reply preview"
+                maxWidth={58}
+                maxHeight={44}
+                aspectRatio="4 / 3"
+                placeholder={ImageReplyBodyViewPlaceholder.BLURHASH}
+                blurhash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+                // Decodes to 32x24, unlike the blurhash which is always drawn at 32x32
+                chromahash="CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04"
+            />,
+        );
+
+        const canvases = container.querySelectorAll("canvas");
+        expect(canvases).toHaveLength(1);
+        expect(canvases[0].height).toBe(24);
+    });
+
     it("uses explicit width sizing for SVG images", () => {
         render(
             <ImageReplyBodyView

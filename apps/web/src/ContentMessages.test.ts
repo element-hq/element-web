@@ -38,6 +38,7 @@ vi.mock("./BlurhashEncoder", () => ({
     BlurhashEncoder: {
         instance: {
             getBlurhash: vi.fn(),
+            getChromaHash: vi.fn(),
         },
     },
 }));
@@ -107,6 +108,7 @@ describe("ContentMessages", () => {
                 <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
             );
             vi.mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue("blurhashstring");
+            vi.mocked(BlurhashEncoder.instance.getChromaHash).mockResolvedValue("chromahashstring");
         });
 
         it("should use m.image for image files", async () => {
@@ -119,8 +121,23 @@ describe("ContentMessages", () => {
                 expect.objectContaining({
                     url: "mxc://server/file",
                     msgtype: "m.image",
+                    info: expect.objectContaining({
+                        "xyz.amorgan.blurhash": "blurhashstring",
+                        "xyz.amorgan.chromahash": "chromahashstring",
+                    }),
                 }),
             );
+        });
+
+        it("should omit a hash which failed to encode", async () => {
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            vi.mocked(BlurhashEncoder.instance.getChromaHash).mockResolvedValue(undefined);
+            const file = new File([], "fileName", { type: "image/jpeg" });
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+
+            const { info } = vi.mocked(client.sendMessage).mock.lastCall![2] as { info: object };
+            expect(info).toHaveProperty(["xyz.amorgan.blurhash"], "blurhashstring");
+            expect(info).not.toHaveProperty(["xyz.amorgan.chromahash"]);
         });
 
         it("should use m.image for PNG files which cannot be parsed but successfully thumbnail", async () => {

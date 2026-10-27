@@ -30,7 +30,7 @@ import { blobIsAnimated, mayBeAnimated } from "../../utils/Image";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { createReconnectedListener } from "../../utils/connection";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
-import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD, createThumbnail, hasPlaceholderHash } from "../../utils/image-media";
 import { isMimeTypeAllowed } from "../../utils/blobs";
 import ImageView from "../../components/views/elements/ImageView";
 
@@ -136,7 +136,7 @@ export class ImageBodyViewModel
             imgError: false,
             imgLoaded: false,
             loadedImageDimensions: undefined,
-            placeholder: mxEvent.getContent<ImageContent>().info?.[BLURHASH_FIELD]
+            placeholder: hasPlaceholderHash(mxEvent.getContent<ImageContent>().info)
                 ? ImageBodyViewPlaceholder.NONE
                 : ImageBodyViewPlaceholder.SPINNER,
             imageSize: SettingsStore.getValue("Images.size"),
@@ -223,6 +223,7 @@ export class ImageBodyViewModel
             showAnimatedContentOnHover: state.isAnimated && !autoplayGifs && !!contentUrl,
             placeholder: !props.forExport && !state.imgLoaded ? state.placeholder : ImageBodyViewPlaceholder.NONE,
             blurhash: content.info?.[BLURHASH_FIELD],
+            chromahash: content.info?.[CHROMAHASH_FIELD],
             gifLabel: state.isAnimated && !autoplayGifs ? "GIF" : undefined,
             bannerLabel: ImageBodyViewModel.shouldShowBanner(props.timelineRenderingType)
                 ? presentableTextForFile(content, _t("common|image"), true, true)
@@ -288,7 +289,7 @@ export class ImageBodyViewModel
 
     private scheduleBlurhashPlaceholder(): void {
         if (
-            !this.props.mxEvent.getContent<ImageContent>().info?.[BLURHASH_FIELD] ||
+            !hasPlaceholderHash(this.props.mxEvent.getContent<ImageContent>().info) ||
             this.state.imgLoaded ||
             this.state.imgError
         ) {

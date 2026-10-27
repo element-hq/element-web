@@ -185,6 +185,28 @@ describe("ImageBodyView", () => {
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
+    it("prefers the chromahash over the blurhash placeholder", () => {
+        const vm = new TestImageBodyViewModel({
+            state: ImageBodyViewState.READY,
+            alt: "Loading image",
+            src: "https://example.org/full.png",
+            placeholder: ImageBodyViewPlaceholder.BLURHASH,
+            blurhash: "LEHV6nWB2yk8pyo0adR*.7kCMdnj",
+            // Decodes to 32x24, unlike the blurhash which is always drawn at 32x32
+            chromahash: "CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04",
+            maxWidth: 320,
+            maxHeight: 240,
+            aspectRatio: "4 / 3",
+        });
+
+        const { container } = render(<ImageBodyView vm={vm} />);
+
+        const canvases = container.querySelectorAll("canvas");
+        expect(canvases).toHaveLength(1);
+        expect(canvases[0].height).toBe(24);
+        expect(screen.queryByRole("progressbar")).toBeNull();
+    });
+
     it("invokes image load and error handlers", () => {
         const onImageLoad = vi.fn();
         const onImageError = vi.fn();

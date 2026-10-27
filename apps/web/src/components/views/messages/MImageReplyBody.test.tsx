@@ -24,7 +24,7 @@ import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { mediaFromContent } from "../../../customisations/Media";
-import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD, createThumbnail } from "../../../utils/image-media";
 import { blobIsAnimated } from "../../../utils/Image";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -431,6 +431,30 @@ describe("<MImageReplyBody />", () => {
         });
 
         expect(container.querySelector(".mx_Blurhash")).not.toBeNull();
+    });
+
+    it("prefers the chromahash placeholder over the blurhash", () => {
+        vi.useFakeTimers();
+        const { container } = renderBase({
+            overrides: {
+                mxEvent: createEvent({
+                    content: {
+                        info: {
+                            [BLURHASH_FIELD]: "LEHV6nWB2yk8pyo0adR*.7kCMdnj",
+                            [CHROMAHASH_FIELD]: "CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04",
+                        },
+                    },
+                }),
+            },
+        });
+
+        act(() => {
+            vi.advanceTimersByTime(150);
+        });
+
+        // The blurhash is always drawn at 32x32, the chromahash at its natural 32x24
+        const canvas = container.querySelector<HTMLCanvasElement>(".mx_Blurhash canvas");
+        expect(canvas?.height).toBe(24);
     });
 
     it("downloads media when visibility changes after mount", async () => {

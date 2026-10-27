@@ -15,14 +15,14 @@ import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
 import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { HiddenMediaPlaceholder } from "@element-hq/web-shared-components";
+import { Chromahash, HiddenMediaPlaceholder } from "@element-hq/web-shared-components";
 
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { type Media, mediaFromContent } from "../../../customisations/Media";
-import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD, createThumbnail, hasPlaceholderHash } from "../../../utils/image-media";
 import ImageView from "../elements/ImageView";
 import { type IBodyProps } from "./IBodyProps";
 import { suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
@@ -319,7 +319,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
             void this.downloadImage();
         }
 
-        if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
+        if (this.hasHashPlaceholder()) {
             this.clearBlurhashTimeout();
             this.timeout = window.setTimeout(() => {
                 if (!this.state.imgLoaded || !this.state.imgError) {
@@ -420,7 +420,7 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
 
         if (!this.props.forExport && !this.state.imgLoaded) {
             const classes = classNames("mx_MImageBody_placeholder", {
-                "mx_MImageBody_placeholder--blurhash": this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
+                "mx_MImageBody_placeholder--blurhash": this.hasHashPlaceholder(),
             });
 
             placeholder = (
@@ -540,13 +540,26 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
         return children;
     }
 
-    protected getPlaceholder(width: number, height: number): ReactNode {
-        const blurhash = this.props.mxEvent.getContent().info?.[BLURHASH_FIELD];
+    /**
+     * Whether the event carries a ChromaHash or blurhash we can show while the image loads.
+     */
+    protected hasHashPlaceholder(): boolean {
+        return hasPlaceholderHash(this.props.mxEvent.getContent().info);
+    }
 
-        if (blurhash) {
+    protected getPlaceholder(width: number, height: number): ReactNode {
+        const info = this.props.mxEvent.getContent().info;
+        const chromahash = info?.[CHROMAHASH_FIELD];
+        const blurhash = info?.[BLURHASH_FIELD];
+
+        if (chromahash || blurhash) {
             if (this.state.placeholder === Placeholder.NoImage) {
                 return null;
             } else if (this.state.placeholder === Placeholder.Blurhash) {
+                // Prefer the ChromaHash, keeping the blurhash for events sent by older clients
+                if (chromahash) {
+                    return <Chromahash className="mx_Blurhash" hash={chromahash} width={width} height={height} />;
+                }
                 return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
             }
         }

@@ -10,7 +10,6 @@ import { type Tooltip } from "@vector-im/compound-web";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { ImageBodyBaseInner } from "./MImageReplyBody";
-import { BLURHASH_FIELD } from "../../../utils/image-media";
 import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 import { type IBodyProps } from "./IBodyProps";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
@@ -41,7 +40,7 @@ class MStickerBodyInner extends ImageBodyBaseInner {
 
     // Placeholder to show in place of the sticker image if img onLoad hasn't fired yet.
     protected getPlaceholder(width: number, height: number): ReactNode {
-        if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
+        if (this.hasHashPlaceholder()) return super.getPlaceholder(width, height);
         return (
             <img
                 aria-hidden

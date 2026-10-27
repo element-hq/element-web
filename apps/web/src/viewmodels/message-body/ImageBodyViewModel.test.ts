@@ -22,7 +22,7 @@ import { ImageBodyViewModel } from "./ImageBodyViewModel";
 import Modal from "../../Modal";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { blobIsAnimated } from "../../utils/Image";
-import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD, createThumbnail } from "../../utils/image-media";
 
 vi.mock("../../customisations/Media", () => ({
     mediaFromContent: vi.fn(),
@@ -301,6 +301,32 @@ describe("ImageBodyViewModel", () => {
         vi.advanceTimersByTime(150);
 
         expect(vm.getSnapshot().placeholder).toBe(ImageBodyViewPlaceholder.BLURHASH);
+        vi.useRealTimers();
+    });
+
+    it("switches to the chromahash placeholder after the delay when there is no blurhash", () => {
+        vi.useFakeTimers();
+        const vm = createVm({
+            mediaVisible: true,
+            mxEvent: createEvent({
+                content: {
+                    info: {
+                        [CHROMAHASH_FIELD]: "CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04",
+                    },
+                },
+            }),
+        });
+
+        vm.loadInitialMediaIfVisible();
+        expect(vm.getSnapshot().placeholder).toBe(ImageBodyViewPlaceholder.NONE);
+
+        vi.advanceTimersByTime(150);
+
+        expect(vm.getSnapshot()).toMatchObject({
+            placeholder: ImageBodyViewPlaceholder.BLURHASH,
+            chromahash: "CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04",
+            blurhash: undefined,
+        });
         vi.useRealTimers();
     });
 

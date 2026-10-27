@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { decode } from "blurhash";
+import { decode as decodeBlurhash } from "blurhash";
+import { decode as decodeChromaHash } from "@visualcommons/chromahash/decode";
 import { type RefObject } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { decodeBase64, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent, type VideoInfo } from "matrix-js-sdk/src/types";
 import {
     BaseViewModel,
@@ -20,7 +21,7 @@ import {
 import { _t } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromContent } from "../../customisations/Media";
-import { BLURHASH_FIELD } from "../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD } from "../../utils/image-media";
 import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../settings/enums/ImageSize";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 
@@ -92,6 +93,7 @@ interface InternalState {
 
 type VideoInfoWithBlurhash = VideoInfo & {
     [BLURHASH_FIELD]?: string;
+    [CHROMAHASH_FIELD]?: string;
 };
 
 /**
@@ -290,17 +292,31 @@ export class VideoBodyViewModel
     private loadBlurhash(): void {
         const info = this.props.mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info;
         const blurhash = info?.[BLURHASH_FIELD];
-        if (!blurhash) {
+        const chromahash = info?.[CHROMAHASH_FIELD];
+        if (!blurhash && !chromahash) {
             return;
         }
 
-        const canvas = document.createElement("canvas");
-        const { w: width, h: height } = VideoBodyViewModel.getDimensions(this.props.mxEvent, this.state.imageSize);
+        // Prefer the ChromaHash, which decodes at its own natural size, keeping the blurhash for older events
+        let width: number;
+        let height: number;
+        let pixels: Uint8Array | Uint8ClampedArray;
+        try {
+            if (chromahash) {
+                ({ w: width, h: height, rgba: pixels } = decodeChromaHash(decodeBase64(chromahash)));
+            } else {
+                ({ w: width, h: height } = VideoBodyViewModel.getDimensions(this.props.mxEvent, this.state.imageSize));
+                pixels = decodeBlurhash(blurhash!, width, height);
+            }
+        } catch (e) {
+            logger.warn("Failed to decode video placeholder hash", e);
+            return;
+        }
 
+        let canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
 
-        const pixels = decode(blurhash, width, height);
         const ctx = canvas.getContext("2d");
         if (!ctx) {
             return;
@@ -309,6 +325,15 @@ export class VideoBodyViewModel
         const imgData = ctx.createImageData(width, height);
         imgData.data.set(pixels);
         ctx.putImageData(imgData, 0, 0);
+
+        // Stretch the ChromaHash to the dimensions in the event, rather than keeping the aspect ratio embedded in it
+        if (chromahash && info?.w && info?.h) {
+            const source = canvas;
+            canvas = document.createElement("canvas");
+            canvas.width = info.w;
+            canvas.height = info.h;
+            canvas.getContext("2d")?.drawImage(source, 0, 0, info.w, info.h);
+        }
 
         this.state = {
             ...this.state,
