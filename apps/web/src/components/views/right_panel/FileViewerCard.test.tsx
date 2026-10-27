@@ -8,14 +8,15 @@ Please see LICENSE in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React, { useState } from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { FileViewerProps, MediaHandle } from "@element-hq/element-web-module-api";
 
-import { FileViewerCard, fileViewerOpenButton } from "./FileViewerCard";
+import { FileViewerCard, fileViewerButtonsFor, fileViewerOpenButton } from "./FileViewerCard";
 import { type RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import { ModuleApi } from "../../../modules/Api";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import type RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "../../../test/test-utils";
@@ -143,6 +144,44 @@ describe("FileViewerCard", () => {
         rerender(<FileViewerCard viewer={viewer} media={OTHER_MEDIA} mxEvent={mkEvent("$other")} onClose={vi.fn()} />);
 
         expect(screen.getByText("Viewer working")).toBeInTheDocument();
+    });
+});
+
+describe("fileViewerButtonsFor", () => {
+    const mxEvent = mkEvent("$file");
+    const rightPanelStore = { setCard: vi.fn() } as unknown as RightPanelStore;
+
+    const namedViewer = (buttonText: string): RegisteredFileViewer => {
+        const viewer = mkViewer(() => <></>);
+        return { ...viewer, options: { ...viewer.options, buttonText } };
+    };
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("offers no buttons when there is no media", () => {
+        const getViewersFor = vi.spyOn(ModuleApi.instance.fileViewer, "getViewersFor");
+
+        expect(fileViewerButtonsFor(undefined, mxEvent, rightPanelStore)).toEqual([]);
+        expect(getViewersFor).not.toHaveBeenCalled();
+    });
+
+    it("offers one button per viewer that matches the media", () => {
+        const first = namedViewer("First");
+        const second = namedViewer("Second");
+        const getViewersFor = vi.spyOn(ModuleApi.instance.fileViewer, "getViewersFor").mockReturnValue([first, second]);
+
+        const buttons = fileViewerButtonsFor(MEDIA, mxEvent, rightPanelStore);
+
+        expect(getViewersFor).toHaveBeenCalledWith(MEDIA);
+        expect(buttons.map((button) => button.label)).toEqual(["First", "Second"]);
+
+        buttons[1].onClick();
+        expect(rightPanelStore.setCard).toHaveBeenCalledWith({
+            phase: RightPanelPhases.FileViewer,
+            state: { fileViewer: { viewer: second, media: MEDIA, mxEvent } },
+        });
     });
 });
 

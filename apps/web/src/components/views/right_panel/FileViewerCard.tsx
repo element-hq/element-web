@@ -15,6 +15,7 @@ import type RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import type { MediaPreviewEntryButton } from "@element-hq/web-shared-components";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { FileViewerCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
+import { ModuleApi } from "../../../modules/Api";
 
 export interface FileViewerCardProps extends FileViewerCardState {
     /** called when the card is closed */
@@ -64,4 +65,22 @@ export function fileViewerOpenButton({
                 },
             }),
     };
+}
+
+/**
+ * Creates a MediaPreviewEntryButton for every registered file viewer that can open the media
+ *
+ * @param media media to find viewers for, or undefined if the event has no viewable media
+ * @param mxEvent source event
+ * @param rightPanelStore which RightPanelStore to open the file in
+ */
+export function fileViewerButtonsFor(
+    media: MediaHandle | undefined,
+    mxEvent: MatrixEvent,
+    rightPanelStore: RightPanelStore,
+): MediaPreviewEntryButton[] {
+    if (!media) return [];
+    return ModuleApi.instance.fileViewer
+        .getViewersFor(media)
+        .map((viewer) => fileViewerOpenButton({ viewer, media, mxEvent, rightPanelStore }));
 }

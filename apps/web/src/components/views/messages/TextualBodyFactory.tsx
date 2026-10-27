@@ -19,7 +19,6 @@ import {
     linkIcon,
     type MediaPreviewGroupEntry,
     type MediaPreviewGroupEntryContent,
-    type MediaPreviewEntryButton,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
 
@@ -45,7 +44,7 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
 import { remoteMediaOfPreview } from "../../../modules/FileViewerApi";
-import { fileViewerOpenButton } from "../right_panel/FileViewerCard";
+import { fileViewerButtonsFor } from "../right_panel/FileViewerCard";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -169,18 +168,11 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         (preview: UrlPreview): MediaPreviewGroupEntry => {
             let content: MediaPreviewGroupEntryContent;
             // offer file viewer buttons for every link preview, whether it came from a bundle or the server
-            const mediaHandle = remoteMediaOfPreview(preview);
-            const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
-            const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
-                ? fileViewers.map((viewer) =>
-                      fileViewerOpenButton({
-                          viewer,
-                          media: mediaHandle,
-                          mxEvent: props.mxEvent,
-                          rightPanelStore: sdkContext.rightPanelStore,
-                      }),
-                  )
-                : [];
+            const fileViewerButtons = fileViewerButtonsFor(
+                remoteMediaOfPreview(preview),
+                props.mxEvent,
+                sdkContext.rightPanelStore,
+            );
 
             if (preview.image === undefined) {
                 content = {

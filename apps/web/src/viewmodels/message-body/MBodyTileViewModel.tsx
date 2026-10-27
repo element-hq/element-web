@@ -20,9 +20,8 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { fileSize } from "../../utils/FileUtils";
 import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
-import { ModuleApi } from "../../modules/Api";
 import { uploadedMediaOfEvent } from "../../modules/FileViewerApi";
-import { fileViewerOpenButton } from "../../components/views/right_panel/FileViewerCard";
+import { fileViewerButtonsFor } from "../../components/views/right_panel/FileViewerCard";
 import type RightPanelStore from "../../stores/right-panel/RightPanelStore";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
@@ -69,18 +68,11 @@ export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
 
-        const mediaHandle = uploadedMediaOfEvent(mxEvent, mediaEventHelper);
-        const fileViewers = mediaHandle ? ModuleApi.instance.fileViewer.getViewersFor(mediaHandle) : [];
-        const fileViewerButtons: MediaPreviewEntryButton[] = mediaHandle
-            ? fileViewers.map((viewer) =>
-                  fileViewerOpenButton({
-                      viewer,
-                      media: mediaHandle,
-                      mxEvent,
-                      rightPanelStore,
-                  }),
-              )
-            : [];
+        const fileViewerButtons = fileViewerButtonsFor(
+            uploadedMediaOfEvent(mxEvent, mediaEventHelper),
+            mxEvent,
+            rightPanelStore,
+        );
 
         // Behind the same lab as the legacy file body's viewers.
         const viewer = documentPreviewsEnabled ? documentViewerForEvent(mxEvent) : undefined;

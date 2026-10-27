@@ -102,6 +102,8 @@ describe("<TextualBody />", () => {
     let defaultRoom: Room;
     let otherRoom: Room;
     let defaultMatrixClient: MockedObject<MatrixClient>;
+    // The app always provides an SDK context, and url previews read the right panel store from it.
+    let sdkContext: SDKContextClass;
 
     const defaultEvent = mkEvent({
         type: "m.room.message",
@@ -123,6 +125,7 @@ describe("<TextualBody />", () => {
     };
 
     beforeEach(() => {
+        sdkContext = { rightPanelStore: { setCard: vi.fn() } } as unknown as SDKContextClass;
         defaultMatrixClient = getMockClientWithEventEmitter({
             getRoom: (roomId: string | undefined) => {
                 if (roomId === room1Id) return defaultRoom;
@@ -164,11 +167,13 @@ describe("<TextualBody />", () => {
             permalinkCreator: mergedProps.permalinkCreator ?? new RoomPermalinkCreator(room),
         };
         return (renderingFn ?? render)(
-            <MatrixClientContext.Provider value={matrixClient}>
-                <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
-                    <TextualBody {...finalProps} />
-                </RoomContext.Provider>
-            </MatrixClientContext.Provider>,
+            <SDKContext.Provider value={sdkContext}>
+                <MatrixClientContext.Provider value={matrixClient}>
+                    <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
+                        <TextualBody {...finalProps} />
+                    </RoomContext.Provider>
+                </MatrixClientContext.Provider>
+            </SDKContext.Provider>,
         );
     };
 
