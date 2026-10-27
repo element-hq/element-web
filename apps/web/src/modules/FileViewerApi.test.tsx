@@ -117,18 +117,27 @@ describe("uploadedMediaOfEvent", () => {
 });
 
 describe("remoteMediaOfPreview", () => {
-    it("wraps the preview without its image", () => {
+    it("wraps the preview without its image or the image fields of its bundle", () => {
         const preview: UrlPreview = {
             link: "https://example.org/spec.pdf",
             title: "Spec",
             siteName: "example.org",
             showTooltipOnLink: false,
             image: { imageThumb: "thumb", imageFull: "full", mxcImageFull: "mxc://example.org/full", playable: false },
+            additionalBundleContent: {
+                "og:image": "mxc://example.org/full",
+                "og:image:type": "image/png",
+                "og:image:width": 480,
+                "og:image:height": 320,
+                "matrix:image:size": 100_000,
+                "og:type": "website",
+            },
         };
 
+        const { image: _image, ...previewWithoutImage } = preview;
         expect(remoteMediaOfPreview(preview)).toEqual({
             type: "remote",
-            preview: { ...preview, image: undefined },
+            preview: { ...previewWithoutImage, additionalBundleContent: { "og:type": "website" } },
         });
     });
 });

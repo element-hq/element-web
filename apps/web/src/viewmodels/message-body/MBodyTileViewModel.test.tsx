@@ -109,9 +109,11 @@ describe("MBodyTileViewModel", () => {
         expect(rightPanelStore.setCard).toHaveBeenCalledWith({
             phase: RightPanelPhases.FileViewer,
             state: {
-                fileViewer: viewer,
-                fileViewerMedia: expect.objectContaining({ type: "uploaded", name: "spec.pdf" }),
-                fileViewerSourceEvent: mxEvent,
+                fileViewer: {
+                    viewer,
+                    media: expect.objectContaining({ type: "uploaded", name: "spec.pdf" }),
+                    mxEvent,
+                },
             },
         });
     });

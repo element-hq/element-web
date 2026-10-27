@@ -82,7 +82,7 @@ describe("RightPanelStoreIPanelState", () => {
         return convertToStatePanel(JSON.parse(JSON.stringify(stored)), room);
     };
 
-    it("stores a file viewer card by the IDs of its viewer, event and room", () => {
+    it("stores a file viewer card by the IDs of its viewer and event", () => {
         const stored = convertToStorePanel({
             isOpen: true,
             history: [
@@ -98,7 +98,6 @@ describe("RightPanelStoreIPanelState", () => {
         expect(stored?.history[0].state).toMatchObject({
             fileViewerId: "test-viewer",
             fileViewerSourceEventId: "$file",
-            fileViewerSourceRoomId: ROOM_ID,
             fileViewerUrlPreview: PREVIEW,
         });
     });
@@ -122,7 +121,7 @@ describe("RightPanelStoreIPanelState", () => {
         const fileViewer = roundTrip({ type: "remote", preview: PREVIEW })?.history[0].state?.fileViewer;
 
         expect(fileViewer?.mxEvent).toBe(fileEvent);
-        expect(fileViewer?.media).toEqual({ type: "remote", preview: { ...PREVIEW, image: undefined } });
+        expect(fileViewer?.media).toEqual({ type: "remote", preview: { ...PREVIEW, additionalBundleContent: {} } });
     });
 
     it("restores no card when the source event can no longer be found", () => {

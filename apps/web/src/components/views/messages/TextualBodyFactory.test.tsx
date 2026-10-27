@@ -682,12 +682,9 @@ describe("<TextualBody />", () => {
                 options: { id: "test-viewer", cardHeader: () => "", buttonText: "Open in viewer", buttonIcon: <></> },
             };
             const getViewersFor = vi.spyOn(ModuleApi.instance.fileViewer, "getViewersFor").mockReturnValue([viewer]);
-            const sdkContext = { rightPanelStore: { setCard: vi.fn() } } as unknown as SDKContextClass;
             const mxEvent = mkRoomTextMessage(`Visit ${link}`);
 
-            getComponent({ mxEvent, showUrlPreview: true }, matrixClient, (ui: React.ReactElement) =>
-                render(<SDKContext.Provider value={sdkContext}>{ui}</SDKContext.Provider>),
-            );
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
             await screen.findByRole("link", { name: "Matrix" });
 
             expect(getViewersFor).toHaveBeenCalledWith({
@@ -700,9 +697,7 @@ describe("<TextualBody />", () => {
             expect(sdkContext.rightPanelStore.setCard).toHaveBeenCalledWith({
                 phase: RightPanelPhases.FileViewer,
                 state: {
-                    fileViewer: viewer,
-                    fileViewerMedia: expect.objectContaining({ type: "remote" }),
-                    fileViewerSourceEvent: mxEvent,
+                    fileViewer: { viewer, media: expect.objectContaining({ type: "remote" }), mxEvent },
                 },
             });
         });
