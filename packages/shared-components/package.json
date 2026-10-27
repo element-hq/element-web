@@ -113,7 +113,7 @@
         "@vitest/browser-playwright": "catalog:",
         "expect": "^30.5.1",
         "oxfmt": "0.73.0",
-        "storybook": "10.5.8",
+        "storybook": "10.6.2",
         "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",
         "typedoc-plugin-markdown": "^4.9.0",
