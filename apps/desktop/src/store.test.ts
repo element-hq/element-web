@@ -301,4 +301,44 @@ describe("Store secret encryption (safeStorage)", () => {
             await expect(consult("plaintext")).rejects.toThrow("user rejected plaintext");
         });
     });
+
+    describe("plaintext -> encrypted migration", () => {
+        // Secrets are stored with the dots in their key escaped, see StorageWriter.getKey
+        const STORED_KEY = KEY.replaceAll(".", "-");
+
+        beforeEach(() => {
+            // Written while encryption was unavailable, e.g. after access to the system keychain was denied
+            backing.set("safeStorageBackend", "plaintext");
+            backing.set("safeStorage", { [STORED_KEY]: "s3cr3t" });
+            backing.set(`safeStorage.${STORED_KEY}`, "s3cr3t");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockClear();
+        });
+
+        it.each(["darwin", "win32"] as const)(
+            "encrypts the secrets with the system backend on %s",
+            async (platform) => {
+                vi.spyOn(process, "platform", "get").mockReturnValue(platform);
+                // getSelectedStorageBackend is Linux-only; calling this method throws on all other platforms
+                vi.mocked(safeStorage.getSelectedStorageBackend).mockImplementation(() => {
+                    throw new Error("getSelectedStorageBackend is not available on this platform");
+                });
+
+                await expect(store.prepareSafeStorage({} as unknown as Electron.Session)).resolves.toBe(true);
+
+                expect(safeStorage.getSelectedStorageBackend).not.toHaveBeenCalled();
+                expect(backing.get("safeStorageBackend")).toBe("system");
+                await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+            },
+        );
+
+        it("encrypts the secrets with the selected keyring backend on Linux", async () => {
+            vi.spyOn(process, "platform", "get").mockReturnValue("linux");
+            vi.mocked(safeStorage.getSelectedStorageBackend).mockReturnValue("gnome_libsecret");
+
+            await expect(store.prepareSafeStorage({} as unknown as Electron.Session)).resolves.toBe(true);
+
+            expect(backing.get("safeStorageBackend")).toBe("gnome_libsecret");
+            await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+        });
+    });
 });
