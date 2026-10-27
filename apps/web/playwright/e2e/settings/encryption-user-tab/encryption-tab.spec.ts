@@ -126,9 +126,13 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();
 
-            await expect(page.getByRole("heading", { name: "Turn off and delete key storage?" })).toBeVisible();
+            // Stacked dialogs share a title id, so locate this one by its heading rather than its accessible name
+            const dialog = page.getByRole("dialog").filter({
+                has: page.getByRole("heading", { name: "Are you sure you want to delete key storage?" }),
+            });
+            await expect(dialog).toBeVisible();
 
-            await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
+            await expect(dialog).toMatchScreenshot("delete-key-storage-confirm.png");
 
             const deleteRequestPromises = [
                 page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.master")),
@@ -139,8 +143,10 @@ test.describe("Encryption tab", () => {
                 page.waitForRequest((req) => req.url().includes("/account_data/m.secret_storage.key.")),
             ];
 
-            await page.getByRole("button", { name: "Delete key storage" }).click();
+            await dialog.getByRole("button", { name: "Delete" }).click();
 
+            // The dialog stays open until key storage has been deleted
+            await expect(dialog).toBeHidden();
             await expect(page.getByRole("switch", { name: "Allow key storage" })).not.toBeChecked();
 
             for (const prom of deleteRequestPromises) {
