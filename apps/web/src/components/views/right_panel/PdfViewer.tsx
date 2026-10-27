@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PdfViewerView, type PdfViewerStatus } from "@element-hq/web-shared-components";
 
@@ -31,6 +31,9 @@ const PDF_HEADER = [0x25, 0x50, 0x44, 0x46, 0x2d];
 /** How far in to look for the signature; the same distance pdf.js scans. */
 const PDF_HEADER_SEARCH_LIMIT = 1024;
 
+/** Numbers the iframe key of each file without an MXC URI. */
+let fileKeyCounter = 0;
+
 /** The whole file is held in memory while open. */
 const MAX_PDF_BYTES = 256 * 1024 * 1024;
 
@@ -53,6 +56,8 @@ function hasPdfHeader(data: Uint8Array): boolean {
  */
 export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement>(null);
+    // A file from a module has no URI, so it gets a key of its own rather than sharing `undefined`.
+    const iframeKey = useMemo(() => media.uri ?? `file-${++fileKeyCounter}`, [media]);
     /** The app's end of the channel the iframe hands over with `ready`. */
     const portRef = useRef<MessagePort | null>(null);
     const [status, setStatus] = useState<PdfViewerStatus>("loading");
@@ -116,7 +121,7 @@ export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
 
             if (disposed) return;
 
-            const saved = getPdfViewerState(media.uri);
+            const saved = media.uri ? getPdfViewerState(media.uri) : undefined;
             const position = saved && { page: saved.page, scale: saved.scale, left: saved.left, top: saved.top };
 
             // Transferred, not copied.
@@ -147,7 +152,7 @@ export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
                 case "position":
                     // Positions before `loaded` predate the restore.
                     if (!isLoaded) return;
-                    setPdfViewerState(media.uri, message.position);
+                    if (media.uri) setPdfViewerState(media.uri, message.position);
                     break;
                 case "error":
                     fail(new Error(message.message));
@@ -248,9 +253,10 @@ export function PdfViewer({ media }: { media: DocumentMedia }): JSX.Element {
             onZoomOut={zoomOut}
             zoomPercent={zoomPercent}
         >
-            {/* Keyed on the file so a new document gets a fresh iframe. `src` is set by the effect above. */}
+            {/* Keyed on the file so a new document gets a fresh iframe, even when neither file has a URI.
+                `src` is set by the effect above. */}
             <iframe
-                key={media.uri}
+                key={iframeKey}
                 ref={iframeRef}
                 className="mx_PdfViewer_iframe"
                 data-testid="pdf-iframe"

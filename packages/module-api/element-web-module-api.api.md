@@ -46,6 +46,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     // @alpha
     readonly customisations: CustomisationsApi;
     // @alpha
+    readonly documentPreviews: DocumentPreviewApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -258,6 +260,25 @@ export type DialogProps<M> = {
     onSubmit(this: void, model: M): void;
     onCancel(this: void): void;
 };
+
+// @alpha
+export interface DocumentPreviewApi {
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
+}
+
+// @alpha
+export interface DocumentPreviewFile {
+    blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
+    name?: string;
+}
+
+// @alpha
+export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
 
 // @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
