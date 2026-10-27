@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: github:element-hq/element-call#6438c18b73773904557baa0b359f3ebed1be76e2&path:/component
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28)(react-dom@19.3.0)(react@19.3.0)
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -627,7 +627,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -1450,8 +1450,8 @@ importers:
         specifier: 10.5.5
         version: 10.5.5(@types/react-dom@19.3.0)(@types/react@19.3.0)(esbuild@0.27.4)(rollup@4.64.2)(storybook@10.6.2)(vite@8.3.4)(webpack@5.112.0)
       '@storybook/addon-vitest':
-        specifier: 10.5.5
-        version: 10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
+        specifier: 10.6.2
+        version: 10.6.2(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
       '@storybook/icons':
         specifier: ^2.0.0
         version: 2.1.0(react@19.3.0)
@@ -1508,7 +1508,7 @@ importers:
         version: 10.6.2(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
       storybook-addon-vis:
         specifier: ^4.0.0
-        version: 4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
+        version: 4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.6.2)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
       typedoc:
         specifier: ^0.28.16
         version: 0.28.20(@typescript/typescript6@6.0.2)
@@ -5796,14 +5796,14 @@ packages:
       '@types/react':
         optional: true
 
-  '@storybook/addon-vitest@10.5.5':
-    resolution: {integrity: sha512-Ymq9ErkSkYiIDuqpJ2+hE5GCQ5J6TCLOWhutqArvwaeAO+HAibM82XNExpJ1/kvPqk9y961GDPkv2W15I88JIw==}
+  '@storybook/addon-vitest@10.6.2':
+    resolution: {integrity: sha512-gyyBzncvUyEgWQR3LinnGuI4UsWIUYLyw1u8i244aTxmY4uxCYjsDmUNkaSr8xQzNz8nh2Ckh3G4bO4SvJ6nJQ==}
     peerDependencies:
-      '@vitest/browser': ^3.0.0 || ^4.0.0
-      '@vitest/browser-playwright': ^4.0.0
-      '@vitest/runner': ^3.0.0 || ^4.0.0
-      storybook: ^10.5.5
-      vitest: ^3.0.0 || ^4.0.0
+      '@vitest/browser': ^3.0.0 || ^4.0.0 || ^5.0.0
+      '@vitest/browser-playwright': ^4.0.0 || ^5.0.0
+      '@vitest/runner': ^3.0.0 || ^4.0.0 || ^5.0.0
+      storybook: ^10.6.2
+      vitest: ^3.0.0 || ^4.0.0 || ^5.0.0
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
@@ -9939,8 +9939,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28:
-    resolution: {gitHosted: true, integrity: sha512-iOJVrmYMoqpMKIfTqVPRjjKGkYvdsZjjLENbUY92GEKFKupVf/S1cperL/yZMBTh5sdbHcS7l9Dc2cX/aHk4bw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76:
+    resolution: {gitHosted: true, integrity: sha512-HvpmDhuQh1t5edGNeKRUfP8Ui112XqP1EBvYAgXmTAOBMVRyg35WQO5/qDykEGfipD/S4GnP7q4en7WVvKjjPg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76}
     version: 45.0.0
     engines: {node: '>=22.0.0'}
 
@@ -15138,11 +15138,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@https://codeload.github.com/element-hq/element-call/tar.gz/6438c18b73773904557baa0b359f3ebed1be76e2#path:/component(@vector-im/compound-design-tokens@11.2.0)(@vector-im/compound-web@10.3.1)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.2.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.3.1(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.2.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -17656,7 +17656,7 @@ snapshots:
       - vite
       - webpack
 
-  '@storybook/addon-vitest@10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)':
+  '@storybook/addon-vitest@10.6.2(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/icons': 2.1.0(react@19.3.0)
@@ -22275,7 +22275,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1608e8cd2a52d6b8af96cf9eac57302ed9cd9c28:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6699a30805fde6899705bb52fcf01e735ed26f76:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
@@ -24657,9 +24657,9 @@ snapshots:
 
   std-env@4.3.0: {}
 
-  storybook-addon-vis@4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.5.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5):
+  storybook-addon-vis@4.3.1(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.6.2)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5):
     dependencies:
-      '@storybook/addon-vitest': 10.5.5(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
+      '@storybook/addon-vitest': 10.6.2(@vitest/browser-playwright@5.0.5)(@vitest/browser@4.1.11)(react@19.3.0)(storybook@10.6.2)(vitest@5.0.5)
       '@storybook/icons': 2.1.0(react@19.3.0)
       '@vitest/browser': 4.1.11(vite@8.3.4)(vitest@5.0.5)
       glob: 13.0.6
