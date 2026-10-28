@@ -2416,14 +2416,6 @@
             },
             "confirm_key_storage_off": "Er du sikker på at du vil ha nøkkeloppbevaring skrudd av?",
             "confirm_key_storage_off_description": "Hvis du logger deg av alle enhetene dine, mister du meldingshistorikken og må bekrefte alle eksisterende kontakter igjen. <a>Lær mer </a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Slett nøkkellagring",
-                "confirm": "Slett nøkkellagring",
-                "description": "Hvis du sletter nøkkellagring, fjernes den kryptografiske identiteten og meldingsnøklene fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
-                "list_first": "Du vil ikke ha kryptert meldingshistorikk på nye enheter",
-                "list_second": "Du vil miste tilgangen til de krypterte meldingene dine hvis du logger av %(brand)s overalt",
-                "title": "Er du sikker på at du vil slå av nøkkellagring og slette den?"
-            },
             "device_not_verified_button": "Bekreft denne enheten",
             "device_not_verified_description": "Du må bekrefte denne enheten for å kunne se krypteringsinnstillingene dine.",
             "device_not_verified_title": "Enhet er ikke verifisert",

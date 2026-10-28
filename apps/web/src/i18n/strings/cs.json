@@ -2481,14 +2481,6 @@
             },
             "confirm_key_storage_off": "Opravdu chcete ponechat úložiště klíčů vypnuté?",
             "confirm_key_storage_off_description": "Pokud se odhlásíte ze všech svých zařízení, ztratíte historii zpráv a budete muset znovu ověřit všechny své stávající kontakty. <a>Další informace</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Smazat úložiště klíčů",
-                "confirm": "Smazat úložiště klíčů",
-                "description": "Smazáním úložiště klíčů odstraníte ze serveru vaši kryptografickou identitu a klíče zpráv a vypnete následující funkce zabezpečení:",
-                "list_first": "Na nových zařízeních nebudete mít šifrovanou historii zpráv",
-                "list_second": "Pokud nebudete přihlášeni k žádnému zařízení, ztratíte přístup ke svým šifrovaným zprávám.",
-                "title": "Opravdu chcete vypnout úložiště klíčů a smazat jej?"
-            },
             "device_not_verified_button": "Ověřte toto zařízení",
             "device_not_verified_description": "Abyste mohli zobrazit nastavení šifrování, musíte toto zařízení ověřit.",
             "device_not_verified_title": "Zařízení nebylo ověřeno",

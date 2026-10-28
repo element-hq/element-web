@@ -2544,14 +2544,6 @@
             },
             "confirm_key_storage_off": "Êtes-vous sûr de vouloir désactiver le stockage des clés ?",
             "confirm_key_storage_off_description": "Si vous supprimez tous vos appareils, vous perdrez l'historique de vos messages et devrez vérifier à nouveau tous vos contacts existants.<a>En savoir plus</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Désactiver la sauvegarde",
-                "confirm": "Désactiver la sauvegarde",
-                "description": "La suppression du stockage des clés supprimera votre identité numérique et vos clés de messagerie du serveur et désactivera les fonctions de sécurité suivantes :",
-                "list_first": "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils",
-                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous n'êtes connecté à aucun appareil.",
-                "title": "Désactiver et supprimer le stockage des clés ?"
-            },
             "device_not_verified_button": "Vérifiez cet appareil",
             "device_not_verified_description": "Vous devez vérifier cet appareil afin de visualiser vos paramètres de chiffrement.",
             "device_not_verified_title": "Appareil non vérifié",

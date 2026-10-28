@@ -2263,13 +2263,6 @@
                 "session_key": "Oturum anahtarı:",
                 "title": "Gelişmiş"
             },
-            "delete_key_storage": {
-                "breadcrumb_page": "Anahtar depolamasını sil",
-                "confirm": "Anahtar depolamasını sil",
-                "description": "Anahtar depolamanın silinmesi kriptografik kimliğinizi ve mesaj anahtarlarınızı sunucudan kaldıracak ve aşağıdaki güvenlik özelliklerini kapatacaktır:",
-                "list_first": "Yeni cihazlarda şifrelenmiş mesaj geçmişine sahip olmayacaksınız",
-                "list_second": "%(brand)s adresinden her yerde oturumunuzu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz"
-            },
             "device_not_verified_button": "Bu cihazı doğrulayın",
             "device_not_verified_description": "Şifreleme ayarlarınızı görüntülemek için bu cihazı doğrulamanız gerekiyor.",
             "device_not_verified_title": "Cihaz doğrulanmamış",

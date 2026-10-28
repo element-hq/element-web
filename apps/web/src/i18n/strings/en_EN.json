@@ -2546,14 +2546,7 @@
             },
             "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
             "confirm_key_storage_off_description": "If you remove all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Delete key storage",
-                "confirm": "Delete key storage",
-                "description": "Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:",
-                "list_first": "You will not have encrypted message history on new devices",
-                "list_second": "You will lose access to your encrypted messages if you're not signed in to any devices",
-                "title": "Turn off and delete key storage?"
-            },
+            "delete_key_storage_title": "Are you sure you want to delete key storage?",
             "device_not_verified_button": "Verify this device",
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",

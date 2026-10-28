@@ -117,7 +117,7 @@ describe("userStatus utils", () => {
 
             await clearAllUserStatus(client);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status");
         });
 
         it("clears the call status", async () => {
@@ -125,7 +125,7 @@ describe("userStatus utils", () => {
 
             await clearAllUserStatus(client);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call");
         });
     });
 
@@ -151,7 +151,7 @@ describe("userStatus utils", () => {
         it("clears the call status if onCall is false", async () => {
             await setUserOnCall(client, false);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call");
         });
     });
 });
