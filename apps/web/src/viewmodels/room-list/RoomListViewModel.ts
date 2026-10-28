@@ -36,6 +36,8 @@ import {
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { PreviewRoomListItemViewModel, type PreviewRoomListItemProps } from "./PreviewRoomListItemViewModel";
 import { hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
@@ -237,6 +239,7 @@ export class RoomListViewModel
             isFlatList,
             sections: toRoomListSection(sections),
             canCreateRoom,
+            canStartChat: shouldShowComponent(UIComponent.CreateRooms),
         });
 
         this.roomsResult = roomsResult;

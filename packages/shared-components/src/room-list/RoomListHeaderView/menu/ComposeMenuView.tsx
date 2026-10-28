@@ -36,7 +36,7 @@ interface ComposeMenuViewProps {
 export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement, areSectionsEnabled } =
+    const { canStartChat, canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement, areSectionsEnabled } =
         useViewModel(vm);
 
     // 28px button with a 20px icon
@@ -69,7 +69,9 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
             align="start"
             trigger={button}
         >
-            <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={vm.createChatRoom} hideChevron />
+            {canStartChat && (
+                <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={vm.createChatRoom} hideChevron />
+            )}
             {canCreateRoom && (
                 <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={vm.createRoom} hideChevron />
             )}

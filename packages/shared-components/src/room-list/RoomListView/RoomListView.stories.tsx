@@ -105,6 +105,7 @@ const meta = {
         },
         sections: mockSections,
         canCreateRoom: true,
+        canStartChat: true,
         // Action properties (callbacks)
         onToggleFilter: fn(),
         createChatRoom: fn(),

@@ -53,6 +53,19 @@ describe("<ComposeMenuView />", () => {
         expect(screen.getByRole("menuitem", { name: "Start chat" })).toBeInTheDocument();
     });
 
+    it("should hide start chat option when canStartChat is false", async () => {
+        const user = userEvent.setup();
+
+        const vm = new MockedViewModel({ ...defaultSnapshot, canStartChat: false });
+        render(<ComposeMenuView vm={vm} />);
+
+        const button = screen.getByRole("button", { name: "New" });
+        await user.click(button);
+
+        expect(screen.queryByRole("menuitem", { name: "Start chat" })).not.toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "New room" })).toBeInTheDocument();
+    });
+
     it("should hide video room option when canCreateVideoRoom is false", async () => {
         const user = userEvent.setup();
 
