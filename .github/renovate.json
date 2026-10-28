@@ -11,7 +11,8 @@
             "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"],
             "dependencyDashboardApproval": false,
-            "schedule": ["* * * * 1,3,5"]
+            "schedule": ["* * * * 1,3,5"],
+            "prConcurrentLimit": 0
         },
         {
             "description": "Group all pnpm updates",
