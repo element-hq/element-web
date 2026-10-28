@@ -79,6 +79,13 @@ export function collectUserVotes(
     return userVotes;
 }
 
+/**
+ * Count number of votes for each poll option
+ *
+ * @param userVotes A map of user ID to their vote info
+ * @param pollStart The poll start event to validate votes against
+ * @returns A map of answer ID to the number of votes it received
+ */
 export function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
     const collected = new Map<string, number>();
 
