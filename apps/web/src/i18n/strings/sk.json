@@ -2454,14 +2454,6 @@
             },
             "confirm_key_storage_off": "Naozaj chcete ponechať úložisko kľúčov vypnuté?",
             "confirm_key_storage_off_description": "Ak sa zo všetkých zariadení odhlásite, stratíte históriu správ a budete musieť znova overiť všetky existujúce kontakty. <a>Prečítajte si viac </a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Odstrániť úložisko kľúčov",
-                "confirm": "Odstrániť úložisko kľúčov",
-                "description": "Odstránením úložiska kľúčov sa odstráni vaša kryptografická identita a kľúče správ zo servera a vypnú sa nasledujúce bezpečnostné funkcie:",
-                "list_first": "Na nových zariadeniach nebudete mať zašifrovanú históriu správ",
-                "list_second": "Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite z aplikácie %(brand)s všade",
-                "title": "Naozaj chcete vypnúť úložisko kľúčov a odstrániť ho?"
-            },
             "device_not_verified_button": "Overiť toto zariadenie",
             "device_not_verified_description": "Ak chcete zobraziť nastavenia šifrovania, musíte toto zariadenie overiť.",
             "device_not_verified_title": "Zariadenie nie je overené",

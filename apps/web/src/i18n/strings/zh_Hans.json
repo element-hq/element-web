@@ -2535,14 +2535,7 @@
             },
             "confirm_key_storage_off": "你确定要持续关闭密钥存储？",
             "confirm_key_storage_off_description": "如果你移除所有设备将丢失消息历史，并需要重新验证所有现有联系人。<a>了解更多</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "删除密钥存储",
-                "confirm": "删除密钥存储",
-                "description": "删除密钥存储将从服务器中移除密码学身份与消息密钥，并关闭以下安全功能：",
-                "list_first": "你将不会在新设备上拥有加密消息历史",
-                "list_second": "如果你不再登录任何设备，你将丢失对加密消息的访问权。",
-                "title": "关闭并删除密钥存储？"
-            },
+            "delete_key_storage_title": "你确定要删除密钥存储？",
             "device_not_verified_button": "验证此设备",
             "device_not_verified_description": "你需要验证此设备才能查看加密设置。",
             "device_not_verified_title": "设备未验证",
@@ -2563,6 +2556,7 @@
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
+                "key_active_description": "如果你无法访问所有设备，可以使用恢复密钥以确认新设备或恢复加密聊天。",
                 "key_active_title": "你的新恢复密钥现已激活",
                 "key_storage_warning": "你的密钥存储不同步。点选以下按钮修复此问题。",
                 "save_key_description": "不要与任何人分享！",

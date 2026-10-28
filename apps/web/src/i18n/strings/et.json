@@ -2485,14 +2485,6 @@
             },
             "confirm_key_storage_off": "Kas sa oled kindel, et tahad krüptovõtmete hoidlat mitte kasutada?",
             "confirm_key_storage_off_description": "Kui sa eemaldad kõik oma seadmed, siis kaotad ligipääsu oma sõnumite ajaloole ning pead kõik olemasolevad kontaktid uuesti verifitseerima. <a>Lisateave</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Kustuta krüptovõtmete hoidla",
-                "confirm": "Kustuta krüptovõtmete hoidla",
-                "description": "Krüptovõtmete hoidla hoidla kustutamisega eemaldad serverist oma krüptoidentiteedi ja sõnumite võtmed ning lülitad välja järgnevad turvalisusega seotud funktsionaalsused:",
-                "list_first": "Sa ei saa uutes seadmetes lugeda varasemaid krüptitud sõnumeid",
-                "list_second": "Kui sa pole ühtegi seadmesse sisse loginud, siis kaotad ligipääsu kõikidele oma krüptitud sõnumitele",
-                "title": "Kas sa oled kindel, et soovid krüptovõtmete hoidla välja lülitada ning seejärel kustutada?"
-            },
             "device_not_verified_button": "Verifitseeri see seade",
             "device_not_verified_description": "Oma krüptoseadistuste nägemiseks palun verifitseeri see seade.",
             "device_not_verified_title": "Seade on verifitseerimata",
