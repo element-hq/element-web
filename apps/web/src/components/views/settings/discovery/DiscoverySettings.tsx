@@ -25,6 +25,8 @@ import { useDispatcher } from "../../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../../../dispatcher/payloads";
 import { AddRemoveThreepids } from "../AddRemoveThreepids";
+import SettingsStore from "../../../../settings/SettingsStore";
+import { UIFeature } from "../../../../settings/UIFeature";
 
 type RequiredPolicyInfo =
     | {
@@ -44,6 +46,7 @@ type RequiredPolicyInfo =
  */
 export const DiscoverySettings: React.FC = () => {
     const client = useMatrixClientContext();
+    const identityServerEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
     const [isLoadingThreepids, setIsLoadingThreepids] = useState<boolean>(true);
     const [emails, setEmails] = useState<ThirdPartyIdentifier[]>([]);
@@ -134,7 +137,7 @@ export const DiscoverySettings: React.FC = () => {
                     introElement={intro}
                 />
                 {/* has its own heading as it includes the current identity server */}
-                <SetIdServer missingTerms={true} />
+                {identityServerEnabled && <SetIdServer missingTerms={true} />}
             </>
         );
     }
@@ -179,7 +182,7 @@ export const DiscoverySettings: React.FC = () => {
         <SettingsSubsection heading={_t("settings|discovery|title")} data-testid="discoverySection" stretchContent>
             {threepidSection}
             {/* has its own heading as it includes the current identity server */}
-            <SetIdServer missingTerms={false} />
+            {identityServerEnabled && <SetIdServer missingTerms={false} />}
         </SettingsSubsection>
     );
 };
