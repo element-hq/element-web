@@ -1040,7 +1040,7 @@ describe("Notifier", () => {
         it("should not show the prompt when a module hides the notifications toast", () => {
             vi.mocked(shouldShowComponent).mockReturnValue(false);
             expect(notifier.shouldShowPrompt()).toBe(false);
-            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.NotificationsToast);
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.OnboardingToasts);
         });
     });
 

@@ -1368,7 +1368,7 @@ describe("DeviceListener", () => {
 
                 await createAndStart();
 
-                expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.SetUpRecoveryToast);
+                expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.OnboardingToasts);
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
             });
