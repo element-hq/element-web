@@ -138,7 +138,7 @@ exports[`A2UISurfaceView > renders the contact form story 1`] = `
           </label>
           <div
             class="Flex-module_flex A2UISurfaceView-module_container"
-            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: end; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: end; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
           >
             <button
               aria-disabled="false"
@@ -149,7 +149,7 @@ exports[`A2UISurfaceView > renders the contact form story 1`] = `
               tabindex="0"
             >
               <span
-                class="A2UISurfaceView-module_text"
+                class="A2UISurfaceView-module_text A2UISurfaceView-module_inlineText"
               >
                 Cancel
               </span>
@@ -163,7 +163,7 @@ exports[`A2UISurfaceView > renders the contact form story 1`] = `
               tabindex="0"
             >
               <span
-                class="A2UISurfaceView-module_text"
+                class="A2UISurfaceView-module_text A2UISurfaceView-module_inlineText"
               >
                 Send
               </span>

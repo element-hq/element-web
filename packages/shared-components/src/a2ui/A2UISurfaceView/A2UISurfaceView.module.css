@@ -33,6 +33,11 @@ Please see LICENSE in the repository root for full details.
     overflow-wrap: anywhere;
 }
 
+/* Button labels only break between words, so a squeezed button cannot shrink its label to one letter per line. */
+.inlineText {
+    overflow-wrap: break-word;
+}
+
 .caption {
     color: var(--cpd-color-text-secondary);
 }

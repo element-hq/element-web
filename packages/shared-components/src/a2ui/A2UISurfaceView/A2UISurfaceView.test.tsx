@@ -21,7 +21,7 @@ import {
 } from "./A2UISurfaceView";
 import * as stories from "./A2UISurfaceView.stories";
 
-const { ContactForm, TemplateList, Tabs, NoRootYet, NoSurfaces, SendFailed } = composeStories(stories);
+const { ContactForm, TemplateList, Tabs, ButtonRow, NoRootYet, NoSurfaces, SendFailed } = composeStories(stories);
 
 function mockVm(root: A2UIRenderNode | null, extra: Partial<A2UISurfaceViewSnapshot> = {}) {
     const setInputValue = vi.fn<A2UISurfaceViewActions["setInputValue"]>();
@@ -180,6 +180,16 @@ describe("A2UISurfaceView", () => {
         expect(setInputValue).toHaveBeenCalledWith("main", "tags", "/tags", []);
 
         expect(screen.getByLabelText("Secret")).toHaveAttribute("type", "password");
+    });
+
+    it("wraps rows of buttons but keeps each button's icon beside its label", () => {
+        render(<ButtonRow />);
+
+        const button = screen.getByRole("button", { name: "Wed 21 Oct" });
+        const outerRow = button.parentElement!;
+        const innerRow = button.firstElementChild as HTMLElement;
+        expect(outerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("wrap");
+        expect(innerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("nowrap");
     });
 
     it("renders catalog icons, custom icon paths and a fallback for unknown names", () => {

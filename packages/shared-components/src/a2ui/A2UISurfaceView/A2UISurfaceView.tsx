@@ -437,7 +437,7 @@ function A2UISliderView({
 
 function A2UITextView({ node, inline }: { node: A2UITextRenderNode; inline?: boolean }): JSX.Element {
     if (inline) {
-        return <span className={styles.text}>{node.text}</span>;
+        return <span className={classNames(styles.text, styles.inlineText)}>{node.text}</span>;
     }
     switch (node.variant) {
         case "h1":
@@ -493,11 +493,15 @@ const JUSTIFY: Record<A2UIContainerRenderNode["justify"], "start" | "center" | "
 
 function A2UIContainerView(props: NodeProps & { node: A2UIContainerRenderNode }): JSX.Element {
     const { node } = props;
+    // Rows wrap onto further lines rather than squeezing their children when the timeline is narrow. Inside a button
+    // the icon and label stay side by side.
+    const wrap = node.direction === "row" && !props.inline;
     return (
         <Flex
             direction={node.direction}
             justify={JUSTIFY[node.justify]}
             align={node.align}
+            wrap={wrap ? "wrap" : "nowrap"}
             gap="var(--cpd-space-2x)"
             className={classNames(styles.container, { [styles.list]: node.component === "List" })}
         >

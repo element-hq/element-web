@@ -250,6 +250,50 @@ export const TemplateList: Story = {
     },
 };
 
+const shortcuts = [
+    { id: "now", label: "On now", icon: "play" },
+    { id: "next", label: "Up next", icon: "fastForward" },
+    { id: "wed", label: "Wed 21 Oct", icon: "calendarToday" },
+    { id: "thu", label: "Thu 22 Oct", icon: "calendarToday" },
+    { id: "rooms", label: "Rooms", icon: "locationOn" },
+    { id: "favourites", label: "Favourites", icon: "star" },
+];
+
+/** A row of buttons too wide for a narrow timeline, which wraps onto further lines. */
+export const ButtonRow: Story = {
+    args: {
+        messages: [
+            {
+                version: "v0.9",
+                updateComponents: {
+                    surfaceId: "main",
+                    components: [
+                        { id: "root", component: "Row", children: shortcuts.map(({ id }) => id) },
+                        ...shortcuts.flatMap(({ id, label, icon }) => [
+                            { id, component: "Button", child: `${id}Content`, action: { event: { name: id } } },
+                            {
+                                id: `${id}Content`,
+                                component: "Row",
+                                align: "center",
+                                children: [`${id}Icon`, `${id}Label`],
+                            },
+                            { id: `${id}Icon`, component: "Icon", name: icon },
+                            { id: `${id}Label`, component: "Text", text: label },
+                        ]),
+                    ],
+                },
+            },
+        ],
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: "300px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
 export const Tabs: Story = {
     args: {
         messages: [
