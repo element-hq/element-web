@@ -2571,14 +2571,6 @@
             },
             "confirm_key_storage_off": "Jeste li sigurni da želite da pohrana ključeva ostane isključena?",
             "confirm_key_storage_off_description": "Ako uklonite sve svoje uređaje, izgubit ćete povijest poruka i trebat ćete ponovno potvrditi sve svoje postojeće kontakte. <a>Saznajte više</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Brisanje pohrane ključeva",
-                "confirm": "Brisanje pohrane ključeva",
-                "description": "Brisanjem pohrane ključeva uklonit ćete svoj digitalni identitet i ključeve poruka s poslužitelja te isključiti sljedeće sigurnosne značajke:",
-                "list_first": "Na novim uređajima nećete imati šifriranu povijest poruka",
-                "list_second": "Izgubit ćete pristup svojim šifriranim porukama ako niste prijavljeni ni na jedan uređaj",
-                "title": "Želite li isključiti i izbrisati pohranu ključeva?"
-            },
             "device_not_verified_button": "Potvrdi ovaj uređaj",
             "device_not_verified_description": "Morate potvrditi ovaj uređaj kako biste vidjeli postavke šifriranja.",
             "device_not_verified_title": "Uređaj nije potvrđen",

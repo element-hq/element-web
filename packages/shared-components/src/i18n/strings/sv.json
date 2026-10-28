@@ -95,6 +95,12 @@
         "cancel_search_label": "Avbryt sökningen",
         "emoji_picker": "Emojiväljare"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Du kommer att förlora din krypterade chatthistorik och behöva återställa din digitala identitet om du tar bort alla dina enheter.",
+            "error": "Det gick inte att radera nyckelförvaringen. Försök igen."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Nedgradera antingen till <b>%(version)s</b> först eller ta bort den här enheten.",
