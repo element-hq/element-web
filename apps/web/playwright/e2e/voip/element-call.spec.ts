@@ -281,6 +281,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });
@@ -441,6 +444,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_dm_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });

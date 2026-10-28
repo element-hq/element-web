@@ -978,7 +978,6 @@
             "warning": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
         "set_up_recovery": "Varunda oma vestlused",
-        "set_up_recovery_toast_description": "Sinu vestlused on automaatselt varundatud kasutades läbivat krüptimist. Kui peaksid kaotama ligipääsu kõikidele oma seadmetele, siis selle varukoopia taastamiseks ja oma digitaalse identiteedi säilitamiseks, on vaja taastevõtit.",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
         "turn_on_key_storage": "Võta krüptovõtmete hoidla kasutusele",
         "turn_on_key_storage_description": "See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes ning on nõutav vestluste ja digitaalse identiteedi varundamiseks.",
@@ -2510,7 +2509,6 @@
                 "change_recovery_key": "Muuda taastevõtit",
                 "change_recovery_key_description": "Palun salvesta see taastevõti turvalisel viisil. Muutuse kinnitamiseks klõpsi „Jätka“.",
                 "change_recovery_key_title": "Kas muudame taastevõtit?",
-                "description": "Sinu vestlused on automaatselt varundatud kasutades läbivat krüptimist. Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma digitaalsele identiteedile ja sõnumite ajaloole.",
                 "enter_key_error": "Sinu sisestatud taastevõti pole korrektne.",
                 "enter_recovery_key": "Sisesta taastevõti",
                 "forgot_recovery_key": "Kas unustasid taastevõtme?",
@@ -3517,10 +3515,6 @@
             "error_loading": "Ei ole võimalik laadida seda sündmust, millele vastus on tehtud - teda kas pole olemas või sul pole õigusi seda näha.",
             "in_reply_to": "<a>Vastuseks kasutajale</a> <pill>",
             "in_reply_to_for_export": "Vastuseks <a>sellele sõnumile</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Sind juhatatakse kolmanda osapoole veebisaiti, kus sa saad autentida oma kontoga %(integrationsUrl)s kasutamiseks. Kas sa soovid jätkata?",
-            "dialog_title": "Lisa lõiming"
         },
         "self_redaction": "Sõnum on kustutatud",
         "send_state_encrypting": "Krüptin sinu sõnumit…",

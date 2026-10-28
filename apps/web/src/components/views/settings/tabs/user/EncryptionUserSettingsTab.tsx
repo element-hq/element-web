@@ -24,7 +24,6 @@ import { type ResetIdentityBodyVariant } from "../../encryption/ResetIdentityBod
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
-import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
@@ -39,7 +38,6 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
  *  - "reset_identity_cant_recover": The panel to show when the user is resetting their identity, in the case where they can't use recovery.
- *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
  */
 export type State =
     | "main"
@@ -48,8 +46,7 @@ export type State =
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
-    | "reset_identity_cant_recover"
-    | "key_storage_delete";
+    | "reset_identity_cant_recover";
 
 interface Props {
     /**
@@ -106,7 +103,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 default:
                     content = (
                         <>
-                            <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
+                            <KeyStoragePanel />
                             <Separator kind="section" />
                             {/* We only show the "Recovery" panel if key storage is enabled.*/}
                             {isBackupEnabled && (
@@ -146,9 +143,6 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                     onReset={() => setState("main")}
                 />
             );
-            break;
-        case "key_storage_delete":
-            content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
             break;
     }
 

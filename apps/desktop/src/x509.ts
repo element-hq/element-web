@@ -407,7 +407,9 @@ function toCertificateInfo(cert: X509Certificate): CertificateInfo {
  * Read the current user's certificate chain from the configured PEM file. The file is provisioned by the
  * admin, formatted as the leaf followed by its intermediates. This is then passed to the crypto stack verbatim.
  */
-async function readUserCertificate(): Promise<X509Result<{ leaf: X509Certificate; chain: string }>> {
+async function readUserCertificate(): Promise<
+    X509Result<{ leaf: X509Certificate; chain: string; chainValidTo: Date }>
+> {
     const certificatePath = getConfig().x509?.certificate_path;
     if (!certificatePath) {
         return fail("CERTIFICATE_NOT_FOUND", "No certificate_path is configured");
@@ -416,22 +418,34 @@ async function readUserCertificate(): Promise<X509Result<{ leaf: X509Certificate
     try {
         chain = await readFile(certificatePath, "utf8");
     } catch (e) {
-        return fail(
-            "CERTIFICATE_NOT_FOUND",
-            `Could not read ${certificatePath}: ${e instanceof Error ? e.message : e}`,
-        );
+        return fail("CERTIFICATE_INVALID", `Could not read ${certificatePath}: ${e instanceof Error ? e.message : e}`);
     }
     let leaf: X509Certificate;
     try {
         // Only the first PEM block is parsed, and that must be the leaf.
         leaf = new X509Certificate(chain);
     } catch {
-        return fail("CERTIFICATE_NOT_FOUND", `${certificatePath} does not start with a certificate`);
+        return fail("CERTIFICATE_INVALID", `${certificatePath} does not start with a certificate`);
     }
     if (leaf.ca) {
-        return fail("CERTIFICATE_NOT_FOUND", `The first certificate in ${certificatePath} is a CA, expected the leaf`);
+        return fail("CERTIFICATE_INVALID", `The first certificate in ${certificatePath} is a CA, expected the leaf`);
     }
-    return ok({ leaf, chain });
+
+    // Compute the earliest expiry date of the leaf and all intermediates.
+    let chainValidTo = leaf.validToDate;
+    for (const pem of chain.match(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g) ?? []) {
+        let cert: X509Certificate;
+        try {
+            cert = new X509Certificate(pem);
+        } catch {
+            return fail("CERTIFICATE_INVALID", `${certificatePath} contains an unparseable certificate`);
+        }
+        if (cert.validToDate < chainValidTo) {
+            chainValidTo = cert.validToDate;
+        }
+    }
+
+    return ok({ leaf, chain, chainValidTo });
 }
 
 /**
@@ -443,7 +457,10 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
         // This is an error variant, so we can just return it directly.
         return result;
     }
-    return ok({ certificate: toCertificateInfo(result.data.leaf), chain: result.data.chain });
+    return ok({
+        ...result.data,
+        certificate: toCertificateInfo(result.data.leaf),
+    });
 }
 
 // #endregion

@@ -2999,10 +2999,6 @@
             "in_reply_to": "<a>Som svar til</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>denne besked</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Du bliver nu omdirigeret til et tredjepartswebsted, hvor du kan godkende din konto til brug med %(integrationsUrl)s. Ønsker du at fortsætte?",
-            "dialog_title": "Tilføj en integration"
-        },
         "self_redaction": "Besked slettet",
         "send_state_encrypting": "Krypterer din besked…",
         "send_state_failed": "Afsendelse mislykkedes",

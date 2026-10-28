@@ -430,14 +430,13 @@ export class ElementWidgetDriver extends WidgetDriver {
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = { delay };
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
             // state event
             r = await client._unstable_sendDelayedStateEvent(
                 roomId,
-                delayOpts,
+                delay,
                 eventType as keyof StateEvents,
                 content satisfies StateEvents[keyof StateEvents],
                 stateKey,
@@ -446,7 +445,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // message event
             r = await client._unstable_sendDelayedEvent(
                 roomId,
-                delayOpts,
+                delay,
                 null,
                 eventType as keyof TimelineEvents,
                 content as TimelineEvents[keyof TimelineEvents],
@@ -474,7 +473,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
             stickyDurationMs,
-            { delay },
+            delay,
             null,
             eventType as keyof TimelineEvents,
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
@@ -538,7 +537,16 @@ export class ElementWidgetDriver extends WidgetDriver {
                     const content = userContentMap[deviceId];
                     const stringifiedContent = JSON.stringify(content);
                     invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
-                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    // "*" means every device, which the server expands for plaintext sends
+                    // but we have to for encrypted ones
+                    let deviceIds = [deviceId];
+                    if (deviceId === "*") {
+                        const devices = await crypto.getUserDeviceInfo([userId], true);
+                        deviceIds = [...(devices.get(userId)?.keys() ?? [])];
+                    }
+                    for (const id of deviceIds) {
+                        invertedContentMap[stringifiedContent].push({ userId, deviceId: id });
+                    }
                 }
             }
 

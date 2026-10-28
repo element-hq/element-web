@@ -74,6 +74,7 @@
         "new_video_room": "新视频房间",
         "next": "下一个",
         "no": "否",
+        "not_now": "暂不",
         "ok": "确定",
         "open": "打开",
         "pin": "置顶",
@@ -207,6 +208,7 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
+            "back_to_app": "返回 app",
             "check_recovery_key": "检查恢复密钥",
             "check_recovery_key_title": "确保你移除此设备前拥有恢复密钥",
             "continue": "继续移除此设备",
@@ -626,7 +628,7 @@
         "mode_plain": "隐藏文字格式化选项",
         "mode_rich_text": "显示文字格式化选项",
         "no_perms_notice": "你无权在此房间发送消息",
-        "placeholder": "发送消息…",
+        "placeholder": "发送未加密消息…",
         "placeholder_encrypted": "发送加密消息…",
         "placeholder_reply": "发送回复…",
         "placeholder_reply_encrypted": "发送加密回复…",
@@ -952,6 +954,7 @@
         "confirm_encryption_setup_body": "点选以下按钮确认加密设置。",
         "confirm_encryption_setup_title": "确认加密设置",
         "continue_with_reset": "继续重置",
+        "create_recovery_key": "创建恢复密钥",
         "cross_signing_room_normal": "此房间已端到端加密",
         "cross_signing_room_verified": "此房间中的每个成员都已验证",
         "cross_signing_room_warning": "有人正在使用未知设备",
@@ -988,6 +991,7 @@
         },
         "pinned_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
+        "recovery_key_description": "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥恢复备份并保留数字身份。",
         "recovery_method_removed": {
             "description_1": "此设备检测到你的安全口令与安全消息密钥已被移除。",
             "description_2": "如果不慎执行了此操作，你可以为此会话设置安全消息传递，它将使用新的恢复方法重新加密此设备的消息历史。",
@@ -995,7 +999,6 @@
             "warning": "如果你未移除恢复方法，攻击者可能正在尝试访问你的账户。请立即在“设置”中更改你的账户密码并设置新的恢复方法。"
         },
         "set_up_recovery": "备份聊天",
-        "set_up_recovery_toast_description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
         "set_up_toast_title": "设置安全备份",
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
@@ -2547,6 +2550,7 @@
             "key_storage": {
                 "allow_key_storage": "允许密钥存储",
                 "description": "这将允许你在任意新设备上查看聊天历史，这对备份聊天和数字身份是必需的。<a>了解更多</a>",
+                "recovery_requires_key_storage": "必须启用密钥存储才能设置恢复。",
                 "title": "密钥存储"
             },
             "recovery": {
@@ -2556,10 +2560,11 @@
                 "change_recovery_key": "更改恢复密钥",
                 "change_recovery_key_description": "在安全的地方记下新的恢复密钥。点选“继续”按钮以确认更改。",
                 "change_recovery_key_title": "更改恢复密钥？",
-                "description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
+                "key_active_description": "如果你无法访问所有设备，可以使用恢复密钥以确认新设备或恢复加密聊天。",
+                "key_active_title": "你的新恢复密钥现已激活",
                 "key_storage_warning": "你的密钥存储不同步。点选以下按钮修复此问题。",
                 "save_key_description": "不要与任何人分享！",
                 "save_key_title": "恢复密钥",
@@ -2784,7 +2789,7 @@
             "rule_room_one_to_one": "一对一聊天中的消息",
             "rule_roomnotif": "包含 @room 的提及",
             "rule_suppress_notices": "由机器人发送的消息",
-            "rule_tombstone": "当房间升级时。",
+            "rule_tombstone": "当房间升级时",
             "show_message_desktop_notification": "在桌面通知中显示消息内容",
             "voip": "音频与视频通话"
         },
@@ -3592,14 +3597,10 @@
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "你将被带到第三方网站，以便验证你的账户是否可用于 %(integrationsUrl)s。是否继续？",
-            "dialog_title": "添加集成"
-        },
         "self_redaction": "消息已被删除",
         "send_state_encrypting": "正在解密消息…",
         "send_state_failed": "发送失败",
-        "send_state_sending": "发送消息…",
+        "send_state_sending": "正在发送消息…",
         "send_state_sent": "消息已发送",
         "summary": {
             "banned": {

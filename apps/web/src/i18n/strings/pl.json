@@ -78,6 +78,7 @@
         "new_video_room": "Nowy pokój wideo",
         "next": "Dalej",
         "no": "Nie",
+        "not_now": "Nie teraz",
         "ok": "OK",
         "open": "Otwórz",
         "pin": "Przypnij",
@@ -211,7 +212,13 @@
         "incorrect_password": "Nieprawidłowe hasło",
         "log_in_new_account": "<a>Zaloguj się</a> do nowego konta.",
         "logout_dialog": {
+            "back_to_app": "Wróć z powrotem do aplikacji",
+            "check_recovery_key": "Sprawdź swój klucz przywracania",
+            "check_recovery_key_title": "Upewnij się, że posiadasz dostęp do klucza przywracania przed usunięciem urządzenia",
+            "continue": "Kontynuuj usuwanie tego urządzenia",
             "description": "Czy na pewno chcesz usunąć to urządzenie?",
+            "generate_recovery_key": "Wygeneruj nowy klucz przywracania",
+            "keep_access_description": "Upewnij się, że zawsze masz dostęp do innego zweryfikowanego urządzenia lub klucza przywracania, aby nie stracić zaszyfrowanej historii czatów.",
             "setup_key_backup_title": "Zamierzasz utracić dostęp do swoich zaszyfrowanych czatów",
             "setup_secure_backup_description": "To jest twoje jedyne urządzenie. Jeśli je usuniesz, będziesz potrzebować klucza przywracania, aby potwierdzić swoją tożsamość cyfrową i przywrócić zaszyfrowane czaty przy następnym logowaniu.",
             "skip_key_backup": "Usuń urządzenie mimo to"
@@ -958,6 +965,7 @@
         "confirm_encryption_setup_body": "Kliknij przycisk poniżej, aby potwierdzić ustawienie szyfrowania.",
         "confirm_encryption_setup_title": "Potwierdź ustawienie szyfrowania",
         "continue_with_reset": "Kontynuuj resetowanie",
+        "create_recovery_key": "Utwórz klucz przywracania",
         "cross_signing_room_normal": "Ten pokój jest szyfrowany end-to-end",
         "cross_signing_room_verified": "Wszyscy w tym pokoju są zweryfikowani",
         "cross_signing_room_warning": "Ktoś korzysta z nieznanego urządzenia",
@@ -994,6 +1002,7 @@
         },
         "pinned_identity_changed": "Tożsamość cyfrowa %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
         "pinned_identity_changed_no_displayname": "Cyfrowa tożsamość <b>%(userId)s</b> została zresetowana. <a>Dowiedz się więcej</a>",
+        "recovery_key_description": "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.",
         "recovery_method_removed": {
             "description_1": "Urządzenie wykryło, że Twoje hasło bezpieczeństwa i klucze bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wysyłanie wiadomości na tym urządzeniu, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -1001,7 +1010,6 @@
             "warning": "Jeśli nie usunąłeś metody odzyskiwania, atakujący może próbować dostać się na Twoje konto. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "set_up_recovery": "Utwórz kopię zapasową swoich czatów",
-        "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
@@ -2545,6 +2553,8 @@
         "encryption": {
             "advanced": {
                 "breadcrumb_alert_cant_confirm": "Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania.",
+                "breadcrumb_description": "Jeśli nie masz dostępu do innych zweryfikowanych urządzeń, ani nie posiadasz klucza przywracania, musisz zresetować swoją tożsamość cyfrową, aby móc nadal korzystać z aplikacji.",
+                "breadcrumb_description_no_verification_method": "Nie masz dostępu do żadnych innych zweryfikowanych urządzeń ani klucza przywracania. Jeśli chcesz nadal korzystać z aplikacji, prosimy o zresetowanie swojej tożsamości cyfrowej.",
                 "breadcrumb_first_description": "Dane konta, kontakty, preferencje i lista czatów zostaną zachowane",
                 "breadcrumb_page": "Resetuj szyfrowanie",
                 "breadcrumb_second_description": "Stracisz dostęp do całej historii wiadomości, która jest przechowywana na serwerze",
@@ -2585,6 +2595,7 @@
             "key_storage": {
                 "allow_key_storage": "Zezwalaj na przechowywanie kluczy",
                 "description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej. <a>Dowiedz się więcej</a>",
+                "recovery_requires_key_storage": "Kopia zapasowa wymaga włączenia magazynu kluczy",
                 "title": "Magazyn kluczy"
             },
             "recovery": {
@@ -2594,10 +2605,11 @@
                 "change_recovery_key": "Zmień klucz przywracania",
                 "change_recovery_key_description": "Zapisz nowy klucz przywracania w bezpiecznym miejscu. Następnie kliknij Kontynuuj, aby zastosować zmiany.",
                 "change_recovery_key_title": "Zmienić klucz przywracania?",
-                "description": "Twoje czaty są automatycznie archiwizowane. Wymagany będzie klucz przywracania, aby je przywrócić po utracie dostępu do wszystkich swoich urządzeń.",
                 "enter_key_error": "Wprowadzony klucz przywracania nie jest poprawny.",
                 "enter_recovery_key": "Wprowadź klucz przywracania",
                 "forgot_recovery_key": "Zapomniałeś klucza przywracania?",
+                "key_active_description": "Możesz użyć klucza przywracania, żeby potwierdzić nowe urządzenia lub przywrócić zaszyfrowane czaty, jeśli stracisz dostęp do wszystkich swoich urządzeń.",
+                "key_active_title": "Nowy klucz przywracania jest już aktywny",
                 "key_storage_warning": "Magazyn kluczy nie jest zsynchronizowany. Kliknij jeden z przycisków poniżej, aby rozwiązać problem.",
                 "save_key_description": "Nie udostępniaj go nikomu!",
                 "save_key_title": "Klucz przywracania",
@@ -3285,7 +3297,7 @@
         "failed_querying_public_rooms": "Nie udało się pobrać pokoi publicznych",
         "failed_querying_public_spaces": "Nie udało się pobrać przestrzeni publicznych",
         "group_chat_section_title": "Inne opcje",
-        "heading_with_query": "Użyj \"%(query)s\" w trakcie szukania",
+        "heading_with_query": "Użyj \"%(query)s\" wyszukując",
         "heading_without_query": "Szukaj",
         "join_button_text": "Dołącz %(roomAddress)s",
         "keyboard_scroll_hint": "Użyj <arrows/>, aby przewijać",
@@ -3294,7 +3306,7 @@
         "other_rooms_in_space": "Inne pokoje w %(spaceName)s",
         "public_rooms_label": "Pokoje publiczne",
         "public_spaces_label": "Przestrzenie publiczne",
-        "recent_searches_section_title": "Ostatnie wyszukania",
+        "recent_searches_section_title": "Ostatnie wyszukiwania",
         "recently_viewed_section_title": "Ostatnio wyświetlane",
         "remove_filter": "Usuń filtr wyszukiwania dla %(filter)s",
         "result_may_be_hidden_privacy_warning": "Niektóre wyniki zostały ukryte dla ochrony prywatności",
@@ -3660,10 +3672,6 @@
             "error_loading": "Nie można wczytać wiadomości, na którą udzielono odpowiedzi. Może ona nie istnieć lub nie masz uprawnień, by ją wyświetlić.",
             "in_reply_to": "<a>W odpowiedzi do</a> <pill>",
             "in_reply_to_for_export": "W odpowiedzi do <a>tej wiadomości</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Za chwilę zostaniesz przekierowany/a na zewnętrzną stronę w celu powiązania Twojego konta z %(integrationsUrl)s. Czy chcesz kontynuować?",
-            "dialog_title": "Dodaj integrację"
         },
         "self_redaction": "Wiadomość usunięta",
         "send_state_encrypting": "Szyfrowanie Twojej wiadomości…",

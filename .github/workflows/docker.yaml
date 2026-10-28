@@ -41,7 +41,7 @@ jobs:
                   install: true
 
             - name: Build and load
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -204,7 +204,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               if: github.event_name != 'pull_request'
               with:
                   source: .
