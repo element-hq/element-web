@@ -33,20 +33,27 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
 
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
+    private dynamicRoomPredecessorsWatcherRef?: string;
 
     private constructor(dispatcher = defaultDispatcher) {
         super(dispatcher, {});
-        SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
-            // We pass SyncState.Syncing here to "simulate" a sync happening.
-            // The code that receives these events actually doesn't care
-            // what state we pass, except that it behaves differently if we
-            // pass SyncState.Error.
-            this.emitUpdateIfStateChanged(SyncState.Syncing, false);
-        });
+        this.dynamicRoomPredecessorsWatcherRef = SettingsStore.watchSetting(
+            "feature_dynamic_room_predecessors",
+            null,
+            () => {
+                // We pass SyncState.Syncing here to "simulate" a sync happening.
+                // The code that receives these events actually doesn't care
+                // what state we pass, except that it behaves differently if we
+                // pass SyncState.Error.
+                this.emitUpdateIfStateChanged(SyncState.Syncing, false);
+            },
+        );
     }
 
     public destroy(): void {
         super.destroy();
+        SettingsStore.unwatchSetting(this.dynamicRoomPredecessorsWatcherRef);
+        this.dynamicRoomPredecessorsWatcherRef = undefined;
         this.clearRoomStates();
         this._globalState.destroy();
     }
@@ -192,9 +199,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
     protected async onNotReady(): Promise<any> {
         this.matrixClient?.off(ClientEvent.Sync, this.onSync);
         this.onRoomStateUpdate.cancel();
-        for (const roomState of this.roomMap.values()) {
-            roomState.destroy();
-        }
+        this.clearRoomStates();
     }
 
     // We don't need this, but our contract says we do.
