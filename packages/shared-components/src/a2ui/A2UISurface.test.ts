@@ -141,15 +141,16 @@ describe("A2UISurface", () => {
         expect(surface.resolveAction("root")).toBeNull();
     });
 
-    it("resolves openUrl buttons to links, accepting only http(s) URLs", () => {
+    it("resolves openUrl buttons to links, accepting only http(s) URLs by default", () => {
         const surface = new A2UISurface("main");
         const openUrl = (url: unknown) => ({ functionCall: { call: "openUrl", args: { url } } }) as A2UIAction;
         surface.updateComponents([
-            { id: "root", component: "Row", children: ["web", "bound", "script", "relative"] },
+            { id: "root", component: "Row", children: ["web", "bound", "script", "relative", "matrix"] },
             { id: "web", component: "Button", child: "label", action: openUrl("https://example.org/talk") },
             { id: "bound", component: "Button", child: "label", action: openUrl({ path: "/link" }) },
             { id: "script", component: "Button", child: "label", action: openUrl("javascript:alert(1)") },
             { id: "relative", component: "Button", child: "label", action: openUrl("/talk") },
+            { id: "matrix", component: "Button", child: "label", action: openUrl("matrix:u/alice:example.org") },
             { id: "label", component: "Text", text: "Open" },
         ]);
         surface.updateDataModel("/", { link: "http://example.org/bound" });
@@ -160,8 +161,27 @@ describe("A2UISurface", () => {
             { id: "bound", enabled: true, href: "http://example.org/bound" },
             { id: "script", enabled: false, href: undefined },
             { id: "relative", enabled: false, href: undefined },
+            { id: "matrix", enabled: false, href: undefined },
         ]);
         expect(surface.resolveAction("web")).toBeNull();
+    });
+
+    it("lets the host decide which openUrl links to open", () => {
+        const resolveLinkUrl = (url: string): string | undefined =>
+            url.startsWith("matrix:") ? `https://matrix.to/#/${url.slice(9)}` : undefined;
+        const surface = new A2UISurface("main", { resolveLinkUrl });
+        const openUrl = (url: string) => ({ functionCall: { call: "openUrl", args: { url } } }) as A2UIAction;
+        surface.updateComponents([
+            { id: "root", component: "Row", children: ["matrix", "web"] },
+            { id: "matrix", component: "Button", child: "label", action: openUrl("matrix:u/alice:example.org") },
+            { id: "web", component: "Button", child: "label", action: openUrl("https://example.org/") },
+            { id: "label", component: "Text", text: "Open" },
+        ]);
+
+        expect((surface.resolve().root as A2UIContainerRenderNode).children).toMatchObject([
+            { id: "matrix", enabled: true, href: "https://matrix.to/#/alice:example.org" },
+            { id: "web", enabled: false, href: undefined },
+        ]);
     });
 
     it("expands template children with a scope per item", () => {

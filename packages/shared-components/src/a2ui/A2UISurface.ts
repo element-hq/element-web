@@ -30,6 +30,11 @@ export interface A2UISurfaceOptions {
      * media blank. Defaults to allowing http(s) URLs unchanged.
      */
     resolveMediaUrl?: (url: string) => string | undefined;
+    /**
+     * Turn the URL of an `openUrl` button into the link to open. Return undefined to show the button disabled.
+     * Defaults to allowing absolute http(s) URLs unchanged.
+     */
+    resolveLinkUrl?: (url: string) => string | undefined;
 }
 
 /** A user action resolved against the data model, ready to be reported to the agent. */
@@ -45,6 +50,10 @@ function isBinding(value: unknown): value is { path: string } {
 
 function defaultResolveMediaUrl(url: string): string | undefined {
     return /^https?:\/\//i.test(url) ? url : undefined;
+}
+
+function defaultResolveLinkUrl(url: string): string | undefined {
+    return /^https?:\/\/\S+$/i.test(url) ? url : undefined;
 }
 
 /**
@@ -152,15 +161,13 @@ export class A2UISurface {
         return (this.options.resolveMediaUrl ?? defaultResolveMediaUrl)(url);
     }
 
-    /**
-     * The URL of an `openUrl` function call action, the only client-side function this renderer runs. Only
-     * absolute http(s) URLs are accepted.
-     */
+    /** The link for an `openUrl` function call action, the only client-side function this renderer runs. */
     private resolveOpenUrl(action: A2UIAction | undefined, scope: string | undefined): string | undefined {
         const call = action?.functionCall;
         if (call?.call !== "openUrl") return undefined;
         const url: unknown = this.resolveDynamic(call.args?.url, scope);
-        return typeof url === "string" && /^https?:\/\/\S+$/i.test(url) ? url : undefined;
+        if (typeof url !== "string") return undefined;
+        return (this.options.resolveLinkUrl ?? defaultResolveLinkUrl)(url);
     }
 
     private bindingPath(value: unknown, scope: string | undefined): string | undefined {

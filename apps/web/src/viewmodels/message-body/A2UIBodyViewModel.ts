@@ -25,6 +25,7 @@ import {
 
 import { _t } from "../../languageHandler";
 import { mediaFromMxc } from "../../customisations/Media";
+import { tryTransformEntityToPermalink } from "../../utils/permalinks/Permalinks";
 import Modal from "../../Modal";
 import ImageView from "../../components/views/elements/ImageView";
 import {
@@ -60,7 +61,11 @@ export class A2UIBodyViewModel
     extends BaseViewModel<A2UISurfaceViewSnapshot, A2UIBodyViewModelProps>
     implements A2UISurfaceViewModelInterface
 {
-    private surfaces = new A2UISurfaceSet({ resolveMediaUrl: this.resolveMediaUrl.bind(this) });
+    private readonly surfaceOptions = {
+        resolveMediaUrl: this.resolveMediaUrl.bind(this),
+        resolveLinkUrl: this.resolveLinkUrl.bind(this),
+    };
+    private surfaces = new A2UISurfaceSet(this.surfaceOptions);
     /** Update events already applied, so a relation refresh does not replay them. */
     private appliedUpdates = new Set<string>();
     private relations?: Relations;
@@ -146,7 +151,7 @@ export class A2UIBodyViewModel
 
     /** Apply the message's own A2UI messages and any updates seen so far, from scratch. */
     private rebuild = (): void => {
-        this.surfaces = new A2UISurfaceSet({ resolveMediaUrl: this.resolveMediaUrl.bind(this) });
+        this.surfaces = new A2UISurfaceSet(this.surfaceOptions);
         this.appliedUpdates.clear();
         for (const message of getA2UIMessages(this.props.mxEvent.getContent())) {
             this.surfaces.apply(message);
@@ -175,6 +180,17 @@ export class A2UIBodyViewModel
     private resolveMediaUrl(url: string): string | undefined {
         if (/^https?:\/\//i.test(url)) return url;
         if (url.startsWith("mxc://")) return mediaFromMxc(url, this.props.cli).srcHttp ?? undefined;
+        return undefined;
+    }
+
+    private resolveLinkUrl(url: string): string | undefined {
+        if (/^https?:\/\/\S+$/i.test(url)) return url;
+        // A matrix: URI becomes a matrix.to link, which the button then opens inside the app like a link in message
+        // text. URIs that do not point at a user, room or event come back unchanged and are refused.
+        if (url.startsWith("matrix:")) {
+            const permalink = tryTransformEntityToPermalink(this.props.cli, url);
+            return permalink && permalink !== url ? permalink : undefined;
+        }
         return undefined;
     }
 

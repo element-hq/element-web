@@ -113,7 +113,7 @@ describe("MA2UIBody", () => {
         expect(screen.getByRole("button", { name: "Show image" })).toBeInTheDocument();
     });
 
-    it("opens matrix.to links in openUrl buttons inside the app and other links in a new tab", () => {
+    it("opens matrix.to links and matrix: URIs in openUrl buttons inside the app and other links in a new tab", () => {
         enableFlag(true);
         const openUrl = (id: string, label: string, url: string) => [
             {
@@ -138,9 +138,10 @@ describe("MA2UIBody", () => {
                         updateComponents: {
                             surfaceId: "main",
                             components: [
-                                { id: "root", component: "Row", children: ["user", "room", "web"] },
+                                { id: "root", component: "Row", children: ["user", "room", "uri", "web"] },
                                 ...openUrl("user", "Speaker", "https://matrix.to/#/@alice:example.org"),
                                 ...openUrl("room", "Room", "https://matrix.to/#/#conference:example.org"),
+                                ...openUrl("uri", "Organiser", "matrix:u/bob:example.org"),
                                 ...openUrl("web", "Website", "https://example.org/"),
                             ],
                         },
@@ -171,6 +172,17 @@ describe("MA2UIBody", () => {
         roomLink.click();
         expect(globalThis.location.hash).toBe("#/room/#conference:example.org");
         globalThis.location.hash = "";
+
+        const uriLink = screen.getByRole("link", { name: "Organiser" });
+        expect(uriLink).toHaveAttribute("href", "https://matrix.to/#/@bob:example.org");
+        expect(uriLink).not.toHaveAttribute("target");
+        uriLink.click();
+        expect(dispatch).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                action: Action.ViewUser,
+                member: expect.objectContaining({ userId: "@bob:example.org" }),
+            }),
+        );
 
         expect(screen.getByRole("link", { name: "Website" })).toHaveAttribute("target", "_blank");
     });

@@ -108,6 +108,43 @@ describe("A2UIBodyViewModel", () => {
         expect(root.children[1]).toMatchObject({ component: "Image", url: "https://hs/media/mxc://example.org/abc" });
     });
 
+    it("opens http(s) links and turns matrix: URIs into matrix.to links", () => {
+        const button = (id: string, url: string) => ({
+            id,
+            component: "Button",
+            child: "label",
+            action: { functionCall: { call: "openUrl", args: { url } } },
+        });
+        const mxEvent = mkSurfaceEvent([
+            { version: "v0.9", createSurface: { surfaceId: "main" } },
+            {
+                version: "v0.9",
+                updateComponents: {
+                    surfaceId: "main",
+                    components: [
+                        { id: "root", component: "Row", children: ["web", "user", "room", "event", "unknown"] },
+                        button("web", "https://example.org/"),
+                        button("user", "matrix:u/alice:example.org"),
+                        button("room", "matrix:r/conference:example.org"),
+                        button("event", "matrix:roomid/room:example.org/e/event"),
+                        button("unknown", "matrix:nonsense"),
+                        { id: "label", component: "Text", text: "Open" },
+                    ],
+                },
+            },
+        ]);
+        const vm = new A2UIBodyViewModel({ ...mediaProps, mxEvent, cli });
+
+        const root = vm.getSnapshot().surfaces[0].root as A2UIContainerRenderNode;
+        expect(root.children).toMatchObject([
+            { id: "web", enabled: true, href: "https://example.org/" },
+            { id: "user", enabled: true, href: "https://matrix.to/#/@alice:example.org" },
+            { id: "room", enabled: true, href: "https://matrix.to/#/#conference:example.org" },
+            { id: "event", enabled: true, href: "https://matrix.to/#/!room:example.org/$event" },
+            { id: "unknown", enabled: false, href: undefined },
+        ]);
+    });
+
     it("renders an empty surface list for a message without messages", () => {
         const vm = new A2UIBodyViewModel({ ...mediaProps, mxEvent: mkSurfaceEvent("nope"), cli });
 

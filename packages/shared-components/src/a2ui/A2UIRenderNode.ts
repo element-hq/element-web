@@ -80,7 +80,7 @@ export interface A2UIButtonRenderNode extends A2UIRenderNodeBase {
     variant: "default" | "primary" | "borderless";
     /** False when the button's action is of a kind this client cannot run. */
     enabled: boolean;
-    /** The http(s) URL to open when the button's action is the `openUrl` function; it then renders as a link. */
+    /** The link to open when the button's action is the `openUrl` function; it then renders as a link. */
     href?: string;
 }
 
