@@ -25,6 +25,8 @@ Please see LICENSE files in the repository root for full details.
         }
         .mx_UserProfileSettings_profile_nameAndStatus {
             width: 100%;
+            /* Override the default of min-width: auto to allow max-width: 100% to bound correctly */
+            min-width: 0;
             gap: 16px;
         }
     }

@@ -40,6 +40,11 @@ describe("<ThemeChoicePanel />", () => {
         vi.mocked(ThemeWatcher).mockImplementation(function () {
             return {
                 isSystemThemeSupported: vi.fn().mockReturnValue(true),
+                getEffectiveTheme: vi.fn().mockReturnValue("light"),
+                start: vi.fn(),
+                stop: vi.fn(),
+                on: vi.fn(),
+                off: vi.fn(),
             } as unknown as Mocked<ThemeWatcher>;
         });
 

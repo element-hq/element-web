@@ -99,6 +99,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
 
+            // Assert that any reply chain has finished loading
+            await expect(locator.getByRole("progressbar", { name: "Loading…" })).toHaveCount(0);
+
             if (monospace) {
                 // Assert that the monospace timer is visible
                 await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", '"Fira Code"');
@@ -113,7 +116,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         }
 
         // Check the status of the seek bar
-        expect(await page.getByRole("region", { name: "Audio player" }).getByRole("slider").count()).toBeGreaterThan(0);
+        await expect(
+            page.locator(".mx_EventTile").last().getByRole("slider", { name: "Audio seek bar" }),
+        ).toBeVisible();
 
         // Enable IRC layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -314,7 +319,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Assert that one line contains the user name
             await expect(
-                tile.locator(".mx_ReplyChain .mx_ReplyTile_sender").getByText(user.displayName!),
+                tile.locator(".mx_ReplyChain").getByTestId("reply-tile-sender").getByText(user.displayName!),
             ).toBeVisible();
 
             // Assert that the other line contains the file button
@@ -377,7 +382,12 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         const composer = thread.locator(".mx_MessageComposer--compact");
         // Assert that the reply preview contains audio ReplyTile the file info button
-        await expect(composer.locator(".mx_ReplyPreview .mx_ReplyTile .mx_MFileBody [role='button']")).toBeVisible();
+        await expect(
+            composer
+                .locator(".mx_ReplyPreview")
+                .getByTestId("reply-tile")
+                .getByRole("button", { name: /1sec-long-name-.*\.ogg/ }),
+        ).toBeVisible();
 
         // Select :smile: emoji and send it
         await composer.getByTestId("basicmessagecomposer").fill(":smile:");
@@ -385,6 +395,8 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await composer.getByTestId("basicmessagecomposer").press("Enter");
 
         // Assert that the file name is rendered on the file button
-        await expect(threadTile.locator(".mx_ReplyTile .mx_MFileBody [role='button']")).toBeVisible();
+        await expect(
+            threadTile.getByTestId("reply-tile").getByRole("button", { name: /1sec-long-name-.*\.ogg/ }),
+        ).toBeVisible();
     });
 });

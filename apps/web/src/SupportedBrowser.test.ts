@@ -13,7 +13,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
 import ToastStore from "./stores/ToastStore";
-import GenericToast from "./components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 vi.mock("matrix-js-sdk/src/logger");
 
@@ -73,15 +73,15 @@ describe("SupportedBrowser", () => {
         // Safari 26.0 on macOS
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
         // Latest Firefox on macOS Sonoma
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:155.0) Gecko/20100101 Firefox/155.0",
         // Latest Edge on Windows
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.4078.65",
         // Latest Edge on macOS
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.4078.65",
         // Latest Firefox on Windows
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0",
         // Latest Firefox on Linux
-        "Mozilla/5.0 (X11; Linux i686; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (X11; Linux i686; rv:155.0) Gecko/20100101 Firefox/155.0",
         // Latest Chrome on Windows
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
     ])("should not warn for supported browsers", testUserAgentFactory());

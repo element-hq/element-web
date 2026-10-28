@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Borrar",
-        "click_to_copy": "Haz clic para copiar",
         "close": "Cerrar",
         "collapse": "Encoger",
         "complete": "Completar",
@@ -819,7 +818,6 @@
             "title": "Método de recuperación eliminado",
             "warning": "Si no eliminó el método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
-        "set_up_recovery_toast_description": "Genera una clave de recuperación que puede usarse para restaurar el histórico de mensajes encriptados en caso de que pierdas el acceso a tus dispositivos.",
         "set_up_toast_title": "Configurar copia de seguridad segura",
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "verification": {
@@ -1304,8 +1302,6 @@
     "language_dropdown_label": "Lista selección de idiomas",
     "leave_room_dialog": {
         "last_person_warning": "Eres la única persona aquí. Si te vas, no podrá unirse nadie en el futuro, incluyéndote a ti.",
-        "leave_room_question": "¿Salir de la sala «%(roomName)s»?",
-        "leave_space_question": "¿Salir del espacio «%(spaceName)s»?",
         "room_rejoin_warning": "Esta sala no es pública. No podrás volver a unirte sin una invitación.",
         "space_rejoin_warning": "Este espacio es privado. No podrás volverte a unir sin una invitación."
     },
@@ -1635,7 +1631,6 @@
         "join_button_account": "Registrarse",
         "join_failed_needs_invite": "Para ver %(roomName)s necesitas una invitación",
         "join_the_discussion": "Unirme a la Sala",
-        "join_title": "Únete a la sala para participar",
         "join_title_account": "Unirse a la conversación con una cuenta",
         "joining": "Uniéndose…",
         "joining_room": "Uniéndose a la sala…",
@@ -1993,11 +1988,6 @@
         "emoji_autocomplete": "Sugerir emojis mientras escribes",
         "enable_markdown": "Activar Markdown",
         "enable_markdown_description": "Empieza tu mensaje con <code>/plain</code> para enviarlo sin markdown.",
-        "encryption": {
-            "recovery": {
-                "set_up_recovery_secondary_description": "Después de hacer clic en continuar te generaremos una clave de recuperación."
-            }
-        },
         "general": {
             "account_management_section": "Gestión de la cuenta",
             "account_section": "Cuenta",
@@ -2804,10 +2794,6 @@
             "error_loading": "No se pudo cargar el evento al que se respondió, bien porque no existe o no tiene permiso para verlo.",
             "in_reply_to": "<a>Respondiendo a </a> <pill>",
             "in_reply_to_for_export": "En respuesta a <a>este mensaje</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Estás a punto de ir a un sitio externo para que puedas iniciar sesión con tu cuenta y usarla en %(integrationsUrl)s. ¿Quieres seguir?",
-            "dialog_title": "Añadir una Integración"
         },
         "self_redaction": "Mensaje eliminado",
         "send_state_encrypting": "Cifrando tu mensaje…",

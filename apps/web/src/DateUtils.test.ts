@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeAll, afterAll } from "vitest";
+import { REPEATABLE_DATE } from "test-utils";
 
 import {
     formatSeconds,
@@ -29,7 +30,6 @@ import {
     MINUTE_MS,
     DAY_MS,
 } from "./DateUtils";
-import { REPEATABLE_DATE } from "../test/test-utils";
 import * as languageSettings from "./i18n/settings";
 
 describe("getDaysArray", () => {

@@ -10,15 +10,15 @@
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockInstance, type MockedObject } from "vitest";
-
-import { SetStatusViewModel, UserMenuSetStatusViewModel } from "./SetStatusViewModel";
 import {
     getMockClientWithEventEmitter,
     MockEventEmitter,
     mockClientMethodsServer,
     mockClientMethodsUser,
-} from "../../../test/test-utils";
+} from "test-utils";
 import type { UserStatus as MatrixUserStatus } from "@element-hq/web-shared-components";
+
+import { SetStatusViewModel, UserMenuSetStatusViewModel } from "./SetStatusViewModel";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../../components/views/dialogs/UserTab";
@@ -48,6 +48,7 @@ describe("SetStatusViewModel", () => {
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         vi.mocked(recent.get).mockReturnValue([]);
@@ -208,6 +209,7 @@ describe("UserMenuSetStatusViewModel", () => {
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         vi.mocked(mockOwnProfileStoreInstance).userStatus = undefined;
         dispatchSpy = vi.spyOn(dis, "dispatch").mockImplementation(() => {});

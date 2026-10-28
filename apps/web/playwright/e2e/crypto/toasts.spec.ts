@@ -9,7 +9,15 @@ import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { assertNoToasts, getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
-import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, verifyAfterLogin } from "./utils";
+import {
+    checkDeviceIsConnectedKeyBackup,
+    createBot,
+    createRoom,
+    deleteCachedSecrets,
+    disableKeyBackup,
+    logIntoElement,
+    verifyAfterLogin,
+} from "./utils";
 import { type Bot } from "../../pages/bot";
 
 // Mask the background of the screenshot to avoid failing the test just because some
@@ -78,7 +86,8 @@ test.describe("'Turn on key storage' toast", () => {
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
@@ -178,7 +187,45 @@ test.describe("'Turn on key storage' toast", () => {
     });
 });
 
+test.describe("'Set up recovery' toast", () => {
+    test.beforeEach(async ({ page, credentials }) => {
+        await logIntoElement(page, credentials);
+
+        // We won't be prompted to set up recovery unless we have an e2e room, so make one
+        await createRoom(page, "Test room", true);
+    });
+
+    test("should set up recovery from the toast", async ({ page, app }) => {
+        // Given the toast is shown
+        const toast = await getToast(page, "Back up your chats");
+
+        // When we click "Create recovery key"
+        await toast.getByRole("button", { name: "Create recovery key" }).click();
+
+        // Then the recovery setup dialog is shown
+        const dialog = page.getByRole("dialog", { name: "Get recovery key" });
+        await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
+
+        // And when we complete the recovery setup flow
+        const recoveryKey = await dialog.getByTestId("recoveryKey").innerText();
+        await dialog.getByRole("button", { name: "Continue" }).click();
+        await dialog.getByRole("textbox").fill(recoveryKey);
+        await dialog.getByRole("button", { name: "Finish set up" }).click();
+
+        // Then the toast is gone and the device is connected to key backup
+        await expect(page.locator(".mx_Toast_toast", { hasText: "Back up your chats" })).not.toBeVisible();
+        await checkDeviceIsConnectedKeyBackup(app, "1", true);
+    });
+});
+
 test.describe("Verify this device toast", () => {
+    // This is also testing skipping verification, hence need to allow it
+    test.use({
+        config: {
+            force_verification: false,
+        },
+    });
+
     test(
         "The toast is displayed if we are not verified",
         { tag: "@screenshot" },

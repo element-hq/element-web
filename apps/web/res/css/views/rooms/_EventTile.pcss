@@ -19,7 +19,6 @@ $left-gutter: 64px;
     --event-tile-bubble-other-background: $eventbubble-others-bg;
     --event-tile-bubble-self-background: $eventbubble-self-bg;
     --event-tile-preview-hover-background: $panels;
-    --event-tile-preview-highlight-background: $alert;
     --event-tile-preview-separator-color: $quinary-content;
     --EventTile_group_line-spacing-block-start: 1px;
     --EventTile_group_line-spacing-block-end: 3px;
@@ -44,6 +43,11 @@ $left-gutter: 64px;
             /* Make sure the formatting bar is visible */
             overflow: visible;
         }
+    }
+
+    .mx_EditMessageComposerWrapper {
+        /* This keeps the autocomplete / format bar visible above the edit composer. */
+        overflow: visible;
     }
 
     .mx_EventTile_searchHighlight {
@@ -90,6 +94,11 @@ $left-gutter: 64px;
             display: block !important;
         }
     }
+}
+
+/* Theads do not set a background on mentioned events as they use an indicator dot */
+.mx_ThreadPanel .mx_EventTile {
+    --event-tile-preview-highlight-background: none;
 }
 
 .mx_GenericEventListSummary {

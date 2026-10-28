@@ -36,6 +36,7 @@ import {
     TileErrorView,
     type EventTileRenderingMode,
 } from "@element-hq/web-shared-components";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -47,6 +48,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
+import { readReceiptsEqual } from "../../../utils/read-receipts";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
@@ -56,7 +58,6 @@ import PlatformPeg from "../../../PlatformPeg";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -263,6 +264,13 @@ export interface EventTileProps {
     hideTimestamp?: boolean;
     /** Whether interactive controls inside the tile should be inhibited. */
     inhibitInteraction?: boolean;
+
+    /**
+     * Show the quoted message in a compact form that keeps the same height while it
+     * loads, standing a skeleton in until it arrives. Used by the new timeline,
+     * where a preview that grows after appearing pushes the messages around it.
+     */
+    compactReplyPreview?: boolean;
 
     /** Ref for imperative access to the unwrapped tile instance. */
     ref?: Ref<UnwrappedEventTile>;
@@ -541,7 +549,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const { permalinkCreator, mxEvent } = this.props;
         if (!permalinkCreator) return;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
-        await copyPlaintext(matrixToUrl);
+        await copyPlainTextToClipboard(matrixToUrl);
     };
 
     private readonly onRoomReceipt = (ev: MatrixEvent, room: Room): void => {
@@ -594,27 +602,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
             // need to deep-compare readReceipts
             if (key === "readReceipts") {
-                const rA = objA[key];
-                const rB = objB[key];
-                if (rA === rB) {
-                    continue;
-                }
-
-                if (!rA || !rB) {
+                if (!readReceiptsEqual(objA[key], objB[key])) {
                     return false;
-                }
-
-                if (rA.length !== rB.length) {
-                    return false;
-                }
-                for (let j = 0; j < rA.length; j++) {
-                    if (rA[j].userId !== rB[j].userId) {
-                        return false;
-                    }
-                    // one has a member set and the other doesn't?
-                    if (rA[j].roomMember !== rB[j].roomMember) {
-                        return false;
-                    }
                 }
             } else {
                 if (objA[key] !== objB[key]) {
@@ -1098,6 +1087,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isQuoteExpanded={isQuoteExpanded}
                 setQuoteExpanded={this.setQuoteExpanded}
                 getRelationsForEvent={this.props.getRelationsForEvent}
+                compactPreview={this.props.compactReplyPreview}
             />
         ) : undefined;
 

@@ -61,6 +61,7 @@ describe("<QuickThemeSwitcher />", () => {
         vi.mocked(useTheme).mockClear().mockReturnValue({
             theme: "light",
             systemThemeActivated: false,
+            effectiveTheme: "light",
         });
         vi.mocked(SettingsStore).setValue.mockClear().mockResolvedValue();
         vi.mocked(dis).dispatch.mockClear();
@@ -87,6 +88,7 @@ describe("<QuickThemeSwitcher />", () => {
         vi.mocked(useTheme).mockClear().mockReturnValue({
             theme: "light",
             systemThemeActivated: true,
+            effectiveTheme: "light",
         });
         renderComponent();
         expect(screen.getByText("Match system")).toBeInTheDocument();

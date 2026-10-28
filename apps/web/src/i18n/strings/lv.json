@@ -28,7 +28,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
         "complete": "Pabeigt",
@@ -1249,8 +1248,6 @@
     },
     "leave_room_dialog": {
         "last_person_warning": "Jūs šeit esat vienīgais. Ja jūs to pametīsiet, nākotnē neviens vairs nevarēs pievienoties, ieskaitot jūs.",
-        "leave_room_question": "Vai tiešām pamest istabu '%(roomName)s'?",
-        "leave_space_question": "Vai tiešām pamest vietu '%(spaceName)s'?",
         "room_leave_admin_warning": "Jūs esat vienīgais administrators šajā istabā. Ja jūs to pametīsiet, neviens nevarēs mainīt istabas iestatījumus vai veikt citas svarīgas darbības.",
         "room_leave_mod_warning": "Jūs esat vienīgais moderators šajā telpā. Ja to pametīsiet, neviens nevarēs mainīt istabas iestatījumus vai veikt citas svarīgas darbības.",
         "room_rejoin_warning": "Šī istaba nav publiska. Tai nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.",
@@ -1311,7 +1308,6 @@
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",
-    "migrating_crypto": "Uzgaidiet! Mēs atjauninām %(brand)s, lai šifrēšana būtu ātrāka un uzticamāka.",
     "mobile_guide": {
         "toast_accept": "Izmantot lietotni",
         "toast_description": "%(brand)s mobilajā tīmekļa pārlūkprogrammā ir eksperimentāls. Lai iegūtu labāku pieredzi un jaunāko funkcionalitāti, izmantojiet mūsu bezmaksas mobilo lietotni.",
@@ -1611,7 +1607,6 @@
         "join_button_account": "Reģistrēties",
         "join_failed_needs_invite": "Lai skatītu %(roomName)s, jums ir nepieciešams uzaicinājums",
         "join_the_discussion": "Pievienoties diskusijai",
-        "join_title": "Pievienoties istabai, lai piedalītos",
         "join_title_account": "Pievienoties sarunai ar kontu",
         "joining": "Pievienojas…",
         "joining_room": "Pievienojas istabai…",
@@ -2608,10 +2603,6 @@
         },
         "show_thread_filter": "Rādīt:"
     },
-    "threads_activity_centre": {
-        "no_rooms_with_threads_notifs": "Jums vēl nav istabu ar pavedienu paziņojumiem.",
-        "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
-    },
     "time": {
         "date_at_time": "%(date)s pulksten %(time)s",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)s m %(seconds)s s atlicis",
@@ -2872,10 +2863,6 @@
             "error_loading": "Nevar ielādēt notikumu, uz kuru tika atbildēts, jo tas vai nu neeksistē, vai arī jums nav atļaujas to skatīt.",
             "in_reply_to": "<a>Atbildē uz</a> <pill>",
             "in_reply_to_for_export": "Atbildot uz <a>šo ziņu</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Jūs tiksiet novirzīts uz trešās puses vietni, lai jūs varētu autentificēt savu kontu %(integrationsUrl)s lietošanai. Vai vēlaties turpināt?",
-            "dialog_title": "Pievienot integrāciju"
         },
         "self_redaction": "Ziņa ir izdzēsta",
         "send_state_encrypting": "Ziņas šifrēšana...",

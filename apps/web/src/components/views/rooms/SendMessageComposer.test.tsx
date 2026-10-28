@@ -20,7 +20,7 @@ import SendMessageComposer, { createMessageContent, isQuickReaction } from "./Se
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType, MainSplitContentType } from "../../../contexts/RoomContext";
 import EditorModel from "../../../editor/model";
-import { createPartCreator } from "../../../../test/unit-tests/editor/mock";
+import { createPartCreator } from "../../../editor/__mocks__";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import DocumentOffset from "../../../editor/offset";
@@ -32,16 +32,24 @@ import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadVi
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
+import { attachUrlPreviews } from "../../../utils/messages";
 
 vi.mock("../../../utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
 }));
 
+// Wrapped rather than replaced: every other test relies on the real attach behaviour, only the
+// cancellation test below overrides it.
+vi.mock("../../../utils/messages", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../../../utils/messages")>();
+    return { ...actual, attachUrlPreviews: vi.fn(actual.attachUrlPreviews) };
+});
+
 describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: RoomContextType = {
         roomViewStore: SDKContextClass.instance.roomViewStore,
         roomLoading: true,
-        peekLoading: false,
+        peekAndSummaryLoading: false,
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
@@ -77,15 +85,14 @@ describe("<SendMessageComposer/>", () => {
         resizing: false,
         narrow: false,
         msc3946ProcessDynamicPredecessor: false,
-        canAskToJoin: false,
         promptAskToJoin: false,
         isRoomEncrypted: false,
     };
     describe("createMessageContent", () => {
-        it("sends plaintext messages correctly", () => {
+        it("sends plaintext messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(11, true);
-            model.update("hello world", "insertText", documentOffset);
+            await model.update("hello world", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -96,10 +103,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("sends markdown messages correctly", () => {
+        it("sends markdown messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(13, true);
-            model.update("hello *world*", "insertText", documentOffset);
+            await model.update("hello *world*", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -112,10 +119,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("strips /me from messages and marks them as m.emote accordingly", () => {
+        it("strips /me from messages and marks them as m.emote accordingly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(22, true);
-            model.update("/me blinks __quickly__", "insertText", documentOffset);
+            await model.update("/me blinks __quickly__", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -128,10 +135,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("allows emoting with non-text parts", () => {
+        it("allows emoting with non-text parts", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(16, true);
-            model.update("/me ✨sparkles✨", "insertText", documentOffset);
+            await model.update("/me ✨sparkles✨", "insertText", documentOffset);
             expect(model.parts.length).toEqual(4); // Emoji count as non-text
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
@@ -143,11 +150,11 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("allows sending double-slash escaped slash commands correctly", () => {
+        it("allows sending double-slash escaped slash commands correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(32, true);
 
-            model.update("//dev/null is my favourite place", "insertText", documentOffset);
+            await model.update("//dev/null is my favourite place", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -188,7 +195,6 @@ describe("<SendMessageComposer/>", () => {
             client: mockClient,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
         const defaultProps = {
@@ -256,6 +262,24 @@ describe("<SendMessageComposer/>", () => {
             expect(container.textContent).toBe("");
         });
 
+        it("restores the draft when replaced by another composer for the same room in the same render", () => {
+            const { container, rerender, unmount } = render(<div key="rightPanel">{getRawComponent()}</div>, {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            });
+            addTextToComposer(container, "Notes from call");
+
+            rerender(<div key="main">{getRawComponent()}</div>);
+            expect(container.textContent).toBe("Notes from call");
+
+            // the replacement composer should persist the draft again when it unmounts
+            unmount();
+            expect(JSON.parse(localStorage.getItem("mx_cider_state_myfakeroom")!)).toStrictEqual({
+                parts: [{ type: "plain", text: "Notes from call" }],
+            });
+        });
+
         it("persists state correctly without replyToEvent onbeforeunload", () => {
             const { container } = getComponent();
 
@@ -297,7 +321,7 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("correctly sends a message", () => {
+        it("correctly sends a message", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -310,11 +334,39 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "test message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            // sending awaits attachUrlPreviews, so the message goes out a tick after the keypress
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "test message",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
+        });
+
+        // Attaching the previews can take a while in an encrypted room, and the user may cancel the
+        // pending message in the meantime; the message must then not be sent after all.
+        it("does not send the message when attaching the previews reports a cancellation", async () => {
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
+            vi.mocked(attachUrlPreviews).mockResolvedValueOnce(true);
+
+            const { container } = getComponent();
+
+            addTextToComposer(container, "cancelled message");
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(attachUrlPreviews).toHaveBeenCalled());
+            // The client mock is shared across the suite, so look for this message specifically
+            // rather than asserting that nothing at all was sent.
+            expect(mockClient.sendMessage).not.toHaveBeenCalledWith(
+                "myfakeroom",
+                null,
+                expect.objectContaining({ body: "cancelled message" }),
+            );
         });
 
         it("correctly sends a reply using a slash command", async () => {
@@ -355,7 +407,7 @@ describe("<SendMessageComposer/>", () => {
             );
         });
 
-        it("shows chat effects on message sending", () => {
+        it("shows chat effects on message sending", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -368,16 +420,20 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                }),
+            );
 
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
+            await waitFor(() =>
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` }),
+            );
         });
 
-        it("not to send chat effects on message sending for threads", () => {
+        it("not to send chat effects on message sending for threads", async () => {
             vi.mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -396,44 +452,51 @@ describe("<SendMessageComposer/>", () => {
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                "body": "test message",
-                "msgtype": MsgType.Text,
-                "m.mentions": {},
-            });
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", "$yolo", {
+                    "body": "🎉",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {},
+                    "m.relates_to": {
+                        event_id: "$yolo",
+                        is_falling_back: true,
+                        rel_type: "m.thread",
+                    },
+                }),
+            );
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
         });
     });
 
     describe("isQuickReaction", () => {
-        it("correctly detects quick reaction", () => {
+        it("correctly detects quick reaction", async () => {
             const model = new EditorModel([], createPartCreator());
-            model.update("+😊", "insertText", new DocumentOffset(3, true));
+            await model.update("+😊", "insertText", new DocumentOffset(3, true));
 
             const isReaction = isQuickReaction(model);
 
             expect(isReaction).toBeTruthy();
         });
 
-        it("correctly detects quick reaction with space", () => {
+        it("correctly detects quick reaction with space", async () => {
             const model = new EditorModel([], createPartCreator());
-            model.update("+ 😊", "insertText", new DocumentOffset(4, true));
+            await model.update("+ 😊", "insertText", new DocumentOffset(4, true));
 
             const isReaction = isQuickReaction(model);
 
             expect(isReaction).toBeTruthy();
         });
 
-        it("correctly rejects quick reaction with extra text", () => {
+        it("correctly rejects quick reaction with extra text", async () => {
             const model = new EditorModel([], createPartCreator());
             const model2 = new EditorModel([], createPartCreator());
             const model3 = new EditorModel([], createPartCreator());
             const model4 = new EditorModel([], createPartCreator());
-            model.update("+😊hello", "insertText", new DocumentOffset(8, true));
-            model2.update(" +😊", "insertText", new DocumentOffset(4, true));
-            model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
-            model4.update("+smiley", "insertText", new DocumentOffset(7, true));
+            await model.update("+😊hello", "insertText", new DocumentOffset(8, true));
+            await model2.update(" +😊", "insertText", new DocumentOffset(4, true));
+            await model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
+            await model4.update("+smiley", "insertText", new DocumentOffset(7, true));
 
             expect(isQuickReaction(model)).toBeFalsy();
             expect(isQuickReaction(model2)).toBeFalsy();
@@ -448,7 +511,6 @@ describe("<SendMessageComposer/>", () => {
             client: cli,
             visible: false,
             showTooltips: false,
-            urlPreviewBundle: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
 

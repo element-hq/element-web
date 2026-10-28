@@ -45,11 +45,12 @@ export function useUserStatus(userId?: string): UserStatus | undefined {
                 setUserStatus(undefined);
                 return;
             }
-            if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
-                setUserStatus(undefined);
-                return;
-            }
             try {
+                if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
+                    setUserStatus(undefined);
+                    return;
+                }
+
                 const result = await fetchUserStatus(matrixClient, userId);
                 setUserStatus(result);
             } catch (ex) {

@@ -196,6 +196,27 @@ describe("getMentionAttributes", () => {
                 ]),
             );
         });
+
+        it("includes the user status emoji in the style when the user has a status", () => {
+            const userCompletion = createMockCompletion({
+                type: "user",
+                getUserStatus: () => ({ emoji: "💡", text: "Having an idea" }),
+            });
+
+            const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
+
+            expect(result.get("style")).toBe(
+                `--avatar-background: url(${testAvatarUrlForMember}); --avatar-letter: '​'; --user-status: '💡'`,
+            );
+        });
+
+        it("omits the user status when the status has not been fetched", () => {
+            const userCompletion = createMockCompletion({ type: "user", getUserStatus: () => undefined });
+
+            const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
+
+            expect(result.get("style")).not.toContain("--user-status");
+        });
     });
 
     describe("room mentions", () => {
@@ -264,5 +285,16 @@ describe("getMentionAttributes", () => {
                 ]),
             );
         });
+    });
+
+    it.each(["room", "at-room"] as const)("never applies a user status to a %s mention", (type) => {
+        const completion = createMockCompletion({
+            type,
+            getUserStatus: () => ({ emoji: "💡", text: "Having an idea" }),
+        });
+
+        const result = getMentionAttributes(completion, mockClient, mockRoom);
+
+        expect(result.get("style")).not.toContain("--user-status");
     });
 });

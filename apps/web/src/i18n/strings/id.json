@@ -27,7 +27,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
         "complete": "Selesai",
@@ -945,7 +944,6 @@
             "warning": "Jika Anda tidak menghapus metode pemulihan, sebuah penyerang mungkin mencoba mengakses akun Anda. Ubah kata sandi akun Anda dan segera tetapkan metode pemulihan baru di Pengaturan."
         },
         "set_up_recovery": "Siapkan pemulihan",
-        "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
@@ -1458,7 +1456,6 @@
         "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>.",
         "experimental_section": "Pratinjau awal",
         "extended_profiles_msc_support": "Memerlukan server Anda untuk mendukung MSC4133",
-        "feature_disable_call_per_sender_encryption": "Nonaktifkan enkripsi per pengirim untuk Element Call",
         "feature_wysiwyg_composer_description": "Menggunakan teks kaya daripada Markdown dalam komposer pesan.",
         "group_developer": "Pengembang",
         "group_encryption": "Enkripsi",
@@ -1542,8 +1539,6 @@
     "language_dropdown_label": "Dropdown Bahasa",
     "leave_room_dialog": {
         "last_person_warning": "Anda adalah satu-satunya di sini. Jika Anda keluar, tidak ada siapa saja dapat bergabung di masa mendatang, termasuk Anda.",
-        "leave_room_question": "Anda yakin ingin meninggalkan ruangan '%(roomName)s'?",
-        "leave_space_question": "Apakah Anda yakin untuk keluar dari space '%(spaceName)s'?",
         "room_leave_admin_warning": "Anda adalah administrator satu-satunya di ruangan ini. Jika Anda keluar, tidak ada siapa pun yang dapat mengubah pengaturan ruangan atau melakukan tindakan penting lainnya.",
         "room_leave_mod_warning": "Anda adalah moderator satu-satunya di ruangan ini. Jika Anda keluar, tidak ada siapa pun yang dapat mengubah pengaturan ruangan atau melakukan tindakan penting lainnya.",
         "room_rejoin_warning": "Ruangan ini tidak publik. Anda tidak dapat bergabung lagi tanpa sebuah undangan.",
@@ -1611,7 +1606,6 @@
     },
     "member_list_back_action_label": "Anggota ruangan",
     "message_edit_dialog_title": "Editan pesan",
-    "migrating_crypto": "Bersabarlah. Kami sedang memperbarui Element untuk membuat enkripsi lebih cepat dan andal.",
     "mobile_guide": {
         "toast_accept": "Gunakan aplikasi",
         "toast_description": "%(brand)s bersifat eksperimental pada peramban web ponsel. Untuk pengalaman yang lebih baik dan fitur-fitur terkini, gunakan aplikasi natif gratis kami.",
@@ -1952,7 +1946,6 @@
         "join_button_account": "Daftar",
         "join_failed_needs_invite": "Untuk menampilkan %(roomName)s, Anda perlu sebuah undangan",
         "join_the_discussion": "Bergabung dengan diskusinya",
-        "join_title": "Bergabung dengan ruangan ini untuk berpartisipasi",
         "join_title_account": "Bergabung obrolan dengan sebuah akun",
         "joining": "Bergabung…",
         "joining_room": "Bergabung dengan ruangan…",
@@ -2412,14 +2405,6 @@
             },
             "confirm_key_storage_off": "Apakah Anda yakin ingin tetap menonaktifkan penyimpanan kunci?",
             "confirm_key_storage_off_description": "Jika Anda keluar dari semua perangkat, Anda akan kehilangan riwayat pesan dan perlu memverifikasi semua kontak yang ada lagi. <a> Pelajari lebih lanjut</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Hapus penyimpanan kunci",
-                "confirm": "Hapus penyimpanan kunci",
-                "description": "Menghapus penyimpanan kunci akan menghapus identitas kriptografi dan kunci pesan Anda dari server dan menonaktifkan fitur keamanan berikut:",
-                "list_first": "Anda tidak akan memiliki riwayat pesan terenkripsi di perangkat baru",
-                "list_second": "Anda akan kehilangan akses ke pesan terenkripsi jika Anda keluar dari %(brand)s di mana pun",
-                "title": "Apakah Anda yakin ingin mematikan penyimpanan kunci dan menghapusnya?"
-            },
             "device_not_verified_button": "Verifikasi perangkat ini",
             "device_not_verified_description": "Anda perlu memverifikasi perangkat ini untuk melihat pengaturan enkripsi Anda.",
             "device_not_verified_title": "Perangkat tidak diverifikasi",
@@ -2436,7 +2421,6 @@
                 "change_recovery_key": "Ubah kunci pemulihan",
                 "change_recovery_key_description": "Tuliskan kunci pemulihan baru ini di tempat yang aman. Kemudian klik Lanjutkan untuk mengonfirmasi perubahan.",
                 "change_recovery_key_title": "Ubah kunci pemulihan?",
-                "description": "Pulihkan identitas kriptografi dan riwayat pesan Anda dengan kunci pemulihan jika Anda kehilangan semua perangkat yang ada.",
                 "enter_key_error": "Kunci pemulihan yang Anda masukkan salah.",
                 "enter_recovery_key": "Masukkan kunci pemulihan",
                 "forgot_recovery_key": "Lupa kunci pemulihan?",
@@ -2447,10 +2431,8 @@
                 "set_up_recovery_confirm_button": "Selesaikan penyiapan",
                 "set_up_recovery_confirm_description": "Masukkan kunci pemulihan yang ditunjukkan pada layar sebelumnya untuk menyelesaikan penyiapan pemulihan.",
                 "set_up_recovery_confirm_title": "Masukkan kunci pemulihan Anda untuk mengonfirmasi",
-                "set_up_recovery_description": "Penyimpanan kunci Anda dilindungi oleh kunci pemulihan. Jika Anda memerlukan kunci pemulihan baru setelah penyiapan, Anda dapat membuatnya kembali dengan memilih '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Catatlah kunci pemulihan ini di tempat yang aman, seperti pengelola kata sandi, catatan terenkripsi, atau brankas fisik.",
                 "set_up_recovery_save_key_title": "Simpan kunci pemulihan Anda di tempat yang aman",
-                "set_up_recovery_secondary_description": "Setelah mengeklik lanjutkan, kami akan membuat kunci pemulihan untuk Anda.",
                 "title": "Pemulihan"
             },
             "title": "Enkripsi"
@@ -3150,9 +3132,7 @@
         "show_thread_filter": "Tampilkan:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitas utas",
-        "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
+        "header": "Aktivitas utas"
     },
     "time": {
         "date_at_time": "%(date)s pada %(time)s",
@@ -3425,10 +3405,6 @@
             "error_loading": "Tidak dapat memuat peristiwa yang dibalas, karena tidak ada atau Anda tidak memiliki izin untuk menampilkannya.",
             "in_reply_to": "<a>Membalas ke</a> <pill>",
             "in_reply_to_for_export": "Membalas ke <a>pesan ini</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?",
-            "dialog_title": "Tambahkan sebuah Integrasi"
         },
         "self_redaction": "Pesan dihapus",
         "send_state_encrypting": "Mengenkripsi pesan Anda…",

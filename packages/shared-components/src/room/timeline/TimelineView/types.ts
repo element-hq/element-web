@@ -13,9 +13,16 @@ import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 /** Discriminated union of every row kind the timeline can render. */
 export type TimelineItemKind = "event" | "date-separator" | "read-marker" | "loading" | "gap";
 
+/**
+ * Opaque type representing an event object from the parent application
+ */
+export type TimelineEvent = unknown;
+
 export interface EventTimelineItem {
     key: string;
     kind: "event";
+    /** The opaque event object from the client (e.g., matrix-js-sdk MatrixEvent) */
+    event: TimelineEvent;
     /** Whether this event continues unbroken from the previous sender (suppresses avatar/name). */
     continuation: boolean;
     /**
@@ -24,12 +31,20 @@ export interface EventTimelineItem {
      * corner — border-radius only, so it is recomputed every build, never cached.
      */
     lastInSection: boolean;
+    /**
+     * How far a message of ours, or our pending edit or redaction of it, has got on its way to
+     * the server. Absent once the server has it, and for other people's messages.
+     */
+    sendState?: EventSendState;
 }
+
+/** The send states a tile draws differently. */
+export type EventSendState = "encrypting" | "sending" | "sent" | "failed";
 
 export interface DateSeparatorTimelineItem {
     key: string;
     kind: "date-separator";
-    label: string;
+    ts: number;
 }
 
 export interface ReadMarkerTimelineItem {

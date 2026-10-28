@@ -7,8 +7,9 @@
 
 import React, { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { userEvent } from "vitest/browser";
 
-import { fireEvent, render } from "@test-utils";
+import { fireEvent, render, screen } from "@test-utils";
 import type { EventLayout } from "../../EventPresentation";
 import {
     EventTileView,
@@ -18,6 +19,9 @@ import {
     type EventTileViewRootState,
 } from "./index";
 import styles from "./EventTileView.module.css";
+import { MockViewModel } from "../../../../core/viewmodel";
+import { ReactionsRowView, type ReactionsRowViewSnapshot } from "../reactions/ReactionsRow";
+import reactionStyles from "../reactions/ReactionsRow/ReactionsRow.module.css";
 
 const renderState: EventTileViewProps["root"] = {
     id: "event-line-1",
@@ -727,5 +731,92 @@ describe("EventTileView", () => {
 
         expect(container.firstElementChild?.tagName).toBe("ARTICLE");
         expect(rootRef.current).toBe(container.firstElementChild);
+    });
+});
+
+describe("EventTileView add-reaction control", () => {
+    const renderWithReactions = (): HTMLElement => {
+        const vm = new MockViewModel<ReactionsRowViewSnapshot>({
+            ariaLabel: "Reactions",
+            isVisible: true,
+            showAddReactionButton: true,
+            addReactionButtonLabel: "Add reaction",
+            // addReactionButtonVisible is deliberately unset. Every story forces it
+            // true, which is why none of them exercised the reveal rule.
+        });
+        const { container } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { ...renderState.state, hasReply: false } },
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        footer: (
+                            <ReactionsRowView vm={vm}>
+                                <button type="button">Reaction</button>
+                            </ReactionsRowView>
+                        ),
+                    },
+                })}
+            />,
+        );
+
+        return container.querySelector<HTMLElement>(`.${reactionStyles.addReactionButton}`)!;
+    };
+
+    it("stays hidden while the event is not hovered", () => {
+        expect(getComputedStyle(renderWithReactions()).visibility).toBe("hidden");
+    });
+
+    it("is revealed by hovering the event body, not only the reactions row", async () => {
+        // The control sits below the message, so requiring a hover of its own row
+        // means the reader has to find it before it appears.
+        const addReactionButton = renderWithReactions();
+
+        await userEvent.hover(screen.getByTestId("body"));
+
+        expect(getComputedStyle(addReactionButton).visibility).toBe("visible");
+    });
+});
+
+describe("EventTileView bubble layout reactions", () => {
+    const reactionsSnapshot: ReactionsRowViewSnapshot = {
+        ariaLabel: "Reactions",
+        isVisible: true,
+        showAddReactionButton: true,
+        addReactionButtonLabel: "Add reaction",
+        addReactionButtonVisible: true,
+    };
+
+    const renderAddReactionButton = (isOwnEvent: boolean): HTMLElement => {
+        const vm = new MockViewModel<ReactionsRowViewSnapshot>(reactionsSnapshot);
+        const { getByRole } = render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { ...renderState.state, hasReply: false, isOwnEvent } },
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        footer: (
+                            <ReactionsRowView vm={vm}>
+                                <button type="button">Reaction</button>
+                            </ReactionsRowView>
+                        ),
+                    },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+
+        return getByRole("button", { name: "Add reaction" });
+    };
+
+    it("moves the add-reaction control ahead of the reactions in an own-message bubble", () => {
+        // The footer is right-aligned for own messages, so an add-reaction control
+        // left at the end of the row reserves space between the reactions and the
+        // bubble edge even while it is hidden.
+        expect(getComputedStyle(renderAddReactionButton(true)).order).toBe("-1");
+    });
+
+    it("keeps the add-reaction control after the reactions in another user's bubble", () => {
+        expect(getComputedStyle(renderAddReactionButton(false)).order).toBe("0");
     });
 });

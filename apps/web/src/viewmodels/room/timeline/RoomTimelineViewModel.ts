@@ -10,18 +10,22 @@ import {
     Direction,
     RoomEvent,
     EventType,
+    EventStatus,
     MatrixEventEvent,
     NotificationCountType,
     ReceiptType,
+    RoomStateEvent,
     type IRoomTimelineData,
     type MatrixClient,
     type MatrixEvent,
     type Room,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type {
+    EventSendState,
     TimelineViewSnapshot,
     TimelineViewActions,
     TimelineItem,
@@ -32,6 +36,14 @@ import { haveRendererForEvent, pickFactory } from "../../../events/EventTileFact
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { clearRoomNotification } from "../../../utils/notifications";
+import { findLastSuccessfulWeSent } from "./event-tile/EventTileReceiptState";
+import {
+    getReadReceiptsByShownEvent,
+    getReadReceiptsForEvent,
+    reuseUnchangedReadReceipts,
+    type ShownReadReceipt,
+} from "../../../utils/read-receipts";
+import type { IReadReceiptProps } from "../../../components/views/rooms/EventTile";
 
 const DEBUG_TIMELINE = false;
 
@@ -42,6 +54,26 @@ const debug = (message: string): void => {
 
 /** How long after the last scroll event to wait before sending a read receipt (ms). */
 const READ_RECEIPT_DEBOUNCE_MS = 500;
+
+/**
+ * The send state of a row's message, read as `MessagePanel` reads it for the old timeline: the
+ * associated status also covers our pending edit or redaction of a message the server already has.
+ */
+function sendStateOf(event: MatrixEvent): EventSendState | undefined {
+    switch (event.getAssociatedStatus()) {
+        case EventStatus.ENCRYPTING:
+            return "encrypting";
+        case EventStatus.QUEUED:
+        case EventStatus.SENDING:
+            return "sending";
+        case EventStatus.SENT:
+            return "sent";
+        case EventStatus.NOT_SENT:
+            return "failed";
+        default:
+            return undefined;
+    }
+}
 
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
@@ -104,11 +136,32 @@ const PAGINATE_DECRYPT_WAIT_MS = 500;
  */
 type LoadTarget = { kind: "live" } | { kind: "permalink"; eventId: string } | { kind: "restore"; eventId: string };
 
+/**
+ * What the room timeline publishes to its view: the shared snapshot, plus the per-message detail
+ * the legacy tiles need and the shared view has no opinion about.
+ */
+export interface RoomTimelineViewSnapshot extends TimelineViewSnapshot {
+    /**
+     * Other users' read receipts, keyed by the id of the message they are drawn beside. A receipt
+     * for an event that is not shown (a reaction, a membership change) is drawn beside the last
+     * shown message before it. Empty while read receipts are turned off.
+     */
+    readReceiptsByEvent: ReadonlyMap<string, IReadReceiptProps[]>;
+    /**
+     * The newest message of ours that has reached the server, when it is also the newest message
+     * that could carry a receipt — the one tile that shows a "Sent" tick in place of read
+     * receipts. Mirrors `lastSuccessfulWeSent` in the old MessagePanel.
+     */
+    lastSuccessfulEventId: string | null;
+}
+
 export interface RoomTimelineViewModelOpts {
     client: MatrixClient;
     room: Room;
     /** Optional anchor for initial load (permalink, search result). Shown highlighted and centred. */
     initialEventId?: string;
+    /** Whether other users' read receipts are drawn; see {@link RoomTimelineViewModel.setShowReadReceipts}. Default true. */
+    showReadReceipts?: boolean;
 }
 
 /**
@@ -135,17 +188,29 @@ export interface RoomTimelineViewModelOpts {
  *    message, and returning to a room restores where the reader left off. See `LoadTarget`.
  *  - **Read state.** Tracking the unread marker, deciding whether to offer a jump to it, and
  *    sending read receipts as the reader catches up.
+ *  - **Messages being sent.** Drawn from the room's pending list until the server echoes them,
+ *    with the row's `sendState` saying how far each has got. See `pendingEventsToShow` and
+ *    `onLocalEchoUpdated`.
  *
  * A note on timing: the constructor deliberately does nothing but set fields. React's StrictMode
  * builds two instances in development and discards one, so anything that subscribes or fetches
  * belongs in {@link start}, which the view calls exactly once.
  */
 export class RoomTimelineViewModel
-    extends BaseViewModel<TimelineViewSnapshot, RoomTimelineViewModelOpts>
+    extends BaseViewModel<RoomTimelineViewSnapshot, RoomTimelineViewModelOpts>
     implements TimelineViewActions
 {
     private readonly opts: RoomTimelineViewModelOpts;
     private timelineWindow: TimelineWindow;
+
+    /** Whether other users' read receipts are drawn; see {@link setShowReadReceipts}. */
+    private showReadReceipts: boolean;
+
+    /**
+     * Where each user's receipt was last drawn, so a receipt that moves onto an event we do not
+     * hold stays where it was; see {@link getReadReceiptsByShownEvent}.
+     */
+    private receiptsByUserId: Map<string, ShownReadReceipt> = new Map();
 
     /**
      * Cache of continuation decisions keyed by event id.
@@ -165,14 +230,21 @@ export class RoomTimelineViewModel
     /** Set by {@link start} so a double-start (e.g. via StrictMode) is a no-op. */
     private started = false;
 
+    /** Set while a rebuild is queued for the next microtask; see {@link scheduleRebuild}. */
+    private rebuildQueued = false;
+
+    /** Set while a {@link load} is running; see {@link scheduleRebuild}. */
+    private loading = false;
+
     /**
      * In-flight backward pagination chain, or null when idle.
      *
      * A single `Promise<void>` is created for the first `onStartReached` call.
-     * Any further `onStartReached` calls while the chain is running simply
-     * return early — they point at the same in-flight work rather than
-     * starting a parallel one. When the chain settles this is set back to null,
-     * and the next `onStartReached` creates a fresh chain.
+     * Any further `onStartReached` calls while the chain is running set
+     * {@link backwardRerunRequested} instead of starting a parallel chain.
+     * When the chain settles this is set back to null (running one follow-up
+     * chain if a request arrived meanwhile), and the next `onStartReached`
+     * creates a fresh chain.
      *
      * Using a stored promise as the guard ensures coalescing survives the async
      * gap between when the chain finishes and when the next `onStartReached` fires.
@@ -181,6 +253,21 @@ export class RoomTimelineViewModel
 
     /** Mirror of {@link backwardPaginateChain} for the forward direction. */
     private forwardPaginateChain: Promise<void> | null = null;
+
+    /**
+     * Set when the view asks for more history while a fetch is already running, and
+     * acted on by running one more fetch once that one finishes.
+     *
+     * Coalescing must not *lose* the request: the view de-duplicates edge reports, and its
+     * dedup key can collide across a chain boundary (observed: the spinner row's removal
+     * exactly cancelling out one new event, leaving the same item count at the same scroll
+     * index). When that happens the view never re-fires, and without this flag the timeline
+     * sits stalled at the edge with more history available until the user jiggles the scroll.
+     */
+    private backwardRerunRequested = false;
+
+    /** Mirror of {@link backwardRerunRequested} for the forward direction. */
+    private forwardRerunRequested = false;
 
     /**
      * The real timeline content: messages, date separators and the unread marker, with no
@@ -294,9 +381,12 @@ export class RoomTimelineViewModel
             canJumpToReadMarker: false,
             numUnreadMessages: 0,
             hasHighlights: false,
+            readReceiptsByEvent: new Map(),
+            lastSuccessfulEventId: null,
         });
 
         this.opts = opts;
+        this.showReadReceipts = opts.showReadReceipts ?? true;
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet(), {
             windowLimit: WINDOW_LIMIT,
         });
@@ -362,6 +452,47 @@ export class RoomTimelineViewModel
             MatrixEventEvent.Decrypted,
             this.onEventDecrypted as (...args: unknown[]) => void,
         );
+        // Messages of ours changing send state or getting their server id.
+        this.disposables.trackListener(
+            this.opts.room,
+            RoomEvent.LocalEchoUpdated,
+            this.onLocalEchoUpdated as (...args: unknown[]) => void,
+        );
+        // Other users' read receipts moving.
+        this.disposables.trackListener(this.opts.room, RoomEvent.Receipt, this.onRoomReceipt);
+        // Members loading or changing profile, whose receipts carry their avatar and name. Listened
+        // for on the client, which re-emits it for whichever state object the room currently has.
+        this.disposables.trackListener(
+            this.opts.client,
+            RoomStateEvent.Update,
+            this.onRoomStateUpdate as (...args: unknown[]) => void,
+        );
+    }
+
+    /** Someone's read receipt moved. Only the receipts change, so the rows are left alone. */
+    private onRoomReceipt = (): void => {
+        this.updateReadReceipts("receipt");
+    };
+
+    private onRoomStateUpdate = (state: RoomState): void => {
+        if (state.roomId !== this.opts.room.roomId) return;
+        this.updateReadReceipts("members");
+    };
+
+    /**
+     * Update the receipts shown beside the current rows. Skipped while a load or rebuild is due,
+     * since the rows are about to change and that republish updates the receipts anyway.
+     */
+    private updateReadReceipts(reason: string): void {
+        if (this.isDisposed || !this.showReadReceipts || this.loading || this.rebuildQueued) return;
+        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, reason);
+    }
+
+    /** Show or hide other users' read receipts — the room-level `showReadReceipts` setting. */
+    public setShowReadReceipts(show: boolean): void {
+        if (show === this.showReadReceipts) return;
+        this.showReadReceipts = show;
+        this.mergeSnapshot({ readReceiptsByEvent: this.computeReadReceipts() }, "show-read-receipts");
     }
 
     private onRoomTimeline = (
@@ -531,6 +662,60 @@ export class RoomTimelineViewModel
         }
     }
 
+    /**
+     * A message of ours has just left the composer, changed send state, or been echoed by the
+     * server. The rebuild waits for a microtask ({@link scheduleRebuild}) so that, on an echo, it
+     * runs after the SDK has moved the message from the pending list into the timeline (where
+     * {@link onRoomTimeline} extends the window to hold it); a rebuild in between would find it in
+     * neither and drop its row for a frame.
+     */
+    private onLocalEchoUpdated = (event: MatrixEvent, _room: Room, oldEventId?: string): void => {
+        if (this.isDisposed) return;
+        // Keep the row's continuation decision, so its avatar does not flip when the id changes.
+        const newEventId = event.getId();
+        if (oldEventId && newEventId && oldEventId !== newEventId) {
+            const cached = this.continuationCache.get(oldEventId);
+            if (cached !== undefined) {
+                this.continuationCache.set(newEventId, cached);
+                this.continuationCache.delete(oldEventId);
+            }
+        }
+        this.scheduleRebuild();
+    };
+
+    /**
+     * Rebuild and republish on the next microtask. Requests made before it runs share that one
+     * rebuild, so changes fired together publish once. Does nothing while a {@link load} is
+     * running: its own build, when it finishes, includes whatever is pending by then, and a
+     * rebuild in the meantime would publish a half-loaded window without the load's anchor.
+     */
+    private scheduleRebuild(): void {
+        if (this.rebuildQueued || this.loading) return;
+        this.rebuildQueued = true;
+        queueMicrotask(() => {
+            this.rebuildQueued = false;
+            if (this.isDisposed || this.loading) return;
+            const rowCountBefore = this.snapshot.current.items.length;
+            this.commitItems(this.buildItems());
+            this.republish("local-echo", {
+                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                canJumpToReadMarker: this.computeCanJumpToReadMarker(this.baseItems),
+            });
+            // A message taking its server id keeps its row, so the view reports no new range, yet
+            // the bottom row may now take a receipt. Re-read it from the range last reported.
+            if (this.snapshot.current.items.length === rowCountBefore) this.updateLastBottomEventAfterEcho();
+        });
+    }
+
+    /** Re-derives {@link lastBottomEventId} from the last reported range, sending a receipt if it moved. */
+    private updateLastBottomEventAfterEcho(): void {
+        if (this.lastBottomEventId === null || this.snapshot.current.pendingAnchor !== null) return;
+        const bottom = this.bottomConfirmedEventId(this.snapshot.current.items);
+        if (bottom === null || bottom === this.lastBottomEventId) return;
+        this.lastBottomEventId = bottom;
+        this.scheduleReadReceipt();
+    }
+
     private onRoomAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() !== EventType.FullyRead) return;
         const newMarker = (ev.getContent()?.event_id as string | undefined) ?? null;
@@ -571,6 +756,7 @@ export class RoomTimelineViewModel
     }
 
     private async load(target: LoadTarget): Promise<void> {
+        this.loading = true;
         debug(
             `[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`,
         );
@@ -657,6 +843,8 @@ export class RoomTimelineViewModel
             this.backwardSpinnerVisible = false;
             this.forwardSpinnerVisible = false;
             this.republish(`load(${target.kind})-error`);
+        } finally {
+            this.loading = false;
         }
     }
 
@@ -790,13 +978,7 @@ export class RoomTimelineViewModel
         this.visibleStartArrayIndex = Math.max(0, startIndex);
         this.visibleEndArrayIndex = Math.max(0, endIndex);
 
-        for (let i = endIndex; i >= startIndex; i--) {
-            const item = items[i];
-            if (item?.kind === "event") {
-                this.lastBottomEventId = item.key;
-                break;
-            }
-        }
+        this.lastBottomEventId = this.bottomConfirmedEventId(items) ?? this.lastBottomEventId;
 
         // Recompute canJumpToReadMarker when the visible range moves.
         if (this.visibleStartArrayIndex !== prevStartArrayIndex || this.visibleEndArrayIndex !== prevEndArrayIndex) {
@@ -806,13 +988,30 @@ export class RoomTimelineViewModel
             }
         }
 
-        // Debounce sending a read receipt for the last visible event.
+        this.scheduleReadReceipt();
+    };
+
+    /**
+     * The bottommost visible message that has reached the server. A message still being sent has
+     * no server id yet, so it can't take a read receipt, and the scroll position can't be restored
+     * to it when the room is next opened; the newest confirmed message stands in for it.
+     */
+    private bottomConfirmedEventId(items: readonly TimelineItem[]): string | null {
+        for (let i = this.visibleEndArrayIndex; i >= this.visibleStartArrayIndex; i--) {
+            const item = items[i];
+            if (item?.kind === "event" && !this.opts.room.hasPendingEvent(item.key)) return item.key;
+        }
+        return null;
+    }
+
+    /** Debounce sending a read receipt for the last visible event. */
+    private scheduleReadReceipt(): void {
         if (this.readReceiptDebounceTimer !== null) clearTimeout(this.readReceiptDebounceTimer);
         this.readReceiptDebounceTimer = setTimeout(() => {
             this.readReceiptDebounceTimer = null;
             this.sendAutoReadReceipt();
         }, READ_RECEIPT_DEBOUNCE_MS);
-    };
+    }
 
     /**
      * Sends a read receipt for the last visible event, debounced from `onVisibleRangeChanged`.
@@ -1011,13 +1210,15 @@ export class RoomTimelineViewModel
     // ── Pagination ───────────────────────────────────────────────────
 
     /**
-     * Entry point for backward pagination. Coalesces concurrent calls behind a
-     * single in-flight chain; the view will re-fire `onStartReached` naturally
-     * if more items are needed after the chain settles.
+     * Asks for older messages. Only one fetch runs at a time; a request that arrives
+     * while one is running is remembered and run afterwards — see
+     * {@link backwardRerunRequested} for why it cannot just be dropped.
      */
     private triggerBackwardPaginate(): void {
         if (this.backwardPaginateChain) {
-            debug(`[TimelineVM] paginate(backward) coalesced — chain in flight`);
+            // Remember it rather than dropping it; see backwardRerunRequested.
+            this.backwardRerunRequested = true;
+            debug(`[TimelineVM] paginate(backward) coalesced — chain in flight, rerun queued`);
             return;
         }
 
@@ -1037,6 +1238,11 @@ export class RoomTimelineViewModel
 
         this.backwardPaginateChain = this.runPaginateChain(Direction.Backward).finally(() => {
             this.backwardPaginateChain = null;
+            if (this.backwardRerunRequested && !this.isDisposed) {
+                this.backwardRerunRequested = false;
+                debug(`[TimelineVM] paginate(backward) — running queued rerun`);
+                this.triggerBackwardPaginate();
+            }
         });
     }
 
@@ -1046,12 +1252,13 @@ export class RoomTimelineViewModel
      */
     private triggerForwardPaginate(): void {
         if (this.forwardPaginateChain) {
-            debug(`[TimelineVM] paginate(forward) coalesced — chain in flight`);
+            // Remember it rather than dropping it; see backwardRerunRequested.
+            this.forwardRerunRequested = true;
+            debug(`[TimelineVM] paginate(forward) coalesced — chain in flight, rerun queued`);
             return;
         }
 
-        // Don't paginate while still placing the initial anchor — see
-        // triggerBackwardPaginate for why.
+        // Wait until the first messages have been positioned; see triggerBackwardPaginate.
         if (this.snapshot.current.pendingAnchor !== null) {
             debug(`[TimelineVM] paginate(forward) skipped — anchor placement pending`);
             return;
@@ -1073,6 +1280,11 @@ export class RoomTimelineViewModel
 
         this.forwardPaginateChain = this.runPaginateChain(Direction.Forward).finally(() => {
             this.forwardPaginateChain = null;
+            if (this.forwardRerunRequested && !this.isDisposed) {
+                this.forwardRerunRequested = false;
+                debug(`[TimelineVM] paginate(forward) — running queued rerun`);
+                this.triggerForwardPaginate();
+            }
         });
     }
 
@@ -1092,7 +1304,7 @@ export class RoomTimelineViewModel
      * Publish {@link baseItems} to the View, layering spinners on top:
      * `[ (backward?), ...baseItems, (forward?) ]`.
      */
-    private republish(reason: string, extra: Partial<TimelineViewSnapshot> = {}): void {
+    private republish(reason: string, extra: Partial<RoomTimelineViewSnapshot> = {}): void {
         const items: TimelineItem[] = [];
         if (this.backwardSpinnerVisible) {
             items.push({ kind: "loading", key: RoomTimelineViewModel.BACKWARD_LOADING_KEY });
@@ -1101,7 +1313,17 @@ export class RoomTimelineViewModel
         if (this.forwardSpinnerVisible) {
             items.push({ kind: "loading", key: RoomTimelineViewModel.FORWARD_LOADING_KEY });
         }
-        this.mergeSnapshot({ items, ...extra }, reason);
+        const events = this.loadedEvents();
+        const isShown = this.shownEventTest();
+        this.mergeSnapshot(
+            {
+                items,
+                readReceiptsByEvent: this.computeReadReceipts(events, isShown),
+                lastSuccessfulEventId: this.computeLastSuccessfulEventId(events, isShown),
+                ...extra,
+            },
+            reason,
+        );
     }
 
     /**
@@ -1300,11 +1522,75 @@ export class RoomTimelineViewModel
 
     // ── Snapshot construction ────────────────────────────────────────
 
+    /**
+     * Messages of ours the server has not echoed yet. The client holds them outside the timeline
+     * (`PendingEventOrdering.Detached`, set in MatrixClientPeg), so without this they would only
+     * show after the next sync, and never as sending or failed. As in the old timeline, they go
+     * last, and only while the newest messages are loaded so they never land in old history.
+     * Thread replies being sent are left out; pending edits and reactions are dropped later by
+     * {@link shouldIncludeEvent}, like any other event.
+     */
+    private pendingEventsToShow(): MatrixEvent[] {
+        if (this.timelineWindow.canPaginate(Direction.Forward)) return [];
+        const pendingEvents = this.opts.room.getPendingEvents();
+        return pendingEvents.filter((event) => this.opts.room.eventShouldLiveIn(event, pendingEvents).shouldLiveInRoom);
+    }
+
+    /** The loaded events followed by our pending ones, oldest first: what {@link buildItems} draws rows from. */
+    private loadedEvents(): MatrixEvent[] {
+        return [...this.timelineWindow.getEvents(), ...this.pendingEventsToShow()];
+    }
+
     private static readonly CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000;
     private static readonly CONTINUED_TYPES = new Set(["m.room.message", "m.sticker"]);
 
+    /**
+     * Which read receipts to draw beside which message, worked out by the same code as the old
+     * timeline's, over the loaded and pending events, with a row for each event in {@link baseItems}.
+     */
+    private computeReadReceipts(
+        events = this.loadedEvents(),
+        isShown = this.shownEventTest(),
+    ): ReadonlyMap<string, IReadReceiptProps[]> {
+        const previous = this.snapshot.current.readReceiptsByEvent;
+        if (!this.showReadReceipts) {
+            this.receiptsByUserId = new Map();
+            return previous.size === 0 ? previous : new Map();
+        }
+        const { room, client } = this.opts;
+        const myUserId = client.getSafeUserId();
+        const { receiptsByEvent, receiptsByUserId } = getReadReceiptsByShownEvent(
+            events,
+            isShown,
+            (event) => getReadReceiptsForEvent(event, room, room, client, myUserId),
+            this.receiptsByUserId,
+        );
+        this.receiptsByUserId = receiptsByUserId;
+        // Keep what is already published where nothing moved, so those rows are not redrawn.
+        return reuseUnchangedReadReceipts(previous, receiptsByEvent);
+    }
+
+    /** The message showing a "Sent" tick in place of read receipts, if any; see {@link findLastSuccessfulWeSent}. */
+    private computeLastSuccessfulEventId(
+        events: readonly MatrixEvent[],
+        isShown: (event: MatrixEvent) => boolean,
+    ): string | null {
+        // Pending messages count: one the server has accepted takes the tick before its echo arrives.
+        const index = findLastSuccessfulWeSent(events, isShown, this.opts.client.getSafeUserId());
+        return index >= 0 ? (events[index].getId() ?? null) : null;
+    }
+
+    /** Whether an event has a row of its own in {@link baseItems}. */
+    private shownEventTest(): (event: MatrixEvent) => boolean {
+        const shownEventIds = new Set<string>();
+        for (const item of this.baseItems) {
+            if (item.kind === "event") shownEventIds.add(item.key);
+        }
+        return (event) => shownEventIds.has(event.getId()!);
+    }
+
     private buildItems(): TimelineItem[] {
-        const events: MatrixEvent[] = this.timelineWindow.getEvents();
+        const events: MatrixEvent[] = this.loadedEvents();
         const items: TimelineItem[] = [];
         let lastDate: string | null = null;
         let prevEvent: MatrixEvent | null = null;
@@ -1354,12 +1640,7 @@ export class RoomTimelineViewModel
                 items.push({
                     key: `date-${dateKey}`,
                     kind: "date-separator",
-                    label: eventDate.toLocaleDateString(undefined, {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                    }),
+                    ts: event.getTs(),
                 });
                 emittedDateKeys.add(dateKey);
                 prevEvent = null; // date separator breaks continuation
@@ -1371,8 +1652,10 @@ export class RoomTimelineViewModel
             items.push({
                 key: eventId,
                 kind: "event",
+                event,
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
                 lastInSection: false, // computed in the post-pass below, once the next event is known
+                sendState: sendStateOf(event),
             });
 
             // Insert the read-marker item directly after the event it belongs to.
@@ -1399,7 +1682,7 @@ export class RoomTimelineViewModel
         }
 
         debug(
-            `[TimelineVM][buildItems] emitted ${items.length} items from ${events.length} window events, ` +
+            `[TimelineVM][buildItems] emitted ${items.length} items from ${events.length} window+pending events, ` +
                 `filtered=${filteredCount}`,
         );
 
@@ -1462,10 +1745,13 @@ export class RoomTimelineViewModel
     /**
      * Return the continuation flag for `event`, using a cached value if we
      * have already seen the event before. See `continuationCache` for why.
+     *
+     * Local echoes are not cached: another sender's event can arrive above one, and a cached
+     * continuation would then draw our message as part of theirs.
      */
     private getCachedContinuation(eventId: string, prev: MatrixEvent | null, cur: MatrixEvent): boolean {
         const cached = this.continuationCache.get(eventId);
-        if (cached !== undefined) return cached;
+        if (cached !== undefined && !this.opts.room.hasPendingEvent(eventId)) return cached;
         const value = this.shouldFormContinuation(prev, cur);
         this.continuationCache.set(eventId, value);
         return value;
@@ -1500,7 +1786,7 @@ export class RoomTimelineViewModel
      * a UI jump: filter the console on `[VM-merge]` and find the merge whose
      * field changes line up with the symptom.
      */
-    private mergeSnapshot(partial: Partial<TimelineViewSnapshot>, reason: string): void {
+    private mergeSnapshot(partial: Partial<RoomTimelineViewSnapshot>, reason: string): void {
         const before = this.snapshot.current;
         const changes: string[] = [];
         for (const [k, v] of Object.entries(partial)) {

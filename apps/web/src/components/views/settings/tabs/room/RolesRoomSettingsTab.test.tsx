@@ -165,14 +165,14 @@ describe("RolesRoomSettingsTab", () => {
     });
 
     describe("Banned users", () => {
-        it("should not render banned section when no banned users", () => {
+        it("should not render banned section when no banned users", async () => {
             const room = new Room(roomId, cli, userId);
-            renderTab(room);
+            await renderTab(room);
 
             expect(screen.queryByText("Banned users")).not.toBeInTheDocument();
         });
 
-        it("renders banned users", () => {
+        it("renders banned users", async () => {
             const bannedMember = new RoomMember(roomId, "@bob:server.org");
             bannedMember.setMembershipEvent(
                 new MatrixEvent({
@@ -186,12 +186,12 @@ describe("RolesRoomSettingsTab", () => {
             );
             const room = new Room(roomId, cli, userId);
             vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bannedMember]);
-            renderTab(room);
+            await renderTab(room);
 
             expect(screen.getByText("Banned users").parentElement).toMatchSnapshot();
         });
 
-        it("uses banners display name when available", () => {
+        it("uses banners display name when available", async () => {
             const bannedMember = new RoomMember(roomId, "@bob:server.org");
             const senderMember = new RoomMember(roomId, "@alice:server.org");
             senderMember.name = "Alice";
@@ -208,7 +208,7 @@ describe("RolesRoomSettingsTab", () => {
             const room = new Room(roomId, cli, userId);
             vi.spyOn(room, "getMembersWithMembership").mockReturnValue([bannedMember]);
             vi.spyOn(room, "getMember").mockReturnValue(senderMember);
-            renderTab(room);
+            await renderTab(room);
 
             expect(screen.getByTitle("Banned by Alice")).toBeInTheDocument();
         });

@@ -14,6 +14,7 @@ import { useViewModel, type ViewModel } from "../core/viewmodel";
 import { StatusPillView } from "./StatusPillView";
 import { CustomStatusView } from "./CustomStatusView";
 import styles from "./SetStatusView.module.css";
+import classNames from "classnames";
 
 const STATUSES = {
     in_a_meeting: { emoji: "💬", textKey: _td("status|set_status|in_a_meeting") },
@@ -38,6 +39,12 @@ export interface SetStatusViewSnapshot {
      * choosing an emoji for a custom status.
      */
     recentEmojis?: string[];
+
+    /**
+     * If true, the view will show as disabled and cannot be interacted with.
+     * Default: false
+     */
+    disabled?: boolean;
 }
 
 export interface SetStatusViewActions {
@@ -88,7 +95,7 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
 }
 
 export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
-    const { userStatus, recentEmojis } = useViewModel(vm);
+    const { userStatus, recentEmojis, disabled } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
 
     const renderItem = useCallback((value: StatusValue | null): React.ReactNode => {
@@ -119,8 +126,9 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
         const trigger = (
             <div className={styles.setStatusContainer}>
                 <Link
-                    className={styles.setStatusTrigger}
+                    className={classNames(styles.setStatusTrigger, { [styles.disabledTrigger]: disabled })}
                     aria-label={_t("status|set_status|set_status_prompt")}
+                    aria-disabled={disabled}
                     {...props}
                 >
                     <ReactionIcon />
@@ -163,6 +171,7 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
             trigger={renderTrigger}
             onValueChange={onValueChange}
             renderItem={renderItem}
+            disabled={disabled}
         />
     );
 }

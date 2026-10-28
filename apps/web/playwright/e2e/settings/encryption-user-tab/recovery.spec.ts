@@ -54,21 +54,16 @@ test.describe("Recovery section in Encryption tab", () => {
         },
     );
 
-    test("should setup the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
+    test("should set up the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
         await verifySession(app, recoveryKey.encodedPrivateKey!);
         await util.removeSecretStorageDefaultKeyId();
 
         // The key backup is deleted and the user needs to set it up
         const dialog = await util.openEncryptionTab();
-        const setupButton = dialog.getByRole("button", { name: "Get recovery key" });
+        const setupButton = dialog.getByRole("button", { name: "Create recovery key" });
         await expect(setupButton).toBeVisible();
         await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("set-up-recovery.png");
         await setupButton.click();
-
-        // Display an informative panel about the recovery key
-        await expect(dialog.getByRole("heading", { name: "Get recovery key" })).toBeVisible();
-        await expect(util.getEncryptionTabContent()).toMatchScreenshot("set-up-key-1-encryption-tab.png");
-        await dialog.getByRole("button", { name: "Continue" }).click();
 
         // Display the new recovery key and click on the copy button
         await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();

@@ -42,7 +42,7 @@ import {
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { CallStore } from "../stores/CallStore";
+import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import DMRoomMap from "../utils/DMRoomMap";
 import ToastStore from "../stores/ToastStore";
@@ -55,7 +55,7 @@ function makeNotificationEvent(room: Room, content: IContent = {}): MatrixEvent 
     const ts = Date.now();
     const notificationContent = {
         "notification_type": "notification",
-        "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
+        "m.relates_to": { rel_type: "m.reference", event_id: "$memberEventId" },
         "m.mentions": { user_ids: [], room: true },
         "lifetime": 3000,
         "sender_ts": ts,
@@ -354,9 +354,11 @@ describe("IncomingCallToast", () => {
     });
 
     it("closes toast when the call event is redacted", async () => {
-        const callId = renderToast();
-
         const event = room.currentState.getStateEvents(MockedCall.EVENT_TYPE, "1")!;
+        const callId = renderToast(
+            makeNotificationEvent(room, { "m.relates_to": { rel_type: "m.reference", event_id: event.getId() } }),
+        );
+
         room.emit(MatrixEventEvent.BeforeRedaction, event, {} as unknown as MatrixEvent);
 
         await waitFor(() =>
@@ -382,6 +384,14 @@ describe("IncomingCallToast", () => {
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId)),
         );
+    });
+
+    it("keeps ringing when a call in another room ends", async () => {
+        const callId = renderToast();
+        CallStore.instance.emit(CallStoreEvent.Call, null, "!other:example.org");
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(toastStore.dismissToast).not.toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
     });
 
     it("closes toast when a decline event was received", async () => {

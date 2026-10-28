@@ -28,8 +28,8 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     describe("Initial state is correct", () => {
-        it("should have correct initial state when panel was previously collapsed", () => {
-            SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, true);
+        it("should have correct initial state when panel was previously collapsed", async () => {
+            await SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, true);
             const vm = new ResizerViewModel(CallStore.instance);
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: true,
@@ -37,8 +37,8 @@ describe("LeftPanelResizerViewModel", () => {
             });
         });
 
-        it("should have correct initial state when panel was previously resized", () => {
-            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        it("should have correct initial state when panel was previously resized", async () => {
+            await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
             const vm = new ResizerViewModel(CallStore.instance);
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
@@ -76,9 +76,9 @@ describe("LeftPanelResizerViewModel", () => {
         }).not.toThrow();
     });
 
-    it("should noop on mouse drag", () => {
+    it("should noop on mouse drag", async () => {
         const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -97,9 +97,9 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
     });
 
-    it("should expand panel when a click wanders a little", () => {
+    it("should expand panel when a click wanders a little", async () => {
         const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -115,9 +115,9 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).toHaveBeenCalledWith("34%");
     });
 
-    it("should expand panel on a click that follows moving across the separator", () => {
+    it("should expand panel on a click that follows moving across the separator", async () => {
         const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -134,9 +134,9 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     describe("should expand panel on double click when panel is collapsed", () => {
-        it("to last non-zero width that the user set", () => {
+        it("to last non-zero width that the user set", async () => {
             const vm = new ResizerViewModel(CallStore.instance);
-            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+            await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
             const mockHandle = {
                 resize: vi.fn(),
                 isCollapsed: vi.fn().mockReturnValue(true),

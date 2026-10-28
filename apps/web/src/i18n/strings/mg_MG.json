@@ -27,7 +27,6 @@
         "cancel": "Hanafoana",
         "change": "Fiovana",
         "clear": "Mazava",
-        "click_to_copy": "Tsindrio raha handika",
         "close": "Akatona",
         "collapse": "Firodanana",
         "complete": "Feno",
@@ -1213,7 +1212,6 @@
         "element_call_video_rooms": "Efitrano fandraisan'orinan-tsary",
         "experimental_description": "Mahatsiaro andrana? Andramo ny hevitray farany amin'ny fampandrosoana. Tsy vita ireo endri-javatra ireo; mety hikorontana izy ireo, mety hiova, na mety ho latsaka tanteraka.<a> Hamantatra bebe kokoa</a> .",
         "experimental_section": "Fijery mialoha",
-        "feature_disable_call_per_sender_encryption": "Atsaharo ny encryption isaky ny mpandefa hoany Element Call",
         "feature_wysiwyg_composer_description": "Mampiasà lahatsoratra manankarena fa tsy Markdown ao amin'ny mpamoron-dahatsoratra.",
         "group_developer": "Fampandrosoana",
         "group_encryption": "Fanafenana",
@@ -1296,8 +1294,6 @@
     "language_dropdown_label": "Teny Dropdown",
     "leave_room_dialog": {
         "last_person_warning": "Ianao irery no eto. Raha miala ianao dia tsy hisy ho afaka hiditra amin'ny ho avy, anisan'izany ianao.",
-        "leave_room_question": "Tena te hiala ny efitrano ve ianao%(roomName)s ?",
-        "leave_space_question": "Tena te hiala amin'ilay toerana ve ianao%(spaceName)s ?",
         "room_rejoin_warning": "Tsy ampahibemaso ity efitrano ity. Tsy afaka miditra indray ianao raha tsy misy fanasana.",
         "space_rejoin_warning": "Tsy ampahibemaso ity habaka ity. Tsy afaka miditra indray ianao raha tsy misy fanasana."
     },
@@ -1357,7 +1353,6 @@
     },
     "member_list_back_action_label": "Mpikambana ao amin'ny efitrano",
     "message_edit_dialog_title": "Fanovana hafatra",
-    "migrating_crypto": "Mihantona mafy. Manavao ny Element izahay mba hahatonga ny fanafenana haingana kokoa sy azo antoka kokoa.",
     "mobile_guide": {
         "toast_accept": "Mampiasà fampiarana",
         "toast_description": "%(brand)sandrana amin'ny mpitety tranonkala finday. Raha te hanana traikefa tsara kokoa sy ny endri-javatra farany indrindra, ampiasao ny fampiharana teratany maimaim-poana.",
@@ -1663,7 +1658,6 @@
         "join_button_account": "Hiditra Mpikambana",
         "join_failed_needs_invite": "Hijery%(roomName)s , mila fanasana ianao",
         "join_the_discussion": "Miaraha aminy fifanakalozan-kevitra",
-        "join_title": "Midira ao amin'ny efitrano mba handray anjara",
         "join_title_account": "Midira aminy resaka miaraka amin'ny kaonty",
         "joining": "Miditra…",
         "joining_room": "Efitrano mitambatra…",
@@ -2925,10 +2919,6 @@
             "error_loading": "Tsy afaka nampiditra hetsika izay novaliana, na tsy misy izany na tsy manana alalana hijery azy ianao.",
             "in_reply_to": "<a>Ho valin'ny</a><pilule>",
             "in_reply_to_for_export": "Ho valin'ny<a> ity hafatra ity</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Efa hoentina any amin'ny tranokalan'ny antoko fahatelo ianao mba hahafahanao manamarina ny kaontinao hampiasaina%(integrationsUrl)s .Te hanohy ve ianao?",
-            "dialog_title": "Ampio ny fampidirana"
         },
         "self_redaction": "Voafafa ny hafatra",
         "send_state_encrypting": "Manidy ny hafatrao…",

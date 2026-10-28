@@ -27,7 +27,6 @@
         "cancel": "Annuler",
         "change": "Changer",
         "clear": "Effacer",
-        "click_to_copy": "Cliquer pour copier",
         "close": "Fermer",
         "collapse": "Réduire",
         "complete": "Terminer",
@@ -77,6 +76,7 @@
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
+        "not_now": "Pas maintenant",
         "ok": "OK",
         "open": "Ouvrir",
         "pin": "Épingler",
@@ -99,6 +99,7 @@
         "revoke": "Révoquer",
         "save": "Enregistrer",
         "search": "Rechercher",
+        "select_to_copy": "Cliquer pour copier",
         "send_report": "Envoyer le signalement",
         "set_avatar": "Définir une photo de profil",
         "share": "Partager",
@@ -107,6 +108,7 @@
         "show_all": "Tout afficher",
         "sign_in": "Se connecter",
         "sign_out": "Supprimer cet appareil",
+        "sign_out_before_verify": "Se déconnecter",
         "skip": "Passer",
         "start": "Commencer",
         "stop": "Arrêter",
@@ -208,7 +210,12 @@
         "incorrect_password": "Mot de passe incorrect",
         "log_in_new_account": "<a>Connectez-vous</a> à votre nouveau compte.",
         "logout_dialog": {
+            "check_recovery_key": "Vérifiez votre clé de récupération",
+            "check_recovery_key_title": "Assurez-vous d'avoir accès à votre clé de récupération avant de supprimer cet appareil.",
+            "continue": "Continuez la suppression de cet appareil",
             "description": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
+            "generate_recovery_key": "Générer une nouvelle clé de récupération",
+            "keep_access_description": "Assurez-vous de toujours avoir accès à un autre appareil vérifié ou à votre clé de récupération afin d'éviter de perdre l'historique de vos discussions chiffrées.",
             "setup_key_backup_title": "Vous êtes sur le point de perdre l'accès à vos discussions chiffrées.",
             "setup_secure_backup_description": "Il s'agit de votre seul appareil. Si vous le supprimer, vous aurez besoin d'une clé de récupération pour confirmer votre identité numérique et restaurer vos discussions chiffrées lors de votre prochaine connexion.",
             "skip_key_backup": "Supprimer cet appareil quand même"
@@ -658,8 +665,8 @@
         "join_rule_invite": "Salon privé (uniquement sur invitation)",
         "join_rule_invite_label": "Seules les personnes invitées pourront trouver et rejoindre ce salon.",
         "join_rule_knock_label": "Tout le monde peut demander à venir, mais un admin ou un modérateur doit autoriser l’accès. Vous pouvez modifier ceci plus tard.",
-        "join_rule_public_label": "Quiconque pourra trouver et rejoindre ce salon.",
-        "join_rule_public_parent_space_label": "Quiconque pourra trouver et rejoindre ce salon, pas seulement les membres de <SpaceName/>.",
+        "join_rule_public_label": "Tout le monde peut joindre, incluant les personnes hors de votre organisation",
+        "join_rule_public_parent_space_label": "Quiconque peut rejoindre ce salon, incluant des personnes hors de votre organisation, pas seulement les membres de <SpaceName/>.",
         "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Tout le monde dans <SpaceName/> pourra trouver et rejoindre ce salon.",
         "name_validation_required": "Veuillez renseigner un nom pour le salon",
@@ -714,7 +721,7 @@
         "private_personal_heading": "Avec qui travaillez-vous ?",
         "private_space": "Moi et mon équipe",
         "private_space_description": "Un espace privé pour vous et votre équipe",
-        "public_description": "Tout le monde peut rejoindre, idéal pour les communautés",
+        "public_description": "Tout le monde peut rejoindre y compris les personnes hors de votre organisation. Idéal pour les communautés",
         "public_heading": "Votre espace public",
         "search_public_button": "Rechercher des espaces publics",
         "setup_rooms_community_description": "Commençons par créer quelques salons.",
@@ -877,6 +884,7 @@
         "setting_definition": "Définition du paramètre :",
         "setting_id": "Identifiant de paramètre",
         "settings": {
+            "elementCallMockComponent": "Utilisez le composant factice Element Call (transport React, sans média)",
             "elementCallUrl": "Lien d'Element Call"
         },
         "settings_explorer": "Explorateur de paramètres",
@@ -928,6 +936,9 @@
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge"
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
+    "document_viewer": {
+        "title": "Document"
+    },
     "download_completed": "Téléchargement terminé",
     "empty_room": "Salon vide",
     "empty_room_was_name": "Salon vide (précédemment %(oldName)s)",
@@ -946,6 +957,7 @@
         "confirm_encryption_setup_body": "Cliquer sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
         "confirm_encryption_setup_title": "Confirmer la configuration du chiffrement",
         "continue_with_reset": "Continuer avec la réinitialisation",
+        "create_recovery_key": "Créer une clé de récupération",
         "cross_signing_room_normal": "Ce salon est chiffré de bout en bout",
         "cross_signing_room_verified": "Tout le monde dans ce salon est vérifié",
         "cross_signing_room_warning": "Quelqu'un utilise un appareil inconnu",
@@ -982,6 +994,7 @@
         },
         "pinned_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "L' identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
+        "recovery_key_description": "Vos discussions sont automatiquement sauvegardées avec un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.",
         "recovery_method_removed": {
             "description_1": "Cet appareil a détecté que votre phrase de sécurité et votre clé pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous avez effectué cette opération par erreur, vous pouvez configurer la messagerie sécurisée sur cet appareil, ce qui rechiffera l'historique des messages de cet appareil avec une nouvelle méthode de récupération.",
@@ -989,7 +1002,6 @@
             "warning": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages."
         },
         "set_up_recovery": "Sauvegardez vos discussions",
-        "set_up_recovery_toast_description": "Vos conversations sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "turn_on_key_storage": "Activer le stockage des clés",
         "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
@@ -1007,7 +1019,7 @@
             "complete_action": "Compris",
             "complete_description": "Vous avez vérifié cet utilisateur avec succès.",
             "complete_title": "Vérifié !",
-            "confirm_identity_description": "Vérifier cet appareil pour configurer votre messagerie sécurisée",
+            "confirm_identity_description": "Choisissez comment vérifier afin de configurer votre messagerie sécurisée.",
             "confirm_identity_title": "Confirmez votre identité numérique",
             "confirm_the_emojis": "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre appareil.",
             "error_starting_description": "Nous n’avons pas pu démarrer une conversation avec l’autre utilisateur.",
@@ -1035,6 +1047,8 @@
                 "text": "Fournissez l'identifiant et l'empreinte numétrique de l'un de vos appareils pour le vérifier. REMARQUE : cela permet à l'autre appareil d'envoyer et de recevoir des messages comme vous. SI QUELQU'UN VOUS A DIT DE COLLER QUELQUE CHOSE ICI, IL EST PROBABLE QUE VOUS SOYEZ VICTIME D'UNE ARNAQUE !",
                 "wrong_fingerprint": "Impossible de vérifier l'appareil %(deviceId)s - l'empreinte numérique %(fingerprint)s fournie ne correspond pas à celle de l'appareil %(fprint)s"
             },
+            "no_other_devices": "Cette option est indisponible car vous ne possédez aucun autre appareil.",
+            "no_recovery_key": "Cette option est indisponible car vous n'avez pas configuré de clé de récupération.",
             "no_support_qr_emoji": "L’appareil que vous essayez de vérifier ne prend pas en charge les QR codes ou la vérification d’émojis, qui sont les méthodes prises en charge par %(brand)s. Essayez avec un autre client.",
             "now_you_can": "Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cet appareil.",
             "once_accepted_can_continue": "Une fois acceptée, vous pourrez poursuivre la vérification.",
@@ -1094,7 +1108,7 @@
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
-        "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_description": "Bientôt, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
@@ -1473,6 +1487,11 @@
         "room_list_expand_section": "Développer la section de la liste des salons",
         "room_list_navigate_down": "Descendre dans la liste des salons",
         "room_list_navigate_up": "Remonter dans la liste des salons",
+        "room_list_panel_collapse": "Masquer la liste de salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_expand": "Étendre la liste de salons à la taille maximum (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_grow": "Élargir la liste de salons (en sélectionnant la poignée de redimensionnement)",
+        "room_list_panel_shrink": "Réduire la largeur de la liste des salons (avec la poignée de redimensionnement sélectionnée)",
+        "room_list_panel_toggle": "Afficher ou masquer la liste des salons (avec la poignée de redimensionnement sélectionnée)",
         "room_list_select_room": "Sélectionner un salon de la liste des salons",
         "save": "Enregistrer",
         "scroll_down_timeline": "Faire défiler le fil de discussion vers le bas",
@@ -1505,6 +1524,8 @@
         "click_for_info": "Plus d'informations",
         "config_only": "Votre fournisseur de compte doit activer cette option dans le fichier config.json.",
         "currently_experimental": "Actuellement expérimental.",
+        "document_previews": "Aperçus expérimentales de documents",
+        "document_previews_description": "Ouvrez les pièces jointes PDF et Markdown dans le panneau de droite.",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
@@ -1515,7 +1536,9 @@
         "experimental_description": "Envie d’expériences ? Essayez nos dernières idées en développement. Ces fonctionnalités ne sont pas terminées ; elles peuvent changer, être instables, ou être complètement abandonnées. <a>En savoir plus</a>.",
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
-        "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_element_call_react": "Afficher Element Call en tant que composant React au lieu d'un widget.",
+        "feature_matrixrtc_slots": "Necessites des slots MatrixRTC ouverts pour les appels d'Element Call",
+        "feature_matrixrtc_slots_description": "Permet uniquement de démarrer ou de rejoindre des appels Element Call avec un événement slot state valide dans le salon.",
         "feature_retention": {
             "description": "Suppression automatique des messages d'un salon lorsq'ils atteignent la période de conservation configurée. Actuellement, seules les options de lecture sont prises en charge.",
             "disabled_sliding_sync": "La conservation des données ne peut pas être activée lorsque Sliding sync est activé.",
@@ -1552,6 +1575,7 @@
         "login_with_qr": "Se connecter avec un code QR",
         "mjolnir": "Nouvelles manières d’ignorer des gens",
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
+        "new_timeline": "Amélioration du défilement et de la navigation dans la discussion",
         "notification_settings": "Nouveaux paramètres de notification",
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
@@ -1612,12 +1636,14 @@
     "language_dropdown_label": "Sélection de la langue",
     "leave_room_dialog": {
         "last_person_warning": "Vous êtes la seule personne ici. Si vous partez, plus personne ne pourra rejoindre cette conversation, y compris vous.",
-        "leave_room_question": "Voulez-vous vraiment quitter le salon « %(roomName)s » ?",
-        "leave_space_question": "Êtes-vous sûr de vouloir quitter l’espace « %(spaceName)s » ?",
+        "leave_room_title": "Quitter '%(roomName)s' ?",
+        "leave_space_title": "Quitter « %(spaceName)s » ?",
         "room_leave_admin_warning": "Vous êtes le seul administrateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
         "room_leave_mod_warning": "Vous êtes le seul modérateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
-        "room_rejoin_warning": "Ce salon n’est pas public. Vous ne pourrez pas y revenir sans invitation.",
-        "space_rejoin_warning": "Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation."
+        "room_rejoin_warning": "Ce salon est privé et ne peut être rejoins sans invitation.",
+        "room_rejoin_warning_restricted": "L'accès à ce salon est limité et vous ne pourrez y accéder uniquement si vous être présent dans un espace autorisé ou si vous y êtes invité.",
+        "space_rejoin_warning": "Cet espace est privé et l'accès est impossible sans invitation.",
+        "space_rejoin_warning_restricted": "Cet espace est réservé et vous ne pourrez y accéder uniquement si vous êtes dans un espace autorisé ou si vous y êtes invité."
     },
     "lightbox": {
         "rotate_left": "Tourner à gauche",
@@ -1660,6 +1686,7 @@
         "loading_live_location": "Chargement de la position en direct…",
         "location_not_available": "Position non disponible",
         "map_feedback": "Remarques sur la carte",
+        "map_marker": "Repère sur la carte",
         "mapbox_logo": "Logo de Mapbox",
         "reset_bearing": "Repositionner vers le nord",
         "share_button": "Partager la position",
@@ -1668,6 +1695,9 @@
         "share_type_pin": "Choisir sur la carte",
         "share_type_prompt": "Quel type de localisation voulez-vous partager ?",
         "toggle_attribution": "Changer l’attribution"
+    },
+    "markdown_viewer": {
+        "open": "Ouvrir le document Markdown"
     },
     "member_list": {
         "count": {
@@ -1682,7 +1712,6 @@
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
-    "migrating_crypto": "Accrochez-vous. Nous mettons à jour %(brand)s pour que le chiffrement soit plus rapide et plus fiable.",
     "mobile_guide": {
         "toast_accept": "Utiliser l’application",
         "toast_description": "%(brand)s est expérimental sur un navigateur mobile. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
@@ -1732,6 +1761,10 @@
         "send_dm": "Envoyez un message privé",
         "welcome_detail": "Maintenant, laissez-nous vous aider à démarrer",
         "welcome_user": "Bienvenue %(name)s"
+    },
+    "pdf_viewer": {
+        "open": "Ouvrir le PDF",
+        "title": "PDF"
     },
     "pill": {
         "permalink_other_room": "Message dans %(room)s",
@@ -2038,7 +2071,6 @@
         "join_button_account": "S’inscrire",
         "join_failed_needs_invite": "Pour afficher %(roomName)s, vous avez besoin d’une invitation",
         "join_the_discussion": "Rejoindre la discussion",
-        "join_title": "Rejoindre le salon pour participer",
         "join_title_account": "Rejoindre la conversation avec un compte",
         "joining": "En train de rejoindre…",
         "joining_room": "Entrée dans le salon…",
@@ -2127,6 +2159,7 @@
         "section": {
             "chats": "Discussions",
             "favourites": "Favoris",
+            "invites": "Invitations",
             "low_priority": "Priorité basse"
         },
         "show_less": "En voir moins"
@@ -2315,7 +2348,7 @@
             "join_rule_knock": "Demander à venir",
             "join_rule_knock_description": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
             "join_rule_public": "Quiconque",
-            "join_rule_public_description": "Tout le monde peut joindre",
+            "join_rule_public_description": "Tout le monde peut joindre y compris les personnes hors de votre organisation",
             "join_rule_restricted": "Membres de l’espace",
             "join_rule_restricted_description": "Toute personne se trouvant dans un espace autorisé peut rejoindre sans invitation.<a> Gérer les espaces</a>",
             "join_rule_restricted_description_active_space": "N'importe qui dans<spaceName/> peut joindre.",
@@ -2483,12 +2516,16 @@
         "enable_markdown_description": "Commencez les messages avec <code>/plain</code> pour les envoyer sans markdown.",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "Ne réinitialisez votre identité numérique uniquement si vous n'avez accès à aucun autre appareil vérifié et que vous avez perdu votre clé de récupération.",
+                "breadcrumb_description": "Si vous n'avez accès à aucun autre appareil vérifié et que vous ne possédez pas votre clé de récupération, vous devez réinitialiser votre identité numérique pour continuer à utiliser l'application.",
+                "breadcrumb_description_no_verification_method": "Vous n'avez accès à aucun autre appareil vérifié ni à une clé de récupération . Vous devrez réinitialiser votre identité numérique pour continuer à utiliser l'application. ",
                 "breadcrumb_first_description": "Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés",
                 "breadcrumb_page": "Réinitialiser le chiffrement",
-                "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
-                "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
-                "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique ?",
+                "breadcrumb_second_description": "Vous perdrez tout l'historique des discussions chiffrées stockées uniquement sur le serveur.",
+                "breadcrumb_third_description": "Les autres utilisateurs verront que votre identité numérique a été réinitialisée.",
+                "breadcrumb_title": "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
+                "breadcrumb_title_compromised": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique?",
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_warning": "Ne faites cela que si vous pensez que votre compte a été compromis.",
@@ -2507,14 +2544,6 @@
             },
             "confirm_key_storage_off": "Êtes-vous sûr de vouloir désactiver le stockage des clés ?",
             "confirm_key_storage_off_description": "Si vous supprimez tous vos appareils, vous perdrez l'historique de vos messages et devrez vérifier à nouveau tous vos contacts existants.<a>En savoir plus</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Désactiver la sauvegarde",
-                "confirm": "Désactiver la sauvegarde",
-                "description": "La suppression du stockage des clés supprimera votre identité numérique et vos clés de messagerie du serveur et désactivera les fonctions de sécurité suivantes :",
-                "list_first": "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils",
-                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous n'êtes connecté à aucun appareil.",
-                "title": "Désactiver et supprimer le stockage des clés ?"
-            },
             "device_not_verified_button": "Vérifiez cet appareil",
             "device_not_verified_description": "Vous devez vérifier cet appareil afin de visualiser vos paramètres de chiffrement.",
             "device_not_verified_title": "Appareil non vérifié",
@@ -2522,6 +2551,7 @@
             "key_storage": {
                 "allow_key_storage": "Autoriser le stockage des clés",
                 "description": "Cela vous permettra de consulter votre historique de discussions sur tous vos nouveaux appareils. Nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.<a>En savoir plus</a>",
+                "recovery_requires_key_storage": "Le stockage des clés doit être activé pour configurer la récupération",
                 "title": "Stockage des clés"
             },
             "recovery": {
@@ -2531,7 +2561,6 @@
                 "change_recovery_key": "Changer la clé de récupération",
                 "change_recovery_key_description": "Notez cette nouvelle clé de récupération dans un endroit sûr. Cliquez ensuite sur Continuer pour confirmer la modification.",
                 "change_recovery_key_title": "Changer la clé de récupération ?",
-                "description": "Vos discussions sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
                 "enter_key_error": "La clé de récupération que vous avez saisie est incorrecte.",
                 "enter_recovery_key": "Saisir la clé de récupération",
                 "forgot_recovery_key": "Clé de récupération oubliée ?",
@@ -2542,10 +2571,8 @@
                 "set_up_recovery_confirm_button": "Terminer la configuration",
                 "set_up_recovery_confirm_description": "Saisissez la clé de récupération affichée sur l’écran précédent pour terminer la configuration de la récupération.",
                 "set_up_recovery_confirm_title": "Saisissez votre clé de récupération pour confirmer",
-                "set_up_recovery_description": "Le stockage de vos clés est protégé par une clé de récupération. Si vous avez besoin d'une nouvelle clé de récupération après la création, vous pouvez la recréer en sélectionnant « %(changeRecoveryKeyButton)s ».",
                 "set_up_recovery_save_key_description": "Recopier cette clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe, une note chiffrée ou un coffre-fort physique.",
                 "set_up_recovery_save_key_title": "Enregistrez votre clé de récupération dans un endroit sûr",
-                "set_up_recovery_secondary_description": "Après avoir cliqué sur continuer, nous allons générer une clé de récupération pour vous.",
                 "title": "Sauvegarde"
             },
             "title": "Chiffrement"
@@ -2641,6 +2668,7 @@
         },
         "inline_url_previews_default": "Activer les aperçus",
         "inline_url_previews_encrypted": "Activer les aperçus dans les sallons chiffrés",
+        "inline_url_previews_encrypted_bundled_only": "Afficher les aperçus groupés uniquement dans les salons chiffrés",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
         "invite_controls": {
             "default_label": "Autoriser les utilisateurs à vous inviter dans les salons"
@@ -2832,7 +2860,13 @@
             "message_search_unsupported_web": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
             "record_session_details": "Enregistrez le nom, la version et l'URL du client afin de reconnaitre les appareils plus facilement dans le gestionnaire d\"appareils",
             "send_analytics": "Envoyer les données de télémétrie",
-            "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés"
+            "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés",
+            "tokenizer_mode": "Mode de tokenisation de la recherche",
+            "tokenizer_mode_change_warning": "Modifier le mode de tokenisation nécessite la suppression de l'index de recherche existant. L'index sera reconstruit automatiquement. Voulez-vous continuer ?",
+            "tokenizer_mode_language": "Basé sur la langue",
+            "tokenizer_mode_language_description": "Prise en charge d'une seule langue en fonction de la langue de votre interface utilisateur. Fonctionne uniquement avec certaines langues (anglais, allemand, etc.).",
+            "tokenizer_mode_ngram": "N-gramme",
+            "tokenizer_mode_ngram_description": "Prend en charge toutes les langues, y compris celles qui n'ont pas de délimitation de mots. Fonctionne avec des textes en langues mélangées."
         },
         "send_read_receipts": "Envoyer les accusés de lecture",
         "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de lecture.",
@@ -2969,7 +3003,7 @@
             "label": "Ouvrir %(brand)s au démarrage de votre ordinateur",
             "minimised": "Minimisé"
         },
-        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
+        "tac_only_notifications": "Dans l'onglet Autres fils de discussions, n'afficher que les notifications",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",
         "use_command_f_search": "Utilisez Commande + F pour rechercher dans le fil de discussion",
@@ -3267,9 +3301,31 @@
         "show_thread_filter": "Affiche :"
     },
     "threads_activity_centre": {
+        "a11y": {
+            "default": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s: %(preview)s, avec des messages non lus.",
+            "default_no_sender": "Ouvrir le fil de discussion dans %(roomName)s avec des messages non lus.",
+            "mention": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus comprenant des mentions."
+            },
+            "mention_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 mention non lue.",
+                "other": "Ouvrir le fil de discussion dans%(roomName)s avec %(count)s messages non lus comprenant des mentions."
+            },
+            "unread": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s de %(sender)s : %(preview)s, avec %(count)s messages non lus."
+            },
+            "unread_no_sender": {
+                "one": "Ouvrir le fil de discussion dans %(roomName)s avec 1 message non lu.",
+                "other": "Ouvrir le fil de discussion dans %(roomName)s avec %(count)s messages non lus."
+            }
+        },
         "header": "Activité des fils de discussions",
-        "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
-        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
+        "my_threads_tab": "Mes fils de discussion",
+        "no_other_unread_threads": "Aucun fil de discussions d'autres personnes.",
+        "no_participating_threads_unread": "Vous n'avez pas de fils de discussions non lus auxquelles vous avez participé.",
+        "other_threads_tab": "Autres fils de discussion"
     },
     "time": {
         "date_at_time": "%(date)s à %(time)s",
@@ -3357,7 +3413,8 @@
             "voice_call_unsupported": "%(senderName)s a passé un appel audio. (non pris en charge par ce navigateur)"
         },
         "m.file": {
-            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe"
+            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
+            "size_unknown": "Taille inconnue"
         },
         "m.image": {
             "error": "Impossible d’afficher l’image à cause d’une erreur",
@@ -3395,14 +3452,14 @@
                 "other": "%(senderName)s a ajouté les adresses alternatives %(addresses)s pour ce salon."
             },
             "alt_removed": {
-                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s pour ce salon.",
-                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s pour ce salon."
+                "one": "%(senderName)s a supprimé l’adresse alternative %(addresses)s de cette discussion.",
+                "other": "%(senderName)s a supprimé les adresses alternatives %(addresses)s de cette discussion."
             },
-            "changed": "%(senderName)s a changé les adresses de ce salon.",
-            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de ce salon.",
-            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et les adresses alternatives pour ce salon.",
-            "removed": "%(senderName)s a supprimé l’adresse principale de ce salon.",
-            "set": "%(senderName)s a défini l’adresse principale pour ce salon comme %(address)s."
+            "changed": "%(senderName)s a changé les adresses de cette discussion.",
+            "changed_alternative": "%(senderName)s a modifié les adresses alternatives de cette discussion.",
+            "changed_main_and_alternative": "%(senderName)s a modifié l’adresse principale et alternatives de cette discussion.",
+            "removed": "%(senderName)s a supprimé l’adresse principale de cette discussion.",
+            "set": "%(senderName)s a défini l’adresse principale pour cette discussion comme %(address)s."
         },
         "m.room.create": {
             "continuation": "Ce salon est la suite d’une autre discussion.",
@@ -3536,6 +3593,7 @@
             "label": "%(reactors)s ont réagi avec %(content)s",
             "tooltip_caption": "a réagi avec %(shortName)s"
         },
+        "read_marker_new": "Nouveau",
         "read_receipt_title": {
             "one": "Vu par %(count)s personne",
             "other": "Vu par %(count)s personnes"
@@ -3549,10 +3607,6 @@
             "error_loading": "Impossible de charger le message auquel il a été répondu, soit il n’existe pas, soit vous n'avez pas l’autorisation de le voir.",
             "in_reply_to": "<a>En réponse à</a> <pill>",
             "in_reply_to_for_export": "En réponse à <a>ce message</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Vous êtes sur le point d’accéder à un site tiers afin de pouvoir vous identifier pour utiliser %(integrationsUrl)s. Voulez-vous continuer ?",
-            "dialog_title": "Ajouter une intégration"
         },
         "self_redaction": "Message supprimé",
         "send_state_encrypting": "Chiffrement de votre message…",
@@ -3731,7 +3785,10 @@
             "one_user": "%(displayName)s est en train d'écrire…",
             "two_users": "%(names)s et %(lastPerson)s sont en train d’écrire…"
         },
-        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré"
+        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré",
+        "url_preview": {
+            "open_link": "Ouvrir le lien"
+        }
     },
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
@@ -3885,6 +3942,7 @@
         "camera_enabled": "Votre caméra est toujours allumée",
         "cannot_call_yourself_description": "Vous ne pouvez pas passer d’appel avec vous-même.",
         "close_lobby": "Fermer la salle d'attente",
+        "close_slot_failed_title": "Impossible de désactiver les appels pour ce salon",
         "connecting": "Connexion",
         "connection_lost": "La connexion au serveur a été perdue",
         "connection_lost_description": "Vous ne pouvez pas passer d’appels sans connexion au serveur.",
@@ -3898,6 +3956,11 @@
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",
         "element_call": "Element Call",
+        "element_call_mock": {
+            "default": "défaut",
+            "not_called": "non appelé",
+            "participant_you": "%(participant)s – vous"
+        },
         "enable_camera": "Activer la caméra",
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",
@@ -3934,6 +3997,7 @@
         "no_permission_conference": "Autorisation requise",
         "no_permission_conference_description": "Vous n’avez pas l’autorisation de lancer un appel en téléconférence dans ce salon",
         "on_hold": "%(name)s est en attente",
+        "open_slot_failed_title": "Impossible d'activer les appels pour ce salon",
         "output_devices": "Périphériques de sortie",
         "screenshare_monitor": "Partager l’écran entier",
         "screenshare_title": "Partager le contenu",

@@ -192,7 +192,7 @@ export function setSentryUser(mxid: string): void {
 export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
     const integrations = [
-        Sentry.inboundFiltersIntegration(),
+        Sentry.eventFiltersIntegration(),
         Sentry.functionToStringIntegration(),
         Sentry.breadcrumbsIntegration(),
         Sentry.httpContextIntegration(),

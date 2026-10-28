@@ -10,17 +10,22 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
     Direction,
+    EventStatus,
     EventType,
     MatrixEvent,
     MatrixEventEvent,
     PendingEventOrdering,
     ReceiptType,
+    RelationType,
     Room,
     RoomEvent,
+    RoomStateEvent,
+    type IEventRelation,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type TimelineItem } from "@element-hq/web-shared-components";
-import { createTestClient, mkMessage } from "test-utils";
+import { createTestClient, mkMembership, mkMessage } from "test-utils";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomTimelineViewModel } from "./RoomTimelineViewModel";
@@ -350,6 +355,31 @@ describe("RoomTimelineViewModel", () => {
             expect(paginate).not.toHaveBeenCalled();
         });
 
+        it("re-runs a fetch for an edge report that arrived while one was already in flight", async () => {
+            // The view only reports reaching the end when something has changed, and what
+            // it compares can look the same either side of a fetch — so it may never ask
+            // again. Dropping the request would leave the timeline stuck at the top.
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            let release!: () => void;
+            const gate = new Promise<boolean>((resolve) => {
+                release = () => resolve(false);
+            });
+            let calls = 0;
+            const { paginate } = stubWindow(vm, {
+                canPaginate: [Direction.Backward],
+                paginate: () => (++calls === 1 ? gate : Promise.resolve(false)),
+            });
+
+            vm.onStartReached();
+            await vi.waitFor(() => expect(paginate).toHaveBeenCalledTimes(1));
+            vm.onStartReached(); // lands while the first fetch is still running
+            release(); // first fetch settles, having found nothing new
+
+            await vi.waitFor(() => expect(paginate).toHaveBeenCalledTimes(2));
+        });
+
         it("clears the spinner when fetching fails", async () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
@@ -619,10 +649,12 @@ describe("RoomTimelineViewModel", () => {
             seedTimeline([makeMessage("$a")]);
             const vm = await createStartedViewModel();
             const before = room.listenerCount(RoomEvent.Timeline);
+            const receiptListenersBefore = room.listenerCount(RoomEvent.Receipt);
 
             vm.dispose();
 
             expect(room.listenerCount(RoomEvent.Timeline)).toBeLessThan(before);
+            expect(room.listenerCount(RoomEvent.Receipt)).toBeLessThan(receiptListenersBefore);
         });
 
         it("remembers where the reader got to, so the next visit resumes there", async () => {
@@ -686,6 +718,499 @@ describe("RoomTimelineViewModel", () => {
             } as any);
 
             expect(vm.getSnapshot().items).toBe(itemsAtDispose);
+        });
+    });
+
+    describe("messages being sent", () => {
+        /** Put a message of ours into the room's pending list, as the SDK does when the composer sends. */
+        const addPendingMessage = (id: string, opts: { ts?: number; relatesTo?: IEventRelation } = {}): MatrixEvent => {
+            const txnId = `txn-${id}`;
+            const event = mkMessage({
+                room: ROOM_ID,
+                user: USER_ID,
+                msg: `message ${id}`,
+                event: true,
+                id,
+                ts: opts.ts,
+                relatesTo: opts.relatesTo,
+            });
+            event.setTxnId(txnId);
+            event.setStatus(EventStatus.SENDING);
+            room.addPendingEvent(event, txnId);
+            return event;
+        };
+
+        /**
+         * Deliver the server's copy of a pending message, as /sync would. The SDK matches it to
+         * the pending message by transaction id, drops that from the pending list, moves it into
+         * the timeline under its server id, and only then announces the local echo changed.
+         */
+        const receiveRemoteEcho = async (pending: MatrixEvent, serverId: string, ts?: number): Promise<void> => {
+            const echo = makeMessage(serverId, { msg: pending.getContent().body, ts });
+            echo.setUnsigned({ ...echo.getUnsigned(), transaction_id: pending.getTxnId() });
+            await room.addLiveEvents([echo], { addToState: false });
+        };
+
+        /** Give any queued rebuild the chance to run. */
+        const settle = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
+
+        const eventRow = (
+            vm: RoomTimelineViewModel,
+            key: string,
+        ): Extract<TimelineItem, { kind: "event" }> | undefined =>
+            vm
+                .getSnapshot()
+                .items.find((i): i is Extract<TimelineItem, { kind: "event" }> => i.kind === "event" && i.key === key);
+
+        beforeEach(() => {
+            // The messages being sent are ours, as they are in the app.
+            vi.mocked(client.getSafeUserId).mockReturnValue(USER_ID);
+        });
+
+        it("shows a message as soon as it leaves the composer, after the confirmed ones", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            // Nothing arrives from the server here: the row has to come from the room's pending list.
+            const timelineEvents = vi.fn();
+            room.on(RoomEvent.Timeline, timelineEvents);
+
+            const pending = addPendingMessage("~pending");
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]));
+            expect(timelineEvents).not.toHaveBeenCalled();
+            expect(pending.status).toBe(EventStatus.SENDING);
+            expect(eventRow(vm, "~pending")?.sendState).toBe("sending");
+            expect(eventRow(vm, "$a")?.sendState).toBeUndefined();
+            // The row carries the message itself, so the view need not look it up in the room.
+            expect(eventRow(vm, "~pending")?.event).toBe(pending);
+            // Our own message is not unread, and the newest messages are still the ones loaded.
+            expect(vm.getSnapshot().numUnreadMessages).toBe(0);
+            expect(vm.getSnapshot().atLiveEnd).toBe(true);
+        });
+
+        it("moves the 'Sent' tick onto a message being sent once the server accepts it", async () => {
+            seedTimeline([makeMessage("$a", { user: USER_ID })]);
+            const vm = await createStartedViewModel();
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$a");
+
+            // Still on its way: the tick stays on the message the server has.
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]));
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$a");
+
+            // Accepted but not yet echoed: the message is still pending, under its server id, and takes the tick.
+            room.updatePendingEvent(pending, EventStatus.SENT, "$real");
+            await vi.waitFor(() => expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$real"));
+            expect(room.getPendingEvents()).toContain(pending);
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]);
+        });
+
+        it("keeps a message being sent below one that arrives meanwhile, as the old timeline does", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]));
+
+            // Someone else's message reaches the timeline while ours is still on its way.
+            await room.addLiveEvents([makeMessage("$b", { user: OTHER_USER_ID })], { addToState: false });
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "~pending"]));
+
+            // Once the server has ours, it takes its place in the timeline's order.
+            await receiveRemoteEcho(pending, "$real");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "$real"]));
+        });
+
+        it("recomputes a local echo's continuation when another sender's event lands above it", async () => {
+            const sentAt = new Date("2026-03-01T10:00:00Z").getTime();
+            seedTimeline([makeMessage("$a", { ts: sentAt })]);
+            const vm = await createStartedViewModel();
+            // Sent straight after our own $a, so at first it continues it.
+            const pending = addPendingMessage("~pending", { ts: sentAt + 1000 });
+            await vi.waitFor(() => expect(eventRow(vm, "~pending")?.continuation).toBe(true));
+
+            // Someone else's message now sits between the two of ours. Drawn as a continuation,
+            // ours would show no name under theirs, as if they had written it.
+            await room.addLiveEvents([makeMessage("$b", { user: OTHER_USER_ID, ts: sentAt + 500 })], {
+                addToState: false,
+            });
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "~pending"]));
+            expect(eventRow(vm, "~pending")?.continuation).toBe(false);
+            expect(eventRow(vm, "$b")?.lastInSection).toBe(true);
+
+            // And it keeps our name once the server has it.
+            await receiveRemoteEcho(pending, "$real", sentAt + 1000);
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$b", "$real"]));
+            expect(eventRow(vm, "$real")?.continuation).toBe(false);
+        });
+
+        it("shows a message that was already pending when the room was opened", async () => {
+            // Pending messages survive a reload (the SDK restores them from storage), so one can be
+            // there before the first load has run; that load has to pick it up itself.
+            seedTimeline([makeMessage("$a")]);
+            addPendingMessage("~pending");
+
+            const vm = await createStartedViewModel();
+
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]);
+        });
+
+        it("does not mix a message being sent into old history", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            // The reader has scrolled back so far that the newest messages are no longer loaded.
+            vi.spyOn((vm as any).timelineWindow, "canPaginate").mockImplementation(
+                (...args: unknown[]) => args[0] === Direction.Forward,
+            );
+
+            addPendingMessage("~pending");
+            await settle();
+
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a"]);
+        });
+
+        it("does not give a pending edit a row of its own", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            addPendingMessage("~edit", { relatesTo: { rel_type: RelationType.Replace, event_id: "$a" } });
+            await settle();
+
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a"]);
+        });
+
+        it("does not show a thread reply being sent in the main timeline", async () => {
+            vi.mocked(client.supportsThreads).mockReturnValue(true);
+            seedTimeline([makeMessage("$root")]);
+            const vm = await createStartedViewModel();
+
+            addPendingMessage("~reply", { relatesTo: { rel_type: RelationType.Thread, event_id: "$root" } });
+            addPendingMessage("~pending");
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$root", "~pending"]);
+        });
+
+        it("swaps the local id for the server's when the echo arrives, without the row ever going missing", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
+
+            const published: string[][] = [];
+            vm.subscribe(() => published.push(eventKeys(vm.getSnapshot().items)));
+
+            await receiveRemoteEcho(pending, "$real");
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]));
+            expect(room.getPendingEvents()).toEqual([]);
+            expect(eventRow(vm, "$real")?.sendState).toBeUndefined();
+            // The SDK turns our copy into the server's in place, so the row keeps the same object.
+            expect(eventRow(vm, "$real")?.event).toBe(pending);
+            // Every publish along the way kept exactly one row for the message: it never
+            // disappeared, and it was never drawn twice under both ids.
+            expect(published.length).toBeGreaterThanOrEqual(1);
+            for (const keys of published) {
+                expect(keys).toHaveLength(2);
+                expect(keys[0]).toBe("$a");
+                expect(["~pending", "$real"]).toContain(keys[1]);
+            }
+            // The echo of our own message does not count as an unread one.
+            expect(vm.getSnapshot().numUnreadMessages).toBe(0);
+        });
+
+        it("folds a burst of state changes into one publish", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
+            const publishes = vi.fn();
+            vm.subscribe(publishes);
+
+            // Sending in an encrypted room walks the message through several states in quick
+            // succession; the rows only need rebuilding once for all of them.
+            room.updatePendingEvent(pending, EventStatus.ENCRYPTING);
+            room.updatePendingEvent(pending, EventStatus.SENDING);
+            expect(publishes).not.toHaveBeenCalled();
+            await settle();
+
+            expect(publishes).toHaveBeenCalledTimes(1);
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]);
+        });
+
+        it("keeps the row's continuation decision when its id changes", async () => {
+            const sentAt = new Date("2026-03-01T10:00:00Z").getTime();
+            seedTimeline([makeMessage("$a", { ts: sentAt })]);
+            const vm = await createStartedViewModel();
+            // Sent straight after $a by the same person, so it is drawn as a continuation.
+            const pending = addPendingMessage("~pending", { ts: sentAt + 1000 });
+            await vi.waitFor(() => expect(eventRow(vm, "~pending")?.continuation).toBe(true));
+
+            // The server stamps it well outside the continuation interval. Decided afresh, the row
+            // would stop being a continuation and grow a header; the decision made for the local
+            // id has to carry over instead.
+            await receiveRemoteEcho(pending, "$real", sentAt + 10 * 60 * 1000);
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]));
+            expect(eventRow(vm, "$real")?.continuation).toBe(true);
+        });
+
+        it("never points the receipt or the saved position at a message still being sent", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
+
+            // The reader can see everything, including the row still being sent.
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            await vi.waitFor(() => expect(client.sendReadReceipt).toHaveBeenCalled(), { timeout: 2000 });
+            expect(vi.mocked(client.sendReadReceipt).mock.calls[0][0]?.getId()).toBe("$b");
+
+            vm.onAtBottomStateChange(false);
+            vm.dispose();
+            expect(localStorage.getItem(`timeline_scroll_${ROOM_ID}`)).toBe("$b");
+            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(ROOM_ID, "$b");
+        });
+
+        it("moves the receipt and marker onto a message of ours once the server confirms it", async () => {
+            seedTimeline([makeMessage("$a", { ts: 1000 })]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const pending = addPendingMessage("~pending", { ts: 2000 });
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]));
+            // The reader can see both rows; the one still being sent is skipped.
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            // The echo swaps the row's id without changing the number of rows, so the view has
+            // nothing new to report: the view model has to notice on its own.
+            await receiveRemoteEcho(pending, "$real", 2000);
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "$real"]));
+
+            await vi.waitFor(
+                () => expect(vi.mocked(client.sendReadReceipt).mock.calls.at(-1)?.[0]?.getId()).toBe("$real"),
+                { timeout: 2000 },
+            );
+            vm.dispose();
+            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(ROOM_ID, "$real");
+        });
+
+        it("says how far a message being sent has got", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventRow(vm, "~pending")?.sendState).toBe("sending"));
+
+            room.updatePendingEvent(pending, EventStatus.ENCRYPTING);
+            await settle();
+            expect(eventRow(vm, "~pending")?.sendState).toBe("encrypting");
+
+            room.updatePendingEvent(pending, EventStatus.SENDING);
+            await settle();
+            expect(eventRow(vm, "~pending")?.sendState).toBe("sending");
+
+            // The server has accepted it and given it an id, but /sync has not echoed it yet.
+            room.updatePendingEvent(pending, EventStatus.SENT, "$real");
+            await settle();
+            expect(eventRow(vm, "$real")?.sendState).toBe("sent");
+        });
+
+        it("marks a delivered message as sending while our edit of it is", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            const edit = addPendingMessage("~edit", { relatesTo: { rel_type: RelationType.Replace, event_id: "$a" } });
+            await vi.waitFor(() => expect(eventRow(vm, "$a")?.sendState).toBe("sending"));
+
+            room.updatePendingEvent(edit, EventStatus.NOT_SENT);
+            await settle();
+            expect(eventRow(vm, "$a")?.sendState).toBe("failed");
+        });
+
+        it("keeps showing a message whose send failed, and drops one that is cancelled", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            const pending = addPendingMessage("~pending");
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("~pending"));
+
+            // Failed: the row stays, so the reader can retry or cancel it.
+            room.updatePendingEvent(pending, EventStatus.NOT_SENT);
+            await settle();
+            expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a", "~pending"]);
+            expect(eventRow(vm, "~pending")?.sendState).toBe("failed");
+
+            // Cancelled: the message leaves the pending list, so its row goes too.
+            room.updatePendingEvent(pending, EventStatus.CANCELLED);
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toEqual(["$a"]));
+        });
+    });
+
+    describe("read receipts shown beside messages", () => {
+        /** Record `userId` having read `eventId`, as a receipt arriving from sync would. */
+        const receiveReceipt = (eventId: string, userId: string, ts: number): void => {
+            room.addReceipt(
+                new MatrixEvent({
+                    type: EventType.Receipt,
+                    content: { [eventId]: { [ReceiptType.Read]: { [userId]: { ts } } } },
+                }),
+            );
+        };
+
+        const usersOn = (vm: RoomTimelineViewModel, eventId: string): string[] | undefined =>
+            vm
+                .getSnapshot()
+                .readReceiptsByEvent.get(eventId)
+                ?.map((r) => r.userId);
+
+        beforeEach(() => {
+            vi.mocked(client.getSafeUserId).mockReturnValue(USER_ID);
+        });
+
+        it("draws another user's receipt beside the message they read", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+            expect(usersOn(vm, "$b")).toEqual([]);
+        });
+
+        it("leaves out the reader's own receipt", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([]);
+        });
+
+        it("draws a receipt for a hidden event beside the last shown message before it", async () => {
+            // A reaction gets no row of its own; a receipt pointing at it belongs with the message above.
+            const reaction = new MatrixEvent({
+                type: EventType.Reaction,
+                room_id: ROOM_ID,
+                sender: OTHER_USER_ID,
+                event_id: "$react",
+                origin_server_ts: 3,
+                content: { "m.relates_to": { rel_type: "m.annotation", event_id: "$a", key: "👍" } },
+            });
+            seedTimeline([makeMessage("$a"), reaction, makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$react", OTHER_USER_ID, 1000);
+
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+        });
+
+        it("orders a message's receipts newest first", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+
+            receiveReceipt("$a", "@earlier:example.org", 1000);
+            receiveReceipt("$a", "@later:example.org", 2000);
+
+            expect(usersOn(vm, "$a")).toEqual(["@later:example.org", "@earlier:example.org"]);
+        });
+
+        it("keeps a user's receipt where it was when it moves onto a message that is not loaded", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$b", OTHER_USER_ID, 1000);
+            expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
+
+            receiveReceipt("$somewhere-else", OTHER_USER_ID, 2000);
+
+            expect(usersOn(vm, "$b")).toEqual([OTHER_USER_ID]);
+        });
+
+        it("keeps the published receipts when a receipt changes nothing drawn", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            const published = vm.getSnapshot().readReceiptsByEvent;
+
+            // Our own receipt is never drawn, so the rows have nothing to redraw.
+            receiveReceipt("$b", USER_ID, 2000);
+            expect(vm.getSnapshot().readReceiptsByEvent).toBe(published);
+
+            // Someone else reading $b changes only $b's receipts; $a keeps its list.
+            receiveReceipt("$b", "@carol:example.org", 3000);
+            expect(vm.getSnapshot().readReceiptsByEvent).not.toBe(published);
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")).toBe(published.get("$a"));
+        });
+
+        it("picks up a reader's profile once their membership loads", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = await createStartedViewModel();
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")?.[0].roomMember).toBeNull();
+
+            // Lazy-loaded members arrive after the room has opened.
+            room.currentState.setStateEvents([
+                mkMembership({
+                    room: ROOM_ID,
+                    mship: KnownMembership.Join,
+                    user: OTHER_USER_ID,
+                    name: "Bob",
+                    event: true,
+                }),
+            ]);
+            client.emit(RoomStateEvent.Update, room.currentState);
+
+            expect(vm.getSnapshot().readReceiptsByEvent.get("$a")?.[0].roomMember?.name).toBe("Bob");
+        });
+
+        it("draws nothing while receipts are turned off, and everything once they are turned back on", async () => {
+            seedTimeline([makeMessage("$a")]);
+            const vm = new RoomTimelineViewModel({ client, room, showReadReceipts: false });
+            vms.push(vm);
+            vm.start();
+            await vi.waitFor(() => expect(vm.getSnapshot().items.length).toBeGreaterThan(0));
+
+            receiveReceipt("$a", OTHER_USER_ID, 1000);
+            expect(vm.getSnapshot().readReceiptsByEvent.size).toBe(0);
+
+            vm.setShowReadReceipts(true);
+            expect(usersOn(vm, "$a")).toEqual([OTHER_USER_ID]);
+        });
+    });
+
+    describe('the "Sent" tick', () => {
+        beforeEach(() => {
+            vi.mocked(client.getSafeUserId).mockReturnValue(USER_ID);
+        });
+
+        it("goes on the newest message of ours once it has reached the server", async () => {
+            seedTimeline([makeMessage("$a", { user: OTHER_USER_ID }), makeMessage("$b", { user: USER_ID })]);
+
+            const vm = await createStartedViewModel();
+
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$b");
+        });
+
+        it("comes off our message once someone else's arrives below it", async () => {
+            seedTimeline([makeMessage("$a", { user: USER_ID })]);
+            const vm = await createStartedViewModel();
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBe("$a");
+
+            const reply = makeMessage("$b", { user: OTHER_USER_ID });
+            room.getUnfilteredTimelineSet().addLiveEvent(reply, { addToState: false });
+            room.emit(RoomEvent.Timeline, reply, room, false, false, {
+                timeline: room.getLiveTimeline(),
+                liveEvent: true,
+            } as any);
+
+            await vi.waitFor(() => expect(eventKeys(vm.getSnapshot().items)).toContain("$b"));
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBeNull();
+        });
+
+        it("is not shown when someone else's message is newer than ours", async () => {
+            seedTimeline([makeMessage("$a", { user: USER_ID }), makeMessage("$b", { user: OTHER_USER_ID })]);
+
+            const vm = await createStartedViewModel();
+
+            expect(vm.getSnapshot().lastSuccessfulEventId).toBeNull();
         });
     });
 });

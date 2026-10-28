@@ -5,7 +5,14 @@
 
 set -e
 
-# Since the deps are fetched from git & linked, we can rev-parse
-JSSDK_SHA=$(git -C $(pnpm -w root)/matrix-js-sdk rev-parse --short=12 HEAD)
+SCRIPT_DIR=$(dirname "$0")
+
+if [ -d "$SCRIPT_DIR/../matrix-js-sdk" ]; then
+    # layered.sh clones matrix-js-sdk directly into <root>/matrix-js-sdk.
+    JSSDK_SHA=$(git -C "$SCRIPT_DIR/../matrix-js-sdk" rev-parse --short=12 HEAD)
+else
+    # fallback to reading the package.json
+    JSSDK_SHA=$(jq -r '.dependencies["matrix-js-sdk"]' "$SCRIPT_DIR/../apps/web/package.json")
+fi
 VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
 echo "$VECTOR_SHA-js-$JSSDK_SHA"

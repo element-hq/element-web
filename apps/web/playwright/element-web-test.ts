@@ -128,7 +128,10 @@ export const expect = baseExpect.extend<Expectations>({
             .mx_DisambiguatedProfile_displayName {
                 color: var(--cpd-color-blue-1200) !important;
             }
-            .mx_BaseAvatar {
+            /* Avatar colours are derived from the random MXID, so pin them. */
+            /* Compound avatars rendered by shared components don't have the mx_BaseAvatar class so use a loose Compound class selector */
+            .mx_BaseAvatar,
+            [class*="_avatar-imageless_"] {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
                 border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;

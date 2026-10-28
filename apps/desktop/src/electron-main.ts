@@ -31,6 +31,7 @@ import "./ipc.js";
 import "./seshat.js";
 import "./settings.js";
 import "./badge.js";
+import "./x509.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { buildMenuTemplate } from "./vectormenu.js";
@@ -97,11 +98,6 @@ void configureSentry();
 process.on("uncaughtException", function (error: Error): void {
     console.log("Unhandled exception", error);
 });
-
-app.commandLine.appendSwitch("--enable-usermedia-screen-capturing");
-if (!app.commandLine.hasSwitch("enable-features")) {
-    app.commandLine.appendSwitch("enable-features", "WebRTCPipeWireCapturer");
-}
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {

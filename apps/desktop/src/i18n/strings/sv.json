@@ -27,10 +27,19 @@
         "yes": "Ja"
     },
     "confirm_quit": "Är du säker att du vill avsluta?",
+    "download": {
+        "unable_to_open_description": "Filen kunde inte öppnas. Den kan ha flyttats eller raderats.",
+        "unable_to_open_title": "Kan inte öppna den här filen"
+    },
     "edit_menu": {
         "speech": "Tal",
         "speech_start_speaking": "Börja tala",
         "speech_stop_speaking": "Sluta tala"
+    },
+    "eol": {
+        "no_more_updates": "Du använder en version av macOS som inte stöds. Uppgradera för att få %(brand)s uppdateringar.",
+        "title": "Systemet stöds inte",
+        "warning": "Du använder en version av macOS som inte stöds. Uppgradera för att säkerställa att %(brand)s fortsätter att fungera."
     },
     "file_menu": {
         "label": "Arkiv"
@@ -48,6 +57,11 @@
         "services": "Tjänster",
         "unhide": "Sluta gömma"
     },
+    "renderer_crash": {
+        "detail": "Avsluta och öppna appen igen för att fortsätta. Om detta fortsätter att hända kan det hjälpa att starta om datorn eller rensa appens cache.",
+        "message": "%(brand)s har återställt sig efter ett problem flera gånger, men problemet fortsätter att uppstå. Därför har den slutat försöka.",
+        "title": "%(brand)s fortsätter att avslutas oväntat."
+    },
     "right_click_menu": {
         "add_to_dictionary": "Lägg till i ordlistan",
         "copy_email": "Kopiera e-postadress",
@@ -57,6 +71,10 @@
         "save_image_as": "Spara bild som…",
         "save_image_as_error_description": "Bilden sparades inte",
         "save_image_as_error_title": "Misslyckades med att spara bilden"
+    },
+    "save_dialog": {
+        "all_files": "Alla filer",
+        "named_file_type": "%(extension)s Fil"
     },
     "store": {
         "error": {

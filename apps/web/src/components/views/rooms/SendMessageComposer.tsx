@@ -172,14 +172,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
 
         const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
-        const parts = this.restoreStoredEditorState(partCreator) || [];
-        this.model = new EditorModel(parts, partCreator);
+        this.model = new EditorModel([], partCreator);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
     }
 
     public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
+
+        // Restore the draft here rather than in the constructor, as another composer for the same room
+        // may be unmounting in this same render (e.g. the right panel timeline when a call ends), and it
+        // only saves its draft in componentWillUnmount, which React runs before componentDidMount,
+        // but after our constructor.
+        const parts = this.restoreStoredEditorState(this.model.partCreator);
+        if (parts) {
+            this.model.reset(parts);
+        }
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
@@ -452,10 +460,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
-            attachUrlPreviews(urlPreviewSnapshot, content, linksIn(this.model.contentPlainText).size !== 0);
+            // must be read before the composer is cleared out from under us
+            const messageHasLinks = linksIn(this.model.contentPlainText).size !== 0;
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
+            if (
+                await attachUrlPreviews(
+                    this.props.mxClient,
+                    this.props.room,
+                    urlPreviewSnapshot,
+                    content,
+                    messageHasLinks,
+                )
+            ) {
+                return;
+            }
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

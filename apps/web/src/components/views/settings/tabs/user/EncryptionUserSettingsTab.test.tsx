@@ -18,6 +18,8 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import { EncryptionUserSettingsTab, type State } from "./EncryptionUserSettingsTab";
 import Modal from "../../../../../Modal";
+import { DeleteKeyStorageDialog } from "../../../dialogs/DeleteKeyStorageDialog";
+import { DeleteKeyStorageViewModel } from "../../../../../viewmodels/crypto/DeleteKeyStorageViewModel";
 import { DeviceListener } from "../../../../../device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
@@ -134,9 +136,11 @@ describe("<EncryptionUserSettingsTab />", () => {
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
-        const button = await waitFor(() => screen.getByRole("button", { name: "Get recovery key" }));
+        const button = await waitFor(() => screen.getByRole("button", { name: "Create recovery key" }));
         await user.click(button);
-        await waitFor(() => expect(screen.getByRole("heading", { name: "Get recovery key" })).toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.getByRole("heading", { name: "Save your recovery key somewhere safe" })).toBeInTheDocument(),
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -146,7 +150,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
-        const button = await waitFor(() => screen.getByRole("button", { name: "Reset cryptographic identity" }));
+        const button = await waitFor(() => screen.getByRole("button", { name: "Reset digital identity" }));
         await user.click(button);
         await waitFor(() =>
             expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
@@ -211,7 +215,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await user.click(screen.getByRole("button", { name: "Back" }));
         await waitFor(() =>
-            screen.getByText("Your key storage is out of sync. Click one of the buttons below to fix the problem."),
+            screen.getByText("Your key storage is out of sync. Select one of the buttons below to fix the problem."),
         );
     });
 
@@ -226,5 +230,40 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await user.click(screen.getByRole("button", { name: "Continue with reset" }));
         expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeVisible();
+    });
+
+    it("should disable the key storage switch while turning key storage on", async () => {
+        const user = userEvent.setup();
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
+        const { promise, resolve } = Promise.withResolvers<null>();
+        vi.mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockReturnValue(promise);
+        renderComponent();
+
+        const toggle = await screen.findByRole("switch", { name: "Allow key storage" });
+        await user.click(toggle);
+
+        expect(toggle).toBeDisabled();
+        resolve(null);
+        await waitFor(() => expect(toggle).toBeEnabled());
+    });
+
+    it("should ask for confirmation in a dialog when turning off key storage", async () => {
+        const user = userEvent.setup();
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+        const dialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([]) } as any);
+        renderComponent();
+
+        await user.click(await screen.findByRole("switch", { name: "Allow key storage" }));
+
+        expect(dialogSpy).toHaveBeenCalledWith(
+            DeleteKeyStorageDialog,
+            { vm: expect.any(DeleteKeyStorageViewModel) },
+            undefined,
+            false,
+            false,
+            expect.anything(),
+        );
+        expect(matrixClient.getCrypto()!.disableKeyStorage).not.toHaveBeenCalled();
+        expect(screen.getByRole("switch", { name: "Allow key storage" })).toBeChecked();
     });
 });

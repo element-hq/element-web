@@ -5,14 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type Ref } from "react";
-import classNames from "classnames";
+import React, { type JSX, type PropsWithChildren } from "react";
+import { IconButton } from "@vector-im/compound-web";
+import { MinusIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
+import { DocumentViewerView, type DocumentViewerStatus } from "../DocumentViewerView";
 import styles from "./PdfViewerView.module.css";
 
-/** The document lifecycle state presented by the PDF viewer shell. */
-export type PdfViewerStatus = "loading" | "ready" | "error";
+/** The document lifecycle state presented by the PDF viewer. */
+export type PdfViewerStatus = DocumentViewerStatus;
 
 /** Controlled state and host integration points for {@link PdfViewerView}. */
 export interface PdfViewerViewProps {
@@ -24,10 +26,6 @@ export interface PdfViewerViewProps {
     pageCount: number;
     /** The controlled value of the page-number input. */
     pageInput: string;
-    /** Receives the scrolling element that the host renderer measures and observes. */
-    containerRef: Ref<HTMLDivElement>;
-    /** Receives the inner element into which the host renders document pages. */
-    viewerRef: Ref<HTMLDivElement>;
     /** Called with each new value typed into the controlled page-number input. */
     onPageInputChange: (value: string) => void;
     /** Called when the page-number input enters its editing state. */
@@ -38,46 +36,53 @@ export interface PdfViewerViewProps {
     onPageInputCancel: () => void;
     /** Called when the user submits the page-number form. */
     onPageSubmit: () => void;
-    /**
-     * Optional CSS class for host-level styling. Applied to the outer element, so a host can scope
-     * styling for its own renderer's markup without that markup being known here.
-     */
+    /** Called when the user presses the zoom-in button. */
+    onZoomIn: () => void;
+    /** Called when the user presses the zoom-out button. */
+    onZoomOut: () => void;
+    /** The current zoom level as a percentage. Omitted until the host reports one. */
+    zoomPercent?: number;
+    /** Optional CSS class for the outer element. */
     className?: string;
 }
 
+/** A whole-number percentage in the user's locale, e.g. "150%". */
+function formatZoomPercent(zoomPercent: number, language: string): string {
+    return new Intl.NumberFormat(language, { style: "percent", maximumFractionDigits: 0 }).format(zoomPercent / 100);
+}
+
 /**
- * Renders the reusable presentation shell for a PDF document viewer.
- *
- * The host owns document loading and rendering. It receives both required DOM elements through refs,
- * while this View owns the toolbar, status overlays, accessibility labels, and pdf.js-compatible page styling.
+ * A PDF viewer on the shared {@link DocumentViewerView} shell: the page and zoom controls, with
+ * `children` as the document surface.
  */
 export function PdfViewerView({
     status,
     currentPage,
     pageCount,
     pageInput,
-    containerRef,
-    viewerRef,
+    children,
     onPageInputChange,
     onPageInputFocus,
     onPageInputBlur,
     onPageInputCancel,
     onPageSubmit,
+    onZoomIn,
+    onZoomOut,
+    zoomPercent,
     className,
-}: Readonly<PdfViewerViewProps>): JSX.Element {
-    const { translate: _t } = useI18n();
+}: Readonly<PropsWithChildren<PdfViewerViewProps>>): JSX.Element {
+    const { translate: _t, language } = useI18n();
 
-    return (
-        <div className={classNames(styles.viewer, className)} data-testid="pdf-viewer">
-            {pageCount > 0 ? (
+    const toolbar =
+        pageCount > 0 ? (
+            <>
                 <form
-                    className={styles.toolbar}
                     onSubmit={(event) => {
                         event.preventDefault();
                         onPageSubmit();
                     }}
                 >
-                    {/* A fieldset groups the controls semantically, and carries the implicit `group` role. */}
+                    {/* A fieldset carries the implicit `group` role. */}
                     <fieldset
                         className={styles.pageForm}
                         aria-label={_t("pdf_viewer|page_label", { page: currentPage, total: pageCount })}
@@ -94,7 +99,7 @@ export function PdfViewerView({
                                 if (event.key !== "Escape") return;
 
                                 onPageInputCancel();
-                                // Blurring completes the same editing lifecycle as clicking away from the input.
+                                // Blur ends the edit the same way clicking away does.
                                 event.currentTarget.blur();
                             }}
                             value={pageInput}
@@ -107,22 +112,39 @@ export function PdfViewerView({
                         </span>
                     </fieldset>
                 </form>
-            ) : null}
-            <div className={styles.body}>
-                <div className={styles.container} data-testid="pdf-container" ref={containerRef}>
-                    <div className="pdfViewer" ref={viewerRef} />
-                </div>
-                {status === "loading" ? (
-                    <div className={styles.message} role="status" aria-live="polite">
-                        {_t("pdf_viewer|loading")}
-                    </div>
-                ) : null}
-                {status === "error" ? (
-                    <div className={classNames(styles.message, styles.error)} role="alert">
-                        {_t("pdf_viewer|error_load")}
-                    </div>
-                ) : null}
+                <fieldset className={styles.zoomControls} aria-label={_t("pdf_viewer|zoom")}>
+                    <IconButton
+                        size="28px"
+                        aria-label={_t("pdf_viewer|zoom_out")}
+                        tooltip={_t("pdf_viewer|zoom_out")}
+                        data-testid="pdf-zoom-out"
+                        onClick={onZoomOut}
+                    >
+                        <MinusIcon />
+                    </IconButton>
+                    {zoomPercent !== undefined ? (
+                        <span className={styles.zoomLevel} data-testid="pdf-zoom-level">
+                            {formatZoomPercent(zoomPercent, language)}
+                        </span>
+                    ) : null}
+                    <IconButton
+                        size="28px"
+                        aria-label={_t("pdf_viewer|zoom_in")}
+                        tooltip={_t("pdf_viewer|zoom_in")}
+                        data-testid="pdf-zoom-in"
+                        onClick={onZoomIn}
+                    >
+                        <PlusIcon />
+                    </IconButton>
+                </fieldset>
+            </>
+        ) : undefined;
+
+    return (
+        <DocumentViewerView status={status} toolbar={toolbar} className={className}>
+            <div className={styles.surface} data-testid="pdf-surface">
+                {children}
             </div>
-        </div>
+        </DocumentViewerView>
     );
 }

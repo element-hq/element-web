@@ -275,16 +275,20 @@ export default class Markdown {
         return true;
     }
 
-    public toHTML({ externalLinks = false } = {}): string {
+    /**
+     * Render the markdown to HTML.
+     *
+     * @param externalLinks - Open every link in a new tab, as a document viewer wants; messages
+     *     leave this off and decide per link at render time.
+     * @param hardSoftBreaks - Turn a single newline inside a paragraph into a line break. Messages
+     *     want this, so that multi-line quotes stay multi-line
+     *     (https://github.com/vector-im/element-web/issues/3154). A document wrapped at a fixed
+     *     column does not, since every wrapped line would otherwise break.
+     */
+    public toHTML({ externalLinks = false, hardSoftBreaks = true } = {}): string {
         const renderer = new commonmark.HtmlRenderer({
             safe: false,
-
-            // Set soft breaks to hard HTML breaks: commonmark
-            // puts softbreaks in for multiple lines in a blockquote,
-            // so if these are just newline characters then the
-            // block quote ends up all on one line
-            // (https://github.com/vector-im/element-web/issues/3154)
-            softbreak: "<br />",
+            softbreak: hardSoftBreaks ? "<br />" : "\n",
         });
 
         // Trying to strip out the wrapping <p/> causes a lot more complication

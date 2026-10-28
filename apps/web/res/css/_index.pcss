@@ -5,7 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-@layer compound-tokens, compound-web, shared-components, app-web;
+/*
+ * `element-call` is last: Element Call's stylesheet (loaded with the call component, see
+ * `ElementCallComponent.css`) redeclares tokens Element Web also sets and must win over them.
+ */
+@layer compound-tokens, compound-web, shared-components, app-web, element-call;
 
 @import url("maplibre-gl/dist/maplibre-gl.css") layer(app-web);
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound-tokens);

@@ -300,6 +300,10 @@ export default class MultiInviter {
                                 errorText = _t("invite|error_forbidden");
                             }
                             break;
+                        case "M_INVITE_BLOCKED":
+                            // User explicitly has blocked invites
+                            errorText = _t("invite|error_forbidden");
+                            break;
                         case USER_ALREADY_INVITED:
                             if (isSpace) {
                                 errorText = _t("invite|error_already_invited_space");

@@ -1,45 +1,23 @@
 # Windows
 
-## Requirements to build native modules
+## Requirements to build
 
-We rely on Github Actions `windows-2022` plus a few extra utilities as per [the workflow](https://github.com/vector-im/element-web/blob/develop/.github/workflows/build_desktop_windows.yaml).
+We rely on Github Actions `windows-2025` as per [the workflow](https://github.com/element-hq/element-web/blob/develop/.github/workflows/build_desktop_windows.yaml).
 
-If you want to build native modules, make sure that the following tools are installed on your system.
+If you want to build Element Desktop on Windows, make sure that the following tools are installed on your system.
 
 - [Git for Windows](https://git-scm.com/download/win)
-- [Node 16](https://nodejs.org)
-- [Python 3](https://www.python.org/downloads/) (if you type 'python' into command prompt it will offer to install it from the windows store)
-- [Strawberry Perl](https://strawberryperl.com/)
-- [Rustup](https://rustup.rs/)
-- [NASM](https://www.nasm.us/)
+- [Node](https://nodejs.org) (see `apps/desktop/.node-version` for the version we build with)
+- [pnpm](https://pnpm.io/installation)
 
 You can install the above tools using [Chocolatey](https://chocolatey.org/install):
 
 ```cmd
-choco install --no-progress -y git nodejs-lts pnpm python StrawberryPerl rustup.install nasm magicsplat-tcl-tk
+choco install --no-progress -y git nodejs-lts pnpm
 ```
-
-- [Build Tools for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019) with the following configuration:
-    - On the Workloads tab:
-        - Desktop & Mobile -> C++ build tools
-    - On the Individual components tab:
-        - MSVC VS 2019 C++ build tools
-        - Windows 10 SDK (latest version available)
-        - C++ CMake tools for Windows
 
 Once installed make sure all those utilities are accessible in your `PATH`.
 
-If you want to be able to build x86 targets from an x64 host install the right toolchain:
-
-```cmd
-rustup toolchain install stable-i686-pc-windows-msvc
-rustup target add i686-pc-windows-msvc
-```
-
-In order to load all the C++ utilities installed by Visual Studio you can run the following in a terminal window.
-
-```
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
-```
-
-You can replace `amd64` with `x86` depending on your CPU architecture.
+Native modules are consumed as prebuilt binaries, so no compiler toolchain is required.
+See [native-node-modules.md](./native-node-modules.md) for details, including how to
+build the arm64 package from an x64 host.

@@ -27,7 +27,6 @@
         "cancel": "Peruuta",
         "change": "Muuta",
         "clear": "Tyhjennä",
-        "click_to_copy": "Kopioi napsauttamalla",
         "close": "Sulje",
         "collapse": "Supista",
         "complete": "Valmis",
@@ -793,7 +792,6 @@
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
         "set_up_recovery": "Varmuuskopioi keskustelusi",
-        "set_up_recovery_toast_description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
         "verification": {
             "accepting": "Hyväksytään…",
@@ -1282,8 +1280,6 @@
     "language_dropdown_label": "Kielipudotusvalikko",
     "leave_room_dialog": {
         "last_person_warning": "Olet ainoa henkilö täällä. Jos lähdet, kukaan ei voi liittyä tulevaisuudessa, et myöskään sinä.",
-        "leave_room_question": "Oletko varma että haluat poistua huoneesta '%(roomName)s'?",
-        "leave_space_question": "Haluatko varmasti poistua tilasta '%(spaceName)s'?",
         "room_rejoin_warning": "Tämä huone ei ole julkinen. Et voi liittyä uudelleen ilman kutsua.",
         "space_rejoin_warning": "Tämä tila ei ole julkinen. Et voi liittyä uudelleen ilman kutsua."
     },
@@ -1626,7 +1622,6 @@
         "join_button_account": "Rekisteröidy",
         "join_failed_needs_invite": "Huoneen %(roomName)s katseluun tarvitaan kutsu",
         "join_the_discussion": "Liity keskusteluun",
-        "join_title": "Liity huoneeseen osallistuaksesi",
         "join_title_account": "Liity keskusteluun tilin avulla",
         "joining": "Liitytään…",
         "joining_room": "Liitytään huoneeseen…",
@@ -2032,7 +2027,6 @@
                 "change_recovery_confirm_title": "Anna uusi palautusavain",
                 "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
-                "description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
@@ -2041,7 +2035,6 @@
                 "set_up_recovery": "Hanki palautusavain",
                 "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
                 "set_up_recovery_save_key_title": "Tallenna palautusavain turvalliseen paikkaan",
-                "set_up_recovery_secondary_description": "Kun napsautat Jatka, sinulle luodaan palautusavain.",
                 "title": "Varmuuskopio"
             },
             "title": "Salaus"
@@ -2926,10 +2919,6 @@
             "error_loading": "Tapahtuman, johon oli vastattu, lataaminen epäonnistui. Se joko ei ole olemassa tai sinulla ei ole oikeutta katsoa sitä.",
             "in_reply_to": "<a>Vastauksena käyttäjälle</a> <pill>",
             "in_reply_to_for_export": "Vastauksena <a>tähän viestiin</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Sinut ohjataan kolmannen osapuolen sivustolle, jotta voit autentikoida tilisi käyttääksesi palvelua %(integrationsUrl)s. Haluatko jatkaa?",
-            "dialog_title": "Lisää integraatio"
         },
         "self_redaction": "Viesti poistettu",
         "send_state_encrypting": "Salataan viestiäsi…",

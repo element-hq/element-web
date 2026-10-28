@@ -389,6 +389,31 @@ describe("RoomViewStore", function () {
         });
     });
 
+    it("keeps the summary of the open room until another room is opened", async () => {
+        const summary = {
+            room_id: roomId,
+            num_joined_members: 1,
+            world_readable: false,
+            guest_can_join: false,
+        };
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+
+        // A summary for a room that isn't open is ignored
+        roomViewStore.setRoomSummary(roomId2, { ...summary, room_id: roomId2 });
+        expect(roomViewStore.getRoomSummary()).toBeUndefined();
+
+        const onUpdate = vi.fn();
+        roomViewStore.on(UPDATE_EVENT, onUpdate);
+        roomViewStore.setRoomSummary(roomId, summary);
+        expect(roomViewStore.getRoomSummary()).toBe(summary);
+        expect(onUpdate).toHaveBeenCalled();
+
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId2 });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+        expect(roomViewStore.getRoomSummary()).toBeUndefined();
+    });
+
     it("removes the roomId on ViewHomePage", async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
@@ -438,6 +463,7 @@ describe("RoomViewStore", function () {
             presented: false,
             connectionState: ConnectionState.Disconnected,
             widget: { id: "!widget:example.org" },
+            participants: new Map(),
             start: vi.fn(),
         } as unknown as Call;
         vi.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
@@ -458,6 +484,60 @@ describe("RoomViewStore", function () {
         expect(persistenceSpy).toHaveBeenCalledWith("!widget:example.org", roomId, true);
         expect(call.start).toHaveBeenCalledWith(expect.objectContaining({ voiceOnly: true }));
         // ...but the room is not switched to the maximised call view.
+        expect(roomViewStore.isViewingCall()).toEqual(false);
+    });
+
+    it("opens a voice-intent call maximised when the call is already in progress", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            participants: new Map([[{ userId: "@alice:example.org" }, new Set(["DEVICE"])]]),
+            start: vi.fn(),
+        } as unknown as Call;
+        vi.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = vi.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            voiceOnly: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).not.toHaveBeenCalled();
+        expect(roomViewStore.isViewingCall()).toEqual(true);
+    });
+
+    it("opens a voice-intent call in PiP when the call is already in progress but the lobby is skipped", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            participants: new Map([[{ userId: "@alice:example.org" }, new Set(["DEVICE"])]]),
+            start: vi.fn(),
+        } as unknown as Call;
+        vi.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = vi.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        // As dispatched by the incoming call toast's Join button
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            skipLobby: true,
+            voiceOnly: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).toHaveBeenCalledWith("!widget:example.org", roomId, true);
         expect(roomViewStore.isViewingCall()).toEqual(false);
     });
 

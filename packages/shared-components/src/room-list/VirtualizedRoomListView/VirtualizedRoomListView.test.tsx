@@ -257,7 +257,7 @@ describe("<VirtualizedRoomListView />", () => {
             ]);
 
             // The drag has activated: the live region reflects the ongoing drag.
-            await waitFor(() => expect(status).toHaveTextContent("General"));
+            await waitFor(() => expect(status).toHaveTextContent("General is over Favourites"));
 
             await user.pointer({ keys: "[/MouseLeft]" }); // release to drop
 

@@ -124,7 +124,7 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                 {displayName}
             </span>
             {userStatus && (
-                <Tooltip description={userStatus.text}>
+                <Tooltip description={userStatus.text} maxWidth="30ch" maxLines={1}>
                     <Text
                         as="span"
                         size="md"

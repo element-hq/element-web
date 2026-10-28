@@ -2,41 +2,88 @@
 
 exports[`ReadMarker > renders the current read marker 1`] = `
 <div>
-  <ul>
-    <li
-      class="ReadMarker-module_readMarker"
-      data-scroll-tokens="$event"
+  <div
+    style="padding: 18px;"
+  >
+    <ul
+      style="margin: 0px; padding: 0px; list-style: none;"
     >
-      <hr
-        class="ReadMarker-module_line"
-      />
-    </li>
-  </ul>
+      <li
+        class="ReadMarker-module_readMarker"
+        data-scroll-tokens="$event"
+      >
+        <hr
+          class="ReadMarker-module_line"
+        />
+      </li>
+    </ul>
+  </div>
 </div>
 `;
 
 exports[`ReadMarker > renders the ghost read marker 1`] = `
 <div>
-  <ul>
-    <li
-      class="ReadMarker-module_readMarker"
+  <div
+    style="padding: 18px;"
+  >
+    <ul
+      style="margin: 0px; padding: 0px; list-style: none;"
     >
-      <hr
-        class="ReadMarker-module_line"
-        data-eventid="$event"
-      />
-    </li>
-  </ul>
+      <li
+        class="ReadMarker-module_readMarker"
+      >
+        <hr
+          class="ReadMarker-module_line"
+          data-eventid="$event"
+        />
+      </li>
+    </ul>
+  </div>
 </div>
 `;
 
 exports[`ReadMarker > renders the hidden current read marker without a line 1`] = `
 <div>
-  <ul>
-    <li
-      class="ReadMarker-module_readMarker"
-      data-scroll-tokens="$event"
-    />
-  </ul>
+  <div
+    style="padding: 18px;"
+  >
+    <ul
+      style="margin: 0px; padding: 0px; list-style: none;"
+    >
+      <li
+        class="ReadMarker-module_readMarker"
+        data-scroll-tokens="$event"
+      />
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`ReadMarker > renders the labelled read marker 1`] = `
+<div>
+  <div
+    style="padding: 18px;"
+  >
+    <ul
+      style="margin: 0px; padding: 0px; list-style: none;"
+    >
+      <li
+        class="ReadMarker-module_readMarker ReadMarker-module_labelledMarker"
+        data-scroll-tokens="$event"
+      >
+        <div
+          aria-label="New"
+          class="ReadMarker-module_labelledLine"
+          role="separator"
+        >
+          <span
+            class="ReadMarker-module_label"
+          >
+            New
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
 `;
