@@ -128,7 +128,7 @@ describe("RestrictedGuestsModule", () => {
         it.each([
             ["matrix guest", { isGuest: true }],
             ["user with guest prefix", { userId: "@guest-jim:server" }],
-        ])("should hide only restricted components from a %s", async (_, profile) => {
+        ])("should hide restricted components from a %s", async (_, profile) => {
             const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, profile));
             await module.load();
 
@@ -136,7 +136,7 @@ describe("RestrictedGuestsModule", () => {
             expect(module.shouldShowComponent(UIComponent.ReleaseAnnouncements)).toBe(false);
             expect(module.shouldShowComponent(UIComponent.SetUpRecoveryToast)).toBe(false);
             expect(module.shouldShowComponent(UIComponent.NotificationsToast)).toBe(false);
-            expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(false);
         });
     });
 
