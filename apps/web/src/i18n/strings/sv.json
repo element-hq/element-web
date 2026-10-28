@@ -2545,14 +2545,7 @@
             },
             "confirm_key_storage_off": "Är du säker på att du vill hålla nyckellagring avstängd?",
             "confirm_key_storage_off_description": "Om du tar bort alla dina enheter förlorar du din meddelandehistorik och du måste verifiera alla dina befintliga kontakter igen. <a>Läs mer</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Radera nyckellagring",
-                "confirm": "Radera nyckellagring",
-                "description": "Om du tar bort säkerhetskopieringen av krypteringsnycklar tas din digitala identitet och dina meddelandenycklar bort från servern, och följande säkerhetsfunktioner stängs av:",
-                "list_first": "Du kommer inte att ha krypterad meddelandehistorik på nya enheter",
-                "list_second": "Du förlorar åtkomst till dina krypterade meddelanden om du inte är inloggad på några enheter.",
-                "title": "Är du säker på att du vill stänga av säkerhetskopieringen och radera den?"
-            },
+            "delete_key_storage_title": "Är du säker på att du vill ta bort nyckelförvaringen?",
             "device_not_verified_button": "Verifiera den här enheten",
             "device_not_verified_description": "Du måste verifiera den här enheten för att se dina krypteringsinställningar.",
             "device_not_verified_title": "Enhet inte verifierad",
