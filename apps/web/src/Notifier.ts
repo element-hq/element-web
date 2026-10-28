@@ -476,7 +476,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         const isGuest = client.isGuest();
         return (
             !isGuest &&
-            shouldShowComponent(UIComponent.NotificationsToast) &&
+            shouldShowComponent(UIComponent.OnboardingToasts) &&
             this.supportsDesktopNotifications() &&
             !isPushNotifyDisabled() &&
             !this.isEnabled() &&

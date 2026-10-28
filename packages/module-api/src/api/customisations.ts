@@ -51,14 +51,9 @@ export const enum UIComponent {
     RoomOptionsMenu = "UIComponent.roomOptionsMenu",
 
     /**
-     * The toast prompting the user to set up recovery ("Back up your chats").
+     * Toasts prompting a new user to finish setting up their account.
      */
-    SetUpRecoveryToast = "UIComponent.setUpRecoveryToast",
-
-    /**
-     * The toast prompting the user to enable desktop notifications.
-     */
-    NotificationsToast = "UIComponent.notificationsToast",
+    OnboardingToasts = "UIComponent.onboardingToasts",
 }
 
 /**
