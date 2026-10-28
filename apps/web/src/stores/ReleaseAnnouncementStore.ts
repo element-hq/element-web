@@ -13,6 +13,8 @@ import { cloneDeep } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
 
 /**
  * The features are shown in the array order.
@@ -117,8 +119,8 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      * @returns The feature to announce or null if there is no feature to announce
      */
     public getReleaseAnnouncement(): Feature | null {
-        // Do nothing if the release announcement is disabled
-        if (!this.enabled) return null;
+        // Do nothing if the release announcement is disabled or hidden by a module
+        if (!this.enabled || !shouldShowComponent(UIComponent.ReleaseAnnouncements)) return null;
 
         // also don't show release announcements if any toasts are on screen
         if (ToastStore.sharedInstance().getToasts().length > 0) return null;
