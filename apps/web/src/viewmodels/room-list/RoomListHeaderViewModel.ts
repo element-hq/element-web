@@ -32,6 +32,8 @@ import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
 
 export interface Props {
@@ -341,6 +343,7 @@ function computeHeaderSpaceState(
 
     return {
         title,
+        canStartChat: shouldShowComponent(UIComponent.CreateRooms),
         canCreateRoom,
         canCreateVideoRoom,
         displaySpaceMenu,

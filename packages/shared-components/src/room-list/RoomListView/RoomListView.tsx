@@ -48,6 +48,8 @@ export type RoomListViewSnapshot = {
     emptyStateAction?: ReactNode;
     /** Whether the user can create rooms */
     canCreateRoom?: boolean;
+    /** Whether the user can start a chat */
+    canStartChat: boolean;
     /** Whether the room list is displayed as a flat list */
     isFlatList: boolean;
     /**

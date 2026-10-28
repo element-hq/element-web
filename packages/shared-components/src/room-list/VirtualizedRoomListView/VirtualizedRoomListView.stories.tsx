@@ -90,6 +90,7 @@ const meta = {
         sections: mock10RoomsSections,
         roomListState: defaultRoomListState,
         canCreateRoom: true,
+        canStartChat: true,
         onToggleFilter: fn(),
         createChatRoom: fn(),
         createRoom: fn(),
