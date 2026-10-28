@@ -386,7 +386,7 @@ export class DeviceListenerCurrentDevice {
 
         this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
 
-        const hiddenByModule = newState === "set_up_recovery" && !shouldShowComponent(UIComponent.SetUpRecoveryToast);
+        const hiddenByModule = newState === "set_up_recovery" && !shouldShowComponent(UIComponent.OnboardingToasts);
         if (newState === "ok" || this.dismissedThisDeviceToast || hiddenByModule) {
             hideSetupEncryptionToast();
         } else if (!isSecretStorageBeingAccessed()) {

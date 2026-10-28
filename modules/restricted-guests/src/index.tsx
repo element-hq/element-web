@@ -23,8 +23,7 @@ const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
     UIComponent.AddIntegrations,
     UIComponent.ReleaseAnnouncements,
     UIComponent.FilterContainer,
-    UIComponent.SetUpRecoveryToast,
-    UIComponent.NotificationsToast,
+    UIComponent.OnboardingToasts,
 ];
 
 class RestrictedGuestsModule implements Module {
