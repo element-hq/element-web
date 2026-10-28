@@ -11,11 +11,19 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { fireEvent, render, type RenderResult } from "test-utils-rtl";
-import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType, M_TEXT } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/vitest";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
-import { mkEvent, mkRoom, stubClient } from "test-utils";
+import {
+    makePollEndEvent,
+    makePollResponseEvent,
+    makePollStartEvent,
+    mkEvent,
+    mkRoom,
+    setupRoomWithPollEvents,
+    stubClient,
+} from "test-utils";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import MessageEvent from "./MessageEvent";
@@ -164,6 +172,63 @@ describe("MessageEvent", () => {
         expect(result.getByText("Unsupported message body")).toBeInTheDocument();
         expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
         expect(result.queryByTestId("textual-body")).toBeNull();
+    });
+
+    it("renders the poll result summary for poll end events", () => {
+        event = makePollEndEvent("$poll:example.com", room.roomId, "@alice:example.com");
+        event.getContent()[M_TEXT.name] = "The poll has ended. Top answer: yes";
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("The poll has ended. Top answer: yes")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_PollEndBody")).not.toBeNull();
+    });
+
+    it("falls back to a generic summary for poll end events without a text fallback", () => {
+        event = makePollEndEvent("$poll:example.com", room.roomId, "@alice:example.com");
+        delete event.getContent()[M_TEXT.name];
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText(/has ended a poll/)).toBeInTheDocument();
+    });
+
+    describe("when the ended poll is known", () => {
+        const pollStartEvent = makePollStartEvent("Totally a poll", "@alice:example.com", undefined, {
+            roomId: "!room:example.com",
+            ts: 1,
+        });
+
+        const setupEndedPoll = async (votes: MatrixEvent[]): Promise<void> => {
+            // Sent by the local user, so the poll accepts it as a valid end event
+            event = makePollEndEvent(pollStartEvent.getId()!, "!room:example.com", client.getSafeUserId(), 100);
+            // A fallback in another language, which should be replaced by the locally counted result
+            event.getContent()[M_TEXT.name] = "ethay ollpay ashay endedyay . optay result: oesshay.";
+            room = await setupRoomWithPollEvents([pollStartEvent], votes, [event], vi.mocked(client));
+        };
+
+        it("shows the top answer counted from the votes", async () => {
+            await setupEndedPoll([
+                makePollResponseEvent(pollStartEvent.getId()!, ["shoes"], "@bob:example.com", room.roomId, 10),
+                makePollResponseEvent(pollStartEvent.getId()!, ["shoes"], "@carol:example.com", room.roomId, 10),
+                makePollResponseEvent(pollStartEvent.getId()!, ["socks"], "@dan:example.com", room.roomId, 10),
+                // Cast after the poll ended, so should not be counted
+                makePollResponseEvent(pollStartEvent.getId()!, ["socks"], "@erin:example.com", room.roomId, 200),
+                makePollResponseEvent(pollStartEvent.getId()!, ["socks"], "@frank:example.com", room.roomId, 200),
+            ]);
+
+            const result = renderMessageEvent();
+
+            expect(await result.findByText("The poll has ended. Top answer: Shoes")).toBeInTheDocument();
+        });
+
+        it("says when nobody voted", async () => {
+            await setupEndedPoll([]);
+
+            const result = renderMessageEvent();
+
+            expect(await result.findByText("The poll has ended. No votes were cast.")).toBeInTheDocument();
+        });
     });
 
     describe("when an image with a caption is sent", () => {
