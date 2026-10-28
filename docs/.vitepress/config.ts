@@ -141,6 +141,7 @@ export default withMermaid({
                     { text: "Release Process", link: "/release.md" },
                     { text: "MVVM", link: "/MVVM.md" },
                     { text: "Settings", link: "/settings.md" },
+                    { text: "A2UI (agent UI) prototype", link: "/a2ui.md" },
                 ],
             },
             {

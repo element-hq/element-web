@@ -134,6 +134,56 @@ describe("MessagePanel", function () {
         }
     });
 
+    describe("scrollToEventTopIfOverflowing", () => {
+        const renderPanel = (events: MatrixEvent[]): MessagePanel => {
+            let panel: MessagePanel | null = null;
+            render(
+                <ScopedRoomContextProvider {...defaultRoomContext}>
+                    <MessagePanel
+                        {...defaultProps}
+                        events={events}
+                        ref={(ref) => {
+                            panel = ref;
+                        }}
+                    />
+                </ScopedRoomContextProvider>,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+            return panel!;
+        };
+
+        it("scrolls to the top of a tile taller than the viewport", () => {
+            const events = mkEvents();
+            const panel = renderPanel(events);
+            const eventId = events[0].getId()!;
+            const node = panel.getNodeForEventId(eventId)!;
+            Object.defineProperty(node, "offsetHeight", { value: 900, configurable: true });
+            const scrollPanel = panel["scrollPanel"].current!;
+            vi.spyOn(scrollPanel, "getViewportHeight").mockReturnValue(600);
+            const scrollToToken = vi.spyOn(scrollPanel, "scrollToToken");
+
+            panel.scrollToEventTopIfOverflowing(eventId);
+
+            expect(scrollToToken).toHaveBeenCalledWith(eventId, 0, 0);
+        });
+
+        it("leaves the scroll position alone for tiles that fit", () => {
+            const events = mkEvents();
+            const panel = renderPanel(events);
+            const eventId = events[0].getId()!;
+            const node = panel.getNodeForEventId(eventId)!;
+            Object.defineProperty(node, "offsetHeight", { value: 300, configurable: true });
+            const scrollPanel = panel["scrollPanel"].current!;
+            vi.spyOn(scrollPanel, "getViewportHeight").mockReturnValue(600);
+            const scrollToToken = vi.spyOn(scrollPanel, "scrollToToken");
+
+            panel.scrollToEventTopIfOverflowing(eventId);
+            panel.scrollToEventTopIfOverflowing("$unknown");
+
+            expect(scrollToToken).not.toHaveBeenCalled();
+        });
+    });
+
     function mkEvents() {
         const events: MatrixEvent[] = [];
         const ts0 = Date.now();

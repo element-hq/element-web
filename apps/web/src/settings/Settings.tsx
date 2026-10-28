@@ -238,6 +238,7 @@ export interface Settings {
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
     "feature_msc4095_url_preview_bundle": IFeature;
+    "feature_a2ui": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -664,6 +665,15 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|document_previews"),
         description: _td("labs|document_previews_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_a2ui": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|a2ui"),
+        description: _td("labs|a2ui_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

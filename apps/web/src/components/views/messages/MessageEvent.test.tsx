@@ -53,6 +53,11 @@ vi.mock("./MStickerBody", () => ({
     default: () => <div data-testid="sticker-body" />,
 }));
 
+vi.mock("./MA2UIBody", () => ({
+    __esModule: true,
+    MA2UIBody: () => <div data-testid="a2ui-body" />,
+}));
+
 describe("MessageEvent", () => {
     let room: Room;
     let client: MatrixClient;
@@ -164,6 +169,24 @@ describe("MessageEvent", () => {
         expect(result.getByText("Unsupported message body")).toBeInTheDocument();
         expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
         expect(result.queryByTestId("textual-body")).toBeNull();
+    });
+
+    it("renders the A2UI body for the io.element.a2ui message type", () => {
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@agent:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: "io.element.a2ui",
+                body: "Interactive message",
+                messages: [],
+            },
+        });
+
+        const result = renderMessageEvent();
+
+        expect(result.getByTestId("a2ui-body")).toBeInTheDocument();
     });
 
     describe("when an image with a caption is sent", () => {

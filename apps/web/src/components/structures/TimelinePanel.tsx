@@ -59,6 +59,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { isA2UIMessageEvent } from "../../a2ui/A2UIEvents";
 
 // These pagination sizes are higher than they may possibly need be
 // once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
@@ -324,7 +325,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.initTimeline(this.props);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
+        this.scrollToTopOfNewA2UIMessage(prevState);
+
         if (prevProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
 
@@ -661,6 +664,31 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 break;
         }
     };
+
+    /** The newest live event already considered for {@link scrollToTopOfNewA2UIMessage}. */
+    private a2uiScrollCheckedEventId?: string;
+
+    /**
+     * When an interactive A2UI message arrives at the bottom of a timeline the user is following, show it from
+     * its top rather than its bottom if it is taller than the viewport. Runs after every update because the
+     * message may reach the timeline as a remote event, as a local echo, or only once it has been decrypted.
+     */
+    private scrollToTopOfNewA2UIMessage(prevState: Readonly<IState>): void {
+        const last = this.state.liveEvents[this.state.liveEvents.length - 1];
+        const eventId = last?.getId();
+        if (!last || !eventId || eventId === this.a2uiScrollCheckedEventId) return;
+
+        // Still encrypted: wait for the decrypted re-render before deciding.
+        if (last.getType() === EventType.RoomMessageEncrypted) return;
+        this.a2uiScrollCheckedEventId = eventId;
+
+        // Only messages that arrive while the timeline is open count, not the initial load.
+        if (prevState.liveEvents.length === 0) return;
+        if (!isA2UIMessageEvent(last)) return;
+        if (!this.messagePanel.current?.getScrollState()?.stuckAtBottom) return;
+
+        this.messagePanel.current.scrollToEventTopIfOverflowing(eventId);
+    }
 
     private onRoomTimeline = (
         ev: MatrixEvent,

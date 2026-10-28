@@ -31,6 +31,8 @@ import {
     THREAD_RELATION_TYPE,
     ThreadEvent,
     ThreadFilterType,
+    type IContent,
+    MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
@@ -47,6 +49,7 @@ import { mkThread } from "test-utils/threads";
 import { createMessageEventContent } from "test-utils/events";
 
 import TimelinePanel from "./TimelinePanel";
+import MessagePanel from "./MessagePanel";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
 import ScrollPanel from "./ScrollPanel";
@@ -600,6 +603,76 @@ describe("TimelinePanel", () => {
             client.emit(RoomEvent.Timeline, event, room, toStartOfTimeline, false, data);
 
             expect(paginateSpy).not.toHaveBeenCalled();
+        });
+
+        describe("A2UI messages", () => {
+            const mkLiveEvent = (room: Room, content: IContent, eventId: string): MatrixEvent =>
+                new MatrixEvent({
+                    event_id: eventId,
+                    type: EventType.RoomMessage,
+                    room_id: room.roomId,
+                    sender: "@agent:example.org",
+                    origin_server_ts: 1000,
+                    content,
+                });
+
+            const a2uiContent = { msgtype: "io.element.a2ui", body: "form", messages: [] };
+
+            // Append a live event to the timeline the way the SDK would, then tell the panel about it.
+            const arrive = async (client: MatrixClient, room: Room, timeline: EventTimeline, ev: MatrixEvent) => {
+                timeline.addEvent(ev, { toStartOfTimeline: false, addToState: true });
+                await act(async () => {
+                    client.emit(RoomEvent.Timeline, ev, room, false, false, { timeline, liveEvent: true });
+                    await flushPromises();
+                });
+            };
+
+            const setup = () => {
+                const [client, room, events] = setupTestData();
+                const [timeline, timelineSet] = mkTimeline(room, events);
+                const scrollSpy = vi
+                    .spyOn(MessagePanel.prototype, "scrollToEventTopIfOverflowing")
+                    .mockImplementation(() => {});
+                render(
+                    <TimelinePanel timelineSet={timelineSet} manageReadReceipts={true} sendReadReceiptOnLoad={true} />,
+                    clientAndSDKContextRenderOptions(client, sdkContext),
+                );
+                return { client, room, timeline, scrollSpy };
+            };
+
+            it("scrolls to the top of an A2UI message that arrives at the bottom", async () => {
+                const { client, room, timeline, scrollSpy } = setup();
+
+                await arrive(client, room, timeline, mkLiveEvent(room, createMessageEventContent("hi"), "$text"));
+                expect(scrollSpy).not.toHaveBeenCalled();
+
+                await arrive(client, room, timeline, mkLiveEvent(room, a2uiContent, "$surface"));
+                expect(scrollSpy).toHaveBeenCalledTimes(1);
+                expect(scrollSpy).toHaveBeenCalledWith("$surface");
+
+                // A re-render for any other reason does not scroll again.
+                await act(async () => {
+                    client.emit(ClientEvent.Sync, SyncState.Prepared, SyncState.Syncing);
+                    await flushPromises();
+                });
+                expect(scrollSpy).toHaveBeenCalledTimes(1);
+            });
+
+            it("waits for an encrypted A2UI message to be decrypted", async () => {
+                const { client, room, timeline, scrollSpy } = setup();
+                const surface = mkLiveEvent(room, a2uiContent, "$surface");
+                const getType = vi.spyOn(surface, "getType").mockReturnValue(EventType.RoomMessageEncrypted);
+
+                await arrive(client, room, timeline, surface);
+                expect(scrollSpy).not.toHaveBeenCalled();
+
+                getType.mockRestore();
+                await act(async () => {
+                    client.emit(MatrixEventEvent.Decrypted, surface);
+                    await flushPromises();
+                });
+                expect(scrollSpy).toHaveBeenCalledWith("$surface");
+            });
         });
 
         it("advances the timeline window", () => {

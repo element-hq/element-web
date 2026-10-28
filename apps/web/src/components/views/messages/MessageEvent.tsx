@@ -45,6 +45,8 @@ import {
     renderMBody,
 } from "./MBodyFactory";
 import { TextualBodyFactory } from "./TextualBodyFactory";
+import { MA2UIBody } from "./MA2UIBody";
+import { A2UI_MSGTYPE } from "../../../a2ui/A2UIEvents";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -75,6 +77,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
+    [A2UI_MSGTYPE, MA2UIBody],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],

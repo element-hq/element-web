@@ -440,6 +440,17 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.scrollPanel.current?.scrollToToken(eventId, pixelOffset, offsetBase);
     }
 
+    /**
+     * If the tile for the event is taller than the viewport, scroll so its top is visible rather than its bottom.
+     * Used for tall interactive messages that arrive while the panel is stuck at the bottom.
+     */
+    public scrollToEventTopIfOverflowing(eventId: string): void {
+        const node = this.getNodeForEventId(eventId);
+        const scrollPanel = this.scrollPanel.current;
+        if (!node || !scrollPanel || node.offsetHeight <= scrollPanel.getViewportHeight()) return;
+        scrollPanel.scrollToToken(eventId, 0, 0);
+    }
+
     public scrollToEventIfNeeded(eventId: string): void {
         const node = this.getNodeForEventId(eventId);
         if (node) {

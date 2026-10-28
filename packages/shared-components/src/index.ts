@@ -7,6 +7,7 @@
  */
 
 // Components
+export * from "./a2ui";
 export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";

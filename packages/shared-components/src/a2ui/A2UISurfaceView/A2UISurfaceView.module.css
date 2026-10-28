@@ -1,0 +1,232 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+.surfaces {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-3x);
+    max-width: 480px;
+}
+
+.surface {
+    display: flex;
+    flex-direction: column;
+}
+
+.notice {
+    color: var(--cpd-color-text-secondary);
+    margin: 0;
+}
+
+.error {
+    color: var(--cpd-color-text-critical-primary);
+    margin: 0;
+}
+
+.text {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.caption {
+    color: var(--cpd-color-text-secondary);
+}
+
+.container {
+    min-width: 0;
+}
+
+.list {
+    gap: var(--cpd-space-1x);
+}
+
+.card {
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-3x);
+    padding: var(--cpd-space-4x);
+    background: var(--cpd-color-bg-canvas-default);
+}
+
+.divider {
+    align-self: stretch;
+}
+
+.image {
+    display: block;
+    max-width: 100%;
+    border-radius: var(--cpd-space-2x);
+}
+
+.image[data-fit="contain"] {
+    object-fit: contain;
+}
+
+.image[data-fit="cover"] {
+    object-fit: cover;
+}
+
+.image[data-fit="scaleDown"] {
+    object-fit: scale-down;
+}
+
+.image[data-fit="none"] {
+    object-fit: none;
+}
+
+.image[data-variant="icon"] {
+    width: 24px;
+    height: 24px;
+}
+
+.image[data-variant="avatar"] {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.image[data-variant="smallFeature"] {
+    max-height: 120px;
+}
+
+.image[data-variant="mediumFeature"] {
+    max-height: 200px;
+}
+
+.image[data-variant="largeFeature"],
+.image[data-variant="header"] {
+    width: 100%;
+    max-height: 320px;
+}
+
+.video {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: var(--cpd-space-2x);
+    background: var(--cpd-color-bg-subtle-secondary);
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    color: var(--cpd-color-icon-primary);
+}
+
+.imageButton {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.imageButton:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+    border-radius: var(--cpd-space-2x);
+}
+
+.hiddenMedia {
+    width: 100%;
+    min-height: 80px;
+}
+
+.imagePlaceholder {
+    display: block;
+    padding: var(--cpd-space-2x);
+    border-radius: var(--cpd-space-2x);
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.label {
+    font: var(--cpd-font-body-sm-medium);
+    color: var(--cpd-color-text-primary);
+}
+
+.inlineField {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-primary);
+}
+
+.textarea {
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-primary);
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-primary);
+    border-radius: var(--cpd-space-2x);
+    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    min-height: 80px;
+    resize: vertical;
+}
+
+.textarea:focus {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.sliderRow {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+}
+
+.slider {
+    flex: 1;
+    accent-color: var(--cpd-color-bg-accent-rest);
+}
+
+.sliderValue {
+    min-width: 3ch;
+    text-align: end;
+    font: var(--cpd-font-body-sm-regular);
+    color: var(--cpd-color-text-secondary);
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-2x);
+}
+
+.tabList {
+    display: flex;
+    gap: var(--cpd-space-1x);
+    border-bottom: 1px solid var(--cpd-color-border-interactive-secondary);
+}
+
+.tab {
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: var(--cpd-space-1x) var(--cpd-space-3x);
+    cursor: pointer;
+    font: var(--cpd-font-body-md-medium);
+    color: var(--cpd-color-text-secondary);
+}
+
+.tab[aria-selected="true"] {
+    color: var(--cpd-color-text-primary);
+    border-bottom-color: var(--cpd-color-border-accent);
+}

@@ -554,6 +554,11 @@ export default class ScrollPanel extends React.Component<IProps> {
     /**
      * jump to the bottom of the content.
      */
+    /** The visible height of the scrolling viewport, in pixels. */
+    public getViewportHeight = (): number => {
+        return this.getScrollNode().clientHeight;
+    };
+
     public scrollToBottom = (): void => {
         // the easiest way to make sure that the scroll state is correctly
         // saved is to do the scroll, then save the updated state. (Calculating

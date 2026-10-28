@@ -2,6 +2,14 @@
     "a11y": {
         "seek_bar_label": "Audio seek bar"
     },
+    "a2ui": {
+        "media_unavailable": "Media unavailable",
+        "no_content": "This message contains an interactive view that cannot be displayed.",
+        "show_image": "Show image",
+        "show_video": "Show video",
+        "unsupported_component": "Unsupported component: %(type)s",
+        "waiting_for_content": "Waiting for content…"
+    },
     "action": {
         "back": "Back",
         "cancel": "Cancel",
