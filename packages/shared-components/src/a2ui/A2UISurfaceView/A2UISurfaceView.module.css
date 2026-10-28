@@ -123,6 +123,11 @@ Please see LICENSE in the repository root for full details.
     color: var(--cpd-color-icon-primary);
 }
 
+/* Icons inside a button follow its label colour, which differs for primary and disabled buttons. */
+.inlineIcon {
+    color: currentColor;
+}
+
 .imageButton {
     display: block;
     padding: 0;

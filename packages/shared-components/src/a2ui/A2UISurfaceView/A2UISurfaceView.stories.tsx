@@ -251,7 +251,7 @@ export const TemplateList: Story = {
 };
 
 const shortcuts = [
-    { id: "now", label: "On now", icon: "play" },
+    { id: "now", label: "On now", icon: "play", variant: "primary" },
     { id: "next", label: "Up next", icon: "fastForward" },
     { id: "wed", label: "Wed 21 Oct", icon: "calendarToday" },
     { id: "thu", label: "Thu 22 Oct", icon: "calendarToday" },
@@ -259,7 +259,7 @@ const shortcuts = [
     { id: "favourites", label: "Favourites", icon: "star" },
 ];
 
-/** A row of buttons too wide for a narrow timeline, which wraps onto further lines. */
+/** A row of icon buttons too wide for a narrow timeline, which wraps onto further lines. */
 export const ButtonRow: Story = {
     args: {
         messages: [
@@ -269,8 +269,14 @@ export const ButtonRow: Story = {
                     surfaceId: "main",
                     components: [
                         { id: "root", component: "Row", children: shortcuts.map(({ id }) => id) },
-                        ...shortcuts.flatMap(({ id, label, icon }) => [
-                            { id, component: "Button", child: `${id}Content`, action: { event: { name: id } } },
+                        ...shortcuts.flatMap(({ id, label, icon, variant }) => [
+                            {
+                                id,
+                                component: "Button",
+                                variant,
+                                child: `${id}Content`,
+                                action: { event: { name: id } },
+                            },
                             {
                                 id: `${id}Content`,
                                 component: "Row",

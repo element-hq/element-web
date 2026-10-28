@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { render, screen } from "@test-utils";
+import { render, screen, within } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -190,6 +190,21 @@ describe("A2UISurfaceView", () => {
         const innerRow = button.firstElementChild as HTMLElement;
         expect(outerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("wrap");
         expect(innerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("nowrap");
+    });
+
+    it("colours icons inside buttons like the button label", () => {
+        // Design tokens are not loaded in unit tests, so give the standalone icon colour a value to tell them apart.
+        const { container } = render(
+            <div style={{ "--cpd-color-icon-primary": "rgb(1, 2, 3)" } as React.CSSProperties}>
+                <ButtonRow />
+            </div>,
+        );
+
+        for (const name of ["On now", "Up next"]) {
+            const button = within(container).getByRole("button", { name });
+            const icon = button.querySelector("svg")!;
+            expect(getComputedStyle(icon).color).toBe(getComputedStyle(button).color);
+        }
     });
 
     it("renders catalog icons, custom icon paths and a fallback for unknown names", () => {

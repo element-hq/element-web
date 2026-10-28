@@ -233,7 +233,7 @@ function A2UINodeView(props: NodeProps): JSX.Element | null {
             }
             return <video className={styles.video} src={node.url} controls preload="metadata" />;
         case "Icon":
-            return <A2UIIconView node={node} />;
+            return <A2UIIconView node={node} inline={props.inline} />;
         case "Row":
         case "Column":
         case "List":
@@ -389,16 +389,17 @@ const CATALOG_ICONS: Record<string, IconComponent> = {
     warning: WarningIcon,
 };
 
-function A2UIIconView({ node }: { node: A2UIIconRenderNode }): JSX.Element {
+function A2UIIconView({ node, inline }: { node: A2UIIconRenderNode; inline?: boolean }): JSX.Element {
+    const className = classNames(styles.icon, { [styles.inlineIcon]: inline });
     if (node.svgPath !== undefined) {
         return (
-            <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true" data-icon="custom">
+            <svg className={className} viewBox="0 0 24 24" aria-hidden="true" data-icon="custom">
                 <path d={node.svgPath} fill="currentColor" />
             </svg>
         );
     }
     const Icon = (node.name && CATALOG_ICONS[node.name]) || UnknownIcon;
-    return <Icon className={styles.icon} aria-hidden="true" data-icon={node.name} />;
+    return <Icon className={className} aria-hidden="true" data-icon={node.name} />;
 }
 
 function A2UISliderView({
