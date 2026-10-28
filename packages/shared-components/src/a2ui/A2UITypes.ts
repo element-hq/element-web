@@ -29,7 +29,10 @@ export type A2UIDynamic<T> = T | A2UIDataBinding;
 /** A list of children: either static component ids or a template expanded over a data model list. */
 export type A2UIChildList = string[] | { componentId: string; path: string };
 
-/** An action attached to a component. Only the server event form is supported. */
+/**
+ * An action attached to a component: either a server event, or a client-side function call. The only function
+ * supported is the basic catalog's `openUrl`.
+ */
 export interface A2UIAction {
     event?: {
         name: string;
@@ -37,7 +40,7 @@ export interface A2UIAction {
     };
     functionCall?: {
         call: string;
-        args?: Record<string, A2UIJsonValue>;
+        args?: Record<string, A2UIDynamic<A2UIJsonValue>>;
     };
 }
 

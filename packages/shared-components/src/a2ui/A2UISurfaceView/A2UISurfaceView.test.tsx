@@ -21,7 +21,8 @@ import {
 } from "./A2UISurfaceView";
 import * as stories from "./A2UISurfaceView.stories";
 
-const { ContactForm, TemplateList, Tabs, ButtonRow, NoRootYet, NoSurfaces, SendFailed } = composeStories(stories);
+const { ContactForm, TemplateList, Tabs, ButtonRow, Links, NoRootYet, NoSurfaces, SendFailed } =
+    composeStories(stories);
 
 function mockVm(root: A2UIRenderNode | null, extra: Partial<A2UISurfaceViewSnapshot> = {}) {
     const setInputValue = vi.fn<A2UISurfaceViewActions["setInputValue"]>();
@@ -129,6 +130,24 @@ describe("A2UISurfaceView", () => {
         render(<A2UISurfaceView vm={vm} />);
 
         for (const button of screen.getAllByRole("button")) expect(button).toBeDisabled();
+    });
+
+    it("renders openUrl buttons as links that open in a new tab", async () => {
+        const user = userEvent.setup();
+        const onAction = vi.fn();
+        render(<Links onAction={(...args) => onAction(...args)} />);
+
+        const link = screen.getByRole("link", { name: "Watch recording" });
+        expect(link).toHaveAttribute("href", "https://media.ccc.de/");
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noreferrer noopener");
+        expect(link).toHaveAttribute("title", "https://media.ccc.de/");
+        expect(screen.getByRole("link", { name: "Slides" })).toHaveAttribute("href", "https://example.org/slides");
+        expect(screen.getByRole("button", { name: "Unsafe link" })).toBeDisabled();
+
+        link.addEventListener("click", (e) => e.preventDefault());
+        await user.click(link);
+        expect(onAction).not.toHaveBeenCalled();
     });
 
     it("passes input edits to the view model with the bound path", async () => {

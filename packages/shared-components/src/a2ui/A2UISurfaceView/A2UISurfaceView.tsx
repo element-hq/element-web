@@ -552,6 +552,23 @@ const BUTTON_KIND: Record<A2UIButtonRenderNode["variant"], "primary" | "secondar
 
 function A2UIButtonView(props: NodeProps & { node: A2UIButtonRenderNode }): JSX.Element {
     const { node, surfaceId, vm, sending } = props;
+    // An openUrl button is a plain link: it runs in the client, so it stays usable while an action is sending, and
+    // the title shows where it leads.
+    if (node.href) {
+        return (
+            <Button
+                kind={BUTTON_KIND[node.variant]}
+                size="md"
+                as="a"
+                href={node.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                title={node.href}
+            >
+                {node.child && <A2UINodeView {...props} node={node.child} inline />}
+            </Button>
+        );
+    }
     return (
         <Button
             kind={BUTTON_KIND[node.variant]}

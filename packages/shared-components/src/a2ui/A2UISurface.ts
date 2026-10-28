@@ -6,6 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import {
+    type A2UIAction,
     type A2UIChildList,
     type A2UIComponent,
     type A2UIDynamic,
@@ -151,6 +152,17 @@ export class A2UISurface {
         return (this.options.resolveMediaUrl ?? defaultResolveMediaUrl)(url);
     }
 
+    /**
+     * The URL of an `openUrl` function call action, the only client-side function this renderer runs. Only
+     * absolute http(s) URLs are accepted.
+     */
+    private resolveOpenUrl(action: A2UIAction | undefined, scope: string | undefined): string | undefined {
+        const call = action?.functionCall;
+        if (call?.call !== "openUrl") return undefined;
+        const url: unknown = this.resolveDynamic(call.args?.url, scope);
+        return typeof url === "string" && /^https?:\/\/\S+$/i.test(url) ? url : undefined;
+    }
+
     private bindingPath(value: unknown, scope: string | undefined): string | undefined {
         return isBinding(value) ? joinJsonPointer(scope, value.path) : undefined;
     }
@@ -263,14 +275,17 @@ export class A2UISurface {
                 };
             case "Divider":
                 return { ...base, component: "Divider", axis: component.axis ?? "horizontal" };
-            case "Button":
+            case "Button": {
+                const href = this.resolveOpenUrl(component.action, scope);
                 return {
                     ...base,
                     component: "Button",
                     child: child(component.child),
                     variant: component.variant ?? "default",
-                    enabled: typeof component.action?.event?.name === "string",
+                    enabled: href !== undefined || typeof component.action?.event?.name === "string",
+                    href,
                 };
+            }
             case "TextField": {
                 const { path, value } = this.inputValue<string>(key, component.value, scope);
                 return {

@@ -300,6 +300,45 @@ export const ButtonRow: Story = {
     ],
 };
 
+/** Buttons running the catalog's `openUrl` function render as links; unsupported URLs are disabled. */
+export const Links: Story = {
+    args: {
+        messages: [
+            {
+                version: "v0.9",
+                updateComponents: {
+                    surfaceId: "main",
+                    components: [
+                        { id: "root", component: "Row", children: ["watch", "slides", "unsafe"] },
+                        {
+                            id: "watch",
+                            component: "Button",
+                            variant: "primary",
+                            child: "watchLabel",
+                            action: { functionCall: { call: "openUrl", args: { url: "https://media.ccc.de/" } } },
+                        },
+                        { id: "watchLabel", component: "Text", text: "Watch recording" },
+                        {
+                            id: "slides",
+                            component: "Button",
+                            child: "slidesLabel",
+                            action: { functionCall: { call: "openUrl", args: { url: "https://example.org/slides" } } },
+                        },
+                        { id: "slidesLabel", component: "Text", text: "Slides" },
+                        {
+                            id: "unsafe",
+                            component: "Button",
+                            child: "unsafeLabel",
+                            action: { functionCall: { call: "openUrl", args: { url: "javascript:alert(1)" } } },
+                        },
+                        { id: "unsafeLabel", component: "Text", text: "Unsafe link" },
+                    ],
+                },
+            },
+        ],
+    },
+};
+
 export const Tabs: Story = {
     args: {
         messages: [

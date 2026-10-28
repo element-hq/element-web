@@ -8,7 +8,7 @@ Please see LICENSE in the repository root for full details.
 import { describe, expect, it } from "vitest";
 
 import { A2UISurface, A2UISurfaceSet } from "./A2UISurface";
-import { type A2UIComponent } from "./A2UITypes";
+import { type A2UIAction, type A2UIComponent } from "./A2UITypes";
 import { type A2UIContainerRenderNode, type A2UITextFieldRenderNode } from "./A2UIRenderNode";
 
 const formComponents: A2UIComponent[] = [
@@ -139,6 +139,29 @@ describe("A2UISurface", () => {
 
         expect(surface.resolve().root).toMatchObject({ component: "Button", enabled: false });
         expect(surface.resolveAction("root")).toBeNull();
+    });
+
+    it("resolves openUrl buttons to links, accepting only http(s) URLs", () => {
+        const surface = new A2UISurface("main");
+        const openUrl = (url: unknown) => ({ functionCall: { call: "openUrl", args: { url } } }) as A2UIAction;
+        surface.updateComponents([
+            { id: "root", component: "Row", children: ["web", "bound", "script", "relative"] },
+            { id: "web", component: "Button", child: "label", action: openUrl("https://example.org/talk") },
+            { id: "bound", component: "Button", child: "label", action: openUrl({ path: "/link" }) },
+            { id: "script", component: "Button", child: "label", action: openUrl("javascript:alert(1)") },
+            { id: "relative", component: "Button", child: "label", action: openUrl("/talk") },
+            { id: "label", component: "Text", text: "Open" },
+        ]);
+        surface.updateDataModel("/", { link: "http://example.org/bound" });
+
+        const root = surface.resolve().root as A2UIContainerRenderNode;
+        expect(root.children).toMatchObject([
+            { id: "web", enabled: true, href: "https://example.org/talk" },
+            { id: "bound", enabled: true, href: "http://example.org/bound" },
+            { id: "script", enabled: false, href: undefined },
+            { id: "relative", enabled: false, href: undefined },
+        ]);
+        expect(surface.resolveAction("web")).toBeNull();
     });
 
     it("expands template children with a scope per item", () => {
