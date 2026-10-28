@@ -2100,9 +2100,6 @@
                 "breadcrumb_page": "Nulstil kryptering",
                 "other_people_device_title": "Andre personers enheder"
             },
-            "delete_key_storage": {
-                "list_first": "Du vil ikke kunne se historikken for krypterede beskeder på nye enheder"
-            },
             "recovery": {
                 "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet."
             }

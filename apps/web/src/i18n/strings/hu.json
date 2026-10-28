@@ -2515,14 +2515,6 @@
             },
             "confirm_key_storage_off": "Biztosan kikapcsolva szeretné tartani a kulcstárolást?",
             "confirm_key_storage_off_description": "Ha eltávolítja az összes eszközét, elveszíti üzenetelőzményeit, és újra ellenőriznie kell az összes meglévő kapcsolatát. <a>Tudjon meg többet</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Kulcstároló törlése",
-                "confirm": "Kulcstároló törlése",
-                "description": "A kulcstároló törlése eltávolítja a kriptográfiai személyazonosságát és üzenetkulcsát a kiszolgálóról, és kikapcsolja a következő biztonsági funkciókat:",
-                "list_first": "Nem lesznek meg a titkosított üzenetek előzményei az új eszközein",
-                "list_second": "Elveszíti hozzáférését titkosított üzeneteihez, ha egy eszközön sincs bejelentkezve.",
-                "title": "Biztos, hogy kikapcsolja a kulcstárolót és törli azt?"
-            },
             "device_not_verified_button": "Az eszköz ellenőrzése",
             "device_not_verified_description": "A titkosítási beállítások megtekintéséhez ellenőriznie kell ezt az eszközt.",
             "device_not_verified_title": "Az eszköz nincs ellenőrizve",

@@ -2426,14 +2426,6 @@
             },
             "confirm_key_storage_off": "Ydych chi'n siŵr eich bod chi eisiau cadw storfa allweddi wedi'i diffodd?",
             "confirm_key_storage_off_description": "Os byddwch chi'n allgofnodi o'ch holl ddyfeisiau byddwch chi'n colli'ch hanes negeseuon a bydd angen i chi wirio'ch holl gysylltiadau presennol eto. <a>Dysgu mwy</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Dileu storfa allweddi",
-                "confirm": "Dileu storfa allweddi",
-                "description": "Bydd dileu storfa allweddi'n tynnu eich hunaniaeth cryptograffig a'ch allweddi neges o'r gweinydd ac yn diffodd y nodweddion diogelwch canlynol:",
-                "list_first": "Ni fydd gennych hanes negeseuon wedi'i amgryptio ar ddyfeisiau newydd",
-                "list_second": "Byddwch yn colli mynediad i'ch negeseuon wedi'u hamgryptio os ydych wedi'ch allgofnodi o %(brand)s ym mhobman",
-                "title": "Ydych chi'n siŵr eich bod am ddiffodd storfa allweddi a'i dileu?"
-            },
             "device_not_verified_button": "Dilyswch y ddyfais hon",
             "device_not_verified_description": "Mae angen i chi wirio'r ddyfais hon er mwyn gweld eich gosodiadau amgryptio.",
             "device_not_verified_title": "Dyfais heb ei gwirio",
