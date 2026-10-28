@@ -45,6 +45,23 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         });
     }
 
+    public destroy(): void {
+        super.destroy();
+        this.clearRoomStates();
+        this._globalState.destroy();
+    }
+
+    /**
+     * Destroys and forgets the notification state of every room.
+     * @internal Public for tests, which create new rooms in every test.
+     */
+    public clearRoomStates(): void {
+        for (const roomState of this.roomMap.values()) {
+            roomState.destroy();
+        }
+        this.roomMap.clear();
+    }
+
     /**
      * @internal Public for test only
      */
@@ -90,6 +107,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
             const state = new RoomNotificationState(room, false);
+            // This store owns the state, and destroying it on teardown removes the listener
+            // oxlint-disable-next-line element-web/no-leaked-emitter-listener
             state.on(NotificationStateEvents.Update, this.onRoomStateUpdate);
             this.roomMap.set(room, state);
         }
@@ -157,8 +176,12 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
             this.globalState.numUnreadStates !== globalState.numUnreadStates ||
             forceEmit
         ) {
+            // Each summary watches a setting, so release the ones which are no longer used
+            this._globalState.destroy();
             this._globalState = globalState;
             this.emit(UPDATE_STATUS_INDICATOR, globalState, state);
+        } else {
+            globalState.destroy();
         }
     };
 

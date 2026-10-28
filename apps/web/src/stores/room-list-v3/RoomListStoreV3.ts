@@ -118,10 +118,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.buildFilters();
 
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, () => {
-            this.onActiveSpaceChanged();
-        });
-        SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
+        SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, this.onSpaceStoreUpdate);
+        SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, this.onSpaceStoreUpdate);
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onSectionsChange());
 
         SettingsStore.watchSetting("Notifications.activityIsUnread", null, (_settingsName, _roomId, _level, newValue) =>
@@ -136,6 +134,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             if (roomId === SDKContextClass.instance.spaceStore.activeSpace) this.onActiveSpaceChanged();
         });
     }
+
+    public destroy(): void {
+        super.destroy();
+        SDKContextClass.instance.spaceStore.off(UPDATE_SELECTED_SPACE, this.onSpaceStoreUpdate);
+        SDKContextClass.instance.spaceStore.off(UPDATE_HOME_BEHAVIOUR, this.onSpaceStoreUpdate);
+    }
+
+    private onSpaceStoreUpdate = (): void => {
+        this.onActiveSpaceChanged();
+    };
 
     /**
      * Build the filters used in the skip list and store them in the filterByFilterKey map.
