@@ -210,6 +210,7 @@
         "empty": {
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_dm": "Get started by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
             "no_invites": "You don't have any unread invites",
             "no_mentions": "You don't have any unread mentions",
