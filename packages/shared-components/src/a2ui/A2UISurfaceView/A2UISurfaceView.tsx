@@ -6,7 +6,7 @@ Please see LICENSE in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type JSX, type Ref, useId, useState } from "react";
+import React, { type JSX, type MouseEventHandler, type Ref, useContext, useId, useState } from "react";
 import { Button, CheckboxInput, Heading, RadioInput, Separator, Text, TextInput } from "@vector-im/compound-web";
 import {
     ArrowLeftIcon,
@@ -61,6 +61,7 @@ import {
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
 import { Flex } from "../../core/utils/Flex";
+import { LinkedTextContext } from "../../core/utils/LinkedText";
 import { HiddenMediaPlaceholder } from "../../room/timeline/event-tile/body/HiddenMediaPlaceholder";
 import { Box } from "../../core/utils/Box";
 import {
@@ -552,18 +553,24 @@ const BUTTON_KIND: Record<A2UIButtonRenderNode["variant"], "primary" | "secondar
 
 function A2UIButtonView(props: NodeProps & { node: A2UIButtonRenderNode }): JSX.Element {
     const { node, surfaceId, vm, sending } = props;
+    const links = useContext(LinkedTextContext);
     // An openUrl button is a plain link: it runs in the client, so it stays usable while an action is sending, and
-    // the title shows where it leads.
+    // the title shows where it leads. It follows the same rules as links in message text, so links to users, rooms
+    // and events open inside the app rather than in a new tab.
     if (node.href) {
+        const target = links?.urlTargetTransformer?.(node.href) ?? "_blank";
+        // The listeners are typed loosely for linkify, but message text passes them React click events too.
+        const onClick = links?.urlListener?.(node.href)?.click as MouseEventHandler<HTMLAnchorElement> | undefined;
         return (
             <Button
                 kind={BUTTON_KIND[node.variant]}
                 size="md"
                 as="a"
                 href={node.href}
-                target="_blank"
+                target={target || undefined}
                 rel="noreferrer noopener"
                 title={node.href}
+                onClick={onClick}
             >
                 {node.child && <A2UINodeView {...props} node={node.child} inline />}
             </Button>

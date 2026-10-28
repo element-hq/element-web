@@ -11,8 +11,9 @@ Enable the **Interactive agent messages (A2UI)** labs flag (`feature_a2ui`).
 
 - Buttons are disabled while an action is being sent, and a failure shows "Your response could not be sent. Please
   try again." under the surfaces.
-- `openUrl` buttons render as links styled as buttons. They open in a new tab, show the URL as a tooltip, and stay
-  usable while an action is sending.
+- `openUrl` buttons render as links styled as buttons. They show the URL as a tooltip and stay usable while an
+  action is sending. They follow the same rules as links in message text: permalinks to users, rooms and events
+  (such as `matrix.to` links) open inside Element, and other links open in a new tab.
 - `mxc` URLs use authenticated media where the homeserver supports it.
 - Images and videos follow the same media preview rules as timeline attachments: when previews are off for the
   sender, a "Show image" or "Show video" placeholder is shown, and the choice to reveal is remembered per message.

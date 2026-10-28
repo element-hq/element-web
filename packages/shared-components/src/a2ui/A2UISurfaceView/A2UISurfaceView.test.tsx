@@ -12,6 +12,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../core/viewmodel";
+import { LinkedTextContext } from "../../core/utils/LinkedText";
 import { type A2UIRenderNode } from "../A2UIRenderNode";
 import {
     A2UISurfaceView,
@@ -209,6 +210,31 @@ describe("A2UISurfaceView", () => {
         const innerRow = button.firstElementChild as HTMLElement;
         expect(outerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("wrap");
         expect(innerRow.style.getPropertyValue("--mx-flex-wrap")).toBe("nowrap");
+    });
+
+    it("opens openUrl links the way the app opens links in message text", async () => {
+        const user = userEvent.setup();
+        const click = vi.fn((e: MouseEvent) => e.preventDefault());
+        const linkConfig = {
+            urlTargetTransformer: (href: string) => (href.startsWith("https://example.org/") ? "" : "_blank"),
+            urlListener: (href: string) => (href.startsWith("https://example.org/") ? { click } : null),
+        };
+        render(
+            <LinkedTextContext.Provider value={linkConfig}>
+                <Links />
+            </LinkedTextContext.Provider>,
+        );
+
+        const internal = screen.getByRole("link", { name: "Slides" });
+        expect(internal).not.toHaveAttribute("target");
+        await user.click(internal);
+        expect(click).toHaveBeenCalledOnce();
+
+        const external = screen.getByRole("link", { name: "Watch recording" });
+        expect(external).toHaveAttribute("target", "_blank");
+        external.addEventListener("click", (e) => e.preventDefault());
+        await user.click(external);
+        expect(click).toHaveBeenCalledOnce();
     });
 
     it("colours icons inside buttons like the button label", () => {

@@ -11,12 +11,16 @@ import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 import { mkEvent, stubClient, withClientContextRenderOptions } from "test-utils";
 
 import { MA2UIBody } from "./MA2UIBody";
 import { A2UI_ACTION_EVENT_TYPE, A2UI_MSGTYPE } from "../../../a2ui/A2UIEvents";
 import SettingsStore from "../../../settings/SettingsStore";
 import { MediaPreviewValue } from "../../../@types/media_preview";
+import { LinkedTextConfiguration } from "../../../Linkify";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 
 vi.mock("./TextualBodyFactory", () => ({
     __esModule: true,
@@ -107,6 +111,68 @@ describe("MA2UIBody", () => {
 
         expect(screen.queryByRole("img", { name: "A picture" })).not.toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Show image" })).toBeInTheDocument();
+    });
+
+    it("opens matrix.to links in openUrl buttons inside the app and other links in a new tab", () => {
+        enableFlag(true);
+        const openUrl = (id: string, label: string, url: string) => [
+            {
+                id,
+                component: "Button",
+                child: `${id}Label`,
+                action: { functionCall: { call: "openUrl", args: { url } } },
+            },
+            { id: `${id}Label`, component: "Text", text: label },
+        ];
+        const linksEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            room: roomId,
+            user: "@agent:example.org",
+            content: {
+                msgtype: A2UI_MSGTYPE,
+                body: "fallback",
+                messages: [
+                    {
+                        version: "v0.9",
+                        updateComponents: {
+                            surfaceId: "main",
+                            components: [
+                                { id: "root", component: "Row", children: ["user", "room", "web"] },
+                                ...openUrl("user", "Speaker", "https://matrix.to/#/@alice:example.org"),
+                                ...openUrl("room", "Room", "https://matrix.to/#/#conference:example.org"),
+                                ...openUrl("web", "Website", "https://example.org/"),
+                            ],
+                        },
+                    },
+                ],
+            },
+        });
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        render(
+            <LinkedTextContext.Provider value={LinkedTextConfiguration}>
+                <MA2UIBody mxEvent={linksEvent} />
+            </LinkedTextContext.Provider>,
+            withClientContextRenderOptions(cli),
+        );
+
+        const userLink = screen.getByRole("link", { name: "Speaker" });
+        expect(userLink).not.toHaveAttribute("target");
+        userLink.click();
+        expect(dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: Action.ViewUser,
+                member: expect.objectContaining({ userId: "@alice:example.org" }),
+            }),
+        );
+
+        const roomLink = screen.getByRole("link", { name: "Room" });
+        expect(roomLink).not.toHaveAttribute("target");
+        roomLink.click();
+        expect(globalThis.location.hash).toBe("#/room/#conference:example.org");
+        globalThis.location.hash = "";
+
+        expect(screen.getByRole("link", { name: "Website" })).toHaveAttribute("target", "_blank");
     });
 
     it("renders the surface and sends actions when the labs flag is on", async () => {
