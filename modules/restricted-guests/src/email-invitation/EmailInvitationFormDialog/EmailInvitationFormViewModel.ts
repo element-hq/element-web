@@ -12,8 +12,15 @@ import type {
     EmailInvitationFormViewActions,
     EmailInvitationFormViewSnapshot,
 } from "./types";
-import type { Api, JoinRule, Room } from "@element-hq/element-web-module-api";
+import type { Api, HistoryVisibility, JoinRule, Room } from "@element-hq/element-web-module-api";
 import type { ModuleConfig } from "../../config";
+
+/**
+ * Whether new members can read the messages sent before they joined.
+ */
+function isHistoryShared(historyVisibility: HistoryVisibility): boolean {
+    return historyVisibility === "shared" || historyVisibility === "world_readable";
+}
 
 interface EmailInvitationFormViewModelProps {
     /** Module API */
@@ -45,7 +52,7 @@ export class EmailInvitationFormViewModel
         super(props, {
             emails: [],
             canSendInvitations: false,
-            hasAccessToChatHistory: false,
+            hasAccessToChatHistory: isHistoryShared(props.room.historyVisibility.value),
             canCopyLinkToClipboard: Boolean(props.inviteLink),
             displayCopyTooltip: false,
             isJoinRuleChangeConfirmed: false,
@@ -60,6 +67,15 @@ export class EmailInvitationFormViewModel
         // Watching refreshes the join rule, which may have changed while nobody was watching
         onJoinRuleChange(props.room.joinRule.value);
         this.disposables.track(() => props.room.joinRule.unwatch(onJoinRuleChange));
+
+        // Listen to history visibility change, guests can read past messages when history is shared
+        const onHistoryVisibilityChange = (historyVisibility: HistoryVisibility): void => {
+            this.snapshot.merge({ hasAccessToChatHistory: isHistoryShared(historyVisibility) });
+        };
+        props.room.historyVisibility.watch(onHistoryVisibilityChange);
+        // Watching refreshes the history visibility, which may have changed while nobody was watching
+        onHistoryVisibilityChange(props.room.historyVisibility.value);
+        this.disposables.track(() => props.room.historyVisibility.unwatch(onHistoryVisibilityChange));
 
         // Clean tooltip timeout
         this.disposables.track(() => clearTimeout(this.copyTooltipTimeout));

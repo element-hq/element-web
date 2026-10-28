@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { type Api, type JoinRule, type Room } from "@element-hq/element-web-module-api";
+import { type Api, type HistoryVisibility, type JoinRule, type Room } from "@element-hq/element-web-module-api";
 import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { EmailInvitationFormViewModel } from "./EmailInvitationFormViewModel";
@@ -21,6 +21,7 @@ vi.mock("@element-hq/element-web-shared-utils", async (importOriginal) => ({
 const makeViewModel = (
     joinRule = "knock",
     allowCopyInviteLink = false,
+    historyVisibility = "shared",
 ): {
     vm: EmailInvitationFormViewModel;
     room: Room;
@@ -29,6 +30,7 @@ const makeViewModel = (
 } => {
     const room = {
         joinRule: { value: joinRule, watch: vi.fn(), unwatch: vi.fn() },
+        historyVisibility: { value: historyVisibility, watch: vi.fn(), unwatch: vi.fn() },
         setJoinRule: vi.fn(),
     } as unknown as Room;
 
@@ -52,13 +54,15 @@ describe("EmailInvitationFormViewModel", () => {
     });
 
     it("should build the initial snapshot from the room and the config", () => {
-        expect(makeViewModel("knock", false).vm.getSnapshot()).toMatchObject({
+        expect(makeViewModel("knock", false, "joined").vm.getSnapshot()).toMatchObject({
             isJoinRuleChangeRequired: false,
             canCopyLinkToClipboard: false,
+            hasAccessToChatHistory: false,
         });
-        expect(makeViewModel("invite", true).vm.getSnapshot()).toMatchObject({
+        expect(makeViewModel("invite", true, "shared").vm.getSnapshot()).toMatchObject({
             isJoinRuleChangeRequired: true,
             canCopyLinkToClipboard: true,
+            hasAccessToChatHistory: true,
         });
     });
 
@@ -75,6 +79,21 @@ describe("EmailInvitationFormViewModel", () => {
         expect(room.joinRule.unwatch).toHaveBeenCalledWith(onJoinRuleChange);
     });
 
+    it("should follow the room history visibility until disposed", () => {
+        const { vm, room } = makeViewModel("knock", false, "shared");
+        const onHistoryVisibilityChange = vi.mocked(room.historyVisibility.watch).mock.calls[0][0] as (
+            historyVisibility: HistoryVisibility,
+        ) => void;
+
+        onHistoryVisibilityChange("invited");
+        expect(vm.getSnapshot().hasAccessToChatHistory).toBe(false);
+        onHistoryVisibilityChange("world_readable");
+        expect(vm.getSnapshot().hasAccessToChatHistory).toBe(true);
+
+        vm.dispose();
+        expect(room.historyVisibility.unwatch).toHaveBeenCalledWith(onHistoryVisibilityChange);
+    });
+
     it("should use the join rule refreshed by watching", () => {
         // The join rule changed while nobody was watching, the first watch refreshes the value
         const joinRule = { value: "invite", watch: vi.fn(), unwatch: vi.fn() };
@@ -82,7 +101,10 @@ describe("EmailInvitationFormViewModel", () => {
 
         const vm = new EmailInvitationFormViewModel({
             api: {} as Api,
-            room: { joinRule } as unknown as Room,
+            room: {
+                joinRule,
+                historyVisibility: { value: "shared", watch: vi.fn(), unwatch: vi.fn() },
+            } as unknown as Room,
             config: { allow_copy_invite_link: false } as ModuleConfig,
             closeDialog: vi.fn(),
             onSubmit: vi.fn(),

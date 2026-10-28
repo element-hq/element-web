@@ -17,6 +17,7 @@ import { type ModuleConfig } from "../../config";
 const renderDialog = (allowCopyInviteLink = false): RenderResult & { onSubmit: () => void; onCancel: () => void } => {
     const room = {
         joinRule: { value: "invite", watch: vi.fn(), unwatch: vi.fn() },
+        historyVisibility: { value: "joined", watch: vi.fn(), unwatch: vi.fn() },
     } as unknown as Room;
     const onSubmit = vi.fn();
     const onCancel = vi.fn();

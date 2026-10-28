@@ -312,6 +312,9 @@ export interface HardwareKey {
 // @alpha
 export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
+// @public
+export type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
+
 // @alpha
 export interface HttpApi {
     authedRequest<T>(method: HttpMethod, path: string, opts?: AuthedRequestOpts): Promise<T>;
@@ -432,6 +435,7 @@ export interface Room {
     canChangeJoinRule: () => boolean;
     canInvite: () => boolean;
     getLastActiveTimestamp: () => number;
+    historyVisibility: Watchable<HistoryVisibility>;
     id: string;
     joinRule: Watchable<JoinRule>;
     name: Watchable<string>;

@@ -14,6 +14,12 @@ import { type Watchable } from "../api/watchable";
 export type JoinRule = "public" | "invite" | "knock" | "restricted" | "private";
 
 /**
+ * The history visibility of a room, from the `m.room.history_visibility` state event.
+ * @public
+ */
+export type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
+
+/**
  * Represents a room from element-web.
  * @public
  */
@@ -37,6 +43,11 @@ export interface Room {
      * @param joinRule - the new join rule
      */
     setJoinRule: (joinRule: JoinRule) => Promise<void>;
+    /**
+     * {@link Watchable} holding the history visibility of this room, from the `m.room.history_visibility` state event.
+     * Defaults to `shared`.
+     */
+    historyVisibility: Watchable<HistoryVisibility>;
     /**
      * Whether the current user can invite new members to this room.
      */

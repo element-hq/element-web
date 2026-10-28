@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from "vitest";
-import { EventType, JoinRule, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, HistoryVisibility, JoinRule, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkRoom, stubClient } from "test-utils";
 
 import { Room } from "./Room";
@@ -147,6 +147,48 @@ describe("Room", () => {
             expect(onSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
 
             room.joinRule.unwatch(fn);
+            expect(offSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+        });
+    });
+
+    describe("watchableHistoryVisibility", () => {
+        it("should follow the history visibility of the sdk room", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            const getHistoryVisibility = vi.mocked(sdkRoom.currentState.getHistoryVisibility);
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Joined);
+
+            const room = new Room(sdkRoom);
+            expect(room.historyVisibility.value).toStrictEqual("joined");
+
+            const fn = vi.fn();
+            const onSpy = vi.spyOn(sdkRoom, "on");
+            const offSpy = vi.spyOn(sdkRoom, "off");
+
+            // Changed while nobody was watching
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Shared);
+            room.historyVisibility.watch(fn);
+            expect(room.historyVisibility.value).toStrictEqual("shared");
+            expect(onSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Invited);
+            const mkStateEvent = (type: string): ReturnType<typeof mkEvent> =>
+                mkEvent({ event: true, type, room: sdkRoom.roomId, user: "@alice:m.org", skey: "", content: {} });
+
+            // Other state events are ignored
+            sdkRoom.emit(RoomStateEvent.Events, mkStateEvent(EventType.RoomTopic), sdkRoom.currentState, null);
+            expect(fn).not.toHaveBeenCalled();
+
+            sdkRoom.emit(
+                RoomStateEvent.Events,
+                mkStateEvent(EventType.RoomHistoryVisibility),
+                sdkRoom.currentState,
+                null,
+            );
+            expect(room.historyVisibility.value).toStrictEqual("invited");
+            expect(fn).toHaveBeenCalledTimes(1);
+
+            room.historyVisibility.unwatch(fn);
             expect(offSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
         });
     });

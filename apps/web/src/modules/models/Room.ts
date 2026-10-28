@@ -5,7 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type JoinRule, type Room as IRoom, Watchable } from "@element-hq/element-web-module-api";
+import {
+    type HistoryVisibility,
+    type JoinRule,
+    type Room as IRoom,
+    Watchable,
+} from "@element-hq/element-web-module-api";
 import {
     EventType,
     JoinRule as SdkJoinRule,
@@ -39,10 +44,12 @@ function toSdkJoinRule(joinRule: JoinRule): SdkJoinRule {
 export class Room implements IRoom {
     public name: Watchable<string>;
     public joinRule: Watchable<JoinRule>;
+    public historyVisibility: Watchable<HistoryVisibility>;
 
     public constructor(private sdkRoom: SdkRoom) {
         this.name = new WatchableName(sdkRoom);
         this.joinRule = new WatchableJoinRule(sdkRoom);
+        this.historyVisibility = new WatchableHistoryVisibility(sdkRoom);
     }
 
     public getLastActiveTimestamp(): number {
@@ -111,6 +118,30 @@ class WatchableJoinRule extends Watchable<JoinRule> {
     protected onFirstWatch(): void {
         // The join rule may have changed while nobody was watching
         super.value = this.sdkRoom.getJoinRule();
+        this.sdkRoom.on(RoomStateEvent.Events, this.onStateEvent);
+    }
+
+    protected onLastWatch(): void {
+        this.sdkRoom.off(RoomStateEvent.Events, this.onStateEvent);
+    }
+}
+
+/**
+ * A custom watchable for the room history visibility.
+ */
+class WatchableHistoryVisibility extends Watchable<HistoryVisibility> {
+    public constructor(private sdkRoom: SdkRoom) {
+        super(sdkRoom.currentState.getHistoryVisibility());
+    }
+
+    private onStateEvent = (event: MatrixEvent): void => {
+        if (event.getType() !== EventType.RoomHistoryVisibility) return;
+        super.value = this.sdkRoom.currentState.getHistoryVisibility();
+    };
+
+    protected onFirstWatch(): void {
+        // The history visibility may have changed while nobody was watching
+        super.value = this.sdkRoom.currentState.getHistoryVisibility();
         this.sdkRoom.on(RoomStateEvent.Events, this.onStateEvent);
     }
 
