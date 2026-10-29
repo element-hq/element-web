@@ -802,16 +802,18 @@ export class ElementCall extends Call {
      *
      * @param transports - The MatrixRTC transports Element Web knows about
      *   (`CallStore.getConfiguredRTCTransports()`). The component itself only looks at the
-     *   `/rtc/transports` endpoint, not at `.well-known`'s `org.matrix.msc4143.rtc_foci`, so the first
-     *   LiveKit transport is passed along as its configured `livekit_service_url`.
+     *   `/rtc/transports` endpoint, not at `.well-known`'s `org.matrix.msc4143.rtc_foci`, so a
+     *   LiveKit transport is passed along as its configured `livekit_service_url`. The first transport
+     *   of type `m.livekit` is picked if one exists or otherwise the first transport of type `livekit`.
      */
     public static getConfigOptions(transports: Transport[] = []): ConfigOptions {
         const options: ConfigOptions = {};
 
-        const livekitTransport = transports.find(
+        const livekitTransports = transports.filter(
             (t): t is Transport & { livekit_service_url: string } =>
-                t.type === "livekit" && typeof t.livekit_service_url === "string",
+                (t.type === "m.livekit" || t.type === "livekit") && typeof t.livekit_service_url === "string",
         );
+        const livekitTransport = livekitTransports.find((t) => t.type === "m.livekit") ?? livekitTransports[0];
         if (livekitTransport) {
             options.livekit = { livekit_service_url: livekitTransport.livekit_service_url };
         }
