@@ -16,7 +16,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import SettingsStore from "../../settings/SettingsStore";
 import { ImageSize } from "../../settings/enums/ImageSize";
 import { type Media, mediaFromContent } from "../../customisations/Media";
-import { BLURHASH_FIELD } from "../../utils/image-media";
+import { BLURHASH_FIELD, CHROMAHASH_FIELD } from "../../utils/image-media";
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 import { VideoBodyViewModel } from "./VideoBodyViewModel";
 
@@ -402,6 +402,97 @@ describe("VideoBodyViewModel", () => {
         expect(vm.getSnapshot().poster).toBe("https://server/poster.jpg");
 
         global.Image = originalImage;
+    });
+
+    describe("chromahash poster", () => {
+        const CHROMAHASH = "CI3MoG9AmAnNGYkQqiba5W6aHRHekEwBslZsOUoyR04"; // 4:3, decodes to 32x24
+
+        const createMockCanvas = () => {
+            const context = {
+                createImageData: vi.fn((width: number, height: number) => ({
+                    data: new Uint8ClampedArray(width * height * 4),
+                })),
+                putImageData: vi.fn(),
+                drawImage: vi.fn(),
+            };
+            return {
+                width: 0,
+                height: 0,
+                context,
+                getContext: vi.fn(() => context),
+                toDataURL: vi.fn(() => "data:image/png;base64,chromahash"),
+            };
+        };
+        let canvases: ReturnType<typeof createMockCanvas>[];
+
+        beforeEach(() => {
+            canvases = [];
+            const originalCreateElement = document.createElement.bind(document);
+            vi.spyOn(document, "createElement").mockImplementation(((tagName: string) => {
+                if (tagName === "canvas") {
+                    canvases.push(createMockCanvas());
+                    return canvases.at(-1) as any;
+                }
+                return originalCreateElement(tagName);
+            }) as typeof document.createElement);
+        });
+
+        it("is preferred and stretched to the raw dimensions in the event info", () => {
+            const vm = createVm({
+                mxEvent: createEvent({
+                    content: {
+                        // 16:9, disagreeing with the 4:3 aspect ratio embedded in the hash
+                        info: {
+                            w: 1600,
+                            h: 900,
+                            [BLURHASH_FIELD]: "LEHV6nWB2yk8pyo0adR*.7kCMdnj",
+                            [CHROMAHASH_FIELD]: CHROMAHASH,
+                        },
+                    },
+                }),
+                mediaVisible: true,
+            });
+            vm.loadInitialMediaIfVisible();
+
+            expect(mockedDecode).not.toHaveBeenCalled();
+            const [source, poster] = canvases;
+            // Decoded at its natural size, then stretched once onto a poster of exactly the event's dimensions
+            expect(source).toMatchObject({ width: 32, height: 24 });
+            expect(source.context.createImageData).toHaveBeenCalledWith(32, 24);
+            expect(poster).toMatchObject({ width: 1600, height: 900 });
+            expect(poster.context.drawImage).toHaveBeenCalledWith(source, 0, 0, 1600, 900);
+            expect(vm.getSnapshot().poster).toBe("data:image/png;base64,chromahash");
+        });
+
+        it("keeps its natural size when the event info has no dimensions", () => {
+            const vm = createVm({
+                mxEvent: createEvent({
+                    content: { info: { w: undefined, h: undefined, [CHROMAHASH_FIELD]: CHROMAHASH } },
+                }),
+                mediaVisible: true,
+            });
+            vm.loadInitialMediaIfVisible();
+
+            expect(canvases).toHaveLength(1);
+            expect(canvases[0]).toMatchObject({ width: 32, height: 24 });
+            expect(vm.getSnapshot().poster).toBe("data:image/png;base64,chromahash");
+        });
+    });
+
+    it("skips the poster placeholder when the chromahash is malformed", () => {
+        const vm = createVm({
+            mxEvent: createEvent({
+                content: {
+                    info: {
+                        [CHROMAHASH_FIELD]: "not a hash",
+                    },
+                },
+            }),
+            mediaVisible: true,
+        });
+        vm.loadInitialMediaIfVisible();
+
+        expect(vm.getSnapshot().poster).not.toMatch(/^data:/);
     });
 
     it("resets encrypted media state when the event changes", async () => {

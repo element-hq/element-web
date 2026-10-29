@@ -22,6 +22,7 @@ import { InlineSpinner, Tooltip } from "@vector-im/compound-web";
 
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import { Chromahash } from "../../../../../core/Chromahash";
 import styles from "./ImageBodyView.module.css";
 
 /**
@@ -81,6 +82,10 @@ export interface ImageBodyViewSnapshot {
      * Blurhash string used when `placeholder` is `BLURHASH`.
      */
     blurhash?: string;
+    /**
+     * Base64 ChromaHash used when `placeholder` is `BLURHASH`. Takes precedence over `blurhash`.
+     */
+    chromahash?: string;
     /**
      * Maximum rendered width for the media frame.
      */
@@ -170,14 +175,26 @@ interface ImageBodyViewProps {
 function renderPlaceholder({
     placeholder,
     blurhash,
+    chromahash,
     maxWidth,
     maxHeight,
     loadingLabel,
-}: Pick<ImageBodyViewSnapshot, "placeholder" | "blurhash" | "maxWidth" | "maxHeight"> & {
+}: Pick<ImageBodyViewSnapshot, "placeholder" | "blurhash" | "chromahash" | "maxWidth" | "maxHeight"> & {
     loadingLabel: string;
 }): JSX.Element | null {
     switch (placeholder) {
         case ImageBodyViewPlaceholder.BLURHASH:
+            if (chromahash) {
+                return (
+                    <Chromahash
+                        className={styles.blurhash}
+                        hash={chromahash}
+                        width={maxWidth ?? 320}
+                        height={maxHeight ?? 240}
+                    />
+                );
+            }
+
             if (!blurhash) {
                 return <InlineSpinner aria-label={loadingLabel} role="progressbar" />;
             }
@@ -234,6 +251,7 @@ export function ImageBodyView({
         showAnimatedContentOnHover,
         placeholder = ImageBodyViewPlaceholder.NONE,
         blurhash,
+        chromahash,
         maxWidth,
         maxHeight,
         aspectRatio,
@@ -298,6 +316,7 @@ export function ImageBodyView({
     const placeholderNode = renderPlaceholder({
         placeholder,
         blurhash,
+        chromahash,
         maxWidth,
         maxHeight,
         loadingLabel: _t("common|loading"),
@@ -342,7 +361,8 @@ export function ImageBodyView({
             {showPlaceholder && (
                 <div
                     className={classNames(styles.placeholder, {
-                        [styles.placeholderBlurhash]: placeholder === ImageBodyViewPlaceholder.BLURHASH && !!blurhash,
+                        [styles.placeholderBlurhash]:
+                            placeholder === ImageBodyViewPlaceholder.BLURHASH && !!(blurhash || chromahash),
                     })}
                 >
                     {placeholderNode}

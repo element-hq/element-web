@@ -19,7 +19,17 @@ export class BlurhashEncoder {
 
     private readonly worker = new WorkerManager<Request, Response>(blurhashWorkerFactory());
 
-    public getBlurhash(imageData: ImageData): Promise<string> {
-        return this.worker.call({ imageData }).then((resp) => resp.blurhash);
+    /**
+     * Encode the image as a blurhash, resolving to undefined if encoding failed.
+     */
+    public getBlurhash(imageData: ImageData): Promise<string | undefined> {
+        return this.worker.call({ imageData, mode: "blurhash" }).then((resp) => resp.hash);
+    }
+
+    /**
+     * Encode the image as a ChromaHash in unpadded base64, resolving to undefined if encoding failed.
+     */
+    public getChromaHash(imageData: ImageData): Promise<string | undefined> {
+        return this.worker.call({ imageData, mode: "chromahash" }).then((resp) => resp.hash);
     }
 }

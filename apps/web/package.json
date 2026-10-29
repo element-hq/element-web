@@ -52,6 +52,7 @@
         "@vector-im/compound-design-tokens": "catalog:",
         "@vector-im/compound-web": "catalog:",
         "@vector-im/matrix-wysiwyg": "2.40.0",
+        "@visualcommons/chromahash": "^0.7.2",
         "@zxcvbn-ts/core": "^4.0.0",
         "@zxcvbn-ts/language-common": "^4.0.0",
         "@zxcvbn-ts/language-en": "^4.0.0",

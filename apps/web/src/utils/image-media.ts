@@ -6,13 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ImageInfo } from "matrix-js-sdk/src/types";
+import { type FileInfo, type ImageInfo } from "matrix-js-sdk/src/types";
 
 import { BlurhashEncoder } from "../BlurhashEncoder";
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 
-export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
+export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448 legacy
+export const CHROMAHASH_FIELD = "xyz.amorgan.chromahash"; // MSC2448, preferred over BLURHASH_FIELD
+
+/**
+ * Whether the media info carries a ChromaHash or blurhash that can be shown while the media loads.
+ */
+export function hasPlaceholderHash(info?: FileInfo): boolean {
+    return !!(info?.[CHROMAHASH_FIELD] || info?.[BLURHASH_FIELD]);
+}
 
 interface IThumbnail {
     info: ImageInfo;
@@ -84,9 +92,12 @@ export async function createThumbnail(
     }
 
     const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-    // thumbnailPromise and blurhash promise are being awaited concurrently
-    const blurhash = calculateBlurhash ? await BlurhashEncoder.instance.getBlurhash(imageData) : undefined;
-    const thumbnail = await thumbnailPromise;
+    // the thumbnail and both hashes are computed concurrently
+    const [blurhash, chromahash, thumbnail] = await Promise.all([
+        calculateBlurhash ? BlurhashEncoder.instance.getBlurhash(imageData) : undefined,
+        calculateBlurhash ? BlurhashEncoder.instance.getChromaHash(imageData) : undefined,
+        thumbnailPromise,
+    ]);
 
     return {
         info: {
@@ -98,7 +109,9 @@ export async function createThumbnail(
             },
             w: inputWidth,
             h: inputHeight,
-            [BLURHASH_FIELD]: blurhash,
+            // omit hashes which were skipped or failed to encode, rather than sending the key with no value
+            ...(blurhash && { [BLURHASH_FIELD]: blurhash }),
+            ...(chromahash && { [CHROMAHASH_FIELD]: chromahash }),
         },
         thumbnail,
     };

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { IWidget } from "matrix-widget-api";
-import type { BLURHASH_FIELD } from "../utils/image-media";
+import type { BLURHASH_FIELD, CHROMAHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
@@ -24,6 +24,7 @@ declare module "matrix-js-sdk/src/types" {
          * @see https://github.com/matrix-org/matrix-spec-proposals/pull/2448
          */
         [BLURHASH_FIELD]?: string;
+        [CHROMAHASH_FIELD]?: string;
     }
 
     export interface ImageInfo {

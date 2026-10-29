@@ -535,6 +535,9 @@ importers:
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.3.0)
+      '@visualcommons/chromahash':
+        specifier: ^0.7.2
+        version: 0.7.2
       '@zxcvbn-ts/core':
         specifier: ^4.0.0
         version: 4.2.0
@@ -1373,6 +1376,9 @@ importers:
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 11.2.0(@types/react@19.3.0)(react@19.3.0)
+      '@visualcommons/chromahash':
+        specifier: ^0.7.2
+        version: 0.7.2
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -6602,6 +6608,9 @@ packages:
       react: ^18.2.0 || ^19.0.0
     bundledDependencies:
       - '@vector-im/matrix-wysiwyg-wasm'
+
+  '@visualcommons/chromahash@0.7.2':
+    resolution: {integrity: sha512-uUCcmqB0W8RzBMTpUDoKI4IJWLtxyxmiIxerL7cULhMJKXw5QHCgeubuq1r8PChmeCApUUiKhbsjQuG4dNhzvA==}
 
   '@vitejs/plugin-react@6.1.2':
     resolution: {integrity: sha512-fhJNGUdscQa4HkI0xFxwonWyhnVReCPDbXI7FH7jmzpnVCrFQI7PRrhWecO263610vOrs9tr2Y4xcf8uAdFxbw==}
@@ -18492,6 +18501,8 @@ snapshots:
   '@vector-im/matrix-wysiwyg@2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.3.0)':
     dependencies:
       react: 19.3.0
+
+  '@visualcommons/chromahash@0.7.2': {}
 
   '@vitejs/plugin-react@6.1.2(vite@8.3.4)':
     dependencies:

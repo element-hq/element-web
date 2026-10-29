@@ -11,6 +11,7 @@ import { Blurhash } from "react-blurhash";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useI18n } from "../../../../../core/i18n/i18nContext";
+import { Chromahash } from "../../../../../core/Chromahash";
 import styles from "./ImageReplyBodyView.module.css";
 
 export const enum ImageReplyBodyViewPlaceholder {
@@ -65,6 +66,10 @@ export interface ImageReplyBodyViewProps {
      */
     blurhash?: string;
     /**
+     * Base64 ChromaHash used when `placeholder` is `BLURHASH`. Takes precedence over `blurhash`.
+     */
+    chromahash?: string;
+    /**
      * Whether hovering the preview should swap to the full-resolution image.
      */
     showAnimatedContentOnHover?: boolean;
@@ -93,14 +98,26 @@ export interface ImageReplyBodyViewProps {
 function renderPlaceholder({
     placeholder,
     blurhash,
+    chromahash,
     maxWidth,
     maxHeight,
     loadingLabel,
-}: Pick<ImageReplyBodyViewProps, "placeholder" | "blurhash" | "maxWidth" | "maxHeight"> & {
+}: Pick<ImageReplyBodyViewProps, "placeholder" | "blurhash" | "chromahash" | "maxWidth" | "maxHeight"> & {
     loadingLabel: string;
 }): JSX.Element | null {
     switch (placeholder) {
         case ImageReplyBodyViewPlaceholder.BLURHASH:
+            if (chromahash) {
+                return (
+                    <Chromahash
+                        className={styles.blurhash}
+                        hash={chromahash}
+                        width={maxWidth ?? 58}
+                        height={maxHeight ?? 44}
+                    />
+                );
+            }
+
             if (!blurhash) {
                 return (
                     <div className={styles.spinner}>
@@ -141,6 +158,7 @@ export function ImageReplyBodyView({
     isSvg,
     placeholder = ImageReplyBodyViewPlaceholder.NONE,
     blurhash,
+    chromahash,
     showAnimatedContentOnHover,
     showImage = true,
     gifLabel,
@@ -197,6 +215,7 @@ export function ImageReplyBodyView({
     const placeholderNode = renderPlaceholder({
         placeholder,
         blurhash,
+        chromahash,
         maxWidth,
         maxHeight,
         loadingLabel: _t("common|loading"),
