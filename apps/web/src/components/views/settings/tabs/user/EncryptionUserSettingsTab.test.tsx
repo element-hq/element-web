@@ -180,6 +180,28 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(displayedToastText()).toContain("Your new recovery key is now active");
     });
 
+    it("should still remove the confirmation toast after the tab is unmounted", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        // Fake timers stall the recovery flow, so spy on the real ones instead.
+        const setTimeoutSpy = vi.spyOn(window, "setTimeout");
+        const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
+        const user = userEvent.setup();
+        const { unmount } = renderComponent({ initialState: "set_recovery_key" });
+        const removeToast = vi.fn();
+        toastRack.displayToast.mockReturnValue(removeToast);
+
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Finish set up" }));
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        const removalTimer = setTimeoutSpy.mock.calls.findIndex(([callback]) => callback === removeToast);
+        expect(removalTimer).not.toBe(-1);
+
+        // The toast lives in the settings dialog, so leaving the tab must not cancel its removal.
+        unmount();
+        expect(clearTimeoutSpy).not.toHaveBeenCalledWith(setTimeoutSpy.mock.results[removalTimer].value);
+    });
+
     /** Render the node passed to the mock toast rack and return its text. */
     function displayedToastText(): string {
         return render(<div>{toastRack.displayToast.mock.calls[0][0]}</div>).container.textContent ?? "";
