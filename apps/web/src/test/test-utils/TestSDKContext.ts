@@ -21,6 +21,7 @@ import { type WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { type WidgetPermissionStore } from "../../stores/widgets/WidgetPermissionStore";
 import type WidgetStore from "../../stores/WidgetStore";
 import type LegacyCallHandler from "../../LegacyCallHandler.tsx";
+import { type DocumentPipStore } from "../../stores/DocumentPipStore";
 import { tearDownAfterTest } from "./teardown";
 
 /**
@@ -47,6 +48,7 @@ export class TestSDKContext extends SDKContextClass {
     declare public _SlidingSyncManager?: SlidingSyncManager;
     declare public _SpaceStore?: SpaceStore;
     declare public _LegacyCallHandler?: LegacyCallHandler;
+    declare public _DocumentPipStore?: DocumentPipStore;
 
     /**
      * Stops this context listening to the dispatcher, and tears down the stores it holds, including any a
