@@ -40,15 +40,23 @@ function captureWindowFocus(): void {
     focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
 }
 
-function toggleWin(wasFocused: boolean): void {
-    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && wasFocused) {
-        global.mainWindow.hide();
-        focusedBeforeTrayAction = false;
+function hideMainWindow(): void {
+    global.mainWindow?.hide();
+    focusedBeforeTrayAction = false;
+}
+
+function showMainWindow(): void {
+    if (global.mainWindow?.isMinimized()) global.mainWindow.restore();
+    if (!global.mainWindow?.isVisible()) global.mainWindow?.show();
+    global.mainWindow?.focus();
+    focusedBeforeTrayAction = true;
+}
+
+function toggleWin(): void {
+    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && focusedBeforeTrayAction) {
+        hideMainWindow();
     } else {
-        if (global.mainWindow?.isMinimized()) global.mainWindow.restore();
-        if (!global.mainWindow?.isVisible()) global.mainWindow?.show();
-        global.mainWindow?.focus();
-        focusedBeforeTrayAction = true;
+        showMainWindow();
     }
 }
 
@@ -76,7 +84,7 @@ export async function create(): Promise<void> {
     // The tray can steal focus before its click event, so sample while the pointer enters or moves over it.
     trayIcon.on("mouse-enter", captureWindowFocus);
     trayIcon.on("mouse-move", captureWindowFocus);
-    trayIcon.on("click", () => toggleWin(focusedBeforeTrayAction));
+    trayIcon.on("click", toggleWin);
 
     // See also, badge.ts
     let lastFavicon: string | null = null;
@@ -126,7 +134,7 @@ export function initApplicationMenu(): void {
     const contextMenu = Menu.buildFromTemplate([
         {
             label: _t("action|show_hide"),
-            click: () => toggleWin(focusedBeforeTrayAction),
+            click: toggleWin,
         },
         { type: "separator" },
         {
