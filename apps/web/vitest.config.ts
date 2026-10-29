@@ -83,7 +83,12 @@ export default defineProject({
                 test: {
                     name: "unit",
                     include: ["src/**/*.test.{ts,tsx}"],
-                    setupFiles: ["src/test/setupJsdomPolyfills.ts", "src/test/setupTests.ts"],
+                    setupFiles: [
+                        "src/test/setupJsdomPolyfills.ts",
+                        // Before setupTests, so that its afterEach runs last: a failing afterEach skips the rest
+                        "src/test/setupLeakDetection.ts",
+                        "src/test/setupTests.ts",
+                    ],
                     environmentOptions: {
                         happyDOM: {
                             url: "http://localhost/",

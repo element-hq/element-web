@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fetchMock from "@fetch-mock/vitest";
 
 import SdkConfig from "../SdkConfig";
@@ -20,9 +20,12 @@ import WebPlatform from "./platform/WebPlatform";
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
 
 describe("Loading server config", function () {
+    let platform: WebPlatform;
+
     beforeEach(async () => {
         SdkConfig.reset();
-        PlatformPeg.set(new WebPlatform());
+        platform = new WebPlatform();
+        PlatformPeg.set(platform);
         fetchMock.get("https://matrix-client.matrix.org/_matrix/client/versions", {
             unstable_features: {},
             versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
@@ -33,6 +36,10 @@ describe("Loading server config", function () {
             },
         });
         fetchMock.get("/version", "1.10.13");
+    });
+
+    afterEach(() => {
+        platform.destroy();
     });
 
     it("should use the default_server_config", async function () {

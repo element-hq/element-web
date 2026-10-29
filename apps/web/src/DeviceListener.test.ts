@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, onTestFinished, type Mocked } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -157,6 +157,7 @@ describe("DeviceListener", () => {
     const createAndStart = async (): Promise<DeviceListener> => {
         const instance = new DeviceListener();
         instance.start(mockClient);
+        onTestFinished(() => instance.stop());
         await flushPromises();
         return instance;
     };

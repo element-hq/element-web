@@ -29,6 +29,9 @@ class MockPlatform extends BasePlatform {
         return SessionLock.getSessionLock(onNewInstance);
     }
 }
+// The most recently mocked platform, destroyed when it is replaced so that platforms do not pile up across tests
+let mockedPlatform: MockPlatform | undefined;
+
 /**
  * Mock Platform Peg
  * Creates a mock BasePlatform class
@@ -38,11 +41,15 @@ class MockPlatform extends BasePlatform {
 export const mockPlatformPeg = (
     platformMocks: Partial<Record<MethodLikeKeys<BasePlatform>, unknown>> = {},
 ): MockedObject<BasePlatform> => {
+    mockedPlatform?.destroy();
     const mockPlatform = new MockPlatform(platformMocks);
+    mockedPlatform = mockPlatform;
     vi.spyOn(PlatformPeg, "get").mockReturnValue(mockPlatform);
     return vi.mocked(mockPlatform);
 };
 
 export const unmockPlatformPeg = () => {
+    mockedPlatform?.destroy();
+    mockedPlatform = undefined;
     vi.spyOn(PlatformPeg, "get").mockRestore();
 };

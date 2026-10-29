@@ -60,6 +60,8 @@ import { DirectoryMember } from "../../utils/direct-messages";
 import { createDmLocalRoom } from "../../utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { SDKContext } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
+import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import WidgetStore from "../../stores/WidgetStore";
@@ -91,6 +93,7 @@ describe("RoomView", () => {
     let rooms: Map<string, Room>;
     let stores: TestSDKContext;
     let crypto: CryptoApi;
+    const globalContext = SDKContextClass.instance;
 
     // mute some noise
     filterConsole("RVS update", "does not have an m.room.create event", "Current version: 1", "Version capability");
@@ -115,6 +118,10 @@ describe("RoomView", () => {
 
         DMRoomMap.makeShared(cli);
         stores = new TestSDKContext();
+        // Stores which use the global context, such as RightPanelStore, would otherwise give it its own
+        // room view store, which reacts to every room this file views and is never torn down
+        // @ts-ignore the global context is read-only
+        SDKContextClass.instance = stores;
         stores._client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
@@ -123,6 +130,9 @@ describe("RoomView", () => {
     });
 
     afterEach(() => {
+        // @ts-ignore the global context is read-only
+        SDKContextClass.instance = globalContext;
+        RoomNotificationStateStore.instance.clearRoomStates();
         unmockPlatformPeg();
         vi.clearAllMocks();
 

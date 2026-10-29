@@ -8,13 +8,27 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 import defaultDispatcher from "./dispatcher";
 import { Action } from "./actions";
 import { AsyncActionPayload } from "./payloads";
 
 describe("MatrixDispatcher", () => {
+    // Callbacks registered on the shared dispatcher by each test, unregistered afterwards
+    const tokens: string[] = [];
+    const register = (callback: Parameters<typeof defaultDispatcher.register>[0]): string => {
+        const token = defaultDispatcher.register(callback);
+        tokens.push(token);
+        return token;
+    };
+
+    afterEach(() => {
+        for (const token of tokens.splice(0)) {
+            defaultDispatcher.unregister(token);
+        }
+    });
+
     it("should throw error if unregistering unknown token", () => {
         expect(() => defaultDispatcher.unregister("not-a-real-token")).toThrow(
             "Dispatcher.unregister(...): 'not-a-real-token' does not map to a registered callback.",
@@ -28,8 +42,8 @@ describe("MatrixDispatcher", () => {
         const fn1 = vi.fn(() => deferred1.resolve(1));
         const fn2 = vi.fn(() => deferred2.resolve(2));
 
-        defaultDispatcher.register(fn1);
-        defaultDispatcher.register(fn2);
+        register(fn1);
+        register(fn2);
 
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn });
         const res = await Promise.race([deferred1.promise, deferred2.promise]);
@@ -44,11 +58,11 @@ describe("MatrixDispatcher", () => {
         const fn1 = vi.fn(() => deferred1.resolve(1));
         const fn2 = vi.fn(() => deferred2.resolve(2));
 
-        defaultDispatcher.register(() => {
+        register(() => {
             defaultDispatcher.waitFor([id2]);
         });
-        defaultDispatcher.register(fn1);
-        const id2 = defaultDispatcher.register(fn2);
+        register(fn1);
+        const id2 = register(fn2);
 
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn });
         const res = await Promise.race([deferred1.promise, deferred2.promise]);
@@ -59,8 +73,8 @@ describe("MatrixDispatcher", () => {
     it("should not fire callback which was added during a dispatch", () => {
         const fn2 = vi.fn();
 
-        defaultDispatcher.register(() => {
-            defaultDispatcher.register(fn2);
+        register(() => {
+            register(fn2);
         });
 
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn }, true);
@@ -70,7 +84,7 @@ describe("MatrixDispatcher", () => {
 
     it("should handle AsyncActionPayload", () => {
         const fn = vi.fn();
-        defaultDispatcher.register(fn);
+        register(fn);
 
         const readyFn = vi.fn((dispatch) => {
             dispatch({ action: "test" });

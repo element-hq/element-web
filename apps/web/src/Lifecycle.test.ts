@@ -34,6 +34,9 @@ import { encryptPickleKey } from "./utils/tokens/pickling";
 import * as StorageManager from "./utils/StorageManager.ts";
 import type BasePlatform from "./BasePlatform.ts";
 import * as createMatrixClientModule from "./utils/createMatrixClient";
+import { Mjolnir } from "./mjolnir/Mjolnir";
+import { DeviceListener } from "./device-listener";
+import Presence from "./Presence";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
@@ -94,6 +97,10 @@ describe("Lifecycle", () => {
     });
 
     afterEach(() => {
+        // stop the singletons which logging in starts
+        Mjolnir.sharedInstance().stop();
+        DeviceListener.sharedInstance().stop();
+        Presence.stop();
         vi.restoreAllMocks();
         // undo any `vi.stubGlobal("localStorage", ...)` a test installed. Note we cannot use
         // vi.unstubAllGlobals() here: that would also drop globals stubbed by the shared setup.

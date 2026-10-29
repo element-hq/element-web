@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, onTestFinished, type MockedObject } from "vitest";
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
@@ -41,6 +41,7 @@ describe("<VideoRoomChatButton />", () => {
 
     const mockRoomNotificationState = (room: Room, level: NotificationLevel): RoomNotificationState => {
         const roomNotificationState = new RoomNotificationState(room, false);
+        onTestFinished(() => roomNotificationState.destroy());
 
         // @ts-ignore ugly mocking
         roomNotificationState._level = level;
