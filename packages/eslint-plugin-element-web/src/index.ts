@@ -7,6 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import noLeakedClassTimer from "./NoLeakedClassTimer.ts";
 import noLeakedEmitterListener from "./NoLeakedEmitterListener.ts";
+import noLeakedSubscription from "./NoLeakedSubscription.ts";
 import noSubscribeAfterAwait from "./NoSubscribeAfterAwait.ts";
 import requireLodashCancel from "./RequireLodashCancel.ts";
 
@@ -16,6 +17,7 @@ const plugin = {
     rules: {
         "no-leaked-class-timer": noLeakedClassTimer,
         "no-leaked-emitter-listener": noLeakedEmitterListener,
+        "no-leaked-subscription": noLeakedSubscription,
         "no-subscribe-after-await": noSubscribeAfterAwait,
         "require-lodash-cancel": requireLodashCancel,
     },

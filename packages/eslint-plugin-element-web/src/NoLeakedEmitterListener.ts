@@ -12,18 +12,13 @@ import {
     type Rule,
     getCalledMethodName,
     getCalledMethodObject,
-    getClassTeardownScopes,
-    getEffectCleanupScopes,
-    getEnclosingClass,
     getEnclosingFunction,
     getParent,
-    isEffectCallback,
+    getSubscriptionTeardownScopes,
     isFunction,
-    isLifecycleClass,
     normalisedText,
     someInScopes,
     unwrap,
-    walk,
 } from "./ast.ts";
 
 const ADD_METHODS = new Set(["on", "addListener"]);
@@ -33,6 +28,14 @@ const REMOVE_METHODS = new Set(["off", "removeListener"]);
 function isInlineHandler(handler: Node): boolean {
     handler = unwrap(handler);
     return isFunction(handler) || (handler.type === "CallExpression" && getCalledMethodName(handler) === "bind");
+}
+
+/** Whether `handler` is one of the parameters of the function which contains `call`. */
+function isParameterOfEnclosingFunction(call: CallExpression, handler: Node): boolean {
+    handler = unwrap(handler);
+    if (handler.type !== "Identifier") return false;
+    const name = handler.name;
+    return !!getEnclosingFunction(call)?.params.some((param) => param.type === "Identifier" && param.name === name);
 }
 
 /**
@@ -74,28 +77,17 @@ function hasRemoval(context: Context, scopes: Node[], emitter: string, event: st
  * with a teardown phase, or the cleanup of the effect which added it.
  */
 function getTeardownScopes(context: Context, call: CallExpression): Node[] | null {
-    const fn = getEnclosingFunction(call);
-    if (fn && isEffectCallback(fn)) return getEffectCleanupScopes(fn);
-    if (fn) {
-        // A listener scoped to one function, removed in a `finally` block of that same function
-        const finalizers: Node[] = [];
-        walk(fn, (node) => {
-            if (node.type === "TryStatement" && node.finalizer && getEnclosingFunction(node) === fn) {
-                finalizers.push(node.finalizer);
-            }
-        });
-        if (finalizers.length > 0) return finalizers;
-    }
-
-    const owner = getEnclosingClass(call);
-    if (!owner || !isLifecycleClass(context, owner)) return null;
-    // Only consider listeners added directly by the class's own methods, not by nested callbacks
-    // which may belong to some other object's lifetime.
-    const method = fn ? getParent(fn) : null;
-    if (method?.type !== "MethodDefinition" && method?.type !== "PropertyDefinition") return null;
     // A class's own `on` method which forwards to an inner emitter is not a subscription
-    if (method.key.type === "Identifier" && ADD_METHODS.has(method.key.name)) return null;
-    return getClassTeardownScopes(owner);
+    const fn = getEnclosingFunction(call);
+    const method = fn ? getParent(fn) : null;
+    if (
+        (method?.type === "MethodDefinition" || method?.type === "PropertyDefinition") &&
+        method.key.type === "Identifier" &&
+        ADD_METHODS.has(method.key.name)
+    ) {
+        return null;
+    }
+    return getSubscriptionTeardownScopes(context, call);
 }
 
 const rule: Rule = {
@@ -123,10 +115,13 @@ const rule: Rule = {
                 const emitterNode = getCalledMethodObject(node);
                 if (!emitterNode) return;
 
+                const [eventNode, handlerNode] = node.arguments;
+                // A handler passed in by the caller, e.g. `addRoomListener(roomId, fn)`, is the caller's to remove
+                if (isParameterOfEnclosingFunction(node, handlerNode)) return;
+
                 const scopes = getTeardownScopes(context, node);
                 if (!scopes) return;
 
-                const [eventNode, handlerNode] = node.arguments;
                 const emitter = normalisedText(context, emitterNode);
                 const event = eventKey(context, eventNode);
                 const handler = normalisedText(context, handlerNode);

@@ -157,7 +157,10 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                     this.updateRoom(room);
                 };
 
+                // Both listeners are kept in callListeners, which onDestroy and onNotReady use to remove them
+                // oxlint-disable-next-line element-web/no-leaked-emitter-listener
                 call.on(CallEvent.ConnectionState, onConnectionState);
+                // oxlint-disable-next-line element-web/no-leaked-emitter-listener
                 call.on(CallEvent.Destroy, onDestroy);
 
                 this.calls.set(room.roomId, call);

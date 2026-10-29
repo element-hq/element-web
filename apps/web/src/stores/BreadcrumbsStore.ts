@@ -71,11 +71,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady(): Promise<void> {
+        // Listen before waiting, so that the listener cannot be added after onNotReady has run
+        this.matrixClient?.on(ClientEvent.Room, this.onRoom);
         await this.updateRooms();
-
-        if (this.matrixClient) {
-            this.matrixClient.on(ClientEvent.Room, this.onRoom);
-        }
     }
 
     protected async onNotReady(): Promise<void> {

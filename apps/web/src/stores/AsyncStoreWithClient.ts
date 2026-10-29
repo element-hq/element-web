@@ -40,6 +40,16 @@ export abstract class AsyncStoreWithClient<T extends object> extends AsyncStore<
         await this.readyStore.start();
     }
 
+    /**
+     * Stops the store listening to the dispatcher and releases what it set up for its client in
+     * {@link onReady}, so that nothing keeps it alive. Subclasses which subscribe to anything else outside
+     * of {@link onReady} should release it here too.
+     */
+    public destroy(): void {
+        this.readyStore.destroy();
+        this.stop();
+    }
+
     public get matrixClient(): MatrixClient | null {
         return this.readyStore.mxClient;
     }
