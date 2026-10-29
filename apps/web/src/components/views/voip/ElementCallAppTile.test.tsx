@@ -48,7 +48,7 @@ describe("ElementCallAppTile", () => {
         viewedRoomId = room.roomId;
         sdkContext = new TestSDKContext();
         sdkContext._client = client;
-        sdkContext._RoomViewStore = { getRoomId: () => viewedRoomId } as any;
+        sdkContext._RoomViewStore = { getRoomId: () => viewedRoomId, destroy: vi.fn() } as any;
 
         ElementCall.create(room);
         const maybeCall = CallStore.instance.getCall(room.roomId);

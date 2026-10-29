@@ -65,6 +65,8 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      */
     private enabled = true;
 
+    private readonly settingWatcherRef: string;
+
     /**
      * The singleton instance of the ReleaseAnnouncementStore.
      */
@@ -81,13 +83,22 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      */
     public constructor() {
         super();
-        SettingsStore.watchSetting("releaseAnnouncementData", null, () => {
-            this.emit("releaseAnnouncementChanged", this.getReleaseAnnouncement());
-        });
-        ToastStore.sharedInstance().on("update", () => {
-            this.emit("releaseAnnouncementChanged", this.getReleaseAnnouncement());
-        });
+        this.settingWatcherRef = SettingsStore.watchSetting("releaseAnnouncementData", null, this.onChange);
+        ToastStore.sharedInstance().on("update", this.onChange);
     }
+
+    /**
+     * Stops listening to the settings and toast stores. Only expected to be called in tests, as the
+     * shared instance otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        SettingsStore.unwatchSetting(this.settingWatcherRef);
+        ToastStore.sharedInstance().off("update", this.onChange);
+    }
+
+    private onChange = (): void => {
+        this.emit("releaseAnnouncementChanged", this.getReleaseAnnouncement());
+    };
 
     /**
      * Get the viewed release announcements from the settings.

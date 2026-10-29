@@ -9,6 +9,7 @@
 
 import { ActionBarAction } from "@element-hq/web-shared-components";
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils";
 
 import { EditHistoryActionBarViewModel } from "./EditHistoryActionBarViewModel";
 
@@ -18,6 +19,7 @@ describe("EditHistoryActionBarViewModel", () => {
             canRemove: true,
             showViewSource: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             actions: [ActionBarAction.Remove, ActionBarAction.ViewSource],
@@ -35,6 +37,7 @@ describe("EditHistoryActionBarViewModel", () => {
             canRemove: false,
             showViewSource: false,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().actions).toEqual([]);
     });
@@ -44,6 +47,7 @@ describe("EditHistoryActionBarViewModel", () => {
             canRemove: false,
             showViewSource: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().actions).toEqual([ActionBarAction.ViewSource]);
 
@@ -62,6 +66,7 @@ describe("EditHistoryActionBarViewModel", () => {
             showViewSource: false,
             onRemoveClick,
         });
+        tearDownAfterTest(vm);
         const anchor = document.createElement("button");
 
         vm.onRemoveClick(anchor);
@@ -76,6 +81,7 @@ describe("EditHistoryActionBarViewModel", () => {
             showViewSource: true,
             onViewSourceClick,
         });
+        tearDownAfterTest(vm);
         const anchor = document.createElement("button");
 
         vm.onViewSourceClick(anchor);

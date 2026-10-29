@@ -77,10 +77,13 @@ export class SDKContextClass {
     protected _CallStore?: CallStore;
     protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
+    // Kept so that test contexts can stop listening to the dispatcher
+    protected dispatcherRef?: string;
+
     public constructor() {
         SettingController.sdkContext = this;
 
-        defaultDispatcher.register(this.onDispatch);
+        this.dispatcherRef = defaultDispatcher.register(this.onDispatch);
     }
 
     private onDispatch = (payload: ActionPayload): void => {

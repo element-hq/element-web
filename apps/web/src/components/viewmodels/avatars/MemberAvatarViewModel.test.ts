@@ -9,7 +9,7 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { EventTimeline, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { mkEvent, mkRoom, mkRoomMember, stubClient } from "test-utils";
+import { mkEvent, mkRoom, mkRoomMember, stubClient, tearDownAfterTest } from "test-utils";
 
 import { MemberAvatarViewModel } from "./MemberAvatarViewModel";
 
@@ -27,7 +27,7 @@ describe("MemberAvatarViewModel", () => {
         const member = mkRoomMember("!my-room:m.org", "@alice:m.org");
         member.getMxcAvatarUrl = () => "avatar-mxc-url";
         member.name = "Alice";
-        const vm = new MemberAvatarViewModel({ cli, member, size: 20 });
+        const vm = tearDownAfterTest(new MemberAvatarViewModel({ cli, member, size: 20 }));
         const snapshot = vm.getSnapshot();
         expect(snapshot.id).toStrictEqual("@alice:m.org");
         expect(snapshot.title).toStrictEqual("@alice:m.org");
@@ -44,7 +44,7 @@ describe("MemberAvatarViewModel", () => {
         member.name = "Alice";
 
         // The name is initially Alice
-        const vm = new MemberAvatarViewModel({ cli, member, size: 20 });
+        const vm = tearDownAfterTest(new MemberAvatarViewModel({ cli, member, size: 20 }));
         expect(vm.getSnapshot().name).toStrictEqual("Alice");
 
         // On room event, name should update to Bob

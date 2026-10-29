@@ -13,7 +13,7 @@ import { render, screen } from "test-utils-rtl";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { vi, describe, it, expect, afterEach, type Mocked } from "vitest";
 
-import { getMockClientWithEventEmitter } from "test-utils";
+import { getMockClientWithEventEmitter, tearDownAfterTest } from "test-utils";
 import SetupEncryptionDialog from "./SetupEncryptionDialog";
 import { Phase, SetupEncryptionStore } from "../../../../stores/SetupEncryptionStore";
 import Modal from "../../../../Modal";
@@ -26,7 +26,7 @@ describe("SetupEncryptionDialog", () => {
 
     it("should launch a dialog when I say Proceed, then be finished when I reset", async () => {
         mockClient();
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
 
         // Given when you open the reset dialog we immediately reset

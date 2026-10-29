@@ -33,6 +33,7 @@ import {
     mockPlatformPeg,
     useMockMediaDevices,
     TestSDKContext,
+    tearDownAfterTest,
 } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -187,7 +188,7 @@ describe("PipContainer", () => {
     };
 
     const setUpRoomViewStore = () => {
-        sdkContext._RoomViewStore = new RoomViewStore(defaultDispatcher, sdkContext);
+        sdkContext._RoomViewStore = tearDownAfterTest(new RoomViewStore(defaultDispatcher, sdkContext));
     };
 
     it("hides if there's no content", () => {

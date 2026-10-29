@@ -7,6 +7,7 @@
 
 import { vi, describe, it, expect, afterEach, beforeEach } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
 import * as DateUtils from "../../../../../DateUtils";
 import { MessageTimestampViewModel } from "./MessageTimestampViewModel";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -36,6 +37,7 @@ describe("MessageTimestampViewModel", () => {
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot()).toMatchObject({
             ts: "08:09",
             tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
@@ -47,6 +49,7 @@ describe("MessageTimestampViewModel", () => {
             ts: nowDate.getTime(),
             receivedTs: nowDate.getTime() + DAY_MS,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot()).toMatchObject({
             ts: "08:09",
             tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
@@ -58,6 +61,7 @@ describe("MessageTimestampViewModel", () => {
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot()).toMatchObject({
             ts: "08:09",
             tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
@@ -73,6 +77,7 @@ describe("MessageTimestampViewModel", () => {
             showRelative: true,
             showTwelveHour: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             ts: "RELATIVE",
@@ -93,6 +98,7 @@ describe("MessageTimestampViewModel", () => {
             showFullDate: true,
             showSeconds: false,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             ts: "FULL_NO_SECONDS",
@@ -110,6 +116,7 @@ describe("MessageTimestampViewModel", () => {
             ts: nowDate.getTime(),
             showSeconds: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             ts: "FULL_TIME",
@@ -125,6 +132,7 @@ describe("MessageTimestampViewModel", () => {
             inhibitTooltip: true,
             href: "https://example.test",
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             inhibitTooltip: true,
@@ -138,6 +146,7 @@ describe("MessageTimestampViewModel", () => {
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -174,6 +183,7 @@ describe("MessageTimestampViewModel", () => {
             onClick,
             onContextMenu,
         });
+        tearDownAfterTest(vm);
 
         vm.setProps({
             ts: nowDate.getTime() + HOUR_MS,
@@ -195,7 +205,7 @@ describe("MessageTimestampViewModel", () => {
             ts: nowDate.getTime(),
             href: "https://example.test/event",
         };
-        const vm = new MessageTimestampViewModel(props);
+        const vm = tearDownAfterTest(new MessageTimestampViewModel(props));
         const listener = vi.fn();
         vm.subscribe(listener);
 
