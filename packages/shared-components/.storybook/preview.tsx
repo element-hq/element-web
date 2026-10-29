@@ -241,6 +241,15 @@ const preview: Preview = {
              */
             test: "error",
         },
+        viewport: {
+            options: {
+                visualTest: {
+                    name: "Visual test",
+                    styles: { width: "960px", height: "720px" },
+                },
+            },
+            defaultViewport: "visualTest",
+        },
     },
     loaders: [languageLoader],
 } satisfies Preview;

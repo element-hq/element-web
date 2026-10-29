@@ -944,7 +944,6 @@
             "warning": "Jika Anda tidak menghapus metode pemulihan, sebuah penyerang mungkin mencoba mengakses akun Anda. Ubah kata sandi akun Anda dan segera tetapkan metode pemulihan baru di Pengaturan."
         },
         "set_up_recovery": "Siapkan pemulihan",
-        "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
@@ -2406,14 +2405,6 @@
             },
             "confirm_key_storage_off": "Apakah Anda yakin ingin tetap menonaktifkan penyimpanan kunci?",
             "confirm_key_storage_off_description": "Jika Anda keluar dari semua perangkat, Anda akan kehilangan riwayat pesan dan perlu memverifikasi semua kontak yang ada lagi. <a> Pelajari lebih lanjut</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Hapus penyimpanan kunci",
-                "confirm": "Hapus penyimpanan kunci",
-                "description": "Menghapus penyimpanan kunci akan menghapus identitas kriptografi dan kunci pesan Anda dari server dan menonaktifkan fitur keamanan berikut:",
-                "list_first": "Anda tidak akan memiliki riwayat pesan terenkripsi di perangkat baru",
-                "list_second": "Anda akan kehilangan akses ke pesan terenkripsi jika Anda keluar dari %(brand)s di mana pun",
-                "title": "Apakah Anda yakin ingin mematikan penyimpanan kunci dan menghapusnya?"
-            },
             "device_not_verified_button": "Verifikasi perangkat ini",
             "device_not_verified_description": "Anda perlu memverifikasi perangkat ini untuk melihat pengaturan enkripsi Anda.",
             "device_not_verified_title": "Perangkat tidak diverifikasi",
@@ -2430,7 +2421,6 @@
                 "change_recovery_key": "Ubah kunci pemulihan",
                 "change_recovery_key_description": "Tuliskan kunci pemulihan baru ini di tempat yang aman. Kemudian klik Lanjutkan untuk mengonfirmasi perubahan.",
                 "change_recovery_key_title": "Ubah kunci pemulihan?",
-                "description": "Pulihkan identitas kriptografi dan riwayat pesan Anda dengan kunci pemulihan jika Anda kehilangan semua perangkat yang ada.",
                 "enter_key_error": "Kunci pemulihan yang Anda masukkan salah.",
                 "enter_recovery_key": "Masukkan kunci pemulihan",
                 "forgot_recovery_key": "Lupa kunci pemulihan?",
@@ -3415,10 +3405,6 @@
             "error_loading": "Tidak dapat memuat peristiwa yang dibalas, karena tidak ada atau Anda tidak memiliki izin untuk menampilkannya.",
             "in_reply_to": "<a>Membalas ke</a> <pill>",
             "in_reply_to_for_export": "Membalas ke <a>pesan ini</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Anda akan dialihkan ke situs pihak ketiga sehingga Anda dapat mengautentikasi akun Anda untuk digunakan dengan %(integrationsUrl)s. Apakah Anda yakin untuk melanjutkan?",
-            "dialog_title": "Tambahkan sebuah Integrasi"
         },
         "self_redaction": "Pesan dihapus",
         "send_state_encrypting": "Mengenkripsi pesan Anda…",

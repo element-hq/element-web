@@ -20,7 +20,7 @@ jobs:
                   operations-per-run: 100
 
                   # Flaky test issue closing
-                  any-of-issue-labels: "Z-Flaky-Test-Chrome,Z-Flaky-Test-Firefox,Z-Flaky-Test-Webkit"
+                  any-of-issue-labels: "Z-Flaky-Test"
                   days-before-issue-stale: 14
                   days-before-issue-close: 0
                   close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."

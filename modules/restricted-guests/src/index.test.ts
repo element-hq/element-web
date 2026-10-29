@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type Api, UIComponent } from "@element-hq/element-web-module-api";
 
 import RestrictedGuestsModule from "./index";
 
@@ -55,14 +55,14 @@ describe("RestrictedGuestsModule", () => {
             const module = new RestrictedGuestsModule(makeApi(null, { isGuest: true }));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(true);
         });
 
         it("should show all components to regular users", async () => {
             const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, { userId: "@alice:server" }));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(true);
         });
 
         it.each([
@@ -72,8 +72,8 @@ describe("RestrictedGuestsModule", () => {
             const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, profile));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(false);
-            expect(module.shouldShowComponent("UIComponent.filterContainer")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(true);
         });
     });
 });

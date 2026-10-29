@@ -58,15 +58,26 @@ describe("serviceworker", () => {
     let mediaUrl: string;
     let homeserverCount = 0;
 
+    let tabReplyOverrides: Record<string, unknown>;
+
     /** Stands in for the tab which the service worker asks for the user ID and device ID. */
     const tab = {
         postMessage: vi.fn(({ responseKey }: { responseKey: string }) => {
-            emit("message", { data: { responseKey, userId: USER_ID, deviceId: DEVICE_ID, homeserver } });
+            emit("message", {
+                data: { responseKey, userId: USER_ID, deviceId: DEVICE_ID, homeserver, ...tabReplyOverrides },
+            });
         }),
+    };
+
+    /** Stands in for the service worker's `clients`. */
+    const clients = {
+        get: vi.fn(async () => tab),
+        claim: vi.fn(async () => {}),
     };
 
     beforeEach(() => {
         vi.clearAllMocks();
+        tabReplyOverrides = {};
 
         storage = {};
         vi.spyOn(StorageAccess, "idbSave").mockImplementation(async (table, key, data) => {
@@ -84,7 +95,7 @@ describe("serviceworker", () => {
             return new Response("media");
         });
         vi.stubGlobal("fetch", fetchSpy);
-        vi.stubGlobal("clients", { get: vi.fn().mockResolvedValue(tab) });
+        vi.stubGlobal("clients", clients);
 
         vi.spyOn(console, "error").mockImplementation(() => {});
         vi.spyOn(console, "log").mockImplementation(() => {});
@@ -133,6 +144,24 @@ describe("serviceworker", () => {
         return encodeUnpaddedBase64(rawPickleKey);
     }
 
+    it("adds no event listeners after the initial evaluation of the worker script", async () => {
+        await persistTokens(undefined, { accessToken: "plain_text_token" });
+
+        await interceptMediaRequest();
+
+        expect(tab.postMessage).toHaveBeenCalled();
+        expect(global.addEventListener).not.toHaveBeenCalled();
+    });
+
+    it("takes control of the tab when asked to claim it", () => {
+        const waitUntil = vi.fn();
+
+        emit("message", { data: { type: "claim" }, waitUntil });
+
+        expect(clients.claim).toHaveBeenCalled();
+        expect(waitUntil).toHaveBeenCalledWith(clients.claim.mock.results[0].value);
+    });
+
     it("passes the request through unauthenticated when there is no access token stored", async () => {
         const { url, init } = await interceptMediaRequest();
 
@@ -161,6 +190,18 @@ describe("serviceworker", () => {
 
         expect(url).toEqual(`${homeserver}/_matrix/client/v1/media/download/example.com/abc123`);
         expect(init).toEqual({ headers: { Authorization: `Bearer plain_text_token` } });
+    });
+
+    it("passes the request through unauthenticated when the tab has no logged-in session", async () => {
+        await persistTokens(undefined, { accessToken: "plain_text_token" });
+        tabReplyOverrides = { userId: null, deviceId: null, homeserver: undefined };
+
+        const { url, init } = await interceptMediaRequest();
+
+        expect(url).toEqual(mediaUrl);
+        expect(init).toBeUndefined();
+        const [, error] = vi.mocked(console.error).mock.calls.at(-1)!;
+        expect(error).toMatchObject({ message: "SW: Tab has no logged-in session" });
     });
 
     it("passes the request through unauthenticated when the token is encrypted but the pickle key is missing", async () => {

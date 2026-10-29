@@ -7,7 +7,8 @@ on:
         paths:
             - "packages/shared-components/**/*"
 
-permissions: {}
+permissions:
+    contents: read
 
 jobs:
     build:

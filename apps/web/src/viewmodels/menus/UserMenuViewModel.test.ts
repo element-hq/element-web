@@ -41,6 +41,7 @@ describe("UserMenuViewModel", () => {
             getAuthMetadata: vi.fn(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         sdkContext = new TestSDKContext();
@@ -190,7 +191,7 @@ describe("UserMenuViewModel", () => {
         vm.setOpen(true);
         vm.clearStatus();
         await waitFor(() =>
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status"),
         );
     });
 

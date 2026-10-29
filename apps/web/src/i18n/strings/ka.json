@@ -2352,10 +2352,6 @@
             "in_reply_to": "<a>პასუხად </a> <pill>",
             "in_reply_to_for_export": "საპასუხოდ<a> ეს შეტყობინება</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "თქვენ გადაგიყვანთ მესამე მხარის საიტზე, რათა შეძლოთ თქვენი ანგარიშის ავთენტიფიკაცია გამოსაყენებლად%(integrationsUrl)s. გსურთ გაგრძელება?",
-            "dialog_title": "დაამატეთ ინტეგრაცია"
-        },
         "self_redaction": "მესიჯი წაშლილია",
         "send_state_encrypting": "მიმდინარეობს თქვენი შეტყობინების დაშიფვრა…",
         "send_state_failed": "გაგზავნა ვერ მოხერხდა",

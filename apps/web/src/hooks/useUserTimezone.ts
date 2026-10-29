@@ -31,7 +31,6 @@ const log = logger.getChild("useUserTimezone");
  */
 export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: string; friendly: string } | null => {
     const [timezone, setTimezone] = useState<string>();
-    const [updateInterval, setUpdateInterval] = useState<ReturnType<typeof setTimeout>>();
     const [friendly, setFriendly] = useState<string>();
     const [supported, setSupported] = useState<boolean>();
     const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
@@ -48,21 +47,16 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
     }, [supported, cli]);
 
     useEffect(() => {
-        return () => {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        };
-    }, [updateInterval]);
-
-    useEffect(() => {
         if (supported !== true) {
             return;
         }
+        let cancelled = false;
+        let updateTimer: ReturnType<typeof setTimeout> | undefined;
         (async () => {
             log.debug("Trying to fetch TZ for", userId);
             try {
                 const userProfile = await cli.getExtendedProfile(userId);
+                if (cancelled) return;
                 // In a future spec release, remove support for legacy key.
                 const tz = userProfile[ProfileKeyTimezone] ?? userProfile[ProfileKeyMSC4175Timezone];
                 if (typeof tz !== "string") {
@@ -84,13 +78,12 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                     });
                     setTimezone(tz);
                     setFriendly(friendly);
-                    setUpdateInterval(setTimeout(updateTime, (60 - currentTime.getSeconds()) * 1000));
+                    updateTimer = setTimeout(updateTime, (60 - currentTime.getSeconds()) * 1000);
                 };
                 updateTime();
             } catch (ex) {
                 setTimezone(undefined);
                 setFriendly(undefined);
-                setUpdateInterval(undefined);
                 if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
                     // No timezone set, ignore.
                     return;
@@ -98,6 +91,10 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                 log.warn(`Could not render current timezone for ${userId}`, ex);
             }
         })();
+        return () => {
+            cancelled = true;
+            clearTimeout(updateTimer);
+        };
     }, [supported, userId, cli, showTwelveHour]);
 
     if (!timezone || !friendly) {
