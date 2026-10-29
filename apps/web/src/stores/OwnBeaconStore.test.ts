@@ -39,7 +39,11 @@ import SettingsStore from "../settings/SettingsStore";
 // short circuit it
 vi.mock("lodash", async () => ({
     ...(await vi.importActual("lodash")),
-    debounce: vi.fn().mockImplementation((callback) => callback),
+    debounce: vi
+        .fn()
+        .mockImplementation((callback) =>
+            Object.assign((...args: unknown[]) => callback(...args), { cancel: vi.fn() }),
+        ),
 }));
 
 vi.useFakeTimers();
@@ -267,6 +271,16 @@ describe("OwnBeaconStore", () => {
             await store.onNotReady();
 
             expect(destroySpy).toHaveBeenCalled();
+        });
+
+        it("cancels a pending location publish", async () => {
+            const store = await makeOwnBeaconStore();
+            // @ts-ignore
+            const cancelSpy = vi.spyOn(store.debouncedPublishLocationToBeacons, "cancel");
+            // @ts-ignore
+            await store.onNotReady();
+
+            expect(cancelSpy).toHaveBeenCalled();
         });
     });
 

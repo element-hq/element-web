@@ -18,6 +18,7 @@ import { stubClient } from "test-utils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DecoratedRoomAvatar from "./DecoratedRoomAvatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 vi.mock("../../../utils/presence", () => ({ isPresenceEnabled: vi.fn().mockReturnValue(true) }));
 
@@ -45,6 +46,7 @@ describe("DecoratedRoomAvatar", () => {
     });
 
     afterEach(() => {
+        RoomNotificationStateStore.instance.clearRoomStates();
         vi.restoreAllMocks();
     });
 
