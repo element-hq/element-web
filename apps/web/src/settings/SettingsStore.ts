@@ -257,7 +257,7 @@ export default class SettingsStore {
         };
 
         const rooms = Array.from(this.monitors.get(settingName)!.keys());
-        const hasRoom = rooms.find((r) => r === roomId || r === null);
+        const hasRoom = rooms.some((r) => r === roomId || r === null);
         if (!hasRoom) {
             registerWatcher();
         } else {

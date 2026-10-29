@@ -52,6 +52,7 @@ import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.t
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import PlatformPeg from "../../../PlatformPeg";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider.tsx";
 
 function getTile(container: HTMLElement): HTMLElement {
@@ -683,7 +684,7 @@ describe("EventTile", () => {
         });
 
         it("does not render the message action bar on hover while editing", async () => {
-            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+            const { container } = getComponent({ editState: new EditorStateTransfer(mxEvent) });
 
             await userEvent.hover(getTile(container));
 
@@ -713,7 +714,7 @@ describe("EventTile", () => {
         });
 
         it("does not render the message context menu while editing", () => {
-            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+            const { container } = getComponent({ editState: new EditorStateTransfer(mxEvent) });
 
             expect(container.querySelector(".mx_EventTile_line")).toBeNull();
             expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();

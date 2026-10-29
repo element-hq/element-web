@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { KnownMembership, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import {
@@ -105,8 +105,15 @@ describe("RoomListViewModel", () => {
         vi.mocked(hasCreateRoomRights).mockReturnValue(false);
     });
 
+    beforeAll(() => {
+        // The global RoomViewStore lives for the whole file, so create it before any test runs rather than
+        // have it look like one which a test made and never tore down.
+        SDKContextClass.instance.constructEagerStores();
+    });
+
     afterEach(() => {
         viewModel?.dispose();
+        RoomNotificationStateStore.instance.clearRoomStates();
         vi.restoreAllMocks();
     });
 
