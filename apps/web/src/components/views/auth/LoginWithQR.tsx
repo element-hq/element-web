@@ -313,74 +313,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
         try {
             if (this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
-                // MSC4108-Flow: NewScanned
-                this.setState({ phase: Phase.Loading });
-
-                // The user has confirmed the check code so we now trust the channel. In the v2025 flow this is
-                // where we tell the other device which protocols are available and wait for it to tell us which
-                // one it is using, along with the verification URI. In the v2024 flow the other device already
-                // sent that, so this only waits for it.
-                const { verificationUri } = await this.state.flow.deviceAuthorizationGrant();
-
-                // Opening a window needs the user's click to still count as recent, even after the await above. This
-                // lasts for the browser's transient activation duration:
-                // https://html.spec.whatwg.org/multipage/interaction.html#transient-activation-duration
-                // This is believed to be in the order of 5 seconds in Chromium, Firefox and WebKit.
-                // When running in Electron the window.open() is intercepted and no limit is applied.
-                let phase = Phase.WaitingForDevice;
-                if (verificationUri) {
-                    // In a standard browser, window.open() returns null if the browser blocked it (e.g. because the transient activation
-                    // duration expired), in which case we offer a button to open it instead.
-                    // In Electron window.open() always returns null.
-                    const openResult = window.open(verificationUri, "_blank");
-
-                    // On a standard browser we show a button to open the verification URI if the browser blocked the automatic window.open() call.
-                    if (!openResult && !window.electron) {
-                        phase = Phase.OpenVerificationUri;
-                    }
-                }
-
-                this.setState({ phase, verificationUri });
-
-                // wait for new device to authenticate and then send secrets
-                await this.state.flow.shareSecrets();
-
-                // done
-                this.onFinished(true);
+                await this.approveLoginOnExistingDevice(this.state.flow);
             } else {
-                if (!this.state.loginServerDetails) {
-                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                    throw new Error("Server details not found in state");
-                }
-
-                const { homeserverUrl, identityServerUrl, clientId, metadata } = this.state.loginServerDetails;
-
-                // Generate our new device ID
-                const deviceId = secureRandomString(10);
-                const { userCode } = await this.state.flow.deviceAuthorizationGrant({
-                    metadata,
-                    clientId,
-                    deviceId,
-                });
-                this.setState({ phase: Phase.WaitingForDevice, userCode });
-
-                const tokenResponse = await this.state.flow.completeLoginOnNewDevice({ clientId });
-
-                if (tokenResponse) {
-                    const { secrets } = await this.state.flow.shareSecrets();
-
-                    await this.props.onLoggedIn({
-                        accessToken: tokenResponse.access_token,
-                        refreshToken: tokenResponse.refresh_token,
-                        homeserverUrl,
-                        clientId,
-                        identityServerUrl,
-                        secrets,
-                        deviceId,
-                    });
-
-                    this.onFinished(true);
-                }
+                await this.approveLoginOnNewDevice(this.state.flow, this.props.onLoggedIn);
             }
         } catch (e: RendezvousError | unknown) {
             logger.error("Error whilst approving sign in", e);
@@ -392,6 +327,90 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             } catch (cancelError) {
                 logger.warn("Failed to cancel rendezvous after error", cancelError);
             }
+        }
+    };
+
+    /**
+     * Completes the sign in after the user has confirmed the check code, when this device is the existing,
+     * signed-in device.
+     */
+    private approveLoginOnExistingDevice = async (flow: SignInWithQRFlow): Promise<void> => {
+        // MSC4108-Flow: NewScanned
+        this.setState({ phase: Phase.Loading });
+
+        // The user has confirmed the check code so we now trust the channel. In the v2025 flow this is
+        // where we tell the other device which protocols are available and wait for it to tell us which
+        // one it is using, along with the verification URI. In the v2024 flow the other device already
+        // sent that, so this only waits for it.
+        const { verificationUri } = await flow.deviceAuthorizationGrant();
+
+        // Opening a window needs the user's click to still count as recent, even after the await above. This
+        // lasts for the browser's transient activation duration:
+        // https://html.spec.whatwg.org/multipage/interaction.html#transient-activation-duration
+        // This is believed to be in the order of 5 seconds in Chromium, Firefox and WebKit.
+        // When running in Electron the window.open() is intercepted and no limit is applied.
+        let phase = Phase.WaitingForDevice;
+        if (verificationUri) {
+            // In a standard browser, window.open() returns null if the browser blocked it (e.g. because the transient activation
+            // duration expired), in which case we offer a button to open it instead.
+            // In Electron window.open() always returns null.
+            const openResult = window.open(verificationUri, "_blank");
+
+            // On a standard browser we show a button to open the verification URI if the browser blocked the automatic window.open() call.
+            if (!openResult && !window.electron) {
+                phase = Phase.OpenVerificationUri;
+            }
+        }
+
+        this.setState({ phase, verificationUri });
+
+        // wait for new device to authenticate and then send secrets
+        await flow.shareSecrets();
+
+        // done
+        this.onFinished(true);
+    };
+
+    /**
+     * Completes the sign in after the user has confirmed the check code, when this device is the new device
+     * being signed in.
+     */
+    private approveLoginOnNewDevice = async (
+        flow: SignInWithQRFlow,
+        onLoggedIn: (credentials: QrLoginCredentials) => Promise<void>,
+    ): Promise<void> => {
+        if (!this.state.loginServerDetails) {
+            this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+            throw new Error("Server details not found in state");
+        }
+
+        const { homeserverUrl, identityServerUrl, clientId, metadata } = this.state.loginServerDetails;
+
+        // Generate our new device ID
+        const deviceId = secureRandomString(10);
+        const { userCode } = await flow.deviceAuthorizationGrant({
+            metadata,
+            clientId,
+            deviceId,
+        });
+        this.setState({ phase: Phase.WaitingForDevice, userCode });
+
+        const tokenResponse = await flow.completeLoginOnNewDevice({ clientId });
+
+        if (tokenResponse) {
+            const { secrets } = await flow.shareSecrets();
+
+            await onLoggedIn({
+                accessToken: tokenResponse.access_token,
+                refreshToken: tokenResponse.refresh_token,
+                homeserverUrl,
+                clientId,
+                identityServerUrl,
+                secrets,
+                deviceId,
+            });
+
+            this.onFinished(true);
         }
     };
 
