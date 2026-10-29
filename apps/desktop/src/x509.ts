@@ -457,10 +457,10 @@ export async function getUserCertificate(): Promise<X509Result<UserCertificate>>
         // This is an error variant, so we can just return it directly.
         return result;
     }
-    return ok({
-        ...result.data,
-        certificate: toCertificateInfo(result.data.leaf),
-    });
+    // N.B. we must be careful not to pass anything Electron can't serialise over IPC - this breaks
+    // X.509 entirely!
+    const { leaf, chain, chainValidTo } = result.data;
+    return ok({ certificate: toCertificateInfo(leaf), chain, chainValidTo });
 }
 
 // #endregion
