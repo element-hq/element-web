@@ -6,7 +6,7 @@
  */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
+import React, { type JSX, useState } from "react";
 import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
@@ -69,21 +69,17 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
     const [state, setState] = useState<State>(initialState);
 
     const toastRack = useToastContext();
-    const toastTimeout = useRef<number>(undefined);
-    useEffect(() => () => window.clearTimeout(toastTimeout.current), []);
-    // Briefly confirm success after the user finishes the recovery key flow.
-    const showRecoveryConfirmationToast = useCallback(
-        (label: string) => {
-            const removeToast = toastRack.displayToast(
-                <>
-                    <CheckIcon width="20px" height="20px" />
-                    {label}
-                </>,
-            );
-            toastTimeout.current = window.setTimeout(removeToast, BACKUP_SET_UP_TOAST_TIMEOUT_MS);
-        },
-        [toastRack],
-    );
+    // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
+    // and the remover is a no-op once another toast replaces it, so the timer is left to fire on its own.
+    const showRecoveryConfirmationToast = (label: string): void => {
+        const removeToast = toastRack.displayToast(
+            <>
+                <CheckIcon width="20px" height="20px" />
+                {label}
+            </>,
+        );
+        window.setTimeout(removeToast, BACKUP_SET_UP_TOAST_TIMEOUT_MS);
+    };
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
