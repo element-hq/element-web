@@ -99,7 +99,7 @@ export function createTestClient(): MatrixClient {
         getUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: vi.fn().mockResolvedValue("userId"),
-        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }),
+        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn(), removeListener: vi.fn() }),
         getDevice: vi.fn(),
         getDeviceId: vi.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",

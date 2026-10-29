@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect } from "vitest";
+import { vi, describe, it, expect, onTestFinished } from "vitest";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { flushPromises } from "test-utils";
 
@@ -34,6 +34,7 @@ describe("VoiceRecordingStore", () => {
 
     const mkStore = async (): Promise<VoiceRecordingStore> => {
         const store = new VoiceRecordingStore();
+        onTestFinished(() => store.destroy());
         await store.start();
         return store;
     };
