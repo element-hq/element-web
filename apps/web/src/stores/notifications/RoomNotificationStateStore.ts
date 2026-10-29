@@ -33,16 +33,40 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
 
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
+    private dynamicRoomPredecessorsWatcherRef?: string;
 
     private constructor(dispatcher = defaultDispatcher) {
         super(dispatcher, {});
-        SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
-            // We pass SyncState.Syncing here to "simulate" a sync happening.
-            // The code that receives these events actually doesn't care
-            // what state we pass, except that it behaves differently if we
-            // pass SyncState.Error.
-            this.emitUpdateIfStateChanged(SyncState.Syncing, false);
-        });
+        this.dynamicRoomPredecessorsWatcherRef = SettingsStore.watchSetting(
+            "feature_dynamic_room_predecessors",
+            null,
+            () => {
+                // We pass SyncState.Syncing here to "simulate" a sync happening.
+                // The code that receives these events actually doesn't care
+                // what state we pass, except that it behaves differently if we
+                // pass SyncState.Error.
+                this.emitUpdateIfStateChanged(SyncState.Syncing, false);
+            },
+        );
+    }
+
+    public destroy(): void {
+        super.destroy();
+        SettingsStore.unwatchSetting(this.dynamicRoomPredecessorsWatcherRef);
+        this.dynamicRoomPredecessorsWatcherRef = undefined;
+        this.clearRoomStates();
+        this._globalState.destroy();
+    }
+
+    /**
+     * Destroys and forgets the notification state of every room.
+     * @internal Public for tests, which create new rooms in every test.
+     */
+    public clearRoomStates(): void {
+        for (const roomState of this.roomMap.values()) {
+            roomState.destroy();
+        }
+        this.roomMap.clear();
     }
 
     /**
@@ -90,6 +114,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
             const state = new RoomNotificationState(room, false);
+            // This store owns the state, and destroying it on teardown removes the listener
+            // oxlint-disable-next-line element-web/no-leaked-emitter-listener
             state.on(NotificationStateEvents.Update, this.onRoomStateUpdate);
             this.roomMap.set(room, state);
         }
@@ -157,8 +183,12 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
             this.globalState.numUnreadStates !== globalState.numUnreadStates ||
             forceEmit
         ) {
+            // Each summary watches a setting, so release the ones which are no longer used
+            this._globalState.destroy();
             this._globalState = globalState;
             this.emit(UPDATE_STATUS_INDICATOR, globalState, state);
+        } else {
+            globalState.destroy();
         }
     };
 
@@ -169,9 +199,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
     protected async onNotReady(): Promise<any> {
         this.matrixClient?.off(ClientEvent.Sync, this.onSync);
         this.onRoomStateUpdate.cancel();
-        for (const roomState of this.roomMap.values()) {
-            roomState.destroy();
-        }
+        this.clearRoomStates();
     }
 
     // We don't need this, but our contract says we do.

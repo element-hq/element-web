@@ -238,6 +238,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly loggedInView = createRef<LoggedInViewType>();
     private dispatcherRef?: string;
     private blacklistUnverifiedDevicesWatcherRef?: string;
+    private analyticsOptInWatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SDKContextClass;
@@ -538,6 +539,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (this.blacklistUnverifiedDevicesWatcherRef) {
             SettingsStore.unwatchSetting(this.blacklistUnverifiedDevicesWatcherRef);
         }
+        SettingsStore.unwatchSetting(this.analyticsOptInWatcherRef);
         DecryptionFailureTracker.instance.stop();
     }
 
@@ -1479,7 +1481,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Listen to changes in settings and show the toast if appropriate - this is necessary because account
         // settings can still be changing at this point in app init (due to the initial sync being cached, then
         // subsequent syncs being received from the server)
-        SettingsStore.watchSetting(
+        SettingsStore.unwatchSetting(this.analyticsOptInWatcherRef);
+        this.analyticsOptInWatcherRef = SettingsStore.watchSetting(
             "pseudonymousAnalyticsOptIn",
             null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {

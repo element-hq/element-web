@@ -7,6 +7,7 @@
  */
 
 import { type MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 // oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
@@ -43,8 +44,16 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         this.matrixClient = cli;
     }
 
+    /**
+     * Stops the store listening to the dispatcher, and releases whatever it set up for its client.
+     */
     public destroy(): void {
         this.dispatcher.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
+        if (this.matrixClient) {
+            this.onNotReady().catch((e) => logger.warn("Failed to release store on destroy", e));
+            this.matrixClient = undefined;
+        }
     }
 
     protected async onReady(): Promise<void> {
