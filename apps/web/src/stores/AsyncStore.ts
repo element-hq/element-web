@@ -38,7 +38,7 @@ export const UPDATE_EVENT = "update";
 export abstract class AsyncStore<T extends object> extends EventEmitter {
     private storeState: Readonly<T>;
     private lock = new AwaitLock();
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
 
     /**
      * Creates a new AsyncStore using the given dispatcher.
@@ -67,6 +67,7 @@ export abstract class AsyncStore<T extends object> extends EventEmitter {
      */
     protected stop(): void {
         this.dispatcher.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
     }
 
     /**
