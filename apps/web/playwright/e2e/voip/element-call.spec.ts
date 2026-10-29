@@ -573,6 +573,69 @@ test.describe("Element Call", () => {
                 }
             });
 
+            test("should keep the same call running when it comes back from PiP into the room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+                await expect(pipContainer).toBeVisible();
+
+                // Viewing a room with an active call docks the call into its call view again
+                await app.viewRoomByName("TestRoom");
+                await expect(pipContainer).not.toBeVisible();
+                await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+
+                if (embedding === "react") {
+                    // The very same component instance docks again: a remount would start it (and its log) afresh
+                    await expect(reactCall(page).getByText(/in call/)).toBeVisible();
+                    await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
+                        "→ setAlwaysOnScreen(true)",
+                    );
+                } else {
+                    // The iframe is not reloaded: the fake call is still in the call rather than back at its lobby
+                    const callFrame = page.locator('iframe[title="Element Call"]').contentFrame();
+                    await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+                }
+            });
+
+            test(
+                "should show the header buttons for taking the call out of the room view",
+                { tag: "@screenshot" },
+                async ({ page, user, room, app }) => {
+                    await app.viewRoomById(room.roomId);
+                    await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                    const header = page.locator(".mx_RoomHeader");
+
+                    await openAndJoinCall(page);
+                    // During a call the header call buttons are not needed.
+                    // We replace them with a PiP button. The React embedding offers the browser (S) PiP.
+                    // The widget embedding offers only minimising into Element Web's floating PiP.
+                    await expect(header.getByRole("button", { name: "Video call" })).toHaveCount(0);
+                    await expect(header.getByRole("button", { name: "Voice call" })).toHaveCount(0);
+                    await expect(header.getByTestId("document-pip-button")).toHaveCount(embedding === "react" ? 1 : 0);
+                    await expect(header.getByRole("button", { name: "Minimise call" })).toHaveCount(
+                        embedding === "widget" ? 1 : 0,
+                    );
+                    await expect(header).toMatchScreenshot(`room-header-in-call-${embedding}.png`);
+                    if (embedding === "react") return;
+
+                    // Minimised into Element Web's own PiP, the same button offers the way back
+                    await header.getByRole("button", { name: "Minimise call" }).click();
+                    await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+                    // Leave the button so neither its hover state nor its tooltip ends up in the screenshot
+                    await page.mouse.move(0, 0);
+                    await expect(header.getByRole("button", { name: "Maximise call" })).toBeVisible();
+                    await expect(header).toMatchScreenshot(`room-header-call-minimised-${embedding}.png`);
+                },
+            );
+
             test("should be able to start a call, close it via PiP, and start again in the same room", async ({
                 page,
                 user,
@@ -728,6 +791,33 @@ test.describe("Element Call", () => {
             await expect(callRoot).toHaveClass(/cpd-theme-dark/);
             await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
         });
+
+        test("has its tooltips styled by Element Web's Compound", async ({ page, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.viewRoomById(room.roomId);
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+
+            // Element Call's own stylesheet only reaches inside its root element, but its tooltips float
+            // through a Compound portal into the body, like Element Web's own. They are styled all the same
+            // because the component shares Element Web's copy of Compound rather than bundling one of its
+            // own: a label tooltip is in the DOM from the start, hidden by Compound's stylesheet until
+            // hovered, and would show as bare text the whole time if that stylesheet did not reach it.
+            const callRoot = page.locator("[data-element-call-root]");
+            const microphone = callRoot.getByRole("switch", { name: /microphone/ });
+            const label = page.getByText(/^(Mute|Unmute) microphone$/);
+            // clip-path is the fingerprint of Compound's "invisible" rule (confirms it gets styled by EW)
+            const tooltip = label.locator("..");
+            await expect(label).toBeAttached();
+            await expect(callRoot.getByText(/^(Mute|Unmute) microphone$/)).toHaveCount(0);
+            await expect(tooltip).toHaveCSS("clip-path", "inset(50%)");
+
+            await microphone.hover();
+            await expect(label).toBeVisible();
+            await expect(tooltip).toHaveCSS("clip-path", "none");
+        });
     });
 
     test.describe("Theme (React component)", () => {
@@ -760,6 +850,139 @@ test.describe("Element Call", () => {
 
             await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
             await expect(mock.getByText(/theme dark/)).toBeVisible();
+        });
+    });
+
+    test.describe("Document Picture-in-Picture (React component)", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
+
+        test("moves the call into a browser window and back", async ({ page, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+
+            await app.viewRoomById(room.roomId);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+            // Not connected yet: no way out of the room view is offered
+            await expect(page.getByTestId("document-pip-button")).toHaveCount(0);
+
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+
+            // In a call: the browser PiP button, and no button to start another call
+            const documentPip = page.getByTestId("document-pip-button");
+            // Tag the mock's DOM so we can tell, once it is back, whether React kept it or rendered it anew
+            await mock.evaluate((el) => el.setAttribute("data-test-before-pip", ""));
+
+            await documentPip.click();
+            // The component's DOM left this document for the browser's window; the room shows the
+            // timeline, and Element Web's own PiP stays out of the way
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.locator(".mx_BasicMessageComposer")).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            // Its React tree kept running: what the mock had logged is still there
+            expect(
+                await page.evaluate(() =>
+                    window.documentPictureInPicture!.window!.document.body.textContent?.includes("in call"),
+                ),
+            ).toBe(true);
+
+            // Closing the window from the browser side brings the call back to where it left from: the
+            // room's call view
+            await page.evaluate(() => window.documentPictureInPicture!.window!.close());
+            await expect(mock).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+            // ...as the very same component instance: it did not reload on the way there or back
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
+
+            // Bringing it back from inside Element Web does not reload it either
+            await documentPip.click();
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await page.getByRole("button", { name: "Bring call back into this window" }).click();
+            await expect(mock).toBeVisible();
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
+        });
+
+        test("keeps a call that was just joined in the browser window", async ({ page, user, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+
+            // Element Web treats the element call component as joined based on the target state.
+            // (clicking join button -> treat the call as joined)
+            // But the RTCSession joined state only appears after the event has been synced:
+            //  - EC loads
+            //  - EC initialisez
+            //  - EC send membership event
+            //  - hs syncs memberhsip event
+            //
+            // On a first call, while the component is still being downloaded, there is a high chance, the user can open the window in
+            // that gap. (first download can take >2-3s)
+            // This has resulted in a broken expecience. This regression test reproduces this condition
+            // by holding back sync responses to construct: open pip while in this "gap".
+            let releaseSync!: () => void;
+            const syncHeld = new Promise<void>((resolve) => (releaseSync = resolve));
+            let holdSync = false;
+            await page.route(/\/_matrix\/client\/v3\/sync\b/, async (route) => {
+                const response = await route.fetch({ timeout: 0 });
+                if (holdSync) await syncHeld;
+                await route.fulfill({ response });
+            });
+
+            await app.viewRoomById(room.roomId);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+
+            holdSync = true;
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+            await page.getByTestId("document-pip-button").click();
+
+            // The call is in the window, and the room shows the timeline rather than a lobby
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+
+            // ...and stays there once the membership arrives
+            releaseSync();
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+            expect(await page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+
+            // Sync long-polls still waiting on the server would otherwise fail once the test ends
+            await page.unrouteAll({ behavior: "ignoreErrors" });
         });
     });
 
