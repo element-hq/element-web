@@ -22,6 +22,7 @@ import { getConfig } from "./config.js";
 const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
 
 let trayIcon: Tray | null = null;
+let focusedBeforeTrayAction = false;
 
 export function hasTray(): boolean {
     return trayIcon !== null;
@@ -31,16 +32,23 @@ export function destroy(): void {
     if (trayIcon) {
         trayIcon.destroy();
         trayIcon = null;
+        focusedBeforeTrayAction = false;
     }
 }
 
-function toggleWin(): void {
-    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized()) {
+function captureWindowFocus(): void {
+    focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
+}
+
+function toggleWin(wasFocused: boolean): void {
+    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && wasFocused) {
         global.mainWindow.hide();
+        focusedBeforeTrayAction = false;
     } else {
         if (global.mainWindow?.isMinimized()) global.mainWindow.restore();
         if (!global.mainWindow?.isVisible()) global.mainWindow?.show();
         global.mainWindow?.focus();
+        focusedBeforeTrayAction = true;
     }
 }
 
@@ -63,8 +71,12 @@ export async function create(): Promise<void> {
     }
 
     trayIcon.setToolTip(getConfig().brand);
+    focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
     initApplicationMenu();
-    trayIcon.on("click", toggleWin);
+    // The tray can steal focus before its click event, so sample while the pointer enters or moves over it.
+    trayIcon.on("mouse-enter", captureWindowFocus);
+    trayIcon.on("mouse-move", captureWindowFocus);
+    trayIcon.on("click", () => toggleWin(focusedBeforeTrayAction));
 
     // See also, badge.ts
     let lastFavicon: string | null = null;
@@ -114,7 +126,7 @@ export function initApplicationMenu(): void {
     const contextMenu = Menu.buildFromTemplate([
         {
             label: _t("action|show_hide"),
-            click: toggleWin,
+            click: () => toggleWin(focusedBeforeTrayAction),
         },
         { type: "separator" },
         {
