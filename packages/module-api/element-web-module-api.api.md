@@ -111,6 +111,7 @@ export interface ComposerApi {
     addFileUploadOption(option: ComposerApiFileUploadOption): void;
     insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void;
     openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void;
+    registerSlashCommand(command: ComposerApiSlashCommand): void;
 }
 
 // @alpha
@@ -122,6 +123,35 @@ export type ComposerApiFileUploadOption = {
         inReplyToEventId?: string;
         relType?: string;
     }) => Promise<void> | void;
+};
+
+// @alpha
+export type ComposerApiSlashCommand = {
+    command: string;
+    aliases?: string[];
+    args?: string;
+    description: string;
+    category?: ComposerApiSlashCommandCategory;
+    hideCompletionAfterSpace?: boolean;
+    views?: ComposerApiTarget["view"][];
+    isEnabled?: (roomId: string | null) => boolean;
+    run?: (args: string | undefined, context: ComposerApiSlashCommandContext) => Promise<ComposerApiSlashCommandContent | void> | ComposerApiSlashCommandContent | void;
+};
+
+// @alpha
+export type ComposerApiSlashCommandCategory = "messages" | "actions" | "admin" | "advanced" | "effects" | "other";
+
+// @alpha
+export type ComposerApiSlashCommandContent = {
+    msgtype: string;
+    body: string;
+    [key: string]: unknown;
+};
+
+// @alpha
+export type ComposerApiSlashCommandContext = {
+    roomId: string;
+    threadId?: string;
 };
 
 // @alpha
