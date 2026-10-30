@@ -5,7 +5,7 @@
     "action": {
         "back": "Vissza",
         "cancel": "Mégse",
-        "click": "Kattintson",
+        "click": "Kiválasztás",
         "close": "Bezárás",
         "collapse": "Összecsukás",
         "delete": "Törlés",
@@ -52,6 +52,10 @@
             "collapse": "Webcímelőnézetek összecsukása",
             "failed": "Nem sikerült az előnézet lekérése",
             "loading": "Előnézet lekérése…",
+            "n_links": {
+                "one": "%(count)s hivatkozás",
+                "other": "%(count)s hivatkozás"
+            },
             "remove": "Webcímelőnézet eltávolítása"
         }
     },
@@ -107,7 +111,7 @@
     },
     "menus": {
         "user_menu": {
-            "clear_status": "Törlés",
+            "clear_status": "Állapot törlése",
             "create_an_account": "Fiók létrehozása",
             "got_an_account": "Van már fiókja?",
             "sign_in": "Bejelentkezés",
@@ -147,17 +151,17 @@
         "jump_to_bottom_button": "Görgetés a legfrissebb üzenetekhez",
         "jump_to_date": "Görgetés időpontra",
         "jump_to_date_beginning": "A szoba kezdete",
-        "jump_to_date_prompt": "Idő kiválasztása az ugráshoz",
+        "jump_to_date_prompt": "Válasszon időt az ugráshoz",
         "knock_sent": "Csatlakozási kérés elküldve",
         "pinned_message_badge": "Kitűzött üzenet",
         "status_bar": {
             "contact_account_provider": "Kapcsolatfelvétel a fiókszolgáltatóval",
             "delete_all": "Összes törlése",
-            "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
-            "exceeded_resource_limit_title": "Az üzenet nem került elküldésre, mert ez a Matrix-kiszolgáló túllépte az erőforráskorlátot.",
+            "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a fiókszolgáltatójával.",
+            "exceeded_resource_limit_title": "Az üzenet nem lett elküldve, mert ez a szolgáltatás túllépett egy erőforráskorlátot.",
             "failed_to_create_room_title": "Nem sikerült csevegést indítani ezzel a felhasználóval",
-            "homeserver_blocked_title": "Az üzenet nem került elküldésre, mert ezt a Matrix-kiszolgálót az adminisztrátora blokkolta.",
-            "monthly_user_limit_reached_title": "Az üzenet nem került elküldésre, mert ez a Matrix-kiszolgáló elérte a havi aktív felhasználói korlátját.",
+            "homeserver_blocked_title": "Az üzenete nem lett elküldve, mert a fiókszolgáltatója blokkolta ezt a szolgáltatást.",
+            "monthly_user_limit_reached_title": "Az üzenete nem lett elküldve, mert ez a szolgáltatás elérte a havi aktív felhasználói korlátját.",
             "requires_consent_agreement_title": "Addig nem küldhet üzeneteket, amíg nem olvasta el és nem fogadta el a felhasználási feltételeinket.",
             "retry_all": "Összes újraküldése",
             "select_messages_to_retry": "Újraküldéshez vagy törléshez kiválaszthatja az üzeneteket egyenként vagy az összeset együtt",
@@ -190,8 +194,8 @@
                 "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel.": "other"
             },
             "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel.",
-            "video_call": "Szoba megnyitása videóhívással itt: %(roomName)s",
-            "voice_call": "Szoba megnyitása hanghívással itt: %(roomName)s"
+            "video_call": "Szoba megnyitása: %(roomName)s, videóhívás folyamatban.",
+            "voice_call": "Szoba megnyitása: %(roomName)s, hanghívás folyamatban."
         },
         "appearance": "Megjelenítés",
         "chat_moved": "Csevegés áthelyezve",
@@ -224,7 +228,7 @@
         },
         "list_title": "Szobalista",
         "more_options": {
-            "copy_link": "Szoba hivatkozásának másolása",
+            "copy_link": "Hivatkozás másolása",
             "favourited": "Kedvencnek jelölve",
             "leave_room": "Szoba elhagyása",
             "low_priority": "Alacsony prioritás",
@@ -315,6 +319,10 @@
                     "title": "A hívás folyamatban"
                 },
                 "room": {
+                    "join_count": {
+                        "one": "%(count)s csatlakozott",
+                        "other": "%(count)s csatlakozott"
+                    },
                     "title": "A csoportos hívás folyamatban"
                 }
             },
@@ -396,8 +404,10 @@
         "element_call_mock": {
             "config_label": "Érvényben lévő konfiguráció",
             "configuration": "Konfiguráció",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
             "in_call": "hívásban",
             "in_lobby": "váróban",
+            "initialized_with": "initializeElementCall: %(value)s",
             "log_label": "HostBridge napló",
             "mute_audio": "Hang némítása",
             "mute_video": "Videó némítása",
