@@ -38,6 +38,7 @@ export default class WebPlatform extends BasePlatform {
     // oxlint-disable-next-line node/no-process-env
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
+    private updateCheckInterval?: number;
 
     public constructor() {
         super();
@@ -61,14 +62,23 @@ export default class WebPlatform extends BasePlatform {
     }
 
     private async registerServiceWorker(): Promise<void> {
+        // Listen before registering, as a service worker already in control may ask us for user info at any time.
+        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
+
         // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
         const registration = await navigator.serviceWorker.register("sw.js");
         if (!registration) {
             throw new Error("Service worker registration failed");
         }
 
-        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
         await registration.update();
+
+        // A hard reload loads the page without the service worker in control, so it would not see our media
+        // requests and they would go out unauthenticated. Ask the active service worker to take control of us.
+        if (!navigator.serviceWorker.controller) {
+            const { active } = await navigator.serviceWorker.ready;
+            active?.postMessage({ type: "claim" });
+        }
     }
 
     private handleServiceWorkerRegistrationError = (): void => {
@@ -188,7 +198,15 @@ export default class WebPlatform extends BasePlatform {
             console.log("Update reloading to " + url.toString());
             window.location.href = url.toString();
         });
-        setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
+        this.updateCheckInterval = setInterval(
+            () => this.pollForUpdate(showUpdateToast, hideUpdateToast),
+            POKE_RATE_MS,
+        );
+    }
+
+    public destroy(): void {
+        super.destroy();
+        clearInterval(this.updateCheckInterval);
     }
 
     public async canSelfUpdate(): Promise<boolean> {

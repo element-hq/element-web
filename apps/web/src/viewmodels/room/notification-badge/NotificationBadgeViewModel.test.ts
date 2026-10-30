@@ -6,6 +6,7 @@
  */
 
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { NotificationBadgeViewModel } from "./NotificationBadgeViewModel";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
@@ -17,6 +18,7 @@ describe("NotificationBadgeViewModel", () => {
             count: 0,
             level: NotificationLevel.Activity,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             shouldRender: true,
@@ -36,6 +38,7 @@ describe("NotificationBadgeViewModel", () => {
             count: 0,
             level: NotificationLevel.Activity,
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -56,6 +59,7 @@ describe("NotificationBadgeViewModel", () => {
             count: 3,
             level: NotificationLevel.Notification,
         });
+        tearDownAfterTest(vm);
 
         vm.setNotificationData({
             symbol: null,
@@ -78,6 +82,7 @@ describe("NotificationBadgeViewModel", () => {
             count: 1,
             level: NotificationLevel.Activity,
         });
+        tearDownAfterTest(vm);
 
         vm.setHideBold(true);
 
@@ -94,6 +99,7 @@ describe("NotificationBadgeViewModel", () => {
             ariaLabel: "Jump to unread",
             tabIndex: 0,
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 

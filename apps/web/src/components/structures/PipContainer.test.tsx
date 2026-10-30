@@ -33,6 +33,7 @@ import {
     mockPlatformPeg,
     useMockMediaDevices,
     TestSDKContext,
+    tearDownAfterTest,
 } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -40,6 +41,7 @@ import { CallStore } from "../../stores/CallStore";
 import { WidgetMessagingStore } from "../../stores/widgets/WidgetMessagingStore";
 import { PipContainer as UnwrappedPipContainer } from "./PipContainer";
 import ActiveWidgetStore from "../../stores/ActiveWidgetStore";
+import { DocumentPipStoreEvent } from "../../stores/DocumentPipStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -187,7 +189,7 @@ describe("PipContainer", () => {
     };
 
     const setUpRoomViewStore = () => {
-        sdkContext._RoomViewStore = new RoomViewStore(defaultDispatcher, sdkContext);
+        sdkContext._RoomViewStore = tearDownAfterTest(new RoomViewStore(defaultDispatcher, sdkContext));
     };
 
     it("hides if there's no content", () => {
@@ -212,6 +214,22 @@ describe("PipContainer", () => {
                 metricsTrigger: expect.any(String),
             });
             defaultDispatcher.unregister(dispatcherRef);
+        });
+    });
+
+    it("does not show a widget that is in a browser Picture-in-Picture window", async () => {
+        const isShowingWidget = vi.spyOn(sdkContext.documentPipStore, "isShowingWidget").mockReturnValue(true);
+        viewRoom(room.roomId);
+        await withCall(async () => {
+            renderPip();
+            expect(screen.queryByTestId("widget-pip-container")).not.toBeInTheDocument();
+
+            // Closing the window hands the widget back to the floating PiP
+            isShowingWidget.mockReturnValue(false);
+            act(() => {
+                sdkContext.documentPipStore.emit(DocumentPipStoreEvent.Update);
+            });
+            await screen.findByTestId("widget-pip-container");
         });
     });
 

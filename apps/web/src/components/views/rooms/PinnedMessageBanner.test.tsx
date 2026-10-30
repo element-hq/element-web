@@ -13,7 +13,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { act, screen, render } from "test-utils-rtl";
 import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "test-utils";
+import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions, TestSDKContext } from "test-utils";
 
 import * as pinnedEventHooks from "../../../hooks/usePinnedEvents";
 import { PinnedMessageBanner } from "./PinnedMessageBanner";
@@ -37,7 +37,7 @@ describe("<PinnedMessageBanner />", () => {
         mockClient = stubClient();
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
         vi.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 

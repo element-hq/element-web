@@ -956,7 +956,6 @@
             "warning": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
         },
         "set_up_recovery": "대화 백업하기",
-        "set_up_recovery_toast_description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
         "set_up_toast_title": "보안 백업 설정",
         "turn_on_key_storage": "키 저장 기능 켜기",
         "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
@@ -1470,7 +1469,6 @@
         "experimental_description": "실험적인 기분이 드시나요? 개발 중인 최신 아이디어를 시험해 보세요. 이 기능들은 아직 완성되지 않았으며, 불안정할 수 있고 변경되거나 아예 중단될 수도 있습니다. <a>자세히 알아보기</a>.",
         "experimental_section": "조기 시연",
         "extended_profiles_msc_support": "서버가 MSC4133을 지원해야 합니다.",
-        "feature_disable_call_per_sender_encryption": "Element 통화에서 발신자별 암호화 비활성화",
         "feature_user_status": {
             "description": "현재 상태를 확인하고 설정할 수 있도록 합니다.",
             "display_name": "사용자 상태",
@@ -2416,14 +2414,6 @@
             },
             "confirm_key_storage_off": "키 저장 기능을 꺼진 상태로 유지하시겠습니까?",
             "confirm_key_storage_off_description": "모든 기기를 제거(로그아웃)하면 대화 기록이 손실되며, 기존의 모든 연락처를 다시 인증해야 합니다. <a>자세히 보기</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "키 저장소 삭제",
-                "confirm": "키 저장소 삭제",
-                "description": "키 저장소를 삭제하면 서버에서 암호화 신원 및 메시지 키가 제거되며 다음 보안 기능이 비활성화됩니다:",
-                "list_first": "새 기기에서는 암호화된 메시지 기록을 확인할 수 없습니다.",
-                "list_second": "모든 기기에서 로그아웃하면 암호화된 메시지를 읽을 수 없게 됩니다.",
-                "title": "정말로 키 저장소를 비활성화하고 삭제하시겠습니까?"
-            },
             "device_not_verified_button": "이 장치를 확인하십시오",
             "device_not_verified_description": "암호화 설정을 확인하려면 이 기기를 인증해야 합니다.",
             "device_not_verified_title": "장치가 인증되지 않았습니다",
@@ -2440,7 +2430,6 @@
                 "change_recovery_key": "복구 키 변경",
                 "change_recovery_key_description": "이 새로운 복구 키를 안전한 곳에 기록해 두십시오. 그런 다음 계속을 클릭하여 변경 사항을 확인하십시오.",
                 "change_recovery_key_title": "복구 키 변경하시겠습니까?",
-                "description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
                 "enter_key_error": "입력하신 복구 키가 올바르지 않습니다.",
                 "enter_recovery_key": "복구 키 확인",
                 "forgot_recovery_key": "복구 키를 잊으셨나요?",
@@ -2451,10 +2440,8 @@
                 "set_up_recovery_confirm_button": "설정 완료",
                 "set_up_recovery_confirm_description": "복구 설정을 완료하려면 이전 화면에 표시된 복구 키를 입력하십시오.",
                 "set_up_recovery_confirm_title": "복구 키를 입력하여 확인하십시오",
-                "set_up_recovery_description": "키 저장소는 복구 키로 보호됩니다. 설정 후 새 복구 키가 필요한 경우 '%(changeRecoveryKeyButton)s'을 선택하여 재작성할 수 있습니다.",
                 "set_up_recovery_save_key_description": "이 복구 키를 암호 관리자, 암호화된 메모 또는 물리적 금고와 같은 안전한 곳에 기록해 두십시오.",
                 "set_up_recovery_save_key_title": "복구 키를 안전한 곳에 보관하세요.",
-                "set_up_recovery_secondary_description": "계속을 클릭하면 복구 키를 생성해 드립니다.",
                 "title": "백업"
             },
             "title": "암호화"
@@ -3426,10 +3413,6 @@
             "error_loading": "응답한 이벤트를 불러오지 못했습니다, 존재하지 않거나 볼 수 있는 권한이 없습니다.",
             "in_reply_to": "<a>관련 대화</a> <pill>",
             "in_reply_to_for_export": "<a>이 메시지</a>에 대한 답장"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "%(integrationsUrl)s에서 쓸 수 있도록 계정을 인증하려고 다른 사이트로 이동하고 있습니다. 계속하겠습니까?",
-            "dialog_title": "통합 추가"
         },
         "self_redaction": "메시지가 삭제됨",
         "send_state_encrypting": "메시지를 암호화 중…",

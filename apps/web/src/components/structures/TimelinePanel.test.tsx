@@ -42,6 +42,7 @@ import {
     mkMembership,
     mkRoom,
     stubClient,
+    TestSDKContext,
 } from "test-utils";
 import { mkThread } from "test-utils/threads";
 import { createMessageEventContent } from "test-utils/events";
@@ -54,7 +55,6 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../../settings/SettingLevel";
 import MatrixClientBackedController from "../../settings/controllers/MatrixClientBackedController";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import type Timer from "../../utils/Timer";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
@@ -164,7 +164,7 @@ const setupPagination = (
 
 describe("TimelinePanel", () => {
     let client: Mocked<MatrixClient>;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
     let userId: string;
 
     filterConsole("checkForPreJoinUISI: showing all messages, skipping check");
@@ -172,7 +172,7 @@ describe("TimelinePanel", () => {
     beforeEach(() => {
         client = vi.mocked(stubClient());
         userId = client.getSafeUserId();
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
     });
 
     describe("read receipts and markers", () => {
@@ -305,7 +305,7 @@ describe("TimelinePanel", () => {
                     // Ensure this setting is supported, otherwise it will use the default value.
                     client.isVersionSupported.mockImplementation(async (v) => v === "v1.4");
                     MatrixClientBackedController.matrixClient = client;
-                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
+                    await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 });
 
                 afterEach(() => {
@@ -487,7 +487,7 @@ describe("TimelinePanel", () => {
             // ScrollPanel has no chance of working in jsdom, so we've no choice
             // but to do some shady stuff to trigger the fill callback by hand
             const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
-            scrollPanel.props.onFillRequest!(true);
+            await scrollPanel.props.onFillRequest!(true);
 
             await waitFor(() => expectEvents(container, [events[0], events[1]]));
         });

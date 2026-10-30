@@ -15,7 +15,7 @@ import {
     _t,
     type ToastType,
 } from "@element-hq/web-shared-components";
-import { Room, type MatrixClient, RoomType } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient, PendingEventOrdering, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";
@@ -297,7 +297,13 @@ export class RoomListViewModel
             }
             this.roomItemViewModels.clear();
             this.previewItem?.dispose();
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.dispose();
+            }
+            this.roomSectionHeaderViewModels.clear();
         });
+
+        this.disposables.track(() => clearTimeout(this.toastRef));
 
         // A room may already be open when the list is created
         this.onRoomViewStoreUpdate();
@@ -321,7 +327,11 @@ export class RoomListViewModel
         this.previewItem = preview && new PreviewRoomListItemViewModel(preview);
         const { client } = this.props;
         this.previewRoom =
-            preview && (client.getRoom(preview.roomId) ?? new Room(preview.roomId, client, client.getSafeUserId()));
+            preview &&
+            (client.getRoom(preview.roomId) ??
+                new Room(preview.roomId, client, client.getSafeUserId(), {
+                    pendingEventOrdering: PendingEventOrdering.Detached,
+                }));
         return true;
     }
 

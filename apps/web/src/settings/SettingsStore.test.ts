@@ -37,7 +37,7 @@ const SETTING_NAME_WITH_CONFIG_OVERRIDE = "feature_msc3531_hide_messages_pending
 describe("SettingsStore", () => {
     let platformSettings: Record<string, any>;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         vi.clearAllMocks();
         platformSettings = {};
         mockPlatformPeg({
@@ -52,9 +52,9 @@ describe("SettingsStore", () => {
             reload: vi.fn(),
         } as unknown as BasePlatform);
 
-        TEST_DATA.forEach((d) => {
-            SettingsStore.setValue(d.name, null, d.level, d.value);
-        });
+        for (const d of TEST_DATA) {
+            await SettingsStore.setValue(d.name, null, d.level, d.value);
+        }
     });
 
     beforeEach(() => {
@@ -167,6 +167,48 @@ describe("SettingsStore", () => {
 
             expect(SettingsStore.canSetValue(SETTING_NAME, null, SettingLevel.DEVICE)).toBe(false);
             expect(SettingsStore.disabledMessage(SETTING_NAME)).toBe("Not today");
+        });
+    });
+
+    describe("urlPreviewsEnabled", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+            MatrixClientBackedController.matrixClient = client;
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it.each([
+            ["no capability is advertised", {}, undefined],
+            ["the stable capability is enabled", { "m.preview_url": { enabled: true } }, undefined],
+            ["the unstable capability is enabled", { "io.element.msc4452.preview_url": { enabled: true } }, undefined],
+            [
+                "the stable capability is disabled",
+                { "m.preview_url": { enabled: false } },
+                "Disabled by your account provider",
+            ],
+            [
+                "the unstable capability is disabled",
+                { "io.element.msc4452.preview_url": { enabled: false } },
+                "Disabled by your account provider",
+            ],
+            [
+                "the stable capability is enabled and the unstable capability is disabled",
+                { "m.preview_url": { enabled: true }, "io.element.msc4452.preview_url": { enabled: false } },
+                undefined,
+            ],
+            [
+                "the stable capability is disabled and the unstable capability is enabled",
+                { "m.preview_url": { enabled: false }, "io.element.msc4452.preview_url": { enabled: true } },
+                "Disabled by your account provider",
+            ],
+        ])("has the expected disabled message when %s", (_desc, caps, expected) => {
+            vi.mocked(client.getCachedCapabilities).mockReturnValue(caps);
+            expect(SettingsStore.disabledMessage("urlPreviewsEnabled")).toEqual(expected);
         });
     });
 

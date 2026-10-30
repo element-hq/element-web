@@ -14,7 +14,8 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     lint:
@@ -61,7 +62,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
                   # Nothing to cache for the jobs that do not install
                   cache: ${{ matrix.install != '' }}
@@ -97,13 +98,15 @@ jobs:
         runs-on: ubuntu-26.04
         permissions:
             security-events: write
+            contents: read
+            actions: read
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+              uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
 
     i18n:
         strategy:
@@ -137,6 +140,7 @@ jobs:
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
+            contents: read
         with:
             hardcoded-words: "Element"
             packageManager: pnpm

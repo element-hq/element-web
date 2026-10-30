@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { createTestClient, flushPromises, setupAsyncStoreWithClient } from "test-utils";
 
 import SettingsStore from "../settings/SettingsStore";
@@ -21,15 +21,24 @@ describe("BreadcrumbsStore", () => {
     let store: BreadcrumbsStore;
     const client: MatrixClient = createTestClient();
 
-    beforeEach(() => {
+    beforeEach(async () => {
         store = BreadcrumbsStore.instance;
-        setupAsyncStoreWithClient(store, client);
+        await setupAsyncStoreWithClient(store, client);
         vi.spyOn(SettingsStore, "setValue").mockImplementation(() => Promise.resolve());
         vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
     });
 
     afterEach(() => {
         vi.resetAllMocks();
+    });
+
+    it("Listens for new rooms without waiting for the existing ones to load", async () => {
+        const onSpy = vi.spyOn(client, "on");
+        // @ts-ignore protected
+        const ready = store.onReady();
+
+        expect(onSpy).toHaveBeenCalledWith(ClientEvent.Room, expect.any(Function));
+        await ready;
     });
 
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     EventStatus,
     EventTimeline,
@@ -40,7 +40,7 @@ describe("MessagePreviewStore", () => {
         event: MatrixEvent,
         fireAction = true,
     ): Promise<void> {
-        room.addLiveEvents([event], { addToState: true });
+        await room.addLiveEvents([event], { addToState: true });
         if (fireAction) {
             // @ts-ignore private access
             await store.onAction({
@@ -87,6 +87,10 @@ describe("MessagePreviewStore", () => {
         store = MessagePreviewStore.testInstance();
         await store.start();
         await setupAsyncStoreWithClient(store, client);
+    });
+
+    afterEach(() => {
+        store.destroy();
     });
 
     it("should ignore edits for events other than the latest one", async () => {

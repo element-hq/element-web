@@ -64,6 +64,11 @@ export default defineConfig({
             fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "umd.cjs"}`,
         },
         outDir: "dist",
+        // In watch mode (`nx start`) consumers such as the element-web webpack dev server compile against
+        // `dist/` concurrently. Emptying it on every rebuild makes the CSS/JS briefly disappear and the
+        // consumer build fails with "Failed to find '@element-hq/web-shared-components/dist/...'".
+        // Overwriting in place keeps the files present at all times; a plain `vite build` still starts clean.
+        emptyOutDir: !process.argv.includes("--watch"),
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
@@ -73,6 +78,8 @@ export default defineConfig({
                 "@vector-im/compound-web",
                 "react-virtuoso",
                 "react-resizable-panels",
+                "react/jsx-runtime",
+                "html-react-parser",
             ],
             plugins: [
                 esmExternalRequirePlugin({

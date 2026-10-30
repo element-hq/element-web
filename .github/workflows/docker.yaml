@@ -8,15 +8,18 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
-permissions: {}
+permissions:
+    contents: read
 jobs:
     buildx:
         name: Docker Buildx
         runs-on: ubuntu-26.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
+        if: github.event_name != 'schedule' || github.repository == 'element-hq/element-web'
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+            contents: read
         env:
             TEST_TAG: ghcr.io/element-hq/element-web:test
             TEST_TAG_MODULES: ghcr.io/element-hq/element-web/modules:test
@@ -39,7 +42,7 @@ jobs:
                   install: true
 
             - name: Build and load
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -202,7 +205,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               if: github.event_name != 'pull_request'
               with:
                   source: .

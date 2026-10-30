@@ -36,19 +36,19 @@ describe("RoomDeviceSettingsHandler", () => {
         watchers.unwatchSetting(settingListener);
     });
 
-    it.each(testSettings)("should write/read/clear the value for »%s«", (setting: string): void => {
+    it.each(testSettings)("should write/read/clear the value for »%s«", async (setting: string): Promise<void> => {
         // initial value should be null
         watchers.watchSetting(setting, roomId, settingListener);
 
         expect(handler.getValue(setting, roomId)).toBeNull();
 
         // set and read value
-        handler.setValue(setting, roomId, value);
+        await handler.setValue(setting, roomId, value);
         expect(settingListener).toHaveBeenCalledWith(roomId, SettingLevel.ROOM_DEVICE, value);
         expect(handler.getValue(setting, roomId)).toEqual(value);
 
         // clear value
-        handler.setValue(setting, roomId, null);
+        await handler.setValue(setting, roomId, null);
         expect(settingListener).toHaveBeenCalledWith(roomId, SettingLevel.ROOM_DEVICE, null);
         expect(handler.getValue(setting, roomId)).toBeNull();
     });

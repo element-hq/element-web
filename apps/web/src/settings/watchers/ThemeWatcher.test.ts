@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils";
 
 import SettingsStore from "../SettingsStore";
 import ThemeWatcher from "./ThemeWatcher";
@@ -66,7 +67,7 @@ describe("ThemeWatcher", function () {
         global.matchMedia = makeMatchMedia({});
 
         // Then getEffectiveTheme returns light
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light");
     });
 
@@ -79,7 +80,7 @@ describe("ThemeWatcher", function () {
         });
 
         // Then getEffectiveTheme returns light
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light");
     });
 
@@ -92,7 +93,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValueAt = makeGetValueAt({ theme: "dark" });
 
         // Then getEffectiveTheme returns dark
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("dark");
     });
 
@@ -105,7 +106,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValueAt = makeGetValueAt({ theme: "light" });
 
         // Then getEffectiveTheme returns light
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light");
     });
 
@@ -115,7 +116,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValueAt = makeGetValueAt({ theme: "light-high-contrast" });
 
         // Then getEffectiveTheme returns light-high-contrast
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light-high-contrast");
     });
 
@@ -127,7 +128,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns light
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light");
     });
 
@@ -139,7 +140,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns dark
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("dark");
     });
 
@@ -150,7 +151,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns light
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light");
     });
 
@@ -161,7 +162,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns dark
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("dark");
     });
 
@@ -175,7 +176,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns light-high-contrast
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("light-high-contrast");
     });
 
@@ -190,7 +191,7 @@ describe("ThemeWatcher", function () {
         SettingsStore.getValue = makeGetValue({ use_system_theme: true });
 
         // Then getEffectiveTheme returns dark
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("dark");
     });
 
@@ -205,7 +206,7 @@ describe("ThemeWatcher", function () {
             ],
         });
 
-        const themeWatcher = new ThemeWatcher();
+        const themeWatcher = tearDownAfterTest(new ThemeWatcher());
         expect(themeWatcher.getEffectiveTheme()).toBe("custom-darkula");
         expect(themeWatcher.isUserOnDarkTheme()).toBe(true);
     });

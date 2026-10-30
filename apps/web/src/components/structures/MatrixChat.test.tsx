@@ -1341,7 +1341,7 @@ describe("<MatrixChat />", () => {
 
                 // And this device is being force-verified (because it logged in after
                 // enforcement was turned on).
-                localStorage.setItem("must_verify_device", "true");
+                localStorage.setItem("force_verification_on_at_login", "true");
 
                 // lostKeys returns false, meaning there are other devices to verify against
                 const realStore = SetupEncryptionStore.sharedInstance();
@@ -1352,7 +1352,7 @@ describe("<MatrixChat />", () => {
                 vi.restoreAllMocks();
                 // Reset things back to how they were before we started
                 defaultProps.config.force_verification = false;
-                localStorage.removeItem("must_verify_device");
+                localStorage.removeItem("force_verification_on_at_login");
             });
 
             it("should show the Complete Security screen if unskippable verification is enabled", async () => {
@@ -1606,6 +1606,8 @@ describe("<MatrixChat />", () => {
                                 force_disable: true,
                             },
                         });
+
+                        defaultProps.config.force_verification = false;
 
                         vi.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
                             async (roomId: string) => {
@@ -1935,9 +1937,9 @@ describe("<MatrixChat />", () => {
                 mockPlatformPeg();
             });
 
-            function simulateSessionLockClaim() {
+            async function simulateSessionLockClaim() {
                 localStorage.setItem("react_sdk_session_lock_claimant", "testtest");
-                act(() =>
+                await act(() =>
                     window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" })),
                 );
             }
@@ -1952,7 +1954,7 @@ describe("<MatrixChat />", () => {
                 await rendered.findByText("Welcome Ernie");
 
                 // we're now at the welcome page. Another session wants the lock...
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -1970,7 +1972,7 @@ describe("<MatrixChat />", () => {
                 expect(rendered.getByTestId("spinner")).toBeInTheDocument();
 
                 // now a third session starts
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -1980,7 +1982,7 @@ describe("<MatrixChat />", () => {
                 expect(rendered.getByTestId("spinner")).toBeInTheDocument();
 
                 // now a third session starts
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -2006,7 +2008,7 @@ describe("<MatrixChat />", () => {
                 await initCryptoCalled;
                 console.log("initCrypto called");
 
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
 
                 // now we should see the error page

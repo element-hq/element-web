@@ -74,6 +74,7 @@
         "new_video_room": "新视频房间",
         "next": "下一个",
         "no": "否",
+        "not_now": "暂不",
         "ok": "确定",
         "open": "打开",
         "pin": "置顶",
@@ -207,7 +208,13 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
+            "back_to_app": "返回 app",
+            "check_recovery_key": "检查恢复密钥",
+            "check_recovery_key_title": "确保你移除此设备前拥有恢复密钥",
+            "continue": "继续移除此设备",
             "description": "你确定要移除此设备？",
+            "generate_recovery_key": "生成新的恢复密钥",
+            "keep_access_description": "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。",
             "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
             "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
@@ -433,7 +440,7 @@
     "cant_load_page": "无法载入页面",
     "chat_card_back_action_label": "回到聊天",
     "chat_effects": {
-        "confetti_description": "向指定消息发送“五彩纸屑”",
+        "confetti_description": "发送指定消息时附加“五彩纸屑”特效",
         "confetti_message": "发送了“五彩纸屑”",
         "fireworks_description": "向指定消息发送“烟花”",
         "fireworks_message": "发送了“烟花”",
@@ -441,7 +448,7 @@
         "hearts_message": "发送了“爱心”",
         "rainfall_description": "向指定消息发送“下雨”",
         "rainfall_message": "发送了“下雨”",
-        "snowfall_description": "向指定消息发送“下雪”",
+        "snowfall_description": "发送指定消息时附加“下雪”特效",
         "snowfall_message": "发送了“下雪”",
         "spaceinvaders_description": "向指定消息发送具有“太空主题”的特效",
         "spaceinvaders_message": "发送了“太空侵略者”"
@@ -621,7 +628,7 @@
         "mode_plain": "隐藏文字格式化选项",
         "mode_rich_text": "显示文字格式化选项",
         "no_perms_notice": "你无权在此房间发送消息",
-        "placeholder": "发送消息…",
+        "placeholder": "发送未加密消息…",
         "placeholder_encrypted": "发送加密消息…",
         "placeholder_reply": "发送回复…",
         "placeholder_reply_encrypted": "发送加密回复…",
@@ -947,6 +954,7 @@
         "confirm_encryption_setup_body": "点选以下按钮确认加密设置。",
         "confirm_encryption_setup_title": "确认加密设置",
         "continue_with_reset": "继续重置",
+        "create_recovery_key": "创建恢复密钥",
         "cross_signing_room_normal": "此房间已端到端加密",
         "cross_signing_room_verified": "此房间中的每个成员都已验证",
         "cross_signing_room_warning": "有人正在使用未知设备",
@@ -983,6 +991,7 @@
         },
         "pinned_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
+        "recovery_key_description": "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥恢复备份并保留数字身份。",
         "recovery_method_removed": {
             "description_1": "此设备检测到你的安全口令与安全消息密钥已被移除。",
             "description_2": "如果不慎执行了此操作，你可以为此会话设置安全消息传递，它将使用新的恢复方法重新加密此设备的消息历史。",
@@ -990,7 +999,6 @@
             "warning": "如果你未移除恢复方法，攻击者可能正在尝试访问你的账户。请立即在“设置”中更改你的账户密码并设置新的恢复方法。"
         },
         "set_up_recovery": "备份聊天",
-        "set_up_recovery_toast_description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
         "set_up_toast_title": "设置安全备份",
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
@@ -1522,7 +1530,6 @@
         "experimental_description": "想体验实验性功能？试试我们正在开发的最新创意。这些功能尚未最终确定；它们可能不稳定，可能会改变，也可能被完全放弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
-        "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
         "feature_element_call_react": "将 Element Call 渲染为 React 组件而不是小部件。",
         "feature_matrixrtc_slots": "基于 Element Call 的通话需要打开 MatrixRTC 插槽。",
         "feature_matrixrtc_slots_description": "仅允许在房间中具有有效的插槽状态事件时开始或加入 Element Call 通话。",
@@ -2500,10 +2507,13 @@
         "enable_markdown_description": "在消息开头输入 <code>/plain</code> 以临时禁用 Markdown。",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "仅当你无法访问其它已登录的设备并且丢失了恢复密钥时才重置数字身份。",
+                "breadcrumb_description": "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。",
+                "breadcrumb_description_no_verification_method": "你没有其它已验证的设备或恢复密钥，因此你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
                 "breadcrumb_page": "重置加密",
-                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的消息历史",
-                "breadcrumb_third_description": "你将需要再次验证所有现有设备与联系人",
+                "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的加密聊天历史",
+                "breadcrumb_third_description": "其他用户将会看到你已重置数字身份。",
                 "breadcrumb_title": "无法确认？你需要重置数字身份。",
                 "breadcrumb_title_cant_confirm": "你需要重置数字身份",
                 "breadcrumb_title_compromised": "你确定要重置数字身份？",
@@ -2525,14 +2535,7 @@
             },
             "confirm_key_storage_off": "你确定要持续关闭密钥存储？",
             "confirm_key_storage_off_description": "如果你移除所有设备将丢失消息历史，并需要重新验证所有现有联系人。<a>了解更多</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "删除密钥存储",
-                "confirm": "删除密钥存储",
-                "description": "删除密钥存储将从服务器中移除密码学身份与消息密钥，并关闭以下安全功能：",
-                "list_first": "你将不会在新设备上拥有加密消息历史",
-                "list_second": "如果你不再登录任何设备，你将丢失对加密消息的访问权。",
-                "title": "关闭并删除密钥存储？"
-            },
+            "delete_key_storage_title": "你确定要删除密钥存储？",
             "device_not_verified_button": "验证此设备",
             "device_not_verified_description": "你需要验证此设备才能查看加密设置。",
             "device_not_verified_title": "设备未验证",
@@ -2540,6 +2543,7 @@
             "key_storage": {
                 "allow_key_storage": "允许密钥存储",
                 "description": "这将允许你在任意新设备上查看聊天历史，这对备份聊天和数字身份是必需的。<a>了解更多</a>",
+                "recovery_requires_key_storage": "必须启用密钥存储才能设置恢复。",
                 "title": "密钥存储"
             },
             "recovery": {
@@ -2549,10 +2553,11 @@
                 "change_recovery_key": "更改恢复密钥",
                 "change_recovery_key_description": "在安全的地方记下新的恢复密钥。点选“继续”按钮以确认更改。",
                 "change_recovery_key_title": "更改恢复密钥？",
-                "description": "你的聊天将自动备份。如果你的所有设备均已丢失，则需要使用恢复密钥恢复聊天。",
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
+                "key_active_description": "如果你无法访问所有设备，可以使用恢复密钥以确认新设备或恢复加密聊天。",
+                "key_active_title": "你的新恢复密钥现已激活",
                 "key_storage_warning": "你的密钥存储不同步。点选以下按钮修复此问题。",
                 "save_key_description": "不要与任何人分享！",
                 "save_key_title": "恢复密钥",
@@ -2560,10 +2565,8 @@
                 "set_up_recovery_confirm_button": "完成设置",
                 "set_up_recovery_confirm_description": "请输入上一屏幕显示的恢复密钥以完成恢复设置。",
                 "set_up_recovery_confirm_title": "输入恢复密钥以确认",
-                "set_up_recovery_description": "你的密钥存储受恢复密钥保护。如果设置后需要新的恢复密钥，可以选择“%(changeRecoveryKeyButton)s”重新创建。",
                 "set_up_recovery_save_key_description": "请将此恢复密钥保存到安全的地方，例如密码管理器、加密笔记或物理保险箱。",
                 "set_up_recovery_save_key_title": "保存恢复密钥到安全的地方",
-                "set_up_recovery_secondary_description": "点选“继续”将生成恢复密钥。",
                 "title": "备份"
             },
             "title": "加密"
@@ -2779,7 +2782,7 @@
             "rule_room_one_to_one": "一对一聊天中的消息",
             "rule_roomnotif": "包含 @room 的提及",
             "rule_suppress_notices": "由机器人发送的消息",
-            "rule_tombstone": "当房间升级时。",
+            "rule_tombstone": "当房间升级时",
             "show_message_desktop_notification": "在桌面通知中显示消息内容",
             "voip": "音频与视频通话"
         },
@@ -3043,7 +3046,7 @@
         "addwidget_invalid_protocol": "请提供“http://”或“https://”开头的小部件 URL",
         "addwidget_missing_url": "请提供小部件 URL 或其嵌入式代码",
         "addwidget_no_permissions": "你在此房间无法修改小部件。",
-        "ban": "使用指定 ID 封禁用户",
+        "ban": "使用指定的 ID 封禁用户",
         "category_actions": "操作",
         "category_admin": "管理员",
         "category_advanced": "高级",
@@ -3073,7 +3076,7 @@
         "invite_3pid_use_default_is_title": "使用身份服务器",
         "invite_3pid_use_default_is_title_description": "使用身份服务器通过邮件地址邀请。点选“继续”以使用默认身份服务器 (%(defaultIdentityServerName)s)，或在“设置”中管理。",
         "invite_failed": "用户（%(user)s）最终未被邀请加入 %(roomId)s，但邀请程序未显示任何错误。",
-        "join": "通过指定的房间地址加入",
+        "join": "通过指定地址加入房间",
         "jumptodate": "在时间线中跳转到指定日期",
         "jumptodate_invalid_input": "我们无法理解指定的日期（%(inputDate)s）。尝试使用 YYYY-MM-DD 格式。",
         "lenny": "附加“( ͡° ͜ʖ ͡°)”到纯文本消息",
@@ -3083,7 +3086,7 @@
         "msg": "向指定用户发送消息",
         "myavatar": "在所有房间更改你的头像",
         "myroomavatar": "仅更改你在当前房间内的头像",
-        "myroomnick": "仅更改我在当前房间内的显示名称",
+        "myroomnick": "仅更改你在当前房间内的显示名称",
         "nick": "更改显示名称",
         "no_active_call": "此房间没有活跃的通话",
         "op": "设置用户的权力级别",
@@ -3587,14 +3590,10 @@
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "你将被带到第三方网站，以便验证你的账户是否可用于 %(integrationsUrl)s。是否继续？",
-            "dialog_title": "添加集成"
-        },
         "self_redaction": "消息已被删除",
         "send_state_encrypting": "正在解密消息…",
         "send_state_failed": "发送失败",
-        "send_state_sending": "发送消息…",
+        "send_state_sending": "正在发送消息…",
         "send_state_sent": "消息已发送",
         "summary": {
             "banned": {
@@ -3912,6 +3911,8 @@
         "disabled_no_perms_start_video_call": "你无权发起视频通话",
         "disabled_no_perms_start_voice_call": "你无权发起语音通话",
         "disabled_ongoing_call": "通话中",
+        "document_pip_close": "将通话置入此窗口",
+        "document_pip_open": "在浮动式窗口中打开通话",
         "element_call": "Element Call",
         "element_call_mock": {
             "default": "默认",

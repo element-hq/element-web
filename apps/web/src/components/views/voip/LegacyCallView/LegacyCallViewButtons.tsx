@@ -186,6 +186,13 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         this.showControls();
     }
 
+    public componentWillUnmount(): void {
+        if (this.controlsHideTimer !== null) {
+            clearTimeout(this.controlsHideTimer);
+            this.controlsHideTimer = null;
+        }
+    }
+
     public showControls(): void {
         if (this.state.showMoreMenu || this.state.showDialpad) return;
 

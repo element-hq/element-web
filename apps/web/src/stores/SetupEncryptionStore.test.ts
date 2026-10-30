@@ -12,7 +12,7 @@ import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
 import { type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { type SecretStorageKeyDescriptionAesV1, type ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
 import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { emitPromise, stubClient } from "test-utils";
+import { emitPromise, stubClient, tearDownAfterTest } from "test-utils";
 
 import { accessSecretStorage } from "../SecurityManager";
 import { SetupEncryptionStore } from "./SetupEncryptionStore";
@@ -46,7 +46,7 @@ describe("SetupEncryptionStore", () => {
         } as unknown as Mocked<ServerSideSecretStorage>;
         Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
 
-        setupEncryptionStore = new SetupEncryptionStore();
+        setupEncryptionStore = tearDownAfterTest(new SetupEncryptionStore());
     });
 
     describe("start", () => {

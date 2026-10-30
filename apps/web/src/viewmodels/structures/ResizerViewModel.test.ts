@@ -11,6 +11,7 @@ import { vi, describe, it, expect, afterEach } from "vitest";
 import { type PointerEvent } from "react";
 
 import { waitFor } from "test-utils-rtl";
+import { tearDownAfterTest } from "test-utils";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
 
 import { ResizerViewModel } from "./ResizerViewModel";
@@ -28,18 +29,18 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     describe("Initial state is correct", () => {
-        it("should have correct initial state when panel was previously collapsed", () => {
-            SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, true);
-            const vm = new ResizerViewModel(CallStore.instance);
+        it("should have correct initial state when panel was previously collapsed", async () => {
+            await SettingsStore.setValue("RoomList.isPanelCollapsed", null, SettingLevel.DEVICE, true);
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: true,
                 initialSize: 0,
             });
         });
 
-        it("should have correct initial state when panel was previously resized", () => {
-            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
-            const vm = new ResizerViewModel(CallStore.instance);
+        it("should have correct initial state when panel was previously resized", async () => {
+            await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: 34,
@@ -47,7 +48,7 @@ describe("LeftPanelResizerViewModel", () => {
         });
 
         it("should have correct initial state when panel was neither resized nor collapsed", () => {
-            const vm = new ResizerViewModel(CallStore.instance);
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: undefined,
@@ -56,7 +57,7 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     it("should update isCollapsed on onLeftPanelResized()", async () => {
-        const vm = new ResizerViewModel(CallStore.instance);
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
         vm.onLeftPanelResize({ inPixels: 100, asPercentage: 6 });
         await waitFor(() => {
             expect(vm.getSnapshot().isCollapsed).toStrictEqual(false);
@@ -68,7 +69,7 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     it("should noop on click when handle is not yet set", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
         expect(() => {
             // Click
             vm.onPointerDown(pointerAt(100, 100));
@@ -76,9 +77,9 @@ describe("LeftPanelResizerViewModel", () => {
         }).not.toThrow();
     });
 
-    it("should noop on mouse drag", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+    it("should noop on mouse drag", async () => {
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -97,9 +98,9 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
     });
 
-    it("should expand panel when a click wanders a little", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+    it("should expand panel when a click wanders a little", async () => {
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -115,9 +116,9 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).toHaveBeenCalledWith("34%");
     });
 
-    it("should expand panel on a click that follows moving across the separator", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+    it("should expand panel on a click that follows moving across the separator", async () => {
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+        await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(true),
@@ -134,9 +135,9 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     describe("should expand panel on double click when panel is collapsed", () => {
-        it("to last non-zero width that the user set", () => {
-            const vm = new ResizerViewModel(CallStore.instance);
-            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        it("to last non-zero width that the user set", async () => {
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+            await SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
             const mockHandle = {
                 resize: vi.fn(),
                 isCollapsed: vi.fn().mockReturnValue(true),
@@ -150,7 +151,7 @@ describe("LeftPanelResizerViewModel", () => {
         });
 
         it("to maximum size of the panel", () => {
-            const vm = new ResizerViewModel(CallStore.instance);
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
             const mockHandle = {
                 resize: vi.fn(),
                 isCollapsed: vi.fn().mockReturnValue(true),
@@ -165,7 +166,7 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     it("should collapse panel on click when panel is expanded", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
         const mockHandle = {
             collapse: vi.fn(),
             isCollapsed: vi.fn().mockReturnValue(false),
@@ -177,7 +178,7 @@ describe("LeftPanelResizerViewModel", () => {
     });
 
     it("should ignore first resized event", () => {
-        const vm = new ResizerViewModel(CallStore.instance);
+        const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
         const mockHandle = {
             resize: vi.fn(),
             getSize: vi.fn().mockReturnValue(0),

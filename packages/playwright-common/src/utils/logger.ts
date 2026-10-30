@@ -77,13 +77,22 @@ export class Logger {
      */
     public async onTestFinished(testInfo: TestInfo) {
         const captureLogs = !!process.env[CAPTURE_LOGS_ENV_VAR];
-        if (testInfo.status === "passed" && !captureLogs) return;
+        if (captureLogs || testInfo.status !== "passed") {
+            await this.attachLogs(testInfo, !captureLogs);
+        }
+    }
 
+    /**
+     * Attach all the collected logs to the test, whatever its status.
+     * @param testInfo - the info about the test to attach the logs to.
+     * @param inline - whether to attach the logs inline or as files. Defaults to true (inline).
+     */
+    public async attachLogs(testInfo: TestInfo, inline = true) {
         for (const id in this.logs) {
             if (!this.logs[id]) continue;
             const body = stripAnsi(this.logs[id]);
 
-            if (captureLogs && !id.startsWith("page-")) {
+            if (!inline && !id.startsWith("page-")) {
                 const logPath = testInfo.outputPath(`${id}.log`);
                 await mkdir(path.dirname(logPath), { recursive: true });
                 await writeFile(logPath, body);

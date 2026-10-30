@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, afterAll, vi } from "vitest";
 import {
     MatrixEvent,
     EventType,
@@ -39,6 +39,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import SettingsStore from "../../../settings/SettingsStore";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 vi.mock("maplibre-gl");
 
@@ -125,6 +126,10 @@ describe("ForwardDialog", () => {
         mockClient.getUserId.mockReturnValue("@bob:example.org");
         mockClient.getSafeUserId.mockReturnValue("@bob:example.org");
         mockClient.sendEvent.mockReset();
+    });
+
+    afterEach(() => {
+        RoomNotificationStateStore.instance.clearRoomStates();
     });
 
     afterAll(() => {

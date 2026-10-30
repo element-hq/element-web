@@ -91,6 +91,8 @@ describe("ElementWidgetDriver", () => {
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
             "org.matrix.msc4515.rtc_transports",
+            "org.matrix.msc4533.rtc_livekit_get_token",
+            "org.matrix.msc4533.rtc_livekit_delegate_delayed_leave",
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
             "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
@@ -211,6 +213,46 @@ describe("ElementWidgetDriver", () => {
                     { deviceId: "bobDesktop", payload: { hello: "bob" }, userId: "@bob:example.org" },
                 ],
             });
+        });
+
+        it("sends encrypted messages to every device for a wildcard", async () => {
+            const encryptToDeviceMessages = vi
+                .fn()
+                .mockImplementation((eventType, recipients: { userId: string; deviceId: string }[], content) => ({
+                    eventType: "m.room.encrypted",
+                    batch: recipients.map(({ userId, deviceId }) => ({
+                        userId,
+                        deviceId,
+                        payload: { eventType, content },
+                    })),
+                }));
+            const crypto = MatrixClientPeg.safeGet().getCrypto()!;
+            crypto.encryptToDeviceMessages = encryptToDeviceMessages;
+            crypto.getUserDeviceInfo = vi.fn().mockResolvedValue(
+                new Map([
+                    [
+                        "@alice:example.org",
+                        new Map([
+                            ["aliceMobile", {}],
+                            ["aliceDesktop", {}],
+                        ]),
+                    ],
+                ]),
+            );
+
+            await driver.sendToDevice("org.example.foo", true, {
+                "@alice:example.org": { "*": { hello: "alice" } },
+            });
+
+            expect(crypto.getUserDeviceInfo).toHaveBeenCalledWith(["@alice:example.org"], true);
+            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+                "org.example.foo",
+                [
+                    { deviceId: "aliceMobile", userId: "@alice:example.org" },
+                    { deviceId: "aliceDesktop", userId: "@alice:example.org" },
+                ],
+                { hello: "alice" },
+            );
         });
 
         it("sends encrypted messages", async () => {
@@ -423,6 +465,64 @@ describe("ElementWidgetDriver", () => {
         });
     });
 
+    describe("getRtcLivekitToken", () => {
+        let driver: WidgetDriver;
+        const request = {
+            server_name: "example.org",
+            url: "wss://livekit.example.org",
+            room_id: "!1:example.org",
+            slot_id: "m.call",
+            member_id: "member-id",
+        };
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets a LiveKit token from the homeserver", async () => {
+            client._unstable_getLivekitToken.mockResolvedValue({ jwt: "the-jwt" });
+
+            await expect(driver.getRtcLivekitToken(request)).resolves.toEqual({ jwt: "the-jwt" });
+            expect(client._unstable_getLivekitToken).toHaveBeenCalledWith(request);
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_FORBIDDEN", error: "Not in room" }, 403);
+            client._unstable_getLivekitToken.mockRejectedValue(error);
+
+            await expect(driver.getRtcLivekitToken(request)).rejects.toBe(error);
+        });
+    });
+
+    describe("delegateRtcLivekitDelayedLeave", () => {
+        let driver: WidgetDriver;
+        const request = {
+            url: "wss://livekit.example.org",
+            room_id: "!1:example.org",
+            slot_id: "m.call",
+            member_id: "member-id",
+            delay_id: "delay-id",
+        };
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("delegates the delayed leave event to the homeserver", async () => {
+            client._unstable_delegateDelayedLeave.mockResolvedValue({});
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).resolves.toEqual({});
+            expect(client._unstable_delegateDelayedLeave).toHaveBeenCalledWith(request);
+        });
+
+        it("propagates errors from the homeserver", async () => {
+            const error = new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Unrecognized request" }, 404);
+            client._unstable_delegateDelayedLeave.mockRejectedValue(error);
+
+            await expect(driver.delegateRtcLivekitDelayedLeave(request)).rejects.toBe(error);
+        });
+    });
+
     describe("readEventRelations", () => {
         let driver: WidgetDriver;
 
@@ -555,7 +655,7 @@ describe("ElementWidgetDriver", () => {
 
             expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
                 roomId,
-                { delay: 2000 },
+                2000,
                 null,
                 EventType.RoomMessage,
                 {},
@@ -574,7 +674,7 @@ describe("ElementWidgetDriver", () => {
 
             expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
                 roomId,
-                { delay: 2000 },
+                2000,
                 EventType.RoomTopic,
                 {},
                 "",
@@ -710,7 +810,7 @@ describe("ElementWidgetDriver", () => {
             expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
                 roomId,
                 2000,
-                { delay: 1000 },
+                1000,
                 null,
                 EventType.RoomMessage,
                 {},

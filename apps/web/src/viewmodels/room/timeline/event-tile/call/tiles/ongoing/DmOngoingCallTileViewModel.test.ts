@@ -9,7 +9,7 @@
 
 import { it, describe, expect } from "vitest";
 import { CallType } from "@element-hq/web-shared-components";
-import { stubClient, TestSDKContext } from "test-utils";
+import { stubClient, TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "../../call-mocks";
 import { DmOngoingCallTileViewModel } from "./DmOngoingCallTileViewModel";
@@ -31,6 +31,7 @@ describe("DmOngoingCallTileViewModel", () => {
                 const call = MockedCall.create().withParticipants([mxEvent.sender]);
                 const callStore = MockedCallStore.create(call);
                 const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+                tearDownAfterTest(vm);
 
                 expect(vm.getSnapshot().callType).toStrictEqual(CallType.Voice);
             });
@@ -44,6 +45,7 @@ describe("DmOngoingCallTileViewModel", () => {
                 const call = MockedCall.create().withParticipants([mxEvent.sender]);
                 const callStore = MockedCallStore.create(call);
                 const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+                tearDownAfterTest(vm);
 
                 expect(vm.getSnapshot().callType).toStrictEqual(CallType.Video);
             });

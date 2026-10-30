@@ -127,6 +127,7 @@ export class PosthogAnalytics {
     private userPropertyCache: UserProperties = {};
     private authenticationType: Signup["authenticationType"] = "Other";
     private watchSettingRef?: string;
+    private dispatcherRef?: string;
 
     // Will be set when the matrixClient is passed to the analytics object (e.g. on login).
     private currentCryptoBackend?: "Rust" | "Legacy" = undefined;
@@ -161,7 +162,7 @@ export class PosthogAnalytics {
             this.enabled = false;
         }
 
-        dis.register(this.onAction);
+        this.dispatcherRef = dis.register(this.onAction);
         SettingsStore.monitorSetting("layout", null);
         SettingsStore.monitorSetting("useCompactLayout", null);
         SettingsStore.monitorSetting("urlPreviewsEnabled", null);
@@ -328,6 +329,17 @@ export class PosthogAnalytics {
 
     public getAnonymity(): Anonymity {
         return this.anonymity;
+    }
+
+    /**
+     * Stops listening to the dispatcher and settings. Only expected to be called in tests, as the shared
+     * instance otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
+        SettingsStore.unwatchSetting(this.watchSettingRef);
+        this.watchSettingRef = undefined;
     }
 
     public logout(): void {

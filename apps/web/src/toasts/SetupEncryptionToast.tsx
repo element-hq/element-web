@@ -28,6 +28,7 @@ import { Action } from "../dispatcher/actions";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
+import { ChangeRecoveryKeyDialog } from "../components/views/dialogs/security/ChangeRecoveryKeyDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
@@ -82,7 +83,7 @@ const shouldShowCloseButton = (state: DeviceStateForToast): boolean => {
 const getSetupCaption = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
-            return _t("action|continue");
+            return _t("encryption|create_recovery_key");
         case "verify_this_session":
             return _t("action|continue");
         case "key_storage_out_of_sync":
@@ -112,7 +113,7 @@ const getPrimaryButtonIcon = (
 const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
-            return _t("action|dismiss");
+            return _t("action|not_now");
         case "verify_this_session":
             return _t("encryption|verification|unverified_sessions_toast_reject");
         case "key_storage_out_of_sync":
@@ -127,7 +128,7 @@ const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
 const getDescription = (state: DeviceStateForToast): string | React.ReactNode => {
     switch (state) {
         case "set_up_recovery":
-            return _t("encryption|set_up_recovery_toast_description");
+            return _t("encryption|recovery_key_description");
         case "verify_this_session":
             return _t("encryption|verify_toast_description", undefined, {
                 a: (sub) => (
@@ -159,12 +160,21 @@ export const showToast = (state: DeviceStateForToast): void => {
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (state) {
-            case "set_up_recovery":
+            case "set_up_recovery": {
+                PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+                    eventName: "Interaction",
+                    interactionType: "Pointer",
+                    name: "ToastSetUpRecoveryClick",
+                });
+                myLogger.debug("Primary button clicked: opening recovery setup dialog");
+                Modal.createDialog(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
+                break;
+            }
             case "turn_on_key_storage": {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
-                    name: state === "set_up_recovery" ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
+                    name: "ToastTurnOnKeyStorageClick",
                 });
                 myLogger.debug("Primary button clicked: opening encryption settings dialog");
                 // Open the user settings dialog to the encryption tab

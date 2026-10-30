@@ -99,7 +99,7 @@ export function createTestClient(): MatrixClient {
         getUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: vi.fn().mockResolvedValue("userId"),
-        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }),
+        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn(), removeListener: vi.fn() }),
         getDevice: vi.fn(),
         getDeviceId: vi.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
@@ -321,6 +321,8 @@ export function createTestClient(): MatrixClient {
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
         _unstable_getRTCTransports: vi.fn(),
+        _unstable_getLivekitToken: vi.fn(),
+        _unstable_delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
             get: vi.fn().mockReturnValue([]),
@@ -370,6 +372,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
@@ -659,8 +662,8 @@ export function mkMessage({
         ...opts,
         type: "m.room.message",
         content: {
-            "msgtype": "m.text",
-            "body": message,
+            msgtype: "m.text",
+            body: message,
             ...(format && formattedMsg ? { format, formatted_body: formattedMsg } : {}),
             ["m.relates_to"]: relatesTo,
         },

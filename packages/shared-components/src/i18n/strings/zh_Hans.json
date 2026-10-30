@@ -94,6 +94,12 @@
         "cancel_search_label": "取消搜索",
         "emoji_picker": "Emoji 选择器"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "如果移除所有设备，你将丢失加密聊天历史，并且需要重置数字身份。",
+            "error": "删除密钥存储失败。请重试。"
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "请先降级到 <b>%(version)s</b> 或移除此设备。",

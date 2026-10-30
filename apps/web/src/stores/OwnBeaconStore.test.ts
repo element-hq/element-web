@@ -39,7 +39,11 @@ import SettingsStore from "../settings/SettingsStore";
 // short circuit it
 vi.mock("lodash", async () => ({
     ...(await vi.importActual("lodash")),
-    debounce: vi.fn().mockImplementation((callback) => callback),
+    debounce: vi
+        .fn()
+        .mockImplementation((callback) =>
+            Object.assign((...args: unknown[]) => callback(...args), { cancel: vi.fn() }),
+        ),
 }));
 
 vi.useFakeTimers();
@@ -249,7 +253,7 @@ describe("OwnBeaconStore", () => {
             const store = await makeOwnBeaconStore();
             const removeSpy = vi.spyOn(mockClient, "removeListener");
             // @ts-ignore
-            store.onNotReady();
+            await store.onNotReady();
 
             expect(removeSpy.mock.calls[0]).toEqual(expect.arrayContaining([BeaconEvent.LivenessChange]));
             expect(removeSpy.mock.calls[1]).toEqual(expect.arrayContaining([BeaconEvent.New]));
@@ -264,9 +268,19 @@ describe("OwnBeaconStore", () => {
             const beacon = room1.currentState.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))!;
             const destroySpy = vi.spyOn(beacon, "destroy");
             // @ts-ignore
-            store.onNotReady();
+            await store.onNotReady();
 
             expect(destroySpy).toHaveBeenCalled();
+        });
+
+        it("cancels a pending location publish", async () => {
+            const store = await makeOwnBeaconStore();
+            // @ts-ignore
+            const cancelSpy = vi.spyOn(store.debouncedPublishLocationToBeacons, "cancel");
+            // @ts-ignore
+            await store.onNotReady();
+
+            expect(cancelSpy).toHaveBeenCalled();
         });
     });
 

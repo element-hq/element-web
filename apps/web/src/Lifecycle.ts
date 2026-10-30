@@ -173,23 +173,6 @@ function getGuestHsUrl(opts: ILoadSessionOpts): string | undefined {
  */
 async function tryLoadSession(opts: ILoadSessionOpts): Promise<boolean> {
     const guestHsUrl = getGuestHsUrl(opts);
-    const guestCreds = opts.urlParams?.guest;
-
-    if (guestHsUrl && guestCreds?.guest_user_id && guestCreds.guest_access_token) {
-        logger.log("Using guest access credentials");
-        await doSetLoggedIn(
-            {
-                userId: guestCreds.guest_user_id,
-                accessToken: guestCreds.guest_access_token,
-                homeserverUrl: guestHsUrl,
-                identityServerUrl: opts.guestIsUrl,
-                guest: true,
-            },
-            true,
-            false,
-        );
-        return true;
-    }
 
     if (await restoreSessionFromStorage({ ignoreGuest: Boolean(opts.ignoreGuest) })) {
         return true;
@@ -348,7 +331,7 @@ export async function configureFromCompletedOAuthLogin({
         identityServerUrl,
         deviceId,
         userId,
-        isGuest,
+        guest: Boolean(isGuest),
     };
 
     logger.debug("Logged in via OAuth2 native flow");
@@ -903,6 +886,9 @@ async function doSetLoggedIn(
         " freshLogin: " + credentials.freshLogin,
     );
 
+    // A logout which is still clearing storage would wipe the session we are about to persist
+    await waitForLogoutCleanup();
+
     if (clearStorageEnabled) {
         await clearStorage();
     }
@@ -977,10 +963,10 @@ async function doSetLoggedIn(
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
 
-    if (isFreshLogin && !credentials.guest) {
+    if (isFreshLogin && !credentials.guest && SdkConfig.get("force_verification")) {
         // For newly registered users, set a flag so that we force them to verify,
         // (we don't want to force users with existing sessions to verify though)
-        localStorage.setItem("must_verify_device", "true");
+        localStorage.setItem("force_verification_on_at_login", "true");
     }
 
     return client;
@@ -1175,10 +1161,8 @@ export async function onLoggedOut(): Promise<void> {
     // that can occur when components try to use a null client.
     dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
-    await clearStorage({ deleteEverything: true });
-    clearUploadedMediaCache();
-    await PlatformPeg.get()?.clearStorage();
-    SettingsStore.reset();
+    loggedOutStorageCleared = clearLoggedOutStorage();
+    await loggedOutStorageCleared;
 
     // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
@@ -1194,11 +1178,38 @@ export async function onLoggedOut(): Promise<void> {
 }
 
 /**
+ * Promise of the latest run of {@link clearLoggedOutStorage}.
+ */
+let loggedOutStorageCleared: Promise<void> | undefined;
+
+async function clearLoggedOutStorage(): Promise<void> {
+    await clearStorage({ deleteEverything: true });
+    clearUploadedMediaCache();
+    await PlatformPeg.get()?.clearStorage();
+    SettingsStore.reset();
+}
+
+/**
+ * Wait for a recent logout to finish clearing storage, if it is still running.
+ * Call this before storing anything for a new login to avoid it possibly getting corrupted.
+ */
+export async function waitForLogoutCleanup(): Promise<void> {
+    try {
+        await loggedOutStorageCleared;
+    } catch {
+        // onLoggedOut reports its own errors
+    }
+}
+
+/**
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
     logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
+
+    // Clear this before awaiting anything, so that we cannot wipe data stored for a login started in the meantime
+    window.sessionStorage?.clear();
 
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
@@ -1231,8 +1242,6 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
             }
         }
     }
-
-    window.sessionStorage?.clear();
 
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({

@@ -203,6 +203,12 @@ export type CustomMessageComponentProps = {
 };
 
 // @alpha
+export interface CustomMessageGrouping {
+    getKey?: (mxEvent: MatrixEvent) => string;
+    getSummary: (events: readonly MatrixEvent[]) => string;
+}
+
+// @alpha
 export type CustomMessageRenderFunction = (
 props: CustomMessageComponentProps,
 originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element) => JSX.Element;
@@ -211,6 +217,9 @@ originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
+    renderAsInfoMessage?: boolean;
+    renderSenderProfile?: boolean;
+    renderGroupSummary?: CustomMessageGrouping;
 };
 
 // @alpha
@@ -478,9 +487,9 @@ export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<
 
 // @alpha
 export interface UserCertificate {
-    // (undocumented)
     certificate: CertificateInfo;
     chain: string;
+    chainValidTo: Date;
 }
 
 // @public
@@ -568,6 +577,7 @@ export type X509IpcErrorCode =
 | "MODULE_NOT_LOADED"
 | "KEY_NOT_FOUND"
 | "CERTIFICATE_NOT_FOUND"
+| "CERTIFICATE_INVALID"
 | "PRIVATE_KEY_NOT_FOUND"
 /**
 * `signData` was called before `logIntoKey`, or the session was invalidated since.

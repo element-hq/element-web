@@ -53,11 +53,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<any> {
         if (!this.matrixClient) return;
         // Fetch transports, but don't await the result.
-        this.matrixClient.cachedRtcTransports.wait().catch(() => {
-            if (SdkConfig.get("enable_client_well_known_lookups")) {
-                void this.matrixClient?.waitForClientWellKnown();
-            }
-        });
+        this.matrixClient.cachedRtcTransports
+            .wait()
+            .catch(() => {
+                if (SdkConfig.get("enable_client_well_known_lookups")) {
+                    return this.matrixClient?.waitForClientWellKnown();
+                }
+            })
+            .catch(() => {});
 
         // We assume that the calls present in a room are a function of room
         // widgets and group calls, so we initialize the room map here and then
@@ -154,7 +157,10 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                     this.updateRoom(room);
                 };
 
+                // Both listeners are kept in callListeners, which onDestroy and onNotReady use to remove them
+                // oxlint-disable-next-line element-web/no-leaked-emitter-listener
                 call.on(CallEvent.ConnectionState, onConnectionState);
+                // oxlint-disable-next-line element-web/no-leaked-emitter-listener
                 call.on(CallEvent.Destroy, onDestroy);
 
                 this.calls.set(room.roomId, call);
