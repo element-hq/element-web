@@ -20,7 +20,6 @@ export const IgnoreToggleButton: React.FC<{
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => vm.ignoreButtonClick(ev)}
             label={vm.isIgnored ? _t("user_info|unignore_button") : _t("user_info|ignore_button")}
             kind="critical"
