@@ -649,7 +649,7 @@ export type X509Result<T, E extends X509IpcError = X509IpcError> = { ok: true; d
 
 // Warnings were encountered during analysis:
 //
-// src/api/file-viewer.ts:29:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
+// src/api/file-viewer.ts:31:5 - (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
