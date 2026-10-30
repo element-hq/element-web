@@ -56,6 +56,12 @@ import styles from "./TimelineView.module.css";
  *    steering towards a row *number*: if history loads while it is doing that, every row
  *    shifts down and it follows the wrong one to the top. See `offsetForKey`.
  *
+ *  - **Keyboard navigation.** One message row at a time holds a roving `tabIndex`. Arrow
+ *    up/down move it (and focus) by one row, page up/down by as many rows as fit on screen,
+ *    home/end to the start of the room and the live end, loading them if needed. The app's
+ *    global page up/down shortcuts arrive through the `ref` handle (`TimelineViewHandle`)
+ *    and use the same code. See "Keyboard navigation" below.
+ *
  * `directDomUpdates: true` lets TanStack position rows by writing to the DOM itself rather
  * than going through a React render, so measuring a row and moving it happen in the same
  * frame (splitting them across two caused a visible stutter). React still re-renders when
@@ -72,6 +78,16 @@ const ESTIMATED_ITEM_HEIGHT = 48;
 const OVERSCAN = 16;
 /** px from the list bottom still counted as "at the bottom". */
 const AT_BOTTOM_THRESHOLD_PX = 4;
+/** Which rows the keyboard can land on: messages. Date separators, spinners and the read
+ * marker are skipped. */
+const isNavigableItem = (item: TimelineItem | undefined): boolean => item?.kind === "event";
+
+/**
+ * Whether a key press happened in something that uses the arrow and page keys itself, such
+ * as the edit composer inside a tile or a poll's radio buttons.
+ */
+const isInEditableElement = (target: EventTarget | null): boolean =>
+    target instanceof HTMLElement && (target.isContentEditable || target.closest("input, textarea, select") !== null);
 /**
  * How long we are willing to keep the timeline hidden on first load, in milliseconds.
  *
@@ -333,11 +349,14 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
     // `lastPlacedAnchorKeyRef` records which message we last jumped to, so that later
     // renders do not repeat the same jump and fight the user's own scrolling.
     const lastPlacedAnchorKeyRef = useRef<string | null>(null);
+    // How that message was aligned, so a home/end jump can tell its own anchor from another.
+    const lastPlacedAnchorAlignRef = useRef<AnchorAlign | null>(null);
     useLayoutEffect(() => {
         if (phaseRef.current !== "live") return;
         const anchor = snapshotRef.current.pendingAnchor;
         if (!anchor) {
             lastPlacedAnchorKeyRef.current = null;
+            lastPlacedAnchorAlignRef.current = null;
             return;
         }
         if (lastPlacedAnchorKeyRef.current !== anchor.targetKey) {
@@ -345,6 +364,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
             if (target !== null) {
                 virtualizer.scrollToOffset(target);
                 lastPlacedAnchorKeyRef.current = anchor.targetKey;
+                lastPlacedAnchorAlignRef.current = anchor.align;
                 vm.onAnchorReached();
             }
         }
@@ -361,24 +381,276 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
         [offsetForKey, virtualizer],
     );
 
-    // ─── Requests from outside the view: the app's keyboard shortcuts ──────────
-    // Page up/down: move by the number of rows on screen and put the row landed on at the top.
-    const scrollByPage = useCallback(
-        (direction: -1 | 1): void => {
-            const range = virtualizer.range;
-            const last = itemsRef.current.length - 1;
-            if (!range || last < 0) return;
-            const pageSize = Math.max(1, range.endIndex - range.startIndex);
-            const index = Math.max(0, Math.min(range.startIndex + direction * pageSize, last));
-            const info = virtualizer.getOffsetForIndex(index, "start");
+    // ─── Keyboard navigation ───────────────────────────────────────────────────
+    // One message row is the *active* row: it has tabIndex 0 while every other message row
+    // has -1, so Tab enters the list once and the arrow keys move within it. Arrow up/down
+    // move the active row by one message, page up/down by as many rows as are currently on
+    // screen, home/end to the first message in the room and the newest one. Moving the
+    // active row scrolls it into view and gives it focus.
+    //
+    // Rows only exist in the DOM while they are near the viewport, so the active row can be
+    // unmounted by scrolling away from it, which drops focus to <body>. The next Tab into
+    // the timeline picks a visible row again (see `onScrollerFocus`).
+    const [activeKey, setActiveKey] = useState<string | null>(null);
+    const activeKeyRef = useRef<string | null>(null);
+    // Make the row for `key` the active one: the ref for event handlers, the state for rendering.
+    const setActiveRow = useCallback((key: string): void => {
+        activeKeyRef.current = key;
+        setActiveKey(key);
+    }, []);
+    // The row we want focused but which has not rendered yet (it was scrolled into range by
+    // the move that chose it). Focused by the layout effect below as soon as it appears.
+    const pendingFocusKeyRef = useRef<string | null>(null);
+
+    // Whether keyboard focus is somewhere inside the timeline.
+    const isFocusWithin = useCallback((): boolean => {
+        const scroller = scrollerRef.current;
+        return !!scroller && scroller.contains(document.activeElement);
+    }, []);
+
+    // The rendered row for `key`, or null if it is not in the DOM.
+    const rowElementFor = useCallback((key: string): HTMLElement | null => {
+        const rows = scrollerRef.current?.querySelectorAll<HTMLElement>("li[data-key]") ?? [];
+        for (const row of rows) if (row.dataset.key === key) return row;
+        return null;
+    }, []);
+
+    // Focus the row for `key` now, or as soon as it renders.
+    const focusRow = useCallback(
+        (key: string): void => {
+            const row = rowElementFor(key);
+            if (!row) {
+                pendingFocusKeyRef.current = key;
+                return;
+            }
+            pendingFocusKeyRef.current = null;
+            // The scroll is handled separately, in the virtualizer's terms; letting focus()
+            // scroll as well would fight it.
+            row.focus({ preventScroll: true });
+        },
+        [rowElementFor],
+    );
+
+    // After each render, focus the row `focusRow` was waiting for, if it has appeared.
+    useLayoutEffect(() => {
+        const key = pendingFocusKeyRef.current;
+        if (key === null) return;
+        // Give up if the user has moved on to something outside the timeline in the meantime.
+        const active = document.activeElement;
+        if (active && active !== document.body && !isFocusWithin()) {
+            pendingFocusKeyRef.current = null;
+            return;
+        }
+        focusRow(key);
+    });
+
+    /**
+     * The nearest message row to `from`, looking in `direction` first and then the other
+     * way, so a move still lands somewhere when only skipped rows lie in that direction.
+     */
+    const nearestNavigableIndex = useCallback((from: number, direction: -1 | 1): number | null => {
+        const list = itemsRef.current;
+        for (let i = from; i >= 0 && i < list.length; i += direction) if (isNavigableItem(list[i])) return i;
+        for (let i = from - direction; i >= 0 && i < list.length; i -= direction)
+            if (isNavigableItem(list[i])) return i;
+        return null;
+    }, []);
+
+    /**
+     * Makes the row at `index` the active one, scrolls it so it sits at `align` ("auto"
+     * meaning only as far as needed to bring it on screen) and, if the keyboard is in the
+     * timeline, focuses it. Focus is left alone otherwise: the app's global page up/down work
+     * from the composer, and must not pull the caret out of it.
+     */
+    const activateRow = useCallback(
+        (index: number, align: "start" | "end" | "auto"): void => {
+            const item = itemsRef.current[index];
+            if (!item) return;
+            const focus = isFocusWithin();
+            setActiveRow(item.key);
+            const info = virtualizer.getOffsetForIndex(index, align);
             if (info) virtualizer.scrollToOffset(info[0]);
+            if (focus) focusRow(item.key);
+        },
+        [virtualizer, isFocusWithin, focusRow, setActiveRow],
+    );
+
+    /**
+     * Where a keyboard move starts from. The row the key was pressed in, if it was pressed in
+     * one; otherwise the active row while it is on screen; otherwise the row at the given
+     * edge of the viewport, which is where a reader who has been scrolling by mouse is looking.
+     */
+    const startIndexFor = useCallback(
+        (target: EventTarget | null, edge: "start" | "end"): number | null => {
+            const list = itemsRef.current;
+            const range = virtualizer.range;
+            if (!range || list.length === 0) return null;
+            const rowKey =
+                target instanceof Element ? target.closest<HTMLElement>("li[data-key]")?.dataset.key : undefined;
+            const rowIndex = rowKey === undefined ? -1 : list.findIndex((i) => i.key === rowKey);
+            if (rowIndex >= 0) return rowIndex;
+            const activeIndex = activeKeyRef.current ? list.findIndex((i) => i.key === activeKeyRef.current) : -1;
+            if (activeIndex >= range.startIndex && activeIndex <= range.endIndex) return activeIndex;
+            return edge === "start" ? range.startIndex : range.endIndex;
         },
         [virtualizer],
     );
-    useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(ref, () => ({ scrollByPage, scrollNow }), [
-        scrollByPage,
-        scrollNow,
-    ]);
+
+    /** Arrow up/down: the previous or next message, scrolled into view only if it is off screen. */
+    const moveByRow = useCallback(
+        (direction: -1 | 1, target: EventTarget | null): void => {
+            // With no row to start from, the first press lands on the row at the edge of the
+            // viewport the move would set off from, rather than skipping past it.
+            const from = startIndexFor(target, direction === 1 ? "start" : "end");
+            if (from === null) return;
+            const fromIsRow = target instanceof Element && target.closest("li[data-key]") !== null;
+            const fromIsActive = itemsRef.current[from]?.key === activeKeyRef.current;
+            const next = nearestNavigableIndex(fromIsRow || fromIsActive ? from + direction : from, direction);
+            if (next !== null) activateRow(next, "auto");
+        },
+        [startIndexFor, nearestNavigableIndex, activateRow],
+    );
+
+    /**
+     * Page up/down: move by the number of rows on screen and put the row we land on at the
+     * top. Used by the keys pressed in the timeline and by the app's global shortcuts
+     * through the handle. When the shortcut comes from outside, the active row is only used
+     * if it is on screen; otherwise paging starts from the top row, so a page is always
+     * relative to what the reader can see.
+     */
+    const scrollByPage = useCallback(
+        (direction: -1 | 1, target: EventTarget | null = null): void => {
+            const range = virtualizer.range;
+            const from = startIndexFor(target, "start");
+            if (!range || from === null) return;
+            const pageSize = Math.max(1, range.endIndex - range.startIndex);
+            const wanted = Math.max(0, Math.min(from + direction * pageSize, itemsRef.current.length - 1));
+            const next = nearestNavigableIndex(wanted, direction);
+            if (next !== null) activateRow(next, "start");
+        },
+        [virtualizer, startIndexFor, nearestNavigableIndex, activateRow],
+    );
+
+    // Make the message nearest the row for `key`, looking in `direction` first, the active row
+    // and focus it. For home/end, whose jump has already scrolled there, so this does not.
+    const focusNearestMessage = useCallback(
+        (key: string, direction: -1 | 1): void => {
+            const list = itemsRef.current;
+            const index = list.findIndex((i) => i.key === key);
+            const navigable = index < 0 ? null : nearestNavigableIndex(index, direction);
+            if (navigable === null) return;
+            const message = list[navigable].key;
+            setActiveRow(message);
+            focusRow(message);
+        },
+        [nearestNavigableIndex, focusRow, setActiveRow],
+    );
+
+    // The latest home/end jump still waiting to land, or null when there is none: the
+    // alignment its anchor will have, and which way to look for a message to focus.
+    const focusAfterJumpRef = useRef<{ align: AnchorAlign; direction: -1 | 1 } | null>(null);
+
+    /** Home/end: the start of the room or the live end. The view model loads it if needed. */
+    const jumpToEdge = useCallback(
+        (edge: "start" | "end"): void => {
+            const direction = edge === "start" ? 1 : -1;
+            focusAfterJumpRef.current = { align: edge, direction };
+            const scrollThenFocus: ImmediateScroll = (anchor) => {
+                focusAfterJumpRef.current = null;
+                scrollNow(anchor);
+                focusNearestMessage(anchor.targetKey, direction);
+            };
+            if (edge === "start") vm.onJumpToStart(scrollThenFocus);
+            else vm.onJumpToLive(scrollThenFocus);
+        },
+        [vm, scrollNow, focusNearestMessage],
+    );
+
+    // When a home/end jump had to load first, focus the message it landed on once placed.
+    // Anchors placed for anything else, including a jump the reader has since overtaken by
+    // pressing the other key, are left alone.
+    useLayoutEffect(() => {
+        const jump = focusAfterJumpRef.current;
+        const placedKey = lastPlacedAnchorKeyRef.current;
+        if (jump === null || placedKey === null || lastPlacedAnchorAlignRef.current !== jump.align) return;
+        focusAfterJumpRef.current = null;
+        // Not if the user has moved on to something outside the timeline while it loaded.
+        const active = document.activeElement;
+        if (active && active !== document.body && !isFocusWithin()) return;
+        focusNearestMessage(placedKey, jump.direction);
+    });
+
+    // Arrow, page and home/end keys pressed inside the timeline.
+    const onKeyDown = useCallback(
+        (ev: React.KeyboardEvent<HTMLDivElement>): void => {
+            // Modified keys are the app's shortcuts (shift+page up, ctrl+home…), and a key
+            // pressed in an editor or form control belongs to it.
+            if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.shiftKey) return;
+            if (isInEditableElement(ev.target)) return;
+            switch (ev.key) {
+                case "ArrowUp":
+                    moveByRow(-1, ev.target);
+                    break;
+                case "ArrowDown":
+                    moveByRow(1, ev.target);
+                    break;
+                case "PageUp":
+                    scrollByPage(-1, ev.target);
+                    break;
+                case "PageDown":
+                    scrollByPage(1, ev.target);
+                    break;
+                case "Home":
+                    jumpToEdge("start");
+                    break;
+                case "End":
+                    jumpToEdge("end");
+                    break;
+                default:
+                    return;
+            }
+            // Handled here, so the browser must not scroll as well and the app's own handlers
+            // for these keys must not run a second time.
+            ev.preventDefault();
+            ev.stopPropagation();
+        },
+        [moveByRow, scrollByPage, jumpToEdge],
+    );
+
+    /**
+     * Tab into the timeline lands on the scroller. Hand focus straight on to a message: the
+     * active row if it is on screen, else the newest row on screen. Only for keyboard focus,
+     * since a click inside the timeline focuses the scroller too and must not have focus
+     * jump to a row.
+     */
+    const onScrollerFocus = useCallback(
+        (ev: React.FocusEvent<HTMLDivElement>): void => {
+            const scroller = scrollerRef.current;
+            if (!scroller || ev.target !== scroller || !scroller.matches(":focus-visible")) return;
+            const index = startIndexFor(null, "end");
+            if (index === null) return;
+            const navigable = nearestNavigableIndex(index, -1);
+            if (navigable !== null) activateRow(navigable, "auto");
+        },
+        [startIndexFor, nearestNavigableIndex, activateRow],
+    );
+
+    /** A row focused by other means — a click, Shift+Tab back into it — becomes the active row. */
+    const onRowFocus = useCallback(
+        (ev: React.FocusEvent<HTMLLIElement>): void => {
+            const key = ev.currentTarget.dataset.key;
+            if (key === undefined || key === activeKeyRef.current) return;
+            setActiveRow(key);
+        },
+        [setActiveRow],
+    );
+
+    // ─── Requests from outside the view: the app's keyboard shortcuts ──────────
+    useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(
+        ref,
+        () => ({ scrollByPage: (direction) => scrollByPage(direction), scrollNow }),
+        [scrollByPage, scrollNow],
+    );
 
     const virtualItems = virtualizer.getVirtualItems();
 
@@ -390,6 +662,8 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
                 // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex={0}
                 className={classNames(styles.scroller, { [styles.hidden]: !revealed })}
+                onKeyDown={onKeyDown}
+                onFocus={onScrollerFocus}
             >
                 {/* An <ol> of <li> rows, so screen readers announce this as a list of messages
                     and can say how many there are. The role="list" is stated explicitly even
@@ -406,6 +680,10 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
                     {virtualItems.map((vi) => {
                         const item: TimelineItem | undefined = items[vi.index];
                         if (!item) return null;
+                        // Message rows carry the roving tabIndex described under "Keyboard
+                        // navigation": 0 on the active row so Tab reaches it, -1 on the rest
+                        // so they can be focused by the arrow keys but are not Tab stops.
+                        const navigable = isNavigableItem(item);
                         return (
                             <li
                                 key={vi.key}
@@ -413,6 +691,8 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
                                 data-index={vi.index}
                                 data-key={item.key}
                                 ref={virtualizer.measureElement}
+                                tabIndex={navigable ? (item.key === activeKey ? 0 : -1) : undefined}
+                                onFocus={navigable ? onRowFocus : undefined}
                             >
                                 {renderItem(item)}
                             </li>

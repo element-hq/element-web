@@ -12,7 +12,13 @@ import { describe, it, expect, vi } from "vitest";
 import { page } from "vitest/browser";
 
 import { TimelineView } from "./TimelineView";
-import type { TimelineItem, TimelineViewHandle, TimelineViewModel, TimelineViewSnapshot } from "./types";
+import type {
+    ImmediateScroll,
+    TimelineItem,
+    TimelineViewHandle,
+    TimelineViewModel,
+    TimelineViewSnapshot,
+} from "./types";
 
 const baseSnapshot: TimelineViewSnapshot = {
     items: [],
@@ -329,6 +335,210 @@ describe("<TimelineView />", () => {
             await userEvent.setup().click(jumpToBottom);
 
             expect(actions.onJumpToLive.mock.calls[0][0]).toBe(handle.scrollNow);
+        });
+    });
+
+    describe("keyboard navigation", () => {
+        const rowFor = (key: string): HTMLElement => screen.getByTestId(`row-${key}`).closest("li")!;
+        const focusedKey = (): string | undefined => (document.activeElement as HTMLElement | null)?.dataset.key;
+
+        /** Render thirty rows at the bottom, with the outer element recording keys that escape. */
+        async function renderFocused(
+            initial: Partial<TimelineViewSnapshot> = {},
+            items: TimelineItem[] = eventItems(30),
+        ): Promise<{
+            scroller: HTMLElement;
+            actions: Actions;
+            escaped: ReturnType<typeof vi.fn>;
+            update: FakeVm["update"];
+        }> {
+            const { vm, actions, update } = makeFakeVm({ items, ...initial });
+            const escaped = vi.fn();
+            render(
+                <div style={{ height: VIEWPORT_HEIGHT, width: 320 }} onKeyDown={escaped}>
+                    <TimelineView vm={vm} renderItem={renderItem} />
+                </div>,
+            );
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            const scroller = screen.getByTestId("timeline-scroller");
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalled());
+            return { scroller, actions, escaped, update };
+        }
+
+        it("hands keyboard focus on to the newest message on screen", async () => {
+            await renderFocused();
+            const user = userEvent.setup();
+
+            // Tab reaches the scroller first; the timeline passes focus on to a row.
+            await user.tab();
+
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+            expect(rowFor("evt-29")).toHaveAttribute("tabindex", "0");
+            expect(rowFor("evt-28")).toHaveAttribute("tabindex", "-1");
+        });
+
+        it("moves one message at a time with the arrow keys, scrolling only when needed", async () => {
+            const { scroller, actions } = await renderFocused();
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+            const atBottom = scroller.scrollTop;
+
+            await user.keyboard("{ArrowUp}");
+            expect(focusedKey()).toBe("evt-28");
+            // Still on screen, so nothing moved.
+            expect(scroller.scrollTop).toBe(atBottom);
+
+            await user.keyboard("{ArrowDown}");
+            expect(focusedKey()).toBe("evt-29");
+            // The newest row is the last one: down from it stays put.
+            await user.keyboard("{ArrowDown}");
+            expect(focusedKey()).toBe("evt-29");
+
+            // Walk up past the top of the viewport: the row above scrolls into view.
+            const [first] = actions.onVisibleRangeChanged.mock.calls.at(-1)! as [number, number];
+            for (let i = 29; i > first - 1; i--) await user.keyboard("{ArrowUp}");
+            expect(focusedKey()).toBe(`evt-${first - 1}`);
+            await waitFor(() => expect(scroller.scrollTop).toBeLessThan(atBottom));
+            expect(scroller.scrollTop).toBe((first - 1) * ROW_HEIGHT);
+        });
+
+        it("pages by the rows on screen and keeps focus on the row landed on", async () => {
+            const { scroller, actions } = await renderFocused();
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+            const [first, last] = actions.onVisibleRangeChanged.mock.calls.at(-1)! as [number, number];
+            const pageSize = last - first;
+
+            await user.keyboard("{PageUp}");
+
+            // From the focused (last) row, up a page, and that row goes to the top.
+            expect(focusedKey()).toBe(`evt-${29 - pageSize}`);
+            await waitFor(() => expect(scroller.scrollTop).toBe((29 - pageSize) * ROW_HEIGHT));
+
+            await user.keyboard("{PageDown}");
+
+            expect(focusedKey()).toBe("evt-29");
+        });
+
+        it("goes to the start of the room and the live end with home and end", async () => {
+            const { scroller, actions } = await renderFocused();
+            // Both are already loaded here, so the view model scrolls straight there.
+            actions.onJumpToStart.mockImplementation((scrollNow: ImmediateScroll) =>
+                scrollNow({ targetKey: "evt-0", align: "start" }),
+            );
+            actions.onJumpToLive.mockImplementation((scrollNow: ImmediateScroll) =>
+                scrollNow({ targetKey: "evt-29", align: "end" }),
+            );
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+
+            await user.keyboard("{Home}");
+            expect(actions.onJumpToStart).toHaveBeenCalledTimes(1);
+            await waitFor(() => expect(focusedKey()).toBe("evt-0"));
+            await waitFor(() => expect(scroller.scrollTop).toBe(0));
+
+            await user.keyboard("{End}");
+            expect(actions.onJumpToLive).toHaveBeenCalledTimes(1);
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+            await waitFor(() => expect(scroller.scrollTop).toBe(30 * ROW_HEIGHT - VIEWPORT_HEIGHT));
+        });
+
+        it("focuses the first message once the start of the room has loaded", async () => {
+            const { scroller, update } = await renderFocused();
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+
+            // The view model has to fetch the start first, so it does not scroll yet.
+            await user.keyboard("{Home}");
+            // It then replaces the rows with the room's first messages and anchors to the top,
+            // which is a date separator rather than a message.
+            update({
+                items: [{ key: "sep-start", kind: "date-separator", ts: 0 }, ...eventItems(30, 100)],
+                pendingAnchor: { targetKey: "sep-start", align: "start" },
+                atLiveEnd: false,
+            });
+
+            await waitFor(() => expect(focusedKey()).toBe("evt-100"));
+            expect(scroller.scrollTop).toBe(0);
+        });
+
+        it("focuses where the last of home and end lands when one overtakes the other", async () => {
+            const { update } = await renderFocused();
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-29"));
+
+            // Home has to load; End is pressed before it lands.
+            await user.keyboard("{Home}");
+            await user.keyboard("{End}");
+            // The start arrives first and is placed, but it is not where the reader is going.
+            update({
+                items: [{ key: "sep-start", kind: "date-separator", ts: 0 }, ...eventItems(30, 100)],
+                pendingAnchor: { targetKey: "sep-start", align: "start" },
+                atLiveEnd: false,
+            });
+            await waitFor(() => expect(screen.getByTestId("row-evt-100")).toBeInTheDocument());
+            expect(focusedKey()).not.toBe("evt-100");
+            // Then the live end, which is.
+            update({
+                items: eventItems(30, 200),
+                pendingAnchor: { targetKey: "evt-229", align: "end" },
+                atLiveEnd: true,
+            });
+
+            await waitFor(() => expect(focusedKey()).toBe("evt-229"));
+        });
+
+        it("skips rows that are not messages", async () => {
+            const items: TimelineItem[] = [
+                ...eventItems(28),
+                { key: "sep", kind: "date-separator", ts: 0 },
+                ...eventItems(1, 28),
+            ];
+            await renderFocused({}, items);
+            const user = userEvent.setup();
+            await user.tab();
+            await waitFor(() => expect(focusedKey()).toBe("evt-28"));
+
+            await user.keyboard("{ArrowUp}");
+
+            expect(focusedKey()).toBe("evt-27");
+        });
+
+        it("leaves modified keys to the app and keys typed in an editor to the editor", async () => {
+            const withInput = (item: TimelineItem): React.ReactNode => (
+                <div data-testid={`row-${item.key}`} style={{ height: ROW_HEIGHT }}>
+                    <input aria-label={`edit ${item.key}`} />
+                </div>
+            );
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const escaped = vi.fn();
+            render(
+                <div style={{ height: VIEWPORT_HEIGHT, width: 320 }} onKeyDown={escaped}>
+                    <TimelineView vm={vm} renderItem={withInput} />
+                </div>,
+            );
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            const user = userEvent.setup();
+
+            const escapedKeys = (): string[] => escaped.mock.calls.map(([e]) => (e as KeyboardEvent).key);
+
+            // Shift+PageUp is the app's "jump to oldest unread": not ours.
+            await user.tab();
+            await user.keyboard("{Shift>}{PageUp}{/Shift}");
+            expect(escapedKeys()).toContain("PageUp");
+            expect(focusedKey()).toBe("evt-29");
+
+            // Inside an editor the arrow keys move the caret.
+            const input = screen.getByLabelText("edit evt-29");
+            input.focus();
+            await user.keyboard("{ArrowUp}");
+            expect(document.activeElement).toBe(input);
+            expect(escapedKeys()).toContain("ArrowUp");
         });
     });
 });
