@@ -29,6 +29,7 @@ import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
 import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import type { CallStore } from "../stores/CallStore";
 import type { CallStatusListener } from "../CallStatusListener";
 import { type IConfigOptions } from "../IConfigOptions";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
@@ -102,6 +103,7 @@ declare global {
         mxInitialCryptoStore?: InitialCryptoSetupStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
+        mxCallStore?: CallStore;
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
