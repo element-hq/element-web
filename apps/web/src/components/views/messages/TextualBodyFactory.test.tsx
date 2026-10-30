@@ -35,6 +35,11 @@ import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import { ModuleApi } from "../../../modules/Api";
+import { type RegisteredFileViewer } from "../../../modules/FileViewerApi";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { type SDKContextClass } from "../../../contexts/SDKContextClass";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
@@ -97,6 +102,8 @@ describe("<TextualBody />", () => {
     let defaultRoom: Room;
     let otherRoom: Room;
     let defaultMatrixClient: MockedObject<MatrixClient>;
+    // The app always provides an SDK context, and url previews read the right panel store from it.
+    let sdkContext: SDKContextClass;
 
     const defaultEvent = mkEvent({
         type: "m.room.message",
@@ -118,6 +125,7 @@ describe("<TextualBody />", () => {
     };
 
     beforeEach(() => {
+        sdkContext = { rightPanelStore: { setCard: vi.fn() } } as unknown as SDKContextClass;
         defaultMatrixClient = getMockClientWithEventEmitter({
             getRoom: (roomId: string | undefined) => {
                 if (roomId === room1Id) return defaultRoom;
@@ -159,11 +167,13 @@ describe("<TextualBody />", () => {
             permalinkCreator: mergedProps.permalinkCreator ?? new RoomPermalinkCreator(room),
         };
         return (renderingFn ?? render)(
-            <MatrixClientContext.Provider value={matrixClient}>
-                <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
-                    <TextualBody {...finalProps} />
-                </RoomContext.Provider>
-            </MatrixClientContext.Provider>,
+            <SDKContext.Provider value={sdkContext}>
+                <MatrixClientContext.Provider value={matrixClient}>
+                    <RoomContext.Provider value={getRoomContext(room, roomContextOverrides)}>
+                        <TextualBody {...finalProps} />
+                    </RoomContext.Provider>
+                </MatrixClientContext.Provider>
+            </SDKContext.Provider>,
         );
     };
 
@@ -663,6 +673,33 @@ describe("<TextualBody />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Open link" }));
 
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("offers the module file viewers for the previewed link and opens them in the right panel", async () => {
+            const viewer: RegisteredFileViewer = {
+                match: () => true,
+                render: vi.fn(),
+                options: { id: "test-viewer", cardHeader: () => "", buttonText: "Open in viewer", buttonIcon: <></> },
+            };
+            const getViewersFor = vi.spyOn(ModuleApi.instance.fileViewer, "getViewersFor").mockReturnValue([viewer]);
+            const mxEvent = mkRoomTextMessage(`Visit ${link}`);
+
+            getComponent({ mxEvent, showUrlPreview: true }, matrixClient);
+            await screen.findByRole("link", { name: "Matrix" });
+
+            expect(getViewersFor).toHaveBeenCalledWith({
+                type: "remote",
+                preview: expect.objectContaining({ link, title: "Matrix" }),
+            });
+
+            fireEvent.click(screen.getByRole("button", { name: "Open in viewer" }));
+
+            expect(sdkContext.rightPanelStore.setCard).toHaveBeenCalledWith({
+                phase: RightPanelPhases.FileViewer,
+                state: {
+                    fileViewer: { viewer, media: expect.objectContaining({ type: "remote" }), mxEvent },
+                },
+            });
         });
 
         it("should listen to showUrlPreview change", async () => {
