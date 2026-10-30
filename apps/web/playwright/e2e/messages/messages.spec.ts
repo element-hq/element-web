@@ -214,6 +214,9 @@ test.describe("Message rendering", () => {
     });
 });
 
+/** What the server answers when asked to preview a site's favicon.ico and the site has none. */
+const NO_FAVICON = { status: 404, json: { errcode: "M_NOT_FOUND", error: "Not found" } };
+
 test.describe("Message url previews", () => {
     test.use({
         displayName: "Alice",
@@ -228,6 +231,8 @@ test.describe("Message url previews", () => {
 
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
+            // The site's favicon.ico is previewed too, as an icon for the tile: this site has none.
+            if (requestedPage === "https://example.org/favicon.ico") return route.fulfill(NO_FAVICON);
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
                 json: {
@@ -249,6 +254,7 @@ test.describe("Message url previews", () => {
             const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
             await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
                 const requestedPage = new URL(request.url()).searchParams.get("url");
+                if (requestedPage === "https://example.org/favicon.ico") return route.fulfill(NO_FAVICON);
                 expect(requestedPage).toEqual("https://example.org/");
                 return route.fulfill({
                     json: {

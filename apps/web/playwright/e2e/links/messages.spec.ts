@@ -57,6 +57,8 @@ test.describe("Message links", () => {
     test("should linkify text inside a URL preview", async ({ page, user, app, room }) => {
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
+            // A preview without a site icon makes the client look for the site's favicon.ico too.
+            if (requestedPage === "https://example.org/favicon.ico") return route.fulfill({ status: 404 });
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
                 json: {
@@ -72,5 +74,35 @@ test.describe("Message links", () => {
                 .locator(`.mx_EventTile[data-event-id="${eventId}"]`)
                 .getByRole("link", { name: "https://example.org/another-link" }),
         ).toBeVisible();
+    });
+    test("should hide only the closed URL preview", async ({ page, user, app, room }) => {
+        await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
+            const requestedPage = new URL(request.url()).searchParams.get("url");
+            // A preview without a site icon makes the client look for the site's favicon.ico too.
+            if (requestedPage?.endsWith("/favicon.ico")) return route.fulfill({ status: 404 });
+            return route.fulfill({
+                json: {
+                    "og:title": requestedPage === "https://example.org/" ? "A simple site" : "Another site",
+                    "og:description": "And with a brief description",
+                },
+            });
+        });
+        await page.goto(`#/room/${room.roomId}`);
+        const { event_id: eventId } = await app.client.sendMessage(
+            room.roomId,
+            "Check out https://example.org/ and https://example.com/",
+        );
+        const tile = page.locator(`.mx_EventTile[data-event-id="${eventId}"]`);
+        const firstPreview = tile.getByRole("link", { name: "A simple site" });
+        const secondPreview = tile.getByRole("link", { name: "Another site" });
+        await expect(firstPreview).toBeVisible();
+        await expect(secondPreview).toBeVisible();
+
+        await tile.getByRole("button", { name: "Close preview" }).first().click();
+
+        await expect(firstPreview).not.toBeVisible();
+        await expect(secondPreview).toBeVisible();
+        // The plain link in the message itself is unaffected.
+        await expect(tile.getByRole("link", { name: "https://example.org/" })).toBeVisible();
     });
 });
