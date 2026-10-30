@@ -5,7 +5,7 @@
         "build": {
             "cache": true,
             "command": "vite build",
-            "inputs": ["src"],
+            "inputs": ["src", "{projectRoot}/vite.config.ts"],
             "outputs": ["{projectRoot}/dist"],
             "options": { "cwd": "packages/shared-components" },
             "dependsOn": ["^build"]
