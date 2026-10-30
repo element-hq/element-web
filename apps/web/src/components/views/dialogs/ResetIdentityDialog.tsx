@@ -59,45 +59,39 @@ export function ResetIdentityDialog({
      * Close the dialog, or sign out if the button is "Sign out".
      */
     const onCancelOrSignOut: () => void = () => {
-        // Wrap the implementation in a function returning a useless bool, to
-        // persuade the type checker to tell us if we missed a case of
-        // `variant`.
-
-        function impl(): boolean {
-            // Normally, the cancel button will just close the dialog, but if
-            // there are no other viable verification methods, the only sensible
-            // option other than a reset is for the user to give up and sign
-            // out.
-            switch (variant) {
-                case "compromised":
-                case "forgot":
-                case "sync_failed":
-                case "confirm": {
-                    onFinished();
-                    return true;
-                }
-                case "no_verification_method":
-                case "no_encrypted_rooms": {
-                    // If we are in one of the modes meaning we have no
-                    // verification methods, then we should have been supplied
-                    // `onSignOut`...
-                    if (onSignOut) {
-                        onSignOut();
-                    } else {
-                        // ... but if that didn't happen for some reason,
-                        // just close the dialog as normal.
-                        onFinished();
-                    }
-                    return true;
-                }
+        // Normally, the cancel button will just close the dialog, but if
+        // there are no other viable verification methods, the only sensible
+        // option other than a reset is for the user to give up and sign
+        // out.
+        switch (variant) {
+            case "compromised":
+            case "forgot":
+            case "sync_failed":
+            case "confirm": {
+                onFinished();
+                break;
             }
-
-            // We always return true within the switch, and have no return
-            // statement at the end, so if we miss a case in the switch we will
-            // see a type error.
+            case "no_verification_method":
+            case "no_encrypted_rooms": {
+                // If we are in one of the modes meaning we have no
+                // verification methods, then we should have been supplied
+                // `onSignOut`...
+                if (onSignOut) {
+                    onSignOut();
+                } else {
+                    // ... but if that didn't happen for some reason,
+                    // just close the dialog as normal.
+                    onFinished();
+                }
+                break;
+            }
+            default: {
+                // Ensure we covered all cases above
+                const shouldNotExist: never = variant;
+                throw new Error(`Unhandled variant ${shouldNotExist}`);
+            }
         }
 
-        impl();
     };
 
     return (
