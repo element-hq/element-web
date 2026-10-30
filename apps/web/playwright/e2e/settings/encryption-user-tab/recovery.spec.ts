@@ -51,6 +51,9 @@ test.describe("Recovery section in Encryption tab", () => {
                 "Confirm new recovery key",
                 "change-key-2-encryption-tab.png",
             );
+
+            // A confirmation toast is shown in the settings dialog
+            await expect(dialog.getByText("Your new recovery key is now active")).toBeVisible();
         },
     );
 
@@ -80,7 +83,8 @@ test.describe("Recovery section in Encryption tab", () => {
             "set-up-key-3-encryption-tab.png",
         );
 
-        // The recovery key is now set up and the user can change it
+        // A confirmation toast is shown, and the user can now change the recovery key
+        await expect(dialog.getByText("Backup is now fully set up")).toBeVisible();
         await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
         // Check that the current device is connected to key backup and the backup version is the expected one

@@ -108,6 +108,14 @@ class Helpers {
         await button.click();
         // Button should disable immediately after clicking.
         await expect(button).toBeDisabled();
-        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
+        // The confirmation toast overlapping the dialog changes the text anti-aliasing of the recovery
+        // section, so hide it to keep the capture comparable with the one taken before the flow.
+        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png", {
+            css: `
+                .mx_SettingsDialog_toastContainer {
+                    display: none !important;
+                }
+            `,
+        });
     }
 }
