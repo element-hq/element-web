@@ -349,7 +349,11 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                             size="32px"
                             selected={activeSpace === item.spaceKey}
                             onClick={() => {
-                                sdkContext.spaceStore.setActiveSpace(item.spaceKey);
+                                // An item with no room list of its own is a button (a
+                                // dialler, say), not a space to switch to
+                                if (ModuleApi.instance.extras.visibleRoomBySpaceKey.has(item.spaceKey)) {
+                                    sdkContext.spaceStore.setActiveSpace(item.spaceKey);
+                                }
                                 item.onSelected?.();
                             }}
                         />
