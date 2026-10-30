@@ -91,7 +91,6 @@ export function ResetIdentityDialog({
                 throw new Error(`Unhandled variant ${shouldNotExist}`);
             }
         }
-
     };
 
     return (
