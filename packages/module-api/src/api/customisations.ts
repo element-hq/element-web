@@ -49,6 +49,11 @@ export const enum UIComponent {
      * Components that lead the user to room options menu.
      */
     RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+
+    /**
+     * Toasts prompting a new user to finish setting up their account.
+     */
+    OnboardingToasts = "UIComponent.onboardingToasts",
 }
 
 /**

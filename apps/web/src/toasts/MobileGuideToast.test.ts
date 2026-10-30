@@ -14,12 +14,26 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import ToastStore from "../stores/ToastStore.ts";
 import { showToast } from "./MobileGuideToast.ts";
 import type { GenericToast } from "@element-hq/web-shared-components";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
+
+vi.mock("../customisations/helpers/UIComponents", () => ({ shouldShowComponent: vi.fn() }));
 
 describe("showToast", () => {
     const addOrReplaceToastSpy = vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
 
     beforeEach(() => {
         sessionStorage.clear();
+        addOrReplaceToastSpy.mockClear();
+        vi.mocked(shouldShowComponent).mockReturnValue(true);
+    });
+
+    it("should do nothing if a module hides the onboarding toasts", () => {
+        vi.mocked(shouldShowComponent).mockReturnValue(false);
+
+        showToast();
+        expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.OnboardingToasts);
+        expect(addOrReplaceToastSpy).not.toHaveBeenCalled();
     });
 
     it("should do nothing if sessionStorage has `skip_mobile_redirect`", () => {

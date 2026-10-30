@@ -25,6 +25,8 @@ import {
     showToast as showSetupEncryptionToast,
 } from "../toasts/SetupEncryptionToast";
 import { isSecretStorageBeingAccessed } from "../SecurityManager";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -384,7 +386,8 @@ export class DeviceListenerCurrentDevice {
 
         this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
 
-        if (newState === "ok" || this.dismissedThisDeviceToast) {
+        const hiddenByModule = newState === "set_up_recovery" && !shouldShowComponent(UIComponent.OnboardingToasts);
+        if (newState === "ok" || this.dismissedThisDeviceToast || hiddenByModule) {
             hideSetupEncryptionToast();
         } else if (!isSecretStorageBeingAccessed()) {
             showSetupEncryptionToast(newState);

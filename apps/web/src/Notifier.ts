@@ -48,6 +48,8 @@ import ToastStore from "./stores/ToastStore";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { type MatrixDispatcher } from "./dispatcher/dispatcher.ts";
+import { shouldShowComponent } from "./customisations/helpers/UIComponents";
+import { UIComponent } from "./settings/UIFeature";
 
 /*
  * Dispatches:
@@ -474,6 +476,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         const isGuest = client.isGuest();
         return (
             !isGuest &&
+            shouldShowComponent(UIComponent.OnboardingToasts) &&
             this.supportsDesktopNotifications() &&
             !isPushNotifyDisabled() &&
             !this.isEnabled() &&
