@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useState, type Ref, type FC, type JSX } from "react";
+import React, { createRef, useState, type Ref, type FC, type JSX, useEffect } from "react";
 import classNames from "classnames";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import {
@@ -42,6 +42,9 @@ import AccessibleButton, {
     type ButtonEvent,
     type ButtonProps as AccessibleButtonProps,
 } from "../../elements/AccessibleButton";
+import type { SourceName } from "shared-types";
+import type AudiofoxManager from "../../../../audio/AudiofoxHook";
+import AudioContextMenu from "../../context_menus/AudioContextMenu";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
@@ -95,11 +98,11 @@ const LegacyCallViewToggleButton: FC<ButtonProps> = ({
     );
 };
 
-interface IDropdownButtonProps extends ButtonProps {
-    deviceKinds: MediaDeviceKindEnum[];
+interface LegacyCallViewDropdownProps extends ButtonProps {
+    renderMenu: (button: HTMLDivElement, closeMenu: () => void) => React.ReactNode;
 }
 
-const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, deviceKinds, ...props }) => {
+const LegacyCallViewDropdown: FC<LegacyCallViewDropdownProps> = ({ state, renderMenu, ...props }) => {
     const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     const [hoveringDropdown, setHoveringDropdown] = useState(false);
 
@@ -123,14 +126,70 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
                 onHover={(hovering) => setHoveringDropdown(hovering)}
                 state={state}
             />
-            {menuDisplayed && buttonRef.current && (
+            {menuDisplayed && buttonRef.current && renderMenu(buttonRef.current, closeMenu)}
+        </LegacyCallViewToggleButton>
+    );
+};
+
+interface IDropdownButtonProps extends ButtonProps {
+    deviceKinds: MediaDeviceKindEnum[];
+}
+
+const LegacyCallViewDropdownButton: FC<IDropdownButtonProps> = ({ state, deviceKinds, ...props }) => {
+    return (
+        <LegacyCallViewDropdown
+            state={state}
+            {...props}
+            renderMenu={(button, closeMenu) => (
                 <DeviceContextMenu
-                    {...alwaysAboveRightOf(buttonRef.current.getBoundingClientRect())}
+                    {...alwaysAboveRightOf(button.getBoundingClientRect())}
                     onFinished={closeMenu}
                     deviceKinds={deviceKinds}
                 />
             )}
-        </LegacyCallViewToggleButton>
+        />
+    );
+};
+
+const LegacyCallViewScreenshareButton: FC<ButtonProps> = (props) => {
+    const [selectedSources, setSelectedSources] = useState<SourceName[]>([]);
+    const [manager, setManager] = useState<AudiofoxManager | null>(null);
+
+    // Start Audiofox on mount
+    useEffect(() => {
+        const platform = window.mxPlatformPeg.get();
+        if (platform) {
+            const initAudiofox = (): void => {
+                const manager = platform.getAudiofox();
+                if (manager) {
+                    manager.start().catch((e) => console.error(e));
+                    setManager(manager);
+                }
+            };
+            initAudiofox();
+            return () => {
+                manager?.stop();
+                setManager(null);
+            };
+        }
+    }, [manager]);
+
+    // If the manager could not be loaded, fallback to a toggle button
+    return manager ? (
+        <LegacyCallViewDropdown
+            {...props}
+            renderMenu={(button, closeMenu) => (
+                <AudioContextMenu
+                    {...alwaysAboveRightOf(button.getBoundingClientRect())}
+                    onFinished={closeMenu}
+                    manager={manager}
+                    selection={selectedSources}
+                    onSelection={setSelectedSources}
+                />
+            )}
+        />
+    ) : (
+        <LegacyCallViewToggleButton {...props} />
     );
 };
 
@@ -324,7 +383,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     />
                 )}
                 {this.props.buttonsVisibility.screensharing && (
-                    <LegacyCallViewToggleButton
+                    <LegacyCallViewScreenshareButton
                         state={this.props.buttonsState.screensharing}
                         className="mx_LegacyCallViewButtons_button_screensharing"
                         onLabel={_t("voip|stop_screenshare")}
