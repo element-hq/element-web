@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeAll, beforeEach, afterEach, type MockedObject } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach, afterAll, type MockedObject } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 import "vitest-canvas-mock";
 
 import { UpdateCheckStatus } from "../../BasePlatform";
@@ -20,6 +20,7 @@ import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";
 import * as rageshake from "../../rageshake/rageshake";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Modal from "../../Modal";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "./ElectronPlatform";
@@ -67,7 +68,7 @@ describe("ElectronPlatform", () => {
         mockElectron.on.mock.calls.find(([type]) => type === eventType);
 
     it("flushes rageshake before quitting", () => {
-        new ElectronPlatform();
+        tearDownAfterTest(new ElectronPlatform());
         const [event, handler] = getElectronEventHandlerCall("before-quit")!;
         // correct event bound
         expect(event).toBeTruthy();
@@ -79,18 +80,18 @@ describe("ElectronPlatform", () => {
     });
 
     it("should load config", async () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         await expect(platform.getConfig()).resolves.toEqual({ _config: true });
     });
 
     it("should return oidc client state as expected", async () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         await platform.getConfig();
         expect(platform.getOAuthClientState()).toMatchInlineSnapshot(`":element-desktop-ssoid:session-id"`);
     });
 
     it("dispatches view settings action on preferences event", () => {
-        new ElectronPlatform();
+        tearDownAfterTest(new ElectronPlatform());
         const [event, handler] = getElectronEventHandlerCall("preferences")!;
         // correct event bound
         expect(event).toBeTruthy();
@@ -101,7 +102,7 @@ describe("ElectronPlatform", () => {
     });
 
     it("creates a modal on openDesktopCapturerSourcePicker", async () => {
-        const plat = new ElectronPlatform();
+        const plat = tearDownAfterTest(new ElectronPlatform());
         Modal.createDialog = vi.fn();
 
         // @ts-ignore mock
@@ -130,7 +131,7 @@ describe("ElectronPlatform", () => {
     });
 
     it("should show a toast when showToast is fired", async () => {
-        new ElectronPlatform();
+        tearDownAfterTest(new ElectronPlatform());
         dispatcher.dispatch(
             {
                 action: Action.ClientStarted,
@@ -155,7 +156,7 @@ describe("ElectronPlatform", () => {
 
     describe("updates", () => {
         it("dispatches on check updates action", () => {
-            new ElectronPlatform();
+            tearDownAfterTest(new ElectronPlatform());
             const [event, handler] = getElectronEventHandlerCall("check_updates")!;
             // correct event bound
             expect(event).toBeTruthy();
@@ -168,7 +169,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("dispatches on check updates action when update not available", () => {
-            new ElectronPlatform();
+            tearDownAfterTest(new ElectronPlatform());
             const [, handler] = getElectronEventHandlerCall("check_updates")!;
 
             handler({}, false);
@@ -179,20 +180,20 @@ describe("ElectronPlatform", () => {
         });
 
         it("starts update check", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             platform.startUpdateCheck();
             expect(mockElectron.send).toHaveBeenCalledWith("check_updates");
         });
 
         it("installs update", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             platform.installUpdate();
             expect(mockElectron.send).toHaveBeenCalledWith("install_update");
         });
     });
 
     it("returns human readable name", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.getHumanReadableName()).toEqual("Electron Platform");
     });
 
@@ -215,61 +216,61 @@ describe("ElectronPlatform", () => {
             ["custom user agent", "Element Desktop: Unknown"],
         ])("%s = %s", (userAgent, result) => {
             Object.defineProperty(window, "navigator", { value: { userAgent }, writable: true });
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
         });
     });
 
     it("returns true for needsUrlTooltips", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.needsUrlTooltips()).toBe(true);
     });
 
     it("should override browser shortcuts", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.overrideBrowserShortcuts()).toBe(true);
     });
 
     it("allows overriding native context menus", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.allowOverridingNativeContextMenus()).toBe(true);
     });
 
     it("indicates support for desktop capturer", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.supportsDesktopCapturer()).toBe(true);
     });
 
     it("indicates no support for jitsi screensharing", () => {
-        const platform = new ElectronPlatform();
+        const platform = tearDownAfterTest(new ElectronPlatform());
         expect(platform.supportsJitsiScreensharing()).toBe(false);
     });
 
     describe("notifications", () => {
         it("indicates support for notifications", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             expect(platform.supportsNotifications()).toBe(true);
         });
 
         it("may send notifications", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             expect(platform.maySendNotifications()).toBe(true);
         });
 
         it("pretends to request notification permission", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             const result = await platform.requestNotificationPermission();
             expect(result).toEqual("granted");
         });
 
         it("creates a loud notification", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             platform.loudNotification(new MatrixEvent(), new Room("!room:server", {} as any, userId));
             expect(mockElectron.send).toHaveBeenCalledWith("loudNotification");
         });
 
         it("sets notification count when count is changing", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             platform.setNotificationCount(0);
             // not called because matches internal notificaiton count
             expect(mockElectron.send).not.toHaveBeenCalledWith("setBadgeCount", 0);
@@ -280,12 +281,12 @@ describe("ElectronPlatform", () => {
 
     describe("spellcheck", () => {
         it("indicates support for spellcheck settings", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             expect(platform.supportsSpellCheckSettings()).toBe(true);
         });
 
         it("gets available spellcheck languages", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             void platform.getAvailableSpellCheckLanguages();
 
@@ -297,7 +298,7 @@ describe("ElectronPlatform", () => {
 
     describe("pickle key", () => {
         it("makes correct ipc call to get pickle key", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             void platform.getPickleKey(userId, deviceId);
 
@@ -307,7 +308,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("resolves to null when no pickle key is stored", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             const promise = platform.getPickleKey(userId, deviceId);
 
@@ -319,7 +320,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("rejects, rather than resolving to null, when the pickle key could not be read", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             const promise = platform.getPickleKey(userId, deviceId);
 
@@ -333,7 +334,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("makes correct ipc call to create pickle key", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             void platform.createPickleKey(userId, deviceId);
 
@@ -343,7 +344,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("makes correct ipc call to destroy pickle key", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             mockElectron.send.mockClear();
             void platform.destroyPickleKey(userId, deviceId);
 
@@ -355,7 +356,7 @@ describe("ElectronPlatform", () => {
 
     describe("versions", () => {
         it("calls install update", () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             platform.installUpdate();
 
             expect(mockElectron.send).toHaveBeenCalledWith("install_update");
@@ -365,7 +366,7 @@ describe("ElectronPlatform", () => {
     describe("breadcrumbs", () => {
         it("should send breadcrumb updates over the IPC", () => {
             const spy = vi.spyOn(BreadcrumbsStore.instance, "on");
-            new ElectronPlatform();
+            tearDownAfterTest(new ElectronPlatform());
             const cb = spy.mock.calls[0][1];
             cb();
 
@@ -375,6 +376,18 @@ describe("ElectronPlatform", () => {
                     name: "breadcrumbs",
                 }),
             );
+        });
+
+        it("should stop listening for breadcrumb updates when destroyed", () => {
+            const onSpy = vi.spyOn(BreadcrumbsStore.instance, "on");
+            const offSpy = vi.spyOn(BreadcrumbsStore.instance, "off");
+            const platform = tearDownAfterTest(new ElectronPlatform());
+            const cb = onSpy.mock.calls.find(([event]) => event === UPDATE_EVENT)![1];
+            expect(offSpy).not.toHaveBeenCalled();
+
+            platform.destroy();
+
+            expect(offSpy).toHaveBeenCalledWith(UPDATE_EVENT, cb);
         });
     });
 
@@ -388,7 +401,7 @@ describe("ElectronPlatform", () => {
                 unstable_features: {},
             });
 
-            new ElectronPlatform();
+            tearDownAfterTest(new ElectronPlatform());
 
             const userAccessTokenCall = mockElectron.on.mock.calls.find((call) => call[0] === "userAccessToken");
             userAccessTokenCall![1]({} as any);
@@ -419,6 +432,10 @@ describe("ElectronPlatform", () => {
             await platform.getConfig(); // await init
         });
 
+        afterAll(() => {
+            platform.destroy();
+        });
+
         it("supportsSetting should return true for the platform", () => {
             expect(platform.supportsSetting()).toBe(true);
         });
@@ -444,7 +461,7 @@ describe("ElectronPlatform", () => {
     });
 
     it("should forward call_state dispatcher events via ipc", async () => {
-        new ElectronPlatform();
+        tearDownAfterTest(new ElectronPlatform());
 
         dispatcher.dispatch(
             {
@@ -476,7 +493,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("should send a badge with a notification count", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             await platform.initialised;
             platform.setNotificationCount(1);
             // Badges are sent asynchronously
@@ -488,7 +505,7 @@ describe("ElectronPlatform", () => {
         });
 
         it("should update badge and skip duplicates", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             await platform.initialised;
             platform.setNotificationCount(1);
             platform.setNotificationCount(1); // Test that duplicates do not fire.
@@ -507,7 +524,7 @@ describe("ElectronPlatform", () => {
             });
         });
         it("should remove badge when notification count zeros", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             await platform.initialised;
             platform.setNotificationCount(1);
             platform.setNotificationCount(0); // Test that duplicates do not fire.
@@ -525,7 +542,7 @@ describe("ElectronPlatform", () => {
             });
         });
         it("should show an error badge when the application errors", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             await platform.initialised;
             platform.setErrorStatus(true);
             // Badges are sent asynchronously
@@ -538,7 +555,7 @@ describe("ElectronPlatform", () => {
             });
         });
         it("should restore after error is resolved", async () => {
-            const platform = new ElectronPlatform();
+            const platform = tearDownAfterTest(new ElectronPlatform());
             await platform.initialised;
             platform.setErrorStatus(true);
             platform.setErrorStatus(false);

@@ -19,7 +19,7 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { createTestClient, flushPromises } from "test-utils";
+import { createTestClient, flushPromises, tearDownAfterTest } from "test-utils";
 
 import { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
@@ -72,7 +72,7 @@ describe("RoomListItemViewModel", () => {
         // Set room name
         room.name = "Test Room";
 
-        notificationState = new RoomNotificationState(room, false);
+        notificationState = tearDownAfterTest(new RoomNotificationState(room, false));
         vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
 
         const dmRoomMap = {

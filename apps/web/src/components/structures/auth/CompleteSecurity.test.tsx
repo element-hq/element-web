@@ -11,7 +11,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { act, render, screen } from "test-utils-rtl";
 import EventEmitter from "node:events";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import CompleteSecurity from "./CompleteSecurity";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
@@ -81,7 +81,7 @@ describe("CompleteSecurity", () => {
 
     it("Renders a warning if user hits Reset", async () => {
         // Given there is no recovery key and no other devices
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
@@ -106,7 +106,7 @@ describe("CompleteSecurity", () => {
 
     it("Allows verifying with another device if one is available", async () => {
         // Given there is no recovery key but there are other devices
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.hasDevicesToVerifyAgainst = true;
             store.phase = Phase.Intro;
@@ -137,7 +137,7 @@ describe("CompleteSecurity", () => {
 
     it("Allows verifying with recovery key if one is available", async () => {
         // Given there are no other devices but there is a recovery key
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.keyInfo = {} as any;
             store.phase = Phase.Intro;

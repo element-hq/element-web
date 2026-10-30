@@ -6,6 +6,7 @@
  */
 
 import { describe, it, expect, vi } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { RedactedBodyViewModel } from "./RedactedBodyViewModel";
 
@@ -15,13 +16,13 @@ describe("RedactedBodyViewModel", () => {
             text: "Message deleted",
             tooltip: "Deleted yesterday",
         };
-        const vm = new RedactedBodyViewModel(props);
+        const vm = tearDownAfterTest(new RedactedBodyViewModel(props));
 
         expect(vm.getSnapshot()).toEqual(props);
     });
 
     it("updates the render snapshot when props change", () => {
-        const vm = new RedactedBodyViewModel({ text: "Message deleted" });
+        const vm = tearDownAfterTest(new RedactedBodyViewModel({ text: "Message deleted" }));
 
         vm.setProps({ text: "Message deleted by Alice", tooltip: "Deleted yesterday" });
 
@@ -33,7 +34,7 @@ describe("RedactedBodyViewModel", () => {
 
     it("does not notify for unchanged props", () => {
         const props = { text: "Message deleted" };
-        const vm = new RedactedBodyViewModel(props);
+        const vm = tearDownAfterTest(new RedactedBodyViewModel(props));
         const listener = vi.fn();
 
         vm.subscribe(listener);

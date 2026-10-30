@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { fireEvent, render, waitFor } from "test-utils-rtl";
 import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg } from "test-utils";
+import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg, tearDownAfterTest } from "test-utils";
 import { addTextToComposer } from "./__mocks__/composer.ts";
 
 import SendMessageComposer, { createMessageContent, isQuickReaction } from "./SendMessageComposer";
@@ -197,6 +197,7 @@ describe("<SendMessageComposer/>", () => {
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
+        afterAll(() => urlPreviewVm.dispose());
         const defaultProps = {
             room: mockRoom,
             toggleStickerPickerOpen: vi.fn(),
@@ -513,6 +514,7 @@ describe("<SendMessageComposer/>", () => {
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
+        tearDownAfterTest(urlPreviewVm);
 
         cli.isRoomEncrypted = vi.fn().mockReturnValue(true);
         const room = mkStubRoom("!roomId:server", "Room", cli);

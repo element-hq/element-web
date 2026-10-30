@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as testUtils from "test-utils";
-import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext } from "test-utils";
+import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import SpaceStore from "./SpaceStore";
 import {
@@ -145,6 +145,7 @@ describe("SpaceStore", () => {
 
     afterEach(async () => {
         await testUtils.resetAsyncStoreWithClient(store);
+        RoomNotificationStateStore.instance.clearRoomStates();
     });
 
     describe("static hierarchy resolution tests", () => {
@@ -1385,7 +1386,7 @@ describe("SpaceStore", () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            const store = tearDownAfterTest(new SpaceStore(defaultDispatcher, sdkContext));
             sdkContext._SpaceStore = store;
             await setupAsyncStoreWithClient(store, client);
 
@@ -1439,7 +1440,7 @@ describe("SpaceStore", () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            const store = tearDownAfterTest(new SpaceStore(defaultDispatcher, sdkContext));
             sdkContext._SpaceStore = store;
             await setupAsyncStoreWithClient(store, client);
 
@@ -1553,6 +1554,33 @@ describe("SpaceStore", () => {
             store.setActiveRoomInSpace(MetaSpace.Home);
 
             expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "view_room" }));
+        });
+    });
+
+    describe("notification states", () => {
+        it("destroys the notification states it handed out when the store is destroyed", async () => {
+            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            await setupAsyncStoreWithClient(store, client);
+            const homeState = store.getNotificationState(MetaSpace.Home);
+            const spaceState = store.getNotificationState(space1);
+            const homeDestroySpy = vi.spyOn(homeState, "destroy");
+            const spaceDestroySpy = vi.spyOn(spaceState, "destroy");
+
+            store.destroy();
+
+            expect(homeDestroySpy).toHaveBeenCalled();
+            expect(spaceDestroySpy).toHaveBeenCalled();
+        });
+
+        it("destroys the notification states it handed out on logout", async () => {
+            await run();
+            const state = store.getNotificationState(MetaSpace.Home);
+            const destroySpy = vi.spyOn(state, "destroy");
+
+            await testUtils.resetAsyncStoreWithClient(store);
+
+            expect(destroySpy).toHaveBeenCalled();
+            expect(store.getNotificationState(MetaSpace.Home)).not.toBe(state);
         });
     });
 });

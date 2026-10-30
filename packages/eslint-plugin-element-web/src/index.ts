@@ -10,6 +10,7 @@ import noLeakedEmitterListener from "./NoLeakedEmitterListener.ts";
 import noLeakedSubscription from "./NoLeakedSubscription.ts";
 import noSubscribeAfterAwait from "./NoSubscribeAfterAwait.ts";
 import requireLodashCancel from "./RequireLodashCancel.ts";
+import requireTestTeardown from "./RequireTestTeardown.ts";
 
 /** Lint rules specific to Element Web, loaded by oxlint as a JS plugin. */
 const plugin = {
@@ -20,6 +21,7 @@ const plugin = {
         "no-leaked-subscription": noLeakedSubscription,
         "no-subscribe-after-await": noSubscribeAfterAwait,
         "require-lodash-cancel": requireLodashCancel,
+        "require-test-teardown": requireTestTeardown,
     },
 };
 

@@ -646,6 +646,30 @@ export default defineConfig({
             },
         },
         {
+            files: ["apps/web/src/**/*.test.{ts,tsx}", "apps/web/test/**/*-test.{ts,tsx}"],
+            rules: {
+                // Stores and view models register on long-lived singletons, so any a test leaves behind
+                // stay reachable, and keep reacting, for the rest of the test file.
+                // Test doubles, named Mock* or Test*, are excluded, as are stores which subscribe to nothing.
+                "element-web/require-test-teardown": [
+                    "error",
+                    {
+                        classes:
+                            "^(?!Mock|Test)\\w*(Store|StoreClass|ViewModel|Tracker|Watcher|Platform|NotificationState)$|^(SDKContextClass|PosthogAnalytics)$",
+                        ignore: [
+                            "InitialCryptoSetupStore",
+                            "MemberListStore",
+                            "ToastStore",
+                            "TypingStore",
+                            "UserProfilesStore",
+                            "WidgetPermissionStore",
+                        ],
+                        helpers: ["tearDownAfterTest"],
+                    },
+                ],
+            },
+        },
+        {
             files: ["**/*.d.ts"],
             rules: {
                 "unicorn/require-module-specifiers": "off",

@@ -8,7 +8,7 @@
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { TestSDKContext } from "test-utils";
+import { TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import { RoomListSearchViewModel } from "./RoomListSearchViewModel";
 import { MetaSpace } from "../../stores/spaces";
@@ -47,6 +47,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             expect(vm.getSnapshot().displayExploreButton).toBe(true);
         });
@@ -57,6 +58,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.VideoRooms,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             expect(vm.getSnapshot().displayExploreButton).toBe(false);
         });
@@ -67,6 +69,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             expect(vm.getSnapshot().displayExploreButton).toBe(false);
         });
@@ -77,6 +80,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             expect(vm.getSnapshot().displayDialButton).toBe(true);
         });
@@ -87,6 +91,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             expect(vm.getSnapshot().displayDialButton).toBe(false);
         });
@@ -99,6 +104,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             vm.onSearchClick();
             expect(fireSpy).toHaveBeenCalledWith(Action.OpenSpotlight);
@@ -110,6 +116,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             vm.onDialPadClick();
             expect(fireSpy).toHaveBeenCalledWith(Action.OpenDialPad);
@@ -121,6 +128,7 @@ describe("RoomListSearchViewModel", () => {
                 activeSpace: MetaSpace.Home,
                 legacyCallHandler: context.legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             const mockEvent = {} as React.MouseEvent<HTMLButtonElement>;
             vm.onExploreClick(mockEvent);
@@ -135,6 +143,7 @@ describe("RoomListSearchViewModel", () => {
             activeSpace: MetaSpace.Home,
             legacyCallHandler: context.legacyCallHandler,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().displayDialButton).toBe(false);
 

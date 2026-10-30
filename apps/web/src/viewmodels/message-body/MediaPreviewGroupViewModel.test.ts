@@ -7,6 +7,7 @@
 
 import { createElement } from "react";
 import { describe, it, expect, vi } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 import type { MediaPreviewGroupEntry } from "@element-hq/web-shared-components";
 
 import { MediaPreviewGroupViewModel } from "./MediaPreviewGroupViewModel";
@@ -24,11 +25,11 @@ describe("MediaPreviewGroupViewModel", () => {
     it("exposes the supplied entries as its snapshot", () => {
         const props = { entries: [mkEntry("$one")] };
 
-        expect(new MediaPreviewGroupViewModel(props).getSnapshot()).toEqual(props);
+        expect(tearDownAfterTest(new MediaPreviewGroupViewModel(props)).getSnapshot()).toEqual(props);
     });
 
     it("replaces the entries and notifies subscribers", () => {
-        const vm = new MediaPreviewGroupViewModel({ entries: [mkEntry("$one")] });
+        const vm = tearDownAfterTest(new MediaPreviewGroupViewModel({ entries: [mkEntry("$one")] }));
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -40,7 +41,7 @@ describe("MediaPreviewGroupViewModel", () => {
     });
 
     it("replaces the entries with an empty group", () => {
-        const vm = new MediaPreviewGroupViewModel({ entries: [mkEntry("$one")] });
+        const vm = tearDownAfterTest(new MediaPreviewGroupViewModel({ entries: [mkEntry("$one")] }));
 
         vm.setProps({ entries: [] });
 
