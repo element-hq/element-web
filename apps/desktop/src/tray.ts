@@ -22,6 +22,7 @@ import { getConfig } from "./config.js";
 const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
 
 let trayIcon: Tray | null = null;
+let focusedBeforeTrayAction = false;
 
 export function hasTray(): boolean {
     return trayIcon !== null;
@@ -31,16 +32,31 @@ export function destroy(): void {
     if (trayIcon) {
         trayIcon.destroy();
         trayIcon = null;
+        focusedBeforeTrayAction = false;
     }
 }
 
+function captureWindowFocus(): void {
+    focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
+}
+
+function hideMainWindow(): void {
+    global.mainWindow?.hide();
+    focusedBeforeTrayAction = false;
+}
+
+function showMainWindow(): void {
+    if (global.mainWindow?.isMinimized()) global.mainWindow.restore();
+    if (!global.mainWindow?.isVisible()) global.mainWindow?.show();
+    global.mainWindow?.focus();
+    focusedBeforeTrayAction = true;
+}
+
 function toggleWin(): void {
-    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && global.mainWindow.isFocused()) {
-        global.mainWindow.hide();
+    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && focusedBeforeTrayAction) {
+        hideMainWindow();
     } else {
-        if (global.mainWindow?.isMinimized()) global.mainWindow.restore();
-        if (!global.mainWindow?.isVisible()) global.mainWindow?.show();
-        global.mainWindow?.focus();
+        showMainWindow();
     }
 }
 
@@ -63,7 +79,11 @@ export async function create(): Promise<void> {
     }
 
     trayIcon.setToolTip(getConfig().brand);
+    focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
     initApplicationMenu();
+    // The tray can steal focus before its click event, so sample while the pointer enters or moves over it.
+    trayIcon.on("mouse-enter", captureWindowFocus);
+    trayIcon.on("mouse-move", captureWindowFocus);
     trayIcon.on("click", toggleWin);
 
     // See also, badge.ts
