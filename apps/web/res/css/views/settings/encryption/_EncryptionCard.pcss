@@ -22,6 +22,7 @@
         align-items: center;
 
         > h2 {
+            color: var(--cpd-color-text-primary);
             margin: 0;
         }
 
@@ -36,6 +37,15 @@
         border: 0px none;
         box-shadow: none;
         padding: 0px;
+    }
+
+    .mx_AlertNoIcon {
+        color: var(--cpd-color-text-critical-primary);
+        margin-top: -var(cpd-space-2x);
+
+        svg {
+            display: none;
+        }
     }
 }
 
