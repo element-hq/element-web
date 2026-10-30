@@ -37,6 +37,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import JoinRuleSettings, { type JoinRuleSettingsProps } from "./JoinRuleSettings";
 import { PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
 import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 import DMRoomMap from "../../../utils/DMRoomMap.ts";
 
@@ -342,6 +343,32 @@ describe("<JoinRuleSettings />", () => {
             it("should set the visibility to private by default", () => {
                 expect(getCheckbox()).not.toBeChecked();
             });
+        });
+    });
+
+    describe("public join rule", () => {
+        const getPublicRadio = () => screen.getByRole("radio", { name: "Anyone" });
+
+        it("should enable the public option when creating public rooms is allowed", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === UIFeature.AllowCreatingPublicRooms,
+            );
+            getComponent();
+            expect(getPublicRadio()).toBeEnabled();
+        });
+
+        it("should disable the public option when creating public rooms is not allowed", () => {
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            getComponent();
+            expect(getPublicRadio()).toBeDisabled();
+        });
+
+        it("should not disable the public option for spaces", () => {
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            const room = new Room(roomId, client, userId);
+            vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
+            getComponent({ room });
+            expect(getPublicRadio()).toBeEnabled();
         });
     });
 
