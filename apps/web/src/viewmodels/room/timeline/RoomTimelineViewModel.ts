@@ -236,6 +236,9 @@ export class RoomTimelineViewModel
     /** Set while a {@link load} is running; see {@link scheduleRebuild}. */
     private loading = false;
 
+    /** A jump asked for while a {@link load} was running, run once it finishes. Only the newest is kept. */
+    private queuedJump: ((scroll: ImmediateScroll) => void) | null = null;
+
     /**
      * In-flight backward pagination chain, or null when idle.
      *
@@ -845,6 +848,13 @@ export class RoomTimelineViewModel
             this.republish(`load(${target.kind})-error`);
         } finally {
             this.loading = false;
+            const queued = this.queuedJump;
+            this.queuedJump = null;
+            // The view has not drawn the rows this load published yet, so the queued jump
+            // scrolls through `pendingAnchor` rather than the view's immediate scroll.
+            if (queued && !this.isDisposed) {
+                queued((anchor) => this.mergeSnapshot({ pendingAnchor: anchor }, "queued-jump"));
+            }
         }
     }
 
@@ -1055,7 +1065,25 @@ export class RoomTimelineViewModel
 
     // ── Overlay button actions ───────────────────────────────────────
 
+    /**
+     * Run a jump the reader asked for. If a load is running, the jump waits until it
+     * finishes and then works from the messages that load loaded, not the ones it was
+     * replacing. A newer jump replaces one that is waiting.
+     */
+    private requestJump(jump: (scroll: ImmediateScroll) => void, scrollNow: ImmediateScroll): void {
+        if (this.loading) {
+            this.queuedJump = jump;
+            return;
+        }
+        this.queuedJump = null;
+        jump(scrollNow);
+    }
+
     public onJumpToReadMarker = (scrollNow: ImmediateScroll): void => {
+        this.requestJump(this.jumpToReadMarker, scrollNow);
+    };
+
+    private jumpToReadMarker = (scrollNow: ImmediateScroll): void => {
         const items = this.snapshot.current.items;
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
         debug(
@@ -1101,7 +1129,34 @@ export class RoomTimelineViewModel
         this.mergeSnapshot({ items: newItems, canJumpToReadMarker: false }, "mark-all-as-read");
     };
 
+    /**
+     * Go to a message and highlight it, as opening a permalink does. For a message asked for
+     * after the timeline is open, such as a pinned message or a link to this room. Scrolls
+     * straight there when it is loaded, otherwise loads the window around it.
+     */
+    public jumpToEvent(eventId: string, scrollNow: ImmediateScroll): void {
+        this.requestJump((scroll) => {
+            debug(`[TimelineVM] jumpToEvent — ${eventId}`);
+            if (this.snapshot.current.items.some((i) => i.key === eventId)) {
+                this.mergeSnapshot({ highlightedEventId: eventId }, "jump-to-event");
+                scroll({ targetKey: eventId, align: "center" });
+            } else {
+                void this.load({ kind: "permalink", eventId });
+            }
+        }, scrollNow);
+    }
+
+    /** Drop the highlight from the message last jumped to, without moving. */
+    public clearHighlight(): void {
+        if (this.snapshot.current.highlightedEventId === null) return;
+        this.mergeSnapshot({ highlightedEventId: null }, "clear-highlight");
+    }
+
     public onJumpToLive = (scrollNow: ImmediateScroll): void => {
+        this.requestJump(this.jumpToLive, scrollNow);
+    };
+
+    private jumpToLive = (scrollNow: ImmediateScroll): void => {
         debug(`[TimelineVM] onJumpToLive — atLiveEnd=${this.snapshot.current.atLiveEnd}`);
         this.unreadMessageCount = 0;
         if (!this.snapshot.current.atLiveEnd) {
