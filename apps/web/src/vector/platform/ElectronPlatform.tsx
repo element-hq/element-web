@@ -45,6 +45,7 @@ import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import { GenericToast } from "@element-hq/web-shared-components";
+import AudiofoxManager from "../../audio/AudiofoxHook";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -92,6 +93,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
+    private readonly audiofox: AudiofoxManager | null;
     private protocol!: string;
     private sessionId!: string;
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
@@ -106,6 +108,7 @@ export default class ElectronPlatform extends BasePlatform {
             throw new Error("Cannot instantiate ElectronPlatform, window.electron is not set");
         }
         this.electron = window.electron;
+        this.audiofox = window.audiofox ? AudiofoxManager.getInstance(window.audiofox()) : null;
 
         // The IPC bridge has no way to remove listeners: they last as long as the window, as the platform does
         /* oxlint-disable element-web/no-leaked-emitter-listener */
@@ -468,6 +471,10 @@ export default class ElectronPlatform extends BasePlatform {
     public supportsJitsiScreensharing(): boolean {
         // See https://github.com/element-hq/element-web/issues/4880
         return false;
+    }
+
+    public getAudiofox(): AudiofoxManager | null {
+        return this.audiofox;
     }
 
     public async getAvailableSpellCheckLanguages(): Promise<string[]> {

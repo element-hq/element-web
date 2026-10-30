@@ -40,6 +40,9 @@ vi.mock("electron", () => ({
         handle: vi.fn((channel: string, cb: (...a: unknown[]) => unknown) => {
             ipcHandlers[channel] = cb;
         }),
+        handleOnce: vi.fn((channel: string, cb: (...a: unknown[]) => unknown) => {
+            ipcHandlers[channel] = cb;
+        }),
     },
     powerSaveBlocker: { isStarted: vi.fn(), start: vi.fn(), stop: vi.fn() },
     TouchBar: class {

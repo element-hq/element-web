@@ -63,6 +63,7 @@
         "uuid": "^14.0.0"
     },
     "optionalDependencies": {
+        "@foxberries/audiofox": "^1.1.0",
         "graphene-pk11": "^2.3.6",
         "pkcs11js": "^2.1.6"
     },
