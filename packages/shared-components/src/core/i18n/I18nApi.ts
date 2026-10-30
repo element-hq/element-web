@@ -12,9 +12,10 @@ import {
     type Translations,
     type Tags,
 } from "@element-hq/element-web-module-api";
+import { set } from "lodash";
 
 import { humanizeTime } from "../utils/humanize";
-import { _t, getLocale, registerTranslations } from "./i18n";
+import { _t, getLocale, registerTranslations, KEY_SEPARATOR } from "./i18n";
 
 export class I18nApi implements II18nApi {
     /**
@@ -33,7 +34,7 @@ export class I18nApi implements II18nApi {
         for (const key in translations) {
             for (const lang in translations[key]) {
                 langs[lang] = langs[lang] || {};
-                langs[lang][key] = translations[key][lang];
+                set(langs[lang], key.split(KEY_SEPARATOR), translations[key][lang]);
             }
         }
 
