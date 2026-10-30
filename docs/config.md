@@ -144,33 +144,30 @@ complete re-branding/private labeling, a more personalised experience can be ach
     1. `element`: Element X Android/iOS.
     2. `element-classic`: Element Classic Android/iOS.
     3. `element-pro`: Element Pro Android/iOS.
-9. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
-   containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
-   in production.
-10. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
-    This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
-    at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
-    configuration found in the well-known location is used instead.
-11. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
-12. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
+9. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
+   This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
+   at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
+   configuration found in the well-known location is used instead.
+10. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
     `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
-13. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
-14. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
-15. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
+12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
+13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
+14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
     `true` to hide these options.
-16. `disable_login_language_selector`: When `false` (default), **enables** the language selector on the login pages. Set to `true`
+15. `disable_login_language_selector`: When `false` (default), **enables** the language selector on the login pages. Set to `true`
     to hide this dropdown.
-17. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
+16. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
     users. Set to `true` to disable this functionality.
-18. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
+17. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
     Takes a configuration object as below:
     1. `title`: Required. Title to show at the top of the notice.
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
-19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
-22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key). Defaults to true.
+18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+20. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+21. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key). Defaults to true.
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -619,8 +616,14 @@ The following are undocumented or intended for developer use only.
 
 ## Additional config options for Element Desktop
 
-1. `update_base_url`: Specifies the URL of the update server, see [document](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/updates.md).
+1. `update_base_url`: Specifies the URL where to acquire update packages. If specified, must be a path to a directory
+   containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
+   in production. See [document](https://github.com/element-hq/element-web/blob/develop/docs/updates.md).
 2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
+3. `spell_checker_dictionary_download_url`: the URL of a directory to download spellchecker dictionaries from,
+   instead of Electron's default CDN. The directory must hold the files from the `hunspell_dictionaries.zip`
+   asset of Electron's releases: if they are served at `https://example.com/dictionaries/en-GB.bdic`,
+   set this to `https://example.com/dictionaries/`. Has no effect on macOS, which uses the system spellchecker.
 
 ---
 

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar, nativeImage } from "electron";
+import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar, nativeImage, session } from "electron";
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
@@ -86,7 +86,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
         case "setSpellCheckEnabled":
             if (typeof args[0] !== "boolean") return;
 
-            global.mainWindow.webContents.session.setSpellCheckerEnabled(args[0]);
+            session.defaultSession.setSpellCheckerEnabled(args[0]);
             store.set("spellCheckerEnabled", args[0]);
             break;
 
@@ -96,17 +96,17 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
 
         case "setSpellCheckLanguages":
             try {
-                global.mainWindow.webContents.session.setSpellCheckerLanguages(args[0]);
+                session.defaultSession.setSpellCheckerLanguages(args[0]);
             } catch (er) {
                 console.log("There were problems setting the spellcheck languages", er);
             }
             break;
 
         case "getSpellCheckLanguages":
-            ret = global.mainWindow.webContents.session.getSpellCheckerLanguages();
+            ret = session.defaultSession.getSpellCheckerLanguages();
             break;
         case "getAvailableSpellCheckLanguages":
-            ret = global.mainWindow.webContents.session.availableSpellCheckerLanguages;
+            ret = session.defaultSession.availableSpellCheckerLanguages;
             break;
 
         case "getPickleKey":
