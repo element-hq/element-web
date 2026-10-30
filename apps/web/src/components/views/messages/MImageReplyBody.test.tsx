@@ -242,11 +242,9 @@ describe("<MImageReplyBody />", () => {
         expect(Modal.createDialog).toHaveBeenCalledWith(
             expect.any(Function),
             expect.objectContaining({
-                src: "https://server/full.png",
-                name: "demo image",
-                width: 320,
-                height: 240,
-                fileSize: 48_000,
+                initialSrc: "https://server/full.png",
+                initialName: "demo image",
+                initialEvent: expect.any(Object),
                 thumbnailInfo: {
                     width: 100,
                     height: 80,
@@ -317,8 +315,8 @@ describe("<MImageReplyBody />", () => {
         expect(Modal.createDialog).toHaveBeenCalledWith(
             expect.any(Function),
             expect.objectContaining({
-                src: "blob:safe-thumbnail",
-                name: "unsafe image",
+                initialSrc: "blob:safe-thumbnail",
+                initialName: "unsafe image",
             }),
             "mx_Dialog_lightbox",
             undefined,
