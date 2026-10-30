@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Glass } from "@vector-im/compound-web";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { KnownMembership, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
@@ -22,6 +23,11 @@ import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 
 interface IProps {
     onFinished: () => void;
+
+    /**
+     * True if the user has any encryted rooms.
+     */
+    anyEncryptedRooms?: boolean;
 }
 
 interface IState {
@@ -109,11 +115,29 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                             {skipButton}
                         </h1>
                         <div className="mx_CompleteSecurity_body">
-                            <SetupEncryptionBody onFinished={this.props.onFinished} allowLogout={true} />
+                            <SetupEncryptionBody
+                                onFinished={this.props.onFinished}
+                                allowLogout={true}
+                                anyEncryptedRooms={this.props.anyEncryptedRooms}
+                            />
                         </div>
                     </CompleteSecurityBody>
                 </Glass>
             </AuthPage>
         );
     }
+
+    public static anyEncryptedRooms(client: MatrixClient | null): boolean {
+        if (!client) {
+            return false;
+        }
+
+        return !!client.getRooms().some(roomIsJoinedEncryptedNonSpace);
+    }
+}
+
+function roomIsJoinedEncryptedNonSpace(room: Room): boolean {
+    // Note: Intended to be identical to matrix-rust-sdk's
+    // matrix_sdk::sliding_sync::client::Client::has_encrypted_rooms
+    return room.hasEncryptionStateEvent() && !room.isSpaceRoom() && room.getMyMembership() === KnownMembership.Join;
 }
