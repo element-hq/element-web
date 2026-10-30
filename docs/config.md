@@ -591,8 +591,8 @@ Currently, the following UI feature flags are supported:
 - `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
   timeline for recent messages. When false day dates will be used.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
-- `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
-- `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
+- `UIFeature.allowCreatingPublicRooms` - Whether to show the option to make a room public at the point of creation. Does not affect editing a room in settings. Default: true.
+- `UIFeature.allowCreatingPublicSpaces` - Whether to show the option to make a space public at the point of creation. Does not affect editing a space in settings. Default: true.
 
 ## Modules
 
