@@ -1287,6 +1287,15 @@ describe("ElementCall with the React component embedding", () => {
             expect(options.livekit).toEqual({ livekit_service_url: "https://livekit-jwt.example.org" });
         });
 
+        it("prefers an m.livekit transport over an earlier livekit one", () => {
+            const options = ElementCall.getConfigOptions([
+                { type: "livekit", livekit_service_url: "https://legacy.example.org" },
+                { type: "m.livekit", url: "wss://sfu.example.org" },
+                { type: "m.livekit", url: "wss://sfu.example.org", livekit_service_url: "https://stable.example.org" },
+            ]);
+            expect(options.livekit).toEqual({ livekit_service_url: "https://stable.example.org" });
+        });
+
         it("leaves the transport to the component when none is known", () => {
             expect(ElementCall.getConfigOptions([]).livekit).toBeUndefined();
             expect(ElementCall.getConfigOptions().livekit).toBeUndefined();
