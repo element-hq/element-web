@@ -21,6 +21,7 @@ import {
 
 import RoomListStoreV3, { RoomListStoreV3Event } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
+import { type FilterId } from "@element-hq/web-shared-components";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
@@ -32,6 +33,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { hasCreateRoomRights } from "./utils";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX, type SectionExpansionState } from "../../stores/room-list-v3/section";
@@ -63,20 +65,28 @@ describe("RoomListViewModel", () => {
     // In-memory backing store for the persisted section expansion setting, reset each test so
     // collapse state does not leak between tests and writes round-trip synchronously.
     let sectionExpansionState: SectionExpansionState;
+    // In-memory backing store for the persisted primary filter.
+    let activeFilterSetting: FilterId | null;
 
     beforeEach(() => {
         matrixClient = createTestClient();
 
         sectionExpansionState = {};
+        activeFilterSetting = null;
         const realGetValue = SettingsStore.getValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, roomId, excludeDefault) => {
             if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+            if (setting === "RoomList.activeFilter") return activeFilterSetting;
             return realGetValue(setting, roomId, excludeDefault);
         });
         const realSetValue = SettingsStore.setValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "setValue").mockImplementation(async (setting, roomId, level, value) => {
             if (setting === "RoomList.SectionExpansionState") {
                 sectionExpansionState = value as SectionExpansionState;
+                return;
+            }
+            if (setting === "RoomList.activeFilter") {
+                activeFilterSetting = value as FilterId | null;
                 return;
             }
             return realSetValue(setting, roomId, level, value);
@@ -589,6 +599,65 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
+        it("should persist the active filter at the device level", () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                "unread",
+            );
+            expect(activeFilterSetting).toBe("unread");
+
+            // Toggling the filter off forgets it
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                null,
+            );
+            expect(activeFilterSetting).toBeNull();
+        });
+
+        it("should restore the persisted filter on creation", () => {
+            activeFilterSetting = "unread";
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                filterKeys: [FilterEnum.UnreadFilter],
+            });
+
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                FilterEnum.UnreadFilter,
+            ]);
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.activeFilterId).toBe("unread");
+            expect(snapshot.roomListState.filterKeys).toEqual([String(FilterEnum.UnreadFilter)]);
+            expect(snapshot.sections[0].roomIds).toEqual(["!room1:server"]);
+
+            // Toggling the restored filter turns it off rather than on again
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
+            });
+            viewModel.onToggleFilter("unread");
+            expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            expect(activeFilterSetting).toBeNull();
+        });
+
         describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
@@ -596,9 +665,38 @@ describe("RoomListViewModel", () => {
                     if (setting === "RoomList.CustomSectionData") return {};
                     if (setting === "RoomList.OrderedCustomSections") return [];
                     if (setting === "RoomList.SectionExpansionState") return {};
+                    if (setting === "RoomList.activeFilter") return activeFilterSetting;
                     return undefined as any;
                 });
             }
+
+            it("ignores a persisted filter that is hidden while sections are enabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(true);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith(undefined);
+                expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            });
+
+            it("restores a persisted section-only filter while sections are disabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(false);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                    FilterEnum.FavouriteFilter,
+                ]);
+                expect(viewModel.getSnapshot().activeFilterId).toBe("favourite");
+            });
 
             it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
@@ -671,6 +769,12 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
                 expect(snapshot.activeFilterId).toBeUndefined();
+                expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                    "RoomList.activeFilter",
+                    null,
+                    SettingLevel.DEVICE,
+                    null,
+                );
             });
         });
     });
