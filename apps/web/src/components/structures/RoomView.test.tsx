@@ -50,6 +50,7 @@ import { Action } from "../../dispatcher/actions";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "./RoomView";
+import MessagePanel from "./MessagePanel";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -77,6 +78,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { ModuleApi } from "../../modules/Api";
 import MatrixClientBackedController from "../../settings/controllers/MatrixClientBackedController.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload.ts";
+import RoomScrollStateStore from "../../stores/RoomScrollStateStore.ts";
 
 // Used by group calls
 vi.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -222,6 +224,78 @@ describe("RoomView", () => {
         await mountRoomView(ref);
         return ref.current!;
     };
+
+    it("returns to the live timeline when a highlighted event link is cleared", async () => {
+        const event = new MatrixEvent({
+            event_id: "$linked-event",
+            room_id: room.roomId,
+            sender: "@alice:example.org",
+            type: EventType.RoomMessage,
+            content: { msgtype: "m.text", body: "Linked event" },
+            origin_server_ts: 1,
+        });
+        await room.addLiveEvents([event], { addToState: false });
+        const instance = await getRoomViewInstance();
+
+        await act(async () => {
+            await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                event_id: event.getId(),
+                highlighted: true,
+                metricsTrigger: undefined,
+            });
+        });
+        await waitFor(() => expect(instance.state.initialEventId).toBe(event.getId()));
+
+        await act(async () => {
+            await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+            });
+        });
+        await waitFor(() => expect(instance.state.initialEventId).toBeUndefined());
+        expect(instance.state.isInitialEventHighlighted).toBe(false);
+    });
+
+    it("scrolls to a saved position when reopening a room", async () => {
+        vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const event = new MatrixEvent({
+            event_id: "$saved-event",
+            room_id: room.roomId,
+            sender: "@alice:example.org",
+            type: EventType.RoomMessage,
+            content: { msgtype: "m.text", body: "Saved event" },
+            origin_server_ts: 1,
+        });
+        await room.addLiveEvents([event], { addToState: false });
+        RoomScrollStateStore.setScrollState(room.roomId, { focussedEvent: event.getId(), pixelOffset: 42 });
+        const scrollToEvent = vi.spyOn(MessagePanel.prototype, "scrollToEvent");
+
+        try {
+            const instance = await getRoomViewInstance();
+
+            expect(instance.state.initialEventId).toBe(event.getId());
+            expect(instance.state.initialEventPixelOffset).toBe(42);
+            expect(instance.state.initialEventScrollIntoView).toBeUndefined();
+            await waitFor(() => expect(scrollToEvent).toHaveBeenCalledWith(event.getId(), 42, 1));
+
+            await act(async () => {
+                await stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    metricsTrigger: undefined,
+                });
+            });
+            expect(instance.state.initialEventId).toBe(event.getId());
+            expect(instance.state.initialEventPixelOffset).toBe(42);
+            expect(instance.state.initialEventScrollIntoView).toBeUndefined();
+        } finally {
+            scrollToEvent.mockRestore();
+            RoomScrollStateStore.setScrollState(room.roomId, null);
+        }
+    });
 
     it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
         stores.multiRoomViewStore.getRoomViewStoreForRoom = vi.fn().mockReturnValue(stores.roomViewStore);
