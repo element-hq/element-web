@@ -223,6 +223,9 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
                 undefined,
                 /* priority = */ false,
                 /* static = */ true,
+                // A background click would report the reset as cancelled, even while it is still running or after it
+                // has succeeded.
+                { blockBackgroundClick: true },
             );
             const [confirmed] = await finished;
             if (!confirmed) {

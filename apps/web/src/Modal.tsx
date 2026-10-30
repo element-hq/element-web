@@ -58,6 +58,8 @@ export interface IModal<C extends ComponentType> {
     beforeClosePromise?: Promise<boolean>;
     closeReason?: ModalCloseReason;
     onBeforeClose?(reason?: ModalCloseReason): Promise<boolean>;
+    /** If true, clicking the background does not close this modal. */
+    blockBackgroundClick?: boolean;
 
     /**
      * Run the {@link deferred} with the given arguments, and close this modal.
@@ -86,7 +88,8 @@ export interface IHandle<C extends ComponentType> {
      * If the dialog body component calls the `onFinished` property, or the caller calls {@link close},
      * the promise resolves with an array holding the arguments to that call.
      *
-     * If the dialog is closed by clicking in the background, the promise resolves with an empty array.
+     * If the dialog is closed by clicking in the background, the promise resolves with an empty array. This can be
+     * prevented with the `blockBackgroundClick` option of {@link ModalManager.createDialog}.
      */
     finished: Promise<OnFinishedParams<C> | []>;
 
@@ -100,6 +103,7 @@ export interface IHandle<C extends ComponentType> {
 
 interface IOptions<C extends ComponentType> {
     onBeforeClose?: IModal<C>["onBeforeClose"];
+    blockBackgroundClick?: IModal<C>["blockBackgroundClick"];
 }
 
 export enum ModalManagerEvent {
@@ -232,6 +236,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     } {
         const modal = {
             onBeforeClose: options?.onBeforeClose,
+            blockBackgroundClick: options?.blockBackgroundClick,
             className,
 
             // these will be set below but we need an object reference to pass to getCloseFn before we can do that
@@ -333,6 +338,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      *                                 static at a time.
      * @param options? extra options for the dialog
      * @param options.onBeforeClose a callback to decide whether to close the dialog
+     * @param options.blockBackgroundClick if true, clicking the background will not close the dialog. Use this for
+     *                                     dialogs which the user must respond to via one of the dialog's own buttons.
      * @returns {@link IHandle} object.
      */
     public createDialog<C extends ComponentType>(
@@ -399,7 +406,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
     private onBackgroundClick = (): void => {
         const modal = this.getCurrentModal();
-        if (!modal) {
+        if (!modal || modal.blockBackgroundClick) {
             return;
         }
         // we want to pass a reason to the onBeforeClose

@@ -103,6 +103,7 @@ describe("SecurityManager", () => {
             await accessSecretStorage(func, { forceReset: true });
 
             expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![5]).toEqual({ blockBackgroundClick: true });
             await expect((spy.mock.lastCall![0] as () => Promise<unknown>)()).resolves.toEqual(
                 expect.objectContaining({ __test: true }),
             );

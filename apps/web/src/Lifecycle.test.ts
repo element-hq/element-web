@@ -22,6 +22,7 @@ import {
 } from "test-utils";
 
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
+import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
 import * as Lifecycle from "./Lifecycle";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";
@@ -189,6 +190,28 @@ describe("Lifecycle", () => {
 
             expect(Modal.createDialog).not.toHaveBeenCalled();
         });
+
+        it("should show an error dialog which cannot be closed by a background click when loading fails", async () => {
+            const error = new Error("test error");
+            vi.spyOn(StorageManager, "checkConsistency").mockRejectedValue(error);
+
+            await expect(
+                Lifecycle.loadSession({
+                    enableGuest: true,
+                    guestHsUrl: "https://guest.server",
+                    urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
+                }),
+            ).resolves.toBeFalsy();
+
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                SessionRestoreErrorDialog,
+                { error },
+                undefined,
+                false,
+                false,
+                { blockBackgroundClick: true },
+            );
+        });
     });
 
     describe("restoreSessionFromStorage()", () => {
@@ -222,7 +245,9 @@ describe("Lifecycle", () => {
             localStorage.setItem("mx_has_access_token", "true");
 
             await expect(() => restoreSessionFromStorage()).rejects.toThrow();
-            expect(Modal.createDialog).toHaveBeenCalledWith(StorageEvictedDialog);
+            expect(Modal.createDialog).toHaveBeenCalledWith(StorageEvictedDialog, undefined, undefined, false, false, {
+                blockBackgroundClick: true,
+            });
             expect(mockClient.clearStores).toHaveBeenCalled();
         });
 
