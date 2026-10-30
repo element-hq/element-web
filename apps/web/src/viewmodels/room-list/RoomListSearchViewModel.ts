@@ -23,6 +23,8 @@ import PosthogTrackers from "../../PosthogTrackers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallHandler from "../../LegacyCallHandler";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { ModuleApi } from "../../modules/Api.ts";
+import { ExtrasApiEvent } from "../../modules/ExtrasApi.ts";
 
 export interface Props {
     /**
@@ -64,25 +66,34 @@ export class RoomListSearchViewModel
     };
 
     public constructor(props: Props) {
-        const supportsPstn = props.legacyCallHandler.getSupportsPstnProtocol();
-        super(props, RoomListSearchViewModel.computeSnapshot(props.activeSpace, supportsPstn));
-        this.displayDialButton = supportsPstn;
+        const showDial = RoomListSearchViewModel.showDialButton(props.legacyCallHandler);
+        super(props, RoomListSearchViewModel.computeSnapshot(props.activeSpace, showDial));
+        this.displayDialButton = showDial;
 
-        // Listen for changes in PSTN protocol support
+        // Listen for changes in PSTN protocol support, or a module offering a dialler
         this.disposables.trackListener(
             props.legacyCallHandler,
             LegacyCallHandlerEvent.ProtocolSupport,
             this.onProtocolSupportChange,
         );
+        this.disposables.trackListener(
+            ModuleApi.instance.extras,
+            ExtrasApiEvent.DialPadHandlerChanged,
+            this.onProtocolSupportChange,
+        );
+    }
+
+    private static showDialButton(legacyCallHandler: LegacyCallHandler): boolean {
+        return legacyCallHandler.getSupportsPstnProtocol() || ModuleApi.instance.extras.dialPadHandler !== undefined;
     }
 
     /**
-     * Handles changes in protocol support (PSTN).
+     * Handles changes in protocol support (PSTN) or the module dialler.
      */
     private readonly onProtocolSupportChange = (): void => {
-        const supportsPstn = this.props.legacyCallHandler.getSupportsPstnProtocol();
-        this.displayDialButton = supportsPstn;
-        this.snapshot.set(RoomListSearchViewModel.computeSnapshot(this.props.activeSpace, supportsPstn));
+        const showDial = RoomListSearchViewModel.showDialButton(this.props.legacyCallHandler);
+        this.displayDialButton = showDial;
+        this.snapshot.set(RoomListSearchViewModel.computeSnapshot(this.props.activeSpace, showDial));
     };
 
     /**
@@ -98,7 +109,9 @@ export class RoomListSearchViewModel
      * Opens the dial pad dialog.
      */
     public onDialPadClick = (): void => {
-        defaultDispatcher.fire(Action.OpenDialPad);
+        const moduleDialler = ModuleApi.instance.extras.dialPadHandler;
+        if (moduleDialler) moduleDialler();
+        else defaultDispatcher.fire(Action.OpenDialPad);
     };
 
     /**
