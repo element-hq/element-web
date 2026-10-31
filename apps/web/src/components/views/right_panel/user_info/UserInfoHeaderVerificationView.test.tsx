@@ -14,7 +14,7 @@ import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, waitFor, screen } from "test-utils-rtl";
 import React from "react";
 
-import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient, flushPromises, TestSDKContext } from "test-utils";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView";
 
@@ -23,6 +23,13 @@ describe("<UserInfoHeaderVerificationView />", () => {
     const defaultUserId = "@user:example.com";
 
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
+    const device1 = new Device({
+        deviceId: "d1",
+        userId: defaultUserId,
+        displayName: "my device",
+        algorithms: [],
+        keys: new Map(),
+    });
 
     let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
@@ -54,13 +61,6 @@ describe("<UserInfoHeaderVerificationView />", () => {
     });
 
     const renderComponent = () => {
-        const device1 = new Device({
-            deviceId: "d1",
-            userId: defaultUserId,
-            displayName: "my device",
-            algorithms: [],
-            keys: new Map(),
-        });
         const devicesMap = new Map<string, Device>([[device1.deviceId, device1]]);
         const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
 
@@ -94,5 +94,33 @@ describe("<UserInfoHeaderVerificationView />", () => {
         const { container } = renderComponent();
         await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
         expect(container).toMatchSnapshot();
+    });
+
+    it("renders verification unavailable message when the user has no devices", async () => {
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+        render(
+            <UserInfoHeaderVerificationView member={defaultMember} devices={[]} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
+        );
+        await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
+        // there are no devices to verify, so we don't ask for the cross-signing keys
+        expect(mockCrypto.userHasCrossSigningKeys).not.toHaveBeenCalled();
+    });
+
+    it("waits for the devices before showing the verify button", async () => {
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(true);
+        const { rerender } = render(
+            <UserInfoHeaderVerificationView member={defaultMember} devices={undefined} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
+        );
+        await waitFor(() => expect(mockCrypto.getUserVerificationStatus).toHaveBeenCalled());
+        await flushPromises();
+        // still loading: neither the button nor the unavailable message
+        expect(screen.queryByText("Verify User")).not.toBeInTheDocument();
+        expect(screen.queryByText("(User verification unavailable)")).not.toBeInTheDocument();
+
+        rerender(<UserInfoHeaderVerificationView member={defaultMember} devices={[device1]} />);
+        await waitFor(() => expect(screen.getByText("Verify User")).toBeInTheDocument());
     });
 });

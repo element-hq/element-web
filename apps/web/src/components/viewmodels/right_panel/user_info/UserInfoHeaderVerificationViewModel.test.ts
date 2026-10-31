@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vi
 import { Device, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { renderHook, waitFor } from "test-utils-rtl";
-import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient, flushPromises, TestSDKContext } from "test-utils";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { useUserInfoVerificationViewModel } from "./UserInfoHeaderVerificationViewModel";
@@ -115,8 +115,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // once we know the user can't be verified, there are no cross-signing keys to wait for
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
@@ -144,8 +144,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // once we know the user can't be verified, there are no cross-signing keys to wait for
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
@@ -166,8 +166,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             const canVerify = result.current.canVerify;
 
             expect(canVerify).toBeFalsy();
-            // if we cant verify the user the hasCrossSigningKeys value should also be undefined
-            expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // once we know the user can't be verified, there are no cross-signing keys to wait for
+            expect(result.current.hasCrossSigningKeys).toBe(false);
         });
     });
 
@@ -196,5 +196,49 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
 
             expect(hasCrossSigningKeys).toBeTruthy();
         });
+    });
+
+    it("should keep hasCrossSigningKeys undefined while the devices are loading", async () => {
+        const notMeId = "@notMe";
+        const notMetMember = new RoomMember(defaultRoomId, notMeId);
+        const device1 = new Device({
+            deviceId: "d1",
+            userId: notMeId,
+            displayName: "my device",
+            algorithms: [],
+            keys: new Map(),
+        });
+
+        // mock the user as not verified
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+
+        vi.spyOn(mockCrypto, "userHasCrossSigningKeys").mockResolvedValue(true);
+        // record every rendered value: a `false` in between would flash "unavailable" before the verify button
+        const seenValues: Array<boolean | undefined> = [];
+        const { result, rerender } = renderHook(
+            ({ devices }: { devices: Device[] | undefined }) => {
+                const vm = useUserInfoVerificationViewModel(notMetMember, devices);
+                seenValues.push(vm.hasCrossSigningKeys);
+                return vm;
+            },
+            {
+                ...clientAndSDKContextRenderOptions(mockClient, sdkContext),
+                initialProps: { devices: undefined as Device[] | undefined },
+            },
+        );
+
+        // the verification status is known, but the devices aren't yet
+        await waitFor(() => expect(mockCrypto.getUserVerificationStatus).toHaveBeenCalled());
+        await flushPromises();
+        expect(result.current.hasCrossSigningKeys).toBeUndefined();
+
+        rerender({ devices: [device1] });
+        await waitFor(() => expect(result.current.hasCrossSigningKeys).toBe(true));
+        // it never claimed that the user has no keys in between
+        expect(seenValues).not.toContain(false);
     });
 });

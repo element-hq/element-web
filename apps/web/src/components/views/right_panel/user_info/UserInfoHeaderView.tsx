@@ -21,7 +21,8 @@ import { useUserStatus } from "../../../../hooks/useUserStatus";
 export interface UserInfoHeaderViewProps {
     member: Member;
     roomId?: string;
-    devices: IDevice[];
+    /** The user's devices, or undefined while they are still being fetched. */
+    devices: IDevice[] | undefined;
     hideVerificationSection: boolean;
 }
 

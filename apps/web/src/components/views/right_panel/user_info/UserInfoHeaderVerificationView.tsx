@@ -17,7 +17,8 @@ import { _t } from "../../../../languageHandler";
 
 export const UserInfoHeaderVerificationView: React.FC<{
     member: User | RoomMember;
-    devices: IDevice[];
+    /** The user's devices, or undefined while they are still being fetched. */
+    devices: IDevice[] | undefined;
 }> = ({ member, devices }) => {
     let content;
     const vm = useUserInfoVerificationViewModel(member, devices);
