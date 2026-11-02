@@ -298,7 +298,7 @@ export function KeyForm({
     const isKeyInvalidAndFilled = isKeyValid === false;
     const canSubmit = (expectedKey === undefined || isKeyValid) && !isSubmitting;
 
-    // We don't have any file in the form, we can cast it as string safely
+    // The cast of `recoveryKey` is safe here, since it holds a string
     const getFilledKey = (form: HTMLFormElement): string => (new FormData(form).get("recoveryKey") as string).trim();
 
     return (
