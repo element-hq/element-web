@@ -46,7 +46,7 @@ interface IProps {
     allowLogout?: boolean;
 
     /**
-     * True if the user has any encryted rooms.
+     * True if the user has any encrypted rooms.
      */
     anyEncryptedRooms?: boolean;
 }
