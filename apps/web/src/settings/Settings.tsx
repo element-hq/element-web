@@ -29,7 +29,8 @@ import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
 import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
-import { UIFeature } from "./UIFeature";
+import UIComponentController from "./controllers/UIComponentController";
+import { UIComponent, UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";
 import { TokenizerMode } from "./enums/TokenizerMode";
 import ReducedMotionController from "./controllers/ReducedMotionController";
@@ -1518,10 +1519,12 @@ export const SETTINGS: Settings = {
     [UIFeature.AllowCreatingPublicSpaces]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
+        controller: new UIComponentController(UIComponent.PublicRooms),
     },
     [UIFeature.AllowCreatingPublicRooms]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
+        controller: new UIComponentController(UIComponent.PublicRooms),
     },
 
     // Electron-specific settings, they are stored by Electron and set/read over an IPC.

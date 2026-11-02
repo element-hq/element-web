@@ -472,6 +472,7 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
+    PublicRooms = "UIComponent.publicRooms",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
