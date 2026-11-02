@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import * as tzh from "./TimezoneHandler";
 
@@ -23,5 +23,13 @@ describe("TimezoneHandler", () => {
     it("Return undefined with an empty TZ", async () => {
         await tzh.setUserTimezone("");
         expect(tzh.getUserTimezone()).toEqual(undefined);
+    });
+    it("should include UTC in the available timezones", () => {
+        vi.spyOn(Intl, "supportedValuesOf").mockReturnValueOnce(["Europe/London", "Europe/Paris"]);
+        expect(tzh.getAllTimezones()).toEqual(["UTC", "Europe/London", "Europe/Paris"]);
+    });
+    it("should not duplicate UTC if the browser already provides it", () => {
+        vi.spyOn(Intl, "supportedValuesOf").mockReturnValueOnce(["Europe/London", "UTC"]);
+        expect(tzh.getAllTimezones()).toEqual(["Europe/London", "UTC"]);
     });
 });

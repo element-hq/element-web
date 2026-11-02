@@ -28,10 +28,15 @@ export function setUserTimezone(timezone: string): Promise<void> {
 }
 
 /**
- * Return all the available timezones
+ * Return all the available timezones.
+ * Will add "UTC" if not provided.
  */
 export function getAllTimezones(): string[] {
-    return Intl.supportedValuesOf("timeZone");
+    const timezones = Intl.supportedValuesOf("timeZone");
+    // Some browsers, notably Chromium ones, do not report UTC
+    // but it is expected to be supported.
+    // See https://github.com/mdn/browser-compat-data/issues/25828
+    return timezones.includes("UTC") ? timezones : ["UTC", ...timezones];
 }
 
 /**
