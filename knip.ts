@@ -33,6 +33,7 @@ export default {
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!src/flaky-reporter.ts!",
+                "!src/flaky-assignee-finder.ts!",
                 "!src/stale-screenshot-reporter.ts!",
             ],
             ignoreDependencies: [

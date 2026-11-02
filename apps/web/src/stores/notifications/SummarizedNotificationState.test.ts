@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils";
 
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { StaticNotificationState } from "./StaticNotificationState";
@@ -15,17 +16,17 @@ import { NotificationLevel } from "./NotificationLevel";
 
 describe("SummarizedNotificationState", () => {
     it("reports the unsent symbol when one of the summarized states failed to send", () => {
-        const state = new SummarizedNotificationState();
-        state.add(StaticNotificationState.forCount(12, NotificationLevel.Notification));
-        state.add(new StaticNotificationState("!", 1, NotificationLevel.Unsent));
+        const state = tearDownAfterTest(new SummarizedNotificationState());
+        state.add(tearDownAfterTest(StaticNotificationState.forCount(12, NotificationLevel.Notification)));
+        state.add(tearDownAfterTest(new StaticNotificationState("!", 1, NotificationLevel.Unsent)));
 
         expect(state.level).toBe(NotificationLevel.Unsent);
         expect(state.symbol).toBe("!");
     });
 
     it("keeps reporting the count when nothing failed to send", () => {
-        const state = new SummarizedNotificationState();
-        state.add(StaticNotificationState.forCount(12, NotificationLevel.Notification));
+        const state = tearDownAfterTest(new SummarizedNotificationState());
+        state.add(tearDownAfterTest(StaticNotificationState.forCount(12, NotificationLevel.Notification)));
 
         expect(state.level).toBe(NotificationLevel.Notification);
         expect(state.symbol).toBeNull();
@@ -33,8 +34,8 @@ describe("SummarizedNotificationState", () => {
     });
 
     it("still adopts an explicit symbol below the unsent level", () => {
-        const state = new SummarizedNotificationState();
-        state.add(StaticNotificationState.forSymbol("@", NotificationLevel.Highlight), true);
+        const state = tearDownAfterTest(new SummarizedNotificationState());
+        state.add(tearDownAfterTest(StaticNotificationState.forSymbol("@", NotificationLevel.Highlight)), true);
 
         expect(state.symbol).toBe("@");
     });

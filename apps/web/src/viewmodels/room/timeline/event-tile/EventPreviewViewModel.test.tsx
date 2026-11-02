@@ -11,7 +11,7 @@ import React from "react";
 import { render, screen, waitFor } from "test-utils-rtl";
 import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
-import { mkEvent, stubClient } from "test-utils";
+import { mkEvent, stubClient, tearDownAfterTest } from "test-utils";
 
 import { EventPreviewViewModel } from "./EventPreviewViewModel";
 
@@ -51,7 +51,7 @@ describe("EventPreviewViewModel", () => {
 
     it("generates a text preview and tooltip", async () => {
         const mxEvent = makeMessageEvent({ body: "Text preview" });
-        const vm = new EventPreviewViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new EventPreviewViewModel({ cli, mxEvent }));
 
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Text preview"));
 
@@ -65,7 +65,7 @@ describe("EventPreviewViewModel", () => {
 
     it("generates prefixed media preview content", async () => {
         const mxEvent = makeMessageEvent({ body: "clip.mp4", msgtype: MsgType.Video });
-        const vm = new EventPreviewViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new EventPreviewViewModel({ cli, mxEvent }));
 
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBeDefined());
 
@@ -79,7 +79,7 @@ describe("EventPreviewViewModel", () => {
 
     it("updates the preview when the event is replaced", async () => {
         const mxEvent = makeMessageEvent({ body: "Original" });
-        const vm = new EventPreviewViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new EventPreviewViewModel({ cli, mxEvent }));
 
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Original"));
 
@@ -109,7 +109,7 @@ describe("EventPreviewViewModel", () => {
     it("skips unchanged setter inputs and updates for a different event", async () => {
         const originalEvent = makeMessageEvent({ body: "Original" });
         const updatedEvent = makeMessageEvent({ body: "Updated" });
-        const vm = new EventPreviewViewModel({ cli, mxEvent: originalEvent });
+        const vm = tearDownAfterTest(new EventPreviewViewModel({ cli, mxEvent: originalEvent }));
         const listener = vi.fn();
 
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Original"));

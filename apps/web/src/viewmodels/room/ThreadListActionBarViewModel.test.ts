@@ -9,12 +9,13 @@
 
 import { ActionBarAction } from "@element-hq/web-shared-components";
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils";
 
 import { ThreadListActionBarViewModel } from "./ThreadListActionBarViewModel";
 
 describe("ThreadListActionBarViewModel", () => {
     it("builds the thread-list action bar snapshot", () => {
-        const vm = new ThreadListActionBarViewModel({});
+        const vm = tearDownAfterTest(new ThreadListActionBarViewModel({}));
 
         expect(vm.getSnapshot()).toMatchObject({
             actions: [ActionBarAction.ViewInRoom, ActionBarAction.CopyLink],
@@ -34,6 +35,7 @@ describe("ThreadListActionBarViewModel", () => {
             onViewInRoomClick,
             onCopyLinkClick,
         });
+        tearDownAfterTest(vm);
         const anchor = document.createElement("button");
 
         vm.onViewInRoomClick(anchor);
@@ -49,6 +51,7 @@ describe("ThreadListActionBarViewModel", () => {
         const vm = new ThreadListActionBarViewModel({
             onViewInRoomClick: initialOnViewInRoomClick,
         });
+        tearDownAfterTest(vm);
         const anchor = document.createElement("button");
 
         vm.setProps({ onViewInRoomClick: nextOnViewInRoomClick });

@@ -9,7 +9,7 @@
 
 import { EventType, type MatrixClient, type MatrixEvent, RelationType, type Room } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { createTestClient, mkEvent, mkStubRoom } from "test-utils";
+import { createTestClient, mkEvent, mkStubRoom, tearDownAfterTest } from "test-utils";
 
 import { ReactionsRowButtonViewModel, type ReactionsRowButtonViewModelProps } from "./ReactionsRowButtonViewModel";
 import { type ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
@@ -72,7 +72,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("updates count with merge and does not touch tooltip props", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
         const tooltipSetPropsSpy = vi.spyOn(getTooltipVm(vm), "setProps");
         const listener = vi.fn();
         vm.subscribe(listener);
@@ -89,7 +89,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("includes an ariaLabel in the snapshot", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
 
         expect(getAriaLabel(vm)).toContain("reacted with 👍");
     });
@@ -97,7 +97,7 @@ describe("ReactionsRowButtonViewModel", () => {
     it("falls back when no room is available", () => {
         vi.spyOn(client, "getRoom").mockReturnValue(null);
 
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
 
         expect(getAriaLabel(vm)).toBeUndefined();
         expect(vm.getSnapshot().content).toBe("👍");
@@ -115,6 +115,7 @@ describe("ReactionsRowButtonViewModel", () => {
                 customReactionImagesEnabled: true,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             imageSrc: "https://example.org/_matrix/media/reaction.png",
@@ -124,7 +125,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
         const tooltipSetPropsSpy = vi.spyOn(getTooltipVm(vm), "setProps");
         const listener = vi.fn();
         vm.subscribe(listener);
@@ -138,7 +139,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("updates disabled state without touching tooltip props", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps({ disabled: false }));
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps({ disabled: false })));
         const tooltipSetPropsSpy = vi.spyOn(getTooltipVm(vm), "setProps");
 
         vm.setDisabled(true);
@@ -148,7 +149,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("setReactionData forwards to tooltip via setProps and updates snapshot content", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
         const tooltipSetPropsSpy = vi.spyOn(getTooltipVm(vm), "setProps");
         const reactionEvents = [createReactionEvent("@carol:example.org", "👎")];
 
@@ -168,7 +169,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     it("redacts reaction on click when myReactionEvent exists", () => {
         const myReactionEvent = createReactionEvent("@me:example.org");
-        const vm = new ReactionsRowButtonViewModel(createProps({ myReactionEvent }));
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps({ myReactionEvent })));
 
         vm.onClick();
 
@@ -177,7 +178,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("sends reaction and dispatches message_sent when no myReactionEvent exists", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
 
         vm.onClick();
 
@@ -192,7 +193,7 @@ describe("ReactionsRowButtonViewModel", () => {
     });
 
     it("does nothing on click when disabled", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps({ disabled: true }));
+        const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps({ disabled: true })));
 
         vm.onClick();
 
