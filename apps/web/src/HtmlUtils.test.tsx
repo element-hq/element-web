@@ -174,8 +174,8 @@ describe("bodyToHtml", () => {
     });
 
     describe("feature_latex_maths", () => {
-        beforeEach(() => {
-            SettingsStore.setValue("feature_latex_maths", null, SettingLevel.DEVICE, true);
+        beforeEach(async () => {
+            await SettingsStore.setValue("feature_latex_maths", null, SettingLevel.DEVICE, true);
         });
 
         afterEach(() => {

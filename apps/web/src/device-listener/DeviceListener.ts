@@ -67,6 +67,10 @@ export class DeviceListener {
     public currentDeviceChangedEmitter = new CurrentDeviceChangedEmitter();
 
     private running = false;
+    // True while a recheck is running. We only run one at a time; see `recheck`.
+    private recheckRunning = false;
+    // Set when a recheck is requested while one is running, so we know to run another when it finishes.
+    private recheckQueued = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
     private client?: MatrixClient;
     private shouldRecordClientInformation = false;
@@ -227,13 +231,31 @@ export class DeviceListener {
     };
 
     public recheck(): void {
-        this.doRecheck().catch((e) => {
-            if (e instanceof ClientStoppedError) {
-                // the client was stopped while recheck() was running. Nothing left to do.
-            } else {
-                logger.error("Error during `DeviceListener.recheck`", e);
-            }
-        });
+        if (this.recheckRunning) {
+            // Only run one recheck at a time. If more are requested while one is running, run
+            // one more when it finishes instead of one per request. Overlapping rechecks can
+            // finish in any order, so an older result could overwrite a newer one, and nothing
+            // would trigger another recheck to put it right.
+            this.recheckQueued = true;
+            return;
+        }
+
+        this.recheckRunning = true;
+        this.doRecheck()
+            .catch((e) => {
+                if (e instanceof ClientStoppedError) {
+                    // the client was stopped while recheck() was running. Nothing left to do.
+                } else {
+                    logger.error("Error during `DeviceListener.recheck`", e);
+                }
+            })
+            .finally(() => {
+                this.recheckRunning = false;
+                if (this.recheckQueued) {
+                    this.recheckQueued = false;
+                    this.recheck();
+                }
+            });
     }
 
     private async doRecheck(): Promise<void> {

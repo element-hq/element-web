@@ -26,7 +26,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { waitFor } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
-import { mkEvent } from "test-utils";
+import { mkEvent, tearDownAfterTest } from "test-utils";
 
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -338,7 +338,7 @@ describe("ThreadSummaryViewModel", () => {
         room.emit(RoomEvent.Receipt);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
-        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+        expect(vm.getSnapshot().notificationIndicator).toBe("accent");
     });
 
     it("refreshes the notification indicator when an event of the room is decrypted", () => {
@@ -359,7 +359,7 @@ describe("ThreadSummaryViewModel", () => {
         room.client.emit(MatrixEventEvent.Decrypted, { getRoomId: () => roomId } as MatrixEvent);
 
         expect(determineUnreadState).toHaveBeenCalledWith(room, "$root", false);
-        expect(vm.getSnapshot().notificationIndicator).toBe("success");
+        expect(vm.getSnapshot().notificationIndicator).toBe("accent");
     });
 
     it("rebinds thread listeners when the thread changes and removes them on dispose", () => {
@@ -450,6 +450,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().isVisible).toBe(false);
         expect(vm.getSnapshot().avatar).toBeUndefined();
@@ -472,6 +473,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: true,
         });
+        tearDownAfterTest(vm);
 
         await waitFor(() => expect(vm.getSnapshot().isVisible).toBe(true));
 
@@ -546,6 +548,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("First reply"));
 
         thread.replyToEvent = makeEvent("Second reply");
@@ -723,6 +726,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
 
         thread.replyToEvent = makeEvent("Second reply");
         thread.emit(ThreadEvent.Update, thread);
@@ -755,6 +759,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
 
         thread.replyToEvent = makeEvent("Second reply");
         thread.emit(ThreadEvent.Update, thread);

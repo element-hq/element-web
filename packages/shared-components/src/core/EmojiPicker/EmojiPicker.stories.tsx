@@ -14,6 +14,10 @@ const meta = {
     title: "Core/EmojiPicker",
     component: EmojiPicker,
     tags: ["autodocs"],
+    globals: {
+        // Render emoji using Twemoji, as Element Web does, rather than the platform's emoji font
+        rootCss: "app-web",
+    },
     args: {
         onChoose: fn(() => true),
         onFinished: fn(),

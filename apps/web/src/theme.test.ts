@@ -61,7 +61,7 @@ describe("theme", () => {
         it("should switch theme on onload call", async () => {
             // When
             await new Promise((resolve) => {
-                setTheme("light").then(resolve);
+                void setTheme("light").then(resolve);
                 lightTheme.onload!({} as Event);
             });
 
@@ -75,7 +75,7 @@ describe("theme", () => {
         it("should switch to dark", async () => {
             // When
             await new Promise((resolve) => {
-                setTheme("dark").then(resolve);
+                void setTheme("dark").then(resolve);
                 darkTheme.onload!({} as Event);
             });
 
@@ -107,7 +107,7 @@ describe("theme", () => {
             // When
             vi.useFakeTimers();
             await new Promise((resolve) => {
-                setTheme("light").then(resolve);
+                void setTheme("light").then(resolve);
                 vi.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
                 vi.advanceTimersByTime(200);
             });
@@ -137,7 +137,7 @@ describe("theme", () => {
 
             const spy = vi.spyOn(document.head, "appendChild").mockImplementation(() => undefined as any);
             await new Promise((resolve) => {
-                setTheme("custom-blue").then(resolve);
+                void setTheme("custom-blue").then(resolve);
                 lightCustomTheme.onload!({} as Event);
             });
             expect(spy).toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe("theme", () => {
                 setProperty: spy,
             } as any);
             await new Promise((resolve) => {
-                setTheme("custom-blue").then(resolve);
+                void setTheme("custom-blue").then(resolve);
                 lightCustomTheme.onload!({} as Event);
             });
             expect(spy).toHaveBeenCalledWith("--sidebar-color", "#abcd");
@@ -184,7 +184,7 @@ describe("theme", () => {
                 setProperty: spy,
             } as any);
             await new Promise((resolve) => {
-                setTheme("custom-blue").then(resolve);
+                void setTheme("custom-blue").then(resolve);
                 lightCustomTheme.onload!({} as Event);
             });
             expect(spy).toHaveBeenCalledWith("--sidebar-color", "#abcdef");
@@ -256,7 +256,7 @@ describe("theme", () => {
 
             // Trigger clearCustomTheme via setTheme
             await new Promise((resolve) => {
-                setTheme("light").then(resolve);
+                void setTheme("light").then(resolve);
                 lightTheme.onload!({} as Event);
             });
 

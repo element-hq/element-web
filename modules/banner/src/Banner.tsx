@@ -45,7 +45,7 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
     let menuJsx;
     switch (menu.type) {
         case "static": {
-            menuJsx = <Menu api={api} config={menu} fallbackLogoUrl={logoUrl} />;
+            menuJsx = <Menu api={api} config={menu} data={menu} fallbackLogoUrl={logoUrl} />;
             break;
         }
         case "univention": {

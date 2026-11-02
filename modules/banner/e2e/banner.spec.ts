@@ -229,7 +229,7 @@ test.describe("Banner", () => {
 
             await trigger.click();
             const sidebar = page.getByRole("dialog");
-            await expect(sidebar.getByText("Failed to load")).toBeVisible();
+            await expect(sidebar.getByText("Could not fetch central navigation")).toBeVisible();
             await expect(sidebar).toMatchScreenshot("univention_error.png");
             await expect(axe).toHaveNoViolations();
         });

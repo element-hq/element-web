@@ -7,13 +7,10 @@ Please see LICENSE in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { isPdfEvent, openPdfViewer, pdfMediaForEvent } from "./pdfViewer";
-import { type MediaEventHelper } from "./MediaEventHelper";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { Action } from "../dispatcher/actions";
+import { isPdfEvent } from "./pdfViewer";
 
 function mkFileEvent(info?: Record<string, unknown>): MatrixEvent {
     return new MatrixEvent({
@@ -52,59 +49,5 @@ describe("isPdfEvent", () => {
         });
 
         expect(isPdfEvent(mxEvent)).toBe(false);
-    });
-});
-
-/** A MediaEventHelper that does not need a logged-in client behind it. */
-function mkHelper(blob = new Blob(["%PDF-1.7\n"], { type: "application/pdf" })): MediaEventHelper {
-    return {
-        media: { srcMxc: "mxc://example.org/spec" },
-        fileName: "spec.pdf",
-        sourceBlob: { value: Promise.resolve(blob) },
-    } as unknown as MediaEventHelper;
-}
-
-describe("pdfMediaForEvent", () => {
-    it("returns nothing for an event that is not a PDF", () => {
-        expect(pdfMediaForEvent(mkFileEvent({ mimetype: "text/plain" }))).toBeUndefined();
-    });
-
-    it("keys on the MXC URI and defers to the helper for the bytes", async () => {
-        const blob = new Blob(["%PDF-1.7\n"], { type: "application/pdf" });
-        const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf" }), mkHelper(blob));
-
-        expect(media).toMatchObject({ uri: "mxc://example.org/spec", name: "spec.pdf" });
-        // The helper decrypts behind `sourceBlob`, so the viewer gets plaintext either way.
-        await expect(media!.blob()).resolves.toBe(blob);
-    });
-
-    it("passes on the declared size so the viewer can refuse a file before downloading it", () => {
-        const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf", size: 1234 }), mkHelper());
-
-        expect(media?.size).toBe(1234);
-    });
-
-    it.each([undefined, "1234", -1, Number.NaN, Number.POSITIVE_INFINITY])(
-        "leaves the size unset when the sender declared %s",
-        (size) => {
-            const media = pdfMediaForEvent(mkFileEvent({ mimetype: "application/pdf", size }), mkHelper());
-
-            expect(media?.size).toBeUndefined();
-        },
-    );
-});
-
-describe("openPdfViewer", () => {
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
-    it("dispatches the open action for the event", () => {
-        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const mxEvent = mkFileEvent({ mimetype: "application/pdf" });
-
-        openPdfViewer(mxEvent);
-
-        expect(dispatch).toHaveBeenCalledWith({ action: Action.OpenPdfViewer, event: mxEvent });
     });
 });

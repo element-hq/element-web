@@ -79,7 +79,7 @@ describe("SessionLock", () => {
         // second instance tries to start. This should block for 10 more seconds
         const onNewInstance2 = vi.fn();
         let session2Result: boolean | undefined;
-        getSessionLock(onNewInstance2).then((res) => {
+        void getSessionLock(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
@@ -114,7 +114,7 @@ describe("SessionLock", () => {
         // second instance tries to start. This should block for 15 seconds
         const onNewInstance2 = vi.fn();
         let session2Result: boolean | undefined;
-        getSessionLock(onNewInstance2).then((res) => {
+        const session2Promise = getSessionLock(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
@@ -129,6 +129,7 @@ describe("SessionLock", () => {
         expect(checkSessionLockFree()).toBe(false); // still false, because the new session has claimed it
 
         expect(onNewInstance2).not.toHaveBeenCalled();
+        await session2Promise;
     });
 
     it("A second instance waits for the first to shut down", async () => {
@@ -143,7 +144,7 @@ describe("SessionLock", () => {
         // second instance tries to start, but should block
         const { window: window2, getSessionLock: getSessionLock2 } = buildNewContext();
         let session2Result: boolean | undefined;
-        getSessionLock2(async () => {}).then((res) => {
+        const session2Promise = getSessionLock2(async () => {}).then((res) => {
             session2Result = res;
         });
         await vi.advanceTimersByTimeAsync(100);
@@ -156,6 +157,7 @@ describe("SessionLock", () => {
         // session 2 now gets the lock
         expect(session2Result).toBe(true);
         window2.close();
+        await session2Promise;
     });
 
     it("If a third instance starts while we are waiting, we give up immediately", async () => {
@@ -169,7 +171,7 @@ describe("SessionLock", () => {
         const { getSessionLock: getSessionLock2 } = buildNewContext();
         let session2Result: boolean | undefined;
         const onNewInstance2 = vi.fn();
-        getSessionLock2(onNewInstance2).then((res) => {
+        const session2Promise = getSessionLock2(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
@@ -179,12 +181,14 @@ describe("SessionLock", () => {
 
         // third instance starts
         const { getSessionLock: getSessionLock3 } = buildNewContext();
-        getSessionLock3(async () => {});
+        // Deliberately not awaited: the first instance never releases the lock, so this never resolves
+        void getSessionLock3(async () => {});
         await vi.advanceTimersByTimeAsync(0);
 
         // session 2 should have given up
         expect(session2Result).toBe(false);
         expect(onNewInstance2).toHaveBeenCalled();
+        await session2Promise;
     });
 
     it("If two new instances start concurrently, only one wins", async () => {
@@ -201,13 +205,13 @@ describe("SessionLock", () => {
         // two new instances start at once
         const { getSessionLock: getSessionLock2 } = buildNewContext();
         let session2Result: boolean | undefined;
-        getSessionLock2(async () => {}).then((res) => {
+        const session2Promise = getSessionLock2(async () => {}).then((res) => {
             session2Result = res;
         });
 
         const { getSessionLock: getSessionLock3 } = buildNewContext();
         let session3Result: boolean | undefined;
-        getSessionLock3(async () => {}).then((res) => {
+        const session3Promise = getSessionLock3(async () => {}).then((res) => {
             session3Result = res;
         });
 
@@ -222,6 +226,7 @@ describe("SessionLock", () => {
         // session 3 now gets the lock
         expect(session2Result).toBe(false);
         expect(session3Result).toBe(true);
+        await Promise.all([session2Promise, session3Promise]);
     });
 
     /** build a new Window in the same domain as the current one.

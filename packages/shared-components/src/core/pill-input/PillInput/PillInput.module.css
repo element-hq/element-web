@@ -6,15 +6,19 @@
  */
 
 .pillInput {
-    background-color: var(--cpd-color-bg-subtle-secondary);
-    border-radius: 20px;
-    padding: var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-2x) var(--cpd-space-3x);
+    border-radius: 24px;
+    padding: var(--cpd-space-3x);
     /* To match pill height in order to avoid the PillInput to grow when a pill is inserted */
-    min-height: 28px;
+    min-height: 24px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
 }
 
-.pillInput:has(.input:focus) {
-    outline: var(--cpd-border-width-1) solid var(--cpd-color-gray-1400);
+.pillInput:hover {
+    border-color: var(--cpd-color-border-interactive-hovered);
+}
+
+.pillInput:focus-within {
+    border-color: var(--cpd-color-border-interactive-pressed);
 }
 
 .input {

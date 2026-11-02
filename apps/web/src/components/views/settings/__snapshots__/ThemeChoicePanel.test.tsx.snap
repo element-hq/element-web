@@ -19,19 +19,19 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_1o4d9_17"
+        class="_root"
       >
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="radix-react-use-id-1"
                 name="systemTheme"
                 role="switch"
@@ -39,15 +39,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="radix-react-use-id-1"
             >
               Match system theme
@@ -56,20 +56,20 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
         </div>
       </form>
       <form
-        class="_root_1o4d9_17 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
                 checked=""
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-2"
                 name="themeSelector"
                 title=""
@@ -77,15 +77,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
                 value="light"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-2"
             >
               Light
@@ -93,16 +93,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-3"
                 name="themeSelector"
                 title=""
@@ -110,15 +110,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
                 value="dark"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-3"
             >
               Dark
@@ -126,16 +126,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-4"
                 name="themeSelector"
                 title=""
@@ -143,15 +143,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
                 value="light-high-contrast"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-4"
             >
               High contrast
@@ -159,16 +159,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-5"
                 name="themeSelector"
                 title=""
@@ -176,15 +176,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
                 value="custom-Alice theme"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-5"
             >
               Alice theme
@@ -194,7 +194,7 @@ exports[`<ThemeChoicePanel /> > custom theme > should display custom theme 1`] =
       </form>
     </div>
     <div
-      class="_separator_13qwf_8"
+      class="_separator"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -222,19 +222,19 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_1o4d9_17"
+        class="_root"
       >
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="radix-react-use-id-1"
                 name="systemTheme"
                 role="switch"
@@ -242,15 +242,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="radix-react-use-id-1"
             >
               Match system theme
@@ -259,20 +259,20 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
         </div>
       </form>
       <form
-        class="_root_1o4d9_17 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
                 checked=""
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-2"
                 name="themeSelector"
                 title=""
@@ -280,15 +280,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
                 value="light"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-2"
             >
               Light
@@ -296,16 +296,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-3"
                 name="themeSelector"
                 title=""
@@ -313,15 +313,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
                 value="dark"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-3"
             >
               Dark
@@ -329,16 +329,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-4"
                 name="themeSelector"
                 title=""
@@ -346,15 +346,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
                 value="light-high-contrast"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-4"
             >
               High contrast
@@ -362,16 +362,16 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-5"
                 name="themeSelector"
                 title=""
@@ -379,15 +379,15 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
                 value="custom-Alice theme"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-5"
             >
               Alice theme
@@ -397,7 +397,7 @@ exports[`<ThemeChoicePanel /> > custom theme > should render the custom theme se
       </form>
     </div>
     <div
-      class="_separator_13qwf_8"
+      class="_separator"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -425,19 +425,19 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_1o4d9_17"
+        class="_root"
       >
         <div
-          class="_inline-field_1o4d9_33"
+          class="_inline-field"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_udcm8_10"
+              class="_container"
             >
               <input
-                class="_input_udcm8_24"
+                class="_input"
                 id="radix-react-use-id-1"
                 name="systemTheme"
                 role="switch"
@@ -445,15 +445,15 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
                 type="checkbox"
               />
               <div
-                class="_ui_udcm8_34"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60"
+              class="_label"
               for="radix-react-use-id-1"
             >
               Match system theme
@@ -462,20 +462,20 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
         </div>
       </form>
       <form
-        class="_root_1o4d9_17 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
                 checked=""
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-2"
                 name="themeSelector"
                 title=""
@@ -483,15 +483,15 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
                 value="light"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-2"
             >
               Light
@@ -499,16 +499,16 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-3"
                 name="themeSelector"
                 title=""
@@ -516,15 +516,15 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
                 value="dark"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-3"
             >
               Dark
@@ -532,16 +532,16 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_1o4d9_33 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_1o4d9_45"
+            class="_inline-field-control"
           >
             <div
-              class="_container_1ug7n_10"
+              class="_container"
             >
               <input
-                class="_input_1ug7n_18"
+                class="_input"
                 id="radix-react-use-id-4"
                 name="themeSelector"
                 title=""
@@ -549,15 +549,15 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
                 value="light-high-contrast"
               />
               <div
-                class="_ui_1ug7n_19"
+                class="_ui"
               />
             </div>
           </div>
           <div
-            class="_inline-field-body_1o4d9_39"
+            class="_inline-field-body"
           >
             <label
-              class="_label_1o4d9_60 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-react-use-id-4"
             >
               High contrast
@@ -567,7 +567,7 @@ exports[`<ThemeChoicePanel /> > renders the theme choice UI 1`] = `
       </form>
     </div>
     <div
-      class="_separator_13qwf_8"
+      class="_separator"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"

@@ -8,25 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import { act, render, type RenderResult } from "test-utils-rtl";
+import { vi, describe, it, expect } from "vitest";
+import { render, type RenderResult } from "test-utils-rtl";
 import React, { type ComponentProps } from "react";
-import EventEmitter from "node:events";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { sleep } from "matrix-js-sdk/src/utils";
 
 import { LoginSplashView } from "./LoginSplashView";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 describe("<LoginSplashView />", () => {
-    let matrixClient: MatrixClient;
-    beforeEach(() => {
-        matrixClient = new EventEmitter() as unknown as MatrixClient;
-    });
-
     function getComponent(props: Partial<ComponentProps<typeof LoginSplashView>> = {}): RenderResult {
         const defaultProps = {
-            matrixClient,
             onLogoutClick: () => {},
             syncError: null,
         };
@@ -50,21 +40,5 @@ describe("<LoginSplashView />", () => {
         expect(onLogoutClick).not.toHaveBeenCalled();
         rendered.getByRole("button", { name: "Logout" }).click();
         expect(onLogoutClick).toHaveBeenCalled();
-    });
-
-    it("Shows migration progress", async () => {
-        const rendered = getComponent();
-
-        act(() => {
-            matrixClient.emit(CryptoEvent.LegacyCryptoStoreMigrationProgress, 5, 10);
-        });
-        rendered.getByText("Hang tight.", { exact: false });
-
-        // Wait for the animation to update
-        await act(() => sleep(500));
-
-        const progress = rendered.getByRole("progressbar");
-        expect(progress.getAttribute("value")).toEqual("5");
-        expect(progress.getAttribute("max")).toEqual("10");
     });
 });

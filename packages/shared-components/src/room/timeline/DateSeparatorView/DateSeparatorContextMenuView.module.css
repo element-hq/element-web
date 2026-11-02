@@ -7,8 +7,16 @@
 
 .picker_menu {
     max-inline-size: none;
-    padding: 0;
-    gap: 0;
+
+    /*
+     * Awful, brittle hack to remove padding from the menu which is now added on the content child
+     * This probably ought to be a parameter to the compound component if we sometimes don't want padding.
+     */
+    > [role="none"] {
+        padding: 0;
+        gap: 0;
+        --cpd-menu-padding-block-end: 0;
+    }
 }
 
 .picker_menu_item {

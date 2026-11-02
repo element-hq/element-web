@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type MockInstance } from "vitest";
 import React, { type ComponentProps } from "react";
-import { render, type RenderResult } from "test-utils-rtl";
+import { fireEvent, render, type RenderResult } from "test-utils-rtl";
 import { type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import {
@@ -26,8 +26,16 @@ import { Layout } from "../../../settings/enums/Layout";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import * as languageSettings from "../../../i18n/settings";
+import { ModuleApi } from "../../../modules/Api.ts";
+import { CustomComponentsApi } from "../../../modules/customComponentApi.ts";
 
 describe("EventListSummary", function () {
+    const spiesToRestore: Array<{ mockRestore: () => void }> = [];
+    const trackSpy = <T extends { mockRestore: () => void }>(spy: T): T => {
+        spiesToRestore.push(spy);
+        return spy;
+    };
+
     const roomId = "!room:server.org";
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events: MatrixEvent[]) => {
@@ -137,11 +145,18 @@ describe("EventListSummary", function () {
         vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
     });
 
+    afterEach(() => {
+        for (const spy of spiesToRestore.splice(0)) {
+            spy.mockRestore();
+        }
+    });
+
     afterAll(() => {
         unmockClientPeg();
     });
 
     it("renders expanded events if there are less than props.threshold", function () {
+        const renderInfoSpy = trackSpy(vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo"));
         const events = generateEvents([
             { userId: "@user_1:some.domain", prevMembership: KnownMembership.Leave, membership: KnownMembership.Join },
         ]);
@@ -159,6 +174,60 @@ describe("EventListSummary", function () {
         expect(children).toHaveLength(1);
         expect(children[0]).toHaveTextContent("Expanded membership");
         expect(children).toMatchSnapshot();
+        expect(renderInfoSpy).not.toHaveBeenCalled();
+    });
+
+    it("includes custom and built-in descriptions in one summary", function () {
+        const api = new CustomComponentsApi();
+        api.registerMessageRenderer("com.example.notice", () => <span>Notice</span>, {
+            renderGroupSummary: { getSummary: (events) => `shared ${events.length} updates` },
+        });
+        trackSpy(
+            vi
+                .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+                .mockImplementation(api.getMessageRenderInfo.bind(api)),
+        );
+        const joined = generateMembershipEvent("joined", {
+            userId: "@user:some.domain",
+            prevMembership: KnownMembership.Leave,
+            membership: KnownMembership.Join,
+        });
+        const left = generateMembershipEvent("left", {
+            userId: "@user:some.domain",
+            prevMembership: KnownMembership.Join,
+            membership: KnownMembership.Leave,
+        });
+        const notices = Array.from({ length: 3 }, () =>
+            mkEvent({
+                event: true,
+                type: "com.example.notice",
+                room: roomId,
+                user: "@user:some.domain",
+                content: {},
+            }),
+        );
+        const { container } = renderComponent({ events: [joined, ...notices, left] });
+
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary")!;
+        expect(summary).toHaveTextContent("joined");
+        expect(summary).toHaveTextContent("shared 3 updates");
+        expect(summary).toHaveTextContent("left");
+        expect(summary.textContent!.indexOf("joined")).toBeLessThan(summary.textContent!.indexOf("left"));
+        expect(summary.textContent!.indexOf("left")).toBeLessThan(summary.textContent!.indexOf("shared"));
+    });
+
+    it("looks up custom summaries only while collapsed", function () {
+        const events = generateEvents([
+            { userId: "@user:some.domain", membership: KnownMembership.Join },
+            { userId: "@user:some.domain", membership: KnownMembership.Leave },
+            { userId: "@user:some.domain", membership: KnownMembership.Join },
+        ]);
+        const renderInfoSpy = trackSpy(vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo"));
+        const { getByRole } = renderComponent({ events, startExpanded: true });
+        expect(renderInfoSpy).not.toHaveBeenCalled();
+
+        fireEvent.click(getByRole("button", { name: /collapse/i }));
+        expect(renderInfoSpy).toHaveBeenCalledTimes(events.length);
     });
 
     it("renders expanded events if there are less than props.threshold for join and leave", function () {

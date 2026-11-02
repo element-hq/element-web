@@ -10,7 +10,10 @@ Please see LICENSE files in the repository root for full details.
     width: 26rem;
 
     .mx_EncryptionCard {
-        gap: 0;
+        /* The dialog-based recovery key flow preserves the card's gap, but emphasised content sets its own. */
+        &:has(> .mx_EncryptionCard_emphasisedContent) {
+            gap: 0;
+        }
         h2 {
             text-align: center;
             color: var(--cpd-color-text-primary);

@@ -1,0 +1,22 @@
+diff --git a/dist/vis_annotation-BHBO0X19.mjs b/dist/vis_annotation-BHBO0X19.mjs
+index e076f7970df3a499058a3e77bf643a8834e9bca9..4cff006fba58f88bdf8ca9d9af025316e9eb21dd 100644
+--- a/dist/vis_annotation-BHBO0X19.mjs
++++ b/dist/vis_annotation-BHBO0X19.mjs
+@@ -23,7 +23,7 @@ function toMatchImageSnapshot$1(options) {
+ 	/* v8 ignore start: stub as success when not in a test (e.g. in a story) */
+ 	if (!test) return Promise.resolve();
+ 	/* v8 ignore end */
+-	return matchPageImageSnapshotAction(commands, toTaskId(test), options);
++	return matchPageImageSnapshotAction(commands, toTaskId(test), options, test);
+ }
+ 
+ //#endregion
+@@ -103,7 +103,7 @@ function toMatchImageSnapshot(subject, options) {
+ 	/* v8 ignore start: stub as success when not in a test (e.g. in a story) */
+ 	if (!test) return Promise.resolve(success);
+ 	/* v8 ignore end */
+-	return matchImageSnapshotAction(commands, toTaskId(test), subject, options).then(() => success);
++	return matchImageSnapshotAction(commands, toTaskId(test), subject, options, test).then(() => success);
+ }
+ 
+ //#endregion

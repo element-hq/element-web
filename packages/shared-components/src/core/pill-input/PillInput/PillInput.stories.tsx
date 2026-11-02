@@ -18,8 +18,8 @@ const meta = {
     args: {
         children: (
             <>
-                <div style={{ minWidth: 162, height: 28, backgroundColor: "#ccc", borderRadius: "99px" }} />
-                <div style={{ minWidth: 162, height: 28, backgroundColor: "#ccc", borderRadius: "99px" }} />
+                <div style={{ minWidth: 162, height: 24, backgroundColor: "#ccc", borderRadius: "99px" }} />
+                <div style={{ minWidth: 162, height: 24, backgroundColor: "#ccc", borderRadius: "99px" }} />
             </>
         ),
         onChange: fn(),

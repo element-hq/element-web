@@ -20,7 +20,6 @@
         "back": "Reen",
         "cancel": "Nuligi",
         "change": "Ŝanĝi",
-        "click_to_copy": "Klaku por kopii",
         "close": "Fermi",
         "collapse": "Maletendi",
         "complete": "Fini",
@@ -2142,10 +2141,6 @@
         "reply": {
             "error_loading": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
             "in_reply_to": "<a>Responde al</a> <pill>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Vi estas direktota al ekstera retejo por aŭtentikigi vian konton por uzo kun %(integrationsUrl)s. Ĉu vi volas daŭrigi tion?",
-            "dialog_title": "Aldoni kunigon"
         },
         "self_redaction": "Mesaĝo foriĝis",
         "send_state_failed": "Malsukcesis sendi",

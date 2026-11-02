@@ -60,7 +60,7 @@ describe("TileErrorViewModel", () => {
             message: "Can't load this message",
             eventType: "m.room.message",
             bugReportCtaLabel: "Submit debug logs",
-            viewSourceCtaLabel: "View Source",
+            viewSourceCtaLabel: "View source",
         });
     });
 

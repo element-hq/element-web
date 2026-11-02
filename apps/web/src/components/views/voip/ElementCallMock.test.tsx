@@ -32,7 +32,7 @@ import { ElementCall, initializeElementCall } from "./ElementCallMock";
 const roomId = "!1:example.org";
 
 const mkMembership = (sender: string, deviceId: string): CallMembership =>
-    ({ sender, deviceId, membershipID: `${sender}:${deviceId}` }) as CallMembership;
+    ({ sender, deviceId, memberId: `${sender}:${deviceId}` }) as CallMembership;
 
 class MockSession extends TypedEventEmitter<MatrixRTCSessionEvent, MatrixRTCSessionEventHandlerMap> {
     public memberships: CallMembership[] = [];

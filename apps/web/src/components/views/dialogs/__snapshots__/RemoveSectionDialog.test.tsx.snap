@@ -19,7 +19,7 @@ exports[`RemoveSectionDialog > renders the dialog when section is empty 1`] = `
       </h1>
     </div>
     <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      class="_typography _font-body-md-regular"
     >
       Are you sure you want to remove this section?
     </span>
@@ -86,13 +86,13 @@ exports[`RemoveSectionDialog > renders the dialog when section is not empty 1`] 
       </h1>
     </div>
     <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      class="_typography _font-body-md-regular"
     >
       Are you sure you want to remove this section?
     </span>
     <br />
     <span
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      class="_typography _font-body-md-regular"
     >
       The chats in this section will still be available in your chats list.
     </span>

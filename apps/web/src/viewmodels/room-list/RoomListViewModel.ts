@@ -15,7 +15,7 @@ import {
     _t,
     type ToastType,
 } from "@element-hq/web-shared-components";
-import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient, PendingEventOrdering, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";
@@ -34,6 +34,7 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
+import { PreviewRoomListItemViewModel, type PreviewRoomListItemProps } from "./PreviewRoomListItemViewModel";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -47,7 +48,10 @@ import {
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -93,6 +97,30 @@ function getVisibleFilterIds(): FilterId[] {
     const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
     const filterIds = [...filterKeyToIdMap.values()];
     return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+}
+
+/**
+ * Read the primary filter persisted at the device level, if it is still one of the visible chips.
+ */
+function getPersistedFilter(): FilterEnum | undefined {
+    const filterId = SettingsStore.getValue("RoomList.activeFilter");
+    // Ignore a filter that is invisble.
+    if (!filterId || !getVisibleFilterIds().includes(filterId)) return undefined;
+    // Find the filter key.
+    for (const [key, id] of filterKeyToIdMap.entries()) {
+        if (id === filterId) return key;
+    }
+    // We don't know this filter ID.
+    return undefined;
+}
+
+/**
+ * Persist the active primary filter at the device level so it survives a reload or relaunch.
+ * @param filterKey - The active filter, or undefined when no filter is selected.
+ */
+function persistFilter(filterKey: FilterEnum | undefined): void {
+    const filterId = filterKey !== undefined ? (filterKeyToIdMap.get(filterKey) ?? null) : null;
+    void SettingsStore.setValue("RoomList.activeFilter", null, SettingLevel.DEVICE, filterId);
 }
 
 /**
@@ -193,11 +221,27 @@ export class RoomListViewModel
     /** Guards {@link scrollToRequestedRoom} against the list update it can trigger itself. */
     private isResolvingRoomIdToScroll = false;
 
+    /**
+     * The item for the open room when it isn't in {@link roomsResult} because the user isn't a member of it.
+     * See {@link updatePreviewItem}.
+     */
+    private previewItem?: PreviewRoomListItemViewModel;
+
+    /**
+     * The room of {@link previewItem}, added at the top of the Chats section by {@link withPreviewRoom}.
+     * When the client doesn't know the room, this is an empty `Room` used only to place the item in the sections.
+     */
+    private previewRoom?: Room;
+
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = props.spaceStore.activeSpaceRoom;
 
+        // Restore the filter selection.
+        const activeFilter = getPersistedFilter();
+
         // Get initial rooms
-        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
+        const filterKeys = activeFilter !== undefined ? [activeFilter] : undefined;
+        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
         const filterIds = getVisibleFilterIds();
@@ -213,17 +257,18 @@ export class RoomListViewModel
             isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
             isRoomListEmpty,
             filterIds,
-            activeFilterId: undefined,
+            activeFilterId: activeFilter !== undefined ? filterKeyToIdMap.get(activeFilter) : undefined,
             roomListState: {
                 activeRoomIndex: undefined,
                 spaceId: roomsResult.spaceId,
-                filterKeys: undefined,
+                filterKeys: roomsResult.filterKeys?.map((k) => String(k)),
             },
             isFlatList,
             sections: toRoomListSection(sections),
             canCreateRoom,
         });
 
+        this.activeFilter = activeFilter;
         this.roomsResult = roomsResult;
         this.sections = sections;
 
@@ -272,13 +317,104 @@ export class RoomListViewModel
             SettingsStore.unwatchSetting(showPeopleSectionRef);
         });
 
+        // The summary of the open room arrives after the room has been opened
+        this.disposables.trackListener(props.roomViewStore, UPDATE_EVENT, this.onRoomViewStoreUpdate);
+
         // Track cleanup of all child view models
         this.disposables.track(() => {
             for (const viewModel of this.roomItemViewModels.values()) {
                 viewModel.dispose();
             }
             this.roomItemViewModels.clear();
+            this.previewItem?.dispose();
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.dispose();
+            }
+            this.roomSectionHeaderViewModels.clear();
         });
+
+        this.disposables.track(() => clearTimeout(this.toastRef));
+
+        // A room may already be open when the list is created
+        this.onRoomViewStoreUpdate();
+    }
+
+    private readonly onRoomViewStoreUpdate = (): void => {
+        if (this.updatePreviewItem()) void this.updateRoomListData();
+    };
+
+    /**
+     * Build the item for the open room when it isn't in the list and the user isn't a member of it,
+     * e.g. a room they can knock on. The item goes away when another room is opened or when the room
+     * enters the list, after the user has joined or knocked. It also sets {@link previewRoom}.
+     * @returns whether the item has changed.
+     */
+    private updatePreviewItem(): boolean {
+        const preview = this.getPreviewItemProps();
+        if (preview?.roomId === this.previewItem?.roomId) return false;
+
+        this.previewItem?.dispose();
+        this.previewItem = preview && new PreviewRoomListItemViewModel(preview);
+        const { client } = this.props;
+        this.previewRoom =
+            preview &&
+            (client.getRoom(preview.roomId) ??
+                new Room(preview.roomId, client, client.getSafeUserId(), {
+                    pendingEventOrdering: PendingEventOrdering.Detached,
+                }));
+        return true;
+    }
+
+    /**
+     * Add the room of the preview item at the top of the Chats section, so it is listed like any other room.
+     */
+    private withPreviewRoom(roomsResult: RoomsResult): RoomsResult {
+        const previewRoom = this.previewRoom;
+        if (!previewRoom) return roomsResult;
+
+        return {
+            ...roomsResult,
+            sections: roomsResult.sections.map((section) =>
+                section.tag === CHATS_TAG ? { ...section, rooms: [previewRoom, ...section.rooms] } : section,
+            ),
+        };
+    }
+
+    /**
+     * Work out what to show for the open room if it isn't in the list and the user isn't a member of it.
+     * The client has the room if the user has left it; otherwise all we have is its summary, which RoomView
+     * only gets for rooms the client doesn't know.
+     */
+    private getPreviewItemProps(): PreviewRoomListItemProps | undefined {
+        const roomId = this.props.roomViewStore.getRoomId();
+        if (!roomId || this.roomsResult.sections.some((s) => s.rooms.some((room) => room.roomId === roomId))) {
+            return undefined;
+        }
+
+        let props: PreviewRoomListItemProps | undefined;
+        const room = this.props.client.getRoom(roomId);
+        if (room) {
+            // A room the user is a member of is only missing because of the filters or the space
+            if (getEffectiveMembership(room.getMyMembership()) !== EffectiveMembership.Leave) return undefined;
+            props = {
+                roomId,
+                name: room.name,
+                avatarUrl: room.getMxcAvatarUrl() ?? undefined,
+                roomType: room.getType(),
+            };
+        } else {
+            const summary = this.props.roomViewStore.getRoomSummary();
+            if (!summary) return undefined;
+            props = {
+                roomId,
+                name: summary.name ?? summary.canonical_alias ?? roomId,
+                avatarUrl: summary.avatar_url,
+                roomType: summary.room_type,
+            };
+        }
+
+        // Spaces are shown in the space panel, not in the room list
+        return props.roomType === RoomType.Space ? undefined : props;
     }
 
     public onToggleFilter = (filterId: FilterId): void => {
@@ -296,6 +432,7 @@ export class RoomListViewModel
         // Toggle the filter - if it's already active, deactivate it
         const newFilter = this.activeFilter === filterKey ? undefined : filterKey;
         this.activeFilter = newFilter;
+        persistFilter(newFilter);
 
         // Update rooms result with new filter
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
@@ -314,6 +451,7 @@ export class RoomListViewModel
      */
     private readonly onShowSectionsChange = (): void => {
         this.activeFilter = undefined;
+        persistFilter(undefined);
         this.clearViewModels();
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace();
         this.updateRoomsMap(this.roomsResult);
@@ -361,16 +499,21 @@ export class RoomListViewModel
      * Get the ordered list of room IDs.
      */
     public get roomIds(): string[] {
-        return this.roomsResult.sections.flatMap((section) => section.rooms).map((room) => room.roomId);
+        return this.withPreviewRoom(this.roomsResult)
+            .sections.flatMap((section) => section.rooms)
+            .map((room) => room.roomId);
     }
 
     /**
-     * Get a RoomListItemViewModel for a specific room.
+     * Get a RoomListItemViewModel for a specific room, or the {@link PreviewRoomListItemViewModel} of the open room
+     * when it isn't in the list.
      * Creates a RoomListItemViewModel if needed, which manages per-room subscriptions.
      * The view should call this only for visible rooms from the roomIds list.
      * @throws Error if room is not found in roomsMap (indicates a programming error)
      */
-    public getRoomItemViewModel(roomId: string): RoomListItemViewModel | undefined {
+    public getRoomItemViewModel(roomId: string): RoomListItemViewModel | PreviewRoomListItemViewModel | undefined {
+        if (this.previewItem?.roomId === roomId) return this.previewItem;
+
         // Check if we have a view model for this room
         let viewModel = this.roomItemViewModels.get(roomId);
 
@@ -868,6 +1011,8 @@ export class RoomListViewModel
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
 
+        this.updatePreviewItem();
+
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
 
@@ -877,8 +1022,9 @@ export class RoomListViewModel
         }
 
         // Build the complete state atomically to ensure consistency
+        const roomsResult = this.withPreviewRoom(this.roomsResult);
         const { sections, isFlatList } = computeSections(
-            this.roomsResult,
+            roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
         this.sections = sections;
@@ -904,7 +1050,7 @@ export class RoomListViewModel
         };
 
         const activeFilterId = this.activeFilter !== undefined ? filterKeyToIdMap.get(this.activeFilter) : undefined;
-        const isRoomListEmpty = this.roomsResult.sections.every((section) => section.rooms.length === 0);
+        const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
         const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
         const previousSections = this.snapshot.current.sections;
 

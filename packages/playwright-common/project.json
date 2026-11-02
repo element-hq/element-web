@@ -5,7 +5,7 @@
     "targets": {
         "build:playwright": {
             "cache": true,
-            "command": "tsc",
+            "command": "tsc -p tsconfig.build.json",
             "inputs": ["src"],
             "outputs": ["{projectRoot}/lib"],
             "options": { "cwd": "packages/playwright-common" },

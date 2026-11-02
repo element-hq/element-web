@@ -6,3 +6,5 @@
  */
 
 export * from "./html";
+export * from "./clipboard";
+export * from "./email";

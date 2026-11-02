@@ -6,12 +6,17 @@
  */
 
 /*
- * Element Call's stylesheet, pulled into its own cascade layer rather than imported unlayered, so that
- * it takes part in the layer order Element Web declares in `res/css/_index.pcss` instead of outranking
- * every layered rule in the app. `element-call` is the last layer, so Element Call still wins where it
- * redeclares something Element Web also sets (the Compound design tokens, notably).
+ * Element Call's stylesheet, imported unlayered on purpose. It declares cascade layers of its own: an
+ * element reset in `normalize` and base styles in `compound-legacy`, both of which Element Call expects
+ * to sit below Compound's component styles, with its own component styles unlayered on top. Importing it
+ * into a layer of Element Web's would nest those layers inside it and lift the reset above Compound's
+ * rules (`compound-web`), which then lose their padding, margins and fonts to it. Instead,
+ * `res/css/_index.pcss` declares `normalize` and `compound-legacy` ahead of Compound's layers, so the
+ * stylesheet falls into the same order it has in Element Call. Its unlayered rules, all scoped to the
+ * component's root element, win where Element Call redeclares something Element Web also sets (the
+ * Compound design tokens, notably).
  *
  * Imported from `WrappedElementCallComponent`, not from `_index.pcss`, to keep the stylesheet in the
  * component's lazily loaded chunk.
  */
-@import url("@element-hq/element-call-component/style.css") layer(element-call);
+@import url("@element-hq/element-call-component/style.css");

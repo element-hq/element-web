@@ -55,7 +55,7 @@ describe("UnverifiedSessionToast", () => {
 
     describe("when rendering the toast", () => {
         beforeEach(async () => {
-            showToast(otherDevice.device_id);
+            await showToast(otherDevice.device_id);
             await flushPromises();
         });
 

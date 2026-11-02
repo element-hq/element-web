@@ -14,16 +14,14 @@ import {
 } from "@element-hq/web-shared-components";
 import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, afterEach } from "vitest";
-import { flushPromises, mkEvent } from "test-utils";
+import { mkEvent } from "test-utils";
 
 import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { TextualBodyViewModel } from "./TextualBodyViewModel";
 import Modal from "../../../../../Modal";
 import dispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { IntegrationManagers } from "../../../../../integrations/IntegrationManagers";
 import * as permalinkUtils from "../../../../../utils/permalinks/Permalinks";
-import QuestionDialog from "../../../../../components/views/dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../../../../../components/views/dialogs/MessageEditHistoryDialog";
 
 describe("TextualBodyViewModel", () => {
@@ -92,9 +90,6 @@ describe("TextualBodyViewModel", () => {
             {
                 body: "waves",
                 msgtype: MsgType.Emote,
-                data: {
-                    "org.matrix.neb.starter_link": "https://scalar.example/starter",
-                },
             },
             { user: "@bob:example.com" },
         );
@@ -103,43 +98,30 @@ describe("TextualBodyViewModel", () => {
         vm.setEvent(emoteEvent);
 
         expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.EMOTE);
-        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.ACTION);
         expect(vm.getSnapshot().emoteSenderName).toBe("Bob");
     });
 
     it("updates wrapper state when the highlight link changes", () => {
-        const starterLinkEvent = createEvent({
-            body: "Open the integration",
-            msgtype: MsgType.Text,
-            data: {
-                "org.matrix.neb.starter_link": "https://scalar.example/starter",
-            },
-        });
-        const vm = createVm({ mxEvent: starterLinkEvent });
+        const vm = createVm();
 
-        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.ACTION);
+        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.NONE);
 
         vm.setHighlightLink("https://element.io");
         expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.LINK);
         expect(vm.getSnapshot().bodyLinkHref).toBe("https://element.io");
 
         vm.setHighlightLink(undefined);
-        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.ACTION);
+        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.NONE);
     });
 
-    it("uses the notice kind and no action wrapper for non-string starter links", () => {
+    it("uses the notice kind for notice messages", () => {
         const noticeEvent = createEvent({
             body: "Notice",
             msgtype: MsgType.Notice,
-            data: {
-                "org.matrix.neb.starter_link": 42,
-            },
         });
         const vm = createVm({ mxEvent: noticeEvent });
 
         expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.NOTICE);
-        expect(vm.getSnapshot().bodyWrapper).toBe(TextualBodyViewBodyWrapperKind.NONE);
-        expect(vm.getSnapshot().bodyActionAriaLabel).toBeUndefined();
     });
 
     it("updates the moderation marker from the dedicated setter", () => {
@@ -236,6 +218,46 @@ describe("TextualBodyViewModel", () => {
         expect(window.location.hash).toBe("#/room/#room:example.org");
     });
 
+    it("shows linkified user IDs in the right panel", () => {
+        const vm = createVm();
+        const preventDefault = vi.fn();
+        const dispatchSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
+
+        vm.onRootClick({
+            preventDefault,
+            target: {
+                dataset: {
+                    [LINKIFIED_DATA_ATTRIBUTE]: "true",
+                },
+                href: "https://matrix.to/#/@user:example.org",
+                nodeName: "A",
+            },
+        } as any);
+
+        expect(preventDefault).toHaveBeenCalled();
+        expect(dispatchSpy).toHaveBeenCalledWith({
+            action: Action.ViewUser,
+            member: expect.objectContaining({ userId: "@user:example.org" }),
+        });
+        expect(window.location.hash).toBe("");
+    });
+
+    it("ignores root clicks which were already handled", () => {
+        const vm = createVm();
+        const transformSpy = vi.spyOn(permalinkUtils, "tryTransformPermalinkToLocalHref");
+
+        vm.onRootClick({
+            defaultPrevented: true,
+            target: {
+                href: "https://matrix.to/#/@user:example.org",
+                nodeName: "A",
+            },
+        } as any);
+
+        expect(transformSpy).not.toHaveBeenCalled();
+        expect(window.location.hash).toBe("");
+    });
+
     it("leaves linkified ordinary links alone", () => {
         const vm = createVm();
         const preventDefault = vi.fn();
@@ -289,119 +311,6 @@ describe("TextualBodyViewModel", () => {
 
         expect(preventDefault).not.toHaveBeenCalled();
         expect(window.location.hash).toBe("");
-    });
-
-    it("does nothing for body actions without a starter link", () => {
-        const vm = createVm();
-        const preventDefault = vi.fn();
-        const hasManagerSpy = vi.spyOn(IntegrationManagers.sharedInstance(), "hasManager");
-
-        vm.onBodyActionClick({ preventDefault } as any);
-
-        expect(preventDefault).toHaveBeenCalled();
-        expect(hasManagerSpy).not.toHaveBeenCalled();
-    });
-
-    it("opens the no-manager dialog for starter links when integrations are unavailable", () => {
-        const vm = createVm({
-            mxEvent: createEvent({
-                body: "Open the integration",
-                msgtype: MsgType.Text,
-                data: {
-                    "org.matrix.neb.starter_link": "https://scalar.example/starter",
-                },
-            }),
-        });
-        const preventDefault = vi.fn();
-        const managers = IntegrationManagers.sharedInstance();
-        vi.spyOn(managers, "hasManager").mockReturnValue(false);
-        const openNoManagerDialogSpy = vi.spyOn(managers, "openNoManagerDialog").mockImplementation(() => {});
-
-        vm.onBodyActionClick({ preventDefault } as any);
-
-        expect(preventDefault).toHaveBeenCalled();
-        expect(openNoManagerDialogSpy).toHaveBeenCalled();
-    });
-
-    it("opens the scalar starter link after confirmation", async () => {
-        const vm = createVm({
-            mxEvent: createEvent({
-                body: "Open the integration",
-                msgtype: MsgType.Text,
-                data: {
-                    "org.matrix.neb.starter_link": "https://scalar.example/starter",
-                },
-            }),
-        });
-        const preventDefault = vi.fn();
-        const managers = IntegrationManagers.sharedInstance();
-        const connect = vi.fn().mockResolvedValue(undefined);
-        const getStarterLink = vi.fn().mockReturnValue("https://scalar.example/complete");
-        const scalarClient = { connect, getStarterLink };
-        const integrationManager = {
-            getScalarClient: vi.fn().mockReturnValue(scalarClient),
-            uiUrl: "https://scalar.example/ui",
-        };
-        const popup = { opener: "initial" };
-
-        vi.spyOn(managers, "hasManager").mockReturnValue(true);
-        vi.spyOn(managers, "getPrimaryManager").mockReturnValue(integrationManager as any);
-        vi.spyOn(Modal, "createDialog").mockReturnValue({
-            close: vi.fn(),
-            finished: Promise.resolve([true]),
-        } as any);
-        const openSpy = vi.spyOn(window, "open").mockImplementation(() => popup as any);
-
-        vm.onBodyActionClick({ preventDefault } as any);
-        await flushPromises();
-
-        expect(connect).toHaveBeenCalled();
-        expect(Modal.createDialog).toHaveBeenCalledWith(
-            QuestionDialog,
-            expect.objectContaining({
-                button: expect.any(String),
-                title: expect.any(String),
-            }),
-        );
-        expect(openSpy).toHaveBeenCalledWith(
-            "https://scalar.example/complete",
-            "_blank",
-            expect.stringContaining("width="),
-        );
-        expect(popup.opener).toBeNull();
-    });
-
-    it("does not open the scalar starter link when the dialog is cancelled", async () => {
-        const vm = createVm({
-            mxEvent: createEvent({
-                body: "Open the integration",
-                msgtype: MsgType.Text,
-                data: {
-                    "org.matrix.neb.starter_link": "https://scalar.example/starter",
-                },
-            }),
-        });
-        const managers = IntegrationManagers.sharedInstance();
-        const scalarClient = {
-            connect: vi.fn().mockResolvedValue(undefined),
-            getStarterLink: vi.fn().mockReturnValue("https://scalar.example/complete"),
-        };
-
-        vi.spyOn(managers, "hasManager").mockReturnValue(true);
-        vi.spyOn(managers, "getPrimaryManager").mockReturnValue({
-            getScalarClient: vi.fn().mockReturnValue(scalarClient),
-            uiUrl: "https://scalar.example/ui",
-        } as any);
-        vi.spyOn(Modal, "createDialog").mockReturnValue({
-            close: vi.fn(),
-            finished: Promise.resolve([false]),
-        } as any);
-        const openSpy = vi.spyOn(window, "open").mockImplementation(() => ({ opener: "initial" }) as any);
-
-        vm.onBodyActionClick({ preventDefault: vi.fn() } as any);
-        await flushPromises();
-
-        expect(openSpy).not.toHaveBeenCalled();
     });
 
     it("opens the edit history dialog from the edited marker", () => {

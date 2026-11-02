@@ -11,7 +11,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { act, render, screen } from "test-utils-rtl";
 import EventEmitter from "node:events";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import CompleteSecurity from "./CompleteSecurity";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
@@ -49,10 +49,10 @@ describe("CompleteSecurity", () => {
         vi.restoreAllMocks();
     });
 
-    it("Renders with a cancel button by default", () => {
+    it("should not render with a cancel button by default", () => {
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Skip verification for now" })).not.toBeInTheDocument();
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
@@ -81,7 +81,7 @@ describe("CompleteSecurity", () => {
 
     it("Renders a warning if user hits Reset", async () => {
         // Given there is no recovery key and no other devices
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
         const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} />));
 
@@ -89,8 +89,9 @@ describe("CompleteSecurity", () => {
         expect(screen.getByText("Use recovery key")).toHaveAttribute("aria-disabled", "true");
         expect(screen.getByText("Use another device")).toHaveAttribute("aria-disabled", "true");
 
-        // The "Can't confirm?" button is visible and enabled.
+        // The "Can't confirm?" button is visible, enabled and is primary.
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Can't confirm?" })).toHaveAttribute("data-kind", "primary");
 
         // And you also have the option to sign out
         expect(screen.queryByRole("button", { name: "Sign out" })).toBeInTheDocument();
@@ -105,7 +106,7 @@ describe("CompleteSecurity", () => {
 
     it("Allows verifying with another device if one is available", async () => {
         // Given there is no recovery key but there are other devices
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.hasDevicesToVerifyAgainst = true;
             store.phase = Phase.Intro;
@@ -121,19 +122,22 @@ describe("CompleteSecurity", () => {
         expect(screen.queryByRole("button", { name: "Use another device" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
 
+        // The "Can't confirm?" button is secondary because it is a last resort
+        expect(screen.queryByRole("button", { name: "Can't confirm?" })).toHaveAttribute("data-kind", "secondary");
+
         // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 
     it("Allows verifying with recovery key if one is available", async () => {
         // Given there are no other devices but there is a recovery key
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(store, "fetchKeyInfo").mockImplementation(async () => {
             store.keyInfo = {} as any;
             store.phase = Phase.Intro;
@@ -149,13 +153,16 @@ describe("CompleteSecurity", () => {
         expect(screen.queryByRole("button", { name: "Use recovery key" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Can't confirm?" })).toBeInTheDocument();
 
+        // The "Can't confirm?" button is secondary because it is a last resort
+        expect(screen.queryByRole("button", { name: "Can't confirm?" })).toHaveAttribute("data-kind", "secondary");
+
         // When we hit "Can't confirm?"
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
+            screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
     });
 });

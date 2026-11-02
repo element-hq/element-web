@@ -18,7 +18,7 @@ import { useTopic } from "./useTopic";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 describe("useTopic", () => {
-    it("should display the room topic", () => {
+    it("should display the room topic", async () => {
         stubClient();
         const room = new Room("!TESTROOM", MatrixClientPeg.safeGet(), "@alice:example.org");
         const topic = mkEvent({
@@ -32,7 +32,7 @@ describe("useTopic", () => {
             event: true,
         });
 
-        room.addLiveEvents([topic], { addToState: true });
+        await room.addLiveEvents([topic], { addToState: true });
 
         function RoomTopic() {
             const topic = useTopic(room);
@@ -54,8 +54,8 @@ describe("useTopic", () => {
             event: true,
         });
 
-        act(() => {
-            room.addLiveEvents([updatedTopic], { addToState: true });
+        await act(async () => {
+            await room.addLiveEvents([updatedTopic], { addToState: true });
         });
 
         expect(screen.queryByText("New topic")).toBeInTheDocument();

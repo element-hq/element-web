@@ -30,6 +30,8 @@ const MenuConfig = z.object({
     logo_href: z.optional(z.url()),
 });
 
+export type MenuConfig = z.infer<typeof MenuConfig>;
+
 const StaticConfig = z.extend(MenuConfig, {
     type: z.literal("static"),
 

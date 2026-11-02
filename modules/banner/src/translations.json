@@ -20,7 +20,7 @@
         "de": "Portal anzeigen"
     },
     "univention_error": {
-        "en": "Failed to load data from Univention",
-        "de": "Daten konnten nicht von Univention geladen werden"
+        "en": "Could not fetch central navigation from the portal",
+        "de": "Konnte die zentrale Navigation nicht aus dem Portal abrufen"
     }
 }

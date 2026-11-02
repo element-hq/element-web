@@ -17,6 +17,8 @@ import { advanceDateAndTime, stubClient, createTestClient } from "test-utils";
 import { type IMatrixClientPeg, MatrixClientPeg as peg } from "./MatrixClientPeg";
 import SdkConfig from "./SdkConfig";
 import { createClientWithCreds } from "./utils/createMatrixClient";
+import * as StorageManager from "./utils/StorageManager";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 
 vi.useFakeTimers();
 
@@ -112,11 +114,19 @@ describe("MatrixClientPeg", () => {
             expect(mockStartDehydration).toHaveBeenCalledWith({ onlyIfKeyCached: true, rehydrate: false });
         });
 
-        it("Should migrate existing login", async () => {
+        it("should initialise the rust crypto library for an existing login", async () => {
             const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
+        });
+
+        it("should refuse to start a session which still has an unmigrated legacy crypto store", async () => {
+            vi.spyOn(StorageManager, "hasUnmigratedLegacyCryptoStore").mockResolvedValue(true);
+            const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+
+            await expect(testPeg.start()).rejects.toThrow(LegacyCryptoStoreError);
+            expect(mockInitRustCrypto).not.toHaveBeenCalled();
         });
 
         it("should poll the client well-known by default", async () => {

@@ -55,7 +55,7 @@ const { vmState } = vi.hoisted(() => ({
     // snapshots by identity, so handing back a fresh object each call would loop.
     vmState: {
         snapshot: {} as Record<string, unknown>,
-        setRows(items: unknown[]) {
+        setRows(items: unknown[], extra: Record<string, unknown> = {}) {
             this.snapshot = {
                 items,
                 atLiveEnd: true,
@@ -65,13 +65,24 @@ const { vmState } = vi.hoisted(() => ({
                 canJumpToReadMarker: false,
                 numUnreadMessages: 0,
                 hasHighlights: false,
+                readReceiptsByEvent: new Map(),
+                lastSuccessfulEventId: null,
+                ...extra,
             };
         },
     },
 }));
 
+const { vmSpies } = vi.hoisted(() => ({
+    vmSpies: { setShowReadReceipts: vi.fn(), constructorOpts: [] as Record<string, unknown>[] },
+}));
+
 vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
     RoomTimelineViewModel: class {
+        public constructor(opts: Record<string, unknown>) {
+            vmSpies.constructorOpts.push(opts);
+        }
+        public setShowReadReceipts = vmSpies.setShowReadReceipts;
         public start = (): void => {};
         public dispose = (): void => {};
         public subscribe = (): (() => void) => (): void => {};
@@ -105,15 +116,28 @@ describe("<NewTimelinePanel />", () => {
         );
 
     /** Set the rows the timeline is given to draw. */
-    const withItems = (items: TimelineItem[]): void => {
-        vmState.setRows(items);
+    const withItems = (items: TimelineItem[], extra: Record<string, unknown> = {}): void => {
+        vmState.setRows(items, extra);
     };
+
+    /** A row for `mxEvent`, carrying the event as the view model's rows do. */
+    const eventRow = (mxEvent: MatrixEvent, extra: Partial<TimelineItem> = {}): TimelineItem =>
+        ({
+            key: mxEvent.getId()!,
+            kind: "event",
+            event: mxEvent,
+            continuation: false,
+            lastInSection: true,
+            ...extra,
+        }) as TimelineItem;
 
     beforeEach(() => {
         vi.restoreAllMocks();
         tileProps.current = [];
         rowsRendered.current = [];
         vmState.setRows([]);
+        vmSpies.setShowReadReceipts.mockReset();
+        vmSpies.constructorOpts = [];
         client = createTestClient();
         room = new Room(ROOM_ID, client, USER_ID, { pendingEventOrdering: PendingEventOrdering.Detached });
         vi.spyOn(client, "getRoom").mockReturnValue(room);
@@ -121,8 +145,8 @@ describe("<NewTimelinePanel />", () => {
         room.getUnfilteredTimelineSet().addLiveEvent(event, { addToState: false });
     });
 
-    it("draws a row for a message in the room", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+    it("draws the event the row carries", () => {
+        withItems([eventRow(event)]);
 
         renderPanel();
 
@@ -130,14 +154,32 @@ describe("<NewTimelinePanel />", () => {
         expect(tileProps.current[0].mxEvent).toBe(event);
     });
 
-    it("skips a row whose event is no longer in the room instead of failing", () => {
-        withItems([{ key: "$gone", kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+    it("draws a row whose event the room no longer has", () => {
+        // A gappy sync resets the room's timeline, dropping every loaded event; the rows the view
+        // model last published still hold theirs, and are drawn until it publishes new ones.
+        const gone = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "gone", event: true });
+        expect(room.findEventById(gone.getId()!)).toBeUndefined();
+        withItems([eventRow(gone)]);
 
         renderPanel();
 
-        // The row is simply absent; rendering the rest of the timeline still succeeded.
-        expect(screen.queryByTestId("event-row")).toBeNull();
-        expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
+        expect(tileProps.current[0].mxEvent).toBe(gone);
+    });
+
+    it("passes the row's send state to the tile", () => {
+        withItems([eventRow(event, { sendState: "failed" })]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBe("failed");
+    });
+
+    it("gives a delivered message no send state", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBeUndefined();
     });
 
     it('labels the read marker "New"', () => {
@@ -174,7 +216,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("falls back to the modern layout when IRC is selected", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel({ layout: Layout.IRC });
 
@@ -182,7 +224,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("passes the message layout through unchanged", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel({ layout: Layout.Bubble });
 
@@ -193,10 +235,7 @@ describe("<NewTimelinePanel />", () => {
         const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
         room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
         const editState = new EditorStateTransfer(event);
-        withItems([
-            { key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
-            { key: other.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
-        ]);
+        withItems([eventRow(event), eventRow(other)]);
 
         renderPanel({ editState });
 
@@ -214,7 +253,7 @@ describe("<NewTimelinePanel />", () => {
     });
 
     it("lets tiles look up relations, so reactions can render", () => {
-        withItems([{ key: event.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem]);
+        withItems([eventRow(event)]);
 
         renderPanel();
 
@@ -227,5 +266,57 @@ describe("<NewTimelinePanel />", () => {
         // Nothing has reacted, so there are no relations to find — but the lookup
         // has to reach the room without throwing.
         expect(getRelationsForEvent(event.getId()!, "m.annotation", "m.reaction")).toBeUndefined();
+    });
+
+    describe("read receipts", () => {
+        const eventRow = (): TimelineItem =>
+            ({ key: event.getId()!, kind: "event", continuation: false, lastInSection: true }) as TimelineItem;
+
+        it("renders receipts provided by the view model", () => {
+            const receipts = [{ userId: "@bob:example.org", roomMember: null, ts: 1000 }];
+            withItems([eventRow()], { readReceiptsByEvent: new Map([[event.getId()!, receipts]]) });
+
+            renderPanel();
+
+            expect(tileProps.current[0].readReceipts).toBe(receipts);
+            expect(tileProps.current[0].showReadReceipts).toBe(true);
+            // Shared by every tile so an avatar can animate from its old row to its new one.
+            expect(tileProps.current[0].readReceiptMap).toEqual({});
+        });
+
+        it('puts the "Sent" tick only on the message the view model chose', () => {
+            const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
+            room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
+            withItems(
+                [
+                    eventRow(),
+                    { key: other.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
+                ],
+                { lastSuccessfulEventId: other.getId() },
+            );
+
+            renderPanel();
+
+            expect(tileProps.current[0].lastSuccessful).toBe(false);
+            expect(tileProps.current[1].lastSuccessful).toBe(true);
+        });
+
+        it("follows the room's read receipts setting", () => {
+            withItems([eventRow()]);
+
+            const { rerender } = renderPanel({ showReadReceipts: false });
+            expect(vmSpies.constructorOpts[0].showReadReceipts).toBe(false);
+            expect(tileProps.current[0].showReadReceipts).toBe(false);
+
+            rerender(
+                <MatrixClientContext.Provider value={client}>
+                    <SDKContext.Provider value={new TestSDKContext()}>
+                        <NewTimelinePanel room={room} showReadReceipts={true} />
+                    </SDKContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+
+            expect(vmSpies.setShowReadReceipts).toHaveBeenLastCalledWith(true);
+        });
     });
 });

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+import { rejectToastIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import type { Preset, RoomMemberEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
@@ -32,6 +32,14 @@ test.describe("Cryptography", function () {
     test.describe("decryption failure messages", () => {
         test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
 
+        // This test logs in again and skips verification to check how undecryptable
+        // history is shown, so opt out of the (now default) forced verification.
+        test.use({
+            config: {
+                force_verification: false,
+            },
+        });
+
         test(
             "should handle device-relative historical messages",
             { tag: "@screenshot" },
@@ -48,11 +56,7 @@ test.describe("Cryptography", function () {
                 // Log in again, and see how the message looks.
                 await logIntoElement(page, credentials);
                 // Dismiss the "Back up your chats" toast, otherwise it gets in the way of clicking the room list
-                await page
-                    .getByRole("alert")
-                    .filter({ hasText: "Back up your chats" })
-                    .getByRole("button", { name: "Dismiss" })
-                    .click();
+                await rejectToast(page, "Back up your chats");
                 await app.viewRoomByName("Test room");
                 const lastTile = page.locator(".mx_EventTile").last();
                 await expect(lastTile).toContainText("Historical messages are not available on this device");
@@ -166,6 +170,8 @@ test.describe("Cryptography", function () {
 
                 // Alice accepts the invite
                 await app.acceptInvitedRoomByName("Test room");
+                // Wait until we're joined, otherwise Bob's messages may land before our join event
+                await expect(page.locator(`.mx_EventTile`).getByText("Alice joined the room")).toBeVisible();
 
                 // Bob sends an encrypted event and an undecryptable event
                 await bob.evaluate(

@@ -14,7 +14,7 @@ import { initSentry } from "./sentry";
 
 vi.mock("@sentry/browser", () => ({
     init: vi.fn(),
-    inboundFiltersIntegration: vi.fn().mockReturnValue({ name: "InboundFilters" }),
+    eventFiltersIntegration: vi.fn().mockReturnValue({ name: "EventFilters" }),
     functionToStringIntegration: vi.fn().mockReturnValue({ name: "FunctionToString" }),
     breadcrumbsIntegration: vi.fn().mockReturnValue({ name: "Breadcrumbs" }),
     httpContextIntegration: vi.fn().mockReturnValue({ name: "HttpContext" }),

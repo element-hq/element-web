@@ -34,7 +34,7 @@ test.describe("Logout tests", () => {
         ).toBeVisible();
     });
 
-    test("If backup is set up show standard confirm", async ({ page, app }) => {
+    test("If recovery is set up remind the user to check their recovery key", async ({ page, app }) => {
         await enableKeyBackup(app);
 
         await createRoom(page, "E2e room", true);
@@ -48,7 +48,11 @@ test.describe("Logout tests", () => {
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
-        await expect(currentDialogLocator.getByText("Are you sure you want to Remove this device?")).toBeVisible();
+        await expect(
+            currentDialogLocator.getByRole("heading", {
+                name: "Make sure you have access to your recovery key before removing this device",
+            }),
+        ).toBeVisible();
     });
 
     test("Ask to set up recovery on logout even if not in encrypted room", async ({ page, app }) => {
@@ -65,5 +69,23 @@ test.describe("Logout tests", () => {
         await expect(
             currentDialogLocator.getByRole("heading", { name: "You're about to lose access to your encrypted chats" }),
         ).toBeVisible();
+    });
+
+    test("Get a recovery key without leaving the logout dialog", async ({ page, app }) => {
+        const locator = await app.settings.openUserMenu();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
+
+        const dialog = page.getByRole("dialog", { name: "Remove this device" });
+        await dialog.getByRole("button", { name: "Get recovery key" }).click();
+
+        const recoveryKey = await dialog.getByTestId("recoveryKey").innerText();
+        await dialog.getByRole("button", { name: "Continue" }).click();
+        await dialog.getByRole("textbox").fill(recoveryKey);
+        await dialog.getByRole("button", { name: "Finish set up" }).click();
+        await expect(dialog.getByRole("heading", { name: "Your new recovery key is now active" })).toBeVisible();
+
+        await dialog.getByRole("button", { name: "Continue to remove this device" }).click();
+        await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
     });
 });

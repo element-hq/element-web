@@ -16,10 +16,10 @@ import FilteredDeviceListHeader from "./FilteredDeviceListHeader";
 
 describe("<FilteredDeviceListHeader />", () => {
     const defaultProps = {
-        "selectedDeviceCount": 0,
-        "isAllSelected": false,
-        "toggleSelectAll": vi.fn(),
-        "children": <div>test</div>,
+        selectedDeviceCount: 0,
+        isAllSelected: false,
+        toggleSelectAll: vi.fn(),
+        children: <div>test</div>,
         ["data-testid"]: "test123",
     };
     const getComponent = (props = {}) => <FilteredDeviceListHeader {...defaultProps} {...props} />;
@@ -36,7 +36,7 @@ describe("<FilteredDeviceListHeader />", () => {
 
     it("renders correctly when some devices are selected", () => {
         const { getByText } = render(getComponent({ selectedDeviceCount: 2 }));
-        expect(getByText("2 sessions selected")).toBeTruthy();
+        expect(getByText("2 devices selected")).toBeTruthy();
     });
 
     it("clicking checkbox toggles selection", () => {

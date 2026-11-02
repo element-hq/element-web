@@ -1,0 +1,139 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+/*
+ * The document's own markup has no classes of ours, since it comes out of a Markdown renderer, so it
+ * is styled by element under `.content`. The frame around it comes from DocumentViewerView.
+ */
+
+/* Fills the shell's document surface, which is the positioning context. */
+.content {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    padding: var(--cpd-space-4x);
+    background: var(--cpd-color-bg-canvas-default);
+    font: var(--cpd-font-body-md-regular);
+    /* Long URLs and identifiers must not force the panel wider. */
+    overflow-wrap: anywhere;
+}
+
+.content > :first-child {
+    margin-top: 0;
+}
+
+.content > :last-child {
+    margin-bottom: 0;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+    margin: var(--cpd-space-6x) 0 var(--cpd-space-2x);
+}
+
+.content h1 {
+    font: var(--cpd-font-heading-lg-semibold);
+}
+
+.content h2 {
+    font: var(--cpd-font-heading-md-semibold);
+}
+
+.content h3 {
+    font: var(--cpd-font-heading-sm-semibold);
+}
+
+.content h4,
+.content h5,
+.content h6 {
+    font: var(--cpd-font-body-md-semibold);
+}
+
+.content p,
+.content ul,
+.content ol,
+.content blockquote,
+.content pre,
+.content table,
+.content details {
+    margin: 0 0 var(--cpd-space-3x);
+}
+
+.content ul,
+.content ol {
+    padding-inline-start: var(--cpd-space-6x);
+}
+
+.content li + li {
+    margin-top: var(--cpd-space-1x);
+}
+
+.content a {
+    color: var(--cpd-color-text-link-external);
+}
+
+.content code {
+    padding: 0 var(--cpd-space-1x);
+    font-family: var(--cpd-font-family-mono);
+    font-size: 0.9em;
+    background: var(--cpd-color-bg-subtle-secondary);
+    border-radius: var(--cpd-space-1x);
+}
+
+.content pre {
+    padding: var(--cpd-space-3x);
+    overflow-x: auto;
+    background: var(--cpd-color-bg-subtle-secondary);
+    border-radius: var(--cpd-space-2x);
+}
+
+.content pre code {
+    padding: 0;
+    font-size: inherit;
+    background: none;
+    border-radius: 0;
+}
+
+.content blockquote {
+    padding: 0 0 0 var(--cpd-space-3x);
+    color: var(--cpd-color-text-secondary);
+    border-left: var(--cpd-border-width-4) solid var(--cpd-color-border-interactive-secondary);
+}
+
+.content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+}
+
+.content th,
+.content td {
+    padding: var(--cpd-space-1x) var(--cpd-space-2x);
+    text-align: start;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+}
+
+.content th {
+    font: var(--cpd-font-body-md-semibold);
+    background: var(--cpd-color-bg-subtle-secondary);
+}
+
+.content hr {
+    margin: var(--cpd-space-4x) 0;
+    border: none;
+    border-top: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+}
+
+.content img {
+    max-width: 100%;
+    height: auto;
+}

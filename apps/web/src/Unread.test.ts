@@ -132,7 +132,7 @@ describe("Unread", () => {
         });
 
         describe("when there is an initial event in the room", () => {
-            beforeEach(() => {
+            beforeEach(async () => {
                 event = mkEvent({
                     event: true,
                     type: "m.room.message",
@@ -140,7 +140,7 @@ describe("Unread", () => {
                     room: roomId,
                     content: {},
                 });
-                room.addLiveEvents([event], { addToState: true });
+                await room.addLiveEvents([event], { addToState: true });
 
                 // Don't care about the code path of hidden events.
                 vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
@@ -150,7 +150,7 @@ describe("Unread", () => {
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
 
-            it("returns false for a room when the latest event was sent by the current user", () => {
+            it("returns false for a room when the latest event was sent by the current user", async () => {
                 event = mkEvent({
                     event: true,
                     type: "m.room.message",
@@ -159,7 +159,7 @@ describe("Unread", () => {
                     content: {},
                 });
                 // Only for timeline events.
-                room.addLiveEvents([event], { addToState: true });
+                await room.addLiveEvents([event], { addToState: true });
 
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
             });
@@ -181,7 +181,7 @@ describe("Unread", () => {
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
             });
 
-            it("returns true for a room when the read receipt is earlier than the latest event", () => {
+            it("returns true for a room when the read receipt is earlier than the latest event", async () => {
                 const receipt = new MatrixEvent({
                     type: "m.receipt",
                     room_id: "!foo:bar",
@@ -203,7 +203,7 @@ describe("Unread", () => {
                     content: {},
                 });
                 // Only for timeline events.
-                room.addLiveEvents([event2], { addToState: true });
+                await room.addLiveEvents([event2], { addToState: true });
 
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
@@ -393,7 +393,7 @@ describe("Unread", () => {
             });
         });
 
-        it("returns true for a room that only contains a hidden event", () => {
+        it("returns true for a room that only contains a hidden event", async () => {
             const redactedEvent = mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -405,7 +405,7 @@ describe("Unread", () => {
             redactedEvent.makeRedacted(redactedEvent, room);
             console.log("Event Id", redactedEvent.getId());
             // Only for timeline events.
-            room.addLiveEvents([redactedEvent], { addToState: true });
+            await room.addLiveEvents([redactedEvent], { addToState: true });
 
             expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             expect(logger.warn).toHaveBeenCalledWith(
@@ -442,7 +442,7 @@ describe("Unread", () => {
         });
 
         describe("with a single event on the main timeline", () => {
-            beforeEach(() => {
+            beforeEach(async () => {
                 event = mkEvent({
                     event: true,
                     type: "m.room.message",
@@ -450,7 +450,7 @@ describe("Unread", () => {
                     room: roomId,
                     content: {},
                 });
-                room.addLiveEvents([event], { addToState: true });
+                await room.addLiveEvents([event], { addToState: true });
             });
 
             it("an unthreaded receipt for the event makes the room read", () => {
@@ -495,7 +495,7 @@ describe("Unread", () => {
         describe("with an event on the main timeline and a later one in a thread", () => {
             let threadEvent: MatrixEvent;
 
-            beforeEach(() => {
+            beforeEach(async () => {
                 const { events } = makeThreadEvents({
                     roomId: roomId,
                     authorId: aliceId,
@@ -504,7 +504,7 @@ describe("Unread", () => {
                     ts: 100,
                     currentUserId: myId,
                 });
-                room.addLiveEvents(events, { addToState: true });
+                await room.addLiveEvents(events, { addToState: true });
                 threadEvent = events[1];
             });
 
@@ -546,7 +546,7 @@ describe("Unread", () => {
             vi.mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
         });
 
-        it("returns false when no threads", () => {
+        it("returns false when no threads", async () => {
             expect(doesRoomHaveUnreadThreads(room)).toBe(false);
 
             // Add event to the room
@@ -557,7 +557,7 @@ describe("Unread", () => {
                 room: roomId,
                 content: {},
             });
-            room.addLiveEvents([event], { addToState: true });
+            await room.addLiveEvents([event], { addToState: true });
 
             // It still returns false
             expect(doesRoomHaveUnreadThreads(room)).toBe(false);

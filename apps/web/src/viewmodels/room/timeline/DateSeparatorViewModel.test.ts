@@ -83,9 +83,10 @@ describe("DateSeparatorViewModel", () => {
         vi.setSystemTime(nowDate.getTime());
         watchCallbacks.clear();
 
-        vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((key: string): any => {
             if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
             if (key === "feature_jump_to_date") return false;
+            if (key === "language") return "en-US";
             return undefined;
         });
         vi.mocked(SettingsStore).watchSetting.mockImplementation((settingName, _roomId, cb): any => {

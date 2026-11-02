@@ -7,10 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useState } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Button, Text } from "@vector-im/compound-web";
+import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
@@ -29,9 +32,22 @@ import { useHasOtherVerifiedDevices } from "../../../hooks/useHasOtherVerifiedDe
 import { EncryptionCard } from "../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../settings/encryption/EncryptionCardEmphasisedContent";
+import { type State as EncryptionState } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import { ChangeRecoveryKeyBody } from "../settings/encryption/ChangeRecoveryKeyBody";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {
     onFinished: (success: boolean) => void;
+}
+
+/** The recovery key steps the dialog can show. */
+enum Step {
+    /** The starting screen, chosen from the device's backup and verification state. */
+    Start = "start",
+    /** The user is creating a new recovery key from the starting screen. Cancelling returns to {@link Step.Start}. */
+    GenerateKey = "generate_key",
+    /** Shown after {@link Step.GenerateKey} succeeds, confirming the new key is set up before the user signs out. */
+    KeyActive = "key_active",
 }
 
 /**
@@ -48,6 +64,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     const client = MatrixClientPeg.safeGet();
     const backupStatus = useKeyBackupStatus(client);
     const hasOtherVerifiedDevices = useHasOtherVerifiedDevices(client);
+    const [step, setStep] = useState<Step>(Step.Start);
 
     const onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
@@ -63,19 +80,67 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(true);
     };
 
-    const onGoToSettings = (): void => {
-        // Open the user settings dialog to the encryption tab and start the flow to get recovery key
+    /**
+     * Open the user settings dialog to the encryption tab in the given state, and close this dialog.
+     */
+    const openSettingsWithState = (initialEncryptionState: EncryptionState): void => {
         const payload: OpenToTabPayload = {
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Encryption,
-            props: {
-                initialEncryptionState: "set_recovery_key",
-            },
+            props: { initialEncryptionState },
         };
         dis.dispatch(payload);
 
         props.onFinished(false);
     };
+
+    if (step === Step.GenerateKey) {
+        return (
+            <BaseDialog
+                contentId="mx_Dialog_content"
+                hasCancel={true}
+                onFinished={onFinished}
+                className="mx_LogoutDialog"
+                aria-label={_t("action|sign_out")}
+            >
+                <MatrixClientContext.Provider value={client}>
+                    <ChangeRecoveryKeyBody
+                        userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
+                        className="mx_EncryptionCard_noBorder"
+                        onCancelClick={() => setStep(Step.Start)}
+                        onFinish={() => setStep(Step.KeyActive)}
+                    />
+                </MatrixClientContext.Provider>
+            </BaseDialog>
+        );
+    } else if (step === Step.KeyActive) {
+        return (
+            <BaseDialog
+                contentId="mx_Dialog_content"
+                hasCancel={true}
+                onFinished={onFinished}
+                className="mx_LogoutDialog"
+                aria-label={_t("action|sign_out")}
+            >
+                <EncryptionCard
+                    Icon={CheckCircleIcon}
+                    success={true}
+                    title={_t("settings|encryption|recovery|key_active_title")}
+                    className="mx_EncryptionCard_noBorder"
+                >
+                    <EncryptionCardEmphasisedContent>
+                        <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
+                    </EncryptionCardEmphasisedContent>
+                    <EncryptionCardButtons>
+                        <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
+                        <Button kind="tertiary" onClick={() => props.onFinished(false)}>
+                            {_t("auth|logout_dialog|back_to_app")}
+                        </Button>
+                    </EncryptionCardButtons>
+                </EncryptionCard>
+            </BaseDialog>
+        );
+    }
 
     if (hasOtherVerifiedDevices === undefined) {
         return <Loading onFinished={onFinished} />;
@@ -87,8 +152,40 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             return <Loading onFinished={onFinished} />;
 
         case BackupStatus.NO_CRYPTO:
-        case BackupStatus.BACKUP_ACTIVE:
             return <ConfirmLogout onFinished={onFinished} />;
+
+        case BackupStatus.BACKUP_ACTIVE:
+            // Only device, but recovery is set up: make sure the user still has their recovery key
+            return (
+                <BaseDialog
+                    contentId="mx_Dialog_content"
+                    hasCancel={true}
+                    onFinished={onFinished}
+                    className="mx_LogoutDialog"
+                    aria-label={_t("action|sign_out")}
+                >
+                    <EncryptionCard
+                        Icon={InfoIcon}
+                        title={_t("auth|logout_dialog|check_recovery_key_title")}
+                        className="mx_EncryptionCard_noBorder"
+                    >
+                        <EncryptionCardEmphasisedContent>
+                            <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
+                        </EncryptionCardEmphasisedContent>
+                        <EncryptionCardButtons>
+                            <Button destructive={true} onClick={onLogoutConfirm} Icon={DeleteIcon}>
+                                {_t("auth|logout_dialog|continue")}
+                            </Button>
+                            <Button kind="secondary" onClick={() => openSettingsWithState("main")}>
+                                {_t("auth|logout_dialog|check_recovery_key")}
+                            </Button>
+                            <Button kind="tertiary" onClick={() => setStep(Step.GenerateKey)}>
+                                {_t("auth|logout_dialog|generate_recovery_key")}
+                            </Button>
+                        </EncryptionCardButtons>
+                    </EncryptionCard>
+                </BaseDialog>
+            );
 
         case BackupStatus.NO_BACKUP:
         case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
@@ -100,6 +197,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                     hasCancel={true}
                     onFinished={onFinished}
                     className="mx_LogoutDialog"
+                    aria-label={_t("action|sign_out")}
                 >
                     <EncryptionCard
                         Icon={ErrorIcon}
@@ -114,7 +212,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                             </Text>
                         </EncryptionCardEmphasisedContent>
                         <EncryptionCardButtons>
-                            <Button onClick={onGoToSettings} Icon={KeyIcon}>
+                            <Button onClick={() => setStep(Step.GenerateKey)} Icon={KeyIcon}>
                                 {_t("settings|encryption|recovery|set_up_recovery")}
                             </Button>
                             <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
@@ -153,8 +251,9 @@ function ConfirmLogout(props: SubComponentProps): JSX.Element {
     return (
         <QuestionDialog
             hasCancelButton={true}
-            title={_t("action|sign_out")}
-            description={_t("auth|logout_dialog|description")}
+            danger={true}
+            title={_t("auth|logout_dialog|description")}
+            description={_t("auth|logout_dialog|keep_access_description")}
             button={_t("action|sign_out")}
             onFinished={props.onFinished}
         />

@@ -60,7 +60,7 @@ describe("MemberTileView", () => {
             );
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
-                expect(screen.getByText("This user has not verified all of their sessions.")).toBeInTheDocument();
+                expect(screen.getByText("This user has not verified all of their devices.")).toBeInTheDocument();
             });
             expect(container).toMatchSnapshot();
         });
@@ -85,7 +85,7 @@ describe("MemberTileView", () => {
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
                 expect(
-                    screen.getByText("You have verified this user. This user has verified all of their sessions."),
+                    screen.getByText("You have verified this user. This user has verified all of their devices."),
                 ).toBeInTheDocument();
             });
             expect(container).toMatchSnapshot();

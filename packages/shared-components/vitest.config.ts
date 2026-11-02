@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig } from "vitest/config";
+import type { BrowserCommand } from "vitest/node";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
@@ -33,6 +34,15 @@ const commonLaunchOptions = {
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Move the real pointer to the bottom-right corner of the page, outside the test iframe,
+ * so that nothing a test renders is hovered unless the test hovers it itself.
+ */
+const parkPointer: BrowserCommand = async ({ page }) => {
+    const size = page.viewportSize();
+    if (size) await page.mouse.move(size.width - 1, size.height - 1);
+};
 
 export default defineConfig({
     test: {
@@ -108,6 +118,7 @@ export default defineConfig({
                             launchOptions: commonLaunchOptions,
                         }),
                         instances: [{ browser: "chromium" }],
+                        commands: { parkPointer },
                     },
                     setupFiles: ["src/test/setupTests.ts"],
                 },

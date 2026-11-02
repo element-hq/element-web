@@ -207,7 +207,7 @@ describe("<UserOptionsSection />", () => {
         vi.spyOn(Modal, "createDialog");
 
         const { result } = renderUserInfoBasicOptionsViewModelHook();
-        result.current.onInviteUserButton("roomId", new Event("click"));
+        const prom = result.current.onInviteUserButton("roomId", new Event("click"));
 
         // check that we have called .invite
         expect(spy).toHaveBeenCalledWith([defaultMember.userId]);
@@ -219,5 +219,6 @@ describe("<UserOptionsSection />", () => {
                 title: "Failed to invite",
             });
         });
+        await prom;
     });
 });

@@ -27,6 +27,7 @@ import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 
 export interface MatrixClientPegAssignOpts {
     /**
@@ -309,6 +310,12 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         if (!opts.rustCryptoStoreKey && !opts.rustCryptoStorePassword) {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
+        }
+
+        // Sessions which still hold a legacy (libolm) crypto store were never migrated to the rust
+        // crypto stack, and we no longer have any way to migrate them. Bail out.
+        if (await StorageManager.hasUnmigratedLegacyCryptoStore()) {
+            throw new LegacyCryptoStoreError();
         }
 
         await this.matrixClient.initRustCrypto({

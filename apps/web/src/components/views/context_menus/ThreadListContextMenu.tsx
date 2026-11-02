@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { useCallback, useContext, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LinkIcon, OverflowHorizontalIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { copyPlaintext } from "../../../utils/strings";
 import { ChevronFace, ContextMenuTooltipButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
@@ -66,7 +66,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                 evt?.preventDefault();
                 evt?.stopPropagation();
                 const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
-                await copyPlaintext(matrixToUrl);
+                await copyPlainTextToClipboard(matrixToUrl);
                 closeThreadOptions();
             }
         },

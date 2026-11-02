@@ -27,6 +27,10 @@
         "yes": "Igen"
     },
     "confirm_quit": "Biztos, hogy kilép?",
+    "download": {
+        "unable_to_open_description": "A fájl nem nyitható meg. Lehet, hogy áthelyezték vagy törölték.",
+        "unable_to_open_title": "Nem lehet megnyitni a fájlt"
+    },
     "edit_menu": {
         "speech": "Beszéd",
         "speech_start_speaking": "Kezdjen beszélni",
@@ -43,8 +47,7 @@
     "icon_overlay": {
         "description_error": "Hiba",
         "description_notifications": {
-            "one": "%(count)s olvasatlan értesítése van.",
-            "other": "%(count)s olvasatlan értesítése van."
+            "%(count)s olvasatlan értesítése van.": "other"
         }
     },
     "menu": {
@@ -52,6 +55,11 @@
         "hide_others": "Mások elrejtése",
         "services": "Szolgáltatás",
         "unhide": "Felfedés"
+    },
+    "renderer_crash": {
+        "detail": "A folytatáshoz lépjen ki és nyissa meg újra az alkalmazást. Ha ez továbbra is fennáll, akkor a számítógép újraindítása vagy a gyorsítótár ürítése segíthet.",
+        "message": "Az %(brand)s többször helyreállt egy problémából, de mivel ez mindig megtörténik, így feladta a próbálkozást.",
+        "title": "Az %(brand)s folyamatosan összeomlik"
     },
     "right_click_menu": {
         "add_to_dictionary": "Hozzáadás a szótárhoz",
@@ -61,7 +69,11 @@
         "copy_link_url": "Hivatkozás másolása",
         "save_image_as": "Kép mentése másként…",
         "save_image_as_error_description": "A kép mentése sikertelen",
-        "save_image_as_error_title": "Kép mentése sikertelen"
+        "save_image_as_error_title": "Nem sikerült a kép mentése"
+    },
+    "save_dialog": {
+        "all_files": "Összes fájl",
+        "named_file_type": "%(extension)s fájl"
     },
     "store": {
         "error": {

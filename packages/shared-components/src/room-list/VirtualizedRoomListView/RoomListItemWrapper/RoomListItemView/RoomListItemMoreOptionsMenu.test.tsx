@@ -175,7 +175,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const button = screen.getByRole("button", { name: "More Options" });
         await user.click(button);
 
-        expect(screen.getByRole("menuitem", { name: "Copy room link" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Copy link" })).toBeInTheDocument();
     });
 
     it("should call onCopyRoomLink when copy link clicked", async () => {
@@ -185,7 +185,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const button = screen.getByRole("button", { name: "More Options" });
         await user.click(button);
 
-        const copyLinkOption = screen.getByRole("menuitem", { name: "Copy room link" });
+        const copyLinkOption = screen.getByRole("menuitem", { name: "Copy link" });
         await user.click(copyLinkOption);
 
         expect(mockCallbacks.onCopyRoomLink).toHaveBeenCalled();

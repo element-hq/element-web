@@ -33,7 +33,6 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "./Call";
-import WidgetStore from "../stores/WidgetStore";
 import { WidgetMessagingStore } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
@@ -80,8 +79,8 @@ async function connect(call: Call, widgetApi: Mocked<ClientWidgetApi>, startWidg
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionConnect();
-    await Promise.all([...(startWidget ? [call.start()] : []), runTimers()]);
+    const sessionPromise = sessionConnect();
+    await Promise.all([...(startWidget ? [call.start()] : []), runTimers(), sessionPromise]);
 }
 
 async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promise<void> {
@@ -95,10 +94,10 @@ async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promi
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionDisconnect();
+    const sessionPromise = sessionDisconnect();
     const promise = call.disconnect();
-    runTimers();
-    await promise;
+    const timersPromise = runTimers();
+    await Promise.all([promise, timersPromise, sessionPromise]);
 }
 
 const cleanUpCallAndWidget = (call: Call, widget: Widget) => {
@@ -782,7 +781,7 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when answering DMs", async () => {
-            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            roomSession.memberships = [{} as CallMembership]; // Remote party is already there
             getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
                 room.roomId === roomId ? "any-user" : undefined,
             );
@@ -795,7 +794,6 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when creating a non-DM call", async () => {
-            roomSession.getOldestMembership.mockReturnValue(undefined);
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -805,7 +803,7 @@ describe("ElementCall", () => {
         });
 
         it("requests correct intent when joining a non-DM call", async () => {
-            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            roomSession.memberships = [{} as CallMembership]; // Remote party is already there
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -1058,25 +1056,6 @@ describe("ElementCall", () => {
             call.destroy();
             expect(destroyPersistentWidgetSpy).toHaveBeenCalled();
         });
-
-        it("the perParticipantE2EE url flag is used in encrypted rooms while respecting the feature_disable_call_per_sender_encryption flag", async () => {
-            // We destroy the call created in beforeEach because we test the call creation process.
-            call.destroy();
-            const addWidgetSpy = vi.spyOn(WidgetStore.instance, "addVirtualWidget");
-            // If a room is not encrypted we will never add the perParticipantE2EE flag.
-            const roomSpy = vi.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
-
-            // should create call with perParticipantE2EE flag
-            ElementCall.create(room);
-            expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(true);
-
-            // should create call without perParticipantE2EE flag
-            enabledSettings.add("feature_disable_call_per_sender_encryption");
-            expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(false);
-            enabledSettings.delete("feature_disable_call_per_sender_encryption");
-            roomSpy.mockRestore();
-            addWidgetSpy.mockRestore();
-        });
     });
 
     describe("instance in a video room", () => {
@@ -1189,6 +1168,22 @@ describe("ElementCall with the React component embedding", () => {
         expect(onClose).toHaveBeenCalledTimes(1);
     });
 
+    it("keeps a joined call that leaves the room view before its membership arrives", () => {
+        // As when the call moves into a Picture-in-Picture window right after joining
+        const onDestroy = vi.fn();
+        call.on(CallEvent.Destroy, onDestroy);
+        call.presented = true;
+        call.handleJoined();
+
+        call.presented = false;
+        expect(onDestroy).not.toHaveBeenCalled();
+        expect(call.connectionState).toBe(ConnectionState.Connected);
+
+        // Hanging up with still nobody in the call ends it
+        call.handleHangup();
+        expect(onDestroy).toHaveBeenCalledTimes(1);
+    });
+
     it("waits for a fresh component after closing", async () => {
         call.markReady();
         await call.start({});
@@ -1240,7 +1235,6 @@ describe("ElementCall with the React component embedding", () => {
             expect(config).toMatchObject({
                 skipLobby: true,
                 background: "solid",
-                perParticipantE2EE: false,
             });
             expect(config.returnToLobby).toBeUndefined();
         });

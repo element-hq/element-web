@@ -140,7 +140,7 @@ describe("MessageEvent", () => {
         const result = renderMessageEvent();
 
         expect(result.getByText(/You have ignored this user, so their message is hidden\./)).toBeInTheDocument();
-        const allowButton = result.getByRole("button", { name: "Show anyways." });
+        const allowButton = result.getByRole("button", { name: "Show anyway." });
 
         fireEvent.click(allowButton);
 

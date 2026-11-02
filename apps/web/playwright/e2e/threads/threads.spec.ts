@@ -257,7 +257,7 @@ test.describe("Threads", () => {
         await expect(locator.getByText("How are things?")).toBeAttached();
 
         locator = page.getByRole("banner").getByRole("button", { name: "Threads" });
-        await expect(locator).toHaveAttribute("data-indicator", "success"); // User asserts thread list unread indicator
+        await expect(locator).toHaveAttribute("data-indicator", "accent"); // User asserts thread list unread indicator
         await locator.click(); // User opens thread list
 
         // User asserts thread with correct root & latest events & unread dot

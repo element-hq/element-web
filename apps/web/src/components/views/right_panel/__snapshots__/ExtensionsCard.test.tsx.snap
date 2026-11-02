@@ -13,7 +13,7 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Extensions
@@ -21,7 +21,7 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -29,7 +29,7 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -47,11 +47,11 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -72,7 +72,7 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
         Add extensions
       </button>
       <div
-        class="_flex_4dswl_9 mx_EmptyState"
+        class="_flex mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg
@@ -87,12 +87,12 @@ exports[`<ExtensionsCard /> > should render empty state 1`] = `
           />
         </svg>
         <p
-          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
+          class="_typography _font-body-lg-semibold"
         >
           Boost productivity with more tools, widgets and bots
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography _font-body-md-regular"
         >
           Select “Add extensions” to browse and add extensions to this room
         </p>
@@ -115,7 +115,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
       >
         <p
           aria-level="1"
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
+          class="_typography _font-body-md-medium mx_BaseCard_header_title_heading"
           role="heading"
         >
           Extensions
@@ -123,7 +123,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8"
+        class="_icon-button"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -131,7 +131,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -149,11 +149,11 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
       </button>
     </div>
     <div
-      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
+      class="_scrollbar mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <button
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -174,7 +174,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
         Add extensions
       </button>
       <div
-        class="_separator_13qwf_8"
+        class="_separator"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -189,7 +189,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -198,7 +198,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="round"
               height="24px"
               loading="lazy"
@@ -208,7 +208,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
             />
           </span>
           <p
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_lineClamp"
+            class="_typography _font-body-md-medium mx_lineClamp"
           >
             Custom Widget
           </p>
@@ -242,7 +242,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -251,7 +251,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="round"
               height="24px"
               loading="lazy"
@@ -261,7 +261,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
             />
           </span>
           <p
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_lineClamp"
+            class="_typography _font-body-md-medium mx_lineClamp"
           >
             Jitsi
           </p>
@@ -286,7 +286,7 @@ exports[`<ExtensionsCard /> > should render widgets 1`] = `
         </div>
       </div>
       <a
-        class="_link_13esb_8"
+        class="_link"
         data-kind="primary"
         data-size="md"
         rel="noreferrer noopener"

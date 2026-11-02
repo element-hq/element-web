@@ -3,13 +3,13 @@
 exports[`MBodyFactory > renderMBody > renders download button for m.file in file rendering type 1`] = `
 <div>
   <span
-    class="_content_1dw8a_8 mx_MFileBody"
+    class="_content mx_MFileBody"
   >
     <div
       data-type="download"
     >
       <a
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="secondary"
         data-size="md"
         href="https://server/_matrix/media/v3/download/server/file"
@@ -40,15 +40,15 @@ exports[`MBodyFactory > renderMBody > renders download button for m.file in file
 exports[`MBodyFactory > renderMBody fallback shows m.audio generic placeholder when showFileInfo is true 1`] = `
 <div>
   <span
-    class="_content_1dw8a_8 mx_MFileBody"
+    class="_content mx_MFileBody"
   >
     <div
-      class="mx_MediaBody _mediaBody_9mib0_8"
+      class="mx_MediaBody _mediaBody"
       data-type="info"
     >
       <button
         aria-label="test-file.txt"
-        class="_button_1nw83_8 _has-icon_1nw83_60"
+        class="_button _has-icon"
         data-kind="secondary"
         data-size="md"
         role="button"
@@ -84,19 +84,19 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`
     class="mx_EventTile_content"
   >
     <div
-      class="_container_b6h8l_1"
+      class="_container"
     >
       <div
-        class="_tile_1vd22_1"
+        class="_tile"
       >
         <div
-          class="_below_1vd22_9"
+          class="_below"
         >
           <div
-            class="_leftGroup_13lno_11"
+            class="_leftGroup"
           >
             <div
-              class="_icon_13lno_32"
+              class="_icon"
             >
               <svg
                 fill="currentColor"
@@ -112,26 +112,26 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in File 1`
               </svg>
             </div>
             <div
-              class="_textContent_13lno_27"
+              class="_textContent"
             >
               <div
-                class="_header_13lno_1"
+                class="_header"
               >
                 test-file.txt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
+                class="_typography _font-body-md-regular _container _body"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_13lno_63"
+            class="_buttonGroup"
           >
             <button
               aria-label="Download"
-              class="_button_13lno_63"
+              class="_button"
               type="button"
             >
               <svg
@@ -160,19 +160,19 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`
     class="mx_EventTile_content"
   >
     <div
-      class="_container_b6h8l_1"
+      class="_container"
     >
       <div
-        class="_tile_1vd22_1"
+        class="_tile"
       >
         <div
-          class="_below_1vd22_9"
+          class="_below"
         >
           <div
-            class="_leftGroup_13lno_11"
+            class="_leftGroup"
           >
             <div
-              class="_icon_13lno_32"
+              class="_icon"
             >
               <svg
                 fill="currentColor"
@@ -188,26 +188,26 @@ exports[`MBodyFactory > renderMBody shows the preview tile for m.file in Room 1`
               </svg>
             </div>
             <div
-              class="_textContent_13lno_27"
+              class="_textContent"
             >
               <div
-                class="_header_13lno_1"
+                class="_header"
               >
                 test-file.txt
               </div>
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_15awj_8 _body_13lno_2"
+                class="_typography _font-body-md-regular _container _body"
               >
                 Size unknown
               </p>
             </div>
           </div>
           <div
-            class="_buttonGroup_13lno_63"
+            class="_buttonGroup"
           >
             <button
               aria-label="Download"
-              class="_button_13lno_63"
+              class="_button"
               type="button"
             >
               <svg

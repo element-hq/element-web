@@ -13,11 +13,13 @@ import BaseDialog from "../components/views/dialogs/BaseDialog.tsx";
 
 const OuterDialog = <M, P extends object>({
     title,
+    ariaLabel,
     Dialog,
     props,
     onFinished,
 }: {
-    title: string;
+    title?: string;
+    ariaLabel?: string;
     Dialog: ComponentType<DialogProps<M> & P>;
     props: P;
     onFinished(this: void, ok: boolean, model: M | null): void;
@@ -25,7 +27,7 @@ const OuterDialog = <M, P extends object>({
     const close = useCallback(() => onFinished(false, null), [onFinished]);
     const submit = useCallback((model: M) => onFinished(true, model), [onFinished]);
     return (
-        <BaseDialog onFinished={close} title={title}>
+        <BaseDialog onFinished={close} title={title} aria-label={ariaLabel}>
             <Dialog {...props} onSubmit={submit} onCancel={close} />
         </BaseDialog>
     );
@@ -38,6 +40,7 @@ export function openDialog<M, P extends object>(
 ): DialogHandle<M> {
     const { close, finished } = Modal.createDialog(OuterDialog<M, P>, {
         title: initialOptions.title,
+        ariaLabel: initialOptions.ariaLabel,
         Dialog,
         props,
     });

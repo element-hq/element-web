@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps, PureComponent, type Ref } from "react";
+import { emailLooksValid } from "@element-hq/element-web-shared-utils";
 
 import Field, { type IInputProps } from "../elements/Field";
 import { _t, _td } from "../../../languageHandler";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
-import * as Email from "../../../email";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     id?: string;
@@ -47,7 +47,7 @@ class EmailField extends PureComponent<IProps> {
             },
             {
                 key: "email",
-                test: ({ value }) => !value || Email.looksValid(value),
+                test: ({ value }) => !value || emailLooksValid(value),
                 invalid: () => _t(this.props.labelInvalid),
             },
         ],

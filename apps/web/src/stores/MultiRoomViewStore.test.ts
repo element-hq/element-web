@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, type Mocked, type MockedClass } from "vitest";
-import { TestSDKContext } from "test-utils";
+import { TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import { MultiRoomViewStore } from "./MultiRoomViewStore";
 import { RoomViewStore } from "./RoomViewStore";
@@ -39,7 +39,7 @@ describe("MultiRoomViewStore", () => {
         // Create mock RoomViewStore instance
         mockRoomViewStore = {
             viewRoom: vi.fn(),
-            dispose: vi.fn(),
+            destroy: vi.fn(),
         } as any;
 
         (RoomViewStore as MockedClass<typeof RoomViewStore>).mockImplementation(function () {
@@ -47,7 +47,7 @@ describe("MultiRoomViewStore", () => {
         });
 
         // Create the MultiRoomViewStore instance
-        multiRoomViewStore = new MultiRoomViewStore(mockDispatcher, mockSdkContext);
+        multiRoomViewStore = tearDownAfterTest(new MultiRoomViewStore(mockDispatcher, mockSdkContext));
     });
 
     describe("getRoomViewStoreForRoom", () => {
@@ -102,6 +102,15 @@ describe("MultiRoomViewStore", () => {
 
             multiRoomViewStore.getRoomViewStoreForRoom(roomId);
             expect(RoomViewStore).toHaveBeenCalledWith(mockDispatcher, mockSdkContext, roomId);
+        });
+
+        it("should destroy the removed RoomViewStore", () => {
+            const roomId = "!room1:example.com";
+
+            multiRoomViewStore.getRoomViewStoreForRoom(roomId);
+            multiRoomViewStore.removeRoomViewStore(roomId);
+
+            expect(mockRoomViewStore.destroy).toHaveBeenCalled();
         });
     });
 });

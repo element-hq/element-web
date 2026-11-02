@@ -118,11 +118,7 @@ export class MockedCall extends EventEmitter {
 
     public get session(): MatrixRTCSession {
         return {
-            getOldestMembership: (): CallMembership => {
-                return {
-                    createdTs: () => this.createdTs,
-                } as CallMembership;
-            },
+            memberships: [{ createdTs: () => this.createdTs } as CallMembership],
         } as MatrixRTCSession;
     }
 }

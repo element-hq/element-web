@@ -11,7 +11,7 @@ import React from "react";
 import { MatrixWidgetType } from "matrix-widget-api";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import { WidgetContextMenuViewModel, type WidgetContextMenuViewModelProps } from "./WidgetContextMenuViewModel";
 import WidgetUtils from "../../../utils/WidgetUtils";
@@ -78,7 +78,7 @@ describe("WidgetContextMenuViewModel", () => {
     });
 
     it("should return the snapshot", () => {
-        const vm = new WidgetContextMenuViewModel(defaultProps);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(defaultProps));
         expect(vm.getSnapshot()).toMatchObject({
             showStreamAudioStreamButton: false, // because widget type is custom and not jitsi
             showEditButton: true, // because default mock return true on canUserModifyWidgets and isManagedByManager
@@ -98,7 +98,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: new Room(roomId, client, userId),
             onEditClick: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         vm.onEditClick();
         expect(WidgetUtils.editWidget).toHaveBeenCalled();
         expect(props.onFinished).toHaveBeenCalled();
@@ -109,7 +109,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         vm.onEditClick();
 
         expect(props.onEditClick).toHaveBeenCalled();
@@ -122,7 +122,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: undefined,
             onEditClick: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         vm.onEditClick();
 
         expect(WidgetUtils.editWidget).not.toHaveBeenCalled();
@@ -135,7 +135,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         vm.onMoveButton(1);
 
         expect(WidgetLayoutStore.instance.moveWithinContainer).toHaveBeenCalledWith(props.room, "top", props.app, 1);
@@ -147,7 +147,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
 
         expect(() => vm.onMoveButton(1)).toThrow();
     });
@@ -159,8 +159,8 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
-        vm.onStreamAudioClick();
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
+        await vm.onStreamAudioClick();
         await expect(livestream.startJitsiAudioLivestream).toHaveBeenCalled();
         expect(props.onFinished).toHaveBeenCalled();
     });
@@ -180,7 +180,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         await vm.onStreamAudioClick();
         expect(Modal.createDialog).toHaveBeenCalled();
     });
@@ -192,7 +192,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         await vm.onStreamAudioClick();
         // nothing happened
         expect(props.onFinished).toHaveBeenCalled();
@@ -202,7 +202,7 @@ describe("WidgetContextMenuViewModel", () => {
         const props = {
             ...defaultProps,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
         vm.onDeleteClick();
         expect(props.onDeleteClick).toHaveBeenCalled();
         expect(props.onFinished).toHaveBeenCalled();
@@ -219,7 +219,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: new Room(roomId, client, userId),
             onDeleteClick: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
 
         vm.onDeleteClick();
 
@@ -233,7 +233,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: undefined,
             onDeleteClick: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
 
         vm.onDeleteClick();
 
@@ -250,7 +250,7 @@ describe("WidgetContextMenuViewModel", () => {
             ...defaultProps,
             room: new Room(roomId, client, userId),
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
 
         vm.onRevokeClick();
 
@@ -284,7 +284,7 @@ describe("WidgetContextMenuViewModel", () => {
             room: undefined,
             onDeleteClick: undefined,
         };
-        const vm = new WidgetContextMenuViewModel(props);
+        const vm = tearDownAfterTest(new WidgetContextMenuViewModel(props));
 
         expect(() => vm.onRevokeClick()).toThrow();
     });

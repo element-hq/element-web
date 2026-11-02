@@ -220,7 +220,7 @@ describe("AutoDiscoveryUtils", () => {
             await expect(() =>
                 AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
             ).rejects.toThrow(
-                "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.",
+                "Your homeserver is too old and does not support the minimum API version required. Please contact your account provider, or upgrade your server.",
             );
         });
 

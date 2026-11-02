@@ -9,7 +9,10 @@
             "groupName": "testcontainers docker digests",
             "groupSlug": "testcontainers-docker",
             "matchDepTypes": ["testcontainers-docker"],
-            "matchPackageNames": ["*"]
+            "matchPackageNames": ["*"],
+            "dependencyDashboardApproval": false,
+            "schedule": ["* * * * 1,3,5"],
+            "prConcurrentLimit": 0
         },
         {
             "description": "Group all pnpm updates",

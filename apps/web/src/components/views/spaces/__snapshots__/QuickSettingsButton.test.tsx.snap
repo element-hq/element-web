@@ -5,14 +5,14 @@ exports[`QuickSettingsButton > should render the quick settings button in expand
   <button
     aria-expanded="true"
     aria-label="Quick settings"
-    class="_icon-button_1215g_8 mx_QuickSettingsButton expanded"
+    class="_icon-button mx_QuickSettingsButton expanded"
     data-kind="primary"
     role="button"
     style="--cpd-icon-button-size: 32px;"
     tabindex="0"
   >
     <div
-      class="_indicator-icon_147l5_17"
+      class="_indicator-icon"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
@@ -27,7 +27,7 @@ exports[`QuickSettingsButton > should render the quick settings button in expand
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_QuickSettingsButton_label"
+        class="_typography _font-body-md-regular mx_QuickSettingsButton_label"
         title="Settings"
       >
         Settings

@@ -51,7 +51,7 @@ const createVm = (
 
 describe("ViewSourceEventView", () => {
     const getToggleButton = (container: HTMLElement): HTMLButtonElement => {
-        const button = container.querySelector<HTMLButtonElement>('button[aria-label="toggle event"]');
+        const button = container.querySelector<HTMLButtonElement>('button[aria-label="Event source"]');
 
         if (!button) {
             throw new Error("Expected view source toggle button to be rendered");

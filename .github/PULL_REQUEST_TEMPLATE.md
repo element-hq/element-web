@@ -10,3 +10,7 @@
 - [ ] I have have included screenshots if what the user sees will change
 - [ ] I have licensed the changes to Element by completing the [Contributor License Agreement (CLA)](https://cla-assistant.io/element-hq/element-web)
 - [ ] I will no longer force push to this branch
+
+## AI assistance
+
+- [ ] I used AI tools to help create this PR.

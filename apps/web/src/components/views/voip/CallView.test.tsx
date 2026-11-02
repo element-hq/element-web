@@ -33,6 +33,7 @@ import {
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CallView as _CallView } from "./CallView";
+import { CallEvent } from "../../../models/Call";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { CallStore } from "../../../stores/CallStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -51,7 +52,7 @@ describe("CallView", () => {
     let call: MockedCall;
     let widget: Widget;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         useMockMediaDevices();
 
         stubClient();
@@ -70,8 +71,8 @@ describe("CallView", () => {
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        setupAsyncStoreWithClient(CallStore.instance, client);
-        setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
+        await setupAsyncStoreWithClient(CallStore.instance, client);
+        await setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
         MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);
@@ -94,9 +95,9 @@ describe("CallView", () => {
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
     });
 
-    const renderView = async (role: string | undefined = undefined): Promise<void> => {
+    const renderView = async (role: string | undefined = undefined, onClose: () => void = () => {}): Promise<void> => {
         render(
-            <CallView room={room} resizing={false} role={role} onClose={() => {}} />,
+            <CallView room={room} resizing={false} role={role} onClose={onClose} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
         await act(() => Promise.resolve()); // Let effects settle
@@ -111,5 +112,29 @@ describe("CallView", () => {
         const cleanSpy = vi.spyOn(call, "clean");
         await renderView();
         expect(cleanSpy).toHaveBeenCalled();
+    });
+
+    it("stops viewing the call when it closes", async () => {
+        const onClose = vi.fn();
+        call.presented = true;
+        await renderView(undefined, onClose);
+
+        act(() => {
+            call.emit(CallEvent.Close);
+        });
+        expect(onClose).toHaveBeenCalledOnce();
+    });
+
+    it("leaves a call that is no longer presented alone when it closes", async () => {
+        const onClose = vi.fn();
+        call.presented = true;
+        await renderView(undefined, onClose);
+
+        // Switching rooms stops presenting the call, which may destroy and so close it on the way out
+        call.presented = false;
+        act(() => {
+            call.emit(CallEvent.Close);
+        });
+        expect(onClose).not.toHaveBeenCalled();
     });
 });
