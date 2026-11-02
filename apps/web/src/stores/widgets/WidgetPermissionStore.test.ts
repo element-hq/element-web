@@ -16,7 +16,6 @@ import { TestSDKContext, stubClient } from "test-utils";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { type SettingLevel } from "../../settings/SettingLevel";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetType } from "../../widgets/WidgetType";
 
@@ -87,7 +86,7 @@ describe("WidgetPermissionStore", () => {
         expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, roomId)).toEqual(OIDCState.Unknown);
     });
     it("is created once in SDKContextClass", () => {
-        const context = new SDKContextClass();
+        const context = new TestSDKContext();
         const store = context.widgetPermissionStore;
         expect(store).toBeDefined();
         const store2 = context.widgetPermissionStore;

@@ -15,6 +15,7 @@ jobs:
         name: Docker Buildx
         runs-on: ubuntu-26.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
+        if: github.event_name != 'schedule' || github.repository == 'element-hq/element-web'
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
