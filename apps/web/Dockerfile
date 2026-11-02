@@ -5,7 +5,10 @@
 FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.18.0@sha256:41c39d1c734b0a810669c07587888aa7dbe9ef9b4c8e98b346b3654f7b269b6d AS pnpm
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:26-bullseye@sha256:784b1bb050f6bf8ccfdc28d9d07ad07d15ab9d72eee5867f875ba219abec2611 AS builder
+FROM --platform=$BUILDPLATFORM node:26-trixie AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    jq
 
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
