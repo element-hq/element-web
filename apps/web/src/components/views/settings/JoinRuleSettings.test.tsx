@@ -363,12 +363,24 @@ describe("<JoinRuleSettings />", () => {
             expect(getPublicRadio()).toBeDisabled();
         });
 
-        it("should not disable the public option for spaces", () => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        it("should enable the public option for spaces when creating public spaces is allowed", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === UIFeature.AllowCreatingPublicSpaces,
+            );
             const room = new Room(roomId, client, userId);
             vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
             getComponent({ room });
             expect(getPublicRadio()).toBeEnabled();
+        });
+
+        it("should disable the public option for spaces when creating public spaces is not allowed", () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === UIFeature.AllowCreatingPublicRooms,
+            );
+            const room = new Room(roomId, client, userId);
+            vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
+            getComponent({ room });
+            expect(getPublicRadio()).toBeDisabled();
         });
     });
 
