@@ -349,104 +349,121 @@ test.describe("Login", () => {
                 });
             });
 
-            test("Can reset identity to become verified", { tag: ["@screenshot"] }, async ({ page, homeserver, request, credentials }) => {
-                // Log in
-                const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
-                    headers: { Authorization: `Bearer ${credentials.accessToken}` },
-                    data: DEVICE_SIGNING_KEYS_BODY,
-                });
-                if (!res.ok()) {
-                    console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
-                    throw new Error("Uploading dummy keys failed");
-                }
+            test(
+                "Can reset identity to become verified",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, request, credentials }) => {
+                    // Log in
+                    const res = await request.post(
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
+                    );
+                    if (!res.ok()) {
+                        console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
+                        throw new Error("Uploading dummy keys failed");
+                    }
 
-                await page.goto("/");
-                await login(page, homeserver, credentials);
+                    await page.goto("/");
+                    await login(page, homeserver, credentials);
 
-                await expect(
-                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
-                ).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
 
-                // Start the reset process
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    // Start the reset process
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                await expect(
-                    page.getByRole("heading", { name: "You need to reset your digital identity" })
-                ).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "You need to reset your digital identity" }),
+                    ).toBeVisible();
 
-                await expect(page).toMatchScreenshot("no_chats.png");
+                    await expect(page).toMatchScreenshot("no_chats.png");
 
-                // First sign out and start again
-                await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Sign out" }).click();
+                    // First sign out and start again
+                    await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Sign out" }).click();
 
-                await login(page, homeserver, credentials);
-                await expect(
-                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
-                ).toBeVisible();
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    await login(page, homeserver, credentials);
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // Then click outside the dialog and restart
-                await page.locator("body").click({ force: true, position: { x: 1, y: 1 } });
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    // Then click outside the dialog and restart
+                    await page.locator("body").click({ force: true, position: { x: 1, y: 1 } });
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // Finally we actually continue
-                await page.getByRole("button", { name: "Continue" }).click();
-                await page.getByPlaceholder("Password").fill(credentials.password!);
-                await page.getByRole("button", { name: "Continue" }).click();
+                    // Finally we actually continue
+                    await page.getByRole("button", { name: "Continue" }).click();
+                    await page.getByPlaceholder("Password").fill(credentials.password!);
+                    await page.getByRole("button", { name: "Continue" }).click();
 
-                // We end up at the Home screen
-                await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-                await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
-            });
+                    // We end up at the Home screen
+                    await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
+                    await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
+                },
+            );
 
-            test("Reset identity warning is slightly more alarming if we have encrypted chats", { tag: ["@screenshot"] }, async ({ page, homeserver, credentials }) => {
-                // Given we have an encrypted chat
-                await page.goto("/#/welcome");
-                await login(page, homeserver, credentials);
-                await page.waitForTimeout(5000);
-                await createRoom(page, "My encrypted room", true);
-                await logOutOfElement(page, true);
+            test(
+                "Reset identity warning is slightly more alarming if we have encrypted chats",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, credentials }) => {
+                    // Given we have an encrypted chat
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+                    await page.waitForTimeout(5000);
+                    await createRoom(page, "My encrypted room", true);
+                    await logOutOfElement(page, true);
 
-                // When we log in and ask to reset our identity
-                await page.goto("/#/welcome");
-                await login(page, homeserver, credentials);
+                    // When we log in and ask to reset our identity
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
 
-                await expect(
-                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
-                ).toBeVisible();
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // Then we see the standard warning saying we have no other
-                // devices, but we do have encrypted chats.
-                await expect(
-                    page.getByRole("heading", { name: "You need to reset your digital identity" })
-                ).toBeVisible();
+                    // Then we see the standard warning saying we have no other
+                    // devices, but we do have encrypted chats.
+                    await expect(
+                        page.getByRole("heading", { name: "You need to reset your digital identity" }),
+                    ).toBeVisible();
 
-                await expect(page).toMatchScreenshot("you_need_to_reset.png");
-            });
+                    await expect(page).toMatchScreenshot("you_need_to_reset.png");
+                },
+            );
 
-            test("Reset identity warning is more alarming if we have other devices", { tag: ["@screenshot"] }, async ({ page, homeserver, credentials }) => {
-                // Given we have another device
-                await createBot(page, homeserver, credentials, true);
-                await page.waitForTimeout(100); // Avoid server rate limit
+            test(
+                "Reset identity warning is more alarming if we have other devices",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, credentials }) => {
+                    // Given we have another device
+                    await createBot(page, homeserver, credentials, true);
+                    await page.waitForTimeout(100); // Avoid server rate limit
 
-                // When we log in and ask to reset our identity
-                await page.goto("/#/welcome");
-                await login(page, homeserver, credentials);
+                    // When we log in and ask to reset our identity
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
 
-                await expect(
-                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
-                ).toBeVisible();
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // Then we see the warning about the damage this could do
-                // because we have other devices.
-                await expect(
-                    page.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." })
-                ).toBeVisible();
+                    // Then we see the warning about the damage this could do
+                    // because we have other devices.
+                    await expect(
+                        page.getByRole("heading", {
+                            name: "Can't confirm? You’ll need to reset your digital identity.",
+                        }),
+                    ).toBeVisible();
 
-                await expect(page).toMatchScreenshot("cant_confirm.png");
-            });
+                    await expect(page).toMatchScreenshot("cant_confirm.png");
+                },
+            );
         });
     });
 
