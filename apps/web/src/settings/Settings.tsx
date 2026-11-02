@@ -863,7 +863,7 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "userTimezone": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
         // Location leak
