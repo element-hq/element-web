@@ -1587,6 +1587,8 @@
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
+        "strip_upload_metadata": "Remove location and other metadata from uploads",
+        "strip_upload_metadata_description": "You can choose to keep it for each upload.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
         "url_preview_bundle": "URL Preview Bundle (MSC4095)",
         "url_preview_bundle_description": "Sends URL previews bundled with the message content",
@@ -3827,6 +3829,7 @@
         "title": "Allow guest users to join this room"
     },
     "upload_failed_generic": "The file '%(fileName)s' failed to upload.",
+    "upload_failed_metadata": "Metadata couldn't be removed from '%(fileName)s', so it wasn't uploaded. To send it anyway, upload it again with \"%(option)s\" unticked.",
     "upload_failed_size": "The file '%(fileName)s' exceeds the size limit for uploads",
     "upload_failed_title": "Upload Failed",
     "upload_file": {
@@ -3836,6 +3839,7 @@
         "error_some_files_too_large": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
         "error_title": "Upload Error",
         "not_image": "The file you have chosen is not a valid image file.",
+        "strip_metadata": "Remove location and other metadata",
         "title": "Upload files",
         "title_progress": "Upload files (%(current)s of %(total)s)",
         "upload_all_button": "Upload all",

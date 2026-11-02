@@ -31,6 +31,10 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { _t } from "./languageHandler";
 import { PosthogAnalytics } from "./PosthogAnalytics";
+import SettingsStore from "./settings/SettingsStore";
+import { SettingLevel } from "./settings/SettingLevel";
+import { stripFileMetadata } from "./utils/media/stripFileMetadata";
+import { MetadataStripError } from "./utils/media/MetadataStripError";
 
 vi.mock("matrix-encrypt-attachment", () => ({ default: { encryptAttachment: vi.fn().mockResolvedValue({}) } }));
 
@@ -44,6 +48,12 @@ vi.mock("./BlurhashEncoder", () => ({
 
 vi.mock("./utils/local-room", () => ({
     doMaybeLocalRoomAction: vi.fn(),
+}));
+
+vi.mock("./utils/media/stripFileMetadata", async (importOriginal) => ({
+    ...(await importOriginal()),
+    // Most tests send placeholder files which are not valid media, so pass them through unchanged.
+    stripFileMetadata: vi.fn(async (file: File) => file),
 }));
 
 const createElement = document.createElement.bind(document);
@@ -331,6 +341,69 @@ describe("ContentMessages", () => {
         });
     });
 
+    describe("sendContentToRoom metadata", () => {
+        const roomId = "!roomId:server";
+        const file = new File(["text with metadata"], "notes.txt", { type: "text/plain" });
+        const strippedFile = new File(["text"], "notes.txt", { type: "text/plain" });
+
+        beforeEach(() => {
+            vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
+            vi.mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+        });
+
+        afterEach(async () => {
+            vi.restoreAllMocks();
+            vi.mocked(stripFileMetadata).mockReset();
+            await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, null);
+        });
+
+        it("removes metadata before uploading when the labs feature is enabled", async () => {
+            await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, true);
+            vi.mocked(stripFileMetadata).mockResolvedValue(strippedFile);
+
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+
+            expect(stripFileMetadata).toHaveBeenCalledWith(file);
+            expect(client.uploadContent).toHaveBeenCalledWith(strippedFile, expect.anything());
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({ info: expect.objectContaining({ size: strippedFile.size }) }),
+            );
+        });
+
+        it("uploads the original file when asked not to remove metadata", async () => {
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined, undefined, false);
+
+            expect(stripFileMetadata).not.toHaveBeenCalled();
+            expect(client.uploadContent).toHaveBeenCalledWith(file, expect.anything());
+        });
+
+        it("does not remove metadata when the labs feature is disabled", async () => {
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+
+            expect(stripFileMetadata).not.toHaveBeenCalled();
+        });
+
+        it("does not send the file if its metadata can't be removed", async () => {
+            vi.mocked(stripFileMetadata).mockRejectedValue(new MetadataStripError("Not a JPEG"));
+            const dialogSpy = vi.spyOn(Modal, "createDialog");
+
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined, undefined, true);
+
+            expect(client.uploadContent).not.toHaveBeenCalled();
+            expect(client.sendMessage).not.toHaveBeenCalled();
+            expect(dialogSpy).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({
+                    description: _t("upload_failed_metadata", { fileName: "notes.txt" }),
+                }),
+            );
+        });
+    });
+
     describe("getCurrentUploads", () => {
         const file1 = new File([], "file1");
         const file2 = new File([], "file2");
@@ -558,5 +631,71 @@ describe("sendContentListToRoom analytics", () => {
             }),
         );
         expect(contentMessages.sendContentToRoom).not.toHaveBeenCalled();
+    });
+});
+
+describe("sendContentListToRoom metadata choice", () => {
+    const roomId = "!roomId:server";
+    let client: MatrixClient;
+    let contentMessages: ContentMessages;
+
+    /** Answers each upload dialog in turn with the given results. */
+    function answerDialogs(...results: [boolean, boolean, boolean | undefined][]): void {
+        vi.spyOn(Modal, "createDialog").mockImplementation((component: unknown) => {
+            if (component === UploadConfirmDialog) {
+                return { finished: Promise.resolve(results.shift()) } as any;
+            }
+            return { finished: new Promise(() => {}), close: vi.fn() } as any;
+        });
+    }
+
+    function stripMetadataArguments(): unknown[] {
+        return vi.mocked(contentMessages.sendContentToRoom).mock.calls.map((call) => call[6]);
+    }
+
+    beforeEach(() => {
+        client = createTestClient();
+        vi.mocked(client.getMediaConfig).mockResolvedValue({});
+        vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+            <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+        );
+        contentMessages = new ContentMessages();
+        vi.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue(undefined);
+        vi.spyOn(PosthogAnalytics.instance, "trackEvent").mockImplementation(() => {});
+    });
+
+    afterEach(async () => {
+        vi.restoreAllMocks();
+        await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, null);
+    });
+
+    const files = (): File[] => [
+        new File(["a"], "a.jpg", { type: "image/jpeg" }),
+        new File(["b"], "b.jpg", { type: "image/jpeg" }),
+    ];
+
+    it("passes the choice made for each file", async () => {
+        answerDialogs([true, false, false], [true, false, true]);
+        await contentMessages.sendContentListToRoom(files(), roomId, undefined, undefined, client);
+        expect(stripMetadataArguments()).toEqual([false, true]);
+    });
+
+    it("applies the last choice to files sent with Upload all", async () => {
+        answerDialogs([true, true, false]);
+        await contentMessages.sendContentListToRoom(files(), roomId, undefined, undefined, client);
+        expect(stripMetadataArguments()).toEqual([false, false]);
+    });
+
+    it("does not remove metadata when the dialog offers no choice and the labs feature is disabled", async () => {
+        answerDialogs([true, false, undefined], [true, false, undefined]);
+        await contentMessages.sendContentListToRoom(files(), roomId, undefined, undefined, client);
+        expect(stripMetadataArguments()).toEqual([false, false]);
+    });
+
+    it("removes metadata when the dialog offers no choice and the labs feature is enabled", async () => {
+        await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, true);
+        answerDialogs([true, false, undefined], [true, false, undefined]);
+        await contentMessages.sendContentListToRoom(files(), roomId, undefined, undefined, client);
+        expect(stripMetadataArguments()).toEqual([true, true]);
     });
 });

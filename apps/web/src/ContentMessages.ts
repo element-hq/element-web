@@ -60,6 +60,8 @@ import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
 import { PosthogAnalytics } from "./PosthogAnalytics.ts";
 import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
+import { stripFileMetadata } from "./utils/media/stripFileMetadata";
+import { MetadataStripError } from "./utils/media/MetadataStripError";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -491,6 +493,7 @@ export default class ContentMessages {
         }
 
         let uploadAll = false;
+        let stripMetadata = SettingsStore.getValue("feature_strip_upload_metadata");
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
@@ -505,13 +508,18 @@ export default class ContentMessages {
                     currentIndex: i,
                     totalFiles: okFiles.length,
                 });
-                const [shouldContinue, shouldUploadAll] = await finished;
+                const [shouldContinue, shouldUploadAll, shouldStripMetadata] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
                     uploadAll = true;
                 }
+                if (shouldStripMetadata !== undefined) {
+                    stripMetadata = shouldStripMetadata;
+                }
             }
             sentFileTypes.push(file.type.split("/")[0]);
+            // Capture the choice for this file, as the send may run after later dialogs have changed it.
+            const stripThisFile = stripMetadata;
 
             promBefore = doMaybeLocalRoomAction(
                 roomId,
@@ -523,6 +531,7 @@ export default class ContentMessages {
                         matrixClient,
                         replyToEvent ?? undefined,
                         loopPromiseBefore,
+                        stripThisFile,
                     ),
                 matrixClient,
             );
@@ -584,6 +593,12 @@ export default class ContentMessages {
         dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
     }
 
+    /**
+     * Uploads a file and sends it to a room as a message.
+     *
+     * @param stripMetadata - whether to remove metadata such as location from images first.
+     *     If it cannot be removed then the file is not sent. Defaults to whether the labs feature is enabled.
+     */
     public async sendContentToRoom(
         file: File,
         roomId: string,
@@ -591,6 +606,7 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
+        stripMetadata: boolean = SettingsStore.getValue("feature_strip_upload_metadata"),
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
         const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
@@ -627,6 +643,13 @@ export default class ContentMessages {
         }
 
         try {
+            if (stripMetadata) {
+                // Fails rather than sending the original if the metadata can't be removed.
+                file = await stripFileMetadata(file);
+                content.info.size = file.size;
+                if (upload.cancelled) throw new UploadCanceledError();
+            }
+
             if (file.type.startsWith("image/")) {
                 content.msgtype = MsgType.Image;
                 try {
@@ -700,6 +723,11 @@ export default class ContentMessages {
                 if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
                     desc = _t("upload_failed_size", {
                         fileName: upload.fileName,
+                    });
+                } else if (unwrappedError instanceof MetadataStripError) {
+                    desc = _t("upload_failed_metadata", {
+                        fileName: upload.fileName,
+                        option: _t("upload_file|strip_metadata"),
                     });
                 }
                 Modal.createDialog(ErrorDialog, {
