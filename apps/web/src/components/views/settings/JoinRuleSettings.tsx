@@ -54,7 +54,9 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     const cli = room.client;
 
     const askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
-    const allowPublicRooms = room.isSpaceRoom() ? SettingsStore.getValue(UIFeature.AllowCreatingPublicSpaces) : SettingsStore.getValue(UIFeature.AllowCreatingPublicRooms);
+    const allowPublicRooms = room.isSpaceRoom()
+        ? SettingsStore.getValue(UIFeature.AllowCreatingPublicSpaces)
+        : SettingsStore.getValue(UIFeature.AllowCreatingPublicRooms);
     const roomSupportsKnock = doesRoomVersionSupport(room.getVersion(), PreferredRoomVersions.KnockRooms);
     const preferredKnockVersion = !roomSupportsKnock && promptUpgrade ? PreferredRoomVersions.KnockRooms : undefined;
 
