@@ -2580,14 +2580,6 @@
             },
             "confirm_key_storage_off": "Czy na pewno pozostawić wyłączony magazyn kluczy?",
             "confirm_key_storage_off_description": "Jeśli usuniesz wszystkie swoje urządzenia, utracisz historię wiadomości i będziesz musiał ponownie zweryfikować wszystkie istniejące kontakty. <a>Dowiedz się więcej</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Usuń magazyn kluczy",
-                "confirm": "Usuń magazyn kluczy",
-                "description": "Usunięcie magazynu kluczy usunie Twoją tożsamość cyfrową i klucze wiadomości z serwera, wyłączając następujące funkcje bezpieczeństwa:",
-                "list_first": "Stracisz dostęp do zaszyfrowanej historii wiadomości na nowych urządzeniach",
-                "list_second": "Jeśli nie jesteś zalogowany na żadnym innym urządzeniu, stracisz dostęp do swoich zaszyfrowanych wiadomości",
-                "title": "Wyłączyć i usunąć magazyn kluczy?"
-            },
             "device_not_verified_button": "Zweryfikuj to urządzenie",
             "device_not_verified_description": "Aby wyświetlić ustawienia szyfrowania, musisz zweryfikować to urządzenie.",
             "device_not_verified_title": "Urządzenie niezweryfikowane",

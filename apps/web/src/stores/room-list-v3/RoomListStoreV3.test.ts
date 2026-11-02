@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, onTestFinished, vi } from "vitest";
 import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEvents } from "test-utils";
@@ -43,12 +43,19 @@ import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { UPDATE_EVENT } from "../AsyncStore.ts";
 
 describe("RoomListStoreV3", () => {
+    /** Creates a store which is destroyed when the test finishes, so stores do not pile up across tests. */
+    function createStore(): RoomListStoreV3Class {
+        const store = new RoomListStoreV3Class(dispatcher);
+        onTestFinished(() => store.destroy());
+        return store;
+    }
+
     async function getRoomListStore() {
         const client = stubClient();
         const rooms = getMockedRooms(client);
         client.getVisibleRooms = vi.fn().mockReturnValue(rooms);
         vi.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-        const store = new RoomListStoreV3Class(dispatcher);
+        const store = createStore();
         await store.start();
         return { client, rooms, store, dispatcher };
     }
@@ -80,6 +87,19 @@ describe("RoomListStoreV3", () => {
 
     afterEach(() => {
         vi.restoreAllMocks();
+    });
+
+    it("should stop listening to the dispatcher, settings and space store when destroyed", async () => {
+        const { store } = await getRoomListStore();
+        const unregisterSpy = vi.spyOn(dispatcher, "unregister");
+        const unwatchSpy = vi.spyOn(SettingsStore, "unwatchSetting");
+        const offSpy = vi.spyOn(SDKContextClass.instance.spaceStore, "off");
+
+        store.destroy();
+
+        expect(unregisterSpy).toHaveBeenCalledTimes(2);
+        expect(unwatchSpy).toHaveBeenCalledTimes(5);
+        expect(offSpy).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, expect.any(Function));
     });
 
     it("Provides an unsorted list of rooms", async () => {
@@ -507,7 +527,7 @@ describe("RoomListStoreV3", () => {
                 const { client, rooms } = getClientAndRooms();
                 const infoSpy = vi.spyOn(logger, "info");
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Create a space and let the store know about it
@@ -541,7 +561,7 @@ describe("RoomListStoreV3", () => {
                     return false;
                 });
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
                 const fn = vi.fn();
                 store.on(LISTS_UPDATE_EVENT, fn);
@@ -594,7 +614,7 @@ describe("RoomListStoreV3", () => {
                     return "watcher-id";
                 });
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
                 const fn = vi.fn();
                 store.on(LISTS_UPDATE_EVENT, fn);
@@ -634,7 +654,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
@@ -658,7 +678,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Let's say 27 got unfavourited
@@ -708,7 +728,7 @@ describe("RoomListStoreV3", () => {
                     });
 
                     setupMocks(spaceRoom, roomIds);
-                    const store = new RoomListStoreV3Class(dispatcher);
+                    const store = createStore();
                     await store.start();
 
                     // Should only give us rooms at index 8 and 27 when Notifications.activityIsUnread=false
@@ -728,7 +748,7 @@ describe("RoomListStoreV3", () => {
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Since there's no unread yet, we expect zero results
@@ -773,7 +793,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // When we ask which rooms to display
@@ -802,7 +822,7 @@ describe("RoomListStoreV3", () => {
                 }) as () => DMRoomMap);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
@@ -838,7 +858,7 @@ describe("RoomListStoreV3", () => {
                 // Let's choose 5 rooms to put in space
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 100, 101, 102, 103, 104], client);
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const result = store
@@ -864,7 +884,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
@@ -888,7 +908,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
@@ -918,7 +938,7 @@ describe("RoomListStoreV3", () => {
                 });
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Should give us only room at 8 since that's the only room which matches both filters
@@ -1018,7 +1038,7 @@ describe("RoomListStoreV3", () => {
                 vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[13].roomId);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Then the current room is in the room list
@@ -1066,7 +1086,7 @@ describe("RoomListStoreV3", () => {
                 vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(rooms[13].roomId);
 
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const unreadRooms = (): Room[] =>
@@ -1094,7 +1114,7 @@ describe("RoomListStoreV3", () => {
                 // Tag rooms 8 and 27 as server notice rooms
                 [8, 27].forEach((i) => (rooms[i].tags[DefaultTagID.ServerNotice] = {}));
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const result = store.getServerNoticeRooms();
@@ -1106,7 +1126,7 @@ describe("RoomListStoreV3", () => {
 
             it("returns an empty array when there are no server notice rooms", async () => {
                 getClientAndRooms();
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
                 expect(store.getServerNoticeRooms()).toEqual([]);
             });
@@ -1122,7 +1142,7 @@ describe("RoomListStoreV3", () => {
 
                 // Activate the space
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Only the server notice room within the active space is returned
@@ -1143,7 +1163,7 @@ describe("RoomListStoreV3", () => {
                     };
                 }) as () => DMRoomMap);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const result = store.getDmRooms();
@@ -1156,7 +1176,7 @@ describe("RoomListStoreV3", () => {
             it("returns an empty array when there are no DM rooms", async () => {
                 // The top-level beforeEach mocks the DM map to match no rooms.
                 getClientAndRooms();
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
                 expect(store.getDmRooms()).toEqual([]);
             });
@@ -1176,7 +1196,7 @@ describe("RoomListStoreV3", () => {
 
                 // Activate the space
                 setupMocks(spaceRoom, roomIds);
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 // Only the DM room within the active space is returned
@@ -1222,7 +1242,7 @@ describe("RoomListStoreV3", () => {
             enableSections();
             getClientAndRooms();
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const result = store.getSortedRoomsInActiveSpace();
@@ -1238,7 +1258,7 @@ describe("RoomListStoreV3", () => {
             enableSections();
             const { rooms } = getClientAndRooms();
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             // Given an untagged room sits in the Chats section
@@ -1263,7 +1283,7 @@ describe("RoomListStoreV3", () => {
 
             // Constructing the store must not read the sections yet: at this point account data
             // (e.g. custom section ordering) may not have been loaded, so sections would be empty.
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
 
             expect(getOrderedSectionTagsSpy).not.toHaveBeenCalled();
             expect(store.orderedSectionTags).toEqual([]);
@@ -1274,7 +1294,7 @@ describe("RoomListStoreV3", () => {
             getClientAndRooms();
             const getOrderedSectionTagsSpy = vi.spyOn(sectionModule, "getOrderedSectionTags");
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             expect(getOrderedSectionTagsSpy).not.toHaveBeenCalled();
 
             await store.start();
@@ -1305,7 +1325,7 @@ describe("RoomListStoreV3", () => {
                 rooms[3].tags[DefaultTagID.Favourite] = {};
                 rooms[7].tags[DefaultTagID.LowPriority] = {};
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1323,7 +1343,7 @@ describe("RoomListStoreV3", () => {
                 enableSections(true);
                 getClientAndRooms();
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1341,7 +1361,7 @@ describe("RoomListStoreV3", () => {
                 const { rooms } = getClientAndRooms();
                 mockDmRooms([rooms[3], rooms[7]]);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1371,7 +1391,7 @@ describe("RoomListStoreV3", () => {
                         return false;
                     });
 
-                    const store = new RoomListStoreV3Class(dispatcher);
+                    const store = createStore();
                     await store.start();
 
                     const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1392,7 +1412,7 @@ describe("RoomListStoreV3", () => {
                     return "watcher-id";
                 });
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 expect(findSection(store.getSortedRoomsInActiveSpace().sections, DefaultTagID.DM)).toBeUndefined();
@@ -1415,7 +1435,7 @@ describe("RoomListStoreV3", () => {
                 return "watcher-id";
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const listsUpdateListener = vi.fn();
@@ -1438,7 +1458,7 @@ describe("RoomListStoreV3", () => {
                 rooms[i].tags[tag] = {};
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1459,7 +1479,7 @@ describe("RoomListStoreV3", () => {
             rooms[0].tags[DefaultTagID.Favourite] = {};
             rooms[1].tags[DefaultTagID.LowPriority] = {};
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1488,7 +1508,7 @@ describe("RoomListStoreV3", () => {
             // Room 2 is a favourite with a pending invitation
             vi.spyOn(rooms[2], "getMyMembership").mockReturnValue(KnownMembership.Invite);
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1511,7 +1531,7 @@ describe("RoomListStoreV3", () => {
             rooms[7].tags[DefaultTagID.Favourite] = {};
             mockDmRooms([rooms[7]]);
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1540,7 +1560,7 @@ describe("RoomListStoreV3", () => {
                 return state;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]);
@@ -1564,7 +1584,7 @@ describe("RoomListStoreV3", () => {
                 return state;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             // With the unread filter, only the Favourite section has matching rooms.
@@ -1580,7 +1600,7 @@ describe("RoomListStoreV3", () => {
             getClientAndRooms();
 
             // No rooms are tagged, so Favourite and LowPriority sections will be empty
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections } = store.getSortedRoomsInActiveSpace();
@@ -1606,7 +1626,7 @@ describe("RoomListStoreV3", () => {
             });
             vi.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(() => spaceRoomId);
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             const { sections, spaceId } = store.getSortedRoomsInActiveSpace();
@@ -1633,7 +1653,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 vi.spyOn(sectionModule, "createSection").mockResolvedValue("element.io.section.test-tag");
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const sectionCreatedListener = vi.fn();
@@ -1650,7 +1670,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 vi.spyOn(sectionModule, "createSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const sectionCreatedListener = vi.fn();
@@ -1668,7 +1688,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 const editSectionSpy = vi.spyOn(sectionModule, "editSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 await store.editSection("element.io.section.test-tag");
@@ -1682,7 +1702,7 @@ describe("RoomListStoreV3", () => {
                 getClientAndRooms();
                 vi.spyOn(sectionModule, "deleteSection").mockResolvedValue(undefined);
 
-                const store = new RoomListStoreV3Class(dispatcher);
+                const store = createStore();
                 await store.start();
 
                 const listsUpdateListener = vi.fn();
@@ -1713,7 +1733,7 @@ describe("RoomListStoreV3", () => {
                 return false;
             });
 
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             // Initial state: 5 sections (Invite, Favourite, Chats, LowPriority)
@@ -1756,7 +1776,7 @@ describe("RoomListStoreV3", () => {
 
             client.getVisibleRooms = vi.fn().mockReturnValue(rooms);
             vi.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
             return { client, rooms, mutedIndices, mutedRooms, store, dispatcher };
         }
@@ -1842,7 +1862,7 @@ describe("RoomListStoreV3", () => {
 
             client.getVisibleRooms = vi.fn().mockReturnValue(rooms);
             vi.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
-            const store = new RoomListStoreV3Class(dispatcher);
+            const store = createStore();
             await store.start();
 
             // We expect the following order: Low Priority -> Low Priority & Muted -> Muted

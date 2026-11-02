@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterEach } from "vitest";
 import React from "react";
 import { fireEvent, getByTestId, render } from "test-utils-rtl";
-import { clientAndSDKContextRenderOptions, mkRoom, stubClient } from "test-utils";
+import { clientAndSDKContextRenderOptions, mkRoom, stubClient, tearDownAfterTest } from "test-utils";
 
 import DMRoomMap from "../../../utils/DMRoomMap";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -119,6 +119,7 @@ describe("SpaceButton", () => {
 
         it("should render notificationState if one is provided", () => {
             const notificationState = new StaticNotificationState(null, 8, NotificationLevel.Notification);
+            tearDownAfterTest(notificationState);
 
             const { container, asFragment } = render(
                 <SpaceButton
