@@ -12,8 +12,10 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import type { Reporter, TestCase } from "@playwright/test/reporter";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
-import { type FlakyAssignee, FlakyAssigneeFinder } from "./flaky-assignee-finder.js";
+import { type FlakyAssignee, FlakyAssigneeFinder, parseIgnoreRevs } from "./flaky-assignee-finder.js";
 
 const REPO = "element-hq/element-web";
 const LABEL = "Z-Flaky-Test";
@@ -22,6 +24,22 @@ const ISSUE_TITLE_PREFIX = "Flaky playwright test: ";
 // New flake issues are assigned to the last member of this team to change the test file
 const ASSIGNEE_ORG = "element-hq";
 const ASSIGNEE_TEAM = "element-web-contributors";
+
+// Mechanical commits (mass reformatting and the like) whose author shouldn't become a test's owner.
+// Read from the repository root, where the merge job runs.
+const IGNORE_REVS_FILE = ".git-blame-ignore-revs";
+
+function readIgnoredCommits(): Set<string> {
+    try {
+        return parseIgnoreRevs(readFileSync(path.resolve(process.cwd(), IGNORE_REVS_FILE), "utf8"));
+    } catch (e) {
+        // No file just means nothing to ignore
+        if ((e as NodeJS.ErrnoException).code !== "ENOENT") {
+            console.error(`Could not read ${IGNORE_REVS_FILE}, not skipping any commits:`, e);
+        }
+        return new Set();
+    }
+}
 
 // The merged report resolves every test path against apps/web's testDir (see playwright-merge.config.ts),
 // even for Desktop and module tests, but the part after "playwright/e2e/" is still relative to the test's
@@ -224,6 +242,7 @@ class FlakyReporter implements Reporter {
             repo: REPO,
             org: ASSIGNEE_ORG,
             team: ASSIGNEE_TEAM,
+            ignoredCommits: readIgnoredCommits(),
         });
 
         const issues = await this.getAllIssues();

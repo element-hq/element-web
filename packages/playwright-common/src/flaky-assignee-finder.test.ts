@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it, vi } from "vitest";
 
-import { FlakyAssigneeFinder } from "./flaky-assignee-finder.js";
+import { FlakyAssigneeFinder, parseIgnoreRevs } from "./flaky-assignee-finder.js";
 
 const API = "https://api.example.test";
 
 function commit(sha: string, login: string | null, type = "User"): object {
-    return { html_url: `https://github.com/o/r/commit/${sha}`, author: login ? { login, type } : null };
+    return { sha, html_url: `https://github.com/o/r/commit/${sha}`, author: login ? { login, type } : null };
 }
 
 function urlOf(input: RequestInfo | URL): URL {
@@ -118,8 +118,43 @@ describe("FlakyAssigneeFinder", () => {
         });
     });
 
+    it("skips commits listed as ignored, such as mass reformatting", async () => {
+        const fetch = fakeApi([commit("aaa", "sweeper"), commit("bbb", "alice")], {
+            sweeper: "active",
+            alice: "active",
+        });
+        const f = new FlakyAssigneeFinder({
+            apiUrl: API,
+            token: "tok",
+            repo: "o/r",
+            org: "o",
+            team: "t",
+            ignoredCommits: new Set(["aaa"]),
+            fetch,
+        });
+        await expect(f.find("a.spec.ts")).resolves.toEqual({
+            login: "alice",
+            commitUrl: "https://github.com/o/r/commit/bbb",
+        });
+    });
+
     it("throws when commits cannot be listed", async () => {
         const fetch = vi.fn(async (_input: RequestInfo | URL) => new Response(null, { status: 500 }));
         await expect(finder(fetch).find("a.spec.ts")).rejects.toThrow("HTTP 500");
+    });
+});
+
+describe("parseIgnoreRevs", () => {
+    it("reads one SHA per line, ignoring comments and blank lines", () => {
+        const text = [
+            "# prettier",
+            "526645C79160AB1AD4B4C3845DE27D51263A405E",
+            "",
+            "7921a6cbf86b035d2b0c1daecb4c24beaf5a5abc  # trailing comment",
+            "   ",
+        ].join("\n");
+        expect(parseIgnoreRevs(text)).toEqual(
+            new Set(["526645c79160ab1ad4b4c3845de27d51263a405e", "7921a6cbf86b035d2b0c1daecb4c24beaf5a5abc"]),
+        );
     });
 });

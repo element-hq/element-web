@@ -7,6 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type TestCase, type TestResult } from "@playwright/test/reporter";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 
 import FlakyReporter from "./flaky-reporter.js";
 
@@ -156,6 +159,32 @@ describe("FlakyReporter", () => {
             `POST ${ISSUES}/5/labels`,
             `POST ${ISSUES}/5/comments`,
         ]);
+    });
+
+    it("skips commits listed in .git-blame-ignore-revs at the repository root", async () => {
+        const root = await mkdtemp(path.join(tmpdir(), "ignore-revs-"));
+        try {
+            await writeFile(path.join(root, ".git-blame-ignore-revs"), "# mass reformat\nsweep1\n");
+            vi.spyOn(process, "cwd").mockReturnValue(root);
+            stubGitHub({
+                commits: [
+                    { sha: "sweep1", html_url: "https://github.com/c/sweep", author: { login: "bob", type: "User" } },
+                    { sha: "real2", html_url: "https://github.com/c/real", author: { login: "alice", type: "User" } },
+                ],
+                members: ["alice", "bob"],
+            });
+            const reporter = new FlakyReporter();
+            reporter.onTestEnd(flakyTest("Chrome", "a.spec.ts", "t"));
+            await reporter.onExit();
+
+            expect(writes.at(-1)).toEqual({
+                method: "POST",
+                url: `${ISSUES}/99/assignees`,
+                body: { assignees: ["alice"] },
+            });
+        } finally {
+            await rm(root, { recursive: true });
+        }
     });
 
     it("files the issue unassigned when nobody qualifies", async () => {

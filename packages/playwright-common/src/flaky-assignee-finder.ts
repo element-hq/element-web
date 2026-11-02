@@ -24,6 +24,8 @@ export interface FlakyAssigneeFinderOptions {
     org: string;
     /** Team slug, e.g. `element-web-contributors` */
     team: string;
+    /** Full SHAs of mechanical commits to skip, such as those listed in .git-blame-ignore-revs */
+    ignoredCommits?: ReadonlySet<string>;
     fetch?: typeof fetch;
 }
 
@@ -34,6 +36,7 @@ interface Author {
 
 /** The subset of the GitHub "list commits" response we use. */
 interface CommitListEntry {
+    sha: string;
     html_url: string;
     author: Author | null;
 }
@@ -45,6 +48,18 @@ const RELEASE_BOT_LOGIN = "RiotRobot";
 function isBot(author: Author): boolean {
     // GitHub Apps such as renovate[bot] have type "Bot"
     return author.type === "Bot" || author.login === RELEASE_BOT_LOGIN;
+}
+
+/**
+ * Parse a git blame.ignoreRevsFile: one full commit SHA per line, with `#` comments.
+ */
+export function parseIgnoreRevs(text: string): Set<string> {
+    return new Set(
+        text
+            .split("\n")
+            .map((line) => line.replace(/#.*/, "").trim().toLowerCase())
+            .filter(Boolean),
+    );
 }
 
 export class FlakyAssigneeFinder {
@@ -85,6 +100,7 @@ export class FlakyAssigneeFinder {
         for (const commit of commits) {
             // A null author means the commit email isn't linked to a GitHub account
             if (!commit.author || isBot(commit.author)) continue;
+            if (this.options.ignoredCommits?.has(commit.sha)) continue;
             if (await this.isTeamMember(commit.author.login)) {
                 return { login: commit.author.login, commitUrl: commit.html_url };
             }
