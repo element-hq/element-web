@@ -306,8 +306,8 @@ export function KeyForm({
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
-                // Compound's disabled button is only `aria-disabled`, so Enter or a click can still submit.
-                // This also stops repeated attempts while one is in progress.
+                // Don't allow early or repeated attempts, since `Button` uses `aria-disabled` to flag its disabled
+                // state, which interacts poorly with `Form`.
                 if (!canSubmit) return;
                 setIsSubmitting(true);
                 void onSubmit(getFilledKey(evt.currentTarget))
