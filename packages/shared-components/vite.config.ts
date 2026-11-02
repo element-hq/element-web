@@ -105,6 +105,9 @@ export default defineConfig({
         layerCssAssets(),
         dts({
             bundleTypes: {
+                // shared-types is a private workspace package, so inline its types rather than
+                // leaving an import that consumers cannot resolve.
+                bundledPackages: ["shared-types"],
                 invokeOptions: {
                     localBuild: !!process.env.CI,
                     // oxlint-disable-next-line unicorn/prefer-module
@@ -112,7 +115,17 @@ export default defineConfig({
                 },
             },
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
+            exclude: [
+                "src/**/*.test.{ts,tsx}",
+                "src/**/*.stories.{ts,tsx}",
+                // Test helpers, including their vitest module augmentations, are not part of the package.
+                "src/test/**",
+                // Our global TranslationKey is internal: the published typings reference TranslationKey as a free
+                // global that each consumer declares. Since unplugin-dts 1.1, hand-written .d.ts files are processed
+                // when bundleTypes is set, and their `declare global` blocks get appended to the bundle without
+                // their imports, which breaks consumers' type checks.
+                "src/@types/i18n.d.ts",
+            ],
             copyDtsFiles: false,
         }),
     ],
