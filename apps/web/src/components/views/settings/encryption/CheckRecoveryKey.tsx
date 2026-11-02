@@ -52,7 +52,7 @@ export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonl
                         return isCorrect;
                     } catch (e) {
                         // Leave the form usable: the key may well be right, we just could not check it
-                        logErrorAndShowErrorDialog("Failed to check the recovery key", e);
+                        logErrorAndShowErrorDialog(_t("settings|encryption|recovery|check_failed_title"), e);
                     }
                 }}
                 onCancelClick={onCancelClick}

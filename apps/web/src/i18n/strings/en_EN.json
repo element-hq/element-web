@@ -2574,6 +2574,7 @@
                 "change_recovery_key_title": "Change recovery key?",
                 "check_description": "Enter the recovery key you’ve saved to make sure that it’s correct and active.",
                 "check_error": "Incorrect recovery key",
+                "check_failed_title": "Failed to check the recovery key",
                 "check_title": "Check your recovery key",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
