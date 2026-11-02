@@ -5,8 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MetadataStripError } from "./MetadataStripError";
-
 /** A piece of an output file: either a slice of the original file or newly written bytes. */
 export type FilePart = Blob | Uint8Array<ArrayBuffer>;
 
@@ -49,7 +47,7 @@ export function dataView(bytes: Uint8Array): DataView {
  */
 export function readAscii(bytes: Uint8Array, offset: number, length: number): string {
     if (offset + length > bytes.length) {
-        throw new MetadataStripError(`Unexpected end of data reading string at ${offset}`);
+        throw new RangeError(`Unexpected end of data reading string at ${offset}`);
     }
     return String.fromCharCode(...bytes.subarray(offset, offset + length));
 }

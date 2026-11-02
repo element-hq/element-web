@@ -5,22 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    assembleFile,
-    bytesEqual,
-    concatBytes,
-    crc32,
-    createBlobRangeReader,
-    dataView,
-    type FilePart,
-    readAscii,
-    startsWith,
-    writeAscii,
-} from "./bytes";
+import { assembleFile, bytesEqual, concatBytes, crc32, dataView, type FilePart, writeAscii } from "./bytes";
+import { PNG_SIGNATURE, readPngChunks } from "./png";
 import { buildExif, emptyExifFields, readExifDisplayFields } from "./exif";
-import { MetadataStripError } from "./MetadataStripError";
-
-const SIGNATURE = "\x89PNG\r\n\x1a\n";
 
 /**
  * Ancillary chunks which affect how the image is drawn. All other ancillary chunks are dropped: text
@@ -69,48 +56,33 @@ function buildExifChunk(tiff: Uint8Array): Uint8Array<ArrayBuffer> {
  * @returns the stripped file, or `file` itself if it held no metadata
  */
 export async function stripPngMetadata(file: File): Promise<File> {
-    // Only the chunk headers and the Exif chunk are needed, so read those rather than the whole file.
-    const read = createBlobRangeReader(file);
-    if (!startsWith(await read(0, SIGNATURE.length), SIGNATURE)) throw new MetadataStripError("Not a PNG");
-
-    const parts: FilePart[] = [file.slice(0, SIGNATURE.length)];
+    const parts: FilePart[] = [file.slice(0, PNG_SIGNATURE.length)];
     let originalExif: Uint8Array | undefined;
     let exifFields = emptyExifFields();
     let changed = false;
 
-    let offset = SIGNATURE.length;
-    let ended = false;
-    while (!ended) {
-        const header = await read(offset, 8);
-        if (header.length < 8) throw new MetadataStripError("Unexpected end of file");
-        const length = dataView(header).getUint32(0);
-        const type = readAscii(header, 4, 4);
-        const end = offset + 12 + length;
-        if (end > file.size) throw new MetadataStripError(`Bad chunk length at ${offset}`);
-
+    let end = PNG_SIGNATURE.length;
+    for await (const chunk of readPngChunks(file)) {
         // The case of the first letter says whether a decoder needs the chunk.
-        const isCritical = type.charCodeAt(0) < 0x61;
-        if (isCritical || KEPT_ANCILLARY_CHUNKS.has(type)) {
-            parts.push(file.slice(offset, end));
-        } else if (type === "eXIf" && originalExif === undefined) {
-            originalExif = await read(offset, end - offset);
-            exifFields = readExifDisplayFields(originalExif.subarray(8, originalExif.length - 4));
+        const isCritical = chunk.type.charCodeAt(0) < 0x61;
+        if (isCritical || KEPT_ANCILLARY_CHUNKS.has(chunk.type)) {
+            parts.push(file.slice(chunk.start, chunk.end));
+        } else if (chunk.type === "eXIf" && originalExif === undefined) {
+            originalExif = await chunk.readData();
+            exifFields = readExifDisplayFields(originalExif);
         } else {
             changed = true;
         }
-
-        ended = type === "IEND";
-        offset = end;
+        end = chunk.end;
     }
-    if (offset < file.size) changed = true;
+    if (end < file.size) changed = true;
 
     if (originalExif) {
         const tiff = buildExif(exifFields);
         if (tiff) {
             // Exif must come before the image data, so put it straight after the IHDR chunk.
-            const exif = buildExifChunk(tiff);
-            parts.splice(2, 0, exif);
-            if (!bytesEqual(exif, originalExif)) changed = true;
+            parts.splice(2, 0, buildExifChunk(tiff));
+            if (!bytesEqual(tiff, originalExif)) changed = true;
         } else {
             changed = true;
         }

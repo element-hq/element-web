@@ -28,7 +28,6 @@ import {
     type MediaEventInfo,
 } from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
-import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
 import type { AttachmentSend } from "@matrix-org/analytics-events/types/typescript/AttachmentSend";
@@ -57,15 +56,11 @@ import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog"
 import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
-import { blobIsAnimated } from "./utils/Image.ts";
+import { blobIsAnimated, blobIsHiDpiPng } from "./utils/Image.ts";
 import { PosthogAnalytics } from "./PosthogAnalytics.ts";
 import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
 import { stripFileMetadata } from "./utils/media/stripFileMetadata";
 import { MetadataStripError } from "./utils/media/MetadataStripError";
-
-// scraped out of a macOS hidpi (5660ppm) screenshot png
-//                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
-const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export class UploadCanceledError extends Error {}
 export class UploadFailedError extends Error {
@@ -106,30 +101,7 @@ async function loadImageElement(imageFile: File): Promise<{
 
     // check for hi-dpi PNGs and fudge display resolution as needed.
     // this is mainly needed for macOS screencaps
-    let parsePromise = Promise.resolve(false);
-    if (imageFile.type === "image/png") {
-        // in practice macOS happens to order the chunks so they fall in
-        // the first 0x1000 bytes (thanks to a massive ICC header).
-        // Thus we could slice the file down to only sniff the first 0x1000
-        // bytes (but this makes extractPngChunks choke on the corrupt file)
-        const headers = imageFile; //.slice(0, 0x1000);
-        parsePromise = readFileAsArrayBuffer(headers)
-            .then((arrayBuffer) => {
-                const buffer = new Uint8Array(arrayBuffer);
-                const chunks = extractPngChunks(buffer);
-                for (const chunk of chunks) {
-                    if (chunk.name === "pHYs") {
-                        if (chunk.data.byteLength !== PHYS_HIDPI.length) return false;
-                        return chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
-                    }
-                }
-                return false;
-            })
-            .catch((e) => {
-                console.error("Failed to parse PNG", e);
-                return false;
-            });
-    }
+    const parsePromise = imageFile.type === "image/png" ? blobIsHiDpiPng(imageFile) : Promise.resolve(false);
 
     const [hidpi] = await Promise.all([parsePromise, imgPromise]);
     const width = hidpi ? img.width >> 1 : img.width;
