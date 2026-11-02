@@ -1,4 +1,5 @@
 /*
+Copyright 2026 foxberries
 Copyright 2024 New Vector Ltd.
 Copyright 2018, 2019 , 2021 New Vector Ltd
 
@@ -10,7 +11,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { ipcRenderer, contextBridge, type IpcRendererEvent } from "electron";
 import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
-import type { X509Api } from "shared-types" with { "resolution-mode": "import" };
+import type { Audiofox, AudioManager, Chunk, LinkHandle, X509Api } from "shared-types" with {
+    "resolution-mode": "import",
+};
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid
 // handing out generalised messaging access.
@@ -89,3 +92,39 @@ contextBridge.exposeInMainWorld("electron", {
             ipcRenderer.invoke("x509", "signData", serialNumber, data),
     } satisfies X509Api,
 });
+
+// Audiofox IPC
+ipcRenderer
+    .invoke("audiofox") // Load the native module
+    .then(() => {
+        let canInit = true; // Only distribute a single IPC object
+        contextBridge.exposeInMainWorld("audiofox", () => {
+            if (canInit) {
+                canInit = false;
+                return {
+                    start: async () => {
+                        await ipcRenderer.invoke("audiofox:start");
+                        return {
+                            list: async () => ipcRenderer.invoke("audiofox:list"),
+                            link: async (sources, callback) => {
+                                // Initiate the link and bridge the callback
+                                await ipcRenderer.invoke("audiofox:link", sources);
+                                // eslint-disable-next-line no-callback-in-promise - callback fires after resolution
+                                const stream = (_event: IpcRendererEvent, chunk: Chunk): void => callback(chunk);
+                                ipcRenderer.on("audiofox:chunk", stream);
+                                // Forward until the stream ends
+                                return {
+                                    unlink: () => {
+                                        ipcRenderer.off("audiofox:chunk", stream);
+                                        ipcRenderer.send("audiofox:unlink");
+                                    },
+                                } satisfies LinkHandle;
+                            },
+                            stop: () => ipcRenderer.send("audiofox:stop"),
+                        } satisfies AudioManager;
+                    },
+                } satisfies Audiofox;
+            } else throw new Error("Audiofox has already been initialized");
+        });
+    })
+    .catch(() => {}); // The error is reported on main

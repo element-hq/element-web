@@ -34,6 +34,7 @@ import SdkConfig from "./SdkConfig";
 import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
 import Favicon from "./favicon.ts";
 import { getVectorConfig } from "./vector/getconfig.ts";
+import type AudiofoxManager from "./audio/AudiofoxHook.ts";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -320,6 +321,14 @@ export default abstract class BasePlatform {
 
     public supportsJitsiScreensharing(): boolean {
         return true;
+    }
+
+    /**
+     * Get the AudiofoxManager for audio capture and enumeration.
+     * @returns {AudiofoxManager} The Audiofox IPC manager; will be null on unsupported platforms.
+     */
+    public getAudiofox(): AudiofoxManager | null {
+        return null;
     }
 
     public overrideBrowserShortcuts(): boolean {

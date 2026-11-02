@@ -15,7 +15,8 @@ module.exports = function () {};
 
 module.exports.pitch = function pitch(request) {
     const cb = this.async();
-    const filename = "recorder.worklet.js";
+    const options = this.getOptions() || {};
+    const filename = options.filename || "[hash:7].worklet.js";
 
     const compiler = this._compilation.createChildCompiler("worker", {
         filename,

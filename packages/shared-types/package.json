@@ -15,6 +15,7 @@
         "lint:types": "tsc --noEmit"
     },
     "devDependencies": {
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "@foxberries/audiofox": "^1.1.0"
     }
 }

@@ -429,7 +429,29 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     type: "javascript/auto",
                     use: [
                         {
-                            loader: path.join(__dirname, "recorder-worklet-loader.cjs"),
+                            loader: path.join(__dirname, "worklet-loader.cjs"),
+                            options: {
+                                // Filename is defined here as the worklet loader is now generic
+                                filename: "recorder.worklet.js",
+                            },
+                        },
+                        {
+                            loader: "babel-loader",
+                        },
+                    ],
+                },
+                {
+                    // Audio processor for screenshare with audiofox
+                    // This handles the received audio data for transmission over WebRTC
+                    test: /AudiofoxWorklet\.ts$/,
+                    type: "javascript/auto",
+                    use: [
+                        {
+                            loader: path.join(__dirname, "worklet-loader.cjs"),
+                            options: {
+                                // Audiofox also uses the worklet loader
+                                filename: "audiofox.worklet.js",
+                            },
                         },
                         {
                             loader: "babel-loader",

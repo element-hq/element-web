@@ -56,7 +56,7 @@ export default defineProject({
             },
             // Stub this out as we lack AudioWorkletProcessor in the test env
             {
-                find: "./recorderWorkletFactory",
+                find: "./audioWorkletFactory",
                 replacement: resolve("./__mocks__/empty.js"),
             },
             // Stub out legacy modules so we don't need to build them first
