@@ -33,6 +33,7 @@ interface CheckRecoveryKeyProps {
 
 /**
  * Lets the user check that the recovery key they have saved is their current one.
+ * Shown as one of the cards making up the body of the logout dialog.
  */
 export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonly<CheckRecoveryKeyProps>): JSX.Element {
     const matrixClient = useMatrixClientContext();
@@ -75,10 +76,11 @@ async function isCurrentRecoveryKey(client: MatrixClient, input: string): Promis
     // "Incorrect key" would be misleading when there is no key to check against
     if (!keyTuple) throw new Error("The recovery key cannot be checked, as there is no default secret storage key");
     const [, keyInfo] = keyTuple;
-    // Without a MAC, `checkKey` accepts any key (allowed by the spec, and written by js-sdk in early 2020)
+    // `checkKey` returns true for any key when the description has no MAC, so there is nothing to check against
     if (!keyInfo.mac) throw new Error("The recovery key cannot be checked, as its description has no MAC");
 
     const inputToKey = makeInputToKey(keyInfo);
+    // A key set up with a passphrase can be unlocked by either the key itself or that passphrase, so try both
     const attempts = keyInfo.passphrase ? [{ recoveryKey: input }, { passphrase: input }] : [{ recoveryKey: input }];
     for (const keyParams of attempts) {
         let key: Uint8Array<ArrayBuffer>;
