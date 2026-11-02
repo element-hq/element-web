@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Page } from "@playwright/test";
+import { type APIRequestContext, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
+import { type Credentials } from "../../plugins/homeserver";
 import { getSampleFilePath, readSampleFile } from "../../sample-files";
 
 test.describe("Image Upload", () => {
@@ -39,14 +40,25 @@ test.describe("Image Upload", () => {
     test.describe("metadata", () => {
         test.use({ labsFlags: ["feature_strip_upload_metadata"] });
 
-        /** Starts waiting for the upload of the file's content, returning its body. */
-        function waitForUpload(page: Page): Promise<Buffer> {
-            return page
-                .waitForRequest((request) => request.method() === "POST" && /\/media\/v3\/upload/.test(request.url()))
-                .then((request) => request.postDataBuffer()!);
+        /**
+         * Starts waiting for the file to be sent, returning the content the homeserver stored for it.
+         * The upload itself can't be inspected: when the browser sends the picked file, it does not expose the request body.
+         */
+        async function waitForUpload(page: Page, request: APIRequestContext, user: Credentials): Promise<Buffer> {
+            const send = await page.waitForRequest(
+                (sendRequest) => sendRequest.method() === "PUT" && /\/send\/m\.room\.message\//.test(sendRequest.url()),
+            );
+            const contentUri: string = send.postDataJSON().url;
+            const [, serverName, mediaId] = /^mxc:\/\/([^/]+)\/(.+)$/.exec(contentUri)!;
+            const download = await request.get(
+                `${user.homeserverBaseUrl}/_matrix/client/v1/media/download/${serverName}/${mediaId}`,
+                { headers: { Authorization: `Bearer ${user.accessToken}` } },
+            );
+            expect(download.ok()).toBe(true);
+            return download.body();
         }
 
-        test("removes location and other metadata from photos", async ({ page, app }) => {
+        test("removes location and other metadata from photos", async ({ page, app, request, user }) => {
             const original = await readSampleFile("photo-with-metadata.jpg", null);
             expect(original.includes("LeakyMake")).toBe(true);
 
@@ -56,7 +68,7 @@ test.describe("Image Upload", () => {
             await expect(checkbox).toBeEnabled();
             await expect(checkbox).toBeChecked();
 
-            const upload = waitForUpload(page);
+            const upload = waitForUpload(page, request, user);
             await dialog.getByRole("button", { name: "Upload" }).click();
 
             const uploaded = await upload;
@@ -64,7 +76,7 @@ test.describe("Image Upload", () => {
             expect(uploaded.includes("Leaky")).toBe(false);
         });
 
-        test("sends the photo unchanged when the option is unticked", async ({ page, app }) => {
+        test("sends the photo unchanged when the option is unticked", async ({ page, app, request, user }) => {
             const original = await readSampleFile("photo-with-metadata.jpg", null);
 
             await app.setComposerInputFiles("room", getSampleFilePath("photo-with-metadata.jpg"));
@@ -73,7 +85,7 @@ test.describe("Image Upload", () => {
             await expect(checkbox).toBeEnabled();
             await checkbox.uncheck();
 
-            const upload = waitForUpload(page);
+            const upload = waitForUpload(page, request, user);
             await dialog.getByRole("button", { name: "Upload" }).click();
 
             expect((await upload).equals(original)).toBe(true);

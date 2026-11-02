@@ -398,7 +398,10 @@ describe("ContentMessages", () => {
             expect(dialogSpy).toHaveBeenCalledWith(
                 ErrorDialog,
                 expect.objectContaining({
-                    description: _t("upload_failed_metadata", { fileName: "notes.txt" }),
+                    description: _t("upload_failed_metadata", {
+                        fileName: "notes.txt",
+                        option: _t("upload_file|strip_metadata"),
+                    }),
                 }),
             );
         });
