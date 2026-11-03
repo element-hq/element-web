@@ -86,7 +86,7 @@ jobs:
 
             # Install Quartz for DMG badges
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
-            - run: sudo pip3 install pyobjc-framework-Quartz
+            - run: sudo pip3 install --break-system-packages pyobjc-framework-Quartz
 
             - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
