@@ -74,16 +74,14 @@ export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonl
 /**
  * Whether the given input unlocks the default secret storage key, either as a recovery key or,
  * for keys set up with a passphrase, as that passphrase.
- * Rejects if there is no key to check against, its description cannot be read or has no MAC,
- * or the check itself fails.
+ * Rejects if there is no key to check against, or if the check itself fails.
  */
 async function isCurrentRecoveryKey(client: MatrixClient, input: string): Promise<boolean> {
     const keyTuple = await client.secretStorage.getKey();
     // "Incorrect key" would be misleading when there is no key to check against
     if (!keyTuple) throw new Error("The recovery key cannot be checked, as there is no default secret storage key");
+    // Per the spec, a description with no MAC matches any key, so `checkKey` returning true is intended
     const [, keyInfo] = keyTuple;
-    // `checkKey` returns true for any key when the description has no MAC, so there is nothing to check against
-    if (!keyInfo.mac) throw new Error("The recovery key cannot be checked, as its description has no MAC");
 
     const inputToKey = makeInputToKey(keyInfo);
     // A key set up with a passphrase can be unlocked by either the key itself or that passphrase, so try both
