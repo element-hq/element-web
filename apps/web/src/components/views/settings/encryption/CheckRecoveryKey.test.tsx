@@ -134,7 +134,6 @@ describe("<CheckRecoveryKey />", () => {
         await waitFor(() =>
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 title: "Failed to check the recovery key",
-                description: "Error: Unknown algorithm",
             }),
         );
         expect(onFinish).not.toHaveBeenCalled();
@@ -157,7 +156,6 @@ describe("<CheckRecoveryKey />", () => {
         await waitFor(() =>
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 title: "Failed to check the recovery key",
-                description: "Error: offline",
             }),
         );
         await userEvent.click(screen.getByRole("button", { name: "OK" }));

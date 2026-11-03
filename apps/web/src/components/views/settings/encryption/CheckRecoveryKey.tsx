@@ -8,11 +8,13 @@
 import React, { type JSX } from "react";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { makeInputToKey } from "../../../../SecurityManager";
-import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
+import Modal from "../../../../Modal";
+import ErrorDialog from "../../dialogs/ErrorDialog";
 import { EncryptionCard } from "./EncryptionCard";
 import { KeyForm } from "./ChangeRecoveryKeyBody";
 
@@ -52,8 +54,12 @@ export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonl
                         if (isCorrect) onFinish();
                         return isCorrect;
                     } catch (e) {
-                        // Leave the form usable: the key may well be right, we just could not check it
-                        logErrorAndShowErrorDialog(_t("settings|encryption|recovery|check_failed_title"), e);
+                        // Leave the form usable, since the key may well be right and we just could not check it.
+                        // The raw error is English, so log it and show only translated text.
+                        logger.error("Failed to check the recovery key:", e);
+                        Modal.createDialog(ErrorDialog, {
+                            title: _t("settings|encryption|recovery|check_failed_title"),
+                        });
                     }
                 }}
                 onCancelClick={onCancelClick}
