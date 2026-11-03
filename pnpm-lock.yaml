@@ -695,8 +695,8 @@ importers:
         specifier: 1.0.40
         version: 1.0.40
       what-input:
-        specifier: ^5.2.10
-        version: 5.2.12
+        specifier: ^6.0.0
+        version: 6.0.1
     devDependencies:
       '@babel/core':
         specifier: ^7.12.10
@@ -12973,8 +12973,9 @@ packages:
       webpack-cli:
         optional: true
 
-  what-input@5.2.12:
-    resolution: {integrity: sha512-3yrSa7nGSXGJS6wZeSkO6VNm95pB1mZ9i3wFzC1hhY7mn4/afue/MvXz04OXNdBC8bfo4AB4RRd3Dem9jXM58Q==}
+  what-input@6.0.1:
+    resolution: {integrity: sha512-9AE9mIMxsTSQB5EFMFz136Egi/FTL1yIMvS/wnNHWTfHBJMEH3E8lS/9q2Ppmg2VogUSd8bwwqJ337aa7wLMhw==}
+    engines: {node: '>=20'}
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -25877,7 +25878,7 @@ snapshots:
       - svgo
       - uglify-js
 
-  what-input@5.2.12: {}
+  what-input@6.0.1: {}
 
   whatwg-mimetype@3.0.0: {}
 
