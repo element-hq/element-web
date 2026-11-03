@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { logger as baseLogger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/src/logger";
 import { SettingLevel } from "./settings/SettingLevel";
 import SettingsStore from "./settings/SettingsStore";
 
 export const USER_TIMEZONE_KEY = "userTimezone";
-const logger = baseLogger.getChild("TimezoneHandler");
+const log = logger.getChild("TimezoneHandler");
 
 /**
  * Get the configured timezone for the user, or undefiend if not configured.
@@ -24,7 +24,7 @@ export function getUserTimezone(): string | undefined {
         // Intl matches zone names regardless of case, so normalise the stored value to match `supportedValuesOf`.
         return new Intl.DateTimeFormat(undefined, { timeZone: tz }).resolvedOptions().timeZone;
     } catch {
-        logger.warn(`User configured timezone "${tz}" is not supported. Falling back to browser default.`);
+        log.warn(`User configured timezone "${tz}" is not supported. Falling back to browser default.`);
         // Not a valid timezone, so fall back to the browser default.
         return undefined;
     }
