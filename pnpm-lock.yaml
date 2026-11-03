@@ -1444,8 +1444,8 @@ importers:
         specifier: 10.5.5
         version: 10.5.5(storybook@10.6.2)
       '@storybook/addon-designs':
-        specifier: 11.1.4
-        version: 11.1.4(@storybook/addon-docs@10.5.5)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)(storybook@10.6.2)
+        specifier: 12.0.0
+        version: 12.0.0(@storybook/addon-docs@10.5.5)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)(storybook@10.6.2)
       '@storybook/addon-docs':
         specifier: 10.5.5
         version: 10.5.5(@types/react-dom@19.3.0)(@types/react@19.3.0)(esbuild@0.27.4)(rollup@4.64.2)(storybook@10.6.2)(vite@8.3.4)(webpack@5.112.2)
@@ -5773,13 +5773,13 @@ packages:
     peerDependencies:
       storybook: ^10.5.5
 
-  '@storybook/addon-designs@11.1.4':
-    resolution: {integrity: sha512-4NWq8iiCbAODyfbMXKlOmMcz+xLcfIKzxC0UMdWq2M4W9SkTwzX7qr/m+2+a0dqddAaZvOZ9zfIrZa5suHC1ow==}
+  '@storybook/addon-designs@12.0.0':
+    resolution: {integrity: sha512-IhbWyqTg2qHN56iS93NynURJBxvYGWY6f7IgrTqOYz6t8AATv+1RIUGXKxVDk4zzVGZYok8TdLBE25O1XmQCXQ==}
     peerDependencies:
-      '@storybook/addon-docs': ^0.0.0-0 || ^10.0.0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.5.0-0 || ^10.6.0-0
+      '@storybook/addon-docs': ^0.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.5.0-0 || ^10.6.0-0 || ^11.0.0-0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-      storybook: ^0.0.0-0 || ^10.0.0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.5.0-0 || ^10.6.0-0
+      storybook: ^0.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.5.0-0 || ^10.6.0-0 || ^11.0.0-0
     peerDependenciesMeta:
       '@storybook/addon-docs':
         optional: true
@@ -17627,7 +17627,7 @@ snapshots:
       axe-core: 4.14.0
       storybook: 10.6.2(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
 
-  '@storybook/addon-designs@11.1.4(@storybook/addon-docs@10.5.5)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)(storybook@10.6.2)':
+  '@storybook/addon-designs@12.0.0(@storybook/addon-docs@10.5.5)(@types/react@19.3.0)(react-dom@19.3.0)(react@19.3.0)(storybook@10.6.2)':
     dependencies:
       '@figspec/react': 2.0.1(@types/react@19.3.0)(react@19.3.0)
       storybook: 10.6.2(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.0)
