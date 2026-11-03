@@ -25,11 +25,6 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
-/** The `getUrlPreview` calls for pages, leaving out those for a site's favicon.ico. */
-function pagePreviewCalls(client: { getUrlPreview: Mock }): unknown[][] {
-    return client.getUrlPreview.mock.calls.filter(([url]) => !String(url).endsWith("/favicon.ico"));
-}
-
 function getViewModel({ visible } = { visible: true }): {
     vm: MessageComposerUrlPreviewViewModel;
     client: { getUrlPreview: Mock; mxcUrlToHttp: Mock };
@@ -211,7 +206,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         vm.updateWithText({ content: "https://example.org", debounced: false });
         vm.updateWithText({ content: "https://example.org some extra words", debounced: false });
         await vi.waitFor(() => {
-            expect(pagePreviewCalls(client)).toHaveLength(1);
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -223,7 +218,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             debounced: false,
         });
         await vi.waitFor(() => {
-            expect(pagePreviewCalls(client)).toHaveLength(1);
+            expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
         });
     });
 
