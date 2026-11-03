@@ -873,7 +873,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
         const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
-        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+        // A media with a caption is not considered a "media tile". It needs extra padding to render correctly in bubble layout for example.
+        const isProbablyMedia =
+            MediaEventHelper.isEligible(this.props.mxEvent) && !MediaEventHelper.hasCaption(this.props.mxEvent);
         const isEditing = !!this.props.editState;
         const isSending =
             this.props.eventSendStatus === EventStatus.SENDING ||

@@ -21,12 +21,11 @@ import {
     type ISearchResults,
 } from "matrix-js-sdk/src/matrix";
 
-import { clientAndSDKContextRenderOptions, stubClient } from "test-utils";
+import { clientAndSDKContextRenderOptions, stubClient, TestSDKContext } from "test-utils";
 import { RoomSearchView } from "./RoomSearchView";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { searchPagination, SearchScope } from "../../Searching";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import SettingsStore from "../../settings/SettingsStore.ts";
 import { SettingLevel } from "../../settings/SettingLevel.ts";
 import type * as Searching from "../../Searching";
@@ -39,13 +38,13 @@ vi.mock("../../Searching", async () => ({
 describe("<RoomSearchView/>", () => {
     const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
     let client: MatrixClient;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
     let room: Room;
 
     beforeEach(async () => {
         stubClient();
         client = MatrixClientPeg.safeGet();
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
         client.supportsThreads = vi.fn().mockReturnValue(true);
         room = new Room("!room:server", client, client.getSafeUserId());
         vi.mocked(client.getRoom).mockReturnValue(room);

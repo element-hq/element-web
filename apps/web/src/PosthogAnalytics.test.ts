@@ -13,7 +13,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type PostHog } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { getMockClientWithEventEmitter } from "test-utils";
+import { getMockClientWithEventEmitter, tearDownAfterTest } from "test-utils";
 
 import { Anonymity, getRedactedCurrentLocation, type IPosthogEvent, PosthogAnalytics } from "./PosthogAnalytics";
 import SdkConfig from "./SdkConfig";
@@ -82,7 +82,7 @@ describe("PosthogAnalytics", () => {
         it("Should not be enabled without config being set", () => {
             // force empty/invalid state for posthog options
             SdkConfig.put({ brand: "Testing" });
-            const analytics = new PosthogAnalytics(fakePosthog);
+            const analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             expect(analytics.isEnabled()).toBe(false);
         });
 
@@ -94,10 +94,21 @@ describe("PosthogAnalytics", () => {
                     api_host: "bar",
                 },
             });
-            const analytics = new PosthogAnalytics(fakePosthog);
+            const analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
             expect(analytics.isEnabled()).toBe(true);
         });
+    });
+
+    it("Stops listening to the dispatcher when destroyed", () => {
+        SdkConfig.put({ brand: "Testing" });
+        const analytics = new PosthogAnalytics(fakePosthog);
+        const unregisterSpy = vi.spyOn(defaultDispatcher, "unregister");
+
+        analytics.destroy();
+
+        expect(unregisterSpy).toHaveBeenCalledWith(expect.any(String));
+        unregisterSpy.mockRestore();
     });
 
     describe("Tracking", () => {
@@ -112,7 +123,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
         });
 
         it("Should pass event to posthog", () => {
@@ -199,7 +210,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
         });
 
@@ -290,7 +301,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
         });
 
@@ -338,7 +349,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
         });
 
         // `updateAnonymityFromSettings` is called On page load / login / account data change.

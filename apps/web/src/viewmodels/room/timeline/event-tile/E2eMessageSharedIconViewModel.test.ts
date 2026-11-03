@@ -16,6 +16,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, type Mock } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
+
 import { E2eMessageSharedIconViewModel } from "./E2eMessageSharedIconViewModel";
 
 type TestRoomState = EventEmitter & {
@@ -141,6 +143,7 @@ describe("E2eMessageSharedIconViewModel", () => {
             roomId: ROOM_ID,
             keyForwardingUserId: USER_ID,
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -165,6 +168,7 @@ describe("E2eMessageSharedIconViewModel", () => {
             roomId: ROOM_ID,
             keyForwardingUserId: USER_ID,
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 

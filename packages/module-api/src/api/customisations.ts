@@ -49,6 +49,13 @@ export const enum UIComponent {
      * Components that lead the user to room options menu.
      */
     RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+
+    /**
+     * Components that let the user make a room or space public, either when creating it or
+     * by changing an existing one. Hiding this is equivalent to setting both
+     * `UIFeature.allowCreatingPublicRooms` and `UIFeature.allowCreatingPublicSpaces` to false.
+     */
+    PublicRooms = "UIComponent.publicRooms",
 }
 
 /**
