@@ -105,7 +105,7 @@
         "sanitize-html": "2.18.1",
         "tar-js": "^0.3.0",
         "ua-parser-js": "1.0.40",
-        "what-input": "^5.2.10"
+        "what-input": "^6.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",
