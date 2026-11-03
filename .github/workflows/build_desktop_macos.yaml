@@ -84,11 +84,6 @@ jobs:
                   name: ${{ inputs.prepare-artifact-name }}
                   path: apps/desktop
 
-            # M1 macos-14 comes without Python preinstalled
-            - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
-              with:
-                  python-version: "3.13"
-
             # Install Quartz for DMG badges
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
             - run: sudo pip3 install pyobjc-framework-Quartz
