@@ -34,6 +34,7 @@ describe("RoomNotificationStateStore", function () {
     });
 
     afterEach(() => {
+        store.destroy();
         vi.resetAllMocks();
     });
 

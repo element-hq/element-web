@@ -12,28 +12,27 @@ import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import { render } from "test-utils-rtl";
-import { stubClient } from "test-utils";
+import { stubClient, TestSDKContext } from "test-utils";
 
 import AppsDrawer from "./AppsDrawer";
 import SdkConfig from "../../../SdkConfig";
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../contexts/SDKContext";
-import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 const ROOM_ID = "!room:id";
 
 describe("AppsDrawer", () => {
     let client: MatrixClient;
     let room: Room;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
     });
 
     afterEach(() => {

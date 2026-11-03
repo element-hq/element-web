@@ -10,6 +10,8 @@
 import { EventType, type MatrixClient, MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
 
+import { tearDownAfterTest } from "test-utils";
+
 import Modal from "../../../../Modal";
 import { RoomAvatarEventViewModel } from "./RoomAvatarEventViewModel";
 
@@ -53,7 +55,7 @@ describe("RoomAvatarEventViewModel", () => {
         const mxEvent = createEvent("mxc://example.org/avatar");
         mxEvent.sender = { name: "Alice" } as MatrixEvent["sender"];
 
-        const vm = new RoomAvatarEventViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new RoomAvatarEventViewModel({ cli, mxEvent }));
 
         expect(vm.getSnapshot()).toEqual({
             senderDisplayName: "Alice",
@@ -66,12 +68,13 @@ describe("RoomAvatarEventViewModel", () => {
 
     it("falls back to the sender ID when no sender member is available", () => {
         const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("mxc://example.org/avatar") });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().senderDisplayName).toBe("@alice:example.org");
     });
 
     it("marks the event as removed when no avatar URL is present", () => {
-        const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("") });
+        const vm = tearDownAfterTest(new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("") }));
 
         expect(vm.getSnapshot()).toMatchObject({
             avatarUrl: undefined,
@@ -81,6 +84,7 @@ describe("RoomAvatarEventViewModel", () => {
 
     it("updates the snapshot when the event changes", () => {
         const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("mxc://example.org/avatar") });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -96,6 +100,7 @@ describe("RoomAvatarEventViewModel", () => {
 
     it("does not emit when the event-derived snapshot is unchanged", () => {
         const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("mxc://example.org/avatar") });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -107,6 +112,7 @@ describe("RoomAvatarEventViewModel", () => {
     it("opens the room avatar in the lightbox", () => {
         const dialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({ close: vi.fn() } as any);
         const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("mxc://example.org/avatar") });
+        tearDownAfterTest(vm);
 
         vm.onAvatarClick();
 
@@ -132,7 +138,7 @@ describe("RoomAvatarEventViewModel", () => {
 
     it("does not open the lightbox when the event has no avatar URL", () => {
         const dialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({ close: vi.fn() } as any);
-        const vm = new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("") });
+        const vm = tearDownAfterTest(new RoomAvatarEventViewModel({ cli, mxEvent: createEvent("") }));
 
         vm.onAvatarClick();
 

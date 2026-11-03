@@ -7,6 +7,7 @@
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { HiddenBodyViewModel } from "./HiddenBodyViewModel";
 
@@ -20,7 +21,7 @@ describe("HiddenBodyViewModel", () => {
         }) as unknown as MatrixEvent;
 
     it("extracts a moderation reason from a hidden event", () => {
-        const vm = new HiddenBodyViewModel({ mxEvent: createEvent(false, "spam") });
+        const vm = tearDownAfterTest(new HiddenBodyViewModel({ mxEvent: createEvent(false, "spam") }));
 
         expect(vm.getSnapshot()).toEqual({
             reason: "spam",
@@ -28,7 +29,7 @@ describe("HiddenBodyViewModel", () => {
     });
 
     it("omits the reason when the hidden event has no reason", () => {
-        const vm = new HiddenBodyViewModel({ mxEvent: createEvent(false, null) });
+        const vm = tearDownAfterTest(new HiddenBodyViewModel({ mxEvent: createEvent(false, null) }));
 
         expect(vm.getSnapshot()).toEqual({
             reason: undefined,
@@ -36,13 +37,13 @@ describe("HiddenBodyViewModel", () => {
     });
 
     it("throws when created for a visible event", () => {
-        expect(() => new HiddenBodyViewModel({ mxEvent: createEvent(true) })).toThrow(
+        expect(() => tearDownAfterTest(new HiddenBodyViewModel({ mxEvent: createEvent(true) }))).toThrow(
             "HiddenBodyViewModel should only be applied to hidden messages",
         );
     });
 
     it("updates the snapshot when the event changes", () => {
-        const vm = new HiddenBodyViewModel({ mxEvent: createEvent(false) });
+        const vm = tearDownAfterTest(new HiddenBodyViewModel({ mxEvent: createEvent(false) }));
 
         vm.setEvent(createEvent(false, "abuse"));
 
@@ -53,7 +54,7 @@ describe("HiddenBodyViewModel", () => {
 
     it("does not emit when setEvent receives the current event", () => {
         const event = createEvent(false, "spam");
-        const vm = new HiddenBodyViewModel({ mxEvent: event });
+        const vm = tearDownAfterTest(new HiddenBodyViewModel({ mxEvent: event }));
         const listener = vi.fn();
         vm.subscribe(listener);
 

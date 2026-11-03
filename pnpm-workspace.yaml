@@ -22,12 +22,12 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.64.0
-    "playwright-core": 1.64.0
+    "@playwright/test": 1.64.1
+    "playwright-core": 1.64.1
     serve: 14.2.6
     # Compound
-    "@vector-im/compound-design-tokens": 11.2.0
-    "@vector-im/compound-web": 10.3.1
+    "@vector-im/compound-design-tokens": 11.3.0
+    "@vector-im/compound-web": "10.4.0"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -77,10 +77,6 @@ allowBuilds:
     # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
     "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
-    # Element Call's React component is a git dependency on the `component` directory of the
-    # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
-    # pnpm matches git-hosted packages by repository URL, not by bare name.
-    "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need

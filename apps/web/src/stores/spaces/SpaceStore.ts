@@ -1088,7 +1088,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
     protected async reset(): Promise<void> {
         this.rootSpaces = [];
         this.parentMap = new EnhancedMap();
-        this.notificationStateMap = new Map();
+        this.destroyNotificationStates();
         this.roomIdsBySpace = new Map();
         this.userIdsBySpace = new Map();
         this._aggregatedSpaceCache.roomIdsBySpace.clear();
@@ -1281,6 +1281,17 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                 }
             }
         }
+    }
+
+    public destroy(): void {
+        super.destroy();
+        this.destroyNotificationStates();
+    }
+
+    /** Destroys the notification states, which each watch a setting, and forgets them. */
+    private destroyNotificationStates(): void {
+        for (const state of this.notificationStateMap.values()) state.destroy();
+        this.notificationStateMap = new Map();
     }
 
     public getNotificationState(key: SpaceKey): SpaceNotificationState {

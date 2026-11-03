@@ -6,9 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Page } from "@playwright/test";
+import type { EventType, MsgType } from "matrix-js-sdk/src/types";
 import { expect, test } from "../../element-web-test";
+import { readSampleFileSync } from "../../sample-files";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
+
+const IMAGE_FILE = readSampleFileSync("riot.png", null);
 
 const roomMessageList = (page: Page) => page.locator(".mx_RoomView_MessageList");
 
@@ -57,6 +61,33 @@ test.describe("EventTileView application coverage", () => {
             await expect(messageTiles).toHaveCount(4);
             await expect(messages).toMatchScreenshot("event-tile-group-compact.png", {
                 css: ".mx_MessageTimestamp { visibility: hidden; }",
+            });
+        },
+    );
+
+    test(
+        "renders image message with a caption in bubble layout",
+        { tag: "@screenshot" },
+        async ({ page, app, bot }) => {
+            const roomId = await app.client.createRoom({ name: "EventTile caption" });
+            const upload = await app.client.uploadContent(IMAGE_FILE, { name: "image.png", type: "image/png" });
+            const event = await app.client.sendEvent(roomId, null, "m.room.message" as EventType, {
+                msgtype: "m.image" as MsgType,
+                filename: "image.png",
+                body: "A caption long enough to reach the right edge of the bubble where the timestamp is drawn",
+                url: upload.content_uri,
+            });
+
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            await app.settings.setValue("alwaysShowTimestamps", null, SettingLevel.DEVICE, true);
+            await app.viewRoomById(roomId);
+
+            const tile = page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${event.event_id}']`);
+            await expect(tile.locator(".mx_EventTile_caption")).toBeVisible();
+
+            await expect(tile).toMatchScreenshot("event-tile-bubble-image-caption.png", {
+                mask: [tile.locator(".mx_MessageTimestamp")],
+                hideJumpToBottomButton: true,
             });
         },
     );
