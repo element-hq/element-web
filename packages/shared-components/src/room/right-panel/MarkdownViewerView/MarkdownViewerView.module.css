@@ -88,11 +88,38 @@ Please see LICENSE in the repository root for full details.
     border-radius: var(--cpd-space-1x);
 }
 
-.content pre {
+.content:not([data-format="plain"]) pre {
     padding: var(--cpd-space-3x);
     overflow-x: auto;
     background: var(--cpd-color-bg-subtle-secondary);
     border-radius: var(--cpd-space-2x);
+}
+
+.content[data-format="plain"] {
+    padding: var(--cpd-space-3x) 0;
+
+    pre {
+        counter-reset: line;
+    }
+
+    code {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        counter-increment: line;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    code::before {
+        content: counter(line);
+        min-width: 3ch;
+        text-align: end;
+        padding: 0 var(--cpd-space-1x);
+        margin-right: var(--cpd-space-2x);
+        border-right: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+        color: var(--cpd-color-text-secondary);
+        user-select: none;
+    }
 }
 
 .content pre code {
@@ -136,4 +163,8 @@ Please see LICENSE in the repository root for full details.
 .content img {
     max-width: 100%;
     height: auto;
+}
+
+.toolbar {
+    margin-left: auto;
 }

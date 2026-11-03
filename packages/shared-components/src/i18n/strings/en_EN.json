@@ -76,6 +76,8 @@
     },
     "document_viewer": {
         "error_load": "Unable to load this file.",
+        "format_plain": "Plain text",
+        "format_rendered": "Rendered",
         "loading": "Loading document…"
     },
     "emoji": {

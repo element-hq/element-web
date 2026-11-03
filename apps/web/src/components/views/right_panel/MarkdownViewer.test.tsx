@@ -123,4 +123,36 @@ describe("MarkdownViewer", () => {
         expect(await screen.findByRole("heading", { name: "Second" })).toBeInTheDocument();
         expect(screen.queryByRole("heading", { name: "First" })).not.toBeInTheDocument();
     });
+
+    it("shows a plain text file as-is, with no format switch", async () => {
+        render(<MarkdownViewer media={media("# Not a heading\n", "notes.txt")} />);
+
+        const content = await screen.findByTestId("markdown-content");
+        expect(content.querySelector("pre")).toHaveTextContent("# Not a heading");
+        expect(content).toHaveAttribute("data-format", "plain");
+        expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+        expect(screen.queryByRole("radio", { name: "Plain text" })).not.toBeInTheDocument();
+    });
+
+    it("keeps HTML in a plain text file as inert text", async () => {
+        render(<MarkdownViewer media={media("<script>window.pwned = true</script>\n", "notes.log")} />);
+
+        const content = await screen.findByTestId("markdown-content");
+        expect(content.querySelector("script")).toBeNull();
+        expect(content).toHaveTextContent("<script>window.pwned = true</script>");
+    });
+
+    it("shows the Markdown source when the user switches to plain text", async () => {
+        const user = userEvent.setup();
+        render(<MarkdownViewer media={media()} />);
+        await screen.findByRole("heading", { name: "Hello" });
+
+        await user.click(screen.getByRole("radio", { name: "Plain text" }));
+
+        await waitFor(() =>
+            expect(screen.getByTestId("markdown-content").querySelector("pre")).toHaveTextContent("# Hello"),
+        );
+        expect(screen.queryByRole("heading", { name: "Hello" })).not.toBeInTheDocument();
+        expect(screen.getByRole("radio", { name: "Plain text" })).toBeChecked();
+    });
 });
