@@ -52,8 +52,13 @@ function showMainWindow(): void {
     focusedBeforeTrayAction = true;
 }
 
+function isMainWindowFocusedForTrayAction(): boolean {
+    if (process.platform === "win32") return focusedBeforeTrayAction;
+    return global.mainWindow?.isFocused() ?? false;
+}
+
 function toggleWin(): void {
-    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && focusedBeforeTrayAction) {
+    if (global.mainWindow?.isVisible() && !global.mainWindow.isMinimized() && isMainWindowFocusedForTrayAction()) {
         hideMainWindow();
     } else {
         showMainWindow();
@@ -79,11 +84,13 @@ export async function create(): Promise<void> {
     }
 
     trayIcon.setToolTip(getConfig().brand);
-    focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
+    if (process.platform === "win32") {
+        focusedBeforeTrayAction = global.mainWindow?.isFocused() ?? false;
+        // The tray can steal focus before its click event, so sample while the pointer enters or moves over it.
+        trayIcon.on("mouse-enter", captureWindowFocus);
+        trayIcon.on("mouse-move", captureWindowFocus);
+    }
     initApplicationMenu();
-    // The tray can steal focus before its click event, so sample while the pointer enters or moves over it.
-    trayIcon.on("mouse-enter", captureWindowFocus);
-    trayIcon.on("mouse-move", captureWindowFocus);
     trayIcon.on("click", toggleWin);
 
     // See also, badge.ts

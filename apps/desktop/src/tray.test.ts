@@ -35,12 +35,14 @@ vi.mock("./config.js");
 
 describe("create", () => {
     let create: () => Promise<void>;
+    let platform: NodeJS.Platform;
 
     beforeEach(async () => {
         vi.resetModules();
         vi.clearAllMocks();
         // The tray is disabled on macOS so test under win32
-        vi.spyOn(process, "platform", "get").mockReturnValue("win32");
+        platform = "win32";
+        vi.spyOn(process, "platform", "get").mockImplementation(() => platform);
         ({ create } = await import("./tray.js"));
     });
 
@@ -56,7 +58,7 @@ describe("create", () => {
         expect(tray.setToolTip).toHaveBeenCalledWith("ChatApp");
     });
 
-    it("should use the pre-click focus state to toggle the window", async () => {
+    it("should use the pre-click focus state to toggle the window on Windows", async () => {
         const window = {
             isVisible: vi.fn().mockReturnValue(true),
             isMinimized: vi.fn().mockReturnValue(false),
@@ -94,5 +96,39 @@ describe("create", () => {
         clickHandler?.();
         expect(window.show).toHaveBeenCalledOnce();
         expect(window.focus).toHaveBeenCalledTimes(2);
+    });
+
+    it("should use the current focus state on Linux without tray mouse events", async () => {
+        platform = "linux";
+        const window = {
+            isVisible: vi.fn().mockReturnValue(true),
+            isMinimized: vi.fn().mockReturnValue(false),
+            isFocused: vi.fn().mockReturnValue(true),
+            hide: vi.fn(),
+            show: vi.fn(),
+            focus: vi.fn(),
+            restore: vi.fn(),
+            webContents: { on: vi.fn() },
+        } as unknown as BrowserWindow;
+        (global as unknown as { mainWindow: BrowserWindow | null }).mainWindow = window;
+
+        await create();
+
+        const tray = vi.mocked(Tray).mock.instances[0];
+        const on = tray.on as unknown as Mock<(event: string, listener: () => void) => void>;
+        const events = on.mock.calls.map(([event]) => event);
+        const clickHandler = on.mock.calls.find(([event]) => event === "click")?.[1];
+        expect(events).toContain("click");
+        expect(events).not.toContain("mouse-enter");
+        expect(events).not.toContain("mouse-move");
+        expect(clickHandler).toBeDefined();
+
+        clickHandler?.();
+        expect(window.hide).toHaveBeenCalledOnce();
+
+        vi.mocked(window.isFocused).mockReturnValue(false);
+        clickHandler?.();
+        expect(window.hide).toHaveBeenCalledOnce();
+        expect(window.focus).toHaveBeenCalledOnce();
     });
 });
