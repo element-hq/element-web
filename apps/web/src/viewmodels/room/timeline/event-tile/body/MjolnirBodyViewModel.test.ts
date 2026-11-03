@@ -6,19 +6,20 @@
  */
 
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { MjolnirBodyViewModel } from "./MjolnirBodyViewModel";
 
 describe("MjolnirBodyViewModel", () => {
     it("has an empty snapshot", () => {
-        const vm = new MjolnirBodyViewModel({ onAllow: vi.fn() });
+        const vm = tearDownAfterTest(new MjolnirBodyViewModel({ onAllow: vi.fn() }));
 
         expect(vm.getSnapshot()).toEqual({});
     });
 
     it("forwards the allow action", () => {
         const onAllow = vi.fn();
-        const vm = new MjolnirBodyViewModel({ onAllow });
+        const vm = tearDownAfterTest(new MjolnirBodyViewModel({ onAllow }));
 
         vm.onAllow();
 
@@ -28,7 +29,7 @@ describe("MjolnirBodyViewModel", () => {
     it("uses the updated action", () => {
         const oldAction = vi.fn();
         const newAction = vi.fn();
-        const vm = new MjolnirBodyViewModel({ onAllow: oldAction });
+        const vm = tearDownAfterTest(new MjolnirBodyViewModel({ onAllow: oldAction }));
 
         vm.setProps({ onAllow: newAction });
         vm.onAllow();
@@ -40,7 +41,7 @@ describe("MjolnirBodyViewModel", () => {
     it("does not emit snapshot updates for unchanged action inputs", () => {
         const props = { onAllow: vi.fn() };
         const listener = vi.fn();
-        const vm = new MjolnirBodyViewModel(props);
+        const vm = tearDownAfterTest(new MjolnirBodyViewModel(props));
 
         vm.subscribe(listener);
 

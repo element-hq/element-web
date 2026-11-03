@@ -6,11 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { EventEmitter } from "node:events";
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
 import { type Feature, ReleaseAnnouncementStore } from "./ReleaseAnnouncementStore";
-import { type SettingLevel } from "../settings/SettingLevel";
+import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
 
 vi.mock("../settings/SettingsStore");
@@ -28,7 +30,8 @@ describe("ReleaseAnnouncementStore", () => {
         settings = {
             releaseAnnouncementData: {},
         };
-        const watchCallbacks: Array<CallbackFn<any>> = [];
+        const watchCallbacks = new Map<string, CallbackFn<any>>();
+        let nextWatcherId = 0;
 
         vi.mocked(SettingsStore.getValue).mockImplementation((setting: string) => {
             return settings[setting];
@@ -46,17 +49,22 @@ describe("ReleaseAnnouncementStore", () => {
         vi.mocked(SettingsStore.canSetValue).mockReturnValue(true);
         vi.mocked(SettingsStore.watchSetting).mockImplementation(
             (settingName: string, roomId: string | null, callback: any) => {
-                watchCallbacks.push(callback);
-                return "watcherId";
+                const watcherId = `watcherId${nextWatcherId++}`;
+                watchCallbacks.set(watcherId, callback);
+                return watcherId;
             },
         );
+        vi.mocked(SettingsStore.unwatchSetting).mockImplementation((watcherId: string | undefined) => {
+            watchCallbacks.delete(watcherId!);
+        });
 
-        vi.mocked(ToastStore.sharedInstance).mockReturnValue({
-            on: vi.fn(),
-            getToasts: vi.fn().mockReturnValue([]),
-        } as any);
+        vi.mocked(ToastStore.sharedInstance).mockReturnValue(
+            Object.assign(new EventEmitter(), {
+                getToasts: vi.fn().mockReturnValue([]),
+            }) as any,
+        );
 
-        releaseAnnouncementStore = new ReleaseAnnouncementStore();
+        releaseAnnouncementStore = tearDownAfterTest(new ReleaseAnnouncementStore());
     });
 
     /**
@@ -102,14 +110,14 @@ describe("ReleaseAnnouncementStore", () => {
         expect(await promise).toBeNull();
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
 
-        const secondStore = new ReleaseAnnouncementStore();
+        const secondStore = tearDownAfterTest(new ReleaseAnnouncementStore());
         // All the release announcements have been viewed, so it should be updated in the store account
         // The release announcement viewing states should be share among all instances (devices in the same account)
         expect(secondStore.getReleaseAnnouncement()).toBeNull();
     });
 
     it("should listen to release announcement data changes in the store", async () => {
-        const secondStore = new ReleaseAnnouncementStore();
+        const secondStore = tearDownAfterTest(new ReleaseAnnouncementStore());
         expect(secondStore.getReleaseAnnouncement()).toBe("room_list_section");
 
         const promise = listenReleaseAnnouncementChanged();
@@ -123,5 +131,21 @@ describe("ReleaseAnnouncementStore", () => {
         vi.mocked(ToastStore.sharedInstance().getToasts).mockReturnValue([{} as any]);
 
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
+    });
+
+    it("should stop emitting changes once destroyed", async () => {
+        const listener = vi.fn();
+        releaseAnnouncementStore.on("releaseAnnouncementChanged", listener);
+
+        // Sanity check: both sources emit before destroy
+        await SettingsStore.setValue("releaseAnnouncementData", null, SettingLevel.ACCOUNT, {});
+        ToastStore.sharedInstance().emit("update");
+        expect(listener).toHaveBeenCalledTimes(2);
+        listener.mockClear();
+
+        releaseAnnouncementStore.destroy();
+        await SettingsStore.setValue("releaseAnnouncementData", null, SettingLevel.ACCOUNT, {});
+        ToastStore.sharedInstance().emit("update");
+        expect(listener).not.toHaveBeenCalled();
     });
 });

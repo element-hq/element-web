@@ -10,7 +10,7 @@ import * as YAML from "yaml";
 
 // Pinned by digest so upstream cannot break our tests; Renovate keeps it updated (see .github/renovate.json).
 const DOCKER_IMAGE =
-    "livekit/livekit-server:v1.13.10@sha256:89ca9ce0791e18d6e03bf6e2c49ceb27e1c754eae8bd50c989386c1a5963791a";
+    "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20";
 
 export const LIVEKIT_API_KEY = "devkey";
 export const LIVEKIT_API_SECRET = "secret";

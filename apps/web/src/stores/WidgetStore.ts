@@ -54,6 +54,11 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         return WidgetStore.internalInstance;
     }
 
+    public destroy(): void {
+        super.destroy();
+        WidgetEchoStore.off("update", this.onWidgetEchoStoreUpdate);
+    }
+
     private initRoom(roomId: string): void {
         if (!this.roomMap.has(roomId)) {
             this.roomMap.set(roomId, {

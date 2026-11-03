@@ -34,7 +34,9 @@ const SilentLogin: FC<Props> = ({ onLoggedIn, icsUrl }) => {
         };
     }, [onLoggedIn, url.origin]);
 
-    return <HiddenIFrame src={url.href} />;
+    // The page only needs to run its script with its own cookies and send a postMessage back,
+    // so it gets no other permissions.
+    return <HiddenIFrame src={url.href} sandbox="allow-scripts allow-same-origin" />;
 };
 
 export default SilentLogin;

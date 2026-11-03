@@ -3959,6 +3959,8 @@
         "disabled_no_perms_start_video_call": "Du är inte behörig att starta videosamtal",
         "disabled_no_perms_start_voice_call": "Du är inte behörig att starta röstsamtal",
         "disabled_ongoing_call": "Pågående samtal",
+        "document_pip_close": "Återför samtalet till det här fönstret",
+        "document_pip_open": "Öppna samtal i ett flytande fönster",
         "element_call": "Element Call",
         "element_call_mock": {
             "default": "standard",

@@ -40,7 +40,7 @@ import dis from "../../../dispatcher/dispatcher";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ContextMenuButton } from "../../structures/ContextMenu";
-import PersistedElement, { getPersistKey } from "./PersistedElement";
+import PersistedElement, { DEFAULT_PERSISTED_Z_INDEX, getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
@@ -793,7 +793,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                     appTileBody = (
                         <div className="mx_AppTile_persistedWrapper">
                             <PersistedElement
-                                zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
+                                zIndex={
+                                    this.props.miniMode ? zIndexAboveOtherPersistentElements : DEFAULT_PERSISTED_Z_INDEX
+                                }
                                 persistKey={this.persistKey}
                                 moveRef={this.props.movePersistedElement}
                             >
