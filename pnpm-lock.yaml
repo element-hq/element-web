@@ -319,7 +319,7 @@ importers:
         version: 3.30.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/818906eef81a7be4999bdfc05e242cb880eae3dc#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/3914aec53f2783682c48a43a42c45a3a92378482#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: 0.28.1
-        version: 0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33)(react-dom@19.3.0)(react@19.3.0)
+        version: 0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -627,7 +627,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -1351,13 +1351,13 @@ importers:
     dependencies:
       '@dnd-kit/abstract':
         specifier: ^0.5.0
-        version: 0.5.1
+        version: 0.5.3
       '@dnd-kit/dom':
         specifier: ^0.5.0
-        version: 0.5.1
+        version: 0.5.3
       '@dnd-kit/react':
         specifier: ^0.5.0
-        version: 0.5.1(react-dom@19.3.0)(react@19.3.0)
+        version: 0.5.3(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../module-api
@@ -2713,26 +2713,26 @@ packages:
     resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
     engines: {node: '>=14.17.0'}
 
-  '@dnd-kit/abstract@0.5.1':
-    resolution: {integrity: sha512-XI13sUYRvRgggMocjHlQhLRgENm/2GF94KF7mk+c0uxse7sbn75r0BgxoNPDlzLTDPWx6PkS0YHoeXN9JWhnOA==}
+  '@dnd-kit/abstract@0.5.3':
+    resolution: {integrity: sha512-KZQ2vftkO9BHupVzlUqB5d7JETL7ITlvslx3hrj4aObwjliAzuzV/n5wCpQllNd0Hxvg7FaQtLekJ8dplqKwbA==}
 
-  '@dnd-kit/collision@0.5.1':
-    resolution: {integrity: sha512-exQmBlWWQ6calIup4KNQudiEF8Do61Lpzw/F0M3UOhqdKi9dx0ZXGf+qfdfmew8rJzPMj3MzKeGqNMEbCKA22g==}
+  '@dnd-kit/collision@0.5.3':
+    resolution: {integrity: sha512-DBo8czkI72xnsHRWOMTn/GAyYgSWy9bmde85mrZ7ShqLhcbIbcu4PVJ3ZU9MBikePCSAVOoUTZE2gS40jogrEw==}
 
-  '@dnd-kit/dom@0.5.1':
-    resolution: {integrity: sha512-r7/l4D+nsH1mFXWkplXCkZC9JlY7UjxsVuTu4yCqzC00XgX+SXiK3Oazp42KKG3mshfBNVtm15BI9rKNlkw2fA==}
+  '@dnd-kit/dom@0.5.3':
+    resolution: {integrity: sha512-JJe+Qu/JmofGzHes3np91sQYwp5spvLcknjRkq+VO59JTqSnQNPXlhHXavRXTwQFabaaRyRzXyH/faAvubCNGw==}
 
-  '@dnd-kit/geometry@0.5.1':
-    resolution: {integrity: sha512-7X/Ro2U5qW96SihIukMitnc3pYc5n/PmHmJ28oApLBIJRfLxPLgrL6X0ZbQT7qUEfdUIqXnehobJ3jXAc4hdAA==}
+  '@dnd-kit/geometry@0.5.3':
+    resolution: {integrity: sha512-U+zscNjoHfJ1xUV+XDGF89jPCoILLivWSb/U9mfM7h83f6o3X9AS9uIwG46bXUpCqPvlI/9JcOlyga5uvfyjgw==}
 
-  '@dnd-kit/react@0.5.1':
-    resolution: {integrity: sha512-WL8LvALUL9PqUUVun4xu4e8HO3x6rPwTxnnNwovj/VOUVyWpTmIaAK5Yj8jkzqNK01W74sQbwtffpLep1Ckj/Q==}
+  '@dnd-kit/react@0.5.3':
+    resolution: {integrity: sha512-BGn6bakgcRSoKMRQP8cRIGu59e5lGC3/sL0zVWmDMo/9CMPSxgjCcQltDn5TDTwAARnEbuwNEksor4rLtH/yEg==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
 
-  '@dnd-kit/state@0.5.1':
-    resolution: {integrity: sha512-SN0BZ0d/ob9dK8sTqk/0z3eNBWV6xPSrLbHUBbiCo9Sj3xfhPFk6ej2oZpDcqk7LWaujT57ocgdtznY7wQ2yFw==}
+  '@dnd-kit/state@0.5.3':
+    resolution: {integrity: sha512-NJTQkBglAT/SXLc+IOLiKwNvsTrWmPG5AO+7Gn0F0n8XyVaf4VCbTCuPuU48sDBfcpg23O0tfGkfZNiZbYTvMw==}
 
   '@docsearch/css@3.8.2':
     resolution: {integrity: sha512-y05ayQFyUmCXze79+56v/4HpycYF3uFqB78pLPrSV5ZKAlDuIAAJNhaRi8tTdRNXh05yxX/TyNnzD6LwSM89vQ==}
@@ -8593,8 +8593,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/818906eef81a7be4999bdfc05e242cb880eae3dc#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-S6XOIQKhykHaWKrrYUUwf8NvGOyQ5ItTnPicq/5Qf/6Y+1i9v3Pw/3hQ0dbOGFs4CI+A26Nb5MTu03ZkBRmlfA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/818906eef81a7be4999bdfc05e242cb880eae3dc}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3914aec53f2783682c48a43a42c45a3a92378482#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-mwlPD5CKo70rBk6nK6/JqESfosRf3KLuIN176VK9FnG9piBEMiIex9mFzbUEkepcQsjsJbv5SkkcbgccYVlwhQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/3914aec53f2783682c48a43a42c45a3a92378482}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.28.0:
@@ -9935,8 +9935,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33:
-    resolution: {gitHosted: true, integrity: sha512-nsJdEFuYOUsRzlN0yh2CT0XYT34KNFtsC+ts3M6GCEXzaVDoULlruE5VKrDgaf1KPgy060/Oqn9DHrP/e4lBQQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01:
+    resolution: {gitHosted: true, integrity: sha512-ZAhn/zB44MgrXqUzi9ffSFcmZY3+2nx7bEgfEJR7chYDFyT/XmlmfCJx7Ar4rOTAYZJRVnMxrEwiEHGDapUi0Q==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01}
     version: 45.0.0
     engines: {node: '>=22.0.0'}
 
@@ -14973,41 +14973,41 @@ snapshots:
 
   '@discoveryjs/json-ext@1.1.0': {}
 
-  '@dnd-kit/abstract@0.5.1':
+  '@dnd-kit/abstract@0.5.3':
     dependencies:
-      '@dnd-kit/geometry': 0.5.1
-      '@dnd-kit/state': 0.5.1
+      '@dnd-kit/geometry': 0.5.3
+      '@dnd-kit/state': 0.5.3
       tslib: 2.8.1
 
-  '@dnd-kit/collision@0.5.1':
+  '@dnd-kit/collision@0.5.3':
     dependencies:
-      '@dnd-kit/abstract': 0.5.1
-      '@dnd-kit/geometry': 0.5.1
+      '@dnd-kit/abstract': 0.5.3
+      '@dnd-kit/geometry': 0.5.3
       tslib: 2.8.1
 
-  '@dnd-kit/dom@0.5.1':
+  '@dnd-kit/dom@0.5.3':
     dependencies:
-      '@dnd-kit/abstract': 0.5.1
-      '@dnd-kit/collision': 0.5.1
-      '@dnd-kit/geometry': 0.5.1
-      '@dnd-kit/state': 0.5.1
+      '@dnd-kit/abstract': 0.5.3
+      '@dnd-kit/collision': 0.5.3
+      '@dnd-kit/geometry': 0.5.3
+      '@dnd-kit/state': 0.5.3
       tslib: 2.8.1
 
-  '@dnd-kit/geometry@0.5.1':
+  '@dnd-kit/geometry@0.5.3':
     dependencies:
-      '@dnd-kit/state': 0.5.1
+      '@dnd-kit/state': 0.5.3
       tslib: 2.8.1
 
-  '@dnd-kit/react@0.5.1(react-dom@19.3.0)(react@19.3.0)':
+  '@dnd-kit/react@0.5.3(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
-      '@dnd-kit/abstract': 0.5.1
-      '@dnd-kit/dom': 0.5.1
-      '@dnd-kit/state': 0.5.1
+      '@dnd-kit/abstract': 0.5.3
+      '@dnd-kit/dom': 0.5.3
+      '@dnd-kit/state': 0.5.3
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       tslib: 2.8.1
 
-  '@dnd-kit/state@0.5.1':
+  '@dnd-kit/state@0.5.3':
     dependencies:
       '@preact/signals-core': 1.14.4
       tslib: 2.8.1
@@ -15139,11 +15139,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -20829,7 +20829,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/818906eef81a7be4999bdfc05e242cb880eae3dc#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3914aec53f2783682c48a43a42c45a3a92378482#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.28.0(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
@@ -22275,7 +22275,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a0de3604d3e732e7a3e3f29506adf86bd472da33:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a9ef09fbf2f1644c8663d0aeaf6a921cd16e7b01:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
