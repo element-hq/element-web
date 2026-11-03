@@ -2389,14 +2389,6 @@
             },
             "confirm_key_storage_off": "Tem certeza de que deseja manter o armazenamento de chaves desativado?",
             "confirm_key_storage_off_description": "Se você sair de todos os seus dispositivos, perderá o histórico de mensagens e precisará verificar todos os seus contatos existentes novamente. <a>Saiba mais</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Excluir armazenamento de chaves",
-                "confirm": "Excluir armazenamento de chaves",
-                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e as chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
-                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
-                "list_second": "Você perderá o acesso às suas mensagens criptografadas se estiver desconectado de %(brand)s em todos os lugares",
-                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
-            },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",

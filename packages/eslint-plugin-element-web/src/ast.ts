@@ -114,16 +114,19 @@ export function normalisedText(context: Context, node: Node): string {
 
 // Methods whose presence shows that a class has a teardown phase which should release what it acquired
 const TEARDOWN_METHODS = new Set(["componentWillUnmount", "dispose", "destroy"]);
-// Methods which run as part of teardown. `close` is often reached through a base class's `destroy`, which
-// this per-class analysis cannot see, so it counts too, but its presence alone does not imply a teardown phase.
-const TEARDOWN_SCOPE_METHODS = new Set([...TEARDOWN_METHODS, "close"]);
+// Methods which run as part of teardown. `close` is often reached through a base class's `destroy`, and a
+// store's `stop` and `onNotReady` through its base class's `destroy`, which this per-class analysis cannot
+// see, so they count too, but their presence alone does not imply a teardown phase.
+const TEARDOWN_SCOPE_METHODS = new Set([...TEARDOWN_METHODS, "close", "stop", "onNotReady"]);
 
-// Base classes with a teardown phase: React class components, and view models (which inherit `dispose`)
-const LIFECYCLE_SUPERCLASS = /(^|\.)(Pure)?Component$|ViewModel$/;
+// Base classes with a teardown phase: React class components, view models (which inherit `dispose`) and
+// stores (which inherit `destroy`)
+const LIFECYCLE_SUPERCLASS =
+    /(^|\.)(Pure)?Component$|ViewModel$|^(AsyncStore|AsyncStoreWithClient|ReadyWatchingStore)$/;
 
 /**
- * Whether `node` is a class with a clear end of life: a React class component, a view model, or a class
- * with a teardown method such as `dispose`. Long-lived singletons without one are deliberately excluded.
+ * Whether `node` is a class with a clear end of life: a React class component, a view model, a store, or a
+ * class with a teardown method such as `dispose`. Long-lived singletons without one are deliberately excluded.
  */
 export function isLifecycleClass(context: Context, node: AnyClass): boolean {
     if (node.superClass && LIFECYCLE_SUPERCLASS.test(context.sourceCode.getText(node.superClass))) {
@@ -163,7 +166,7 @@ const CLEANUP_NAME = /clean|dispos|teardown|unsub|unwatch|unlisten|detach/i;
 const STORING_METHODS = new Set(["push", "add", "set", "track"]);
 
 /** Returns the name `node` is stored under, e.g. `cleanup` for `this.cleanup` or `const cleanup`. */
-function getTargetName(node: Node): string | null {
+export function getTargetName(node: Node): string | null {
     node = unwrap(node);
     if (node.type === "Identifier") return node.name;
     if (node.type === "MemberExpression" && node.property.type === "Identifier") return node.property.name;
@@ -268,6 +271,34 @@ export function getHookTeardownScopes(owner: AnyFunction): Node[] {
         }
     });
     return scopes;
+}
+
+/**
+ * Returns where whatever `call` subscribes to must be released: the cleanup of the effect which made it,
+ * a `finally` block of the same function, or the teardown of a class with a teardown phase.
+ * Returns null when `call` is not tied to any of those lifetimes.
+ */
+export function getSubscriptionTeardownScopes(context: Context, call: CallExpression): Node[] | null {
+    const fn = getEnclosingFunction(call);
+    if (fn && isEffectCallback(fn)) return getEffectCleanupScopes(fn);
+    if (fn) {
+        // A subscription scoped to one function, released in a `finally` block of that same function
+        const finalizers: Node[] = [];
+        walk(fn, (node) => {
+            if (node.type === "TryStatement" && node.finalizer && getEnclosingFunction(node) === fn) {
+                finalizers.push(node.finalizer);
+            }
+        });
+        if (finalizers.length > 0) return finalizers;
+    }
+
+    const owner = getEnclosingClass(call);
+    if (!owner || !isLifecycleClass(context, owner)) return null;
+    // Only consider subscriptions made directly by the class's own methods, not by nested callbacks
+    // which may belong to some other object's lifetime.
+    const method = fn ? getParent(fn) : null;
+    if (method?.type !== "MethodDefinition" && method?.type !== "PropertyDefinition") return null;
+    return getClassTeardownScopes(owner);
 }
 
 /** Whether any node within `scopes` satisfies `predicate`. */

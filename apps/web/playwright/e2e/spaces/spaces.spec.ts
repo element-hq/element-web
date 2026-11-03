@@ -286,7 +286,11 @@ test.describe("Spaces", () => {
             await bot.joinRoom(roomId);
 
             for (let i = 0; i < 10; i++) {
-                await bot.sendMessage(roomId, `${user.displayName} unread message ${i}`);
+                await bot.sendMessage(roomId, {
+                    "msgtype": "m.text",
+                    "body": `${user.displayName} unread message ${i}`,
+                    "m.mentions": { user_ids: [user.userId] },
+                });
             }
 
             const badge = spaceButton.locator(".mx_SpacePanel_notificationBadge");

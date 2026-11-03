@@ -347,8 +347,14 @@ export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
     const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
     if (await keyStorageToggle.isChecked()) {
         await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
-        await encryptionTab.getByRole("button", { name: "Delete key storage" }).click();
-        await expect(encryptionTab.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
+        // Stacked dialogs share a title id, so locate this one by its heading rather than its accessible name
+        const dialog = app.page.getByRole("dialog").filter({
+            has: app.page.getByRole("heading", { name: "Are you sure you want to delete key storage?" }),
+        });
+        await dialog.getByRole("button", { name: "Delete" }).click();
+        // The dialog stays open until key storage has been deleted
+        await expect(dialog).toBeHidden();
+        await expect(keyStorageToggle).not.toBeChecked();
 
         // Wait for the update to account data to stick
         await new Promise((resolve) => setTimeout(resolve, 2000));

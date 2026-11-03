@@ -28,6 +28,7 @@ import { Action } from "../dispatcher/actions";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
+import { ChangeRecoveryKeyDialog } from "../components/views/dialogs/security/ChangeRecoveryKeyDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
@@ -159,12 +160,21 @@ export const showToast = (state: DeviceStateForToast): void => {
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (state) {
-            case "set_up_recovery":
+            case "set_up_recovery": {
+                PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+                    eventName: "Interaction",
+                    interactionType: "Pointer",
+                    name: "ToastSetUpRecoveryClick",
+                });
+                myLogger.debug("Primary button clicked: opening recovery setup dialog");
+                Modal.createDialog(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
+                break;
+            }
             case "turn_on_key_storage": {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
-                    name: state === "set_up_recovery" ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
+                    name: "ToastTurnOnKeyStorageClick",
                 });
                 myLogger.debug("Primary button clicked: opening encryption settings dialog");
                 // Open the user settings dialog to the encryption tab

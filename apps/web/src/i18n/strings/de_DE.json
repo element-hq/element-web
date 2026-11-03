@@ -2510,14 +2510,6 @@
             },
             "confirm_key_storage_off": "Soll der Schlüsselspeicher wirklich deaktiviert bleiben?",
             "confirm_key_storage_off_description": "Wenn du alle deine Geräte entfernst, verlierst du deinen Nachrichtenverlauf und musst alle bestehenden Kontakte erneut verifizieren. <a>Mehr erfahren</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Schlüsselspeicher löschen",
-                "confirm": "Schlüsselspeicher löschen",
-                "description": "Das Löschen des Schlüsselspeichers entfernt deine digitale Identität und deine Nachrichtenschlüssel vom Server und deaktiviert die folgenden Sicherheitsfunktionen:",
-                "list_first": "Auf neuen Geräten ist kein verschlüsselter Nachrichtenverlauf verfügbar",
-                "list_second": "Du verlierst den Zugriff auf deine verschlüsselten Nachrichten, wenn du auf keinem Gerät mehr angemeldet bist",
-                "title": "Schlüsselspeicher deaktivieren und löschen?"
-            },
             "device_not_verified_button": "Dieses Gerät verifizieren",
             "device_not_verified_description": "Du musst dieses Gerät verifizieren, um deine Verschlüsselungseinstellungen sehen zu können.",
             "device_not_verified_title": "Gerät nicht verifiziert",

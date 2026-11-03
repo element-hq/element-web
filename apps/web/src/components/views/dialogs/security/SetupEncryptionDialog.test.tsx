@@ -13,7 +13,7 @@ import { render, screen } from "test-utils-rtl";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { vi, describe, it, expect, afterEach, type Mocked } from "vitest";
 
-import { getMockClientWithEventEmitter } from "test-utils";
+import { getMockClientWithEventEmitter, tearDownAfterTest } from "test-utils";
 import SetupEncryptionDialog from "./SetupEncryptionDialog";
 import { Phase, SetupEncryptionStore } from "../../../../stores/SetupEncryptionStore";
 import Modal from "../../../../Modal";
@@ -24,9 +24,9 @@ describe("SetupEncryptionDialog", () => {
         vi.restoreAllMocks();
     });
 
-    it("should launch a dialog when I say Proceed, then be finished when I reset", async () => {
+    it("should launch reset dialog when I say 'Can't confirm?' then be finished when I reset", async () => {
         mockClient();
-        const store = new SetupEncryptionStore();
+        const store = tearDownAfterTest(new SetupEncryptionStore());
         vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
 
         // Given when you open the reset dialog we immediately reset
@@ -46,7 +46,7 @@ describe("SetupEncryptionDialog", () => {
         await act(async () => await store.fetchKeyInfo());
         expect(store.phase).toBe(Phase.Intro);
 
-        // And we hit the Proceed with reset button.
+        // And we hit the Can't confirm? button.
         // (The createDialog mock above simulates the user doing the reset)
         await act(async () => screen.getByRole("button", { name: "Can't confirm?" }).click());
 

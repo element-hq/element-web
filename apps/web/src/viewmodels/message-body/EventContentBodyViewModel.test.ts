@@ -10,7 +10,7 @@
 import { MatrixEventEvent, MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { type JSX } from "react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { stubClient, mkStubRoom, mkEvent } from "test-utils";
+import { stubClient, mkStubRoom, mkEvent, tearDownAfterTest } from "test-utils";
 
 import { EventContentBodyViewModel, type EventContentBodyViewModelProps } from "./EventContentBodyViewModel";
 import { bodyToNode } from "../../HtmlUtils";
@@ -92,6 +92,7 @@ describe("EventContentBodyViewModel", () => {
                 mediaIsVisible: false,
             }),
         );
+        tearDownAfterTest(vm);
         const snapshot = vm.getSnapshot();
 
         expect(mockedBodyToNode).toHaveBeenCalledWith(defaultContent, undefined, {
@@ -121,7 +122,7 @@ describe("EventContentBodyViewModel", () => {
             return true;
         });
 
-        new EventContentBodyViewModel(defaultProps());
+        tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
 
         expect(getValueSpy).toHaveBeenCalledWith("TextualBody.enableBigEmoji");
         expect(getValueSpy).toHaveBeenCalledWith("Pill.shouldShowPillAvatar");
@@ -158,7 +159,7 @@ describe("EventContentBodyViewModel", () => {
         const room = mkStubRoom("!room:example.org", "Room", client) as Room;
         const getRoomSpy = vi.spyOn(client, "getRoom").mockReturnValue(room);
 
-        new EventContentBodyViewModel(defaultProps({ mxEvent, client }));
+        tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ mxEvent, client })));
 
         expect(getRoomSpy).toHaveBeenCalledWith("!room:example.org");
         expect(createReplacerFromOptions).toHaveBeenCalledWith(expect.objectContaining({ room }));
@@ -174,7 +175,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        new EventContentBodyViewModel(
+        const vm = new EventContentBodyViewModel(
             defaultProps({
                 content: {
                     body: "Emote",
@@ -183,6 +184,7 @@ describe("EventContentBodyViewModel", () => {
                 enableBigEmoji: true,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(mockedBodyToNode).toHaveBeenCalledWith(
             { body: "Emote", msgtype: MsgType.Emote },
@@ -201,7 +203,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps());
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
 
         const snapshot = vm.getSnapshot();
 
@@ -221,7 +223,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps());
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
 
         expect(vm.getSnapshot().body).toBe(emojiElements);
         expect(vm.getSnapshot().replacer).toBe(replacer);
@@ -237,7 +239,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps({ as: "div", includeDir: false }));
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ as: "div", includeDir: false })));
 
         expect(vm.getSnapshot().dir).toBe("auto");
     });
@@ -252,7 +254,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps({ as: "span", includeDir: false }));
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ as: "span", includeDir: false })));
 
         expect(vm.getSnapshot().dir).toBeUndefined();
     });
@@ -267,7 +269,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps());
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
         expect(vm.getSnapshot().body).toBe("Initial");
 
         mockedBodyToNode.mockReturnValue({
@@ -307,7 +309,7 @@ describe("EventContentBodyViewModel", () => {
 
         it("renders the edited content", () => {
             const event = mkReplacedEvent();
-            const vm = new EventContentBodyViewModel(defaultProps({ mxEvent: event }));
+            const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ mxEvent: event })));
             expect(vm.getSnapshot().body).toBe("Hello world");
 
             event.emit(MatrixEventEvent.Replaced, event);
@@ -318,6 +320,7 @@ describe("EventContentBodyViewModel", () => {
         it("keeps the given content when ignoreReplacements is set", () => {
             const event = mkReplacedEvent();
             const vm = new EventContentBodyViewModel(defaultProps({ mxEvent: event, ignoreReplacements: true }));
+            tearDownAfterTest(vm);
 
             event.emit(MatrixEventEvent.Replaced, event);
 
@@ -335,7 +338,7 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        const vm = new EventContentBodyViewModel(defaultProps());
+        const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
         const previousSnapshot = vm.getSnapshot();
         const subscriber = vi.fn();
 
@@ -375,7 +378,7 @@ describe("EventContentBodyViewModel", () => {
         } as unknown as ReturnType<MatrixEvent["getPushDetails"]>);
         vi.spyOn(client, "getRoom").mockReturnValue(mkStubRoom("!room:example.org", "Room", client) as Room);
 
-        new EventContentBodyViewModel(
+        const vm = new EventContentBodyViewModel(
             defaultProps({
                 renderMentionPills: true,
                 renderKeywordPills: true,
@@ -385,6 +388,7 @@ describe("EventContentBodyViewModel", () => {
                 mxEvent,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(mockedCombineRenderers).toHaveBeenCalledWith(
             mentionPillRenderer,
@@ -406,12 +410,13 @@ describe("EventContentBodyViewModel", () => {
         });
         mockedPlatformPeg.get.mockReturnValue({ needsUrlTooltips: () => false } as unknown as BasePlatform);
 
-        new EventContentBodyViewModel(
+        const vm = new EventContentBodyViewModel(
             defaultProps({
                 renderMentionPills: true,
                 renderTooltipsForAmbiguousLinks: true,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(mockedCombineRenderers).toHaveBeenCalledWith(mentionPillRenderer);
     });

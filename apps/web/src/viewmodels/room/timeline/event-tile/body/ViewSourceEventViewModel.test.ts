@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MouseEvent } from "react";
 import { type MatrixClient, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { ViewSourceEventViewModel } from "./ViewSourceEventViewModel";
 
@@ -35,7 +36,7 @@ describe("ViewSourceEventViewModel", () => {
     it("creates a collapsed event source snapshot and requests decryption", () => {
         const cli = createClient();
         const mxEvent = createEvent("m.room.member");
-        const vm = new ViewSourceEventViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli, mxEvent }));
 
         expect(cli.decryptEventIfNeeded).toHaveBeenCalledWith(mxEvent);
         expect(vm.getSnapshot()).toEqual({
@@ -47,7 +48,7 @@ describe("ViewSourceEventViewModel", () => {
 
     it("toggles expanded state", () => {
         const mxEvent = createEvent();
-        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli: createClient(), mxEvent }));
         const event = createClickEvent();
 
         vm.onToggle(event);
@@ -66,7 +67,7 @@ describe("ViewSourceEventViewModel", () => {
         const cli = createClient();
         const oldEvent = createEvent("m.room.message");
         const newEvent = createEvent("m.room.topic", { topic: "New topic" });
-        const vm = new ViewSourceEventViewModel({ cli, mxEvent: oldEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli, mxEvent: oldEvent }));
 
         vm.onToggle(createClickEvent());
         vm.setProps({ mxEvent: newEvent });
@@ -83,7 +84,7 @@ describe("ViewSourceEventViewModel", () => {
         const oldEvent = createEvent("m.room.encrypted");
         vi.spyOn(oldEvent, "isBeingDecrypted").mockReturnValue(true);
         const offSpy = vi.spyOn(oldEvent, "off");
-        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent: oldEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli: createClient(), mxEvent: oldEvent }));
 
         vm.setProps({ mxEvent: createEvent("m.room.message") });
 
@@ -94,7 +95,7 @@ describe("ViewSourceEventViewModel", () => {
         const oldClient = createClient();
         const newClient = createClient();
         const mxEvent = createEvent();
-        const vm = new ViewSourceEventViewModel({ cli: oldClient, mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli: oldClient, mxEvent }));
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -107,7 +108,7 @@ describe("ViewSourceEventViewModel", () => {
     it("does not emit when setProps receives unchanged props", () => {
         const cli = createClient();
         const mxEvent = createEvent();
-        const vm = new ViewSourceEventViewModel({ cli, mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli, mxEvent }));
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -119,7 +120,7 @@ describe("ViewSourceEventViewModel", () => {
     it("updates the source after decryption completes", () => {
         const mxEvent = createEvent("m.room.encrypted", { ciphertext: "encrypted" });
         vi.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(true);
-        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli: createClient(), mxEvent }));
         vm.onToggle(createClickEvent());
         const listener = vi.fn();
         vm.subscribe(listener);
@@ -135,7 +136,7 @@ describe("ViewSourceEventViewModel", () => {
         const mxEvent = createEvent("m.room.encrypted");
         vi.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(true);
         const offSpy = vi.spyOn(mxEvent, "off");
-        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent });
+        const vm = tearDownAfterTest(new ViewSourceEventViewModel({ cli: createClient(), mxEvent }));
 
         vm.dispose();
 

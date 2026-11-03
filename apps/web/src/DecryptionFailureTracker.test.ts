@@ -17,7 +17,7 @@ import {
     CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import { DecryptionFailureTracker, type ErrorProperties } from "./DecryptionFailureTracker";
 import * as Lifecycle from "./Lifecycle";
@@ -52,6 +52,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         tracker.addVisibleEvent(failedDecryptionEvent);
         eventDecrypted(tracker, failedDecryptionEvent, Date.now());
@@ -79,6 +80,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         tracker.addVisibleEvent(failedDecryptionEvent);
         eventDecrypted(tracker, failedDecryptionEvent, Date.now());
@@ -103,6 +105,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         eventDecrypted(tracker, failedDecryptionEvent, Date.now());
         tracker.addVisibleEvent(failedDecryptionEvent);
@@ -124,6 +127,7 @@ describe("DecryptionFailureTracker", function () {
             (error: string) => error,
             false,
         );
+        tearDownAfterTest(tracker);
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;
@@ -165,6 +169,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         tracker.addVisibleEvent(decryptedEvent);
         eventDecrypted(tracker, decryptedEvent, Date.now());
@@ -194,6 +199,7 @@ describe("DecryptionFailureTracker", function () {
                 () => "UnknownError",
                 false,
             );
+            tearDownAfterTest(tracker);
 
             eventDecrypted(tracker, decryptedEvent, Date.now());
 
@@ -222,6 +228,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         tracker.addVisibleEvent(decryptedEvent);
 
@@ -257,6 +264,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(tracker);
         await tracker.start(mockClient());
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -284,6 +292,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(tracker);
         await tracker.start(mockClient());
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -301,6 +310,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(secondTracker);
         await secondTracker.start(mockClient());
 
         secondTracker.addVisibleEvent(decryptedEvent);
@@ -322,6 +332,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(tracker);
         await tracker.start(mockClient());
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -338,6 +349,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(secondTracker);
         await secondTracker.start(mockClient());
 
         secondTracker.addVisibleEvent(decryptedEvent);
@@ -357,6 +369,7 @@ describe("DecryptionFailureTracker", function () {
             () => count++,
             () => "UnknownError",
         );
+        tearDownAfterTest(tracker);
         await tracker.start(mockClient());
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -386,6 +399,7 @@ describe("DecryptionFailureTracker", function () {
                 error === DecryptionFailureCode.UNKNOWN_ERROR ? "UnknownError" : "OlmKeysNotSentError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         const decryptedEvent1 = await createFailedDecryptionEvent({
             code: DecryptionFailureCode.UNKNOWN_ERROR,
@@ -424,6 +438,7 @@ describe("DecryptionFailureTracker", function () {
             (_errorCode: string) => "OlmUnspecifiedError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         const decryptedEvent1 = await createFailedDecryptionEvent({
             code: DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID,
@@ -459,6 +474,7 @@ describe("DecryptionFailureTracker", function () {
             (errorCode: string) => Array.from(errorCode).reverse().join(""),
             false,
         );
+        tearDownAfterTest(tracker);
 
         const decryptedEvent = await createFailedDecryptionEvent({
             code: DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX,
@@ -485,6 +501,7 @@ describe("DecryptionFailureTracker", function () {
             DecryptionFailureTracker.instance.errorCodeMapFn,
             false,
         );
+        tearDownAfterTest(tracker);
 
         const now = Date.now();
 
@@ -535,6 +552,7 @@ describe("DecryptionFailureTracker", function () {
             (error: string) => error,
             false,
         );
+        tearDownAfterTest(tracker);
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;
@@ -590,6 +608,7 @@ describe("DecryptionFailureTracker", function () {
             (error: string) => error,
             false,
         );
+        tearDownAfterTest(tracker);
 
         // Calling .start will start some intervals.  This test shouldn't run
         // long enough for the timers to fire, but we'll use fake timers just
@@ -632,6 +651,7 @@ describe("DecryptionFailureTracker", function () {
             (error: string) => error,
             false,
         );
+        tearDownAfterTest(tracker);
 
         // @ts-ignore access to private method
         await tracker.calculateClientProperties(client);
@@ -705,6 +725,7 @@ describe("DecryptionFailureTracker", function () {
             () => "UnknownError",
             false,
         );
+        tearDownAfterTest(tracker);
 
         tracker.addVisibleEvent(failedDecryptionEvent);
 
