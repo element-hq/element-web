@@ -162,9 +162,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         // Overall, the point of this is to avoid memory-related issues due to storing a massive
         // audio buffer in memory, as that can balloon to far greater than the input buffer's
         // byte length.
-        if (this.buf.byteLength > 5 * 1024 * 1024) {
-            // 5mb
-            logger.log("Audio file too large: processing through <audio /> element");
+        // A long audio file but with a huge compression can still be a problem when decoded by taking too much memory.
+        if (this.buf.byteLength > 5 * 1024 * 1024 || this.clock.durationSeconds > 5 * 60) {
+            logger.log("Audio file too large or long: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
             const deferred = Promise.withResolvers<unknown>();
             this.element.onloadeddata = deferred.resolve;
