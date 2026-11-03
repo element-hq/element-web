@@ -622,8 +622,11 @@ The following are undocumented or intended for developer use only.
 2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
 3. `spell_checker_dictionary_download_url`: the URL of a directory to download spellchecker dictionaries from,
    instead of Electron's default CDN. The directory must hold the files from the `hunspell_dictionaries.zip`
-   asset of Electron's releases: if they are served at `https://example.com/dictionaries/en-GB.bdic`,
-   set this to `https://example.com/dictionaries/`. Has no effect on macOS, which uses the system spellchecker.
+   asset of Electron's releases: if they are served at `https://example.com/dictionaries/en-GB-10-1.bdic`,
+   set this to `https://example.com/dictionaries/`. The server must match file names case-insensitively;
+   if it cannot, serve each file twice, once with the name it has in the ZIP and once with the name in lowercase.
+   Has no effect on macOS, which uses the system spellchecker. On Windows, the system spellchecker is used for
+   languages with a Windows language pack installed, so dictionaries are only downloaded for other languages.
 
 ---
 
