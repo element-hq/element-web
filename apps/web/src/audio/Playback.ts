@@ -129,7 +129,12 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
-        void this.stop();
+        // The audio context and decoded buffer are released here as the playback can outlive its
+        // component
+        this.stop()
+            .finally(() => this.context.close())
+            .catch((e) => logger.warn("Failed to close audio context", e));
+        this.audioBuf = undefined;
         this.removeAllListeners();
         this.clock.destroy();
         this.waveformObservable.close();

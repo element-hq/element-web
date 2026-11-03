@@ -43,6 +43,7 @@ describe("Playback", () => {
         decodeAudioData: vi.fn(),
         suspend: vi.fn(),
         resume: vi.fn(),
+        close: vi.fn().mockResolvedValue(undefined),
         createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
         createMediaElementSource: vi.fn().mockReturnValue(mockMediaElementSourceNode),
         currentTime: 1337,
@@ -296,6 +297,7 @@ describe("Playback", () => {
             playback.destroy();
 
             expect(element.listenerCount("ended")).toEqual(0);
+            await vi.waitFor(() => expect(mockAudioContext.close).toHaveBeenCalled());
         });
     });
 });
