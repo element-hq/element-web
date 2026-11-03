@@ -14,7 +14,7 @@ import { type UIComponent } from "../UIFeature";
  * Otherwise, the setting value is unchanged.
  */
 export default class UIComponentController extends SettingController {
-    public constructor(private component: UIComponent) {
+    public constructor(private readonly component: UIComponent) {
         super();
     }
 
