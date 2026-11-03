@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterEach, beforeEach, type MockedObject } from "vitest";
 import { type MatrixClient, type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
+import type { MediaHandle } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -22,6 +23,7 @@ import { RightPanelPhases } from "./RightPanelStorePhases";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { pendingVerificationRequestForUser } from "../../verification.ts";
+import { type RegisteredFileViewer } from "../../modules/FileViewerApi";
 
 vi.mock("../../verification");
 
@@ -253,6 +255,34 @@ describe("RightPanelStore", () => {
                 await viewRoom("!1:example.org");
 
                 store.setCard(documentCard, true, "!1:example.org");
+
+                expect(store.roomPhaseHistory).toEqual([]);
+            });
+        });
+        describe("FileViewer", () => {
+            const fileViewerState = {
+                fileViewer: {
+                    viewer: { options: { id: "test-viewer" } } as RegisteredFileViewer,
+                    media: { type: "uploaded", name: "spec.pdf", blob: vi.fn() } as MediaHandle,
+                    mxEvent: {
+                        getId: () => "$file",
+                        getRoomId: () => "!1:example.org",
+                    } as unknown as MatrixEvent,
+                },
+            };
+
+            it("keeps a card with a viewer, media and source event", async () => {
+                await viewRoom("!1:example.org");
+
+                store.setCard({ phase: RightPanelPhases.FileViewer, state: fileViewerState }, true, "!1:example.org");
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.FileViewer);
+            });
+
+            it("drops a card without file viewer state", async () => {
+                await viewRoom("!1:example.org");
+
+                store.setCard({ phase: RightPanelPhases.FileViewer, state: {} }, true, "!1:example.org");
 
                 expect(store.roomPhaseHistory).toEqual([]);
             });

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -24,6 +24,7 @@ import { type UrlPreview } from "shared-types";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
+import { SDKContext } from "../../../contexts/SDKContext";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { TextualBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/TextualBodyViewModel";
@@ -42,6 +43,8 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
+import { remoteMediaOfPreview } from "../../../modules/FileViewerApi";
+import { fileViewerButtonsFor } from "../right_panel/FileViewerCard";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -63,6 +66,7 @@ function getTextualBodyClassName(msgtype: MsgType | undefined): string {
 
 export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
+    const sdkContext = useContext(SDKContext);
     const client = useMatrixClientContext();
     const [mediaVisible] = useMediaVisible(props.mxEvent);
     const content = props.mxEvent.getContent();
@@ -160,58 +164,69 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         [overPreviewLimit, previewsLimited, totalPreviewCount, previews.length, urlPreviewVm],
     );
 
-    const previewToEntry = (preview: UrlPreview): MediaPreviewGroupEntry => {
-        let content: MediaPreviewGroupEntryContent;
-        if (preview.image === undefined) {
-            content = {
-                type: "text",
-            };
-        } else {
-            content = {
-                type: "image",
-                image: preview.image.imageFull,
-                imageAlt: preview.title,
-                imageSize: "banner",
-                imageOnClick: () => {
-                    Modal.createDialog(
-                        ImageView,
-                        {
-                            src: preview.image!.imageFull, // full-res URL
-                            name: `Thumbnail of ${preview.title}`,
-                            width: preview.image?.width,
-                            height: preview.image?.height,
-                            fileSize: preview.image?.fileSize,
-                        },
-                        "mx_Dialog_lightbox",
-                        undefined,
-                        true,
-                    );
-                },
-            };
-        }
+    const previewToEntry = useCallback(
+        (preview: UrlPreview): MediaPreviewGroupEntry => {
+            let content: MediaPreviewGroupEntryContent;
+            // offer file viewer buttons for every link preview, whether it came from a bundle or the server
+            const fileViewerButtons = fileViewerButtonsFor(
+                remoteMediaOfPreview(preview),
+                props.mxEvent,
+                sdkContext.rightPanelStore,
+            );
 
-        let body: string;
-        if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
-        else body = preview.description!;
-
-        return {
-            id: preview.link,
-            header: preview.title,
-            headerUrl: preview.link,
-            body,
-            buttons: [
-                {
-                    label: _t("timeline|url_preview|open_link"),
-                    icon: <PopOutIcon />,
-                    onClick: async () => {
-                        window.open(preview.link, "_blank", "noreferrer");
+            if (preview.image === undefined) {
+                content = {
+                    type: "text",
+                };
+            } else {
+                content = {
+                    type: "image",
+                    image: preview.image.imageFull,
+                    imageAlt: preview.title,
+                    imageSize: "banner",
+                    imageOnClick: () => {
+                        Modal.createDialog(
+                            ImageView,
+                            {
+                                src: preview.image!.imageFull, // full-res URL
+                                name: `Thumbnail of ${preview.title}`,
+                                width: preview.image?.width,
+                                height: preview.image?.height,
+                                fileSize: preview.image?.fileSize,
+                            },
+                            "mx_Dialog_lightbox",
+                            undefined,
+                            true,
+                        );
                     },
-                },
-            ],
-            ...linkIcon(),
-            ...content,
-        };
-    };
+                };
+            }
+
+            let body: string;
+            if (preview.description === undefined || preview.description.trim().length === 0) body = preview.siteName;
+            else body = preview.description!;
+
+            return {
+                id: preview.link,
+                header: preview.title,
+                headerUrl: preview.link,
+                body,
+                buttons: [
+                    ...fileViewerButtons,
+                    {
+                        label: _t("timeline|url_preview|open_link"),
+                        icon: <PopOutIcon />,
+                        onClick: async () => {
+                            window.open(preview.link, "_blank", "noreferrer");
+                        },
+                    },
+                ],
+                ...linkIcon(),
+                ...content,
+            };
+        },
+        [props.mxEvent, sdkContext],
+    );
 
     const mediaPreviewVm = useCreateAutoDisposedViewModel(
         () =>
@@ -295,7 +310,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             entries: previews.map(previewToEntry),
             collapse,
         });
-    }, [previews, collapse, mediaPreviewVm]);
+    }, [previews, previewToEntry, collapse, mediaPreviewVm]);
 
     useEffect(() => {
         if (previews.length === 0) {
