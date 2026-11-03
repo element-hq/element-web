@@ -178,6 +178,8 @@
     width: 130px;
     height: 142px;
     flex-shrink: 0;
+    /* Behind transparent images, which would otherwise sit on the tile's grey. */
+    background: var(--cpd-color-bg-canvas-default);
 
     button {
         height: 100%;
