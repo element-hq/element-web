@@ -27,6 +27,7 @@ import { StorageHelperApi } from "./StorageHelperApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { UrlPreviewApi } from "./UrlPreviewApi.ts";
+import SettingController from "../settings/controllers/SettingController.ts";
 
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
@@ -38,6 +39,8 @@ export class ModuleApi implements Api {
         if (!ModuleApi._instance) {
             ModuleApi._instance = new ModuleApi();
             window.mxModuleApi = ModuleApi._instance;
+            // Settings can't import the ModuleApi directly without causing an import cycle
+            SettingController.moduleCustomisations = ModuleApi._instance.customisations;
         }
         return ModuleApi._instance;
     }
