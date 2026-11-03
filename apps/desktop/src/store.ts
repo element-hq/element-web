@@ -380,7 +380,7 @@ class Store extends ElectronStore<StoreData> {
             }
 
             if (existingSafeStorageBackend === "plaintext" && backend !== "plaintext") {
-                await this.migratePlaintextToEncrypted();
+                await this.migratePlaintextToEncrypted(backend);
                 // Ensure we update existingSafeStorageBackend so we don't fall into the "backend changed" clause below
                 existingSafeStorageBackend = this.get("safeStorageBackend");
             }
@@ -532,17 +532,22 @@ class Store extends ElectronStore<StoreData> {
         this.delete("safeStorageBackendMigrate");
         relaunchApp();
     }
-    private async migratePlaintextToEncrypted(): Promise<void> {
+
+    /**
+     * Encrypt secrets which were stored in plaintext, now that an encrypted backend is available.
+     * @param backend - the backend picked by {@link chooseBackend}. On macOS and Windows this is "system",
+     *     as `safeStorage.getSelectedStorageBackend` only exists on Linux.
+     */
+    private async migratePlaintextToEncrypted(backend: SaneSafeStorageBackend): Promise<void> {
         const secrets = new SafeStorageWriter(this);
-        const selectedSafeStorageBackend = safeStorage.getSelectedStorageBackend();
-        console.info(`Finishing safeStorage migration to ${selectedSafeStorageBackend}`);
+        console.info(`Finishing safeStorage migration to ${backend}`);
         const data = this.get("safeStorage");
         if (data) {
             for (const key in data) {
                 await secrets.set(key, data[key]);
             }
         }
-        this.recordSafeStorageBackend(selectedSafeStorageBackend);
+        this.recordSafeStorageBackend(backend);
     }
 
     /**
