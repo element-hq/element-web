@@ -523,9 +523,6 @@ importers:
       '@sentry/browser':
         specifier: ^11.0.0
         version: 11.5.0
-      '@types/png-chunks-extract':
-        specifier: ^1.0.2
-        version: 1.0.2
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 11.3.0(@types/react@19.3.0)(react@19.3.0)
@@ -646,9 +643,6 @@ importers:
       pdfjs-dist:
         specifier: ^6.2.108
         version: 6.3.289
-      png-chunks-extract:
-        specifier: ^1.0.0
-        version: 1.0.0
       posthog-js:
         specifier: 1.434.14
         version: 1.434.14(@types/react@19.3.0)(react@19.3.0)
@@ -6298,9 +6292,6 @@ packages:
   '@types/picomatch@4.0.2':
     resolution: {integrity: sha512-qHHxQ+P9PysNEGbALT8f8YOSHW0KJu6l2xU8DYY0fu/EmGxXdVnuTLvFUvBgPJMSqXq29SYHveejeAha+4AYgA==}
 
-  '@types/png-chunks-extract@1.0.2':
-    resolution: {integrity: sha512-z6djfFIbrrddtunoMJBOPlyZrnmeuG1kkvHUNi2QfpOb+JMMLuLliHHTmMyRi7k7LiTAut0HbdGCF6ibDtQAHQ==}
-
   '@types/postcss-import@14.0.3':
     resolution: {integrity: sha512-raZhRVTf6Vw5+QbmQ7LOHSDML71A5rj4+EqDzAbrZPfxfoGzFxMHRCq16VlddGIZpHELw0BG4G0YE2ANkdZiIQ==}
 
@@ -7775,10 +7766,6 @@ packages:
   cpu-features@0.0.10:
     resolution: {integrity: sha512-9IkYqtX3YHPCzoVg1Py+o9057a3i0fp7S530UWokCSaFVTc7CwXPRiOjRjBQQ18ZCNafx78YfnG+HALxtVmOGA==}
     engines: {node: '>=10.0.0'}
-
-  crc-32@0.3.0:
-    resolution: {integrity: sha512-kucVIjOmMc1f0tv53BJ/5WIX+MGLcKuoBhnGqQrgKJNqLByb/sVMWfW/Aw6hw0jgcqjJ2pi9E5y32zOIpaUlsA==}
-    engines: {node: '>=0.8'}
 
   crc-32@1.2.2:
     resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
@@ -10670,9 +10657,6 @@ packages:
 
   pluralizers@0.1.7:
     resolution: {integrity: sha512-mw6AejUiCaMQ6uPN9ObjJDTnR5AnBSmnHHy3uVTbxrSFSxO5scfwpTs8Dxyb6T2v7GSulhvOq+pm9y+hXUvtOA==}
-
-  png-chunks-extract@1.0.0:
-    resolution: {integrity: sha512-ZiVwF5EJ0DNZyzAqld8BP1qyJBaGOFaq9zl579qfbkcmOwWLLO4I9L8i2O4j3HkI6/35i0nKG2n+dZplxiT89Q==}
 
   png-to-ico@3.0.2:
     resolution: {integrity: sha512-36vvp3/YF7LPYkUEOj08/WgB1wI63qW391YfOhOWckgOtGkarr9+EhPBimcCmRP7fJaG4EaXQhTTaQ8qqdj8aA==}
@@ -18248,8 +18232,6 @@ snapshots:
 
   '@types/picomatch@4.0.2': {}
 
-  '@types/png-chunks-extract@1.0.2': {}
-
   '@types/postcss-import@14.0.3':
     dependencies:
       postcss: 8.5.32
@@ -19957,8 +19939,6 @@ snapshots:
       buildcheck: 0.0.7
       nan: 2.29.0
     optional: true
-
-  crc-32@0.3.0: {}
 
   crc-32@1.2.2: {}
 
@@ -23343,10 +23323,6 @@ snapshots:
       xmlbuilder: 15.1.1
 
   pluralizers@0.1.7: {}
-
-  png-chunks-extract@1.0.0:
-    dependencies:
-      crc-32: 0.3.0
 
   png-to-ico@3.0.2:
     dependencies:

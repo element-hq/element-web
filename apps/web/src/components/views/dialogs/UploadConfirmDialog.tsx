@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, type JSX } from "react";
+import React, { useCallback, useState, type JSX } from "react";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -21,6 +21,9 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/MediaPreviewGroupViewModel";
+import StyledCheckbox from "../elements/StyledCheckbox";
+import { useFeatureEnabled } from "../../../hooks/useSettings";
+import { canStripFileMetadata } from "../../../utils/media/stripFileMetadata";
 
 interface IProps {
     file: File;
@@ -28,7 +31,14 @@ interface IProps {
     currentIndex?: number;
     /** Defaults to 1. */
     totalFiles?: number;
-    onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
+    /**
+     * Called when the dialog closes.
+     *
+     * `stripMetadata` is whether the user chose to remove metadata, which also applies to the remaining files
+     * if `uploadAll` is set. It is undefined if no choice was offered, because the labs feature is disabled or
+     * metadata can't be removed from this type of file.
+     */
+    onFinished: (uploadConfirmed: boolean, uploadAll?: boolean, stripMetadata?: boolean) => void;
 }
 
 const previewableFormats = ["video", "audio", "image"];
@@ -104,6 +114,8 @@ export default function UploadConfirmDialog({
     onFinished,
 }: IProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new UploadPreviewViewModel(file));
+    const offerMetadataChoice = useFeatureEnabled("feature_strip_upload_metadata") && canStripFileMetadata(file.type);
+    const [stripMetadata, setStripMetadata] = useState(true);
 
     let title: string;
     if (totalFiles > 1 && currentIndex !== undefined) {
@@ -120,12 +132,12 @@ export default function UploadConfirmDialog({
     }, [onFinished]);
 
     const onUploadClick = useCallback((): void => {
-        onFinished(true);
-    }, [onFinished]);
+        onFinished(true, false, offerMetadataChoice ? stripMetadata : undefined);
+    }, [onFinished, offerMetadataChoice, stripMetadata]);
 
     const onUploadAllClick = useCallback((): void => {
-        onFinished(true, true);
-    }, [onFinished]);
+        onFinished(true, true, offerMetadataChoice ? stripMetadata : undefined);
+    }, [onFinished, offerMetadataChoice, stripMetadata]);
 
     let uploadAllButton: JSX.Element | undefined;
     if (currentIndex + 1 < totalFiles) {
@@ -150,6 +162,15 @@ export default function UploadConfirmDialog({
                         <MediaPreviewGroupPreview vm={vm} />
                     </div>
                 </div>
+                {offerMetadataChoice && (
+                    <StyledCheckbox
+                        className="mx_UploadConfirmDialog_stripMetadata"
+                        checked={stripMetadata}
+                        onChange={(e) => setStripMetadata(e.target.checked)}
+                    >
+                        {_t("upload_file|strip_metadata")}
+                    </StyledCheckbox>
+                )}
             </div>
 
             <DialogButtons

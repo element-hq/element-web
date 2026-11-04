@@ -217,6 +217,7 @@ export interface Settings {
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_latex_maths": IFeature;
+    "feature_strip_upload_metadata": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
     "feature_exclude_insecure_devices": IFeature;
@@ -483,6 +484,15 @@ export const SETTINGS: Settings = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|latex_maths"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_strip_upload_metadata": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|strip_upload_metadata"),
+        description: _td("labs|strip_upload_metadata_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

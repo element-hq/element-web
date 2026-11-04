@@ -8,11 +8,14 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { render, waitFor } from "test-utils-rtl";
+import { render, screen, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import UploadConfirmDialog from "./UploadConfirmDialog.tsx";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 /**
  * The shared media preview tile hides the image until it has loaded it once out of band, which jsdom
@@ -68,9 +71,10 @@ describe("<UploadConfirmDialog />", () => {
         }) as typeof document.createElement);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         window.Image = originalImage;
         vi.mocked(document.createElement).mockRestore();
+        await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, null);
     });
 
     it("should display image preview", async () => {
@@ -109,5 +113,63 @@ describe("<UploadConfirmDialog />", () => {
 
         expect(getByText("notes.txt")).toBeInTheDocument();
         expect(container.querySelector("img, video, audio")).toBeNull();
+    });
+
+    describe("metadata option", () => {
+        const image = (): File => new File(["image"], "image.jpg", { type: "image/jpeg" });
+        const checkbox = (): HTMLElement =>
+            screen.getByRole("checkbox", { name: "Remove location and other metadata" });
+
+        beforeEach(async () => {
+            await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, true);
+        });
+
+        it("is offered, ticked, for media whose metadata can be removed", () => {
+            render(<UploadConfirmDialog file={image()} onFinished={vi.fn()} />);
+
+            expect(checkbox()).toBeEnabled();
+            expect(checkbox()).toBeChecked();
+        });
+
+        it("is not shown when the labs feature is disabled", async () => {
+            await SettingsStore.setValue("feature_strip_upload_metadata", null, SettingLevel.DEVICE, false);
+            const onFinished = vi.fn();
+            render(<UploadConfirmDialog file={image()} onFinished={onFinished} />);
+
+            expect(screen.queryByRole("checkbox")).toBeNull();
+            await userEvent.click(screen.getByRole("button", { name: "Upload" }));
+            expect(onFinished).toHaveBeenCalledWith(true, false, undefined);
+        });
+
+        it.each([
+            ["media whose metadata can't be removed", new File(["audio"], "voice.ogg", { type: "audio/ogg" })],
+            ["files which are not media", new File(["hello"], "notes.txt", { type: "text/plain" })],
+        ])("is not shown for %s", async (_, file) => {
+            const onFinished = vi.fn();
+            render(<UploadConfirmDialog file={file} onFinished={onFinished} />);
+
+            expect(screen.queryByRole("checkbox")).toBeNull();
+            await userEvent.click(screen.getByRole("button", { name: "Upload" }));
+            expect(onFinished).toHaveBeenCalledWith(true, false, undefined);
+        });
+
+        it("passes on the choice to keep the metadata", async () => {
+            const onFinished = vi.fn();
+            render(<UploadConfirmDialog file={image()} onFinished={onFinished} />);
+
+            await userEvent.click(checkbox());
+            await userEvent.click(screen.getByRole("button", { name: "Upload" }));
+
+            expect(onFinished).toHaveBeenCalledWith(true, false, false);
+        });
+
+        it("passes on the choice when uploading all files", async () => {
+            const onFinished = vi.fn();
+            render(<UploadConfirmDialog file={image()} currentIndex={0} totalFiles={2} onFinished={onFinished} />);
+
+            await userEvent.click(screen.getByRole("button", { name: "Upload all" }));
+
+            expect(onFinished).toHaveBeenCalledWith(true, true, true);
+        });
     });
 });

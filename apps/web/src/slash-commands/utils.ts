@@ -16,6 +16,7 @@ import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Modal from "../Modal";
 import UploadConfirmDialog from "../components/views/dialogs/UploadConfirmDialog";
 import { type RunResult } from "./interface";
+import { stripFileMetadata } from "../utils/media/stripFileMetadata";
 
 export function reject(error?: any): RunResult {
     return { error };
@@ -55,9 +56,11 @@ export const singleMxcUpload = async (cli: MatrixClient): Promise<string | null>
             if (!file) return;
 
             const { finished } = Modal.createDialog(UploadConfirmDialog, { file });
-            void finished.then(async ([shouldContinue]) => {
+            void finished.then(async ([shouldContinue, , stripMetadata]) => {
                 if (shouldContinue) {
-                    const { content_uri: uri } = await cli.uploadContent(file);
+                    const { content_uri: uri } = await cli.uploadContent(
+                        stripMetadata ? await stripFileMetadata(file) : file,
+                    );
                     resolve(uri);
                 } else {
                     resolve(null);

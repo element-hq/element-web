@@ -33,6 +33,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { SettingsSection } from "./shared/SettingsSection.tsx";
 import { SetStatusViewModel } from "../../../viewmodels/status/SetStatusViewModel.ts";
 import SettingsStore from "../../../settings/SettingsStore.ts";
+import { stripFileMetadataIfEnabled } from "../../../utils/media/stripFileMetadataIfEnabled";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -168,7 +169,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
             );
             try {
                 setAvatarError(false);
-                const { content_uri: uri } = await client.uploadContent(avatarFile);
+                const { content_uri: uri } = await client.uploadContent(await stripFileMetadataIfEnabled(avatarFile));
                 await client.setAvatarUrl(uri);
                 setAvatarURL(uri);
             } catch {

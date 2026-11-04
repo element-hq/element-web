@@ -6,23 +6,44 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { arrayHasDiff } from "./arrays";
+import { bytesEqual, startsWith } from "./media/bytes";
+import { type PngChunk, readPngChunks } from "./media/png";
+
+// scraped out of a macOS hidpi (5660ppm) screenshot png
+//                                 5669 px (x-axis)      , 5669 px (y-axis)      , per metre
+const PHYS_HIDPI = new Uint8Array([0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01]);
 
 export function mayBeAnimated(mimeType?: string): boolean {
     return ["image/gif", "image/webp", "image/png", "image/apng", "image/avif"].includes(mimeType!);
 }
 
-function arrayBufferRead(arr: ArrayBuffer, start: number, len: number): Uint8Array {
-    return new Uint8Array(arr.slice(start, start + len));
+/**
+ * Finds the first chunk of the given types which comes before the image data of a PNG.
+ *
+ * @returns the chunk, or undefined if there is none or the blob is not a valid PNG
+ */
+async function findPngChunkBeforeImageData(blob: Blob, types: string[]): Promise<PngChunk | undefined> {
+    try {
+        for await (const chunk of readPngChunks(blob)) {
+            if (types.includes(chunk.type)) return chunk;
+            if (chunk.type === "IDAT") return undefined;
+        }
+    } catch {
+        // Not a PNG, or truncated: treat it as having no such chunk.
+    }
+    return undefined;
 }
 
-function arrayBufferReadInt(arr: ArrayBuffer, start: number): number {
-    const dv = new DataView(arr, start, 4);
-    return dv.getUint32(0);
-}
-
-function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): string {
-    return String.fromCharCode.apply(null, Array.from(arrayBufferRead(arr, start, len)));
+/**
+ * Check if a Blob is a PNG with the pixel density of a macOS hidpi screenshot, so it should be displayed at
+ * half its pixel size.
+ * @param blob The Blob to check.
+ * @returns True if the image is a hidpi PNG, false if not or if it could not be parsed.
+ */
+export async function blobIsHiDpiPng(blob: Blob): Promise<boolean> {
+    // pHYs must come before the image data, so there is no need to look further.
+    const chunk = await findPngChunkBeforeImageData(blob, ["pHYs"]);
+    return !!chunk && bytesEqual(await chunk.readData(), PHYS_HIDPI);
 }
 
 /**
@@ -50,13 +71,14 @@ export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.
             // Based on https://developers.google.com/speed/webp/docs/riff_container#extended_file_format
-            const arr = await blob.slice(0, 21).arrayBuffer();
+            const header = new Uint8Array(await blob.slice(0, 21).arrayBuffer());
             if (
-                arrayBufferReadStr(arr, 0, 4) === "RIFF" &&
-                arrayBufferReadStr(arr, 8, 4) === "WEBP" &&
-                arrayBufferReadStr(arr, 12, 4) === "VP8X"
+                header.length === 21 &&
+                startsWith(header, "RIFF") &&
+                startsWith(header, "WEBP", 8) &&
+                startsWith(header, "VP8X", 12)
             ) {
-                const [flags] = arrayBufferRead(arr, 20, 1);
+                const flags = header[20];
                 // Flags: R R I L E X _A_ R (reversed)
                 const animationFlagMask = 1 << 1;
                 return (flags & animationFlagMask) != 0;
@@ -97,29 +119,8 @@ export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
 
         case "image/png":
         case "image/apng": {
-            // Based on https://stackoverflow.com/a/68618296
-            const arr = await blob.arrayBuffer();
-            if (
-                arrayHasDiff([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], Array.from(arrayBufferRead(arr, 0, 8)))
-            ) {
-                return false;
-            }
-
-            for (let i = 8; i < blob.size;) {
-                const length = arrayBufferReadInt(arr, i);
-                i += 4;
-                const type = arrayBufferReadStr(arr, i, 4);
-                i += 4;
-
-                switch (type) {
-                    case "acTL":
-                        return true;
-                    case "IDAT":
-                        return false;
-                }
-                i += length + 4;
-            }
-            return false;
+            // An animated PNG has an acTL chunk before its image data.
+            return !!(await findPngChunkBeforeImageData(blob, ["acTL"]));
         }
     }
 }

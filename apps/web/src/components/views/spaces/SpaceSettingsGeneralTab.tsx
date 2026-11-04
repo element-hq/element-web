@@ -20,6 +20,7 @@ import { getTopic } from "../../../hooks/room/useTopic";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
 import { SettingsSubsection } from "../settings/shared/SettingsSubsection";
+import { stripFileMetadataIfEnabled } from "../../../utils/media/stripFileMetadataIfEnabled";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -59,7 +60,9 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
             if (newAvatar) {
                 promises.push(
                     (async (): Promise<void> => {
-                        const { content_uri: url } = await cli.uploadContent(newAvatar);
+                        const { content_uri: url } = await cli.uploadContent(
+                            await stripFileMetadataIfEnabled(newAvatar),
+                        );
                         await cli.sendStateEvent(space.roomId, EventType.RoomAvatar, { url }, "");
                     })(),
                 );
