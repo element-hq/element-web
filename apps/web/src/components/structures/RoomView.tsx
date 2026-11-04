@@ -20,6 +20,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import {
+    EventTimeline,
     type IRecommendedVersion,
     NotificationCountType,
     type Room,
@@ -28,10 +29,11 @@ import {
     RoomStateEvent,
     type MatrixEvent,
     MatrixEventEvent,
-    type EventTimeline,
     type IRoomTimelineData,
     EventType,
     HistoryVisibility,
+    JoinRule,
+    RestrictedAllowType,
     ClientEvent,
     type MatrixError,
     type ISearchResults,
@@ -39,7 +41,7 @@ import {
     type MatrixClient,
     type RoomSummary,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
@@ -51,7 +53,6 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
-import { isKnockJoinRule } from "../../utils/room/isKnockJoinRule";
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
 import * as TimezoneHandler from "../../TimezoneHandler";
@@ -944,15 +945,47 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     /**
+     * The rooms whose members can join a knock_restricted room without knocking.
+     * @returns The room IDs of the allowed rooms.
+     */
+    private get knockRestrictedAllowedRoomIds(): string[] {
+        const room = this.state.room;
+        // Not in the room yet: the room summary lists the allowed rooms
+        if (!room) return this.state.roomSummary?.allowed_room_ids ?? [];
+
+        // Otherwise read them from the allow list of the join rules event
+        const joinRules = room
+            .getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.getStateEvents(EventType.RoomJoinRules, "")
+            ?.getContent<RoomJoinRulesEventContent>();
+        return (
+            joinRules?.allow
+                ?.filter(({ type }) => type === RestrictedAllowType.RoomMembership)
+                .map(({ room_id: roomId }) => roomId) ?? []
+        );
+    }
+
+    /**
      * Whether the user can ask to join the room. This is true if the room is knockable and the feature is enabled.
      * Look first at the room object, then the room summary if the room is not available.
      */
     private get canAskToJoin(): boolean {
         if (!this.askToJoinEnabled) return false;
 
-        const room = this.state.room;
-        const joinRule = room ? room.getJoinRule() : this.state.roomSummary?.join_rule;
-        return isKnockJoinRule(joinRule);
+        const joinRule = this.state.room?.getJoinRule() ?? this.state.roomSummary?.join_rule;
+        // Knockable rooms can be asked to join
+        if (joinRule === JoinRule.Knock) return true;
+        // Other rooms don't accept knocks, apart from knock_restricted
+        if (joinRule !== JoinRule.KnockRestricted) return false;
+
+        // Members of an allowed room (usually a space) can join a knock_restricted room directly, so they are not asked
+        const client = this.context.client;
+        const isMemberOfAllowedRoom = this.knockRestrictedAllowedRoomIds.some(
+            (roomId) => client?.getRoom(roomId)?.getMyMembership() === KnownMembership.Join,
+        );
+        // Not a member of the allowed rooms, so have to knock
+        return !isMemberOfAllowedRoom;
     }
 
     private shouldShowApps(room: Room): boolean {
