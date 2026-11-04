@@ -19,7 +19,6 @@ import {
     type MediaPreviewGroupEntryContent,
 } from "@element-hq/web-shared-components";
 import { type UrlPreview } from "shared-types";
-import { imageFitsThumbnail } from "../../../utils/UrlPreviewFetcher";
 
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
@@ -47,13 +46,6 @@ const logger = rootLogger.getChild("TextualBodyFactory");
 function previewHost(preview: UrlPreview): string {
     if (!URL.canParse(preview.link)) return preview.siteName;
     return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
-}
-
-/** Whether the link is to YouTube, whose 16:9 og:image is the video still and worth a thumbnail despite the crop. */
-function isYouTubeLink(link: string): boolean {
-    if (!URL.canParse(link)) return false;
-    const host = new URL(link).hostname.toLowerCase();
-    return host === "youtu.be" || host === "youtube.com" || host.endsWith(".youtube.com");
 }
 
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
@@ -179,10 +171,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const previewToEntry = useCallback(
         (preview: UrlPreview): MediaPreviewGroupEntry => {
             let content: MediaPreviewGroupEntryContent;
-            if (
-                preview.image !== undefined &&
-                (imageFitsThumbnail(preview.image) || isYouTubeLink(preview.link) || preview.siteIcon === undefined)
-            ) {
+            if (preview.image !== undefined) {
                 content = {
                     type: "image",
                     image: preview.image.imageFull,

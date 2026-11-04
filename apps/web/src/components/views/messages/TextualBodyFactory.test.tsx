@@ -678,16 +678,15 @@ describe("<TextualBody />", () => {
 
         const ogLogo = { "msc4448:site_logo": "mxc://example.org/logo", "msc4448:site_logo:size": 1234 };
 
-        it("shows a near-square og:image as the thumbnail and opens the lightbox when it is clicked", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
-                ogData({ ...ogImage, ...ogLogo, "og:image:width": 480, "og:image:height": 480 }),
-            );
+        it("shows the og:image as the thumbnail and opens the lightbox when it is clicked", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ ...ogImage, ...ogLogo }));
             const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
 
             await renderPreviews();
 
             const button = await screen.findByRole("button", { name: "View image" });
             expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+            expect(screen.queryByRole("img", { name: "matrix.org" })).not.toBeInTheDocument();
             fireEvent.click(button);
             expect(createDialog).toHaveBeenCalledWith(
                 ImageView,
@@ -698,37 +697,14 @@ describe("<TextualBody />", () => {
             );
         });
 
-        it("shows the site logo instead of a wide og:image which the thumbnail would crop", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData({ ...ogImage, ...ogLogo }));
+        it("shows the site logo when the page has no og:image", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogLogo));
 
             await renderPreviews();
 
             const logo = await screen.findByRole("img", { name: "matrix.org" });
             expect(logo).toHaveAttribute("src", "mxc://example.org/logo");
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
-        });
-
-        it.each(["https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://youtu.be/dQw4w9WgXcQ"])(
-            "shows the wide og:image of %s as the thumbnail even though the site has a logo",
-            async (youtubeLink) => {
-                vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
-                    ogData({ ...ogImage, ...ogLogo, "og:image:width": 1280, "og:image:height": 720 }),
-                );
-
-                await renderPreviews(`Watch ${youtubeLink}`);
-
-                const button = await screen.findByRole("button", { name: "View image" });
-                expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
-            },
-        );
-
-        it("shows a wide og:image anyway when the site has no logo", async () => {
-            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
-
-            await renderPreviews();
-
-            const button = await screen.findByRole("button", { name: "View image" });
-            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
         });
 
         it("shows the site logo guessed from a small og:image", async () => {
