@@ -116,9 +116,7 @@ class Helpers {
         await expect(button).toBeDisabled();
         // Assert the toast before the screenshot below: the toast expires after a few seconds,
         // while the screenshot can retry past that budget on a slow runner.
-        await expect(
-            this.page.locator(".mx_SettingsDialog_toastContainer").getByText(confirmationToast),
-        ).toBeVisible();
+        await expect(this.page.locator(".mx_SettingsDialog_toastContainer").getByText(confirmationToast)).toBeVisible();
         // The confirmation toast overlapping the dialog changes the text anti-aliasing of the recovery
         // section, so hide it to keep the capture comparable with the one taken before the flow.
         await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png", {
