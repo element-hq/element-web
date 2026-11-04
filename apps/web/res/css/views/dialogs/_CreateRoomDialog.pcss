@@ -113,3 +113,8 @@ Please see LICENSE files in the repository root for full details.
     color: $muted-fg-color;
     margin-top: var(--cpd-space-6x);
 }
+
+/* The extra margin only separates the first toggle from the hint above it */
+.mx_CreateRoomDialog_labelledCheckbox + .mx_CreateRoomDialog_labelledCheckbox {
+    margin-top: 0;
+}
