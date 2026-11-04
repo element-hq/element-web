@@ -157,12 +157,8 @@ overrides:
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
-    esbuild@<=0.27.4: 0.27.4
-    # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
-    # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
-    # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
-    vitepress>vite: ^6.4.4
+    esbuild@0 <0.28.1: 0.28.1
+    vitepress>vite: 8.3.5
     # https://github.com/advisories/GHSA-qxg6-89mg-rqv8
     "@vitest/mocker@4 <4.1.12": ^4.1.12
     # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
