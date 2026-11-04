@@ -49,7 +49,6 @@
     "composer": {
         "url_preview": {
             "clear_all": "Clear all",
-            "collapse": "Collapse URL previews",
             "failed": "Failed to fetch preview",
             "loading": "Fetching preview…",
             "n_links": {
