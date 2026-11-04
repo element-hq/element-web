@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { act, fireEvent, render, waitFor } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import {
     BeaconEvent,
     getBeaconInfoIdentifier,
@@ -38,6 +37,7 @@ import Modal from "../../../Modal";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import * as mapUtilHooks from "../../../utils/location/useMap";
 import { LocationShareError } from "../../../utils/location";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

@@ -321,7 +321,7 @@ importers:
         version: 3.38.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/f930f73c400c27f0d482f77421f29e588ef91f0a#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/00463c3ede8447cf8f4eba886eb691deeb34a2f2#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -8605,8 +8605,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/f930f73c400c27f0d482f77421f29e588ef91f0a#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-2VoJDe8HCfRyMZkpcrg5jMtaOV83gSvXiaaXbG+SzDENM8iGfgLnnAWb/Cwm9j303OBkkWSJgOJqRx+ptNJXqA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/f930f73c400c27f0d482f77421f29e588ef91f0a}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/00463c3ede8447cf8f4eba886eb691deeb34a2f2#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-wehLAhPotsPVN2vVT4ryyqfx30OzvkDAuWhFeshzdtfY9qif4mFqvyCKZ14KjzF1StkFa5QpeaITORG76F4LRA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/00463c3ede8447cf8f4eba886eb691deeb34a2f2}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.28.8:
@@ -20831,7 +20831,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/f930f73c400c27f0d482f77421f29e588ef91f0a#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/00463c3ede8447cf8f4eba886eb691deeb34a2f2#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.28.8(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
