@@ -6,11 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventTimeline, JoinRule, type MatrixError, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, type MatrixError, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { type ReactElement, type ReactNode, useCallback, useState, type FC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
+import { isKnockJoinRule } from "../../../utils/room/isKnockJoinRule";
 import dis from "../../../dispatcher/dispatcher";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";
@@ -31,7 +32,7 @@ export const RoomKnocksBar: FC<{ room: Room }> = ({ room }) => {
     );
     const knockMembersCount = knockMembers.length;
 
-    if (room.getJoinRule() !== JoinRule.Knock || knockMembersCount === 0) return null;
+    if (!isKnockJoinRule(room.getJoinRule()) || knockMembersCount === 0) return null;
 
     const client = room.client;
     const userId = client.getUserId() || "";

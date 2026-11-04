@@ -10,6 +10,7 @@ import React, { type ChangeEventHandler, type JSX, type ReactNode, type Syntheti
 import { EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
+import { isKnockJoinRule } from "../../../utils/room/isKnockJoinRule";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -55,7 +56,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         const room = MatrixClientPeg.safeGet().getRoom(this.props.roomId);
         const joinRules = room?.currentState.getStateEvents(EventType.RoomJoinRules, "");
         this.joinRule = joinRules?.getContent()["join_rule"] ?? JoinRule.Invite;
-        this.isInviteOrKnockRoom = [JoinRule.Invite, JoinRule.Knock].includes(this.joinRule);
+        this.isInviteOrKnockRoom = this.joinRule === JoinRule.Invite || isKnockJoinRule(this.joinRule);
         this.currentVersion = room?.getVersion();
 
         this.state = {

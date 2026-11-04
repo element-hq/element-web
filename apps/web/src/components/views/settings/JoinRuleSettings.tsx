@@ -29,6 +29,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import LabelledCheckbox from "../elements/LabelledCheckbox";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
+import { isKnockJoinRule } from "../../../utils/room/isKnockJoinRule";
 
 export interface JoinRuleSettingsProps {
     room: Room;
@@ -81,7 +82,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     const [isPublicKnockRoom, setIsPublicKnockRoom] = useState(false);
 
     useEffect(() => {
-        if (joinRule === JoinRule.Knock) {
+        if (isKnockJoinRule(joinRule)) {
             cli.getRoomDirectoryVisibility(room.roomId)
                 .then(({ visibility }) => setIsPublicKnockRoom(visibility === Visibility.Public))
                 .catch(onError);
@@ -341,7 +342,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     {_t("room_settings|security|join_rule_knock_description")}
                     <LabelledCheckbox
                         className="mx_JoinRuleSettings_labelledCheckbox"
-                        disabled={joinRule !== JoinRule.Knock}
+                        disabled={!isKnockJoinRule(joinRule)}
                         label={
                             room.isSpaceRoom()
                                 ? _t("room_settings|security|publish_space")

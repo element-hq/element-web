@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { useMemo } from "react";
 import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
+import { isKnockJoinRule } from "../../utils/room/isKnockJoinRule";
 import SdkConfig from "../../SdkConfig";
 import { useRoomState } from "../useRoomState";
 
@@ -36,7 +37,7 @@ export const useGuestAccessInformation = (room: Room): GuestAccessInformation =>
         canChangeJoinRule: roomState.maySendStateEvent(EventType.RoomJoinRules, room.myUserId),
     }));
     const isRoomJoinable = useMemo(
-        () => joinRule === JoinRule.Public || (joinRule === JoinRule.Knock && canInvite),
+        () => joinRule === JoinRule.Public || (isKnockJoinRule(joinRule) && canInvite),
         [canInvite, joinRule],
     );
     const canInviteGuests = useMemo(
@@ -46,7 +47,7 @@ export const useGuestAccessInformation = (room: Room): GuestAccessInformation =>
 
     const isRoomJoinableFunction = (): boolean => {
         const join = room.getJoinRule();
-        return join === JoinRule.Public || (join === JoinRule.Knock && room.canInvite(room.myUserId));
+        return join === JoinRule.Public || (isKnockJoinRule(join) && room.canInvite(room.myUserId));
     };
 
     return { canInviteGuests, guestSpaUrl, isRoomJoinable: isRoomJoinableFunction, canInvite };
