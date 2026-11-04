@@ -172,31 +172,57 @@
     object-fit: contain;
 }
 
-/* Fixed 130x142px box for the side layout. */
+/* Box for the side layout: a 130px square picture, in a box as tall as the tile so that it reaches
+   the tile's top and bottom edges when the text beside it is taller. */
 .image.thumbnailImage,
 .video.thumbnailVideo {
     width: 130px;
-    height: 142px;
+    min-height: 130px;
+    align-self: stretch;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
     /* Behind transparent images, which would otherwise sit on the tile's grey. */
     background: var(--cpd-color-bg-canvas-default);
+    /* The image itself, set inline, which the blurred backdrop below inherits. */
+    background-size: cover;
+    background-position: center;
 
     button {
+        display: flex;
+        align-items: center;
+        width: 100%;
         height: 100%;
     }
 }
 
+/* Blurred copy of the image filling the box behind the letterboxed image. Oversized so the blur's
+   faded edges fall outside the box. */
+.image.thumbnailImage::before {
+    content: "";
+    position: absolute;
+    inset: -16px;
+    background: inherit;
+    filter: blur(12px);
+}
+
 .image.thumbnailImage img,
 .video.thumbnailVideo video {
-    height: 100%;
-    object-fit: cover;
+    position: relative;
+    height: 130px;
+    /* Show the whole image rather than cropping it to the square. */
+    object-fit: contain;
 }
 
 /* Site logo in the side layout: the thumbnail box, with the logo centred rather than scaled up, as
    favicons are small and blur when enlarged. */
 .image.logoImage {
     width: 130px;
-    height: 142px;
+    /* As tall as the tile, so the box reaches its top and bottom edges. */
+    min-height: 130px;
+    align-self: stretch;
     flex-shrink: 0;
     display: flex;
     align-items: center;

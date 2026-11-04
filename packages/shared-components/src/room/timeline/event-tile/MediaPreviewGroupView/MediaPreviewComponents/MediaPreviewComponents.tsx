@@ -257,8 +257,11 @@ export function Image({
     if (!valid || src !== image) return null;
 
     const imageElem = <img src={image} alt={imageAlt} />;
+    // The thumbnail box shows the whole image, so an image of another shape leaves bands at the sides;
+    // a blurred copy of the image behind it fills those with its own colours rather than a flat one.
+    const backdrop = imageSize === "thumbnail" ? { backgroundImage: `url(${JSON.stringify(image)})` } : undefined;
     return (
-        <div className={classNames(classes)}>
+        <div className={classNames(classes)} style={backdrop}>
             {imageOnClick ? (
                 <button onClick={imageOnClick} type="button" aria-label={_t("timeline|url_preview|view_image")}>
                     {imageElem}

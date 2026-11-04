@@ -146,6 +146,7 @@ exports[`ImagePreviewTile > renders the side-by-side story with a clickable thum
   >
     <div
       class="MediaPreviewComponents-module_image MediaPreviewComponents-module_thumbnailImage"
+      style="background-image: url("/static/wideImage.png");"
     >
       <button
         aria-label="View image"
