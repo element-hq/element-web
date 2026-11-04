@@ -747,6 +747,10 @@ describe("TextForEvent", () => {
             [JoinRule.Public, { result: "@a made the room public to whoever knows the link." }],
             [JoinRule.Invite, { result: "@a made the room invite only." }],
             [JoinRule.Knock, { result: "@a changed the join rule to ask to join." }],
+            [
+                JoinRule.KnockRestricted,
+                { result: "@a changed the join rule to ask to join, or join from authorised spaces." },
+            ],
             [JoinRule.Restricted, { result: "@a changed who can join this room." }],
         ];
 
