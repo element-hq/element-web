@@ -250,4 +250,14 @@ export interface DesktopConfigJson extends WebConfigJson {
          */
         certificate_path?: string;
     };
+
+    /**
+     * URL of the directory to download spellchecker dictionaries from, instead of Electron's default CDN.
+     * If the files in Electron's `hunspell_dictionaries.zip` are served at
+     * `https://example.com/dictionaries/en-GB.bdic`, this should be `https://example.com/dictionaries/`.
+     *
+     * Has no effect on macOS, where the operating system's spellchecker is used.
+     * {@link https://www.electronjs.org/docs/latest/api/session#sessetspellcheckerdictionarydownloadurlurl}
+     */
+    spell_checker_dictionary_download_url?: string;
 }

@@ -35,7 +35,7 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.3.4
+    vite: 8.3.5
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 5.0.5
@@ -47,9 +47,9 @@ catalog:
     "@vitejs/plugin-react": 6.1.2
     unplugin-dts: 1.1.2
     # nx
-    nx: 23.3.0
+    nx: 24.0.3
     # oxc
-    oxlint: 1.88.0
+    oxlint: 1.90.0
 
 catalogs:
     ts6:

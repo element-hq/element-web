@@ -21,7 +21,7 @@ export async function randomArray(size: number): Promise<string> {
             if (err) {
                 reject(err);
             } else {
-                resolve(buf.toString("base64").replace(/=+$/g, ""));
+                resolve(buf.toString("base64").replace(/[=]+$/g, ""));
             }
         });
     });
