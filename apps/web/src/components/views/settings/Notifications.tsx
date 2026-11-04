@@ -299,7 +299,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         const cli = MatrixClientPeg.safeGet();
         const settingsEvent = cli.getAccountData(getLocalNotificationAccountDataEventType(cli.deviceId));
         if (settingsEvent) {
-            const notificationsEnabled = !(settingsEvent.getContent() as LocalNotificationSettings).is_silenced;
+            const notificationsEnabled = !settingsEvent.getContent<LocalNotificationSettings>().is_silenced;
             await SettingsStore.setValue("deviceNotificationsEnabled", null, SettingLevel.DEVICE, notificationsEnabled);
         }
     }

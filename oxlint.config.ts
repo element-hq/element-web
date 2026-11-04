@@ -260,6 +260,7 @@ export default defineConfig({
         "typescript/no-duplicate-type-constituents": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
+        "typescript/no-unsafe-enum-assignment": "off",
         "promise/valid-params": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",
