@@ -90,7 +90,7 @@ describe("serviceworker", () => {
 
         fetchSpy = vi.fn(async (input: URL | string) => {
             if (input.toString().endsWith("/_matrix/client/versions")) {
-                return { json: async () => ({ versions: ["v1.11"] }) };
+                return new Response(JSON.stringify({ versions: ["v1.11"] }));
             }
             return new Response("media");
         });
