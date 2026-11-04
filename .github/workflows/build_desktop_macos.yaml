@@ -88,7 +88,7 @@ jobs:
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
             - run: sudo pip3 install --break-system-packages pyobjc-framework-Quartz
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: true
