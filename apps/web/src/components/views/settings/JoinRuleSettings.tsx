@@ -201,6 +201,61 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             label
         );
 
+    /**
+     * Render the list of spaces whose members can join without asking, with a link to edit it.
+     */
+    const renderAllowedSpaces = (allowRoomIds: string[], onEditClick: () => void): JSX.Element => {
+        // only show the first 4 spaces we know about, so that the UI doesn't grow out of proportion there are lots.
+        const shownSpaces = allowRoomIds
+            .map((roomId) => cli.getRoom(roomId))
+            .filter((room) => room?.isSpaceRoom())
+            .slice(0, 4) as Room[];
+
+        let moreText;
+        if (shownSpaces.length < allowRoomIds.length) {
+            if (shownSpaces.length > 0) {
+                moreText = _t("room_settings|security|join_rule_restricted_n_more", {
+                    count: allowRoomIds.length - shownSpaces.length,
+                });
+            } else {
+                moreText = _t("room_settings|security|join_rule_restricted_summary", {
+                    count: allowRoomIds.length,
+                });
+            }
+        }
+
+        return (
+            <div>
+                <span>
+                    {_t(
+                        "room_settings|security|join_rule_restricted_description",
+                        {},
+                        {
+                            a: (sub) => (
+                                <AccessibleButton disabled={disabled} onClick={onEditClick} kind="link_inline">
+                                    {sub}
+                                </AccessibleButton>
+                            ),
+                        },
+                    )}
+                </span>
+
+                <div className="mx_JoinRuleSettings_spacesWithAccess">
+                    <h4>{_t("room_settings|security|join_rule_restricted_description_spaces")}</h4>
+                    {shownSpaces.map((room) => {
+                        return (
+                            <span key={room.roomId}>
+                                <RoomAvatar room={room} size="32px" />
+                                {room.name}
+                            </span>
+                        );
+                    })}
+                    {moreText && <span>{moreText}</span>}
+                </div>
+            </div>
+        );
+    };
+
     const definitions: IDefinition<JoinRule>[] = [
         {
             value: JoinRule.Invite,
@@ -220,25 +275,6 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     if (roomSupportsRestricted || preferredRestrictionVersion || joinRule === JoinRule.Restricted) {
         let description;
         if (joinRule === JoinRule.Restricted && restrictedAllowRoomIds?.length) {
-            // only show the first 4 spaces we know about, so that the UI doesn't grow out of proportion there are lots.
-            const shownSpaces = restrictedAllowRoomIds
-                .map((roomId) => cli.getRoom(roomId))
-                .filter((room) => room?.isSpaceRoom())
-                .slice(0, 4) as Room[];
-
-            let moreText;
-            if (shownSpaces.length < restrictedAllowRoomIds.length) {
-                if (shownSpaces.length > 0) {
-                    moreText = _t("room_settings|security|join_rule_restricted_n_more", {
-                        count: restrictedAllowRoomIds.length - shownSpaces.length,
-                    });
-                } else {
-                    moreText = _t("room_settings|security|join_rule_restricted_summary", {
-                        count: restrictedAllowRoomIds.length,
-                    });
-                }
-            }
-
             const onRestrictedRoomIdsChange = (newAllowRoomIds: string[]): void => {
                 if (!arrayHasDiff(restrictedAllowRoomIds || [], newAllowRoomIds)) return;
 
@@ -268,40 +304,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                 }
             };
 
-            description = (
-                <div>
-                    <span>
-                        {_t(
-                            "room_settings|security|join_rule_restricted_description",
-                            {},
-                            {
-                                a: (sub) => (
-                                    <AccessibleButton
-                                        disabled={disabled}
-                                        onClick={onEditRestrictedClick}
-                                        kind="link_inline"
-                                    >
-                                        {sub}
-                                    </AccessibleButton>
-                                ),
-                            },
-                        )}
-                    </span>
-
-                    <div className="mx_JoinRuleSettings_spacesWithAccess">
-                        <h4>{_t("room_settings|security|join_rule_restricted_description_spaces")}</h4>
-                        {shownSpaces.map((room) => {
-                            return (
-                                <span key={room.roomId}>
-                                    <RoomAvatar room={room} size="32px" />
-                                    {room.name}
-                                </span>
-                            );
-                        })}
-                        {moreText && <span>{moreText}</span>}
-                    </div>
-                </div>
-            );
+            description = renderAllowedSpaces(restrictedAllowRoomIds, onEditRestrictedClick);
         } else if (SDKContextClass.instance.spaceStore.activeSpaceRoom) {
             description = _t(
                 "room_settings|security|join_rule_restricted_description_active_space",
