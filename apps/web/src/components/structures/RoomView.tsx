@@ -32,7 +32,6 @@ import {
     type IRoomTimelineData,
     EventType,
     HistoryVisibility,
-    JoinRule,
     ClientEvent,
     type MatrixError,
     type ISearchResults,
@@ -52,6 +51,7 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
+import { isKnockJoinRule } from "../../utils/room/isKnockJoinRule";
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
 import * as TimezoneHandler from "../../TimezoneHandler";
@@ -950,7 +950,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const room = this.state.room;
         const joinRule = room ? room.getJoinRule() : this.state.roomSummary?.join_rule;
-        return joinRule === JoinRule.Knock;
+        return isKnockJoinRule(joinRule);
     }
 
     private shouldShowApps(room: Room): boolean {

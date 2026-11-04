@@ -1265,7 +1265,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const content = joinRules.getContent<RoomJoinRulesEventContent>();
             if (content.join_rule !== JoinRule.Public) {
                 const hasAuthorisedSpaces =
-                    content.join_rule === JoinRule.Restricted &&
+                    (content.join_rule === JoinRule.Restricted || content.join_rule === JoinRule.KnockRestricted) &&
                     !!content.allow?.some(({ type }) => type === RestrictedAllowType.RoomMembership);
                 let warning: string;
                 if (isSpace) {

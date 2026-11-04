@@ -11,7 +11,7 @@ import { capitalize, sum } from "lodash";
 import {
     type HierarchyRoom,
     type IPublicRoomsChunkRoom,
-    JoinRule,
+    type JoinRule,
     type MatrixClient,
     type Room,
     RoomMember,
@@ -41,6 +41,7 @@ import {
     LinkIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
+import { isKnockJoinRule } from "../../../../utils/room/isKnockJoinRule";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import {
     findNextSiblingElement,
@@ -307,7 +308,7 @@ const roomAriaUnreadLabel = (room: Room, notification: RoomNotificationState): s
 };
 
 const canAskToJoin = (joinRule?: JoinRule): boolean => {
-    return SettingsStore.getValue("feature_ask_to_join") && JoinRule.Knock === joinRule;
+    return SettingsStore.getValue("feature_ask_to_join") && isKnockJoinRule(joinRule);
 };
 
 interface IDirectoryOpts {

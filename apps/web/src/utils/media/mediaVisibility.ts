@@ -25,6 +25,7 @@ function isRoomPrivate(client: MatrixClient, roomId?: string): boolean {
     switch (joinRule) {
         case JoinRule.Invite:
         case JoinRule.Knock:
+        case JoinRule.KnockRestricted:
         case JoinRule.Restricted:
             return true;
         default:
