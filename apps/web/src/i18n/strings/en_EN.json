@@ -3497,6 +3497,7 @@
         "m.room.join_rules": {
             "invite": "%(senderDisplayName)s made the room invite only.",
             "knock": "%(senderDisplayName)s changed the join rule to ask to join.",
+            "knock_restricted": "%(senderDisplayName)s changed the join rule to ask to join, or join from authorised spaces.",
             "public": "%(senderDisplayName)s made the room public to whoever knows the link.",
             "restricted": "%(senderDisplayName)s changed who can join this room.",
             "restricted_settings": "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.",
