@@ -333,8 +333,8 @@ importers:
         specifier: ^9.0.0
         version: 9.1.7
       knip:
-        specifier: 6.44.1
-        version: 6.44.1(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28)
+        specifier: 6.43.0
+        version: 6.43.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28)
       lint-staged:
         specifier: ^17.0.0
         version: 17.6.0
@@ -9661,8 +9661,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  knip@6.44.1:
-    resolution: {integrity: sha512-Hbd8nvkIsNgFfXgC7Jsb5LHv7jj6VwA3tmfHd53XPX2z9Vc9RnAZqV0BIiP4OrtYqKwCoLseFHQZerb1bNlbSw==}
+  knip@6.43.0:
+    resolution: {integrity: sha512-8l3cCOg/EXoILO0qcSoMra49yQM91+lEIR4fu5Ko8rrArGX8xKdKZiGI9psPiY6rhLmfLERcMfFEByF0wli5CA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -22108,7 +22108,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  knip@6.44.1(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28):
+  knip@6.43.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28):
     dependencies:
       formatly: 0.11.4
       get-tsconfig: 4.14.3
