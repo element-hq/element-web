@@ -40,6 +40,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 import DMRoomMap from "../../../utils/DMRoomMap.ts";
+import Modal from "../../../Modal";
 
 describe("<JoinRuleSettings />", () => {
     const userId = "@alice:server.org";
@@ -281,7 +282,8 @@ describe("<JoinRuleSettings />", () => {
     });
 
     describe("knock rooms directory visibility", () => {
-        const getCheckbox = () => screen.getByRole("checkbox");
+        const getCheckbox = () =>
+            screen.getByRole("checkbox", { name: "Make this room visible in the public room directory." });
         let room: Room;
 
         beforeEach(() => (room = new Room(roomId, client, userId)));
@@ -343,6 +345,85 @@ describe("<JoinRuleSettings />", () => {
             it("should set the visibility to private by default", () => {
                 expect(getCheckbox()).not.toBeChecked();
             });
+        });
+    });
+
+    describe("knock_restricted join rule", () => {
+        const spaceId = "!space:server.org";
+        const getCheckbox = () =>
+            screen.queryByRole("checkbox", { name: "Members of authorised spaces can join without asking." });
+        let room: Room;
+
+        beforeEach(() => (room = new Room(roomId, client, userId)));
+        afterEach(async () => {
+            await clearAllModals();
+        });
+
+        it("should switch from knock to knock_restricted with the selected spaces", async () => {
+            setRoomStateEvents(room, PreferredRoomVersions.KnockRestrictedRooms, JoinRule.Knock);
+            vi.spyOn(Modal, "createDialog").mockReturnValueOnce({
+                finished: Promise.resolve([[spaceId]]),
+                close: vi.fn(),
+            });
+            getComponent({ room });
+
+            fireEvent.click(getCheckbox()!);
+            await act(async () => await flushPromises());
+
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                roomId,
+                EventType.RoomJoinRules,
+                { join_rule: JoinRule.KnockRestricted, allow: [{ type: "m.room_membership", room_id: spaceId }] },
+                "",
+            );
+        });
+
+        it("should show knock_restricted as ask to join and switch back to knock", async () => {
+            setRoomStateEvents(room, PreferredRoomVersions.KnockRestrictedRooms);
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomJoinRules,
+                    content: {
+                        join_rule: JoinRule.KnockRestricted,
+                        allow: [{ type: "m.room_membership", room_id: spaceId }],
+                    },
+                    sender: userId,
+                    state_key: "",
+                    room_id: roomId,
+                }),
+            ]);
+            getComponent({ room });
+
+            expect(screen.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+            expect(getCheckbox()).toBeChecked();
+            expect(screen.getByText("Authorised spaces")).toBeInTheDocument();
+
+            fireEvent.click(getCheckbox()!);
+            await act(async () => await flushPromises());
+
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                roomId,
+                EventType.RoomJoinRules,
+                { join_rule: JoinRule.Knock },
+                "",
+            );
+        });
+
+        it("should hide the checkbox when the room version is unsupported and upgrade is disabled", () => {
+            setRoomStateEvents(room, PreferredRoomVersions.KnockRooms, JoinRule.Knock);
+            getComponent({ room });
+            expect(getCheckbox()).not.toBeInTheDocument();
+        });
+
+        it("should prompt an upgrade when the room version is unsupported", async () => {
+            setRoomStateEvents(room, PreferredRoomVersions.KnockRooms, JoinRule.Knock);
+            getComponent({ room, promptUpgrade: true });
+
+            fireEvent.click(getCheckbox()!);
+
+            const dialog = await screen.findByRole("dialog");
+            expect(within(dialog).getByRole("button", { name: "Upgrade" })).toBeInTheDocument();
+            expect(client.sendStateEvent).not.toHaveBeenCalled();
         });
     });
 
