@@ -33,7 +33,6 @@ import {
     GuestAccess,
     HistoryVisibility,
     type HierarchyRoom,
-    JoinRule,
 } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
@@ -43,6 +42,7 @@ import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/
 import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { LinkedText } from "@element-hq/web-shared-components";
 
+import { isKnockJoinRule } from "../../utils/room/isKnockJoinRule";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
@@ -153,7 +153,7 @@ const Tile: React.FC<ITileProps> = ({
                 <Spinner size={24} />
             </AccessibleButton>
         );
-    } else if (joinedRoom || room.join_rule === JoinRule.Knock) {
+    } else if (joinedRoom || isKnockJoinRule(room.join_rule)) {
         // If the room is knockable, show the "View" button even if we are not a member; that
         // allows us to reuse the "request to join" UX in RoomView.
         button = (
