@@ -37,6 +37,11 @@
         {
             "groupName": "oxc",
             "matchDepNames": ["oxlint", "oxfmt"]
+        },
+        {
+            "description": "Keep TanStack Virtual out of the react group, updates usually need the @tanstack/virtual-core patch rebased by hand",
+            "groupName": "@tanstack/react-virtual",
+            "matchDepNames": ["@tanstack/react-virtual", "@tanstack/virtual-core"]
         }
     ],
     "customManagers": [
