@@ -240,6 +240,26 @@ const preview: Preview = {
              * See: https://storybook.js.org/docs/next/writing-tests/accessibility-testing#test-behavior
              */
             test: "error",
+            config: {
+                rules: [
+                    /*
+                     * Enabled by default since axe-core 4.14. Our composite list items (room list, rich list,
+                     * thread summary, reactions, …) use an aria-label summary that cannot contain all of their
+                     * visible text. Fixing this needs a rethink of those accessible names.
+                     * Ignore temporarily until we fix this.
+                     */
+                    { id: "label-content-name-mismatch", enabled: false },
+                ],
+            },
+        },
+        viewport: {
+            options: {
+                visualTest: {
+                    name: "Visual test",
+                    styles: { width: "960px", height: "720px" },
+                },
+            },
+            defaultViewport: "visualTest",
         },
     },
     loaders: [languageLoader],

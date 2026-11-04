@@ -2267,14 +2267,6 @@
                 "session_key": "Chave da sessão:",
                 "title": "Avançadas"
             },
-            "delete_key_storage": {
-                "breadcrumb_page": "Excluir armazenamento de chaves",
-                "confirm": "Excluir armazenamento de chaves",
-                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
-                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
-                "list_second": "Irá perder o acesso às suas mensagens encriptadas se se desconectar de %(brand)s em qualquer lugar",
-                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
-            },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",
@@ -3243,10 +3235,6 @@
             "error_loading": "Não foi possível carregar o evento ao qual se respondeu, ou ele não existe ou não tens permissão para o ver.",
             "in_reply_to": "<a>Em resposta a</a> <pill>",
             "in_reply_to_for_export": "Em resposta a <a>esta mensagem</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-            "dialog_title": "Adicionar uma integração"
         },
         "self_redaction": "Mensagem apagada",
         "send_state_encrypting": "A encriptar a tua mensagem...",

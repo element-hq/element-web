@@ -2479,10 +2479,6 @@
             "in_reply_to": "<a>En resposta a</a> <pill>",
             "in_reply_to_for_export": "En resposta a <a>esta mensaxe</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Vai ser redirixido a unha web de terceiros para poder autenticar a súa conta e así utilizar %(integrationsUrl)s. Quere continuar?",
-            "dialog_title": "Engadir unha integración"
-        },
         "self_redaction": "Mensaxe eliminada",
         "send_state_failed": "Fallou o envío",
         "send_state_sent": "Enviouse a túa mensaxe",

@@ -99,7 +99,7 @@ export function createTestClient(): MatrixClient {
         getUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: vi.fn().mockResolvedValue("userId"),
-        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }),
+        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn(), removeListener: vi.fn() }),
         getDevice: vi.fn(),
         getDeviceId: vi.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
@@ -372,6 +372,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 

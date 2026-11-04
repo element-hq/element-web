@@ -2795,10 +2795,6 @@
             "in_reply_to": "<a>Respondiendo a </a> <pill>",
             "in_reply_to_for_export": "En respuesta a <a>este mensaje</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Estás a punto de ir a un sitio externo para que puedas iniciar sesión con tu cuenta y usarla en %(integrationsUrl)s. ¿Quieres seguir?",
-            "dialog_title": "Añadir una Integración"
-        },
         "self_redaction": "Mensaje eliminado",
         "send_state_encrypting": "Cifrando tu mensaje…",
         "send_state_failed": "No se ha podido mandar",

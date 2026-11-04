@@ -21,7 +21,7 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react": "catalog:",
-        "happy-dom": "^20.10.2",
+        "happy-dom": "^21.0.0",
         "matrix-web-i18n": "^3.6.0",
         "matrix-widget-api": "^1.17.0",
         "react": "catalog:",
@@ -33,8 +33,8 @@
     },
     "dependencies": {
         "@radix-ui/react-dialog": "^1.1.6",
-        "@vector-im/compound-design-tokens": "^10.0.0",
-        "@vector-im/compound-web": "^9.0.0",
+        "@vector-im/compound-design-tokens": "^11.0.0",
+        "@vector-im/compound-web": "^10.0.0",
         "motion": "^14.0.0",
         "styled-components": "^6.1.18",
         "zod": "^4.0.0"

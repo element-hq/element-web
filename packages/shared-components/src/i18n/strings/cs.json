@@ -175,7 +175,8 @@
         "space_menu": {
             "home": "Domov prostoru",
             "space_settings": "Nastavení prostoru"
-        }
+        },
+        "unread_messages": "Nepřečtené zprávy"
     },
     "terms": {
         "tac_button": "Přečíst smluvní podmínky"

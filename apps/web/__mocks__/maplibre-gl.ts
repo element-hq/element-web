@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventEmitter } from "node:events";
 import { vi } from "vitest";
+// oxlint-disable-next-line no-restricted-imports -- the mock reuses the real maplibre-gl classes
 import { LngLat, LngLatBounds, NavigationControl } from "maplibre-gl";
 
 class MockMap extends EventEmitter {

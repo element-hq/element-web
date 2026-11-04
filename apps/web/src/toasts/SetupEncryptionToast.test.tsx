@@ -24,6 +24,7 @@ import { DeviceListener } from "../device-listener";
 import Modal from "../Modal";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
+import { ChangeRecoveryKeyDialog } from "../components/views/dialogs/security/ChangeRecoveryKeyDialog";
 import { stubClient } from "test-utils";
 
 vi.mock("../dispatcher/dispatcher", () => ({
@@ -48,6 +49,17 @@ describe("SetupEncryptionToast", () => {
             act(() => showToast("set_up_recovery"));
 
             expect(await screen.findByRole("heading", { name: "Back up your chats" })).toBeInTheDocument();
+        });
+
+        it("should open the recovery setup dialog when 'Create recovery key' clicked", async () => {
+            vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([]) } as any);
+
+            act(() => showToast("set_up_recovery"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Create recovery key" }));
+
+            expect(Modal.createDialog).toHaveBeenCalledWith(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
         });
 
         it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {

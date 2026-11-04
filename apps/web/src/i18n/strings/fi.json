@@ -2920,10 +2920,6 @@
             "in_reply_to": "<a>Vastauksena käyttäjälle</a> <pill>",
             "in_reply_to_for_export": "Vastauksena <a>tähän viestiin</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Sinut ohjataan kolmannen osapuolen sivustolle, jotta voit autentikoida tilisi käyttääksesi palvelua %(integrationsUrl)s. Haluatko jatkaa?",
-            "dialog_title": "Lisää integraatio"
-        },
         "self_redaction": "Viesti poistettu",
         "send_state_encrypting": "Salataan viestiäsi…",
         "send_state_failed": "Lähettäminen epäonnistui",
