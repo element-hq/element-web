@@ -651,6 +651,12 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
+    protected setDisconnected(): void {
+        super.setDisconnected();
+        // Only a connected call outlives having no members (see checkDestroy)
+        this.checkDestroy();
+    }
+
     public widgetGenerationParameters: WidgetGenerationParameters = {};
 
     /**
@@ -796,16 +802,18 @@ export class ElementCall extends Call {
      *
      * @param transports - The MatrixRTC transports Element Web knows about
      *   (`CallStore.getConfiguredRTCTransports()`). The component itself only looks at the
-     *   `/rtc/transports` endpoint, not at `.well-known`'s `org.matrix.msc4143.rtc_foci`, so the first
-     *   LiveKit transport is passed along as its configured `livekit_service_url`.
+     *   `/rtc/transports` endpoint, not at `.well-known`'s `org.matrix.msc4143.rtc_foci`, so a
+     *   LiveKit transport is passed along as its configured `livekit_service_url`. The first transport
+     *   of type `m.livekit` is picked if one exists or otherwise the first transport of type `livekit`.
      */
     public static getConfigOptions(transports: Transport[] = []): ConfigOptions {
         const options: ConfigOptions = {};
 
-        const livekitTransport = transports.find(
+        const livekitTransports = transports.filter(
             (t): t is Transport & { livekit_service_url: string } =>
-                t.type === "livekit" && typeof t.livekit_service_url === "string",
+                (t.type === "m.livekit" || t.type === "livekit") && typeof t.livekit_service_url === "string",
         );
+        const livekitTransport = livekitTransports.find((t) => t.type === "m.livekit") ?? livekitTransports[0];
         if (livekitTransport) {
             options.livekit = { livekit_service_url: livekitTransport.livekit_service_url };
         }
@@ -1120,8 +1128,13 @@ export class ElementCall extends Call {
 
     private checkDestroy = (): void => {
         // A call ceases to exist as soon as all participants leave and also the
-        // user isn't looking at it (for example, waiting in an empty lobby)
-        if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
+        // user isn't looking at it (for example, waiting in an empty lobby).
+        // A call the user is connected to is kept even when no membership is known yet: Element Call reports
+        // having joined before its membership comes back down the sync, and the call may meanwhile have left
+        // the room view (for a Picture-in-Picture window). Disconnecting checks again.
+        if (this.session.memberships.length === 0 && !this.presented && !this.connected && !this.room.isCallRoom()) {
+            this.destroy();
+        }
     };
 
     private readonly onMembershipChanged = (): void => {

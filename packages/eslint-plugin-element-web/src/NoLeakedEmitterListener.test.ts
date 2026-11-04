@@ -86,6 +86,12 @@ tester.run("no-leaked-emitter-listener", rule, {
             public on(event, listener): this { this.inner.on(event, listener); return this; }
             public destroy(): void {}
         }`,
+        // A handler passed in by the caller, who removes it through a matching method
+        `class FooStore {
+            public addRoomListener(roomId: string, fn: Listener): void { this.on(roomId, fn); }
+            public removeRoomListener(roomId: string, fn: Listener): void { this.off(roomId, fn); }
+            public destroy(): void {}
+        }`,
         // The return value is an unsubscribe function
         `class Foo extends React.Component {
             public componentDidMount(): void { this.unsubscribe = store.on("change", this.onChange); }

@@ -8,7 +8,7 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeAll } from "vitest";
+import { vi, describe, it, expect, beforeAll, afterEach } from "vitest";
 import React, { type ComponentProps } from "react";
 import { render, screen } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
@@ -21,6 +21,7 @@ import { NotificationLevel } from "../../../../stores/notifications/Notification
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../../utils/DMRoomMap";
+import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
 
 describe("ThreadsActivityCentre", () => {
     const getTACButton = () => {
@@ -45,6 +46,8 @@ describe("ThreadsActivityCentre", () => {
 
     const cli = stubClient();
     cli.supportsThreads = () => true;
+
+    afterEach(() => RoomNotificationStateStore.instance.clearRoomStates());
 
     const userId = cli.getSafeUserId();
 

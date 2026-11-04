@@ -37,13 +37,13 @@
         "@types/sanitize-html": "2.16.1",
         "@types/node": "catalog:ts6",
         "@typescript/native": "catalog:",
-        "happy-dom": "^20.10.2",
+        "happy-dom": "^21.0.0",
         "typescript": "catalog:ts6",
         "unplugin-dts": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     },
     "dependencies": {
-        "sanitize-html": "2.18.0"
+        "sanitize-html": "2.18.1"
     }
 }

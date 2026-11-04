@@ -71,10 +71,20 @@ export default abstract class BasePlatform {
     protected errorDidOccur = false;
     protected _favicon?: Favicon;
     public readonly initialised = Promise.resolve<void>(undefined);
+    private dispatcherRef?: string;
 
     protected constructor() {
-        dis.register(this.onAction.bind(this));
+        this.dispatcherRef = dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
+    }
+
+    /**
+     * Stops the platform listening to the dispatcher, and to anything else it subscribed to.
+     * Only expected to be called in tests, as the platform otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {

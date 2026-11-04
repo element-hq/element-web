@@ -191,6 +191,7 @@ export default defineConfig({
         "element-web/no-subscribe-after-await": "error",
         "element-web/no-leaked-class-timer": "error",
         "element-web/no-leaked-emitter-listener": "error",
+        "element-web/no-leaked-subscription": "error",
         "react-web-api/no-leaked-event-listener": "error",
         "react-web-api/no-leaked-fetch": "error",
         "react-web-api/no-leaked-intersection-observer": "error",
@@ -259,6 +260,7 @@ export default defineConfig({
         "typescript/no-duplicate-type-constituents": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
+        "typescript/no-unsafe-enum-assignment": "off",
         "promise/valid-params": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",
@@ -642,6 +644,30 @@ export default defineConfig({
             rules: {
                 // Jest is still CommonJS
                 "unicorn/prefer-module": "off",
+            },
+        },
+        {
+            files: ["apps/web/src/**/*.test.{ts,tsx}", "apps/web/test/**/*-test.{ts,tsx}"],
+            rules: {
+                // Stores and view models register on long-lived singletons, so any a test leaves behind
+                // stay reachable, and keep reacting, for the rest of the test file.
+                // Test doubles, named Mock* or Test*, are excluded, as are stores which subscribe to nothing.
+                "element-web/require-test-teardown": [
+                    "error",
+                    {
+                        classes:
+                            "^(?!Mock|Test)\\w*(Store|StoreClass|ViewModel|Tracker|Watcher|Platform|NotificationState)$|^(SDKContextClass|PosthogAnalytics)$",
+                        ignore: [
+                            "InitialCryptoSetupStore",
+                            "MemberListStore",
+                            "ToastStore",
+                            "TypingStore",
+                            "UserProfilesStore",
+                            "WidgetPermissionStore",
+                        ],
+                        helpers: ["tearDownAfterTest"],
+                    },
+                ],
             },
         },
         {

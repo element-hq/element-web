@@ -218,6 +218,25 @@ describe("<ChangeRecoveryKeyBody />", () => {
 
             await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1));
         });
+
+        it("should not change the recovery key when submitting a key that does not match", async () => {
+            const user = userEvent.setup();
+            const onFinish = vi.fn();
+            const { getByRole, getByText, getByTitle } = renderComponent(false, onFinish);
+
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
+            await waitFor(() => expect(getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = getByRole("button", { name: "Finish set up" });
+            await userEvent.type(getByTitle("Enter recovery key"), "wrong recovery key{Enter}");
+            // The button is only `aria-disabled`, so clicking it still reaches the form
+            await user.click(finishButton);
+
+            expect(finishButton).toHaveAttribute("aria-disabled", "true");
+            expect(matrixClient.getCrypto()!.bootstrapSecretStorage).not.toHaveBeenCalled();
+            expect(onFinish).not.toHaveBeenCalled();
+        });
     });
 
     describe("flow to change the recovery key", () => {

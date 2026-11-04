@@ -14,31 +14,27 @@ import { _t } from "../../../../languageHandler";
 import { SettingsHeader } from "../SettingsHeader";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import SdkConfig from "../../../../SdkConfig";
-
-interface Props {
-    /**
-     * Called when the user turns off the "allow key storage" toggle
-     */
-    onKeyStorageDisableClick: () => void;
-}
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { openDeleteKeyStorageDialog } from "../../dialogs/DeleteKeyStorageDialog";
 
 /**
  * This component allows the user to set up or change their recovery key.
  *
  * It is used within the "Encryption" settings tab.
  */
-export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) => {
-    const { isEnabled, setEnabled, loading, busy } = useKeyStoragePanelViewModel();
+export const KeyStoragePanel: React.FC = () => {
+    const matrixClient = useMatrixClientContext();
+    const { isEnabled, enable, loading, busy } = useKeyStoragePanelViewModel();
 
     const onKeyBackupChange = useCallback(
         (e: FormEvent<HTMLInputElement>) => {
             if (e.currentTarget.checked) {
-                void setEnabled(true);
+                void enable();
             } else {
-                onKeyStorageDisableClick();
+                openDeleteKeyStorageDialog(matrixClient);
             }
         },
-        [setEnabled, onKeyStorageDisableClick],
+        [enable, matrixClient],
     );
 
     if (loading) {
@@ -66,6 +62,7 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
                 <SettingsToggleInput
                     name="keyStorage"
                     checked={isEnabled}
+                    disabled={busy}
                     onChange={onKeyBackupChange}
                     label={_t("settings|encryption|key_storage|allow_key_storage")}
                     helpMessage={

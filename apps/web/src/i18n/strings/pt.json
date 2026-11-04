@@ -2267,14 +2267,6 @@
                 "session_key": "Chave da sessão:",
                 "title": "Avançadas"
             },
-            "delete_key_storage": {
-                "breadcrumb_page": "Excluir armazenamento de chaves",
-                "confirm": "Excluir armazenamento de chaves",
-                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
-                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
-                "list_second": "Irá perder o acesso às suas mensagens encriptadas se se desconectar de %(brand)s em qualquer lugar",
-                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
-            },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",

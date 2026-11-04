@@ -30,6 +30,7 @@ describe("OwnProfileStore", () => {
 
     afterEach(() => {
         ownProfileStore.removeListener(UPDATE_EVENT, onUpdate);
+        ownProfileStore.destroy();
     });
 
     it("if the client has not yet been started, the displayname and avatar should be null", () => {
