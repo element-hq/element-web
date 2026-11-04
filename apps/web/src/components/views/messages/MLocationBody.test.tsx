@@ -12,7 +12,6 @@ import React from "react";
 import { type EventEmitter } from "node:events";
 import { describe, it, expect, beforeEach, afterAll, vi, type MockInstance } from "vitest";
 import { fireEvent, render, waitFor } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { makeLocationEvent, getMockClientWithEventEmitter } from "test-utils";
@@ -24,6 +23,7 @@ import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

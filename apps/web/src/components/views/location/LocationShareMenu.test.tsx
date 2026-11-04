@@ -13,7 +13,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { RoomMember, RelationType, type MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { act, fireEvent, render, type RenderResult } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import {
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
@@ -32,6 +31,7 @@ import { DEFAULT_DURATION_MS } from "./LiveDurationDropdown";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 
