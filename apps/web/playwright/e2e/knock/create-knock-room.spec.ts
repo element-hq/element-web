@@ -90,6 +90,34 @@ test.describe("Create Knock Room", () => {
         await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
     });
 
+    test("should create a knock_restricted room in a space", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
+        await app.client.createSpace({ name: "Team" });
+        await app.viewSpaceHomeByName("Team");
+        await page.getByRole("main").getByRole("button", { name: "Add" }).click();
+        await page.getByRole("menuitem", { name: "New room" }).click();
+
+        const dialog = page.getByRole("dialog");
+        await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
+        await dialog.getByRole("button", { name: "Room visibility" }).click();
+        await dialog.getByRole("option", { name: "Ask to join" }).click();
+        await dialog.getByRole("switch", { name: "Members of Team can join without asking." }).click();
+        await dialog.getByRole("button", { name: "Create room" }).click();
+
+        await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
+
+        // The room is knock_restricted, allowing the members of the space
+        await app.settings.openRoomSettings("Security & Privacy");
+        const settingsGroup = page.getByRole("group", { name: "Access" });
+        await expect(settingsGroup.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+        await expect(
+            settingsGroup.getByRole("checkbox", { name: "Members of authorised spaces can join without asking." }),
+        ).toBeChecked();
+        await expect(settingsGroup.getByRole("heading", { name: "Authorised spaces" })).toBeVisible();
+        await expect(settingsGroup.getByText("Team", { exact: true })).toBeVisible();
+    });
+
     test("should change a room's join rule to knock_restricted", async ({ page, app, user }) => {
         await rejectToast(page, "Verify this device");
 

@@ -248,18 +248,28 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         createOpts.room_version = PreferredRoomVersions.KnockRooms;
     }
 
+    if (
+        opts.joinRule === JoinRule.KnockRestricted &&
+        !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRestrictedRooms)
+    ) {
+        createOpts.room_version = PreferredRoomVersions.KnockRestrictedRooms;
+    }
+
     if (opts.parentSpace) {
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
 
-        if (opts.joinRule === JoinRule.Restricted) {
-            if (!doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
+        if (opts.joinRule === JoinRule.Restricted || opts.joinRule === JoinRule.KnockRestricted) {
+            if (
+                opts.joinRule === JoinRule.Restricted &&
+                !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)
+            ) {
                 createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
             }
 
             createOpts.initial_state.push({
                 type: EventType.RoomJoinRules,
                 content: {
-                    join_rule: JoinRule.Restricted,
+                    join_rule: opts.joinRule,
                     allow: [
                         {
                             type: RestrictedAllowType.RoomMembership,
@@ -271,8 +281,8 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         }
     }
 
-    // we handle the restricted join rule in the parentSpace handling block above
-    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted) {
+    // we handle the restricted and knock_restricted join rules in the parentSpace handling block above
+    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted && opts.joinRule !== JoinRule.KnockRestricted) {
         createOpts.initial_state.push({
             type: EventType.RoomJoinRules,
             content: { join_rule: opts.joinRule },

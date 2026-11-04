@@ -17,6 +17,7 @@ import {
     Preset,
     RoomType,
     JoinRule,
+    EventType,
     RoomVersionStability,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
@@ -471,6 +472,35 @@ describe("createRoom", () => {
                     room_version: PreferredRoomVersions.RestrictedRooms,
                 }),
             );
+        });
+        it("should use the correct room version and allow list for knock_restricted join rules", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "9",
+                    available: {
+                        [PreferredRoomVersions.KnockRestrictedRooms]: RoomVersionStability.Stable,
+                        "9": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.KnockRestricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    room_version: PreferredRoomVersions.KnockRestrictedRooms,
+                    initial_state: expect.arrayContaining([
+                        expect.objectContaining({
+                            type: EventType.RoomJoinRules,
+                            content: {
+                                join_rule: JoinRule.KnockRestricted,
+                                allow: [{ type: "m.room_membership", room_id: "!parent" }],
+                            },
+                        }),
+                    ]),
+                }),
+            );
+            // only one join rules event: the plain join rule block must skip knock_restricted
+            const { initial_state: initialState } = client.createRoom.mock.calls[0][0];
+            expect(initialState!.filter((e) => e.type === EventType.RoomJoinRules)).toHaveLength(1);
         });
         it("should use the default room version for restricted join rules when default supports it", async () => {
             client.getCapabilities.mockResolvedValue({
