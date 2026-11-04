@@ -708,6 +708,20 @@ describe("<TextualBody />", () => {
             expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
         });
 
+        it.each(["https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://youtu.be/dQw4w9WgXcQ"])(
+            "shows the wide og:image of %s as the thumbnail even though the site has a logo",
+            async (youtubeLink) => {
+                vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                    ogData({ ...ogImage, ...ogLogo, "og:image:width": 1280, "og:image:height": 720 }),
+                );
+
+                await renderPreviews(`Watch ${youtubeLink}`);
+
+                const button = await screen.findByRole("button", { name: "View image" });
+                expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+            },
+        );
+
         it("shows a wide og:image anyway when the site has no logo", async () => {
             vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(ogData(ogImage));
 

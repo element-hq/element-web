@@ -49,6 +49,13 @@ function previewHost(preview: UrlPreview): string {
     return new URL(preview.link).hostname.toLowerCase().replace(/^www\./, "");
 }
 
+/** Whether the link is to YouTube, whose 16:9 og:image is the video still and worth a thumbnail despite the crop. */
+function isYouTubeLink(link: string): boolean {
+    if (!URL.canParse(link)) return false;
+    const host = new URL(link).hostname.toLowerCase();
+    return host === "youtu.be" || host === "youtube.com" || host.endsWith(".youtube.com");
+}
+
 function getTextualBodyClassName(msgtype: MsgType | undefined): string {
     if (msgtype === MsgType.Notice) {
         return "mx_MNoticeBody mx_EventTile_content";
@@ -172,7 +179,10 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const previewToEntry = useCallback(
         (preview: UrlPreview): MediaPreviewGroupEntry => {
             let content: MediaPreviewGroupEntryContent;
-            if (preview.image !== undefined && (imageFitsThumbnail(preview.image) || preview.siteIcon === undefined)) {
+            if (
+                preview.image !== undefined &&
+                (imageFitsThumbnail(preview.image) || isYouTubeLink(preview.link) || preview.siteIcon === undefined)
+            ) {
                 content = {
                     type: "image",
                     image: preview.image.imageFull,
