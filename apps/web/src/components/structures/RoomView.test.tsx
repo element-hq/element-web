@@ -961,6 +961,27 @@ describe("RoomView", () => {
             expect(cli.peekInRoom).not.toHaveBeenCalled();
         });
 
+        it("shows the join prompt instead of asking to join for a member of an allowed space", async () => {
+            const spaceId = "!space:example.org";
+            const space = new Room(spaceId, cli, cli.getSafeUserId());
+            vi.spyOn(space, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            rooms.set(spaceId, space);
+            rooms.delete(room.roomId);
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                join_rule: JoinRule.KnockRestricted,
+                allowed_room_ids: [spaceId],
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+
+            await mountRoomView();
+
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(screen.queryByRole("heading", { name: "Ask to join?" })).not.toBeInTheDocument();
+        });
+
         it("shows the join prompt when the room summary cannot be fetched", async () => {
             rooms.delete(room.roomId);
             cli.getRoomSummary.mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" }));
