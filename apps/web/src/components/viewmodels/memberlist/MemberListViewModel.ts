@@ -21,6 +21,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
+import { type RoomAction } from "@element-hq/element-web-module-api";
 
 import { type RoomMember } from "../../../models/rooms/RoomMember";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -38,6 +39,8 @@ import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
+import { ModuleApi } from "../../../modules/Api";
+import { getRoomActions } from "../../../modules/ExtrasApi";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
@@ -109,6 +112,10 @@ export interface MemberListViewState {
     isLoading: boolean;
     canInvite: boolean;
     onInviteButtonClick: (ev: ButtonEvent) => void;
+    /**
+     * Actions added by modules to the member list header
+     */
+    moduleActions: RoomAction[];
 }
 export function useMemberListViewModel(roomId: string): MemberListViewState {
     const cli = useMatrixClientContext();
@@ -201,6 +208,11 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     );
     const [shouldShowInvite, setShouldShowInvite] = useState<boolean>(getShouldShowInvite());
 
+    const moduleActions = useMemo(
+        () => getRoomActions(ModuleApi.instance.extras.memberListHeaderActionCallbacks, roomId),
+        [roomId],
+    );
+
     const onInviteButtonClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebRightPanelMemberListInviteButton", ev);
         ev.preventDefault();
@@ -276,5 +288,6 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         onInviteButtonClick,
         shouldShowSearch: totalMemberCount >= 20,
         canInvite,
+        moduleActions,
     };
 }
