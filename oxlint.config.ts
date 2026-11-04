@@ -449,6 +449,12 @@ export default defineConfig({
                                 message:
                                     "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
                             },
+                            {
+                                name: "maplibre-gl",
+                                allowTypeImports: true,
+                                message:
+                                    "Please use utils/location/maplibre instead, it points maplibre at the bundled worker.",
+                            },
                         ],
                         patterns: [
                             {
