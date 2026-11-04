@@ -65,6 +65,13 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     const preferredRestrictionVersion =
         !roomSupportsRestricted && promptUpgrade ? PreferredRoomVersions.RestrictedRooms : undefined;
 
+    const roomSupportsKnockRestricted = doesRoomVersionSupport(
+        room.getVersion(),
+        PreferredRoomVersions.KnockRestrictedRooms,
+    );
+    const preferredKnockRestrictedVersion =
+        !roomSupportsKnockRestricted && promptUpgrade ? PreferredRoomVersions.KnockRestrictedRooms : undefined;
+
     const disabled = !room.currentState.mayClientSendStateEvent(EventType.RoomJoinRules, cli);
 
     const [content, setContent] = useLocalEcho<RoomJoinRulesEventContent | undefined, RoomJoinRulesEventContent>(
@@ -75,9 +82,15 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
 
     const { join_rule: joinRule = JoinRule.Invite } = content || {};
     const restrictedAllowRoomIds =
-        joinRule === JoinRule.Restricted
+        joinRule === JoinRule.Restricted || joinRule === JoinRule.KnockRestricted
             ? content?.allow?.filter((o) => o.type === RestrictedAllowType.RoomMembership).map((o) => o.room_id)
             : undefined;
+
+    // Only offer knock_restricted for rooms in a space
+    const isInSpace = SDKContextClass.instance.spaceStore.getKnownParents(room.roomId).size > 0;
+    const showKnockRestricted =
+        joinRule === JoinRule.KnockRestricted ||
+        (isInSpace && (roomSupportsKnockRestricted || !!preferredKnockRestrictedVersion));
 
     const [isPublicKnockRoom, setIsPublicKnockRoom] = useState(false);
 
@@ -256,6 +269,30 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         );
     };
 
+    const toAllowRules = (roomIds: string[]): RoomJoinRulesEventContent["allow"] =>
+        roomIds.map((roomId) => ({ type: RestrictedAllowType.RoomMembership, room_id: roomId }));
+
+    // Editing the knock_restricted spaces: an empty selection falls back to plain knock.
+    const onEditKnockRestrictedClick = async (): Promise<void> => {
+        const roomIds = await editRestrictedRoomIds();
+        if (!Array.isArray(roomIds)) return;
+        setContent(
+            roomIds.length
+                ? { join_rule: JoinRule.KnockRestricted, allow: toAllowRules(roomIds) }
+                : { join_rule: JoinRule.Knock },
+        );
+    };
+
+    const onKnockRestrictedChange = (checked: boolean): void => {
+        if (!checked) {
+            setContent({ join_rule: JoinRule.Knock });
+        } else if (preferredKnockRestrictedVersion) {
+            upgradeRequiredDialog(preferredKnockRestrictedVersion);
+        } else {
+            void onEditKnockRestrictedClick();
+        }
+    };
+
     const definitions: IDefinition<JoinRule>[] = [
         {
             value: JoinRule.Invite,
@@ -354,8 +391,22 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                         onChange={onIsPublicKnockRoomChange}
                         value={isPublicKnockRoom}
                     />
+                    {showKnockRestricted && (
+                        <LabelledCheckbox
+                            className="mx_JoinRuleSettings_labelledCheckbox"
+                            disabled={!isKnockJoinRule(joinRule)}
+                            label={_t("room_settings|security|join_rule_knock_restricted")}
+                            onChange={onKnockRestrictedChange}
+                            value={joinRule === JoinRule.KnockRestricted}
+                        />
+                    )}
+                    {joinRule === JoinRule.KnockRestricted &&
+                        !!restrictedAllowRoomIds?.length &&
+                        renderAllowedSpaces(restrictedAllowRoomIds, onEditKnockRestrictedClick)}
                 </>
             ),
+            // knock_restricted is shown as the "Ask to join" option with its checkbox ticked
+            checked: isKnockJoinRule(joinRule),
         });
     }
 

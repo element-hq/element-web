@@ -89,4 +89,40 @@ test.describe("Create Knock Room", () => {
         await spotlightDialog.search("Cyber");
         await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
     });
+
+    test("should change a room's join rule to knock_restricted", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
+        const spaceId = await app.client.createSpace({ name: "Team" });
+        const roomId = await app.client.createRoom({
+            name: "Cybersecurity",
+            room_version: "10",
+            initial_state: [{ type: "m.room.join_rules", content: { join_rule: "knock" }, state_key: "" }],
+        });
+        await app.client.sendStateEvent(spaceId, "m.space.child", { via: [user.homeServer] }, roomId);
+
+        await app.viewRoomById(roomId);
+        await app.settings.openRoomSettings("Security & Privacy");
+
+        const settingsGroup = page.getByRole("group", { name: "Access" });
+        await expect(settingsGroup.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+        const checkbox = settingsGroup.getByRole("checkbox", {
+            name: "Members of authorised spaces can join without asking.",
+        });
+        await checkbox.click();
+
+        // The space the room is viewed in is preselected
+        const manageSpacesDialog = page
+            .getByRole("dialog")
+            .filter({ has: page.getByRole("heading", { name: "Manage spaces" }) });
+        await expect(manageSpacesDialog.getByRole("checkbox", { name: "Team" })).toBeChecked();
+        await manageSpacesDialog.getByRole("button", { name: "Confirm" }).click();
+
+        // The room is now knock_restricted, allowing the members of the space
+        await expect(checkbox).toBeChecked();
+        await expect(settingsGroup.getByRole("heading", { name: "Authorised spaces" })).toBeVisible();
+        await expect(settingsGroup.getByText("Team", { exact: true })).toBeVisible();
+        await expect(settingsGroup.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+        await expect(checkbox).toBeChecked();
+    });
 });
