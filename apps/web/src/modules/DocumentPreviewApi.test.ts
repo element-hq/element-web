@@ -50,12 +50,15 @@ describe("DocumentPreviewApi", () => {
         expect(new DocumentPreviewApi().getPreviewOpener({ mimetype: "application/pdf" })).toBeNull();
     });
 
-    it("opens the file in the document viewer with the mimetype and name it was got for", () => {
+    it("opens the file in the document viewer with the mimetype and name it was got for", async () => {
         vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room:example.org");
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const blob = vi.fn(() => Promise.resolve(new Blob()));
 
-        new DocumentPreviewApi().getPreviewOpener({ mimetype: "application/pdf", name: "spec.pdf" })!({ blob });
+        const api = new DocumentPreviewApi();
+        await api.moduleLoadPromise;
+
+        api.getPreviewOpener({ mimetype: "application/pdf", name: "spec.pdf" })!({ blob });
 
         expect(dispatch).toHaveBeenCalledWith({
             action: Action.OpenDocumentViewer,
@@ -68,7 +71,9 @@ describe("DocumentPreviewApi", () => {
     it("throws if the lab is turned off after the opener was got", async () => {
         vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room:example.org");
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const openPreview = new DocumentPreviewApi().getPreviewOpener({ mimetype: "application/pdf" })!;
+        const api = new DocumentPreviewApi();
+        await api.moduleLoadPromise;
+        const openPreview = api.getPreviewOpener({ mimetype: "application/pdf" })!;
 
         await setDocumentPreviewsLab(false);
 
@@ -76,8 +81,19 @@ describe("DocumentPreviewApi", () => {
         expect(dispatch).not.toHaveBeenCalled();
     });
 
-    it("throws if no room is being viewed", () => {
+    it("throws if no room is being viewed", async () => {
         vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const api = new DocumentPreviewApi();
+        await api.moduleLoadPromise;
+        const openPreview = api.getPreviewOpener({ mimetype: "application/pdf" })!;
+
+        expect(() => openPreview({ blob: vi.fn() })).toThrow("No room is being viewed");
+        expect(dispatch).not.toHaveBeenCalled();
+    });
+
+    it("throws as if no room is being viewed when the SDK context has not loaded yet", () => {
+        vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room:example.org");
         const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
         const openPreview = new DocumentPreviewApi().getPreviewOpener({ mimetype: "application/pdf" })!;
 
