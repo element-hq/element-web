@@ -1194,6 +1194,10 @@
             "user": "%(sender)s reacted %(reaction)s to %(message)s",
             "you": "You reacted %(reaction)s to %(message)s"
         },
+        "m.rtc.notification": {
+            "ended": "Call ended",
+            "started": "Call started"
+        },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
         "prefix": {
