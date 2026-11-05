@@ -69,6 +69,15 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it("should display the advanced panel when the encryption is not set up", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("verify_this_session");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Verify this device" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
+    });
+
     it("should display the recovery panel when key storage is enabled", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
@@ -89,6 +98,15 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should display the advanced panel when the recovery is out of sync", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
     });
 
     it("should enter the 'reset identity' flow if user clicks 'forgot password' and we are missing identity keys", async () => {
