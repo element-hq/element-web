@@ -95,7 +95,6 @@ jobs:
 
             - name: Build
               env:
-                  CI_PACKAGE: true
                   VERSION: ${{ steps.layered.outputs.version }}
               working-directory: apps/web
               run: pnpm run build

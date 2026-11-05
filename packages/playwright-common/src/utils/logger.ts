@@ -11,6 +11,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import stripAnsi from "strip-ansi";
 
+import { SourceMapper } from "./sourcemaps.js";
+
 /**
  * Environment variable which, when set to any non-empty value, captures logs for every test rather than only for
  * failing ones. Container logs are also written to `<container>.log` in the test's output directory, so they can be
@@ -24,6 +26,8 @@ const CAPTURE_LOGS_ENV_VAR = "PLAYWRIGHT_CAPTURE_LOGS";
 export class Logger {
     private pages: Page[] = [];
     private logs: Record<string, string> = {};
+    // Kept for the whole worker, so each script's source map is only fetched once
+    private readonly sourceMapper = new SourceMapper();
 
     /**
      * Get a consumer function that captures logs for a given container.
@@ -90,7 +94,9 @@ export class Logger {
     public async attachLogs(testInfo: TestInfo, inline = true) {
         for (const id in this.logs) {
             if (!this.logs[id]) continue;
-            const body = stripAnsi(this.logs[id]);
+            let body = stripAnsi(this.logs[id]);
+            // Point stack traces in the app's console logs at its source, rather than at its minified bundles
+            if (id.startsWith("page-")) body = await this.sourceMapper.mapLocations(body);
 
             if (!inline && !id.startsWith("page-")) {
                 const logPath = testInfo.outputPath(`${id}.log`);
