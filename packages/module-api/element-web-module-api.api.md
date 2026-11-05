@@ -99,6 +99,7 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    waitForClientStarted(): Promise<void>;
 }
 
 // @public

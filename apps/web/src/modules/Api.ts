@@ -60,7 +60,7 @@ export class ModuleApi implements Api {
     public readonly widgetLifecycle = new WidgetLifecycleApi();
     public readonly widget = new WidgetApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
-    public readonly client = new ClientApi();
+    public readonly client = new ClientApi(defaultDispatcher);
     // Element Desktop exposes this on the preload; on the web it is undefined and modules see no X.509 support.
     public readonly x509 = window.electron?.x509;
     public readonly stores = new StoresApi();
