@@ -163,6 +163,7 @@ class Helpers {
         );
         await dialog.getByRole("textbox", { name: "Custom theme URL" }).fill(this.CUSTOM_THEME_URL);
         await dialog.getByRole("button", { name: "Add custom theme" }).click();
+        await expect(dialog.getByRole("listitem", { name: this.CUSTOM_THEME.name })).toBeVisible();
         await this.page.unroute(this.CUSTOM_THEME_URL);
 
         await this.app.closeDialog();
@@ -175,10 +176,9 @@ class Helpers {
     async removeCustomTheme() {
         const dialog = await this.openCustomThemesDevtool();
 
-        await dialog
-            .getByRole("listitem", { name: this.CUSTOM_THEME.name })
-            .getByRole("button", { name: "Delete" })
-            .click();
+        const theme = dialog.getByRole("listitem", { name: this.CUSTOM_THEME.name });
+        await theme.getByRole("button", { name: "Delete" }).click();
+        await expect(theme).not.toBeVisible();
 
         await this.app.closeDialog();
     }

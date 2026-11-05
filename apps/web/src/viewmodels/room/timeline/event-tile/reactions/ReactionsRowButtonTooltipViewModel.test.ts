@@ -9,7 +9,7 @@
 
 import { type MatrixClient, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { stubClient, mkStubRoom, mkEvent } from "test-utils";
+import { stubClient, mkStubRoom, mkEvent, tearDownAfterTest } from "test-utils";
 
 import {
     ReactionsRowButtonTooltipViewModel,
@@ -80,7 +80,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
     it("should return undefined snapshot when room is not found", () => {
         vi.spyOn(client, "getRoom").mockReturnValue(null);
 
-        const vm = new ReactionsRowButtonTooltipViewModel(createProps());
+        const vm = tearDownAfterTest(new ReactionsRowButtonTooltipViewModel(createProps()));
         const snapshot = vm.getSnapshot();
 
         expect(snapshot.formattedSenders).toBeUndefined();
@@ -88,7 +88,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
     });
 
     it("should return undefined snapshot when MatrixClient is unavailable", () => {
-        const vm = new ReactionsRowButtonTooltipViewModel(createProps({ client: null }));
+        const vm = tearDownAfterTest(new ReactionsRowButtonTooltipViewModel(createProps({ client: null })));
         const snapshot = vm.getSnapshot();
 
         expect(snapshot.formattedSenders).toBeUndefined();
@@ -100,6 +100,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
         vi.spyOn(room, "getMember").mockReturnValue({ name: "Alice", userId: "@alice:example.org" } as RoomMember);
 
         const vm = new ReactionsRowButtonTooltipViewModel(createProps({ reactionEvents: [reactionEvent] }));
+        tearDownAfterTest(vm);
         const snapshot = vm.getSnapshot();
 
         expect(snapshot.formattedSenders).toBe("Alice");
@@ -111,6 +112,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
         vi.spyOn(room, "getMember").mockReturnValue(null);
 
         const vm = new ReactionsRowButtonTooltipViewModel(createProps({ reactionEvents: [reactionEvent] }));
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().formattedSenders).toBe("@unknown:example.org");
     });
@@ -129,6 +131,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
                 customReactionImagesEnabled: true,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().caption).toContain("custom_emoji");
     });
@@ -147,6 +150,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
                 customReactionImagesEnabled: false,
             }),
         );
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().caption).toBeUndefined();
     });
@@ -161,6 +165,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
         });
 
         const vm = new ReactionsRowButtonTooltipViewModel(createProps({ reactionEvents: [aliceReaction] }));
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().formattedSenders).toBe("Alice");
 
         const subscriber = vi.fn();

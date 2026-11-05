@@ -44,8 +44,8 @@ describe("shareLocation", () => {
         shareLocationFn = shareLocation(client, roomId, shareType, undefined, () => {});
     });
 
-    it("should forward the call to doMaybeLocalRoomAction", () => {
-        shareLocationFn({ uri: "https://example.com/" });
+    it("should forward the call to doMaybeLocalRoomAction", async () => {
+        await shareLocationFn({ uri: "https://example.com/" });
         expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, content);
     });
 });

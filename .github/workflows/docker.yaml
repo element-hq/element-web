@@ -8,15 +8,18 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
-permissions: {}
+permissions:
+    contents: read
 jobs:
     buildx:
         name: Docker Buildx
         runs-on: ubuntu-26.04
         environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
+        if: github.event_name != 'schedule' || github.repository == 'element-hq/element-web'
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+            contents: read
         env:
             TEST_TAG: ghcr.io/element-hq/element-web:test
             TEST_TAG_MODULES: ghcr.io/element-hq/element-web/modules:test
@@ -39,7 +42,7 @@ jobs:
                   install: true
 
             - name: Build and load
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               with:
                   source: .
                   files: ./docker-bake.hcl
@@ -149,14 +152,14 @@ jobs:
                   bake-target: docker-metadata-action-modules
 
             - name: Login to Docker Hub
-              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+              uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
               if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+              uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -164,7 +167,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Connect to Tailscale
-              uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4
+              uses: tailscale/github-action@064b10558093f38325e838ddea35486bdc6b1d5c # v4
               if: github.event_name != 'pull_request'
               with:
                   oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
@@ -192,7 +195,7 @@ jobs:
                       services/web-repositories/secret/data/oci.element.io password | OCI_PASSWORD ;
 
             - name: Login to oci.element.io Registry
-              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+              uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: oci-push.vpn.infra.element.io
@@ -202,7 +205,7 @@ jobs:
             # Both targets are built in a single bake so that the app is only compiled once.
             - name: Build and push
               id: build-and-push
-              uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7
+              uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e # v7
               if: github.event_name != 'pull_request'
               with:
                   source: .

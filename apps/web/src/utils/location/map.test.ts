@@ -5,34 +5,39 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { setWorkerUrl } from "maplibre-gl";
+// @vitest-environment happy-dom
+
+import { describe, expect, it, vi } from "vitest";
+import { getMockClientWithEventEmitter } from "test-utils";
+import { type Map as MapLibreMap } from "maplibre-gl";
+import { type EventEmitter } from "node:events";
+
+import { createMap } from "./map";
+import { TILE_SERVER_WK_KEY } from "../WellKnownUtils";
 
 vi.mock("maplibre-gl");
 
-// Webpack defines these globals in the built app; map.ts reads them to locate the bundled maplibre worker.
-const webpackGlobals = globalThis as { __webpack_public_path__?: string; __webpack_get_script_filename__?: unknown };
-
-describe("map worker URL", () => {
-    afterEach(() => {
-        delete webpackGlobals.__webpack_public_path__;
-        delete webpackGlobals.__webpack_get_script_filename__;
-        vi.resetModules();
-        vi.mocked(setWorkerUrl).mockClear();
+describe("createMap", () => {
+    const client = getMockClientWithEventEmitter({
+        getClientWellKnown: vi.fn().mockReturnValue({
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
+        }),
     });
 
-    it("points maplibre at the bundled worker under webpack", async () => {
-        webpackGlobals.__webpack_public_path__ = "https://app.example.org/";
-        webpackGlobals.__webpack_get_script_filename__ = (chunkId: string) => `bundles/abc123/${chunkId}.js`;
+    it("marks the map busy until it has loaded and drawn its data", () => {
+        const map = createMap(client, false, "map-id");
+        const emitter = map as unknown as EventEmitter & MapLibreMap;
+        const canvas = map.getCanvas();
 
-        await import("./map");
+        expect(canvas).toHaveAttribute("aria-busy", "true");
 
-        expect(setWorkerUrl).toHaveBeenCalledWith("https://app.example.org/bundles/abc123/maplibre.worker.js");
-    });
+        emitter.emit("idle");
+        expect(canvas).not.toHaveAttribute("aria-busy");
 
-    it("leaves the worker URL alone outside webpack", async () => {
-        await import("./map");
+        emitter.emit("dataloading");
+        expect(canvas).toHaveAttribute("aria-busy", "true");
 
-        expect(setWorkerUrl).not.toHaveBeenCalled();
+        emitter.emit("idle");
+        expect(canvas).not.toHaveAttribute("aria-busy");
     });
 });

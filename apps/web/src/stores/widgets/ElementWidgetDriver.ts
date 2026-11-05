@@ -27,6 +27,10 @@ import {
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
     type IRtcTransportsResult,
+    type IRtcLivekitGetTokenFromWidgetRequestData,
+    type IRtcLivekitGetTokenFromWidgetResponseData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -119,6 +123,8 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitGetToken);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitDelegateDelayedLeave);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -424,14 +430,13 @@ export class ElementWidgetDriver extends WidgetDriver {
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = { delay };
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
             // state event
             r = await client._unstable_sendDelayedStateEvent(
                 roomId,
-                delayOpts,
+                delay,
                 eventType as keyof StateEvents,
                 content satisfies StateEvents[keyof StateEvents],
                 stateKey,
@@ -440,7 +445,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // message event
             r = await client._unstable_sendDelayedEvent(
                 roomId,
-                delayOpts,
+                delay,
                 null,
                 eventType as keyof TimelineEvents,
                 content as TimelineEvents[keyof TimelineEvents],
@@ -468,7 +473,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
             stickyDurationMs,
-            { delay },
+            delay,
             null,
             eventType as keyof TimelineEvents,
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
@@ -532,7 +537,16 @@ export class ElementWidgetDriver extends WidgetDriver {
                     const content = userContentMap[deviceId];
                     const stringifiedContent = JSON.stringify(content);
                     invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
-                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    // "*" means every device, which the server expands for plaintext sends
+                    // but we have to for encrypted ones
+                    let deviceIds = [deviceId];
+                    if (deviceId === "*") {
+                        const devices = await crypto.getUserDeviceInfo([userId], true);
+                        deviceIds = [...(devices.get(userId)?.keys() ?? [])];
+                    }
+                    for (const id of deviceIds) {
+                        invertedContentMap[stringifiedContent].push({ userId, deviceId: id });
+                    }
                 }
             }
 
@@ -752,6 +766,31 @@ export class ElementWidgetDriver extends WidgetDriver {
             // Re-throw to turn the error into a widget error response
             throw e;
         }
+    }
+
+    /**
+     * Obtains a JWT for a LiveKit SFU on the widget's behalf by calling the
+     * homeserver's `/rtc/livekit/get_token` endpoint (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async getRtcLivekitToken(
+        data: IRtcLivekitGetTokenFromWidgetRequestData,
+    ): Promise<IRtcLivekitGetTokenFromWidgetResponseData> {
+        // Errors are re-thrown so that MatrixErrors reach the widget as matrix_api_error details
+        return { ...(await MatrixClientPeg.safeGet()._unstable_getLivekitToken(data)) };
+    }
+
+    /**
+     * Hands a MatrixRTC session's delayed leave event over to the homeserver on
+     * the widget's behalf by calling `/rtc/livekit/delegate_delayed_leave` (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async delegateRtcLivekitDelayedLeave(
+        data: IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    ): Promise<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData> {
+        // Errors are re-thrown so that the widget can detect homeservers without support (M_UNRECOGNIZED)
+        await MatrixClientPeg.safeGet()._unstable_delegateDelayedLeave(data);
+        return {};
     }
 
     public async readEventRelations(

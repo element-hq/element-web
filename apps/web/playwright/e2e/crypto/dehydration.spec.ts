@@ -62,7 +62,7 @@ test.describe("Dehydration", () => {
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
     });
 
-    test("'Get recovery key' creates dehydrated device", async ({ app, credentials, page }) => {
+    test("'Create recovery key' creates dehydrated device", async ({ app, credentials, page }) => {
         await logIntoElement(page, credentials);
         await enableKeyBackup(app);
         await expectDehydratedDeviceEnabled(app);

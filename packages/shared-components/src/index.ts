@@ -20,6 +20,7 @@ export * from "./room/composer/UploadButton";
 export * from "./room/composer/MessageComposerUrlPreview/index.ts";
 export * from "./crypto/SasEmoji";
 export * from "./crypto/LegacyCryptoUnsupportedView";
+export * from "./crypto/DeleteKeyStorageView";
 export * from "./menus/UserMenu";
 export * from "./notifications/NotificationBadgeView";
 export * from "./room/timeline/ReadMarker";

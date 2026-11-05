@@ -44,6 +44,17 @@ describe("MediaEventHelper", () => {
         expect(blob?.type).toBe(event.getContent().info.thumbnail_info?.mimetype);
     });
 
+    it.each([
+        ["captioned image", { msgtype: "m.image", filename: "image.png", body: "A caption" }, true],
+        ["captioned file", { msgtype: "m.file", filename: "doc.pdf", body: "A caption" }, true],
+        ["image without filename", { msgtype: "m.image", body: "image.png" }, false],
+        ["image whose body is its filename", { msgtype: "m.image", filename: "image.png", body: "image.png" }, false],
+        ["text message", { msgtype: "m.text", filename: "image.png", body: "Hello" }, false],
+    ])("hasCaption returns the expected value for a %s", (_, content, expected) => {
+        const event = new MatrixEvent({ type: "m.room.message", content });
+        expect(MediaEventHelper.hasCaption(event)).toBe(expected);
+    });
+
     describe("for media this client uploaded", () => {
         const uploaded = new Blob(["uploaded bytes"], { type: "image/png" });
         const thumbnail = new Blob(["thumbnail bytes"], { type: "image/jpeg" });

@@ -1172,7 +1172,7 @@ exports[`UserMenu > renders an open menu with user status 1`] = `
       >
         <span
           aria-label="@person-name:homeserver.com"
-          class="_avatar_va14e_8"
+          class="_avatar_va14e_8 UserMenu-module_avatarWithStatus"
           data-color="1"
           data-type="round"
           role="img"
@@ -1266,7 +1266,7 @@ exports[`UserMenu > renders the status emoji when set 1`] = `
       >
         <span
           aria-label="@person-name:homeserver.com"
-          class="_avatar_va14e_8"
+          class="_avatar_va14e_8 UserMenu-module_avatarWithStatus"
           data-color="1"
           data-type="round"
           role="img"

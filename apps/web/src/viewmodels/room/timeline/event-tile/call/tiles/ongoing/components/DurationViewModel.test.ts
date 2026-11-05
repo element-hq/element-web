@@ -6,6 +6,7 @@
  */
 
 import { describe, it, beforeEach, afterEach, vi, expect } from "vitest";
+import { tearDownAfterTest } from "test-utils/teardown";
 
 import { DurationViewModel } from "./DurationViewModel";
 
@@ -21,7 +22,7 @@ describe("DurationViewModel", () => {
     it("should compute duration correctly", () => {
         const callStartTs = Date.now();
         vi.advanceTimersByTime(100 * 1000);
-        const vm = new DurationViewModel({ callStartTs });
+        const vm = tearDownAfterTest(new DurationViewModel({ callStartTs }));
 
         // Time elapsed from callStartTs is 100 seconds, so expect duration to be 100
         expect(vm.getSnapshot().duration).toStrictEqual(100);

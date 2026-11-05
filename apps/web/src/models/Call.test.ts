@@ -79,8 +79,8 @@ async function connect(call: Call, widgetApi: Mocked<ClientWidgetApi>, startWidg
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionConnect();
-    await Promise.all([...(startWidget ? [call.start()] : []), runTimers()]);
+    const sessionPromise = sessionConnect();
+    await Promise.all([...(startWidget ? [call.start()] : []), runTimers(), sessionPromise]);
 }
 
 async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promise<void> {
@@ -94,10 +94,10 @@ async function disconnect(call: Call, widgetApi: Mocked<ClientWidgetApi>): Promi
         vi.advanceTimersByTime(500);
         vi.advanceTimersByTime(500);
     }
-    sessionDisconnect();
+    const sessionPromise = sessionDisconnect();
     const promise = call.disconnect();
-    runTimers();
-    await promise;
+    const timersPromise = runTimers();
+    await Promise.all([promise, timersPromise, sessionPromise]);
 }
 
 const cleanUpCallAndWidget = (call: Call, widget: Widget) => {
@@ -1168,6 +1168,22 @@ describe("ElementCall with the React component embedding", () => {
         expect(onClose).toHaveBeenCalledTimes(1);
     });
 
+    it("keeps a joined call that leaves the room view before its membership arrives", () => {
+        // As when the call moves into a Picture-in-Picture window right after joining
+        const onDestroy = vi.fn();
+        call.on(CallEvent.Destroy, onDestroy);
+        call.presented = true;
+        call.handleJoined();
+
+        call.presented = false;
+        expect(onDestroy).not.toHaveBeenCalled();
+        expect(call.connectionState).toBe(ConnectionState.Connected);
+
+        // Hanging up with still nobody in the call ends it
+        call.handleHangup();
+        expect(onDestroy).toHaveBeenCalledTimes(1);
+    });
+
     it("waits for a fresh component after closing", async () => {
         call.markReady();
         await call.start({});
@@ -1269,6 +1285,15 @@ describe("ElementCall with the React component embedding", () => {
                 { type: "livekit", livekit_service_url: "https://second.example.org" },
             ]);
             expect(options.livekit).toEqual({ livekit_service_url: "https://livekit-jwt.example.org" });
+        });
+
+        it("prefers an m.livekit transport over an earlier livekit one", () => {
+            const options = ElementCall.getConfigOptions([
+                { type: "livekit", livekit_service_url: "https://legacy.example.org" },
+                { type: "m.livekit", url: "wss://sfu.example.org" },
+                { type: "m.livekit", url: "wss://sfu.example.org", livekit_service_url: "https://stable.example.org" },
+            ]);
+            expect(options.livekit).toEqual({ livekit_service_url: "https://stable.example.org" });
         });
 
         it("leaves the transport to the component when none is known", () => {

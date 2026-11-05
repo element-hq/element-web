@@ -21,6 +21,7 @@ import {
 
 import RoomListStoreV3, { RoomListStoreV3Event } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
+import { type FilterId } from "@element-hq/web-shared-components";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
@@ -32,6 +33,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { hasCreateRoomRights } from "./utils";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX, type SectionExpansionState } from "../../stores/room-list-v3/section";
@@ -63,20 +65,28 @@ describe("RoomListViewModel", () => {
     // In-memory backing store for the persisted section expansion setting, reset each test so
     // collapse state does not leak between tests and writes round-trip synchronously.
     let sectionExpansionState: SectionExpansionState;
+    // In-memory backing store for the persisted primary filter.
+    let activeFilterSetting: FilterId | null;
 
     beforeEach(() => {
         matrixClient = createTestClient();
 
         sectionExpansionState = {};
+        activeFilterSetting = null;
         const realGetValue = SettingsStore.getValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, roomId, excludeDefault) => {
             if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+            if (setting === "RoomList.activeFilter") return activeFilterSetting;
             return realGetValue(setting, roomId, excludeDefault);
         });
         const realSetValue = SettingsStore.setValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "setValue").mockImplementation(async (setting, roomId, level, value) => {
             if (setting === "RoomList.SectionExpansionState") {
                 sectionExpansionState = value as SectionExpansionState;
+                return;
+            }
+            if (setting === "RoomList.activeFilter") {
+                activeFilterSetting = value as FilterId | null;
                 return;
             }
             return realSetValue(setting, roomId, level, value);
@@ -434,6 +444,10 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections[0].roomIds[0]).toBe(previewRoomId);
                 expect(viewModel.getRoomItemViewModel(previewRoomId)?.getSnapshot().name).toBe("Knock room");
 
+                // The placeholder room has the same pending event ordering as the client's rooms,
+                // so the unread checks below the fold can read its pending events
+                expect(() => (viewModel as any).previewRoom.getPendingEvents()).not.toThrow();
+
                 // The user has knocked, so the room is now in the room list
                 const knockRoom = mkStubRoom(previewRoomId, "Knock room", matrixClient);
                 vi.mocked(knockRoom.getMyMembership).mockReturnValue(KnownMembership.Knock);
@@ -585,6 +599,65 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
+        it("should persist the active filter at the device level", () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                "unread",
+            );
+            expect(activeFilterSetting).toBe("unread");
+
+            // Toggling the filter off forgets it
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                null,
+            );
+            expect(activeFilterSetting).toBeNull();
+        });
+
+        it("should restore the persisted filter on creation", () => {
+            activeFilterSetting = "unread";
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                filterKeys: [FilterEnum.UnreadFilter],
+            });
+
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                FilterEnum.UnreadFilter,
+            ]);
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.activeFilterId).toBe("unread");
+            expect(snapshot.roomListState.filterKeys).toEqual([String(FilterEnum.UnreadFilter)]);
+            expect(snapshot.sections[0].roomIds).toEqual(["!room1:server"]);
+
+            // Toggling the restored filter turns it off rather than on again
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
+            });
+            viewModel.onToggleFilter("unread");
+            expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            expect(activeFilterSetting).toBeNull();
+        });
+
         describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
@@ -592,9 +665,38 @@ describe("RoomListViewModel", () => {
                     if (setting === "RoomList.CustomSectionData") return {};
                     if (setting === "RoomList.OrderedCustomSections") return [];
                     if (setting === "RoomList.SectionExpansionState") return {};
+                    if (setting === "RoomList.activeFilter") return activeFilterSetting;
                     return undefined as any;
                 });
             }
+
+            it("ignores a persisted filter that is hidden while sections are enabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(true);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith(undefined);
+                expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            });
+
+            it("restores a persisted section-only filter while sections are disabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(false);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                    FilterEnum.FavouriteFilter,
+                ]);
+                expect(viewModel.getSnapshot().activeFilterId).toBe("favourite");
+            });
 
             it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
@@ -667,6 +769,12 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
                 expect(snapshot.activeFilterId).toBeUndefined();
+                expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                    "RoomList.activeFilter",
+                    null,
+                    SettingLevel.DEVICE,
+                    null,
+                );
             });
         });
     });
@@ -1399,7 +1507,7 @@ describe("RoomListViewModel", () => {
                 expect(headerVM1).toBe(headerVM2);
             });
 
-            it("should hide room IDs when a section is collapsed", () => {
+            it("should hide room IDs when a section is collapsed", async () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1408,7 +1516,7 @@ describe("RoomListViewModel", () => {
 
                 // Collapse the favourite section
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
-                favHeader.onClick();
+                await favHeader.onClick();
                 expect(favHeader.isExpanded).toBe(false);
 
                 const snapshot = viewModel.getSnapshot();
@@ -1431,7 +1539,7 @@ describe("RoomListViewModel", () => {
 
                 // Collapse the favourite section (which has 2 rooms: fav1, fav2)
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
-                favHeader.onClick();
+                await favHeader.onClick();
                 expect(favHeader.isExpanded).toBe(false);
 
                 // Select regularRoom1, which is the first room in the chats section
@@ -1452,7 +1560,7 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.roomListState.activeRoomIndex).toBe(0);
             });
 
-            it("should restore room IDs when a section is re-expanded", () => {
+            it("should restore room IDs when a section is re-expanded", async () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1462,8 +1570,8 @@ describe("RoomListViewModel", () => {
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
 
                 // Collapse then re-expand
-                favHeader.onClick();
-                favHeader.onClick();
+                await favHeader.onClick();
+                await favHeader.onClick();
                 expect(favHeader.isExpanded).toBe(true);
 
                 const snapshot = viewModel.getSnapshot();
@@ -1495,7 +1603,7 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server", "!fav2:server", "!fav3:server"]);
             });
 
-            it("should preserve section collapse state across list updates", () => {
+            it("should preserve section collapse state across list updates", async () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1504,7 +1612,7 @@ describe("RoomListViewModel", () => {
 
                 // Collapse favourites
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
-                favHeader.onClick();
+                await favHeader.onClick();
 
                 // Trigger a list update
                 RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
@@ -1514,7 +1622,7 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual([]);
             });
 
-            it("should track section collapse state per space", () => {
+            it("should track section collapse state per space", async () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
                     spaceStore: SDKContextClass.instance.spaceStore,
@@ -1523,7 +1631,7 @@ describe("RoomListViewModel", () => {
 
                 // Collapse favourites in the home space
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
-                favHeader.onClick();
+                await favHeader.onClick();
 
                 // Switch to a different space with its own rooms
                 const spaceFav = mkStubRoom("!spacefav:server", "Space Fav", matrixClient);
@@ -1712,7 +1820,7 @@ describe("RoomListViewModel", () => {
 
                     // Collapse first
                     const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
-                    favHeader.onClick();
+                    await favHeader.onClick();
                     expect(favHeader.isExpanded).toBe(false);
 
                     dispatcher.dispatch({ action: Action.RoomListExpandAllSections });
@@ -1873,9 +1981,9 @@ describe("RoomListViewModel", () => {
                     }
                 });
 
-                it("should restore the pre-drag expansion state on drag end", () => {
+                it("should restore the pre-drag expansion state on drag end", async () => {
                     // Collapse Favourite before the drag; other sections remain expanded
-                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+                    await viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
 
                     viewModel.onSectionOrRoomDragStart();
                     viewModel.onSectionOrRoomDragEnd();
@@ -1895,14 +2003,14 @@ describe("RoomListViewModel", () => {
                     ]);
                 });
 
-                it("should re-snapshot expansion state on each drag start", () => {
+                it("should re-snapshot expansion state on each drag start", async () => {
                     // First cycle: Favourite is collapsed before the drag
-                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+                    await viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
                     viewModel.onSectionOrRoomDragStart();
                     viewModel.onSectionOrRoomDragEnd();
 
                     // Between cycles: collapse CHATS_TAG as well
-                    viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
+                    await viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
                     viewModel.onSectionOrRoomDragStart();
                     viewModel.onSectionOrRoomDragEnd();
 

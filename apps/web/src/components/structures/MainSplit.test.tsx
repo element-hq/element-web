@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, beforeEach, expect, vi } from "vitest";
 import React from "react";
 import { render, fireEvent } from "test-utils-rtl";
+import { TestSDKContext } from "test-utils";
 
 import MainSplit from "./MainSplit";
 import { PosthogAnalytics } from "../../PosthogAnalytics.ts";
@@ -28,7 +29,7 @@ describe("<MainSplit/>", () => {
 
     beforeEach(() => {
         localStorage.clear();
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
     });
 
     it("renders", () => {

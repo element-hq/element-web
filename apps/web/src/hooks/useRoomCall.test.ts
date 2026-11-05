@@ -171,15 +171,15 @@ describe("useRoomCall", () => {
 
     describe("Slot handling", () => {
         beforeEach(async () => {
-            SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
+            await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
             client._unstable_getRTCTransports.mockResolvedValue([
                 { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
 
-        afterEach(() => {
-            SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+        afterEach(async () => {
+            await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
         });
 
         it("does not disable call buttons when slot is open", async () => {
@@ -223,7 +223,7 @@ describe("useRoomCall", () => {
         });
 
         it("ignores slot state entirely when labs feature is disabled", async () => {
-            SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+            await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
             vi.mocked(matrixRTC.isSlotClosed).mockReturnValue(true);
             vi.mocked(room.currentState.mayClientSendStateEvent).mockImplementation(
                 (eventType) => eventType !== EventType.RTCSlot,

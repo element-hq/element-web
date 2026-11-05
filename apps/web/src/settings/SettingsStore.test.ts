@@ -37,7 +37,7 @@ const SETTING_NAME_WITH_CONFIG_OVERRIDE = "feature_msc3531_hide_messages_pending
 describe("SettingsStore", () => {
     let platformSettings: Record<string, any>;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         vi.clearAllMocks();
         platformSettings = {};
         mockPlatformPeg({
@@ -52,9 +52,9 @@ describe("SettingsStore", () => {
             reload: vi.fn(),
         } as unknown as BasePlatform);
 
-        TEST_DATA.forEach((d) => {
-            SettingsStore.setValue(d.name, null, d.level, d.value);
-        });
+        for (const d of TEST_DATA) {
+            await SettingsStore.setValue(d.name, null, d.level, d.value);
+        }
     });
 
     beforeEach(() => {

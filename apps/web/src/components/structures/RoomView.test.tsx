@@ -1316,7 +1316,7 @@ describe("RoomView", () => {
                 skey: id,
                 ts,
             });
-            room.addLiveEvents([widgetEvent], { addToState: false });
+            await room.addLiveEvents([widgetEvent], { addToState: false });
             room.currentState.setStateEvents([widgetEvent]);
             cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
             await flushPromises();
@@ -1326,7 +1326,7 @@ describe("RoomView", () => {
             vi.spyOn(WidgetUtils, "setRoomWidget");
             const widgetStore = WidgetStore.instance;
             await setupAsyncStoreWithClient(widgetStore, cli);
-            getRoomViewInstance();
+            await getRoomViewInstance();
         });
 
         const itShouldNotRemoveTheLastWidget = (): void => {

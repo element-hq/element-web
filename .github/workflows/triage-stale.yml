@@ -20,7 +20,7 @@ jobs:
                   operations-per-run: 100
 
                   # Flaky test issue closing
-                  any-of-issue-labels: "Z-Flaky-Test-Chrome,Z-Flaky-Test-Firefox,Z-Flaky-Test-Webkit"
+                  any-of-issue-labels: "Z-Flaky-Test"
                   days-before-issue-stale: 14
                   days-before-issue-close: 0
                   close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."
@@ -37,12 +37,11 @@ jobs:
         name: Mark inactive X-Needs-Iteration PRs as draft
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         runs-on: ubuntu-26.04
-        permissions:
-            pull-requests: write
         steps:
             - name: Mark inactive labelled PRs as draft
               uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
               with:
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   script: |
                       const STALE_LABEL = "X-Needs-Iteration";
                       const DAYS_BEFORE_STALE = 14;

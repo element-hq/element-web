@@ -129,6 +129,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Log in again
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
+        await expect(page.getByText("Continue to Element?")).toBeVisible();
         await page.getByRole("button", { name: "Continue" }).click();
 
         // We should be in
@@ -221,6 +222,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 // Log in again
                 await page.goto("/#/login");
                 await page.getByRole("button", { name: "Continue" }).click();
+                await expect(page.getByText("Continue to Element?")).toBeVisible();
                 await page.getByRole("button", { name: "Continue" }).click();
 
                 // We should be in, and not able to dismiss the verify dialog
