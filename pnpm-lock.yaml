@@ -744,8 +744,8 @@ importers:
         specifier: ^7.12.7
         version: 7.29.7(@babel/core@7.29.7)(supports-color@10.2.2)
       '@element-hq/element-call-embedded':
-        specifier: 0.28.0
-        version: 0.28.0
+        specifier: 0.28.1
+        version: 0.28.1
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2821,8 +2821,8 @@ packages:
       react: ^19
       react-dom: ^19
 
-  '@element-hq/element-call-embedded@0.28.0':
-    resolution: {integrity: sha512-wM5tLXrSCLbveGlvQg1Pj6dNAp75mhJe2Zr3Vb8dtK6z9tuuFMcsn1q1Gjy1KYWQdzBzKK2wLc1O8H7DzYZRHQ==}
+  '@element-hq/element-call-embedded@0.28.1':
+    resolution: {integrity: sha512-cUG3O50n2vWjFJxiZ7K4CcTT6TyxRp9d7lxnkB1SPgh6/FrlirrF2zOC+J9XIkyh4S2+1zKtua5oOhTkJ9dUoQ==}
 
   '@emnapi/core@1.11.0':
     resolution: {integrity: sha512-l9Oo58x0HOP5znGzVhYW9U3e5wVuA4LAZU2AGezTmkhO1CgQRFDhDg4nneHsu/t3WniXg9QrG2nIXL/ZS8ln8Q==}
@@ -15159,7 +15159,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@element-hq/element-call-embedded@0.28.0': {}
+  '@element-hq/element-call-embedded@0.28.1': {}
 
   '@emnapi/core@1.11.0':
     dependencies:
