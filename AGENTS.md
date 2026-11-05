@@ -41,22 +41,21 @@ Run `pnpm i18n` after adding or changing any translated string.
 
 ## Running unit tests
 
-Both jest and vitest are in use; a migration to vitest is in progress. **The file path decides the runner.**
+All unit tests run on vitest. **The file path decides the vitest project.**
 
 | Test file                                      | Runner           | Command                                                     |
 | ---------------------------------------------- | ---------------- | ----------------------------------------------------------- |
-| `apps/web/test/**/*-test.[tj]s?(x)`            | jest             | `cd apps/web && pnpm jest <path>`                           |
 | `apps/web/src/**/*.test.{ts,tsx}`              | vitest           | `pnpm vitest run <path>`                                    |
-| `apps/web/src/**/*.test.browser.{ts,tsx}`      | vitest (browser) | `pnpm vitest run --project web-browser <path>`              |
+| `apps/web/src/**/*.test.browser.{ts,tsx}`      | vitest (browser) | `pnpm vitest run --project 'element-web (browser)' <path>`  |
 | `packages/shared-components/src/**/*.test.tsx` | vitest           | `cd packages/shared-components && pnpm test:unit -- <path>` |
 
 Notes:
 
-- Write new tests as co-located vitest `*.test.ts(x)` next to the source file. The `apps/web/test/` jest tree is
-  legacy; extend it only when the file you are changing already lives there.
+- Write new tests as co-located vitest `*.test.ts(x)` next to the source file.
 - Vitest runs with `globals: false`, so import `describe`, `it`, `expect` and friends explicitly.
-- `packages/shared-components` is excluded from the root vitest config and must be run from its own directory.
-- "No test files found" means you picked the wrong runner or path. It is not a pass.
+- `packages/shared-components` is also a project in the root vitest config, but a root run of a path there includes its
+  storybook project as well; use its own `test:unit` to run just the unit tests.
+- "No test files found" means you picked the wrong project or path. It is not a pass.
 - Prefer extending an existing test over adding a new file when covering a close variant of existing behaviour.
 
 ## Running e2e tests
@@ -64,13 +63,14 @@ Notes:
 Specs live in `apps/web/playwright/e2e`. See [docs/playwright.md](./docs/playwright.md) for the full guide.
 
 ```sh
-cd apps/web && pnpm test:playwright -- playwright/e2e/<spec>.spec.ts --project=Chrome
+cd apps/web && pnpm test:playwright playwright/e2e/<spec>.spec.ts --project=Chrome
 ```
 
 - Requires a container runtime (Docker/Podman/Colima) for the homeserver testcontainers.
 - On macOS, add `--ignore-snapshots`. Screenshot baselines are only committed for Linux, so comparisons fail locally.
-- Never run `pnpm test:playwright:screenshots` locally to "fix" a screenshot diff — it writes host-rendered baselines.
-  Screenshots are updated in the Docker environment, which CI matches.
+- Update screenshot baselines with `pnpm test:playwright:screenshots <spec>` (again, no `--`). It runs the browser in the
+  playwright-server Docker image, which CI matches, and writes the `-linux` baselines. Never pass `--update-snapshots`
+  to plain `pnpm test:playwright` — that renders on the host and writes platform-suffixed baselines CI never uses.
 - The config uses `reuseExistingServer: true`. Check `lsof -ti:8080` first; a stale dev server silently serves the
   tests. Port-bind errors are an infrastructure problem, not a test failure.
 - Locate elements by role, label and accessible name, not CSS classes.
@@ -176,9 +176,7 @@ Keep comments short and relevant.
   reports in the workspaces you touched, then compare from the root:
 
     ```sh
-    pnpm test:unit --coverage                              # vitest, writes coverage/lcov.info
-    cd apps/web && pnpm coverage                           # jest only, writes apps/web/coverage/lcov.info
-    cd packages/shared-components && pnpm coverage
+    pnpm test:unit --coverage                              # writes coverage/lcov.info
     pnpm coverage:diff                                     # from the root, needs diff_cover installed
     ```
 

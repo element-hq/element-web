@@ -16,6 +16,7 @@ import { stubClient, tearDownAfterTest } from "test-utils";
 import CompleteSecurity from "./CompleteSecurity";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
 import SdkConfig from "../../../SdkConfig";
+import { KnownMembership, Room } from "matrix-js-sdk/src/matrix";
 
 class MockSetupEncryptionStore extends EventEmitter {
     public phase: Phase = Phase.Intro;
@@ -164,5 +165,115 @@ describe("CompleteSecurity", () => {
         expect(
             screen.getByRole("heading", { name: "Can't confirm? You’ll need to reset your digital identity." }),
         ).toBeInTheDocument();
+    });
+
+    it("Launches reset dialog with 'no_recovery_key' variant when I have no way to verify", async () => {
+        // Given there are no other devices, no recovery key but I do have encrypted rooms
+        const store = tearDownAfterTest(new SetupEncryptionStore());
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} anyEncryptedRooms={true} />));
+
+        // When we hit "Can't confirm?"
+        await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
+
+        // Then the reset identity dialog appears, telling you that you have no
+        // option, so you may as well reset.
+        expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "You don't have access to any other verified devices or a recovery key, so you'll need to reset your digital identity to continue using the app.",
+            ),
+        ).toBeInTheDocument();
+
+        // Including a warning about losing chat history
+        expect(
+            screen.getByText("You'll lose any encrypted chat history that's stored only on the server"),
+        ).toBeInTheDocument();
+    });
+
+    it("Launches reset dialog with 'no_encrypted_rooms' variant when I have no encrypted rooms", async () => {
+        // Given there are no other devices, no recovery key and no encrypted rooms
+        const store = tearDownAfterTest(new SetupEncryptionStore());
+        vi.spyOn(SetupEncryptionStore, "sharedInstance").mockReturnValue(store);
+        const panel = await act(() => render(<CompleteSecurity onFinished={() => {}} anyEncryptedRooms={false} />));
+
+        // When we hit "Can't confirm?"
+        await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
+
+        // Then the reset identity dialog appears, telling you that you have no
+        // encrypted rooms, so this is not too bad.
+        expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "You don't have access to any other verified devices or a recovery key, so you'll need to reset your digital identity to continue using the app.",
+            ),
+        ).toBeInTheDocument();
+
+        // In particular, there is NO warning about losing chat history
+        expect(
+            screen.queryByText("You'll lose any encrypted chat history that's stored only on the server"),
+        ).not.toBeInTheDocument();
+    });
+
+    it("Finds encrypted rooms when they exist", () => {
+        // Given some encrypted room exists (as well as another)
+        const client = stubClient();
+        const publicRoom = new Room("!r1:s.co", client, "@u:s.co");
+        publicRoom.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        const encryptedRoom = new Room("!r2:s.co", client, "@u:s.co");
+        encryptedRoom.hasEncryptionStateEvent = vi.fn().mockReturnValue(true);
+        encryptedRoom.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        client.getRooms = vi.fn().mockReturnValue([publicRoom, encryptedRoom]);
+
+        // When we ask whether there are encrypted rooms
+        // Then the answer is yes
+        expect(CompleteSecurity.anyEncryptedRooms(client)).toBeTruthy();
+    });
+
+    it("Finds no encrypted rooms when they don't exist", () => {
+        // Given no encrypted rooms exist but some others do
+        const client = stubClient();
+        const publicRoom1 = new Room("!r1:s.co", client, "@u:s.co");
+        publicRoom1.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        const publicRoom2 = new Room("!r2:s.co", client, "@u:s.co");
+        publicRoom2.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        client.getRooms = vi.fn().mockReturnValue([publicRoom1, publicRoom2]);
+
+        // When we ask whether there are encrypted rooms
+        // Then the answer is no
+        expect(CompleteSecurity.anyEncryptedRooms(client)).toBeFalsy();
+    });
+
+    it("Ignores encrypted spaces", () => {
+        // Given an enecrypted space exists but no rooms
+        const client = stubClient();
+        const encryptedSpace = new Room("!r1:s.co", client, "@u:s.co");
+        encryptedSpace.hasEncryptionStateEvent = vi.fn().mockReturnValue(true);
+        encryptedSpace.isSpaceRoom = vi.fn().mockReturnValue(true);
+        encryptedSpace.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        const publicRoom = new Room("!r2:s.co", client, "@u:s.co");
+        publicRoom.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        client.getRooms = vi.fn().mockReturnValue([encryptedSpace, publicRoom]);
+
+        // When we ask whether there are encrypted rooms
+        // Then the answer is no
+        expect(CompleteSecurity.anyEncryptedRooms(client)).toBeFalsy();
+    });
+
+    it("Ignores non-joined rooms", () => {
+        // Given some encrypted room exists but the user is not a member of it
+        const client = stubClient();
+        const publicRoom = new Room("!r1:s.co", client, "@u:s.co");
+        publicRoom.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+        const encryptedRoom = new Room("!r2:s.co", client, "@u:s.co");
+        encryptedRoom.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Leave);
+        encryptedRoom.hasEncryptionStateEvent = vi.fn().mockReturnValue(true);
+        client.getRooms = vi.fn().mockReturnValue([publicRoom, encryptedRoom]);
+
+        // When we ask whether there are encrypted rooms
+        // Then the answer is no
+        expect(CompleteSecurity.anyEncryptedRooms(client)).toBeFalsy();
     });
 });

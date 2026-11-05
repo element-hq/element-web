@@ -489,6 +489,19 @@ test.describe("Spaces", () => {
         });
     });
 
+    test("should render the new room intro in a space", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        const roomId = await app.client.createRoom({ name: "Test Room" });
+        await app.client.createRoom(spaceCreateOptions(user.homeServer, "Test Space", [roomId]));
+
+        await app.viewSpaceByName("Test Space");
+        await app.viewRoomById(roomId);
+
+        const intro = page
+            .getByRole("listitem")
+            .filter({ has: page.getByRole("heading", { name: "Test Room", level: 2 }) });
+        await expect(intro).toMatchScreenshot("new-room-intro.png");
+    });
+
     test.describe("Should hide public spaces option if not allowed", () => {
         test.use({
             config: {

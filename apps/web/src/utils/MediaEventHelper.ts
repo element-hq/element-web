@@ -17,6 +17,9 @@ import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
 import { queryUploadedMediaCache } from "./UploadedMediaCache";
 
+// Consider this list of message types as "media".
+const MEDIA_MSG_TYPES: string[] = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video];
+
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
 export class MediaEventHelper implements IDestroyable {
@@ -144,12 +147,20 @@ export class MediaEventHelper implements IDestroyable {
         if (event.getType() !== EventType.RoomMessage) return false;
 
         const content = event.getContent();
-        const mediaMsgTypes: string[] = [MsgType.Video, MsgType.Audio, MsgType.Image, MsgType.File];
-        if (mediaMsgTypes.includes(content.msgtype!)) return true;
+        if (MEDIA_MSG_TYPES.includes(content.msgtype!)) return true;
         if (typeof content.url === "string") return true;
 
         // Finally, it's probably not media
         return false;
+    }
+
+    /**
+     * Determine if the media event in question has a caption
+     * @returns `true` if the event is an image, file, audio or video message with a caption, otherwise `false`.
+     */
+    public static hasCaption(event: MatrixEvent): boolean {
+        const content = event.getContent();
+        return MEDIA_MSG_TYPES.includes(content.msgtype!) && !!content.filename && content.filename !== content.body;
     }
 
     /**

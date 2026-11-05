@@ -2521,6 +2521,8 @@
                 "breadcrumb_description": "Om du inte har tillgång till några andra verifierade enheter och du inte har din återställningsnyckel måste du återställa din digitala identitet för att fortsätta använda appen.",
                 "breadcrumb_description_no_verification_method": "Du har inte tillgång till några andra verifierade enheter eller en återställningsnyckel, så du måste återställa din digitala identitet för att fortsätta använda appen. ",
                 "breadcrumb_first_description": "Dina kontouppgifter, kontakter, inställningar och chattlista sparas",
+                "breadcrumb_first_description_no_encrypted_devices": "Det verkar som om du inte har några chattar än. Om detta stämmer kan du tryggt gå vidare med att återställa din digitala identitet",
+                "breadcrumb_fourth_description": "Alla enheter som du är inloggad på måste bekräftas på nytt",
                 "breadcrumb_page": "Återställ kryptering",
                 "breadcrumb_second_description": "Du kommer att förlora all krypterad chatthistorik som endast lagras på servern.",
                 "breadcrumb_third_description": "Andra användare kommer att se att din digitala identitet har återställts",

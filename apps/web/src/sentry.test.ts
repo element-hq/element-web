@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, afterEach, vi } from "vitest";
+// oxlint-disable-next-line no-restricted-imports
 import * as Sentry from "@sentry/browser";
 
 import { initSentry } from "./sentry";

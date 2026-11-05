@@ -13,6 +13,7 @@ import {
     M_POLL_START,
     RoomEvent,
     type EmptyObject,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
@@ -30,6 +31,8 @@ import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { type Preview } from "./previews";
 import shouldHideEvent from "../../shouldHideEvent";
+import { RTCNotificationEventPreview } from "./previews/RTCNotificationEventPreview";
+import { CallStore, CallStoreEvent } from "../CallStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -112,6 +115,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
             "m.reaction": { isState: false, previewer: new ReactionEventPreview(this) },
             [M_POLL_START.name]: { isState: false, previewer: new PollStartEventPreview() },
             [M_POLL_START.altName]: { isState: false, previewer: new PollStartEventPreview() },
+            [EventType.RTCNotification]: { isState: false, previewer: new RTCNotificationEventPreview() },
         };
     }
 
@@ -240,12 +244,25 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<void> {
         if (!this.matrixClient) return;
         this.matrixClient.on(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+        CallStore.instance.on(CallStoreEvent.Call, this.onCallChanged);
     }
 
     protected async onNotReady(): Promise<void> {
         if (!this.matrixClient) return;
         this.matrixClient.off(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+        CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);
     }
+
+    /**
+     * The rtc notification preview depends on whether the call is still going, so regenerate it when the call
+     * starts or ends.
+     */
+    private onCallChanged = async (_call: unknown, roomId: string): Promise<void> => {
+        if (!this.previews.has(roomId)) return;
+        const room = this.matrixClient?.getRoom(roomId);
+        if (!room) return;
+        await this.generatePreview(room, TAG_ANY);
+    };
 
     protected onLocalEchoUpdated = async (ev: MatrixEvent, room: Room): Promise<void> => {
         if (!this.previews.has(room.roomId)) return;

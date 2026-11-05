@@ -665,6 +665,28 @@ describe("<TextualBody />", () => {
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
         });
 
+        it("shows the thumbnail in the tile and the original image in the lightbox", async () => {
+            // Thumbnail URLs get a size, so they can be told apart from the original's.
+            // eslint-disable-next-line no-restricted-properties
+            matrixClient.mxcUrlToHttp = vi.fn((mxc: string, width?: number) => (width ? `${mxc}/thumbnail` : mxc));
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, "og:image:type": "image/gif" }),
+            );
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
+
+            await renderPreviews();
+
+            expect(screen.getByAltText("Matrix")).toHaveAttribute("src", "mxc://example.org/preview/thumbnail");
+            fireEvent.click(screen.getByRole("button", { name: "View image" }));
+            expect(createDialog).toHaveBeenCalledWith(
+                ImageView,
+                expect.objectContaining({ src: "mxc://example.org/preview" }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+        });
+
         it("should listen to showUrlPreview change", async () => {
             const ev = mkRoomTextMessage(`Visit ${link}`);
 

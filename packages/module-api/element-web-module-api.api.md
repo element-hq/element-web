@@ -46,6 +46,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     // @alpha
     readonly customisations: CustomisationsApi;
     // @alpha
+    readonly documentPreviews: DocumentPreviewApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -97,6 +99,7 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    waitForClientStarted(): Promise<void>;
 }
 
 // @public
@@ -260,6 +263,25 @@ export type DialogProps<M> = {
 };
 
 // @alpha
+export interface DocumentPreviewApi {
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
+}
+
+// @alpha
+export interface DocumentPreviewFile {
+    blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
+    name?: string;
+}
+
+// @alpha
+export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -268,6 +290,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 export interface ExtrasApi {
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
@@ -472,6 +495,7 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
+    PublicRooms = "UIComponent.publicRooms",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
