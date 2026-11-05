@@ -179,7 +179,8 @@ jobs:
               run: |
                   pnpm test:playwright \
                       --shard "$SHARD" \
-                      --project="${{ matrix.project }}"
+                      --project="${{ matrix.project }}" \
+                      ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
               env:
                   SHARD: ${{ format('{0}/{1}', matrix.runner, needs.prepare.outputs.num-runners) }}
 
@@ -193,7 +194,7 @@ jobs:
                   if-no-files-found: error
 
             - name: Upload flakiness report to GitHub Actions Artifacts
-              if: matrix.project == 'Chrome'
+              if: matrix.project == 'Chrome' && github.event_name != 'pull_request'
               uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: flakiness-report-${{ matrix.runner }}
@@ -355,7 +356,7 @@ jobs:
 
             - name: Download flakiness reports from GitHub Actions Artifacts
               id: flakiness-reports
-              if: needs.playwright_ew.result == 'success'
+              if: needs.playwright_ew.result == 'success' && github.event_name != 'pull_request'
               uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   pattern: flakiness-report-*
