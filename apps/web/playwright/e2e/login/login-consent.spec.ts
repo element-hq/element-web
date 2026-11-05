@@ -102,13 +102,11 @@ test.use({
         const credentials = await homeserver.registerUser(username, password, displayName);
         console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
+        // No need to restart the homeserver afterwards: the context fixture above restarts it before each test
         await use({
             ...credentials,
             displayName,
         });
-
-        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
-        await homeserver.restart();
     },
 });
 
