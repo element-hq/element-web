@@ -182,7 +182,7 @@ describe("HTMLExport", () => {
         fetchMock.get(media.srcHttp!, body);
     }
 
-    function mockReactionForMessage(message: IRoomEvent): MatrixEvent {
+    async function mockReactionForMessage(message: IRoomEvent): Promise<MatrixEvent> {
         const firstMessage = new MatrixEvent(message);
         const reaction = mkReaction(firstMessage);
 
@@ -191,7 +191,7 @@ describe("HTMLExport", () => {
             getChildEventsForEvent: vi.fn(),
         } as unknown as RelationsContainer;
         const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
-        relations.addEvent(reaction);
+        await relations.addEvent(reaction);
         relationsContainer.getChildEventsForEvent = vi
             .fn()
             .mockImplementation(
@@ -255,7 +255,7 @@ describe("HTMLExport", () => {
                 body: `Message #${i}`,
             },
         }));
-        mockReactionForMessage(events[0]);
+        await mockReactionForMessage(events[0]);
         mockMessages(...events);
 
         const exporter = new HTMLExporter(
@@ -729,7 +729,7 @@ describe("HTMLExport", () => {
 
     it("should not make /messages requests when exporting 'Current Timeline'", async () => {
         client.createMessagesRequest.mockRejectedValue(new Error("Should never be called"));
-        room.addLiveEvents(
+        await room.addLiveEvents(
             [
                 new MatrixEvent({
                     event_id: `$eventId`,
@@ -763,7 +763,7 @@ describe("HTMLExport", () => {
     });
 
     it("should include reactions", async () => {
-        const reaction = mockReactionForMessage(EVENT_MESSAGE);
+        const reaction = await mockReactionForMessage(EVENT_MESSAGE);
         mockMessages(EVENT_MESSAGE);
         const exporter = new HTMLExporter(
             room,

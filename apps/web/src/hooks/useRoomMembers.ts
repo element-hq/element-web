@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type Room, RoomEvent, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { type Membership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
@@ -30,6 +30,7 @@ export const useRoomMembers = (room: Room, throttleWait = 250): RoomMember[] => 
     );
 
     useTypedEventEmitter(room.currentState, RoomStateEvent.Members, throttledUpdate);
+    useEffect(() => () => throttledUpdate.cancel(), [throttledUpdate]);
     return members;
 };
 
@@ -77,6 +78,7 @@ export const useRoomMemberCount = (
      * So we need to re-compute the member count when the summary gets updated
      */
     useTypedEventEmitter(room, RoomEvent.Summary, throttledUpdate);
+    useEffect(() => () => throttledUpdate.cancel(), [throttledUpdate]);
     return count;
 };
 

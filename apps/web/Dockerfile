@@ -2,10 +2,10 @@
 # Context must be the root of the monorepo
 
 # PNPM source
-FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.0.0@sha256:bce5ae25ef95edd79e696d7fa8489b80561ef660100fd35bd0286d0f90db3dcc AS pnpm
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.17.0@sha256:172468925f0ca368313c09867081a43e298eaeb13dee8f7e4356bfad45dd8b15 AS pnpm
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:25f3016fcdae6b5d65bd9bcb4064b7e4198ec8d49493fa40d73f9b463d04fb15 AS builder
+FROM --platform=$BUILDPLATFORM node:26-bullseye@sha256:784b1bb050f6bf8ccfdc28d9d07ad07d15ab9d72eee5867f875ba219abec2611 AS builder
 
 COPY --from=pnpm /opt/pnpm /opt/pnpm
 RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
@@ -30,7 +30,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:1517d8c358e2e093957ebee087afa9eb19a32f5d7ecb711b7429e369cb998224 AS element_web
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:a8cb0f33d51fa107c96fd2bd3a71aaf564ec131e9d2bdf8700944f0ed8b170d7 AS element_web
 
 # Need root user to install packages & manipulate the usr directory
 USER root
@@ -58,7 +58,7 @@ HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB
 
 # Modules are consumed as prebuilt release artifacts rather than built from source.
 # Each module is pinned to a version and the sha256 of its release archive.
-FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS modules
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS modules
 
 ARG MODULE_BANNER_VERSION=v2.1.1
 ADD --checksum=sha256:bd894fa30df4faa4fd7aab450f8d15c2f1b8246b3073b51932e5fa35821973da \

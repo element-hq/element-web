@@ -271,6 +271,8 @@ export class ElementAppPage {
         const buffer = await readFile(samplePath);
         const name = path.basename(samplePath);
         const composer = this.getComposerField(location === "thread");
+        // The rich text editor isn't editable until it has loaded, and only handles pastes from then on
+        await expect(composer).toHaveAttribute("contenteditable", "true");
 
         await composer.evaluate(
             async (element, [buffer, name, type]) => {

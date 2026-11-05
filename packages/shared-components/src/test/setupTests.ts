@@ -60,7 +60,7 @@ function setupLanguageMock(): void {
 setupLanguageMock();
 fetchMock.mockGlobal();
 
-setLanguage("en");
+await setLanguage("en");
 
 declare module "vitest/browser" {
     interface BrowserCommands {

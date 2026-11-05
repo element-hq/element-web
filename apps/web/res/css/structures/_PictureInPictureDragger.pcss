@@ -11,8 +11,12 @@ Please see LICENSE files in the repository root for full details.
     left: 0;
     position: fixed;
     top: 0;
-    /* Display above any widget elements */
-    z-index: 102;
+    /*
+     * Rendered in #mx_PersistedElement_container: display above docked widgets (z-index 9),
+     * but below the persisted widget shown in the PiP itself (z-index 101), which is
+     * positioned over a placeholder inside this element.
+     */
+    z-index: 100;
 }
 
 .mx_PictureInPictureDragger:active {

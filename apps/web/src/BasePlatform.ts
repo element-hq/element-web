@@ -71,10 +71,20 @@ export default abstract class BasePlatform {
     protected errorDidOccur = false;
     protected _favicon?: Favicon;
     public readonly initialised = Promise.resolve<void>(undefined);
+    private dispatcherRef?: string;
 
     protected constructor() {
-        dis.register(this.onAction.bind(this));
+        this.dispatcherRef = dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
+    }
+
+    /**
+     * Stops the platform listening to the dispatcher, and to anything else it subscribed to.
+     * Only expected to be called in tests, as the platform otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -423,12 +433,11 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Clear app storage, called when logging out to perform data clean up.
+     * Clear any storage specific to this platform, called when logging out to perform data clean up.
+     * localStorage and sessionStorage have already been cleared by then, and must not be cleared again as a new
+     * login may have started using them in the meantime.
      */
-    public async clearStorage(): Promise<void> {
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-    }
+    public async clearStorage(): Promise<void> {}
 
     /**
      * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance

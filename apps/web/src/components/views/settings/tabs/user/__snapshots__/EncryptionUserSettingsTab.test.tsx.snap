@@ -323,7 +323,7 @@ exports[`<EncryptionUserSettingsTab /> > should display the recovery out of sync
           <div
             class="mx_SettingsSubheader"
           >
-            Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.
+            Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
             <span
               class="mx_SettingsSubheader_error"
             >
@@ -538,6 +538,24 @@ exports[`<EncryptionUserSettingsTab /> > should display the reset identity panel
               </svg>
               Other users will see that your digital identity has been reset
             </li>
+            <li
+              class="_visual-list-item"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.5 20q-.625 0-1.062-.437A1.45 1.45 0 0 1 2 18.5q0-.625.438-1.062A1.45 1.45 0 0 1 3.5 17H4V6q0-.824.588-1.412A1.93 1.93 0 0 1 6 4h14q.424 0 .712.287Q21 4.576 21 5t-.288.713A.97.97 0 0 1 20 6H6v11h4.5q.624 0 1.063.438.437.437.437 1.062t-.437 1.063A1.45 1.45 0 0 1 10.5 20zM15 20a.97.97 0 0 1-.713-.288A.97.97 0 0 1 14 19V9q0-.424.287-.713A.97.97 0 0 1 15 8h6q.424 0 .712.287Q22 8.576 22 9v10q0 .424-.288.712A.97.97 0 0 1 21 20zm1-3h4v-7h-4z"
+                />
+              </svg>
+              Any devices you're signed in to will need to be reconfirmed
+            </li>
           </ul>
           <span>
             Only do this if you believe your account has been compromised.
@@ -661,17 +679,62 @@ exports[`<EncryptionUserSettingsTab /> > should display the set up recovery key 
           <h2
             class="_typography _font-heading-sm-semibold"
           >
-            Get recovery key
+            Save your recovery key somewhere safe
           </h2>
           <span>
-            Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
+            Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
           </span>
         </div>
-        <span
-          class="_typography _font-body-md-medium mx_InformationPanel_description"
+        <div
+          class="mx_KeyPanel"
         >
-          After selecting Continue, we'll generate a recovery key for you.
-        </span>
+          <span
+            class="_typography _font-body-md-medium"
+          >
+            Recovery key
+          </span>
+          <div>
+            <span
+              class="_typography _font-body-md-regular mx_KeyPanel_key"
+              data-testid="recoveryKey"
+            >
+              encoded private key
+            </span>
+            <span
+              class="_typography _font-body-sm-regular"
+            >
+              Do not share this with anyone!
+            </span>
+          </div>
+          <button
+            aria-label="Copy"
+            class="_icon-button"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 28px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                />
+                <path
+                  d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
         <div
           class="mx_EncryptionCard_buttons"
         >

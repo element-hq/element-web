@@ -1937,9 +1937,9 @@ describe("<MatrixChat />", () => {
                 mockPlatformPeg();
             });
 
-            function simulateSessionLockClaim() {
+            async function simulateSessionLockClaim() {
                 localStorage.setItem("react_sdk_session_lock_claimant", "testtest");
-                act(() =>
+                await act(() =>
                     window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" })),
                 );
             }
@@ -1954,7 +1954,7 @@ describe("<MatrixChat />", () => {
                 await rendered.findByText("Welcome Ernie");
 
                 // we're now at the welcome page. Another session wants the lock...
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -1972,7 +1972,7 @@ describe("<MatrixChat />", () => {
                 expect(rendered.getByTestId("spinner")).toBeInTheDocument();
 
                 // now a third session starts
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -1982,7 +1982,7 @@ describe("<MatrixChat />", () => {
                 expect(rendered.getByTestId("spinner")).toBeInTheDocument();
 
                 // now a third session starts
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
                 expect(rendered.container).toMatchSnapshot();
             });
@@ -2008,7 +2008,7 @@ describe("<MatrixChat />", () => {
                 await initCryptoCalled;
                 console.log("initCrypto called");
 
-                simulateSessionLockClaim();
+                await simulateSessionLockClaim();
                 await flushPromises();
 
                 // now we should see the error page

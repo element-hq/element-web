@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type Room } from "matrix-js-sdk/src/matrix";
+import { isUnstableLivekitTransport } from "matrix-js-sdk/src/matrixrtc";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
@@ -123,8 +124,7 @@ export const useRoomCall = (
     const serverIsConfiguredForElementCall = useEventEmitterState(
         CallStore.instance,
         CallStoreEvent.TransportsUpdated,
-        () =>
-            CallStore.instance.getConfiguredRTCTransports().some((s) => s.type === "livekit" && s.livekit_service_url),
+        () => CallStore.instance.getConfiguredRTCTransports().some(isUnstableLivekitTransport),
     );
 
     useEffect(() => {

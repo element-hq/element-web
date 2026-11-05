@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { fireEvent, render, waitFor } from "test-utils-rtl";
 import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg } from "test-utils";
+import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg, tearDownAfterTest } from "test-utils";
 import { addTextToComposer } from "./__mocks__/composer.ts";
 
 import SendMessageComposer, { createMessageContent, isQuickReaction } from "./SendMessageComposer";
@@ -89,10 +89,10 @@ describe("<SendMessageComposer/>", () => {
         isRoomEncrypted: false,
     };
     describe("createMessageContent", () => {
-        it("sends plaintext messages correctly", () => {
+        it("sends plaintext messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(11, true);
-            model.update("hello world", "insertText", documentOffset);
+            await model.update("hello world", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -103,10 +103,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("sends markdown messages correctly", () => {
+        it("sends markdown messages correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(13, true);
-            model.update("hello *world*", "insertText", documentOffset);
+            await model.update("hello *world*", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -119,10 +119,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("strips /me from messages and marks them as m.emote accordingly", () => {
+        it("strips /me from messages and marks them as m.emote accordingly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(22, true);
-            model.update("/me blinks __quickly__", "insertText", documentOffset);
+            await model.update("/me blinks __quickly__", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -135,10 +135,10 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("allows emoting with non-text parts", () => {
+        it("allows emoting with non-text parts", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(16, true);
-            model.update("/me ✨sparkles✨", "insertText", documentOffset);
+            await model.update("/me ✨sparkles✨", "insertText", documentOffset);
             expect(model.parts.length).toEqual(4); // Emoji count as non-text
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
@@ -150,11 +150,11 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("allows sending double-slash escaped slash commands correctly", () => {
+        it("allows sending double-slash escaped slash commands correctly", async () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(32, true);
 
-            model.update("//dev/null is my favourite place", "insertText", documentOffset);
+            await model.update("//dev/null is my favourite place", "insertText", documentOffset);
 
             const content = createMessageContent("@alice:test", model, undefined, undefined);
 
@@ -197,6 +197,7 @@ describe("<SendMessageComposer/>", () => {
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
+        afterAll(() => urlPreviewVm.dispose());
         const defaultProps = {
             room: mockRoom,
             toggleStickerPickerOpen: vi.fn(),
@@ -470,33 +471,33 @@ describe("<SendMessageComposer/>", () => {
     });
 
     describe("isQuickReaction", () => {
-        it("correctly detects quick reaction", () => {
+        it("correctly detects quick reaction", async () => {
             const model = new EditorModel([], createPartCreator());
-            model.update("+😊", "insertText", new DocumentOffset(3, true));
+            await model.update("+😊", "insertText", new DocumentOffset(3, true));
 
             const isReaction = isQuickReaction(model);
 
             expect(isReaction).toBeTruthy();
         });
 
-        it("correctly detects quick reaction with space", () => {
+        it("correctly detects quick reaction with space", async () => {
             const model = new EditorModel([], createPartCreator());
-            model.update("+ 😊", "insertText", new DocumentOffset(4, true));
+            await model.update("+ 😊", "insertText", new DocumentOffset(4, true));
 
             const isReaction = isQuickReaction(model);
 
             expect(isReaction).toBeTruthy();
         });
 
-        it("correctly rejects quick reaction with extra text", () => {
+        it("correctly rejects quick reaction with extra text", async () => {
             const model = new EditorModel([], createPartCreator());
             const model2 = new EditorModel([], createPartCreator());
             const model3 = new EditorModel([], createPartCreator());
             const model4 = new EditorModel([], createPartCreator());
-            model.update("+😊hello", "insertText", new DocumentOffset(8, true));
-            model2.update(" +😊", "insertText", new DocumentOffset(4, true));
-            model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
-            model4.update("+smiley", "insertText", new DocumentOffset(7, true));
+            await model.update("+😊hello", "insertText", new DocumentOffset(8, true));
+            await model2.update(" +😊", "insertText", new DocumentOffset(4, true));
+            await model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
+            await model4.update("+smiley", "insertText", new DocumentOffset(7, true));
 
             expect(isQuickReaction(model)).toBeFalsy();
             expect(isQuickReaction(model2)).toBeFalsy();
@@ -513,6 +514,7 @@ describe("<SendMessageComposer/>", () => {
             showTooltips: false,
             moduleUrlPreviewApi: new UrlPreviewApi(),
         });
+        tearDownAfterTest(urlPreviewVm);
 
         cli.isRoomEncrypted = vi.fn().mockReturnValue(true);
         const room = mkStubRoom("!roomId:server", "Room", cli);

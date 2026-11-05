@@ -7,7 +7,11 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    rejectToast,
+    rejectToastIfExists,
+} from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -204,6 +208,48 @@ test.describe("Room list filters and sort", () => {
             await expect(primaryFilters.getByRole("option", { name: "Invites" })).not.toBeVisible();
         });
 
+        test("should keep the selected primary filter across a reload", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const primaryFilters = getPrimaryFilters(page);
+
+            await primaryFilters.getByRole("option", { name: "Unread" }).click();
+            await expect(primaryFilters.getByRole("option", { name: "Unread" })).toHaveAttribute(
+                "aria-selected",
+                "true",
+            );
+            await expect(roomList.getByRole("button", { name: "empty room" })).not.toBeVisible();
+
+            // The selection is persisted at the device level, so it survives a reload.
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(primaryFilters.getByRole("option", { name: "Unread" })).toHaveAttribute(
+                "aria-selected",
+                "true",
+            );
+            await expect(roomList.getByRole("button", { name: "unread dm" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "empty room" })).not.toBeVisible();
+
+            // Deselecting the filter is persisted too.
+            await primaryFilters.getByRole("option", { name: "Unread" }).click();
+            await expect(primaryFilters.getByRole("option", { name: "Unread" })).toHaveAttribute(
+                "aria-selected",
+                "false",
+            );
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(primaryFilters.getByRole("option", { name: "Unread" })).toHaveAttribute(
+                "aria-selected",
+                "false",
+            );
+            await expect(roomList.getByRole("button", { name: "empty room" })).toBeVisible();
+        });
+
         test.describe("Unread filter", () => {
             test(
                 "unread filter should only match unread rooms that have a count when Notifications.showbold=off",
@@ -278,7 +324,7 @@ test.describe("Room list filters and sort", () => {
 
                 // Even though favourite room is read (because we have it open), it is still shown because it is
                 // the current room.
-                expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
+                await expect(roomListView.getByRole("button", { name: "Open room favourite room" })).toBeVisible();
             });
         });
 

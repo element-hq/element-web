@@ -104,7 +104,7 @@ describe("notifications", () => {
         );
 
         it("does not override an existing account event data", async () => {
-            mockClient.setAccountData(accountDataEventKey, {
+            await mockClient.setAccountData(accountDataEventKey, {
                 is_silenced: false,
             });
 
@@ -118,11 +118,11 @@ describe("notifications", () => {
         it("defaults to false when no setting exists", () => {
             expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
         });
-        it("checks the persisted value", () => {
-            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+        it("checks the persisted value", async () => {
+            await mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
             expect(localNotificationsAreSilenced(mockClient)).toBeTruthy();
 
-            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            await mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
             expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
         });
     });
@@ -135,7 +135,7 @@ describe("notifications", () => {
         const USER_ID = "@bob:example.org";
         let message: MatrixEvent;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             stubClient();
             client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
@@ -145,10 +145,10 @@ describe("notifications", () => {
                 user: USER_ID,
                 msg: "Hello",
             });
-            room.addLiveEvents([message], { addToState: true });
+            await room.addLiveEvents([message], { addToState: true });
             sendReadReceiptSpy = vi.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             vi.spyOn(client, "getRooms").mockReturnValue([room]);
-            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
+            await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
         it("sends a request even if everything has been read", async () => {
@@ -168,7 +168,7 @@ describe("notifications", () => {
 
         describe("when sendReadReceipts setting is disabled", () => {
             it("should send a private read receipt", async () => {
-                SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
+                await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 await clearRoomNotification(room, client);
                 expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.ReadPrivate, true);
             });
@@ -183,17 +183,17 @@ describe("notifications", () => {
         const ROOM_ID = "123";
         const USER_ID = "@bob:example.org";
 
-        beforeEach(() => {
+        beforeEach(async () => {
             stubClient();
             client = vi.mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
             sendReadReceiptSpy = vi.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             vi.spyOn(client, "getRooms").mockReturnValue([room]);
-            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
+            await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
-        it("does not send any requests if everything has been read", () => {
-            clearAllNotifications(client);
+        it("does not send any requests if everything has been read", async () => {
+            await clearAllNotifications(client);
             expect(sendReadReceiptSpy).not.toHaveBeenCalled();
         });
 
@@ -204,7 +204,7 @@ describe("notifications", () => {
                 user: USER_ID,
                 ts: 1,
             });
-            room.addLiveEvents([message], { addToState: true });
+            await room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
             await clearAllNotifications(client);
@@ -219,10 +219,10 @@ describe("notifications", () => {
                 user: USER_ID,
                 ts: 1,
             });
-            room.addLiveEvents([message], { addToState: true });
+            await room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
-            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
+            await SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
 
             await clearAllNotifications(client);
 

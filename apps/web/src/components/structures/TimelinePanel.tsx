@@ -373,7 +373,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             this.readMarkerActivityTimer.abort();
             this.readMarkerActivityTimer = null;
         }
-
+        this.doManageReadMarkers.cancel();
         dis.unregister(this.dispatcherRef);
 
         const client = MatrixClientPeg.get();

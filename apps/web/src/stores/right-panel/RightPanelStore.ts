@@ -95,15 +95,19 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
             case Action.OpenDocumentViewer: {
                 const { event, file } = <OpenDocumentViewerPayload>payload;
-                if (event) {
-                    this.setCard(
-                        { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event } } },
-                        true,
-                        event.getRoomId(),
-                    );
+                // A file has no room of its own, so it opens in the room being viewed.
+                const roomId = event?.getRoomId() ?? this.viewedRoomId ?? "";
+                const card: IRightPanelCard = {
+                    phase: RightPanelPhases.DocumentViewer,
+                    state: { documentViewer: event ? { event } : { file } },
+                };
+                const currentPhase = this.currentCardForRoom(roomId).phase;
+
+                // Stack over open cards for back navigation; replace an existing viewer.
+                if (this.isOpenForRoom(roomId) && currentPhase && currentPhase !== RightPanelPhases.DocumentViewer) {
+                    this.pushCard(card, true, roomId);
                 } else {
-                    // A file has no room of its own, so it opens in the room being viewed.
-                    this.setCard({ phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { file } } }, true);
+                    this.setCard(card, true, roomId);
                 }
                 break;
             }

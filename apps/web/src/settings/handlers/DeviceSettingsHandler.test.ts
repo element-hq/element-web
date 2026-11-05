@@ -40,13 +40,13 @@ describe("DeviceSettingsHandler", () => {
         expect(handler.getValue(unknownSettingKey, ROOM_ID_IS_UNUSED)).toBeUndefined();
     });
 
-    it("Returns the value for a disabled feature", () => {
-        handler.setValue(featureKey, ROOM_ID_IS_UNUSED, false);
+    it("Returns the value for a disabled feature", async () => {
+        await handler.setValue(featureKey, ROOM_ID_IS_UNUSED, false);
         expect(handler.getValue(featureKey, ROOM_ID_IS_UNUSED)).toBe(false);
     });
 
-    it("Returns the value for an enabled feature", () => {
-        handler.setValue(featureKey, ROOM_ID_IS_UNUSED, true);
+    it("Returns the value for an enabled feature", async () => {
+        await handler.setValue(featureKey, ROOM_ID_IS_UNUSED, true);
         expect(handler.getValue(featureKey, ROOM_ID_IS_UNUSED)).toBe(true);
     });
 
@@ -63,13 +63,13 @@ describe("DeviceSettingsHandler", () => {
             MatrixClientPeg.safeGet = () => new MatrixClient({ baseUrl: "foobar" });
         });
 
-        it("Returns the value for a disabled feature", () => {
-            handler.setValue(featureKey, ROOM_ID_IS_UNUSED, false);
+        it("Returns the value for a disabled feature", async () => {
+            await handler.setValue(featureKey, ROOM_ID_IS_UNUSED, false);
             expect(handler.getValue(featureKey, ROOM_ID_IS_UNUSED)).toBe(false);
         });
 
-        it("Returns the value for an enabled feature", () => {
-            handler.setValue(featureKey, ROOM_ID_IS_UNUSED, true);
+        it("Returns the value for an enabled feature", async () => {
+            await handler.setValue(featureKey, ROOM_ID_IS_UNUSED, true);
             expect(handler.getValue(featureKey, ROOM_ID_IS_UNUSED)).toBe(true);
         });
     });

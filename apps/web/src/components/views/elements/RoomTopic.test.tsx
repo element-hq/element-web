@@ -37,7 +37,7 @@ describe("<RoomTopic/>", () => {
      * Create a room with the given topic
      * @param topic
      */
-    function createRoom(topic: string) {
+    async function createRoom(topic: string) {
         stubClient();
         const room = new Room("!pMBteVpcoJRdCJxDmn:matrix.org", MatrixClientPeg.safeGet(), "@alice:example.org");
         const topicEvent = mkEvent({
@@ -48,7 +48,7 @@ describe("<RoomTopic/>", () => {
             ts: 123,
             event: true,
         });
-        room.addLiveEvents([topicEvent], { addToState: true });
+        await room.addLiveEvents([topicEvent], { addToState: true });
 
         return room;
     }
@@ -57,8 +57,8 @@ describe("<RoomTopic/>", () => {
      * Create a room and render it
      * @param topic
      */
-    const renderRoom = (topic: string) => {
-        const room = createRoom(topic);
+    const renderRoom = async (topic: string) => {
+        const room = await createRoom(topic);
         render(<RoomTopic room={room} />, {
             wrapper: ({ children }) => <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>,
         });
@@ -69,33 +69,33 @@ describe("<RoomTopic/>", () => {
      * @param topic
      * @param clickText
      */
-    function runClickTest(topic: string, clickText: string) {
-        renderRoom(topic);
+    async function runClickTest(topic: string, clickText: string) {
+        await renderRoom(topic);
         fireEvent.click(screen.getByText(clickText));
     }
 
-    it("should capture permalink clicks", () => {
+    it("should capture permalink clicks", async () => {
         const permalink =
             "https://matrix.to/#/!pMBteVpcoJRdCJxDmn:matrix.org/$K4Kg0fL-GKpW1EQ6lS36bP4eUXadWJFkdK_FH73Df8A?via=matrix.org";
         const expectedHref =
             "http://localhost/#/room/!pMBteVpcoJRdCJxDmn:matrix.org/$K4Kg0fL-GKpW1EQ6lS36bP4eUXadWJFkdK_FH73Df8A?via=matrix.org";
-        runClickTest(`... ${permalink} ...`, permalink);
+        await runClickTest(`... ${permalink} ...`, permalink);
         expect(window.location.href).toEqual(expectedHref);
         expect(dis.fire).toHaveBeenCalledTimes(0);
     });
 
-    it("should not capture non-permalink clicks", () => {
+    it("should not capture non-permalink clicks", async () => {
         const link = "https://matrix.org";
         const expectedHref = originalHref;
-        runClickTest(`... ${link} ...`, link);
+        await runClickTest(`... ${link} ...`, link);
         expect(window.location.href).toEqual(expectedHref);
         expect(dis.fire).toHaveBeenCalledTimes(0);
     });
 
-    it("should open topic dialog when not clicking a link", () => {
+    it("should open topic dialog when not clicking a link", async () => {
         const topic = "foobar";
         const expectedHref = originalHref;
-        runClickTest(topic, topic);
+        await runClickTest(topic, topic);
         expect(window.location.href).toEqual(expectedHref);
         expect(dis.fire).toHaveBeenCalledWith(Action.ShowRoomTopic);
     });
@@ -106,8 +106,8 @@ describe("<RoomTopic/>", () => {
          * "Edit topic" button can be clicked.
          * @param isSpaceRoom whether the room should report itself as a space
          */
-        function renderTopicDialog(isSpaceRoom: boolean) {
-            const room = createRoom("a topic");
+        async function renderTopicDialog(isSpaceRoom: boolean) {
+            const room = await createRoom("a topic");
             vi.spyOn(room, "isSpaceRoom").mockReturnValue(isSpaceRoom);
             vi.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(true);
 
@@ -138,8 +138,8 @@ describe("<RoomTopic/>", () => {
             return room;
         }
 
-        it("opens space settings for a space", () => {
-            const room = renderTopicDialog(true);
+        it("opens space settings for a space", async () => {
+            const room = await renderTopicDialog(true);
 
             fireEvent.click(screen.getByRole("button", { name: "Edit topic" }));
 
@@ -147,8 +147,8 @@ describe("<RoomTopic/>", () => {
             expect(dis.dispatch).not.toHaveBeenCalledWith({ action: "open_room_settings" });
         });
 
-        it("opens room settings for a room", () => {
-            renderTopicDialog(false);
+        it("opens room settings for a room", async () => {
+            await renderTopicDialog(false);
 
             fireEvent.click(screen.getByRole("button", { name: "Edit topic" }));
 
@@ -158,14 +158,14 @@ describe("<RoomTopic/>", () => {
 
     it("should open the tooltip when hovering a text", async () => {
         const topic = "room topic";
-        renderRoom(topic);
+        await renderRoom(topic);
         await userEvent.hover(screen.getByText(topic));
         await waitFor(() => expect(screen.getByRole("tooltip", { name: "Read the full topic" })).toBeInTheDocument());
     });
 
     it("should not open the tooltip when hovering a link", async () => {
         const topic = "https://matrix.org";
-        renderRoom(topic);
+        await renderRoom(topic);
         await userEvent.hover(screen.getByText(topic));
         await waitFor(() => expect(screen.queryByRole("tooltip", { name: "Read the full topic" })).toBeNull());
     });

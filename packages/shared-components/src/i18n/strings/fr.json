@@ -27,6 +27,7 @@
         "play": "Lecture",
         "react": "Réagir",
         "remove": "Supprimer",
+        "remove_this_device": "Supprimer cet appareil",
         "reply": "Répondre",
         "reply_in_thread": "Répondre dans le fil de discussion",
         "retry": "Réessayer",
@@ -74,7 +75,8 @@
         "toggle_event": "Source de l'événement"
     },
     "document_viewer": {
-        "error_load": "Impossible de charger ce fichier."
+        "error_load": "Impossible de charger ce fichier.",
+        "loading": "Chargement du document…"
     },
     "emoji": {
         "categories": "Catégories",
@@ -92,6 +94,13 @@
     "emoji_picker": {
         "cancel_search_label": "Annuler la recherche",
         "emoji_picker": "Sélecteur d'emoji"
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Veuillez soit revenir à la version <b>%(version)s</b>, soit supprimer cet appareil.",
+            "description": "%(brand)s a été mis à jour à partir d'une version très ancienne et ne peut pas migrer votre coffre de chiffrement vers un nouveau format.",
+            "title": "Cet appareil ne peut pas être utilisé"
+        }
     },
     "keyboard": {
         "shift": "Maj"

@@ -524,7 +524,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         _setQuery(newQuery);
     };
     useEffect(() => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             const node = rovingContext.state.nodes[0];
             if (node) {
                 rovingContext.dispatch({
@@ -536,6 +536,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 });
             }
         });
+        return () => clearTimeout(timeout);
         // we intentionally ignore changes to the rovingContext for the purpose of this hook
         // we only want to reset the focus whenever the results or filters change
         // oxlint-disable-next-line react-hooks/exhaustive-deps

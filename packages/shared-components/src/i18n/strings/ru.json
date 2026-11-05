@@ -20,6 +20,7 @@
         "new_room": "Новая комната",
         "new_section": "Новый раздел",
         "new_video_room": "Новая видеокомната",
+        "no": "Нет",
         "open_menu": "Открыть меню",
         "pause": "Пауза",
         "pin": "Закрепить",
@@ -33,7 +34,8 @@
         "search": "Поиск",
         "start_chat": "Начать чат",
         "unpin": "Открепить",
-        "view_source": "Показать источник"
+        "view_source": "Показать источник",
+        "yes": "Да"
     },
     "common": {
         "attachment": "Вложение",
@@ -174,6 +176,7 @@
             "unsent_message": "Открыть комнату %(roomName)s с неотправленным сообщением."
         },
         "appearance": "Внешний вид",
+        "chat_moved": "Диалог перемещён",
         "collapse_all_sections": "Свернуть все чаты",
         "collapse_filters": "Свернуть список фильтров",
         "empty": {
@@ -209,7 +212,8 @@
             "low_priority": "Низкий приоритет",
             "mark_read": "Отметить как прочитанное",
             "mark_unread": "Отметить как непрочитанное",
-            "move_to_section": "Переместить в"
+            "move_to_section": "Переместить в",
+            "remove_from_section": "Убрать из секции"
         },
         "notification_options": "Параметры уведомлений",
         "open_space_menu": "Открыть меню пространств",
@@ -223,7 +227,9 @@
             "label": "Название раздела"
         },
         "section_header": {
-            "more_options": "Другие параметры"
+            "edit_section": "Редактировать секцию",
+            "more_options": "Другие параметры",
+            "remove_section": "Удалить секцию"
         },
         "show_message_previews": "Показать предварительный просмотр сообщений",
         "sort": "Сортировать",

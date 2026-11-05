@@ -76,6 +76,7 @@
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
+        "not_now": "Pas maintenant",
         "ok": "OK",
         "open": "Ouvrir",
         "pin": "Épingler",
@@ -98,6 +99,7 @@
         "revoke": "Révoquer",
         "save": "Enregistrer",
         "search": "Rechercher",
+        "select_to_copy": "Cliquer pour copier",
         "send_report": "Envoyer le signalement",
         "set_avatar": "Définir une photo de profil",
         "share": "Partager",
@@ -208,7 +210,12 @@
         "incorrect_password": "Mot de passe incorrect",
         "log_in_new_account": "<a>Connectez-vous</a> à votre nouveau compte.",
         "logout_dialog": {
+            "check_recovery_key": "Vérifiez votre clé de récupération",
+            "check_recovery_key_title": "Assurez-vous d'avoir accès à votre clé de récupération avant de supprimer cet appareil.",
+            "continue": "Continuez la suppression de cet appareil",
             "description": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
+            "generate_recovery_key": "Générer une nouvelle clé de récupération",
+            "keep_access_description": "Assurez-vous de toujours avoir accès à un autre appareil vérifié ou à votre clé de récupération afin d'éviter de perdre l'historique de vos discussions chiffrées.",
             "setup_key_backup_title": "Vous êtes sur le point de perdre l'accès à vos discussions chiffrées.",
             "setup_secure_backup_description": "Il s'agit de votre seul appareil. Si vous le supprimer, vous aurez besoin d'une clé de récupération pour confirmer votre identité numérique et restaurer vos discussions chiffrées lors de votre prochaine connexion.",
             "skip_key_backup": "Supprimer cet appareil quand même"
@@ -950,6 +957,7 @@
         "confirm_encryption_setup_body": "Cliquer sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
         "confirm_encryption_setup_title": "Confirmer la configuration du chiffrement",
         "continue_with_reset": "Continuer avec la réinitialisation",
+        "create_recovery_key": "Créer une clé de récupération",
         "cross_signing_room_normal": "Ce salon est chiffré de bout en bout",
         "cross_signing_room_verified": "Tout le monde dans ce salon est vérifié",
         "cross_signing_room_warning": "Quelqu'un utilise un appareil inconnu",
@@ -986,6 +994,7 @@
         },
         "pinned_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "L' identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
+        "recovery_key_description": "Vos discussions sont automatiquement sauvegardées avec un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.",
         "recovery_method_removed": {
             "description_1": "Cet appareil a détecté que votre phrase de sécurité et votre clé pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous avez effectué cette opération par erreur, vous pouvez configurer la messagerie sécurisée sur cet appareil, ce qui rechiffera l'historique des messages de cet appareil avec une nouvelle méthode de récupération.",
@@ -993,7 +1002,6 @@
             "warning": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages."
         },
         "set_up_recovery": "Sauvegardez vos discussions",
-        "set_up_recovery_toast_description": "Vos conversations sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "turn_on_key_storage": "Activer le stockage des clés",
         "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
@@ -1528,8 +1536,9 @@
         "experimental_description": "Envie d’expériences ? Essayez nos dernières idées en développement. Ces fonctionnalités ne sont pas terminées ; elles peuvent changer, être instables, ou être complètement abandonnées. <a>En savoir plus</a>.",
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
-        "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
         "feature_element_call_react": "Afficher Element Call en tant que composant React au lieu d'un widget.",
+        "feature_matrixrtc_slots": "Necessites des slots MatrixRTC ouverts pour les appels d'Element Call",
+        "feature_matrixrtc_slots_description": "Permet uniquement de démarrer ou de rejoindre des appels Element Call avec un événement slot state valide dans le salon.",
         "feature_retention": {
             "description": "Suppression automatique des messages d'un salon lorsq'ils atteignent la période de conservation configurée. Actuellement, seules les options de lecture sont prises en charge.",
             "disabled_sliding_sync": "La conservation des données ne peut pas être activée lorsque Sliding sync est activé.",
@@ -2507,12 +2516,16 @@
         "enable_markdown_description": "Commencez les messages avec <code>/plain</code> pour les envoyer sans markdown.",
         "encryption": {
             "advanced": {
+                "breadcrumb_alert_cant_confirm": "Ne réinitialisez votre identité numérique uniquement si vous n'avez accès à aucun autre appareil vérifié et que vous avez perdu votre clé de récupération.",
+                "breadcrumb_description": "Si vous n'avez accès à aucun autre appareil vérifié et que vous ne possédez pas votre clé de récupération, vous devez réinitialiser votre identité numérique pour continuer à utiliser l'application.",
+                "breadcrumb_description_no_verification_method": "Vous n'avez accès à aucun autre appareil vérifié ni à une clé de récupération . Vous devrez réinitialiser votre identité numérique pour continuer à utiliser l'application. ",
                 "breadcrumb_first_description": "Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés",
                 "breadcrumb_page": "Réinitialiser le chiffrement",
-                "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
-                "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
+                "breadcrumb_second_description": "Vous perdrez tout l'historique des discussions chiffrées stockées uniquement sur le serveur.",
+                "breadcrumb_third_description": "Les autres utilisateurs verront que votre identité numérique a été réinitialisée.",
                 "breadcrumb_title": "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
+                "breadcrumb_title_compromised": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique?",
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_warning": "Ne faites cela que si vous pensez que votre compte a été compromis.",
@@ -2531,14 +2544,6 @@
             },
             "confirm_key_storage_off": "Êtes-vous sûr de vouloir désactiver le stockage des clés ?",
             "confirm_key_storage_off_description": "Si vous supprimez tous vos appareils, vous perdrez l'historique de vos messages et devrez vérifier à nouveau tous vos contacts existants.<a>En savoir plus</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Désactiver la sauvegarde",
-                "confirm": "Désactiver la sauvegarde",
-                "description": "La suppression du stockage des clés supprimera votre identité numérique et vos clés de messagerie du serveur et désactivera les fonctions de sécurité suivantes :",
-                "list_first": "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils",
-                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous n'êtes connecté à aucun appareil.",
-                "title": "Désactiver et supprimer le stockage des clés ?"
-            },
             "device_not_verified_button": "Vérifiez cet appareil",
             "device_not_verified_description": "Vous devez vérifier cet appareil afin de visualiser vos paramètres de chiffrement.",
             "device_not_verified_title": "Appareil non vérifié",
@@ -2546,6 +2551,7 @@
             "key_storage": {
                 "allow_key_storage": "Autoriser le stockage des clés",
                 "description": "Cela vous permettra de consulter votre historique de discussions sur tous vos nouveaux appareils. Nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.<a>En savoir plus</a>",
+                "recovery_requires_key_storage": "Le stockage des clés doit être activé pour configurer la récupération",
                 "title": "Stockage des clés"
             },
             "recovery": {
@@ -2555,7 +2561,6 @@
                 "change_recovery_key": "Changer la clé de récupération",
                 "change_recovery_key_description": "Notez cette nouvelle clé de récupération dans un endroit sûr. Cliquez ensuite sur Continuer pour confirmer la modification.",
                 "change_recovery_key_title": "Changer la clé de récupération ?",
-                "description": "Vos discussions sont sauvegardées automatiquement. Vous aurez besoin de votre clé de récupération pour les restaurer si vous perdez tous vos appareils.",
                 "enter_key_error": "La clé de récupération que vous avez saisie est incorrecte.",
                 "enter_recovery_key": "Saisir la clé de récupération",
                 "forgot_recovery_key": "Clé de récupération oubliée ?",
@@ -2566,10 +2571,8 @@
                 "set_up_recovery_confirm_button": "Terminer la configuration",
                 "set_up_recovery_confirm_description": "Saisissez la clé de récupération affichée sur l’écran précédent pour terminer la configuration de la récupération.",
                 "set_up_recovery_confirm_title": "Saisissez votre clé de récupération pour confirmer",
-                "set_up_recovery_description": "Le stockage de vos clés est protégé par une clé de récupération. Si vous avez besoin d'une nouvelle clé de récupération après la création, vous pouvez la recréer en sélectionnant « %(changeRecoveryKeyButton)s ».",
                 "set_up_recovery_save_key_description": "Recopier cette clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe, une note chiffrée ou un coffre-fort physique.",
                 "set_up_recovery_save_key_title": "Enregistrez votre clé de récupération dans un endroit sûr",
-                "set_up_recovery_secondary_description": "Après avoir cliqué sur continuer, nous allons générer une clé de récupération pour vous.",
                 "title": "Sauvegarde"
             },
             "title": "Chiffrement"
@@ -3605,10 +3608,6 @@
             "in_reply_to": "<a>En réponse à</a> <pill>",
             "in_reply_to_for_export": "En réponse à <a>ce message</a>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "Vous êtes sur le point d’accéder à un site tiers afin de pouvoir vous identifier pour utiliser %(integrationsUrl)s. Voulez-vous continuer ?",
-            "dialog_title": "Ajouter une intégration"
-        },
         "self_redaction": "Message supprimé",
         "send_state_encrypting": "Chiffrement de votre message…",
         "send_state_failed": "Échec de l’envoi",
@@ -3943,6 +3942,7 @@
         "camera_enabled": "Votre caméra est toujours allumée",
         "cannot_call_yourself_description": "Vous ne pouvez pas passer d’appel avec vous-même.",
         "close_lobby": "Fermer la salle d'attente",
+        "close_slot_failed_title": "Impossible de désactiver les appels pour ce salon",
         "connecting": "Connexion",
         "connection_lost": "La connexion au serveur a été perdue",
         "connection_lost_description": "Vous ne pouvez pas passer d’appels sans connexion au serveur.",
@@ -3997,6 +3997,7 @@
         "no_permission_conference": "Autorisation requise",
         "no_permission_conference_description": "Vous n’avez pas l’autorisation de lancer un appel en téléconférence dans ce salon",
         "on_hold": "%(name)s est en attente",
+        "open_slot_failed_title": "Impossible d'activer les appels pour ce salon",
         "output_devices": "Périphériques de sortie",
         "screenshare_monitor": "Partager l’écran entier",
         "screenshare_title": "Partager le contenu",

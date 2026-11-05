@@ -12,6 +12,8 @@ import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import styles from "./MjolnirBodyView.module.css";
 
+// The view has no state, only an action, so the snapshot is intentionally empty
+// oxlint-disable-next-line typescript/no-generated-empty-object-type
 export type MjolnirBodyViewSnapshot = Record<never, never>;
 
 export interface MjolnirBodyViewActions {

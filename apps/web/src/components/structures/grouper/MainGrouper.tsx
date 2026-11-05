@@ -33,14 +33,22 @@ const groupedStateEvents = [
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
     const sdkContext = useContext(SDKContext);
     const vm = useCreateAutoDisposedViewModel(
-        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
+        () =>
+            new DateSeparatorViewModel({
+                roomId,
+                ts,
+                roomViewStore: sdkContext.roomViewStore,
+            }),
     );
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 
 // Wrap consecutive grouped events in a ListSummary
 export class MainGrouper extends BaseGrouper {
-    public static canStartGroup = function (panel: MessagePanel, { event: ev, shouldShow }: WrappedEvent): boolean {
+    public static readonly canStartGroup = function (
+        panel: MessagePanel,
+        { event: ev, shouldShow, customRenderInfo }: WrappedEvent,
+    ): boolean {
         if (!shouldShow) return false;
 
         if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
@@ -51,11 +59,11 @@ export class MainGrouper extends BaseGrouper {
             return true;
         }
 
-        if (panel.showHiddenEvents && !panel.shouldShowEvent(ev, true)) {
+        if (panel.showHiddenEvents && !panel.shouldShowEvent({ event: ev, customRenderInfo }, true)) {
             return true;
         }
 
-        return false;
+        return customRenderInfo?.hasGrouping === true;
     };
 
     public constructor(
@@ -70,7 +78,7 @@ export class MainGrouper extends BaseGrouper {
         this.events = [firstEventAndShouldShow];
     }
 
-    public shouldGroup({ event: ev, shouldShow }: WrappedEvent): boolean {
+    public shouldGroup({ event: ev, shouldShow, customRenderInfo }: WrappedEvent): boolean {
         if (!shouldShow) {
             // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
             return true;
@@ -84,10 +92,10 @@ export class MainGrouper extends BaseGrouper {
         if (ev.isRedacted()) {
             return true;
         }
-        if (this.panel.showHiddenEvents && !this.panel.shouldShowEvent(ev, true)) {
+        if (this.panel.showHiddenEvents && !this.panel.shouldShowEvent({ event: ev, customRenderInfo }, true)) {
             return true;
         }
-        return false;
+        return customRenderInfo?.hasGrouping === true;
     }
 
     public add(wrappedEvent: WrappedEvent): void {

@@ -162,12 +162,12 @@ describe("VoipRoomSettingsTab", () => {
                 return session;
             };
 
-            beforeEach(() => {
-                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
+            beforeEach(async () => {
+                await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
             });
 
-            afterEach(() => {
-                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+            afterEach(async () => {
+                await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
             });
 
             it("opens/creates the slot when enabling Element calls", async () => {
@@ -228,7 +228,7 @@ describe("VoipRoomSettingsTab", () => {
             });
 
             it("does not touch the slot when the labs flag is disabled", async () => {
-                SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+                await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
                 mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
                 const session = mockSlotSession();
 
@@ -272,9 +272,9 @@ describe("VoipRoomSettingsTab", () => {
                 expect(getElementCallSwitch(tab)).toBeDisabled();
             });
 
-            it("does not disable the switch for missing RTCSlot permission when the feature is off", () => {
-                act(() => {
-                    SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
+            it("does not disable the switch for missing RTCSlot permission when the feature is off", async () => {
+                await act(async () => {
+                    await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, false);
                 });
                 vi.spyOn(room.currentState, "maySendStateEvent").mockImplementation(
                     (eventType) => eventType !== EventType.RTCSlot,

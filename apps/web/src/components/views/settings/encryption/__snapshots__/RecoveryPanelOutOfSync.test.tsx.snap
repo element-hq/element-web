@@ -17,7 +17,7 @@ exports[`<RecoveyPanelOutOfSync /> > should render 1`] = `
       <div
         class="mx_SettingsSubheader"
       >
-        Your chats are backed up automatically. You'll need your recovery key to restore them if you lose all your devices.
+        Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
         <span
           class="mx_SettingsSubheader_error"
         >

@@ -217,4 +217,4 @@ async function loadDump() {
     window.location.replace("/");
 }
 
-loadDump();
+void loadDump();

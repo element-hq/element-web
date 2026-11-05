@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
 import fetchMock from "@fetch-mock/vitest";
 import { emitPromise } from "test-utils/utilities";
+import { tearDownAfterTest } from "test-utils";
 import "vitest-canvas-mock";
 
 import { UpdateCheckStatus } from "../../BasePlatform";
@@ -21,28 +22,77 @@ import defaultDispatcher from "../../dispatcher/dispatcher.ts";
 import { Action } from "../../dispatcher/actions.ts";
 
 describe("WebPlatform", () => {
-    beforeEach(() => {
+    /** The active service worker, as resolved by `navigator.serviceWorker.ready`. */
+    const activeServiceWorker = { postMessage: vi.fn() };
+
+    /** Mock `navigator.serviceWorker`, with `controller` set to the service worker controlling the page, if any. */
+    function mockServiceWorkerContainer(controller: object | null): void {
         vi.spyOn(global, "navigator", "get").mockReturnValue({
             ...navigator,
-            // @ts-expect-error - mocking readonly object
             serviceWorker: {
                 register: vi.fn().mockResolvedValue({
                     update: vi.fn(),
                 }),
                 addEventListener: vi.fn(),
-            },
+                controller,
+                ready: Promise.resolve({ active: activeServiceWorker }),
+            } as unknown as ServiceWorkerContainer,
         });
+    }
+
+    beforeEach(() => {
+        activeServiceWorker.postMessage.mockClear();
+        mockServiceWorkerContainer(activeServiceWorker);
     });
 
     it("returns human readable name", () => {
-        const platform = new WebPlatform();
+        const platform = tearDownAfterTest(new WebPlatform());
         expect(platform.getHumanReadableName()).toEqual("Web Platform");
+    });
+
+    it("stops listening to the dispatcher and polling for updates when destroyed", () => {
+        vi.useFakeTimers();
+        const platform = new WebPlatform();
+        const pollSpy = vi
+            .spyOn(platform, "pollForUpdate")
+            .mockResolvedValue({ status: UpdateCheckStatus.NotAvailable });
+        const unregisterSpy = vi.spyOn(defaultDispatcher, "unregister");
+        platform.startUpdater();
+        pollSpy.mockClear();
+
+        platform.destroy();
+        vi.runOnlyPendingTimers();
+
+        expect(unregisterSpy).toHaveBeenCalled();
+        expect(pollSpy).not.toHaveBeenCalled();
+        vi.useRealTimers();
     });
 
     describe("service worker", () => {
         it("registers successfully", () => {
-            new WebPlatform();
+            tearDownAfterTest(new WebPlatform());
             expect(navigator.serviceWorker.register).toHaveBeenCalled();
+        });
+
+        it("listens for messages from the service worker before registering it", async () => {
+            const platform = tearDownAfterTest(new WebPlatform());
+            await platform["registerServiceWorkerPromise"];
+            expect(vi.mocked(navigator.serviceWorker.addEventListener).mock.invocationCallOrder[0]).toBeLessThan(
+                vi.mocked(navigator.serviceWorker.register).mock.invocationCallOrder[0],
+            );
+        });
+
+        it("does not ask the service worker to claim the page when it is already in control", async () => {
+            const platform = tearDownAfterTest(new WebPlatform());
+            await platform["registerServiceWorkerPromise"];
+            expect(activeServiceWorker.postMessage).not.toHaveBeenCalled();
+        });
+
+        it("asks the service worker to claim the page when it is not in control, e.g. after a hard reload", async () => {
+            mockServiceWorkerContainer(null);
+            const platform = tearDownAfterTest(new WebPlatform());
+            await platform["registerServiceWorkerPromise"];
+            expect(activeServiceWorker.postMessage).toHaveBeenCalledWith({ type: "claim" });
         });
 
         it("handles errors", async () => {
@@ -52,7 +102,7 @@ describe("WebPlatform", () => {
                     register: undefined,
                 },
             });
-            new WebPlatform();
+            tearDownAfterTest(new WebPlatform());
 
             defaultDispatcher.dispatch({ action: Action.ClientStarted });
             await emitPromise(ToastStore.sharedInstance(), "update");
@@ -65,7 +115,7 @@ describe("WebPlatform", () => {
     it("should call reload on window location object", () => {
         Object.defineProperty(window, "location", { value: { reload: vi.fn() }, writable: true });
 
-        const platform = new WebPlatform();
+        const platform = tearDownAfterTest(new WebPlatform());
         expect(window.location.reload).not.toHaveBeenCalled();
         platform.reload();
         expect(window.location.reload).toHaveBeenCalled();
@@ -74,7 +124,7 @@ describe("WebPlatform", () => {
     it("should call reload to install update", () => {
         Object.defineProperty(window, "location", { value: { reload: vi.fn() }, writable: true });
 
-        const platform = new WebPlatform();
+        const platform = tearDownAfterTest(new WebPlatform());
         expect(window.location.reload).not.toHaveBeenCalled();
         platform.installUpdate();
         expect(window.location.reload).toHaveBeenCalled();
@@ -91,7 +141,7 @@ describe("WebPlatform", () => {
         ])("%s & %s = %s", (url, userAgent, result) => {
             vi.spyOn(global, "navigator", "get").mockReturnValue({ userAgent } as Navigator);
             Object.defineProperty(window, "location", { value: { href: url }, writable: true });
-            const platform = new WebPlatform();
+            const platform = tearDownAfterTest(new WebPlatform());
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
         });
     });
@@ -110,26 +160,26 @@ describe("WebPlatform", () => {
         it("supportsNotifications returns false when platform does not support notifications", () => {
             // @ts-ignore
             window.Notification = undefined;
-            expect(new WebPlatform().supportsNotifications()).toBe(false);
+            expect(tearDownAfterTest(new WebPlatform()).supportsNotifications()).toBe(false);
         });
 
         it("supportsNotifications returns true when platform supports notifications", () => {
-            expect(new WebPlatform().supportsNotifications()).toBe(true);
+            expect(tearDownAfterTest(new WebPlatform()).supportsNotifications()).toBe(true);
         });
 
         it("maySendNotifications returns true when notification permissions are not granted", () => {
-            expect(new WebPlatform().maySendNotifications()).toBe(false);
+            expect(tearDownAfterTest(new WebPlatform()).maySendNotifications()).toBe(false);
         });
 
         it("maySendNotifications returns true when notification permissions are granted", () => {
             mockNotification.permission = "granted";
-            expect(new WebPlatform().maySendNotifications()).toBe(true);
+            expect(tearDownAfterTest(new WebPlatform()).maySendNotifications()).toBe(true);
         });
 
         it("requests notification permissions and returns result", async () => {
             mockNotification.requestPermission.mockImplementation((callback) => callback("test"));
 
-            const platform = new WebPlatform();
+            const platform = tearDownAfterTest(new WebPlatform());
             const result = await platform.requestNotificationPermission();
             expect(result).toEqual("test");
         });
@@ -150,7 +200,7 @@ describe("WebPlatform", () => {
         });
 
         it("should return true from canSelfUpdate()", async () => {
-            const platform = new WebPlatform();
+            const platform = tearDownAfterTest(new WebPlatform());
             const result = await platform.canSelfUpdate();
             expect(result).toBe(true);
         });
@@ -158,7 +208,7 @@ describe("WebPlatform", () => {
         it("getAppVersion returns normalized app version", async () => {
             // @ts-ignore
             WebPlatform.VERSION = prodVersion;
-            const platform = new WebPlatform();
+            const platform = tearDownAfterTest(new WebPlatform());
 
             const version = await platform.getAppVersion();
             expect(version).toEqual(prodVersion);
@@ -180,7 +230,7 @@ describe("WebPlatform", () => {
                 // @ts-ignore
                 WebPlatform.VERSION = prodVersion;
                 fetchMock.getOnce("end:/version", prodVersion);
-                const platform = new WebPlatform();
+                const platform = tearDownAfterTest(new WebPlatform());
 
                 const showUpdate = vi.fn();
                 const showNoUpdate = vi.fn();
@@ -195,7 +245,7 @@ describe("WebPlatform", () => {
                 // @ts-ignore
                 WebPlatform.VERSION = prodVersion;
                 fetchMock.getOnce("end:/version", `v${prodVersion}`);
-                const platform = new WebPlatform();
+                const platform = tearDownAfterTest(new WebPlatform());
 
                 const showUpdate = vi.fn();
                 const showNoUpdate = vi.fn();
@@ -211,7 +261,7 @@ describe("WebPlatform", () => {
                 // @ts-ignore
                 WebPlatform.VERSION = "0.0.0"; // old version
                 fetchMock.getOnce("end:/version", prodVersion);
-                const platform = new WebPlatform();
+                const platform = tearDownAfterTest(new WebPlatform());
 
                 const showUpdate = vi.fn();
                 const showNoUpdate = vi.fn();
@@ -227,7 +277,7 @@ describe("WebPlatform", () => {
                 WebPlatform.VERSION = "0.0.0"; // old version
                 vi.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(true);
                 fetchMock.getOnce("end:/version", prodVersion);
-                const platform = new WebPlatform();
+                const platform = tearDownAfterTest(new WebPlatform());
 
                 const showUpdate = vi.fn();
                 const showNoUpdate = vi.fn();
@@ -240,7 +290,7 @@ describe("WebPlatform", () => {
 
             it("should return error when version check fails", async () => {
                 fetchMock.getOnce("end:/version", { throws: "oups" });
-                const platform = new WebPlatform();
+                const platform = tearDownAfterTest(new WebPlatform());
 
                 const showUpdate = vi.fn();
                 const showNoUpdate = vi.fn();
@@ -256,15 +306,23 @@ describe("WebPlatform", () => {
     it("should return config from config.json", async () => {
         window.location.hostname = "domain.com";
         fetchMock.get(/config\.json.*/, { brand: "test" });
-        const platform = new WebPlatform();
+        const platform = tearDownAfterTest(new WebPlatform());
         await expect(platform.getConfig()).resolves.toEqual(expect.objectContaining({ brand: "test" }));
     });
 
     it("should re-render favicon when setting error status", () => {
-        const platform = new WebPlatform();
+        const platform = tearDownAfterTest(new WebPlatform());
         const spy = vi.spyOn(platform.favicon, "badge");
         platform.setErrorStatus(true);
         expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
+    });
+
+    it("should not clear sessionStorage when clearing its storage", async () => {
+        // Logging out has already cleared it, and a new login may have started using it since
+        sessionStorage.setItem("mx_oidc_test", "value");
+        await tearDownAfterTest(new WebPlatform()).clearStorage();
+        expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
+        sessionStorage.removeItem("mx_oidc_test");
     });
 
     describe("getOAuthCallbackUrl()", () => {
@@ -277,7 +335,7 @@ describe("WebPlatform", () => {
                 },
                 writable: true,
             });
-            const platform = new WebPlatform();
+            const platform = tearDownAfterTest(new WebPlatform());
             const url = platform.getOAuthCallbackUrl();
 
             expect(url.searchParams.has("updated")).toBe(false);

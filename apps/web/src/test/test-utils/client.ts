@@ -157,10 +157,9 @@ export const mockClientMethodsDevice = (
 });
 
 export const mockClientMethodsCrypto = (): Partial<
-    Record<MethodLikeKeys<MatrixClient> & PropertyLikeKeys<MatrixClient>, unknown>
+    Record<MethodLikeKeys<MatrixClient> | PropertyLikeKeys<MatrixClient>, unknown>
 > => ({
     isKeyBackupKeyStored: vi.fn(),
-    getCrossSigningCacheCallbacks: vi.fn().mockReturnValue({ getCrossSigningKeyCache: vi.fn() }),
     secretStorage: {
         hasKey: vi.fn(),
         isStored: vi.fn().mockResolvedValue(null),

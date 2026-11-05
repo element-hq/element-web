@@ -95,6 +95,12 @@
         "cancel_search_label": "Cancel search",
         "emoji_picker": "Emoji picker"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.",
+            "error": "Failed to delete key storage. Please try again."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Please either downgrade to <b>%(version)s</b> first or remove this device.",

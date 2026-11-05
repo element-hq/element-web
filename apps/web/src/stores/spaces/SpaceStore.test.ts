@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as testUtils from "test-utils";
-import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext } from "test-utils";
+import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import SpaceStore from "./SpaceStore";
 import {
@@ -145,6 +145,7 @@ describe("SpaceStore", () => {
 
     afterEach(async () => {
         await testUtils.resetAsyncStoreWithClient(store);
+        RoomNotificationStateStore.instance.clearRoomStates();
     });
 
     describe("static hierarchy resolution tests", () => {
@@ -1347,12 +1348,12 @@ describe("SpaceStore", () => {
     });
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {
-        beforeAll(() => {
+        beforeAll(async () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "Spaces.allRoomsInHome",
             );
             // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
+            await sdkContext.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1381,13 +1382,13 @@ describe("SpaceStore", () => {
             expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
         });
 
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
+        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", async () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            const store = tearDownAfterTest(new SpaceStore(defaultDispatcher, sdkContext));
             sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
+            await setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1400,13 +1401,13 @@ describe("SpaceStore", () => {
     });
 
     describe("when feature_dynamic_room_predecessors is enabled", () => {
-        beforeAll(() => {
+        beforeAll(async () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) =>
                     settingName === "Spaces.allRoomsInHome" || settingName === "feature_dynamic_room_predecessors",
             );
             // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
+            await sdkContext.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1435,13 +1436,13 @@ describe("SpaceStore", () => {
             expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
         });
 
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
+        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", async () => {
             const sdkContext = new TestSDKContext();
             sdkContext._client = client;
             // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            const store = tearDownAfterTest(new SpaceStore(defaultDispatcher, sdkContext));
             sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
+            await setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1553,6 +1554,33 @@ describe("SpaceStore", () => {
             store.setActiveRoomInSpace(MetaSpace.Home);
 
             expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "view_room" }));
+        });
+    });
+
+    describe("notification states", () => {
+        it("destroys the notification states it handed out when the store is destroyed", async () => {
+            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            await setupAsyncStoreWithClient(store, client);
+            const homeState = store.getNotificationState(MetaSpace.Home);
+            const spaceState = store.getNotificationState(space1);
+            const homeDestroySpy = vi.spyOn(homeState, "destroy");
+            const spaceDestroySpy = vi.spyOn(spaceState, "destroy");
+
+            store.destroy();
+
+            expect(homeDestroySpy).toHaveBeenCalled();
+            expect(spaceDestroySpy).toHaveBeenCalled();
+        });
+
+        it("destroys the notification states it handed out on logout", async () => {
+            await run();
+            const state = store.getNotificationState(MetaSpace.Home);
+            const destroySpy = vi.spyOn(state, "destroy");
+
+            await testUtils.resetAsyncStoreWithClient(store);
+
+            expect(destroySpy).toHaveBeenCalled();
+            expect(store.getNotificationState(MetaSpace.Home)).not.toBe(state);
         });
     });
 });

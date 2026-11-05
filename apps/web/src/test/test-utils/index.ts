@@ -21,6 +21,7 @@ export * from "./utilities";
 export * from "./date";
 export * from "./console";
 export * from "./TestSDKContext.ts";
+export * from "./teardown";
 
 /**
  * wait for loading page

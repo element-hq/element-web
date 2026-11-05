@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback } from "react";
-import { InlineField, InlineSpinner, Label, Link, Root, ToggleControl } from "@vector-im/compound-web";
+import { InlineSpinner, Link, Root, SettingsToggleInput } from "@vector-im/compound-web";
 
 import type { FormEvent } from "react";
 import { SettingsSection } from "../shared/SettingsSection";
@@ -14,31 +14,27 @@ import { _t } from "../../../../languageHandler";
 import { SettingsHeader } from "../SettingsHeader";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import SdkConfig from "../../../../SdkConfig";
-
-interface Props {
-    /**
-     * Called when the user turns off the "allow key storage" toggle
-     */
-    onKeyStorageDisableClick: () => void;
-}
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { openDeleteKeyStorageDialog } from "../../dialogs/DeleteKeyStorageDialog";
 
 /**
  * This component allows the user to set up or change their recovery key.
  *
  * It is used within the "Encryption" settings tab.
  */
-export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) => {
-    const { isEnabled, setEnabled, loading, busy } = useKeyStoragePanelViewModel();
+export const KeyStoragePanel: React.FC = () => {
+    const matrixClient = useMatrixClientContext();
+    const { isEnabled, enable, loading, busy } = useKeyStoragePanelViewModel();
 
     const onKeyBackupChange = useCallback(
         (e: FormEvent<HTMLInputElement>) => {
             if (e.currentTarget.checked) {
-                void setEnabled(true);
+                void enable();
             } else {
-                onKeyStorageDisableClick();
+                openDeleteKeyStorageDialog(matrixClient);
             }
         },
-        [setEnabled, onKeyStorageDisableClick],
+        [enable, matrixClient],
     );
 
     if (loading) {
@@ -63,12 +59,16 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
             })}
         >
             <Root className="mx_KeyStoragePanel_toggleRow">
-                <InlineField
+                <SettingsToggleInput
                     name="keyStorage"
-                    control={<ToggleControl name="keyStorage" checked={isEnabled} onChange={onKeyBackupChange} />}
-                >
-                    <Label>{_t("settings|encryption|key_storage|allow_key_storage")}</Label>
-                </InlineField>
+                    checked={isEnabled}
+                    disabled={busy}
+                    onChange={onKeyBackupChange}
+                    label={_t("settings|encryption|key_storage|allow_key_storage")}
+                    helpMessage={
+                        isEnabled ? undefined : _t("settings|encryption|key_storage|recovery_requires_key_storage")
+                    }
+                />
                 {busy && <InlineSpinner />}
             </Root>
         </SettingsSection>

@@ -38,6 +38,8 @@ interface IState {
 }
 
 export default class VerificationRequestDialog extends React.Component<IProps, IState> {
+    private unmounted = false;
+
     public constructor(props: IProps) {
         super(props);
         this.state = {
@@ -52,6 +54,8 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
         this.state.verificationRequest?.on(VerificationRequestEvent.Change, this.onRequestChange);
 
         void this.props.verificationRequestPromise?.then((r) => {
+            if (this.unmounted) return;
+
             // The request promise completed, so we have a new request
 
             // Stop listening to the old request (if we have one, which normally we won't)
@@ -65,6 +69,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         // Stop listening for changes to the request when we close
         this.state.verificationRequest?.off(VerificationRequestEvent.Change, this.onRequestChange);
     }

@@ -80,12 +80,12 @@ export const Ready: Story = {
         zoomPercent: 100,
     },
     play: async ({ canvasElement }) => {
-        await waitFor(() => {
+        await waitFor(async () => {
             const preview = canvasElement.querySelector<HTMLImageElement>("[data-testid='pdf-story-page']");
 
-            expect(preview).toHaveAttribute("src", samplePage);
-            expect(preview?.complete).toBe(true);
-            expect(preview?.naturalWidth).toBeGreaterThan(0);
+            await expect(preview).toHaveAttribute("src", samplePage);
+            await expect(preview?.complete).toBe(true);
+            await expect(preview?.naturalWidth).toBeGreaterThan(0);
         });
     },
 };
