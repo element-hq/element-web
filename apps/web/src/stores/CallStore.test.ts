@@ -61,7 +61,7 @@ describe("CallStore", () => {
 
         expect(getSpy).toHaveBeenCalledTimes(1);
         expect(getSpy).toHaveReturnedWith(expect.any(ElementCall));
-        expect(CallStore.instance.getCall(room.roomId)).not.toBe(null);
+        expect(CallStore.instance.getCall(room.roomId)).not.toBeNull();
         expect(CallStore.instance.getConfiguredRTCTransports()).toHaveLength(0);
     });
 
@@ -75,7 +75,7 @@ describe("CallStore", () => {
 
         it("constructs a call once the memberships have been calculated", async () => {
             await setupAsyncStoreWithClient(CallStore.instance, client);
-            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+            expect(CallStore.instance.getCall(room.roomId)).toBeNull();
 
             roomSession.memberships.push({} as CallMembership);
             membershipsCalculated.resolve();
@@ -90,7 +90,7 @@ describe("CallStore", () => {
             await setupAsyncStoreWithClient(CallStore.instance, client);
             client.getRooms.mockReturnValue([room]);
             WidgetStore.instance.emit(UPDATE_EVENT, room.roomId);
-            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+            expect(CallStore.instance.getCall(room.roomId)).toBeNull();
 
             roomSession.memberships.push({} as CallMembership);
             membershipsCalculated.resolve();
@@ -107,7 +107,7 @@ describe("CallStore", () => {
             await flushPromises();
 
             expect(getSpy).not.toHaveBeenCalled();
-            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+            expect(CallStore.instance.getCall(room.roomId)).toBeNull();
         });
 
         it("handles the calculation failing", async () => {
@@ -116,7 +116,7 @@ describe("CallStore", () => {
             membershipsCalculated.reject(new Error("calculation failed"));
             await flushPromises();
 
-            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+            expect(CallStore.instance.getCall(room.roomId)).toBeNull();
         });
 
         it("does not construct a call if the store stops before the calculation finishes", async () => {
@@ -127,7 +127,7 @@ describe("CallStore", () => {
             membershipsCalculated.resolve();
             await flushPromises();
 
-            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+            expect(CallStore.instance.getCall(room.roomId)).toBeNull();
         });
     });
 
