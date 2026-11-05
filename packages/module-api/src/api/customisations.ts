@@ -61,6 +61,12 @@ export const enum UIComponent {
      * Release announcements highlighting new features.
      */
     ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
+
+    /**
+     * The toast prompting the user to set up recovery ("Back up your chats").
+     * Toasts prompting a new user to finish setting up their account.
+     */
+    OnboardingToasts = "UIComponent.onboardingToasts",
 }
 
 /**

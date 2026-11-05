@@ -10,6 +10,8 @@ import { _t } from "../languageHandler";
 import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import SdkConfig from "../SdkConfig";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
 
 const onAccept = (): void => {
     window.location.href = "mobile_guide/";
@@ -23,6 +25,8 @@ const onReject = (): void => {
 const TOAST_KEY = "mobileguide";
 
 export const showToast = (): void => {
+    if (!shouldShowComponent(UIComponent.OnboardingToasts)) return;
+
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isAndroid = /Android/.test(navigator.userAgent);
     const brand = SdkConfig.get().brand;
