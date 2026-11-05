@@ -189,6 +189,8 @@ test.describe("Custom Component API", () => {
                 await expect(formattedTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
                 await expect(formattedBody).toHaveClass(/markdown-body/);
 
+                // Compare with a standard informational event instead of hard-coding its CSS values.
+                // Verify that the styling of the informational event matches that of a name change event.
                 const nameChangeTypography = await nameChangeBody.evaluate((element) => {
                     const style = getComputedStyle(element);
                     return { fontSize: style.fontSize, letterSpacing: style.letterSpacing };

@@ -138,9 +138,12 @@ $left-gutter: 64px;
     */
     overflow-y: hidden;
     overflow-x: hidden;
+    /* Formatted event bodies use GitHub's `.markdown-body` styles but inherit typography from the event tile. */
+    /* This rule compiles to the more specific .mx_EventTile_content .markdown-body. */
+    /* Its normal declaration therefore wins even though GitHub Markdown CSS is imported later. */
     .markdown-body {
-        font: inherit !important;
-        letter-spacing: inherit !important;
+        font: inherit;
+        letter-spacing: inherit;
         font-family: inherit !important;
         white-space: normal !important;
         line-height: inherit !important;
