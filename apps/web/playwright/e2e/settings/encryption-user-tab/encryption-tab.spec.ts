@@ -81,7 +81,9 @@ test.describe("Encryption tab", () => {
                 const dialog = util.getEncryptionTabContent();
                 const enterKeyButton = dialog.getByRole("button", { name: "Enter recovery key" });
                 await expect(enterKeyButton).toBeVisible();
-                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png");
+                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png", {
+                    mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
+                });
                 await enterKeyButton.click();
 
                 // Fill the recovery key
