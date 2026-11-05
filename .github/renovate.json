@@ -50,6 +50,7 @@
             "groupSlug": "element-call",
             "matchDepNames": ["@element-hq/element-call-component", "@element-hq/element-call-embedded"],
             "dependencyDashboardApproval": false,
+            "minimumReleaseAge": null,
             "schedule": ["* 0-3 * * 2"],
             "updateNotScheduled": false,
             "prConcurrentLimit": 0
