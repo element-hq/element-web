@@ -8,7 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { type Locator, type Page } from "@playwright/test";
-import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    rejectToast,
+    rejectToastIfExists,
+} from "@element-hq/element-web-playwright-common";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -218,6 +222,32 @@ test.describe("Element Call", () => {
                 // voice call does that)
                 await expect(page.getByTestId("widget-pip-container")).not.toBeVisible();
             });
+        });
+
+        test("should still show a call in progress after reloading", async ({ page, bot, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+            // Bob starts a call; Alice is not a participant
+            await sendRTCState(bot, room.roomId, undefined, "video");
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+
+            // This test fixes a bug that is somewhat time sensitive.
+            // Save the sync cache now that it contains Bob's membership, so that after the reload the call is
+            // loaded from the cache.
+            //
+            // This bug is triggered by loading membership from the sync cache, which is only saved to periodically.
+            await app.client.evaluate((client) => client.store.save(true));
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+            await app.viewRoomById(room.roomId);
+
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+            await expect(
+                page.getByRole("option", { name: "Open room TestRoom, video call in progress." }),
+            ).toBeVisible();
         });
 
         [true, false].forEach((joinWithVideo) => {
