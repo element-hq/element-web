@@ -34,7 +34,7 @@ export class ClientApi implements IClientApi {
         return this.clientStarted.promise;
     }
 
-    private readonly onAction =(payload: ActionPayload): void => {
+    private readonly onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ClientStarted) {
             this.clientStarted.resolve();
         } else if (payload.action === Action.OnLoggedOut) {
