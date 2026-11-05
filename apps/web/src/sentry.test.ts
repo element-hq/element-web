@@ -8,12 +8,15 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, afterEach, vi } from "vitest";
-import * as Sentry from "@sentry/browser";
+import { init, rewriteFramesIntegration, setUser } from "@sentry/browser";
+import type * as SentryModule from "@sentry/browser";
 
-import { initSentry } from "./sentry";
+import { initSentry, setSentryUser } from "./sentry";
+import SdkConfig from "./SdkConfig";
 
 vi.mock("@sentry/browser", () => ({
     init: vi.fn(),
+    setUser: vi.fn(),
     eventFiltersIntegration: vi.fn().mockReturnValue({ name: "EventFilters" }),
     functionToStringIntegration: vi.fn().mockReturnValue({ name: "FunctionToString" }),
     breadcrumbsIntegration: vi.fn().mockReturnValue({ name: "Breadcrumbs" }),
@@ -29,7 +32,7 @@ describe("initSentry", () => {
 
     it("does nothing if no sentry config is given", async () => {
         await initSentry(undefined);
-        expect(Sentry.init).not.toHaveBeenCalled();
+        expect(init).not.toHaveBeenCalled();
     });
 
     it("normalizes Element Desktop's vector:// stack frames so they group with Element Web", async () => {
@@ -38,13 +41,35 @@ describe("initSentry", () => {
             environment: "test",
         });
 
-        expect(Sentry.rewriteFramesIntegration).toHaveBeenCalledWith({
+        expect(rewriteFramesIntegration).toHaveBeenCalledWith({
             root: "vector://vector/webapp",
             prefix: "app://",
         });
 
-        const { integrations } = vi.mocked(Sentry.init).mock.calls[0][0]!;
+        const { integrations } = vi.mocked(init).mock.calls[0][0]!;
         expect(integrations).toEqual(expect.arrayContaining([{ name: "RewriteFrames" }]));
+    });
+});
+
+describe("setSentryUser", () => {
+    afterEach(() => {
+        SdkConfig.reset();
+        vi.clearAllMocks();
+    });
+
+    it("sets the user once Sentry has loaded, if Sentry is configured", async () => {
+        SdkConfig.put({ sentry: { dsn: "https://examplePublicKey@o0.ingest.sentry.io/0", environment: "test" } });
+
+        setSentryUser("@alice:example.org");
+
+        await vi.waitFor(() => expect(setUser).toHaveBeenCalledWith({ username: "@alice:example.org" }));
+    });
+
+    it("does nothing if Sentry is not configured", async () => {
+        setSentryUser("@alice:example.org");
+        await vi.dynamicImportSettled();
+
+        expect(setUser).not.toHaveBeenCalled();
     });
 });
 
@@ -55,7 +80,7 @@ describe("rewriteFramesIntegration output", () => {
     // Relies on this test file's happy-dom environment providing a real `window`, which is what makes
     // the SDK's browser root/prefix substitution apply in the first place.
     it("rewrites a vector:// frame to a clean app:/// path", async () => {
-        const RealSentry = await vi.importActual<typeof Sentry>("@sentry/browser");
+        const RealSentry = await vi.importActual<typeof SentryModule>("@sentry/browser");
 
         const integration = RealSentry.rewriteFramesIntegration({
             root: "vector://vector/webapp",
