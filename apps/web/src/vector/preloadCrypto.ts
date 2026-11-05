@@ -22,5 +22,5 @@ export function preloadCryptoIfLoggedIn(): void {
     }
     // Any failure is reported when the client initialises crypto
     // oxlint-disable-next-line no-restricted-imports -- must be the exact module the js-sdk loads, to share its chunk
-    import("matrix-js-sdk/src/rust-crypto/index").catch(() => {});
+    import("matrix-js-sdk/src/rust-crypto/index").then(({ preloadRustCrypto }) => preloadRustCrypto()).catch(() => {});
 }
