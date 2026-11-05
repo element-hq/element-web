@@ -374,6 +374,29 @@ describe("Store secret encryption (safeStorage)", () => {
             await expect(store.getSecret("good")).resolves.toBe("goodsecret");
         });
 
+        it.each(["darwin", "win32"] as const)(
+            "encrypts existing plaintext secrets with the system backend on %s",
+            async (platform) => {
+                usePlatform(platform);
+                // getSelectedStorageBackend is Linux-only; calling it throws on all other platforms
+                vi.mocked(safeStorage.getSelectedStorageBackend)
+                    .mockClear()
+                    .mockImplementation(() => {
+                        throw new Error("getSelectedStorageBackend is not available on this platform");
+                    });
+                backing.set("safeStorage", { good: "goodsecret" });
+                backing.set("safeStorage.good", "goodsecret");
+
+                const store = freshStore();
+                await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);
+
+                expect(safeStorage.getSelectedStorageBackend).not.toHaveBeenCalled();
+                expect(backing.get("safeStorage.good")).toBe(encrypted("goodsecret"));
+                expect(backing.get("safeStorageBackend")).toBe("system");
+                await expect(store.getSecret("good")).resolves.toBe("goodsecret");
+            },
+        );
+
         it("does nothing when there are no secrets to migrate", async () => {
             const store = freshStore();
             await expect(store.prepareSafeStorage(SESSION)).resolves.toBe(true);

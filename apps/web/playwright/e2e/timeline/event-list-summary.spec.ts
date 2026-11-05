@@ -195,7 +195,12 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(2).click();
+            await page
+                .locator(".mx_RoomView_body .mx_GenericEventListSummary[data-layout='group']", {
+                    hasText: "joined, were removed, were invited, and joined",
+                })
+                .getByRole("button", { name: "expand" })
+                .click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();
@@ -265,7 +270,12 @@ test.describe("Event List Summary", () => {
             // Note: we can't include "expand" in the screenshot because it
             // moves around, but at least we know it exists because we click it
             // here.
-            await page.getByRole("button", { name: "expand" }).nth(2).click();
+            await page
+                .locator(".mx_RoomView_body .mx_GenericEventListSummary[data-layout='group']", {
+                    hasText: "was removed, was invited, and joined",
+                })
+                .getByRole("button", { name: "expand" })
+                .click();
 
             // Make sure the mouse is in a consistent position to avoid flaking
             await page.getByRole("textbox").hover();

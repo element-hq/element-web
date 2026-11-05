@@ -53,7 +53,8 @@ const mockMembership = (deviceId: string): SessionMembershipData => {
     const configured = CallStore.instance.getConfiguredRTCTransports().filter(isUnstableLivekitTransport);
     const fociPreferred =
         configured.length > 0
-            ? configured.map((t) => ({ ...t, livekit_alias: "element-call-mock" }))
+            ? // Clients that don't know `m.livekit` only read `livekit`.
+              configured.map((t) => ({ ...t, type: "livekit", livekit_alias: "element-call-mock" }))
             : [{ livekit_alias: "any-alias", livekit_service_url: "https://example.org", type: "livekit" }];
     return {
         "application": "m.call",
