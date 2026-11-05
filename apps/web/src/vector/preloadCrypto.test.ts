@@ -1,0 +1,59 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const cryptoModuleLoaded = vi.fn();
+
+describe("preloadCryptoIfLoggedIn", () => {
+    let preloadCryptoIfLoggedIn: () => void;
+
+    beforeEach(async () => {
+        // Each test needs a fresh module registry and mock, or the crypto module would only be loaded once per file
+        vi.resetModules();
+        vi.doMock("matrix-js-sdk/src/rust-crypto/index", () => {
+            cryptoModuleLoaded();
+            return {};
+        });
+        ({ preloadCryptoIfLoggedIn } = await import("./preloadCrypto"));
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+        localStorage.clear();
+        cryptoModuleLoaded.mockClear();
+    });
+
+    it("loads the crypto module when there is a stored session", async () => {
+        localStorage.setItem("mx_has_access_token", "true");
+
+        preloadCryptoIfLoggedIn();
+        await vi.dynamicImportSettled();
+
+        expect(cryptoModuleLoaded).toHaveBeenCalled();
+    });
+
+    it("does nothing without a stored session", async () => {
+        preloadCryptoIfLoggedIn();
+        await vi.dynamicImportSettled();
+
+        expect(cryptoModuleLoaded).not.toHaveBeenCalled();
+    });
+
+    it("does nothing when storage is inaccessible", async () => {
+        vi.spyOn(window, "localStorage", "get").mockImplementation(() => {
+            throw new Error("SecurityError");
+        });
+
+        preloadCryptoIfLoggedIn();
+        await vi.dynamicImportSettled();
+
+        expect(cryptoModuleLoaded).not.toHaveBeenCalled();
+    });
+});
