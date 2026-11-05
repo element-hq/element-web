@@ -83,4 +83,14 @@ export interface ExtrasApi {
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
      */
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+
+    /**
+     * Adds an entry to the credits list in the Help & About settings tab. Each entry is
+     * rendered inside its own list item, after Element's built-in credits.
+     * If called again with the same attributionId, will update the existing entry.
+     *
+     * @param attributionId - A key to identify this credits entry.
+     * @param render - A function returning the content of the entry.
+     */
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
 }
