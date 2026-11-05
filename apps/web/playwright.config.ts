@@ -99,7 +99,7 @@ export default defineConfig<{}, WorkerOptions>({
     },
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",
-    workers: 1,
+    workers: process.env.CI ? "50%" : 1,
     retries: process.env.CI ? 2 : 0,
     retryStrategy: "isolated",
     maxFailures: process.env.CI ? 10 : undefined,
