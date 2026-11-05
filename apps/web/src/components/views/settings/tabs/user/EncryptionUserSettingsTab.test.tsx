@@ -64,9 +64,11 @@ describe("<EncryptionUserSettingsTab />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
 
-        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: new Promise(() => {}) } as any);
+        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([true]) } as any);
         await user.click(screen.getByText("Verify this device"));
         expect(spy).toHaveBeenCalled();
+        // The dialog resolving returns the tab to the main state. The device is still unverified, so it re-renders.
+        await waitFor(() => expect(screen.getByRole("button", { name: "Verify this device" })).toBeInTheDocument());
     });
 
     it("should display the advanced panel when the encryption is not set up", async () => {
@@ -135,6 +137,34 @@ describe("<EncryptionUserSettingsTab />", () => {
         const user = userEvent.setup();
         await user.click(screen.getByRole("button", { name: "Forgot recovery key?" }));
         await waitFor(() => expect(screen.getByText("Change recovery key")).toBeVisible());
+    });
+
+    it.each(["verify_this_session", "key_storage_out_of_sync"] as const)(
+        "should enter the reset identity flow from the advanced panel when the device state is %s",
+        async (deviceState) => {
+            vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(deviceState);
+            renderComponent();
+
+            const user = userEvent.setup();
+            const button = await waitFor(() => screen.getByRole("button", { name: "Reset digital identity" }));
+            await user.click(button);
+            await waitFor(() =>
+                expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
+            );
+        },
+    );
+
+    it("should enter the 'change recovery key' flow if entering the recovery key fails", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        vi.spyOn(DeviceListener.sharedInstance(), "whilePaused").mockRejectedValue(new Error("failed to access 4S"));
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(false);
+        renderComponent();
+
+        const user = userEvent.setup();
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
+        await waitFor(() => expect(screen.getByText("Change recovery key")).toBeInTheDocument());
     });
 
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
