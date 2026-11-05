@@ -27,6 +27,7 @@ import { StorageHelperApi } from "./StorageHelperApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { UrlPreviewApi } from "./UrlPreviewApi.ts";
+import { DocumentPreviewApi } from "./DocumentPreviewApi.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
 
 /**
@@ -67,6 +68,7 @@ export class ModuleApi implements Api {
     public readonly storageHelper = new StorageHelperApi();
     public readonly settings = new SettingsApi();
     public readonly urlPreviews = new UrlPreviewApi();
+    public readonly documentPreviews = new DocumentPreviewApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
