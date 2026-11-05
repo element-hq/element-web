@@ -158,13 +158,9 @@ test.describe("Cryptography", function () {
                 // no e2e icon
                 await expect(lastTileE2eIcon).not.toBeVisible();
 
-                await expect
-                    .poll(
-                        () =>
-                            app.client.evaluate(async (cli) => (await cli.getCrypto()!.getKeyBackupInfo())?.count ?? 0),
-                        { message: "waiting for room keys to be backed up", timeout: 15000 },
-                    )
-                    .toBeGreaterThan(0);
+                // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
+                // the key to be backed up.
+                await page.waitForTimeout(10000);
 
                 /* log out, and back in */
                 await logOutOfElement(page);

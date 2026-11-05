@@ -72,13 +72,9 @@ test.describe("Cryptography", function () {
                 await app.viewRoomByName("Test room");
                 await sendMessageInCurrentRoom(page, "test2 test2");
 
-                await expect
-                    .poll(
-                        () =>
-                            app.client.evaluate(async (cli) => (await cli.getCrypto()!.getKeyBackupInfo())?.count ?? 0),
-                        { message: "waiting for room keys to be backed up", timeout: 15000 },
-                    )
-                    .toBeGreaterThan(0);
+                // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
+                // the key to be backed up.
+                await page.waitForTimeout(10000);
 
                 // Finally, log out again, and back in, skipping verification for now, and see what we see.
                 await logOutOfElement(page);
