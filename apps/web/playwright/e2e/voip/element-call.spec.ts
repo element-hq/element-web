@@ -244,6 +244,11 @@ test.describe("Element Call", () => {
             await sendRTCState(bot, room.roomId, undefined, "video");
             await expect(page.getByTestId("join-call-button")).toBeVisible();
 
+            // Alice's client only stores a sync response after it has processed it, so seeing the call doesn't
+            // mean the sync with Bob's membership has been stored yet. Once a later sync is processed, it has.
+            await bot.sendMessage(room.roomId, "Is anyone else joining?");
+            await expect(page.getByTestId("timeline").getByText("Is anyone else joining?")).toBeVisible();
+
             // This test fixes a bug that is somewhat time sensitive.
             // Save the sync cache now that it contains Bob's membership, so that after the reload the call is
             // loaded from the cache.
