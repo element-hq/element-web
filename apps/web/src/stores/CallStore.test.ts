@@ -9,31 +9,43 @@
 
 import { type CallMembership, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import {
     setUpClientRoomAndStores,
     cleanUpClientRoomAndStores,
     setupAsyncStoreWithClient,
     enableCalls,
     flushPromises,
+    resetAsyncStoreWithClient,
 } from "test-utils";
 
 import { ElementCall } from "../models/Call";
 import { CallStore } from "./CallStore";
 import SdkConfig from "../SdkConfig";
+import WidgetStore from "./WidgetStore";
+import { UPDATE_EVENT } from "./AsyncStore";
 
 describe("CallStore", () => {
     let client: ReturnType<typeof setUpClientRoomAndStores>["client"];
     let room: Room;
+    let roomSession: ReturnType<typeof setUpClientRoomAndStores>["roomSession"];
+
+    beforeAll(() => {
+        // Create the store while there is no client. Otherwise the getter also sets it up with the first test's
+        // client, and as the reset after each test only removes one set of listeners, some would be left behind.
+        void CallStore.instance;
+    });
 
     beforeEach(() => {
         enableCalls();
         const res = setUpClientRoomAndStores();
         client = res.client;
         room = res.room;
+        roomSession = res.roomSession;
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        await resetAsyncStoreWithClient(CallStore.instance);
         cleanUpClientRoomAndStores(client, room);
         vi.restoreAllMocks();
     });
@@ -52,6 +64,73 @@ describe("CallStore", () => {
         expect(CallStore.instance.getCall(room.roomId)).not.toBe(null);
         expect(CallStore.instance.getConfiguredRTCTransports()).toHaveLength(0);
     });
+
+    describe("while the session's memberships are still being calculated", () => {
+        let membershipsCalculated: PromiseWithResolvers<void>;
+
+        beforeEach(() => {
+            membershipsCalculated = Promise.withResolvers<void>();
+            Object.assign(roomSession, { initialMembershipCalculated: membershipsCalculated.promise });
+        });
+
+        it("constructs a call once the memberships have been calculated", async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+
+            roomSession.memberships.push({} as CallMembership);
+            membershipsCalculated.resolve();
+            await flushPromises();
+
+            expect(CallStore.instance.getCall(room.roomId)).toEqual(expect.any(ElementCall));
+        });
+
+        it("constructs a call for a room that arrives after the store has started", async () => {
+            // As on reload, where the store starts before the rooms are loaded from the sync cache
+            client.getRooms.mockReturnValue([]);
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            client.getRooms.mockReturnValue([room]);
+            WidgetStore.instance.emit(UPDATE_EVENT, room.roomId);
+            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+
+            roomSession.memberships.push({} as CallMembership);
+            membershipsCalculated.resolve();
+            await flushPromises();
+
+            expect(CallStore.instance.getCall(room.roomId)).toEqual(expect.any(ElementCall));
+        });
+
+        it("does not check the room again if the calculation finds no members", async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            const getSpy = vi.spyOn(ElementCall, "get");
+
+            membershipsCalculated.resolve();
+            await flushPromises();
+
+            expect(getSpy).not.toHaveBeenCalled();
+            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+        });
+
+        it("handles the calculation failing", async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+
+            membershipsCalculated.reject(new Error("calculation failed"));
+            await flushPromises();
+
+            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+        });
+
+        it("does not construct a call if the store stops before the calculation finishes", async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            await resetAsyncStoreWithClient(CallStore.instance);
+
+            roomSession.memberships.push({} as CallMembership);
+            membershipsCalculated.resolve();
+            await flushPromises();
+
+            expect(CallStore.instance.getCall(room.roomId)).toBe(null);
+        });
+    });
+
     it("delegates transport discovery to the client", async () => {
         client.cachedRtcTransports.get.mockReturnValue([
             { type: "type-a", some_data: "value" },

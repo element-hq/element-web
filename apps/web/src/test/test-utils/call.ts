@@ -191,6 +191,7 @@ export function setUpClientRoomAndStores(): {
 
     const roomSession = new MockEventEmitter({
         memberships: [],
+        initialMembershipCalculated: Promise.resolve(),
         getConsensusCallIntent: vi.fn().mockReturnValue(undefined),
         room,
     }) as unknown as Mocked<MatrixRTCSession>;

@@ -149,6 +149,7 @@ describe("RoomViewStore", function () {
             getRoomSession() {
                 return new (class extends EventEmitter {
                     memberships = [];
+                    initialMembershipCalculated = Promise.resolve();
                 })();
             }
         })(),

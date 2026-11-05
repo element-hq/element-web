@@ -89,6 +89,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     }
 
     protected async onNotReady(): Promise<any> {
+        this.readyAbortController.abort();
+        this.readyAbortController = new AbortController();
+
         for (const [call, listenerMap] of this.callListeners) {
             // It's important that we remove the listeners before destroying the
             // call, because otherwise the call's onDestroy callback would fire
@@ -128,6 +131,8 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     }
 
     private calls = new Map<string, Call>(); // Key is room ID
+    // Aborted when the store stops, so that work it started while running doesn't act afterwards
+    private readyAbortController = new AbortController();
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
     private inUpdateRoom = false;
@@ -171,6 +176,13 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                         [CallEvent.Destroy, onDestroy],
                     ]),
                 );
+            } else {
+                // We didn't find a call, but it's possible we've
+                // not finished membership calculations. Add a cheap
+                // await for one.
+                // This will effectively run for all rooms without a call,
+                // but the cost is cheap.
+                this.updateRoomOnceMembershipsCalculated(room);
             }
 
             this.emit(CallStoreEvent.Call, call, room.roomId);
@@ -233,6 +245,28 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
         }
         return [];
+    }
+
+    /**
+     * Checks the room for a call again once its MatrixRTC session has calculated its first set of memberships.
+     *
+     * A session's memberships start out empty and are calculated asynchronously, so a call that is already in
+     * progress when the session is created (for example, one loaded from the sync cache on reload) can't be seen
+     * yet. The session manager only emits SessionStarted in response to new membership events, so nothing else
+     * tells us about this call.
+     */
+    private updateRoomOnceMembershipsCalculated(room: Room): void {
+        const session = room.client.matrixRTC.getRoomSession(room);
+        const signal = this.readyAbortController.signal;
+        void session.initialMembershipCalculated
+            .catch((e) => {
+                logger.warn(`Failed to calculate initial call memberships for room ${room.roomId}`, e);
+            })
+            .then(() => {
+                // Without members there is still no call, so don't emit another update for the room
+                if (signal.aborted || session.memberships.length === 0) return;
+                this.updateRoom(room);
+            });
     }
 
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
