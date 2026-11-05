@@ -6,7 +6,14 @@
  */
 
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    ClientPrefix,
+    type IPreviewUrlResponse,
+    type MatrixClient,
+    MatrixError,
+    type MatrixEvent,
+    Method,
+} from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
 
 import type { UrlPreview } from "shared-types";
@@ -23,6 +30,9 @@ export const PREVIEW_WIDTH_PX = 478;
 export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
+
+/** MSC4448: Preview URL site logos, see https://github.com/matrix-org/matrix-spec-proposals/pull/4448 */
+const UNSTABLE_MSC4448_SITE_LOGO = "org.matrix.msc4448";
 
 /**
  * Handles fetching and parsing URL previews.
@@ -157,6 +167,11 @@ export class UrlPreviewFetcher {
         let image: UrlPreview["image"];
         let siteIcon: string | undefined;
 
+        // MSC4448: a site logo the server identified as such beats guessing one from the image size.
+        if (typeof response["msc4448:site_logo"] === "string" && loadMedia) {
+            siteIcon = mediaFromMxc(response["msc4448:site_logo"], this.client).srcHttp ?? undefined;
+        }
+
         if (typeof response["og:image"] === "string" && loadMedia) {
             const mxcImageFull = response["og:image"];
             const media = mediaFromMxc(response["og:image"], this.client);
@@ -167,9 +182,14 @@ export class UrlPreviewFetcher {
             const imageType = typeof response["og:image:type"] === "string" ? response["og:image:type"] : undefined;
 
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
-                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
+                // Scale the declared size down to fit the preview box, keeping the aspect ratio. An image of
+                // unknown size is taken to fill the box.
                 const height =
-                    thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
+                    thumbHeight(declaredWidth, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
+                const width =
+                    declaredWidth && declaredHeight
+                        ? Math.floor((declaredWidth * height) / declaredHeight)
+                        : PREVIEW_WIDTH_PX;
                 const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
                 const playable = !!response["og:video"] || !!response["og:video:type"] || !!response["og:audio"];
                 if (thumb) {
@@ -185,11 +205,47 @@ export class UrlPreviewFetcher {
                         playable,
                     };
                 }
-            } else if (media.srcHttp) {
+            } else if (media.srcHttp && !siteIcon) {
                 siteIcon = media.srcHttp;
             }
         }
         return { image, siteIcon };
+    }
+
+    /**
+     * Whether the server advertises MSC4448 site logos. A failure to find out is no reason to go without
+     * previews altogether, so it counts as unsupported.
+     */
+    private async supportsSiteLogo(): Promise<boolean> {
+        try {
+            return await this.client.doesServerSupportUnstableFeature(UNSTABLE_MSC4448_SITE_LOGO);
+        } catch (error) {
+            logger.debug("Could not check for MSC4448 support, not asking for site logos: ", error);
+            return false;
+        }
+    }
+
+    /**
+     * Fetch the server's preview of a link, asking for its MSC4448 site logo when the server supports that.
+     * The sdk's `getUrlPreview` cannot pass the extra parameter, so that case calls the endpoint directly, in
+     * the same way the sdk does.
+     * @param link The URL to preview.
+     */
+    private async getUrlPreview(link: string): Promise<IPreviewUrlResponse> {
+        if (!(await this.supportsSiteLogo())) {
+            return this.client.getUrlPreview(link, this.previewRequestTs);
+        }
+        // As the sdk does: bucket the timestamp to the minute, and drop the fragment as it cannot affect the preview.
+        const ts = Math.floor(this.previewRequestTs / 60000) * 60000;
+        const url = new URL(link);
+        url.hash = "";
+        return this.client.http.authedRequest<IPreviewUrlResponse>(
+            Method.Get,
+            "/media/preview_url",
+            { url: url.toString(), ts: ts.toString(), msc4448_include: "msc4448:site_logo" },
+            undefined,
+            { prefix: ClientPrefix.V1, priority: "low" },
+        );
     }
 
     /**
@@ -209,7 +265,7 @@ export class UrlPreviewFetcher {
 
         let response: IPreviewUrlResponse;
         try {
-            response = await this.client.getUrlPreview(link, this.previewRequestTs);
+            response = await this.getUrlPreview(link);
         } catch (error) {
             if (error instanceof MatrixError && error.httpStatus === 404) {
                 logger.debug("Failed to get URL preview: ", error);

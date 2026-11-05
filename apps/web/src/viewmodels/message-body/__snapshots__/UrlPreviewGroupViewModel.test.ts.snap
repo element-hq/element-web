@@ -26,7 +26,7 @@ exports[`UrlPreviewGroupViewModel > should handle being hidden and shown by the 
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
-  "totalPreviewCount": 1,
+  "totalPreviewCount": 0,
 }
 `;
 

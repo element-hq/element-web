@@ -28,20 +28,29 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
+type MockClient = {
+    getUrlPreview: Mock;
+    mxcUrlToHttp: Mock;
+    doesServerSupportUnstableFeature: Mock;
+    http: { authedRequest: Mock };
+};
+
 function getFetcher(showTooltips = false): {
     fetcher: UrlPreviewFetcher;
-    client: { getUrlPreview: Mock; mxcUrlToHttp: Mock };
+    client: MockClient;
     moduleApi: { getPreview: Mock };
 } {
     const client = {
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
+        doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
+        http: { authedRequest: vi.fn() },
     } as unknown as MatrixClient;
     // By default no module handles the URL, so we fall through to the bundle/server logic.
     const moduleApi = { getPreview: vi.fn().mockResolvedValue(null) };
     return {
         fetcher: new UrlPreviewFetcher(client, 0, showTooltips, moduleApi as unknown as UrlPreviewApi),
-        client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock },
+        client: client as unknown as MockClient,
         moduleApi,
     };
 }
@@ -165,6 +174,137 @@ describe("UrlPreviewFetcher", () => {
         const preview = await fetcher.fetchPreview("https://example.org", true);
         expect(preview?.siteIcon).toBeTruthy();
         expect(preview?.image).toBeUndefined();
+    });
+
+    it.each([
+        [1200, 600, 478, 239], // wide banner, scaled down to the preview width
+        [500, 1000, 239, 478], // tall image, scaled down to the preview height
+        [128, 128, 128, 128], // small image, left alone
+        [undefined, undefined, 478, 478], // unknown size fills the box
+    ])("should scale a %sx%s image to %sx%s keeping its aspect ratio", async (w, h, width, height) => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:width": w,
+            "og:image:height": h,
+            "matrix:image:size": 10000,
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation(() => "https://example.org/image");
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.image?.width).toBe(width);
+        expect(preview?.image?.height).toBe(height);
+    });
+
+    describe("asking for the MSC4448 site logo", () => {
+        it("should call the preview endpoint directly when the server supports MSC4448", async () => {
+            const { fetcher, client } = getFetcher();
+            client.doesServerSupportUnstableFeature.mockResolvedValue(true);
+            client.http.authedRequest.mockResolvedValue({
+                ...BASIC_PREVIEW_OGDATA,
+                "msc4448:site_logo": "mxc://example.org/logo",
+            });
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockImplementation((url: string) => `https://example.org/${url.split("/").pop()}`);
+
+            const preview = await fetcher.fetchPreview("https://example.org/page#section", true);
+
+            expect(client.doesServerSupportUnstableFeature).toHaveBeenCalledWith("org.matrix.msc4448");
+            expect(client.http.authedRequest).toHaveBeenCalledWith(
+                "GET",
+                "/media/preview_url",
+                { url: "https://example.org/page", ts: "0", msc4448_include: "msc4448:site_logo" },
+                undefined,
+                expect.objectContaining({ prefix: "/_matrix/client/v1" }),
+            );
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+            expect(preview?.siteIcon).toBe("https://example.org/logo");
+        });
+
+        it("should use the sdk's getUrlPreview when the MSC4448 check fails", async () => {
+            const { fetcher, client } = getFetcher();
+            client.doesServerSupportUnstableFeature.mockRejectedValue(new Error("No versions for you"));
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+
+            const preview = await fetcher.fetchPreview("https://example.org/page", true);
+
+            expect(preview?.title).toBe("This is an example!");
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/page", 0);
+        });
+
+        it("should use the sdk's getUrlPreview when the server does not support MSC4448", async () => {
+            const { fetcher, client } = getFetcher();
+            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+
+            await fetcher.fetchPreview("https://example.org/page", true);
+
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/page", 0);
+            expect(client.http.authedRequest).not.toHaveBeenCalled();
+        });
+    });
+
+    it("should use the MSC4448 site logo as the site icon", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "msc4448:site_logo": "mxc://example.org/logo",
+            "msc4448:site_logo:size": 1234,
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => {
+            expect(url).toEqual("mxc://example.org/logo");
+            return "https://example.org/logo/src";
+        });
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo/src");
+        expect(preview?.image).toBeUndefined();
+    });
+
+    it("should prefer the MSC4448 site logo over a small og:image", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:height": 16,
+            "og:image:width": 16,
+            "matrix:image:size": 100,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => `https://example.org/${url.split("/").pop()}`);
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo");
+        expect(preview?.image).toBeUndefined();
+    });
+
+    it("should keep the full-size image alongside the MSC4448 site logo", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            "og:image:height": 128,
+            "og:image:width": 128,
+            "matrix:image:size": 10000,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url) => `https://example.org/${url.split("/").pop()}`);
+        const preview = await fetcher.fetchPreview("https://example.org", true);
+        expect(preview?.siteIcon).toBe("https://example.org/logo");
+        expect(preview?.image?.mxcImageFull).toBe(IMAGE_MXC);
+    });
+
+    it("should not load the MSC4448 site logo when media is hidden", async () => {
+        const { fetcher, client } = getFetcher();
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "msc4448:site_logo": "mxc://example.org/logo",
+        });
+        const preview = await fetcher.fetchPreview("https://example.org", false);
+        expect(preview?.siteIcon).toBeUndefined();
+        // eslint-disable-next-line no-restricted-properties
+        expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
     });
 
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
