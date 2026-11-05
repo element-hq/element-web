@@ -87,6 +87,18 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
     });
 }
 
+/**
+ * Clear the bot's call membership set by {@link sendRTCState}, which ends the call when the bot was the only member.
+ */
+async function endRTCState(bot: Bot, roomId: string) {
+    await bot.sendStateEvent(
+        roomId,
+        "org.matrix.msc3401.call.member",
+        {},
+        `_@${bot.credentials!.userId}_OiDFxsZrjz_m.call`,
+    );
+}
+
 test.use({
     synapseConfig: {
         experimental_features: {
@@ -248,6 +260,22 @@ test.describe("Element Call", () => {
             await expect(
                 page.getByRole("option", { name: "Open room TestRoom, video call in progress." }),
             ).toBeVisible();
+        });
+
+        test("should show the call state in the room list message preview", async ({ page, bot, room, app }) => {
+            await app.settings.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, true);
+            await app.viewRoomById(room.roomId);
+            // Allow bob to create a call
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+
+            const roomListItem = page.getByTestId("room-list").getByRole("option", { name: /TestRoom/ });
+
+            await sendRTCState(bot, room.roomId, "notification");
+            await expect(roomListItem.getByText("Call started")).toBeVisible();
+
+            await endRTCState(bot, room.roomId);
+            await expect(roomListItem.getByText("Call ended")).toBeVisible();
         });
 
         [true, false].forEach((joinWithVideo) => {
