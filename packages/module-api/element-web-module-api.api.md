@@ -268,6 +268,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 export interface ExtrasApi {
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
@@ -472,6 +473,7 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
+    PublicRooms = "UIComponent.publicRooms",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 

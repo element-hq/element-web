@@ -63,6 +63,6 @@ export function hasCreateRoomRights(matrixClient: MatrixClient, space?: Room | n
         space
             ?.getLiveTimeline()
             .getState(EventTimeline.FORWARDS)
-            ?.maySendStateEvent(EventType.RoomAvatar, matrixClient.getSafeUserId()),
+            ?.maySendStateEvent(EventType.SpaceChild, matrixClient.getSafeUserId()),
     );
 }

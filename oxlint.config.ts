@@ -260,6 +260,7 @@ export default defineConfig({
         "typescript/no-duplicate-type-constituents": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
+        "typescript/no-unsafe-enum-assignment": "off",
         "promise/valid-params": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",
@@ -447,6 +448,12 @@ export default defineConfig({
                                 name: "emojibase-regex",
                                 message:
                                     "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
+                            },
+                            {
+                                name: "maplibre-gl",
+                                allowTypeImports: true,
+                                message:
+                                    "Please use utils/location/maplibre instead, it points maplibre at the bundled worker.",
                             },
                         ],
                         patterns: [
