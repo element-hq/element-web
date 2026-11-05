@@ -794,7 +794,6 @@
             "warning": "如果您沒有移除復原方法，攻擊者可能會試圖存取您的帳號。請立刻在設定中變更您帳號的密碼並設定新的復原方式。"
         },
         "set_up_recovery": "設定復原",
-        "set_up_recovery_toast_description": "產生一把復原金鑰，以便在您無法存取裝置時恢復您的加密訊息歷史記錄。",
         "set_up_toast_title": "設定安全備份",
         "turn_on_key_storage_description": "在伺服器安全地儲存您的加密身分及訊息金鑰。如此一來，您便能在任何新裝置上檢視訊息歷史紀錄。",
         "unable_to_setup_keys_error": "無法設定金鑰",
@@ -2042,7 +2041,6 @@
                 "change_recovery_key": "變更復原金鑰",
                 "change_recovery_key_description": "請將這組新的復原金鑰記錄在安全的地方，接著點擊「繼續」以確認變更。",
                 "change_recovery_key_title": "變更復原金鑰？",
-                "description": "如果您遺失了所有現有設備，請使用復原金鑰來恢復您的加密身分和訊息歷史記錄。",
                 "enter_key_error": "您輸入的復原密鑰不正確。",
                 "enter_recovery_key": "輸入復原金鑰",
                 "forgot_recovery_key": "忘記復原金鑰？",
@@ -2937,10 +2935,6 @@
             "error_loading": "無法載入要回覆的活動，它可能不存在或是您沒有權限檢視它。",
             "in_reply_to": "<a>回覆給</a> <pill>",
             "in_reply_to_for_export": "回覆<a>此訊息</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "您即將被帶到第三方網站，以便您可以驗證帳戶來使用 %(integrationsUrl)s。請問您要繼續嗎？",
-            "dialog_title": "新增整合器"
         },
         "self_redaction": "訊息已刪除",
         "send_state_encrypting": "正在加密您的訊息…",

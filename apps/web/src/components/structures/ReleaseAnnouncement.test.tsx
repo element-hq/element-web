@@ -11,6 +11,7 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import React from "react";
 import { act, render, screen, waitFor } from "test-utils-rtl";
+import { tearDownAfterTest } from "test-utils";
 
 import { ReleaseAnnouncement } from "./ReleaseAnnouncement";
 import Modal, { ModalManagerEvent } from "../../Modal";
@@ -20,7 +21,7 @@ describe("ReleaseAnnouncement", () => {
     beforeEach(async () => {
         // Reset the singleton instance of the ReleaseAnnouncementStore
         // @ts-ignore
-        ReleaseAnnouncementStore.internalInstance = new ReleaseAnnouncementStore();
+        ReleaseAnnouncementStore.internalInstance = tearDownAfterTest(new ReleaseAnnouncementStore());
     });
 
     function renderReleaseAnnouncement() {

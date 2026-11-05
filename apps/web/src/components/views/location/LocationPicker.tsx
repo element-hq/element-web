@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type SyntheticEvent } from "react";
-import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
@@ -23,6 +22,7 @@ import { MapError } from "./MapError";
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from "./LiveDurationDropdown";
 import { LocationShareType, type ShareLocationFn } from "./shareLocation";
 import Marker from "./Marker";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 export interface ILocationPickerProps {
     sender: RoomMember;
@@ -82,6 +82,8 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
             this.map.addControl(this.geolocate);
 
+            // The map is destroyed with remove() on unmount, which also removes these listeners
+            // oxlint-disable-next-line element-web/no-leaked-emitter-listener
             this.map.on("error", (e) => {
                 logger.error(
                     "Failed to load map: check map_style_url in config.json has a valid URL and API key",
@@ -90,6 +92,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                 this.setState({ error: LocationShareError.MapStyleUrlNotReachable });
             });
 
+            // oxlint-disable-next-line element-web/no-leaked-emitter-listener
             this.map.on("load", () => {
                 this.geolocate?.trigger();
             });
@@ -126,6 +129,9 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         this.geolocate?.off("geolocate", this.onGeolocate);
         this.map?.off("click", this.onClick);
         this.context.off(ClientEvent.ClientWellKnown, this.updateStyleUrl);
+        // Destroy the map instance so its internal listeners (including the "error"/"load"
+        // handlers registered in componentDidMount) don't fire after this component has unmounted.
+        this.map?.remove();
     }
 
     private addMarkerToMap = (): void => {

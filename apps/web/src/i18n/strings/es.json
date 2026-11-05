@@ -818,7 +818,6 @@
             "title": "Método de recuperación eliminado",
             "warning": "Si no eliminó el método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
-        "set_up_recovery_toast_description": "Genera una clave de recuperación que puede usarse para restaurar el histórico de mensajes encriptados en caso de que pierdas el acceso a tus dispositivos.",
         "set_up_toast_title": "Configurar copia de seguridad segura",
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "verification": {
@@ -2795,10 +2794,6 @@
             "error_loading": "No se pudo cargar el evento al que se respondió, bien porque no existe o no tiene permiso para verlo.",
             "in_reply_to": "<a>Respondiendo a </a> <pill>",
             "in_reply_to_for_export": "En respuesta a <a>este mensaje</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Estás a punto de ir a un sitio externo para que puedas iniciar sesión con tu cuenta y usarla en %(integrationsUrl)s. ¿Quieres seguir?",
-            "dialog_title": "Añadir una Integración"
         },
         "self_redaction": "Mensaje eliminado",
         "send_state_encrypting": "Cifrando tu mensaje…",

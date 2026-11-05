@@ -784,6 +784,36 @@ describe("MPollBody", () => {
         expect(getByText("Due to decryption errors, some votes may not be counted")).toBeInTheDocument();
     });
 
+    it("renders a warning message when a later page of relations is undecryptable", async () => {
+        const votes = [responseEvent("@me:example.com", "wings", 15)];
+        const undecryptable = responseEvent("@op:example.com", "pizza", 16);
+        vi.spyOn(undecryptable, "isDecryptionFailure").mockReturnValue(true);
+        const mxEvent = new MatrixEvent({
+            type: M_POLL_START.name,
+            event_id: "$mypoll",
+            room_id: "#myroom:example.com",
+            content: newPollStart(),
+        });
+        await setupRoomWithPollEvents([mxEvent], votes, [], mockClient);
+        const { promise: secondPage, resolve: resolveSecondPage } = Promise.withResolvers<{ events: MatrixEvent[] }>();
+        mockClient.relations
+            .mockResolvedValueOnce({ events: votes, nextBatch: "page2" })
+            .mockReturnValueOnce(secondPage);
+
+        const renderResult = renderMPollBodyWithWrapper(getMPollBodyPropsFromEvent(mxEvent));
+        // wait for the first page of /relations to resolve
+        await flushPromises();
+        expect(renderResult.getByTestId("totalVotes").textContent).toBe("Based on 1 vote");
+        expect(renderResult.queryByText("Due to decryption errors, some votes may not be counted")).toBeNull();
+
+        await act(async () => {
+            resolveSecondPage({ events: [undecryptable] });
+            await flushPromises();
+        });
+
+        expect(renderResult.getByText("Due to decryption errors, some votes may not be counted")).toBeInTheDocument();
+    });
+
     it("renders a poll with local, non-local and invalid votes", async () => {
         const votes = [
             responseEvent("@a:example.com", "pizza", 12),

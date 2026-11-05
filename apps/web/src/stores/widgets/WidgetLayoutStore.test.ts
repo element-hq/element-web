@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, beforeAll, afterAll } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import WidgetStore, { type IApp } from "../WidgetStore";
 import { WidgetLayoutStore } from "./WidgetLayoutStore";
@@ -72,6 +72,7 @@ describe("WidgetLayoutStore", () => {
 
     afterAll(() => {
         store.removeListener(`update_${roomId}`, roomUpdateListener);
+        store.destroy();
     });
 
     it("all widgets should be in the right container by default", () => {
@@ -170,6 +171,7 @@ describe("WidgetLayoutStore", () => {
 
     it("should recalculate all rooms when the client is ready", async () => {
         vi.mocked(client.getVisibleRooms).mockReturnValue([mockRoom]);
+        tearDownAfterTest(store);
         await store.start();
 
         expect(roomUpdateListener).toHaveBeenCalled();
@@ -197,7 +199,9 @@ describe("WidgetLayoutStore", () => {
         expect(store.getContainerWidgets(mockRoom, "right")).toEqual([]);
     });
 
-    it("should clear the layout if the client is not viable", () => {
+    it("should clear the layout if the client is not viable", async () => {
+        tearDownAfterTest(store);
+        await store.start();
         store.recalculateRoom(mockRoom);
         defaultDispatcher.dispatch({ action: Action.ClientNotViable }, true);
 
@@ -233,6 +237,7 @@ describe("WidgetLayoutStore", () => {
     });
 
     it("should copy the layout to the room", async () => {
+        tearDownAfterTest(store);
         await store.start();
         store.recalculateRoom(mockRoom);
         store.moveToContainer(mockRoom, mockApps[0], "top");
@@ -272,7 +277,7 @@ describe("WidgetLayoutStore", () => {
         // Just to quieten SonarCloud :-(
 
         // @ts-ignore bypass private ctor for tests
-        const store = new WidgetLayoutStore();
+        const store = tearDownAfterTest(new WidgetLayoutStore());
         // @ts-ignore calling private method
         expect(() => store.onNotReady()).not.toThrow();
     });
@@ -286,7 +291,7 @@ describe("WidgetLayoutStore", () => {
             vi.mocked(client.getVisibleRooms).mockRestore();
             vi.mocked(client.getVisibleRooms).mockReturnValue([]);
             // @ts-ignore bypass private ctor for tests
-            const store = new WidgetLayoutStore();
+            const store = tearDownAfterTest(new WidgetLayoutStore());
             await store.start();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
@@ -303,7 +308,7 @@ describe("WidgetLayoutStore", () => {
             vi.mocked(client.getVisibleRooms).mockRestore();
             vi.mocked(client.getVisibleRooms).mockReturnValue([]);
             // @ts-ignore bypass private ctor for tests
-            const store = new WidgetLayoutStore();
+            const store = tearDownAfterTest(new WidgetLayoutStore());
             await store.start();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });

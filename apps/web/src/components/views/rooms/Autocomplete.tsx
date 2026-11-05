@@ -97,6 +97,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount(): void {
         this.autocompleter?.destroy();
+        clearTimeout(this.debounceCompletionsRequest);
     }
 
     private complete(query: string, selection: ISelectionRange): Promise<void> {

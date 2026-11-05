@@ -10,7 +10,12 @@ Please see LICENSE files in the repository root for full details.
 import { ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
-import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "test-utils";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+    tearDownAfterTest,
+} from "test-utils";
 
 import { UserStatusIconViewModel } from "./UserStatusIconViewModel";
 import SettingsStore from "../../settings/SettingsStore";
@@ -38,7 +43,7 @@ describe("UserStatusIconViewModel", () => {
     });
 
     it("initialises with an undefined status", () => {
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
         expect(vm.getSnapshot().status).toBeUndefined();
     });
 
@@ -46,7 +51,7 @@ describe("UserStatusIconViewModel", () => {
         vi.mocked(SettingsStore.getValue).mockReturnValue(false);
         client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🐎", text: "on a horse" });
 
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
 
         await waitFor(() => expect(client.doesServerSupportExtendedProfiles).not.toHaveBeenCalled());
         expect(vm.getSnapshot().status).toBeUndefined();
@@ -55,13 +60,13 @@ describe("UserStatusIconViewModel", () => {
     it("fetches and populates the status on construction", async () => {
         client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🐎", text: "on a horse" });
 
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
 
         await waitFor(() => expect(vm.getSnapshot().status).toEqual({ emoji: "🐎", text: "on a horse" }));
     });
 
     it("updates the status when a matching UserProfileUpdate event is emitted", async () => {
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
         await waitFor(() => expect(client.getExtendedProfileProperty).toHaveBeenCalled());
 
         client.getExtendedProfileProperty.mockResolvedValue({ emoji: "😵", text: "off a horse" });
@@ -76,7 +81,7 @@ describe("UserStatusIconViewModel", () => {
 
     it("ignores UserProfileUpdate events for other users", async () => {
         client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🐎", text: "on a horse" });
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
         await waitFor(() => expect(vm.getSnapshot().status).toEqual({ emoji: "🐎", text: "on a horse" }));
 
         client.emit(ClientEvent.UserProfileUpdate, "@bob:example.com", {
@@ -87,7 +92,7 @@ describe("UserStatusIconViewModel", () => {
     });
 
     it("stops listening for updates once disposed", async () => {
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
         await waitFor(() => expect(client.getExtendedProfileProperty).toHaveBeenCalled());
         vm.dispose();
 
@@ -106,7 +111,7 @@ describe("UserStatusIconViewModel", () => {
             }),
         );
 
-        const vm = new UserStatusIconViewModel({ userId, matrixClient: client });
+        const vm = tearDownAfterTest(new UserStatusIconViewModel({ userId, matrixClient: client }));
         vm.dispose();
         resolveFetch({ emoji: "🐎", text: "on a horse" });
 

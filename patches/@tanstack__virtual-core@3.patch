@@ -1,8 +1,8 @@
 diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
-index 039bff8..39d31ff 100644
+index c9065e7..8c8f81c 100644
 --- a/dist/esm/index.d.ts
 +++ b/dist/esm/index.d.ts
-@@ -78,6 +78,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
+@@ -83,6 +83,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
      initialMeasurementsCache?: Array<VirtualItem>;
      lanes?: number;
      anchorTo?: ScrollAnchor;
@@ -16,10 +16,10 @@ index 039bff8..39d31ff 100644
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index 7032b66..b8140c8 100644
+index dcba044..d04e2c3 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
-@@ -321,7 +321,24 @@ class Virtualizer {
+@@ -331,7 +331,24 @@ class Virtualizer {
          const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
          if (didEdgeKeysChange) {
            edgeKeysChanged = true;
@@ -45,7 +45,7 @@ index 7032b66..b8140c8 100644
            if (item) {
              anchor = [item.key, this.getScrollOffset() - item.start];
            }
-@@ -443,7 +460,23 @@ class Virtualizer {
+@@ -453,7 +470,23 @@ class Virtualizer {
          });
          this.unsubs.push(
            this.options.observeElementRect(this, (rect) => {
@@ -69,11 +69,11 @@ index 7032b66..b8140c8 100644
              this.maybeNotify();
            })
          );
-@@ -913,9 +946,19 @@ class Virtualizer {
+@@ -943,9 +976,19 @@ class Virtualizer {
        const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
        const delta = size - itemSize;
        if (delta !== 0) {
--        const wasAtEnd = this.options.anchorTo === "end" && ((_b = this.scrollState) == null ? void 0 : _b.behavior) !== "smooth" && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
+-        const wasAtEnd = this.options.anchorTo === "end" && ((_c = this.scrollState) == null ? void 0 : _c.behavior) !== "smooth" && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
 +        // `this.scrollOffset` only updates when the async scroll event fires, so
 +        // within a frame it can be stale in two ways: (a) an earlier resize in the
 +        // same ResizeObserver batch already queued `scrollAdjustments`, and (b) a
@@ -84,14 +84,14 @@ index 7032b66..b8140c8 100644
 +        // during a scroll-to-end land uncompensated, stranding the view above the
 +        // bottom. Use the synchronous truth when a write is pending.
 +        const effectiveScrollOffset = this._intendedScrollOffset ?? (this.getScrollOffset() + this.scrollAdjustments);
-+        const wasAtEnd = this.options.anchorTo === "end" && ((_b = this.scrollState) == null ? void 0 : _b.behavior) !== "smooth" && this.getTotalSize() - this.getSize() - effectiveScrollOffset <= this.options.scrollEndThreshold;
++        const wasAtEnd = this.options.anchorTo === "end" && ((_c = this.scrollState) == null ? void 0 : _c.behavior) !== "smooth" && this.getTotalSize() - this.getSize() - effectiveScrollOffset <= this.options.scrollEndThreshold;
          const prevTotalSize = wasAtEnd ? this.getTotalSize() : 0;
 -        const scrollOffsetWithAdj = this.getScrollOffset() + this.scrollAdjustments;
 +        const scrollOffsetWithAdj = effectiveScrollOffset;
          const isFirstMeasure = !this.itemSizeCache.has(key);
          const defaultShouldAdjust = isFirstMeasure ? (
            // First measurement: compensate any item whose top sits above the
-@@ -928,9 +971,12 @@ class Virtualizer {
+@@ -958,9 +1001,12 @@ class Virtualizer {
            // below — e.g. a streaming chat message growing at its bottom)
            // changes size *below* the anchor point, so shifting scrollTop by the
            // delta would drag the viewport downward on every growth (#1218).
@@ -105,10 +105,10 @@ index 7032b66..b8140c8 100644
 +          // shoved the view while scrolling up — so the guard is dropped.
 +          itemStart + itemSize <= scrollOffsetWithAdj
          );
-         const shouldAdjustScroll = ((_c = this.scrollState) == null ? void 0 : _c.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(
+         const shouldAdjustScroll = ((_d = this.scrollState) == null ? void 0 : _d.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(
            // The callback expects a VirtualItem; build one lazily only
-@@ -1197,16 +1243,19 @@ class Virtualizer {
-       this._iosDeferredAdjustment += delta;
+@@ -1274,16 +1320,19 @@ class Virtualizer {
+       }
        return false;
      } else {
 -      const target = this.getScrollOffset() + this.scrollAdjustments + delta;

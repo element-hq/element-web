@@ -202,7 +202,7 @@ test.describe("Cryptography", function () {
 
         // We should be back to the main encryption tab, and it should indicate
         // that there is no existing recovery key.
-        await expect(encryptionTab.getByRole("button", { name: "Get recovery key" })).toBeVisible();
+        await expect(encryptionTab.getByRole("button", { name: "Create recovery key" })).toBeVisible();
     });
 
     test(

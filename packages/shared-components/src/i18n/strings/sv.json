@@ -18,7 +18,7 @@
         "invite": "Bjud in",
         "new_conversation": "Ny",
         "new_room": "Nytt rum",
-        "new_section": "Nytt avsnitt",
+        "new_section": "Ny sektion",
         "new_video_room": "Nytt videorum",
         "no": "Nej",
         "open_menu": "Öppna meny",
@@ -95,6 +95,12 @@
         "cancel_search_label": "Avbryt sökningen",
         "emoji_picker": "Emojiväljare"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Du kommer att förlora din krypterade chatthistorik och behöva återställa din digitala identitet om du tar bort alla dina enheter.",
+            "error": "Det gick inte att radera nyckelförvaringen. Försök igen."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Nedgradera antingen till <b>%(version)s</b> först eller ta bort den här enheten.",
@@ -135,7 +141,7 @@
     },
     "release_announcement": {
         "room_list_section_close": "OK",
-        "room_list_section_description": "Gruppera dina chattar i olika avsnitt för att hålla ordning på konversationerna och göra det enkelt att hitta rätt.",
+        "room_list_section_description": "Gruppera dina chattar i olika sektioner för att hålla ordning på konversationerna och göra det enkelt att hitta rätt.",
         "room_list_section_title": "Presentation Sektioner"
     },
     "room": {

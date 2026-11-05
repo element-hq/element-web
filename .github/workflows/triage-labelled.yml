@@ -161,6 +161,17 @@ jobs:
                   project-url: https://github.com/orgs/element-hq/projects/76
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
+    integrations:
+        name: Add labelled issues to Integrations project
+        runs-on: ubuntu-26.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'Team: Integrations')
+        steps:
+            - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2.0.0
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/156
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
     tech_debt:
         name: Add labelled issues to tech debt project
         runs-on: ubuntu-26.04

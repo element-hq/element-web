@@ -2028,10 +2028,6 @@
             "error_loading": "לא ניתן לטעון אירוע שהשיב לו, או שהוא לא קיים או שאין לך הרשאה להציג אותו.",
             "in_reply_to": "<a> בתשובה ל- </a> <pill>"
         },
-        "scalar_starter_link": {
-            "dialog_description": "אתה עומד להועבר לאתר של צד שלישי כדי שתוכל לאמת את חשבונך לשימוש עם %(integrationsUrl)s. האם אתה מקווה להמשיך?",
-            "dialog_title": "הוסף אינטגרציה"
-        },
         "self_redaction": "הודעה נמחקה",
         "send_state_failed": "השליחה נכשלה",
         "send_state_sent": "ההודעה שלך נשלחה",

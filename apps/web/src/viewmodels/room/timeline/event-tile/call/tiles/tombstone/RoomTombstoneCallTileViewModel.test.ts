@@ -8,6 +8,7 @@
 // @vitest-environment happy-dom
 
 import { it, describe, expect, vi } from "vitest";
+import { tearDownAfterTest } from "test-utils";
 
 import { getMockedRtcNotificationEvent } from "../../call-mocks";
 import { RoomTombstoneCallTileViewModel } from "./RoomTombstoneCallTileViewModel";
@@ -18,21 +19,21 @@ import { formatTime } from "../../../../../../../DateUtils";
 describe("RoomTombstoneCallTileViewModel", () => {
     it("should compute timestamp correctly", () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
-        const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
+        const vm = tearDownAfterTest(new RoomTombstoneCallTileViewModel({ mxEvent }));
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
     });
 
     it("falls back to origin_server_ts when the notification has no sender_ts", () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
         vi.spyOn(mxEvent, "getContent").mockReturnValue({});
-        const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
+        const vm = tearDownAfterTest(new RoomTombstoneCallTileViewModel({ mxEvent }));
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
     });
 
     it("should calculate time string correctly when configured to use 12 hour format", async () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
         await SettingsStore.setValue("showTwelveHourTimestamps", null, SettingLevel.DEVICE, true);
-        const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
+        const vm = tearDownAfterTest(new RoomTombstoneCallTileViewModel({ mxEvent }));
         const { timestamp } = vm.getSnapshot();
 
         expect(timestamp).toStrictEqual(formatTime(new Date(924285348000), true));
@@ -42,7 +43,7 @@ describe("RoomTombstoneCallTileViewModel", () => {
     it("should change timestamp format when setting is modified", async () => {
         await SettingsStore.setValue("showTwelveHourTimestamps", null, SettingLevel.DEVICE, false);
         const mxEvent = getMockedRtcNotificationEvent("video", 924285348000, 924285348000);
-        const vm = new RoomTombstoneCallTileViewModel({ mxEvent });
+        const vm = tearDownAfterTest(new RoomTombstoneCallTileViewModel({ mxEvent }));
         expect(vm.getSnapshot().timestamp).toStrictEqual(formatTime(new Date(924285348000)));
         await SettingsStore.setValue("showTwelveHourTimestamps", null, SettingLevel.DEVICE, true);
         await vi.waitFor(() => {

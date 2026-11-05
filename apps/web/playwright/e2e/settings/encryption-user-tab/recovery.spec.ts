@@ -60,7 +60,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
         // The key backup is deleted and the user needs to set it up
         const dialog = await util.openEncryptionTab();
-        const setupButton = dialog.getByRole("button", { name: "Get recovery key" });
+        const setupButton = dialog.getByRole("button", { name: "Create recovery key" });
         await expect(setupButton).toBeVisible();
         await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("set-up-recovery.png");
         await setupButton.click();
