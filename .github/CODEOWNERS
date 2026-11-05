@@ -40,3 +40,6 @@
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating
 /apps/web/playwright/testcontainers/synapse.ts
 /apps/web/playwright/testcontainers/mas.ts
+
+# Ignore the Playwright shard timings as these are updated by GHA weekly
+/apps/web/playwright/timings.json

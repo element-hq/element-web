@@ -103,7 +103,18 @@ export default defineConfig<{}, WorkerOptions>({
     retries: process.env.CI ? 2 : 0,
     retryStrategy: "isolated",
     maxFailures: process.env.CI ? 10 : undefined,
-    reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
+    reporter: process.env.CI
+        ? [
+              ["blob"],
+              ["github"],
+              [
+                  "@flakiness/playwright",
+                  {
+                      shardBalancing: { timingsFile: "./playwright/timings.json" },
+                  },
+              ],
+          ]
+        : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
     // When running the browser in docker, set the platform to `linux` as that is the platform where the browser is running
     snapshotPathTemplate: `{snapshotDir}/{testFilePath}/{arg}-${process.env.PW_TEST_CONNECT_WS_ENDPOINT ? "linux" : "{platform}"}{ext}`,
