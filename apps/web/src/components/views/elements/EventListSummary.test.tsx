@@ -216,6 +216,52 @@ describe("EventListSummary", function () {
         expect(summary.textContent!.indexOf("left")).toBeLessThan(summary.textContent!.indexOf("shared"));
     });
 
+    it("shows an avatar for each sender when they have no uploaded avatar", function () {
+        const events = generateEvents([
+            { userId: "@user_1:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_2:some.domain", membership: KnownMembership.Join },
+            { userId: "@user_1:some.domain", membership: KnownMembership.Leave },
+        ]);
+        for (const event of events) {
+            vi.spyOn(event.target!, "getMxcAvatarUrl").mockReturnValue(undefined);
+        }
+
+        const { container } = renderComponent({ events });
+        expect(container.querySelectorAll(".mx_GenericEventListSummary_avatars .mx_BaseAvatar")).toHaveLength(2);
+    });
+
+    it("keeps renderers with matching grouping keys in separate summaries", function () {
+        const api = new CustomComponentsApi();
+        for (const kind of ["first", "second", "explicit-empty"]) {
+            api.registerMessageRenderer(`com.example.${kind}`, () => <span>Notice</span>, {
+                renderGroupSummary: {
+                    getKey: kind === "explicit-empty" ? () => "" : undefined,
+                    getSummary: (events) => `${kind}: ${events.length} events`,
+                },
+            });
+        }
+        trackSpy(
+            vi
+                .spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo")
+                .mockImplementation(api.getMessageRenderInfo.bind(api)),
+        );
+        const events = ["first", "second", "explicit-empty", "first", "second", "explicit-empty"].map((kind) =>
+            mkEvent({
+                event: true,
+                type: `com.example.${kind}`,
+                room: roomId,
+                user: "@user:some.domain",
+                content: {},
+            }),
+        );
+
+        const { container } = renderComponent({ events });
+        const summary = container.querySelector(".mx_GenericEventListSummary_summary")!;
+        expect(summary).toHaveTextContent("first: 2 events");
+        expect(summary).toHaveTextContent("second: 2 events");
+        expect(summary).toHaveTextContent("explicit-empty: 2 events");
+    });
+
     it("looks up custom summaries only while collapsed", function () {
         const events = generateEvents([
             { userId: "@user:some.domain", membership: KnownMembership.Join },
