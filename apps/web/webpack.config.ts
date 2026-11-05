@@ -78,9 +78,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
     //      (called by developers, runs the continuous reload script)
     // process.env.CI_PACKAGE is set when pnpm build is called from scripts/ci_package.sh
     //      (called to build nightly and develop.element.io)
+    // process.env.KEEP_TEST_IDS is set when building for tests, which locate elements by their data-testid
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== "production";
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
+    const removeTestIds = enableMinification && !process.env.KEEP_TEST_IDS;
 
     let VERSION = process.env.VERSION;
     if (!VERSION) {
@@ -312,7 +314,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: true,
-                        plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
+                        plugins: removeTestIds ? ["babel-plugin-jsx-remove-data-test-id"] : [],
                     },
                 },
                 {

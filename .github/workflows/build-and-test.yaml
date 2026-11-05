@@ -95,6 +95,8 @@ jobs:
 
             - name: Build
               env:
+                  # The tests locate elements by their data-testid, which minified builds would otherwise strip
+                  KEEP_TEST_IDS: true
                   VERSION: ${{ steps.layered.outputs.version }}
               working-directory: apps/web
               run: pnpm run build
