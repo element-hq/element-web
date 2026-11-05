@@ -162,18 +162,18 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
             // wait for the bot to see we have finished
             await verifier.evaluate((verifier) => verifier.verify());
 
-            // the bot uploads the signatures asynchronously, so wait for that to happen
-            await page.waitForTimeout(1000);
-
-            // our device should trust the bot device
-            await app.client.evaluate(async (cli, aliceBotCredentials) => {
-                const deviceStatus = await cli
-                    .getCrypto()!
-                    .getDeviceVerificationStatus(aliceBotCredentials!.userId, aliceBotCredentials!.deviceId);
-                if (!deviceStatus!.isVerified()) {
-                    throw new Error("Bot device was not verified after QR code verification");
-                }
-            }, aliceBotClient.credentials);
+            // the bot uploads the signatures asynchronously, so our device should trust the bot device soon
+            await expect
+                .poll(
+                    () =>
+                        app.client.evaluate(async (cli, aliceBotCredentials) => {
+                            const { userId, deviceId } = aliceBotCredentials!;
+                            const deviceStatus = await cli.getCrypto()!.getDeviceVerificationStatus(userId, deviceId);
+                            return deviceStatus?.isVerified() ?? false;
+                        }, aliceBotClient.credentials),
+                    { message: "Bot device was not verified after QR code verification" },
+                )
+                .toBe(true);
 
             // Check that our device is now cross-signed
             await checkDeviceIsCrossSigned(app);

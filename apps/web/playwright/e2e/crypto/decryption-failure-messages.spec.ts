@@ -72,9 +72,13 @@ test.describe("Cryptography", function () {
                 await app.viewRoomByName("Test room");
                 await sendMessageInCurrentRoom(page, "test2 test2");
 
-                // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
-                // the key to be backed up.
-                await page.waitForTimeout(10000);
+                await expect
+                    .poll(
+                        () =>
+                            app.client.evaluate(async (cli) => (await cli.getCrypto()!.getKeyBackupInfo())?.count ?? 0),
+                        { message: "waiting for room keys to be backed up", timeout: 15000 },
+                    )
+                    .toBeGreaterThan(0);
 
                 // Finally, log out again, and back in, skipping verification for now, and see what we see.
                 await logOutOfElement(page);
@@ -84,7 +88,11 @@ test.describe("Cryptography", function () {
                 await app.viewRoomByName("Test room");
 
                 // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
-                await page.waitForTimeout(1000);
+                await expect(
+                    page
+                        .locator(".mx_EventTile")
+                        .filter({ hasText: "You need to verify this device for access to historical messages" }),
+                ).toHaveCount(2);
 
                 // There should be two historical events in the timeline
                 const tiles = await page.locator(".mx_EventTile").all();

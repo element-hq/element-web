@@ -109,14 +109,15 @@ export class ElementAppPage {
         await this.page.getByTestId("room-list").waitFor();
 
         const dismissToasts = async (): Promise<void> => {
-            await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
-            const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", {
-                timeout: 50,
-            });
-            if (keyStorageToastRejected) {
-                await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+            // Check for each toast without waiting for it to appear, as the retry loop below dismisses any which
+            // turn up later.
+            for (const title of ["Verify this device", "Turn on key storage", "Notifications"]) {
+                if (!(await this.page.locator(".mx_Toast_toast", { hasText: title }).first().isVisible())) continue;
+                const rejected = await rejectToastIfExists(this.page, title, { timeout: 50 });
+                if (rejected && title === "Turn on key storage") {
+                    await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+                }
             }
-            await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
         };
 
         await dismissToasts();
