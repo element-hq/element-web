@@ -9,6 +9,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useState } from "react";
 import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import { useToastContext } from "@element-hq/web-shared-components";
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
@@ -56,10 +58,28 @@ interface Props {
 }
 
 /**
+ * How long the recovery confirmation toast stays visible.
+ */
+const BACKUP_SET_UP_TOAST_TIMEOUT_MS = 5000;
+
+/**
  * The encryption settings tab.
  */
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
+
+    const toastRack = useToastContext();
+    // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
+    // and the remover is a no-op once another toast replaces it, so the timer is left to fire on its own.
+    const showRecoveryConfirmationToast = (label: string): void => {
+        const removeToast = toastRack.displayToast(
+            <>
+                <CheckIcon width="20px" height="20px" />
+                {label}
+            </>,
+        );
+        window.setTimeout(removeToast, BACKUP_SET_UP_TOAST_TIMEOUT_MS);
+    };
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
@@ -128,7 +148,14 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 <ChangeRecoveryKey
                     userHasRecoveryKey={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
+                    onFinish={() => {
+                        showRecoveryConfirmationToast(
+                            state === "change_recovery_key"
+                                ? _t("settings|encryption|recovery|key_active_title")
+                                : _t("settings|encryption|recovery|backup_set_up_toast"),
+                        );
+                        setState("main");
+                    }}
                 />
             );
             break;
