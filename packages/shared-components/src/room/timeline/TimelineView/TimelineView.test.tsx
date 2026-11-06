@@ -200,6 +200,62 @@ describe("<TimelineView />", () => {
         await waitFor(() => expect(scroller.scrollTop).toBe(before - 100 + 40));
     });
 
+    describe("reporting what is on screen to the view model", () => {
+        // Like the real view model, which clears the anchor once the view says it is placed.
+        function makeAnchoredVm(items: TimelineItem[], targetKey: string): FakeVm {
+            const fake = makeFakeVm({ items, pendingAnchor: { targetKey, align: "end" } });
+            fake.actions.onAnchorReached.mockImplementation(() =>
+                queueMicrotask(() => fake.update({ pendingAnchor: null })),
+            );
+            return fake;
+        }
+
+        it("reports the rows on screen once the first load is placed, even if nothing scrolls", async () => {
+            // Three rows fit in the viewport, so nothing scrolls after they are placed.
+            const { vm, actions } = makeAnchoredVm(eventItems(3), "evt-2");
+            renderTimeline(vm);
+
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalledWith(0, 2), {
+                timeout: 5000,
+            });
+        });
+
+        it("reports where a jump landed, not where it started", async () => {
+            const { vm, actions, update } = makeAnchoredVm(eventItems(30), "evt-29");
+            renderTimeline(vm);
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalled(), { timeout: 5000 });
+            actions.onVisibleRangeChanged.mockClear();
+
+            // Up to an older row. The view model sends a read receipt for what it is told is on
+            // screen, so the bottom rows we left must not be reported first.
+            update({ pendingAnchor: { targetKey: "evt-5", align: "start" } });
+
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalled());
+            expect(actions.onVisibleRangeChanged.mock.calls[0][0]).toBe(5);
+        });
+
+        it("still reports after a row grows in a room that fits and a new message is placed", async () => {
+            // Three rows fit, so the scroller cannot scroll. A row growing (an image loading)
+            // makes TanStack keep the end pinned with a scroll write the browser clamps to 0
+            // without a scroll event; the placing of a message that then arrives must not be
+            // mistaken for a scroll still waiting to be read back, or nothing is reported.
+            const { vm, actions, update } = makeAnchoredVm(eventItems(3), "evt-2");
+            renderTimeline(vm);
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalledWith(0, 2), {
+                timeout: 5000,
+            });
+            actions.onVisibleRangeChanged.mockClear();
+
+            screen.getByTestId("row-evt-1").style.height = `${ROW_HEIGHT + 24}px`;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            update({ items: eventItems(4), pendingAnchor: { targetKey: "evt-3", align: "end" } });
+
+            await waitFor(() => expect(actions.onVisibleRangeChanged).toHaveBeenCalledWith(0, 3), {
+                timeout: 3000,
+            });
+        });
+    });
+
     describe("when the viewport changes height", () => {
         // The view is height:100%, so re-rendering the wrapper with a new height is how the composer
         // growing, or a banner appearing above the timeline, reaches the scroller.
@@ -216,6 +272,22 @@ describe("<TimelineView />", () => {
         const distanceFromBottom = (el: HTMLElement): number => el.scrollHeight - el.scrollTop - el.clientHeight;
         // Long enough for TanStack's scroll corrections to finish, or for a wrongful scroll to show.
         const settle = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 100));
+
+        it("still reports the rows on screen when the height changes just as the first load is placed", async () => {
+            // Three rows fit, so nothing scrolls afterwards and this report would be the only one.
+            const fake = makeFakeVm({ items: eventItems(3), pendingAnchor: { targetKey: "evt-2", align: "end" } });
+            const { resize } = renderResizable(fake.vm, VIEWPORT_HEIGHT);
+            // The height changes in the same tick as the anchor being cleared, before TanStack's
+            // ResizeObserver has seen it, so its figures disagree with the scroller at that moment.
+            fake.actions.onAnchorReached.mockImplementation(() => {
+                resize(VIEWPORT_HEIGHT - 60);
+                queueMicrotask(() => fake.update({ pendingAnchor: null }));
+            });
+
+            await waitFor(() => expect(fake.actions.onVisibleRangeChanged).toHaveBeenCalledWith(0, 2), {
+                timeout: 5000,
+            });
+        });
 
         it("keeps a reader who was at the bottom at the bottom when the viewport shrinks", async () => {
             const { vm, actions } = makeFakeVm({ items: eventItems(30) });
