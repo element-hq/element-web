@@ -901,6 +901,19 @@ describe("RoomTimelineViewModel", () => {
 
             expect(vi.mocked(client.sendReadReceipt).mock.calls.length).toBe(callsAfterBottom);
         });
+
+        it("sends a receipt still waiting when the room is left", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            // Left straight away, before the receipt's timer runs out.
+            vm.dispose();
+
+            expect(client.sendReadReceipt).toHaveBeenCalledTimes(1);
+            expect(vi.mocked(client.sendReadReceipt).mock.calls[0][0]?.getId()).toBe("$b");
+        });
     });
 
     describe("dispose", () => {

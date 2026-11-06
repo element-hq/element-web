@@ -1298,8 +1298,11 @@ export class RoomTimelineViewModel
     }
 
     /**
-     * Tear-down: save scroll position and advance the FullyRead marker.
+     * Tear-down: send any read receipt still waiting, save scroll position and advance the
+     * FullyRead marker.
      *
+     * - Sends a read receipt still waiting on its timer, as when the room is left within
+     *   half a second of opening it. Dropping it would leave the room unread.
      * - Saves the current scroll position to localStorage so the next visit
      *   resumes here. Clears the saved position only when the user is at the
      *   visual bottom (so the next visit starts fresh at the live end).
@@ -1313,6 +1316,7 @@ export class RoomTimelineViewModel
         if (this.readReceiptDebounceTimer !== null) {
             clearTimeout(this.readReceiptDebounceTimer);
             this.readReceiptDebounceTimer = null;
+            this.sendAutoReadReceipt();
         }
         if (this.decryptDebounceTimer !== null) {
             clearTimeout(this.decryptDebounceTimer);
