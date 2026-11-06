@@ -74,7 +74,7 @@ exports[`<ChangeRecoveryKeyDialog /> > shows the confirmation screen when the ke
       class="mx_Dialog_header"
     />
     <div
-      class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+      class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
     >
       <div
         class="mx_EncryptionCard_header"

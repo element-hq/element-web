@@ -6,31 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-/* ChangeRecoveryKeyDialog hosts the same dialog-based recovery key flow and shares its styling. */
-.mx_LogoutDialog,
-.mx_ChangeRecoveryKeyDialog {
+.mx_LogoutDialog {
     width: 26rem;
-
-    .mx_EncryptionCard {
-        /* The dialog-based recovery key flow preserves the card's gap, but emphasised content sets its own. */
-        &:has(> .mx_EncryptionCard_emphasisedContent) {
-            gap: 0;
-        }
-        h2 {
-            text-align: center;
-            color: var(--cpd-color-text-primary);
-        }
-        .mx_EncryptionCard_emphasisedContent {
-            text-align: center;
-            margin-top: var(--cpd-space-2x);
-            margin-bottom: var(--cpd-space-12x);
-            p {
-                margin: 0;
-            }
-            /* The design shows the settings breadcrumb on its own line */
-            strong {
-                display: block;
-            }
-        }
-    }
 }
