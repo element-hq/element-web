@@ -102,4 +102,16 @@ describe("<SecurityUserSettingsTab />", () => {
 
         expect(screen.queryByRole("heading", { name: "Privacy" })).toBeNull();
     });
+
+    it("does not render identity server settings if the identity server feature is disabled", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((key: any): any => {
+            if (key === UIFeature.ThirdPartyID) return true;
+            if (key === UIFeature.IdentityServer) return false;
+        });
+
+        render(getComponent());
+
+        expect(screen.queryByTestId("discoverySection")).toBeInTheDocument();
+        expect(screen.queryByText("Identity server")).toBeNull();
+    });
 });
