@@ -35,7 +35,7 @@
     --event-tile-bubble-margin-inline-start: 49px;
     --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
-    --event-tile-bubble-self-background: var(--cpd-color-green-300);
+    --event-tile-bubble-self-background: var(--cpd-color-purple-300);
     --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
 
     /* Shared preview, action-bar, bubble, and interaction values. */

@@ -1,0 +1,52 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * Uses the violet of the app icon as the accent colour instead of Compound's green.
+ * Each green shade maps to the purple shade of the same step, so contrast stays as designed in every theme.
+ * Success colours (verified, diff additions, …) stay green on purpose: there green means "good", not "brand".
+ *
+ * Imported into Compound's `custom` layer, which sits above its semantic tokens but below custom themes.
+ * No leading underscore, so that rethemendex.sh does not also pull it into the app-web layer.
+ */
+:root,
+[class*="cpd-theme-"] {
+    --cpd-color-text-action-accent: var(--cpd-color-purple-900);
+    --cpd-color-text-badge-accent: var(--cpd-color-purple-1100);
+    --cpd-color-bg-accent-rest: var(--cpd-color-purple-900);
+    --cpd-color-bg-accent-hovered: var(--cpd-color-purple-1000);
+    --cpd-color-bg-accent-pressed: var(--cpd-color-purple-1100);
+    --cpd-color-bg-accent-selected: var(--cpd-color-alpha-purple-300);
+    --cpd-color-bg-accent-subtle: var(--cpd-color-purple-200);
+    --cpd-color-bg-badge-accent: var(--cpd-color-purple-400);
+    --cpd-color-border-accent-subtle: var(--cpd-color-purple-700);
+    --cpd-color-border-accent-primary: var(--cpd-color-purple-900);
+    --cpd-color-icon-accent-tertiary: var(--cpd-color-purple-800);
+    --cpd-color-icon-accent-primary: var(--cpd-color-purple-900);
+    --cpd-color-gradient-subtle-stop1: var(--cpd-color-alpha-purple-500);
+    --cpd-color-gradient-subtle-stop2: var(--cpd-color-alpha-purple-400);
+    --cpd-color-gradient-subtle-stop3: var(--cpd-color-alpha-purple-300);
+    --cpd-color-gradient-subtle-stop4: var(--cpd-color-alpha-purple-200);
+    --cpd-color-gradient-subtle-stop5: var(--cpd-color-alpha-purple-100);
+}
+
+/* The action gradient runs in opposite directions in light and dark themes */
+.cpd-theme-light,
+.cpd-theme-light-hc {
+    --cpd-color-gradient-action-stop1: var(--cpd-color-purple-500);
+    --cpd-color-gradient-action-stop2: var(--cpd-color-purple-700);
+    --cpd-color-gradient-action-stop3: var(--cpd-color-purple-900);
+    --cpd-color-gradient-action-stop4: var(--cpd-color-purple-1100);
+}
+
+.cpd-theme-dark,
+.cpd-theme-dark-hc {
+    --cpd-color-gradient-action-stop1: var(--cpd-color-purple-1100);
+    --cpd-color-gradient-action-stop2: var(--cpd-color-purple-900);
+    --cpd-color-gradient-action-stop3: var(--cpd-color-purple-700);
+    --cpd-color-gradient-action-stop4: var(--cpd-color-purple-500);
+}

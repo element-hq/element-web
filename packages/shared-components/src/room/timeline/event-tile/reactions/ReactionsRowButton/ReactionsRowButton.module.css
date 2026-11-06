@@ -19,8 +19,8 @@
 }
 
 .reactionsRowButtonSelected {
-    background-color: var(--cpd-color-green-300);
-    border-color: var(--cpd-color-green-800);
+    background-color: var(--cpd-color-purple-300);
+    border-color: var(--cpd-color-purple-800);
 }
 
 .reactionsRowButtonDisabled {
