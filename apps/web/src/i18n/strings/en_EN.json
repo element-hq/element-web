@@ -2035,8 +2035,6 @@
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
         "header": {
-            "join_video_call": "Join video call",
-            "join_voice_call": "Join voice call",
             "n_people_asking_to_join": {
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
@@ -4046,10 +4044,8 @@
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
         "video_call_incoming": "Incoming video call",
-        "video_call_using": "Video call using:",
         "voice_call": "Voice call",
         "voice_call_incoming": "Incoming voice call",
-        "voice_call_using": "Voice call using:",
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",

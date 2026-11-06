@@ -7,10 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useContext, useState } from "react";
-import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
+import React, { type JSX, useContext } from "react";
+import { Text, IconButton, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
-import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import PopInIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-in";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -22,14 +21,13 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { Flex, Box, StatusTextView } from "@element-hq/web-shared-components";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler";
-import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall";
+import { useRoomCall } from "../../../../hooks/room/useRoomCall";
 import { useDocumentPip } from "../../../../hooks/room/useDocumentPip";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
@@ -65,19 +63,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     const members = useRoomMembers(room, 2500);
     const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
 
-    const {
-        voiceCallDisabledReason,
-        voiceCallClick,
-        videoCallDisabledReason,
-        videoCallClick,
-        toggleCallMaximized: toggleCall,
-        isViewingCall,
-        isConnectedToCall,
-        activeCallSessionType,
-        callOptions,
-        showVoiceCallButton,
-        showVideoCallButton,
-    } = useRoomCall(room);
+    const { toggleCallMaximized: toggleCall, isViewingCall, isConnectedToCall } = useRoomCall(room);
     const documentPip = useDocumentPip(room);
     const threadNotifications = useRoomThreadNotifications(room);
     const globalNotificationState = useGlobalNotificationState();
@@ -87,219 +73,34 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
 
     const notificationsEnabled = useFeatureEnabled("feature_notifications");
 
-    const videoClick = useCallback(
-        (ev: React.MouseEvent) => videoCallClick(ev, callOptions[0]),
-        [callOptions, videoCallClick],
-    );
-
-    const voiceClick = useCallback(
-        (ev: React.MouseEvent) => voiceCallClick(ev, callOptions[0]),
-        [callOptions, voiceCallClick],
-    );
-
-    const toggleCallButton = !documentPip.available ? (
-        <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
-            <IconButton onClick={toggleCall}>
-                <VideoCallIcon />
-            </IconButton>
-        </Tooltip>
-    ) : undefined;
-
-    // ...and the browser's, a window of its own that can leave the browser. Only the Element Call React
-    // component can be moved there, so this is only offered when the call is rendered that way.
-    const documentPipButton = documentPip.available ? (
-        <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
-            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
-                {documentPip.active ? <PopInIcon /> : <PopOutIcon />}
-            </IconButton>
-        </Tooltip>
-    ) : undefined;
-
-    const joinCallButton = (
-        <Tooltip
-            description={
-                videoCallDisabledReason ??
-                (activeCallSessionType === CallType.Voice ? _t("voip|voice_call") : _t("voip|video_call"))
-            }
-        >
-            <Button
-                size="md"
-                onClick={activeCallSessionType === CallType.Video ? videoClick : voiceClick}
-                // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
-                Icon={activeCallSessionType === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
-                className="mx_RoomHeader_join_button"
-                disabled={!!videoCallDisabledReason}
-                color="primary"
-                aria-label={
-                    videoCallDisabledReason ??
-                    (activeCallSessionType === CallType.Voice
-                        ? _t("room|header|join_voice_call")
-                        : _t("room|header|join_video_call"))
-                }
-                data-testId="join-call-button"
-            >
-                {_t("action|join")}
-            </Button>
-        </Tooltip>
-    );
-
-    const videoCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
-            <VideoCallIcon />
-        </Tooltip>
-    );
-
-    const voiceCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|voice_call")}>
-            <VoiceCallIcon />
-        </Tooltip>
-    );
-
-    const [videoMenuOpen, setVideoMenuOpen] = useState(false);
-
-    const onVideoOpenChange = useCallback(
-        (newOpen: boolean) => {
-            if (!videoCallDisabledReason) setVideoMenuOpen(newOpen);
-        },
-        [videoCallDisabledReason],
-    );
-
-    const [voiceMenuOpen, setVoiceMenuOpen] = useState(false);
-
-    const onVoiceOpenChange = useCallback(
-        (newOpen: boolean) => {
-            if (!voiceCallDisabledReason) setVoiceMenuOpen(newOpen);
-        },
-        [voiceCallDisabledReason],
-    );
-
-    const startVideoCallButton = (
-        <>
-            {/* Can be either a menu or just a button depending on the number of call options.*/}
-            {callOptions.length > 1 ? (
-                <Menu
-                    open={videoMenuOpen}
-                    onOpenChange={onVideoOpenChange}
-                    title={_t("voip|video_call_using")}
-                    trigger={
-                        <IconButton
-                            disabled={!!videoCallDisabledReason}
-                            aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
-                        >
-                            {videoCallIconWithTooltip}
-                        </IconButton>
-                    }
-                    side="left"
-                    align="start"
-                >
-                    {callOptions.map((option) => {
-                        const { label, children } = getPlatformCallTypeProps(option);
-                        return (
-                            <MenuItem
-                                key={option}
-                                label={label}
-                                aria-label={label}
-                                children={children}
-                                className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => {
-                                    setVideoMenuOpen(false);
-                                    videoCallClick(ev, option);
-                                }}
-                                Icon={VideoCallIcon}
-                                onSelect={() => {} /* Dummy handler since we want the click event.*/}
-                            />
-                        );
-                    })}
-                </Menu>
-            ) : (
-                <IconButton
-                    disabled={!!videoCallDisabledReason}
-                    aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
-                    onClick={videoClick}
-                >
-                    {videoCallIconWithTooltip}
-                </IconButton>
-            )}
-        </>
-    );
-    const startVoiceCallButton = (
-        <>
-            {/* Can be either a menu or just a button depending on the number of call options.*/}
-            {callOptions.length > 1 ? (
-                <Menu
-                    open={voiceMenuOpen}
-                    onOpenChange={onVoiceOpenChange}
-                    title={_t("voip|voice_call_using")}
-                    trigger={
-                        <IconButton
-                            disabled={!!voiceCallDisabledReason}
-                            aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
-                        >
-                            {voiceCallIconWithTooltip}
-                        </IconButton>
-                    }
-                    side="left"
-                    align="start"
-                >
-                    {callOptions.map((option) => {
-                        const { label, children } = getPlatformCallTypeProps(option);
-                        return (
-                            <MenuItem
-                                key={option}
-                                label={label}
-                                aria-label={label}
-                                children={children}
-                                className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => {
-                                    setVoiceMenuOpen(false);
-                                    voiceCallClick(ev, option);
-                                }}
-                                Icon={VoiceCallIcon}
-                                onSelect={() => {} /* Dummy handler since we want the click event.*/}
-                            />
-                        );
-                    })}
-                </Menu>
-            ) : (
-                <IconButton
-                    disabled={!!voiceCallDisabledReason}
-                    aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
-                    onClick={voiceClick}
-                >
-                    {voiceCallIconWithTooltip}
-                </IconButton>
-            )}
-        </>
-    );
-
-    const closeLobbyButton = (
-        <Tooltip label={_t("voip|close_lobby")}>
-            <IconButton onClick={toggleCall}>
-                <CloseCallIcon />
-            </IconButton>
-        </Tooltip>
-    );
-    let videoCallButton: JSX.Element | undefined = startVideoCallButton;
-    let voiceCallButton: JSX.Element | undefined = startVoiceCallButton;
-    let pipButton: JSX.Element | undefined;
+    // There are no buttons to start or join a call. A call joined elsewhere (from the timeline or an incoming
+    // call toast) still gets the controls to take it out of the room view or close its lobby.
+    let callControlButton: JSX.Element | undefined;
     if (isConnectedToCall) {
-        // In a call there is nothing to start: the two buttons are the two ways of taking the call out of
-        // the room view
-        videoCallButton = toggleCallButton;
-        voiceCallButton = undefined;
-        pipButton = documentPipButton;
+        // Element Web's own PiP, or the browser's: a window of its own that can leave the browser. Only the
+        // Element Call React component can be moved there, so that is only offered when the call is rendered
+        // that way.
+        callControlButton = documentPip.available ? (
+            <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
+                <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+                    {documentPip.active ? <PopInIcon /> : <PopOutIcon />}
+                </IconButton>
+            </Tooltip>
+        ) : (
+            <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
+                <IconButton onClick={toggleCall}>
+                    <VideoCallIcon />
+                </IconButton>
+            </Tooltip>
+        );
     } else if (isViewingCall) {
-        videoCallButton = closeLobbyButton;
-        voiceCallButton = undefined;
-    }
-
-    if (!showVideoCallButton) {
-        videoCallButton = undefined;
-        pipButton = undefined;
-    }
-
-    if (!showVoiceCallButton) {
-        voiceCallButton = undefined;
+        callControlButton = (
+            <Tooltip label={_t("voip|close_lobby")}>
+                <IconButton onClick={toggleCall}>
+                    <CloseCallIcon />
+                </IconButton>
+            </Tooltip>
+        );
     }
 
     const roomContext = useScopedRoomContext("mainSplitContentType");
@@ -314,15 +115,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
 
             {isViewingCall && <CallGuestLinkButton room={room} />}
 
-            {activeCallSessionType && !isConnectedToCall && !isViewingCall ? (
-                joinCallButton
-            ) : (
-                <>
-                    {!isVideoRoom && pipButton}
-                    {!isVideoRoom && videoCallButton}
-                    {!isVideoRoom && voiceCallButton}
-                </>
-            )}
+            {!isVideoRoom && callControlButton}
 
             {showChatButton && <VideoRoomChatButton room={room} />}
 

@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 
 import React from "react";
-import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import {
     EventType,
     JoinRule,
@@ -28,10 +28,8 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import {
     act,
-    getAllByLabelText,
     getByLabelText,
     getByText,
-    queryByLabelText,
     render,
     type RenderOptions,
     screen,
@@ -54,13 +52,9 @@ import { CallStore } from "../../../../stores/CallStore";
 import { type Call, ConnectionState, ElementCall } from "../../../../models/Call";
 import { DocumentPipStore } from "../../../../stores/DocumentPipStore";
 import * as ShieldUtils from "../../../../utils/ShieldUtils";
-import { WidgetLayoutStore } from "../../../../stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
-import WidgetStore, { type IApp } from "../../../../stores/WidgetStore";
-import { UIFeature } from "../../../../settings/UIFeature";
 import { SettingLevel } from "../../../../settings/SettingLevel";
-import { ElementCallMemberEventType } from "../../../../call-types";
 import { SDKContext } from "../../../../contexts/SDKContext";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass.ts";
 
@@ -233,185 +227,13 @@ describe("RoomHeader", () => {
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.NotificationPanel });
     });
 
-    it("should show both call buttons in rooms smaller than 3 members", async () => {
-        mockRoomMembers(room, 2);
+    it.each([2, 3, 10])("does not offer to start a call in a room with %i members", (count) => {
+        mockRoomMembers(room, count);
+        vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
         render(<RoomHeader room={room} />, getWrapper());
 
-        const voiceButton = screen.getByRole("button", { name: "Voice call" });
-        const videoButton = screen.getByRole("button", { name: "Video call" });
-        expect(videoButton).toBeInTheDocument();
-        expect(voiceButton).toBeInTheDocument();
-    });
-
-    it("should not show voice call button in managed hybrid environments", async () => {
-        mockRoomMembers(room, 2);
-        vi.spyOn(SdkConfig, "get").mockReturnValue({ widget_build_url: "https://widget.build.url" });
-        render(<RoomHeader room={room} />, getWrapper());
-
-        const videoButton = screen.getByRole("button", { name: "Video call" });
-        expect(videoButton).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
-    });
-
-    it("should not show voice call button in rooms larger than 2 members", async () => {
-        mockRoomMembers(room, 3);
-        render(<RoomHeader room={room} />, getWrapper());
-
-        const videoButton = screen.getByRole("button", { name: "Video call" });
-        expect(videoButton).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
-    });
-
-    describe("UIFeature.Voip disabled", () => {
-        beforeEach(() => {
-            SdkConfig.put({
-                setting_defaults: {
-                    [UIFeature.Voip]: false,
-                },
-            });
-        });
-
-        afterEach(() => {
-            SdkConfig.reset();
-            vi.restoreAllMocks();
-        });
-
-        it("should not show call buttons in rooms smaller than 3 members", async () => {
-            mockRoomMembers(room, 2);
-            render(<RoomHeader room={room} />, getWrapper());
-
-            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
-            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
-        });
-
-        it("should not show call button in rooms larger than 2 members", async () => {
-            mockRoomMembers(room, 3);
-            render(<RoomHeader room={room} />, getWrapper());
-
-            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
-            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
-        });
-    });
-
-    describe("UIFeature.Widgets enabled (default)", () => {
-        beforeEach(() => {
-            SdkConfig.put({
-                setting_defaults: {
-                    [UIFeature.Widgets]: true,
-                },
-            });
-        });
-
-        afterEach(() => {
-            SdkConfig.reset();
-        });
-
-        it("should show call buttons in a room with 2 members", () => {
-            mockRoomMembers(room, 2);
-            render(<RoomHeader room={room} />, getWrapper());
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).toBeInTheDocument();
-        });
-
-        it("should show call buttons in a room with more than 2 members", () => {
-            mockRoomMembers(room, 3);
-            render(<RoomHeader room={room} />, getWrapper());
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).toBeInTheDocument();
-        });
-    });
-
-    describe("UIFeature.Widgets disabled", () => {
-        beforeEach(() => {
-            SdkConfig.put({
-                setting_defaults: {
-                    [UIFeature.Widgets]: false,
-                },
-            });
-        });
-
-        afterEach(() => {
-            SdkConfig.reset();
-        });
-
-        it("should show call buttons in a room with 2 members", () => {
-            mockRoomMembers(room, 2);
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).toBeInTheDocument();
-        });
-
-        it("should not show call buttons in a room with more than 2 members", () => {
-            mockRoomMembers(room, 3);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryByLabelText(container, "Video call")).not.toBeInTheDocument();
-        });
-    });
-
-    describe("groups call disabled", () => {
-        beforeEach(() => {
-            SdkConfig.put({
-                setting_defaults: {
-                    [UIFeature.Widgets]: true,
-                },
-            });
-        });
-
-        afterEach(() => {
-            SdkConfig.reset();
-        });
-
-        it("you can call when you're two in the room", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 2);
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const voiceButton = screen.getByRole("button", { name: "Voice call" });
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
-            expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
-
-            const placeCallSpy = vi.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
-
-            await user.click(voiceButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
-
-            await user.click(videoButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
-        });
-
-        it("you can't call if there's already a call", () => {
-            mockRoomMembers(room, 2);
-            vi.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
-                // The JS-SDK does not export the class `MatrixCall` only the type
-                {} as MatrixCall,
-            );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "Ongoing call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
-        it("can call in large rooms if able to edit widgets", () => {
-            mockRoomMembers(room, 10);
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const videoCallButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoCallButton).not.toHaveAttribute("aria-disabled", "true");
-        });
-
-        it("disable calls in large rooms by default", () => {
-            mockRoomMembers(room, 10);
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
-            render(<RoomHeader room={room} />, getWrapper());
-            expect(
-                getByLabelText(document.body, "You do not have permission to start video calls", {
-                    selector: "button",
-                }),
-            ).toHaveAttribute("aria-disabled", "true");
-        });
     });
 
     describe("group call enabled", () => {
@@ -428,30 +250,6 @@ describe("RoomHeader", () => {
         afterEach(() => {
             SdkConfig.reset();
             vi.restoreAllMocks();
-        });
-
-        it("renders only the video call element", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 3);
-            SdkConfig.add({
-                element_call: {
-                    use_exclusively: true,
-                },
-            });
-            // allow element calls
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
-
-            render(<RoomHeader room={room} />, getWrapper());
-
-            expect(screen.queryByTitle("Voice call")).toBeNull();
-
-            const videoCallButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoCallButton).not.toHaveAttribute("aria-disabled", "true");
-
-            const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
-
-            await user.click(videoCallButton);
-            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
         });
 
         describe("while connected to a call", () => {
@@ -544,198 +342,15 @@ describe("RoomHeader", () => {
             });
         });
 
-        it("can't call if there's an ongoing (pinned) call", () => {
-            SdkConfig.add({
-                element_call: {
-                    use_exclusively: true,
-                },
-            });
-            // allow element calls
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
-            vi.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
-            const widget = { type: "m.jitsi" } as IApp;
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue({
-                widget,
-                on: () => {},
-                off: () => {},
-            } as unknown as Call);
-            vi.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
-            render(<RoomHeader room={room} />, getWrapper());
-            // Voice and video
-            for (const button of screen.getAllByRole("button", { name: "Ongoing call" })) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
-        it("clicking on ongoing (unpinned) call re-pins it", async () => {
-            const user = userEvent.setup();
+        it.each([CallType.Video, CallType.Voice])("does not offer to join an ongoing %s call", (callType) => {
             mockRoomMembers(room, 3);
-            SdkConfig.add({
-                element_call: { disable: true }, // This test is about Jitsi widget re-pinning, not Element Call
-                setting_defaults: {
-                    [UIFeature.Widgets]: true,
-                },
-            });
-            // allow calls
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
-            vi.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
-            const spy = vi.spyOn(WidgetLayoutStore.instance, "moveToContainer");
-
-            const widget = { type: "m.jitsi" } as IApp;
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue({
-                widget,
-                on: () => {},
-                off: () => {},
-            } as unknown as Call);
-            vi.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
-
+            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, callType, true));
             render(<RoomHeader room={room} />, getWrapper());
 
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
-            await user.click(videoButton);
-            expect(spy).toHaveBeenCalledWith(room, widget, "top");
+            expect(screen.queryByRole("button", { name: /^Join/ })).not.toBeInTheDocument();
+            expect(screen.queryByTestId("join-call-button")).not.toBeInTheDocument();
         });
 
-        it("disables calling if there's a jitsi call", () => {
-            mockRoomMembers(room, 2);
-            vi.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
-                // The JS-SDK does not export the class `MatrixCall` only the type
-                {} as MatrixCall,
-            );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "Ongoing call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
-        it("calls using legacy or jitsi", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 2);
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === "im.vector.modular.widgets") return true;
-                return false;
-            });
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const voiceButton = screen.getByRole("button", { name: "Voice call" });
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
-            expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
-
-            const placeCallSpy = vi.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
-            await user.click(voiceButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
-
-            await user.click(videoButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
-        });
-
-        it("calls using legacy or jitsi for large rooms", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 3);
-
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === "im.vector.modular.widgets") return true;
-                return false;
-            });
-
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
-
-            const placeCallSpy = vi.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
-            await user.click(videoButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
-        });
-
-        it("calls using element call for large rooms", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 3);
-
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === ElementCallMemberEventType.name) return true;
-                return false;
-            });
-
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const videoButton = screen.getByRole("button", { name: "Video call" });
-            expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
-
-            const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
-            await user.click(videoButton);
-            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
-        });
-
-        it("buttons are disabled if there is an ongoing call", async () => {
-            mockRoomMembers(room, 3);
-
-            vi.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
-                new Set([{ roomId: "some_other_room" } as Call]),
-            );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-
-            const [videoButton] = getAllByLabelText(container, "Ongoing call");
-
-            expect(videoButton).toHaveAttribute("aria-disabled", "true");
-        });
-
-        it("join video call button is shown if there is an ongoing call", async () => {
-            mockRoomMembers(room, 3);
-            // Mock CallStore to return a call with 3 participants
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
-            render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join video call");
-            expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
-        });
-
-        it("join voice call button is shown if there is an ongoing call", async () => {
-            mockRoomMembers(room, 3);
-            // Mock CallStore to return a call with 3 participants
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice));
-            render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join voice call");
-            expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
-        });
-
-        it("clicking the join button of an ongoing video call joins as a video call", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 3);
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video, true));
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
-            await user.click(getByLabelText(document.body, "Join video call"));
-
-            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: false }));
-        });
-
-        it("clicking the join button of an ongoing voice call joins as a voice call", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 3);
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice, true));
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
-            await user.click(getByLabelText(document.body, "Join voice call"));
-
-            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: true }));
-        });
-
-        it("join button is disabled if there is an other ongoing call", async () => {
-            mockRoomMembers(room, 3);
-            // Mock CallStore to return a call with 3 participants
-            vi.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
-            vi.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
-                new Set([{ roomId: "some_other_room" } as Call]),
-            );
-            render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Ongoing call");
-
-            expect(joinButton).toHaveAttribute("aria-disabled", "true");
-        });
 
         it("close lobby button is shown", async () => {
             mockRoomMembers(room, 3);
@@ -770,40 +385,6 @@ describe("RoomHeader", () => {
             expect(getByLabelText(document.body, _t("voip|get_call_link"))).toBeInTheDocument();
         });
 
-        it("gives the option of element call or legacy calling for video", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 2);
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === ElementCallMemberEventType.name) return true;
-                return false;
-            });
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const button = screen.getByRole("button", { name: "Video call" });
-            expect(button).not.toHaveAttribute("aria-disabled", "true");
-            await user.click(button);
-            const elementCallButton = screen.getByRole("menuitem", { name: "Element Call" });
-            const legacyCallButton = screen.getByRole("menuitem", { name: "Legacy Call" });
-            expect(elementCallButton).toBeInTheDocument();
-            expect(legacyCallButton).toBeInTheDocument();
-        });
-        it("gives the option of element call or legacy calling for voice in DM rooms", async () => {
-            const user = userEvent.setup();
-            mockRoomMembers(room, 2);
-            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === ElementCallMemberEventType.name) return true;
-                return false;
-            });
-            render(<RoomHeader room={room} />, getWrapper());
-
-            const button = screen.getByRole("button", { name: "Voice call" });
-            expect(button).not.toHaveAttribute("aria-disabled", "true");
-            await user.click(button);
-            const elementCallButton = screen.getByRole("menuitem", { name: "Element Call" });
-            const legacyCallButton = screen.getByRole("menuitem", { name: "Legacy Call" });
-            expect(elementCallButton).toBeInTheDocument();
-            expect(legacyCallButton).toBeInTheDocument();
-        });
     });
 
     describe("public room", () => {

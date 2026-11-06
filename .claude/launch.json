@@ -1,0 +1,11 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "element-web",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": ["--dir", "apps/web", "start"],
+            "port": 8080
+        }
+    ]
+}
