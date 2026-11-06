@@ -421,6 +421,7 @@ export interface RichVariables {
 export interface Room {
     getLastActiveTimestamp: () => number;
     id: string;
+    isEncrypted: Watchable<boolean | undefined>;
     name: Watchable<string>;
 }
 
