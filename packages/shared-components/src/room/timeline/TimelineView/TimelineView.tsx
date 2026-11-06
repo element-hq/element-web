@@ -149,6 +149,8 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // hold the last values we sent and repeats are skipped.
     const lastVisibleRangeRef = useRef<{ start: number; end: number } | null>(null);
     const lastAtBottomRef = useRef<boolean | null>(null);
+    // Holds the frame that confirms the reader has left the bottom. See `reportVisibleState`.
+    const atBottomRafRef = useRef<number | undefined>(undefined);
     // For the "reached the top/bottom" reports we remember a short description of the
     // situation we last reported, in the form "<number of rows>:<row index>", and clear it
     // whenever we move away from that end. This stops us reporting over and over while
@@ -185,13 +187,41 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             // Are we scrolled to the bottom? Worked out from figures TanStack already holds
             // (how far we have scrolled, the viewport height, the total height) rather than
             // measuring the DOM, which would force the browser to redo layout on every call.
+            // Asking the DOM would not be any fresher either: rows are positioned absolutely,
+            // so the scroller's height is whatever TanStack last wrote to the sizer from these
+            // same figures, not something the browser worked out from the rows.
             const scrollOffset = v.scrollOffset ?? 0;
             const viewportHeight = v.scrollRect?.height ?? 0;
             const totalSize = v.getTotalSize();
             const atBottom = viewportHeight > 0 && scrollOffset + viewportHeight >= totalSize - AT_BOTTOM_THRESHOLD_PX;
-            if (atBottom !== lastAtBottomRef.current) {
-                lastAtBottomRef.current = atBottom;
-                vm.onAtBottomStateChange(atBottom);
+
+            // A resize reaches us in several passes. The viewport is measured in one and the
+            // rows sized against it in another, so the figures above disagree in between and
+            // read as the reader having scrolled up when they never moved. Reporting that
+            // flashes the jump-to-bottom button whenever the window edge is dragged, and there
+            // is no consistent set of figures to read instead, so leaving the bottom is only
+            // reported once it has held for a frame.
+            if (atBottom) {
+                // We are at the bottom, so a leave waiting on its frame was one of those misreads.
+                if (atBottomRafRef.current !== undefined) {
+                    cancelAnimationFrame(atBottomRafRef.current);
+                    atBottomRafRef.current = undefined;
+                }
+                // Arriving at the bottom cannot be a misread, so we don't need to wait. We skip
+                // if the state is already reported.
+                if (lastAtBottomRef.current !== true) {
+                    lastAtBottomRef.current = true;
+                    vm.onAtBottomStateChange(true);
+                }
+            } else if (lastAtBottomRef.current !== false && atBottomRafRef.current === undefined) {
+                // We have left the bottom, as far as this pass can tell, so hold the report for a
+                // frame. If we reach the bottom again before that frame runs, we cancel it and
+                // nothing is reported. The two guards keep one frame in flight, not one per pass.
+                atBottomRafRef.current = requestAnimationFrame(() => {
+                    atBottomRafRef.current = undefined;
+                    lastAtBottomRef.current = false;
+                    vm.onAtBottomStateChange(false);
+                });
             }
 
             // Have we reached either end of the loaded messages? True once the very first or
@@ -281,6 +311,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     useEffect(() => {
         return () => {
             if (coldRafRef.current !== undefined) cancelAnimationFrame(coldRafRef.current);
+            if (atBottomRafRef.current !== undefined) cancelAnimationFrame(atBottomRafRef.current);
         };
     }, []);
     useLayoutEffect(() => {
