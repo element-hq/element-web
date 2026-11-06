@@ -376,6 +376,8 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     return (
         <RovingTabIndexProvider key={rovingProviderKey} handleLeftRight handleHomeEnd handleLoop>
             {({ onKeyDownHandler }) => (
+                // False positive lint hit - the children are focusable widgets
+                // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
                 <Flex
                     display="inline-flex"
                     direction="row"
