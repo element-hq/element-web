@@ -96,7 +96,7 @@ class Helpers {
      * @param title - The title of the dialog
      * @param confirmButtonLabel - The label of the confirm button
      * @param screenshot
-     * @param confirmationToast - The text of the confirmation toast shown after confirming
+     * @param confirmationToast - The expected text of the confirmation toast shown after confirming
      */
     async confirmRecoveryKey(
         title: string,
