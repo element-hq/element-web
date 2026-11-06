@@ -95,6 +95,8 @@ allowBuilds:
     protobufjs: false
     # Builds optional crypto binding, which we do not need
     ssh2: false
+    # Picks the FFI binary for @github/copilot-sdk's experimental in-process transport, which we do not use
+    koffi: false
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true

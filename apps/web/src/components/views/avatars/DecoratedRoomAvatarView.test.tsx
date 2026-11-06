@@ -83,6 +83,17 @@ describe("<DecoratedRoomAvatarView />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should render an agent decoration", () => {
+        vi.mocked(useRoomAvatarViewModel).mockReturnValue({
+            ...defaultValue,
+            badgeDecoration: AvatarBadgeDecoration.Agent,
+        });
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
+
+        expect(screen.getByLabelText("The agent replies in this chat")).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     it.each([
         { presence: Presence.Online, label: "Online" },
         { presence: Presence.Offline, label: "Offline" },

@@ -57,4 +57,6 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     areSectionsEnabled: true,
     canChangeSection: true,
     canReorder: false,
+    canUseAgent: false,
+    isAgent: false,
 };

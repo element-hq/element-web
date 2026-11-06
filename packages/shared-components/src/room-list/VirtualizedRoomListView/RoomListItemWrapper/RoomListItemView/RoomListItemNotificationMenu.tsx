@@ -6,12 +6,13 @@
  */
 
 import React, { type JSX } from "react";
-import { MenuItem, SubMenu } from "@vector-im/compound-web";
+import { MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
 import {
     NotificationsSolidIcon,
     NotificationsOffSolidIcon,
     CheckIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import AiIcon from "@vector-im/compound-design-tokens/assets/web/icons/ai";
 
 import { _t } from "../../../../core/i18n/i18n";
 import { RoomNotifState } from "./RoomNotifs";
@@ -33,6 +34,7 @@ export interface RoomListItemNotificationMenuProps {
 
 /**
  * The notification settings of a room list item, Normal or Silent, as a submenu of the more options menu.
+ * For a direct message it also holds the switch that lets the agent reply in it.
  * The bell on its entry is crossed out when the room is muted.
  */
 export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMenuProps): JSX.Element {
@@ -41,7 +43,7 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
     const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
 
     // Normal follows the account-wide notification settings, Silent mutes the room completely (mentions and
-    // keywords included). A room set to another state elsewhere has neither option checked.
+    // keywords included). A room set to another state elsewhere has no option checked.
     const options: { state: RoomNotifState; label: string }[] = [
         { state: RoomNotifState.AllMessages, label: _t("room_list|notification_options_normal") },
         { state: RoomNotifState.Mute, label: _t("room_list|notification_options_silent") },
@@ -69,6 +71,19 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
                     {snapshot.roomNotifState === state && checkComponent}
                 </MenuItem>
             ))}
+            {/* Independent of the notification options, so that the agent can also answer a silent room */}
+            {snapshot.canUseAgent && (
+                <>
+                    <Separator />
+                    <ToggleMenuItem
+                        Icon={AiIcon}
+                        checked={snapshot.isAgent}
+                        label={_t("room_list|notification_options_agent")}
+                        onSelect={vm.onToggleAgent}
+                        onClick={(evt) => evt.stopPropagation()}
+                    />
+                </>
+            )}
         </SubMenu>
     );
 }

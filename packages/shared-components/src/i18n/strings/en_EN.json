@@ -240,6 +240,7 @@
             "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
+        "notification_options_agent": "Agent",
         "notification_options_normal": "Normal",
         "notification_options_silent": "Silent",
         "open_space_menu": "Open space menu",
@@ -266,6 +267,30 @@
             "space_settings": "Space settings"
         },
         "unread_messages": "Unread messages"
+    },
+    "settings": {
+        "agent": {
+            "connect": "Connect",
+            "connected_claude": "Connected to Claude",
+            "connected_copilot": "Connected to GitHub Copilot",
+            "credential_claude": "Anthropic API key",
+            "credential_copilot": "GitHub token",
+            "credential_help_claude": "Create an API key at console.anthropic.com. It is checked with Anthropic, then stored encrypted on this computer only.",
+            "credential_help_copilot": "Use a fine-grained personal access token with the \"Copilot Requests\" permission, from an account with a Copilot plan. It is checked with GitHub, then stored encrypted on this computer only.",
+            "description": "The agent replies to direct messages set to Agent in their notification options. Its replies are sent as automated messages. It only runs while Element Desktop is open on this computer.",
+            "disconnect": "Disconnect",
+            "error_invalid_credential": "The key or token was not accepted. Check it and try again.",
+            "error_rate_limited": "The provider is limiting requests, or your plan's allowance is used up. Try again later.",
+            "error_unavailable": "The provider could not be reached. Check your connection and try again.",
+            "error_unknown": "Something went wrong. Try again.",
+            "instructions": "Instructions",
+            "instructions_placeholder": "For example: Answer in a friendly, short way. I'm on holiday until Monday.",
+            "model": "Model",
+            "model_default": "Default model",
+            "provider": "Provider",
+            "provider_claude": "Claude",
+            "provider_copilot": "GitHub Copilot"
+        }
     },
     "status": {
         "set_status": {

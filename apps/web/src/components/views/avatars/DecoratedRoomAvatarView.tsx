@@ -7,6 +7,7 @@
 
 import React, { memo, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import AiIcon from "@vector-im/compound-design-tokens/assets/web/icons/ai";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import VideoIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import ArrowDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-down";
@@ -107,7 +108,17 @@ function getPresenceDecoration(presence: Presence): JSX.Element {
 }
 
 function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presence | null): React.ReactNode {
-    if (decoration === AvatarBadgeDecoration.LowPriority) {
+    if (decoration === AvatarBadgeDecoration.Agent) {
+        return (
+            <AiIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-accent-primary)"
+                aria-label={getDecorationLabel(decoration, presence)}
+            />
+        );
+    } else if (decoration === AvatarBadgeDecoration.LowPriority) {
         return (
             <ArrowDownIcon
                 width="16px"
@@ -148,6 +159,8 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
  */
 function getDecorationLabel(decoration: AvatarBadgeDecoration, presence: Presence | null): string | undefined {
     switch (decoration) {
+        case AvatarBadgeDecoration.Agent:
+            return _t("room|agent_replies");
         case AvatarBadgeDecoration.LowPriority:
             return _t("room|room_is_low_priority");
         case AvatarBadgeDecoration.VideoRoom:

@@ -23,6 +23,7 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
+import AiIcon from "@vector-im/compound-design-tokens/assets/web/icons/ai";
 import { ToastContext, useActiveToast } from "@element-hq/web-shared-components";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
@@ -50,6 +51,8 @@ import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import { AgentUserSettingsTab } from "../settings/tabs/user/AgentUserSettingsTab";
+import PlatformPeg from "../../../PlatformPeg";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -87,6 +90,8 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
             return _t("settings|keyboard|dialog_title", undefined, subs);
         case UserTab.Sidebar:
             return _t("settings|sidebar|dialog_title", undefined, subs);
+        case UserTab.Agent:
+            return _t("settings|agent|dialog_title", undefined, subs);
         case UserTab.Voice:
             return _t("settings|voip|dialog_title", undefined, subs);
         case UserTab.Security:
@@ -196,6 +201,21 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 "UserSettingsSidebar",
             ),
         );
+
+        // Only platforms that can keep the credentials of the AI providers have an agent
+        const agent = PlatformPeg.get()?.agent;
+        if (agent) {
+            tabs.push(
+                new Tab(
+                    UserTab.Agent,
+                    _td("settings|agent|title"),
+                    <AiIcon />,
+                    <AgentUserSettingsTab agent={agent} />,
+                    // The analytics schema has no screen for this tab
+                    undefined,
+                ),
+            );
+        }
 
         if (voipEnabled) {
             tabs.push(

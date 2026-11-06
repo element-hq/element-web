@@ -34,6 +34,7 @@ import SdkConfig from "./SdkConfig";
 import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
 import Favicon from "./favicon.ts";
 import { getVectorConfig } from "./vector/getconfig.ts";
+import type { AgentApi } from "./agent/AgentApi.ts";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -175,6 +176,14 @@ export default abstract class BasePlatform {
      */
     public supportsSpellCheckSettings(): boolean {
         return false;
+    }
+
+    /**
+     * The agent that replies to direct messages in agent mode, or undefined if the platform has none.
+     * Only Element Desktop has one, as it can keep the credentials of the AI providers outside of the web page.
+     */
+    public get agent(): AgentApi | undefined {
+        return undefined;
     }
 
     /**

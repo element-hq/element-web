@@ -12,6 +12,16 @@ import { randomArray } from "./utils.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
+import {
+    connectAgent,
+    disconnectAgent,
+    generateAgentReply,
+    getAgentRooms,
+    getAgentStatus,
+    listAgentModels,
+    setAgentRoom,
+    setAgentSettings,
+} from "./agent.js";
 
 let focusHandlerAttached = false;
 ipcMain.on("loudNotification", function (): void {
@@ -170,6 +180,31 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
         case "callDisplayMediaCallback":
             consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
+            break;
+
+        case "agentGetStatus":
+            ret = getAgentStatus();
+            break;
+        case "agentSetSettings":
+            ret = setAgentSettings(args[0]);
+            break;
+        case "agentConnect":
+            ret = await connectAgent(args[0], args[1]);
+            break;
+        case "agentDisconnect":
+            ret = await disconnectAgent(args[0]);
+            break;
+        case "agentListModels":
+            ret = await listAgentModels(args[0]);
+            break;
+        case "agentGetRooms":
+            ret = getAgentRooms(args[0]);
+            break;
+        case "agentSetRoom":
+            ret = setAgentRoom(args[0], args[1], args[2]);
+            break;
+        case "agentGenerateReply":
+            ret = await generateAgentReply(args[0]);
             break;
 
         case "clearStorage":

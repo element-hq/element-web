@@ -52,6 +52,8 @@
         "sane-postinstall": "electron-builder install-app-deps"
     },
     "dependencies": {
+        "@anthropic-ai/sdk": "^1.5.0",
+        "@github/copilot-sdk": "^1.0.28",
         "@matrix-org/seshat": "^6.0.1",
         "@sentry/electron": "^7.0.0",
         "auto-launch": "^5.0.5",

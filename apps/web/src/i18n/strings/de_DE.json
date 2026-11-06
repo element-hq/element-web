@@ -1943,6 +1943,7 @@
         "3pid_invite_error_public_subtitle": "Du kannst hier dennoch beitreten.",
         "3pid_invite_error_title": "Bei der Einladung ist etwas schiefgelaufen.",
         "3pid_invite_error_title_room": "Bei deiner Einladung zu %(roomName)s ist ein Fehler aufgetreten",
+        "agent_replies": "Der Agent antwortet in diesem Chat",
         "3pid_invite_no_is_subtitle": "Verknüpfe einen Identitäts-Server in den Einstellungen, um die Einladungen direkt in %(brand)s zu erhalten.",
         "banned_by": "Du wurdest von %(memberName)s gesperrt",
         "banned_from_room_by": "Du wurdest von %(memberName)s in %(roomName)s gesperrt",
@@ -2449,6 +2450,10 @@
             "title": "Konto"
         },
         "activityIsUnread": "Jede neue Aktivität als ungelesene Nachricht behandeln",
+        "agent": {
+            "dialog_title": "<strong>Einstellungen:</strong> Agent",
+            "title": "Agent"
+        },
         "all_rooms_home": "Zeige alle Chats auf der Startseite",
         "all_rooms_home_description": "Alle Chats, denen du beigetreten bist, werden auf der Startseite erscheinen.",
         "always_show_message_timestamps": "Nachrichtenzeitstempel immer anzeigen",

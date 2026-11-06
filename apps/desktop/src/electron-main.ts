@@ -50,6 +50,7 @@ import { getIconPath } from "./icon.js";
 import { getArgs } from "./args.js";
 import { configureSpellChecker } from "./spellcheck.js";
 import { type ConfigOptions, loadConfig } from "./config.js";
+import { stopCopilot } from "./agent.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -415,6 +416,8 @@ app.on("activate", () => {
 function beforeQuit(): void {
     global.appQuitting = true;
     global.mainWindow?.webContents.send("before-quit");
+    // The agent's Copilot runtime is a child process, which must not outlive the app
+    void stopCopilot();
 }
 
 app.on("before-quit", beforeQuit);

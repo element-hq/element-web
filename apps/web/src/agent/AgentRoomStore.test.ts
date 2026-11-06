@@ -1,0 +1,108 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
+
+import { AgentRoomStore, AgentRoomStoreEvent } from "./AgentRoomStore";
+import type { AgentApi } from "./AgentApi";
+
+const ALICE = "@alice:example.org";
+
+describe("AgentRoomStore", () => {
+    let agent: Mocked<AgentApi>;
+    let store: AgentRoomStore;
+
+    beforeEach(() => {
+        agent = {
+            getStatus: vi.fn(),
+            setSettings: vi.fn(),
+            connect: vi.fn(),
+            disconnect: vi.fn(),
+            listModels: vi.fn(),
+            getRooms: vi.fn().mockResolvedValue({ ok: true, data: ["!a:example.org"] }),
+            setRoom: vi.fn(async (_userId, roomId, enabled) => ({ ok: true as const, data: enabled ? [roomId] : [] })),
+            generateReply: vi.fn(),
+        };
+        store = new AgentRoomStore();
+    });
+
+    afterEach(() => {
+        store.stop();
+    });
+
+    it("reads the marked rooms of the user from the platform", async () => {
+        const onUpdate = vi.fn();
+        store.on(AgentRoomStoreEvent.Update, onUpdate);
+
+        await store.start(agent, ALICE);
+
+        expect(agent.getRooms).toHaveBeenCalledWith(ALICE);
+        expect(store.isAvailable).toBe(true);
+        expect(store.isAgentRoom("!a:example.org")).toBe(true);
+        expect(store.isAgentRoom("!b:example.org")).toBe(false);
+        expect(onUpdate).toHaveBeenCalled();
+    });
+
+    it("marks nothing on a platform without an agent", async () => {
+        await store.start(undefined, ALICE);
+
+        expect(store.isAvailable).toBe(false);
+        expect(store.isAgentRoom("!a:example.org")).toBe(false);
+    });
+
+    it("marks and unmarks a room, saving it on the platform", async () => {
+        await store.start(agent, ALICE);
+
+        const marking = store.setAgentRoom("!b:example.org", true);
+        // The mark shows before the platform has saved it
+        expect(store.isAgentRoom("!b:example.org")).toBe(true);
+        await marking;
+        expect(agent.setRoom).toHaveBeenCalledWith(ALICE, "!b:example.org", true);
+
+        await store.setAgentRoom("!a:example.org", false);
+        expect(agent.setRoom).toHaveBeenCalledWith(ALICE, "!a:example.org", false);
+        expect(store.isAgentRoom("!a:example.org")).toBe(false);
+    });
+
+    it("undoes a mark the platform can't save", async () => {
+        await store.start(agent, ALICE);
+        agent.setRoom.mockResolvedValue({ ok: false, error: "unavailable" });
+
+        await store.setAgentRoom("!b:example.org", true);
+
+        expect(store.isAgentRoom("!b:example.org")).toBe(false);
+    });
+
+    it("doesn't save a mark that doesn't change anything", async () => {
+        await store.start(agent, ALICE);
+
+        await store.setAgentRoom("!a:example.org", true);
+
+        expect(agent.setRoom).not.toHaveBeenCalled();
+    });
+
+    it("forgets the marks when stopped", async () => {
+        await store.start(agent, ALICE);
+
+        store.stop();
+
+        expect(store.isAvailable).toBe(false);
+        expect(store.isAgentRoom("!a:example.org")).toBe(false);
+    });
+
+    it("ignores marks read for a user that logged out meanwhile", async () => {
+        let finish: (result: { ok: true; data: string[] }) => void = () => {};
+        agent.getRooms.mockReturnValue(new Promise((resolve) => (finish = resolve)));
+        const starting = store.start(agent, ALICE);
+
+        store.stop();
+        finish({ ok: true, data: ["!a:example.org"] });
+        await starting;
+
+        expect(store.isAgentRoom("!a:example.org")).toBe(false);
+    });
+});

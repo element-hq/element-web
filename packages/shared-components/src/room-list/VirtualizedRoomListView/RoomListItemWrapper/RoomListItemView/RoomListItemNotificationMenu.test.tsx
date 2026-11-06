@@ -19,10 +19,13 @@ import { mockedActions as mockCallbacks } from "./mocked-actions";
 
 describe("<RoomListItemNotificationMenu />", () => {
     // Rendered on its own, outside of the more options menu, the submenu shows its entries directly
-    const renderMenu = (roomNotifState: RoomNotifState = RoomNotifState.AllMessages): ReturnType<typeof render> => {
+    const renderMenu = (
+        roomNotifState: RoomNotifState = RoomNotifState.AllMessages,
+        overrides: Partial<RoomListItemViewSnapshot> = {},
+    ): ReturnType<typeof render> => {
         const TestComponent = (): JSX.Element => {
             const vm = useMockedViewModel(
-                { ...defaultSnapshot, showNotificationMenu: true, roomNotifState } as RoomListItemViewSnapshot,
+                { ...defaultSnapshot, showNotificationMenu: true, roomNotifState, ...overrides },
                 mockCallbacks,
             );
             return <RoomListItemNotificationMenu vm={vm} />;
@@ -30,8 +33,16 @@ describe("<RoomListItemNotificationMenu />", () => {
         return render(<TestComponent />);
     };
 
+    /** The labels of the notification options, in the order they are shown */
+    const getOptionLabels = (): (string | null)[] =>
+        screen
+            .getAllByRole("menuitem")
+            .filter((item) => item.hasAttribute("aria-selected"))
+            .map((item) => item.textContent);
+
     beforeEach(() => {
         vi.mocked(mockCallbacks.onSetRoomNotifState).mockClear();
+        vi.mocked(mockCallbacks.onToggleAgent).mockClear();
     });
 
     it("should render the notification options entry", () => {
@@ -47,10 +58,8 @@ describe("<RoomListItemNotificationMenu />", () => {
     });
 
     it("should only offer Normal and Silent", () => {
-        renderMenu();
-
-        const options = screen.getAllByRole("menuitem").filter((item) => item.hasAttribute("aria-selected"));
-        expect(options.map((item) => item.textContent)).toEqual(["Normal", "Silent"]);
+        renderMenu(RoomNotifState.AllMessages, { canUseAgent: true });
+        expect(getOptionLabels()).toEqual(["Normal", "Silent"]);
     });
 
     it.each([
@@ -84,4 +93,29 @@ describe("<RoomListItemNotificationMenu />", () => {
             expect(screen.getByRole("menuitem", { name: "Silent" })).toHaveAttribute("aria-selected", "false");
         },
     );
+
+    describe("agent", () => {
+        it("should not offer the agent where it can't be used", () => {
+            renderMenu(RoomNotifState.AllMessages, { canUseAgent: false });
+            expect(screen.queryByRole("menuitemcheckbox", { name: "Agent" })).not.toBeInTheDocument();
+        });
+
+        it.each([false, true])("should show whether the agent replies: %s", (isAgent) => {
+            renderMenu(RoomNotifState.AllMessages, { canUseAgent: true, isAgent });
+            expect(screen.getByRole("menuitemcheckbox", { name: "Agent" })).toHaveAttribute(
+                "aria-checked",
+                String(isAgent),
+            );
+        });
+
+        it("should toggle the agent, independently of the notification options", async () => {
+            const user = userEvent.setup();
+            renderMenu(RoomNotifState.Mute, { canUseAgent: true });
+
+            await user.click(screen.getByRole("menuitemcheckbox", { name: "Agent" }));
+
+            expect(mockCallbacks.onToggleAgent).toHaveBeenCalled();
+            expect(mockCallbacks.onSetRoomNotifState).not.toHaveBeenCalled();
+        });
+    });
 });

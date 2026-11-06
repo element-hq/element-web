@@ -220,6 +220,7 @@
             "remove_from_section": "Aus Abschnitt entfernen"
         },
         "notification_options": "Benachrichtigungsoptionen",
+        "notification_options_agent": "Agent",
         "notification_options_normal": "Normal",
         "notification_options_silent": "Silent",
         "open_space_menu": "Menü für Spaces öffnen",
@@ -252,6 +253,30 @@
             "space_settings": "Space Einstellungen"
         },
         "unread_messages": "Ungelesene Nachrichten"
+    },
+    "settings": {
+        "agent": {
+            "connect": "Verbinden",
+            "connected_claude": "Mit Claude verbunden",
+            "connected_copilot": "Mit GitHub Copilot verbunden",
+            "credential_claude": "Anthropic-API-Schlüssel",
+            "credential_copilot": "GitHub-Token",
+            "credential_help_claude": "Erstelle einen API-Schlüssel unter console.anthropic.com. Er wird bei Anthropic geprüft und danach nur auf diesem Computer verschlüsselt gespeichert.",
+            "credential_help_copilot": "Verwende einen Fine-grained Personal Access Token mit der Berechtigung „Copilot Requests“ von einem Konto mit Copilot-Abo. Er wird bei GitHub geprüft und danach nur auf diesem Computer verschlüsselt gespeichert.",
+            "description": "Der Agent antwortet auf Direktnachrichten, deren Benachrichtigungsoption auf Agent steht. Seine Antworten werden als automatische Nachrichten gesendet. Er läuft nur, solange Element Desktop auf diesem Computer geöffnet ist.",
+            "disconnect": "Trennen",
+            "error_invalid_credential": "Der Schlüssel oder Token wurde nicht akzeptiert. Prüfe ihn und versuche es erneut.",
+            "error_rate_limited": "Der Anbieter begrenzt die Anfragen, oder das Kontingent deines Abos ist aufgebraucht. Versuche es später erneut.",
+            "error_unavailable": "Der Anbieter ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+            "error_unknown": "Etwas ist schiefgelaufen. Versuche es erneut.",
+            "instructions": "Anweisungen",
+            "instructions_placeholder": "Zum Beispiel: Antworte freundlich und kurz. Ich bin bis Montag im Urlaub.",
+            "model": "Modell",
+            "model_default": "Standardmodell",
+            "provider": "Anbieter",
+            "provider_claude": "Claude",
+            "provider_copilot": "GitHub Copilot"
+        }
     },
     "status": {
         "set_status": {

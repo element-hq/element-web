@@ -87,6 +87,8 @@ export class PreviewRoomListItemViewModel
             areSectionsEnabled: false,
             canChangeSection: false,
             canReorder: false,
+            canUseAgent: false,
+            isAgent: false,
         };
     }
 
@@ -103,6 +105,7 @@ export class PreviewRoomListItemViewModel
     public onMarkAsUnread = (): void => {};
     public onToggleFavorite = (): void => {};
     public onToggleLowPriority = (): void => {};
+    public onToggleAgent = (): void => {};
     public onInvite = (): void => {};
     public onCopyRoomLink = (): void => {};
     public onLeaveRoom = (): void => {};

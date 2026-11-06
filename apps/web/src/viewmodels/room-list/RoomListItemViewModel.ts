@@ -44,6 +44,7 @@ import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
 import { fetchUserStatus } from "../../utils/userStatus";
+import { AgentRoomStore, AgentRoomStoreEvent } from "../../agent/AgentRoomStore";
 
 /**
  * View section type without `isSelected` field
@@ -130,6 +131,9 @@ export class RoomListItemViewModel
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallStateChanged);
         // If there is an active call for this room, listen to participant changes
         this.listenToCallParticipants();
+
+        // Subscribe to the rooms marked for the agent, kept on this computer
+        this.disposables.trackListener(AgentRoomStore.instance, AgentRoomStoreEvent.Update, this.onRoomChanged);
 
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
@@ -387,6 +391,9 @@ export class RoomListItemViewModel
         // In the flat list the favourites keep the position the user drags them to (see RecencySorter). With
         // sections, a room is dragged onto a section header instead.
         const canReorder = isFavourite && !areSectionsEnabled && canChangeSection;
+        // The agent replies to direct messages only, and only on platforms that have one
+        const canUseAgent = isDm && AgentRoomStore.instance.isAvailable;
+        const isAgent = canUseAgent && AgentRoomStore.instance.isAgentRoom(room.roomId);
 
         return {
             id: room.roomId,
@@ -420,6 +427,8 @@ export class RoomListItemViewModel
             areSectionsEnabled,
             canChangeSection,
             canReorder,
+            canUseAgent,
+            isAgent,
         };
     }
 
@@ -516,6 +525,10 @@ export class RoomListItemViewModel
         if (sectionTag) {
             tagRoom(this.props.room, sectionTag, true);
         }
+    };
+
+    public onToggleAgent = (): void => {
+        void AgentRoomStore.instance.setAgentRoom(this.props.room.roomId, !this.snapshot.current.isAgent);
     };
 
     private onCustomSectionsChange = (): void => {

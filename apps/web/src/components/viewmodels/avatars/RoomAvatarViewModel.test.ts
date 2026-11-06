@@ -25,6 +25,7 @@ import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "./RoomAvatarViewM
 import DMRoomMap from "../../../utils/DMRoomMap";
 import * as PresenceIndicatorModule from "../../views/avatars/WithPresenceIndicator";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
+import { AgentRoomStore, AgentRoomStoreEvent } from "../../../agent/AgentRoomStore";
 
 vi.mock("../../../utils/room/getJoinedNonFunctionalMembers", () => ({
     getJoinedNonFunctionalMembers: vi.fn().mockReturnValue([]),
@@ -43,6 +44,7 @@ describe("RoomAvatarViewModel", () => {
 
         vi.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(null);
         vi.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
+        vi.spyOn(AgentRoomStore.instance, "isAgentRoom").mockReturnValue(false);
     });
 
     it("should have badgeDecoration set to LowPriority", () => {
@@ -92,6 +94,19 @@ describe("RoomAvatarViewModel", () => {
         });
         rerender(room);
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.LowPriority);
+
+        // 5. When the agent replies in the room, the agent takes precedence over everything
+        vi.mocked(AgentRoomStore.instance.isAgentRoom).mockReturnValue(true);
+        act(() => {
+            AgentRoomStore.instance.emit(AgentRoomStoreEvent.Update);
+        });
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.Agent);
+    });
+
+    it("should have badgeDecoration set to Agent when the agent replies in the room", () => {
+        vi.mocked(AgentRoomStore.instance.isAgentRoom).mockImplementation((roomId) => roomId === room.roomId);
+        const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.Agent);
     });
 
     it("should recompute isPublic when room changed", async () => {

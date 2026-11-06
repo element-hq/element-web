@@ -132,6 +132,32 @@ describe("<UserSettingsDialog />", () => {
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
 
+    it("does not render the agent tab on a platform without an agent", () => {
+        const { queryByTestId } = render(getComponent());
+        expect(queryByTestId(`settings-tab-${UserTab.Agent}`)).toBeNull();
+    });
+
+    it("renders the agent tab on a platform with an agent", () => {
+        const platform = mockPlatformPeg({
+            supportsSpellCheckSettings: vi.fn().mockReturnValue(false),
+            getAppVersion: vi.fn().mockResolvedValue("1"),
+        });
+        const agent = { getStatus: vi.fn().mockReturnValue(new Promise(() => {})) };
+        Object.defineProperty(platform, "agent", { value: agent });
+
+        const { container, getByTestId } = render(getComponent({ initialTabId: UserTab.Agent }));
+
+        expect(getByTestId(`settings-tab-${UserTab.Agent}`)).toBeTruthy();
+        expect(getActiveTabLabel(container)).toEqual("Agent");
+        expect(agent.getStatus).toHaveBeenCalled();
+
+        // Back to the platform of the other tests, which has no agent
+        mockPlatformPeg({
+            supportsSpellCheckSettings: vi.fn().mockReturnValue(false),
+            getAppVersion: vi.fn().mockResolvedValue("1"),
+        });
+    });
+
     it("renders with session manager tab selected", () => {
         const { getByTestId } = render(getComponent({ initialTabId: UserTab.SessionManager }));
         expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();

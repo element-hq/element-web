@@ -21,6 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
 
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
+import type { AgentApi } from "../../agent/AgentApi";
 import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
@@ -501,6 +502,22 @@ export default class ElectronPlatform extends BasePlatform {
 
     public overrideBrowserShortcuts(): boolean {
         return true;
+    }
+
+    /** The agent runs in the main process of Element Desktop, which keeps its credentials */
+    private readonly electronAgent: AgentApi = {
+        getStatus: () => this.ipc.call("agentGetStatus"),
+        setSettings: (changes) => this.ipc.call("agentSetSettings", changes),
+        connect: (provider, credential) => this.ipc.call("agentConnect", provider, credential),
+        disconnect: (provider) => this.ipc.call("agentDisconnect", provider),
+        listModels: (provider) => this.ipc.call("agentListModels", provider),
+        getRooms: (userId) => this.ipc.call("agentGetRooms", userId),
+        setRoom: (userId, roomId, enabled) => this.ipc.call("agentSetRoom", userId, roomId, enabled),
+        generateReply: (request) => this.ipc.call("agentGenerateReply", request),
+    };
+
+    public get agent(): AgentApi {
+        return this.electronAgent;
     }
 
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {

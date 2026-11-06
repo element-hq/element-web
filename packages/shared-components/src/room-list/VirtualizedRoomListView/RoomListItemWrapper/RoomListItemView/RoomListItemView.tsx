@@ -111,6 +111,10 @@ export interface RoomListItemViewSnapshot {
      * (the favourites in the flat list), instead of being placed by its latest message.
      */
     canReorder: boolean;
+    /** Whether the room can be marked for the agent to reply in: a direct message, on a platform with an agent */
+    canUseAgent: boolean;
+    /** Whether the agent replies in this room */
+    isAgent: boolean;
 }
 
 /**
@@ -142,6 +146,8 @@ export interface RoomListItemViewActions {
     onToggleSection: (tag: string) => void;
     /** Called when removing the room from a section */
     onRemoveFromSection: () => void;
+    /** Called to mark the room for the agent to reply in, or to unmark it */
+    onToggleAgent: () => void;
 }
 
 /**

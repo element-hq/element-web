@@ -36,6 +36,7 @@ import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import * as tagRoomModule from "../../utils/room/tagRoom";
 import { CHATS_TAG } from "../../stores/room-list-v3/section";
+import { AgentRoomStore, AgentRoomStoreEvent } from "../../agent/AgentRoomStore";
 
 vi.mock("./utils", () => ({
     hasAccessToOptionsMenu: vi.fn().mockReturnValue(true),
@@ -484,6 +485,61 @@ describe("RoomListItemViewModel", () => {
 
             await flushPromises();
             expect(viewModel.getSnapshot().name).toBe("Updated Room");
+        });
+    });
+
+    describe("Agent", () => {
+        beforeEach(() => {
+            vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue("@user:server");
+            vi.spyOn(AgentRoomStore.instance, "isAvailable", "get").mockReturnValue(true);
+            vi.spyOn(AgentRoomStore.instance, "isAgentRoom").mockReturnValue(false);
+        });
+
+        it("lets a direct message be marked for the agent", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot()).toMatchObject({ canUseAgent: true, isAgent: false });
+        });
+
+        it("shows a direct message marked for the agent", () => {
+            vi.mocked(AgentRoomStore.instance.isAgentRoom).mockReturnValue(true);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().isAgent).toBe(true);
+        });
+
+        it.each([
+            [
+                "a room that is not a direct message",
+                () => vi.mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(undefined),
+            ],
+            [
+                "a platform without an agent",
+                () => vi.spyOn(AgentRoomStore.instance, "isAvailable", "get").mockReturnValue(false),
+            ],
+        ])("doesn't offer the agent for %s", (_, setUp) => {
+            setUp();
+            vi.mocked(AgentRoomStore.instance.isAgentRoom).mockReturnValue(true);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot()).toMatchObject({ canUseAgent: false, isAgent: false });
+        });
+
+        it("toggles the mark of the room", () => {
+            const setAgentRoom = vi.spyOn(AgentRoomStore.instance, "setAgentRoom").mockResolvedValue();
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            viewModel.onToggleAgent();
+
+            expect(setAgentRoom).toHaveBeenCalledWith(room.roomId, true);
+        });
+
+        it("updates when the marks change", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            vi.mocked(AgentRoomStore.instance.isAgentRoom).mockReturnValue(true);
+            AgentRoomStore.instance.emit(AgentRoomStoreEvent.Update);
+
+            expect(viewModel.getSnapshot().isAgent).toBe(true);
         });
     });
 

@@ -68,6 +68,17 @@ vi.mock("./displayMediaCallback.js", () => ({
     consumeDisplayMediaCallback: vi.fn(),
 }));
 vi.mock("./config.js");
+const agent = vi.hoisted(() => ({
+    getAgentStatus: vi.fn(),
+    setAgentSettings: vi.fn(),
+    connectAgent: vi.fn(),
+    disconnectAgent: vi.fn(),
+    listAgentModels: vi.fn(),
+    getAgentRooms: vi.fn(),
+    setAgentRoom: vi.fn(),
+    generateAgentReply: vi.fn(),
+}));
+vi.mock("./agent.js", () => agent);
 
 await import("./ipc.js");
 
@@ -348,5 +359,31 @@ describe("ipcCall: spellchecker", () => {
         await callIpc("getAvailableSpellCheckLanguages", 22, []);
 
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 22, reply: ["en-GB", "en-US"], error: undefined });
+    });
+});
+
+describe("ipc agent commands", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    it.each([
+        ["agentGetStatus", agent.getAgentStatus, []],
+        ["agentSetSettings", agent.setAgentSettings, [{ model: "claude-opus-5-5" }]],
+        ["agentConnect", agent.connectAgent, ["claude", "sk-ant-test"]],
+        ["agentDisconnect", agent.disconnectAgent, ["copilot"]],
+        ["agentListModels", agent.listAgentModels, ["claude"]],
+        ["agentGetRooms", agent.getAgentRooms, ["@alice:example.org"]],
+        ["agentSetRoom", agent.setAgentRoom, ["@alice:example.org", "!dm:example.org", true]],
+        ["agentGenerateReply", agent.generateAgentReply, [{ ownName: "Alice", partnerName: "Bob", turns: [] }]],
+    ])("routes %s to the agent and replies with its result", async (name, handler, args) => {
+        // A plain value works for the synchronous and the awaited handlers alike
+        vi.mocked(handler).mockReturnValue({ ok: true, data: name });
+
+        await callIpc(name, 30, args);
+
+        expect(handler).toHaveBeenCalledWith(...args);
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 30, reply: { ok: true, data: name }, error: undefined });
     });
 });

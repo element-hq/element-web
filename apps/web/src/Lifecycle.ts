@@ -68,6 +68,8 @@ import { type URLParams } from "./vector/url_utils.ts";
 import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
 import { clearUploadedMediaCache } from "./utils/UploadedMediaCache";
 import { CallStatusListener } from "./CallStatusListener.ts";
+import { AgentReplyListener } from "./agent/AgentReplyListener.ts";
+import { AgentRoomStore } from "./agent/AgentRoomStore.ts";
 import { CallStore } from "./stores/CallStore.ts";
 import { ModuleApi } from "./modules/Api.ts";
 
@@ -1134,6 +1136,11 @@ async function startMatrixClient(
 
     CallStatusListener.sharedInstance().start(CallStore.instance, client);
 
+    // Answers the direct messages marked for the agent, on platforms that have an agent
+    const agent = PlatformPeg.get()?.agent;
+    void AgentRoomStore.instance.start(agent, client.getSafeUserId());
+    AgentReplyListener.sharedInstance().start(client, agent);
+
     // Similarly, don't start sending presence updates until we've started the client
     if (!SettingsStore.getValue("lowBandwidth")) {
         void Presence.start();
@@ -1269,6 +1276,8 @@ export function stopMatrixClient(unsetClient = true): void {
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
     CallStatusListener.sharedInstance().stop();
+    AgentReplyListener.sharedInstance().stop();
+    AgentRoomStore.instance.stop();
     DMRoomMap.shared()?.stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

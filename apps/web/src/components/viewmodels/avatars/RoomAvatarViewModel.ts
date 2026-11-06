@@ -11,8 +11,10 @@ import { useEffect, useState } from "react";
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
+import { AgentRoomStore, AgentRoomStoreEvent } from "../../../agent/AgentRoomStore";
 
 export enum AvatarBadgeDecoration {
+    Agent = "Agent",
     LowPriority = "LowPriority",
     VideoRoom = "VideoRoom",
     PublicRoom = "PublicRoom",
@@ -43,8 +45,15 @@ export function useRoomAvatarViewModel(room: Room): RoomAvatarViewState {
     const isPublic = useIsPublic(room);
     const isLowPriority = useTypedEventEmitterState(room, RoomEvent.Tags, () => !!room.tags[DefaultTagID.LowPriority]);
 
+    const isAgent = useTypedEventEmitterState(AgentRoomStore.instance, AgentRoomStoreEvent.Update, () =>
+        AgentRoomStore.instance.isAgentRoom(room.roomId),
+    );
+
     let badgeDecoration: AvatarBadgeDecoration | undefined;
-    if (isLowPriority) {
+    // An agent replying on the user's behalf matters more than any other state of the room
+    if (isAgent) {
+        badgeDecoration = AvatarBadgeDecoration.Agent;
+    } else if (isLowPriority) {
         badgeDecoration = AvatarBadgeDecoration.LowPriority;
     } else if (isVideoRoom) {
         badgeDecoration = AvatarBadgeDecoration.VideoRoom;

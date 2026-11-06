@@ -45,6 +45,7 @@ const RoomListItemWrapperImpl = ({
     onCreateSection,
     onToggleSection,
     onRemoveFromSection,
+    onToggleAgent,
     isSelected,
     isFocused,
     onFocus,
@@ -66,6 +67,7 @@ const RoomListItemWrapperImpl = ({
         onCreateSection,
         onToggleSection,
         onRemoveFromSection,
+        onToggleAgent,
     });
     return (
         <RoomListItemView
