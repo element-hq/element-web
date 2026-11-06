@@ -110,18 +110,17 @@ test.describe("Room list", () => {
             await roomItem.hover();
 
             await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
-            let roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            // The notification options are a submenu of the more options menu
+            let roomItemMenu = roomItem.getByRole("button", { name: "More options" });
             await roomItemMenu.click();
+            await page.getByRole("menuitem", { name: "Notification options" }).click();
 
-            // Default settings should be selected
-            await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
-                "aria-selected",
-                "true",
-            );
+            // Normal should be selected
+            await expect(page.getByRole("menuitem", { name: "Normal" })).toHaveAttribute("aria-selected", "true");
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options.png");
 
             // It should make the room muted
-            await page.getByRole("menuitem", { name: "Mute room" }).click();
+            await page.getByRole("menuitem", { name: "Silent" }).click();
 
             // Put focus on the room list
             await roomListView.getByRole("option", { name: "Open room room28" }).click();
@@ -138,11 +137,12 @@ test.describe("Room list", () => {
             // On hover, the room should show the muted icon
             await expect(roomItem).toMatchScreenshot("room-list-item-hover-silent.png");
 
-            roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            roomItemMenu = roomItem.getByRole("button", { name: "More options" });
             await roomItemMenu.click();
+            await page.getByRole("menuitem", { name: "Notification options" }).click();
 
-            // The Mute room option should be selected
-            await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
+            // The Silent option should be selected
+            await expect(page.getByRole("menuitem", { name: "Silent" })).toHaveAttribute("aria-selected", "true");
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
         });
 
@@ -237,28 +237,26 @@ test.describe("Room list", () => {
                 const roomListView = getRoomList(page);
                 const room29 = roomListView.getByRole("option", { name: "Open room room29" });
                 const moreButton = room29.getByRole("button", { name: "More options" });
-                const notificationButton = room29.getByRole("button", { name: "Notification options" });
 
                 await room29.click();
                 // put focus back on the room list item
                 await room29.click();
                 await page.keyboard.press("Tab");
                 await expect(moreButton).toBeFocused();
-                await page.keyboard.press("Tab");
-                await expect(notificationButton).toBeFocused();
 
-                // Open the menu
+                // Open the more options menu, then its notification options submenu
                 await page.keyboard.press("Enter");
-                // Wait for the menu to be open
-                await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
-                    "aria-selected",
-                    "true",
-                );
+                const notificationItem = page.getByRole("menuitem", { name: "Notification options" });
+                await notificationItem.focus();
+                await page.keyboard.press("ArrowRight");
+                // Wait for the submenu to be open
+                await expect(page.getByRole("menuitem", { name: "Normal" })).toHaveAttribute("aria-selected", "true");
 
-                await page.keyboard.press("ArrowDown");
+                // Escape closes the submenu, then the menu, and focus goes back to the more options button
                 await page.keyboard.press("Escape");
-                // Focus should be back on the notification button
-                await expect(notificationButton).toBeFocused();
+                await expect(notificationItem).toBeFocused();
+                await page.keyboard.press("Escape");
+                await expect(moreButton).toBeFocused();
             });
 
             test("should reveal the options menu when a room is focused with the keyboard", async ({

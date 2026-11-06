@@ -25,6 +25,7 @@ import { _t } from "../../../../core/i18n/i18n";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 import styles from "./RoomListItemMoreOptionsMenu.module.css";
+import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 
 /**
  * View model type for room list item
@@ -41,7 +42,7 @@ export interface RoomListItemMoreOptionsMenuProps {
 
 /**
  * The more options menu for room list items.
- * Displays additional room actions like mark as read/unread, favorite, invite, etc.
+ * Displays additional room actions like mark as read/unread, favorite, notification settings, invite, etc.
  */
 export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
@@ -117,6 +118,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     />
                 </>
             )}
+            {snapshot.showNotificationMenu && <RoomListItemNotificationMenu vm={vm} />}
             <Separator />
             {snapshot.canInvite && (
                 <MenuItem

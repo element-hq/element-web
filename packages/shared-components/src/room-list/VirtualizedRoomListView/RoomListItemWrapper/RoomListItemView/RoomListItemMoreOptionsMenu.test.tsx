@@ -48,6 +48,24 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         expect(screen.getByRole("menu")).toBeInTheDocument();
     });
 
+    it("should hold the notification options when showNotificationMenu is true", async () => {
+        const user = userEvent.setup();
+        renderMenu({ showNotificationMenu: true });
+
+        await user.click(screen.getByRole("button", { name: "More Options" }));
+
+        expect(screen.getByRole("menuitem", { name: "Notification options" })).toBeInTheDocument();
+    });
+
+    it("should not hold the notification options when showNotificationMenu is false", async () => {
+        const user = userEvent.setup();
+        renderMenu({ showNotificationMenu: false });
+
+        await user.click(screen.getByRole("button", { name: "More Options" }));
+
+        expect(screen.queryByRole("menuitem", { name: "Notification options" })).not.toBeInTheDocument();
+    });
+
     it("should show mark as read option when canMarkAsRead is true", async () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsRead: true });

@@ -125,12 +125,8 @@
         }
     },
     "notifications": {
-        "all_messages": "All messages",
-        "default_settings": "Match default settings",
         "mark_all_read": "Mark all as read",
-        "mentions_keywords": "Mentions and keywords",
-        "message_didnt_send": "Message didn't send. Select for info.",
-        "mute_room": "Mute room"
+        "message_didnt_send": "Message didn't send. Select for info."
     },
     "pdf_viewer": {
         "page_label": "Page %(page)s of %(total)s",
@@ -244,6 +240,8 @@
             "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
+        "notification_options_normal": "Normal",
+        "notification_options_silent": "Silent",
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "room": {

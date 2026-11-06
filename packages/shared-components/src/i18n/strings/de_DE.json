@@ -220,6 +220,8 @@
             "remove_from_section": "Aus Abschnitt entfernen"
         },
         "notification_options": "Benachrichtigungsoptionen",
+        "notification_options_normal": "Normal",
+        "notification_options_silent": "Silent",
         "open_space_menu": "Menü für Spaces öffnen",
         "primary_filters": "Filter für die Chatliste",
         "room": {

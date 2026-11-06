@@ -69,12 +69,8 @@ export const RoomListItemContent = memo(function RoomListItemContent({
                         </Text>
                     )}
                 </div>
-                {!isDragging && (item.showMoreOptionsMenu || item.showNotificationMenu) && (
-                    <RoomListItemHoverMenu
-                        showMoreOptionsMenu={item.showMoreOptionsMenu}
-                        showNotificationMenu={item.showNotificationMenu}
-                        vm={vm}
-                    />
+                {!isDragging && item.showMoreOptionsMenu && (
+                    <RoomListItemHoverMenu showMoreOptionsMenu={item.showMoreOptionsMenu} vm={vm} />
                 )}
 
                 {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}

@@ -8,7 +8,7 @@
 import React, { type JSX } from "react";
 import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 import { RoomNotifState } from "./RoomNotifs";
@@ -18,15 +18,11 @@ import { defaultSnapshot } from "./default-snapshot";
 import { mockedActions as mockCallbacks } from "./mocked-actions";
 
 describe("<RoomListItemNotificationMenu />", () => {
+    // Rendered on its own, outside of the more options menu, the submenu shows its entries directly
     const renderMenu = (roomNotifState: RoomNotifState = RoomNotifState.AllMessages): ReturnType<typeof render> => {
         const TestComponent = (): JSX.Element => {
             const vm = useMockedViewModel(
-                {
-                    ...defaultSnapshot,
-                    showMoreOptionsMenu: false,
-                    showNotificationMenu: true,
-                    roomNotifState,
-                } as RoomListItemViewSnapshot,
+                { ...defaultSnapshot, showNotificationMenu: true, roomNotifState } as RoomListItemViewSnapshot,
                 mockCallbacks,
             );
             return <RoomListItemNotificationMenu vm={vm} />;
@@ -34,120 +30,58 @@ describe("<RoomListItemNotificationMenu />", () => {
         return render(<TestComponent />);
     };
 
-    it("should render the notification menu button", () => {
+    beforeEach(() => {
+        vi.mocked(mockCallbacks.onSetRoomNotifState).mockClear();
+    });
+
+    it("should render the notification options entry", () => {
         renderMenu();
-        expect(screen.getByRole("button", { name: "Notification options" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Notification options" })).toBeInTheDocument();
     });
 
-    it("should show muted icon when notifications are muted", () => {
-        renderMenu(RoomNotifState.Mute);
-        const button = screen.getByRole("button", { name: "Notification options" });
-        expect(button.querySelector("svg")).toBeInTheDocument();
+    it("should show the muted icon when notifications are muted", () => {
+        const { container: unmuted } = renderMenu(RoomNotifState.AllMessages);
+        const unmutedIcon = unmuted.querySelector("svg")?.innerHTML;
+        const { container: muted } = renderMenu(RoomNotifState.Mute);
+        expect(muted.querySelector("svg")?.innerHTML).not.toEqual(unmutedIcon);
     });
 
-    it("should open menu when clicked", async () => {
-        const user = userEvent.setup();
-        renderMenu();
-
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        expect(screen.getByRole("menu")).toBeInTheDocument();
-    });
-
-    it("should call onSetRoomNotifState with AllMessages when default settings selected", async () => {
-        const user = userEvent.setup();
+    it("should only offer Normal and Silent", () => {
         renderMenu();
 
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const defaultOption = screen.getByRole("menuitem", { name: "Match default settings" });
-        await user.click(defaultOption);
-
-        expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.AllMessages);
+        const options = screen.getAllByRole("menuitem").filter((item) => item.hasAttribute("aria-selected"));
+        expect(options.map((item) => item.textContent)).toEqual(["Normal", "Silent"]);
     });
 
-    it("should call onSetRoomNotifState with AllMessagesLoud when all messages selected", async () => {
+    it.each([
+        ["Normal", RoomNotifState.AllMessages],
+        ["Silent", RoomNotifState.Mute],
+    ])("should call onSetRoomNotifState when %s is selected", async (label, state) => {
         const user = userEvent.setup();
         renderMenu();
 
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
+        await user.click(screen.getByRole("menuitem", { name: label }));
 
-        const allMessagesOption = screen.getByRole("menuitem", { name: "All messages" });
-        await user.click(allMessagesOption);
-
-        expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.AllMessagesLoud);
+        expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(state);
     });
 
-    it("should call onSetRoomNotifState with MentionsOnly when mentions and keywords selected", async () => {
-        const user = userEvent.setup();
-        renderMenu();
+    it.each([
+        [RoomNotifState.AllMessages, "Normal", "Silent"],
+        [RoomNotifState.Mute, "Silent", "Normal"],
+    ])("should mark the selected option for %s", (state, selected, other) => {
+        renderMenu(state);
 
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const mentionsOption = screen.getByRole("menuitem", { name: "Mentions and keywords" });
-        await user.click(mentionsOption);
-
-        expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.MentionsOnly);
+        expect(screen.getByRole("menuitem", { name: selected })).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByRole("menuitem", { name: other })).toHaveAttribute("aria-selected", "false");
     });
 
-    it("should call onSetRoomNotifState with Mute when mute selected", async () => {
-        const user = userEvent.setup();
-        renderMenu();
+    it.each([RoomNotifState.AllMessagesLoud, RoomNotifState.MentionsOnly])(
+        "should mark neither option for a room set to %s elsewhere",
+        (state) => {
+            renderMenu(state);
 
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const muteOption = screen.getByRole("menuitem", { name: "Mute room" });
-        await user.click(muteOption);
-
-        expect(mockCallbacks.onSetRoomNotifState).toHaveBeenCalledWith(RoomNotifState.Mute);
-    });
-
-    it("should show check mark next to selected option - AllMessage", async () => {
-        const user = userEvent.setup();
-        renderMenu(RoomNotifState.AllMessages);
-
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const defaultOption = screen.getByRole("menuitem", { name: "Match default settings" });
-        expect(defaultOption).toHaveAttribute("aria-selected", "true");
-    });
-
-    it("should show check mark next to selected option - AllMessagesLoud", async () => {
-        const user = userEvent.setup();
-        renderMenu(RoomNotifState.AllMessagesLoud);
-
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const allMessagesOption = screen.getByRole("menuitem", { name: "All messages" });
-        expect(allMessagesOption).toHaveAttribute("aria-selected", "true");
-    });
-
-    it("should show check mark next to selected option - MentionsOnly", async () => {
-        const user = userEvent.setup();
-        renderMenu(RoomNotifState.MentionsOnly);
-
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const mentionsOption = screen.getByRole("menuitem", { name: "Mentions and keywords" });
-        expect(mentionsOption).toHaveAttribute("aria-selected", "true");
-    });
-
-    it("should show check mark next to selected option - Mute", async () => {
-        const user = userEvent.setup();
-        renderMenu(RoomNotifState.Mute);
-
-        const button = screen.getByRole("button", { name: "Notification options" });
-        await user.click(button);
-
-        const muteOption = screen.getByRole("menuitem", { name: "Mute room" });
-        expect(muteOption).toHaveAttribute("aria-selected", "true");
-    });
+            expect(screen.getByRole("menuitem", { name: "Normal" })).toHaveAttribute("aria-selected", "false");
+            expect(screen.getByRole("menuitem", { name: "Silent" })).toHaveAttribute("aria-selected", "false");
+        },
+    );
 });
