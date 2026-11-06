@@ -35,6 +35,7 @@ import {
     filterConsole,
     flushPromises,
     mkEvent,
+    mkMessage,
     mkRoomMemberJoinEvent,
     mkThirdPartyInviteEvent,
     mockPlatformPeg,
@@ -84,6 +85,20 @@ vi.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.VideoInput]: [],
     [MediaDeviceKindEnum.AudioOutput]: [],
 });
+
+// The new timeline panel has its own tests. Here it is a stub that records the props RoomView
+// passes it. Only rendered with feature_new_timeline on, which only the last describe in this
+// file turns on.
+const { newTimelinePanelProps } = vi.hoisted(() => ({
+    /** The props the stub was last rendered with. */
+    newTimelinePanelProps: { current: {} as Record<string, any> },
+}));
+vi.mock("./NewTimelinePanel", () => ({
+    NewTimelinePanel: (props: Record<string, unknown>) => {
+        newTimelinePanelProps.current = props;
+        return <div data-testid="new-timeline-stub" />;
+    },
+}));
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -1428,5 +1443,58 @@ describe("RoomView", () => {
                 room_id: room2.roomId,
             }),
         );
+    });
+
+    describe("with the new timeline", () => {
+        beforeEach(() => {
+            // Earlier describes leave SettingsStore.getValue spied with a narrow implementation
+            // (this file deliberately avoids restoreAllMocks), which would hide the flag. Put the
+            // real implementation back and layer the flag on top of it.
+            if (vi.isMockFunction(SettingsStore.getValue)) vi.mocked(SettingsStore.getValue).mockRestore();
+            const realGetValue = SettingsStore.getValue.bind(SettingsStore) as (...args: unknown[]) => unknown;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(((name: string, ...rest: unknown[]) =>
+                name === "feature_new_timeline" ? true : realGetValue(name, ...rest)) as typeof SettingsStore.getValue);
+            room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+            // The top-level beforeEach hides crypto, which leaves the room's encryption state
+            // loading and neither timeline mounted; the timeline is the point here.
+            vi.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        });
+
+        afterEach(() => {
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("mounts the new panel in place of the old timeline", async () => {
+            await mountRoomView();
+
+            expect(await screen.findByTestId("new-timeline-stub")).toBeInTheDocument();
+            expect(document.querySelector(".mx_ScrollPanel")).toBeNull();
+        });
+
+        it("passes a message asked for after opening to the new panel, and clears the scroll flag once told", async () => {
+            const pinned = mkMessage({ room: room.roomId, user: "@alice:example.org", msg: "pinned", event: true });
+            room.getUnfilteredTimelineSet().addLiveEvent(pinned, { addToState: false });
+            await mountRoomView();
+            await screen.findByTestId("new-timeline-stub");
+
+            // As clicking a pinned message does.
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    event_id: pinned.getId(),
+                    highlighted: true,
+                    metricsTrigger: undefined,
+                }),
+            );
+            await waitFor(() => expect(newTimelinePanelProps.current.highlightedEventId).toBe(pinned.getId()));
+            expect(newTimelinePanelProps.current.eventScrollIntoView).toBe(true);
+
+            // The panel reports the jump; RoomView clears the flag so the same message can be asked for again.
+            await act(() => newTimelinePanelProps.current.onEventScrolledIntoView(pinned.getId()));
+
+            await waitFor(() => expect(newTimelinePanelProps.current.eventScrollIntoView).toBe(false));
+            expect(newTimelinePanelProps.current.highlightedEventId).toBe(pinned.getId());
+        });
     });
 });
