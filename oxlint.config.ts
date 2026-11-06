@@ -455,6 +455,12 @@ export default defineConfig({
                                 message:
                                     "Please use utils/location/maplibre instead, it points maplibre at the bundled worker.",
                             },
+                            {
+                                name: "@sentry/browser",
+                                importNames: ["logger"],
+                                allowTypeImports: true,
+                                message: "Please use the logger from matrix-js-sdk/src/logger instead.",
+                            },
                         ],
                         patterns: [
                             {
