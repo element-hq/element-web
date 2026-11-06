@@ -1156,6 +1156,24 @@ describe("SpaceStore", () => {
             expect(store.activeSpace).toBe(space1);
         });
 
+        it("follows feature_notifications for the notifications metaspace, which contains every room", async () => {
+            await SettingsStore.setValue("feature_notifications", null, SettingLevel.DEVICE, true);
+            vi.runAllTimers();
+            expect(store.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Notifications, MetaSpace.Orphans]);
+
+            // Opening a notification's room keeps the notification list
+            viewRoom(room1);
+            store.setActiveSpace(MetaSpace.Notifications, false);
+            viewRoom(room2);
+            expect(store.activeSpace).toBe(MetaSpace.Notifications);
+
+            await SettingsStore.setValue("feature_notifications", null, SettingLevel.DEVICE, false);
+            vi.runAllTimers();
+            expect(store.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
+            // Like any disabled metaspace, it is left for the space of the viewed room
+            expect(store.activeSpace).toBe(space2);
+        });
+
         it("when switching rooms in the all rooms home space don't switch to related space", async () => {
             await setShowAllRooms(true);
             viewRoom(room2);

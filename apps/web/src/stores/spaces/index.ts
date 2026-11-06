@@ -21,6 +21,7 @@ export const UPDATE_SUGGESTED_ROOMS = Symbol("suggested-rooms");
 
 export enum MetaSpace {
     Home = "home-space",
+    Notifications = "notifications-space",
     Orphans = "orphans-space",
     VideoRooms = "video-rooms-space",
 }
@@ -33,6 +34,8 @@ export const getMetaSpaceName = (spaceKey: MetaSpace, allRoomsInHome = false): s
             return _t("common|orphan_rooms");
         case MetaSpace.VideoRooms:
             return _t("voip|metaspace_video_rooms|conference_room_section");
+        case MetaSpace.Notifications:
+            return _t("notifications|enable_prompt_toast_title");
     }
 };
 
@@ -51,5 +54,5 @@ export interface ISuggestedRoom extends HierarchyRoom {
 }
 
 export function isMetaSpace(spaceKey?: SpaceKey): spaceKey is MetaSpace {
-    return spaceKey === MetaSpace.Home || spaceKey === MetaSpace.Orphans || spaceKey === MetaSpace.VideoRooms;
+    return Object.values<string | undefined>(MetaSpace).includes(spaceKey);
 }
