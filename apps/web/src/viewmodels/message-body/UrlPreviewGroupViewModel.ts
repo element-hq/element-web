@@ -231,6 +231,21 @@ export class UrlPreviewGroupViewModel
         });
     }
 
+    /*
+     * Change where URL previews are sourced from
+     */
+    public setUrlPreviewKind(kind: UrlPreviewKind): Promise<void> {
+        this.props.urlPreviewKind = kind;
+        return this.computeSnapshot();
+    }
+
+    /*
+     * Triggers a recalculation of snapshot, e.g. after the message is updated
+     */
+    public onBundleContentChanged(): Promise<void> {
+        return this.computeSnapshot();
+    }
+
     /**
      * Trigger a recalculation of the links in an event.
      * @param eventElement
