@@ -65,7 +65,7 @@ describe("useRoomSummaryCardViewModel", () => {
 
         expect(result.current.isDirectMessage).toBe(false);
         // null while the async encryption check is pending, so no badge is shown
-        expect(result.current.isRoomEncrypted).toBe(null);
+        expect(result.current.isRoomEncrypted).toBeNull();
         expect(result.current.isVideoRoom).toBe(false);
         expect(result.current.isFavorite).toBe(false);
         expect(result.current.pinCount).toBe(0);
