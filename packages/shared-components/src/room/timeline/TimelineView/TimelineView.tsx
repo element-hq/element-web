@@ -189,7 +189,14 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             const viewportHeight = v.scrollRect?.height ?? 0;
             const totalSize = v.getTotalSize();
             const atBottom = viewportHeight > 0 && scrollOffset + viewportHeight >= totalSize - AT_BOTTOM_THRESHOLD_PX;
-            if (atBottom !== lastAtBottomRef.current) {
+            // Between the browser resizing the scroller and TanStack's ResizeObserver callback,
+            // TanStack can pick up the new scroll position while viewportHeight is still the old
+            // height, so atBottom above is wrong. Skip reporting a change while the scroller's
+            // real height differs from viewportHeight; a later call will report it. We only check
+            // when atBottom has changed, as reading offsetHeight forces a layout.
+            const resizePending = (): boolean =>
+                Math.abs((scrollerRef.current?.offsetHeight ?? viewportHeight) - viewportHeight) > 1;
+            if (atBottom !== lastAtBottomRef.current && !resizePending()) {
                 lastAtBottomRef.current = atBottom;
                 vm.onAtBottomStateChange(atBottom);
             }
