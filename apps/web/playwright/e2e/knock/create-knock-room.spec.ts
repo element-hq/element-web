@@ -89,4 +89,77 @@ test.describe("Create Knock Room", () => {
         await spotlightDialog.search("Cyber");
         await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
     });
+
+    test("should create a knock_restricted room in a space", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
+        const spaceId = await app.client.createSpace({ name: "Team" });
+        await app.viewSpaceHomeByName("Team");
+        await page.getByRole("main").getByRole("button", { name: "Add" }).click();
+        await page.getByRole("menuitem", { name: "New room" }).click();
+
+        const dialog = page.getByRole("dialog");
+        await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
+        await dialog.getByRole("button", { name: "Room visibility" }).click();
+        await dialog.getByRole("option", { name: "Ask to join" }).click();
+        await dialog.getByRole("switch", { name: "Members of Team can join without asking." }).click();
+        await dialog.getByRole("button", { name: "Create room" }).click();
+
+        await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
+
+        const roomId = await app.getCurrentRoomIdFromUrl();
+
+        // Room should have a knock_restricted join rule allowing the members of the space
+        await waitForRoom(page, app.client, roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.join_rules" &&
+                    e.getContent().join_rule === "knock_restricted" &&
+                    e.getContent().allow?.[0]?.room_id === spaceId,
+            );
+        });
+    });
+
+    test("should change a room's join rule to knock_restricted", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
+        const spaceId = await app.client.createSpace({ name: "Team" });
+        const roomId = await app.client.createRoom({
+            name: "Cybersecurity",
+            room_version: "10",
+            initial_state: [{ type: "m.room.join_rules", content: { join_rule: "knock" }, state_key: "" }],
+        });
+        await app.client.sendStateEvent(spaceId, "m.space.child", { via: [user.homeServer] }, roomId);
+
+        await app.viewRoomById(roomId);
+        await app.settings.openRoomSettings("Security & Privacy");
+
+        const settingsGroup = page.getByRole("group", { name: "Access" });
+        await expect(settingsGroup.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+        const checkbox = settingsGroup.getByRole("checkbox", {
+            name: "Members of authorised spaces can join without asking.",
+        });
+        await checkbox.click();
+
+        // The space the room is viewed in is preselected
+        const manageSpacesDialog = page
+            .getByRole("dialog")
+            .filter({ has: page.getByRole("heading", { name: "Manage spaces" }) });
+        await expect(manageSpacesDialog.getByRole("checkbox", { name: "Team" })).toBeChecked();
+        await manageSpacesDialog.getByRole("button", { name: "Confirm" }).click();
+
+        // Room should have a knock_restricted join rule allowing the members of the space
+        await waitForRoom(page, app.client, roomId, (room) => {
+            const events = room.getLiveTimeline().getEvents();
+            return events.some(
+                (e) =>
+                    e.getType() === "m.room.join_rules" &&
+                    e.getContent().join_rule === "knock_restricted" &&
+                    e.getContent().allow?.[0]?.room_id === spaceId,
+            );
+        });
+        await expect(settingsGroup.getByRole("radio", { name: "Ask to join" })).toBeChecked();
+        await expect(checkbox).toBeChecked();
+    });
 });

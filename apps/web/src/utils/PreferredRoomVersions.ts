@@ -25,6 +25,11 @@ export class PreferredRoomVersions {
      */
     public static readonly RestrictedRooms = "9";
 
+    /**
+     * The room version to use when creating "knock_restricted" rooms.
+     */
+    public static readonly KnockRestrictedRooms = "10";
+
     private constructor() {
         // readonly, static, class
     }
