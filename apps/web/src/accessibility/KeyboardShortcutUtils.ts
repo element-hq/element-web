@@ -98,6 +98,23 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
         },
     };
 
+    // Listed in settings but handled by the new timeline itself, so not bound. Only shown
+    // while the Labs new timeline is enabled.
+    if (SettingsStore.getValue("feature_new_timeline")) {
+        keyboardShortcuts[KeyBindingAction.PrevMessage] = {
+            default: {
+                key: Key.ARROW_UP,
+            },
+            displayName: _td("keyboard|timeline_navigate_up"),
+        };
+        keyboardShortcuts[KeyBindingAction.NextMessage] = {
+            default: {
+                key: Key.ARROW_DOWN,
+            },
+            displayName: _td("keyboard|timeline_navigate_down"),
+        };
+    }
+
     if (PlatformPeg.get()?.overrideBrowserShortcuts()) {
         // XXX: This keyboard shortcut isn't manually added to
         // KeyBindingDefaults as it can't be easily handled by the
