@@ -7,46 +7,43 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-
 import type { Meta, StoryFn } from "@storybook/react-vite";
+
 import siteIconFile from "../../../../static/element.png";
-import imagePreviewFile from "../../../../static/wideImage.png";
+import wideImageFile from "../../../../static/wideImage.png";
+import tallImageFile from "../../../../static/tallImage.png";
 import {
-    type MessageComposerUrlPreviewSnapshotEntryLoaded,
+    type MessageComposerUrlPreviewSnapshotEntry,
     MessageComposerUrlPreviewView,
     type MessageComposerUrlPreviewSnapshot,
 } from "./MessageComposerUrlPreview";
 import { useMockedViewModel } from "../../../core/viewmodel";
-import { LinkedTextContext } from "../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
-type MessageComposerUrlPreviewWrapperProps = MessageComposerUrlPreviewSnapshot & {
+type MessageComposerUrlPreviewWrapperProps = Pick<MessageComposerUrlPreviewSnapshot, "entries"> & {
     /**
-     * Whether the previews are collapsed down to the summary row.
-     */
-    collapsed: boolean;
-    /**
-     * Set to render the remove/clear affordances, as the app does when the URL
-     * preview bundle feature is enabled.
+     * Set to render the remove buttons, as the app does when the URL preview bundle feature is enabled.
      */
     removePreview?: (url: string) => void;
 };
 
 const MessageComposerUrlPreviewViewWrapperImpl = ({
-    collapsed,
     removePreview,
-    ...rest
+    entries,
 }: MessageComposerUrlPreviewWrapperProps): JSX.Element | null => {
-    const vm = useMockedViewModel(rest, {});
+    const vm = useMockedViewModel(
+        {
+            entries,
+            content: entries.map((entry) => entry.matched_url).join(" "),
+            contentLinks: new Set(entries.map((entry) => entry.matched_url)),
+            isModified: false,
+        },
+        {},
+    );
     return (
-        <LinkedTextContext.Provider value={{}}>
-            <MessageComposerUrlPreviewView
-                vm={vm}
-                collapsed={collapsed}
-                removePreview={removePreview}
-                toggleCollapsed={() => {}}
-            />
-        </LinkedTextContext.Provider>
+        <div style={{ maxWidth: 480 }}>
+            <MessageComposerUrlPreviewView vm={vm} removePreview={removePreview} />
+        </div>
     );
 };
 
@@ -59,9 +56,6 @@ export default {
     title: "Composer/MessageComposerUrlPreview",
     component: MessageComposerUrlPreviewViewWrapper,
     tags: ["autodocs"],
-    args: {
-        collapsed: true,
-    },
     parameters: {
         design: {
             type: "figma",
@@ -74,147 +68,111 @@ const Template: StoryFn<typeof MessageComposerUrlPreviewViewWrapper> = (args) =>
     <MessageComposerUrlPreviewViewWrapper {...args} />
 );
 
+const imageEntry = {
+    status: "loaded",
+    matched_url: "https://www.bbc.co.uk/news/business-56559073",
+    include: true,
+    preview: {
+        title: "UK economy rebounds as Covid restrictions ease",
+        description: "The economy grew faster than expected in March.",
+        link: "https://www.bbc.co.uk/news/business-56559073",
+        siteName: "BBC News",
+        showTooltipOnLink: false,
+        image: {
+            imageThumb: wideImageFile,
+            imageFull: wideImageFile,
+            alt: "",
+            playable: false,
+            mxcImageFull: "mxc://server/wide",
+        },
+    },
+} satisfies MessageComposerUrlPreviewSnapshotEntry;
+
+const logoEntry = {
+    status: "loaded",
+    matched_url: "https://github.com/element-hq/element-web/issues/12490",
+    include: true,
+    preview: {
+        title: "filepanel is missing entries · Issue #12490",
+        link: "https://github.com/element-hq/element-web/issues/12490",
+        siteName: "GitHub",
+        showTooltipOnLink: false,
+        siteIcon: siteIconFile,
+    },
+} satisfies MessageComposerUrlPreviewSnapshotEntry;
+
+const tallImageEntry = {
+    status: "loaded",
+    matched_url: "https://nextcloud.com/s/frog",
+    include: true,
+    preview: {
+        title: "Frog.jpg",
+        link: "https://nextcloud.com/s/frog",
+        siteName: "Nextcloud",
+        showTooltipOnLink: false,
+        image: {
+            imageThumb: tallImageFile,
+            imageFull: tallImageFile,
+            alt: "",
+            playable: false,
+            mxcImageFull: "mxc://server/tall",
+        },
+    },
+} satisfies MessageComposerUrlPreviewSnapshotEntry;
+
+const plainEntry = {
+    status: "loaded",
+    matched_url: "https://matrix.org",
+    include: true,
+    preview: {
+        title: "Matrix.org",
+        link: "https://matrix.org",
+        siteName: "matrix.org",
+        showTooltipOnLink: false,
+    },
+} satisfies MessageComposerUrlPreviewSnapshotEntry;
+
 export const Default = Template.bind({});
 Default.args = {
-    entries: [
-        {
-            status: "loaded",
-            matched_url: "https://matrix.org",
-            include: true,
-            preview: {
-                title: "A simple title",
-                description: "A simple description",
-                link: "https://matrix.org",
-                siteName: "matrix.org",
-                showTooltipOnLink: false,
-            },
-        },
-    ],
-};
-
-export const WithImage = Template.bind({});
-WithImage.args = {
-    entries: [
-        {
-            status: "loaded",
-            matched_url: "https://matrix.org",
-            include: true,
-            preview: {
-                image: {
-                    imageThumb: imagePreviewFile,
-                    imageFull: imagePreviewFile,
-                    alt: "The element logo",
-                    playable: false,
-                    mxcImageFull: "mxc://server/file",
-                },
-                ...(Default.args.entries![0] as MessageComposerUrlPreviewSnapshotEntryLoaded).preview,
-            },
-        },
-    ],
-};
-export const WithImageAndSiteIcon = Template.bind({});
-WithImageAndSiteIcon.args = {
-    entries: [
-        {
-            status: "loaded",
-            matched_url: "https://matrix.org",
-            include: true,
-            preview: {
-                image: {
-                    imageThumb: imagePreviewFile,
-                    imageFull: imagePreviewFile,
-                    alt: "The element logo",
-                    playable: false,
-                    mxcImageFull: "mxc://server/file",
-                },
-                siteIcon: siteIconFile,
-                ...(Default.args.entries![0] as MessageComposerUrlPreviewSnapshotEntryLoaded).preview,
-            },
-        },
-    ],
-};
-
-export const WithImageAndLoadsOfText = Template.bind({});
-WithImageAndLoadsOfText.args = {
-    entries: [
-        {
-            status: "loaded",
-            matched_url: "https://matrix.org",
-            include: true,
-            preview: {
-                description: `Molestiae aliquam quos possimus molestiae id sit nulla rerum. Sunt cumque illum alias. Illo ipsa ut iure quia nulla magnam repellat.
-
-    Esse velit corporis sapiente temporibus quia ipsam. Pariatur est rem veritatis. Inventore sit consequatur odio ipsa error non assumenda. Est eum ex dignissimos voluptatibus voluptatem delectus modi. Nisi quia eius ea quibusdam. Aut eveniet maxime non.
-
-    Impedit qui minus soluta cupiditate. Illo blanditiis sint et dolores rem consequuntur rerum ut. Delectus tempore dolorem veritatis odit enim ut dolores. Sit quae rerum explicabo consequatur tenetur. Labore in doloremque libero.
-
-    Incidunt ut ea quae nobis. Reiciendis inventore quas qui eum voluptatem ex et qui. Adipisci quibusdam dolores hic inventore et suscipit cupiditate consequuntur.
-
-    Temporibus similique sint quo. Omnis tempora quidem explicabo in quidem magnam quia. Aut sunt accusantium ut et ut laborum debitis in. Enim nihil sit consectetur facilis quidem voluptatem. Quod impedit odit veritatis est laudantium tempore sit labore. Atque minima aliquam nostrum et.`,
-                image: {
-                    imageThumb: imagePreviewFile,
-                    imageFull: imagePreviewFile,
-                    alt: "The element logo",
-                    playable: false,
-                    mxcImageFull: "mxc://server/file",
-                },
-                ...(Default.args.entries![0]! as MessageComposerUrlPreviewSnapshotEntryLoaded).preview,
-            },
-        },
-    ],
-};
-
-export const Expanded = Template.bind({});
-Expanded.args = {
-    ...Default.args,
-    collapsed: false,
-};
-
-export const ExpandedWithImage = Template.bind({});
-ExpandedWithImage.args = {
-    ...WithImage.args,
-    collapsed: false,
-};
-
-export const ExpandedWithImageAndSiteIcon = Template.bind({});
-ExpandedWithImageAndSiteIcon.args = {
-    ...WithImageAndSiteIcon.args,
-    collapsed: false,
-};
-
-export const ExpandedWithImageAndLoadsOfText = Template.bind({});
-ExpandedWithImageAndLoadsOfText.args = {
-    ...WithImageAndLoadsOfText.args,
-    collapsed: false,
+    entries: [imageEntry],
 };
 
 /**
- * The loading and failed placeholders only show their text in the expanded view.
+ * One card per link: a preview image, a site logo, and a link with neither.
  */
-export const ExpandedWithLoadingAndFailedEntries = Template.bind({});
-ExpandedWithLoadingAndFailedEntries.args = {
-    collapsed: false,
+export const MultipleLinks = Template.bind({});
+MultipleLinks.args = {
+    entries: [imageEntry, logoEntry, tallImageEntry, plainEntry],
+};
+
+export const WithLongTitle = Template.bind({});
+WithLongTitle.args = {
     entries: [
-        Default.args.entries![0]!,
         {
-            status: "loading",
-            matched_url: "https://element.io",
-            include: true,
+            ...logoEntry,
+            preview: {
+                ...logoEntry.preview,
+                title: "A very long title which does not fit on one line and so is cut off with an ellipsis at the end",
+            },
         },
-        {
-            status: "failed",
-            matched_url: "https://example.com",
-            include: true,
-        },
+    ],
+};
+
+export const LoadingAndFailed = Template.bind({});
+LoadingAndFailed.args = {
+    entries: [
+        imageEntry,
+        { status: "loading", matched_url: "https://element.io", include: true },
+        { status: "failed", matched_url: "https://example.com", include: true },
     ],
 };
 
 /**
- * The app only passes `removePreview` when the URL preview bundle feature is
- * enabled, which adds the per-entry remove buttons and the "Clear all" button.
+ * The app only passes `removePreview` when the URL preview bundle feature is enabled, which adds the remove
+ * button beside each card.
  */
-export const ExpandedWithRemoveButtons = Template.bind({});
-ExpandedWithRemoveButtons.args = {
-    ...ExpandedWithLoadingAndFailedEntries.args,
+export const WithRemoveButtons = Template.bind({});
+WithRemoveButtons.args = {
+    entries: [imageEntry, logoEntry, tallImageEntry],
     removePreview: fn(),
 };
