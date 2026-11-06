@@ -1,0 +1,9 @@
+{
+    "appId": "im.riot.pilot",
+    "name": "element-desktop-pilot",
+    "productName": "Element Pilot",
+    "description": "Element Pilot: Element with an AI agent, installed beside Element",
+    "protocols": ["io.element.pilot"],
+    "linux.executableName": "element-desktop-pilot",
+    "linux.deb.name": "element-pilot"
+}

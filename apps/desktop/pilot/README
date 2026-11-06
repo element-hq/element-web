@@ -1,0 +1,17 @@
+This directory contains the build variant "Element Pilot": Element with the AI agent, built so that it can be
+installed and run beside the official Element Desktop.
+
+Everything that decides where the app lives differs from the official build:
+
+- the name (element-desktop-pilot), so the installer puts it in its own directory,
+- the product name (Element Pilot), so its data is in %APPDATA%\Element Pilot and its agent data in
+  %LOCALAPPDATA%\Element Pilot\agent instead of Element's,
+- the app ID (im.riot.pilot), so Windows keeps its taskbar entry and notifications apart,
+- the link protocol (io.element.pilot); it doesn't claim element:// links, which stay with Element.
+
+Build it with this directory as the variant, from apps/desktop:
+
+    VARIANT_PATH=pilot/build.json pnpm run build
+
+There is no config.json here: the web app is built with apps/web/config.json, and the build has no update server,
+so it never replaces itself with an official Element build.
