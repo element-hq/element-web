@@ -514,6 +514,7 @@ export default class ElectronPlatform extends BasePlatform {
         getRooms: (userId) => this.ipc.call("agentGetRooms", userId),
         setRoom: (userId, roomId, enabled) => this.ipc.call("agentSetRoom", userId, roomId, enabled),
         generateReply: (request) => this.ipc.call("agentGenerateReply", request),
+        generateSuggestions: (request) => this.ipc.call("agentGenerateSuggestions", request),
     };
 
     public get agent(): AgentApi {

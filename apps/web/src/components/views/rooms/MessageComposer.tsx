@@ -43,7 +43,7 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import type EditorModel from "../../../editor/model";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { type SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdatedPayload";
 import MessageComposerButtons from "./MessageComposerButtons";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -60,6 +60,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
+import { ReplySuggestions } from "./ReplySuggestions";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
@@ -687,6 +688,12 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
 
+        // Suggestions are for the main timeline of a room, not for threads or the chat beside a call
+        const showReplySuggestions =
+            canSendMessages &&
+            !this.props.relation &&
+            this.context.timelineRenderingType === TimelineRenderingType.Room;
+
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
@@ -697,6 +704,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
+                    {showReplySuggestions && <ReplySuggestions room={this.props.room} key={this.props.room.roomId} />}
                     <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview

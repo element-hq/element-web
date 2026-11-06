@@ -12,10 +12,11 @@ import type {
     AgentResult,
     AgentSettings,
     AgentStatus,
+    AgentSuggestionsRequest,
 } from "shared-types";
 
 /**
- * Access to the agent that replies to the direct messages the user marked for it. The platform holds the
+ * Access to the agent that replies to the direct messages the user marked for it, and suggests replies in any chat. The platform holds the
  * credentials and the marks and talks to the AI providers; see {@link BasePlatform.agent}.
  */
 export interface AgentApi {
@@ -38,4 +39,6 @@ export interface AgentApi {
     setRoom(userId: string, roomId: string, enabled: boolean): Promise<AgentResult<string[]>>;
     /** Write the next message of the user in a direct message */
     generateReply(request: AgentReplyRequest): Promise<AgentResult<string>>;
+    /** Suggest replies the user could send next in a chat */
+    generateSuggestions(request: AgentSuggestionsRequest): Promise<AgentResult<string[]>>;
 }

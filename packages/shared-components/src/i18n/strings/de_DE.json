@@ -44,6 +44,9 @@
         "state_encryption_enabled": "Experimentelle State-Verschlüsselung aktiviert"
     },
     "composer": {
+        "reply_suggestions": {
+            "label": "Antwortvorschläge"
+        },
         "url_preview": {
             "clear_all": "Alle entfernen",
             "collapse": "URL-Vorschauen einklappen",

@@ -35,6 +35,7 @@ describe("AgentSettingsViewModel", () => {
             getRooms: vi.fn(),
             setRoom: vi.fn(),
             generateReply: vi.fn(),
+            generateSuggestions: vi.fn(),
         };
     }
 

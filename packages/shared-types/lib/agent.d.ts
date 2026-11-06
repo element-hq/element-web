@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 // This file contains types for the agent IPC API: the renderer asks the main process of Element Desktop for
-// replies to direct messages in agent mode. The main process holds the credentials and talks to the providers,
+// replies to direct messages in agent mode, and for reply suggestions in any chat. The main process holds the credentials and talks to the providers,
 // so the credentials never reach the renderer.
 
 /**
@@ -54,6 +54,31 @@ export interface AgentReplyRequest {
     partnerName: string;
     /** The latest messages of the conversation, oldest first, ending with a message of the partner */
     turns: AgentTurn[];
+}
+
+/**
+ * One message of a chat the agent suggests replies for.
+ */
+export interface AgentSuggestionMessage {
+    /** The display name of the sender */
+    sender: string;
+    /** Whether the user the agent writes for sent it */
+    own: boolean;
+    text: string;
+}
+
+/**
+ * A request for replies the user could send next in a chat, direct or group.
+ */
+export interface AgentSuggestionsRequest {
+    /** The display name of the user the agent writes for */
+    ownName: string;
+    /** The name of the chat */
+    chatName: string;
+    /** Whether the chat is a direct message */
+    isDirect: boolean;
+    /** The latest messages of the chat, oldest first, ending with a message of someone else */
+    messages: AgentSuggestionMessage[];
 }
 
 /**

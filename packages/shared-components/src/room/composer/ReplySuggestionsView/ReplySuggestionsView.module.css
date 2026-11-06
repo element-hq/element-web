@@ -1,0 +1,62 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.view {
+    padding: var(--cpd-space-2x) 0;
+    min-inline-size: 0;
+}
+
+.icon {
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-accent-primary);
+}
+
+.suggestion {
+    /* Share the row; a long suggestion is cut off, and its full text is in the tooltip */
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    padding: var(--cpd-space-1x) var(--cpd-space-3x);
+    border: 1px solid var(--cpd-color-border-accent-subtle);
+    border-radius: 9999px;
+    background: var(--cpd-color-bg-accent-subtle);
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-sm-regular);
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    border-color: var(--cpd-color-border-accent-primary);
+}
+
+.suggestion:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.placeholder {
+    inline-size: 120px;
+    block-size: 26px;
+    border-radius: 9999px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    animation: pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    to {
+        opacity: 0.4;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .placeholder {
+        animation: none;
+    }
+}

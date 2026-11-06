@@ -16,6 +16,7 @@ import {
     connectAgent,
     disconnectAgent,
     generateAgentReply,
+    generateAgentSuggestions,
     getAgentRooms,
     getAgentStatus,
     listAgentModels,
@@ -205,6 +206,9 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "agentGenerateReply":
             ret = await generateAgentReply(args[0]);
+            break;
+        case "agentGenerateSuggestions":
+            ret = await generateAgentSuggestions(args[0]);
             break;
 
         case "clearStorage":

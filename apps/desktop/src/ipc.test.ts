@@ -77,6 +77,7 @@ const agent = vi.hoisted(() => ({
     getAgentRooms: vi.fn(),
     setAgentRoom: vi.fn(),
     generateAgentReply: vi.fn(),
+    generateAgentSuggestions: vi.fn(),
 }));
 vi.mock("./agent.js", () => agent);
 
@@ -377,6 +378,11 @@ describe("ipc agent commands", () => {
         ["agentGetRooms", agent.getAgentRooms, ["@alice:example.org"]],
         ["agentSetRoom", agent.setAgentRoom, ["@alice:example.org", "!dm:example.org", true]],
         ["agentGenerateReply", agent.generateAgentReply, [{ ownName: "Alice", partnerName: "Bob", turns: [] }]],
+        [
+            "agentGenerateSuggestions",
+            agent.generateAgentSuggestions,
+            [{ ownName: "Alice", chatName: "Bob", isDirect: true, messages: [] }],
+        ],
     ])("routes %s to the agent and replies with its result", async (name, handler, args) => {
         // A plain value works for the synchronous and the awaited handlers alike
         vi.mocked(handler).mockReturnValue({ ok: true, data: name });
