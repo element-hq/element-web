@@ -94,6 +94,18 @@ describe("<DecoratedRoomAvatarView />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should render the presence ring together with the agent decoration", () => {
+        vi.mocked(useRoomAvatarViewModel).mockReturnValue({
+            badgeDecoration: AvatarBadgeDecoration.Agent,
+            presence: Presence.Online,
+        });
+        const { container } = render(<DecoratedRoomAvatarView room={room} />);
+
+        expect(screen.getByLabelText("The agent replies in this chat")).toBeInTheDocument();
+        expect(screen.getByLabelText("Online")).toHaveClass("mx_RoomAvatarView_PresenceRing");
+        expect(container.querySelector(".mx_RoomAvatarView")).toHaveClass("mx_RoomAvatarView_withIcon");
+    });
+
     it.each([
         { presence: Presence.Online, label: "Online" },
         { presence: Presence.Offline, label: "Offline" },
@@ -107,7 +119,10 @@ describe("<DecoratedRoomAvatarView />", () => {
         });
         const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
 
-        expect(screen.getByLabelText(label)).toBeInTheDocument();
+        expect(screen.getByLabelText(label)).toHaveClass(
+            "mx_RoomAvatarView_PresenceRing",
+            `mx_RoomAvatarView_PresenceRing_${presence}`,
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -25,10 +25,6 @@
         mask-image: url("/res/img/element-icons/roomlist/room-avatar-view-icon-mask.svg");
     }
 
-    .mx_RoomAvatarView_RoomAvatar_presence {
-        mask-image: url("/res/img/element-icons/roomlist/room-avatar-view-presence-mask.svg");
-    }
-
     .mx_RoomAvatarView_icon {
         position: absolute;
 
@@ -38,12 +34,46 @@
         bottom: var(--cpd-space-0-5x);
     }
 
-    .mx_RoomAvatarView_PresenceDecoration {
+    .mx_RoomAvatarView_PresenceRing {
+        --presence-ring-width: 3px;
+
         position: absolute;
 
-        /* Place half the icon inside the avatar */
-        /* Avatar size - (icon size (8px) / 2) */
-        left: calc((var(--room-avatar-size) - 4px));
-        bottom: var(--cpd-space-0-5x);
+        /* A ring around the avatar, with a 1px gap so it doesn't touch the avatar's edge */
+        inset: calc(-1 * (var(--presence-ring-width) + 1px));
+        border: var(--presence-ring-width) solid var(--presence-ring-color);
+        border-radius: 50%;
+    }
+
+    /* Cut the same hole into the ring as into the avatar, so that the icon stands free */
+    &.mx_RoomAvatarView_withIcon .mx_RoomAvatarView_PresenceRing {
+        /* The hole of room-avatar-view-icon-mask.svg: 10px around (32px, 22px) of the avatar */
+        --presence-ring-hole-x: calc(32px + var(--presence-ring-width) + 1px);
+        --presence-ring-hole-y: calc(22px + var(--presence-ring-width) + 1px);
+
+        mask-image: radial-gradient(
+            circle 10px at var(--presence-ring-hole-x) var(--presence-ring-hole-y),
+            transparent 10px,
+            #000 10px
+        );
+    }
+
+    .mx_RoomAvatarView_PresenceRing_online {
+        --presence-ring-color: var(--cpd-color-icon-accent-primary);
+    }
+
+    .mx_RoomAvatarView_PresenceRing_unavailable {
+        --presence-ring-color: var(--cpd-color-icon-quaternary);
+    }
+
+    .mx_RoomAvatarView_PresenceRing_busy {
+        --presence-ring-color: var(--cpd-color-icon-critical-primary);
+    }
+
+    .mx_RoomAvatarView_PresenceRing_offline {
+        --presence-ring-color: var(--cpd-color-border-interactive-secondary);
+
+        /* Being offline is the usual state, so it gets a quieter ring */
+        --presence-ring-width: 2px;
     }
 }
