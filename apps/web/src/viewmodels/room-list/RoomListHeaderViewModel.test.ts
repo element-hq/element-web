@@ -26,7 +26,6 @@ import {
     showSpaceSettings,
 } from "../../utils/space";
 import { createRoom, hasCreateRoomRights } from "./utils";
-import PosthogTrackers from "../../PosthogTrackers";
 import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
 
 vi.mock("../../PosthogTrackers", () => ({
@@ -95,7 +94,7 @@ describe("RoomListHeaderViewModel", () => {
             expect(snapshot.displaySpaceMenu).toBe(false);
             expect(snapshot.canCreateRoom).toBe(true);
             expect(snapshot.canCreateVideoRoom).toBe(true);
-            expect(snapshot.activeSortOption).toBe("recent");
+            expect(snapshot).not.toHaveProperty("activeSortOption");
         });
 
         it("should compute snapshot for active space", () => {
@@ -116,16 +115,6 @@ describe("RoomListHeaderViewModel", () => {
 
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
             expect(vm.getSnapshot().canCreateVideoRoom).toBe(false);
-        });
-
-        it("should show alphabetical sort option when RoomList.preferredSorting is Alphabetic", () => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Alphabetic;
-                return false;
-            });
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            expect(vm.getSnapshot().activeSortOption).toBe("alphabetical");
         });
 
         it("should show invite option when space is public", () => {
@@ -306,33 +295,6 @@ describe("RoomListHeaderViewModel", () => {
             vm.openSpaceSettings();
 
             expect(showSpaceSettings).toHaveBeenCalledWith(mockSpace);
-        });
-
-        it.each([
-            ["recent" as const, SortingAlgorithm.Recency],
-            ["alphabetical" as const, SortingAlgorithm.Alphabetic],
-            ["unread-first" as const, SortingAlgorithm.Unread],
-        ])("should resort when sort is called with '%s'", (option, expectedAlgorithm) => {
-            const resortSpy = vi.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(vi.fn());
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            vm.sort(option);
-            expect(resortSpy).toHaveBeenCalledWith(expectedAlgorithm);
-        });
-
-        it("should track analytics on resort", () => {
-            vi.spyOn(RoomListStoreV3.instance, "activeSortAlgorithm", "get").mockReturnValue(
-                SortingAlgorithm.Alphabetic,
-            );
-            PosthogTrackers.trackRoomListSortingAlgorithmChange = vi.fn();
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
-            vi.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(vi.fn());
-            vm.sort("unread-first");
-
-            expect(PosthogTrackers.trackRoomListSortingAlgorithmChange).toHaveBeenCalledWith(
-                SortingAlgorithm.Alphabetic,
-                SortingAlgorithm.Unread,
-            );
         });
 
         it("should call createSection on RoomListStoreV3 when createSection is called", () => {

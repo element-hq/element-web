@@ -10,7 +10,6 @@ import {
     BaseViewModel,
     type RoomListHeaderViewSnapshot,
     type RoomListHeaderViewModel as RoomListHeaderViewModelInterface,
-    type SortOption,
 } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -29,7 +28,6 @@ import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
-import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
 import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
@@ -197,29 +195,6 @@ export class RoomListHeaderViewModel
         showSpaceSettings(this.activeSpace);
     };
 
-    public sort = (option: SortOption): void => {
-        const oldSortingAlgorithm = RoomListStoreV3.instance.activeSortAlgorithm;
-        let newSortingAlgorithm: SortingAlgorithm;
-        switch (option) {
-            case "alphabetical":
-                newSortingAlgorithm = SortingAlgorithm.Alphabetic;
-                break;
-            case "recent":
-                newSortingAlgorithm = SortingAlgorithm.Recency;
-                break;
-            case "unread-first":
-                newSortingAlgorithm = SortingAlgorithm.Unread;
-                break;
-        }
-        RoomListStoreV3.instance.resort(newSortingAlgorithm);
-        this.snapshot.merge({ activeSortOption: option });
-
-        // Record analytics for this action
-        if (oldSortingAlgorithm) {
-            PosthogTrackers.trackRoomListSortingAlgorithmChange(oldSortingAlgorithm, newSortingAlgorithm);
-        }
-    };
-
     public toggleMessagePreview = (): void => {
         PosthogTrackers.trackInteraction("WebRoomListMessagePreviewToggle");
 
@@ -272,25 +247,9 @@ export class RoomListHeaderViewModel
  * @returns
  */
 function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
-    const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
-
-    let activeSortOption: SortOption;
-    switch (sortingAlgorithm) {
-        case SortingAlgorithm.Alphabetic:
-            activeSortOption = "alphabetical";
-            break;
-        case SortingAlgorithm.Recency:
-            activeSortOption = "recent";
-            break;
-        case SortingAlgorithm.Unread:
-            activeSortOption = "unread-first";
-            break;
-    }
-
     const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
 
     return {
-        activeSortOption,
         isMessagePreviewEnabled,
         ...computeHeaderSpaceState(spaceStore, matrixClient),
     };
@@ -323,7 +282,7 @@ function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
 function computeHeaderSpaceState(
     spaceStore: SpaceStore,
     matrixClient: MatrixClient,
-): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
+): Omit<RoomListHeaderViewSnapshot, "isMessagePreviewEnabled"> {
     const displaySectionReleaseAnnouncement =
         ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
     const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");

@@ -86,6 +86,7 @@ export class PreviewRoomListItemViewModel
             sections: [],
             areSectionsEnabled: false,
             canChangeSection: false,
+            canReorder: false,
         };
     }
 

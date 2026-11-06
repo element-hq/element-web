@@ -14,6 +14,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
 import { getScrollTargetEntryIndex, KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
+import { createGetRoomItemViewModel, mock10RoomsIds } from "../story-mocks";
 
 const { Default, Sections } = composeStories(stories);
 
@@ -214,6 +215,91 @@ describe("<VirtualizedRoomListView />", () => {
             });
             expect(Sections.args.onSectionOrRoomDragStart).toHaveBeenCalled();
             expect(Sections.args.onSectionOrRoomDragEnd).toHaveBeenCalled();
+        });
+    });
+
+    describe("reordering in the flat list", () => {
+        // The first three rooms (General, Random, Engineering) can be reordered, like favourites
+        const getRoomItemViewModel = createGetRoomItemViewModel(mock10RoomsIds);
+        const viewModels = new Map(
+            mock10RoomsIds.map((roomId, index) => {
+                const vm = getRoomItemViewModel(roomId);
+                if (index >= 3) return [roomId, vm];
+                const snapshot = { ...vm.getSnapshot(), isFavourite: true, canReorder: true };
+                return [roomId, { ...vm, getSnapshot: () => snapshot }];
+            }),
+        );
+        const renderFlatList = (): ReturnType<typeof render> =>
+            renderWithMockContext(<Default getRoomItemViewModel={(roomId) => viewModels.get(roomId)!} />);
+
+        /** Drag the focused room down by about `distance` pixels with the keyboard and drop it. */
+        async function dragDown(user: ReturnType<typeof userEvent.setup>, distance: number): Promise<void> {
+            await user.keyboard(" "); // start drag
+            for (let i = 0; i < Math.round(distance / KEYBOARD_DRAG_OFFSET); i++) {
+                await user.keyboard("{ArrowDown}");
+            }
+            await user.keyboard(" "); // drop
+        }
+
+        beforeEach(() => {
+            (Default.args.reorderRoom as any).mockClear?.();
+        });
+
+        it("moves a reorderable room to the position of the reorderable room it is dropped on", async () => {
+            const user = userEvent.setup();
+            renderFlatList();
+
+            (await screen.findByRole("option", { name: "Open room General" })).focus();
+            // Two rooms down, from the middle of General to the middle of Engineering
+            await dragDown(user, 104);
+
+            await waitFor(() => {
+                expect(Default.args.reorderRoom).toHaveBeenCalledWith("!room0:server", "!room2:server");
+            });
+        });
+
+        it("announces where the room will be dropped", async () => {
+            const user = userEvent.setup();
+            renderFlatList();
+            const status = screen.getByRole("status");
+
+            (await screen.findByRole("option", { name: "Open room General" })).focus();
+            await user.keyboard(" "); // start drag
+            for (let i = 0; i < Math.round(52 / KEYBOARD_DRAG_OFFSET); i++) {
+                await user.keyboard("{ArrowDown}");
+            }
+
+            await waitFor(() => expect(status).toHaveTextContent("General will be dropped after Random"));
+            await user.keyboard("{Escape}"); // cancel
+        });
+
+        it("does not drop a reorderable room on a room that can't be reordered", async () => {
+            const user = userEvent.setup();
+            renderFlatList();
+
+            (await screen.findByRole("option", { name: "Open room Engineering" })).focus();
+            // Down onto the fourth room, which can't be reordered
+            await dragDown(user, 52);
+
+            await user.keyboard("{Escape}");
+            expect(Default.args.reorderRoom).not.toHaveBeenCalled();
+        });
+
+        it("does not let a room that can't be reordered be dragged", async () => {
+            const user = userEvent.setup();
+            renderFlatList();
+
+            const instructions = screen.getByText(
+                "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
+            );
+            const reorderable = await screen.findByRole("option", { name: "Open room General" });
+            await waitFor(() => expect(reorderable).toHaveAttribute("aria-describedby", instructions.id));
+            const fixed = screen.getAllByRole("option")[3];
+            expect(fixed).not.toHaveAttribute("aria-describedby", instructions.id);
+
+            fixed.focus();
+            await dragDown(user, 104);
+            expect(Default.args.reorderRoom).not.toHaveBeenCalled();
         });
     });
 

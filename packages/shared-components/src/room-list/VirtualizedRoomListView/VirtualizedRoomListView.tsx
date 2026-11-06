@@ -19,6 +19,7 @@ import {
     type VirtualizedListContext,
     GroupedVirtualizedList,
     type GroupedVirtualizedListProps,
+    type FlatVirtualizedListProps,
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
@@ -77,6 +78,38 @@ const ROOM_LIST_ITEM_HEIGHT = 52;
  * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
  */
 export const KEYBOARD_DRAG_OFFSET = 17;
+
+/**
+ * Sensors shared by the flat and the grouped list to start, move and drop a drag.
+ */
+const DRAG_SENSORS = [
+    // By default, PointerSensor activates dragging immediately on mouse pointer down, which interferes
+    // with clicking a room and keyboard navigation, so for mouse/pen we require a small drag distance
+    // before a drag starts (allowing a plain click without dragging).
+    // For touch, a Delay constraint that aborts the drag if the finger moves before the delay elapses is used to avoid accidental drags when scrolling the list with a finger.
+    PointerSensor.configure({
+        activationConstraints(event) {
+            if (event.pointerType === "touch") {
+                return [new PointerActivationConstraints.Delay({ value: 250, tolerance: 5 })];
+            }
+            return [new PointerActivationConstraints.Distance({ value: 5 })];
+        },
+    }),
+    // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
+    KeyboardSensor.configure({
+        // The default 10px-per-keypress offset makes keyboard dragging feel sluggish.
+        offset: KEYBOARD_DRAG_OFFSET,
+        keyboardCodes: {
+            start: ["Space"],
+            cancel: ["Escape"],
+            end: ["Space"],
+            up: ["ArrowUp"],
+            down: ["ArrowDown"],
+            left: ["ArrowLeft"],
+            right: ["ArrowRight"],
+        },
+    }),
+];
 
 /**
  * Type for context used in ListView
@@ -595,13 +628,27 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
     if (isFlatList) {
         return (
-            <FlatVirtualizedList
-                {...commonProps}
-                {...getContainerAccessibleProps("listbox")}
-                scrollHandleRef={setVirtuosoHandle}
-                items={roomIds}
-                getItemComponent={getItemComponentForFlatList}
-            />
+            <DragDropProvider<RoomListDragData>
+                onDragEnd={(event) => {
+                    const { source, target } = event.operation;
+                    if (event.canceled || !source || !target) return;
+                    // Only reorderable rooms are drop targets in the flat list
+                    vm.reorderRoom(String(source.id), String(target.id));
+                }}
+                sensors={DRAG_SENSORS}
+                plugins={a11yPlugins}
+            >
+                <DragOverlay dropAnimation={null}>
+                    <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
+                </DragOverlay>
+                <FlatRoomList
+                    {...commonProps}
+                    {...getContainerAccessibleProps("listbox")}
+                    scrollHandleRef={setVirtuosoHandle}
+                    items={roomIds}
+                    getItemComponent={getItemComponentForFlatList}
+                />
+            </DragDropProvider>
         );
     }
 
@@ -622,34 +669,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     vm.changeRoomSection(String(source.id), String(target.id));
                 }
             }}
-            sensors={[
-                // By default, PointerSensor activates dragging immediately on mouse pointer down, which interferes
-                // with clicking a room and keyboard navigation, so for mouse/pen we require a small drag distance
-                // before a drag starts (allowing a plain click without dragging).
-                // For touch, a Delay constraint that aborts the drag if the finger moves before the delay elapses is used to avoid accidental drags when scrolling the list with a finger.
-                PointerSensor.configure({
-                    activationConstraints(event) {
-                        if (event.pointerType === "touch") {
-                            return [new PointerActivationConstraints.Delay({ value: 250, tolerance: 5 })];
-                        }
-                        return [new PointerActivationConstraints.Distance({ value: 5 })];
-                    },
-                }),
-                // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
-                KeyboardSensor.configure({
-                    // The default 10px-per-keypress offset makes keyboard dragging feel sluggish.
-                    offset: KEYBOARD_DRAG_OFFSET,
-                    keyboardCodes: {
-                        start: ["Space"],
-                        cancel: ["Escape"],
-                        end: ["Space"],
-                        up: ["ArrowUp"],
-                        down: ["ArrowDown"],
-                        left: ["ArrowLeft"],
-                        right: ["ArrowRight"],
-                    },
-                }),
-            ]}
+            sensors={DRAG_SENSORS}
             plugins={a11yPlugins}
         >
             <DragOverlay dropAnimation={null}>
@@ -668,6 +688,16 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             />
         </DragDropProvider>
     );
+}
+
+/**
+ * Inner component rendered inside DragDropProvider that renders the flat virtualized list.
+ * Like {@link GroupedRoomList}, it disables the list's own keyboard navigation during a drag.
+ */
+function FlatRoomList(props: FlatVirtualizedListProps<string, Context>): JSX.Element {
+    const { source } = useDragOperation<RoomListDragData>();
+
+    return <FlatVirtualizedList<string, Context> {...props} disableKeyboardNavigation={source !== null} />;
 }
 
 /**

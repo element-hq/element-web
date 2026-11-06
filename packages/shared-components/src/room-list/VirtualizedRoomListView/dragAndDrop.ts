@@ -7,8 +7,11 @@
 
 /** Drag payload for a section header. */
 export type SectionDragData = { type: "section"; index: number };
-/** Drag payload for a room item. */
-export type RoomDragData = { type: "room"; isDm: boolean };
+/**
+ * Drag payload for a room item. `index` is the position of the room in the list and `canReorder`
+ * whether it can be moved among the other reorderable rooms (see {@link canDropForReorder}).
+ */
+export type RoomDragData = { type: "room"; isDm: boolean; index: number; canReorder: boolean };
 /** Discriminated union of all drag payloads in the room list. */
 export type RoomListDragData = SectionDragData | RoomDragData;
 
@@ -24,6 +27,22 @@ export function isSectionDragData(data: RoomListDragData | undefined): data is S
  */
 export function isRoomDragData(data: RoomListDragData | undefined): data is RoomDragData {
     return data?.type === "room";
+}
+
+/**
+ * Whether the room being dragged can be dropped on a reorderable room to take its position: only
+ * a room that can be reordered itself moves among the reorderable rooms.
+ */
+export function canDropForReorder(dragged: RoomListDragData | undefined): boolean {
+    return isRoomDragData(dragged) && dragged.canReorder;
+}
+
+/**
+ * Where a room dropped on the room at `targetIndex` lands: a room dragged upwards takes the place
+ * before it, a room dragged downwards the place after it.
+ */
+export function getDropPosition(sourceIndex: number, targetIndex: number): "before" | "after" {
+    return sourceIndex > targetIndex ? "before" : "after";
 }
 
 /** The kind of room a section takes when a room is dropped on it. */

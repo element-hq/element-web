@@ -82,21 +82,12 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
 ]);
 
 /**
- * Filters that are redundant when sections are enabled: Invites, Favourites and Low Priority rooms
- * already have their own sections, so these filters are only shown as chips when sectioning
- * is disabled (see {@link getVisibleFilterIds}).
- */
-const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority", "invites"]);
-
-/**
  * Compute the filter ids to display as primary filter chips.
- * When sections are enabled, the Invites, Favourites and Low Priority filters are hidden because
- * those rooms are surfaced as dedicated sections instead.
+ * None are shown: the room list is a single unfiltered list. Returning no ids also makes
+ * {@link getPersistedFilter} ignore a filter saved by an earlier version.
  */
 function getVisibleFilterIds(): FilterId[] {
-    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
-    const filterIds = [...filterKeyToIdMap.values()];
-    return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+    return [];
 }
 
 /**
@@ -160,6 +151,12 @@ export class RoomListViewModel
      */
     private sections: Section[] = [];
     private lastActiveRoomPosition: StickyRoomPosition | undefined = undefined;
+
+    /**
+     * Whether the next list update comes from the user reordering rooms, in which case the active room
+     * moves with the others instead of staying in place (see {@link applyStickyRoom}).
+     */
+    private skipStickyRoomOnNextUpdate = false;
 
     // Child view model management
     private readonly roomItemViewModels = new Map<string, RoomListItemViewModel>();
@@ -943,9 +940,11 @@ export class RoomListViewModel
      */
     private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Section[] {
         const sections = this.roomsResult.sections;
+        const skipSticky = this.skipStickyRoomOnNextUpdate;
+        this.skipStickyRoomOnNextUpdate = false;
 
-        // When opening another room, the index should obviously change
-        if (!roomId || isRoomChange) return sections;
+        // When opening another room, or after the user reordered the rooms, the index should obviously change
+        if (!roomId || isRoomChange || skipSticky) return sections;
 
         // If there was no previously tracked position, nothing to stick to
         const oldPosition = this.lastActiveRoomPosition;
@@ -1189,6 +1188,12 @@ export class RoomListViewModel
         }
         this.savedExpansionStates.clear();
         void this.updateRoomListData();
+    };
+
+    public reorderRoom = (roomId: string, targetRoomId: string): void => {
+        // The user put the rooms where they want them: keeping the active room in place would undo that
+        this.skipStickyRoomOnNextUpdate = true;
+        void RoomListStoreV3.instance.moveFavourite(roomId, targetRoomId);
     };
 
     public changeRoomSection = (roomId: string, tag: string): void => {

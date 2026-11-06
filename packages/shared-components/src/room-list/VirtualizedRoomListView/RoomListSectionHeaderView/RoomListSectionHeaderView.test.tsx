@@ -119,7 +119,7 @@ describe("<RoomListSectionHeaderView /> drop eligibility", () => {
     function DraggableRoom({ isDm }: { isDm: boolean }): JSX.Element {
         const { ref, handleRef } = useDraggable<RoomDragData>({
             id: ROOM_ID,
-            data: { type: "room", isDm },
+            data: { type: "room", isDm, index: 0, canReorder: false },
             // The list clones the dragged row rather than moving it, which is also what keeps the
             // original from going `pointer-events: none` mid-gesture
             plugins: [Feedback.configure({ feedback: "clone" })],

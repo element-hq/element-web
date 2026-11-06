@@ -263,12 +263,6 @@
             "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
         "show_message_previews": "Show message previews",
-        "sort": "Sort",
-        "sort_type": {
-            "activity": "Latest activity",
-            "atoz": "A-Z",
-            "unread_first": "Unread first"
-        },
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"

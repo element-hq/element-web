@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { CheckboxMenuItem, IconButton, Menu, MenuTitle, RadioMenuItem } from "@vector-im/compound-web";
+import { CheckboxMenuItem, IconButton, Menu, MenuTitle } from "@vector-im/compound-web";
 import React, { type JSX, useState } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
@@ -22,8 +22,8 @@ interface OptionMenuViewProps {
 }
 
 /**
- * A menu component that provides sorting options for the room list.
- * Displays a dropdown menu with radio buttons to sort rooms by activity or alphabetically.
+ * A menu component that provides display options for the room list.
+ * The list is always sorted by recency, so there is no sorting choice here.
  *
  * @example
  * ```tsx
@@ -33,7 +33,7 @@ interface OptionMenuViewProps {
 export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { activeSortOption, isMessagePreviewEnabled } = useViewModel(vm);
+    const { isMessagePreviewEnabled } = useViewModel(vm);
 
     return (
         <Menu
@@ -54,23 +54,7 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
                 </IconButton>
             }
         >
-            <MenuTitle title={_t("room_list|sort")} className={styles.title} />
-            <RadioMenuItem
-                label={_t("room_list|sort_type|activity")}
-                checked={activeSortOption === "recent"}
-                onSelect={() => vm.sort("recent")}
-            />
-            <RadioMenuItem
-                label={_t("room_list|sort_type|unread_first")}
-                checked={activeSortOption === "unread-first"}
-                onSelect={() => vm.sort("unread-first")}
-            />
-            <RadioMenuItem
-                label={_t("room_list|sort_type|atoz")}
-                checked={activeSortOption === "alphabetical"}
-                onSelect={() => vm.sort("alphabetical")}
-            />
-            <MenuTitle title={_t("room_list|appearance")} />
+            <MenuTitle title={_t("room_list|appearance")} className={styles.title} />
             <CheckboxMenuItem
                 label={_t("room_list|show_message_previews")}
                 onSelect={vm.toggleMessagePreview}

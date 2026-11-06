@@ -710,6 +710,52 @@ describe("RoomListItemViewModel", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
             expect(viewModel.getSnapshot().canChangeSection).toBe(expected);
         });
+
+        it.each([
+            { isFavourite: true, showSections: false, expected: true },
+            { isFavourite: false, showSections: false, expected: false },
+            { isFavourite: true, showSections: true, expected: false },
+        ])(
+            "should set canReorder to $expected for a favourite: $isFavourite, with sections: $showSections",
+            ({ isFavourite, showSections, expected }) => {
+                room.tags = isFavourite ? { [DefaultTagID.Favourite]: {} } : {};
+                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                    if (setting === "RoomList.showSections") return showSections;
+                    return false;
+                });
+
+                viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+                expect(viewModel.getSnapshot().canReorder).toBe(expected);
+            },
+        );
+
+        it("should not let a favourite with a pending invitation be reordered", () => {
+            room.tags = { [DefaultTagID.Favourite]: {} };
+            vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canReorder).toBe(false);
+        });
+
+        it("should update canReorder when RoomList.showSections setting changes", () => {
+            room.tags = { [DefaultTagID.Favourite]: {} };
+            let watchCallback: CallbackFn<"RoomList.showSections"> = () => {};
+            vi.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                if (setting === "RoomList.showSections") watchCallback = callback;
+                return "watcher-id";
+            });
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canReorder).toBe(true);
+
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showSections") return true;
+                return false;
+            });
+            watchCallback("RoomList.showSections", null, null as any, null, null);
+
+            expect(viewModel.getSnapshot().canReorder).toBe(false);
+        });
     });
 
     describe("Cleanup", () => {

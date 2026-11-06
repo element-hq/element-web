@@ -83,6 +83,30 @@
     opacity: 0.6;
 }
 
+/* A line marking where the dragged room will land: above or below this item */
+.dropBefore .container,
+.dropAfter .container {
+    position: relative;
+}
+
+.dropBefore .container::before,
+.dropAfter .container::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--cpd-color-border-accent-primary);
+}
+
+.dropBefore .container::before {
+    top: 0;
+}
+
+.dropAfter .container::after {
+    bottom: 0;
+}
+
 .content {
     flex: 1;
     min-width: 0;

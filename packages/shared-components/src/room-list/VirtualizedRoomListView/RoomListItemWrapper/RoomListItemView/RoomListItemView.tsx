@@ -106,6 +106,11 @@ export interface RoomListItemViewSnapshot {
      * that assign a section (Favourited, Low priority and "Move to").
      */
     canChangeSection: boolean;
+    /**
+     * Whether the room can be dragged to another position among the rooms that can also be reordered
+     * (the favourites in the flat list), instead of being placed by its latest message.
+     */
+    canReorder: boolean;
 }
 
 /**
@@ -164,6 +169,8 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     renderAvatar: (room: Room) => ReactNode;
     /** Whether this item is the source of an active drag operation */
     isDragSource?: boolean;
+    /** Where the dragged room will land relative to this item, when this item is the drop target */
+    dropIndicator?: "before" | "after";
     ref?: Ref<Element>;
 }
 
@@ -180,6 +187,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     isLastItem,
     renderAvatar,
     isDragSource = false,
+    dropIndicator,
     ref,
     ...props
 }: RoomListItemViewProps): JSX.Element {
@@ -234,6 +242,8 @@ export const RoomListItemView = memo(function RoomListItemView({
                     [styles.firstItem]: isFirstItem,
                     [styles.lastItem]: isLastItem,
                     [styles.dragSource]: isDragSource,
+                    [styles.dropBefore]: dropIndicator === "before",
+                    [styles.dropAfter]: dropIndicator === "after",
                     mx_RoomListItemView_selected: isSelected,
                 })}
                 gap="var(--cpd-space-3x)"

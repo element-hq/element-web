@@ -133,6 +133,15 @@ describe("<RoomListView />", () => {
         expect(Default.args.onToggleFilter).toHaveBeenCalled();
     });
 
+    it("should not render the filter list when there are no filters", () => {
+        renderWithMockContext(<Default filterIds={[]} />);
+
+        expect(screen.queryByRole("listbox", { name: "Room list filters" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("option", { name: "People" })).not.toBeInTheDocument();
+        // The rooms are still listed
+        expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+    });
+
     it("should call createRoom when New room button is clicked", async () => {
         const user = userEvent.setup();
         renderWithMockContext(<Empty />);

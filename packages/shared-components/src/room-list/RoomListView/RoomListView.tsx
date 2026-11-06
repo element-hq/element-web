@@ -100,6 +100,11 @@ export interface RoomListViewActions {
     changeRoomSection: (roomId: string, tag: string) => void;
     /** Called to change the order of sections */
     changeSectionOrder: (sourceTag: string, targetTag: string) => void;
+    /**
+     * Called when a reorderable room is dropped on another one in the flat list: the room takes the
+     * position of the target room, the rooms in between move up or down by one.
+     */
+    reorderRoom: (roomId: string, targetRoomId: string) => void;
     /** Called when a section drag starts — collapses all sections */
     onSectionOrRoomDragStart: () => void;
     /** Called when a section drag ends (drop or cancel) — restores expansion states */
@@ -140,13 +145,15 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
 
     return (
         <>
-            <div>
-                <RoomListPrimaryFilters
-                    filterIds={snapshot.filterIds}
-                    activeFilterId={snapshot.activeFilterId}
-                    onToggleFilter={vm.onToggleFilter}
-                />
-            </div>
+            {snapshot.filterIds.length > 0 && (
+                <div>
+                    <RoomListPrimaryFilters
+                        filterIds={snapshot.filterIds}
+                        activeFilterId={snapshot.activeFilterId}
+                        onToggleFilter={vm.onToggleFilter}
+                    />
+                </div>
+            )}
             <Flex direction="column" className={styles.list}>
                 <AutoHideScrollbar className={styles.scrollbar}>
                     {listBody}

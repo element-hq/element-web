@@ -16,11 +16,6 @@ import { ComposeMenuView, OptionMenuView, SpaceMenuView } from "./menu";
 import styles from "./RoomListHeaderView.module.css";
 
 /**
- * The available sorting options for the room list.
- */
-export type SortOption = "recent" | "alphabetical" | "unread-first";
-
-/**
  * The available options for collapsing sections in the room list.
  */
 export type CollapseSectionsOption = "collapse" | "expand";
@@ -51,10 +46,6 @@ export interface RoomListHeaderViewSnapshot {
      * Whether the user can access space settings
      */
     canAccessSpaceSettings: boolean;
-    /**
-     * The currently active sort option.
-     */
-    activeSortOption: SortOption;
     /**
      * Whether message previews are enabled in the room list.
      */
@@ -104,10 +95,6 @@ export interface RoomListHeaderViewActions {
      * Open the space settings
      */
     openSpaceSettings: () => void;
-    /**
-     * Change the sort order of the room-list.
-     */
-    sort: (option: SortOption) => void;
     /**
      * Toggle message preview display in the room list.
      */

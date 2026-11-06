@@ -10,7 +10,7 @@ import { configure, Plugin, type Plugins } from "@dnd-kit/abstract";
 import { Accessibility, type Draggable, type DragDropManager, type Droppable } from "@dnd-kit/dom";
 
 import { useI18n } from "../../core/i18n/i18nContext";
-import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
+import { isRoomDragData, isSectionDragData, type RoomListDragData } from "./dragAndDrop";
 import type { RoomListViewModel } from "../RoomListView";
 
 type Manager = DragDropManager;
@@ -45,6 +45,19 @@ export interface RoomListAccessibilityOptions {
      * draggable via `aria-describedby`.
      */
     instructions?: string;
+}
+
+/**
+ * Whether a section is dragged onto a section, or a room onto a room. Both are reorderings where the
+ * source lands before or after the target, unlike a room dropped on a section header.
+ */
+function isSameKindDrag(
+    source: RoomListDragData | undefined,
+    target: RoomListDragData | undefined,
+): source is RoomListDragData & { index: number } {
+    return (
+        (isSectionDragData(source) && isSectionDragData(target)) || (isRoomDragData(source) && isRoomDragData(target))
+    );
 }
 
 /**
@@ -200,14 +213,14 @@ export function useRoomListAccessibilityPlugin(
 ): (defaults: Plugins<Manager>) => Plugins<Manager> {
     const { translate: _t } = useI18n();
 
-    // Get the display name of a draggable source: the section title for a section, or the
-    // room name for a room. Returns undefined if the source can't be resolved.
-    const getDragSourceName = useCallback(
-        (source: Draggable<RoomListDragData>): string | undefined => {
-            if (isSectionDragData(source.data)) {
-                return vm.getSectionHeaderViewModel(source.id as string).getSnapshot().title;
+    // Get the display name of a drag source or drop target: the section title for a section, or
+    // the room name for a room. Returns undefined if it can't be resolved.
+    const getDragItemName = useCallback(
+        (item: Draggable<RoomListDragData> | Droppable<RoomListDragData>): string | undefined => {
+            if (isRoomDragData(item.data)) {
+                return vm.getRoomItemViewModel(item.id as string)?.getSnapshot().name;
             }
-            return vm.getRoomItemViewModel(source.id as string)?.getSnapshot().name;
+            return vm.getSectionHeaderViewModel(item.id as string).getSnapshot().title;
         },
         [vm],
     );
@@ -216,21 +229,22 @@ export function useRoomListAccessibilityPlugin(
         () => ({
             dragstart: ({ operation: { source } }: A11yData) => {
                 if (!source) return;
-                const sourceName = getDragSourceName(source);
+                const sourceName = getDragItemName(source);
                 if (sourceName === undefined) return;
                 return _t("room_list|a11y|drag_start", { source: sourceName });
             },
             dragover: ({ operation: { source, target } }: A11yData) => {
                 if (!source) return;
-                const sourceName = getDragSourceName(source);
+                const sourceName = getDragItemName(source);
                 if (sourceName === undefined) return;
                 // A section dragged over a non-droppable area (favourites/low-priority or its own original slot) has no target and snaps back to where it started.
                 if (isSectionDragData(source.data) && !target) {
                     return _t("room_list|a11y|drag_over_original", { source: sourceName });
                 }
                 if (!target) return;
-                const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
-                if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
+                const targetTitle = getDragItemName(target);
+                if (targetTitle === undefined) return;
+                if (isSameKindDrag(source.data, target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
 
                     return droppedBefore
@@ -242,7 +256,7 @@ export function useRoomListAccessibilityPlugin(
             dragend: ({ operation: { source, target }, canceled }: A11yData) => {
                 if (!source) return;
                 if (canceled) return _t("room_list|a11y|drag_cancelled");
-                const sourceName = getDragSourceName(source);
+                const sourceName = getDragItemName(source);
                 if (sourceName === undefined) return;
                 // A section dragged over a non-droppable area (favourites/low-priority or its own original slot) has no target and snaps back to where it started.
                 if (isSectionDragData(source.data) && !target) {
@@ -250,8 +264,9 @@ export function useRoomListAccessibilityPlugin(
                 }
 
                 if (!target) return;
-                const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
-                if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
+                const targetTitle = getDragItemName(target);
+                if (targetTitle === undefined) return;
+                if (isSameKindDrag(source.data, target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
                     return droppedBefore
                         ? _t("room_list|a11y|drag_end_before", { source: sourceName, target: targetTitle })
@@ -260,7 +275,7 @@ export function useRoomListAccessibilityPlugin(
                 return _t("room_list|a11y|drag_end", { source: sourceName, target: targetTitle });
             },
         }),
-        [vm, _t, getDragSourceName],
+        [getDragItemName, _t],
     );
 
     const instructions = _t("room_list|a11y|drag_instructions");

@@ -113,6 +113,7 @@ export const createMockRoomSnapshot = (
     sections: [],
     areSectionsEnabled: true,
     canChangeSection: true,
+    canReorder: false,
 });
 
 export function createMockRoomItemViewModel(

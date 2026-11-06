@@ -45,6 +45,7 @@ const RoomListViewWrapperImpl = ({
     setScrollToIndex,
     changeRoomSection,
     changeSectionOrder,
+    reorderRoom,
     onSectionOrRoomDragStart,
     onSectionOrRoomDragEnd,
     ...rest
@@ -62,6 +63,7 @@ const RoomListViewWrapperImpl = ({
         setScrollToIndex,
         changeRoomSection,
         changeSectionOrder,
+        reorderRoom,
         onSectionOrRoomDragStart,
         onSectionOrRoomDragEnd,
     });
@@ -121,6 +123,7 @@ const meta = {
         setScrollToIndex: fn(),
         changeRoomSection: fn(),
         changeSectionOrder: fn(),
+        reorderRoom: fn(),
         onSectionOrRoomDragStart: fn(),
         onSectionOrRoomDragEnd: fn(),
     },

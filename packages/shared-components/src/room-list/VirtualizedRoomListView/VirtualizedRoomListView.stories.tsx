@@ -41,6 +41,7 @@ const RoomListWrapperImpl = ({
     renderAvatar: renderAvatarProp,
     changeRoomSection,
     changeSectionOrder,
+    reorderRoom,
     onSectionOrRoomDragStart,
     onSectionOrRoomDragEnd,
     ...rest
@@ -58,6 +59,7 @@ const RoomListWrapperImpl = ({
         setScrollToIndex,
         changeRoomSection,
         changeSectionOrder,
+        reorderRoom,
         onSectionOrRoomDragStart,
         onSectionOrRoomDragEnd,
     });
@@ -104,6 +106,7 @@ const meta = {
         setScrollToIndex: fn(),
         changeRoomSection: fn(),
         changeSectionOrder: fn(),
+        reorderRoom: fn(),
         onSectionOrRoomDragStart: fn(),
         onSectionOrRoomDragEnd: fn(),
     },

@@ -1282,8 +1282,10 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|show_message_previews"),
     },
     "RoomList.showSections": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: true,
+        // The room list is a single flat list. Only the config can still turn sections on, so a value
+        // saved in the account data by an earlier version is ignored.
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: false,
         displayName: _td("settings|show_sections"),
         controller: new AnalyticsController("WebRoomListSectionToggle"),
     },

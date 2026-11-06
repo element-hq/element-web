@@ -130,12 +130,13 @@ describe("RoomListStoreV3", () => {
         expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Recency);
     });
 
-    it("Uses preferred sorter on startup", async () => {
-        vi.spyOn(SettingsStore, "getValue").mockImplementation(() => {
-            return SortingAlgorithm.Alphabetic;
-        });
+    it("Sorts by recency on startup, ignoring a sorting choice saved by an earlier version", async () => {
+        const getValue = SettingsStore.getValue.bind(SettingsStore);
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) =>
+            setting === "RoomList.preferredSorting" ? SortingAlgorithm.Alphabetic : getValue(setting, ...args),
+        );
         const { store } = await getRoomListStore();
-        expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Alphabetic);
+        expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Recency);
     });
 
     describe("Updates", () => {
@@ -1756,6 +1757,96 @@ describe("RoomListStoreV3", () => {
             expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(5);
             const customSection = findSection(store.getSortedRoomsInActiveSpace().sections, customTag)!;
             expect(customSection.rooms).toContain(rooms[0]);
+        });
+    });
+
+    describe("Favourite order", () => {
+        /** Make some of the rooms favourites; a room with a higher index has a more recent message. */
+        function makeFavourites(rooms: Room[], orders: Record<number, number | undefined>): void {
+            for (const [index, order] of Object.entries(orders)) {
+                rooms[Number(index)].tags[DefaultTagID.Favourite] = order === undefined ? {} : { order };
+            }
+        }
+
+        it("moves a favourite to the position of another one and saves the order of the favourites", async () => {
+            const { client, rooms, store } = await getRoomListStore();
+            makeFavourites(rooms, { 10: undefined, 20: undefined, 30: undefined });
+            store.resort(SortingAlgorithm.Alphabetic);
+            store.resort(SortingAlgorithm.Recency);
+            // Without an order, the favourites are sorted by recency
+            expect(store.getSortedRooms().slice(0, 3)).toEqual([rooms[30], rooms[20], rooms[10]]);
+
+            const listener = vi.fn();
+            store.on(LISTS_UPDATE_EVENT, listener);
+            const done = store.moveFavourite(rooms[10].roomId, rooms[30].roomId);
+
+            // The list changes straight away, before the server sends the tags back
+            expect(store.getSortedRooms().slice(0, 3)).toEqual([rooms[10], rooms[30], rooms[20]]);
+            expect(listener).toHaveBeenCalled();
+            await done;
+            // None of the favourites had an order, so they are all numbered
+            expect(client.setRoomTag).toHaveBeenCalledTimes(3);
+            expect(client.setRoomTag).toHaveBeenCalledWith(rooms[10].roomId, DefaultTagID.Favourite, { order: 0.25 });
+            expect(client.setRoomTag).toHaveBeenCalledWith(rooms[30].roomId, DefaultTagID.Favourite, { order: 0.5 });
+            expect(client.setRoomTag).toHaveBeenCalledWith(rooms[20].roomId, DefaultTagID.Favourite, { order: 0.75 });
+
+            // A new message no longer moves a favourite
+            const event = mkMessage({ room: rooms[20].roomId, user: "@bob:example.org", ts: 1000, event: true });
+            vi.spyOn(rooms[20].getLiveTimeline(), "getEvents").mockReturnValue([event]);
+            dispatcher.dispatch(
+                {
+                    action: "MatrixActions.Room.timeline",
+                    event,
+                    isLiveEvent: true,
+                    isLiveUnfilteredRoomTimelineEvent: true,
+                    room: rooms[20],
+                },
+                true,
+            );
+            expect(store.getSortedRooms().slice(0, 3)).toEqual([rooms[10], rooms[30], rooms[20]]);
+        });
+
+        it("only changes the order of the moved favourite when all of them have one", async () => {
+            const { client, rooms, store } = await getRoomListStore();
+            makeFavourites(rooms, { 10: 0.2, 20: 0.4, 30: 0.6 });
+            store.resort(SortingAlgorithm.Alphabetic);
+            store.resort(SortingAlgorithm.Recency);
+            expect(store.getSortedRooms().slice(0, 3)).toEqual([rooms[10], rooms[20], rooms[30]]);
+
+            await store.moveFavourite(rooms[30].roomId, rooms[20].roomId);
+
+            expect(store.getSortedRooms().slice(0, 3)).toEqual([rooms[10], rooms[30], rooms[20]]);
+            expect(client.setRoomTag).toHaveBeenCalledTimes(1);
+            expect(client.setRoomTag).toHaveBeenCalledWith(rooms[30].roomId, DefaultTagID.Favourite, {
+                order: expect.closeTo(0.3),
+            });
+        });
+
+        it("restores the previous order when it can't be saved", async () => {
+            const { client, rooms, store } = await getRoomListStore();
+            makeFavourites(rooms, { 10: 0.2, 20: 0.4 });
+            store.resort(SortingAlgorithm.Alphabetic);
+            store.resort(SortingAlgorithm.Recency);
+            vi.mocked(client.setRoomTag).mockRejectedValue(new Error("Network error"));
+            vi.spyOn(logger, "error").mockImplementation(() => {});
+
+            await store.moveFavourite(rooms[20].roomId, rooms[10].roomId);
+
+            expect(store.getSortedRooms().slice(0, 2)).toEqual([rooms[10], rooms[20]]);
+            expect(rooms[20].tags[DefaultTagID.Favourite]).toEqual({ order: 0.4 });
+        });
+
+        it.each([
+            ["the room is not a favourite", 11, 10],
+            ["the target is not a favourite", 10, 11],
+            ["the room is dropped on itself", 10, 10],
+        ])("does nothing when %s", async (_, roomIndex, targetIndex) => {
+            const { client, rooms, store } = await getRoomListStore();
+            makeFavourites(rooms, { 10: 0.2, 20: 0.4 });
+
+            await store.moveFavourite(rooms[roomIndex].roomId, rooms[targetIndex].roomId);
+
+            expect(client.setRoomTag).not.toHaveBeenCalled();
         });
     });
 

@@ -9,7 +9,6 @@ export type {
     RoomListHeaderViewModel,
     RoomListHeaderViewSnapshot,
     RoomListHeaderViewActions,
-    SortOption,
     CollapseSectionsOption,
 } from "./RoomListHeaderView";
 export { RoomListHeaderView } from "./RoomListHeaderView";

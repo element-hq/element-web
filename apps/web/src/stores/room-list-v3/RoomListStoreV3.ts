@@ -41,6 +41,7 @@ import { filterBoolean } from "../../utils/arrays";
 import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedSectionTags, reorderSection } from "./section";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { getFavouriteOrderUpdates } from "../../utils/room/favouriteOrder";
 
 export enum RoomListStoreV3Event {
     // The event/channel which is called when the room lists have been changed.
@@ -439,13 +440,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Create the correct sorter depending on the persisted user preference.
+     * Create the sorter the room list starts with. The list is always sorted by recency (favourites first,
+     * low priority and muted rooms last); a sorting choice saved by an earlier version is ignored.
      * @param myUserId The user-id of our user.
      * @returns Sorter object that can be passed to the skip list.
      */
     private getPreferredSorter(myUserId: string): Sorter {
-        const preferred = SettingsStore.getValue("RoomList.preferredSorting");
-        return this.getSorterFromSortingAlgorithm(preferred, myUserId);
+        return this.getSorterFromSortingAlgorithm(SortingAlgorithm.Recency, myUserId);
     }
 
     /**
@@ -623,6 +624,64 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     public async reorderSection(sourceTag: string, targetTag: string): Promise<void> {
         await reorderSection(sourceTag, targetTag);
+    }
+
+    /**
+     * Move a favourite room to the position of another favourite room, by changing the order of their
+     * favourite tags (see {@link getFavouriteOrderUpdates}). The list is updated straight away rather than
+     * once the server sends the new tags back; if saving fails, the previous order is restored.
+     * Emits {@link LISTS_UPDATE_EVENT}.
+     * @param roomId The id of the favourite room to move
+     * @param targetRoomId The id of the favourite room whose position it takes
+     */
+    public async moveFavourite(roomId: string, targetRoomId: string): Promise<void> {
+        const client = this.matrixClient;
+        if (!this.roomSkipList || !client) return;
+
+        // The order is global, so move the room among all the favourites, not only those of the active space
+        const favourites = this.getSortedRooms().filter((room) => room.tags[DefaultTagID.Favourite]);
+        const from = favourites.findIndex((room) => room.roomId === roomId);
+        const to = favourites.findIndex((room) => room.roomId === targetRoomId);
+        if (from === -1 || to === -1 || from === to) return;
+        const [movedRoom] = favourites.splice(from, 1);
+        favourites.splice(to, 0, movedRoom);
+
+        const updates = getFavouriteOrderUpdates(favourites, to);
+        const changedRooms = favourites.filter((room) => updates.has(room.roomId));
+        const previousTags = new Map(changedRooms.map((room) => [room.roomId, room.tags[DefaultTagID.Favourite]]));
+        this.setFavouriteTags(changedRooms, (room) => ({
+            ...room.tags[DefaultTagID.Favourite],
+            order: updates.get(room.roomId),
+        }));
+
+        try {
+            await Promise.all(
+                changedRooms.map((room) =>
+                    client.setRoomTag(room.roomId, DefaultTagID.Favourite, room.tags[DefaultTagID.Favourite]),
+                ),
+            );
+        } catch (e) {
+            logger.error("RoomListStoreV3: Failed to save the order of the favourites", e);
+            this.setFavouriteTags(changedRooms, (room) => previousTags.get(room.roomId)!);
+        }
+    }
+
+    /**
+     * Set the favourite tag of some rooms locally and move them to their new place in the skip list.
+     * Emits {@link LISTS_UPDATE_EVENT}.
+     * @param rooms The rooms whose favourite tag changes
+     * @param getTag The new favourite tag of a room
+     */
+    private setFavouriteTags(rooms: Room[], getTag: (room: Room) => Room["tags"][string]): void {
+        if (!this.roomSkipList) return;
+        // Take all the rooms out before putting any back: a room is placed by comparing it to the rooms in
+        // the list, which must not include rooms whose tag already changed but which are still in their old place
+        for (const room of rooms) this.roomSkipList.removeRoom(room);
+        for (const room of rooms) {
+            room.tags[DefaultTagID.Favourite] = getTag(room);
+            this.roomSkipList.addNewRoom(room);
+        }
+        this.scheduleEmit();
     }
 
     /**

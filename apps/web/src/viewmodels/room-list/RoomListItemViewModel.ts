@@ -181,8 +181,8 @@ export class RoomListItemViewModel
     };
 
     private readonly onShowSectionsChange = (): void => {
-        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
-        this.snapshot.merge({ areSectionsEnabled });
+        // Whether the room can be reordered also depends on the sections, see generateItemSync
+        this.updateItem();
     };
 
     /**
@@ -384,6 +384,9 @@ export class RoomListItemViewModel
         // A room with a pending invitation always sits in the Invites section, so it can't be moved
         // to another one, by dragging it or through the menu entries that assign a section.
         const canChangeSection = room.getMyMembership() !== KnownMembership.Invite;
+        // In the flat list the favourites keep the position the user drags them to (see RecencySorter). With
+        // sections, a room is dragged onto a section header instead.
+        const canReorder = isFavourite && !areSectionsEnabled && canChangeSection;
 
         return {
             id: room.roomId,
@@ -416,6 +419,7 @@ export class RoomListItemViewModel
             sections,
             areSectionsEnabled,
             canChangeSection,
+            canReorder,
         };
     }
 
