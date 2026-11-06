@@ -37,7 +37,9 @@ interface NewTimelinePanelProps {
     /**
      * Whether `highlightedEventId` still has to be scrolled into view. RoomView clears it
      * once we report the jump through `onEventScrolledIntoView`, and sets it again when the
-     * same message is asked for again, so a second click on it jumps too. Unset means true.
+     * same message is asked for again, so a second click on it jumps too.
+     *
+     * Default: true
      */
     eventScrollIntoView?: boolean;
     /** Called once we have gone to `highlightedEventId`. */
