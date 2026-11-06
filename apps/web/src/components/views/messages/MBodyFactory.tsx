@@ -29,7 +29,7 @@ import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyVi
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
-import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { shouldImageFallbackToFileBody } from "../../../utils/media/imageEvents";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
 
@@ -202,10 +202,10 @@ export function ImageBodyFactory({
     const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
     const imageRef = useRef<HTMLImageElement>(null);
     const content = mxEvent.getContent<ImageContent>();
-    const shouldFallbackToFileBody =
-        mediaEventHelper?.media.isEncrypted === true &&
-        !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
-        !content.info?.thumbnail_info;
+    const shouldFallbackToFileBody = shouldImageFallbackToFileBody(
+        content,
+        mediaEventHelper?.media.isEncrypted === true,
+    );
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
