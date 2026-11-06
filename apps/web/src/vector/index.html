@@ -43,6 +43,15 @@
         <% }
     } %>
 
+    <% // The theme stylesheets above are only fetched once the app has picked one, so start fetching the one matching
+       // the system theme now, as that is what is used by default.
+    for (const file of htmlWebpackPlugin.files.css) {
+        const theme = file.match(/^bundles\/.*?\/theme-(light|dark)\.css$/)?.[1];
+        if (theme) { %>
+            <link rel="preload" as="style" href="<%= file %>" media="(prefers-color-scheme: <%= theme %>)">
+        <% }
+    } %>
+
     <% for (const tag of htmlWebpackPlugin.tags.headTags) {
         let path = tag.attributes && tag.attributes.href;
         if (path && path.includes("/Inter/")) { %>
