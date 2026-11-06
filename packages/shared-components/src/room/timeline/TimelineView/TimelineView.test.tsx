@@ -300,6 +300,19 @@ describe("<TimelineView />", () => {
             await waitFor(() => expect(scroller.scrollTop).toBe(first * ROW_HEIGHT));
         });
 
+        it("keeps paging from the right place when pressed twice quickly", async () => {
+            const { handle, scroller, actions } = await renderWithHandle();
+            const [first] = actions.onVisibleRangeChanged.mock.calls.at(-1)! as [number, number];
+
+            // Both presses in one go, as with a key held down: the second must start from
+            // where the first left off, not from the bottom.
+            act(() => {
+                handle.scrollByPage(-1);
+                handle.scrollByPage(1);
+            });
+            await waitFor(() => expect(scroller.scrollTop).toBe(first * ROW_HEIGHT));
+        });
+
         it("does not take focus when the shortcut comes from outside the timeline", async () => {
             const { handle } = await renderWithHandle();
             // As when the reader presses page up with the caret in the composer.

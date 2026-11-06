@@ -361,11 +361,22 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
         [offsetForKey, virtualizer],
     );
 
+    // The first and last rows on screen, worked out from where the scroller is now. Not
+    // `virtualizer.range`: that only catches up when the scroll event arrives, so straight
+    // after a scroll (a second page up pressed quickly) it still describes the old position.
+    const rowsOnScreen = useCallback((): { startIndex: number; endIndex: number } | null => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return null;
+        const first = virtualizer.getVirtualItemForOffset(scroller.scrollTop);
+        const last = virtualizer.getVirtualItemForOffset(scroller.scrollTop + scroller.clientHeight - 1);
+        return first && last ? { startIndex: first.index, endIndex: last.index } : null;
+    }, [virtualizer]);
+
     // ─── Requests from outside the view: the app's keyboard shortcuts ──────────
     // Page up/down: move by the number of rows on screen and put the row landed on at the top.
     const scrollByPage = useCallback(
         (direction: -1 | 1): void => {
-            const range = virtualizer.range;
+            const range = rowsOnScreen();
             const last = itemsRef.current.length - 1;
             if (!range || last < 0) return;
             const pageSize = Math.max(1, range.endIndex - range.startIndex);
@@ -373,7 +384,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
             const info = virtualizer.getOffsetForIndex(index, "start");
             if (info) virtualizer.scrollToOffset(info[0]);
         },
-        [virtualizer],
+        [virtualizer, rowsOnScreen],
     );
     useImperativeHandle<TimelineViewHandle, TimelineViewHandle>(ref, () => ({ scrollByPage, scrollNow }), [
         scrollByPage,
