@@ -37,3 +37,29 @@ test.describe("Composer API", () => {
         await expect(fileTile.getByRole("button", { name: "Download" })).toBeVisible();
     });
 });
+
+test.describe("Composer API slash commands", () => {
+    test.use({
+        displayName: "Manny",
+        config: {
+            modules: ["/modules/slash-command-module.js"],
+        },
+        page: async ({ page }, use) => {
+            await page.route("/modules/slash-command-module.js", async (route) => {
+                await route.fulfill({ path: getSampleFilePath("slash-command-module.js") });
+            });
+            await use(page);
+        },
+        room: async ({ app, user }, use) => {
+            const roomId = await app.client.createRoom({ name: "TestRoom" });
+            await use({ roomId });
+        },
+    });
+    test("should be able to run a custom slash command", async ({ page, room, app }) => {
+        await app.viewRoomById(room.roomId);
+        const composer = app.getComposerField();
+        await composer.fill("/shout hello");
+        await composer.press("Enter");
+        await expect(page.getByRole("listitem").getByText("HELLO", { exact: true })).toBeVisible();
+    });
+});

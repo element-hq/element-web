@@ -168,6 +168,8 @@ export async function loadPlugins(): Promise<void> {
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;
+    // Modules may register slash commands as they load, which needs the built-in commands to be loaded first.
+    await import("../slash-commands/SlashCommands");
     const moduleLoader = new ModuleLoader(ModuleApi.instance);
     window.mxModuleLoader = moduleLoader;
     for (const src of modules) {
