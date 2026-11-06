@@ -21,9 +21,17 @@ const AgentSettingsViewWrapperImpl = ({
     disconnect,
     setModel,
     saveInstructions,
+    setReplySuggestions,
     ...rest
 }: AgentSettingsProps): JSX.Element => {
-    const vm = useMockedViewModel(rest, { setProvider, connect, disconnect, setModel, saveInstructions });
+    const vm = useMockedViewModel(rest, {
+        setProvider,
+        connect,
+        disconnect,
+        setModel,
+        saveInstructions,
+        setReplySuggestions,
+    });
     return <AgentSettingsView vm={vm} />;
 };
 const AgentSettingsViewWrapper = withViewDocs(AgentSettingsViewWrapperImpl, AgentSettingsView);
@@ -40,12 +48,14 @@ const meta = {
         models: [],
         model: undefined,
         instructions: "",
+        replySuggestions: true,
         error: undefined,
         setProvider: fn(),
         connect: fn(),
         disconnect: fn(),
         setModel: fn(),
         saveInstructions: fn(),
+        setReplySuggestions: fn(),
     },
 } satisfies Meta<typeof AgentSettingsViewWrapper>;
 

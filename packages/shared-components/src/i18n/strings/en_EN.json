@@ -292,7 +292,9 @@
             "model_default": "Default model",
             "provider": "Provider",
             "provider_claude": "Claude",
-            "provider_copilot": "GitHub Copilot"
+            "provider_copilot": "GitHub Copilot",
+            "reply_suggestions": "Suggest replies",
+            "reply_suggestions_description": "Shows three suggested replies above the message field of every chat. The latest messages of the open chat are sent to the provider for this."
         }
     },
     "status": {

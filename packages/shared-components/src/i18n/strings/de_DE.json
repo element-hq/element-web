@@ -278,7 +278,9 @@
             "model_default": "Standardmodell",
             "provider": "Anbieter",
             "provider_claude": "Claude",
-            "provider_copilot": "GitHub Copilot"
+            "provider_copilot": "GitHub Copilot",
+            "reply_suggestions": "Antworten vorschlagen",
+            "reply_suggestions_description": "Zeigt in jedem Chat drei Antwortvorschläge über dem Eingabefeld. Dafür werden die letzten Nachrichten des geöffneten Chats an den Anbieter gesendet."
         }
     },
     "status": {

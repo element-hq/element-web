@@ -48,6 +48,7 @@ export class AgentSettingsViewModel
             connected: { claude: false, copilot: false },
             models: [],
             instructions: "",
+            replySuggestions: true,
         });
         void this.load();
     }
@@ -55,8 +56,8 @@ export class AgentSettingsViewModel
     private async load(): Promise<void> {
         const status = await this.props.agent.getStatus();
         if (this.isDisposed) return;
-        const { provider, connected, model, instructions } = status;
-        this.snapshot.merge({ isLoading: false, provider, connected, model, instructions });
+        const { provider, connected, model, instructions, replySuggestions } = status;
+        this.snapshot.merge({ isLoading: false, provider, connected, model, instructions, replySuggestions });
         await this.loadModels();
     }
 
@@ -127,6 +128,13 @@ export class AgentSettingsViewModel
         void (async () => {
             const result = await this.run(() => this.props.agent.setSettings({ instructions }));
             if (result?.ok) this.snapshot.merge({ instructions: result.data.instructions });
+        })();
+    };
+
+    public setReplySuggestions = (replySuggestions: boolean): void => {
+        void (async () => {
+            const result = await this.run(() => this.props.agent.setSettings({ replySuggestions }));
+            if (result?.ok) this.snapshot.merge({ replySuggestions: result.data.replySuggestions });
         })();
     };
 }

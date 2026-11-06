@@ -49,7 +49,8 @@ const suggestionsCache = new Map<string, { eventId: string; suggestions: string[
 /**
  * Suggests replies to the latest message of a room, written by the agent of the platform.
  *
- * Suggestions are only written when a provider is connected, the latest message is from someone else, and the agent
+ * Suggestions are only written when a provider is connected, they are turned on in the agent settings, the latest
+ * message is from someone else, and the agent
  * doesn't already reply in the room by itself. Picking one puts it into the composer, so it can be edited before
  * sending.
  */
@@ -57,8 +58,8 @@ export class ReplySuggestionsViewModel
     extends BaseViewModel<ReplySuggestionsViewSnapshot, ReplySuggestionsViewModelProps>
     implements ReplySuggestionsViewModelInterface
 {
-    /** Whether a provider is connected; until known, nothing is requested */
-    private connected = false;
+    /** Whether a provider is connected and suggestions are turned on; until known, nothing is requested */
+    private enabled = false;
     private timer?: ReturnType<typeof setTimeout>;
     /** The message the suggestions being written are for; a later message makes them out of date */
     private pendingEventId?: string;
@@ -74,7 +75,7 @@ export class ReplySuggestionsViewModel
         props.room.on(RoomEvent.Timeline, this.onTimeline);
         this.disposables.track(() => props.room.off(RoomEvent.Timeline, this.onTimeline));
         this.disposables.track(() => clearTimeout(this.timer));
-        void this.checkConnected(props.agent);
+        void this.checkEnabled(props.agent);
     }
 
     /**
@@ -89,14 +90,14 @@ export class ReplySuggestionsViewModel
         defaultDispatcher.dispatch({ action: Action.FocusSendMessageComposer });
     };
 
-    private async checkConnected(agent: AgentApi): Promise<void> {
+    private async checkEnabled(agent: AgentApi): Promise<void> {
         try {
             const status = await agent.getStatus();
-            this.connected = status.connected[status.provider];
+            this.enabled = status.replySuggestions && status.connected[status.provider];
         } catch (e) {
             logger.warn("Could not read the status of the agent", e);
         }
-        if (this.connected && !this.disposables.isDisposed) this.update();
+        if (!this.disposables.isDisposed) this.update();
     }
 
     private readonly onTimeline = (
@@ -132,7 +133,7 @@ export class ReplySuggestionsViewModel
         // Nothing to answer: the user wrote last, or the agent answers by itself
         if (
             !agent ||
-            !this.connected ||
+            !this.enabled ||
             !lastMessage ||
             !eventId ||
             lastMessage.getSender() === myUserId ||
@@ -176,7 +177,7 @@ export class ReplySuggestionsViewModel
         if (!result?.ok) {
             if (result)
                 logger.warn(`Could not get reply suggestions in ${room.roomId}: ${result.error}`, result.message);
-            if (result?.error === "not_connected") this.connected = false;
+            if (result?.error === "not_connected" || result?.error === "disabled") this.enabled = false;
             this.snapshot.merge({ suggestions: [], loading: false });
             return;
         }

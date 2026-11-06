@@ -17,7 +17,14 @@ const { NotConnected, Connected, Copilot, InvalidCredential, Loading } = compose
 
 describe("<AgentSettingsView />", () => {
     beforeEach(() => {
-        for (const action of ["setProvider", "connect", "disconnect", "setModel", "saveInstructions"] as const) {
+        for (const action of [
+            "setProvider",
+            "connect",
+            "disconnect",
+            "setModel",
+            "saveInstructions",
+            "setReplySuggestions",
+        ] as const) {
             vi.mocked(NotConnected.args[action]!).mockClear();
             vi.mocked(Connected.args[action]!).mockClear();
         }
@@ -95,5 +102,16 @@ describe("<AgentSettingsView />", () => {
         await user.click(save);
 
         expect(Connected.args.saveInstructions).toHaveBeenCalledWith("Be brief.");
+    });
+
+    it("turns the reply suggestions off", async () => {
+        const user = userEvent.setup();
+        render(<Connected />);
+
+        const toggle = screen.getByRole("switch", { name: "Suggest replies" });
+        expect(toggle).toBeChecked();
+        await user.click(toggle);
+
+        expect(Connected.args.setReplySuggestions).toHaveBeenCalledWith(false);
     });
 });

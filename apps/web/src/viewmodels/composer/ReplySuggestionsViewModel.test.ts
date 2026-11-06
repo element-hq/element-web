@@ -80,6 +80,7 @@ describe("ReplySuggestionsViewModel", () => {
             getStatus: vi.fn().mockResolvedValue({
                 provider: "claude",
                 instructions: "",
+                replySuggestions: true,
                 connected: { claude: true, copilot: false },
             }),
             setSettings: vi.fn(),
@@ -144,6 +145,7 @@ describe("ReplySuggestionsViewModel", () => {
         agent.getStatus.mockResolvedValue({
             provider: "copilot",
             instructions: "",
+            replySuggestions: true,
             connected: { claude: true, copilot: false },
         });
 
@@ -152,6 +154,23 @@ describe("ReplySuggestionsViewModel", () => {
         vm!.dispose();
 
         await createViewModel(false);
+        expect(vm!.getSnapshot()).toEqual({ suggestions: [], loading: false });
+    });
+
+    it("suggests nothing when suggestions are turned off in the settings", async () => {
+        events.push(message(PARTNER, "Hi"));
+        agent.getStatus.mockResolvedValue({
+            provider: "claude",
+            instructions: "",
+            replySuggestions: false,
+            connected: { claude: true, copilot: false },
+        });
+
+        await createViewModel();
+        receive(PARTNER, "Lunch?");
+        await vi.advanceTimersByTimeAsync(SUGGESTION_DELAY_MS);
+
+        expect(agent.generateSuggestions).not.toHaveBeenCalled();
         expect(vm!.getSnapshot()).toEqual({ suggestions: [], loading: false });
     });
 

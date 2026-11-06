@@ -18,6 +18,7 @@ import {
     Root,
     Submit,
     Text,
+    ToggleControl,
 } from "@vector-im/compound-web";
 
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
@@ -63,6 +64,8 @@ export interface AgentSettingsViewSnapshot {
     model?: string;
     /** The user's own instructions for the agent */
     instructions: string;
+    /** Whether replies are suggested above the composer of every chat */
+    replySuggestions: boolean;
     /** Why the last action failed, if it did */
     error?: AgentSettingsError;
 }
@@ -78,6 +81,8 @@ export interface AgentSettingsViewActions {
     setModel: (model: string) => void;
     /** Save the user's own instructions */
     saveInstructions: (instructions: string) => void;
+    /** Turn the reply suggestions on or off */
+    setReplySuggestions: (enabled: boolean) => void;
 }
 
 /**
@@ -92,11 +97,12 @@ export interface AgentSettingsViewProps {
 
 /**
  * Settings of the agent that replies to the direct messages set to "Agent": which AI provider it uses, the
- * credential of the provider, the model and the user's own instructions.
+ * credential of the provider, the model, the user's own instructions and whether it suggests replies in every chat.
  */
 export function AgentSettingsView({ vm }: Readonly<AgentSettingsViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { isLoading, isBusy, provider, connected, models, model, instructions, error } = useViewModel(vm);
+    const { isLoading, isBusy, provider, connected, models, model, instructions, replySuggestions, error } =
+        useViewModel(vm);
     const [credential, setCredential] = useState("");
     const [instructionsDraft, setInstructionsDraft] = useState(instructions);
 
@@ -218,6 +224,22 @@ export function AgentSettingsView({ vm }: Readonly<AgentSettingsViewProps>): JSX
                     )}
                 </Flex>
             )}
+
+            <Root onSubmit={(ev) => ev.preventDefault()}>
+                <InlineField
+                    name="replySuggestions"
+                    control={
+                        <ToggleControl
+                            checked={replySuggestions}
+                            disabled={isBusy}
+                            onChange={(ev) => vm.setReplySuggestions(ev.currentTarget.checked)}
+                        />
+                    }
+                >
+                    <Label>{_t("settings|agent|reply_suggestions")}</Label>
+                    <HelpMessage>{_t("settings|agent|reply_suggestions_description")}</HelpMessage>
+                </InlineField>
+            </Root>
 
             <Flex direction="column" gap="var(--cpd-space-2x)">
                 <label className={styles.label} htmlFor="mx_AgentSettings_instructions">

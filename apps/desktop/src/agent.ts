@@ -44,7 +44,7 @@ export const SUGGESTION_COUNT = 3;
 /** How long to wait for a reply before giving up */
 const REPLY_TIMEOUT_MS = 2 * 60 * 1000;
 
-const DEFAULT_SETTINGS: AgentSettings = { provider: "claude", instructions: "" };
+const DEFAULT_SETTINGS: AgentSettings = { provider: "claude", instructions: "", replySuggestions: true };
 
 const PROVIDERS: readonly AgentProvider[] = ["claude", "copilot"];
 
@@ -135,10 +135,11 @@ export function getAgentStatus(): AgentStatus {
  */
 export function setAgentSettings(changes: unknown): AgentResult<AgentSettings> {
     if (typeof changes !== "object" || changes === null) return failure("invalid_request");
-    const { provider, model, instructions } = changes as Partial<AgentSettings>;
+    const { provider, model, instructions, replySuggestions } = changes as Partial<AgentSettings>;
     if (provider !== undefined && !isProvider(provider)) return failure("invalid_request");
     if (model !== undefined && typeof model !== "string") return failure("invalid_request");
     if (instructions !== undefined && typeof instructions !== "string") return failure("invalid_request");
+    if (replySuggestions !== undefined && typeof replySuggestions !== "boolean") return failure("invalid_request");
 
     const settings = getSettings();
     // Each provider has its own models, so a new provider starts with its default model
@@ -146,6 +147,7 @@ export function setAgentSettings(changes: unknown): AgentResult<AgentSettings> {
     if (provider !== undefined) settings.provider = provider;
     if (model !== undefined) settings.model = model || undefined;
     if (instructions !== undefined) settings.instructions = instructions;
+    if (replySuggestions !== undefined) settings.replySuggestions = replySuggestions;
     getAgentStore().set("settings", settings);
     return { ok: true, data: settings };
 }
@@ -248,6 +250,7 @@ export async function generateAgentReply(request: unknown): Promise<AgentResult<
 export async function generateAgentSuggestions(request: unknown): Promise<AgentResult<string[]>> {
     if (!isSuggestionsRequest(request)) return failure("invalid_request");
     const settings = getSettings();
+    if (!settings.replySuggestions) return failure("disabled");
     const credential = await getCredential(settings.provider);
     if (!credential) return failure("not_connected");
 

@@ -22,12 +22,13 @@ describe("AgentSettingsViewModel", () => {
             getStatus: vi.fn().mockResolvedValue({
                 provider: "claude",
                 instructions: "Be brief.",
+                replySuggestions: true,
                 connected: { claude: true, copilot: false },
                 ...status,
             }),
             setSettings: vi.fn(async (changes) => ({
                 ok: true as const,
-                data: { provider: "claude" as const, instructions: "", ...changes },
+                data: { provider: "claude" as const, instructions: "", replySuggestions: true, ...changes },
             })),
             connect: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
             disconnect: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
@@ -133,6 +134,14 @@ describe("AgentSettingsViewModel", () => {
             vm.saveInstructions("I'm on holiday.");
             await vi.waitFor(() => expect(vm.getSnapshot().instructions).toBe("I'm on holiday."));
             expect(agent.setSettings).toHaveBeenCalledWith({ instructions: "I'm on holiday." });
+        });
+
+        it("shows and changes whether replies are suggested", async () => {
+            expect(vm.getSnapshot().replySuggestions).toBe(true);
+
+            vm.setReplySuggestions(false);
+            await vi.waitFor(() => expect(vm.getSnapshot().replySuggestions).toBe(false));
+            expect(agent.setSettings).toHaveBeenCalledWith({ replySuggestions: false });
         });
     });
 

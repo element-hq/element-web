@@ -144,6 +144,7 @@ describe("agent", () => {
             expect(await getAgentStatus()).toEqual({
                 provider: "claude",
                 instructions: "",
+                replySuggestions: true,
                 connected: { claude: false, copilot: false },
             });
         });
@@ -154,11 +155,11 @@ describe("agent", () => {
 
             expect(result).toEqual({
                 ok: true,
-                data: { provider: "copilot", model: undefined, instructions: "Be brief." },
+                data: { provider: "copilot", model: undefined, instructions: "Be brief.", replySuggestions: true },
             });
         });
 
-        it.each([null, { provider: "openai" }, { model: 1 }, { instructions: false }])(
+        it.each([null, { provider: "openai" }, { model: 1 }, { instructions: false }, { replySuggestions: "yes" }])(
             "refuses invalid settings %j",
             (changes) => {
                 expect(setAgentSettings(changes)).toEqual({ ok: false, error: "invalid_request", message: undefined });
@@ -440,6 +441,16 @@ describe("agent", () => {
             expect(await generateAgentSuggestions(suggestionsRequest)).toEqual({ ok: true, data: ["A", "B", "C"] });
             expect(copilot.createSession.mock.calls[0][0]).toMatchObject({ availableTools: [] });
             expect(copilot.deleteSession).toHaveBeenCalledWith("session-1");
+        });
+
+        it("can be turned off in the settings", async () => {
+            storeCredential("claude", "sk-ant-test");
+
+            expect(setAgentSettings({ replySuggestions: false })).toMatchObject({ data: { replySuggestions: false } });
+            expect(await generateAgentSuggestions(suggestionsRequest)).toMatchObject({ ok: false, error: "disabled" });
+            expect(anthropic.messagesCreate).not.toHaveBeenCalled();
+
+            expect(setAgentSettings({ replySuggestions: "yes" })).toMatchObject({ error: "invalid_request" });
         });
 
         it("reports an answer without suggestions as refused", async () => {

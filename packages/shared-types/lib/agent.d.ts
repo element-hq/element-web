@@ -25,6 +25,8 @@ export interface AgentSettings {
     model?: string;
     /** Extra instructions from the user, added to the system prompt */
     instructions: string;
+    /** Whether replies are suggested above the composer of every chat */
+    replySuggestions: boolean;
 }
 
 /**
@@ -96,6 +98,7 @@ export interface AgentModel {
  * - `invalid_credential`: the provider rejected the credential.
  * - `rate_limited`: the provider asks to slow down, or the plan's allowance is used up.
  * - `refused`: the model declined to write a reply.
+ * - `disabled`: the user turned the feature off in the settings.
  * - `unavailable`: the provider could not be reached or failed.
  * - `invalid_request`: the command was called with invalid arguments.
  */
@@ -104,6 +107,7 @@ export type AgentErrorCode =
     | "invalid_credential"
     | "rate_limited"
     | "refused"
+    | "disabled"
     | "unavailable"
     | "invalid_request";
 
