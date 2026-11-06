@@ -493,7 +493,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
     const startIndexFor = useCallback(
         (target: EventTarget | null, edge: "start" | "end"): number | null => {
             const list = itemsRef.current;
-            const range = virtualizer.range;
+            const range = rowsOnScreen();
             if (!range || list.length === 0) return null;
 
             // Focus is on a message, or on something inside one such as a link: start there.
@@ -511,7 +511,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
             // top or bottom of what is on screen.
             return edge === "start" ? range.startIndex : range.endIndex;
         },
-        [virtualizer],
+        [rowsOnScreen],
     );
 
     /** Arrow up/down: the previous or next message, scrolled into view only if it is off screen. */
@@ -538,7 +538,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
      */
     const scrollByPage = useCallback(
         (direction: -1 | 1, target: EventTarget | null = null): void => {
-            const range = virtualizer.range;
+            const range = rowsOnScreen();
             const from = startIndexFor(target, "start");
             if (!range || from === null) return;
             const pageSize = Math.max(1, range.endIndex - range.startIndex);
@@ -546,7 +546,7 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
             const next = nearestNavigableIndex(wanted, direction);
             if (next !== null) activateRow(next, "start");
         },
-        [virtualizer, startIndexFor, nearestNavigableIndex, activateRow],
+        [rowsOnScreen, startIndexFor, nearestNavigableIndex, activateRow],
     );
 
     // Make the message nearest the row for `key`, looking in `direction` first, the active row
