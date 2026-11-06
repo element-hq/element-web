@@ -27,7 +27,9 @@ export default class CustomComponentModule {
             { allowEditingEvent: false },
         );
         this.api.customComponents.registerMessageRenderer(
-            (evt) => evt.content.body === "Render as informational message",
+            (evt) =>
+                evt.content.body === "Render as informational message" ||
+                evt.content.body === "Render as **informational** message",
             (_props, originalComponent) => {
                 return originalComponent();
             },

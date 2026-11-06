@@ -53,6 +53,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import PlatformPeg from "../../../PlatformPeg";
 import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider.tsx";
+import { ModuleApi } from "../../../modules/Api";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -452,6 +453,29 @@ describe("EventTile", () => {
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
             expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
+        });
+
+        it("renders formatted informational message bodies with the markdown class", () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Render as **informational** message",
+                formattedMsg: "Render as <strong>informational</strong> message",
+                format: "org.matrix.custom.html",
+                event: true,
+            });
+            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockReturnValue({
+                hints: { renderAsInfoMessage: true },
+                hasGrouping: false,
+                getGrouping: () => null,
+            });
+
+            const { container } = getComponent();
+
+            expect(container.querySelector('[data-testid="event-tile-slot-sender"]')).toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
+            const body = container.querySelector(".mx_EventTile_content .mx_EventTile_body.markdown-body");
+            expect(body).toContainHTML("Render as <strong>informational</strong> message");
         });
 
         it("renders the notification avatar independently from the sender details", () => {
