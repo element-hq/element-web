@@ -76,7 +76,7 @@ import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
-import { NewTimelinePanel } from "./NewTimelinePanel";
+import { NewTimelinePanel, type NewTimelinePanelHandle } from "./NewTimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
@@ -441,6 +441,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
     private messagePanel: TimelinePanel | null = null;
+    /** Set instead of `messagePanel` while the Labs new timeline is mounted. */
+    private newTimelinePanel = createRef<NewTimelinePanelHandle>();
+
+    /**
+     * Whichever timeline panel is mounted, for the requests both of them answer (page keys,
+     * escape, shift+page up, scrolling down after a send): the old TimelinePanel, or the new
+     * panel's handle.
+     */
+    private get activeTimelinePanel(): TimelinePanel | NewTimelinePanelHandle | null {
+        return this.messagePanel ?? this.newTimelinePanel.current;
+    }
     private roomViewBody = createRef<HTMLDivElement>();
 
     private roomViewStore: RoomViewStore;
@@ -1160,7 +1171,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
             case KeyBindingAction.DismissReadMarker:
-                void this.messagePanel?.forgetReadMarker();
+                void this.activeTimelinePanel?.forgetReadMarker();
                 this.jumpToLiveTimeline();
                 handled = true;
                 break;
@@ -1340,7 +1351,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             case "scroll_to_bottom":
                 if (payload.timelineRenderingType === TimelineRenderingType.Room) {
-                    this.messagePanel?.jumpToLiveTimeline();
+                    this.activeTimelinePanel?.jumpToLiveTimeline();
                 }
                 break;
             case Action.ViewUser:
@@ -1985,14 +1996,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
         } else {
             // Otherwise we have to jump manually
-            this.messagePanel?.jumpToLiveTimeline();
+            this.activeTimelinePanel?.jumpToLiveTimeline();
             defaultDispatcher.fire(Action.FocusSendMessageComposer);
         }
     };
 
     // jump up to wherever our read marker is
     private jumpToReadMarker = (): void => {
-        this.messagePanel?.jumpToReadMarker();
+        this.activeTimelinePanel?.jumpToReadMarker();
     };
 
     // update the read marker to match the read-receipt
@@ -2067,16 +2078,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
-     * We pass it down to the scroll panel.
+     * We pass it down to the scroll panel: the search results while they are showing,
+     * otherwise whichever timeline panel is mounted.
      */
     public handleScrollKey = (ev: React.KeyboardEvent | KeyboardEvent): void => {
-        let panel: ScrollPanel | TimelinePanel | undefined;
-        if (this.searchResultsPanel.current) {
-            panel = this.searchResultsPanel.current;
-        } else if (this.messagePanel) {
-            panel = this.messagePanel;
-        }
-
+        const panel: ScrollPanel | TimelinePanel | NewTimelinePanelHandle | null =
+            this.searchResultsPanel.current ?? this.activeTimelinePanel;
         panel?.handleScrollKey(ev);
     };
 
@@ -2569,10 +2576,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // New MVVM timeline behind the Labs flag. It manages its own scrolling, read
             // receipts and read marker, so none of TimelinePanel's plumbing is mounted.
             // The `messagePanel` ref stays null; every RoomView use of it is null-guarded.
+            // Keyboard shortcuts reach this panel through `newTimelinePanel` instead.
             messagePanel = (
                 <EventPresentationContextProvider layout={this.state.layout}>
                     <NewTimelinePanel
                         key={this.state.room.roomId}
+                        ref={this.newTimelinePanel}
                         room={this.state.room}
                         hidden={hideMessagePanel}
                         highlightedEventId={highlightedEventId}

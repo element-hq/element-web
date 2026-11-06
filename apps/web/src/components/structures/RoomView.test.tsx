@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock, type MockedObject } from "vitest";
-import React, { createRef, type RefObject } from "react";
+import React, { createRef, useImperativeHandle, type RefObject } from "react";
 import {
     EventTimeline,
     EventType,
@@ -87,15 +87,22 @@ vi.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
 });
 
 // The new timeline panel has its own tests. Here it is a stub that records the props RoomView
-// passes it. Only rendered with feature_new_timeline on, which only the last describe in this
-// file turns on.
-const { newTimelinePanelProps } = vi.hoisted(() => ({
+// passes it and exposes a handle recording what RoomView asks of it. Only rendered with
+// feature_new_timeline on, which only the last describe in this file turns on.
+const { newTimelinePanelHandle, newTimelinePanelProps } = vi.hoisted(() => ({
+    newTimelinePanelHandle: {
+        handleScrollKey: vi.fn(),
+        jumpToLiveTimeline: vi.fn(),
+        jumpToReadMarker: vi.fn(),
+        forgetReadMarker: vi.fn(),
+    },
     /** The props the stub was last rendered with. */
     newTimelinePanelProps: { current: {} as Record<string, any> },
 }));
 vi.mock("./NewTimelinePanel", () => ({
-    NewTimelinePanel: (props: Record<string, unknown>) => {
+    NewTimelinePanel: (props: { ref?: React.Ref<unknown> }) => {
         newTimelinePanelProps.current = props;
+        useImperativeHandle(props.ref, () => newTimelinePanelHandle, []);
         return <div data-testid="new-timeline-stub" />;
     },
 }));
@@ -1471,6 +1478,36 @@ describe("RoomView", () => {
             expect(document.querySelector(".mx_ScrollPanel")).toBeNull();
         });
 
+        it("forwards the timeline's keyboard shortcuts to the new panel", async () => {
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref);
+            await screen.findByTestId("new-timeline-stub");
+            const ev = new KeyboardEvent("keydown", { key: "PageUp" });
+
+            ref.current!.handleScrollKey(ev);
+
+            expect(newTimelinePanelHandle.handleScrollKey).toHaveBeenCalledWith(ev);
+        });
+
+        it("dismisses the read marker and jumps to the live end on escape", async () => {
+            await mountRoomView();
+            const stub = await screen.findByTestId("new-timeline-stub");
+
+            fireEvent.keyDown(stub, { key: "Escape" });
+
+            expect(newTimelinePanelHandle.forgetReadMarker).toHaveBeenCalled();
+            expect(newTimelinePanelHandle.jumpToLiveTimeline).toHaveBeenCalled();
+        });
+
+        it("jumps to the oldest unread message on shift+page up", async () => {
+            await mountRoomView();
+            const stub = await screen.findByTestId("new-timeline-stub");
+
+            fireEvent.keyDown(stub, { key: "PageUp", shiftKey: true });
+
+            expect(newTimelinePanelHandle.jumpToReadMarker).toHaveBeenCalled();
+        });
+
         it("passes a message asked for after opening to the new panel, and clears the scroll flag once told", async () => {
             const pinned = mkMessage({ room: room.roomId, user: "@alice:example.org", msg: "pinned", event: true });
             room.getUnfilteredTimelineSet().addLiveEvent(pinned, { addToState: false });
@@ -1495,6 +1532,33 @@ describe("RoomView", () => {
 
             await waitFor(() => expect(newTimelinePanelProps.current.eventScrollIntoView).toBe(false));
             expect(newTimelinePanelProps.current.highlightedEventId).toBe(pinned.getId());
+        });
+
+        describe("when a message is sent", () => {
+            // The composer announces a send with a dispatch rather than by calling the timeline.
+            const sendFrom = (timelineRenderingType: TimelineRenderingType): void => {
+                defaultDispatcher.dispatch({ action: "scroll_to_bottom", timelineRenderingType }, true);
+            };
+
+            beforeEach(() => newTimelinePanelHandle.jumpToLiveTimeline.mockClear());
+
+            it("scrolls the new timeline to the live end when the room composer sent it", async () => {
+                await mountRoomView();
+                await screen.findByTestId("new-timeline-stub");
+
+                sendFrom(TimelineRenderingType.Room);
+
+                expect(newTimelinePanelHandle.jumpToLiveTimeline).toHaveBeenCalledTimes(1);
+            });
+
+            it("leaves it alone when a thread composer sent it", async () => {
+                await mountRoomView();
+                await screen.findByTestId("new-timeline-stub");
+
+                sendFrom(TimelineRenderingType.Thread);
+
+                expect(newTimelinePanelHandle.jumpToLiveTimeline).not.toHaveBeenCalled();
+            });
         });
     });
 });
