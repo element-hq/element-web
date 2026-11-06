@@ -13,7 +13,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { act, fireEvent, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "test-utils-rtl";
 import {
     MatrixEvent,
-    Relations,
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_RESPONSE,
@@ -30,7 +29,7 @@ import {
     setupRoomWithPollEvents,
 } from "test-utils";
 
-import MPollBody, { allVotes, findTopAnswer, isPollEnded } from "./MPollBody";
+import MPollBody, { isPollEnded } from "./MPollBody";
 import { type IBodyProps } from "./IBodyProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -55,10 +54,6 @@ describe("MPollBody", () => {
         mockClient.getRoom.mockReturnValue(null);
         mockClient.relations.mockResolvedValue({ events: [] });
         vi.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
-    });
-
-    it("finds no votes if there are none", async () => {
-        expect(allVotes(await newVoteRelations([]))).toEqual([]);
     });
 
     it("renders a loader while responses are still loading", async () => {
@@ -477,34 +472,6 @@ describe("MPollBody", () => {
         expect(mockClient.sendEvent).not.toHaveBeenCalled();
     });
 
-    it("finds the top answer among several votes", async () => {
-        // 2 votes for poutine, 1 for pizza.  "me" made an invalid vote.
-        const votes = [
-            responseEvent("@me:example.com", "pizza", 12),
-            responseEvent("@me:example.com", ["pizza", "doesntexist"], 13),
-            responseEvent("@uy:example.com", "italian", 14),
-            responseEvent("@uy:example.com", "doesntexist", 15),
-            responseEvent("@uy:example.com", "poutine", 16),
-            responseEvent("@ab:example.com", "pizza", 17),
-            responseEvent("@fa:example.com", "poutine", 18),
-        ];
-
-        expect(await runFindTopAnswer(votes)).toEqual("Poutine");
-    });
-
-    it("finds all top answers when there is a draw", async () => {
-        const votes = [
-            responseEvent("@uy:example.com", "italian", 14),
-            responseEvent("@ab:example.com", "pizza", 17),
-            responseEvent("@fa:example.com", "poutine", 18),
-        ];
-        expect(await runFindTopAnswer(votes)).toEqual("Italian, Pizza and Poutine");
-    });
-
-    it("is silent about the top answer if there are no votes", async () => {
-        expect(await runFindTopAnswer([])).toEqual("");
-    });
-
     it("shows disabled radio buttons if the poll is ended", async () => {
         const events = [newPollEndEvent()];
         const { container } = await newMPollBody([], events);
@@ -903,22 +870,6 @@ describe("MPollBody", () => {
     });
 });
 
-async function newVoteRelations(relationEvents: Array<MatrixEvent>): Promise<Relations> {
-    return newRelations(relationEvents, M_POLL_RESPONSE.name, [M_POLL_RESPONSE.altName!]);
-}
-
-async function newRelations(
-    relationEvents: Array<MatrixEvent>,
-    eventType: string,
-    altEventTypes?: string[],
-): Promise<Relations> {
-    const voteRelations = new Relations("m.reference", eventType, mockClient, altEventTypes);
-    for (const ev of relationEvents) {
-        await voteRelations.addEvent(ev);
-    }
-    return voteRelations;
-}
-
 async function newMPollBody(
     relationEvents: Array<MatrixEvent>,
     endEvents: Array<MatrixEvent> = [],
@@ -1092,17 +1043,6 @@ async function runIsPollEnded(ends: MatrixEvent[]) {
     await setupRoomWithPollEvents([pollEvent], [], ends, mockClient);
 
     return isPollEnded(pollEvent, mockClient);
-}
-
-async function runFindTopAnswer(votes: MatrixEvent[]): Promise<string> {
-    const pollEvent = new MatrixEvent({
-        event_id: "$mypoll",
-        room_id: "#myroom:example.com",
-        type: M_POLL_START.name,
-        content: newPollStart(),
-    });
-
-    return findTopAnswer(pollEvent, await newVoteRelations(votes));
 }
 
 let EVENT_ID = 0;

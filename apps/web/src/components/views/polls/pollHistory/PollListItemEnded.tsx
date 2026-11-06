@@ -13,7 +13,7 @@ import { PollsEndIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 
 import { _t } from "../../../../languageHandler";
 import { formatLocalDateShort } from "../../../../DateUtils";
-import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
+import { allVotes, collectUserVotes, countVotes } from "../../../../utils/polls";
 import { PollOption } from "../../polls/PollOption";
 import { Caption } from "../../typography/Caption";
 import AccessibleButton from "../../elements/AccessibleButton.tsx";

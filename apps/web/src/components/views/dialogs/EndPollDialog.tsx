@@ -12,7 +12,7 @@ import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEven
 
 import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
-import { findTopAnswer } from "../messages/MPollBody";
+import { findTopAnswer } from "../../../utils/polls";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
 

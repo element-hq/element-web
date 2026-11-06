@@ -226,6 +226,40 @@ test.describe("Polls", () => {
         await expect(page.locator(".mx_ErrorDialog")).toBeAttached();
     });
 
+    test("should show the top answer in the timeline when ended", async ({ page, app, user, bot }) => {
+        const roomId: string = await app.client.createRoom({});
+        await app.client.inviteUser(roomId, bot.credentials!.userId);
+        await page.goto("/#/room/" + roomId);
+
+        const locator = await app.openMessageComposerOptions();
+        await locator.getByRole("menuitem", { name: "Poll" }).click();
+
+        const pollParams = {
+            title: "Does the polls feature work?",
+            options: ["Yes", "No", "Maybe"],
+        };
+        await createPoll(page, pollParams);
+
+        // Wait for message to send, get its ID and save as @pollId
+        const pollId = (await page
+            .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
+            .filter({ hasText: pollParams.title })
+            .getAttribute("data-scroll-tokens"))!;
+
+        // Bot votes 'Yes' in the poll
+        await botVoteForOption(page, bot, roomId, pollId, pollParams.options[0]);
+        await expect(page.locator(".mx_MPollBody_totalVotes")).toContainText("1 vote cast");
+
+        // End the poll from the context menu
+        await getPollTile(page, pollId).click({ button: "right" });
+        await page.getByRole("menuitem", { name: "End Poll" }).click();
+        await page.getByRole("dialog").getByRole("button", { name: "End Poll" }).click();
+
+        await expect(
+            page.locator(".mx_RoomView_body .mx_EventTile").getByText("The poll has ended. Top answer: Yes"),
+        ).toBeVisible();
+    });
+
     test(
         "should be displayed correctly in thread panel",
         { tag: "@screenshot" },
