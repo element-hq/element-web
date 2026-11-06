@@ -78,21 +78,35 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
             switch (deviceState) {
                 // some device states require action from the user rather than showing the main settings screen
                 case "verify_this_session":
-                    content = <SetUpEncryptionPanel onFinish={() => setState("main")} />;
+                    content = (
+                        <>
+                            <SetUpEncryptionPanel onFinish={() => setState("main")} />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting their identity. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
+                    );
                     break;
                 case "key_storage_out_of_sync":
                     content = (
-                        <RecoveryPanelOutOfSync
-                            onFinish={() => setState("main")}
-                            onForgotRecoveryKey={async () => {
-                                setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
-                            }}
-                            onAccessSecretStorageFailed={async () => {
-                                const needsCrossSigningReset =
-                                    await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
-                                setState(needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key");
-                            }}
-                        />
+                        <>
+                            <RecoveryPanelOutOfSync
+                                onFinish={() => setState("main")}
+                                onForgotRecoveryKey={async () => {
+                                    setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
+                                }}
+                                onAccessSecretStorageFailed={async () => {
+                                    const needsCrossSigningReset =
+                                        await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
+                                    setState(
+                                        needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
+                                    );
+                                }}
+                            />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting recovery. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
                     );
                     break;
                 case "identity_needs_reset":
