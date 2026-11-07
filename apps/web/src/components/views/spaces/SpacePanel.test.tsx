@@ -22,6 +22,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 import UnwrappedSpacePanel from "./SpacePanel";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -164,6 +165,35 @@ describe("<SpacePanel />", () => {
         expect(metaSpaceLabels).toEqual(["Home", "Other rooms", "Conferences"]);
 
         spySettingsStore.mockRestore();
+    });
+
+    describe("collapsed state persistence", () => {
+        it("should initialise the collapsed state from the setting", () => {
+            const originalGetValue = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) =>
+                setting === "Spaces.isPanelCollapsed" ? false : originalGetValue(setting, ...args),
+            );
+            const { container } = render(<SpacePanel />);
+            expect(container.querySelector(".mx_SpacePanel")).not.toHaveClass("collapsed");
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("should persist the collapsed state when toggled", async () => {
+            const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            const { container } = render(<SpacePanel />);
+            const toggleButton = container.querySelector(".mx_SpacePanel_toggleCollapse");
+            expect(toggleButton).toBeInTheDocument();
+            fireEvent.click(toggleButton!);
+            await waitFor(() => {
+                expect(setValueSpy).toHaveBeenCalledWith(
+                    "Spaces.isPanelCollapsed",
+                    null,
+                    SettingLevel.DEVICE,
+                    expect.any(Boolean),
+                );
+            });
+            setValueSpy.mockRestore();
+        });
     });
 
     describe("create new space button", () => {
