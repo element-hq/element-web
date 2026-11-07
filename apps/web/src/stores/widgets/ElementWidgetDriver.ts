@@ -147,9 +147,14 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomEncryption).raw,
             );
-            // So the call can ignore bots when picking who to ring and deciding whether the room is a DM
+            // So the call can ignore bots when picking who to ring and deciding whether the room is a DM,
+            // and list the bots it invites (recording, captions) so that clients keep treating the room as one
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name).raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Send, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name, "")
+                    .raw,
             );
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
             // For the legacy membership type
