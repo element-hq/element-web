@@ -8,10 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment jsdom
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { parseEvent } from "./deserialize";
+import SettingsStore from "../settings/SettingsStore";
 import { type Part } from "./parts";
 import { createPartCreator } from "./__mocks__";
 
@@ -74,6 +75,53 @@ function normalize(parts: Part[]) {
 }
 
 describe("editor/deserialize", function () {
+    afterEach(() => vi.restoreAllMocks());
+
+    it("treats a marked link as a mention when the Labs flag is disabled", () => {
+        const parts = normalize(
+            parseEvent(
+                htmlMessage('<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link>DM me</a>'),
+                createPartCreator(),
+            ),
+        );
+        expect(parts[0].type).toBe("user-pill");
+    });
+    it.each([
+        ["@room", "@room"],
+        ["Ask <strong>@room</strong> for help", "Ask **@room** for help"],
+    ])("keeps @room text inside explicit link labels when editing (%s)", (label, markdown) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        const parts = normalize(
+            parseEvent(
+                htmlMessage(
+                    `<a href="https://matrix.to/#/#support:example.org" data-org.matrix.msc4550.link>${label}</a>`,
+                ),
+                createPartCreator(),
+            ),
+        );
+        expect(parts).toEqual([
+            {
+                type: "plain",
+                text: `[${markdown}](https://matrix.to/#/#support:example.org)`,
+            },
+        ]);
+    });
+    it.each(["", "true"])("keeps explicit user links as Markdown when editing (marker: %s)", (marker) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        const parts = normalize(
+            parseEvent(
+                htmlMessage(
+                    `<a href="https://matrix.to/#/@alice:example.org" data-org.matrix.msc4550.link="${marker}">DM me</a>`,
+                ),
+                createPartCreator(),
+            ),
+        );
+        expect(parts).toEqual([{ type: "plain", text: "[DM me](https://matrix.to/#/@alice:example.org)" }]);
+    });
     describe("text messages", function () {
         it("test with newlines", function () {
             const parts = normalize(parseEvent(textMessage("hello\nworld"), createPartCreator()));
