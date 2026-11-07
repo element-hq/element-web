@@ -20,9 +20,22 @@ export class NavigationApi implements INavigationApi {
     public locationRenderers = new Map<string, LocationRenderFunction>();
 
     public async toMatrixToLink(link: string, join = false): Promise<void> {
-        navigateToPermalink(link);
-
         const parts = parsePermalink(link);
+        if (parts?.roomIdOrAlias && parts.eventId) {
+            const key = parts.roomIdOrAlias.startsWith("#") ? "room_alias" : "room_id";
+            dispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                [key]: parts.roomIdOrAlias,
+                event_id: parts.eventId,
+                highlighted: true,
+                via_servers: parts.viaServers ?? undefined,
+                auto_join: join,
+                metricsTrigger: undefined,
+            });
+            return;
+        }
+
+        navigateToPermalink(link);
         if (parts?.roomIdOrAlias) {
             this.openRoom(parts.roomIdOrAlias, {
                 viaServers: parts.viaServers ?? undefined,
