@@ -17,7 +17,8 @@ import { _t } from "../../../../languageHandler";
 
 export const UserInfoHeaderVerificationView: React.FC<{
     member: User | RoomMember;
-    devices: IDevice[];
+    /** The user's devices, or undefined while they are still being fetched. */
+    devices: IDevice[] | undefined;
 }> = ({ member, devices }) => {
     let content;
     const vm = useUserInfoVerificationViewModel(member, devices);
@@ -31,8 +32,8 @@ export const UserInfoHeaderVerificationView: React.FC<{
                 </Text>
             </Badge>
         );
-    } else if (vm.hasCrossSigningKeys === undefined) {
-        // We are still fetching the cross-signing keys for the user, show spinner.
+    } else if (vm.isLoading) {
+        // We are still fetching the verification status, the devices or the cross-signing keys, show spinner.
         content = <InlineSpinner size={24} />;
     } else if (vm.canVerify && vm.hasCrossSigningKeys) {
         content = (

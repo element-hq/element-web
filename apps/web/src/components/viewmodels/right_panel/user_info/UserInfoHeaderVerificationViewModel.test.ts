@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach, afterEach, type Mocked } from "vi
 import { Device, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { renderHook, waitFor } from "test-utils-rtl";
-import { clientAndSDKContextRenderOptions, createTestClient, TestSDKContext } from "test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient, flushPromises, TestSDKContext } from "test-utils";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { useUserInfoVerificationViewModel } from "./UserInfoHeaderVerificationViewModel";
@@ -117,6 +117,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             expect(canVerify).toBeFalsy();
             // if we cant verify the user the hasCrossSigningKeys value should also be undefined
             expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // but we are not waiting for anything, so no spinner
+            expect(result.current.isLoading).toBe(false);
         });
     });
 
@@ -146,6 +148,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             expect(canVerify).toBeFalsy();
             // if we cant verify the user the hasCrossSigningKeys value should also be undefined
             expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // but we are not waiting for anything, so no spinner
+            expect(result.current.isLoading).toBe(false);
         });
     });
 
@@ -168,6 +172,8 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
             expect(canVerify).toBeFalsy();
             // if we cant verify the user the hasCrossSigningKeys value should also be undefined
             expect(result.current.hasCrossSigningKeys).toBeUndefined();
+            // but we are not waiting for anything, so no spinner
+            expect(result.current.isLoading).toBe(false);
         });
     });
 
@@ -196,5 +202,50 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
 
             expect(hasCrossSigningKeys).toBeTruthy();
         });
+    });
+
+    it("should keep loading while the devices are loading", async () => {
+        const notMeId = "@notMe";
+        const notMetMember = new RoomMember(defaultRoomId, notMeId);
+        const device1 = new Device({
+            deviceId: "d1",
+            userId: notMeId,
+            displayName: "my device",
+            algorithms: [],
+            keys: new Map(),
+        });
+
+        // mock the user as not verified
+        vi.spyOn(mockCrypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+
+        vi.spyOn(mockClient, "getUserId").mockReturnValue(defaultMember.userId);
+
+        vi.spyOn(mockCrypto, "userHasCrossSigningKeys").mockResolvedValue(true);
+        // count the renders that are done loading without the verify button: they would flash "unavailable"
+        let unavailableRenders = 0;
+        const { result, rerender } = renderHook(
+            ({ devices }: { devices: Device[] | undefined }) => {
+                const vm = useUserInfoVerificationViewModel(notMetMember, devices);
+                if (!vm.isLoading && !(vm.canVerify && vm.hasCrossSigningKeys)) unavailableRenders++;
+                return vm;
+            },
+            {
+                ...clientAndSDKContextRenderOptions(mockClient, sdkContext),
+                initialProps: { devices: undefined as Device[] | undefined },
+            },
+        );
+
+        // the verification status is known, but the devices aren't yet
+        await waitFor(() => expect(mockCrypto.getUserVerificationStatus).toHaveBeenCalled());
+        await flushPromises();
+        expect(result.current.isLoading).toBe(true);
+
+        rerender({ devices: [device1] });
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+        expect(result.current.canVerify).toBe(true);
+        expect(result.current.hasCrossSigningKeys).toBe(true);
+        expect(unavailableRenders).toBe(0);
     });
 });

@@ -184,7 +184,8 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
 
     const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
-    const devices = useDevices(user.userId) ?? [];
+    // undefined while the device list is still loading; a failed load counts as no devices
+    const devices = useDevices(user.userId);
 
     const classes = ["mx_UserInfo"];
 
@@ -222,7 +223,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
         <UserInfoHeaderView
             hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
             member={member}
-            devices={devices}
+            devices={devices === null ? [] : devices}
             roomId={room?.roomId}
         />
     );

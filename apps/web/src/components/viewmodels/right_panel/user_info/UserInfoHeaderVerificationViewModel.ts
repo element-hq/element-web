@@ -20,6 +20,10 @@ export interface UserInfoVerificationSectionState {
     canVerify: boolean;
     hasCrossSigningKeys: boolean | undefined;
     /**
+     * true while the verification status, the devices or the cross-signing keys are still being fetched
+     */
+    isLoading: boolean;
+    /**
      * used to display correct badge value
      */
     isUserVerified: boolean;
@@ -38,11 +42,13 @@ const useHasCrossSigningKeys = (cli: MatrixClient, member: User, canVerify: bool
 
 /**
  * View model for the userInfoVerificationHeaderView
+ * @param member - the user whose profile is shown
+ * @param devices - the user's devices, or undefined while they are still being fetched
  * @see {@link UserInfoVerificationSectionState} for more information about what this view model returns.
  */
 export const useUserInfoVerificationViewModel = (
     member: User | RoomMember,
-    devices: IDevice[],
+    devices: IDevice[] | undefined,
 ): UserInfoVerificationSectionState => {
     const sdkContext = useContext(SDKContext);
 
@@ -55,14 +61,18 @@ export const useUserInfoVerificationViewModel = (
     const hasUserVerificationStatus = Boolean(userTrust);
     const isUserVerified = Boolean(userTrust?.isVerified());
     const isMe = member.userId === sdkContext.client!.getUserId();
-    const canVerify = hasUserVerificationStatus && !isUserVerified && !isMe && devices && devices.length > 0;
+    const canVerify = hasUserVerificationStatus && !isUserVerified && !isMe && !!devices?.length;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(sdkContext.client!, member as User, canVerify);
+    // the cross-signing keys are only fetched for a user we can verify
+    const isLoading =
+        !hasUserVerificationStatus || devices === undefined || (canVerify && hasCrossSigningKeys === undefined);
     const verifySelectedUser = (): void => verifyUser(sdkContext.rightPanelStore, sdkContext.client!, member as User);
 
     return {
         canVerify,
         hasCrossSigningKeys,
+        isLoading,
         isUserVerified,
         verifySelectedUser,
     };
