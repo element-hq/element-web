@@ -74,7 +74,7 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
                   install: false
@@ -101,7 +101,7 @@ jobs:
               run: pnpm run build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -161,7 +161,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
                   install: true
@@ -186,7 +186,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
                   path: apps/web/blob-report
@@ -210,7 +210,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
                   install: true
@@ -230,7 +230,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-modules
                   path: modules/blob-report
@@ -308,7 +308,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               if: needs.prepare.outputs.skip == 'false'
               with:
                   cache: true
@@ -338,7 +338,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && needs.prepare.outputs.skip == 'false'
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: html-report
                   path: playwright-report

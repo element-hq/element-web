@@ -35,7 +35,7 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.3.4
+    vite: 8.3.5
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 5.0.5
@@ -47,9 +47,9 @@ catalog:
     "@vitejs/plugin-react": 6.1.2
     unplugin-dts: 1.1.2
     # nx
-    nx: 23.3.0
+    nx: 24.0.3
     # oxc
-    oxlint: 1.88.0
+    oxlint: 1.90.0
 
 catalogs:
     ts6:
@@ -77,10 +77,6 @@ allowBuilds:
     # Needed to make the git dependency in layered.sh happy
     "matrix-js-sdk@git+https://github.com/matrix-org/matrix-js-sdk.git": true
     "matrix-js-sdk@file:matrix-js-sdk/matrix-js-sdk.tgz": true
-    # Element Call's React component is a git dependency on the `component` directory of the
-    # element-call repository, whose `prepare` script builds it on install (nothing is published yet).
-    # pnpm matches git-hosted packages by repository URL, not by bare name.
-    "@element-hq/element-call-component@git+https://github.com/element-hq/element-call.git": true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -143,10 +139,10 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.3.0
+    pretty-format@30>react-is: 19.3.1
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001810
+    caniuse-lite: 1.0.30001820
 
     # Make sure we only have one instance of the widget API in the build;
     # failure to do so results in (unspecified) breakage in downstream builds
@@ -161,12 +157,10 @@ overrides:
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
-    esbuild@<=0.27.4: 0.27.4
-    # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
-    # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
-    # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
-    vitepress>vite: ^6.4.3
+    esbuild@0 <0.28.1: 0.28.1
+    vitepress>vite: 8.3.5
+    # https://github.com/advisories/GHSA-qxg6-89mg-rqv8
+    "@vitest/mocker@4 <4.1.12": ^4.1.12
     # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
     nx: "catalog:"
     # https://github.com/advisories/GHSA-2p49-hgcm-8545
@@ -207,6 +201,8 @@ overrides:
     js-yaml@3 <3.15.2: ^3.15.2
     # https://github.com/advisories/GHSA-2883-xcg3-v3hh
     js-yaml@4 <4.3.2: ^4.3.2
+    # https://github.com/advisories/GHSA-vc2v-76pw-4v95
+    compression@1 <1.8.2: ^1.8.2
 
     # Convince api-extractor to use a newer Typescript version
     "unplugin-dts>typescript": "catalog:ts6"

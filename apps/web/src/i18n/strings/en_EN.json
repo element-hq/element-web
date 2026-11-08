@@ -217,6 +217,7 @@
             "description": "Are you sure you want to remove this device?",
             "generate_recovery_key": "Generate new recovery key",
             "keep_access_description": "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.",
+            "key_checked_title": "Your recovery key is active",
             "setup_key_backup_title": "You're about to lose access to your encrypted chats",
             "setup_secure_backup_description": "This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.",
             "skip_key_backup": "Remove this device anyway"
@@ -283,6 +284,8 @@
             "tap_avatar_link_new_device": "Tap your avatar and select \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",
+            "verification_uri_explainer": "Your account provider will open in a new tab. Approve the sign-in there, then come back to this tab.",
+            "verification_uri_heading": "Approve the sign-in with your account provider",
             "waiting_for_device": "Waiting for your other device"
         },
         "register_action": "Create Account",
@@ -1190,6 +1193,10 @@
         "m.reaction": {
             "user": "%(sender)s reacted %(reaction)s to %(message)s",
             "you": "You reacted %(reaction)s to %(message)s"
+        },
+        "m.rtc.notification": {
+            "ended": "Call ended",
+            "started": "Call started"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
@@ -2522,6 +2529,8 @@
                 "breadcrumb_description": "If you don't have access to any other verified devices and you don't have your recovery key, then you'll need to reset your digital identity to continue using the app.",
                 "breadcrumb_description_no_verification_method": "You don't have access to any other verified devices or a recovery key, so you'll need to reset your digital identity to continue using the app. ",
                 "breadcrumb_first_description": "Your account details, contacts, preferences, and chat list will be kept",
+                "breadcrumb_first_description_no_encrypted_devices": "It looks like you don't have any chats yet. If this is correct, you can safely proceed with resetting your digital identity",
+                "breadcrumb_fourth_description": "Any devices you're signed in to will need to be reconfirmed",
                 "breadcrumb_page": "Reset encryption",
                 "breadcrumb_second_description": "You'll lose any encrypted chat history that's stored only on the server",
                 "breadcrumb_third_description": "Other users will see that your digital identity has been reset",
@@ -2564,6 +2573,10 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then select Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
+                "check_description": "Enter the recovery key you’ve saved to make sure that it’s correct and active.",
+                "check_error": "Incorrect recovery key",
+                "check_failed_title": "Failed to check the recovery key",
+                "check_title": "Check your recovery key",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
                 "forgot_recovery_key": "Forgot recovery key?",

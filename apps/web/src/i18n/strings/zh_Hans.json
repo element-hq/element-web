@@ -215,6 +215,7 @@
             "description": "你确定要移除此设备？",
             "generate_recovery_key": "生成新的恢复密钥",
             "keep_access_description": "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。",
+            "key_checked_title": "恢复密钥已激活",
             "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
             "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
@@ -281,6 +282,8 @@
             "tap_avatar_link_new_device": "点击头像并选择“%(linkNewDevice)s”",
             "unsupported_explainer": "你的账户提供者不支持通过二维码登录到新设备。",
             "unsupported_heading": "二维码不受支持",
+            "verification_uri_explainer": "将在新标签页中打开账户提供者网页。请在该处批准登录，然后返回此标签页。",
+            "verification_uri_heading": "使用你的账户提供者批准登录",
             "waiting_for_device": "正在等待其他设备"
         },
         "register_action": "创建账户",
@@ -1186,6 +1189,10 @@
         "m.reaction": {
             "user": "%(sender)s 使用 %(reaction)s 对 %(message)s 作出反应",
             "you": "你使用了 %(reaction)s 对 %(message)s 作出反应"
+        },
+        "m.rtc.notification": {
+            "ended": "通话已结束",
+            "started": "通话已开始"
         },
         "m.sticker": "%(senderName)s：%(stickerName)s",
         "m.text": "%(senderName)s：%(message)s",
@@ -2511,6 +2518,8 @@
                 "breadcrumb_description": "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_description_no_verification_method": "你没有其它已验证的设备或恢复密钥，因此你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
+                "breadcrumb_first_description_no_encrypted_devices": "看起来你暂无任何聊天记录。如果情况属实，你可以安全地继续重置数字身份。",
+                "breadcrumb_fourth_description": "你所有已登录的设备都需要重新确认。",
                 "breadcrumb_page": "重置加密",
                 "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的加密聊天历史",
                 "breadcrumb_third_description": "其他用户将会看到你已重置数字身份。",
@@ -2553,6 +2562,10 @@
                 "change_recovery_key": "更改恢复密钥",
                 "change_recovery_key_description": "在安全的地方记下新的恢复密钥。点选“继续”按钮以确认更改。",
                 "change_recovery_key_title": "更改恢复密钥？",
+                "check_description": "请输入你已保存的恢复密钥，以确保其正确且有效。",
+                "check_error": "恢复密钥不正确",
+                "check_failed_title": "恢复密钥检查失败",
+                "check_title": "检查恢复密钥",
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",

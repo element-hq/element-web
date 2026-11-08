@@ -256,12 +256,13 @@ describe("<VirtualizedRoomListView />", () => {
                 { coords: { x: 20, y: 140 } },
             ]);
 
-            // The drag has activated: the live region reflects the ongoing drag.
-            await waitFor(() => expect(status).toHaveTextContent("General is over Favourites"));
+            // The drag has activated: the live region reflects the ongoing drag. It briefly announces the
+            // room's own section on activation, so wait for the section under the pointer (the Chats header).
+            await waitFor(() => expect(status).toHaveTextContent("General is over Chats"));
 
             await user.pointer({ keys: "[/MouseLeft]" }); // release to drop
 
-            await waitFor(() => expect(Sections.args.changeRoomSection).toHaveBeenCalled());
+            await waitFor(() => expect(Sections.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "chats"));
         });
     });
 
