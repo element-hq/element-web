@@ -158,21 +158,16 @@ const LegacyCallViewScreenshareButton: FC<ButtonProps> = (props) => {
     // Start Audiofox on mount
     useEffect(() => {
         const platform = window.mxPlatformPeg.get();
-        if (platform) {
-            const initAudiofox = (): void => {
-                const manager = platform.getAudiofox();
-                if (manager) {
-                    manager.start().catch((e) => console.error(e));
-                    setManager(manager);
-                }
-            };
-            initAudiofox();
+        const manager = platform?.getAudiofox();
+        if (manager) {
+            manager.start().catch((e) => console.error(e));
+            setManager(manager);
+
             return () => {
-                manager?.stop();
-                setManager(null);
+                manager.stop();
             };
         }
-    }, [manager]);
+    }, []);
 
     // If the manager could not be loaded, fallback to a toggle button
     return manager ? (
