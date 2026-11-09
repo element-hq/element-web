@@ -18,6 +18,7 @@ import { bodyToHtml, bodyToNode, formatEmojis, getEmojiRegex, sanitizedHtmlNode,
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import SdkConfig from "./SdkConfig";
+import { getKatex, loadKatex } from "./utils/katex";
 
 describe("topicToHtml", () => {
     function getContent() {
@@ -183,7 +184,23 @@ describe("bodyToHtml", () => {
             SdkConfig.reset();
         });
 
-        it("should render inline katex", () => {
+        // Runs first, as once KaTeX is loaded it stays loaded for the rest of this file
+        it("should leave maths as the sender's fallback until KaTeX has loaded", () => {
+            expect(getKatex()).toBeUndefined();
+            const html = bodyToHtml(
+                {
+                    body: "hello \\xi world",
+                    msgtype: "m.text",
+                    formatted_body: 'hello <span data-mx-maths="\\xi"><code>\\xi</code></span> world',
+                    format: "org.matrix.custom.html",
+                },
+                [],
+            );
+            expect(html).toBe('hello <span data-mx-maths="\\xi"><code>\\xi</code></span> world');
+        });
+
+        it("should render inline katex", async () => {
+            await loadKatex();
             const html = bodyToHtml(
                 {
                     body: "hello \\xi world",
@@ -196,7 +213,8 @@ describe("bodyToHtml", () => {
             expect(html).toMatchSnapshot();
         });
 
-        it("should render block katex", () => {
+        it("should render block katex", async () => {
+            await loadKatex();
             const html = bodyToHtml(
                 {
                     body: "hello \\xi world",
