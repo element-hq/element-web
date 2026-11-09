@@ -99,6 +99,7 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     doAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+    doUnsafeAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
     getRoom: (id: string) => Room | null;
     waitForClientStarted(): Promise<void>;
 }

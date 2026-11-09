@@ -25,13 +25,15 @@ describe("ClientApi", () => {
         expect(moduleRoom?.id).toStrictEqual("!foo:matrix.org");
     });
 
-    describe("doAuthenticatedRequest", () => {
+    // Both methods share the header handling; the homeserver check is covered separately below.
+    describe.each(["doAuthenticatedRequest", "doUnsafeAuthenticatedRequest"] as const)("%s", (method) => {
         const url = "https://example.org/_matrix/client/v3/foo";
         let fetchSpy: MockInstance<typeof fetch>;
 
         beforeEach(() => {
             const client = stubClient();
             vi.mocked(client.getAccessToken).mockReturnValue("syt_token");
+            vi.mocked(client.getHomeserverUrl).mockReturnValue("https://example.org");
             fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response());
         });
 
@@ -47,21 +49,21 @@ describe("ClientApi", () => {
 
         it("should add the header to a string URL", async () => {
             const api = new ClientApi(new MatrixDispatcher());
-            await api.doAuthenticatedRequest(url);
+            await api[method](url);
             expect(sentRequest().url).toStrictEqual(url);
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
         });
 
         it("should add the header to a URL object input", async () => {
             const api = new ClientApi(new MatrixDispatcher());
-            await api.doAuthenticatedRequest(new URL(url));
+            await api[method](new URL(url));
             expect(sentRequest().url).toStrictEqual(url);
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
         });
 
         it("should pass through other init options", async () => {
             const api = new ClientApi(new MatrixDispatcher());
-            await api.doAuthenticatedRequest(url, { method: "POST", body: "hello" });
+            await api[method](url, { method: "POST", body: "hello" });
             expect(sentRequest().method).toStrictEqual("POST");
             await expect(sentRequest().text()).resolves.toStrictEqual("hello");
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
@@ -74,7 +76,7 @@ describe("ClientApi", () => {
         ])("should add the header without changing existing headers given as %s", async (_, makeHeaders) => {
             const api = new ClientApi(new MatrixDispatcher());
             const headers = makeHeaders();
-            await api.doAuthenticatedRequest(url, { headers });
+            await api[method](url, { headers });
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
             expect(sentRequest().headers.get("X-Foo")).toStrictEqual("bar");
             expect(headers).toStrictEqual(makeHeaders());
@@ -83,7 +85,7 @@ describe("ClientApi", () => {
         it("should add the header to a Request input without changing it", async () => {
             const api = new ClientApi(new MatrixDispatcher());
             const request = new Request(url, { headers: { "X-Foo": "bar" } });
-            await api.doAuthenticatedRequest(request);
+            await api[method](request);
             expect(sentRequest()).not.toBe(request);
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
             expect(sentRequest().headers.get("X-Foo")).toStrictEqual("bar");
@@ -93,7 +95,7 @@ describe("ClientApi", () => {
         it("should add the header when a Request input has its headers replaced by init", async () => {
             const api = new ClientApi(new MatrixDispatcher());
             const request = new Request(url, { headers: { "X-Foo": "bar" } });
-            await api.doAuthenticatedRequest(request, { headers: { "X-Baz": "qux" } });
+            await api[method](request, { headers: { "X-Baz": "qux" } });
             expect(sentRequest().headers.get("Authorization")).toStrictEqual("Bearer syt_token");
             expect(sentRequest().headers.get("X-Baz")).toStrictEqual("qux");
             // Matches fetch: headers in init replace those on the Request.
@@ -111,7 +113,7 @@ describe("ClientApi", () => {
             ],
         ])("should refuse to make the request if %s already has an Authorization header", async (_, makeArgs) => {
             const api = new ClientApi(new MatrixDispatcher());
-            await expect(api.doAuthenticatedRequest(...makeArgs())).rejects.toThrow("already has an Authorization");
+            await expect(api[method](...makeArgs())).rejects.toThrow("already has an Authorization");
             expect(fetchSpy).not.toHaveBeenCalled();
         });
 
@@ -119,13 +121,13 @@ describe("ClientApi", () => {
             const response = new Response("body");
             fetchSpy.mockResolvedValue(response);
             const api = new ClientApi(new MatrixDispatcher());
-            await expect(api.doAuthenticatedRequest(url)).resolves.toBe(response);
+            await expect(api[method](url)).resolves.toBe(response);
         });
 
         it("should refuse to make the request if the client has no access token", async () => {
             vi.mocked(MatrixClientPeg.safeGet().getAccessToken).mockReturnValue(null);
             const api = new ClientApi(new MatrixDispatcher());
-            await expect(api.doAuthenticatedRequest(url)).rejects.toThrow("Client has no token");
+            await expect(api[method](url)).rejects.toThrow("Client has no token");
             expect(fetchSpy).not.toHaveBeenCalled();
         });
 
@@ -134,8 +136,55 @@ describe("ClientApi", () => {
                 throw new Error("not logged in");
             });
             const api = new ClientApi(new MatrixDispatcher());
-            await expect(api.doAuthenticatedRequest(url)).rejects.toThrow("not logged in");
+            await expect(api[method](url)).rejects.toThrow("not logged in");
             expect(fetchSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("homeserver check", () => {
+        let fetchSpy: MockInstance<typeof fetch>;
+
+        beforeEach(() => {
+            const client = stubClient();
+            vi.mocked(client.getAccessToken).mockReturnValue("syt_token");
+            vi.mocked(client.getHomeserverUrl).mockReturnValue("https://matrix.example.org/base");
+            fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response());
+        });
+
+        afterEach(() => {
+            fetchSpy.mockRestore();
+        });
+
+        it.each([
+            ["a path under the homeserver URL", "https://matrix.example.org/base/_matrix/client/v3/foo"],
+            ["another path on the homeserver origin", "https://matrix.example.org/_matrix/client/v3/foo"],
+            ["a Request to the homeserver", new Request("https://matrix.example.org/_matrix/client/v3/foo")],
+        ])("doAuthenticatedRequest should allow %s", async (_, input) => {
+            const api = new ClientApi(new MatrixDispatcher());
+            await api.doAuthenticatedRequest(input);
+            const sent = fetchSpy.mock.lastCall?.[0] as Request;
+            expect(sent.headers.get("Authorization")).toStrictEqual("Bearer syt_token");
+        });
+
+        it.each([
+            ["another host", "https://evil.example.com/_matrix/client/v3/foo"],
+            ["a host starting with the homeserver host", "https://matrix.example.org.evil.com/_matrix/client/v3/foo"],
+            ["another port", "https://matrix.example.org:8448/_matrix/client/v3/foo"],
+            ["another scheme", "http://matrix.example.org/_matrix/client/v3/foo"],
+            ["a URL object for another host", new URL("https://evil.example.com/foo")],
+            ["a Request to another host", new Request("https://evil.example.com/foo")],
+        ])("doAuthenticatedRequest should refuse %s", async (_, input) => {
+            const api = new ClientApi(new MatrixDispatcher());
+            await expect(api.doAuthenticatedRequest(input)).rejects.toThrow("not to the homeserver");
+            expect(fetchSpy).not.toHaveBeenCalled();
+        });
+
+        it("doUnsafeAuthenticatedRequest should allow another host", async () => {
+            const api = new ClientApi(new MatrixDispatcher());
+            await api.doUnsafeAuthenticatedRequest("https://evil.example.com/foo");
+            const sent = fetchSpy.mock.lastCall?.[0] as Request;
+            expect(sent.url).toStrictEqual("https://evil.example.com/foo");
+            expect(sent.headers.get("Authorization")).toStrictEqual("Bearer syt_token");
         });
     });
 

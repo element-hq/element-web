@@ -51,14 +51,36 @@ export interface ClientApi {
     getRoom: (id: string) => Room | null;
 
     /**
-     * Make a `fetch` request with the client's access token added as an `Authorization: Bearer` header.
-     * Takes the same arguments as `fetch`. The arguments passed in are not modified.
-     * @param input - The resource to fetch.
+     * Make a `fetch` request to the homeserver with the client's access token added as an `Authorization: Bearer`
+     * header. Takes the same arguments as `fetch`. The arguments passed in are not modified.
+     *
+     * @param input - The resource to fetch. Must have the same origin (scheme, host and port) as the homeserver.
      * @param init - Options for the request. Must not set an `Authorization` header.
-     * @returns The response from `fetch`. Rejects if the client isn't ready yet, has no access token, or the
-     * request already has an `Authorization` header.
+     *
+     * @returns The response from `fetch`. Rejects if:
+     *  - the client isn't ready yet
+     *  - has no access token
+     *  - the request isn't for the homeserver's origin.
+     *  - or the request already has an `Authorization` header.
      */
     doAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+
+    /**
+     * Make a `fetch` request to any URL with the client's access token added as an `Authorization: Bearer` header.
+     * Takes the same arguments as `fetch`. The arguments passed in are not modified.
+     *
+     * **Warning:** this sends the user's access token to whatever URL you pass, which gives that server full
+     * access to the user's account. For requests to the homeserver, use {@link ClientApi.doAuthenticatedRequest} instead.
+     *
+     * @param input - The resource to fetch.
+     * @param init - Options for the request. Must not set an `Authorization` header.
+     *
+     * @returns The response from `fetch`. Rejects if:
+     *  - the client isn't ready yet
+     *  - has no access token
+     *  - or the request already has an `Authorization` header.
+     */
+    doUnsafeAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 
     /**
      * Wait for the client to be started.
