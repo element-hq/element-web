@@ -897,12 +897,17 @@ export class RoomTimelineViewModel
         const MAX_FILL_REQUESTS_PER_DIRECTION = 2;
         const centreOn = target.kind === "permalink" ? target.eventId : undefined;
         const perDirectionTarget = centreOn ? Math.ceil(MIN_INITIAL_EVENTS / 2) : MIN_INITIAL_EVENTS;
-        const directions =
-            target.kind === "permalink"
-                ? [Direction.Backward, Direction.Forward]
-                : target.kind === "start"
-                  ? [Direction.Forward]
-                  : [Direction.Backward];
+        let directions: Direction[];
+        switch (target.kind) {
+            case "permalink":
+                directions = [Direction.Backward, Direction.Forward];
+                break;
+            case "start":
+                directions = [Direction.Forward];
+                break;
+            default:
+                directions = [Direction.Backward];
+        }
 
         for (const direction of directions) {
             let requests = 0;
@@ -1157,9 +1162,11 @@ export class RoomTimelineViewModel
 
     private jumpToStart = (scrollNow: ImmediateScroll): void => {
         const createEventId = this.opts.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getId();
-        const reachesStart =
-            !this.timelineWindow.canPaginate(Direction.Backward) ||
-            this.timelineWindow.getEvents().some((e) => e.getId() === createEventId);
+        // The window reaches the start of the room if there is nothing older left to fetch,
+        // or if the create event, the room's first event, is already among its events.
+        const nothingOlder = !this.timelineWindow.canPaginate(Direction.Backward);
+        const hasCreateEvent = this.timelineWindow.getEvents().some((e) => e.getId() === createEventId);
+        const reachesStart = nothingOlder || hasCreateEvent;
         debug(`[TimelineVM] onJumpToStart — createEventId=${createEventId}, reachesStart=${reachesStart}`);
         if (reachesStart || !createEventId) {
             // Already loaded, or nothing to load around: go to the top of what we have. Reaching
