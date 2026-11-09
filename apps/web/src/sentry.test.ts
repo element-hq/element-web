@@ -7,16 +7,19 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, afterEach, vi } from "vitest";
-import { init, rewriteFramesIntegration, setUser } from "@sentry/browser";
+import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
+import { captureException, captureMessage, init, rewriteFramesIntegration, setUser } from "@sentry/browser";
 import type * as SentryModule from "@sentry/browser";
 
-import { initSentry, setSentryUser } from "./sentry";
+import { initSentry, sendSentryReport, setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
+import { stubClient } from "test-utils";
 
 vi.mock("@sentry/browser", () => ({
     init: vi.fn(),
     setUser: vi.fn(),
+    captureException: vi.fn(),
+    captureMessage: vi.fn(),
     eventFiltersIntegration: vi.fn().mockReturnValue({ name: "EventFilters" }),
     functionToStringIntegration: vi.fn().mockReturnValue({ name: "FunctionToString" }),
     breadcrumbsIntegration: vi.fn().mockReturnValue({ name: "Breadcrumbs" }),
@@ -70,6 +73,60 @@ describe("setSentryUser", () => {
         await vi.dynamicImportSettled();
 
         expect(setUser).not.toHaveBeenCalled();
+    });
+});
+
+describe("sendSentryReport", () => {
+    beforeEach(() => {
+        const client = stubClient();
+        // The crypto context isn't under test here
+        vi.mocked(client.getCrypto).mockReturnValue(undefined);
+        SdkConfig.put({ sentry: { dsn: "https://examplePublicKey@o0.ingest.sentry.io/0", environment: "test" } });
+    });
+
+    afterEach(() => {
+        SdkConfig.reset();
+        vi.clearAllMocks();
+    });
+
+    it("does nothing if Sentry is not configured", async () => {
+        SdkConfig.reset();
+
+        await sendSentryReport("it broke", "https://github.com/element-hq/element-web/issues/1", new Error("oops"));
+
+        expect(captureException).not.toHaveBeenCalled();
+        expect(captureMessage).not.toHaveBeenCalled();
+    });
+
+    it("captures the error with the user's report attached", async () => {
+        const error = new Error("oops");
+
+        await sendSentryReport("it broke", "https://github.com/element-hq/element-web/issues/1", error);
+
+        expect(captureException).toHaveBeenCalledWith(
+            error,
+            expect.objectContaining({
+                extra: { user_text: "it broke", issue_url: "https://github.com/element-hq/element-web/issues/1" },
+            }),
+        );
+        expect(captureMessage).not.toHaveBeenCalled();
+    });
+
+    it("captures a message for the issue if there is no error", async () => {
+        await sendSentryReport("it broke", "https://github.com/element-hq/element-web/issues/1");
+
+        expect(captureMessage).toHaveBeenCalledWith(
+            "Issue: https://github.com/element-hq/element-web/issues/1",
+            expect.objectContaining({ extra: expect.objectContaining({ user_text: "it broke" }) }),
+        );
+        expect(captureException).not.toHaveBeenCalled();
+    });
+
+    it("sends nothing if there is neither an error nor an issue", async () => {
+        await sendSentryReport("it broke", "");
+
+        expect(captureException).not.toHaveBeenCalled();
+        expect(captureMessage).not.toHaveBeenCalled();
     });
 });
 
