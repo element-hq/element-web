@@ -247,6 +247,36 @@ describe("<TimelineView />", () => {
             expect(scroller.scrollTop).toBe(200);
         });
 
+        it("does not report leaving the bottom when the scroll position is read before a resize is measured", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            // Start with the reader sitting at the bottom of the timeline.
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(true));
+            await settle();
+            actions.onAtBottomStateChange.mockClear();
+
+            // When the timeline gets taller, the browser moves scrollTop up so the bottom stays
+            // in view, and fires the scroll event before TanStack's ResizeObserver has seen the
+            // new height. Without our @tanstack/virtual-core patch, which reads the height with
+            // the scroll event, that paired the new scrollTop with the old height and looked as
+            // if the reader had scrolled up.
+            //
+            // On CI this only happened when a timer fired in that gap by chance, so the test
+            // failed now and then (#35449). Here we force it: make the timeline taller, then
+            // straight away fire a scroll event.
+            resize(VIEWPORT_HEIGHT + 60);
+            scroller.dispatchEvent(new Event("scroll"));
+
+            // Let TanStack catch up with the new height.
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT + 60));
+            await settle();
+            // The reader is still at the bottom, and was never reported as having left it.
+            expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1);
+            expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
+        });
+
         it("keeps a reader at the bottom when the window shrinks and some rows shrink with it", async () => {
             // Every fourth row is sized as a share of the window height, like a collapsed code
             // block, so it changes height in the same frame as the viewport.

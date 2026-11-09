@@ -1,5 +1,5 @@
 diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
-index 0524d9a..f730b01 100644
+index 0524d9a..4c350d4 100644
 --- a/dist/esm/index.d.ts
 +++ b/dist/esm/index.d.ts
 @@ -83,6 +83,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
@@ -15,19 +15,54 @@ index 0524d9a..f730b01 100644
      followOnAppend?: FollowOnAppend;
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
-@@ -196,6 +202,7 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+@@ -196,6 +202,9 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
      private _momentumStop;
      private _stopMomentum;
      private _clampedBy;
++    private _readDefaultRect;
++    private _setScrollRect;
 +    private isPinnedToEnd;
      private getVirtualDistanceFromEnd;
      getDistanceFromEnd: () => number;
      isAtEnd: (threshold?: number) => boolean;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index abe4b49..8e18d5b 100644
+index abe4b49..3018fe4 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
-@@ -406,7 +406,16 @@ class Virtualizer {
+@@ -5,8 +5,12 @@ import { IosGesture, isIOSWebKit, momentumOverridesWrites } from "./ios-gesture.
+ import { _resetIOSDetectionForTests } from "./ios-gesture.js";
+ const getRect = (element) => {
+   const { clientWidth, clientHeight } = element;
+-  return { width: clientWidth, height: clientHeight };
++  return { width: Math.round(clientWidth), height: Math.round(clientHeight) };
+ };
++const getWindowRect = (win) => ({
++  width: win.innerWidth,
++  height: win.innerHeight
++});
+ const createFrameQueue = (targetWindow) => {
+   const ids = /* @__PURE__ */ new Set();
+   return {
+@@ -45,8 +49,7 @@ const observeElementRect = (instance, cb) => {
+     return;
+   }
+   const handler = (rect) => {
+-    const { width, height } = rect;
+-    cb({ width: Math.round(width), height: Math.round(height) });
++    cb(rect);
+   };
+   handler(getRect(element));
+   if (!targetWindow.ResizeObserver) {
+@@ -75,7 +78,7 @@ const observeWindowRect = (instance, cb) => {
+     return;
+   }
+   const handler = () => {
+-    cb({ width: element.innerWidth, height: element.innerHeight });
++    cb(getWindowRect(element));
+   };
+   handler();
+   element.addEventListener("resize", handler, addEventListenerOptions);
+@@ -406,7 +409,16 @@ class Virtualizer {
          const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
          if (didEdgeKeysChange) {
            edgeKeysChanged = true;
@@ -45,27 +80,29 @@ index abe4b49..8e18d5b 100644
            if (item) {
              anchor = [item.key, this.getScrollOffset() - item.start];
            }
-@@ -529,9 +538,19 @@ class Virtualizer {
+@@ -529,9 +541,11 @@ class Virtualizer {
          this.elementsCache.forEach((cached) => {
            this.observer.observe(cached);
          });
 +        let isFirstRect = true;
          this.unsubs.push(
            this.options.observeElementRect(this, (rect) => {
-+            const prevSize = !isFirstRect && this.scrollRect !== null ? this.getSize() : null;
+-            this.scrollRect = rect;
++            this._setScrollRect(rect, isFirstRect);
 +            isFirstRect = false;
-+            const wasAtEnd = prevSize !== null && this.scrollDirection !== "backward" && this.isPinnedToEnd();
-             this.scrollRect = rect;
-+            if (wasAtEnd && prevSize > this.getSize() && !this._awaitingCommandReadBack()) {
-+              const shrink = prevSize - this.getSize();
-+              this.applyScrollAdjustment(
-+                this._clampedAdjustment !== null ? shrink : Math.min(shrink, this.getDistanceFromEnd())
-+              );
-+            }
              this.maybeNotify();
            })
          );
-@@ -1049,7 +1068,7 @@ class Virtualizer {
+@@ -601,6 +615,8 @@ class Virtualizer {
+             ((_d = this.scrollState) == null ? void 0 : _d.phase) === "queued") {
+               this.scrollState = null;
+             }
++            const liveRect = this._readDefaultRect();
++            if (liveRect !== null) this._setScrollRect(liveRect, false);
+             this._flushHoldIfReady(true);
+             if (this.scrollState) {
+               this.scheduleScrollReconcile();
+@@ -1049,7 +1065,7 @@ class Virtualizer {
        const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
        const delta = size - itemSize;
        if (delta !== 0) {
@@ -74,10 +111,33 @@ index abe4b49..8e18d5b 100644
          const prevTotalSize = wasAtEnd ? this._getLayoutTotalSize() : 0;
          const scrollOffset = this.getScrollOffset();
          const isFirstMeasure = !this.itemSizeCache.has(key);
-@@ -1226,6 +1245,7 @@ class Virtualizer {
+@@ -1226,6 +1242,30 @@ class Virtualizer {
        const maxAtWrite = elementMax + this._holdOffset;
        return target > maxAtWrite + 0.5 ? { target, maxAtWrite } : null;
      };
++    this._readDefaultRect = () => {
++      const el = this.scrollElement;
++      const observe = this.options.observeElementRect;
++      if (el == null) return null;
++      if (observe === observeElementRect) return getRect(el);
++      if (observe === observeWindowRect) return getWindowRect(el);
++      return null;
++    };
++    this._setScrollRect = (rect, isFirst) => {
++      const prev = this.scrollRect;
++      if (prev !== null && prev.width === rect.width && prev.height === rect.height) {
++        return;
++      }
++      const prevSize = !isFirst && prev !== null ? this.getSize() : null;
++      const wasAtEnd = prevSize !== null && this.scrollDirection !== "backward" && this.isPinnedToEnd();
++      this.scrollRect = rect;
++      if (wasAtEnd && prevSize > this.getSize() && !this._awaitingCommandReadBack()) {
++        const shrink = prevSize - this.getSize();
++        this.applyScrollAdjustment(
++          this._clampedAdjustment !== null ? shrink : Math.min(shrink, this.getDistanceFromEnd())
++        );
++      }
++    };
 +    this.isPinnedToEnd = () => this.options.anchorTo === "end" && !isSmoothScroll(this.scrollState) && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
      this.getVirtualDistanceFromEnd = () => {
        return Math.max(
