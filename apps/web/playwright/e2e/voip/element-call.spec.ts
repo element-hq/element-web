@@ -244,16 +244,18 @@ test.describe("Element Call", () => {
             await sendRTCState(bot, room.roomId, undefined, "video");
             await expect(page.getByTestId("join-call-button")).toBeVisible();
 
-            // Alice's client only stores a sync response after it has processed it, so seeing the call doesn't
-            // mean the sync with Bob's membership has been stored yet. Once a later sync is processed, it has.
+            // The bug only happens when Bob's membership is loaded from the sync cache on reload. If it arrives
+            // from the server instead, the call is found as normal. So we need the membership in the cache, which
+            // takes two steps.
+
+            // Step 1: get Bob's membership into the client's in-memory sync data. The client adds a sync response
+            // to it only after updating the UI, so the Join button showing isn't enough. Once a later sync (this
+            // message) is shown, the earlier one has been added.
             await bot.sendMessage(room.roomId, "Is anyone else joining?");
             await expect(page.getByTestId("timeline").getByText("Is anyone else joining?")).toBeVisible();
 
-            // This test fixes a bug that is somewhat time sensitive.
-            // Save the sync cache now that it contains Bob's membership, so that after the reload the call is
-            // loaded from the cache.
-            //
-            // This bug is triggered by loading membership from the sync cache, which is only saved to periodically.
+            // Step 2: write the sync data to IndexedDB. The client otherwise only does this on the first sync after
+            // loading and then every 5 minutes, so the cache wouldn't contain Bob's membership yet.
             await app.client.evaluate((client) => client.store.save(true));
 
             await page.reload();
