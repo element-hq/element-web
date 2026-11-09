@@ -14,7 +14,7 @@ import { render, screen } from "test-utils-rtl";
 import parse from "html-react-parser";
 import { getMockClientWithEventEmitter } from "test-utils";
 
-import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "./HtmlUtils";
+import { bodyToHtml, bodyToNode, formatEmojis, getEmojiRegex, sanitizedHtmlNode, topicToHtml } from "./HtmlUtils";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import SdkConfig from "./SdkConfig";
@@ -250,6 +250,22 @@ describe("formatEmojis", () => {
             expect(res[i].props.children).toEqual(emoji);
             expect(res[i].props.title).toEqual(`:${title}:`);
         }
+    });
+});
+
+describe("getEmojiRegex", () => {
+    it("builds the regex once and reuses it", () => {
+        expect(getEmojiRegex()).toBe(getEmojiRegex());
+    });
+
+    it.each([
+        ["😀", true],
+        ["🇬🇧", true],
+        ["a", false],
+        // Text presentation selector: not an emoji
+        ["☺\uFE0E", false],
+    ])("matches %s: %s", (text, expected) => {
+        expect(getEmojiRegex().test(text)).toBe(expected);
     });
 });
 
