@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { init, rewriteFramesIntegration, setUser } from "@sentry/browser";
 import type * as SentryModule from "@sentry/browser";
 
 import { initSentry, setSentryUser } from "./sentry";

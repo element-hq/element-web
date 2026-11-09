@@ -178,14 +178,14 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                     </Badge>
                 )}
 
-                {vm.isRoomEncrypted && vm.e2eStatus !== E2EStatus.Warning && (
+                {vm.isRoomEncrypted === true && vm.e2eStatus !== E2EStatus.Warning && (
                     <Badge kind="green">
                         <LockIcon width="1rem" height="1rem" />
                         {_t("common|encrypted")}
                     </Badge>
                 )}
 
-                {!vm.isRoomEncrypted && (
+                {vm.isRoomEncrypted === false && (
                     <Badge kind="blue">
                         <LockOffIcon width="1rem" height="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|unencrypted")}

@@ -21,6 +21,12 @@ export interface Room {
      */
     name: Watchable<string>;
     /**
+     * {@link Watchable} holding whether this room is encrypted.
+     * The value is only kept up to date while it is being watched.
+     * The value is `undefined` until the encryption status has been determined.
+     */
+    isEncrypted: Watchable<boolean | undefined>;
+    /**
      * Get the timestamp of the last message in this room.
      * @returns last active timestamp
      */

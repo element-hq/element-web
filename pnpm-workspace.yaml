@@ -47,7 +47,7 @@ catalog:
     "@vitejs/plugin-react": 6.1.2
     unplugin-dts: 1.1.2
     # nx
-    nx: 24.0.3
+    nx: 24.0.4
     # oxc
     oxlint: 1.90.0
 
@@ -157,12 +157,10 @@ overrides:
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
-    esbuild@<=0.27.4: 0.27.4
-    # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
-    # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
-    # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
-    vitepress>vite: ^6.4.3
+    esbuild@0 <0.28.1: 0.28.1
+    vitepress>vite: 8.3.5
+    # https://github.com/advisories/GHSA-qxg6-89mg-rqv8
+    "@vitest/mocker@4 <4.1.12": ^4.1.12
     # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
     nx: "catalog:"
     # https://github.com/advisories/GHSA-2p49-hgcm-8545
@@ -203,6 +201,8 @@ overrides:
     js-yaml@3 <3.15.2: ^3.15.2
     # https://github.com/advisories/GHSA-2883-xcg3-v3hh
     js-yaml@4 <4.3.2: ^4.3.2
+    # https://github.com/advisories/GHSA-vc2v-76pw-4v95
+    compression@1 <1.8.2: ^1.8.2
 
     # Convince api-extractor to use a newer Typescript version
     "unplugin-dts>typescript": "catalog:ts6"

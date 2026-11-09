@@ -5,7 +5,7 @@
     "action": {
         "back": "Tagasi",
         "cancel": "Katkesta",
-        "click": "Klõpsa",
+        "click": "Vali",
         "close": "Sulge",
         "collapse": "Ahenda",
         "delete": "Kustuta",
@@ -16,16 +16,18 @@
         "go": "Mine",
         "hide": "Peida",
         "invite": "Kutsu",
-        "new_conversation": "Uus vestlus",
+        "new_conversation": "Uus",
         "new_room": "Uus jututuba",
         "new_section": "Uus jaotis",
         "new_video_room": "Uus videotuba",
+        "no": "Ei",
         "open_menu": "Ava menüü",
         "pause": "Peata",
         "pin": "Tõste esile",
         "play": "Esita",
         "react": "Reageeri",
         "remove": "Eemalda",
+        "remove_this_device": "Eemalda see seade",
         "reply": "Vasta",
         "reply_in_thread": "Vasta jutulõngas",
         "retry": "Proovi uuesti",
@@ -33,7 +35,8 @@
         "search": "Otsing",
         "start_chat": "Alusta vestlust",
         "unpin": "Lõpeta esiletõstmine",
-        "view_source": "Vaata lähtekoodi"
+        "view_source": "Vaata lähtekoodi",
+        "yes": "Jah"
     },
     "common": {
         "attachment": "Manus",
@@ -45,11 +48,32 @@
     },
     "composer": {
         "url_preview": {
-            "clear_all": "Eemalda kõik"
+            "clear_all": "Eemalda kõik",
+            "collapse": "Klõpsa võrguaadresside eelvaated kokku",
+            "failed": "Eelvaate laadimine ei õnnestunud",
+            "loading": "Laadin eelvaadet…",
+            "n_links": {
+                "one": "%(count)s link",
+                "other": "%(count)s linki"
+            },
+            "remove": "Eemalda võrguaadressi eelvaade"
         }
     },
     "devtools": {
+        "custom_themes": {
+            "add": "Lisa kohandatud kujundus",
+            "downloading": "Laadin alla kohandatud kujundust…",
+            "error_downloading": "Viga kujunduse allalaadimisel",
+            "help": "Sisesta kohandatud kujunduse võrguaadress.",
+            "installed_heading": "Paigaldatud kohandatud kujundused",
+            "refresh": "Laadi kujundus uuesti alla",
+            "url_label": "Kohandatud kujunduse võrguaadress"
+        },
         "toggle_event": "lülita sündmus sisse/välja"
+    },
+    "document_viewer": {
+        "error_load": "Selle faili laadimine ei õnnestu.",
+        "loading": "Laadin dokumenti…"
     },
     "emoji": {
         "categories": "Kategooriad",
@@ -67,6 +91,19 @@
     "emoji_picker": {
         "cancel_search_label": "Katkesta otsing",
         "emoji_picker": "Emojide valija"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Kui sa eemaldad kõik oma seadmed, siis sa kaotad ligipääsu oma krüptitud sõnumitele ja pead oma digitaalse identiteedi lähtestama.",
+            "error": "Võtmehoidla kustutamine ei õnnestu. Palun proovi uuesti."
+        }
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Palun esmalt koli tagasi varasema <b>%(version)s</b> versiooni juurde või eemalda see seade.",
+            "description": "%(brand)s on uuendatud väga vanast versioonist ja sinu võtmehoidlat ei saa uude vormingusse ümber tõsta.",
+            "title": "Seda seadet ei saa kasutada"
+        }
     },
     "keyboard": {
         "shift": "Shift"
@@ -87,8 +124,17 @@
     "notifications": {
         "all_messages": "Kõik sõnumid",
         "default_settings": "Sobita vaikimisi seadistustega",
+        "mark_all_read": "Märgi kõik loetuks",
         "mentions_keywords": "Mainimised ja märksõnad",
+        "message_didnt_send": "Sõnum jäi saatmata. Vali ja näed lisateavet.",
         "mute_room": "Summuta jututuba"
+    },
+    "pdf_viewer": {
+        "page_label": "Leht %(page)s / %(total)s",
+        "page_number": "Lehe number",
+        "zoom": "Suumi",
+        "zoom_in": "Suumi sisse",
+        "zoom_out": "Suumi välja"
     },
     "release_announcement": {
         "room_list_section_close": "Sobib",
@@ -109,14 +155,16 @@
         "jump_to_date": "Vaata kuupäeva",
         "jump_to_date_beginning": "Jututoa algus",
         "jump_to_date_prompt": "Vali kuupäev, mida soovid vaadata",
+        "knock_sent": "Liitumispalve on saadetud",
         "pinned_message_badge": "Esiletõstetud sõnum",
         "status_bar": {
+            "contact_account_provider": "Võtke ühendust kasutajakonto teenusepakkujaga",
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",
-            "exceeded_resource_limit_title": "Kuna see koduserver on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
+            "exceeded_resource_limit_title": "Kuna see teenusepakkuja on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
             "failed_to_create_room_title": "Selle kasutajaga ei õnnestunud alustada vestlust",
-            "homeserver_blocked_title": "Kuna see koduserver on peakasutaja või haldaaja poolt blokeerinud, siis sinu sõnum on saatmata.",
-            "monthly_user_limit_reached_title": "Sinu sõnum on saatmata, kuna see koduserver on saavutanud oma igakuise aktiivsete kasutajate ülempiiri.",
+            "homeserver_blocked_title": "Kuna see teenus on sinu teenusepakkuja poolt blokeerinud, siis sinu sõnum on saatmata.",
+            "monthly_user_limit_reached_title": "Sinu sõnum on saatmata, kuna see teenusepakkuja on saavutanud oma igakuise aktiivsete kasutajate ülempiiri.",
             "requires_consent_agreement_title": "Sa ei saa sõnumeid saata enne, kui oled meie kasutustingimustega tutvunud ja nendega nõustunud.",
             "retry_all": "Proovi kõikidega uuesti",
             "select_messages_to_retry": "Sa võid valida kas kõik või mõned sõnumid kas kustutamiseks või uuesti saatmiseks",
@@ -183,7 +231,7 @@
         },
         "list_title": "Jututubade loend",
         "more_options": {
-            "copy_link": "Kopeeri jututoa link",
+            "copy_link": "Kopeeri link",
             "favourited": "Märgitud lemmikuks",
             "leave_room": "Lahku jututoast",
             "low_priority": "Vähetähtis",
@@ -237,7 +285,7 @@
         "tac_button": "Vaata üle kasutustingimused"
     },
     "threads": {
-        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa"
+        "error_start_thread_existing_relation": "Sa ei saa sellest sõnumist alustada jutulõnga."
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -314,7 +362,7 @@
             "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
             "disabled": "Krüptimine ei ole kasutusel",
             "enabled": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
-            "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
+            "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tema tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
             "enabled_local": "Sõnumid siin vestluses on läbivalt krüptitud.",
             "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
             "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
@@ -340,7 +388,10 @@
                 "one": "Näita veel %(count)s muud eelvaadet",
                 "other": "Näita veel %(count)s muud eelvaadet"
             },
-            "view_image": "Vaata pilti"
+            "view_audio": "Vaata helifaili",
+            "view_file": "Vaata faili",
+            "view_image": "Vaata pilti",
+            "view_video": "Vaata videofaili"
         }
     },
     "user_menu": {
@@ -349,6 +400,26 @@
         "open_home": "Avaleht",
         "open_security": "Turvalisus ja privaatsus",
         "open_settings": "Kõik seadistused"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Kasutuselolev seadistus",
+            "configuration": "Seadistused",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "kõnes",
+            "in_lobby": "ooteruumis",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "HostBridge'i logi",
+            "mute_audio": "Summuta heli",
+            "mute_video": "Summuta video",
+            "no_participants": "Selles kõnes pole kedagi",
+            "participants": "Osalejad",
+            "status": "%(roomId)s · liidestuspäring %(intent)s · %(state)s · kujundus %(theme)s · keel %(language)s",
+            "title": "Element Call (simulatsioon)",
+            "unknown_room": "Tundmatu jututuba: %(roomId)s",
+            "unmute_audio": "Lõpeta heli summutamine",
+            "unmute_video": "Lõpeta video summutamine"
+        }
     },
     "widget": {
         "context_menu": {
