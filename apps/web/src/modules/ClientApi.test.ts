@@ -38,23 +38,13 @@ describe("ClientApi", () => {
             expect(api.getDeviceId()).toStrictEqual("ABCDEFGHI");
         });
 
-        it("should return the access token from getAccessToken()", () => {
-            const client = stubClient();
-            vi.mocked(client.getAccessToken).mockReturnValue("syt_token");
+        it.each(["getUserId", "getDeviceId"] as const)("should throw from %s() if the client isn't ready", (method) => {
+            vi.spyOn(MatrixClientPeg, "safeGet").mockImplementation(() => {
+                throw new Error("not logged in");
+            });
             const api = new ClientApi(new MatrixDispatcher());
-            expect(api.getAccessToken()).toStrictEqual("syt_token");
+            expect(() => api[method]()).toThrow("not logged in");
         });
-
-        it.each(["getUserId", "getDeviceId", "getAccessToken"] as const)(
-            "should throw from %s() if the client isn't ready",
-            (method) => {
-                vi.spyOn(MatrixClientPeg, "safeGet").mockImplementation(() => {
-                    throw new Error("not logged in");
-                });
-                const api = new ClientApi(new MatrixDispatcher());
-                expect(() => api[method]()).toThrow("not logged in");
-            },
-        );
     });
 
     describe("waitForClientStarted", () => {

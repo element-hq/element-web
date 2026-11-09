@@ -98,7 +98,6 @@ export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
-    getAccessToken(): string | null;
     getDeviceId(): string | null;
     getRoom: (id: string) => Room | null;
     getUserId(): string | null;

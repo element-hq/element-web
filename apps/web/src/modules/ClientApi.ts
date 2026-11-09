@@ -44,16 +44,6 @@ export class ClientApi implements IClientApi {
         return MatrixClientPeg.safeGet().getDeviceId();
     }
 
-    /**
-     * Get the current access token in use by this client.
-     *
-     * @returns The access token, or null if none in use.
-     * @throws If the client isn't ready yet.
-     */
-    public getAccessToken(): string | null {
-        return MatrixClientPeg.safeGet().getAccessToken();
-    }
-
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);

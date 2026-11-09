@@ -65,13 +65,6 @@ export interface ClientApi {
     getDeviceId(): string | null;
 
     /**
-     * Get the access token currently in use by this client.
-     * @returns The access token, or null if none is in use.
-     * @throws If the client isn't ready yet.
-     */
-    getAccessToken(): string | null;
-
-    /**
      * Wait for the client to be started.
      * Resolves immediately if the client has already started. If the user logs out, the next call waits for the
      * client to start again.
