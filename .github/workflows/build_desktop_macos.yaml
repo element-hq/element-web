@@ -207,7 +207,7 @@ jobs:
         with:
             project: macos
             artifact: ${{ inputs.artifact-prefix }}macos
-            runs-on: macos-14
+            runs-on: macos-15
             executable: /Users/runner/Applications/Element*.app/Contents/MacOS/Element*
             # We need to mount the DMG and copy the app to the Applications folder as a mounted DMG is
             # read-only and thus would not allow us to override the fuses as is required for Playwright.
