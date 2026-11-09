@@ -6,14 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// oxlint-disable-next-line no-restricted-imports
-import * as Sentry from "@sentry/browser";
+import type * as SentryModule from "@sentry/browser";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { type IConfigOptions } from "./IConfigOptions";
+
+let sentryPromise: Promise<typeof SentryModule> | undefined;
+
+/**
+ * Sentry is only used when it is configured,
+ * so load it on first use rather than with the rest of the app.
+ */
+function loadSentry(): Promise<typeof SentryModule> {
+    sentryPromise ??= import("@sentry/browser");
+    return sentryPromise;
+}
 
 type StorageContext = {
     storageManager_persisted?: string;
@@ -175,6 +186,7 @@ export async function sendSentryReport(userText: string, issueUrl: string, error
         },
     };
 
+    const Sentry = await loadSentry();
     // If there's no error and no issueUrl, the report will just produce non-grouped noise in Sentry, so don't
     // upload it
     if (error) {
@@ -186,12 +198,16 @@ export async function sendSentryReport(userText: string, issueUrl: string, error
 
 export function setSentryUser(mxid: string): void {
     if (SdkConfig.get().sentry) {
-        Sentry.setUser({ username: mxid });
+        loadSentry().then(
+            (Sentry) => Sentry.setUser({ username: mxid }),
+            (e) => logger.error("Failed to load Sentry", e),
+        );
     }
 }
 
 export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
+    const Sentry = await loadSentry();
     const integrations = [
         Sentry.eventFiltersIntegration(),
         Sentry.functionToStringIntegration(),
