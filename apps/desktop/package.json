@@ -80,7 +80,7 @@
         "@typescript/native": "catalog:",
         "app-builder-lib": "26.18.0",
         "chokidar": "^6.0.0",
-        "electron": "44.10.1",
+        "electron": "44.10.2",
         "electron-builder": "26.18.0",
         "electron-builder-squirrel-windows": "26.18.0",
         "electron-devtools-installer": "^4.0.0",
