@@ -11,12 +11,14 @@ Please see LICENSE files in the repository root for full details.
 //
 // Everything the agent keeps stays on this computer: its settings, the credentials (encrypted with safeStorage)
 // and the marked rooms are in a store of their own, in a directory that is never synced to other computers.
+// Instead of a stored token, Copilot can use the GitHub account it is signed in to on this computer, which the
+// Copilot runtime keeps itself.
 
 import path from "node:path";
-import { app, safeStorage } from "electron";
+import { app, safeStorage, shell } from "electron";
 import ElectronStore from "electron-store";
 import Anthropic from "@anthropic-ai/sdk";
-import { CopilotClient } from "@github/copilot-sdk";
+import { CopilotClient, type CopilotSession } from "@github/copilot-sdk";
 import type {
     AgentErrorCode,
     AgentModel,
@@ -27,6 +29,8 @@ import type {
     AgentStatus,
     AgentSuggestionsRequest,
     AgentTurn,
+    CopilotAccount,
+    CopilotAuth,
 } from "shared-types";
 
 /** The model used for Claude when the user picked none */
@@ -44,6 +48,9 @@ export const SUGGESTION_COUNT = 3;
 /** How long to wait for a reply before giving up */
 const REPLY_TIMEOUT_MS = 2 * 60 * 1000;
 
+/** How long to wait for the user to sign in to GitHub in the browser */
+const SIGN_IN_TIMEOUT_MS = 10 * 60 * 1000;
+
 const DEFAULT_SETTINGS: AgentSettings = { provider: "claude", instructions: "", replySuggestions: true };
 
 const PROVIDERS: readonly AgentProvider[] = ["claude", "copilot"];
@@ -52,6 +59,8 @@ interface AgentStoreData {
     settings?: AgentSettings;
     /** The credential of each connected provider, encrypted with safeStorage and base64-encoded */
     secrets?: Partial<Record<AgentProvider, string>>;
+    /** Whether Copilot uses the GitHub account it is signed in to on this computer, rather than a stored token */
+    copilotAccount?: boolean;
     /** The rooms the agent replies in, by the Matrix user they belong to */
     rooms?: Record<string, string[]>;
 }
@@ -123,11 +132,35 @@ function failure(error: AgentErrorCode, message?: string): AgentResult<never> {
     return { ok: false, error, message };
 }
 
+/** What Copilot is connected with */
+type CopilotCredential = { kind: "account" } | { kind: "token"; token: string };
+
+/** How Copilot is connected, or undefined if it isn't */
+function getCopilotAuth(): CopilotAuth | undefined {
+    if (getAgentStore().get("copilotAccount")) return "account";
+    return hasCredential("copilot") ? "token" : undefined;
+}
+
+/**
+ * Read what Copilot is connected with.
+ * @returns the credential, or undefined if Copilot is not connected or its token can't be decrypted
+ */
+async function getCopilotCredential(): Promise<CopilotCredential | undefined> {
+    if (getAgentStore().get("copilotAccount")) return { kind: "account" };
+    const token = await getCredential("copilot");
+    return token ? { kind: "token", token } : undefined;
+}
+
 /**
  * Get the settings of the agent and which providers are connected.
  */
 export function getAgentStatus(): AgentStatus {
-    return { ...getSettings(), connected: { claude: hasCredential("claude"), copilot: hasCredential("copilot") } };
+    const copilotAuth = getCopilotAuth();
+    return {
+        ...getSettings(),
+        connected: { claude: hasCredential("claude"), copilot: copilotAuth !== undefined },
+        copilotAuth,
+    };
 }
 
 /**
@@ -161,7 +194,10 @@ export async function connectAgent(provider: unknown, credential: unknown): Prom
     if (!isProvider(provider) || typeof credential !== "string" || !credential.trim()) {
         return failure("invalid_request");
     }
-    const checked = await listModelsWith(provider, credential.trim());
+    const checked =
+        provider === "claude"
+            ? await listClaudeModels(credential.trim())
+            : await listCopilotModels({ kind: "token", token: credential.trim() });
     if (!checked.ok) return checked;
     try {
         setCredential(provider, credential.trim());
@@ -170,17 +206,157 @@ export async function connectAgent(provider: unknown, credential: unknown): Prom
         console.error("Failed to store the agent credential", e);
         return failure("unavailable", e instanceof Error ? e.message : String(e));
     }
+    if (provider === "copilot") getAgentStore().delete("copilotAccount");
     return { ok: true, data: undefined };
 }
 
 /**
- * Forget the credential of a provider.
+ * Forget the credential of a provider. For Copilot, this also stops using the account of the computer, which stays
+ * signed in for the Copilot CLI.
  */
 export async function disconnectAgent(provider: unknown): Promise<AgentResult<void>> {
     if (!isProvider(provider)) return failure("invalid_request");
     setCredential(provider, undefined);
-    if (provider === "copilot") await stopCopilot();
+    if (provider === "copilot") {
+        getAgentStore().delete("copilotAccount");
+        await stopCopilot();
+    }
     return { ok: true, data: undefined };
+}
+
+/**
+ * Get the GitHub account Copilot is signed in to on this computer, as the Copilot CLI sees it.
+ */
+export async function getCopilotAccount(): Promise<AgentResult<CopilotAccount>> {
+    try {
+        const client = await getCopilotClient({ kind: "account" });
+        const auth = await client.getAuthStatus();
+        return { ok: true, data: { signedIn: auth.isAuthenticated, login: auth.login } };
+    } catch (e) {
+        return toFailure("copilot", e);
+    }
+}
+
+/**
+ * Connect Copilot with the GitHub account it is signed in to on this computer, instead of a stored token.
+ */
+export async function connectCopilotAccount(): Promise<AgentResult<void>> {
+    const checked = await listCopilotModels({ kind: "account" });
+    if (!checked.ok) return checked;
+    getAgentStore().set("copilotAccount", true);
+    setCredential("copilot", undefined);
+    return { ok: true, data: undefined };
+}
+
+/** Why a sign-in stopped before it completed */
+class SignInStopped extends Error {
+    public constructor(public readonly reason: "cancelled" | "timeout") {
+        super(`The sign-in was ${reason === "cancelled" ? "cancelled" : "not completed in time"}`);
+    }
+}
+
+/** The sign-in in progress, if any */
+let copilotSignIn: { stop: (reason: SignInStopped["reason"]) => void } | undefined;
+
+/** A step of the login flow of the Copilot runtime */
+type CopilotLoginStep = Awaited<ReturnType<CopilotSession["rpc"]["accounts"]["login"]["advance"]>>;
+
+/**
+ * Sign in to GitHub in the browser, for the Copilot runtime of this computer, and connect Copilot with that account.
+ * The account is the one the Copilot CLI uses too.
+ * @returns the account that was signed in
+ */
+export async function signInCopilot(): Promise<AgentResult<CopilotAccount>> {
+    if (copilotSignIn) return failure("invalid_request", "A sign-in is already in progress");
+
+    let stop!: (reason: SignInStopped["reason"]) => void;
+    const stopped = new Promise<never>((_, reject) => {
+        stop = (reason) => reject(new SignInStopped(reason));
+    });
+    // The rejection is handled where the flow waits for it; this only keeps it from being reported as unhandled
+    stopped.catch(() => {});
+    copilotSignIn = { stop };
+    const timeout = setTimeout(() => stop("timeout"), SIGN_IN_TIMEOUT_MS);
+
+    let login: string | undefined;
+    try {
+        const signedIn = await runCopilotSignIn(stopped);
+        if (!signedIn.ok) return signedIn;
+        login = signedIn.data;
+    } finally {
+        clearTimeout(timeout);
+        copilotSignIn = undefined;
+    }
+
+    // A new runtime reads the account that was just stored
+    await stopCopilot();
+    const connected = await connectCopilotAccount();
+    return connected.ok ? { ok: true, data: { signedIn: true, login } } : connected;
+}
+
+/**
+ * Cancel the sign-in in progress, if any.
+ */
+export function cancelCopilotSignIn(): AgentResult<void> {
+    copilotSignIn?.stop("cancelled");
+    return { ok: true, data: undefined };
+}
+
+/**
+ * Go through the login flow of the Copilot runtime, which runs in a session of its own.
+ * @param stopped - Rejects when the sign-in is cancelled or times out
+ * @returns the GitHub login that was signed in
+ */
+async function runCopilotSignIn(stopped: Promise<never>): Promise<AgentResult<string | undefined>> {
+    let client: CopilotClient | undefined;
+    let session: CopilotSession | undefined;
+    let flowId: string | undefined;
+    try {
+        client = await getCopilotClient({ kind: "account" });
+        session = await client.createSession({
+            clientName: "Element Desktop",
+            availableTools: [],
+            onPermissionRequest: () => ({ kind: "reject" }),
+        });
+        const flow = session.rpc.accounts.login;
+        const begun = await flow.begin({ kind: "githubDotCom" });
+        flowId = begun.flowId;
+
+        let step: CopilotLoginStep = begun.step;
+        while (step.kind !== "completed") {
+            if (step.kind === "error") return failure("unavailable", step.message);
+            // Signing in to github.com doesn't ask for anything, unlike GitHub Enterprise
+            if (step.kind === "input-required") return failure("unavailable", step.prompt);
+            if (step.kind === "open-url") await openSignInPage(step.url);
+            // Waits until the user has signed in in the browser
+            step = await Promise.race([flow.advance({ flowId }), stopped]);
+        }
+        if (step.result.status !== "completed") return failure("unavailable", step.result.status);
+        return { ok: true, data: step.result.login };
+    } catch (e) {
+        if (e instanceof SignInStopped) {
+            if (flowId) {
+                await session?.rpc.accounts.login
+                    .cancel({ flowId })
+                    .catch((e) => console.warn("Failed to cancel the Copilot sign-in", e));
+            }
+            return failure(e.reason === "cancelled" ? "cancelled" : "unavailable", e.message);
+        }
+        return toFailure("copilot", e);
+    } finally {
+        if (session) {
+            await session.disconnect().catch((e) => console.warn("Failed to disconnect the Copilot session", e));
+            await client
+                ?.deleteSession(session.sessionId)
+                .catch((e) => console.warn("Failed to delete the Copilot session", e));
+        }
+    }
+}
+
+/** Open the GitHub sign-in page in the browser, which is the only kind of page the login flow should open */
+async function openSignInPage(url: string): Promise<void> {
+    if (new URL(url).protocol !== "https:") throw new Error("The sign-in page is not on https");
+    await shell.openExternal(url);
 }
 
 /**
@@ -219,9 +395,12 @@ export function setAgentRoom(userId: unknown, roomId: unknown, enabled: unknown)
  */
 export async function listAgentModels(provider: unknown): Promise<AgentResult<AgentModel[]>> {
     if (!isProvider(provider)) return failure("invalid_request");
-    const credential = await getCredential(provider);
-    if (!credential) return failure("not_connected");
-    return listModelsWith(provider, credential);
+    if (provider === "claude") {
+        const apiKey = await getCredential("claude");
+        return apiKey ? listClaudeModels(apiKey) : failure("not_connected");
+    }
+    const credential = await getCopilotCredential();
+    return credential ? listCopilotModels(credential) : failure("not_connected");
 }
 
 /**
@@ -231,15 +410,16 @@ export async function listAgentModels(provider: unknown): Promise<AgentResult<Ag
 export async function generateAgentReply(request: unknown): Promise<AgentResult<string>> {
     if (!isReplyRequest(request)) return failure("invalid_request");
     const settings = getSettings();
-    const credential = await getCredential(settings.provider);
-    if (!credential) return failure("not_connected");
-
     const system = buildSystemPrompt(request, settings.instructions);
     if (settings.provider === "claude") {
+        const apiKey = await getCredential("claude");
+        if (!apiKey) return failure("not_connected");
         const messages = toClaudeMessages(request.turns);
         if (messages.at(-1)?.role !== "user") return failure("invalid_request");
-        return askClaude(credential, settings.model, system, messages);
+        return askClaude(apiKey, settings.model, system, messages);
     }
+    const credential = await getCopilotCredential();
+    if (!credential) return failure("not_connected");
     return askCopilot(credential, settings.model, system, buildCopilotReplyPrompt(request));
 }
 
@@ -251,15 +431,19 @@ export async function generateAgentSuggestions(request: unknown): Promise<AgentR
     if (!isSuggestionsRequest(request)) return failure("invalid_request");
     const settings = getSettings();
     if (!settings.replySuggestions) return failure("disabled");
-    const credential = await getCredential(settings.provider);
-    if (!credential) return failure("not_connected");
 
     const system = buildSuggestionsSystemPrompt(request, settings.instructions);
     const prompt = buildSuggestionsPrompt(request);
-    const result =
-        settings.provider === "claude"
-            ? await askClaude(credential, settings.model, system, [{ role: "user", content: prompt }])
-            : await askCopilot(credential, settings.model, system, prompt);
+    let result: AgentResult<string>;
+    if (settings.provider === "claude") {
+        const apiKey = await getCredential("claude");
+        if (!apiKey) return failure("not_connected");
+        result = await askClaude(apiKey, settings.model, system, [{ role: "user", content: prompt }]);
+    } else {
+        const credential = await getCopilotCredential();
+        if (!credential) return failure("not_connected");
+        result = await askCopilot(credential, settings.model, system, prompt);
+    }
     if (!result.ok) return result;
 
     const suggestions = parseSuggestions(result.data);
@@ -374,20 +558,26 @@ export function buildSystemPrompt({ ownName, partnerName }: AgentReplyRequest, i
     return lines.join("\n");
 }
 
-async function listModelsWith(provider: AgentProvider, credential: string): Promise<AgentResult<AgentModel[]>> {
+async function listClaudeModels(apiKey: string): Promise<AgentResult<AgentModel[]>> {
     try {
-        if (provider === "claude") {
-            const page = await new Anthropic({ apiKey: credential }).models.list({ limit: 100 });
-            return { ok: true, data: page.data.map((model) => ({ id: model.id, name: model.display_name })) };
-        }
+        const page = await new Anthropic({ apiKey }).models.list({ limit: 100 });
+        return { ok: true, data: page.data.map((model) => ({ id: model.id, name: model.display_name })) };
+    } catch (e) {
+        return toFailure("claude", e);
+    }
+}
 
+async function listCopilotModels(credential: CopilotCredential): Promise<AgentResult<AgentModel[]>> {
+    try {
         const client = await getCopilotClient(credential);
         const auth = await client.getAuthStatus();
-        if (!auth.isAuthenticated) return failure("invalid_credential", auth.statusMessage);
+        if (!auth.isAuthenticated) {
+            return failure(credential.kind === "token" ? "invalid_credential" : "not_connected", auth.statusMessage);
+        }
         const models = await client.listModels();
         return { ok: true, data: models.map((model) => ({ id: model.id, name: model.name })) };
     } catch (e) {
-        return toFailure(provider, e);
+        return toFailure("copilot", e);
     }
 }
 
@@ -445,24 +635,47 @@ async function askClaude(
     }
 }
 
-let copilot: { token: string; client: CopilotClient } | undefined;
+let copilot: { credential: CopilotCredential; client: Promise<CopilotClient> } | undefined;
+
+function isSameCopilotCredential(a: CopilotCredential, b: CopilotCredential): boolean {
+    return a.kind === "account" ? b.kind === "account" : b.kind === "token" && a.token === b.token;
+}
 
 /**
- * Get the Copilot client for a token, starting the Copilot runtime if needed. The runtime runs as a child
- * process, so one client is kept for as long as the token stays the same.
+ * Get the Copilot client for a credential, starting the Copilot runtime if needed. The runtime runs as a child
+ * process, so one client is kept for as long as the credential stays the same, and requests made while it starts
+ * wait for the same one.
  */
-async function getCopilotClient(token: string): Promise<CopilotClient> {
-    if (copilot?.token === token) return copilot.client;
-    await stopCopilot();
-    const client = new CopilotClient({
-        gitHubToken: token,
-        // Only the token from the settings, not a Copilot CLI or gh login of the computer
-        useLoggedInUser: false,
-        logLevel: "error",
-        baseDirectory: path.join(getAgentDataPath(), "copilot"),
+function getCopilotClient(credential: CopilotCredential): Promise<CopilotClient> {
+    if (copilot && isSameCopilotCredential(copilot.credential, credential)) return copilot.client;
+    const stopped = stopCopilot();
+    const client = stopped.then(async () => {
+        const started = new CopilotClient(
+            credential.kind === "token"
+                ? {
+                      gitHubToken: credential.token,
+                      // Only the token from the settings, not a Copilot CLI or gh login of the computer
+                      useLoggedInUser: false,
+                      logLevel: "error",
+                      baseDirectory: path.join(getAgentDataPath(), "copilot"),
+                  }
+                : {
+                      // The default directory of the Copilot runtime, which the Copilot CLI shares, so the account
+                      // signed in there is used. The agent's sessions are deleted after each request, so they don't
+                      // pile up in it.
+                      useLoggedInUser: true,
+                      logLevel: "error",
+                  },
+        );
+        await started.start();
+        return started;
     });
-    await client.start();
-    copilot = { token, client };
+    const entry = { credential, client };
+    copilot = entry;
+    // A runtime that failed to start is not kept, so the next request tries again
+    client.catch(() => {
+        if (copilot === entry) copilot = undefined;
+    });
     return client;
 }
 
@@ -470,8 +683,9 @@ async function getCopilotClient(token: string): Promise<CopilotClient> {
  * Stop the Copilot runtime, if it runs.
  */
 export async function stopCopilot(): Promise<void> {
-    const client = copilot?.client;
+    const previous = copilot;
     copilot = undefined;
+    const client = await previous?.client.catch(() => undefined);
     await client?.stop().catch((e) => console.warn("Failed to stop Copilot", e));
 }
 
@@ -490,13 +704,13 @@ function buildCopilotReplyPrompt({ ownName, partnerName, turns }: AgentReplyRequ
  * Get the answer of Copilot to a prompt, in a session that is deleted afterwards.
  */
 async function askCopilot(
-    token: string,
+    credential: CopilotCredential,
     model: string | undefined,
     system: string,
     prompt: string,
 ): Promise<AgentResult<string>> {
     try {
-        const client = await getCopilotClient(token);
+        const client = await getCopilotClient(credential);
         const session = await client.createSession({
             clientName: "Element Desktop",
             model,
