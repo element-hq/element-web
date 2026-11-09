@@ -24,6 +24,22 @@ export class ClientApi implements IClientApi {
         dispatcher.register(this.onAction);
     }
 
+    public doAuthenticatedRequest: typeof fetch = async (input, init) => {
+        const token = MatrixClientPeg.safeGet().getAccessToken();
+        if (!token) {
+            throw new Error("Client has no token. Refusing to make request");
+        }
+        // Build our own Request so fetch's usual rules decide which headers apply (e.g. `init.headers` replacing
+        // those on a Request input), and so we add the token to a copy rather than changing the caller's objects.
+        const request = new Request(input, init);
+        const headers = new Headers(request.headers);
+        if (headers.has("Authorization")) {
+            throw new Error("Request already has an Authorization header. Refusing to make request");
+        }
+        headers.set("Authorization", `Bearer ${token}`);
+        return fetch(new Request(request, { headers }));
+    };
+
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);

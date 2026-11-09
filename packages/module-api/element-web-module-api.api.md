@@ -98,6 +98,7 @@ export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
+    doAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
     getRoom: (id: string) => Room | null;
     waitForClientStarted(): Promise<void>;
 }

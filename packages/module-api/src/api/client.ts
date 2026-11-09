@@ -51,6 +51,16 @@ export interface ClientApi {
     getRoom: (id: string) => Room | null;
 
     /**
+     * Make a `fetch` request with the client's access token added as an `Authorization: Bearer` header.
+     * Takes the same arguments as `fetch`. The arguments passed in are not modified.
+     * @param input - The resource to fetch.
+     * @param init - Options for the request. Must not set an `Authorization` header.
+     * @returns The response from `fetch`. Rejects if the client isn't ready yet, has no access token, or the
+     * request already has an `Authorization` header.
+     */
+    doAuthenticatedRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+
+    /**
      * Wait for the client to be started.
      * Resolves immediately if the client has already started. If the user logs out, the next call waits for the
      * client to start again.
