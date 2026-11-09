@@ -269,6 +269,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         let isScreensharing;
         if (this.state.screensharing) {
             isScreensharing = await this.props.call.setScreensharingEnabled(false);
+            window.mxPlatformPeg.get()?.getAudiofox()?.unlink();
         } else {
             isScreensharing = await this.props.call.setScreensharingEnabled(true);
         }

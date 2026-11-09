@@ -12,6 +12,7 @@ import { randomArray } from "./utils.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
+import "./audiofox.js";
 
 let focusHandlerAttached = false;
 ipcMain.on("loudNotification", function (): void {

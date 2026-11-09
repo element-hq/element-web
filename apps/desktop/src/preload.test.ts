@@ -11,7 +11,7 @@ import type { X509Api, X509IpcCommand } from "shared-types";
 // `vi.mock` factories are hoisted above top-level constants, so anything they reference must be hoisted too.
 const { exposed, invoke } = vi.hoisted(() => ({
     exposed: new Map<string, unknown>(),
-    invoke: vi.fn<(channel: string, ...args: unknown[]) => Promise<unknown>>(),
+    invoke: vi.fn<(channel: string, ...args: unknown[]) => Promise<unknown>>().mockResolvedValue(undefined), // to allow for promise chaining
 }));
 
 vi.mock("electron", () => ({
