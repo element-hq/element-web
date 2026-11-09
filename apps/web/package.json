@@ -126,6 +126,7 @@
         "@element-hq/element-call-embedded": "0.28.2",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
+        "@flakiness/playwright": "^2.0.3",
         "@peculiar/webcrypto": "^2.0.0",
         "@playwright/test": "catalog:",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",

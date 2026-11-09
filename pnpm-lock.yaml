@@ -754,6 +754,9 @@ importers:
       '@fetch-mock/vitest':
         specifier: ^0.2.18
         version: 0.2.18(vitest@5.0.5)
+      '@flakiness/playwright':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@peculiar/webcrypto':
         specifier: ^2.0.0
         version: 2.0.0(@peculiar/asn1-schema@3.0.0)(@peculiar/json-schema@3.0.0)(webcrypto-core@2.0.0)
@@ -3123,6 +3126,11 @@ packages:
     resolution: {integrity: sha512-xflqJ3XQZVzm8+7dsm8OFxVAmBNNA3Mg65sqwNHiq7VRSMSD7qwH4BPsBy07ZaX+9nHeaacBpFZd3Q0aIsISqw==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@flakiness/playwright@2.0.3':
+    resolution: {integrity: sha512-VNsnCnn967F6gTBAyJKwoykt4Uf1EgvWBNlvpyfs9vjvgAJkD3jSgu6V/dTEfnB4whn9fULST+6jLBtmbr33Ug==}
+    engines: {node: ^20.17.0 || >=22.9.0}
+    hasBin: true
 
   '@floating-ui/core@1.8.0':
     resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
@@ -15369,6 +15377,8 @@ snapshots:
       react: 19.3.1
     transitivePeerDependencies:
       - '@types/react'
+
+  '@flakiness/playwright@2.0.3': {}
 
   '@floating-ui/core@1.8.0':
     dependencies:

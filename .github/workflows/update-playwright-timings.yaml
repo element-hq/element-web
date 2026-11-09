@@ -1,0 +1,60 @@
+# Fetches the Playwright shard balancing timings from the latest develop Build & Test run
+# and opens a PR to update them if they differ from what's in the repository
+name: Update Playwright timings
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 3 * * 1" # 3am every Monday
+permissions:
+    actions: read # needed to download the timings artifact from Build & Test
+    pull-requests: write # needed to auto-approve PRs
+jobs:
+    update:
+        runs-on: ubuntu-26.04
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+
+            # Take the newest timings from a develop merge queue or scheduled run, as staging may lack tests on develop
+            - name: Download timings
+              run: |
+                  RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=playwright-timings&per_page=100" --jq '
+                      [.artifacts[]
+                          | select(.expired | not)
+                          | select(.workflow_run.head_branch == "develop" or (.workflow_run.head_branch | startswith("gh-readonly-queue/develop/")))]
+                      | sort_by(.created_at) | last | .workflow_run.id // empty')
+                  if [ -z "$RUN_ID" ]; then
+                      echo "::error::No playwright-timings artifact found from develop"
+                      exit 1
+                  fi
+                  gh run download "$RUN_ID" --name playwright-timings --dir "$RUNNER_TEMP/playwright-timings"
+                  mv "$RUNNER_TEMP/playwright-timings/timings.json" apps/web/playwright/timings.json
+              env:
+                  GH_TOKEN: ${{ github.token }}
+
+            - name: Create Pull Request
+              id: cpr
+              uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  branch: actions/playwright-timings
+                  delete-branch: true
+                  add-paths: apps/web/playwright/timings.json
+                  title: Update Playwright timings
+                  labels: |
+                      T-Task
+
+            - name: Enable automerge
+              run: gh pr merge --merge --auto "$PR_NUMBER"
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              env:
+                  GH_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+
+            - name: Approve
+              run: gh pr review --approve "$PR_NUMBER"
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
