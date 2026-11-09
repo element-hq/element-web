@@ -169,6 +169,29 @@ describe("<TimelineView />", () => {
         expect(actions.onJumpToLive.mock.calls[0][0]).toBeTypeOf("function");
     });
 
+    it("keeps the rows on screen still when a row above them grows while scrolling up", async () => {
+        const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+        renderTimeline(vm);
+        const scroller = screen.getByTestId("timeline-scroller");
+        await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+        const pause = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 150));
+
+        // Scroll up far enough for the top rows to render and be measured, and let that settle.
+        scroller.scrollTop = 600;
+        await pause();
+        const before = scroller.scrollTop;
+
+        // Scroll up again, so TanStack sees a backward scroll, then grow a row that is entirely
+        // above the viewport, as an image in it finishing loading would.
+        scroller.scrollTop = before - 100;
+        scroller.dispatchEvent(new Event("scroll"));
+        const row = screen.getByTestId("row-evt-2");
+        row.style.height = `${ROW_HEIGHT + 40}px`;
+
+        // The scroll position moves by the growth, so the rows on screen do not.
+        await waitFor(() => expect(scroller.scrollTop).toBe(before - 100 + 40));
+    });
+
     describe("when the viewport changes height", () => {
         // The view is height:100%, so re-rendering the wrapper with a new height is how the composer
         // growing, or a banner appearing above the timeline, reaches the scroller.
