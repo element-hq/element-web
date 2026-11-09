@@ -120,7 +120,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
-    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    # Chat timeline fixes pending upstream: isValidAnchorItem for placeholder rows (TanStack/virtual#1211) and
+    # staying at the end when the scroller shrinks (TanStack/virtual#1298)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
     # Tweaks to record screenshot diffs as vitest artifacts
     vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
