@@ -51,6 +51,27 @@ export interface ClientApi {
     getRoom: (id: string) => Room | null;
 
     /**
+     * Get the Matrix user ID of the logged-in user.
+     * @returns The user ID, or null if not logged in.
+     * @throws If the client isn't ready yet.
+     */
+    getUserId(): string | null;
+
+    /**
+     * Get the device ID of this client.
+     * @returns The device ID, or null if none is set.
+     * @throws If the client isn't ready yet.
+     */
+    getDeviceId(): string | null;
+
+    /**
+     * Get the access token currently in use by this client.
+     * @returns The access token, or null if none is in use.
+     * @throws If the client isn't ready yet.
+     */
+    getAccessToken(): string | null;
+
+    /**
      * Wait for the client to be started.
      * Resolves immediately if the client has already started. If the user logs out, the next call waits for the
      * client to start again.
