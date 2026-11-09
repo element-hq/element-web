@@ -18,7 +18,7 @@ import path from "node:path";
 import { app, safeStorage, shell } from "electron";
 import ElectronStore from "electron-store";
 import Anthropic from "@anthropic-ai/sdk";
-import { CopilotClient, type CopilotSession } from "@github/copilot-sdk";
+import { CopilotClient, RuntimeConnection, type CopilotSession } from "@github/copilot-sdk";
 import type {
     AgentErrorCode,
     AgentModel,
@@ -32,6 +32,8 @@ import type {
     CopilotAccount,
     CopilotAuth,
 } from "shared-types";
+
+import { getCopilotRuntimePath } from "./copilot-runtime.js";
 
 /** The model used for Claude when the user picked none */
 export const DEFAULT_CLAUDE_MODEL = "claude-opus-5-5";
@@ -650,9 +652,12 @@ function getCopilotClient(credential: CopilotCredential): Promise<CopilotClient>
     if (copilot && isSameCopilotCredential(copilot.credential, credential)) return copilot.client;
     const stopped = stopCopilot();
     const client = stopped.then(async () => {
+        const runtimePath = getCopilotRuntimePath();
+        const connection = runtimePath ? { connection: RuntimeConnection.forStdio({ path: runtimePath }) } : {};
         const started = new CopilotClient(
             credential.kind === "token"
                 ? {
+                      ...connection,
                       gitHubToken: credential.token,
                       // Only the token from the settings, not a Copilot CLI or gh login of the computer
                       useLoggedInUser: false,
@@ -660,6 +665,7 @@ function getCopilotClient(credential: CopilotCredential): Promise<CopilotClient>
                       baseDirectory: path.join(getAgentDataPath(), "copilot"),
                   }
                 : {
+                      ...connection,
                       // The default directory of the Copilot runtime, which the Copilot CLI shares, so the account
                       // signed in there is used. The agent's sessions are deleted after each request, so they don't
                       // pile up in it.

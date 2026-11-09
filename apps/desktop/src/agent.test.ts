@@ -32,7 +32,7 @@ import {
     toClaudeMessages,
 } from "./agent.js";
 
-const { storeData, storeOptions, safeStorage, shell, anthropic, copilot } = vi.hoisted(() => {
+const { storeData, storeOptions, safeStorage, shell, anthropic, copilot, getCopilotRuntimePath } = vi.hoisted(() => {
     return {
         /** What the agent's store holds, as electron-store would write it to disk */
         storeData: {} as Record<string, unknown>,
@@ -63,6 +63,7 @@ const { storeData, storeOptions, safeStorage, shell, anthropic, copilot } = vi.h
             loginAdvance: vi.fn(),
             loginCancel: vi.fn(async () => {}),
         },
+        getCopilotRuntimePath: vi.fn((): string | undefined => undefined),
     };
 });
 
@@ -114,7 +115,10 @@ vi.mock("@github/copilot-sdk", () => ({
             deleteSession: copilot.deleteSession,
         });
     }),
+    RuntimeConnection: { forStdio: (options: { path?: string }) => ({ kind: "stdio", ...options }) },
 }));
+
+vi.mock("./copilot-runtime.js", () => ({ getCopilotRuntimePath }));
 
 const request: AgentReplyRequest = {
     ownName: "Alice",
@@ -142,6 +146,7 @@ describe("agent", () => {
         vi.clearAllMocks();
         anthropic.options.length = 0;
         copilot.options.length = 0;
+        getCopilotRuntimePath.mockReturnValue(undefined);
         copilot.createSession.mockResolvedValue({
             sessionId: "session-1",
             sendAndWait: copilot.sendAndWait,
@@ -374,6 +379,17 @@ describe("agent", () => {
 
             // No token and no directory of the agent, so the runtime finds the login of the Copilot CLI
             expect(copilot.options).toEqual([{ useLoggedInUser: true, logLevel: "error" }]);
+        });
+
+        it("starts the runtime the packaged app unpacked", async () => {
+            const runtime = path.join("resources", "app.asar.unpacked", "copilot-runtime.exe");
+            getCopilotRuntimePath.mockReturnValue(runtime);
+
+            await getCopilotAccount();
+
+            expect(copilot.options).toEqual([
+                expect.objectContaining({ connection: { kind: "stdio", path: runtime }, useLoggedInUser: true }),
+            ]);
         });
 
         it("starts one runtime for the requests made while it starts", async () => {
