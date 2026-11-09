@@ -14,7 +14,6 @@ import { ClientApi } from "./ClientApi";
 import { Room } from "./models/Room";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 
 describe("ClientApi", () => {
     it("should return module room from getRoom()", () => {
@@ -23,28 +22,6 @@ describe("ClientApi", () => {
         const moduleRoom = client.getRoom("!foo:matrix.org");
         expect(moduleRoom).toBeInstanceOf(Room);
         expect(moduleRoom?.id).toStrictEqual("!foo:matrix.org");
-    });
-
-    describe("client details", () => {
-        it("should return the user ID from getUserId()", () => {
-            stubClient();
-            const api = new ClientApi(new MatrixDispatcher());
-            expect(api.getUserId()).toStrictEqual("@userId:matrix.org");
-        });
-
-        it("should return the device ID from getDeviceId()", () => {
-            stubClient();
-            const api = new ClientApi(new MatrixDispatcher());
-            expect(api.getDeviceId()).toStrictEqual("ABCDEFGHI");
-        });
-
-        it.each(["getUserId", "getDeviceId"] as const)("should throw from %s() if the client isn't ready", (method) => {
-            vi.spyOn(MatrixClientPeg, "safeGet").mockImplementation(() => {
-                throw new Error("not logged in");
-            });
-            const api = new ClientApi(new MatrixDispatcher());
-            expect(() => api[method]()).toThrow("not logged in");
-        });
     });
 
     describe("waitForClientStarted", () => {

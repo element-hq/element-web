@@ -98,9 +98,7 @@ export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
-    getDeviceId(): string | null;
     getRoom: (id: string) => Room | null;
-    getUserId(): string | null;
     waitForClientStarted(): Promise<void>;
 }
 
@@ -401,6 +399,7 @@ export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean
 
 // @public
 export interface Profile {
+    deviceId?: string;
     displayName?: string;
     isGuest?: boolean;
     userId?: string;

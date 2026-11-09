@@ -24,26 +24,6 @@ export class ClientApi implements IClientApi {
         dispatcher.register(this.onAction);
     }
 
-    /**
-     * Get the Matrix User Id of the logged-in user.
-     *
-     * @returns MXID for the logged-in user, or null if not logged in
-     * @throws If the client isn't ready yet.
-     */
-    public getUserId(): string | null {
-        return MatrixClientPeg.safeGet().getUserId();
-    }
-
-    /**
-     * Get the device ID of this client.
-     *
-     * @returns device ID if one is set.
-     * @throws If the client isn't ready yet.
-     */
-    public getDeviceId(): string | null {
-        return MatrixClientPeg.safeGet().getDeviceId();
-    }
-
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);
