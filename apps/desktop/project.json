@@ -23,7 +23,7 @@
         "build:ts": {
             "cache": true,
             "command": "tsc",
-            "inputs": ["src", "{projectRoot}/tsconfig.json"],
+            "inputs": ["production", "{projectRoot}/tsconfig.json"],
             "outputs": ["{projectRoot}/lib/*.js", "{projectRoot}/lib/*.d.ts"],
             "options": {
                 "cwd": "apps/desktop"
@@ -32,16 +32,15 @@
         "build:res": {
             "cache": true,
             "command": "node scripts/copy-res.ts",
-            "inputs": ["{projectRoot}/i18n"],
+            "inputs": ["{projectRoot}/src/i18n/**/*", "{projectRoot}/scripts/copy-res.ts"],
             "outputs": ["{projectRoot}/lib/i18n"],
             "options": {
                 "cwd": "apps/desktop"
             }
         },
         "build": {
-            "cache": true,
+            "cache": false,
             "command": "pnpm exec electron-builder",
-            "inputs": ["src", "{projectRoot}/electron-builder.json", "{projectRoot}/webapp.asar"],
             "outputs": ["{projectRoot}/dist"],
             "options": {
                 "cwd": "apps/desktop"
@@ -74,9 +73,8 @@
             "dependsOn": ["build:*"]
         },
         "test:playwright:screenshots:build-docker": {
-            "cache": true,
+            "cache": false,
             "command": "docker build -f playwright/Dockerfile -t element-desktop-playwright --platform linux/amd64 ../..",
-            "inputs": ["{projectRoot}/playwright/Dockerfile", "{projectRoot}/playwright/docker-entrypoint.sh"],
             "options": {
                 "cwd": "apps/desktop"
             }
