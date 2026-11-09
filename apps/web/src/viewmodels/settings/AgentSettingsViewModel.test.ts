@@ -32,6 +32,10 @@ describe("AgentSettingsViewModel", () => {
             })),
             connect: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
             disconnect: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
+            getCopilotAccount: vi.fn().mockResolvedValue({ ok: true, data: { signedIn: true, login: "octocat" } }),
+            connectCopilotAccount: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
+            signInCopilot: vi.fn().mockResolvedValue({ ok: true, data: { signedIn: true, login: "octocat" } }),
+            cancelCopilotSignIn: vi.fn().mockResolvedValue({ ok: true, data: undefined }),
             listModels: vi.fn().mockResolvedValue({ ok: true, data: MODELS }),
             getRooms: vi.fn(),
             setRoom: vi.fn(),
@@ -145,6 +149,117 @@ describe("AgentSettingsViewModel", () => {
         });
     });
 
+    describe("the Copilot account of the computer", () => {
+        const notConnected = { connected: { claude: false, copilot: false } };
+
+        it("offers the account when Copilot is selected and not connected", async () => {
+            await createLoaded({ provider: "copilot", ...notConnected });
+
+            await vi.waitFor(() =>
+                expect(vm.getSnapshot().copilotAccount).toEqual({ signedIn: true, login: "octocat" }),
+            );
+        });
+
+        it("shows the account Copilot is connected with", async () => {
+            await createLoaded({
+                provider: "copilot",
+                connected: { claude: false, copilot: true },
+                copilotAuth: "account",
+            });
+
+            await vi.waitFor(() => expect(vm.getSnapshot().copilotAccount?.login).toBe("octocat"));
+            expect(vm.getSnapshot().copilotAuth).toBe("account");
+            expect(agent.listModels).toHaveBeenCalledWith("copilot");
+        });
+
+        it("doesn't look up the account when Copilot is connected with a token, or not selected", async () => {
+            await createLoaded({
+                provider: "copilot",
+                connected: { claude: false, copilot: true },
+                copilotAuth: "token",
+            });
+            await vi.waitFor(() => expect(vm.getSnapshot().models).toEqual(MODELS));
+            expect(agent.getCopilotAccount).not.toHaveBeenCalled();
+            vm.dispose();
+            await createLoaded(notConnected);
+
+            expect(agent.getCopilotAccount).not.toHaveBeenCalled();
+        });
+
+        it("looks up the account when switching to Copilot", async () => {
+            await createLoaded(notConnected);
+
+            vm.setProvider("copilot");
+
+            await vi.waitFor(() => expect(vm.getSnapshot().copilotAccount?.signedIn).toBe(true));
+        });
+
+        it("connects Copilot with the account", async () => {
+            await createLoaded({ provider: "copilot", ...notConnected });
+
+            vm.connectCopilotAccount();
+
+            await vi.waitFor(() => expect(vm.getSnapshot().connected.copilot).toBe(true));
+            expect(vm.getSnapshot().copilotAuth).toBe("account");
+            await vi.waitFor(() => expect(vm.getSnapshot().models).toEqual(MODELS));
+        });
+
+        it("signs in in the browser and connects Copilot with the new account", async () => {
+            await createLoaded({ provider: "copilot", ...notConnected });
+            agent.getCopilotAccount.mockResolvedValue({ ok: true, data: { signedIn: false } });
+
+            vm.signInCopilot();
+            expect(vm.getSnapshot()).toMatchObject({ isSigningIn: true, isBusy: true });
+
+            await vi.waitFor(() => expect(vm.getSnapshot().isSigningIn).toBe(false));
+            expect(vm.getSnapshot()).toMatchObject({
+                isBusy: false,
+                connected: { copilot: true },
+                copilotAuth: "account",
+                copilotAccount: { signedIn: true, login: "octocat" },
+            });
+        });
+
+        it("ends a cancelled sign-in without an error", async () => {
+            await createLoaded({ provider: "copilot", ...notConnected });
+            let finish!: (result: { ok: false; error: "cancelled" }) => void;
+            agent.signInCopilot.mockReturnValue(new Promise((resolve) => (finish = resolve)));
+            agent.cancelCopilotSignIn.mockImplementation(async () => {
+                finish({ ok: false, error: "cancelled" });
+                return { ok: true, data: undefined };
+            });
+
+            vm.signInCopilot();
+            vm.cancelCopilotSignIn();
+
+            await vi.waitFor(() => expect(vm.getSnapshot().isSigningIn).toBe(false));
+            expect(vm.getSnapshot()).toMatchObject({ isBusy: false, error: undefined, connected: { copilot: false } });
+        });
+
+        it("cancels a sign-in when the settings are closed", async () => {
+            await createLoaded({ provider: "copilot", ...notConnected });
+            agent.signInCopilot.mockReturnValue(new Promise(() => {}));
+
+            vm.signInCopilot();
+            vm.dispose();
+
+            expect(agent.cancelCopilotSignIn).toHaveBeenCalled();
+        });
+
+        it("offers the account again after disconnecting Copilot", async () => {
+            await createLoaded({
+                provider: "copilot",
+                connected: { claude: false, copilot: true },
+                copilotAuth: "token",
+            });
+
+            vm.disconnect();
+
+            await vi.waitFor(() => expect(vm.getSnapshot().copilotAccount?.signedIn).toBe(true));
+            expect(vm.getSnapshot()).toMatchObject({ connected: { copilot: false }, copilotAuth: undefined });
+        });
+    });
+
     describe("toSettingsError", () => {
         it.each([
             ["invalid_credential", "invalid_credential"],
@@ -152,6 +267,7 @@ describe("AgentSettingsViewModel", () => {
             ["unavailable", "unavailable"],
             ["refused", "unknown"],
             ["not_connected", "unknown"],
+            ["cancelled", undefined],
         ] as const)("shows %s as %s", (error, expected) => {
             expect(toSettingsError(error)).toBe(expected);
         });

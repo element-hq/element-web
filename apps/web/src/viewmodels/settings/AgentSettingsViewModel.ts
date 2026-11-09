@@ -21,13 +21,18 @@ export interface Props {
     agent: AgentApi;
 }
 
-/** Turn the error of the platform into one the settings can show */
-export function toSettingsError(error: AgentErrorCode): AgentSettingsError {
+/**
+ * Turn the error of the platform into one the settings can show.
+ * @returns undefined for a sign-in the user cancelled, which is not an error to show
+ */
+export function toSettingsError(error: AgentErrorCode): AgentSettingsError | undefined {
     switch (error) {
         case "invalid_credential":
         case "rate_limited":
         case "unavailable":
             return error;
+        case "cancelled":
+            return undefined;
         default:
             return "unknown";
     }
@@ -44,6 +49,7 @@ export class AgentSettingsViewModel
         super(props, {
             isLoading: true,
             isBusy: false,
+            isSigningIn: false,
             provider: "claude",
             connected: { claude: false, copilot: false },
             models: [],
@@ -53,12 +59,27 @@ export class AgentSettingsViewModel
         void this.load();
     }
 
+    public override dispose(): void {
+        // A sign-in waits for the browser for minutes; nobody would see how it ends once the settings are closed
+        if (this.snapshot.current.isSigningIn) void this.props.agent.cancelCopilotSignIn();
+        super.dispose();
+    }
+
     private async load(): Promise<void> {
         const status = await this.props.agent.getStatus();
         if (this.isDisposed) return;
-        const { provider, connected, model, instructions, replySuggestions } = status;
-        this.snapshot.merge({ isLoading: false, provider, connected, model, instructions, replySuggestions });
+        const { provider, connected, copilotAuth, model, instructions, replySuggestions } = status;
+        this.snapshot.merge({
+            isLoading: false,
+            provider,
+            connected,
+            copilotAuth,
+            model,
+            instructions,
+            replySuggestions,
+        });
         await this.loadModels();
+        await this.loadCopilotAccount();
     }
 
     /** Read the models of the selected provider, if it is connected */
@@ -75,6 +96,19 @@ export class AgentSettingsViewModel
         } else {
             this.snapshot.merge({ models: [], error: toSettingsError(result.error) });
         }
+    }
+
+    /**
+     * Read the GitHub account Copilot is signed in to on this computer, when Copilot is selected and could use it.
+     * With a token, Copilot runs with that token only, so the account is not looked up.
+     */
+    private async loadCopilotAccount(): Promise<void> {
+        const { provider, connected, copilotAuth } = this.snapshot.current;
+        if (provider !== "copilot" || (connected.copilot && copilotAuth !== "account")) return;
+        const result = await this.props.agent.getCopilotAccount();
+        if (this.isDisposed) return;
+        // Without the account, Copilot can still be signed in or connected with a token
+        this.snapshot.merge({ copilotAccount: result.ok ? result.data : undefined });
     }
 
     /**
@@ -95,6 +129,7 @@ export class AgentSettingsViewModel
             if (!result?.ok) return;
             this.snapshot.merge({ provider: result.data.provider, model: result.data.model });
             await this.loadModels();
+            await this.loadCopilotAccount();
         })();
     };
 
@@ -104,8 +139,42 @@ export class AgentSettingsViewModel
             const result = await this.run(() => this.props.agent.connect(provider, credential));
             if (!result?.ok) return;
             this.snapshot.merge({ connected: { ...this.snapshot.current.connected, [provider]: true } });
+            if (provider === "copilot") this.snapshot.merge({ copilotAuth: "token" });
             await this.loadModels();
         })();
+    };
+
+    public connectCopilotAccount = (): void => {
+        void (async () => {
+            const result = await this.run(() => this.props.agent.connectCopilotAccount());
+            if (!result?.ok) return;
+            this.snapshot.merge({
+                connected: { ...this.snapshot.current.connected, copilot: true },
+                copilotAuth: "account",
+            });
+            await this.loadModels();
+        })();
+    };
+
+    public signInCopilot = (): void => {
+        void (async () => {
+            this.snapshot.merge({ isSigningIn: true });
+            const result = await this.run(() => this.props.agent.signInCopilot());
+            if (!result) return;
+            this.snapshot.merge({ isSigningIn: false });
+            if (!result.ok) return;
+            this.snapshot.merge({
+                connected: { ...this.snapshot.current.connected, copilot: true },
+                copilotAuth: "account",
+                copilotAccount: result.data,
+            });
+            await this.loadModels();
+        })();
+    };
+
+    public cancelCopilotSignIn = (): void => {
+        // The sign-in itself then ends with "cancelled", which resets the state
+        void this.props.agent.cancelCopilotSignIn();
     };
 
     public disconnect = (): void => {
@@ -114,6 +183,10 @@ export class AgentSettingsViewModel
             const result = await this.run(() => this.props.agent.disconnect(provider));
             if (!result?.ok) return;
             this.snapshot.merge({ connected: { ...this.snapshot.current.connected, [provider]: false }, models: [] });
+            if (provider === "copilot") {
+                this.snapshot.merge({ copilotAuth: undefined });
+                await this.loadCopilotAccount();
+            }
         })();
     };
 
