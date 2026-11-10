@@ -76,6 +76,8 @@ const agent = vi.hoisted(() => ({
     listAgentModels: vi.fn(),
     getAgentRooms: vi.fn(),
     setAgentRoom: vi.fn(),
+    getContactInstructions: vi.fn(),
+    setContactInstructions: vi.fn(),
     generateAgentReply: vi.fn(),
     generateAgentSuggestions: vi.fn(),
 }));
@@ -377,6 +379,8 @@ describe("ipc agent commands", () => {
         ["agentListModels", agent.listAgentModels, ["claude"]],
         ["agentGetRooms", agent.getAgentRooms, ["@alice:example.org"]],
         ["agentSetRoom", agent.setAgentRoom, ["@alice:example.org", "!dm:example.org", true]],
+        ["agentGetContactInstructions", agent.getContactInstructions, ["@bob:example.org"]],
+        ["agentSetContactInstructions", agent.setContactInstructions, ["@bob:example.org", "Be formal."]],
         ["agentGenerateReply", agent.generateAgentReply, [{ ownName: "Alice", partnerName: "Bob", turns: [] }]],
         [
             "agentGenerateSuggestions",

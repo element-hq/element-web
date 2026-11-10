@@ -6,7 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import path from "node:path";
+import fs from "node:fs/promises";
+import os from "node:os";
 import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
+import { app } from "electron";
 import { AuthenticationError, RateLimitError } from "@anthropic-ai/sdk";
 import type { AgentReplyRequest, AgentSuggestionsRequest } from "shared-types";
 
@@ -20,10 +23,14 @@ import {
     getAgentDataPath,
     getAgentRooms,
     getAgentStatus,
+    getContactInstructions,
+    getContactInstructionsPath,
     listAgentModels,
+    MAX_CONTACT_INSTRUCTIONS_LENGTH,
     parseSuggestions,
     setAgentRoom,
     setAgentSettings,
+    setContactInstructions,
     stopCopilot,
     toClaudeMessages,
 } from "./agent.js";
@@ -474,6 +481,95 @@ describe("agent", () => {
         });
     });
 
+    describe("instructions for a chat partner", () => {
+        const platform = process.platform;
+        let dataDir: string;
+
+        beforeEach(async () => {
+            // Keep the files in a directory of their own, the same on every platform
+            Object.defineProperty(process, "platform", { value: "linux" });
+            dataDir = await fs.mkdtemp(path.join(os.tmpdir(), "agent-test-"));
+            vi.mocked(app.getPath).mockReturnValue(dataDir);
+        });
+
+        afterEach(async () => {
+            Object.defineProperty(process, "platform", { value: platform });
+            vi.mocked(app.getPath).mockReturnValue("/roaming/Element");
+            await fs.rm(dataDir, { recursive: true, force: true });
+        });
+
+        const bobFile = (): string => path.join(dataDir, "agent", "contacts", "@bob%3Aexample.org.md");
+
+        it("keeps one Markdown file per user, with a name every file system allows", () => {
+            expect(getContactInstructionsPath("@bob:example.org")).toBe(bobFile());
+            expect(path.basename(getContactInstructionsPath("@b/ö*:example.org:8448"))).toBe(
+                "@b%2F%C3%B6%2A%3Aexample.org%3A8448.md",
+            );
+        });
+
+        it("saves, reads and deletes the instructions", async () => {
+            expect(await getContactInstructions("@bob:example.org")).toEqual({
+                ok: true,
+                data: { text: "", path: bobFile() },
+            });
+
+            expect(await setContactInstructions("@bob:example.org", "# Bob\nBe formal.")).toEqual({
+                ok: true,
+                data: { text: "# Bob\nBe formal.", path: bobFile() },
+            });
+            expect(await fs.readFile(bobFile(), "utf8")).toBe("# Bob\nBe formal.");
+            expect(await getContactInstructions("@bob:example.org")).toMatchObject({
+                data: { text: "# Bob\nBe formal." },
+            });
+
+            expect(await setContactInstructions("@bob:example.org", "  \n")).toMatchObject({ data: { text: "" } });
+            await expect(fs.access(bobFile())).rejects.toThrow();
+        });
+
+        it.each([
+            ["not a user ID", "Hi"],
+            ["@bob:example.org", 42],
+            ["@bob:example.org", "x".repeat(MAX_CONTACT_INSTRUCTIONS_LENGTH + 1)],
+        ])("refuses invalid arguments %s", async (userId, text) => {
+            expect(await setContactInstructions(userId, text)).toMatchObject({ ok: false, error: "invalid_request" });
+            expect(await getContactInstructions(42)).toMatchObject({ ok: false, error: "invalid_request" });
+        });
+
+        it("adds the partner's instructions to the reply prompt", async () => {
+            storeCredential("claude", "sk-ant-test");
+            setAgentSettings({ instructions: "Be brief." });
+            anthropic.messagesCreate.mockResolvedValue({
+                stop_reason: "end_turn",
+                content: [{ type: "text", text: "Hi" }],
+            });
+            await setContactInstructions("@bob:example.org", "Bob is my boss, be formal.");
+
+            await generateAgentReply({ ...request, partnerId: "@bob:example.org" });
+
+            const system = anthropic.messagesCreate.mock.calls[0][0].system;
+            expect(system).toBe(buildSystemPrompt(request, "Be brief.", "Bob is my boss, be formal."));
+            expect(system).toMatch(
+                /Instructions from Alice for the chat with Bob, which take precedence over the general ones:\nBob is my boss, be formal\.$/,
+            );
+        });
+
+        it("adds the partner's instructions to the suggestions of a direct message only", async () => {
+            storeCredential("claude", "sk-ant-test");
+            anthropic.messagesCreate.mockResolvedValue({
+                stop_reason: "end_turn",
+                content: [{ type: "text", text: '["A"]' }],
+            });
+            await setContactInstructions("@bob:example.org", "Be formal.");
+
+            await generateAgentSuggestions({ ...suggestionsRequest, isDirect: true, partnerId: "@bob:example.org" });
+            await generateAgentSuggestions({ ...suggestionsRequest, partnerId: "@bob:example.org" });
+
+            expect(anthropic.messagesCreate.mock.calls[0][0].system).toContain("for the chat with Team");
+            expect(anthropic.messagesCreate.mock.calls[0][0].system).toMatch(/\nBe formal\.$/);
+            expect(anthropic.messagesCreate.mock.calls[1][0].system).not.toContain("Be formal.");
+        });
+    });
+
     describe("parseSuggestions", () => {
         it("reads a JSON array, even with text around it, and keeps at most three", () => {
             expect(parseSuggestions('Here you go:\n["A", " B ", "", 4, "C", "D"]')).toEqual(["A", "B", "C"]);
@@ -531,6 +627,15 @@ describe("agent", () => {
 
         it("has no instructions section without instructions", () => {
             expect(buildSystemPrompt(request, "  ")).not.toContain("Instructions from");
+            expect(buildSystemPrompt(request, "  ", " \n ")).not.toContain("Instructions from");
+        });
+
+        it("puts the instructions for the partner after the general ones", () => {
+            const prompt = buildSystemPrompt(request, "Be brief.", " Be formal. ");
+
+            expect(prompt).toMatch(
+                /Instructions from Alice:\nBe brief\.\n\nInstructions from Alice for the chat with Bob, .*:\nBe formal\.$/,
+            );
         });
     });
 });

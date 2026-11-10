@@ -54,6 +54,8 @@ export interface AgentReplyRequest {
     ownName: string;
     /** The display name of their chat partner */
     partnerName: string;
+    /** The Matrix user ID of their chat partner, whose own instructions are added if there are any */
+    partnerId?: string;
     /** The latest messages of the conversation, oldest first, ending with a message of the partner */
     turns: AgentTurn[];
 }
@@ -79,8 +81,20 @@ export interface AgentSuggestionsRequest {
     chatName: string;
     /** Whether the chat is a direct message */
     isDirect: boolean;
+    /** The Matrix user ID of the partner of a direct message, whose own instructions are added if there are any */
+    partnerId?: string;
     /** The latest messages of the chat, oldest first, ending with a message of someone else */
     messages: AgentSuggestionMessage[];
+}
+
+/**
+ * The instructions for the agent about one chat partner, kept in a Markdown file of their own on this computer.
+ */
+export interface AgentContactInstructions {
+    /** The content of the file, or "" if there is none */
+    text: string;
+    /** Where the file is, so that it can also be edited outside of Element */
+    path: string;
 }
 
 /**

@@ -19,9 +19,11 @@ import {
     generateAgentSuggestions,
     getAgentRooms,
     getAgentStatus,
+    getContactInstructions,
     listAgentModels,
     setAgentRoom,
     setAgentSettings,
+    setContactInstructions,
 } from "./agent.js";
 
 let focusHandlerAttached = false;
@@ -203,6 +205,12 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "agentSetRoom":
             ret = setAgentRoom(args[0], args[1], args[2]);
+            break;
+        case "agentGetContactInstructions":
+            ret = await getContactInstructions(args[0]);
+            break;
+        case "agentSetContactInstructions":
+            ret = await setContactInstructions(args[0], args[1]);
             break;
         case "agentGenerateReply":
             ret = await generateAgentReply(args[0]);

@@ -10,14 +10,18 @@ Please see LICENSE files in the repository root for full details.
 // credentials stay in the main process.
 //
 // Everything the agent keeps stays on this computer: its settings, the credentials (encrypted with safeStorage)
-// and the marked rooms are in a store of their own, in a directory that is never synced to other computers.
+// and the marked rooms are in a store of their own, in a directory that is never synced to other computers. The
+// instructions for each chat partner are Markdown files in the "contacts" folder of that directory, so that they
+// can also be edited outside of Element.
 
 import path from "node:path";
+import fs from "node:fs/promises";
 import { app, safeStorage } from "electron";
 import ElectronStore from "electron-store";
 import Anthropic from "@anthropic-ai/sdk";
 import { CopilotClient } from "@github/copilot-sdk";
 import type {
+    AgentContactInstructions,
     AgentErrorCode,
     AgentModel,
     AgentProvider,
@@ -43,6 +47,9 @@ export const SUGGESTION_COUNT = 3;
 
 /** How long to wait for a reply before giving up */
 const REPLY_TIMEOUT_MS = 2 * 60 * 1000;
+
+/** The most characters of instructions for one chat partner that are kept and sent to the provider */
+export const MAX_CONTACT_INSTRUCTIONS_LENGTH = 20000;
 
 const DEFAULT_SETTINGS: AgentSettings = { provider: "claude", instructions: "", replySuggestions: true };
 
@@ -224,6 +231,86 @@ export async function listAgentModels(provider: unknown): Promise<AgentResult<Ag
     return listModelsWith(provider, credential);
 }
 
+/** Whether a value looks like a Matrix user ID, such as @alice:example.org */
+function isUserId(value: unknown): value is string {
+    return typeof value === "string" && value.length <= 255 && /^@[^:\s]+:\S+$/.test(value);
+}
+
+/**
+ * The Markdown file with the instructions for a chat partner, in the "contacts" folder of the agent's data.
+ * Characters that some file systems don't allow in names, such as ":" on Windows, are percent-encoded, so the
+ * name stays readable and every user ID gets a file of its own: @alice:example.org is "@alice%3Aexample.org.md".
+ */
+export function getContactInstructionsPath(userId: string): string {
+    const name = userId.replace(/[^A-Za-z0-9@._=+-]/gu, (char) =>
+        [...Buffer.from(char, "utf8")].map((byte) => `%${byte.toString(16).toUpperCase().padStart(2, "0")}`).join(""),
+    );
+    return path.join(getAgentDataPath(), "contacts", `${name}.md`);
+}
+
+/**
+ * Read the instructions for a chat partner.
+ * @returns the instructions, "" if there are none
+ */
+async function readContactInstructions(userId: string): Promise<string> {
+    try {
+        return await fs.readFile(getContactInstructionsPath(userId), "utf8");
+    } catch (e) {
+        if ((e as NodeJS.ErrnoException).code !== "ENOENT") {
+            console.error(`Failed to read the agent instructions for ${userId}`, e);
+        }
+        return "";
+    }
+}
+
+/**
+ * Get the instructions for a chat partner and where they are kept.
+ * @param userId - The Matrix user ID of the chat partner
+ */
+export async function getContactInstructions(userId: unknown): Promise<AgentResult<AgentContactInstructions>> {
+    if (!isUserId(userId)) return failure("invalid_request");
+    return {
+        ok: true,
+        data: { text: await readContactInstructions(userId), path: getContactInstructionsPath(userId) },
+    };
+}
+
+/**
+ * Save the instructions for a chat partner in their Markdown file, or delete the file if they are empty.
+ * @param userId - The Matrix user ID of the chat partner
+ * @param text - The instructions, in Markdown
+ */
+export async function setContactInstructions(
+    userId: unknown,
+    text: unknown,
+): Promise<AgentResult<AgentContactInstructions>> {
+    if (!isUserId(userId) || typeof text !== "string" || text.length > MAX_CONTACT_INSTRUCTIONS_LENGTH) {
+        return failure("invalid_request");
+    }
+    const filePath = getContactInstructionsPath(userId);
+    try {
+        if (text.trim()) {
+            await fs.mkdir(path.dirname(filePath), { recursive: true });
+            await fs.writeFile(filePath, text, "utf8");
+        } else {
+            await fs.rm(filePath, { force: true });
+        }
+    } catch (e) {
+        console.error(`Failed to save the agent instructions for ${userId}`, e);
+        return failure("unavailable", e instanceof Error ? e.message : String(e));
+    }
+    return { ok: true, data: { text: text.trim() ? text : "", path: filePath } };
+}
+
+/**
+ * The instructions for a chat partner as they are sent to the provider: trimmed and cut to
+ * {@link MAX_CONTACT_INSTRUCTIONS_LENGTH}, since the file can be edited outside of Element.
+ */
+async function getPromptContactInstructions(userId: string | undefined): Promise<string> {
+    if (!isUserId(userId)) return "";
+    return (await readContactInstructions(userId)).trim().slice(0, MAX_CONTACT_INSTRUCTIONS_LENGTH);
+}
+
 /**
  * Write the next message of the user in a direct message, with the provider and model of the settings.
  * @returns the text of the reply
@@ -234,7 +321,11 @@ export async function generateAgentReply(request: unknown): Promise<AgentResult<
     const credential = await getCredential(settings.provider);
     if (!credential) return failure("not_connected");
 
-    const system = buildSystemPrompt(request, settings.instructions);
+    const system = buildSystemPrompt(
+        request,
+        settings.instructions,
+        await getPromptContactInstructions(request.partnerId),
+    );
     if (settings.provider === "claude") {
         const messages = toClaudeMessages(request.turns);
         if (messages.at(-1)?.role !== "user") return failure("invalid_request");
@@ -254,7 +345,8 @@ export async function generateAgentSuggestions(request: unknown): Promise<AgentR
     const credential = await getCredential(settings.provider);
     if (!credential) return failure("not_connected");
 
-    const system = buildSuggestionsSystemPrompt(request, settings.instructions);
+    const contactInstructions = request.isDirect ? await getPromptContactInstructions(request.partnerId) : "";
+    const system = buildSuggestionsSystemPrompt(request, settings.instructions, contactInstructions);
     const prompt = buildSuggestionsPrompt(request);
     const result =
         settings.provider === "claude"
@@ -268,11 +360,12 @@ export async function generateAgentSuggestions(request: unknown): Promise<AgentR
 
 function isSuggestionsRequest(value: unknown): value is AgentSuggestionsRequest {
     if (typeof value !== "object" || value === null) return false;
-    const { ownName, chatName, isDirect, messages } = value as AgentSuggestionsRequest;
+    const { ownName, chatName, isDirect, partnerId, messages } = value as AgentSuggestionsRequest;
     return (
         typeof ownName === "string" &&
         typeof chatName === "string" &&
         typeof isDirect === "boolean" &&
+        (partnerId === undefined || typeof partnerId === "string") &&
         Array.isArray(messages) &&
         messages.length > 0 &&
         messages.every(
@@ -286,10 +379,12 @@ function isSuggestionsRequest(value: unknown): value is AgentSuggestionsRequest 
 
 /**
  * The system prompt for suggestions. As for replies, the messages of the chat are only conversation content.
+ * @param contactInstructions - The instructions for the partner of a direct message, or ""
  */
 export function buildSuggestionsSystemPrompt(
     { ownName, chatName, isDirect }: AgentSuggestionsRequest,
     instructions: string,
+    contactInstructions = "",
 ): string {
     const chat = isDirect ? `a direct chat with ${chatName}` : `the group chat "${chatName}"`;
     const lines = [
@@ -303,7 +398,20 @@ export function buildSuggestionsSystemPrompt(
     if (instructions.trim()) {
         lines.push("", `Instructions from ${ownName}:`, instructions.trim());
     }
+    if (isDirect) addContactInstructions(lines, ownName, chatName, contactInstructions);
     return lines.join("\n");
+}
+
+/**
+ * Add the instructions of the user for one chat partner to the lines of a system prompt, if there are any.
+ */
+function addContactInstructions(lines: string[], ownName: string, partnerName: string, text: string): void {
+    if (!text.trim()) return;
+    lines.push(
+        "",
+        `Instructions from ${ownName} for the chat with ${partnerName}, which take precedence over the general ones:`,
+        text.trim(),
+    );
 }
 
 /** The chat written out as a transcript, ending with the request for suggestions */
@@ -343,10 +451,11 @@ export function parseSuggestions(text: string): string[] {
 
 function isReplyRequest(value: unknown): value is AgentReplyRequest {
     if (typeof value !== "object" || value === null) return false;
-    const { ownName, partnerName, turns } = value as AgentReplyRequest;
+    const { ownName, partnerName, partnerId, turns } = value as AgentReplyRequest;
     return (
         typeof ownName === "string" &&
         typeof partnerName === "string" &&
+        (partnerId === undefined || typeof partnerId === "string") &&
         Array.isArray(turns) &&
         turns.length > 0 &&
         turns.every((turn) => (turn.role === "user" || turn.role === "assistant") && typeof turn.text === "string")
@@ -356,8 +465,14 @@ function isReplyRequest(value: unknown): value is AgentReplyRequest {
 /**
  * The system prompt for both providers. The partner's messages are only conversation content: the
  * instructions come from here and from the user's own instructions.
+ * @param instructions - The general instructions of the user
+ * @param contactInstructions - The instructions of the user for this chat partner, or ""
  */
-export function buildSystemPrompt({ ownName, partnerName }: AgentReplyRequest, instructions: string): string {
+export function buildSystemPrompt(
+    { ownName, partnerName }: AgentReplyRequest,
+    instructions: string,
+    contactInstructions = "",
+): string {
     const lines = [
         `You write the replies of ${ownName} in a direct chat with ${partnerName} on Matrix.`,
         `Write only the text of the next message of ${ownName}: as short as a chat message, in the language ` +
@@ -371,6 +486,7 @@ export function buildSystemPrompt({ ownName, partnerName }: AgentReplyRequest, i
     if (instructions.trim()) {
         lines.push("", `Instructions from ${ownName}:`, instructions.trim());
     }
+    addContactInstructions(lines, ownName, partnerName, contactInstructions);
     return lines.join("\n");
 }
 
