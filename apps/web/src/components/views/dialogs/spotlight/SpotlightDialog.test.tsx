@@ -22,7 +22,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
 import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
-import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "test-utils";
+import { flushPromisesWithFakeTimers, mkRoom, mkStubRoom, stubClient } from "test-utils";
 
 import SpotlightDialog from "./SpotlightDialog";
 import { Filter } from "./Filter";
@@ -406,6 +406,42 @@ describe("Spotlight Dialog", () => {
         it("should not find LocalRooms", () => {
             expect(options).toHaveLength(5);
             expect(options[0]!.innerHTML).not.toContain(testLocalRoom.name);
+        });
+    });
+
+    describe("searching for rooms by words", () => {
+        async function renderOptionTexts(query: string): Promise<string[]> {
+            render(<SpotlightDialog initialText={query} onFinished={() => null} />);
+            // search is debounced
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            return [...content.querySelectorAll("li.mx_SpotlightDialog_option")].map((it) => it.textContent ?? "");
+        }
+
+        it("should find a room whose name contains every word of the query", async () => {
+            const room = mkStubRoom("!itsupport:example.com", "IT Support (Internal)", mockedClient);
+            vi.mocked(mockedClient.getVisibleRooms).mockReturnValue([room]);
+
+            const optionTexts = await renderOptionTexts("IT Internal");
+            expect(optionTexts.some((text) => text.includes("IT Support (Internal)"))).toBe(true);
+        });
+
+        it("should list rooms containing the whole query before rooms containing only its words", async () => {
+            const phraseRoom = mkStubRoom("!phrase:example.com", "Team Updates", mockedClient);
+            const wordsRoom = mkStubRoom("!words:example.com", "Updates for the Team", mockedClient);
+            // The words-only match is more recent, so would come first if sorted by recency alone
+            vi.mocked(phraseRoom.getBumpStamp).mockReturnValue(1);
+            vi.mocked(wordsRoom.getBumpStamp).mockReturnValue(100);
+            vi.mocked(mockedClient.getVisibleRooms).mockReturnValue([wordsRoom, phraseRoom]);
+
+            const optionTexts = await renderOptionTexts("team updates");
+            const phraseIndex = optionTexts.findIndex((text) => text.includes("Team Updates"));
+            const wordsIndex = optionTexts.findIndex((text) => text.includes("Updates for the Team"));
+            expect(phraseIndex).not.toBe(-1);
+            expect(wordsIndex).not.toBe(-1);
+            expect(phraseIndex).toBeLessThan(wordsIndex);
         });
     });
 

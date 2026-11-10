@@ -18,7 +18,6 @@ import {
     RoomType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { normalize } from "matrix-js-sdk/src/utils";
 import React, {
     type ChangeEvent,
     type JSX,
@@ -94,6 +93,7 @@ import RoomAvatar from "../../avatars/RoomAvatar";
 import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
 import { transformSearchTerm } from "../../../../utils/SearchInput";
+import { SearchQuery, SearchQueryMatch } from "../../../../utils/SearchQuery";
 import { Filter } from "./Filter";
 
 const MAX_RECENT_SEARCHES = 10;
@@ -443,24 +443,29 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             [Section.PublicRoomsAndSpaces]: [],
         };
 
+        // How well each room result matched the query, used to rank results below
+        const roomMatches = new Map<IRoomResult, SearchQueryMatch>();
+
         // Group results in their respective sections
         if (trimmedQuery) {
             const lcQuery = trimmedQuery.toLowerCase();
-            const normalizedQuery = normalize(trimmedQuery);
+            const searchQuery = new SearchQuery(trimmedQuery);
 
             possibleResults.forEach((entry) => {
                 if (isRoomResult(entry)) {
                     // If the room is a DM with a user that is part of the user directory search results,
                     // we can assume the user is a relevant result, so include the DM with them too.
                     const userId = DMRoomMap.shared().getUserIdForRoomId(entry.room.roomId);
-                    if (!userDirectorySearchResults.some((user) => user.userId === userId)) {
-                        if (
-                            !entry.room.normalizedName?.includes(normalizedQuery) &&
-                            !entry.room.getCanonicalAlias()?.toLowerCase().includes(lcQuery) &&
-                            !entry.query?.some((q) => q.includes(lcQuery))
-                        ) {
-                            return; // bail, does not match query
-                        }
+                    if (userDirectorySearchResults.some((user) => user.userId === userId)) {
+                        roomMatches.set(entry, SearchQueryMatch.Phrase);
+                    } else {
+                        const match = Math.max(
+                            searchQuery.matchNormalized(entry.room.normalizedName),
+                            searchQuery.matchIgnoringCase(entry.room.getCanonicalAlias() ?? undefined),
+                            ...(entry.query ?? []).map((q) => searchQuery.matchIgnoringCase(q)),
+                        );
+                        if (match === SearchQueryMatch.None) return; // bail, does not match query
+                        roomMatches.set(entry, match);
                     }
                 } else if (isMemberResult(entry)) {
                     if (!entry.alreadyFiltered && !entry.query?.some((q) => q.includes(lcQuery))) return; // bail, does not match query
@@ -497,6 +502,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     // Room results should appear at the top of the list
                     if (!isRoomResult(b)) return -1;
                     if (!isRoomResult(a)) return -1;
+
+                    // Rooms containing the whole query come before rooms that only contain each of its words
+                    const matchOrder =
+                        (roomMatches.get(b) ?? SearchQueryMatch.None) - (roomMatches.get(a) ?? SearchQueryMatch.None);
+                    if (matchOrder !== 0) return matchOrder;
 
                     return compareRoomsByRecency(a.room, b.room, myUserId);
                 } else if (isMemberResult(a) || isMemberResult(b)) {
