@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Page } from "@playwright/test";
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -134,48 +133,4 @@ test.describe("Create Room", () => {
             await expect(header).toContainText(name);
         });
     });
-
-    test.describe("when the encrypted state labs flag is turned off", () => {
-        test.use({ labsFlags: [] });
-
-        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user, app }) => {
-            await rejectToast(page, "Verify this device");
-
-            // When we start to create a room
-            await page.getByRole("button", { name: "New", exact: true }).click();
-            await page.getByRole("menuitem", { name: "New room" }).click();
-            await page.getByRole("textbox", { name: "Name" }).fill(name);
-
-            // Then there is no Encrypt state events button
-            await expect(page.getByRole("checkbox", { name: "Encrypt state events" })).not.toBeVisible();
-
-            // And when we create the room
-            await page.getByRole("button", { name: "Create room" }).click();
-
-            // Then we created a normal encrypted room, without encrypted state
-            await expect(page.getByText("Encryption enabled")).toBeVisible();
-            await expect(page.getByText("State encryption enabled")).not.toBeVisible();
-
-            // And the room name state event is not encrypted
-            await viewSourceOnRoomNameEvent(page);
-            await expect(page.getByText("Original event source")).toBeVisible();
-            await expect(page.getByText("Decrypted event source")).not.toBeVisible();
-        });
-    });
 });
-
-async function viewSourceOnRoomNameEvent(page: Page) {
-    await page
-        .getByRole("listitem")
-        .filter({ hasText: "created and configured the room" })
-        .getByRole("button", { name: "expand" })
-        .click();
-
-    await page
-        .getByRole("listitem")
-        .filter({ hasText: "changed the room name to" })
-        .getByRole("button", { name: "Options" })
-        .click();
-
-    await page.getByRole("menuitem", { name: "View source" }).click();
-}

@@ -13,7 +13,6 @@ import { EncryptionEventState } from "@element-hq/web-shared-components";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { mkEvent, stubClient } from "test-utils";
 
-import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { EncryptionEventViewModel } from "./EncryptionEventViewModel";
 import { LocalRoom } from "../../../../models/LocalRoom";
 import DMRoomMap from "../../../../utils/DMRoomMap";
@@ -66,7 +65,6 @@ describe("EncryptionEventViewModel", () => {
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
         expect(vm.getSnapshot()).toMatchObject({
             state: EncryptionEventState.ENABLED,
-            encryptedStateEvents: false,
         });
     });
 

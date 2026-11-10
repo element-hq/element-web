@@ -41,7 +41,6 @@ interface IProps {
     defaultName?: string;
     parentSpace?: Room;
     defaultEncrypted?: boolean;
-    defaultStateEncrypted?: boolean;
     onFinished(proceed?: false): void;
     onFinished(proceed: true, opts: IOpts): void;
 }
@@ -119,7 +118,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.state = {
             isPublicKnockRoom: defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
-            isStateEncrypted: this.props.defaultStateEncrypted ?? false,
             joinRule,
             name: this.props.defaultName || "",
             topic: "",
@@ -144,6 +142,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             opts.guestAccess = false;
             const { alias } = this.state;
             createOpts.room_alias_name = alias.substring(1, alias.indexOf(":"));
+        } else {
+            opts.encryption = this.state.isEncrypted;
         }
 
         if (this.state.topic) {
@@ -236,10 +236,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
     private onEncryptedChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
         this.setState({ isEncrypted: evt.target.checked });
-    };
-
-    private onStateEncryptedChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
-        this.setState({ isStateEncrypted: evt.target.checked });
     };
 
     private onAliasChange = (alias: string): void => {

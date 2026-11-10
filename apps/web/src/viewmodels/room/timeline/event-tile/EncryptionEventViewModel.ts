@@ -92,7 +92,6 @@ export class EncryptionEventViewModel
             const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
             const dmPartner = roomId ? DMRoomMap.shared().getUserIdForRoomId(roomId) : undefined;
 
-
             newSnapshot.state = EncryptionEventState.ENABLED;
 
             if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
