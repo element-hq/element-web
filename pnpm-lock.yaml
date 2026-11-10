@@ -496,8 +496,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.10
       '@element-hq/element-call-component':
-        specifier: 0.28.1
-        version: 0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577)(react-dom@19.3.1)(react@19.3.1)
+        specifier: 0.28.2
+        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -629,7 +629,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -2801,9 +2801,9 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@0.28.1':
-    resolution: {integrity: sha512-NU0rCETxzEuJQMVORFsb/xmj5T0aG8sesHZnvwNrqaX+mdUOnGvjE4CFCt8KsMnwM5b8q6ZXqbfhxBCVRkf63w==}
-    version: 0.28.1
+  '@element-hq/element-call-component@0.28.2':
+    resolution: {integrity: sha512-nATHTGmZojDBaAnRI3Se8kyCvZqjZEJprlj1llc5P2hqGv4DhX2/3jN5wY0RhdjtzniRxcXs0gOCsbQpBfAIlA==}
+    version: 0.28.2
     peerDependencies:
       '@vector-im/compound-design-tokens': ^11.0.0
       '@vector-im/compound-web': ^10.3.1
@@ -9945,8 +9945,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577:
-    resolution: {gitHosted: true, integrity: sha512-pXUqeO/rpjCcN0UqPA2EW1/dHiXCMaq6ysPSxrZzleRe3xQgamtHeZNT0DMTguFb670CSiQjqDO48r96wYmVHw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321:
+    resolution: {gitHosted: true, integrity: sha512-jXvIeA62HbaLzr6UkctohfobuQ30t3LVHWKm+doOuRGtnNF9+SVa0VYTDb2Eeqpp5wDmBdDb8i/X7ZM6okWCAA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321}
     version: 45.0.0
     engines: {node: '>=22.0.0'}
 
@@ -15100,11 +15100,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -22325,7 +22325,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/090f3d3ddbf962beb8b03dc5558e03ca992ff577:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a019c7f66968b4a8c5ea71d4f1cbdd555c069321:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
