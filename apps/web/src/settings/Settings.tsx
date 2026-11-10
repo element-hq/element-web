@@ -228,7 +228,6 @@ export interface Settings {
     "feature_element_call_react": IFeature;
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
-    "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
@@ -627,16 +626,6 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|location_share_live"),
         description: _td("labs|location_share_live_description"),
-        shouldWarn: true,
-        default: false,
-    },
-    "feature_dynamic_room_predecessors": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|dynamic_room_predecessors"),
-        description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
         default: false,
     },

@@ -104,11 +104,10 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     private async appendRoom(room: Room): Promise<void> {
         let updated = false;
         const rooms = (this.state.rooms || []).slice(); // cheap clone
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
         // If the room is upgraded, use that room instead. We'll also splice out
         // any children of the room.
-        const history = this.matrixClient?.getRoomUpgradeHistory(room.roomId, true, msc3946ProcessDynamicPredecessor);
+        const history = this.matrixClient?.getRoomUpgradeHistory(room.roomId, true);
         if (history && history.length > 1) {
             room = history[history.length - 1]; // Last room is most recent in history
 

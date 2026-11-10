@@ -283,7 +283,6 @@ export interface IRoomState {
     timelineRenderingType: TimelineRenderingType;
     liveTimeline?: EventTimeline;
     narrow: boolean;
-    msc3946ProcessDynamicPredecessor: boolean;
     /**
      * Whether the room is encrypted or not.
      * If null, we are still determining the encryption status.
@@ -507,7 +506,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             timelineRenderingType: TimelineRenderingType.Room,
             liveTimeline: undefined,
             narrow: false,
-            msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
             isRoomEncrypted: null,
             roomSummary: undefined,
             promptAskToJoin: false,
@@ -1024,9 +1022,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
-            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
-                this.setState({ msc3946ProcessDynamicPredecessor: value! }),
-            ),
         ];
 
         void this.onRoomViewStoreUpdate(true);
@@ -2097,7 +2092,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getOldRoom(): Room | null {
-        const { roomId } = this.state.room?.findPredecessor(this.state.msc3946ProcessDynamicPredecessor) || {};
+        const { roomId } = this.state.room?.findPredecessor() || {};
         return this.context.client?.getRoom(roomId) || null;
     }
 
