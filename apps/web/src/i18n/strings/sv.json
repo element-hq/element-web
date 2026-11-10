@@ -1191,6 +1191,10 @@
             "user": "%(sender)s reagerade med %(reaction)s till %(message)s",
             "you": "Du reagerade med %(reaction)s till %(message)s"
         },
+        "m.rtc.notification": {
+            "ended": "Samtalet avslutades",
+            "started": "Samtal påbörjat"
+        },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
         "prefix": {
