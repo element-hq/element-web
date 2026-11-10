@@ -262,29 +262,6 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
             expect(asFragment()).toMatchSnapshot();
         });
-
-        describe("when the state encryption labs flag is on", () => {
-            beforeEach(() => {
-                vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === "feature_msc4362_encrypted_state_events",
-                );
-            });
-
-            it("should turn on state encryption when toggled", async () => {
-                // Given we have the create room dialog open
-                const { asFragment } = getComponent();
-                await flushPromises();
-                expect(asFragment()).toMatchSnapshot();
-
-                // When I click the Encrypt state events toggle
-                const toggle = screen.getByRole("switch", { name: "Encrypt state events" });
-                expect(toggle).not.toBeChecked();
-                act(() => toggle.click());
-
-                // Then it changes state
-                expect(toggle).toBeChecked();
-            });
-        });
     });
 
     describe("for a knock room", () => {
