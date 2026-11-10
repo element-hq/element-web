@@ -28,6 +28,7 @@ import postcssNested from "postcss-nested";
 
 import pkgJson from "./package.json" with { type: "json" };
 import { I18nWebpackPlugin } from "./I18nWebpackPlugin.ts";
+import { getMinimumBrowserVersions } from "./supportedBrowsers.ts";
 import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
 // Environment variables
@@ -734,7 +735,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             }),
 
             // We bake the version in so the app knows its version immediately
-            new webpack.DefinePlugin({ "process.env.VERSION": JSON.stringify(VERSION) }),
+            new webpack.DefinePlugin({
+                "process.env.VERSION": JSON.stringify(VERSION),
+                // Worked out at build time so browserslist and its data aren't shipped to the browser
+                "__MINIMUM_BROWSER_VERSIONS__": JSON.stringify(getMinimumBrowserVersions()),
+            }),
             // But we also write it to a file which gets polled for update detection
             new VersionFilePlugin({
                 outputFile: "version",

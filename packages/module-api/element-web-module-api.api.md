@@ -399,6 +399,7 @@ export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean
 
 // @public
 export interface Profile {
+    deviceId?: string;
     displayName?: string;
     isGuest?: boolean;
     userId?: string;
