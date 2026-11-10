@@ -1,7 +1,13 @@
 # Releasing a Module
 
-To make a release of a module, simply push an tag in the format `module/<module name>/v<version>`
+To make a release of a module, simply push an tag in the format `module/<module name>/v<version>`.
 
-So to release version 88.77.66 of the banner module, push tag `module/banner/v88.77.66`.
+So to release version 88.77.66 of the banner module as commit hash abcedf:
 
-The [automation](https://github.com/element-hq/element-web/actions/workflows/release-module.yml) will handle the rest.
+```bash
+git tag module/banner/v88.77.66 abcedf
+git push --tags
+```
+
+The [automation](https://github.com/element-hq/element-web/actions/workflows/release-module.yml) will create a draft
+release. Once it's done, check it and, if it looks good, publish the release.
