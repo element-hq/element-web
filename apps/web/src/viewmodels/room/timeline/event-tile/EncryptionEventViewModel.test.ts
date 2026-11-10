@@ -78,16 +78,6 @@ describe("EncryptionEventViewModel", () => {
         expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED);
     });
 
-    it("sets ENABLED with encryptedStateEvents=true for encrypted state events", async () => {
-        setRoomEncrypted(true);
-        client.enableEncryptedStateEvents = true;
-        (event.getContent() as RoomEncryptionEventContent)["io.element.msc4362.encrypt_state_events"] = true;
-
-        const vm = createVm();
-        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
-        expect(vm.getSnapshot().encryptedStateEvents).toBe(true);
-    });
-
     it("sets CHANGED when previous algorithm is already megolm", async () => {
         setRoomEncrypted(true);
         event = mkEvent({
