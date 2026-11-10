@@ -328,7 +328,6 @@ export interface Settings {
         allow?: string[];
         deny?: string[];
     }>;
-    "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     /**
      * This is the 2019-era low bandwidth that deals with disabling features of the
@@ -1238,11 +1237,6 @@ export const SETTINGS: Settings = {
         },
         // Expses widget information
         shouldExportToRageshake: false,
-    },
-    "breadcrumbs": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|show_breadcrumbs"),
-        default: true,
     },
     "showHiddenEventsInTimeline": {
         displayName: _td("devtools|show_hidden_events"),
