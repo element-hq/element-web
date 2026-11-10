@@ -1,6 +1,9 @@
 # Releasing a Module
 
-To make a release of a module, simply push a signed tag in the format `module/<module name>/v<version>`.
+To make a release of a module:
+
+1. Bump the module's version in package.json and commit it
+1. Push a signed tag in the format `module/<module name>/v<version>`.
 
 So to release version 88.77.66 of the banner module as commit hash abcedf:
 
