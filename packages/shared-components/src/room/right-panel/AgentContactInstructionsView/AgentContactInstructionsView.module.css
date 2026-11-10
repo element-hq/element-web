@@ -1,0 +1,47 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.agentContactInstructions {
+    padding: var(--cpd-space-2x) 0;
+}
+
+.label {
+    font: var(--cpd-font-body-md-medium);
+    color: var(--cpd-color-text-primary);
+}
+
+.description {
+    color: var(--cpd-color-text-secondary);
+    overflow-wrap: anywhere;
+}
+
+/* The instructions field looks like the Compound text controls */
+.control {
+    box-sizing: border-box;
+    width: 100%;
+    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    border: 1px solid var(--cpd-color-border-interactive-primary);
+    border-radius: 0.5rem;
+    background-color: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-md-regular);
+    resize: vertical;
+}
+
+.control:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.control:disabled {
+    background-color: var(--cpd-color-bg-canvas-disabled);
+    color: var(--cpd-color-text-disabled);
+}
+
+.error {
+    color: var(--cpd-color-text-critical-primary);
+}

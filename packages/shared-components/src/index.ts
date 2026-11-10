@@ -46,6 +46,7 @@ export * from "./room/WidgetPip";
 export * from "./room/ElementCallAppTile";
 export * from "./room/ElementCallMockView";
 export * from "./room/HistoryVisibilityBadge";
+export * from "./room/right-panel/AgentContactInstructionsView";
 export * from "./room/right-panel/DocumentViewerView";
 export * from "./room/right-panel/PdfViewerView";
 export * from "./room/right-panel/MarkdownViewerView";

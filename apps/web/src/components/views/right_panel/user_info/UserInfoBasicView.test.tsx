@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi, type Mocked } from "vitest";
 import { type MatrixClient, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
-import { logRoles, render, screen } from "test-utils-rtl";
+import { logRoles, render, screen, waitFor } from "test-utils-rtl";
 
 import { createTestClient, mkStubRoom } from "test-utils";
 import {
@@ -19,6 +19,9 @@ import {
 } from "../../../viewmodels/right_panel/user_info/UserInfoBasicViewModel";
 import { UserInfoBasicView } from "./UserInfoBasicView";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
+import PlatformPeg from "../../../../PlatformPeg";
+import type BasePlatform from "../../../../BasePlatform";
+import type { AgentApi } from "../../../../agent/AgentApi";
 
 const defaultRoomPermissions = {
     canEdit: true,
@@ -110,5 +113,45 @@ describe("<UserInfoBasic />", () => {
 
         const spinner = screen.getByTestId("spinner");
         expect(spinner).toBeInTheDocument();
+    });
+
+    describe("instructions for the agent", () => {
+        let agent: Mocked<Pick<AgentApi, "getContactInstructions" | "setContactInstructions">>;
+
+        beforeEach(() => {
+            agent = {
+                getContactInstructions: vi.fn().mockResolvedValue({ ok: true, data: { text: "Be formal.", path: "" } }),
+                setContactInstructions: vi.fn(),
+            };
+            vi.spyOn(PlatformPeg, "get").mockReturnValue({ agent } as unknown as BasePlatform);
+        });
+
+        afterEach(() => {
+            vi.mocked(PlatformPeg.get).mockRestore();
+        });
+
+        it("should show the instructions for the user", async () => {
+            vi.mocked(useUserInfoBasicViewModel).mockReturnValue(defaultValue);
+            renderComponent();
+
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveValue("Be formal."));
+            expect(agent.getContactInstructions).toHaveBeenCalledWith(defaultUserId);
+        });
+
+        it("should not show the instructions if user is me", () => {
+            vi.mocked(useUserInfoBasicViewModel).mockReturnValue({ ...defaultValue, isMe: true });
+            renderComponent();
+
+            expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+            expect(agent.getContactInstructions).not.toHaveBeenCalled();
+        });
+
+        it("should not show the instructions without an agent", () => {
+            vi.spyOn(PlatformPeg, "get").mockReturnValue({} as BasePlatform);
+            vi.mocked(useUserInfoBasicViewModel).mockReturnValue(defaultValue);
+            renderComponent();
+
+            expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+        });
     });
 });

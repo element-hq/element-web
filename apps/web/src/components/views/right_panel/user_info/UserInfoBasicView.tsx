@@ -18,6 +18,8 @@ import { IgnoreToggleButton } from "./UserInfoIgnoreButtonView";
 import Spinner from "../../elements/Spinner";
 import { UserInfoAdminToolsContainer } from "./UserInfoAdminToolsContainer";
 import { UserInfoBasicOptionsView } from "./UserInfoBasicOptionsView";
+import { UserInfoAgentInstructions } from "./UserInfoAgentInstructions";
+import PlatformPeg from "../../../../PlatformPeg";
 
 /**
  * There are two types of components that can be displayed in the right panel concerning userinfo
@@ -28,6 +30,7 @@ export const UserInfoBasicView: React.FC<{
     member: User | RoomMember;
 }> = ({ room, member }) => {
     const vm = useUserInfoBasicViewModel(room, member);
+    const agent = PlatformPeg.get()?.agent;
     let synapseDeactivateButton;
     let spinner;
     let memberDetails;
@@ -82,6 +85,9 @@ export const UserInfoBasicView: React.FC<{
                 {memberDetails}
             </UserInfoBasicOptionsView>
             {adminToolsContainer}
+            {!vm.isMe && agent && (
+                <UserInfoAgentInstructions key={member.userId} userId={member.userId} agent={agent} />
+            )}
             {!vm.isMe && (
                 <Container>
                     <IgnoreToggleButton member={member} />

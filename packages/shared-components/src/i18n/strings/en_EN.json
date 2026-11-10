@@ -144,6 +144,13 @@
         "room_list_section_title": "Introducing Sections"
     },
     "room": {
+        "agent_instructions": {
+            "description": "The agent follows these instructions, on top of the general ones, when it replies or suggests replies in your direct messages with this person. Use Markdown.",
+            "error": "The instructions could not be read or saved. Try again.",
+            "file": "Saved as a Markdown file: %(path)s",
+            "placeholder": "For example: Answer formally and keep it short.",
+            "title": "Instructions for the agent"
+        },
         "context_menu": {
             "title": "Room options"
         },
