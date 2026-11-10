@@ -252,10 +252,10 @@
             "error_etag_missing": "Tekkis ootamatu viga. Selle põhjuseks võivad olla brauseri lisamoodul, proksiserveri seadistused või koduserveri vigased seadistused.",
             "error_expired": "Sisselogimine aegus. Palun proovi uuesti.",
             "error_expired_title": "Sisselogimine ei jõudnud õigeaegselt lõpule",
-            "error_insecure_channel_detected": "Uue seadmega ei saanud turvalist ühendust luua. Sinu teised seadmed on endiselt turvalised ja nende pärast ei pea muretsema.",
+            "error_insecure_channel_detected": "Uue seadmega ei saanud turvalist ühendust luua. Sinu teised seadmed on endiselt turvalised ja nende pärast sa ei pea muretsema.",
             "error_insecure_channel_detected_instructions": "Mis nüüd?",
-            "error_insecure_channel_detected_instructions_1": "Proovi QR-koodiga teise seadmesse uuesti sisse logida, juhuks kui tegemist oli võrguprobleemiga",
-            "error_insecure_channel_detected_instructions_2": "Kui sul tekib sama probleem uuesti, proovi teist WiFi-võrku või kasuta wifi asemel mobiilset andmesidet",
+            "error_insecure_channel_detected_instructions_1": "Kui tegemist oli võrguprobleemiga, siis proovi QR-koodi alusel teise seadmesse uuesti sisse logida",
+            "error_insecure_channel_detected_instructions_2": "Kui sul tekib sama probleem uuesti, proovi teist WiFi-võrku või kasuta WiFi asemel mobiilset andmesidet",
             "error_insecure_channel_detected_instructions_3": "Kui see ei aita, logi sisse käsitsi",
             "error_insecure_channel_detected_title": "Ühendus pole turvaline",
             "error_other_device_already_signed_in": "Sa ei pea enam midagi muud tegema.",
@@ -284,6 +284,8 @@
             "tap_avatar_link_new_device": "Klõpsa oma tunnuspilti ja vali „%(linkNewDevice)s“",
             "unsupported_explainer": "Sinu teenusepakkuja ei toeta võimalust logida sisse QR-koodi abil.",
             "unsupported_heading": "QR-koodi kasutamine pole toetatud",
+            "verification_uri_explainer": "Sinu kasutajakonto teenusepakkuja leht avaneb uuel vahekaardil. Kinnita seal sisselogimine ja siis tule tagasi siia vahekaarti.",
+            "verification_uri_heading": "Kinnita sisselogimine oma kasutajakonto teenusepakkuja kaudu",
             "waiting_for_device": "Ootame sinu teise seadme järgi"
         },
         "register_action": "Loo konto",
@@ -295,6 +297,7 @@
         "registration_disabled": "Väline registreerimine ei ole selle teenusepakkuja puhul kasutusel.",
         "registration_msisdn_field_required_invalid": "Sisesta telefoninumber (nõutav selles teenusepakkuja puhul)",
         "registration_rate_limited": "Liiga palju katseid lühikese aja jooksul. Oota hetk enne uuesti proovimist.",
+        "registration_rate_limited_with_time": "Liiga palju päringuid napis ajavahemikus. Enne uuesti proovimist palun oota %(timeout)s sekundit.",
         "registration_successful": "Registreerimine õnnestus",
         "registration_username_in_use": "Keegi juba pruugib sellist kasutajanime. Katseta mõne muuga või kui oled sina ise, siis logi sisse.",
         "registration_username_unable_check": "Kasutajanime saadavust ei õnnestu kontrollida. Palun proovi hiljem uuesti.",
@@ -667,7 +670,7 @@
         "join_rule_invite_label": "See jututuba on leitav vaid kutse olemasolul ning liitumine on võimalik vaid kutse alusel.",
         "join_rule_knock_label": "Kõik võivad liituda, kuid jututoa haldur või moderaator peab eelnevalt ligipääsu kinnitama. Sa saad seda hiljem muuta.",
         "join_rule_public_label": "Kõik võivad selle jututoaga liituda, sealhulgas kasutajad väljastpoolt sinu organisatsiooni.",
-        "join_rule_public_parent_space_label": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda jututuba leida ja võivad temaga liituda.",
+        "join_rule_public_parent_space_label": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik võivad selle kogukonnaga liituda, sealhulgas huvilised väljastpoolt sinu organisatsiooni.",
         "join_rule_restricted": "Standardne",
         "join_rule_restricted_label": "Kõik <SpaceName/> kogukonna liikmed liituda.",
         "name_validation_required": "Palun sisesta jututoa nimi",
@@ -684,11 +687,13 @@
         "unsupported_version": "See server ei toeta antud jututoa versiooni."
     },
     "create_section_dialog": {
+        "add_rooms": "Lisa vestlusi",
         "create_section": "Lisa jaotis",
         "empty_list_text": "Ühtegi vestlust ei leidu",
         "list_title": "Soovitatud",
         "placeholder": "Otsi oma vestlustest",
         "title": "Lisa jaotis",
+        "title_add_rooms": "Lisa vestlusi „%(section)s“ jaotisse",
         "title_edition": "Muuda jaotist"
     },
     "create_space": {
@@ -720,7 +725,7 @@
         "private_personal_heading": "Kellega sa koos töötad?",
         "private_space": "Mina ja minu kaasteelised",
         "private_space_description": "Privaatne kogukond sinu ja sinu kaasteeliste jaoks",
-        "public_description": "Kõik võivad liituda, sobib kõige paremini kogukondadele",
+        "public_description": "Kõik võivad liituda, sealhulgas kasutajad väljastpoolt sinu organisatsiooni. Sobib kõige paremini kogukondade jaoks",
         "public_heading": "Sinu avalik kogukond",
         "search_public_button": "Avalike kogukondade otsing",
         "setup_rooms_community_description": "Teeme siis alustuseks mõned jututoad.",
@@ -736,7 +741,7 @@
         "subspace_dropdown_title": "Loo kogukond",
         "subspace_existing_space_prompt": "Kas sa selle asemel soovid lisada olemasoleva kogukonna?",
         "subspace_join_rule_invite_description": "See kogukond on leitav vaid kutse olemasolul ning liitumine on võimalik vaid kutse alusel.",
-        "subspace_join_rule_invite_only": "Privaatne kogukond (kutse alusel)",
+        "subspace_join_rule_invite_only": "Vaid kutsega",
         "subspace_join_rule_label": "Kogukonna nähtavus",
         "subspace_join_rule_public_description": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda kogukonda leida ja võivad temaga liituda.",
         "subspace_join_rule_restricted_description": "Kõik <SpaceName/> kogukonna liikmed saavad liituda."
@@ -750,7 +755,7 @@
         "confirm": "Kas sa oled kindel, et soovid keelduda kutsest liituda „%(roomName)s“ jututoaga?",
         "ignore_user_help": "Sa ei näe enam selle kasutaja saadetud sõnumeid või jututubade kutseid",
         "reason_description": "Kirjelda jututoast teatamise põhjust",
-        "report_room_description": "Teata sellest jututoast oma teenusepakkujale.",
+        "report_room_description": "Teata sellest vestlusest oma teenusepakkujale.",
         "title": "Lükka kutse tagasi"
     },
     "desktop_default_device_name": "%(brand)s töölaud: %(platformName)s",
@@ -883,6 +888,7 @@
         "setting_definition": "Seadistuse määratlus:",
         "setting_id": "Seadistuse tunnus",
         "settings": {
+            "elementCallMockComponent": "Kasuta simuleeritud Element Calli komponenti (transpordikiht react-teegi abil ja ilma meediumita)",
             "elementCallUrl": "Element Calli võrguaadress"
         },
         "settings_explorer": "Seadistuste haldur",
@@ -1111,7 +1117,7 @@
         "withdraw_verification_action": "Eemalda verifitseerimine"
     },
     "error": {
-        "admin_contact": "Jätkamaks selle teenuse kasutamist palun <a>võta ühendust oma teenuse haldajaga</a>.",
+        "admin_contact": "Jätkamaks selle teenuse kasutamist palun <a>võta ühendust oma teenusepakkujaga</a>.",
         "admin_contact_short": "Võta ühendust <a>oma kasutajakonto teenusepakkujaga</a>.",
         "app_launch_unexpected_error": "Rakenduse ettevalmistamisel tekkis ootamatu viga. Täpsema teabe leiad konsoolist.",
         "cannot_load_config": "Seadistuste faili laadimine ei õnnestunud: uuesti proovimiseks palun laadi leht uuesti.",
@@ -1134,10 +1140,10 @@
         "session_restore": {
             "clear_storage_button": "Eemalda see seade",
             "clear_storage_description": "Kas eemaldad selle seadme koos tema krüptimisvõtmetega?",
-            "description_1": "Meil tekkis sinu sessiooni taastamisel viga.",
-            "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu pragune sessioon ei pruugi olla sellega ühilduv. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
+            "description_1": "Sinu sisselogimise taastamine ei õnnestunud.",
+            "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu salvestatud andmed ei pruugi olla ühilduvad praeguse versiooniga. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
             "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas eemaldad ka selle seadme ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
-            "title": "Sessiooni taastamine ei õnnestunud"
+            "title": "Sisselogimise taastamine ei õnnestunud"
         },
         "something_went_wrong": "Midagi läks nüüd valesti!",
         "storage_evicted_description_1": "Osa selles seadmes salvestatud andmetes, sealhulgas sõnumi krüptovõtmed, on puudu. Seega varasemad sõnumid ei pruugi avaneda. Vea parandamiseks eemalda see seade ja logi uuesti sisse. Kui võtmete taastamine on seadistatud, siis sinu sõnumid saavad uuesti olema nähtavad.",
@@ -1152,7 +1158,7 @@
     },
     "error_app_open_in_another_tab": "%(brand)s'i kasutamiseks ava teine vahekaart. Selle vahekaardi võid kinni panna.",
     "error_app_open_in_another_tab_title": "%(brand)s'i on kasutatav teisel vahekaardil",
-    "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa \"%(label)s\", et kasutada siin %(brand)s ja katkestada teise akna ühendus.",
+    "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa „%(label)s“, et kasutada siin rakendust %(brand)s ja sellega katkestada teise akna ühenduse.",
     "error_database_closed_description": {
         "for_desktop": "Andmekandja maht võib olla täis saanud. Palun tee ruumi juurde ja laadi leht uuesti.",
         "for_web": "Kui sa kustutasid brauseris puhverdatud andmed, siis selline teade on ootuspärane. Lisaks on võimalik, et %(brand)s on avatud mõnes teises vahekaardis või sinu seadme kõvakettaruum on otsas. Palun tee seadmesse ruumi ja laadi uuesti"
@@ -1275,7 +1281,7 @@
         "sent": "Tagasiside on saadetud"
     },
     "file_panel": {
-        "empty_description": "Faile saad manuseks lisada kas vastava nupu alt vestlusest või sikutades neid jututoa aknasse.",
+        "empty_description": "Faile saad manuseks lisada kas vastava nupu alt kirjutusvaatest või sikutades neid jututoa aknasse.",
         "empty_heading": "Selles jututoas pole faile",
         "guest_note": "Selle funktsionaalsuse kasutamiseks pead sa <a>registreeruma</a>",
         "peek_note": "Failide nägemiseks pead jututoaga liituma"
@@ -1359,10 +1365,10 @@
     },
     "invite": {
         "confirm_unknown_users": {
-            "invite_subtitle": "Sul pole hetkel nende kontaktidega ühtegi vestlust. Enne jätkamist kinnita neile siia jututuppa kutse saatmine.",
-            "invite_title": "Kas kutsud uued kontaktid siia jututuppa?",
-            "start_chat_subtitle_multiple_users": "Sul pole hetkel nendega inimestega ühtegi vestlust. Enne jätkamist kinnita neile kutse saatmine.",
-            "start_chat_subtitle_one_user": "Sul pole hetkel selle inimesega ühtegi vestlust. Enne jätkamist kinnita talle kutse saatmine.",
+            "invite_subtitle": "Sul pole hetkel nende kontaktidega ühtegi vestlust.",
+            "invite_title": "Kas kutsud uued kontaktid siia vestlusesse?",
+            "start_chat_subtitle_multiple_users": "Sul pole hetkel nendega kontaktidega ühtegi vestlust.",
+            "start_chat_subtitle_one_user": "Sul pole hetkel selle inimesega ühtegi vestlust.",
             "start_chat_title_multiple_users": "Kas alustad vestlust nende uute kontaktidega?",
             "start_chat_title_one_user": "Kas alustad vestlust selle uue kontaktiga?"
         },
@@ -1374,18 +1380,20 @@
         "error_already_invited_space": "Sellel kasutajal juba on kutse siia kogukonda",
         "error_already_joined_room": "Kasutaja juba on jututoa selle liige",
         "error_already_joined_space": "Kasutaja juba on kogukonna selle liige",
-        "error_bad_state": "Enne kutse saatmist peab kasutajalt olema eemaldatud ligipääsukeeld.",
+        "error_bad_state": "Enne kutse saatmist peab kasutajalt olema eemaldatud ligipääsukeeld",
         "error_dm": "Otsesuhtluse loomine ei õnnestunud.",
         "error_find_room": "Kasutajatele kutse saatmisel läks midagi viltu.",
         "error_find_user_description": "Järgmisi kasutajanimesid pole olemas või on vigaselt kirjas ning seega ei saa neile kutset saata: %(csvNames)s",
         "error_find_user_title": "Järgnevaid kasutajaid ei õnnestunud leida",
+        "error_forbidden": "Kutseid ei võeta vastu",
         "error_invite": "Meil ei õnnestunud neile kasutajatele kutset saata. Palun kontrolli, keda soovid kutsuda ning proovi uuesti.",
-        "error_permissions_room": "Sul pole õigusi siia jututuppa osalejate kutsumiseks.",
-        "error_permissions_space": "Sul pole õigusi siia kogukonda osalejate kutsumiseks.",
+        "error_permissions_room": "Sul pole õigusi siia jututuppa osalejate kutsumiseks",
+        "error_permissions_space": "Sul pole õigusi siia kogukonda osalejate kutsumiseks",
         "error_profile_undisclosed": "Kasutaja võib olla, aga ka võib mitte olla olemas",
+        "error_rate_limited": "Liiga palju saadetud kutseid. Palun proovi hiljem uuesti.",
         "error_transfer_multiple_target": "Kõnet on võimalik edasi suunata vaid ühele kasutajale.",
         "error_unfederated_room": "See jututuba on födereerimata. Sa ei saa kutsuda osalejaid välistest serveritest.",
-        "error_unfederated_space": "See kogukond on föderatsioonita. Sa ei saa kutsuda inimesi välistest serveritest.",
+        "error_unfederated_space": "See kogukond on födereerimata. Sa ei saa kutsuda inimesi välistest serveritest",
         "error_unknown": "Tundmatu serveriviga",
         "error_user_not_found": "Sellist kasutajat pole olemas",
         "error_version_unsupported_room": "Kasutaja teenusepakkuja ei toeta selle jututoa versiooni.",
@@ -1402,8 +1410,9 @@
             "preparing": "Valmistan kutseid ette..."
         },
         "recents_section": "Hiljutised vestlused",
+        "room_failed_partial_description": "Muud kutsed said saadetud, kui alljärgnevatele kasutajatele kutsete saatmine ei õnnestunud.",
         "room_failed_partial_reason": "%(reason)s:",
-        "room_failed_partial_title": "Mõnede kutsete saatmine ei õnnestunud",
+        "room_failed_partial_title": "Mõned kutsed jäid saatmata",
         "room_failed_title": "Kasutajate kutsumine %(roomName)s jututuppa ei õnnestunud",
         "send_link_prompt": "Või saada kutse link",
         "start_conversation_name_email_mxid_prompt": "Alusta vestlust kasutades teise osapoole nime, e-posti aadressi või kasutajanime (näiteks <userId/>).",
@@ -1486,6 +1495,11 @@
         "room_list_expand_section": "Laienda jututubade loendi valikut",
         "room_list_navigate_down": "Suundu jututubade loendis alla",
         "room_list_navigate_up": "Suundu jututubade loendis üles",
+        "room_list_panel_collapse": "Peida jututubade loend (suuruse muutmise käepide on fookuses)",
+        "room_list_panel_expand": "Näita jututubade loendit täislaiuses (suuruse muutmise käepide on fookuses)",
+        "room_list_panel_grow": "Muuda jututubade loend laiemaks (suuruse muutmise käepide on fookuses)",
+        "room_list_panel_shrink": "Muuda jututubade loend kitsamaks (suuruse muutmise käepide on fookuses)",
+        "room_list_panel_toggle": "Peida jututubade loend või näita seda (suuruse muutmise käepide on fookuses)",
         "room_list_select_room": "Vali tubade loendist jututuba",
         "save": "Salvesta",
         "scroll_down_timeline": "Liigu ajajoonel alla",
@@ -1518,6 +1532,7 @@
         "click_for_info": "Lisateave",
         "config_only": "Sinu teenusepakkuja peab selle lülitama sisse config.json failist.",
         "currently_experimental": "Parasjagu katsejärgus.",
+        "document_previews": "Dokumentide katseline eelvaade",
         "document_previews_description": "Ava PDF- ja Markdown-failid paremal paanil.",
         "dynamic_room_predecessors": "Jututoa dünaamilised eellased",
         "dynamic_room_predecessors_description": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
@@ -1529,6 +1544,9 @@
         "experimental_description": "Soovid katsetada? Proovi meie uusimaid arendusmõtteid. Need funktsionaalsused pole üldsegi veel valmis, nad võivad toimida puudulikult, võivad muutuda või sootuks lõpetamata jääda. <a>Lisateavet leiad siit</a>.",
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
+        "feature_element_call_react": "Renderda Element Calli vidina asemel React-teegi põhise komponendina",
+        "feature_matrixrtc_slots": "Eelda Element Calli kõnede puhul avatud MatrixRTC ühendusslottide olemasolu",
+        "feature_matrixrtc_slots_description": "Element Calli kõne algatamine või sellega liitumine on võimalik vaid korrektse ühendusslotiga seotud sündmuse olemasolul jututoas.",
         "feature_retention": {
             "description": "Selle seadistusega saad jututoast sõnumeid automaatselt eemaldada etteantud ajavahemiku möödumisel. Hetkel on toetatud vaid lugemise seadistused.",
             "disabled_sliding_sync": "Kui järkjärgulise sünkroonimine on kasutusel, siis sõnumise säilitamise reegleid ei saa sisse lülitada.",
@@ -1555,7 +1573,7 @@
         "hidebold": "Peida teavituse täpp (ja näita loendure)",
         "join_beta": "Hakka kasutama beetaversiooni",
         "join_beta_reload": "Beeta-funktsionaalsuste kasutusele võtmisel laadime uuesti rakenduse %(brand)s.",
-        "jump_to_date": "Võimalda kuupäeva valida (lisab /jumptodate käsu ja kuupäeva valimisega seotud päisekirjed)",
+        "jump_to_date": "Suundu kuupäeva juurde (lisab „/jumptodate“ käsu ja kuupäeva valimisega seotud päisekirjed)",
         "jump_to_date_msc_support": "Eeldab, et sinu koduserver toetab MSC3030 spetsifikatsiooni",
         "latex_maths": "Sõnumites visualiseeri LaTeX-vormingus matemaatikat",
         "leave_beta": "Lõpeta beetaversiooni kasutamine",
@@ -1578,7 +1596,7 @@
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
         "url_preview_bundle": "Võrguaadresside lõimitud eelvaated (MSC4095)",
-        "url_preview_bundle_description": "Võid saata võrguaadresside eelvaateid osana sõnumist",
+        "url_preview_bundle_description": "Edastab võrguaadresside eelvaated osana sõnumist",
         "video_rooms": "Videotoad",
         "video_rooms_a_new_way_to_chat": "Uus võimalus videovestlusteks rakenduses %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videotoad on kogu aeg saadaval VoIP kanalid, mis on lõimitud jututubadega ja kasutatavad rakenduses %(brand)s.",
@@ -1630,8 +1648,10 @@
         "leave_space_title": "Kas lahkud „%(spaceName)s“ kogukonnast?",
         "room_leave_admin_warning": "Sa oled ainus selle jututoa haldaja. Kui sa siit lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_leave_mod_warning": "Sa oled ainus moderaator selles jututoas. Kui sa siis lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
-        "room_rejoin_warning": "See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.",
-        "space_rejoin_warning": "See ei ole avalik kogukond. Ilma kutseta sa ei saa uuesti liituda."
+        "room_rejoin_warning": "See jututuba on privaatne. Ilma kutseta sa ei saa uuesti liituda.",
+        "room_rejoin_warning_restricted": "See jututuba on piiratud ligipääsuga ja sellega ei saa uuesti liituda, kui sa pole seotud kogukonna liige või sind pole eraldi kutsutud.",
+        "space_rejoin_warning": "See kogukond on privaatne. Ilma kutseta sa ei saa uuesti liituda.",
+        "space_rejoin_warning_restricted": "See kogukond on piiratud ligipääsuga ja sellega ei saa uuesti liituda, kui sa pole seotud kogukonna liige või sind pole eraldi kutsutud."
     },
     "lightbox": {
         "rotate_left": "Pööra vasakule",
@@ -2165,7 +2185,7 @@
             "room_id": "Jututoa tehniline tunnus",
             "room_predecessor": "Näita vanemat tüüpi sõnumeid jututoas %(roomName)s.",
             "room_upgrade_button": "Uuenda see jututoa versioon soovitatud versioonini",
-            "room_upgrade_warning": "<b>Hoiatus</b>: Jututoa versiooni uuendamine <i>ei koli jututoa liikmeid automaatselt uude jututoa olekusse.</i> Vanas jututoa versioonis saab olema viide uuele versioonile ning kõik liikmed peavad jututoa uue versiooni kasutamiseks seda viidet klõpsama.",
+            "room_upgrade_warning": "<b>Hoiatus</b>: Jututoa versiooni uuendamine <i>ei koli jututoa liikmeid automaatselt uude jututoa olekusse.</i> Vanas jututoa versioonis saab olema viide uuele versioonile ning kõik liikmed peavad jututoa uue versiooni kasutamiseks seda linki klõpsama.",
             "room_version": "Jututoa versioon:",
             "room_version_section": "Jututoa versioon",
             "space_predecessor": "Vaata %(spaceName)s kogukonna varasemaid versioone.",
@@ -2238,7 +2258,7 @@
             "publish_warn_no_canonical_permission": "Siin jututoas sisu avaldamiseks peab sul olema õigus põhiaadressi muutmiseks.",
             "published_aliases_description": "Aadressi avaldamiseks peab ta esmalt olema määratud kohalikuks aadressiks.",
             "published_aliases_explainer_room": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu jututoaga.",
-            "published_aliases_explainer_space": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu kogukonnaga.",
+            "published_aliases_explainer_space": "Avaldatud aadresse saab igaüks iga teenusepakkuja juurest kasutada liitumiseks sinu kogukonnaga.",
             "published_aliases_section": "Avaldatud aadressid",
             "save": "Salvesta muutused",
             "topic_field_label": "Jututoa teema"
@@ -2336,7 +2356,7 @@
             "join_rule_knock": "Küsi võimalust liitumiseks",
             "join_rule_knock_description": "Kasutajade ei saa liituda enne, kui selleks vastav luba on antud.",
             "join_rule_public": "Kõik",
-            "join_rule_public_description": "Kõik võivad jututoaga liituda.",
+            "join_rule_public_description": "Kõik võivad liituda, sealhulgas kasutajad väljastpoolt sinu organisatsiooni.",
             "join_rule_restricted": "Kogukonna liikmed",
             "join_rule_restricted_description": "Kõik lubatud kogukondade liikmed saavad liituda ilma kutseta. <a>Halda kogukondi</a>",
             "join_rule_restricted_description_active_space": "Kõik <spaceName/> kogukonna liikmed võivad liituda.",
@@ -2345,9 +2365,9 @@
             "join_rule_restricted_dialog_description": "Kogukonnad, mille liikmed saavad <RoomName/> jututoaga liituda ilma kutseta.",
             "join_rule_restricted_dialog_empty_warning": "Sa oled eemaldamas kõiki lubatud kogukondi. Edaspidine ligipääs eeldab vaikimisi kutse olemasolu",
             "join_rule_restricted_dialog_filter_placeholder": "Otsi kogukondi",
-            "join_rule_restricted_dialog_heading_known": "Sinu kogukonnad, kus pole seda jututuba",
+            "join_rule_restricted_dialog_heading_known": "Sinu kogukonnad, kus pole seda jututuba/vestlust",
             "join_rule_restricted_dialog_heading_other": "Muud kogukonnad, mille liige sa ei ole",
-            "join_rule_restricted_dialog_heading_room": "Sinu kogukonnad, kus on see jututuba",
+            "join_rule_restricted_dialog_heading_room": "Sinu kogukonnad, kus leiduv see jututuba/vestlus",
             "join_rule_restricted_dialog_heading_space": "Sulle teadaolevad kogukonnad, millesse kuulub see kogukond",
             "join_rule_restricted_dialog_heading_unknown": "Ilmselt on tegemist nendega, mille liikmed on teiste jututubade haldajad.",
             "join_rule_restricted_dialog_title": "Halda kogukondi",
@@ -2359,8 +2379,8 @@
                 "one": "Hetkel on ühel kogukonnal ligipääs",
                 "other": "Hetkel on %(count)s-l kogukonnal ligipääs"
             },
-            "join_rule_restricted_upgrade_description": "Antud uuendusega on valitud kogukondade liikmetel võimalik selle jututoaga liituda ilma kutseta.",
-            "join_rule_restricted_upgrade_warning": "See jututuba on mõne sellise kogukonna osa, kus sul pole haldaja õigusi. Selliselt juhul vana jututuba jätkuvalt kuvatakse, kuid selle asutajatele pakutakse võimalust uuega liituda.",
+            "join_rule_restricted_upgrade_description": "Antud uuendusega on valitud kogukondade liikmetel võimalik selle jututoaga/vestlusega liituda ilma kutseta.",
+            "join_rule_restricted_upgrade_warning": "See jututuba/vestlus on mõne sellise kogukonna osa, kus sul pole haldaja õigusi. Selliselt juhul neis kogukondades vana jututuba/vestlust jätkuvalt kuvatakse, kuid selle kasutajatele pakutakse võimalust uuega liituda.",
             "join_rule_upgrade_awaiting_room": "Laadin uut jututuba",
             "join_rule_upgrade_required": "Vajalik on uuendus",
             "join_rule_upgrade_sending_invites": {
@@ -2580,7 +2600,7 @@
             "add_email_dialog_title": "Lisa e-posti aadress",
             "add_email_failed_verification": "E-posti aadressi kontrollimine ei õnnestunud: palun vaata, et sa kindlasti klõpsisid saabunud kirjas olnud viidet",
             "add_email_instructions": "Sinu aadressi kontrollimiseks saatsime sulle e-kirja. Palun järgi kirjas näidatud juhendit ja siis klõpsi alljärgnevat nuppu.",
-            "add_msisdn_confirm_body": "Klõpsi järgnevat nuppu telefoninumbri lisamise kinnitamiseks.",
+            "add_msisdn_confirm_body": "Selle telefoninumbri lisamise kinnitamiseks klõpsi järgnevat nuppu.",
             "add_msisdn_confirm_button": "Kinnita telefoninumbri lisamine",
             "add_msisdn_confirm_sso_button": "Kinnita selle telefoninumbri lisamine kasutades oma isiku tuvastamiseks ühekordset sisselogimist (Single Sign On).",
             "add_msisdn_dialog_title": "Lisa telefoninumber",
@@ -2595,7 +2615,7 @@
             "avatar_upload_error_text": "Failivormingu tugi puudub või fail on suurem, kui %(size)s.",
             "avatar_upload_error_text_generic": "See failivorming ei pruugi olla toetatud.",
             "avatar_upload_error_title": "Tunnuspildi faili üleslaadimine ei õnnestunud",
-            "confirm_adding_email_body": "Klõpsi järgnevat nuppu e-posti aadressi lisamise kinnitamiseks.",
+            "confirm_adding_email_body": "Klõpsi järgnevat nuppu selle e-posti aadressi lisamise kinnitamiseks.",
             "confirm_adding_email_title": "Kinnita e-posti aadressi lisamine",
             "deactivate_confirm_body": "Kas sa oled kindel, et soovid oma konto sulgeda? Seda tegevust ei saa hiljem tagasi pöörata.",
             "deactivate_confirm_body_sso": "Kinnitamaks seda, et soovid oma konto kasutusest eemaldada, kasuta oma isiku tuvastamiseks ühekordset sisselogimist.",
@@ -2621,7 +2641,7 @@
             "email_address_in_use": "See e-posti aadress on juba kasutusel",
             "email_address_label": "E-posti aadress",
             "email_not_verified": "Sinu e-posti aadress pole veel verifitseeritud",
-            "email_verification_instructions": "Klõpsi saabunud e-kirjas olevat verifitseerimisviidet ning seejärel klõpsi siin uuesti nuppu „Jätka“.",
+            "email_verification_instructions": "Klõpsi saabunud e-kirjas olevat verifitseerimislinki ning seejärel klõpsi siin uuesti nuppu „Jätka“.",
             "emails_heading": "E-posti aadressid",
             "error_add_email": "E-posti aadressi lisamine ebaõnnestus",
             "error_deactivate_communication": "Serveriühenduses tekkis viga. Palun proovi uuesti.",
@@ -2858,7 +2878,12 @@
             "record_session_details": "Sessioonide paremaks tuvastamiseks saad nüüd seadmehalduris salvestada klientrakenduse nime, versiooni ja aadressi",
             "send_analytics": "Saada arendajatele analüütikat",
             "strict_encryption": "Saada sõnumeid vaid verifitseeritud kasutajatele",
-            "tokenizer_mode_language": "Keelepõhine"
+            "tokenizer_mode": "Tookenite kasutusviis otsingus",
+            "tokenizer_mode_change_warning": "Otsingu jaoks mõeldud tookenite kasutusviisi muutmine eeldab olemasoleva indeksi kustutamist. Uus indeks luuakse automaatselt. Kas tahad jätkata?",
+            "tokenizer_mode_language": "Keelepõhine",
+            "tokenizer_mode_language_description": "Ühe keele tugi vastavalt sinu kasutajaliidese keelele. Toimib ainult mõne keelega (inglise, saksa jne).",
+            "tokenizer_mode_ngram": "Sõnamitmik (n-gramm)",
+            "tokenizer_mode_ngram_description": "Toetab kõiki keeli, sealhulgas neid, millel puuduvad sõnapiirid. Toetab erinevaid keeli läbisegi."
         },
         "send_read_receipts": "Saada lugemisteatiseid",
         "send_read_receipts_unsupported": "Sinu koduserver ei võimalda lugemisteatiste keelamist.",
@@ -3238,6 +3263,7 @@
         "join_button_text": "Liitu %(roomAddress)s jututoaga",
         "keyboard_scroll_hint": "Kerimiseks kasuta <arrows/>",
         "messages_label": "Sõnumid",
+        "no_results": "Tulemusi ei leidu",
         "other_rooms_in_space": "Muud jututoad %(spaceName)s kogukonnad",
         "public_rooms_label": "Avalikud jututoad",
         "public_spaces_label": "Avalikud kogukonnad",
@@ -3293,7 +3319,24 @@
     },
     "threads_activity_centre": {
         "a11y": {
-            "default_no_sender": "Ava lugemata sõnumitega jutulõng „%(roomName)s“ jututoas."
+            "default": "Ava „%(roomName)s“ jututoa jutulõng saatjalt „%(sender)s“: %(preview)s, lugemata sõnumitega.",
+            "default_no_sender": "Ava lugemata sõnumitega jutulõng „%(roomName)s“ jututoas.",
+            "mention": {
+                "one": "Ava „%(roomName)s“ jututoa jutulõng saatjalt „%(sender)s“: %(preview)s, ühe lugemata mainimisega.",
+                "other": "Ava „%(roomName)s“ jututoa jutulõng saatjalt „%(sender)s“: %(preview)s, %(count)s lugemata sõnumiga, kus on mainimisi."
+            },
+            "mention_no_sender": {
+                "one": "Ava „%(roomName)s“ jututoa jutulõng ühe lugemata mainimisega.",
+                "other": "Ava „%(roomName)s“ jututoa jutulõng %(count)s lugemata sõnumiga, kus on mainimisi."
+            },
+            "unread": {
+                "one": "Ava „%(roomName)s“ jututoa jutulõng saatjalt „%(sender)s“: %(preview)s, ühe lugemata sõnumiga.",
+                "other": "Ava „%(roomName)s“ jututoa jutulõng saatjalt „%(sender)s“: %(preview)s, %(count)s lugemata sõnumiga."
+            },
+            "unread_no_sender": {
+                "one": "Ava ühe lugemata sõnumiga jutulõng „%(roomName)s“ jututoas.",
+                "other": "Ava %(count)s lugemata sõnumiga jutulõng „%(roomName)s“ jututoas."
+            }
         },
         "header": "Jutulõngade ülevaade",
         "my_threads_tab": "Minu jutulõngad",
@@ -3422,12 +3465,12 @@
         },
         "m.room.canonical_alias": {
             "alt_added": {
-                "other": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s.",
-                "one": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s."
+                "one": "%(senderName)s lisas sellele jututoale/vestlusele täiendava aadressi %(addresses)s.",
+                "other": "%(senderName)s lisas sellele jututoale/vestlusele täiendavad aadressid %(addresses)s."
             },
             "alt_removed": {
-                "other": "%(senderName)s eemaldas täiendavad aadressid %(addresses)s sellelt jututoalt.",
-                "one": "%(senderName)s eemaldas täiendava aadressi %(addresses)s sellelt jututoalt."
+                "one": "%(senderName)s eemaldas täiendava aadressi %(addresses)s sellelt jututoalt/vestluselt.",
+                "other": "%(senderName)s eemaldas täiendavad aadressid %(addresses)s sellelt jututoalt/vestluselt."
             },
             "changed": "%(senderName)s muutis selle jututoa/vestluse aadresse.",
             "changed_alternative": "%(senderName)s muutis selle vestluse/jututoa alternatiivseid aadresse.",
@@ -3476,6 +3519,8 @@
             "kick": "%(senderName)s eemaldas kasutaja %(targetName)s",
             "kick_reason": "%(senderName)s eemaldas kasutaja %(targetName)s: %(reason)s",
             "knock": "%(senderName)s soovib liituda",
+            "knock_accepted": "%(senderName)s lubas ligipääsu kasutajale %(targetName)s",
+            "knock_denied": "%(senderName)s lükkas tagasi liitumispalve kasutajalt %(targetName)s",
             "knock_reason": "%(senderName)s soovib liituda ja märkis põhjuseks: %(reason)s",
             "knock_retracted": "%(targetName)s võttis oma liitumispalve tagasi",
             "left": "%(targetName)s lahkus jututoast",
@@ -3667,6 +3712,22 @@
                 "one": "said juurdepääsu",
                 "other": "said juurdepääsu %(count)s korda"
             },
+            "knock_denied": {
+                "one": ": liitumispalve lükati tagasi",
+                "other": ": liitumispalve lükati tagasi %(count)s korda"
+            },
+            "knock_denied_multiple": {
+                "one": ": liitumispalve lükati tagasi",
+                "other": ": liitumispalve lükati tagasi %(count)s korda"
+            },
+            "knock_retracted": {
+                "one": "%(oneUser)s tühistas oma liitumispalve",
+                "other": "%(oneUser)s tühistas oma liitumispalve %(count)s korda"
+            },
+            "knock_retracted_multiple": {
+                "one": "%(severalUsers)s tühistasid oma liitumispalved",
+                "other": "%(severalUsers)s tühistasid oma liitumispalved %(count)s korda"
+            },
             "knocked": {
                 "one": "%(oneUser)s palun liitumise võimalust",
                 "other": "%(oneUser)s palun liitumise võimalust %(count)s korda"
@@ -3778,7 +3839,7 @@
         "title": "Luba külalistel selle jututoaga liituda"
     },
     "upload_failed_generic": "Faili '%(fileName)s' üleslaadimine ei õnnestunud.",
-    "upload_failed_size": "Faili '%(fileName)s' suurus ületab serveris seadistatud üleslaadimise piiri",
+    "upload_failed_size": "„%(fileName)s“ faili suurus ületab seadistatud üleslaadimise piiri",
     "upload_failed_title": "Üleslaadimine ei õnnestunud",
     "upload_file": {
         "cancel_all_button": "Tühista kõik",
