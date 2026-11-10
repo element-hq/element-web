@@ -8,7 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { type Locator, type Page } from "@playwright/test";
-import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+import {
+    closeReleaseAnnouncementIfExists,
+    rejectToast,
+    rejectToastIfExists,
+} from "@element-hq/element-web-playwright-common";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -230,6 +234,39 @@ test.describe("Element Call", () => {
                 // voice call does that)
                 await expect(page.getByTestId("widget-pip-container")).not.toBeVisible();
             });
+        });
+
+        test("should still show a call in progress after reloading", async ({ page, bot, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+            // Bob starts a call; Alice is not a participant
+            await sendRTCState(bot, room.roomId, undefined, "video");
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+
+            // The bug only happens when Bob's membership is loaded from the sync cache on reload. If it arrives
+            // from the server instead, the call is found as normal. So we need the membership in the cache, which
+            // takes two steps.
+
+            // Step 1: get Bob's membership into the client's in-memory sync data. The client adds a sync response
+            // to it only after updating the UI, so the Join button showing isn't enough. Once a later sync (this
+            // message) is shown, the earlier one has been added.
+            await bot.sendMessage(room.roomId, "Is anyone else joining?");
+            await expect(page.getByTestId("timeline").getByText("Is anyone else joining?")).toBeVisible();
+
+            // Step 2: write the sync data to IndexedDB. The client otherwise only does this on the first sync after
+            // loading and then every 5 minutes, so the cache wouldn't contain Bob's membership yet.
+            await app.client.evaluate((client) => client.store.save(true));
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+            await app.viewRoomById(room.roomId);
+
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+            await expect(
+                page.getByRole("option", { name: "Open room TestRoom, video call in progress." }),
+            ).toBeVisible();
         });
 
         test("should show the call state in the room list message preview", async ({ page, bot, room, app }) => {
