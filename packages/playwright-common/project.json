@@ -6,7 +6,7 @@
         "build:playwright": {
             "cache": true,
             "command": "tsc -p tsconfig.build.json",
-            "inputs": ["src"],
+            "inputs": ["production", "buildConfig"],
             "outputs": ["{projectRoot}/lib"],
             "options": { "cwd": "packages/playwright-common" },
             "dependsOn": ["^build"]
