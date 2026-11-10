@@ -49,7 +49,19 @@
         }
     },
     "devtools": {
-        "toggle_event": "lülita sündmus sisse/välja"
+        "custom_themes": {
+            "add": "Lisa kohandatud kujundus",
+            "downloading": "Laadin alla kohandatud kujundust…",
+            "error_already_installed": "Sellise nimega kujundus on juba paigaldatud.",
+            "error_downloading": "Viga kujunduse allalaadimisel",
+            "error_invalid": "Vigane kujunduse skeema.",
+            "error_save_failed": "Muudatuse salvestamine ei õnnestunud. Aga taustal võib see veel õnnestuda.",
+            "help": "Sisesta kohandatud kujunduse võrguaadress.",
+            "installed_heading": "Paigaldatud kohandatud kujundused",
+            "refresh": "Laadi kujundus uuesti alla",
+            "url_label": "Kohandatud kujunduse võrguaadress"
+        },
+        "toggle_event": "Sündmuse lähtekood"
     },
     "emoji": {
         "categories": "Kategooriad",
@@ -112,8 +124,8 @@
         "pinned_message_badge": "Esiletõstetud sõnum",
         "status_bar": {
             "delete_all": "Kustuta kõik",
-            "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",
-            "exceeded_resource_limit_title": "Kuna see koduserver on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
+            "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenusepakkujaga.",
+            "exceeded_resource_limit_title": "Kuna see teenusepakkuja on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
             "failed_to_create_room_title": "Selle kasutajaga ei õnnestunud alustada vestlust",
             "homeserver_blocked_title": "Kuna see koduserver on peakasutaja või haldaaja poolt blokeerinud, siis sinu sõnum on saatmata.",
             "monthly_user_limit_reached_title": "Sinu sõnum on saatmata, kuna see koduserver on saavutanud oma igakuise aktiivsete kasutajate ülempiiri.",
@@ -149,8 +161,8 @@
                 "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
             },
             "unsent_message": "Ava „%(roomName)s“ jututuba saatmata sõnumiga.",
-            "video_call": "Ava %(roomName)s jututuba, kus on pooleli videokõne",
-            "voice_call": "Ava %(roomName)s jututuba, kus on pooleli häälkõne"
+            "video_call": "Ava %(roomName)s jututuba, kus on pooleli videokõne.",
+            "voice_call": "Ava %(roomName)s jututuba, kus on pooleli häälkõne."
         },
         "appearance": "Välimus",
         "chat_moved": "Vestlus on tõstetud mujale",
@@ -201,6 +213,7 @@
         "room_options": "Jututoa valikud",
         "section_created": "Jaotis on loodud",
         "section_creation": {
+            "description": "Jaotised on vaid sinu jaoks",
             "label": "Jaotise nimi"
         },
         "section_header": {
@@ -227,6 +240,8 @@
         "set_status": {
             "away": "Eemal",
             "be_right_back": "Tulen kohe tagasi",
+            "choose_emoji": "Vali emoji",
+            "custom": "Kohandatud…",
             "focus_time": "Keskendumisaeg",
             "in_a_meeting": "Koosolekul",
             "on_the_road": "Olen liikumises",

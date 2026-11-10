@@ -38,6 +38,8 @@
         "create_a_room": "Luo huone",
         "create_account": "Luo tili",
         "decline": "Hylkää",
+        "decline_and_block": "Hylkää ja estä",
+        "decline_invite": "Hylkää kutsu",
         "delete": "Poista",
         "deny": "Estä",
         "disable": "Poista käytöstä",
@@ -74,6 +76,7 @@
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
         "no": "Ei",
+        "not_now": "Ei nyt",
         "ok": "OK",
         "open": "Avaa",
         "pin": "Kiinnitä",
@@ -96,6 +99,7 @@
         "revoke": "Kumoa",
         "save": "Tallenna",
         "search": "Haku",
+        "select_to_copy": "Valitse kopioidaksesi",
         "send_report": "Lähetä ilmoitus",
         "set_avatar": "Aseta profiilikuva",
         "share": "Jaa",
@@ -104,6 +108,7 @@
         "show_all": "Näytä kaikki",
         "sign_in": "Kirjaudu sisään",
         "sign_out": "Poista tämä laite",
+        "sign_out_before_verify": "Kirjaudu ulos",
         "skip": "Ohita",
         "start": "Aloita",
         "stop": "Pysäytä",
@@ -127,6 +132,7 @@
         "view_message": "Näytä viesti",
         "view_source": "Näytä lähdekoodi",
         "yes": "Kyllä",
+        "yes_dismiss": "Kyllä, hylkää",
         "zoom_in": "Lähennä",
         "zoom_out": "Loitonna"
     },
@@ -201,7 +207,12 @@
         "incorrect_password": "Virheellinen salasana",
         "log_in_new_account": "<a>Kirjaudu</a> uudelle tilillesi.",
         "logout_dialog": {
+            "check_recovery_key": "Tarkista palautusavaimesi",
+            "check_recovery_key_title": "Varmista, että palautusavaimesi on tallessa ennen tämän laitteen poistamista",
+            "continue": "Jatka tämän laitteen poistamista",
             "description": "Haluatko varmasti poistaa tämän laitteen?",
+            "keep_access_description": "Varmista, että sinulla on toinen vahvistettu laite tai palautusavaimesi käytettävissä, jotta et menetä salattua keskusteluhistoriaasi.",
+            "key_checked_title": "",
             "setup_key_backup_title": "Olet menettämässä pääsyn salattuihin keskusteluihisi",
             "skip_key_backup": "Poista tämä laite silti"
         },
@@ -312,7 +323,7 @@
         "server_picker_title_default": "Palvelinasetukset",
         "server_picker_title_registration": "Ylläpidä tiliä osoitteessa",
         "session_logged_out_description": "Turvallisuussyistä tämä laite on poistettu. Ole hyvä ja kirjaudu sisään uudelleen.",
-        "session_logged_out_title": "Istunto poistettu",
+        "session_logged_out_title": "Laite poistettu",
         "set_email": {
             "description": "Tämä sallii sinun uudelleenalustaa salasanasi ja vastaanottaa ilmoituksia.",
             "verification_pending_description": "Ole hyvä ja tarkista sähköpostisi ja seuraa sen sisältämää linkkiä. Kun olet valmis, napsauta Jatka.",
@@ -384,6 +395,7 @@
         "downloading_logs": "Ladataan lokeja",
         "error_empty": "Kerro mikä meni pieleen, tai, mikä parempaa, luo GitHub-issue joka kuvailee ongelman.",
         "failed_send_logs_causes": {
+            "rejected_recovery_key": "Virheraporttisi hylättiin turvallisuussyistä, koska se sisälsi palautusavaimen.",
             "unknown_error": "Lokien lähettäminen epäonnistui."
         },
         "github_issue": "GitHub-issue",
@@ -459,7 +471,7 @@
         "guest": "Vieras",
         "help": "Ohje",
         "home": "Etusivu",
-        "homeserver": "Kotipalvelin",
+        "homeserver": "Palveluntarjoaja",
         "identity_server": "Identiteettipalvelin",
         "image": "Kuva",
         "integration_manager": "Integraatiohallinta",
@@ -523,6 +535,7 @@
         "settings": "Asetukset",
         "setup_secure_messages": "Ota käyttöön salatut viestit",
         "show_more": "Näytä lisää",
+        "skip": "Ohita",
         "someone": "Joku",
         "space": "Tila",
         "spaces": "Tilat",
@@ -636,6 +649,9 @@
         "unfederated_label_default_on": "Voi olla paikallaan poistaa tämä käytöstä, jos huonetta käyttävät myös ulkoiset tiimit joilla on oma kotipalvelimensa. Asetusta ei voi muuttaa myöhemmin.",
         "unsupported_version": "Palvelin ei tue määritettyä huoneversiota."
     },
+    "create_section_dialog": {
+        "list_title": "Ehdotettu"
+    },
     "create_space": {
         "add_details_prompt": "Lisää joitain tietoja, jotta ihmiset tunnistavat sen.",
         "add_details_prompt_2": "Voit muuttaa näitä koska tahansa.",
@@ -678,7 +694,7 @@
         "subspace_dropdown_title": "Luo tila",
         "subspace_existing_space_prompt": "Haluatko sen sijaan lisätä olemassa olevan tilan?",
         "subspace_join_rule_invite_description": "Vain kutsutut ihmiset voivat löytää tämän tilan ja liittyä siihen.",
-        "subspace_join_rule_invite_only": "Yksityinen tila (vain kutsulla)",
+        "subspace_join_rule_invite_only": "Vain kutsutut",
         "subspace_join_rule_label": "Tilan näkyvyys",
         "subspace_join_rule_public_description": "Kuka tahansa voi löytää tämän tilan ja liittyä siihen, ei pelkästään tilan <SpaceName/> jäsenet.",
         "subspace_join_rule_restricted_description": "Kuka tahansa tilassa <SpaceName/> voi liittyä."
@@ -699,10 +715,15 @@
         "caution_colon": "Varoitus:",
         "client_versions": "Asiakasversiot",
         "crypto": {
+            "cross_signing_public_keys_on_device": "muistissa",
+            "device_id": "Laitteen tunnus",
+            "secret_storage_ready": "valmis",
             "title": "Päästä päähän -salaus"
         },
         "developer_mode": "Kehittäjätila",
         "developer_tools": "Kehittäjätyökalut",
+        "device_id": "Laitteen tunnus: %(deviceId)s",
+        "device_keys": "Laitteen avaimet",
         "edit_setting": "Muokkaa asetusta",
         "edit_values": "Muokkaa arvoja",
         "event_content": "Tapahtuman sisältö",
@@ -741,6 +762,8 @@
         "title": "Kehittäjätyökalut",
         "toolbox": "Työkalut",
         "use_at_own_risk": "Tämä käyttöliittymä EI tarkista arvojen tyyppejä. Käytä omalla vastuullasi.",
+        "user_identity_unknown": "Tuntematon",
+        "users": "Käyttäjät",
         "value": "Arvo",
         "value_colon": "Arvo:",
         "value_in_this_room": "Arvo tässä huoneessa",
@@ -748,6 +771,9 @@
         "widget_screenshots": "Ota sovelmien kuvankaappaukset käyttöön tuetuissa sovelmissa"
     },
     "dialog_close_label": "Sulje dialogi",
+    "document_viewer": {
+        "title": "Asiakirja"
+    },
     "download_completed": "Lataus valmis",
     "empty_room": "Tyhjä huone",
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
@@ -757,6 +783,7 @@
                 "wrong_security_key": "Antamasi palautusavain on virheellinen."
             },
             "restoring": "Palautetaan avaimia varmuuskopiosta",
+            "security_key_label": "Palautusavain",
             "security_key_title": "Anna palautusavaimesi"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
@@ -778,7 +805,7 @@
         "messages_not_secure": {
             "cause_1": "Kotipalvelimesi",
             "cause_3": "Sinun tai toisen osapuolen internet-yhteys",
-            "cause_4": "Sinun tai toisen osapuolen istunto",
+            "cause_4": "Sinun tai toisen osapuolen laite",
             "heading": "Jokin seuraavista saattaa olla vaarantunut:",
             "title": "Viestisi eivät ole turvassa"
         },
@@ -836,6 +863,7 @@
             "unverified_sessions_toast_description": "Katselmoi varmistaaksesi, että tilisi on turvassa",
             "unverified_sessions_toast_reject": "Myöhemmin",
             "unverified_sessions_toast_title": "Sinulla on vahvistamattomia istuntoja",
+            "use_recovery_key": "Käytä palautusavainta",
             "verification_dialog_title_device": "Vahvista toinen laite",
             "verification_dialog_title_user": "Varmennuspyyntö",
             "verification_success_with_backup": "Uusi laitteesi on nyt vahvistettu. Laitteella on pääsy salattuihin viesteihisi, ja muut käyttäjät näkevät sen luotettuna.",
@@ -1350,6 +1378,7 @@
         "keyword": "Avainsana",
         "keyword_new": "Uusi avainsana",
         "level_activity": "Aktiivisuus",
+        "level_muted": "Mykistetty",
         "level_none": "Ei mitään",
         "level_notification": "Ilmoitus",
         "mark_all_read": "Merkitse kaikki luetuiksi",
@@ -1371,6 +1400,9 @@
         "send_dm": "Lähetä yksityisviesti",
         "welcome_detail": "Autetaanpa sinut alkuun",
         "welcome_user": "Tervetuloa, %(name)s"
+    },
+    "pdf_viewer": {
+        "title": "PDF-tiedosto"
     },
     "pill": {
         "permalink_other_room": "Viesti huoneessa %(room)s",
@@ -1396,6 +1428,7 @@
         "options_heading": "Luo vaihtoehdot",
         "options_label": "Vaihtoehto %(number)s",
         "options_placeholder": "Kirjoita vaihtoehto",
+        "poll_label": "Kysely",
         "topic_heading": "Mikä on kyselysi kysymys tai aihe?",
         "topic_label": "Kysymys tai aihe",
         "topic_placeholder": "Kirjoita joitain…",
@@ -1417,6 +1450,7 @@
     },
     "power_level": {
         "admin": "Ylläpitäjä",
+        "creator": "Omistaja",
         "custom": "Mukautettu (%(level)s)",
         "custom_level": "Mukautettu taso",
         "default": "Oletus",
@@ -1592,6 +1626,7 @@
             "room_is_public": "Tämä huone on julkinen"
         },
         "header_avatar_open_settings_label": "Avaa huoneen asetukset",
+        "header_face_pile_tooltip": "Ihmiset",
         "inaccessible": "Tämä huone tai tila ei ole käytettävissä juuri tällä hetkellä.",
         "inaccessible_name": "%(roomName)s ei ole saatavilla tällä hetkellä.",
         "inaccessible_subtitle_1": "Yritä myöhemmin uudelleen tai pyydä huoneen tai tilan ylläpitäjää tarkistamaan, onko sinulla pääsyoikeus.",
@@ -1695,6 +1730,11 @@
             "leave_room": "Poistu huoneesta"
         },
         "notification_options": "Ilmoitusasetukset",
+        "section": {
+            "chats": "Keskustelut",
+            "favourites": "Suosikit",
+            "invites": "Kutsut"
+        },
         "show_less": "Näytä vähemmän"
     },
     "room_settings": {
@@ -1865,6 +1905,7 @@
             "join_rule_description": "Päätä ketkä voivat liittyä huoneeseen %(roomName)s.",
             "join_rule_invite": "Vain kutsutut",
             "join_rule_invite_description": "Vain kutsutut ihmiset voivat liittyä.",
+            "join_rule_public": "Kuka tahansa",
             "join_rule_public_description": "Kuka tahansa voi liittyä.",
             "join_rule_restricted": "Tilan jäsenet",
             "join_rule_restricted_description": "Kuka tahansa valtuutetuissa tiloissa liittyä ilman kutsua. <a>Hallitse tiloja</a>",
@@ -2027,6 +2068,8 @@
                 "change_recovery_confirm_title": "Anna uusi palautusavain",
                 "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
+                "check_error": "Väärä palautusavain",
+                "check_title": "Tarkista palautusavaimesi",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
@@ -2353,7 +2396,7 @@
                 "one": "Poista %(count)s istunto",
                 "other": "Poista %(count)s istuntoa"
             },
-            "title": "Istunnot",
+            "title": "Laitteet",
             "unknown_session": "Tuntematon istunnon tyyppi",
             "unverified_session": "Vahvistamaton istunto",
             "unverified_session_explainer_1": "Tämä istunto ei tue salausta, joten sitä ei voi vahvistaa.",
@@ -2390,6 +2433,10 @@
             "metaspaces_video_rooms_description": "Ryhmitä kaikki yksityiset videohuoneet ja konferenssit.",
             "spaces_explainer": "Tilat ovat tapa ryhmitellä huoneita ja ihmisiä. Voit käyttää nykyisten tilojesi lisäksi esivalmisteltuja tiloja.",
             "title": "Sivupalkki"
+        },
+        "start_automatically": {
+            "disabled": "Ei",
+            "enabled": "Kyllä"
         },
         "use_12_hour_format": "Näytä aikaleimat 12 tunnin muodossa (esim. 2:30pm)",
         "use_command_enter_send_message": "Komento + Enter lähettää viestin",
@@ -3121,6 +3168,7 @@
         "error_mute_user": "Käyttäjän mykistäminen epäonnistui",
         "error_revoke_3pid_invite_description": "Kutsun kumoaminen epäonnistui. Kyseessä saattaa olla väliaikainen ongelma tai sinulla ei ole tarvittavia oikeuksia kutsun kumoamiseen.",
         "error_revoke_3pid_invite_title": "Kutsun kumoaminen epäonnistui",
+        "ignore_button": "Sivuuta",
         "ignore_confirm_description": "Kaikki tämän käyttäjän lähettämät viestit ja kutsut sivuutetaan. Haluatko varmasti sivuuttaa hänet?",
         "ignore_confirm_title": "Sivuuta %(user)s",
         "invited_by": "Kutsuttu henkilön %(sender)s toimesta",
