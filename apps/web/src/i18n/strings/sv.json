@@ -1534,8 +1534,6 @@
         "currently_experimental": "För närvarande experimentellt.",
         "document_previews": "Förhandsvisningar av experimentella dokument",
         "document_previews_description": "Öppna PDF- och Markdown-bilagor i den högra panelen.",
-        "dynamic_room_predecessors": "Dynamiska rumsföregångare",
-        "dynamic_room_predecessors_description": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
         "element_call_video_rooms": "Element Call videorum",
         "encrypted_state_events": "Krypterade tillståndshändelser (MSC4362)",
         "encrypted_state_events_description": "Aktiverar experimentellt stöd för encryption av tillståndshändelser, vilket döljer metadata som rumsnamn och rumsbeskrivningar från servern. Denna metadata kommer även att döljas för personer som ansluter sig till rummen senare, samt för personer vars klienter inte stöder MSC4362.",
@@ -2987,7 +2985,6 @@
             "web_session": "Webbläsare"
         },
         "show_avatar_changes": "Visa profilbildsbyten",
-        "show_breadcrumbs": "Visa genvägar till nyligen visade rum över rumslistan",
         "show_chat_effects": "Visa chatteffekter (animeringar när du tar emot t.ex. konfetti)",
         "show_displayname_changes": "Visa visningsnamnsändringar",
         "show_join_leave": "Visa gå med/lämna-meddelanden (inbjudningar/borttagningar/banningar påverkas inte)",

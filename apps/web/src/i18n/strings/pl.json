@@ -1548,8 +1548,6 @@
         "currently_experimental": "Aktualnie eksperymentalne.",
         "document_previews": "Eksperymentalne podglądanie dokumentów",
         "document_previews_description": "Otwórz załączniki PDF i Markdown w prawym panelu.",
-        "dynamic_room_predecessors": "Dynamiczne poprzedniki pokoju",
-        "dynamic_room_predecessors_description": "Włącz MSC3946 (dla opóźnionych archiwów pokoju)",
         "element_call_video_rooms": "Pokoje rozmów wideo Element Call",
         "encrypted_state_events": "Szyfrowane zdarzenia stanowe (MSC4362)",
         "encrypted_state_events_description": "Włącza eksperymentalne wsparcie dla szyfrowania zdarzeń stanowych, które ukrywa przed serwerem metadane, takie jak nazwy pokoi i tematy. Te metadane będą również ukryte przed osobami dołączającymi do pokoi później oraz osobami, których klient nie obsługuje standardu MSC4362.",
@@ -3030,7 +3028,6 @@
             "web_session": "Przeglądarka"
         },
         "show_avatar_changes": "Pokaż zmiany zdjęcia profilowego",
-        "show_breadcrumbs": "Pokazuj skróty do ostatnio wyświetlonych pokojów nad listą pokojów",
         "show_chat_effects": "Pokaż efekty czatu (animacje po odebraniu np. confetti)",
         "show_displayname_changes": "Pokaż zmiany wyświetlanej nazwy",
         "show_join_leave": "Pokaż wiadomości dołączenia/opuszczenia pokoju (nie dotyczy wiadomości zaproszenia/wyrzucenia/banów)",
