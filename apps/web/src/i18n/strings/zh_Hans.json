@@ -281,6 +281,8 @@
             "tap_avatar_link_new_device": "点击头像并选择“%(linkNewDevice)s”",
             "unsupported_explainer": "你的账户提供者不支持通过二维码登录到新设备。",
             "unsupported_heading": "二维码不受支持",
+            "verification_uri_explainer": "将在新标签页中打开账户提供者网页。请在该处批准登录，然后返回此标签页。",
+            "verification_uri_heading": "使用你的账户提供者批准登录",
             "waiting_for_device": "正在等待其他设备"
         },
         "register_action": "创建账户",
@@ -2511,6 +2513,8 @@
                 "breadcrumb_description": "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_description_no_verification_method": "你没有其它已验证的设备或恢复密钥，因此你需要重置数字身份才能继续使用该 app。",
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
+                "breadcrumb_first_description_no_encrypted_devices": "看起来你暂无任何聊天记录。如果情况属实，你可以安全地继续重置数字身份。",
+                "breadcrumb_fourth_description": "你所有已登录的设备都需要重新确认。",
                 "breadcrumb_page": "重置加密",
                 "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的加密聊天历史",
                 "breadcrumb_third_description": "其他用户将会看到你已重置数字身份。",
