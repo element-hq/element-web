@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type {
+    AgentContactInstructions,
     AgentModel,
     AgentProvider,
     AgentReplyRequest,
@@ -37,6 +38,10 @@ export interface AgentApi {
      * @returns the rooms the agent replies in afterwards
      */
     setRoom(userId: string, roomId: string, enabled: boolean): Promise<AgentResult<string[]>>;
+    /** Get the instructions for a chat partner, kept by the platform in a Markdown file of their own */
+    getContactInstructions(contactId: string): Promise<AgentResult<AgentContactInstructions>>;
+    /** Save the instructions for a chat partner; empty instructions delete the file */
+    setContactInstructions(contactId: string, text: string): Promise<AgentResult<AgentContactInstructions>>;
     /** Write the next message of the user in a direct message */
     generateReply(request: AgentReplyRequest): Promise<AgentResult<string>>;
     /** Suggest replies the user could send next in a chat */

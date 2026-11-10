@@ -72,6 +72,8 @@ describe("AgentReplyListener", () => {
             listModels: vi.fn(),
             getRooms: vi.fn(),
             setRoom: vi.fn(),
+            getContactInstructions: vi.fn(),
+            setContactInstructions: vi.fn(),
             generateReply: vi.fn().mockResolvedValue({ ok: true, data: "Sure, see you tomorrow!" }),
             generateSuggestions: vi.fn(),
         };
@@ -94,6 +96,7 @@ describe("AgentReplyListener", () => {
         expect(agent.generateReply).toHaveBeenCalledWith({
             ownName: "Alice",
             partnerName: "Bob",
+            partnerId: PARTNER,
             turns: [
                 { role: "assistant", text: "Hi Bob" },
                 { role: "user", text: "Are you free tomorrow?" },

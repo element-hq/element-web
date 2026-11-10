@@ -89,6 +89,8 @@ describe("ReplySuggestionsViewModel", () => {
             listModels: vi.fn(),
             getRooms: vi.fn(),
             setRoom: vi.fn(),
+            getContactInstructions: vi.fn(),
+            setContactInstructions: vi.fn(),
             generateReply: vi.fn(),
             generateSuggestions: vi.fn().mockResolvedValue({ ok: true, data: SUGGESTIONS }),
         };
@@ -116,6 +118,17 @@ describe("ReplySuggestionsViewModel", () => {
             ],
         });
         expect(vm!.getSnapshot()).toEqual({ suggestions: SUGGESTIONS, loading: false });
+    });
+
+    it("names the partner of a direct message, so that their own instructions are used", async () => {
+        DMRoomMap.setShared({ getUserIdForRoomId: () => PARTNER } as unknown as DMRoomMap);
+        events.push(message(PARTNER, "Hi"));
+
+        await createViewModel();
+
+        expect(agent.generateSuggestions).toHaveBeenCalledWith(
+            expect.objectContaining({ isDirect: true, partnerId: PARTNER }),
+        );
     });
 
     it("shows placeholders while the suggestions are written", async () => {

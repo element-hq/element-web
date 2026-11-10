@@ -25,6 +25,8 @@ describe("AgentRoomStore", () => {
             listModels: vi.fn(),
             getRooms: vi.fn().mockResolvedValue({ ok: true, data: ["!a:example.org"] }),
             setRoom: vi.fn(async (_userId, roomId, enabled) => ({ ok: true as const, data: enabled ? [roomId] : [] })),
+            getContactInstructions: vi.fn(),
+            setContactInstructions: vi.fn(),
             generateReply: vi.fn(),
             generateSuggestions: vi.fn(),
         };

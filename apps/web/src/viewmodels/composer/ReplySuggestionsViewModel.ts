@@ -159,11 +159,13 @@ export class ReplySuggestionsViewModel
     private async requestSuggestions(agent: AgentApi, eventId: string): Promise<void> {
         const { room, client } = this.props;
         const myUserId = client.getSafeUserId();
+        const partnerId = DMRoomMap.shared()?.getUserIdForRoomId(room.roomId);
         const result = await agent
             .generateSuggestions({
                 ownName: room.getMember(myUserId)?.name ?? myUserId,
                 chatName: room.name,
-                isDirect: Boolean(DMRoomMap.shared()?.getUserIdForRoomId(room.roomId)),
+                isDirect: Boolean(partnerId),
+                partnerId,
                 messages: this.getMessages(),
             })
             .catch((e) => {

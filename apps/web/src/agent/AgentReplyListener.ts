@@ -142,6 +142,7 @@ export class AgentReplyListener {
             const result = await agent.generateReply({
                 ownName: room.getMember(myUserId)?.name ?? myUserId,
                 partnerName: room.getMember(partnerId)?.name ?? partnerId,
+                partnerId,
                 turns,
             });
             if (!result.ok) {
