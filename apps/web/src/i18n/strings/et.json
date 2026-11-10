@@ -1534,8 +1534,6 @@
         "currently_experimental": "Parasjagu katsejärgus.",
         "document_previews": "Dokumentide katseline eelvaade",
         "document_previews_description": "Ava PDF- ja Markdown-failid paremal paanil.",
-        "dynamic_room_predecessors": "Jututoa dünaamilised eellased",
-        "dynamic_room_predecessors_description": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
         "element_call_video_rooms": "Element Call videotoad",
         "encrypted_state_events": "Krüptitud olekusündmused (MSC4362)",
         "encrypted_state_events_description": "Sellega võtad kasutusele olekusündmuste krüptimise, mis võimaldab serverist peita metateabe, nagu jututubade nimed ja teemad. See metateave pole nähtav ka jututoaga hiljem liitujatele ning neile, kelle kliendid ei toeta MSC4362 spetsifikatsiooni.",
@@ -2987,7 +2985,6 @@
             "web_session": "Veebibrauser"
         },
         "show_avatar_changes": "Näita tunnuspildi muudatusi",
-        "show_breadcrumbs": "Näita viimati külastatud jututubade viiteid jututubade loendi kohal",
         "show_chat_effects": "Näita vestluses edevat graafikat (näiteks kui keegi on saatnud serpentiine)",
         "show_displayname_changes": "Näita kuvatava nime muutusi",
         "show_join_leave": "Näita jututubade liitumise ja lahkumise teateid (ei käi kutsete, müksamiste ja keelamiste kohta)",

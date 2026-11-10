@@ -213,7 +213,7 @@
             "back_to_app": "Zurück zur App",
             "check_recovery_key": "Wiederherstellungsschlüssel überprüfen",
             "check_recovery_key_title": "Stelle sicher, dass du Zugriff auf deinen Wiederherstellungsschlüssel hast, bevor du dieses Gerät entfernst",
-            "continue": "Weiter und dieses Gerät entfernen",
+            "continue": "Dieses Gerät entfernen",
             "description": "Bist du sicher, dass du dieses Gerät entfernen möchtest?",
             "generate_recovery_key": "Neuen Wiederherstellungsschlüssel erzeugen",
             "keep_access_description": "Stelle sicher, dass du immer Zugriff auf ein anderes verifiziertes Gerät oder deinen Wiederherstellungsschlüssel hast, damit du deinen verschlüsselten Chatverlauf nicht verlierst.",
@@ -998,7 +998,7 @@
         },
         "pinned_identity_changed": "Die digitale Identität von %(displayName)s (<b>%(userId)s</b>) wurde zurückgesetzt. <a>Mehr erfahren</a>",
         "pinned_identity_changed_no_displayname": "Die digitale Identität von <b>%(userId)s</b> wurde zurückgesetzt. <a>Mehr erfahren</a>",
-        "recovery_key_description": "Deine Chats werden automatisch mit Ende-zu-Ende-Verschlüsselung gesichert. Um diese Sicherung wiederherzustellen und deine digitale Identität zu behalten, wenn du den Zugriff auf alle deine Geräte verlierst, benötigst du deinen Wiederherstellungsschlüssel.",
+        "recovery_key_description": "Deine Chats werden automatisch mit Ende-zu-Ende-Verschlüsselung gesichert. Um dieses Backup wiederherzustellen und deine digitale Identität zu behalten, wenn du den Zugriff auf alle deine Geräte verlierst, benötigst du deinen Wiederherstellungsschlüssel.",
         "recovery_method_removed": {
             "description_1": "Auf diesem Gerät wurde festgestellt, dass deine Sicherheitsphrase und dein Schlüssel für sichere Nachrichten entfernt wurden.",
             "description_2": "Wenn du dies versehentlich getan hast, kannst du auf diesem Gerät „Sichere Nachrichten“ einrichten, die den Nachrichtenverlauf dieses Geräts mit einer neuen Wiederherstellungsmethode erneut verschlüsseln.",
@@ -1023,7 +1023,7 @@
             "complete_action": "Verstanden",
             "complete_description": "Du hast diesen Nutzer erfolgreich verifiziert.",
             "complete_title": "Verifiziert!",
-            "confirm_identity_description": "Verifiziere dieses Gerät, um sichere Nachrichten einzurichten",
+            "confirm_identity_description": "Wähle eine Verifizierungsmethode, um sichere Nachrichten einzurichten.",
             "confirm_identity_title": "Bestätige deine digitale Identität",
             "confirm_the_emojis": "Vergewissere dich, dass die unten stehenden Emojis mit denen auf dem anderen Gerät übereinstimmen.",
             "error_starting_description": "Wir konnten keinen Chat mit dem anderen Nutzer starten.",
@@ -1112,7 +1112,7 @@
         "verification_requested_toast_title": "Verifizierung angefragt",
         "verified_identity_changed": "Die digitale Identität von %(displayName)s (<b>%(userId)s</b>) wurde zurückgesetzt. <a>Mehr erfahren</a>",
         "verified_identity_changed_no_displayname": "Die digitale Identität von <b>%(userId)s</b> wurde zurückgesetzt. <a>Mehr erfahren</a>",
-        "verify_toast_description": "Ab Ende Oktober 2026 können nicht verifizierte Geräte keine Nachrichten mehr senden und empfangen. <a> Weitere Informationen </a>",
+        "verify_toast_description": "Bald können nicht verifizierte Geräte keine Nachrichten mehr senden und empfangen. <a>Mehr erfahren</a>",
         "verify_toast_title": "Dieses Gerät verifizieren",
         "withdraw_verification_action": "Verifizierung zurückziehen"
     },
@@ -1533,9 +1533,7 @@
         "config_only": "Muss von deinem Kontoanbieter in der config.json aktiviert werden.",
         "currently_experimental": "Aktuell experimentell.",
         "document_previews": "Experimentelle Dokumentvorschau",
-        "document_previews_description": "PDF- und Markdown-Anhänge in der rechten Seitenleiste öffnen.",
-        "dynamic_room_predecessors": "Veränderbare Chat Vorgänger",
-        "dynamic_room_predecessors_description": "MSC3946 aktivieren (zur Verknüpfung von Chat Archiven nach der Chat Erstellung)",
+        "document_previews_description": "Öffnet PDF- und Markdown-Anhänge in der rechten Seitenleiste.",
         "element_call_video_rooms": "Element Call-Videochats",
         "encrypted_state_events": "Verschlüsselte State-Events (MSC4362)",
         "encrypted_state_events_description": "Aktiviert die experimentelle Unterstützung für die Verschlüsselung von State-Events. Dadurch werden Metadaten wie Chatname und Thema vor dem Server verborgen. Sie bleiben außerdem für Personen verborgen, die dem Chat später beitreten, sowie für Personen, deren Clients MSC4362 nicht unterstützen.",
@@ -1546,7 +1544,7 @@
         "extended_profiles_msc_support": "Erfordert die Unterstützung von MSC4133 durch den Server",
         "feature_element_call_react": "Element Call als React-Komponente statt als Widget darstellen",
         "feature_matrixrtc_slots": "Offene MatrixRTC-Slots für Element Call-Anrufe voraussetzen",
-        "feature_matrixrtc_slots_description": "Erlaubt das Starten oder Beitreten von Element Call-Anrufen nur mit einem gültigen Slot-State-Event im Chat.",
+        "feature_matrixrtc_slots_description": "Erlaubt das Starten von und den Beitritt zu Element Call-Anrufen nur mit einem gültigen Slot-State-Event im Chat.",
         "feature_retention": {
             "description": "Entfernt Nachrichten automatisch aus einem Chat, sobald die konfigurierte Aufbewahrungsfrist erreicht ist. Unterstützt derzeit nur das Lesen der Einstellungen.",
             "disabled_sliding_sync": "Die Aufbewahrungsfrist kann nicht aktiviert werden, solange Sliding Sync aktiviert ist.",
@@ -1993,7 +1991,7 @@
             "mark_read": "Als gelesen markieren",
             "mark_unread": "Als ungelesen markieren",
             "notifications_default": "Standardeinstellung verwenden",
-            "notifications_mute": "Chat stumm stellen",
+            "notifications_mute": "Chat stummschalten",
             "title": "Chatoptionen",
             "unfavourite": "Favorisiert"
         },
@@ -2525,16 +2523,16 @@
         "enable_markdown_description": "Beginne Nachrichten mit <code>/plain</code>, um sie ohne Markdown zu senden.",
         "encryption": {
             "advanced": {
-                "breadcrumb_alert_cant_confirm": "Setze deine digitale Identität nur zurück, wenn du keinen Zugriff auf ein anderes verifiziertes Gerät und deinen Wiederherstellungsschlüssel nicht hast.",
-                "breadcrumb_description": "Wenn du keinen Zugriff auf andere verifizierte Geräte hast und deinen Wiederherstellungsschlüssel nicht hast, musst du deine digitale Identität zurücksetzen, um die App weiter nutzen zu können.",
-                "breadcrumb_description_no_verification_method": "Du hast keinen Zugriff auf andere verifizierte Geräte oder einen Wiederherstellungsschlüssel. Daher musst du deine digitale Identität zurücksetzen, um die App weiter nutzen zu können. ",
-                "breadcrumb_first_description": "Deine Kontodaten, Kontakte, Einstellungen und Chatlisten werden gespeichert",
-                "breadcrumb_first_description_no_encrypted_devices": "Anscheinend hast du noch keine Chats. Wenn das stimmt, kannst du deine digitale Identität bedenkenlos zurücksetzen",
+                "breadcrumb_alert_cant_confirm": "Setze deine digitale Identität nur zurück, wenn du weder Zugriff auf ein anderes verifiziertes Gerät noch deinen Wiederherstellungsschlüssel hast.",
+                "breadcrumb_description": "Wenn du weder Zugriff auf andere verifizierte Geräte noch deinen Wiederherstellungsschlüssel hast, musst du deine digitale Identität zurücksetzen, um die App weiter nutzen zu können.",
+                "breadcrumb_description_no_verification_method": "Du hast weder Zugriff auf andere verifizierte Geräte noch einen Wiederherstellungsschlüssel. Daher musst du deine digitale Identität zurücksetzen, um die App weiter nutzen zu können.",
+                "breadcrumb_first_description": "Deine Kontodaten, Kontakte, Einstellungen und Chatliste bleiben erhalten",
+                "breadcrumb_first_description_no_encrypted_devices": "Anscheinend hast du noch keine Chats. Wenn das stimmt, kannst du deine digitale Identität bedenkenlos zurücksetzen.",
                 "breadcrumb_fourth_description": "Alle Geräte, an denen du angemeldet bist, müssen erneut bestätigt werden",
                 "breadcrumb_page": "Verschlüsselung zurücksetzen",
-                "breadcrumb_second_description": "Du verlierst den Nachrichtenverlauf, der nur auf dem Server gespeichert ist",
-                "breadcrumb_third_description": "Du musst alle deine Geräte und Kontakte erneut verifizieren",
-                "breadcrumb_title": "Möchtest du deine digitale Identität wirklich zurücksetzen?",
+                "breadcrumb_second_description": "Du verlierst den verschlüsselten Nachrichtenverlauf, der nur auf dem Server gespeichert ist",
+                "breadcrumb_third_description": "Andere Nutzer sehen, dass deine digitale Identität zurückgesetzt wurde",
+                "breadcrumb_title": "Bestätigung nicht möglich? Dann musst du deine digitale Identität zurücksetzen.",
                 "breadcrumb_title_cant_confirm": "Du musst deine digitale Identität zurücksetzen",
                 "breadcrumb_title_compromised": "Möchtest du deine digitale Identität wirklich zurücksetzen?",
                 "breadcrumb_title_forgot": "Wiederherstellungsschlüssel vergessen? Dann musst du deine digitale Identität zurücksetzen.",
@@ -2563,7 +2561,7 @@
             "key_storage": {
                 "allow_key_storage": "Schlüsselspeicher zulassen",
                 "description": "So kannst du deinen Chatverlauf auf allen neuen Geräten einsehen. Erforderlich für das Backup von Chats und digitaler Identität. <a>Mehr erfahren</a>",
-                "recovery_requires_key_storage": "Der Schlüsselspeicher muss aktiviert sein, um die Wiederherstellung einzurichten",
+                "recovery_requires_key_storage": "Der Schlüsselspeicher muss aktiviert sein, um einen Wiederherstellungsschlüssel zu erstellen",
                 "title": "Schlüsselspeicher"
             },
             "recovery": {
@@ -2576,7 +2574,7 @@
                 "check_description": "Gib den gespeicherten Wiederherstellungsschlüssel ein, um sicherzustellen, dass er korrekt und aktiv ist.",
                 "check_error": "Falscher Wiederherstellungsschlüssel",
                 "check_failed_title": "Wiederherstellungsschlüssel konnte nicht überprüft werden",
-                "check_title": "Wiederherstellungsschlüssel überprüfen",
+                "check_title": "Überprüfe deinen Wiederherstellungsschlüssel",
                 "enter_key_error": "Der eingegebene Wiederherstellungsschlüssel ist nicht korrekt.",
                 "enter_recovery_key": "Gib den Wiederherstellungsschlüssel ein",
                 "forgot_recovery_key": "Wiederherstellungsschlüssel vergessen?",
@@ -2804,7 +2802,7 @@
             "rule_invite_for_me": "Einladungen",
             "rule_message": "Gruppenunterhaltungen",
             "rule_room_one_to_one": "Direktnachrichten",
-            "rule_roomnotif": "@Chat-Erwähnungen",
+            "rule_roomnotif": "@room Erwähnungen",
             "rule_suppress_notices": "Nachrichten von Bots",
             "rule_tombstone": "Wenn die Chat-Version aktualisiert wird",
             "show_message_desktop_notification": "Nachrichteninhalt in der Desktopbenachrichtigung anzeigen",
@@ -2988,7 +2986,6 @@
             "web_session": "Browser"
         },
         "show_avatar_changes": "Profilbildänderungen anzeigen",
-        "show_breadcrumbs": "Kürzlich besuchte Chats anzeigen",
         "show_chat_effects": "Effekte bei manchen Emojis (z. B. Konfetti)",
         "show_displayname_changes": "Änderungen von Anzeigenamen",
         "show_join_leave": "Bei-/Austrittsnachrichten (Einladung/Entfernen/Bann nicht betroffen)",
@@ -3021,7 +3018,7 @@
             "label": "Öffne %(brand)s, wenn du dich an deinem Computer anmeldest",
             "minimised": "Minimiert"
         },
-        "tac_only_notifications": "Benachrichtigungen nur im Thread Aktivitätszentrum anzeigen",
+        "tac_only_notifications": "Im Tab „Andere Threads“ nur Threads mit Benachrichtigungen anzeigen",
         "use_12_hour_format": "Uhrzeiten im 12-Stundenformat (z. B. 2:30 p. m.)",
         "use_command_enter_send_message": "Benutze Betriebssystemtaste + Eingabe um eine Nachricht zu senden",
         "use_command_f_search": "Nutze Command + F um den Verlauf zu durchsuchen",
@@ -3473,11 +3470,11 @@
                 "one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Chat entfernt.",
                 "other": "%(senderName)s hat die alternativen Adressen %(addresses)s für diesen Chat entfernt."
             },
-            "changed": "%(senderName)s hat die Adresse für diesen Chat geändert.",
+            "changed": "%(senderName)s hat die Adressen für diesen Chat geändert.",
             "changed_alternative": "%(senderName)s hat die alternative Adresse für diesen Chat geändert.",
             "changed_main_and_alternative": "%(senderName)s hat die Haupt- und Alternativadressen für diesen Chat geändert.",
             "removed": "%(senderName)s hat die Hauptadresse von diesem Chat entfernt.",
-            "set": "%(senderName)s hat als Hauptadresse des Chats %(address)s festgelegt."
+            "set": "%(senderName)s hat %(address)s als Hauptadresse des Chats festgelegt."
         },
         "m.room.create": {
             "continuation": "Dieser Chat ist eine Fortsetzung einer anderen Unterhaltung.",

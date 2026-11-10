@@ -1485,8 +1485,6 @@
         "click_for_info": "Klikněte pro více informací",
         "config_only": "Lze povolit pouze přes config.json.",
         "currently_experimental": "V současnosti experimentální.",
-        "dynamic_room_predecessors": "Předchůdci dynamické místnosti",
-        "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)",
         "element_call_video_rooms": "Element Call video místnosti",
         "encrypted_state_events": "Šifrované stavové události (MSC4362)",
         "encrypted_state_events_description": "Umožňuje experimentální podporu pro šifrování stavových událostí, která skrývá metadata, jako jsou názvy místností a témata, před serverem. Tato metadata budou také skryta před lidmi, kteří se k místnostem připojí později, a před lidmi, jejichž klienti nepodporují MSC4362.",
@@ -2905,7 +2903,6 @@
             "web_session": "Prohlížeč"
         },
         "show_avatar_changes": "Zobrazit změny profilového obrázku",
-        "show_breadcrumbs": "Zobrazovat zkratky do nedávno zobrazených místností navrchu",
         "show_chat_effects": "Zobrazit efekty chatu (animace např. při přijetí konfet)",
         "show_displayname_changes": "Zobrazovat změny zobrazovaného jména",
         "show_join_leave": "Zobrazit zprávy o vstupu/odchodu (pozvánky/odebrání/vykázání nejsou ovlivněny)",

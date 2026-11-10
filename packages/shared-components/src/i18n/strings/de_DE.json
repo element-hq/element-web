@@ -135,7 +135,7 @@
     "pdf_viewer": {
         "page_label": "Seite %(page)s von %(total)s",
         "page_number": "Seitenzahl",
-        "zoom": "Zoomen",
+        "zoom": "Zoom",
         "zoom_in": "Vergrößern",
         "zoom_out": "Verkleinern"
     },
@@ -361,7 +361,7 @@
             "error_invalid": "Ungültige Datei"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s hat das Gruppenbild geändert zu <img/>",
+            "changed_img": "%(senderDisplayName)s hat das Gruppenbild geändert: <img/>",
             "removed": "%(senderDisplayName)s hat das Gruppenbild entfernt."
         },
         "m.room.encryption": {
