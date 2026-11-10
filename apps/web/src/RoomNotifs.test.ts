@@ -15,13 +15,12 @@ import {
     NotificationCountType,
     Room,
     EventStatus,
-    EventType,
     type MatrixEvent,
     PendingEventOrdering,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "test-utils";
+import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient } from "test-utils";
 import { mkThread } from "test-utils/threads";
 
 import {
@@ -196,40 +195,6 @@ describe("RoomNotifs test", () => {
                 });
             };
 
-            const mkPredecessorEvent = (predecessorId: string): MatrixEvent => {
-                return mkEvent({
-                    event: true,
-                    type: EventType.RoomPredecessor,
-                    room: ROOM_ID,
-                    user: "@zoe:localhost",
-                    skey: "",
-                    content: {
-                        predecessor_room_id: predecessorId,
-                    },
-                    ts: Date.now(),
-                });
-            };
-
-            const itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent = (): void => {
-                it("and there is a predecessor in the create event, it should count predecessor highlight", async () => {
-                    await room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)], { addToState: true });
-
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
-                });
-            };
-
-            const itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent = (): void => {
-                it("and there is a predecessor event, it should count predecessor highlight", async () => {
-                    client.getVisibleRooms();
-                    await room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)], { addToState: true });
-                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
-
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
-                });
-            };
-
             beforeEach(() => {
                 room.setUnreadNotificationCount(NotificationCountType.Total, 2);
                 room.setUnreadNotificationCount(NotificationCountType.Highlight, 1);
@@ -245,44 +210,11 @@ describe("RoomNotifs test", () => {
                 });
             });
 
-            describe("and dynamic room predecessors are disabled", () => {
-                itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent();
-                itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent();
+            it("and there is a predecessor in the create event, it should count predecessor highlight", async () => {
+                await room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)], { addToState: true });
 
-                it("and there is only a predecessor event, it should not count predecessor highlight", async () => {
-                    await room.addLiveEvents([mkCreateEvent()], { addToState: true });
-                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
-
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(2);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(1);
-                });
-            });
-
-            describe("and dynamic room predecessors are enabled", () => {
-                beforeEach(() => {
-                    vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                        (settingName) => settingName === "feature_dynamic_room_predecessors",
-                    );
-                });
-
-                itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent();
-                itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent();
-
-                it("and there is only a predecessor event, it should count predecessor highlight", async () => {
-                    await room.addLiveEvents([mkCreateEvent()], { addToState: true });
-                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
-
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
-                });
-
-                it("and there is an unknown room in the predecessor event, it should not count predecessor highlight", async () => {
-                    await room.addLiveEvents([mkCreateEvent()], { addToState: true });
-                    upsertRoomStateEvents(room, [mkPredecessorEvent("!unknon:example.com")]);
-
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(2);
-                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(1);
-                });
+                expect(getUnreadNotificationCount(room, NotificationCountType.Total, false)).toBe(8);
+                expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, false)).toBe(7);
             });
         });
 
