@@ -20,6 +20,13 @@ class MockMap extends EventEmitter {
     setStyle = vi.fn();
     fitBounds = vi.fn();
     remove = vi.fn();
+
+    // A plain method rather than vi.fn() so tests which reset all mocks still get a canvas back
+    private canvas?: HTMLCanvasElement;
+    public getCanvas(): HTMLCanvasElement {
+        this.canvas ??= document.createElement("canvas");
+        return this.canvas;
+    }
 }
 const mockMapInstance = new MockMap();
 

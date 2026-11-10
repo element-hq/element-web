@@ -96,6 +96,12 @@
         "cancel_search_label": "Anuluj wyszukiwanie",
         "emoji_picker": "Selektor emoji"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Jeśli usuniesz wszystkie swoje urządzenia, stracisz zaszyfrowaną historię wiadomości i będziesz musiał zresetować swoją tożsamość cyfrową.",
+            "error": "Nie udało się usunąć magazynu kluczy. Spróbuj ponownie."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Najpierw przejdź na wersję <b>%(version)s</b> albo usuń to urządzenie.",

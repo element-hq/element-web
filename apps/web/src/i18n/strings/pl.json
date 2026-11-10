@@ -219,6 +219,7 @@
             "description": "Czy na pewno chcesz usunąć to urządzenie?",
             "generate_recovery_key": "Wygeneruj nowy klucz przywracania",
             "keep_access_description": "Upewnij się, że zawsze masz dostęp do innego zweryfikowanego urządzenia lub klucza przywracania, aby nie stracić zaszyfrowanej historii czatów.",
+            "key_checked_title": "Klucz przywracania jest aktywny",
             "setup_key_backup_title": "Zamierzasz utracić dostęp do swoich zaszyfrowanych czatów",
             "setup_secure_backup_description": "To jest twoje jedyne urządzenie. Jeśli je usuniesz, będziesz potrzebować klucza przywracania, aby potwierdzić swoją tożsamość cyfrową i przywrócić zaszyfrowane czaty przy następnym logowaniu.",
             "skip_key_backup": "Usuń urządzenie mimo to"
@@ -285,6 +286,8 @@
             "tap_avatar_link_new_device": "Kliknij swój awatar i wybierz \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Twój dostawca konta nie obsługuje logowania nowego urządzenia za pomocą kodu QR.",
             "unsupported_heading": "Kod QR nie jest wspierany",
+            "verification_uri_explainer": "Twój dostawca konta otworzy się w nowej karcie. Zatwierdź tam logowanie, a następnie wróć tutaj.",
+            "verification_uri_heading": "Zatwierdź logowanie u swojego dostawcy konta",
             "waiting_for_device": "Oczekiwanie na drugie urządzenie"
         },
         "register_action": "Utwórz konto",
@@ -1197,6 +1200,10 @@
         "m.reaction": {
             "user": "%(sender)s dodał reakcję %(reaction)s do %(message)s",
             "you": "Dodano reakcję %(reaction)s do %(message)s"
+        },
+        "m.rtc.notification": {
+            "ended": "Połączenie zakończone",
+            "started": "Rozmowa rozpoczęta"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
@@ -2556,6 +2563,8 @@
                 "breadcrumb_description": "Jeśli nie masz dostępu do innych zweryfikowanych urządzeń, ani nie posiadasz klucza przywracania, musisz zresetować swoją tożsamość cyfrową, aby móc nadal korzystać z aplikacji.",
                 "breadcrumb_description_no_verification_method": "Nie masz dostępu do żadnych innych zweryfikowanych urządzeń ani klucza przywracania. Jeśli chcesz nadal korzystać z aplikacji, prosimy o zresetowanie swojej tożsamości cyfrowej.",
                 "breadcrumb_first_description": "Dane konta, kontakty, preferencje i lista czatów zostaną zachowane",
+                "breadcrumb_first_description_no_encrypted_devices": "Wygląda na to, że nie prowadzisz jeszcze żadnych czatów. Jeśli tak, możesz bezpiecznie zresetować swoją tożsamość cyfrową.",
+                "breadcrumb_fourth_description": "Wszystkie urządzenia, na których jesteś zalogowany, będą wymagały ponownego potwierdzenia",
                 "breadcrumb_page": "Resetuj szyfrowanie",
                 "breadcrumb_second_description": "Stracisz dostęp do całej historii wiadomości, która jest przechowywana na serwerze",
                 "breadcrumb_third_description": "Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana",
@@ -2580,6 +2589,7 @@
             },
             "confirm_key_storage_off": "Czy na pewno pozostawić wyłączony magazyn kluczy?",
             "confirm_key_storage_off_description": "Jeśli usuniesz wszystkie swoje urządzenia, utracisz historię wiadomości i będziesz musiał ponownie zweryfikować wszystkie istniejące kontakty. <a>Dowiedz się więcej</a>",
+            "delete_key_storage_title": "Czy na pewno chcesz usunąć magazyn kluczy?",
             "device_not_verified_button": "Zweryfikuj to urządzenie",
             "device_not_verified_description": "Aby wyświetlić ustawienia szyfrowania, musisz zweryfikować to urządzenie.",
             "device_not_verified_title": "Urządzenie niezweryfikowane",
@@ -2597,6 +2607,10 @@
                 "change_recovery_key": "Zmień klucz przywracania",
                 "change_recovery_key_description": "Zapisz nowy klucz przywracania w bezpiecznym miejscu. Następnie kliknij Kontynuuj, aby zastosować zmiany.",
                 "change_recovery_key_title": "Zmienić klucz przywracania?",
+                "check_description": "Wpisz zapisany klucz przywracania, aby upewnić się, że jest poprawny i aktywny.",
+                "check_error": "Nieprawidłowy klucz przywracania",
+                "check_failed_title": "Nie udało się sprawdzić klucza przywracania",
+                "check_title": "Sprawdź swój klucz przywracania",
                 "enter_key_error": "Wprowadzony klucz przywracania nie jest poprawny.",
                 "enter_recovery_key": "Wprowadź klucz przywracania",
                 "forgot_recovery_key": "Zapomniałeś klucza przywracania?",
@@ -4060,6 +4074,8 @@
         "disabled_no_perms_start_video_call": "Nie masz uprawnień do rozpoczęcia rozmowy wideo",
         "disabled_no_perms_start_voice_call": "Nie masz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",
+        "document_pip_close": "Przenieś połączenie z powrotem do tego okna",
+        "document_pip_open": "Otwórz połączenie w pływającym oknie",
         "element_call": "Element Call",
         "element_call_mock": {
             "default": "domyślny",

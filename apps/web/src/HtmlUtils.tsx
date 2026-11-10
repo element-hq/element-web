@@ -12,7 +12,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
 import { sanitizeHtml, type HtmlSanitizeOptions } from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
-import katex from "katex";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
@@ -23,6 +22,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
+import { getKatex } from "./utils/katex";
 
 export { linkifyAndSanitizeHtml } from "./Linkify";
 export { isUrlPermitted, sanitizeHtmlText } from "@element-hq/element-web-shared-utils";
@@ -373,7 +373,9 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
             const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
             isHtmlMessage = !isPlainText;
 
-            if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
+            // KaTeX is loaded on demand; until it is, maths is left as the sender's fallback
+            const katex = getKatex();
+            if (isHtmlMessage && katex && SettingsStore.getValue("feature_latex_maths")) {
                 [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
                     e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
                         throwOnError: false,
