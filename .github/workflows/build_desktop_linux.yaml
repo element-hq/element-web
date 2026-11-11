@@ -65,6 +65,8 @@ jobs:
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
         env:
             BUILDENV_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
               id: config
@@ -138,6 +140,7 @@ jobs:
                     -e VERSION \
                     -e USE_HARD_LINKS \
                     -e ED_DEBIAN_CHANGELOG \
+                    -e PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm run build --publish never $BUILD_ARGS -l $TARGETS
                   sudo chown -R $USER:$USER apps/desktop/dist
