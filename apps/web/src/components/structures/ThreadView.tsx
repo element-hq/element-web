@@ -241,7 +241,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
         const lastReply = this.threadLastReply;
         // The room emits LocalEchoUpdated for messages outside this thread too.
         // Avoid re-rendering the entire thread timeline when its last reply is unchanged.
-        if (lastReply === this.state.lastReply && lastReply?.getId() === this.lastReplyEventId) return;
+        const sameReply = lastReply === this.state.lastReply || (!lastReply && !this.state.lastReply);
+        if (sameReply && lastReply?.getId() === this.lastReplyEventId) return;
         this.lastReplyEventId = lastReply?.getId();
         this.setState({ lastReply });
     };
