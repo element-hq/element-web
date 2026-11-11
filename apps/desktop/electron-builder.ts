@@ -193,7 +193,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             signingHashAlgorithms: ["sha256"],
         },
         icon: "build/icon.ico",
-        signExts: [".exe", ".dll", ".node"],
+        signExts: [".msi", ".exe", ".dll", ".node"],
     },
     msi: {
         perMachine: true,
