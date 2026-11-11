@@ -28,16 +28,16 @@ interface CheckRecoveryKeyProps {
      */
     onCancelClick: () => void;
     /**
-     * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
+     * Whether the card is shown in a dialog, which adjusts its styling. Passed to {@link EncryptionCard}.
      */
-    className?: string;
+    dialog?: boolean;
 }
 
 /**
  * Lets the user check that the recovery key they have saved is their current one.
  * Shown as one of the cards making up the body of the logout dialog.
  */
-export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonly<CheckRecoveryKeyProps>): JSX.Element {
+export function CheckRecoveryKey({ onFinish, onCancelClick, dialog }: Readonly<CheckRecoveryKeyProps>): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     return (
@@ -45,7 +45,7 @@ export function CheckRecoveryKey({ onFinish, onCancelClick, className }: Readonl
             Icon={KeyIcon}
             title={_t("settings|encryption|recovery|check_title")}
             description={_t("settings|encryption|recovery|check_description")}
-            className={className}
+            dialog={dialog}
         >
             <KeyForm
                 onSubmit={async (recoveryKey) => {

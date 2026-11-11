@@ -16,6 +16,8 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
+import { ToastContext, type ToastRack } from "@element-hq/web-shared-components";
+
 import { EncryptionUserSettingsTab, type State } from "./EncryptionUserSettingsTab";
 import Modal from "../../../../../Modal";
 import { DeleteKeyStorageDialog } from "../../../dialogs/DeleteKeyStorageDialog";
@@ -24,6 +26,7 @@ import { DeviceListener } from "../../../../../device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
+    let toastRack: { displayToast: ReturnType<typeof vi.fn> };
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -49,7 +52,13 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     function renderComponent(props: { initialState?: State } = {}) {
-        return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
+        toastRack = { displayToast: vi.fn().mockReturnValue(() => {}) };
+        return render(
+            <ToastContext.Provider value={toastRack as unknown as ToastRack}>
+                <EncryptionUserSettingsTab {...props} />
+            </ToastContext.Provider>,
+            withClientContextRenderOptions(matrixClient),
+        );
     }
 
     it("should display a verify button when the encryption is not set up", async () => {
@@ -64,9 +73,20 @@ describe("<EncryptionUserSettingsTab />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
 
-        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: new Promise(() => {}) } as any);
+        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([true]) } as any);
         await user.click(screen.getByText("Verify this device"));
         expect(spy).toHaveBeenCalled();
+        // The dialog resolving returns the tab to the main state. The device is still unverified, so it re-renders.
+        await waitFor(() => expect(screen.getByRole("button", { name: "Verify this device" })).toBeInTheDocument());
+    });
+
+    it("should display the advanced panel when the encryption is not set up", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("verify_this_session");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Verify this device" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
     });
 
     it("should display the recovery panel when key storage is enabled", async () => {
@@ -89,6 +109,15 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should display the advanced panel when the recovery is out of sync", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
     });
 
     it("should enter the 'reset identity' flow if user clicks 'forgot password' and we are missing identity keys", async () => {
@@ -119,6 +148,34 @@ describe("<EncryptionUserSettingsTab />", () => {
         await waitFor(() => expect(screen.getByText("Change recovery key")).toBeVisible());
     });
 
+    it.each(["verify_this_session", "key_storage_out_of_sync"] as const)(
+        "should enter the reset identity flow from the advanced panel when the device state is %s",
+        async (deviceState) => {
+            vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(deviceState);
+            renderComponent();
+
+            const user = userEvent.setup();
+            const button = await waitFor(() => screen.getByRole("button", { name: "Reset digital identity" }));
+            await user.click(button);
+            await waitFor(() =>
+                expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
+            );
+        },
+    );
+
+    it("should enter the 'change recovery key' flow if entering the recovery key fails", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        vi.spyOn(DeviceListener.sharedInstance(), "whilePaused").mockRejectedValue(new Error("failed to access 4S"));
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(false);
+        renderComponent();
+
+        const user = userEvent.setup();
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
+        await waitFor(() => expect(screen.getByText("Change recovery key")).toBeInTheDocument());
+    });
+
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         const user = userEvent.setup();
@@ -143,6 +200,60 @@ describe("<EncryptionUserSettingsTab />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should show a confirmation toast when the recovery key is set up", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "set_recovery_key" });
+
+        // Walk the whole recovery key flow: save the generated key, then confirm it.
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Finish set up" }));
+
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        expect(displayedToastText()).toContain("Backup is now fully set up");
+    });
+
+    it("should show a key-active confirmation toast when the recovery key is changed", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "change_recovery_key" });
+
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Confirm new recovery key" }));
+
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        expect(displayedToastText()).toContain("Your new recovery key is now active");
+    });
+
+    it("should still remove the confirmation toast after the tab is unmounted", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        // Fake timers stall the recovery flow, so spy on the real ones instead.
+        const setTimeoutSpy = vi.spyOn(window, "setTimeout");
+        const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
+        const user = userEvent.setup();
+        const { unmount } = renderComponent({ initialState: "set_recovery_key" });
+        const removeToast = vi.fn();
+        toastRack.displayToast.mockReturnValue(removeToast);
+
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Finish set up" }));
+        await waitFor(() => expect(toastRack.displayToast).toHaveBeenCalledTimes(1));
+        const removalTimer = setTimeoutSpy.mock.calls.findIndex(([callback]) => callback === removeToast);
+        expect(removalTimer).not.toBe(-1);
+
+        // The toast lives in the settings dialog, so leaving the tab must not cancel its removal.
+        unmount();
+        expect(clearTimeoutSpy).not.toHaveBeenCalledWith(setTimeoutSpy.mock.results[removalTimer].value);
+    });
+
+    /** Render the node passed to the mock toast rack and return its text. */
+    function displayedToastText(): string {
+        return render(<div>{toastRack.displayToast.mock.calls[0][0]}</div>).container.textContent ?? "";
+    }
 
     it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
