@@ -80,6 +80,11 @@ jobs:
         env:
             SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
             BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
+            # Make MSVC output reproducible, so that native modules compiled during the build (e.g. pkcs11js) are
+            # byte-identical between builds and can be reused from the sign cache. /Brepro drops timestamps & random
+            # PDB GUIDs, /PDBALTPATH stops the checkout path being embedded via the PDB path.
+            _CL_: /Brepro
+            _LINK_: /Brepro /PDBALTPATH:%_PDB%
         steps:
             # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
             - name: Configure git line endings
