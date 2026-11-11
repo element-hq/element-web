@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
 import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 
 import { AgentContactInstructionsViewModel } from "./AgentContactInstructionsViewModel";
@@ -26,6 +28,7 @@ describe("AgentContactInstructionsViewModel", () => {
         agent = {
             getContactInstructions: vi.fn().mockResolvedValue({ ok: true, data: { text: "Be formal.", path: PATH } }),
             setContactInstructions: vi.fn(),
+            openContactInstructions: vi.fn(),
         } as unknown as Mocked<AgentApi>;
     });
 
@@ -79,6 +82,40 @@ describe("AgentContactInstructionsViewModel", () => {
         await vm.save("Be brief.");
 
         expect(vm.getSnapshot()).toMatchObject({ isBusy: false, instructions: "Be formal.", hasError: true });
+    });
+
+    it("opens the file and shows what it holds", async () => {
+        agent.openContactInstructions.mockResolvedValue({ ok: true, data: { text: "Be brief.", path: PATH } });
+        const vm = createViewModel();
+        await vi.waitFor(() => expect(vm.getSnapshot().isLoading).toBe(false));
+
+        await vm.openFile();
+
+        expect(agent.openContactInstructions).toHaveBeenCalledWith(PARTNER);
+        expect(vm.getSnapshot()).toMatchObject({ instructions: "Be brief.", hasError: false });
+    });
+
+    it("shows an error when the file cannot be opened", async () => {
+        agent.openContactInstructions.mockResolvedValue({ ok: false, error: "unavailable" });
+        const vm = createViewModel();
+        await vi.waitFor(() => expect(vm.getSnapshot().isLoading).toBe(false));
+
+        await vm.openFile();
+
+        expect(vm.getSnapshot()).toMatchObject({ instructions: "Be formal.", hasError: true });
+    });
+
+    it("reads the instructions again when the window gets focus, as the file may have been edited", async () => {
+        const vm = createViewModel();
+        await vi.waitFor(() => expect(vm.getSnapshot().isLoading).toBe(false));
+        agent.getContactInstructions.mockResolvedValue({ ok: true, data: { text: "Edited.", path: PATH } });
+
+        window.dispatchEvent(new Event("focus"));
+
+        await vi.waitFor(() => expect(vm.getSnapshot().instructions).toBe("Edited."));
+        vm.dispose();
+        window.dispatchEvent(new Event("focus"));
+        expect(agent.getContactInstructions).toHaveBeenCalledTimes(2);
     });
 
     it("ignores results that arrive after being disposed", async () => {

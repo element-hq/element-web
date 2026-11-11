@@ -17,7 +17,7 @@ Please see LICENSE files in the repository root for full details.
 import path from "node:path";
 import fs from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
-import { app, safeStorage } from "electron";
+import { app, safeStorage, shell } from "electron";
 import ElectronStore from "electron-store";
 import Anthropic from "@anthropic-ai/sdk";
 import { CopilotClient } from "@github/copilot-sdk";
@@ -388,6 +388,32 @@ export async function setContactInstructions(
         return failure("unavailable", e instanceof Error ? e.message : String(e));
     }
     return { ok: true, data: { text: text.trim() ? text : "", path: filePath } };
+}
+
+/**
+ * Open the Markdown file with the instructions for a chat partner in the app the system uses for it, so that it can
+ * be read and edited there. A file that doesn't exist yet is created empty first.
+ * @param userId - The Matrix user ID of the chat partner
+ * @returns the instructions as they are when the file is opened
+ */
+export async function openContactInstructions(userId: unknown): Promise<AgentResult<AgentContactInstructions>> {
+    if (!isUserId(userId)) return failure("invalid_request");
+    await moveOldContactInstructions();
+    const filePath = getContactInstructionsPath(userId);
+    try {
+        await fs.mkdir(path.dirname(filePath), { recursive: true });
+        // The "a" flag creates a missing file without touching an existing one
+        await (await fs.open(filePath, "a")).close();
+    } catch (e) {
+        console.error(`Failed to create the agent instructions for ${userId}`, e);
+        return failure("unavailable", e instanceof Error ? e.message : String(e));
+    }
+    const error = await shell.openPath(filePath);
+    if (error) {
+        console.error(`Failed to open the agent instructions for ${userId}: ${error}`);
+        return failure("unavailable", error);
+    }
+    return { ok: true, data: { text: await readContactInstructions(userId), path: filePath } };
 }
 
 /**

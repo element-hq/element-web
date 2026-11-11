@@ -19,8 +19,12 @@ import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
 type AgentContactInstructionsProps = AgentContactInstructionsViewSnapshot & AgentContactInstructionsViewActions;
 
-const AgentContactInstructionsViewWrapperImpl = ({ save, ...rest }: AgentContactInstructionsProps): JSX.Element => {
-    const vm = useMockedViewModel(rest, { save });
+const AgentContactInstructionsViewWrapperImpl = ({
+    save,
+    openFile,
+    ...rest
+}: AgentContactInstructionsProps): JSX.Element => {
+    const vm = useMockedViewModel(rest, { save, openFile });
     return <AgentContactInstructionsView vm={vm} />;
 };
 const AgentContactInstructionsViewWrapper = withViewDocs(
@@ -39,6 +43,7 @@ const meta = {
         filePath: "C:\\Users\\Alice\\Documents\\Element\\contacts\\@bob%3Aexample.org.md",
         hasError: false,
         save: fn(),
+        openFile: fn(),
     },
 } satisfies Meta<typeof AgentContactInstructionsViewWrapper>;
 

@@ -19,6 +19,7 @@ describe("<AgentContactInstructionsView />", () => {
     beforeEach(() => {
         vi.mocked(Empty.args.save!).mockClear();
         vi.mocked(WithInstructions.args.save!).mockClear();
+        vi.mocked(Empty.args.openFile!).mockClear();
     });
 
     it("shows the saved instructions and where they are kept", () => {
@@ -51,13 +52,23 @@ describe("<AgentContactInstructionsView />", () => {
         expect(WithInstructions.args.save).toHaveBeenCalledWith("");
     });
 
+    it("opens the file to edit it outside of the app", async () => {
+        const user = userEvent.setup();
+        render(<Empty />);
+
+        await user.click(screen.getByRole("button", { name: "Open file" }));
+
+        expect(Empty.args.openFile).toHaveBeenCalled();
+    });
+
     it("disables the field while loading", () => {
         render(<Loading />);
         expect(screen.getByLabelText("Instructions for the agent")).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Open file" })).toBeDisabled();
     });
 
     it("shows an error when saving failed", () => {
         render(<SaveFailed />);
-        expect(screen.getByText("The instructions could not be read or saved. Try again.")).toBeInTheDocument();
+        expect(screen.getByText("The instructions could not be read, saved or opened. Try again.")).toBeInTheDocument();
     });
 });

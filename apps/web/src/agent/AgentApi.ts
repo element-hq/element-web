@@ -57,6 +57,12 @@ export interface AgentApi {
     getContactInstructions(contactId: string): Promise<AgentResult<AgentContactInstructions>>;
     /** Save the instructions for a chat partner; empty instructions delete the file */
     setContactInstructions(contactId: string, text: string): Promise<AgentResult<AgentContactInstructions>>;
+    /**
+     * Open the Markdown file with the instructions for a chat partner in the app the system uses for it, creating
+     * the file if it is missing.
+     * @returns the instructions as they are when the file is opened
+     */
+    openContactInstructions(contactId: string): Promise<AgentResult<AgentContactInstructions>>;
     /** Write the next message of the user in a direct message */
     generateReply(request: AgentReplyRequest): Promise<AgentResult<string>>;
     /** Suggest replies the user could send next in a chat */

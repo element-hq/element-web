@@ -76,6 +76,7 @@ describe("AgentReplyListener", () => {
             setReplyMarking: vi.fn(),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
+            openContactInstructions: vi.fn(),
             generateReply: vi.fn().mockResolvedValue({ ok: true, data: "Sure, see you tomorrow!" }),
             generateSuggestions: vi.fn(),
         };

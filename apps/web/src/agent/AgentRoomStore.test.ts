@@ -29,6 +29,7 @@ describe("AgentRoomStore", () => {
             setReplyMarking: vi.fn().mockResolvedValue({ ok: true, data: {} }),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
+            openContactInstructions: vi.fn(),
             generateReply: vi.fn(),
             generateSuggestions: vi.fn(),
         };

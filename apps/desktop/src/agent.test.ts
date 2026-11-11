@@ -9,7 +9,7 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import os from "node:os";
 import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
-import { app } from "electron";
+import { app, shell } from "electron";
 import { AuthenticationError, RateLimitError } from "@anthropic-ai/sdk";
 import type { AgentReplyRequest, AgentSuggestionsRequest } from "shared-types";
 
@@ -28,6 +28,7 @@ import {
     getContactInstructionsPath,
     listAgentModels,
     MAX_CONTACT_INSTRUCTIONS_LENGTH,
+    openContactInstructions,
     parseSuggestions,
     setAgentReplyMarking,
     setAgentRoom,
@@ -67,7 +68,11 @@ const { storeData, storeOptions, safeStorage, anthropic, copilot } = vi.hoisted(
     };
 });
 
-vi.mock("electron", () => ({ app: { getPath: vi.fn(() => "/roaming/Element") }, safeStorage }));
+vi.mock("electron", () => ({
+    app: { getPath: vi.fn(() => "/roaming/Element") },
+    safeStorage,
+    shell: { openPath: vi.fn(async () => "") },
+}));
 vi.mock("electron-store", () => ({
     default: vi.fn(function (this: Record<string, unknown>, options: unknown) {
         storeOptions.push(options);
@@ -584,6 +589,30 @@ describe("agent", () => {
 
             expect(await setContactInstructions("@bob:example.org", "  \n")).toMatchObject({ data: { text: "" } });
             await expect(fs.access(bobFile())).rejects.toThrow();
+        });
+
+        it("opens the file in the system's app, creating it if it is missing", async () => {
+            expect(await openContactInstructions("@bob:example.org")).toEqual({
+                ok: true,
+                data: { text: "", path: bobFile() },
+            });
+            expect(shell.openPath).toHaveBeenCalledWith(bobFile());
+            expect(await fs.readFile(bobFile(), "utf8")).toBe("");
+
+            await setContactInstructions("@bob:example.org", "Be formal.");
+            expect(await openContactInstructions("@bob:example.org")).toMatchObject({ data: { text: "Be formal." } });
+            expect(await fs.readFile(bobFile(), "utf8")).toBe("Be formal.");
+        });
+
+        it("reports when the file can't be opened", async () => {
+            vi.mocked(shell.openPath).mockResolvedValueOnce("No app for .md files");
+
+            expect(await openContactInstructions("@bob:example.org")).toEqual({
+                ok: false,
+                error: "unavailable",
+                message: "No app for .md files",
+            });
+            expect(await openContactInstructions("Bob")).toMatchObject({ ok: false, error: "invalid_request" });
         });
 
         it.each([

@@ -29,6 +29,8 @@ export interface AgentContactInstructionsViewSnapshot {
 export interface AgentContactInstructionsViewActions {
     /** Save the instructions; empty instructions remove them */
     save: (instructions: string) => void;
+    /** Open the file with the instructions in the app the system uses for Markdown files */
+    openFile: () => void;
 }
 
 /**
@@ -83,7 +85,10 @@ export function AgentContactInstructionsView({ vm }: Readonly<AgentContactInstru
                     {_t("room|agent_instructions|error")}
                 </Text>
             )}
-            <Flex justify="end">
+            <Flex justify="end" gap="var(--cpd-space-2x)">
+                <Button kind="secondary" size="md" disabled={isLoading || isBusy} onClick={() => vm.openFile()}>
+                    {_t("room|agent_instructions|open_file")}
+                </Button>
                 <Button
                     kind="primary"
                     size="md"

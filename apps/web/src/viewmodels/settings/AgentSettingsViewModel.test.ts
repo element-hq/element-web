@@ -39,6 +39,7 @@ describe("AgentSettingsViewModel", () => {
             setReplyMarking: vi.fn(),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
+            openContactInstructions: vi.fn(),
             generateReply: vi.fn(),
             generateSuggestions: vi.fn(),
         };

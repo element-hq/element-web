@@ -22,6 +22,7 @@ import {
     getAgentStatus,
     getContactInstructions,
     listAgentModels,
+    openContactInstructions,
     setAgentReplyMarking,
     setAgentRoom,
     setAgentSettings,
@@ -219,6 +220,9 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "agentSetContactInstructions":
             ret = await setContactInstructions(args[0], args[1]);
+            break;
+        case "agentOpenContactInstructions":
+            ret = await openContactInstructions(args[0]);
             break;
         case "agentGenerateReply":
             ret = await generateAgentReply(args[0]);

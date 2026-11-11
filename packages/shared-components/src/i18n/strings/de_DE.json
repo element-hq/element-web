@@ -127,8 +127,9 @@
     "room": {
         "agent_instructions": {
             "description": "Der Agent befolgt diese Anweisungen zusätzlich zu den allgemeinen, wenn er in Direktnachrichten mit dieser Person antwortet oder Antworten vorschlägt. Markdown ist möglich.",
-            "error": "Die Anweisungen konnten nicht gelesen oder gespeichert werden. Versuche es erneut.",
+            "error": "Die Anweisungen konnten nicht gelesen, gespeichert oder geöffnet werden. Versuche es erneut.",
             "file": "Gespeichert als Markdown-Datei: %(path)s",
+            "open_file": "Datei öffnen",
             "placeholder": "Zum Beispiel: Antworte förmlich und fasse dich kurz.",
             "title": "Anweisungen für den Agenten"
         },

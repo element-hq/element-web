@@ -517,6 +517,7 @@ export default class ElectronPlatform extends BasePlatform {
         setReplyMarking: (userId, roomId, marking) => this.ipc.call("agentSetReplyMarking", userId, roomId, marking),
         getContactInstructions: (contactId) => this.ipc.call("agentGetContactInstructions", contactId),
         setContactInstructions: (contactId, text) => this.ipc.call("agentSetContactInstructions", contactId, text),
+        openContactInstructions: (contactId) => this.ipc.call("agentOpenContactInstructions", contactId),
         generateReply: (request) => this.ipc.call("agentGenerateReply", request),
         generateSuggestions: (request) => this.ipc.call("agentGenerateSuggestions", request),
     };
