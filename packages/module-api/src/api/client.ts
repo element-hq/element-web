@@ -57,6 +57,13 @@ export interface ClientApi {
      * @returns A promise that resolves once the client has started.
      */
     waitForClientStarted(): Promise<void>;
+
+    /**
+     * Get the base URL of the user's homeserver's client-server API, as used by the client.
+     * Throws if there is no logged-in client.
+     * @returns The homeserver base URL, eg. `https://matrix-client.matrix.org`.
+     */
+    getHomeserverUrl(): string;
 }
 
 /**

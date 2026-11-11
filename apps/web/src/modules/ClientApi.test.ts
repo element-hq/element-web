@@ -24,6 +24,13 @@ describe("ClientApi", () => {
         expect(moduleRoom?.id).toStrictEqual("!foo:matrix.org");
     });
 
+    it("should return the homeserver URL from getHomeserverUrl()", () => {
+        const cli = stubClient();
+        vi.mocked(cli.getHomeserverUrl).mockReturnValue("https://matrix-client.example.org");
+        const client = new ClientApi(new MatrixDispatcher());
+        expect(client.getHomeserverUrl()).toStrictEqual("https://matrix-client.example.org");
+    });
+
     describe("waitForClientStarted", () => {
         it("should resolve once the client has started", async () => {
             const dispatcher = new MatrixDispatcher();

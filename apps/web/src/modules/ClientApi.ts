@@ -30,6 +30,10 @@ export class ClientApi implements IClientApi {
         return null;
     }
 
+    public getHomeserverUrl(): string {
+        return MatrixClientPeg.safeGet().getHomeserverUrl();
+    }
+
     public waitForClientStarted(): Promise<void> {
         return this.clientStarted.promise;
     }

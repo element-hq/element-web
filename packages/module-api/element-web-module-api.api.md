@@ -98,6 +98,7 @@ export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
+    getHomeserverUrl(): string;
     getRoom: (id: string) => Room | null;
     waitForClientStarted(): Promise<void>;
 }
