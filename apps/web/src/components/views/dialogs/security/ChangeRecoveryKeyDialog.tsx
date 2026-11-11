@@ -67,7 +67,7 @@ export function ChangeRecoveryKeyDialog({
                     onCancelClick={() => onFinished(false)}
                 />
             ) : (
-                <ConfirmationCard userHasRecoveryKey={userHasRecoveryKey} onDoneClick={() => onFinished(true)} />
+                <ConfirmationCard userHasRecoveryKey={userHasRecoveryKey} onFinish={() => onFinished(true)} />
             )}
         </BaseDialog>
     );
@@ -82,13 +82,13 @@ interface ConfirmationCardProps {
     /**
      * Called when the done button is clicked.
      */
-    onDoneClick: () => void;
+    onFinish: () => void;
 }
 
 /**
  * The confirmation screen shown after the recovery key was successfully changed.
  */
-function ConfirmationCard({ userHasRecoveryKey, onDoneClick }: Readonly<ConfirmationCardProps>): JSX.Element {
+function ConfirmationCard({ userHasRecoveryKey, onFinish }: Readonly<ConfirmationCardProps>): JSX.Element {
     return (
         <EncryptionCard
             Icon={CheckCircleIcon}
@@ -111,7 +111,7 @@ function ConfirmationCard({ userHasRecoveryKey, onDoneClick }: Readonly<Confirma
                 )}
             </EncryptionCardEmphasisedContent>
             <EncryptionCardButtons>
-                <Button onClick={onDoneClick}>{_t("action|done")}</Button>
+                <Button onClick={onFinish}>{_t("action|done")}</Button>
             </EncryptionCardButtons>
         </EncryptionCard>
     );
