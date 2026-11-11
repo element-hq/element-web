@@ -201,7 +201,7 @@ jobs:
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
                       -Recurse dist `
-                      -Include *.exe, *.msi `
+                      -Include *.exe, *.msi, *.dll, *.node `
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts
