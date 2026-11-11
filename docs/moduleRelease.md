@@ -2,8 +2,9 @@
 
 To make a release of a module:
 
-1. Bump the module's version in package.json and commit it
-1. Push a signed tag in the format `module/<module name>/v<version>`.
+1. Make a PR to bump the module's version in package.json, taking care to bump the version respecting SemVer.
+1. Get it merged.
+1. Push a signed tag pointing to the squash commit in the format `module/<module name>/v<version>`.
 
 So to release version 88.77.66 of the banner module as commit hash abcedf:
 
