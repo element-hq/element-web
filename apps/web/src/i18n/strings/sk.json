@@ -1467,8 +1467,6 @@
         "bridge_state_workspace": "Pracovný priestor: <networkLink/>",
         "click_for_info": "Kliknite pre viac informácií",
         "currently_experimental": "V súčasnosti experimentálne.",
-        "dynamic_room_predecessors": "Predchodcovia dynamickej miestnosti",
-        "dynamic_room_predecessors_description": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
         "element_call_video_rooms": "Element Call video miestnosti",
         "encrypted_state_events": "Zašifrované stavy udalostí (MSC4362)",
         "encrypted_state_events_description": "Umožňuje experimentálnu podporu šifrovania stavových udalostí, ktoré skryjú metadáta, ako sú názvy miestností a témy, pred serverom. Tieto metadáta budú tiež skryté pred ľuďmi, ktorí sa k miestnostiam pripoja neskôr, a ľuďmi, ktorých klienti nepodporujú MSC4362.",
@@ -2871,7 +2869,6 @@
             "web_session": "Webová relácia"
         },
         "show_avatar_changes": "Zobraziť zmeny profilového obrázka",
-        "show_breadcrumbs": "Zobraziť skratky nedávno zobrazených miestnosti nad zoznamom miestností",
         "show_chat_effects": "Zobraziť efekty konverzácie (animácie pri prijímaní napr. konfety)",
         "show_displayname_changes": "Zobrazovať zmeny zobrazovaného mena",
         "show_join_leave": "Zobraziť správy o pripojení/odchode (pozvania/odstránenia/zákazy nie sú ovplyvnené)",

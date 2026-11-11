@@ -84,7 +84,6 @@ describe("<SendMessageComposer/>", () => {
         canSelfRedact: false,
         resizing: false,
         narrow: false,
-        msc3946ProcessDynamicPredecessor: false,
         promptAskToJoin: false,
         isRoomEncrypted: false,
     };

@@ -1530,8 +1530,6 @@
         "currently_experimental": "Actuellement expérimental.",
         "document_previews": "Aperçus expérimentales de documents",
         "document_previews_description": "Ouvrez les pièces jointes PDF et Markdown dans le panneau de droite.",
-        "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
-        "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
         "encrypted_state_events": "Événements d'état chiffrés (MSC4362)",
         "encrypted_state_events_description": "Active la prise en charge expérimentale du chiffrement des événements d'état, masquant ainsi les métadonnées telles que les noms des salons et les sujets de discussion auprès du serveur. Ces métadonnées seront également masquées pour les personnes rejoignant les salons ultérieurement, ainsi que pour les applications ne prennant pas en charge MSC4362.",
@@ -2983,7 +2981,6 @@
             "web_session": "Navigateur"
         },
         "show_avatar_changes": "Afficher les changements d’image de profil",
-        "show_breadcrumbs": "Afficher les raccourcis vers les salons vus récemment au-dessus de la liste des salons",
         "show_chat_effects": "Afficher les animations de conversation (animations lors de la réception par ex. de confettis)",
         "show_displayname_changes": "Afficher les changements de nom d’affichage",
         "show_join_leave": "Afficher les messages d'arrivée et de départ (les invitations/expulsions/bannissements ne sont pas concernés)",

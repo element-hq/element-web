@@ -62,17 +62,29 @@ export class Helpers {
         const roomId = room.roomId;
 
         for (const message of messages) {
-            await cli.sendMessage(roomId, { body: message, msgtype: "m.text" });
+            const { event_id: eventId } = await cli.sendMessage(roomId, { body: message, msgtype: "m.text" });
 
-            // TODO: without this wait, some tests that send lots of messages flake
-            // from time to time. I (andyb) have done some investigation, but it
-            // needs more work to figure out. The messages do arrive over sync, but
-            // they never appear in the timeline, and they never fire a
-            // Room.timeline event. I think this only happens with events that refer
-            // to other events (e.g. replies), so it might be caused by the
-            // referring event arriving before the referred-to event.
-            await this.page.waitForTimeout(100);
+            // Wait for our client to receive the event before sending the next one. Without this, tests that
+            // send lots of messages flake: the messages arrive over sync but sometimes never appear in the
+            // timeline, which seems to happen when an event that refers to another arrives before its target.
+            await this.waitForEventReceived(roomId, eventId);
         }
+    }
+
+    /**
+     * Wait for the app's client to have received the event with the supplied ID in the supplied room.
+     */
+    private async waitForEventReceived(roomId: string, eventId: string) {
+        await expect
+            .poll(
+                () =>
+                    this.app.client.evaluate(
+                        (cli, { roomId, eventId }) => !!cli.getRoom(roomId)?.findEventById(eventId),
+                        { roomId, eventId },
+                    ),
+                { message: `event ${eventId} was not received by the client` },
+            )
+            .toBe(true);
     }
 
     /**
