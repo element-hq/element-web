@@ -175,6 +175,14 @@ jobs:
                   INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
+            # Trust the sandbox cert before building so that signatures made during the build validate,
+            # letting the build skip re-signing files it has already signed, as it does with the real cert.
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
             - name: Build App
               working-directory: apps/desktop
               run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
@@ -190,12 +198,6 @@ jobs:
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
                   TARGETS: ${{ inputs.targets }}
 
-            - name: Trust eSigner sandbox cert
-              if: inputs.sign == ''
-              run: |
-                  Set-StrictMode -Version 'Latest'
-                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
-
             - name: Check app was signed successfully
               working-directory: apps/desktop
               # Allow the step to fail if setting up the CKA failed (e.g. for PRs),
@@ -205,7 +207,7 @@ jobs:
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
                       -Recurse dist `
-                      -Include *.exe, *.msi `
+                      -Include *.exe, *.msi, *.dll, *.node `
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts
