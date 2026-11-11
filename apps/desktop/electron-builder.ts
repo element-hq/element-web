@@ -127,7 +127,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         loadBrowserProcessSpecificV8Snapshot: false,
         enableEmbeddedAsarIntegrityValidation: true,
     },
-    files: ["package.json", "lib/**"],
+    files: [
+        "package.json",
+        "lib/**",
+        // electron-builder strips node-gyp's Make build leftovers from native modules but not MSBuild's on Windows
+        "!**/node_modules/*/build/*.{vcxproj,vcxproj.filters}",
+        "!**/node_modules/*/build/Release/{obj,*.iobj,*.ipdb,*.exp,*.lib}",
+        // pkcs11js is compiled from source on install, its sources are not needed at runtime
+        "!**/node_modules/pkcs11js/{src,includes}",
+    ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
         name: variant.name,
