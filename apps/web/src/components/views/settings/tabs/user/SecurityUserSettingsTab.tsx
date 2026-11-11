@@ -354,8 +354,10 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
             }
         }
 
+        // Discovery binds 3PIDs to the identity server. UIFeature.IdentityServer is forced off when
+        // UIFeature.ThirdPartyID is off, so checking it covers both flags.
         let discoverySection;
-        if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+        if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             discoverySection = <DiscoverySettings />;
         }
 
