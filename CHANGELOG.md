@@ -1,3 +1,43 @@
+Changes in [1.12.34](https://github.com/element-hq/element-web/releases/tag/v1.12.34) (2026-11-11)
+==================================================================================================
+## Security
+
+* Includes a fix for GHSA-jx97-gwvc-pfxx
+* Includes a fix for GHSA-pqp6-f7wc-6498
+
+## ✨ Features
+
+* Add ability to disable public rooms entirely via modules ([#35641](https://github.com/element-hq/element-web/pull/35641)). Contributed by @dbkr.
+* Harden banner module ([#35646](https://github.com/element-hq/element-web/pull/35646)). Contributed by @t3chguy.
+* Use the (now available) npm package for the element-call component ([#35637](https://github.com/element-hq/element-web/pull/35637)). Contributed by @toger5.
+* Tweak Can't confirm dialog to match designs exactly ([#35574](https://github.com/element-hq/element-web/pull/35574)). Contributed by @andybalaam.
+* Allow "userTimezone" to be configured via the config. ([#35631](https://github.com/element-hq/element-web/pull/35631)). Contributed by @Half-Shot.
+* Add a softer reset warning screen if the user has no encrypted chats ([#35415](https://github.com/element-hq/element-web/pull/35415)). Contributed by @andybalaam.
+* Persist active filter selection ([#35420](https://github.com/element-hq/element-web/pull/35420)). Contributed by @Johennes.
+* OS level Picture-in-Picture for ElementCall (Using Document Picture-in-Picture API) ([#35002](https://github.com/element-hq/element-web/pull/35002)). Contributed by @toger5.
+* Use the asynchronous safeStorage APIs ([#34965](https://github.com/element-hq/element-web/pull/34965)). Contributed by @hughns.
+* Allow generating a recovery key when logging out and this is the last device ([#35401](https://github.com/element-hq/element-web/pull/35401)). Contributed by @kaylendog.
+* Show read receipts in the new timeline(labs) ([#35276](https://github.com/element-hq/element-web/pull/35276)). Contributed by @langleyd.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix startup exit when migrating plaintext secrets on macOS and Windows ([#35752](https://github.com/element-hq/element-web/pull/35752)). Contributed by @RiotRobot.
+* Fix user status being clipped by user menu ([#35649](https://github.com/element-hq/element-web/pull/35649)). Contributed by @florianduros.
+* Surface configured timezone in dropdown ([#35650](https://github.com/element-hq/element-web/pull/35650)). Contributed by @Half-Shot.
+* Fix "UIFeature.AllowCreatingPublic[Rooms|Spaces]" ([#35591](https://github.com/element-hq/element-web/pull/35591)). Contributed by @dbkr.
+* Fix header color in encryption tab ([#35643](https://github.com/element-hq/element-web/pull/35643)). Contributed by @florianduros.
+* Fix timestamp overlap on caption text in bubble layout ([#35644](https://github.com/element-hq/element-web/pull/35644)). Contributed by @florianduros.
+* Fix type errors with shared-components ([#35616](https://github.com/element-hq/element-web/pull/35616)). Contributed by @Half-Shot.
+* Correctly pass X.509-related data over the Electron IPC ([#35601](https://github.com/element-hq/element-web/pull/35601)). Contributed by @kaylendog.
+* Don't set custom profile fields to `null` when deletion is meant. ([#34844](https://github.com/element-hq/element-web/pull/34844)). Contributed by @reivilibre.
+* Fix UI elements displayed despite being disable by restricted guest module  ([#35562](https://github.com/element-hq/element-web/pull/35562)). Contributed by @florianduros.
+* Compute X.509 certificate chain validity using the minimum `validTo` of all certs ([#35522](https://github.com/element-hq/element-web/pull/35522)). Contributed by @kaylendog.
+
+## 🧰 Maintenance
+
+* Update embedded Element Call package to 0.28.2 ([#35720](https://github.com/element-hq/element-web/pull/35720)). Contributed by @robintown.
+
+
 Changes in [1.12.33](https://github.com/element-hq/element-web/releases/tag/v1.12.33) (2026-10-27)
 ==================================================================================================
 ## ✨ Features
