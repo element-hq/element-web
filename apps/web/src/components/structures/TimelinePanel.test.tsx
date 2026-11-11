@@ -516,10 +516,7 @@ describe("TimelinePanel", () => {
     it("keeps the thread listener attached across ordinary re-renders", async () => {
         const [client, room, events] = setupTestData();
         const props = getProps(room, events);
-        const { rerender } = render(
-            <TimelinePanel {...props} />,
-            clientAndSDKContextRenderOptions(client, sdkContext),
-        );
+        const { rerender } = render(<TimelinePanel {...props} />, clientAndSDKContextRenderOptions(client, sdkContext));
         await flushPromises();
 
         const onSpy = vi.spyOn(room, "on");
