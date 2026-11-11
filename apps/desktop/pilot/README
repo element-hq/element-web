@@ -13,9 +13,10 @@ Build it with this directory as the variant, from apps/desktop:
 
     VARIANT_PATH=pilot/build.json pnpm run build
 
-The agent's instructions for one chat partner are Markdown files in %LOCALAPPDATA%\Element Pilot\agent\contacts,
-one per Matrix ID with ":" written as "%3A" (for example @bob%3Aexample.org.md). They can be edited there or in the
-user info of that person.
+The agent's instructions for one chat partner are Markdown files in Documents\Element Pilot\contacts, so that they
+are kept when Element Pilot is uninstalled or installed again. There is one per Matrix ID with ":" written as "%3A"
+(for example @bob%3Aexample.org.md). They can be edited there or in the user info of that person. Files that earlier
+versions kept in %LOCALAPPDATA%\Element Pilot\agent\contacts are moved there the first time they are needed.
 
 There is no config.json here: the web app is built with apps/web/config.json, and the build has no update server,
 so it never replaces itself with an official Element build.

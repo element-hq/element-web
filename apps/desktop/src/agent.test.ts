@@ -530,22 +530,41 @@ describe("agent", () => {
             // Keep the files in a directory of their own, the same on every platform
             Object.defineProperty(process, "platform", { value: "linux" });
             dataDir = await fs.mkdtemp(path.join(os.tmpdir(), "agent-test-"));
-            vi.mocked(app.getPath).mockReturnValue(dataDir);
+            vi.mocked(app.getPath).mockImplementation((name) =>
+                path.join(dataDir, name === "documents" ? "Documents" : "Element"),
+            );
         });
 
         afterEach(async () => {
             Object.defineProperty(process, "platform", { value: platform });
-            vi.mocked(app.getPath).mockReturnValue("/roaming/Element");
+            vi.mocked(app.getPath).mockReset().mockReturnValue("/roaming/Element");
             await fs.rm(dataDir, { recursive: true, force: true });
         });
 
-        const bobFile = (): string => path.join(dataDir, "agent", "contacts", "@bob%3Aexample.org.md");
+        const bobFile = (): string => path.join(dataDir, "Documents", "Element", "contacts", "@bob%3Aexample.org.md");
+        const oldContactsDir = (): string => path.join(dataDir, "Element", "agent", "contacts");
 
-        it("keeps one Markdown file per user, with a name every file system allows", () => {
+        it("keeps one Markdown file per user in the documents, with a name every file system allows", () => {
             expect(getContactInstructionsPath("@bob:example.org")).toBe(bobFile());
             expect(path.basename(getContactInstructionsPath("@b/ö*:example.org:8448"))).toBe(
                 "@b%2F%C3%B6%2A%3Aexample.org%3A8448.md",
             );
+        });
+
+        it("moves the files from the agent's data to the documents, keeping files already there", async () => {
+            await fs.mkdir(oldContactsDir(), { recursive: true });
+            await fs.writeFile(path.join(oldContactsDir(), "@bob%3Aexample.org.md"), "Be formal.");
+            await fs.writeFile(path.join(oldContactsDir(), "@carol%3Aexample.org.md"), "Old Carol");
+            await fs.mkdir(path.dirname(bobFile()), { recursive: true });
+            await fs.writeFile(path.join(path.dirname(bobFile()), "@carol%3Aexample.org.md"), "New Carol");
+
+            expect(await getContactInstructions("@bob:example.org")).toMatchObject({ data: { text: "Be formal." } });
+            expect(await getContactInstructions("@carol:example.org")).toMatchObject({ data: { text: "New Carol" } });
+            expect(await fs.readdir(oldContactsDir())).toEqual(["@carol%3Aexample.org.md"]);
+
+            await fs.rm(path.join(oldContactsDir(), "@carol%3Aexample.org.md"));
+            await getContactInstructions("@bob:example.org");
+            await expect(fs.access(oldContactsDir())).rejects.toThrow();
         });
 
         it("saves, reads and deletes the instructions", async () => {

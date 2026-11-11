@@ -9,13 +9,14 @@ Please see LICENSE files in the repository root for full details.
 // renderer decides when a reply or suggestions are needed and sends the conversation; this module holds the credentials and talks to the providers, so the
 // credentials stay in the main process.
 //
-// Everything the agent keeps stays on this computer: its settings, the credentials (encrypted with safeStorage),
-// the marked rooms and how the replies are marked in them are in a store of their own, in a directory that is never
-// synced to other computers. The instructions for each chat partner are Markdown files in the "contacts" folder of
-// that directory, so that they can also be edited outside of Element.
+// The agent's settings, the credentials (encrypted with safeStorage), the marked rooms and how the replies are
+// marked in them stay on this computer, in a store of their own in a directory that is never synced to other
+// computers. The instructions for each chat partner are Markdown files in a "contacts" folder in the user's
+// documents, so that they can also be edited outside of Element and survive installing Element again.
 
 import path from "node:path";
 import fs from "node:fs/promises";
+import { constants as fsConstants } from "node:fs";
 import { app, safeStorage } from "electron";
 import ElectronStore from "electron-store";
 import Anthropic from "@anthropic-ai/sdk";
@@ -281,7 +282,16 @@ function isUserId(value: unknown): value is string {
 }
 
 /**
- * The Markdown file with the instructions for a chat partner, in the "contacts" folder of the agent's data.
+ * The folder with the instructions for each chat partner: "contacts" in a folder named like Element's data folder
+ * in the user's documents, such as Documents\Element Pilot\contacts. Unlike the application data, which lies next to
+ * where Element is installed, the documents are not touched when Element is uninstalled or installed again.
+ */
+export function getContactsPath(): string {
+    return path.join(app.getPath("documents"), path.basename(app.getPath("userData")), "contacts");
+}
+
+/**
+ * The Markdown file with the instructions for a chat partner, in the {@link getContactsPath | contacts folder}.
  * Characters that some file systems don't allow in names, such as ":" on Windows, are percent-encoded, so the
  * name stays readable and every user ID gets a file of its own: @alice:example.org is "@alice%3Aexample.org.md".
  */
@@ -289,7 +299,39 @@ export function getContactInstructionsPath(userId: string): string {
     const name = userId.replace(/[^A-Za-z0-9@._=+-]/gu, (char) =>
         [...Buffer.from(char, "utf8")].map((byte) => `%${byte.toString(16).toUpperCase().padStart(2, "0")}`).join(""),
     );
-    return path.join(getAgentDataPath(), "contacts", `${name}.md`);
+    return path.join(getContactsPath(), `${name}.md`);
+}
+
+/**
+ * Move the instructions from the "contacts" folder of the agent's data, where earlier versions kept them, to the
+ * {@link getContactsPath | contacts folder}. A file that already exists there is kept and the old one left alone.
+ * The files are copied rather than renamed, since the documents may be on another drive.
+ */
+async function moveOldContactInstructions(): Promise<void> {
+    const oldDir = path.join(getAgentDataPath(), "contacts");
+    let names: string[];
+    try {
+        names = (await fs.readdir(oldDir)).filter((name) => name.endsWith(".md"));
+    } catch {
+        return;
+    }
+    try {
+        await fs.mkdir(getContactsPath(), { recursive: true });
+        for (const name of names) {
+            const oldFile = path.join(oldDir, name);
+            try {
+                await fs.copyFile(oldFile, path.join(getContactsPath(), name), fsConstants.COPYFILE_EXCL);
+            } catch (e) {
+                if ((e as NodeJS.ErrnoException).code === "EEXIST") continue;
+                throw e;
+            }
+            await fs.rm(oldFile, { force: true });
+        }
+        // Only succeeds when the folder is empty, which leaves files that couldn't be moved where they are
+        await fs.rmdir(oldDir).catch(() => {});
+    } catch (e) {
+        console.error("Failed to move the agent instructions to the contacts folder", e);
+    }
 }
 
 /**
@@ -297,6 +339,7 @@ export function getContactInstructionsPath(userId: string): string {
  * @returns the instructions, "" if there are none
  */
 async function readContactInstructions(userId: string): Promise<string> {
+    await moveOldContactInstructions();
     try {
         return await fs.readFile(getContactInstructionsPath(userId), "utf8");
     } catch (e) {
@@ -331,6 +374,7 @@ export async function setContactInstructions(
     if (!isUserId(userId) || typeof text !== "string" || text.length > MAX_CONTACT_INSTRUCTIONS_LENGTH) {
         return failure("invalid_request");
     }
+    await moveOldContactInstructions();
     const filePath = getContactInstructionsPath(userId);
     try {
         if (text.trim()) {

@@ -36,7 +36,7 @@ const meta = {
         isLoading: false,
         isBusy: false,
         instructions: "",
-        filePath: "C:\\Users\\Alice\\AppData\\Local\\Element\\agent\\contacts\\@bob%3Aexample.org.md",
+        filePath: "C:\\Users\\Alice\\Documents\\Element\\contacts\\@bob%3Aexample.org.md",
         hasError: false,
         save: fn(),
     },
