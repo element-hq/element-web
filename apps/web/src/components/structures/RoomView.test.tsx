@@ -492,28 +492,11 @@ describe("RoomView", () => {
         it("and it has 0 unreads, getHiddenHighlightCount should return 0", async () => {
             vi.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(0);
             expect(instance.getHiddenHighlightCount()).toBe(0);
-            // assert that msc3946ProcessDynamicPredecessor is false by default
-            expect(room.findPredecessor).toHaveBeenCalledWith(false);
         });
 
         it("and it has 23 unreads, getHiddenHighlightCount should return 23", async () => {
             vi.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(23);
             expect(instance.getHiddenHighlightCount()).toBe(23);
-        });
-
-        describe("and feature_dynamic_room_predecessors is enabled", () => {
-            beforeEach(() => {
-                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: true }));
-            });
-
-            afterEach(() => {
-                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: false }));
-            });
-
-            it("should pass the setting to findPredecessor", async () => {
-                expect(instance.getHiddenHighlightCount()).toBe(0);
-                expect(room.findPredecessor).toHaveBeenCalledWith(true);
-            });
         });
     });
 

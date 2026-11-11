@@ -1532,8 +1532,6 @@
         "currently_experimental": "Trenutačno u eksperimentalnoj fazi.",
         "document_previews": "Eksperimentalni pretpregledi dokumenata",
         "document_previews_description": "Otvorite PDF i Markdown privitke na desnoj ploči.",
-        "dynamic_room_predecessors": "Dinamički prethodnici soba",
-        "dynamic_room_predecessors_description": "Omogući MSC3946 (za podršku naknadno pristiglim arhivama soba)",
         "element_call_video_rooms": "Videosobe u Element Callu",
         "encrypted_state_events": "Događaji šifriranog stanja (MSC4362)",
         "encrypted_state_events_description": "Omogućuje eksperimentalnu podršku za šifriranje događaja stanja, čime se od poslužitelja skrivaju metapodatci, poput naziva soba i tema. Ti metapodatci bit će skriveni i od osoba koje se poslije pridruže sobama i od onih čiji klijenti ne podržavaju MSC4362.",
@@ -3004,7 +3002,6 @@
             "web_session": "Preglednik"
         },
         "show_avatar_changes": "Prikaži promjene profilne slike",
-        "show_breadcrumbs": "Prikaži prečace do nedavno pregledanih soba iznad popisa soba",
         "show_chat_effects": "Prikaži efekte razgovora (animacije prilikom primanja npr. konfeta)",
         "show_displayname_changes": "Prikaži promjene imena za prikaz",
         "show_join_leave": "Prikaži poruke o pridruživanju/odlasku (pozivi/uklanjanja/zabrane ostaju nepromijenjene)",

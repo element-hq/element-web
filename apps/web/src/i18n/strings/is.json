@@ -1896,7 +1896,6 @@
             "verify_session": "Sannprófa setu",
             "web_session": "Vefseta"
         },
-        "show_breadcrumbs": "Sýna flýtileiðir í nýskoðaðar spjallrásir fyrir ofan listann yfir spjallrásir",
         "show_chat_effects": "Sýna hreyfingar í spjalli (t.d. þegar tekið er við skrauti)",
         "show_displayname_changes": "Sýna breytingar á birtingarnafni",
         "show_join_leave": "Birta taka-þátt/hætta skilaboð (hefur ekki áhrif á boð/fjarlægingu/bönn)",

@@ -396,7 +396,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
-        session.getConsensusCallIntent = () => "video";
+        session.getConsensusIntent = () => "m.video";
         return session;
     });
     return {
