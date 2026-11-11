@@ -1222,8 +1222,6 @@
         "bridge_state_workspace": "Spazio di lavoro: <networkLink/>",
         "click_for_info": "Clicca per altre info",
         "currently_experimental": "Al momento è sperimentale.",
-        "dynamic_room_predecessors": "Predecessori della stanza dinamici",
-        "dynamic_room_predecessors_description": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)",
         "element_call_video_rooms": "Stanze video di Element Call",
         "experimental_description": "Ti senti di sperimentare? Prova le nostre ultime idee in sviluppo. Queste funzioni non sono complete; potrebbero essere instabili, cambiare o essere scartate. <a>Maggiori informazioni</a>.",
         "experimental_section": "Anteprime",
@@ -2387,7 +2385,6 @@
             "web_session": "Sessione web"
         },
         "show_avatar_changes": "Mostra cambiamenti dell'immagine del profilo",
-        "show_breadcrumbs": "Mostra scorciatoie per le stanze viste di recente sopra l'elenco stanze",
         "show_chat_effects": "Mostra effetti chat (animazioni quando si ricevono ad es. coriandoli)",
         "show_displayname_changes": "Mostra i cambi di nomi visualizzati",
         "show_join_leave": "Mostra messaggi di entrata/uscita (non influenza inviti/rimozioni/ban)",

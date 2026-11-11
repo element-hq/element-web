@@ -15,7 +15,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { mkRoom, mkSpace, stubClient } from "test-utils";
 import AddExistingToSpaceDialog from "./AddExistingToSpaceDialog";
-import SettingsStore from "../../../settings/SettingsStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 
 describe("<AddExistingToSpaceDialog />", () => {
@@ -44,35 +43,6 @@ describe("<AddExistingToSpaceDialog />", () => {
         const { queryByText, getByText } = renderAddExistingToSpaceDialog(client);
         expect(queryByText("No results")).not.toBeInTheDocument();
         expect(getByText("!room2:example.com")).toBeInTheDocument();
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            const client = stubClient();
-            vi.mocked(client.getVisibleRooms).mockClear();
-            renderAddExistingToSpaceDialog(client);
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            const client = stubClient();
-            vi.mocked(client.getVisibleRooms).mockClear();
-            renderAddExistingToSpaceDialog(client);
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
     });
 });
 

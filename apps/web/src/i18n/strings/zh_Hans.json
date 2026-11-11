@@ -215,6 +215,7 @@
             "description": "你确定要移除此设备？",
             "generate_recovery_key": "生成新的恢复密钥",
             "keep_access_description": "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。",
+            "key_checked_title": "恢复密钥已激活",
             "setup_key_backup_title": "你即将失去加密聊天记录的访问权",
             "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时，你需要使用恢复密钥验证数字身份，并恢复加密聊天。",
             "skip_key_backup": "仍要移除此设备"
@@ -512,7 +513,7 @@
         "message_layout": "消息布局",
         "message_timestamp_invalid": "无效时间戳",
         "microphone": "麦克风",
-        "moderation_and_safety": "尺度与安全",
+        "moderation_and_safety": "内容审核与安全",
         "modern": "现代",
         "mute": "静默",
         "n_members": {
@@ -1189,6 +1190,10 @@
             "user": "%(sender)s 使用 %(reaction)s 对 %(message)s 作出反应",
             "you": "你使用了 %(reaction)s 对 %(message)s 作出反应"
         },
+        "m.rtc.notification": {
+            "ended": "通话已结束",
+            "started": "通话已开始"
+        },
         "m.sticker": "%(senderName)s：%(stickerName)s",
         "m.text": "%(senderName)s：%(message)s",
         "prefix": {
@@ -1522,8 +1527,6 @@
         "currently_experimental": "当前为实验性。",
         "document_previews": "实验性文档预览",
         "document_previews_description": "在右侧面板打开 PDF 与 Markdown 附件。",
-        "dynamic_room_predecessors": "动态房间前身",
-        "dynamic_room_predecessors_description": "需要启用 MSC3946 以支持“迟到房间归档”。",
         "element_call_video_rooms": "Element Call 视频房间",
         "encrypted_state_events": "已加密的状态事件",
         "encrypted_state_events_description": "启用加密状态事件的实验性支持，此功能会对服务器隐藏房间名称与主题等元数据。这些元数据对之后加入房间的用户与不支持 MSC4362 的客户端隐藏。",
@@ -2557,6 +2560,10 @@
                 "change_recovery_key": "更改恢复密钥",
                 "change_recovery_key_description": "在安全的地方记下新的恢复密钥。点选“继续”按钮以确认更改。",
                 "change_recovery_key_title": "更改恢复密钥？",
+                "check_description": "请输入你已保存的恢复密钥，以确保其正确且有效。",
+                "check_error": "恢复密钥不正确",
+                "check_failed_title": "恢复密钥检查失败",
+                "check_title": "检查恢复密钥",
                 "enter_key_error": "你输入的恢复密钥不正确。",
                 "enter_recovery_key": "输入恢复密钥",
                 "forgot_recovery_key": "忘记恢复密钥？",
@@ -2962,7 +2969,6 @@
             "web_session": "浏览器"
         },
         "show_avatar_changes": "显示头像更改",
-        "show_breadcrumbs": "在房间列表之上显示最近访问的房间的快捷入口",
         "show_chat_effects": "显示聊天特效（例如当收到“五彩纸屑”时）",
         "show_displayname_changes": "显示用户的“显示名称更改”",
         "show_join_leave": "显示加入及离开消息（邀请、移除及封禁不受影响）",

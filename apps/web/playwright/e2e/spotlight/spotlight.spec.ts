@@ -23,7 +23,6 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
     const spotlight = await app.openSpotlight();
     await spotlight.filter(Filter.People);
     await spotlight.search(name);
-    await page.waitForTimeout(1000); // wait for the dialog code to settle
     await expect(spotlight.dialog.locator(".mx_Spinner")).not.toBeAttached();
     const result = spotlight.results;
     await expect(result).toHaveCount(1);
@@ -107,7 +106,6 @@ test.describe("Spotlight", () => {
 
     test("should be able to add and remove filters via keyboard", async ({ page, app }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(1000); // wait for the dialog to settle, otherwise our keypresses might race with an update
 
         // initially, public spaces should be highlighted (because there are no other suggestions)
         await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicSpaces")).toHaveAttribute(
@@ -120,7 +118,11 @@ test.describe("Spotlight", () => {
         await expect(spotlight.dialog.locator(".mx_SpotlightDialog_filter")).toHaveText("Public spaces");
         await spotlight.searchBox.press("Backspace");
         await expect(spotlight.dialog.locator(".mx_SpotlightDialog_filter")).not.toBeAttached();
-        await page.waitForTimeout(200); // Again, wait to settle so keypresses arrive correctly
+        // Wait for the default selection to return so the next keypress isn't lost to a re-render
+        await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicSpaces")).toHaveAttribute(
+            "aria-selected",
+            "true",
+        );
 
         await spotlight.searchBox.press("ArrowDown");
         await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicRooms")).toHaveAttribute(
@@ -135,7 +137,6 @@ test.describe("Spotlight", () => {
 
     test("should find joined rooms", async ({ page, app, room1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.search(room1.name);
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -147,7 +148,6 @@ test.describe("Spotlight", () => {
 
     test("should find known public rooms", async ({ page, app, room1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room1.name);
         const resultLocator = spotlight.results;
@@ -161,7 +161,6 @@ test.describe("Spotlight", () => {
 
     test("should find unknown public rooms", async ({ page, app, room2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room2.name);
         const resultLocator = spotlight.results;
@@ -176,7 +175,6 @@ test.describe("Spotlight", () => {
 
     test("should find unknown public world readable rooms", async ({ page, app, room3 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room3.name);
         const resultLocator = spotlight.results;
@@ -193,7 +191,6 @@ test.describe("Spotlight", () => {
     // We obviously don’t have federation or bridges in local e2e tests
     test.skip("should find unknown public rooms on other homeservers", async ({ page, app, room3 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room3.name);
         await page.locator("[aria-haspopup=true][role=button]").click();
@@ -204,7 +201,6 @@ test.describe("Spotlight", () => {
             .locator("..")
             .locator("[role=menuitemradio]")
             .click();
-        await page.waitForTimeout(500); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -214,7 +210,6 @@ test.describe("Spotlight", () => {
 
     test("should find known people", async ({ page, app, bot1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.displayName!);
         const resultLocator = spotlight.results;
@@ -233,7 +228,6 @@ test.describe("Spotlight", () => {
      */
     test("should find unknown people", async ({ page, app, bot2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
         const resultLocator = spotlight.results;
@@ -249,7 +243,6 @@ test.describe("Spotlight", () => {
 
         // Starting a DM with ByteBot (will be turned into a group dm later)
         let spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
         let resultLocator = spotlight.results;
@@ -290,7 +283,6 @@ test.describe("Spotlight", () => {
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.userId);
-        await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
         await expect(
@@ -303,7 +295,6 @@ test.describe("Spotlight", () => {
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.userId);
-        await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
         await expect(
@@ -317,7 +308,6 @@ test.describe("Spotlight", () => {
     // Test against https://github.com/vector-im/element-web/issues/22851
     test("should show each person result only once", async ({ page, app, bot1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
 
         // 2 rounds of search to simulate the bug conditions. Specifically, the first search
@@ -328,7 +318,6 @@ test.describe("Spotlight", () => {
         for (let i = 0; i < 2; i++) {
             console.log("Iteration: " + i);
             await spotlight.search(bot1.credentials!.userId);
-            await page.waitForTimeout(1000); // wait for the dialog to settle
             const resultLocator = spotlight.results;
             await expect(resultLocator).toHaveCount(1);
             await expect(resultLocator.first()).toContainText(bot1.credentials!.userId);
@@ -337,10 +326,8 @@ test.describe("Spotlight", () => {
 
     test("should allow opening group chat dialog", async ({ page, app, bot2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
-        await page.waitForTimeout(3000); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -362,10 +349,8 @@ test.describe("Spotlight", () => {
         await startDM(app, page, bot1.credentials!.displayName!);
         await page.goto("/#/home");
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.displayName!);
-        await page.waitForTimeout(3000); // wait for the dialog to settle
         await expect(spotlight.dialog.locator(".mx_Spinner")).not.toBeAttached();
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -373,7 +358,6 @@ test.describe("Spotlight", () => {
 
     test("should be able to navigate results via keyboard", async ({ page, app }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search("b");
 

@@ -113,8 +113,7 @@ export function getUnreadNotificationCount(
     // Check notification counts in the old room just in case there's some lost
     // there. We only go one level down to avoid performance issues, and theory
     // is that 1st generation rooms will have already been read by the 3rd generation.
-    const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-    const predecessor = room.findPredecessor(msc3946ProcessDynamicPredecessor);
+    const predecessor = room.findPredecessor();
     // Exclude threadId, as the same thread can't continue over a room upgrade
     if (!threadId && predecessor?.roomId) {
         const oldRoomId = predecessor.roomId;

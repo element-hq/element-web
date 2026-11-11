@@ -10,10 +10,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import * as maplibregl from "maplibre-gl";
 import { render, screen } from "test-utils-rtl";
 
 import ZoomButtons from "./ZoomButtons";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

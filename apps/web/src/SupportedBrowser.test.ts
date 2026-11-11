@@ -10,12 +10,16 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
+import browserslist from "browserslist";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
+import { getMinimumBrowserVersions } from "../supportedBrowsers.ts";
 import ToastStore from "./stores/ToastStore";
 import { GenericToast } from "@element-hq/web-shared-components";
 
 vi.mock("matrix-js-sdk/src/logger");
+// Only used by the build-time getMinimumBrowserVersions: the app reads the versions baked in by the build
+vi.mock("browserslist", () => ({ default: vi.fn() }));
 
 describe("SupportedBrowser", () => {
     beforeEach(() => {
@@ -120,5 +124,19 @@ describe("SupportedBrowser", () => {
         checkBrowserSupport();
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, but user has previously accepted");
         expect(toastSpy).not.toHaveBeenCalled();
+    });
+});
+
+describe("getMinimumBrowserVersions", () => {
+    it("picks the oldest version of each browser, comparing versions as numbers", () => {
+        vi.mocked(browserslist).mockReturnValue(["chrome 100", "chrome 99", "safari 26.1", "safari 18.5", "Edge 141"]);
+
+        expect(getMinimumBrowserVersions()).toEqual({ chrome: 99, safari: 18, edge: 141 });
+    });
+
+    it("ignores non-numeric versions", () => {
+        vi.mocked(browserslist).mockReturnValue(["safari TP", "safari 26.0"]);
+
+        expect(getMinimumBrowserVersions()).toEqual({ safari: 26 });
     });
 });

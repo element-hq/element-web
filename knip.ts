@@ -7,8 +7,9 @@ Please see LICENSE in the repository root for full details.
 
 import { type KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally load plugins
+// Specify these as knip loads config files which may conditionally load plugins or run commands
 process.env.GITHUB_ACTIONS = "1";
+process.env.CI = "1";
 
 export default {
     workspaces: {
@@ -54,6 +55,7 @@ export default {
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
+                "supportedBrowsers.ts!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
                 "src/hooks/useIsReleaseAnnouncementOpen.ts!",
@@ -83,9 +85,6 @@ export default {
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
                 "@types/sdp-transform",
-
-                // Used by Playwright to serve the built web app.
-                "serve",
             ],
         },
         "apps/desktop": {

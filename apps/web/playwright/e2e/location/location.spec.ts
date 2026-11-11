@@ -53,10 +53,10 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
             // wait for the dialog to be visible
             await expect(dialog).toBeVisible();
 
-            // screenshot the map within the dialog
-            await expect(dialog.getByRole("region", { name: "Map" })).toMatchScreenshot(
-                "location-pin-drop-message-map.png",
-            );
+            // screenshot the map within the dialog, once its tiles have loaded and been drawn
+            const map = dialog.getByRole("region", { name: "Map" });
+            await expect(map).not.toHaveAttribute("aria-busy");
+            await expect(map).toMatchScreenshot("location-pin-drop-message-map.png");
 
             await app.closeDialog();
 

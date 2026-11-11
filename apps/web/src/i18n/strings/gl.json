@@ -1975,7 +1975,6 @@
             "verified_sessions_list_description": "Para a mellor seguridade, desconecta calquera outra sesión que xa non recoñezas ou uses.",
             "verify_session": "Verificar sesión"
         },
-        "show_breadcrumbs": "Mostrar atallos a salas vistas recentemente enriba da lista de salas",
         "show_chat_effects": "Mostrar efectos no chat (animacións na recepción, ex. confetti)",
         "show_displayname_changes": "Mostrar cambios do nome mostrado",
         "show_join_leave": "Mostrar unirse/saír (convites/eliminacións/vetos non afectados)",

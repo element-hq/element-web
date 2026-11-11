@@ -217,6 +217,7 @@
             "description": "Är du säker på att du vill ta bort den här enheten?",
             "generate_recovery_key": "Skapa en ny återställningsnyckel",
             "keep_access_description": "Se till att du alltid har tillgång till en annan verifierad enhet eller din återställningsnyckel för att undvika att förlora din krypterade chatthistorik.",
+            "key_checked_title": "Din återställningsnyckel är aktiv",
             "setup_key_backup_title": "Du kommer att förlora åtkomsten till dina krypterade meddelanden",
             "setup_secure_backup_description": "Det här är din enda enhet. Om du tar bort den behöver du en återställningsnyckel för att bekräfta din digitala identitet och återställa dina krypterade chattar nästa gång du loggar in.",
             "skip_key_backup": "Ta bort den här enheten ändå"
@@ -283,6 +284,8 @@
             "tap_avatar_link_new_device": "Klicka på din profilbild och välj \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Din kontoleverantör stöder inte inloggning på en ny enhet med en QR-kod.",
             "unsupported_heading": "QR-kod stöds inte",
+            "verification_uri_explainer": "Din kontotjänstleverantör öppnas i en ny flik. Godkänn inloggningen där och gå sedan tillbaka till den här fliken.",
+            "verification_uri_heading": "Godkänn inloggningen hos din kontoleverantör",
             "waiting_for_device": "Väntar på din andra enhet"
         },
         "register_action": "Skapa konto",
@@ -1109,7 +1112,7 @@
         "verification_requested_toast_title": "Verifiering begärd",
         "verified_identity_changed": "Verifierad identitet för %(displayName)s (<b>%(userId)s</b>) har ändrats. <a>Läs mer </a>",
         "verified_identity_changed_no_displayname": "Verifierad identitet för <b>%(userId)s</b> har ändrats. <a>Läs mer </a>",
-        "verify_toast_description": "Från och med slutet av oktober 2026 kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>\n\nhttps://github.com/element-hq/crypto-internal/issues/305",
+        "verify_toast_description": "Från och med slutet av oktober 2026 kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>",
         "verify_toast_title": "Verifiera den här enheten",
         "withdraw_verification_action": "Återkalla verifieringen"
     },
@@ -1190,6 +1193,10 @@
         "m.reaction": {
             "user": "%(sender)s reagerade med %(reaction)s till %(message)s",
             "you": "Du reagerade med %(reaction)s till %(message)s"
+        },
+        "m.rtc.notification": {
+            "ended": "Samtalet avslutades",
+            "started": "Samtal påbörjat"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
@@ -1527,8 +1534,6 @@
         "currently_experimental": "För närvarande experimentellt.",
         "document_previews": "Förhandsvisningar av experimentella dokument",
         "document_previews_description": "Öppna PDF- och Markdown-bilagor i den högra panelen.",
-        "dynamic_room_predecessors": "Dynamiska rumsföregångare",
-        "dynamic_room_predecessors_description": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
         "element_call_video_rooms": "Element Call videorum",
         "encrypted_state_events": "Krypterade tillståndshändelser (MSC4362)",
         "encrypted_state_events_description": "Aktiverar experimentellt stöd för encryption av tillståndshändelser, vilket döljer metadata som rumsnamn och rumsbeskrivningar från servern. Denna metadata kommer även att döljas för personer som ansluter sig till rummen senare, samt för personer vars klienter inte stöder MSC4362.",
@@ -2565,6 +2570,10 @@
                 "change_recovery_key": "Byt återställningsnyckel",
                 "change_recovery_key_description": "Spara ner den här nya återställningsnyckeln på ett säkert ställe. Klicka sedan på Fortsätt för att bekräfta ändringen.",
                 "change_recovery_key_title": "Byt återställningsnyckel?",
+                "check_description": "Ange den återställningsnyckel du har sparat för att kontrollera att den är korrekt och aktiv.",
+                "check_error": "Felaktig återställningsnyckel",
+                "check_failed_title": "Det gick inte att verifiera återställningsnyckeln",
+                "check_title": "Kontrollera din återställningsnyckel",
                 "enter_key_error": "Återställningsnyckeln du angav är inte korrekt.",
                 "enter_recovery_key": "Ange återställningsnyckel",
                 "forgot_recovery_key": "Glömt återställningsnyckeln?",
@@ -2976,7 +2985,6 @@
             "web_session": "Webbläsare"
         },
         "show_avatar_changes": "Visa profilbildsbyten",
-        "show_breadcrumbs": "Visa genvägar till nyligen visade rum över rumslistan",
         "show_chat_effects": "Visa chatteffekter (animeringar när du tar emot t.ex. konfetti)",
         "show_displayname_changes": "Visa visningsnamnsändringar",
         "show_join_leave": "Visa gå med/lämna-meddelanden (inbjudningar/borttagningar/banningar påverkas inte)",

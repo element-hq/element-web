@@ -64,7 +64,6 @@ import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
-import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 import SdkConfig from "../../SdkConfig.ts";
 
@@ -876,7 +875,7 @@ export class ElementWidgetDriver extends WidgetDriver {
      */
     public getKnownRooms(): string[] {
         return MatrixClientPeg.safeGet()
-            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .getVisibleRooms()
             .map((r) => r.roomId);
     }
 
