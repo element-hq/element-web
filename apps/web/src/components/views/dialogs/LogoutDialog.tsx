@@ -181,7 +181,8 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     return (
         <BaseDialog
             contentId="mx_Dialog_content"
-            hasCancel={true}
+            // Recovery key steps must be cancelled via their own buttons
+            hasCancel={step === Step.Start}
             onFinished={onFinished}
             className="mx_LogoutDialog"
             aria-label={_t("action|sign_out")}
