@@ -21,6 +21,8 @@ jobs:
               uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: true
                   require-lockfile: true
 

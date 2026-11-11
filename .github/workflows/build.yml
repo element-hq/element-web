@@ -53,6 +53,8 @@ jobs:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
                   cache: ${{ runner.os != 'Windows' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             - name: Fetch layered build

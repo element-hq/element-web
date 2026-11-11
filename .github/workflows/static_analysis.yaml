@@ -66,6 +66,8 @@ jobs:
               with:
                   # Nothing to cache for the jobs that do not install
                   cache: ${{ matrix.install != '' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             - name: Install Dependencies (layered)
