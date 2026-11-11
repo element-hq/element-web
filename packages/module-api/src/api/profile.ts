@@ -28,6 +28,10 @@ export interface Profile {
      * The display name of the logged-in user.
      */
     displayName?: string;
+    /**
+     * The base API URL of the homeserver the user is logged into.
+     */
+    homeserverUrl?: string;
 }
 
 /**
