@@ -16,7 +16,9 @@ import type { AgentReplyRequest, AgentSuggestionsRequest } from "shared-types";
 import {
     buildSuggestionsSystemPrompt,
     buildSystemPrompt,
+    cancelCopilotSignIn,
     connectAgent,
+    connectCopilotAccount,
     disconnectAgent,
     generateAgentReply,
     generateAgentSuggestions,
@@ -26,6 +28,7 @@ import {
     getAgentStatus,
     getContactInstructions,
     getContactInstructionsPath,
+    getCopilotAccount,
     listAgentModels,
     MAX_CONTACT_INSTRUCTIONS_LENGTH,
     openContactInstructions,
@@ -34,11 +37,12 @@ import {
     setAgentRoom,
     setAgentSettings,
     setContactInstructions,
+    signInCopilot,
     stopCopilot,
     toClaudeMessages,
 } from "./agent.js";
 
-const { storeData, storeOptions, safeStorage, anthropic, copilot } = vi.hoisted(() => {
+const { storeData, storeOptions, safeStorage, shell, anthropic, copilot, getCopilotRuntimePath } = vi.hoisted(() => {
     return {
         /** What the agent's store holds, as electron-store would write it to disk */
         storeData: {} as Record<string, unknown>,
@@ -49,6 +53,7 @@ const { storeData, storeOptions, safeStorage, anthropic, copilot } = vi.hoisted(
             encryptString: vi.fn((text: string) => Buffer.from(`encrypted:${text}`)),
             decryptString: vi.fn((buffer: Buffer) => buffer.toString().replace(/^encrypted:/, "")),
         },
+        shell: { openExternal: vi.fn(async () => {}) },
         anthropic: {
             options: [] as unknown[],
             modelsList: vi.fn(),
@@ -64,14 +69,18 @@ const { storeData, storeOptions, safeStorage, anthropic, copilot } = vi.hoisted(
             deleteSession: vi.fn(async () => {}),
             sendAndWait: vi.fn(),
             disconnect: vi.fn(async () => {}),
+            loginBegin: vi.fn(),
+            loginAdvance: vi.fn(),
+            loginCancel: vi.fn(async () => {}),
         },
+        getCopilotRuntimePath: vi.fn((): string | undefined => undefined),
     };
 });
 
 vi.mock("electron", () => ({
     app: { getPath: vi.fn(() => "/roaming/Element") },
     safeStorage,
-    shell: { openPath: vi.fn(async () => "") },
+    shell: Object.assign(shell, { openPath: vi.fn(async () => "") }),
 }));
 vi.mock("electron-store", () => ({
     default: vi.fn(function (this: Record<string, unknown>, options: unknown) {
@@ -79,6 +88,9 @@ vi.mock("electron-store", () => ({
         this.get = (key: string) => storeData[key];
         this.set = (key: string, value: unknown) => {
             storeData[key] = structuredClone(value);
+        };
+        this.delete = (key: string) => {
+            delete storeData[key];
         };
     }),
 }));
@@ -117,7 +129,10 @@ vi.mock("@github/copilot-sdk", () => ({
             deleteSession: copilot.deleteSession,
         });
     }),
+    RuntimeConnection: { forStdio: (options: { path?: string }) => ({ kind: "stdio", ...options }) },
 }));
+
+vi.mock("./copilot-runtime.js", () => ({ getCopilotRuntimePath }));
 
 const request: AgentReplyRequest = {
     ownName: "Alice",
@@ -145,10 +160,16 @@ describe("agent", () => {
         vi.clearAllMocks();
         anthropic.options.length = 0;
         copilot.options.length = 0;
+        getCopilotRuntimePath.mockReturnValue(undefined);
         copilot.createSession.mockResolvedValue({
             sessionId: "session-1",
             sendAndWait: copilot.sendAndWait,
             disconnect: copilot.disconnect,
+            rpc: {
+                accounts: {
+                    login: { begin: copilot.loginBegin, advance: copilot.loginAdvance, cancel: copilot.loginCancel },
+                },
+            },
         });
         copilot.getAuthStatus.mockResolvedValue({ isAuthenticated: true });
     });
@@ -348,6 +369,131 @@ describe("agent", () => {
             });
             expect(copilot.disconnect).toHaveBeenCalled();
             expect(copilot.deleteSession).toHaveBeenCalledWith("session-1");
+        });
+
+        it("replies with the account of the computer when Copilot is connected with it", async () => {
+            delete storeData.secrets;
+            storeData.copilotAccount = true;
+            copilot.sendAndWait.mockResolvedValue({ data: { content: "Sure" } });
+
+            expect(await generateAgentReply(request)).toEqual({ ok: true, data: "Sure" });
+
+            expect(copilot.options).toEqual([{ useLoggedInUser: true, logLevel: "error" }]);
+            expect(copilot.deleteSession).toHaveBeenCalledWith("session-1");
+        });
+    });
+
+    describe("the Copilot account of the computer", () => {
+        const signInUrl = "https://github.com/login/oauth/authorize?client_id=test";
+
+        it("reports the account the Copilot runtime is signed in to, with the runtime's own directory", async () => {
+            copilot.getAuthStatus.mockResolvedValue({ isAuthenticated: true, authType: "user", login: "alice" });
+
+            expect(await getCopilotAccount()).toEqual({ ok: true, data: { signedIn: true, login: "alice" } });
+
+            // No token and no directory of the agent, so the runtime finds the login of the Copilot CLI
+            expect(copilot.options).toEqual([{ useLoggedInUser: true, logLevel: "error" }]);
+        });
+
+        it("starts the runtime the packaged app unpacked", async () => {
+            const runtime = path.join("resources", "app.asar.unpacked", "copilot-runtime.exe");
+            getCopilotRuntimePath.mockReturnValue(runtime);
+
+            await getCopilotAccount();
+
+            expect(copilot.options).toEqual([
+                expect.objectContaining({ connection: { kind: "stdio", path: runtime }, useLoggedInUser: true }),
+            ]);
+        });
+
+        it("starts one runtime for the requests made while it starts", async () => {
+            storeData.copilotAccount = true;
+            copilot.listModels.mockResolvedValue([]);
+
+            await Promise.all([listAgentModels("copilot"), getCopilotAccount()]);
+
+            expect(copilot.start).toHaveBeenCalledTimes(1);
+        });
+
+        it("connects Copilot with the account instead of a stored token", async () => {
+            storeCredential("copilot", "github_pat_test");
+            copilot.listModels.mockResolvedValue([{ id: "gpt-5", name: "GPT-5" }]);
+
+            expect(await connectCopilotAccount()).toEqual({ ok: true, data: undefined });
+
+            expect(storeData.secrets).toEqual({});
+            expect(getAgentStatus()).toMatchObject({ connected: { copilot: true }, copilotAuth: "account" });
+            expect(await listAgentModels("copilot")).toEqual({ ok: true, data: [{ id: "gpt-5", name: "GPT-5" }] });
+        });
+
+        it("doesn't connect Copilot when the computer is not signed in", async () => {
+            copilot.getAuthStatus.mockResolvedValue({ isAuthenticated: false, statusMessage: "Not signed in" });
+
+            expect(await connectCopilotAccount()).toEqual({
+                ok: false,
+                error: "not_connected",
+                message: "Not signed in",
+            });
+            expect(storeData.copilotAccount).toBeUndefined();
+        });
+
+        it("switches back to a token, and forgets the account on disconnecting without signing it out", async () => {
+            copilot.listModels.mockResolvedValue([]);
+            await connectCopilotAccount();
+
+            await connectAgent("copilot", "github_pat_test");
+            expect(getAgentStatus()).toMatchObject({ copilotAuth: "token" });
+
+            await connectCopilotAccount();
+            await disconnectAgent("copilot");
+            expect(getAgentStatus()).toMatchObject({ connected: { copilot: false }, copilotAuth: undefined });
+            expect(copilot.stop).toHaveBeenCalled();
+            expect(copilot.loginCancel).not.toHaveBeenCalled();
+        });
+
+        it("signs in in the browser and connects Copilot with the new account", async () => {
+            copilot.listModels.mockResolvedValue([]);
+            copilot.loginBegin.mockResolvedValue({ flowId: "flow-1", step: { kind: "open-url", url: signInUrl } });
+            copilot.loginAdvance.mockResolvedValue({
+                kind: "completed",
+                result: { status: "completed", login: "alice" },
+            });
+
+            expect(await signInCopilot()).toEqual({ ok: true, data: { signedIn: true, login: "alice" } });
+
+            expect(copilot.loginBegin).toHaveBeenCalledWith({ kind: "githubDotCom" });
+            expect(shell.openExternal).toHaveBeenCalledWith(signInUrl);
+            expect(copilot.loginAdvance).toHaveBeenCalledWith({ flowId: "flow-1" });
+            expect(copilot.deleteSession).toHaveBeenCalledWith("session-1");
+            // The runtime is restarted to pick up the new account
+            expect(copilot.stop).toHaveBeenCalled();
+            expect(storeData.copilotAccount).toBe(true);
+        });
+
+        it("stops signing in when the user cancels", async () => {
+            copilot.loginBegin.mockResolvedValue({ flowId: "flow-1", step: { kind: "open-url", url: signInUrl } });
+            copilot.loginAdvance.mockReturnValue(new Promise(() => {}));
+
+            const result = signInCopilot();
+            await vi.waitFor(() => expect(copilot.loginAdvance).toHaveBeenCalled());
+            expect(await signInCopilot()).toMatchObject({ ok: false, error: "invalid_request" });
+            cancelCopilotSignIn();
+
+            expect(await result).toMatchObject({ ok: false, error: "cancelled" });
+            expect(copilot.loginCancel).toHaveBeenCalledWith({ flowId: "flow-1" });
+            expect(copilot.deleteSession).toHaveBeenCalledWith("session-1");
+            expect(storeData.copilotAccount).toBeUndefined();
+        });
+
+        it("reports a sign-in that fails and doesn't open pages other than https", async () => {
+            vi.spyOn(console, "error").mockImplementation(() => {});
+            copilot.loginBegin.mockResolvedValue({ flowId: "flow-1", step: { kind: "error", message: "Offline" } });
+            expect(await signInCopilot()).toEqual({ ok: false, error: "unavailable", message: "Offline" });
+
+            copilot.loginBegin.mockResolvedValue({ flowId: "flow-2", step: { kind: "open-url", url: "file:///x" } });
+            expect(await signInCopilot()).toMatchObject({ ok: false, error: "unavailable" });
+            expect(shell.openExternal).not.toHaveBeenCalled();
+            expect(storeData.copilotAccount).toBeUndefined();
         });
     });
 

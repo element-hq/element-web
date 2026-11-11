@@ -18,6 +18,9 @@ type AgentSettingsProps = AgentSettingsViewSnapshot & AgentSettingsViewActions;
 const AgentSettingsViewWrapperImpl = ({
     setProvider,
     connect,
+    connectCopilotAccount,
+    signInCopilot,
+    cancelCopilotSignIn,
     disconnect,
     setModel,
     saveInstructions,
@@ -27,6 +30,9 @@ const AgentSettingsViewWrapperImpl = ({
     const vm = useMockedViewModel(rest, {
         setProvider,
         connect,
+        connectCopilotAccount,
+        signInCopilot,
+        cancelCopilotSignIn,
         disconnect,
         setModel,
         saveInstructions,
@@ -43,8 +49,11 @@ const meta = {
     args: {
         isLoading: false,
         isBusy: false,
+        isSigningIn: false,
         provider: "claude",
         connected: { claude: false, copilot: false },
+        copilotAuth: undefined,
+        copilotAccount: undefined,
         models: [],
         model: undefined,
         instructions: "",
@@ -52,6 +61,9 @@ const meta = {
         error: undefined,
         setProvider: fn(),
         connect: fn(),
+        connectCopilotAccount: fn(),
+        signInCopilot: fn(),
+        cancelCopilotSignIn: fn(),
         disconnect: fn(),
         setModel: fn(),
         saveInstructions: fn(),
@@ -79,6 +91,36 @@ export const Connected: Story = {
 export const Copilot: Story = {
     args: {
         provider: "copilot",
+        copilotAccount: { signedIn: false },
+    },
+};
+
+export const CopilotSignedIn: Story = {
+    args: {
+        provider: "copilot",
+        copilotAccount: { signedIn: true, login: "octocat" },
+    },
+};
+
+export const CopilotSigningIn: Story = {
+    args: {
+        provider: "copilot",
+        isBusy: true,
+        isSigningIn: true,
+        copilotAccount: { signedIn: false },
+    },
+};
+
+export const CopilotConnectedWithAccount: Story = {
+    args: {
+        provider: "copilot",
+        connected: { claude: false, copilot: true },
+        copilotAuth: "account",
+        copilotAccount: { signedIn: true, login: "octocat" },
+        models: [
+            { id: "gpt-5", name: "GPT-5" },
+            { id: "claude-sonnet-5.5", name: "Claude Sonnet 5.5" },
+        ],
     },
 };
 

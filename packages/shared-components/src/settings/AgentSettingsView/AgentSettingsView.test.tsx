@@ -13,13 +13,25 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 
 import * as stories from "./AgentSettingsView.stories";
 
-const { NotConnected, Connected, Copilot, InvalidCredential, Loading } = composeStories(stories);
+const {
+    NotConnected,
+    Connected,
+    Copilot,
+    CopilotSignedIn,
+    CopilotSigningIn,
+    CopilotConnectedWithAccount,
+    InvalidCredential,
+    Loading,
+} = composeStories(stories);
 
 describe("<AgentSettingsView />", () => {
     beforeEach(() => {
         for (const action of [
             "setProvider",
             "connect",
+            "connectCopilotAccount",
+            "signInCopilot",
+            "cancelCopilotSignIn",
             "disconnect",
             "setModel",
             "saveInstructions",
@@ -42,10 +54,50 @@ describe("<AgentSettingsView />", () => {
         expect(screen.queryByLabelText("Model")).not.toBeInTheDocument();
     });
 
-    it("asks for a GitHub token when Copilot is selected", () => {
+    it("offers to sign in to GitHub, or a GitHub token, when Copilot is selected", async () => {
+        const user = userEvent.setup();
         render(<Copilot />);
         expect(screen.getByRole("radio", { name: "GitHub Copilot" })).toBeChecked();
         expect(screen.getByLabelText("GitHub token")).toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: "Sign in with GitHub" }));
+
+        expect(Copilot.args.signInCopilot).toHaveBeenCalled();
+    });
+
+    it("offers the GitHub account Copilot is signed in to on this computer", async () => {
+        const user = userEvent.setup();
+        render(<CopilotSignedIn />);
+        expect(screen.getByText("Copilot on this computer is signed in to GitHub as octocat.")).toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: "Use this account" }));
+
+        expect(CopilotSignedIn.args.connectCopilotAccount).toHaveBeenCalled();
+    });
+
+    it("lets the sign-in be cancelled while it continues in the browser", async () => {
+        const user = userEvent.setup();
+        render(<CopilotSigningIn />);
+        expect(screen.getByText("Continue signing in to GitHub in your browser…")).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Sign in with GitHub" })).not.toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+        expect(CopilotSigningIn.args.cancelCopilotSignIn).toHaveBeenCalled();
+    });
+
+    it("shows the account Copilot is connected with", () => {
+        render(<CopilotConnectedWithAccount />);
+        expect(screen.getByText("Connected to GitHub Copilot as octocat")).toBeInTheDocument();
+        expect(screen.queryByLabelText("GitHub token")).not.toBeInTheDocument();
+        expect(screen.getByLabelText("Model")).toBeInTheDocument();
+    });
+
+    it("shows an error once below both ways of connecting Copilot", () => {
+        render(<Copilot error="unavailable" />);
+        expect(
+            screen.getAllByText("The provider could not be reached. Check your connection and try again."),
+        ).toHaveLength(1);
     });
 
     it("connects with the typed credential", async () => {

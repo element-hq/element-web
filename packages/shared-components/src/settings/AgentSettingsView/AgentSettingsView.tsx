@@ -27,9 +27,26 @@ import { Flex } from "../../core/utils/Flex";
 import styles from "./AgentSettingsView.module.css";
 
 /**
- * The AI providers the agent can use: Claude with an Anthropic API key, or GitHub Copilot with a GitHub token.
+ * The AI providers the agent can use: Claude with an Anthropic API key, or GitHub Copilot with a GitHub account.
  */
 export type AgentSettingsProvider = "claude" | "copilot";
+
+/**
+ * How Copilot is connected.
+ * - `account`: with the GitHub account Copilot is signed in to on this computer.
+ * - `token`: with a GitHub token.
+ */
+export type AgentSettingsCopilotAuth = "account" | "token";
+
+/**
+ * The GitHub account Copilot is signed in to on this computer.
+ */
+export interface AgentSettingsCopilotAccount {
+    /** Whether Copilot is signed in to an account on this computer */
+    signedIn: boolean;
+    /** The GitHub login of the account, if known */
+    login?: string;
+}
 
 /**
  * Why the last action failed.
@@ -56,8 +73,14 @@ export interface AgentSettingsViewSnapshot {
     isBusy: boolean;
     /** The provider that writes the replies */
     provider: AgentSettingsProvider;
-    /** Whether a credential is stored for each provider */
+    /** Whether each provider is connected */
     connected: Record<AgentSettingsProvider, boolean>;
+    /** How Copilot is connected, if it is */
+    copilotAuth?: AgentSettingsCopilotAuth;
+    /** The GitHub account Copilot is signed in to on this computer, once it is known */
+    copilotAccount?: AgentSettingsCopilotAccount;
+    /** Whether the user is signing in to GitHub in the browser */
+    isSigningIn: boolean;
     /** The models of the selected provider; empty while it is not connected */
     models: AgentSettingsModel[];
     /** The selected model, or undefined for the provider's default */
@@ -75,7 +98,13 @@ export interface AgentSettingsViewActions {
     setProvider: (provider: AgentSettingsProvider) => void;
     /** Connect the selected provider with an API key or token */
     connect: (credential: string) => void;
-    /** Forget the credential of the selected provider */
+    /** Connect Copilot with the GitHub account it is signed in to on this computer */
+    connectCopilotAccount: () => void;
+    /** Sign in to GitHub in the browser and connect Copilot with that account */
+    signInCopilot: () => void;
+    /** Stop signing in to GitHub */
+    cancelCopilotSignIn: () => void;
+    /** Disconnect the selected provider */
     disconnect: () => void;
     /** Choose a model of the selected provider, or "" for its default */
     setModel: (model: string) => void;
@@ -96,13 +125,27 @@ export interface AgentSettingsViewProps {
 }
 
 /**
- * Settings of the agent that replies to the direct messages set to "Agent": which AI provider it uses, the
- * credential of the provider, the model, the user's own instructions and whether it suggests replies in every chat.
+ * Settings of the agent that replies to the direct messages set to "Agent": which AI provider it uses, how the
+ * provider is connected, the model, the user's own instructions and whether it suggests replies in every chat.
+ * Copilot can be connected with the GitHub account it is signed in to on this computer, by signing in in the
+ * browser, or with a GitHub token.
  */
 export function AgentSettingsView({ vm }: Readonly<AgentSettingsViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { isLoading, isBusy, provider, connected, models, model, instructions, replySuggestions, error } =
-        useViewModel(vm);
+    const {
+        isLoading,
+        isBusy,
+        isSigningIn,
+        provider,
+        connected,
+        copilotAuth,
+        copilotAccount,
+        models,
+        model,
+        instructions,
+        replySuggestions,
+        error,
+    } = useViewModel(vm);
     const [credential, setCredential] = useState("");
     const [instructionsDraft, setInstructionsDraft] = useState(instructions);
 
@@ -138,6 +181,68 @@ export function AgentSettingsView({ vm }: Readonly<AgentSettingsViewProps>): JSX
         unknown: _t("settings|agent|error_unknown"),
     };
     const errorMessage = error && errorMessages[error];
+    const connectedLabel =
+        provider === "copilot" && copilotAuth === "account" && copilotAccount?.login
+            ? _t("settings|agent|connected_copilot_account", { login: copilotAccount.login })
+            : connectedLabels[provider];
+
+    const tokenForm = (
+        <Root
+            onSubmit={(ev) => {
+                ev.preventDefault();
+                if (credential.trim()) vm.connect(credential.trim());
+            }}
+        >
+            <Field name="credential">
+                <Label>{credentialLabels[provider]}</Label>
+                <PasswordControl
+                    value={credential}
+                    disabled={isBusy}
+                    autoComplete="off"
+                    onChange={(ev) => setCredential(ev.currentTarget.value)}
+                />
+                <HelpMessage>{credentialHelp[provider]}</HelpMessage>
+                {provider === "claude" && errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </Field>
+            <Submit size="md" disabled={isBusy || !credential.trim()}>
+                {_t("settings|agent|connect")}
+            </Submit>
+        </Root>
+    );
+
+    let copilotAccountControls: JSX.Element;
+    if (isSigningIn) {
+        copilotAccountControls = (
+            <Flex align="center" justify="space-between" gap="var(--cpd-space-4x)">
+                <Text size="md">{_t("settings|agent|copilot_signing_in")}</Text>
+                <Button kind="secondary" size="md" onClick={vm.cancelCopilotSignIn}>
+                    {_t("action|cancel")}
+                </Button>
+            </Flex>
+        );
+    } else if (copilotAccount?.signedIn) {
+        copilotAccountControls = (
+            <Flex align="center" justify="space-between" gap="var(--cpd-space-4x)">
+                <Text size="md">
+                    {copilotAccount.login
+                        ? _t("settings|agent|copilot_signed_in_as", { login: copilotAccount.login })
+                        : _t("settings|agent|copilot_signed_in")}
+                </Text>
+                <Button kind="primary" size="md" disabled={isBusy} onClick={vm.connectCopilotAccount}>
+                    {_t("settings|agent|copilot_use_account")}
+                </Button>
+            </Flex>
+        );
+    } else {
+        copilotAccountControls = (
+            <Flex align="center" justify="space-between" gap="var(--cpd-space-4x)">
+                <Text size="md">{_t("settings|agent|copilot_sign_in_description")}</Text>
+                <Button kind="primary" size="md" disabled={isBusy} onClick={vm.signInCopilot}>
+                    {_t("settings|agent|copilot_sign_in")}
+                </Button>
+            </Flex>
+        );
+    }
 
     return (
         <Flex direction="column" gap="var(--cpd-space-6x)" className={styles.agentSettings}>
@@ -167,35 +272,41 @@ export function AgentSettingsView({ vm }: Readonly<AgentSettingsViewProps>): JSX
                 ))}
             </Root>
 
-            {isConnected ? (
+            {isConnected && (
                 <Flex align="center" justify="space-between" gap="var(--cpd-space-4x)">
-                    <Text size="md">{connectedLabels[provider]}</Text>
+                    <Text size="md">{connectedLabel}</Text>
                     <Button kind="secondary" size="md" disabled={isBusy} onClick={vm.disconnect}>
                         {_t("settings|agent|disconnect")}
                     </Button>
                 </Flex>
-            ) : (
-                <Root
-                    onSubmit={(ev) => {
-                        ev.preventDefault();
-                        if (credential.trim()) vm.connect(credential.trim());
-                    }}
-                >
-                    <Field name="credential">
-                        <Label>{credentialLabels[provider]}</Label>
-                        <PasswordControl
-                            value={credential}
-                            disabled={isBusy}
-                            autoComplete="off"
-                            onChange={(ev) => setCredential(ev.currentTarget.value)}
-                        />
-                        <HelpMessage>{credentialHelp[provider]}</HelpMessage>
-                        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                    </Field>
-                    <Submit size="md" disabled={isBusy || !credential.trim()}>
-                        {_t("settings|agent|connect")}
-                    </Submit>
-                </Root>
+            )}
+
+            {!isConnected && provider === "claude" && tokenForm}
+
+            {!isConnected && provider === "copilot" && (
+                <Flex direction="column" gap="var(--cpd-space-6x)">
+                    <Flex direction="column" gap="var(--cpd-space-3x)">
+                        <Text as="h3" size="md" weight="semibold">
+                            {_t("settings|agent|copilot_account")}
+                        </Text>
+                        {copilotAccountControls}
+                        <Text size="sm" className={styles.description}>
+                            {_t("settings|agent|copilot_account_help")}
+                        </Text>
+                    </Flex>
+                    <Flex direction="column" gap="var(--cpd-space-3x)">
+                        <Text as="h3" size="md" weight="semibold">
+                            {_t("settings|agent|copilot_token")}
+                        </Text>
+                        {tokenForm}
+                    </Flex>
+                    {/* Shown once below both ways of connecting, since it can come from either */}
+                    {errorMessage && (
+                        <Text size="sm" className={styles.error}>
+                            {errorMessage}
+                        </Text>
+                    )}
+                </Flex>
             )}
 
             {isConnected && (

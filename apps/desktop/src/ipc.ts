@@ -13,7 +13,9 @@ import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearData } from "./store.js";
 import { getConfig } from "./config.js";
 import {
+    cancelCopilotSignIn,
     connectAgent,
+    connectCopilotAccount,
     disconnectAgent,
     generateAgentReply,
     generateAgentSuggestions,
@@ -21,12 +23,14 @@ import {
     getAgentRooms,
     getAgentStatus,
     getContactInstructions,
+    getCopilotAccount,
     listAgentModels,
     openContactInstructions,
     setAgentReplyMarking,
     setAgentRoom,
     setAgentSettings,
     setContactInstructions,
+    signInCopilot,
 } from "./agent.js";
 
 let focusHandlerAttached = false;
@@ -199,6 +203,18 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "agentDisconnect":
             ret = await disconnectAgent(args[0]);
+            break;
+        case "agentGetCopilotAccount":
+            ret = await getCopilotAccount();
+            break;
+        case "agentConnectCopilotAccount":
+            ret = await connectCopilotAccount();
+            break;
+        case "agentSignInCopilot":
+            ret = await signInCopilot();
+            break;
+        case "agentCancelCopilotSignIn":
+            ret = cancelCopilotSignIn();
             break;
         case "agentListModels":
             ret = await listAgentModels(args[0]);

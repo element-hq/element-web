@@ -15,6 +15,7 @@ import type {
     AgentSettings,
     AgentStatus,
     AgentSuggestionsRequest,
+    CopilotAccount,
 } from "shared-types";
 
 /**
@@ -28,8 +29,19 @@ export interface AgentApi {
     setSettings(changes: Partial<AgentSettings>): Promise<AgentResult<AgentSettings>>;
     /** Check a credential with its provider and store it */
     connect(provider: AgentProvider, credential: string): Promise<AgentResult<void>>;
-    /** Forget the credential of a provider */
+    /** Forget the credential of a provider, or stop using the account of the computer for Copilot */
     disconnect(provider: AgentProvider): Promise<AgentResult<void>>;
+    /** Get the GitHub account Copilot is signed in to on this computer */
+    getCopilotAccount(): Promise<AgentResult<CopilotAccount>>;
+    /** Connect Copilot with the GitHub account it is signed in to on this computer */
+    connectCopilotAccount(): Promise<AgentResult<void>>;
+    /**
+     * Sign in to GitHub in the browser for Copilot on this computer, and connect Copilot with that account.
+     * @returns the account that was signed in
+     */
+    signInCopilot(): Promise<AgentResult<CopilotAccount>>;
+    /** Stop the sign-in in progress, which then fails with `cancelled` */
+    cancelCopilotSignIn(): Promise<AgentResult<void>>;
     /** List the models a connected provider offers */
     listModels(provider: AgentProvider): Promise<AgentResult<AgentModel[]>>;
     /** Get the rooms the agent replies in, for a Matrix user */
