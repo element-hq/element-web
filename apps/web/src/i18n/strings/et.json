@@ -2951,7 +2951,7 @@
             "security_recommendations_description": "Kui järgid neid soovitusi, siis sa parandad oma kasutajakonto turvalisust.",
             "session_id": "Seadme tunnus",
             "show_details": "Näita üksikasju",
-            "sign_in_with_qr": "Seosta uus seade",
+            "sign_in_with_qr": "Seo uus seade",
             "sign_in_with_qr_button": "Näita QR-koodi",
             "sign_in_with_qr_description": "Kasuta QR-koodi teise seadmesse sisse logimiseks ja turvalise sõnumivahetuse seadistamiseks.",
             "sign_in_with_qr_unsupported": "Sinu teenusepakkuja ei toeta seda võimalust",
