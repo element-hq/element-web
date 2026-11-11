@@ -495,7 +495,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: 0.28.1
-        version: 0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@45.1.0-rc.0)(react-dom@19.3.0)(react@19.3.0)
+        version: 0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@45.1.0)(react-dom@19.3.0)(react@19.3.0)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -626,8 +626,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: 45.1.0-rc.0
-        version: 45.1.0-rc.0
+        specifier: 45.1.0
+        version: 45.1.0
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -3482,8 +3482,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.9.0':
-    resolution: {integrity: sha512-NtLzNDTEfNASBjNCTGZHuk7N0jrQhS6Zx2CM857rCHZYYh/rpbKGQNrJ7azktm4S1P5Jy3WU3nwJTGohGw26qQ==}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.9.2':
+    resolution: {integrity: sha512-GHeuSeb5Fj6Wg2+NE/WoLJJs9U3nOzttO+2sj7lOaS5gNBpGIksc48N/Q/kK/Z+Lxh7YMhopB7M8b6HyASXnGQ==}
     engines: {node: '>= 18'}
 
   '@matrix-org/seshat-darwin-arm64@6.0.1':
@@ -9946,8 +9946,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@45.1.0-rc.0:
-    resolution: {integrity: sha512-U5vzQuH4bbNReEdYcbiBHJn6mhj6kDAIhFFC9eSuRHZxKwiRDGhbkwzwTX+c5B7q8Y5REPMfDaJFDxtnSbnSuQ==}
+  matrix-js-sdk@45.1.0:
+    resolution: {integrity: sha512-uv/vwk/cutrhVSnYZ9pNCxwfcME/+eDfDmWE5VqrzGLMAdw4j7aeBXBXBzRA9pzHheU8DSTUrNTFqvL1OmkktA==}
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -11306,6 +11306,10 @@ packages:
     peerDependencies:
       react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  re2js@2.9.1:
+    resolution: {integrity: sha512-JIT3bEEUZTOR2YS1walNEIfH4cF/cQeZcBUFq7ldqO6lR6g0X5CBq/S8rsa9omzZcsNf8qc36jCkWpKKtncrZg==}
+    engines: {node: '>=20.0.0'}
 
   react-beautiful-dnd@13.1.1:
     resolution: {integrity: sha512-0Lvs4tq2VcrEjEgDXHjT98r+63drkKEgqyxdA7qD3mvKwga6a5SscbdLPO2IExotU1jW8L0Ksdl0Cj2AF67nPQ==}
@@ -15152,11 +15156,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@45.1.0-rc.0)(react-dom@19.3.0)(react@19.3.0)':
+  '@element-hq/element-call-component@0.28.1(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@45.1.0)(react-dom@19.3.0)(react@19.3.0)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.0)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.0)(react@19.3.0)
-      matrix-js-sdk: 45.1.0-rc.0
+      matrix-js-sdk: 45.1.0
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
@@ -15814,7 +15818,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.9.0': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.9.2': {}
 
   '@matrix-org/seshat-darwin-arm64@6.0.1':
     optional: true
@@ -22297,10 +22301,10 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@45.1.0-rc.0:
+  matrix-js-sdk@45.1.0:
     dependencies:
       '@babel/runtime': 8.0.7
-      '@matrix-org/matrix-sdk-crypto-wasm': 18.9.0
+      '@matrix-org/matrix-sdk-crypto-wasm': 18.9.2
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 3.1.1
@@ -22308,6 +22312,7 @@ snapshots:
       matrix-events-sdk: 0.0.1
       matrix-widget-api: 1.20.0
       p-retry: 8.0.1
+      re2js: 2.9.1
       sdp-transform: 3.0.0
       unhomoglyph: 1.0.6
 
@@ -23954,6 +23959,8 @@ snapshots:
     dependencies:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
+
+  re2js@2.9.1: {}
 
   react-beautiful-dnd@13.1.1(react-dom@19.3.0)(react@19.3.0):
     dependencies:
