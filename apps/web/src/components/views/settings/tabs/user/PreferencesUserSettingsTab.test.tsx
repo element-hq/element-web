@@ -46,6 +46,20 @@ describe("PreferencesUserSettingsTab", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should save the room list sections toggle to the account", async () => {
+        stubClient();
+        const setValueSpy = vi.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        renderTab();
+
+        const toggle = screen.getByRole("switch", { name: "Show sections" });
+        await waitFor(() => expect(toggle).not.toBeDisabled());
+        fireEvent.click(toggle);
+
+        expect(setValueSpy).toHaveBeenCalledWith("RoomList.showSections", null, SettingLevel.ACCOUNT, true);
+        expect(screen.getByRole("switch", { name: "Show People as a section" })).toBeInTheDocument();
+        setValueSpy.mockRestore();
+    });
+
     it("should reload when changing language", async () => {
         const reloadStub = vi.fn();
         PlatformPeg.get()!.reload = reloadStub;
