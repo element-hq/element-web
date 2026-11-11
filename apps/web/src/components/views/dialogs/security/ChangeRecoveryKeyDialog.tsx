@@ -62,7 +62,7 @@ export function ChangeRecoveryKeyDialog({
             {state === "key_form" ? (
                 <ChangeRecoveryKeyBody
                     userHasRecoveryKey={userHasRecoveryKey}
-                    className="mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
+                    dialog={true}
                     onFinish={() => setState("confirmation")}
                     onCancelClick={() => onFinished(false)}
                 />
@@ -98,7 +98,7 @@ function ConfirmationCard({ userHasRecoveryKey, onDoneClick }: Readonly<Confirma
                     ? _t("settings|encryption|recovery|key_active_title")
                     : _t("settings|encryption|recovery|backup_set_up_title")
             }
-            className="mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
+            dialog={true}
         >
             <EncryptionCardEmphasisedContent>
                 <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
