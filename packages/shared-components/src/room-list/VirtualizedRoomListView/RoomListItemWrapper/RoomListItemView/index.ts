@@ -7,6 +7,7 @@
 
 export { RoomListItemView } from "./RoomListItemView";
 export type {
+    AgentReplyMarking,
     Room,
     RoomListItemViewSnapshot,
     RoomListItemViewModel,

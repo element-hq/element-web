@@ -89,6 +89,7 @@ export class PreviewRoomListItemViewModel
             canReorder: false,
             canUseAgent: false,
             isAgent: false,
+            agentReplyMarking: "notice",
         };
     }
 
@@ -106,6 +107,7 @@ export class PreviewRoomListItemViewModel
     public onToggleFavorite = (): void => {};
     public onToggleLowPriority = (): void => {};
     public onToggleAgent = (): void => {};
+    public onSetAgentReplyMarking = (): void => {};
     public onInvite = (): void => {};
     public onCopyRoomLink = (): void => {};
     public onLeaveRoom = (): void => {};

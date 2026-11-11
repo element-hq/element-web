@@ -59,6 +59,14 @@ export interface Section {
 }
 
 /**
+ * How the agent's replies in a room show that they are automated:
+ * - `notice`: sent as a notice, shown greyed out as an automated message
+ * - `marker`: sent as a normal message with a hidden marker that only other agents read
+ * - `none`: sent as a normal message, with nothing marking it
+ */
+export type AgentReplyMarking = "notice" | "marker" | "none";
+
+/**
  * Snapshot for a room list item.
  * Contains all the data needed to render a room in the list.
  */
@@ -115,6 +123,8 @@ export interface RoomListItemViewSnapshot {
     canUseAgent: boolean;
     /** Whether the agent replies in this room */
     isAgent: boolean;
+    /** How the agent's replies in this room show that they are automated */
+    agentReplyMarking: AgentReplyMarking;
 }
 
 /**
@@ -148,6 +158,8 @@ export interface RoomListItemViewActions {
     onRemoveFromSection: () => void;
     /** Called to mark the room for the agent to reply in, or to unmark it */
     onToggleAgent: () => void;
+    /** Called to change how the agent's replies in the room show that they are automated */
+    onSetAgentReplyMarking: (marking: AgentReplyMarking) => void;
 }
 
 /**

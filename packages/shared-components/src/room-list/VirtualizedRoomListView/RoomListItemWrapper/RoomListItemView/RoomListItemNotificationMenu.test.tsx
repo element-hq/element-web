@@ -43,6 +43,7 @@ describe("<RoomListItemNotificationMenu />", () => {
     beforeEach(() => {
         vi.mocked(mockCallbacks.onSetRoomNotifState).mockClear();
         vi.mocked(mockCallbacks.onToggleAgent).mockClear();
+        vi.mocked(mockCallbacks.onSetAgentReplyMarking).mockClear();
     });
 
     it("should render the notification options entry", () => {
@@ -115,6 +116,40 @@ describe("<RoomListItemNotificationMenu />", () => {
             await user.click(screen.getByRole("menuitemcheckbox", { name: "Agent" }));
 
             expect(mockCallbacks.onToggleAgent).toHaveBeenCalled();
+            expect(mockCallbacks.onSetRoomNotifState).not.toHaveBeenCalled();
+        });
+
+        it("should only offer how replies are marked while the agent replies", () => {
+            renderMenu(RoomNotifState.AllMessages, { canUseAgent: true, isAgent: false });
+            expect(screen.queryByRole("menuitem", { name: "Mark as AI reply" })).not.toBeInTheDocument();
+        });
+
+        it.each([
+            ["notice", "Mark as AI reply"],
+            ["marker", "Hidden marker only"],
+            ["none", "Not marked"],
+        ] as const)("should mark how replies are marked: %s", (agentReplyMarking, selected) => {
+            renderMenu(RoomNotifState.AllMessages, { canUseAgent: true, isAgent: true, agentReplyMarking });
+
+            for (const label of ["Mark as AI reply", "Hidden marker only", "Not marked"]) {
+                expect(screen.getByRole("menuitem", { name: label })).toHaveAttribute(
+                    "aria-selected",
+                    String(label === selected),
+                );
+            }
+        });
+
+        it.each([
+            ["Mark as AI reply", "notice"],
+            ["Hidden marker only", "marker"],
+            ["Not marked", "none"],
+        ])("should call onSetAgentReplyMarking when %s is selected", async (label, marking) => {
+            const user = userEvent.setup();
+            renderMenu(RoomNotifState.AllMessages, { canUseAgent: true, isAgent: true });
+
+            await user.click(screen.getByRole("menuitem", { name: label }));
+
+            expect(mockCallbacks.onSetAgentReplyMarking).toHaveBeenCalledWith(marking);
             expect(mockCallbacks.onSetRoomNotifState).not.toHaveBeenCalled();
         });
     });

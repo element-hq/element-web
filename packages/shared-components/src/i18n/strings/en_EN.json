@@ -209,6 +209,9 @@
             "video_call": "Open room %(roomName)s, video call in progress.",
             "voice_call": "Open room %(roomName)s, voice call in progress."
         },
+        "agent_reply_marking_marker": "Hidden marker only",
+        "agent_reply_marking_none": "Not marked",
+        "agent_reply_marking_notice": "Mark as AI reply",
         "appearance": "Appearance",
         "chat_moved": "Chat moved",
         "collapse_all_sections": "Collapse all sections",

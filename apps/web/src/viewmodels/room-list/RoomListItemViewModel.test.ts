@@ -541,6 +541,34 @@ describe("RoomListItemViewModel", () => {
 
             expect(viewModel.getSnapshot().isAgent).toBe(true);
         });
+
+        it("shows how replies are marked in the room", () => {
+            const getReplyMarking = vi.spyOn(AgentRoomStore.instance, "getReplyMarking").mockReturnValue("marker");
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            expect(getReplyMarking).toHaveBeenCalledWith(room.roomId);
+            expect(viewModel.getSnapshot().agentReplyMarking).toBe("marker");
+        });
+
+        it("changes how replies are marked in the room", () => {
+            const setReplyMarking = vi.spyOn(AgentRoomStore.instance, "setReplyMarking").mockResolvedValue();
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            viewModel.onSetAgentReplyMarking("none");
+
+            expect(setReplyMarking).toHaveBeenCalledWith(room.roomId, "none");
+        });
+
+        it("updates when how replies are marked changes", () => {
+            const getReplyMarking = vi.spyOn(AgentRoomStore.instance, "getReplyMarking").mockReturnValue("notice");
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            getReplyMarking.mockReturnValue("none");
+            AgentRoomStore.instance.emit(AgentRoomStoreEvent.Update);
+
+            expect(viewModel.getSnapshot().agentReplyMarking).toBe("none");
+        });
     });
 
     describe("DM detection", () => {

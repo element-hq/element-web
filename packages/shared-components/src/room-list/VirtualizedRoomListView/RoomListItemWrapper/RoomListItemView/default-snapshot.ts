@@ -59,4 +59,5 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     canReorder: false,
     canUseAgent: false,
     isAgent: false,
+    agentReplyMarking: "notice",
 };

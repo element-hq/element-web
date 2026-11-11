@@ -189,6 +189,9 @@
             "video_call": "Öffne den Chat %(roomName)s, Videoanruf läuft.",
             "voice_call": "Öffne den Chat %(roomName)s, Sprachanruf läuft."
         },
+        "agent_reply_marking_marker": "Nur versteckte Markierung",
+        "agent_reply_marking_none": "Nicht kennzeichnen",
+        "agent_reply_marking_notice": "Als KI-Antwort kennzeichnen",
         "appearance": "Darstellung",
         "chat_moved": "Chat verschoben",
         "collapse_all_sections": "Alle Abschnitte reduzieren",

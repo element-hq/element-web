@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import {
     BaseViewModel,
     RoomNotifState,
+    type AgentReplyMarking,
     type RoomListItemViewSnapshot,
     type RoomListItemViewActions,
     type Section,
@@ -429,6 +430,7 @@ export class RoomListItemViewModel
             canReorder,
             canUseAgent,
             isAgent,
+            agentReplyMarking: AgentRoomStore.instance.getReplyMarking(room.roomId),
         };
     }
 
@@ -529,6 +531,10 @@ export class RoomListItemViewModel
 
     public onToggleAgent = (): void => {
         void AgentRoomStore.instance.setAgentRoom(this.props.room.roomId, !this.snapshot.current.isAgent);
+    };
+
+    public onSetAgentReplyMarking = (marking: AgentReplyMarking): void => {
+        void AgentRoomStore.instance.setReplyMarking(this.props.room.roomId, marking);
     };
 
     private onCustomSectionsChange = (): void => {

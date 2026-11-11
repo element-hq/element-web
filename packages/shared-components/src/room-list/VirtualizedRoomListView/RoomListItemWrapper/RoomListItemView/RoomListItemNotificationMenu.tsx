@@ -17,7 +17,7 @@ import AiIcon from "@vector-im/compound-design-tokens/assets/web/icons/ai";
 import { _t } from "../../../../core/i18n/i18n";
 import { RoomNotifState } from "./RoomNotifs";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
-import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
+import type { AgentReplyMarking, RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 
 /**
  * View model type for room list item
@@ -34,7 +34,8 @@ export interface RoomListItemNotificationMenuProps {
 
 /**
  * The notification settings of a room list item, Normal or Silent, as a submenu of the more options menu.
- * For a direct message it also holds the switch that lets the agent reply in it.
+ * For a direct message it also holds the switch that lets the agent reply in it, and once the agent replies there,
+ * the choice of how its replies show that they are automated.
  * The bell on its entry is crossed out when the room is muted.
  */
 export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMenuProps): JSX.Element {
@@ -47,6 +48,11 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
     const options: { state: RoomNotifState; label: string }[] = [
         { state: RoomNotifState.AllMessages, label: _t("room_list|notification_options_normal") },
         { state: RoomNotifState.Mute, label: _t("room_list|notification_options_silent") },
+    ];
+    const replyMarkings: { marking: AgentReplyMarking; label: string }[] = [
+        { marking: "notice", label: _t("room_list|agent_reply_marking_notice") },
+        { marking: "marker", label: _t("room_list|agent_reply_marking_marker") },
+        { marking: "none", label: _t("room_list|agent_reply_marking_none") },
     ];
 
     return (
@@ -82,6 +88,19 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
                         onSelect={vm.onToggleAgent}
                         onClick={(evt) => evt.stopPropagation()}
                     />
+                    {snapshot.isAgent &&
+                        replyMarkings.map(({ marking, label }) => (
+                            <MenuItem
+                                key={marking}
+                                aria-selected={snapshot.agentReplyMarking === marking}
+                                hideChevron={true}
+                                label={label}
+                                onSelect={() => vm.onSetAgentReplyMarking(marking)}
+                                onClick={(evt) => evt.stopPropagation()}
+                            >
+                                {snapshot.agentReplyMarking === marking && checkComponent}
+                            </MenuItem>
+                        ))}
                 </>
             )}
         </SubMenu>

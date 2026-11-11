@@ -23,4 +23,5 @@ export const mockedActions: RoomListItemViewActions = {
     onToggleSection: fn(),
     onRemoveFromSection: fn(),
     onToggleAgent: fn(),
+    onSetAgentReplyMarking: fn(),
 };
