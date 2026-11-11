@@ -11,7 +11,6 @@ import { Button, ErrorMessage, Field, IconButton, Label, PasswordControl, Root, 
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { logger } from "matrix-js-sdk/src/logger";
-import classNames from "classnames";
 import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
@@ -49,9 +48,9 @@ interface ChangeRecoveryKeyBodyProps {
      */
     onCancelClick: () => void;
     /**
-     * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
+     * Whether the card is shown in a dialog, which adjusts its styling. Passed to {@link EncryptionCard}.
      */
-    className?: string;
+    dialog?: boolean;
 }
 
 /**
@@ -62,7 +61,7 @@ export function ChangeRecoveryKeyBody({
     userHasRecoveryKey,
     onFinish,
     onCancelClick,
-    className,
+    dialog,
 }: Readonly<ChangeRecoveryKeyBodyProps>): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
@@ -152,7 +151,8 @@ export function ChangeRecoveryKeyBody({
             Icon={KeyIcon}
             title={labels.title}
             description={labels.description}
-            className={classNames("mx_ChangeRecoveryKey", className)}
+            className="mx_ChangeRecoveryKey"
+            dialog={dialog}
         >
             {content}
         </EncryptionCard>

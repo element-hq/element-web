@@ -5,6 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
+// decoder.js uses these classes via the globals shared by classic scripts, which oxlint cannot see
+/* oxlint-disable no-unused-vars */
+
 /*
  * Quick-n-dirty algebraic datatypes.
  *
@@ -58,3 +61,53 @@ class Some extends Optional {
     }
 }
 const None = new Optional();
+
+class FetchStatus {
+    constructor(opt = {}) {
+        this.opt = { at: Date.now(), ...opt };
+    }
+    map(f) {
+        return this;
+    }
+    flatMap(f) {
+        return this;
+    }
+}
+class Success extends FetchStatus {
+    static of(value) {
+        return new Success(value);
+    }
+    constructor(value, opt) {
+        super(opt);
+        this.value = value;
+    }
+    map(f) {
+        return new Success(f(this.value), this.opt);
+    }
+    flatMap(f) {
+        return f(this.value, this.opt);
+    }
+    fold({ success }) {
+        return typeof success === "function" ? success(this.value, this.opt) : undefined;
+    }
+}
+class Pending extends FetchStatus {
+    static of(opt) {
+        return new Pending(opt);
+    }
+    fold({ pending }) {
+        return typeof pending === "function" ? pending(this.opt) : undefined;
+    }
+}
+class FetchError extends FetchStatus {
+    static of(reason, opt) {
+        return new FetchError(reason, opt);
+    }
+    constructor(reason, opt) {
+        super(opt);
+        this.reason = reason;
+    }
+    fold({ error }) {
+        return typeof error === "function" ? error(this.reason, this.opt) : undefined;
+    }
+}

@@ -69,7 +69,6 @@ import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { getTopic } from "../../hooks/room/useTopic";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
-import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
@@ -469,11 +468,7 @@ interface IHierarchyLevelProps {
 }
 
 export const toLocalRoom = (cli: MatrixClient, room: HierarchyRoom, hierarchy: RoomHierarchy): HierarchyRoom => {
-    const history = cli.getRoomUpgradeHistory(
-        room.room_id,
-        true,
-        SettingsStore.getValue("feature_dynamic_room_predecessors"),
-    );
+    const history = cli.getRoomUpgradeHistory(room.room_id, true);
 
     // Pick latest room that is actually part of the hierarchy
     let cliRoom: Room | null = null;
