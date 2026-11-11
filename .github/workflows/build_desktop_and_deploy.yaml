@@ -232,6 +232,19 @@ jobs:
                   R2_URL: ${{ vars.CF_R2_S3_API }}
                   DEPLOYMENT_DIR: ${{ needs.prepare.outputs.packages-dir }}
 
+            - name: Upload newly signed files to the sign cache
+              if: needs.prepare.outputs.deploy == 'true'
+              run: |
+                  set -x
+                  for dir in sign-cache-win-*/; do
+                      [ -d "$dir" ] || continue
+                      aws s3 cp --recursive "$dir" s3://$R2_BUCKET/sign-cache/ --endpoint-url $R2_URL --region auto --checksum-algorithm CRC32
+                  done
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+                  R2_URL: ${{ vars.CF_R2_S3_API }}
+
             - name: Notify packages.element.io of new files
               if: needs.prepare.outputs.deploy == 'true'
               uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4

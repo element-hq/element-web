@@ -30,6 +30,15 @@ on:
                 type: string
                 required: false
                 description: "Whether to sign & notarise the build, requires 'Desktop eSigner' environment"
+            sign-cache-url:
+                type: string
+                required: false
+                description: |
+                    Public base URL to reuse previously signed DLLs, native modules & Squirrel.exe from when signing, to save on signatures.
+                    Files are fetched from `<url>/<certificate thumbprint>/<sha256 of unsigned file><ext>`.
+                    Files signed during the build are uploaded in the same layout as the `sign-cache-win-<arch>` artifact,
+                    for a trusted job to upload to the cache.
+                default: "https://packages.element.io/sign-cache"
             blob_report:
                 type: boolean
                 required: false
@@ -197,6 +206,8 @@ jobs:
                   # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
                   TARGETS: ${{ inputs.targets }}
+                  ED_SIGN_CACHE_URL: ${{ inputs.sign && inputs.sign-cache-url || '' }}
+                  ED_SIGN_CACHE_DIR: sign-cache
 
             - name: Check app was signed successfully
               working-directory: apps/desktop
@@ -216,6 +227,15 @@ jobs:
                   name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
                   path: |
                       apps/desktop/dist
+                  retention-days: 1
+
+            - name: Upload newly signed files for the sign cache
+              if: inputs.sign
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+              with:
+                  name: ${{ inputs.artifact-prefix }}sign-cache-win-${{ inputs.arch }}
+                  path: apps/desktop/sign-cache
+                  if-no-files-found: ignore
                   retention-days: 1
 
             - name: Assert executable is present
