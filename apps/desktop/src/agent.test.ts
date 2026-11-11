@@ -21,6 +21,7 @@ import {
     generateAgentReply,
     generateAgentSuggestions,
     getAgentDataPath,
+    getAgentReplyMarkings,
     getAgentRooms,
     getAgentStatus,
     getContactInstructions,
@@ -28,6 +29,7 @@ import {
     listAgentModels,
     MAX_CONTACT_INSTRUCTIONS_LENGTH,
     parseSuggestions,
+    setAgentReplyMarking,
     setAgentRoom,
     setAgentSettings,
     setContactInstructions,
@@ -417,6 +419,45 @@ describe("agent", () => {
         ])("refuses invalid arguments %s %s %s", (userId, roomId, enabled) => {
             expect(setAgentRoom(userId, roomId, enabled)).toMatchObject({ ok: false, error: "invalid_request" });
             expect(storeData.rooms).toBeUndefined();
+        });
+    });
+
+    describe("reply markings", () => {
+        it("keeps how replies are marked in each room of each Matrix user", () => {
+            expect(getAgentReplyMarkings("@alice:example.org")).toEqual({ ok: true, data: {} });
+
+            setAgentReplyMarking("@alice:example.org", "!a:example.org", "marker");
+            setAgentReplyMarking("@alice:example.org", "!b:example.org", "none");
+            setAgentReplyMarking("@bob:example.org", "!c:example.org", "none");
+
+            expect(getAgentReplyMarkings("@alice:example.org")).toEqual({
+                ok: true,
+                data: { "!a:example.org": "marker", "!b:example.org": "none" },
+            });
+            expect(getAgentReplyMarkings("@bob:example.org")).toEqual({ ok: true, data: { "!c:example.org": "none" } });
+        });
+
+        it("forgets rooms set back to the default", () => {
+            setAgentReplyMarking("@alice:example.org", "!a:example.org", "none");
+
+            expect(setAgentReplyMarking("@alice:example.org", "!a:example.org", "notice")).toEqual({
+                ok: true,
+                data: {},
+            });
+            expect(storeData.replyMarkings).toEqual({ "@alice:example.org": {} });
+        });
+
+        it.each([
+            [undefined, "!a:example.org", "none"],
+            ["@alice:example.org", "", "none"],
+            ["@alice:example.org", "!a:example.org", "hidden"],
+            ["@alice:example.org", "!a:example.org", undefined],
+        ])("refuses invalid arguments %s %s %s", (userId, roomId, marking) => {
+            expect(setAgentReplyMarking(userId, roomId, marking)).toMatchObject({
+                ok: false,
+                error: "invalid_request",
+            });
+            expect(storeData.replyMarkings).toBeUndefined();
         });
     });
 

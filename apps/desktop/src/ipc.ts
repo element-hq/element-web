@@ -17,10 +17,12 @@ import {
     disconnectAgent,
     generateAgentReply,
     generateAgentSuggestions,
+    getAgentReplyMarkings,
     getAgentRooms,
     getAgentStatus,
     getContactInstructions,
     listAgentModels,
+    setAgentReplyMarking,
     setAgentRoom,
     setAgentSettings,
     setContactInstructions,
@@ -205,6 +207,12 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "agentSetRoom":
             ret = setAgentRoom(args[0], args[1], args[2]);
+            break;
+        case "agentGetReplyMarkings":
+            ret = getAgentReplyMarkings(args[0]);
+            break;
+        case "agentSetReplyMarking":
+            ret = setAgentReplyMarking(args[0], args[1], args[2]);
             break;
         case "agentGetContactInstructions":
             ret = await getContactInstructions(args[0]);

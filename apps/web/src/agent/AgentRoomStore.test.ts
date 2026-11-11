@@ -25,6 +25,8 @@ describe("AgentRoomStore", () => {
             listModels: vi.fn(),
             getRooms: vi.fn().mockResolvedValue({ ok: true, data: ["!a:example.org"] }),
             setRoom: vi.fn(async (_userId, roomId, enabled) => ({ ok: true as const, data: enabled ? [roomId] : [] })),
+            getReplyMarkings: vi.fn().mockResolvedValue({ ok: true, data: { "!a:example.org": "none" } }),
+            setReplyMarking: vi.fn().mockResolvedValue({ ok: true, data: {} }),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
             generateReply: vi.fn(),
@@ -107,5 +109,65 @@ describe("AgentRoomStore", () => {
         await starting;
 
         expect(store.isAgentRoom("!a:example.org")).toBe(false);
+    });
+
+    it("reads how replies are marked in the rooms of the user", async () => {
+        await store.start(agent, ALICE);
+
+        expect(agent.getReplyMarkings).toHaveBeenCalledWith(ALICE);
+        expect(store.getReplyMarking("!a:example.org")).toBe("none");
+        expect(store.getReplyMarking("!b:example.org")).toBe("notice");
+    });
+
+    it("still reads the marked rooms if the reply markings can't be read", async () => {
+        agent.getReplyMarkings.mockResolvedValue({ ok: false, error: "unavailable" });
+
+        await store.start(agent, ALICE);
+
+        expect(store.isAgentRoom("!a:example.org")).toBe(true);
+        expect(store.getReplyMarking("!a:example.org")).toBe("notice");
+    });
+
+    it("changes how replies are marked in a room, saving it on the platform", async () => {
+        await store.start(agent, ALICE);
+        const onUpdate = vi.fn();
+        store.on(AgentRoomStoreEvent.Update, onUpdate);
+
+        const changing = store.setReplyMarking("!b:example.org", "marker");
+        // The change shows before the platform has saved it
+        expect(store.getReplyMarking("!b:example.org")).toBe("marker");
+        await changing;
+        expect(agent.setReplyMarking).toHaveBeenCalledWith(ALICE, "!b:example.org", "marker");
+        expect(onUpdate).toHaveBeenCalled();
+
+        await store.setReplyMarking("!a:example.org", "notice");
+        expect(agent.setReplyMarking).toHaveBeenCalledWith(ALICE, "!a:example.org", "notice");
+        expect(store.getReplyMarking("!a:example.org")).toBe("notice");
+    });
+
+    it("undoes a reply marking the platform can't save", async () => {
+        await store.start(agent, ALICE);
+        agent.setReplyMarking.mockResolvedValue({ ok: false, error: "unavailable" });
+
+        await store.setReplyMarking("!a:example.org", "marker");
+
+        expect(store.getReplyMarking("!a:example.org")).toBe("none");
+    });
+
+    it("doesn't save a reply marking that doesn't change anything", async () => {
+        await store.start(agent, ALICE);
+
+        await store.setReplyMarking("!a:example.org", "none");
+        await store.setReplyMarking("!b:example.org", "notice");
+
+        expect(agent.setReplyMarking).not.toHaveBeenCalled();
+    });
+
+    it("forgets the reply markings when stopped", async () => {
+        await store.start(agent, ALICE);
+
+        store.stop();
+
+        expect(store.getReplyMarking("!a:example.org")).toBe("notice");
     });
 });

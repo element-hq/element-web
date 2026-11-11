@@ -513,6 +513,8 @@ export default class ElectronPlatform extends BasePlatform {
         listModels: (provider) => this.ipc.call("agentListModels", provider),
         getRooms: (userId) => this.ipc.call("agentGetRooms", userId),
         setRoom: (userId, roomId, enabled) => this.ipc.call("agentSetRoom", userId, roomId, enabled),
+        getReplyMarkings: (userId) => this.ipc.call("agentGetReplyMarkings", userId),
+        setReplyMarking: (userId, roomId, marking) => this.ipc.call("agentSetReplyMarking", userId, roomId, marking),
         getContactInstructions: (contactId) => this.ipc.call("agentGetContactInstructions", contactId),
         setContactInstructions: (contactId, text) => this.ipc.call("agentSetContactInstructions", contactId, text),
         generateReply: (request) => this.ipc.call("agentGenerateReply", request),

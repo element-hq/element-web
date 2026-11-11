@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkMessage, stubClient } from "test-utils";
 
-import { AgentReplyListener, REPLY_DELAY_MS } from "./AgentReplyListener";
+import { AGENT_REPLY_MARKER, AgentReplyListener, REPLY_DELAY_MS } from "./AgentReplyListener";
 import type { AgentApi } from "./AgentApi";
 import DMRoomMap from "../utils/DMRoomMap";
 import { AgentRoomStore } from "./AgentRoomStore";
@@ -72,6 +72,8 @@ describe("AgentReplyListener", () => {
             listModels: vi.fn(),
             getRooms: vi.fn(),
             setRoom: vi.fn(),
+            getReplyMarkings: vi.fn(),
+            setReplyMarking: vi.fn(),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
             generateReply: vi.fn().mockResolvedValue({ ok: true, data: "Sure, see you tomorrow!" }),
@@ -108,6 +110,32 @@ describe("AgentReplyListener", () => {
         });
         expect(client.sendTyping).toHaveBeenCalledWith(ROOM_ID, true, 30000);
         expect(client.sendTyping).toHaveBeenLastCalledWith(ROOM_ID, false, 0);
+    });
+
+    it.each([
+        ["marker", { msgtype: MsgType.Text, body: "Sure", [AGENT_REPLY_MARKER]: true }],
+        ["none", { msgtype: MsgType.Text, body: "Sure" }],
+        ["notice", { msgtype: MsgType.Notice, body: "Sure" }],
+    ] as const)("sends the reply marked as chosen for the room: %s", async (marking, content) => {
+        vi.spyOn(AgentRoomStore.instance, "getReplyMarking").mockReturnValue(marking);
+        agent.generateReply.mockResolvedValue({ ok: true, data: "Sure" });
+        receive(PARTNER, "Are you free tomorrow?");
+
+        await waitForReply();
+
+        expect(AgentRoomStore.instance.getReplyMarking).toHaveBeenCalledWith(ROOM_ID);
+        expect(client.sendMessage).toHaveBeenCalledWith(ROOM_ID, content);
+    });
+
+    it("does not reply to a reply of the partner's agent sent with the hidden marker", async () => {
+        const event = mkMessage({ room: ROOM_ID, user: PARTNER, msg: "Hi", ts: Date.now(), event: true });
+        event.getContent()[AGENT_REPLY_MARKER] = true;
+        events.push(event);
+        client.emit(RoomEvent.Timeline, event, room, false, false, LIVE);
+
+        await waitForReply();
+
+        expect(agent.generateReply).not.toHaveBeenCalled();
     });
 
     it("waits for the partner to finish writing and replies once", async () => {

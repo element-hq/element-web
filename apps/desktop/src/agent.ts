@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 // renderer decides when a reply or suggestions are needed and sends the conversation; this module holds the credentials and talks to the providers, so the
 // credentials stay in the main process.
 //
-// Everything the agent keeps stays on this computer: its settings, the credentials (encrypted with safeStorage)
-// and the marked rooms are in a store of their own, in a directory that is never synced to other computers. The
-// instructions for each chat partner are Markdown files in the "contacts" folder of that directory, so that they
-// can also be edited outside of Element.
+// Everything the agent keeps stays on this computer: its settings, the credentials (encrypted with safeStorage),
+// the marked rooms and how the replies are marked in them are in a store of their own, in a directory that is never
+// synced to other computers. The instructions for each chat partner are Markdown files in the "contacts" folder of
+// that directory, so that they can also be edited outside of Element.
 
 import path from "node:path";
 import fs from "node:fs/promises";
@@ -25,6 +25,7 @@ import type {
     AgentErrorCode,
     AgentModel,
     AgentProvider,
+    AgentReplyMarking,
     AgentReplyRequest,
     AgentResult,
     AgentSettings,
@@ -55,12 +56,19 @@ const DEFAULT_SETTINGS: AgentSettings = { provider: "claude", instructions: "", 
 
 const PROVIDERS: readonly AgentProvider[] = ["claude", "copilot"];
 
+const REPLY_MARKINGS: readonly AgentReplyMarking[] = ["notice", "marker", "none"];
+
 interface AgentStoreData {
     settings?: AgentSettings;
     /** The credential of each connected provider, encrypted with safeStorage and base64-encoded */
     secrets?: Partial<Record<AgentProvider, string>>;
     /** The rooms the agent replies in, by the Matrix user they belong to */
     rooms?: Record<string, string[]>;
+    /**
+     * How the agent's replies are marked in each room, by the Matrix user the rooms belong to. Rooms with the
+     * default, `notice`, are left out.
+     */
+    replyMarkings?: Record<string, Record<string, AgentReplyMarking>>;
 }
 
 /**
@@ -219,6 +227,42 @@ export function setAgentRoom(userId: unknown, roomId: unknown, enabled: unknown)
     rooms[userId] = [...userRooms];
     getAgentStore().set("rooms", rooms);
     return { ok: true, data: rooms[userId] };
+}
+
+/**
+ * Get how the agent's replies are marked in the rooms of a Matrix user.
+ * @param userId - The Matrix user the rooms belong to
+ * @returns the marking of each room that doesn't use the default, `notice`
+ */
+export function getAgentReplyMarkings(userId: unknown): AgentResult<Record<string, AgentReplyMarking>> {
+    if (typeof userId !== "string" || !userId) return failure("invalid_request");
+    return { ok: true, data: getAgentStore().get("replyMarkings")?.[userId] ?? {} };
+}
+
+/**
+ * Set how the agent's replies are marked in a room.
+ * @param userId - The Matrix user the room belongs to
+ * @param roomId - The room
+ * @param marking - How the replies are marked
+ * @returns the marking of each room that doesn't use the default afterwards
+ */
+export function setAgentReplyMarking(
+    userId: unknown,
+    roomId: unknown,
+    marking: unknown,
+): AgentResult<Record<string, AgentReplyMarking>> {
+    if (typeof userId !== "string" || !userId || typeof roomId !== "string" || !roomId) {
+        return failure("invalid_request");
+    }
+    if (!REPLY_MARKINGS.includes(marking as AgentReplyMarking)) return failure("invalid_request");
+
+    const markings = { ...getAgentStore().get("replyMarkings") };
+    const userMarkings = { ...markings[userId] };
+    if (marking === "notice") delete userMarkings[roomId];
+    else userMarkings[roomId] = marking as AgentReplyMarking;
+    markings[userId] = userMarkings;
+    getAgentStore().set("replyMarkings", markings);
+    return { ok: true, data: userMarkings };
 }
 
 /**

@@ -89,6 +89,8 @@ describe("ReplySuggestionsViewModel", () => {
             listModels: vi.fn(),
             getRooms: vi.fn(),
             setRoom: vi.fn(),
+            getReplyMarkings: vi.fn(),
+            setReplyMarking: vi.fn(),
             getContactInstructions: vi.fn(),
             setContactInstructions: vi.fn(),
             generateReply: vi.fn(),

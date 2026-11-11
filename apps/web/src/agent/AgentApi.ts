@@ -9,6 +9,7 @@ import type {
     AgentContactInstructions,
     AgentModel,
     AgentProvider,
+    AgentReplyMarking,
     AgentReplyRequest,
     AgentResult,
     AgentSettings,
@@ -38,6 +39,20 @@ export interface AgentApi {
      * @returns the rooms the agent replies in afterwards
      */
     setRoom(userId: string, roomId: string, enabled: boolean): Promise<AgentResult<string[]>>;
+    /**
+     * Get how the agent's replies are marked in the rooms of a Matrix user, kept by the platform on this computer.
+     * @returns the marking of each room that doesn't use the default, `notice`
+     */
+    getReplyMarkings(userId: string): Promise<AgentResult<Record<string, AgentReplyMarking>>>;
+    /**
+     * Set how the agent's replies are marked in a room.
+     * @returns the marking of each room that doesn't use the default afterwards
+     */
+    setReplyMarking(
+        userId: string,
+        roomId: string,
+        marking: AgentReplyMarking,
+    ): Promise<AgentResult<Record<string, AgentReplyMarking>>>;
     /** Get the instructions for a chat partner, kept by the platform in a Markdown file of their own */
     getContactInstructions(contactId: string): Promise<AgentResult<AgentContactInstructions>>;
     /** Save the instructions for a chat partner; empty instructions delete the file */
