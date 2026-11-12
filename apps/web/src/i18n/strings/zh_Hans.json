@@ -1527,8 +1527,6 @@
         "currently_experimental": "当前为实验性。",
         "document_previews": "实验性文档预览",
         "document_previews_description": "在右侧面板打开 PDF 与 Markdown 附件。",
-        "dynamic_room_predecessors": "动态房间前身",
-        "dynamic_room_predecessors_description": "需要启用 MSC3946 以支持“迟到房间归档”。",
         "element_call_video_rooms": "Element Call 视频房间",
         "encrypted_state_events": "已加密的状态事件",
         "encrypted_state_events_description": "启用加密状态事件的实验性支持，此功能会对服务器隐藏房间名称与主题等元数据。这些元数据对之后加入房间的用户与不支持 MSC4362 的客户端隐藏。",
@@ -2971,7 +2969,6 @@
             "web_session": "浏览器"
         },
         "show_avatar_changes": "显示头像更改",
-        "show_breadcrumbs": "在房间列表之上显示最近访问的房间的快捷入口",
         "show_chat_effects": "显示聊天特效（例如当收到“五彩纸屑”时）",
         "show_displayname_changes": "显示用户的“显示名称更改”",
         "show_join_leave": "显示加入及离开消息（邀请、移除及封禁不受影响）",

@@ -253,6 +253,24 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         onChange: reportVisibleState,
     });
 
+    // Whether a row changing height should move the scroll position by the same amount, so the
+    // rows on screen stay put. TanStack's default rule does not compensate re-measurements
+    // (async content loading late, etc) when the user is scrolling up, which causes items in our
+    // timeline above the fold to cause jumps for the on screen content. In TanStack/virtual#1227
+    // they clarify this is the escape hatch to use to customise this behaviour.
+    virtualizer.shouldAdjustScrollPositionOnItemSizeChange = (item, _delta, v) => {
+        const scrollOffset = v.scrollOffset ?? 0;
+        if (!v.itemSizeCache.has(item.key)) {
+            // The first measurement corrects the row's estimated height, so compensate for any row
+            // whose top is above the viewport, including one partly showing at the top.
+            return item.start < scrollOffset;
+        }
+        // A re-measurement is the row really changing size (an image or link preview loaded).
+        // Compensate for a row fully above the viewport, so the rows on screen don't move. A row
+        // partly on screen grows in view and pushes the rows below it down, as it should.
+        return item.end <= scrollOffset;
+    };
+
     // Works out how far down the list we would have to scroll, in pixels, to bring the row
     // with `targetKey` into view — `align` saying whether it should end up at the top,
     // the middle or the bottom of the viewport. Returns null if that message is not among

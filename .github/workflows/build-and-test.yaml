@@ -307,6 +307,9 @@ jobs:
             - build_ed_macos
         if: always()
         runs-on: ubuntu-26.04
+        env:
+            # Only some deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
@@ -320,8 +323,13 @@ jobs:
                   cache: true
                   # PR & merge queue caches are scoped to their own ref so nothing else can restore them
                   save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
-                  install: true
+                  install: false
                   require-lockfile: true
+
+            # Merging the reports needs Playwright, from the workspace root's deps, and playwright-common's reporters
+            - name: Install Deps
+              if: needs.prepare.outputs.skip == 'false'
+              run: "pnpm install --frozen-lockfile --filter @element-hq/element-web-playwright-common"
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: needs.prepare.outputs.skip == 'false'

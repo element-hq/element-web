@@ -20,12 +20,14 @@
         "new_room": "Neue Gruppe",
         "new_section": "Neuer Abschnitt",
         "new_video_room": "Neuer Videochat",
+        "no": "Nein",
         "open_menu": "Menü öffnen",
         "pause": "Pausieren",
         "pin": "Fixieren",
         "play": "Abspielen",
         "react": "Reagieren",
         "remove": "Entfernen",
+        "remove_this_device": "Dieses Gerät entfernen",
         "reply": "Antworten",
         "reply_in_thread": "Im Thread antworten",
         "retry": "Erneut versuchen",
@@ -33,7 +35,8 @@
         "search": "Suchen",
         "start_chat": "Neuer Chat",
         "unpin": "Lösen",
-        "view_source": "Rohdaten anzeigen"
+        "view_source": "Rohdaten anzeigen",
+        "yes": "Ja"
     },
     "common": {
         "attachment": "Anhang",
@@ -71,6 +74,10 @@
         },
         "toggle_event": "Event-Rohdaten"
     },
+    "document_viewer": {
+        "error_load": "Diese Datei kann nicht geladen werden.",
+        "loading": "Dokument wird geladen …"
+    },
     "emoji": {
         "categories": "Kategorien",
         "category_activities": "Aktivitäten",
@@ -87,6 +94,19 @@
     "emoji_picker": {
         "cancel_search_label": "Suche abbrechen",
         "emoji_picker": "Emoji-Auswahl"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Wenn du alle deine Geräte entfernst, verlierst du deinen verschlüsselten Chatverlauf und musst deine digitale Identität zurücksetzen.",
+            "error": "Schlüsselspeicher konnte nicht gelöscht werden. Bitte versuche es erneut."
+        }
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Bitte führe zuerst ein Downgrade auf <b>%(version)s</b> durch oder entferne dieses Gerät.",
+            "description": "%(brand)s wurde von einer sehr alten Version aktualisiert und kann deinen Verschlüsselungsspeicher nicht in ein neues Format migrieren.",
+            "title": "Dieses Gerät kann nicht verwendet werden"
+        }
     },
     "keyboard": {
         "shift": "Umschalt"
@@ -114,7 +134,10 @@
     },
     "pdf_viewer": {
         "page_label": "Seite %(page)s von %(total)s",
-        "page_number": "Seitenzahl"
+        "page_number": "Seitenzahl",
+        "zoom": "Zoom",
+        "zoom_in": "Vergrößern",
+        "zoom_out": "Verkleinern"
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
@@ -138,6 +161,7 @@
         "knock_sent": "Beitrittsanfrage gestellt",
         "pinned_message_badge": "Fixierte Nachricht",
         "status_bar": {
+            "contact_account_provider": "Kontoanbieter kontaktieren",
             "delete_all": "Alle löschen",
             "exceeded_resource_limit_description": "Bitte wende dich an deinen Kontoanbieter, um den Dienst weiterhin nutzen zu können.",
             "exceeded_resource_limit_title": "Deine Nachricht wurde nicht gesendet, da dieser Dienst ein Ressourcenlimit überschritten hat.",
@@ -337,7 +361,7 @@
             "error_invalid": "Ungültige Datei"
         },
         "m.room.avatar": {
-            "changed_img": "%(senderDisplayName)s hat das Gruppenbild geändert zu <img/>",
+            "changed_img": "%(senderDisplayName)s hat das Gruppenbild geändert: <img/>",
             "removed": "%(senderDisplayName)s hat das Gruppenbild entfernt."
         },
         "m.room.encryption": {
@@ -382,6 +406,26 @@
         "open_home": "Startseite",
         "open_security": "Sicherheit & Datenschutz",
         "open_settings": "Alle Einstellungen"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Wirksame Konfiguration",
+            "configuration": "Konfiguration",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "im Anruf",
+            "in_lobby": "in der Lobby",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "HostBridge-Protokoll",
+            "mute_audio": "Audio stummschalten",
+            "mute_video": "Video deaktivieren",
+            "no_participants": "Niemand ist in diesem Anruf",
+            "participants": "Teilnehmende",
+            "status": "%(roomId)s · Intent %(intent)s · %(state)s · Design %(theme)s · Sprache %(language)s",
+            "title": "Element Call (Mock)",
+            "unknown_room": "Unbekannter Chat %(roomId)s",
+            "unmute_audio": "Audio-Stummschaltung aufheben",
+            "unmute_video": "Video aktivieren"
+        }
     },
     "widget": {
         "context_menu": {

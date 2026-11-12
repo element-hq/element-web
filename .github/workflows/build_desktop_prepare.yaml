@@ -49,6 +49,9 @@ jobs:
         name: Prepare
         environment: ${{ inputs.nightly && 'packages.element.io' || '' }}
         runs-on: ubuntu-26.04
+        env:
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         permissions:
             contents: read
         outputs:

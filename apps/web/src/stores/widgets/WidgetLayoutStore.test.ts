@@ -281,36 +281,4 @@ describe("WidgetLayoutStore", () => {
         // @ts-ignore calling private method
         expect(() => store.onNotReady()).not.toThrow();
     });
-
-    describe("when feature_dynamic_room_predecessors is not enabled", () => {
-        beforeAll(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("passes the flag in to getVisibleRooms", async () => {
-            vi.mocked(client.getVisibleRooms).mockRestore();
-            vi.mocked(client.getVisibleRooms).mockReturnValue([]);
-            // @ts-ignore bypass private ctor for tests
-            const store = tearDownAfterTest(new WidgetLayoutStore());
-            await store.start();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("when feature_dynamic_room_predecessors is enabled", () => {
-        beforeAll(() => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("passes the flag in to getVisibleRooms", async () => {
-            vi.mocked(client.getVisibleRooms).mockRestore();
-            vi.mocked(client.getVisibleRooms).mockReturnValue([]);
-            // @ts-ignore bypass private ctor for tests
-            const store = tearDownAfterTest(new WidgetLayoutStore());
-            await store.start();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
-    });
 });

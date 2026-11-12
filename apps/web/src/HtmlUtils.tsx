@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
 import { sanitizeHtml, type HtmlSanitizeOptions } from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
+import { once } from "lodash";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
@@ -39,13 +40,17 @@ const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 // (Zero-Width Space, other whitespace)
 const EMOJI_SEPARATOR_REGEX = /[\u200B\s]/g;
 
-// Regex for emoji. This includes any RGI_Emoji sequence followed by an optional
-// emoji presentation VS (U+FE0F), but not those sequences that are followed by
-// a text presentation VS (U+FE0E). We also count lone regional indicators
-// (U+1F1E6-U+1F1FF). Technically this regex produces false negatives for emoji
-// followed by U+FE0E when the emoji doesn't have a text variant, but in
-// practice this doesn't matter.
-export const EMOJI_REGEX = (() => {
+/**
+ * Regex for emoji. This includes any RGI_Emoji sequence followed by an optional
+ * emoji presentation VS (U+FE0F), but not those sequences that are followed by
+ * a text presentation VS (U+FE0E). We also count lone regional indicators
+ * (U+1F1E6-U+1F1FF). Technically this regex produces false negatives for emoji
+ * followed by U+FE0E when the emoji doesn't have a text variant, but in
+ * practice this doesn't matter.
+ *
+ * Built on first use rather than at import, as compiling `\p{RGI_Emoji}` is slow enough to delay app startup.
+ */
+export const getEmojiRegex = once((): RegExp => {
     try {
         // Per our support policy, v mode is available to us, but we still don't
         // want the app to completely crash on older platforms. We use the
@@ -55,16 +60,16 @@ export const EMOJI_REGEX = (() => {
         // v mode not supported; fall back to matching nothing
         return /(?!)/;
     }
-})();
+});
 
-const BIGEMOJI_REGEX = (() => {
+const getBigEmojiRegex = once((): RegExp => {
     try {
-        return new RegExp(`^(${EMOJI_REGEX.source})+$`, "iv");
+        return new RegExp(`^(${getEmojiRegex().source})+$`, "iv");
     } catch {
-        // Fall back, just like for EMOJI_REGEX
+        // Fall back, just like for getEmojiRegex
         return /(?!)/;
     }
-})();
+});
 
 /*
  * Return true if the given string contains emoji
@@ -248,7 +253,7 @@ export function formatEmojis(message: string | undefined, isHtmlMessage?: boolea
     let key = 0;
 
     for (const data of graphemeSegmenter.segment(message)) {
-        if (EMOJI_REGEX.test(data.segment)) {
+        if (getEmojiRegex().test(data.segment)) {
             if (text) {
                 result.push(text);
                 text = "";
@@ -419,7 +424,7 @@ export function bodyToNode(content: IContent, highlights?: string[], opts: Event
         // messages.
         contentBodyTrimmed = contentBodyTrimmed.replace(EMOJI_SEPARATOR_REGEX, "");
 
-        const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
+        const match = getBigEmojiRegex().exec(contentBodyTrimmed);
         emojiBody =
             match?.[0]?.length === contentBodyTrimmed.length &&
             // Prevent user pills expanding for users with only emoji in

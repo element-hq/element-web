@@ -1510,8 +1510,6 @@
         "currently_experimental": "Jelenleg kísérleti állapotban van.",
         "document_previews": "Kísérleti dokumentum-előnézetek",
         "document_previews_description": "PDF- és Markdown-mellékletek megnyitása közvetlenül a jobb panelen.",
-        "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
-        "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
         "element_call_video_rooms": "Element Call videószobák",
         "encrypted_state_events": "Titkosított állapotesemények (MSC4362)",
         "encrypted_state_events_description": "Engedélyezi az állapotesemények titkosításának kísérleti támogatását, amely elrejti a metaadatokat, például a szobák nevét és témáit a kiszolgáló elől. Ezek a metaadatok a később a szobákhoz csatlakozók, valamint az MSC4362 szabványt nem támogató kliensek előtt is rejtve lesznek.",
@@ -2940,7 +2938,6 @@
             "web_session": "Böngésző"
         },
         "show_avatar_changes": "Profilképváltozások megjelenítése",
-        "show_breadcrumbs": "Gyors elérési gombok megjelenítése a nemrég meglátogatott szobákhoz a szobalista felett",
         "show_chat_effects": "Csevegési effektek (például a konfetti animáció) megjelenítése",
         "show_displayname_changes": "Megjelenítendő nevek változásának megjelenítése",
         "show_join_leave": "Be- és kilépési üzenetek megjelenítése (a meghívók/kirúgások/kitiltások üzeneteit nem érinti)",

@@ -91,7 +91,6 @@ import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 import RoomAvatar from "../../avatars/RoomAvatar";
-import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
 import { transformSearchTerm } from "../../../../utils/SearchInput";
 import { Filter } from "./Filter";
@@ -265,8 +264,8 @@ export const useWebSearchMetrics = (numResults: number, queryLength: number, via
     }, [numResults, queryLength, viaSpotlight]);
 };
 
-const findVisibleRooms = (cli: MatrixClient, msc3946ProcessDynamicPredecessor: boolean): Room[] => {
-    return cli.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((room) => {
+const findVisibleRooms = (cli: MatrixClient): Room[] => {
+    return cli.getVisibleRooms().filter((room) => {
         // Do not show local rooms
         if (isLocalRoom(room)) return false;
 
@@ -334,7 +333,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         const memberScores = buildMemberScores(cli);
         return compareMembers(activityScores, memberScores);
     }, [cli]);
-    const msc3946ProcessDynamicPredecessor = useFeatureEnabled("feature_dynamic_room_predecessors");
 
     const ownInviteLink = makeUserPermalink(cli.getUserId()!);
     const [inviteLinkCopied, setInviteLinkCopied] = useState<boolean>(false);
@@ -382,7 +380,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     useDebouncedCallback(filter === Filter.People, searchProfileInfo, searchParams);
 
     const possibleResults = useMemo<Result[]>(() => {
-        const visibleRooms = findVisibleRooms(cli, msc3946ProcessDynamicPredecessor);
+        const visibleRooms = findVisibleRooms(cli);
         const roomResults = visibleRooms.map(toRoomResult);
         const userResults: IMemberResult[] = [];
 
@@ -432,7 +430,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             ...userResults,
             ...publicRooms.map(toPublicRoomResult),
         ].filter((result) => filter === null || result.filter.includes(filter));
-    }, [cli, userDirectorySearchResults, profile, publicRooms, filter, msc3946ProcessDynamicPredecessor]);
+    }, [cli, userDirectorySearchResults, profile, publicRooms, filter]);
 
     const results = useMemo<Record<Section, Result[]>>(() => {
         const results: Record<Section, Result[]> = {

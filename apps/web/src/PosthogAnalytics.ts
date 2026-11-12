@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import posthog, { type CaptureOptions, type PostHog, type Properties } from "posthog-js";
+import type { CaptureOptions, PostHog, Properties } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
@@ -22,6 +22,13 @@ import { Action } from "./dispatcher/actions";
 import { isSettingUpdatedPayload, type SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
 import dis from "./dispatcher/dispatcher";
 import { Layout } from "./settings/enums/Layout";
+
+/**
+ * posthog-js is only needed when analytics are configured, so it is loaded then rather than with the rest of the app.
+ */
+async function loadPosthog(): Promise<PostHog> {
+    return (await import("posthog-js")).default;
+}
 
 /* Posthog analytics tracking.
  *
@@ -119,7 +126,11 @@ export class PosthogAnalytics {
 
     private anonymity = Anonymity.Disabled;
     // set true during the constructor if posthog config is present, otherwise false
-    private readonly enabled: boolean = false;
+    private enabled: boolean = false;
+    // The PostHog client, once posthog-js has loaded and been initialised
+    private posthog?: PostHog;
+    // Calls made before posthog-js finished loading, run in order once it has
+    private pendingPosthogCalls: ((posthog: PostHog) => void)[] = [];
     private static _instance: PosthogAnalytics | null = null;
     private platformSuperProperties: Properties = {};
     public static readonly ANALYTICS_EVENT_TYPE = "im.vector.analytics";
@@ -134,32 +145,33 @@ export class PosthogAnalytics {
 
     public static get instance(): PosthogAnalytics {
         if (!this._instance) {
-            this._instance = new PosthogAnalytics(posthog);
+            this._instance = new PosthogAnalytics(loadPosthog);
         }
         return this._instance;
     }
 
-    public constructor(private readonly posthog: PostHog) {
+    /**
+     * @param posthog - The PostHog client, or a function which loads it. The function is only called if analytics are
+     *     configured.
+     */
+    public constructor(posthog: PostHog | (() => Promise<PostHog>)) {
         const posthogConfig = SdkConfig.get("posthog");
-        if (posthogConfig?.project_api_key && posthogConfig?.api_host) {
-            this.posthog.init(posthogConfig.project_api_key, {
-                api_host: posthogConfig.api_host,
-                autocapture: false,
-                mask_all_text: true,
-                mask_all_element_attributes: true,
-                // This only triggers on page load, which for our SPA isn't particularly useful.
-                // Plus, the .capture call originating from somewhere in posthog makes it hard
-                // to redact URLs, which requires async code.
-                //
-                // To raise this manually, just call .capture("$pageview") or posthog.capture_pageview.
-                capture_pageview: false,
-                sanitize_properties: this.sanitizeProperties,
-                respect_dnt: true,
-                advanced_disable_decide: true,
-            });
+        const projectApiKey = posthogConfig?.project_api_key;
+        const apiHost = posthogConfig?.api_host;
+        if (projectApiKey && apiHost) {
             this.enabled = true;
-        } else {
-            this.enabled = false;
+            if (typeof posthog === "function") {
+                posthog().then(
+                    (client) => this.initPosthog(client, projectApiKey, apiHost),
+                    (e) => {
+                        logger.error("Failed to load PostHog, disabling analytics", e);
+                        this.enabled = false;
+                        this.pendingPosthogCalls = [];
+                    },
+                );
+            } else {
+                this.initPosthog(posthog, projectApiKey, apiHost);
+            }
         }
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -169,6 +181,36 @@ export class PosthogAnalytics {
         this.onLayoutUpdated();
         this.onUrlPreviewSettingUpdated(SettingsStore.getValue("urlPreviewsEnabled"));
         this.updateCryptoSuperProperty();
+    }
+
+    private initPosthog(posthog: PostHog, projectApiKey: string, apiHost: string): void {
+        posthog.init(projectApiKey, {
+            api_host: apiHost,
+            autocapture: false,
+            mask_all_text: true,
+            mask_all_element_attributes: true,
+            // This only triggers on page load, which for our SPA isn't particularly useful.
+            // Plus, the .capture call originating from somewhere in posthog makes it hard
+            // to redact URLs, which requires async code.
+            //
+            // To raise this manually, just call .capture("$pageview") or posthog.capture_pageview.
+            capture_pageview: false,
+            sanitize_properties: this.sanitizeProperties,
+            respect_dnt: true,
+            advanced_disable_decide: true,
+        });
+        this.posthog = posthog;
+        for (const call of this.pendingPosthogCalls) call(posthog);
+        this.pendingPosthogCalls = [];
+    }
+
+    /**
+     * Runs `fn` with the PostHog client now, or once posthog-js has loaded. Does nothing if analytics are disabled.
+     */
+    private withPosthog(fn: (posthog: PostHog) => void): void {
+        if (!this.enabled) return;
+        if (this.posthog) fn(this.posthog);
+        else this.pendingPosthogCalls.push(fn);
     }
 
     private onLayoutUpdated = (): void => {
@@ -235,9 +277,7 @@ export class PosthogAnalytics {
     };
 
     private registerSuperProperties(properties: Properties): void {
-        if (this.enabled) {
-            this.posthog.register(properties);
-        }
+        this.withPosthog((posthog) => posthog.register(properties));
     }
 
     private static async getPlatformProperties(): Promise<Partial<PlatformProperties>> {
@@ -263,8 +303,9 @@ export class PosthogAnalytics {
         }
         const { origin, hash, pathname } = window.location;
         properties["redactedCurrentUrl"] = getRedactedCurrentLocation(origin, hash, pathname);
-        this.posthog.capture(eventName, { ...this.propertiesForNextEvent, ...properties }, options);
+        const allProperties = { ...this.propertiesForNextEvent, ...properties };
         this.propertiesForNextEvent = {};
+        this.withPosthog((posthog) => posthog.capture(eventName, allProperties, options));
     }
 
     public isEnabled(): boolean {
@@ -278,7 +319,7 @@ export class PosthogAnalytics {
         if (this.enabled && (anonymity == Anonymity.Disabled || anonymity == Anonymity.Anonymous)) {
             // when transitioning to Disabled or Anonymous ensure we clear out any prior state
             // set in posthog e.g. distinct ID
-            this.posthog.reset();
+            this.withPosthog((posthog) => posthog.reset());
             // Restore any previously set platform super properties
             this.registerSuperProperties(this.platformSuperProperties);
         }
@@ -310,15 +351,17 @@ export class PosthogAnalytics {
                         ...accountData,
                     });
                 }
-                if (this.posthog.get_distinct_id() === analyticsID) {
-                    // No point identifying again
-                    return;
-                }
-                if (this.posthog.persistence?.get_property("$user_state") === "identified") {
-                    // Analytics ID has changed, reset as Posthog will refuse to merge in this case
-                    this.posthog.reset();
-                }
-                this.posthog.identify(analyticsID);
+                this.withPosthog((posthog) => {
+                    if (posthog.get_distinct_id() === analyticsID) {
+                        // No point identifying again
+                        return;
+                    }
+                    if (posthog.persistence?.get_property("$user_state") === "identified") {
+                        // Analytics ID has changed, reset as Posthog will refuse to merge in this case
+                        posthog.reset();
+                    }
+                    posthog.identify(analyticsID);
+                });
             } catch (e) {
                 // The above could fail due to network requests, but not essential to starting the application,
                 // so swallow it.
@@ -343,9 +386,7 @@ export class PosthogAnalytics {
     }
 
     public logout(): void {
-        if (this.enabled) {
-            this.posthog.reset();
-        }
+        this.withPosthog((posthog) => posthog.reset());
         SettingsStore.unwatchSetting(this.watchSettingRef);
         this.setAnonymity(Anonymity.Disabled);
     }
