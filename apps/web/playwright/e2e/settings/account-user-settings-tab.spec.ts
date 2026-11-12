@@ -131,7 +131,7 @@ test.describe("Account user settings tab", () => {
     });
 
     test("should support adding and removing a profile picture", async ({ uut, page }) => {
-      test.skip(!!process.env.CI, "flaky on CI - see #35267; remove when fixed");
+      test.fixme(!!process.env.CI, "flaky on CI - see #35267; remove when fixed");
         const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
         await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));
