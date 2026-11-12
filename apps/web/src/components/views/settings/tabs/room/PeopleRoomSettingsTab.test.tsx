@@ -23,6 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
+import ConfirmUserActionDialog from "../../../dialogs/ConfirmUserActionDialog";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import { PeopleRoomSettingsTab } from "./PeopleRoomSettingsTab";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
@@ -30,6 +31,7 @@ import Modal from "../../../../../Modal";
 
 describe("PeopleRoomSettingsTab", () => {
     const client = getMockClientWithEventEmitter({
+        ban: vi.fn(),
         getUserId: vi.fn(),
         invite: vi.fn(),
         kick: vi.fn(),
@@ -41,7 +43,8 @@ describe("PeopleRoomSettingsTab", () => {
     const room = new Room(roomId, client, userId);
     const state = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
 
-    const getButton = (name: "Approve" | "Deny" | "See less" | "See more") => screen.getByRole("button", { name });
+    const getButton = (name: "Approve" | "Decline and ban" | "Deny" | "See less" | "See more") =>
+        screen.getByRole("button", { name });
     const getComponent = (room: Room) =>
         render(
             <MatrixClientContext.Provider value={client}>
@@ -175,6 +178,57 @@ describe("PeopleRoomSettingsTab", () => {
                 room.emit(RoomStateEvent.Update, state);
             });
             expect(getParagraph()).toHaveTextContent("No requests");
+        });
+
+        describe("ban", () => {
+            const mockConfirmDialog = (proceed: boolean, reason?: string): void => {
+                vi.mocked(Modal.createDialog).mockReturnValueOnce({
+                    finished: Promise.resolve([proceed, reason]),
+                    close: vi.fn(),
+                } as unknown as ReturnType<typeof Modal.createDialog>);
+            };
+
+            it("disables the ban button if the power level is insufficient", () => {
+                vi.spyOn(state, "hasSufficientPowerLevelFor").mockImplementation((action) => action !== "ban");
+                getComponent(room);
+                expect(getButton("Decline and ban")).toHaveAttribute("disabled");
+            });
+
+            it("asks for confirmation and calls ban with the reason", async () => {
+                mockConfirmDialog(true, "spam");
+                vi.spyOn(client, "ban").mockResolvedValue({});
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                expect(getButton("Deny")).toHaveAttribute("disabled");
+                await act(() => flushPromises());
+                expect(Modal.createDialog).toHaveBeenCalledWith(
+                    ConfirmUserActionDialog,
+                    expect.objectContaining({ member: knockMember, askReason: true, danger: true }),
+                );
+                expect(client.ban).toHaveBeenCalledWith(roomId, knockUserId, "spam");
+            });
+
+            it("re-enables the buttons when the confirmation is cancelled", async () => {
+                mockConfirmDialog(false);
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                await act(() => flushPromises());
+                expect(client.ban).not.toHaveBeenCalled();
+                expect(getButton("Decline and ban")).not.toHaveAttribute("disabled");
+            });
+
+            it("fails to ban a request", async () => {
+                mockConfirmDialog(true);
+                vi.spyOn(client, "ban").mockRejectedValue(error);
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                await act(() => flushPromises());
+                expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                    title: error.name,
+                    description: error.message,
+                });
+                expect(getButton("Decline and ban")).not.toHaveAttribute("disabled");
+            });
         });
 
         it("disables the approve button if the power level is insufficient", () => {
