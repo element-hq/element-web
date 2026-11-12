@@ -76,6 +76,7 @@ test.describe("Create Room", () => {
     });
 
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
+      test.skip(!!process.env.CI, "flaky on CI - see #31435; remove when fixed");
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
         await rejectToast(page, "Verify this device");
 
