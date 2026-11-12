@@ -184,8 +184,8 @@ catalogs:
       specifier: 10.4.0
       version: 10.4.0
     '@vitejs/plugin-react':
-      specifier: 6.1.2
-      version: 6.1.2
+      specifier: 6.3.0
+      version: 6.3.0
     '@vitest/browser':
       specifier: 5.1.0
       version: 5.1.0
@@ -602,7 +602,7 @@ importers:
         version: 2.6.0
       html-react-parser:
         specifier: ^6.0.0
-        version: 6.1.8(@types/react@19.3.0)(react@19.3.1)
+        version: 6.1.9(@types/react@19.3.0)(react@19.3.1)
       is-ip:
         specifier: ^5.0.0
         version: 5.0.1
@@ -1072,7 +1072,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.1.2(vite@8.3.6)
+        version: 6.3.0(vite@8.3.6)
       happy-dom:
         specifier: ^21.0.0
         version: 21.0.4
@@ -1130,7 +1130,7 @@ importers:
         version: 19.3.0
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.1.2(vite@8.3.6)
+        version: 6.3.0(vite@8.3.6)
       react:
         specifier: 'catalog:'
         version: 19.3.1
@@ -1210,7 +1210,7 @@ importers:
         version: 19.3.0
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.1.2(vite@8.3.6)
+        version: 6.3.0(vite@8.3.6)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 5.1.0(playwright@1.65.0)(vite@8.3.6)(vitest@5.1.0)
@@ -1386,13 +1386,13 @@ importers:
         version: 3.3.0
       html-react-parser:
         specifier: ^6.0.0
-        version: 6.1.8(@types/react@19.3.0)(react@19.3.1)
+        version: 6.1.9(@types/react@19.3.0)(react@19.3.1)
       linkify-html:
         specifier: 4.4.0
         version: 4.4.0(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.4.0)
       linkify-react:
-        specifier: 4.3.3
-        version: 4.3.3(linkifyjs@4.4.0)(react@19.3.1)
+        specifier: 4.4.0
+        version: 4.4.0(linkifyjs@4.4.0)(react@19.3.1)
       linkify-string:
         specifier: 4.4.0
         version: 4.4.0(linkifyjs@4.4.0)
@@ -1418,11 +1418,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.3.1)
       react-resizable-panels:
-        specifier: 4.14.5
-        version: 4.14.5(react-dom@19.3.1)(react@19.3.1)
+        specifier: 4.21.0
+        version: 4.21.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.19(react-dom@19.3.1)(react@19.3.1)
+        version: 4.18.21(react-dom@19.3.1)(react@19.3.1)
       temporal-polyfill:
         specifier: ^1.0.0
         version: 1.0.6
@@ -1492,7 +1492,7 @@ importers:
         version: 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
-        version: 6.1.2(vite@8.3.6)
+        version: 6.3.0(vite@8.3.6)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 5.1.0(playwright@1.65.0)(vite@8.3.6)(vitest@5.1.0)
@@ -6611,13 +6611,13 @@ packages:
     bundledDependencies:
       - '@vector-im/matrix-wysiwyg-wasm'
 
-  '@vitejs/plugin-react@6.1.2':
-    resolution: {integrity: sha512-fhJNGUdscQa4HkI0xFxwonWyhnVReCPDbXI7FH7jmzpnVCrFQI7PRrhWecO263610vOrs9tr2Y4xcf8uAdFxbw==}
+  '@vitejs/plugin-react@6.3.0':
+    resolution: {integrity: sha512-H9E955aVvD2F4zNHCw4eIZbIfF6xKldlh7MNu+hSU7xwQzh65lI/N+CJWqmfhi0PEjDXIt/H7T7J/4wU63KJiw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
+      '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0 || ^0.3.0
       babel-plugin-react-compiler: ^1.0.0
-      oxc-transform-react: ^0.152.0
+      oxc-transform-react: '>=0.152.0 <0.157.0'
       vite: ^8.0.0
     peerDependenciesMeta:
       '@rolldown/plugin-babel':
@@ -9164,8 +9164,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  html-react-parser@6.1.8:
-    resolution: {integrity: sha512-tlLNVnvtAhGabZTyboRJ/5/ZTD1iZzN5oAQZkW37gUvpcR/XkVNUvcB25Vpo+/tosbJNyfHbx/8H30k3Ug638Q==}
+  html-react-parser@6.1.9:
+    resolution: {integrity: sha512-5lQzzUQXrFe1+OR7GOGkATsm/2h3UIIWQvPkl+84+A9vYG6zbGxhZJjrCDlGvmQs7qPMbffO3XYizVrHekLZbA==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: 0.14 || 15 || 16 || 17 || 18 || 19
@@ -9796,10 +9796,10 @@ packages:
   linkify-it@5.0.2:
     resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
 
-  linkify-react@4.3.3:
-    resolution: {integrity: sha512-bMWuN1YJ3hyDyojk4hzUugecN2RsTuibKAQBplUT2o+3uK33THdRL2qD0Zf3ibCXuBLBCyOE6Uj/S/1cY48Ygw==}
+  linkify-react@4.4.0:
+    resolution: {integrity: sha512-7mST+yaoW15MujtQYTM7TtSEqTnnBw1TUBVO8mIgn1za0RZfEQdGDLe1avTlxP58LJ9/Bu1pFvbGyDJMz8QX2A==}
     peerDependencies:
-      linkifyjs: '==4.3.3'
+      linkifyjs: 4.4.0
       react: '>= 15.0.0'
 
   linkify-string@4.4.0:
@@ -11409,11 +11409,15 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.14.5:
-    resolution: {integrity: sha512-AoHgoq3sGOfciPn2ahddFrBCqsitZLse8cJIYWblvE3kQ9z39IrhdlHCjnVRrDL8XcWqvA0u/t9nLZTfWePJ5A==}
+  react-resizable-panels@4.21.0:
+    resolution: {integrity: sha512-SzNEQNH/xIn3aKKLSdv48h0eu1gF1bkvozIVStow2hRmh/d9jkyoZR7dF8GUx39Wc2TAJTmfSUr4y/wwtvMoRQ==}
     peerDependencies:
+      '@types/react': ^19.2.10
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-string-replace@2.0.1:
     resolution: {integrity: sha512-J7y/IxZkwhOgCexu6GtkNH2FIa9f/z6ykvK1YXS8VLIdvcP8Vyx3LAUFsfIFvq3aQbmin2d+clFR1J50LnR2yA==}
@@ -11434,8 +11438,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-virtuoso@4.18.19:
-    resolution: {integrity: sha512-dewyZisA5IiQTldh7eHM5KpI+qxi0nKRVYi2iM01XmPkNa5tjvVUKJKAIc6ted1hAK1/NFlXuhXpVYqGHHdcdQ==}
+  react-virtuoso@4.18.21:
+    resolution: {integrity: sha512-2F7utTLDpzc0MjIRfN1ObU1K7UgwDuNs420iPA9Jqg0QxpHi2AnTF1ir7YIhk44Xj4hgi+7iY8krCMOUbKhnXA==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -18475,7 +18479,7 @@ snapshots:
     dependencies:
       react: 19.3.1
 
-  '@vitejs/plugin-react@6.1.2(vite@8.3.6)':
+  '@vitejs/plugin-react@6.3.0(vite@8.3.6)':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.6(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
@@ -21565,7 +21569,7 @@ snapshots:
       relateurl: 0.2.7
       terser: 5.51.2
 
-  html-react-parser@6.1.8(@types/react@19.3.0)(react@19.3.1):
+  html-react-parser@6.1.9(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       domhandler: 6.0.1
       html-dom-parser: 8.0.2
@@ -22176,7 +22180,7 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
 
-  linkify-react@4.3.3(linkifyjs@4.4.0)(react@19.3.1):
+  linkify-react@4.4.0(linkifyjs@4.4.0)(react@19.3.1):
     dependencies:
       linkifyjs: 4.4.0
       react: 19.3.1
@@ -24083,10 +24087,12 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  react-resizable-panels@4.14.5(react-dom@19.3.1)(react@19.3.1):
+  react-resizable-panels@4.21.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   react-string-replace@2.0.1: {}
 
@@ -24107,7 +24113,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  react-virtuoso@4.18.19(react-dom@19.3.1)(react@19.3.1):
+  react-virtuoso@4.18.21(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
