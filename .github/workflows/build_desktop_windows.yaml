@@ -82,6 +82,12 @@ jobs:
             BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
             # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
             PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
+            # Make MSVC output reproducible, so that native modules compiled during the build (e.g. pkcs11js) are
+            # byte-identical between builds and can be reused from the sign cache. -Brepro drops timestamps & random
+            # PDB GUIDs, -PDBALTPATH stops the checkout path being embedded via the PDB path.
+            # Uses the `-` form of the options as Git Bash rewrites `/`-prefixed env values into Windows paths.
+            _CL_: -Brepro
+            _LINK_: -Brepro -PDBALTPATH:%_PDB%
         steps:
             # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
             - name: Configure git line endings
@@ -171,6 +177,14 @@ jobs:
                   INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
+            # Trust the sandbox cert before building so that signatures made during the build validate,
+            # letting the build skip re-signing files it has already signed, as it does with the real cert.
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
             - name: Build App
               working-directory: apps/desktop
               run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
@@ -186,12 +200,6 @@ jobs:
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
                   TARGETS: ${{ inputs.targets }}
 
-            - name: Trust eSigner sandbox cert
-              if: inputs.sign == ''
-              run: |
-                  Set-StrictMode -Version 'Latest'
-                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
-
             - name: Check app was signed successfully
               working-directory: apps/desktop
               # Allow the step to fail if setting up the CKA failed (e.g. for PRs),
@@ -201,7 +209,7 @@ jobs:
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
                       -Recurse dist `
-                      -Include *.exe, *.msi `
+                      -Include *.exe, *.msi, *.dll, *.node `
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts

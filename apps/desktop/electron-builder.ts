@@ -5,17 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
+import { execFile } from "node:child_process";
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 import {
     type Configuration as BaseConfiguration,
     type AfterPackContext,
     type BeforeBuildContext,
+    type CustomWindowsSign,
     Arch,
     log,
 } from "electron-builder";
+import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 /**
@@ -127,7 +131,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         loadBrowserProcessSpecificV8Snapshot: false,
         enableEmbeddedAsarIntegrityValidation: true,
     },
-    files: ["package.json", "lib/**"],
+    files: [
+        "package.json",
+        "lib/**",
+        // electron-builder strips node-gyp's Make build leftovers from native modules but not MSBuild's on Windows
+        "!**/node_modules/*/build/*.{vcxproj,vcxproj.filters}",
+        "!**/node_modules/*/build/Release/{obj,*.iobj,*.ipdb,*.exp,*.lib}",
+        // pkcs11js is compiled from source on install, its sources are not needed at runtime
+        "!**/node_modules/pkcs11js/{src,includes}",
+    ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
         name: variant.name,
@@ -189,6 +201,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             signingHashAlgorithms: ["sha256"],
         },
         icon: "build/icon.ico",
+        signExts: [".msi", ".exe", ".dll", ".node"],
     },
     msi: {
         perMachine: true,
@@ -260,6 +273,38 @@ if (variant["linux.deb.name"]) {
 }
 
 /**
+ * Signs a file with signtool, unless it already carries a valid signature, e.g. Microsoft's DirectX DLLs bundled
+ * with Electron, as EV code signing is charged per signature.
+ */
+async function signUnlessSigned(...[config, packager]: Parameters<CustomWindowsSign>): Promise<void> {
+    // Nested signatures are appended to the one we just made, so the file is expected to be signed already
+    if (!config.isNest) {
+        try {
+            // Pass the path via the environment to avoid having to quote it for PowerShell
+            const { stdout } = await promisify(execFile)(
+                "powershell",
+                [
+                    "-NoProfile",
+                    "-NonInteractive",
+                    "-Command",
+                    "(Get-AuthenticodeSignature -LiteralPath $env:ED_SIGN_FILE).Status",
+                ],
+                { env: { ...process.env, ED_SIGN_FILE: config.path } },
+            );
+            if (stdout.trim() === "Valid") {
+                log.info({ file: log.filePath(config.path) }, "skipped signing as file is already signed");
+                return;
+            }
+        } catch (e) {
+            log.warn({ file: log.filePath(config.path), error: String(e) }, "failed to check existing signature");
+        }
+    }
+
+    const manager = (await packager!.signingManager.value) as WindowsSignToolManager;
+    await manager.doSign(config, packager!);
+}
+
+/**
  * Allow specifying windows signing cert via env vars
  * @param {string} process.env.ED_SIGNTOOL_SUBJECT_NAME
  * @param {string} process.env.ED_SIGNTOOL_THUMBPRINT
@@ -268,6 +313,7 @@ if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) 
     config.win.signtoolOptions!.certificateSubjectName = process.env.ED_SIGNTOOL_SUBJECT_NAME;
     config.win.signtoolOptions!.certificateSha1 = process.env.ED_SIGNTOOL_THUMBPRINT;
     config.extraMetadata.electron_windows_cert_sn = config.win.signtoolOptions!.certificateSubjectName;
+    config.win.signtoolOptions!.sign = signUnlessSigned;
 }
 
 if (os.platform() === "linux") {
