@@ -59,7 +59,14 @@ describe("SetupEncryptionToast", () => {
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Create recovery key" }));
 
-            expect(Modal.createDialog).toHaveBeenCalledWith(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ChangeRecoveryKeyDialog,
+                { userHasRecoveryKey: false },
+                undefined,
+                false,
+                false,
+                { onBeforeClose: expect.any(Function) },
+            );
         });
 
         it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {
