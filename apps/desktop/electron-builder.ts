@@ -5,12 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { execFile } from "node:child_process";
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import path from "node:path";
-import { promisify } from "node:util";
 import {
     type Configuration as BaseConfiguration,
     type AfterPackContext,
@@ -22,12 +20,16 @@ import {
 import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
+import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
+
 /**
  * This script has different outputs depending on your os platform.
  *
  * On Windows:
  *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
+ *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
+ *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
@@ -272,26 +274,17 @@ if (variant["linux.deb.name"]) {
     config.deb.fpm.push("--name", variant["linux.deb.name"]);
 }
 
+const cachedSign = createCachedSign();
+
 /**
  * Signs a file with signtool, unless it already carries a valid signature, e.g. Microsoft's DirectX DLLs bundled
- * with Electron, as EV code signing is charged per signature.
+ * with Electron, or a signed copy can be reused from the sign cache, as EV code signing is charged per signature.
  */
 async function signUnlessSigned(...[config, packager]: Parameters<CustomWindowsSign>): Promise<void> {
     // Nested signatures are appended to the one we just made, so the file is expected to be signed already
     if (!config.isNest) {
         try {
-            // Pass the path via the environment to avoid having to quote it for PowerShell
-            const { stdout } = await promisify(execFile)(
-                "powershell",
-                [
-                    "-NoProfile",
-                    "-NonInteractive",
-                    "-Command",
-                    "(Get-AuthenticodeSignature -LiteralPath $env:ED_SIGN_FILE).Status",
-                ],
-                { env: { ...process.env, ED_SIGN_FILE: config.path } },
-            );
-            if (stdout.trim() === "Valid") {
+            if ((await getAuthenticodeSignature(config.path)).status === "Valid") {
                 log.info({ file: log.filePath(config.path) }, "skipped signing as file is already signed");
                 return;
             }
@@ -299,6 +292,8 @@ async function signUnlessSigned(...[config, packager]: Parameters<CustomWindowsS
             log.warn({ file: log.filePath(config.path), error: String(e) }, "failed to check existing signature");
         }
     }
+
+    if (cachedSign) return cachedSign(config, packager);
 
     const manager = (await packager!.signingManager.value) as WindowsSignToolManager;
     await manager.doSign(config, packager!);
