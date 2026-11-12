@@ -429,7 +429,10 @@ export default abstract class BasePlatform {
      * runs later, after the client's persistent stores have been deleted, by which time the user may already
      * be signing in again, and clearing web storage then would drop the new session's state.
      */
-    public async clearStorage(): Promise<void> {}
+    public async clearStorage(): Promise<void> {
+        window.localStorage.clear();
+        window.sessionStorage?.clear();
+    }
 
     /**
      * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance

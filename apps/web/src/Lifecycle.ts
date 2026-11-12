@@ -1208,11 +1208,9 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
         const pendingInvites = ThreepidInviteStore.instance.getWireInvites();
         const registrationTime = window.localStorage.getItem("mx_registration_time");
 
-        window.localStorage.clear();
-        // Clear this before anything is awaited: the view has already moved on (see onLoggedOut), so a login
-        // started in the meantime keeps its session state, such as the OAuth2 context that must survive the
-        // redirect to the identity provider.
-        window.sessionStorage?.clear();
+        // Clear this before anything is awaited: when reaching this, the view will already have logged out (see onLoggedOut)
+        // So one could log in again but would still have the storage from the old session. Broken OAuth2 context.
+        await PlatformPeg.get()?.clearStorage();
 
         try {
             await StorageAccess.idbClear("account");
