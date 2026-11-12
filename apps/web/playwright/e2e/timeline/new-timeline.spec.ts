@@ -137,4 +137,49 @@ test.describe("New timeline", () => {
 
         await expect(timelineRow(page, oldest.event_id)).toContainText("The very first message");
     });
+
+    test("jumps to a message clicked in the search results, centred", async ({ page, app, user }) => {
+        const roomId = await app.client.createRoom({ name: "Search jump" });
+        // The message to find sits well above the live end, but within what the timeline
+        // loads when the room opens, so the jump only has to scroll.
+        for (let i = 1; i <= 8; i++) {
+            await app.client.sendMessage(roomId, `Before ${i}. ${"Padding. ".repeat(30)}`);
+        }
+        const target = await app.client.sendMessage(roomId, "The haystack needle");
+        for (let i = 1; i <= 12; i++) {
+            await app.client.sendMessage(roomId, `After ${i}. ${"Padding. ".repeat(30)}`);
+        }
+
+        await app.viewRoomById(roomId);
+        await expect(page.locator(".mx_NewTimelinePanel")).toBeVisible();
+        await expect(timelineRow(page, target.event_id)).not.toBeInViewport();
+
+        await app.toggleRoomInfoPanel();
+        const searchbox = page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox");
+        await searchbox.fill("needle");
+        await searchbox.press("Enter");
+        const result = page.locator(".mx_RoomView_searchResultsPanel").getByText("The haystack needle");
+        await expect(result).toBeVisible();
+        // The timeline is hidden behind the results while they show, so this jump is made
+        // before it is visible again.
+        await result.click();
+
+        await expect(page.locator(".mx_RoomView_searchResultsPanel")).toHaveCount(0);
+        await expect(timelineRow(page, target.event_id)).toBeInViewport();
+        // Centred, not just somewhere on screen: the row's middle is near the timeline's.
+        await expect
+            .poll(
+                () =>
+                    page.evaluate((eventId) => {
+                        const scroller = document.querySelector('[data-testid="timeline-scroller"]');
+                        const row = document.querySelector(`.mx_TimelineView_tile[data-key="${eventId}"]`);
+                        if (!scroller || !row) return Number.MAX_SAFE_INTEGER;
+                        const s = scroller.getBoundingClientRect();
+                        const r = row.getBoundingClientRect();
+                        return Math.abs(r.top + r.height / 2 - (s.top + s.height / 2));
+                    }, target.event_id),
+                { timeout: 15_000 },
+            )
+            .toBeLessThan(40);
+    });
 });

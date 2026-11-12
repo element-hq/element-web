@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 
 // ─── Timeline item: one renderable row ─────────────────────────────
@@ -98,6 +98,16 @@ export interface NavigationAnchor {
  * the current items snapshot to resolve the target.
  */
 export type ImmediateScroll = (anchor: NavigationAnchor) => void;
+
+/** Controls the view exposes through its `ref`, for driving it from outside. */
+export interface TimelineViewHandle {
+    /**
+     * Scroll to a loaded row straight away. This is the same handle the view gives the view
+     * model's actions, so an outside caller can drive those actions too, e.g.
+     * `vm.onJumpToLive(handle.scrollNow)`.
+     */
+    scrollNow: ImmediateScroll;
+}
 
 // ─── Timeline view model contract ──────────────────────────────────
 
@@ -213,4 +223,7 @@ export interface TimelineViewProps {
      * The shared container calls this for every visible item.
      */
     renderItem: (item: TimelineItem) => ReactNode;
+
+    /** Receives the view's {@link TimelineViewHandle} once it has mounted. */
+    ref?: Ref<TimelineViewHandle>;
 }
