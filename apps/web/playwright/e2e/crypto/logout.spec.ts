@@ -89,6 +89,29 @@ test.describe("Logout tests", () => {
         await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
     });
 
+    test("Logout dialog is not closed by clicking the background", async ({ page, app }) => {
+        const locator = await app.settings.openUserMenu();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
+
+        const dialog = page.getByRole("dialog", { name: "Remove this device" });
+        await dialog.getByRole("button", { name: "Get recovery key" }).click();
+        await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
+
+        // Clicking the dialog background must not dismiss the dialog
+        // (the static background belongs to the settings dialog behind it)
+        await page
+            .locator("#mx_Dialog_Container")
+            .getByTestId("dialog-background")
+            .click({ force: true, position: { x: 10, y: 10 } });
+        await page.waitForTimeout(500);
+        await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
+
+        // The Cancel button still works and returns to the start screen
+        await dialog.getByRole("button", { name: "Cancel" }).click();
+        await expect(dialog.getByRole("button", { name: "Get recovery key" })).toBeVisible();
+    });
+
     test("Check the recovery key without leaving the logout dialog", async ({ page, app }) => {
         const recoveryKey = await enableKeyBackup(app);
 
