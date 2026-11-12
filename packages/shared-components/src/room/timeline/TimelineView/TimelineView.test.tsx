@@ -169,6 +169,29 @@ describe("<TimelineView />", () => {
         expect(actions.onJumpToLive.mock.calls[0][0]).toBeTypeOf("function");
     });
 
+    it("keeps the rows on screen still when a row above them grows while scrolling up", async () => {
+        const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+        renderTimeline(vm);
+        const scroller = screen.getByTestId("timeline-scroller");
+        await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+        const pause = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 150));
+
+        // Scroll up far enough for the top rows to render and be measured, and let that settle.
+        scroller.scrollTop = 600;
+        await pause();
+        const before = scroller.scrollTop;
+
+        // Scroll up again, so TanStack sees a backward scroll, then grow a row that is entirely
+        // above the viewport, as an image in it finishing loading would.
+        scroller.scrollTop = before - 100;
+        scroller.dispatchEvent(new Event("scroll"));
+        const row = screen.getByTestId("row-evt-2");
+        row.style.height = `${ROW_HEIGHT + 40}px`;
+
+        // The scroll position moves by the growth, so the rows on screen do not.
+        await waitFor(() => expect(scroller.scrollTop).toBe(before - 100 + 40));
+    });
+
     describe("when the viewport changes height", () => {
         // The view is height:100%, so re-rendering the wrapper with a new height is how the composer
         // growing, or a banner appearing above the timeline, reaches the scroller.
@@ -222,6 +245,36 @@ describe("<TimelineView />", () => {
             // Give the view time to scroll, in case it wrongly does.
             await settle();
             expect(scroller.scrollTop).toBe(200);
+        });
+
+        it("does not report leaving the bottom when the scroll position is read before a resize is measured", async () => {
+            const { vm, actions } = makeFakeVm({ items: eventItems(30) });
+            const { resize } = renderResizable(vm, VIEWPORT_HEIGHT);
+            const scroller = screen.getByTestId("timeline-scroller");
+            // Start with the reader sitting at the bottom of the timeline.
+            await waitFor(() => expect(actions.onAnchorReached).toHaveBeenCalled(), { timeout: 5000 });
+            await waitFor(() => expect(actions.onAtBottomStateChange).toHaveBeenLastCalledWith(true));
+            await settle();
+            actions.onAtBottomStateChange.mockClear();
+
+            // When the timeline gets taller, the browser moves scrollTop up so the bottom stays
+            // in view, and fires the scroll event before TanStack's ResizeObserver has seen the
+            // new height. Without our @tanstack/virtual-core patch, which reads the height with
+            // the scroll event, that paired the new scrollTop with the old height and looked as
+            // if the reader had scrolled up.
+            //
+            // On CI this only happened when a timer fired in that gap by chance, so the test
+            // failed now and then (#35449). Here we force it: make the timeline taller, then
+            // straight away fire a scroll event.
+            resize(VIEWPORT_HEIGHT + 60);
+            scroller.dispatchEvent(new Event("scroll"));
+
+            // Let TanStack catch up with the new height.
+            await waitFor(() => expect(scroller.clientHeight).toBe(VIEWPORT_HEIGHT + 60));
+            await settle();
+            // The reader is still at the bottom, and was never reported as having left it.
+            expect(distanceFromBottom(scroller)).toBeLessThanOrEqual(1);
+            expect(actions.onAtBottomStateChange).not.toHaveBeenCalledWith(false);
         });
 
         it("keeps a reader at the bottom when the window shrinks and some rows shrink with it", async () => {
