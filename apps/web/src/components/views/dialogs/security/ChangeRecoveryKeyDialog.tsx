@@ -48,7 +48,6 @@ export function ChangeRecoveryKeyDialog({
     return (
         <BaseDialog
             className="mx_ChangeRecoveryKeyDialog"
-            onFinished={() => onFinished(state === "confirmation")}
             hasCancel={false}
             aria-label={
                 userHasRecoveryKey
