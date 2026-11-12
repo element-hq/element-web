@@ -168,19 +168,51 @@ class SafeStorageWriter extends StorageWriter {
             // No secret stored.
             return undefined;
         }
+        const ciphertextBuffer = Buffer.from(ciphertext, "base64");
+
+        let asyncError: unknown;
         try {
             // TODO: honour `shouldReEncrypt` by writing the secret back under safeStorage's new key.
             // This will be enabled in a follow-up change.
-            const { result } = await safeStorage.decryptStringAsync(Buffer.from(ciphertext, "base64"));
+            const { result } = await safeStorage.decryptStringAsync(ciphertextBuffer);
             return result;
         } catch (e) {
-            // The secret exists but cannot be decrypted in this session. Returning undefined here (as
-            // we used to) is indistinguishable from "no secret stored", which makes callers create or
-            // overwrite a fresh secret and permanently destroy the still-valid ciphertext. Throw a
-            // typed error instead so callers can preserve the data and recover on a later launch once
-            // the keychain is readable again. See element-web#32521 / #32715.
-            console.error("Failed to decrypt secret", e);
-            throw new SafeStorageDecryptionError("Failed to decrypt safeStorage secret", { cause: e });
+            asyncError = e;
+        }
+
+        const legacySecret = this.decryptLegacy(ciphertextBuffer);
+        if (legacySecret !== undefined) return legacySecret;
+
+        // The secret exists but cannot be decrypted in this session. Returning undefined here (as
+        // we used to) is indistinguishable from "no secret stored", which makes callers create or
+        // overwrite a fresh secret and permanently destroy the still-valid ciphertext. Throw a
+        // typed error instead so callers can preserve the data and recover on a later launch once
+        // the keychain is readable again. See element-web#32521 / #32715.
+        console.error("Failed to decrypt secret", asyncError);
+        throw new SafeStorageDecryptionError("Failed to decrypt safeStorage secret", { cause: asyncError });
+    }
+
+    /**
+     * Decrypt a secret with the synchronous safeStorage API, for ciphertext the asynchronous API cannot read.
+     *
+     * On Linux the asynchronous API can fetch its key from a different keyring entry than the synchronous API
+     * did (on KDE, "<app> Keys" rather than "Chromium Keys"), so it cannot decrypt secrets written by versions
+     * of the app which used the synchronous API. See element-web#35802.
+     *
+     * The stored ciphertext is left as it is, so earlier versions of the app can still read it.
+     *
+     * @param ciphertext - The encrypted secret.
+     * @returns The secret, or undefined if not on Linux or the synchronous API cannot decrypt it either.
+     */
+    private decryptLegacy(ciphertext: Buffer): string | undefined {
+        // TODO: the synchronous API is removed in Electron 46. Before upgrading, migrate these secrets to the
+        // asynchronous API, or they become unreadable.
+        if (process.platform !== "linux") return undefined;
+        try {
+            return safeStorage.decryptString(ciphertext);
+        } catch (e) {
+            console.warn("Failed to decrypt secret with the synchronous safeStorage API", e);
+            return undefined;
         }
     }
 }
