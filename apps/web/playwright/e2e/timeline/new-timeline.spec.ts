@@ -112,6 +112,39 @@ test.describe("New timeline", () => {
         await expect(jumpToBottom).not.toBeVisible();
     });
 
+    test("moves between messages with the arrow keys, and back to the newest with End", async ({ page, app, user }) => {
+        const roomId = await app.client.createRoom({ name: "Keyboard" });
+        const sent: { event_id: string }[] = [];
+        // Enough to make the timeline scroll, so End has somewhere to come back from.
+        for (let i = 1; i <= 20; i++) {
+            sent.push(await app.client.sendMessage(roomId, `Message ${i}. ${"Padding. ".repeat(30)}`));
+        }
+        const ids = sent.map((r) => r.event_id);
+
+        await app.viewRoomById(roomId);
+        await expect(timelineRow(page, ids[19])).toBeVisible();
+
+        // Clicking a message puts focus inside its row (on the tile), and the arrow keys carry on
+        // from that message.
+        await timelineRow(page, ids[19]).getByText("Message 20.").click();
+        await page.keyboard.press("ArrowUp");
+        await expect(timelineRow(page, ids[18])).toBeFocused();
+        await page.keyboard.press("ArrowUp");
+        await expect(timelineRow(page, ids[17])).toBeFocused();
+        await page.keyboard.press("ArrowDown");
+        await expect(timelineRow(page, ids[18])).toBeFocused();
+
+        // Far enough up that the newest message has scrolled away...
+        for (let i = 0; i < 8; i++) await page.keyboard.press("ArrowUp");
+        await expect(timelineRow(page, ids[10])).toBeFocused();
+        await expect(timelineRow(page, ids[19])).not.toBeInViewport();
+
+        // ...and End brings focus and the view back to it.
+        await page.keyboard.press("End");
+        await expect(timelineRow(page, ids[19])).toBeFocused();
+        await expectAtLiveEnd(page);
+    });
+
     test("pages the timeline from the composer without moving focus out of it", async ({ page, app, user }) => {
         const roomId = await app.client.createRoom({ name: "Paging" });
         for (let i = 1; i <= 20; i++) {
