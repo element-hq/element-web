@@ -96,6 +96,7 @@ const Knock: FC<{
                 kind="icon_primary_outline"
                 onClick={handleBan}
                 title={_t("action|decline_and_ban")}
+                placement="top"
             >
                 <ChatProblemIcon color="var(--cpd-color-icon-critical-primary)" width={18} height={18} />
             </AccessibleButton>
@@ -105,6 +106,7 @@ const Knock: FC<{
                 kind="icon_primary_outline"
                 onClick={() => handleDeny(roomMember.userId)}
                 title={_t("action|decline")}
+                placement="top"
             >
                 <CloseIcon width={18} height={18} />
             </AccessibleButton>
@@ -114,6 +116,7 @@ const Knock: FC<{
                 kind="icon_primary"
                 onClick={() => handleApprove(roomMember.userId)}
                 title={_t("action|accept")}
+                placement="top"
             >
                 <CheckIcon width={18} height={18} />
             </AccessibleButton>
