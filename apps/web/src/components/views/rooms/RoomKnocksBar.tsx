@@ -89,7 +89,7 @@ export const RoomKnocksBar: FC<{ room: Room }> = ({ room }) => {
                     disabled={!canKick || disabled}
                     kind="icon_primary_outline"
                     onClick={() => handleDeny(knockMembers[0].userId)}
-                    title={_t("action|deny")}
+                    title={_t("action|decline")}
                 >
                     <CloseIcon width={18} height={18} />
                 </AccessibleButton>
@@ -98,7 +98,7 @@ export const RoomKnocksBar: FC<{ room: Room }> = ({ room }) => {
                     disabled={!canInvite || disabled}
                     kind="icon_primary"
                     onClick={() => handleApprove(knockMembers[0].userId)}
-                    title={_t("action|approve")}
+                    title={_t("action|accept")}
                 >
                     <CheckIcon width={18} height={18} />
                 </AccessibleButton>

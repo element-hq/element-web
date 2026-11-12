@@ -104,7 +104,7 @@ const Knock: FC<{
                 disabled={!canKick || disabled}
                 kind="icon_primary_outline"
                 onClick={() => handleDeny(roomMember.userId)}
-                title={_t("action|deny")}
+                title={_t("action|decline")}
             >
                 <CloseIcon width={18} height={18} />
             </AccessibleButton>
@@ -113,7 +113,7 @@ const Knock: FC<{
                 disabled={!canInvite || disabled}
                 kind="icon_primary"
                 onClick={() => handleApprove(roomMember.userId)}
-                title={_t("action|approve")}
+                title={_t("action|accept")}
             >
                 <CheckIcon width={18} height={18} />
             </AccessibleButton>

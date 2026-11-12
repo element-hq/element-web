@@ -89,7 +89,7 @@ exports[`PeopleRoomSettingsTab > with requests to join > renders requests fully 
         </svg>
       </div>
       <div
-        aria-label="Deny"
+        aria-label="Decline"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
         role="button"
         tabindex="0"
@@ -107,7 +107,7 @@ exports[`PeopleRoomSettingsTab > with requests to join > renders requests fully 
         </svg>
       </div>
       <div
-        aria-label="Approve"
+        aria-label="Accept"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
         role="button"
         tabindex="0"
@@ -192,7 +192,7 @@ exports[`PeopleRoomSettingsTab > with requests to join > renders requests reduce
         </svg>
       </div>
       <div
-        aria-label="Deny"
+        aria-label="Decline"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
         role="button"
         tabindex="0"
@@ -210,7 +210,7 @@ exports[`PeopleRoomSettingsTab > with requests to join > renders requests reduce
         </svg>
       </div>
       <div
-        aria-label="Approve"
+        aria-label="Accept"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
         role="button"
         tabindex="0"

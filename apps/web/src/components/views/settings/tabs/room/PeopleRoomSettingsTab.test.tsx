@@ -43,7 +43,7 @@ describe("PeopleRoomSettingsTab", () => {
     const room = new Room(roomId, client, userId);
     const state = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
 
-    const getButton = (name: "Approve" | "Decline and ban" | "Deny" | "See less" | "See more") =>
+    const getButton = (name: "Accept" | "Decline and ban" | "Decline" | "See less" | "See more") =>
         screen.getByRole("button", { name });
     const getComponent = (room: Room) =>
         render(
@@ -150,20 +150,20 @@ describe("PeopleRoomSettingsTab", () => {
         it("disables the deny button if the power level is insufficient", () => {
             vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
             getComponent(room);
-            expect(getButton("Deny")).toHaveAttribute("disabled");
+            expect(getButton("Decline")).toHaveAttribute("disabled");
         });
 
         it("calls kick on deny", () => {
             vi.spyOn(client, "kick").mockResolvedValue({});
             getComponent(room);
-            fireEvent.click(getButton("Deny"));
+            fireEvent.click(getButton("Decline"));
             expect(client.kick).toHaveBeenCalledWith(roomId, knockUserId);
         });
 
         it("fails to deny a request", async () => {
             vi.spyOn(client, "kick").mockRejectedValue(error);
             getComponent(room);
-            fireEvent.click(getButton("Deny"));
+            fireEvent.click(getButton("Decline"));
             await act(() => flushPromises());
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 title: error.name,
@@ -199,7 +199,7 @@ describe("PeopleRoomSettingsTab", () => {
                 vi.spyOn(client, "ban").mockResolvedValue({});
                 getComponent(room);
                 fireEvent.click(getButton("Decline and ban"));
-                expect(getButton("Deny")).toHaveAttribute("disabled");
+                expect(getButton("Decline")).toHaveAttribute("disabled");
                 await act(() => flushPromises());
                 expect(Modal.createDialog).toHaveBeenCalledWith(
                     ConfirmUserActionDialog,
@@ -234,20 +234,20 @@ describe("PeopleRoomSettingsTab", () => {
         it("disables the approve button if the power level is insufficient", () => {
             vi.spyOn(room, "canInvite").mockReturnValue(false);
             getComponent(room);
-            expect(getButton("Approve")).toHaveAttribute("disabled");
+            expect(getButton("Accept")).toHaveAttribute("disabled");
         });
 
         it("calls invite on approve", () => {
             vi.spyOn(client, "invite").mockResolvedValue({});
             getComponent(room);
-            fireEvent.click(getButton("Approve"));
+            fireEvent.click(getButton("Accept"));
             expect(client.invite).toHaveBeenCalledWith(roomId, knockUserId);
         });
 
         it("fails to approve a request", async () => {
             vi.spyOn(client, "invite").mockRejectedValue(error);
             getComponent(room);
-            fireEvent.click(getButton("Approve"));
+            fireEvent.click(getButton("Accept"));
             await act(() => flushPromises());
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 title: error.name,
