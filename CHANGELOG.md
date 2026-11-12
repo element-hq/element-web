@@ -1,3 +1,10 @@
+Changes in [1.12.35](https://github.com/element-hq/element-web/releases/tag/v1.12.35) (2026-11-12)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] Fall back to synchronous safeStorage ([#35807](https://github.com/element-hq/element-web/pull/35807)). Contributed by @RiotRobot.
+
+
 Changes in [1.12.34](https://github.com/element-hq/element-web/releases/tag/v1.12.34) (2026-11-11)
 ==================================================================================================
 ## Security
