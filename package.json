@@ -44,7 +44,7 @@
         "eslint-plugin-react-web-api": "^5.28.8",
         "eslint-plugin-storybook": "^10.6.5",
         "husky": "^9.1.7",
-        "knip": "6.44.2",
+        "knip": "6.43.0",
         "lint-staged": "^17.6.0",
         "lodash": "^4.18.1",
         "mermaid": "^12.2.0",
