@@ -48,6 +48,14 @@ vi.mock("./config.js", () => ({
 
 // A reversible "encryption" so we control exactly when decryption fails.
 const PREFIX = "enc:";
+// Ciphertext only the synchronous API can decrypt, like secrets written before the switch to the
+// asynchronous API on Linux, where the two can use different keyring entries.
+const LEGACY_PREFIX = "legacy:";
+const decryptLegacy = (buf: Buffer): string => {
+    const s = buf.toString("utf8");
+    if (!s.startsWith(LEGACY_PREFIX)) throw new Error("Failed to decrypt");
+    return s.slice(LEGACY_PREFIX.length);
+};
 vi.mock("electron", () => ({
     app: {
         whenReady: vi.fn(() => Promise.resolve()),
@@ -70,6 +78,7 @@ vi.mock("electron", () => ({
             if (!s.startsWith(PREFIX)) return Promise.reject(new Error("Failed to decrypt"));
             return Promise.resolve({ result: s.slice(PREFIX.length), shouldReEncrypt: false });
         }),
+        decryptString: vi.fn((buf: Buffer) => decryptLegacy(buf)),
     },
 }));
 
@@ -79,6 +88,7 @@ const STORED_KEY = "safeStorage.@alice:example-org|DEVICEID";
 const SESSION = {} as unknown as Electron.Session;
 
 const encrypted = (secret: string): string => Buffer.from(PREFIX + secret, "utf8").toString("base64");
+const legacyEncrypted = (secret: string): string => Buffer.from(LEGACY_PREFIX + secret, "utf8").toString("base64");
 
 /**
  * Drop the Store singleton so a test can build one with a different mode, platform or on-disk
@@ -140,6 +150,7 @@ describe("Store secret encryption (safeStorage)", () => {
             if (!s.startsWith(PREFIX)) return Promise.reject(new Error("Failed to decrypt"));
             return Promise.resolve({ result: s.slice(PREFIX.length), shouldReEncrypt: false });
         });
+        vi.mocked(safeStorage.decryptString).mockReset().mockImplementation(decryptLegacy);
     });
 
     afterEach(() => {
@@ -251,6 +262,45 @@ describe("Store secret encryption (safeStorage)", () => {
             } finally {
                 getSpy.mockRestore();
             }
+        });
+    });
+
+    describe("secrets only the synchronous API can decrypt", () => {
+        beforeEach(() => {
+            usePlatform("linux");
+            backing.set(STORED_KEY, legacyEncrypted("s3cr3t"));
+        });
+
+        it("decrypts them with the synchronous API on Linux", async () => {
+            await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+            expect(safeStorage.decryptString).toHaveBeenCalled();
+        });
+
+        it("leaves the stored ciphertext as it is, so earlier versions of the app can still read it", async () => {
+            await store.getSecret(KEY);
+
+            expect(backing.get(STORED_KEY)).toBe(legacyEncrypted("s3cr3t"));
+            expect(safeStorage.encryptStringAsync).not.toHaveBeenCalled();
+        });
+
+        it("is not reported as undecryptable", async () => {
+            await expect(store.isSecretUndecryptable(KEY)).resolves.toBe(false);
+        });
+
+        it("throws SafeStorageDecryptionError, leaving the ciphertext untouched, when neither API can decrypt", async () => {
+            const undecryptable = Buffer.from("not-decryptable", "utf8").toString("base64");
+            backing.set(STORED_KEY, undecryptable);
+
+            await expect(store.getSecret(KEY)).rejects.toBeInstanceOf(SafeStorageDecryptionError);
+            expect(backing.get(STORED_KEY)).toBe(undecryptable);
+        });
+
+        it("does not try the synchronous API outside Linux", async () => {
+            usePlatform("darwin");
+
+            await expect(store.getSecret(KEY)).rejects.toBeInstanceOf(SafeStorageDecryptionError);
+            expect(safeStorage.decryptString).not.toHaveBeenCalled();
+            expect(backing.get(STORED_KEY)).toBe(legacyEncrypted("s3cr3t"));
         });
     });
 
@@ -435,6 +485,17 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.get("safeStorageBackendOverride")).toBeUndefined();
             expect(backing.has("safeStorageBackendMigrate")).toBe(false);
             expect(app.relaunch).toHaveBeenCalled();
+        });
+
+        it("migrates secrets only the synchronous API can decrypt", async () => {
+            const LEGACY_CIPHERTEXT = legacyEncrypted("legacysecret");
+            backing.set("safeStorage", { legacy: LEGACY_CIPHERTEXT });
+            backing.set("safeStorage.legacy", LEGACY_CIPHERTEXT);
+
+            await migrate();
+
+            expect(backing.get("safeStorage.legacy")).toBe("legacysecret");
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
         });
 
         it("defers the whole migration when any secret cannot be decrypted", async () => {
