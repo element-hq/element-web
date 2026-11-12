@@ -308,7 +308,7 @@ test.describe("Editing", () => {
     });
 
     test("should show the emoji autocomplete above the edit composer", async ({ page, app, room }) => {
-      test.skip(!!process.env.CI, "flaky on CI - see #35273; remove when fixed");
+      test.fixme(!!process.env.CI, "flaky on CI - see #35273; remove when fixed");
         await page.goto(`#/room/${room.roomId}`);
 
         await sendEvent(app, room.roomId);
