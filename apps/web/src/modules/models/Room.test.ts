@@ -50,6 +50,29 @@ describe("Room", () => {
             expect(sourceEvent.getContent().nested).toEqual({ value: "original" });
         });
 
+        it("refreshes the snapshot when first watched", () => {
+            const sdkRoom = mkRoom(stubClient(), "!foo:m.org");
+            let currentEvents: ReturnType<typeof mkEvent>[] = [];
+            const state = { getStateEvents: vi.fn(() => currentEvents) } as unknown as RoomState;
+            vi.spyOn(sdkRoom.getLiveTimeline(), "getState").mockReturnValue(state);
+            const watchable = new Room(sdkRoom).getStateEvents("com.example.config");
+            const listener = vi.fn();
+            const event = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { enabled: true },
+                skey: "connection",
+            });
+            currentEvents = [event];
+
+            watchable.watch(listener);
+
+            expect(listener).toHaveBeenCalledExactlyOnceWith([{ stateKey: "connection", content: { enabled: true } }]);
+            watchable.unwatch(listener);
+        });
+
         it("updates on relevant live state changes and removes its listener after the last unwatch", async () => {
             const cli = stubClient();
             const sdkRoom = mkRoom(cli, "!foo:m.org");

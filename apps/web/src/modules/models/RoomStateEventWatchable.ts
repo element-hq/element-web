@@ -30,8 +30,7 @@ export class RoomStateEventWatchable extends Watchable<ModuleRoomStateEvent[]> {
     protected onFirstWatch(): void {
         this.sdkRoom.on(SdkRoomStateEvent.Events, this.onStateEvent);
         this.listening = true;
-        // Watchable invokes this before adding the listener, so defer the initial refresh.
-        queueMicrotask(() => this.refresh());
+        this.refresh();
     }
 
     protected onLastWatch(): void {
