@@ -27,6 +27,7 @@ import { assertNoHardLinks } from "./scripts/hard-links.ts";
 import { pruneSeshatBinaries } from "./scripts/seshat-binaries.ts";
 import { writeMacReleasesJson } from "./scripts/mac-releases.ts";
 import { assertArtifactsPresent } from "./scripts/artifacts.ts";
+import { assertNativeLibraries } from "./scripts/native-libraries.ts";
 import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
@@ -50,6 +51,7 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
  *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
+ *  Checks the native libraries in the packaged app, failing the build on CI and warning otherwise.
  *  Fails the build if the deb or tar.gz contains hard links.
  */
 
@@ -264,6 +266,8 @@ const config: Omit<Writable<Configuration>, "electronFuses" | "publish"> & {
     },
     afterPack: async (context: AfterPackContext) => {
         await pruneSeshatBinaries(context);
+        // Runs after pruning, as the binaries for other architectures would fail the checks
+        await assertNativeLibraries(context);
     },
     artifactBuildCompleted: async (event: ArtifactCreated) => {
         await assertNoHardLinks(event);
