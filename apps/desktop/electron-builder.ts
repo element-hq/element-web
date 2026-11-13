@@ -111,6 +111,14 @@ for (const key in variant) {
     console.log(`${key}: ${variant[key as keyof Variant]}`);
 }
 
+/**
+ * CI passes the macOS signing credentials as empty strings when not signing, but electron-builder treats an empty
+ * CSC_LINK as a certificate to import, so treat empty values as unset.
+ */
+for (const name of ["CSC_LINK", "CSC_KEY_PASSWORD", "APPLE_ID", "APPLE_APP_SPECIFIC_PASSWORD", "APPLE_TEAM_ID"]) {
+    if (process.env[name] === "") delete process.env[name];
+}
+
 interface Configuration extends BaseConfiguration {
     extraMetadata: Partial<Pick<Pkg, "version">> & ExtraMetadata;
     linux: BaseConfiguration["linux"];
