@@ -62,16 +62,21 @@ Please see LICENSE files in the repository root for full details.
             border-color: var(--cpd-color-icon-primary);
             background-color: var(--cpd-color-icon-primary);
 
-            div {
-                background: none;
+            & div {
+                background: none; /* override the inner circle */
 
-                svg {
+                & svg {
                     color: var(--cpd-color-icon-on-solid-primary);
                     width: 12px;
                     height: 12px;
                     margin: -2px;
                     display: block;
                 }
+            }
+        }
+        & input[type="radio"]:checked:disabled + div {
+            div {
+                background: none; /* override the inner circle */
             }
         }
     }
@@ -89,13 +94,17 @@ Please see LICENSE files in the repository root for full details.
         input[type="radio"]:checked + div {
             border-color: var(--cpd-color-icon-accent-tertiary);
             background-color: var(--cpd-color-icon-accent-tertiary);
+
+            & div {
+                background: none; /* override the inner circle */
+            }
         }
     }
 }
 
-/* options not actionable in these states */
-.mx_PollOption_checked,
-.mx_PollOption_ended {
+/* options not actionable in ended and busy state */
+.mx_PollOption_ended,
+.mx_PollOption_busy {
     pointer-events: none;
 }
 
