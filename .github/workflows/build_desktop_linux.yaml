@@ -116,10 +116,13 @@ jobs:
 
             # Install dependencies inside container so we compile native modules (like pkcs11js)
             # against bookworm's glibc.
+            # The container runs as the runner's user so that the files it writes stay owned by the runner,
+            # with a writable HOME for the pnpm, node-gyp & electron-builder caches.
             - name: Install Deps
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm install --frozen-lockfile --filter element-desktop
@@ -135,6 +138,7 @@ jobs:
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     -e VARIANT_PATH \
                     -e VERSION \
@@ -142,7 +146,6 @@ jobs:
                     -e PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm run build --publish never $BUILD_ARGS -l $TARGETS
-                  sudo chown -R $USER:$USER apps/desktop/dist
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
