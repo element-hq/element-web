@@ -768,6 +768,7 @@
             border-radius: 0;
             border-start-start-radius: var(--event-tile-bubble-corner-radius);
             border-start-end-radius: var(--event-tile-bubble-corner-radius);
+            border-end-end-radius: var(--event-tile-bubble-corner-radius);
         }
     }
 
@@ -934,6 +935,7 @@
         :global(.mx_MediaBody) {
             background: var(--event-tile-bubble-self-background);
             border-end-start-radius: var(--event-tile-bubble-corner-radius);
+            border-end-end-radius: 0;
         }
     }
 
@@ -999,11 +1001,15 @@
         margin-top: 2px;
     }
 
-    &.stateContinuation .line {
+    /* Media bodies paint the bubble of a media line, so they take the same
+       corners as the line in each section state. */
+    &.stateContinuation .line,
+    &.stateContinuation .lineMedia :global(.mx_MediaBody) {
         border-start-start-radius: 0;
     }
 
-    &.stateContinuation.stateOwnEvent .line {
+    &.stateContinuation.stateOwnEvent .line,
+    &.stateContinuation.stateOwnEvent .lineMedia :global(.mx_MediaBody) {
         border-start-start-radius: var(--event-tile-bubble-corner-radius);
         border-start-end-radius: 0;
     }
@@ -1012,7 +1018,8 @@
         margin-bottom: calc(var(--event-tile-bubble-gutter) / 2);
     }
 
-    &.stateLastInSection .line {
+    &.stateLastInSection .line,
+    &.stateLastInSection .lineMedia :global(.mx_MediaBody) {
         border-end-start-radius: var(--event-tile-bubble-corner-radius);
     }
 

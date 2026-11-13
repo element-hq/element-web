@@ -20,6 +20,7 @@ import {
 } from "./index";
 import styles from "./EventTileView.module.css";
 import { MockViewModel } from "../../../../core/viewmodel";
+import { MediaBody } from "../body/MediaBody";
 import { ReactionsRowView, type ReactionsRowViewSnapshot } from "../reactions/ReactionsRow";
 import reactionStyles from "../reactions/ReactionsRow/ReactionsRow.module.css";
 import { MessageTimestampView, type MessageTimestampViewSnapshot } from "../timestamp/MessageTimestampView";
@@ -776,6 +777,43 @@ describe("EventTileView add-reaction control", () => {
         await userEvent.hover(screen.getByTestId("body"));
 
         expect(getComputedStyle(addReactionButton).visibility).toBe("visible");
+    });
+});
+
+describe("EventTileView bubble layout media corners", () => {
+    const corners = (element: Element): string[] => {
+        const style = getComputedStyle(element);
+        return [
+            style.borderStartStartRadius,
+            style.borderStartEndRadius,
+            style.borderEndEndRadius,
+            style.borderEndStartRadius,
+        ];
+    };
+
+    it.each<[string, Partial<EventTileViewRootState>]>([
+        ["another user's first message", { isOwnEvent: false }],
+        ["another user's follow-up", { isOwnEvent: false, continuation: true }],
+        ["another user's last message", { isOwnEvent: false, lastInSection: true }],
+        ["another user's last follow-up", { isOwnEvent: false, continuation: true, lastInSection: true }],
+        ["an own first message", { isOwnEvent: true }],
+        ["an own follow-up", { isOwnEvent: true, continuation: true }],
+        ["an own last message", { isOwnEvent: true, lastInSection: true }],
+        ["an own last follow-up", { isOwnEvent: true, continuation: true, lastInSection: true }],
+    ])("rounds the media body of %s like a text bubble", (_, state) => {
+        // Media lines have no background of their own, so the media body has to carry the bubble's corners.
+        render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { isOwnEvent: false, hasReply: false, ...state } },
+                    line: { media: true },
+                    slots: { body: <MediaBody data-testid="media-body">Recording.ogg</MediaBody> },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+
+        expect(corners(screen.getByTestId("media-body"))).toEqual(corners(screen.getByTestId("event-tile-line")));
     });
 });
 
