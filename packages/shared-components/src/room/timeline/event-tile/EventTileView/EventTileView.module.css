@@ -1043,6 +1043,13 @@
         }
     }
 
+    /* Your own avatar starts where the row ends. A bubble reaches under it,
+       but an emote is too short for its time to clear it, so end the line
+       where the row ends. */
+    &.stateOwnEvent .lineEmote {
+        margin-inline-end: 0;
+    }
+
     /* Events without sender details, and emotes, which have no sender row, use
        the same avatar placement as an own message whose sender row is hidden. */
     &.stateNoSender .slotAvatar,

@@ -996,4 +996,17 @@ describe("EventTileView bubble layout emotes", () => {
 
         expect(time.top + time.height / 2).toBe(lastLineCenter);
     });
+
+    it("keeps the time of your own emote clear of your avatar and of its text", () => {
+        const message = renderTile({ isOwnEvent: true });
+        const emote = renderTile({ ...emoteState, isOwnEvent: true }, { emote: true });
+        const spaceBeforeTime = (tile: { body: Element; timestamp: Element }): number =>
+            tile.timestamp.getBoundingClientRect().left - tile.body.getBoundingClientRect().right;
+
+        expect(emote.timestamp.getBoundingClientRect().right).toBeLessThanOrEqual(
+            emote.avatar.getBoundingClientRect().left,
+        );
+        // The time needs all of the space a bubble leaves for it, or a 12-hour time runs into the text.
+        expect(spaceBeforeTime(emote)).toBe(spaceBeforeTime(message));
+    });
 });
