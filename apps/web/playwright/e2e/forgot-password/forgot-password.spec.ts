@@ -81,6 +81,15 @@ test.describe("Forgot Password", () => {
             await expect(page.getByRole("button", { name: "Resend" })).toBeInViewport();
 
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("forgot-password-verify-email.png");
+
+            // The close button must be as far from the side as from the top, like in every other dialog
+            const dialog = page.locator(".mx_Dialog");
+            const dialogBox = await dialog.boundingBox();
+            const closeBox = await dialog.getByRole("button", { name: "Close dialog" }).boundingBox();
+            expect(dialogBox!.x + dialogBox!.width - (closeBox!.x + closeBox!.width)).toBeCloseTo(
+                closeBox!.y - dialogBox!.y,
+                0,
+            );
         },
     );
 });
