@@ -48,6 +48,7 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
  * On macOS:
  *  Writes releases.json & releases-legacy.json for Squirrel.Mac if $ED_BASE_URL, the URL the build will be deployed to,
  *      is specified.
+ *  Disables automatic discovery of a signing identity on CI when $CSC_LINK is not specified.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
@@ -125,6 +126,11 @@ for (const key in variant) {
  */
 for (const name of ["CSC_LINK", "CSC_KEY_PASSWORD", "APPLE_ID", "APPLE_APP_SPECIFIC_PASSWORD", "APPLE_TEAM_ID"]) {
     if (process.env[name] === "") delete process.env[name];
+}
+
+// Don't let unsigned CI builds pick up a signing identity from the runner's keychain
+if (process.env.CI && !process.env.CSC_LINK) {
+    process.env.CSC_IDENTITY_AUTO_DISCOVERY ??= "false";
 }
 
 interface Configuration extends BaseConfiguration {
