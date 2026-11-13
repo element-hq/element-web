@@ -226,3 +226,8 @@
 .quickHeader .name {
     margin-right: var(--cpd-space-1x);
 }
+
+/* Keep the shortcode shown on hover inside the heading's line, so the emoji below don't move */
+.quickHeader .shortcode {
+    line-height: 1;
+}

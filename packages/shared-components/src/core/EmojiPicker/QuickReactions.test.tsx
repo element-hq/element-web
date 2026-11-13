@@ -10,6 +10,7 @@ Please see LICENSE in the repository root for full details.
 import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
 import { render, screen, within } from "@test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -34,5 +35,15 @@ describe("QuickReactions", () => {
         for (const emoji of emojis) {
             expect(emoji.getBoundingClientRect().bottom).toBeLessThanOrEqual(footerBottom);
         }
+    });
+
+    it("doesn't move the emoji when one is hovered", async () => {
+        const { toolbar, emojis } = renderQuickReactions();
+        const restingBox = toolbar.getBoundingClientRect().toJSON();
+
+        await userEvent.hover(emojis[0]);
+
+        expect(screen.getByText("thumbs up")).toBeInTheDocument();
+        expect(toolbar.getBoundingClientRect().toJSON()).toEqual(restingBox);
     });
 });
