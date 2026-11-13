@@ -77,6 +77,13 @@ const useSignOut = (
             undefined, // className
             false, // isPriority
             true, // isStatic
+            {
+                onBeforeClose: async (reason) => {
+                    // Inhibit closure due to clicking in the background.
+                    // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
+                    return reason !== "backgroundClick";
+                },
+            },
         );
     };
 

@@ -32,10 +32,6 @@ interface ChangeRecoveryKeyDialogProps {
     /**
      * Called when the dialog is closed: `keyChanged` is true if the recovery key was successfully
      * changed, and false (or undefined) if the user cancelled.
-     *
-     * Caveat: clicking the dialog backdrop closes the modal through ModalManager directly, reporting
-     * no `keyChanged` even from the confirmation screen, so a falsy value does not prove the key is
-     * unchanged.
      */
     onFinished: (keyChanged?: boolean) => void;
 }
@@ -52,7 +48,7 @@ export function ChangeRecoveryKeyDialog({
     return (
         <BaseDialog
             className="mx_ChangeRecoveryKeyDialog"
-            onFinished={() => onFinished(state === "confirmation")}
+            hasCancel={false}
             aria-label={
                 userHasRecoveryKey
                     ? _t("settings|encryption|recovery|change_recovery_key")

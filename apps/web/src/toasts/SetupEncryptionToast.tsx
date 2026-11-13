@@ -167,7 +167,13 @@ export const showToast = (state: DeviceStateForToast): void => {
                     name: "ToastSetUpRecoveryClick",
                 });
                 myLogger.debug("Primary button clicked: opening recovery setup dialog");
-                Modal.createDialog(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
+                Modal.createDialog(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false }, undefined, false, false, {
+                    onBeforeClose: async (reason) => {
+                        // Inhibit closure due to clicking in the background.
+                        // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
+                        return reason !== "backgroundClick";
+                    },
+                });
                 break;
             }
             case "turn_on_key_storage": {
