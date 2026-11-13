@@ -1,17 +1,23 @@
 /*
-Copyright 2025 Element Creations Ltd.
+ * Copyright 2025-2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import { type Room as IRoom, Watchable } from "@element-hq/element-web-module-api";
+import {
+    type Room as IRoom,
+    type RoomStateEvent as ModuleRoomStateEvent,
+    Watchable,
+} from "@element-hq/element-web-module-api";
 import { EventType, type MatrixEvent, RoomEvent, RoomStateEvent, type Room as SdkRoom } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomStateEventWatchable } from "./RoomStateEventWatchable";
 
 export class Room implements IRoom {
     public name: Watchable<string>;
     public isEncrypted: Watchable<boolean | undefined>;
+    private readonly stateWatchables = new Map<string, RoomStateEventWatchable>();
 
     public constructor(private sdkRoom: SdkRoom) {
         this.name = new WatchableName(sdkRoom);
@@ -20,6 +26,16 @@ export class Room implements IRoom {
 
     public getLastActiveTimestamp(): number {
         return this.sdkRoom.getLastActiveTimestamp();
+    }
+
+    /** Get the current state events of one type in this room. */
+    public getStateEvents(eventType: string): Watchable<ModuleRoomStateEvent[]> {
+        let watchable = this.stateWatchables.get(eventType);
+        if (!watchable) {
+            watchable = new RoomStateEventWatchable(this.sdkRoom, eventType);
+            this.stateWatchables.set(eventType, watchable);
+        }
+        return watchable;
     }
 
     public get id(): string {
