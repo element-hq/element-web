@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type HTMLProps } from "react";
 import { throttle } from "lodash";
 import classNames from "classnames";
-import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CloseIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
@@ -139,6 +139,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
         // the explore button next to it when blurred
         return (
             <div className={classNames("mx_SearchBox", "mx_textinput", { mx_SearchBox_blurred: this.state.blurred })}>
+                <SearchIcon className="mx_SearchBox_icon" />
                 <input
                     {...props}
                     key="searchfield"
