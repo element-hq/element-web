@@ -928,6 +928,19 @@ test.describe("Timeline", () => {
             await expect(pre).toHaveCSS("padding-top", collapsedPadding);
         });
 
+        test("should pad inline code at its sides", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("Run `pnpm install` first");
+            await composer.press("Enter");
+
+            const inlineCode = page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").locator("code");
+            await expect(inlineCode).toHaveText("pnpm install");
+            await expect(inlineCode).not.toHaveCSS("padding-left", "0px");
+            await expect(inlineCode).not.toHaveCSS("padding-right", "0px");
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },
