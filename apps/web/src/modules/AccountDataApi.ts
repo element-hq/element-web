@@ -46,6 +46,8 @@ class AccountDataWatchable extends Watchable<unknown> {
 
     protected onFirstWatch(): void {
         this.cli.on(ClientEvent.AccountData, this.onAccountData);
+        // @ts-expect-error: JS-SDK accepts known event-types, intentionally allow arbitrary types.
+        this.value = this.cli.getAccountData(this.eventType)?.getContent();
     }
 
     protected onLastWatch(): void {
