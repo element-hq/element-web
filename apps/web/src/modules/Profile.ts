@@ -27,7 +27,9 @@ export class WatchableProfile extends Watchable<Profile> {
         return {
             isGuest: client?.isGuest() ?? false,
             userId: client?.getUserId() ?? undefined,
+            deviceId: client?.getDeviceId() ?? undefined,
             displayName: OwnProfileStore.instance.displayName ?? undefined,
+            homeserverUrl: client?.getHomeserverUrl() ?? undefined,
         };
     }
 

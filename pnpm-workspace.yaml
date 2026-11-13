@@ -22,9 +22,9 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.64.1
-    "playwright-core": 1.64.1
-    serve: 14.2.6
+    "@playwright/test": 1.65.0
+    "playwright-core": 1.65.0
+    serve: 14.2.7
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
     "@vector-im/compound-web": "10.4.0"
@@ -35,19 +35,19 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.3.5
+    vite: 8.3.6
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 5.0.5
-    "@vitest/coverage-v8": 5.0.5
-    "@vitest/browser-playwright": 5.0.5
-    "@vitest/browser": 5.0.5
-    "@vitest/spy": 5.0.5
-    "@vitest/ui": 5.0.5
-    "@vitejs/plugin-react": 6.1.2
+    vitest: 5.1.0
+    "@vitest/coverage-v8": 5.1.0
+    "@vitest/browser-playwright": 5.1.0
+    "@vitest/browser": 5.1.0
+    "@vitest/spy": 5.1.0
+    "@vitest/ui": 5.1.0
+    "@vitejs/plugin-react": 6.3.0
     unplugin-dts: 1.1.2
     # nx
-    nx: 24.0.3
+    nx: 24.0.5
     # oxc
     oxlint: 1.90.0
 
@@ -120,7 +120,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
-    # Workaround for scroll anchoring landing on transient placeholder rows (pending upstream)
+    # Chat timeline fixes pending upstream: isValidAnchorItem for placeholder rows (TanStack/virtual#1211), staying
+    # at the end when the scroller shrinks (#1298) and reading the scroller's size with each scroll event (#1378)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
     # Tweaks to record screenshot diffs as vitest artifacts
     vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
@@ -157,12 +158,10 @@ overrides:
     markdown-it: ^14.3.0
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
-    esbuild@<=0.27.4: 0.27.4
-    # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
-    # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
-    # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
-    # vitepress is the only consumer of vite <8; pin it to a patched vite 6 (it does not support vite 8).
-    vitepress>vite: ^6.4.3
+    esbuild@0 <0.28.1: 0.28.1
+    vitepress>vite: 8.3.6
+    # https://github.com/advisories/GHSA-qxg6-89mg-rqv8
+    "@vitest/mocker@4 <4.1.12": ^4.1.12
     # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w
     nx: "catalog:"
     # https://github.com/advisories/GHSA-2p49-hgcm-8545
@@ -203,6 +202,8 @@ overrides:
     js-yaml@3 <3.15.2: ^3.15.2
     # https://github.com/advisories/GHSA-2883-xcg3-v3hh
     js-yaml@4 <4.3.2: ^4.3.2
+    # https://github.com/advisories/GHSA-vc2v-76pw-4v95
+    compression@1 <1.8.2: ^1.8.2
 
     # Convince api-extractor to use a newer Typescript version
     "unplugin-dts>typescript": "catalog:ts6"

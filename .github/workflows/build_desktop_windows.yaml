@@ -30,6 +30,15 @@ on:
                 type: string
                 required: false
                 description: "Whether to sign & notarise the build, requires 'Desktop eSigner' environment"
+            sign-cache-url:
+                type: string
+                required: false
+                description: |
+                    Public base URL to reuse previously signed DLLs, native modules & Squirrel.exe from when signing, to save on signatures.
+                    Files are fetched from `<url>/<certificate thumbprint>/<sha256 of unsigned file><ext>`.
+                    Files signed during the build are uploaded in the same layout as the `sign-cache-win-<arch>` artifact,
+                    for a trusted job to upload to the cache.
+                default: "https://packages.element.io/sign-cache"
             blob_report:
                 type: boolean
                 required: false
@@ -80,6 +89,14 @@ jobs:
         env:
             SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
             BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
+            # Make MSVC output reproducible, so that native modules compiled during the build (e.g. pkcs11js) are
+            # byte-identical between builds and can be reused from the sign cache. -Brepro drops timestamps & random
+            # PDB GUIDs, -PDBALTPATH stops the checkout path being embedded via the PDB path.
+            # Uses the `-` form of the options as Git Bash rewrites `/`-prefixed env values into Windows paths.
+            _CL_: -Brepro
+            _LINK_: -Brepro -PDBALTPATH:%_PDB%
         steps:
             # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
             - name: Configure git line endings
@@ -169,6 +186,14 @@ jobs:
                   INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
+            # Trust the sandbox cert before building so that signatures made during the build validate,
+            # letting the build skip re-signing files it has already signed, as it does with the real cert.
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
             - name: Build App
               working-directory: apps/desktop
               run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
@@ -183,12 +208,8 @@ jobs:
                   # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Trust eSigner sandbox cert
-              if: inputs.sign == ''
-              run: |
-                  Set-StrictMode -Version 'Latest'
-                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+                  ED_SIGN_CACHE_URL: ${{ inputs.sign && inputs.sign-cache-url || '' }}
+                  ED_SIGN_CACHE_DIR: sign-cache
 
             - name: Check app was signed successfully
               working-directory: apps/desktop
@@ -199,7 +220,7 @@ jobs:
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
                       -Recurse dist `
-                      -Include *.exe, *.msi `
+                      -Include *.exe, *.msi, *.dll, *.node `
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts
@@ -208,6 +229,15 @@ jobs:
                   name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
                   path: |
                       apps/desktop/dist
+                  retention-days: 1
+
+            - name: Upload newly signed files for the sign cache
+              if: inputs.sign
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+              with:
+                  name: ${{ inputs.artifact-prefix }}sign-cache-win-${{ inputs.arch }}
+                  path: apps/desktop/sign-cache
+                  if-no-files-found: ignore
                   retention-days: 1
 
             - name: Assert executable is present

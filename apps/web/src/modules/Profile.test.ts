@@ -20,10 +20,20 @@ describe("WatchableProfile", () => {
         const listener = vi.fn();
         profile.watch(listener);
 
-        const client = { isGuest: () => true, getUserId: () => "@guest-1:server" } as unknown as MatrixClient;
+        const client = {
+            isGuest: () => true,
+            getUserId: () => "@guest-1:server",
+            getDeviceId: () => "GUESTDEVICE",
+            getHomeserverUrl: () => "https://matrix.server",
+        } as unknown as MatrixClient;
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn, client }, true);
 
-        expect(profile.value).toMatchObject({ isGuest: true, userId: "@guest-1:server" });
+        expect(profile.value).toMatchObject({
+            isGuest: true,
+            userId: "@guest-1:server",
+            deviceId: "GUESTDEVICE",
+            homeserverUrl: "https://matrix.server",
+        });
         expect(listener).toHaveBeenCalledWith(profile.value);
     });
 });

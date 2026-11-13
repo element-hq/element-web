@@ -228,7 +228,6 @@ export interface Settings {
     "feature_element_call_react": IFeature;
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
-    "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
@@ -328,7 +327,6 @@ export interface Settings {
         allow?: string[];
         deny?: string[];
     }>;
-    "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     /**
      * This is the 2019-era low bandwidth that deals with disabling features of the
@@ -628,16 +626,6 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|location_share_live"),
         description: _td("labs|location_share_live_description"),
-        shouldWarn: true,
-        default: false,
-    },
-    "feature_dynamic_room_predecessors": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|dynamic_room_predecessors"),
-        description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
         default: false,
     },
@@ -1238,11 +1226,6 @@ export const SETTINGS: Settings = {
         },
         // Expses widget information
         shouldExportToRageshake: false,
-    },
-    "breadcrumbs": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|show_breadcrumbs"),
-        default: true,
     },
     "showHiddenEventsInTimeline": {
         displayName: _td("devtools|show_hidden_events"),

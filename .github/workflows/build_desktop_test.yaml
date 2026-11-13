@@ -36,6 +36,9 @@ jobs:
     test:
         name: Test ${{ inputs.project }}
         runs-on: ${{ inputs.runs-on }}
+        env:
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:

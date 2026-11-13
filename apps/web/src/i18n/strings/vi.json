@@ -1158,7 +1158,6 @@
         "bridge_state_workspace": "Không gian làm việc(workspace): <networkLink/>",
         "click_for_info": "Nhấp để có thêm thông tin",
         "currently_experimental": "Hiện đang thử nghiệm.",
-        "dynamic_room_predecessors": "Tiền nhiệm động cho phòng",
         "element_call_video_rooms": "Phòng truyền hình Element Call",
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
         "experimental_section": "Thử trước tính năng mới",
@@ -2194,7 +2193,6 @@
             "web_session": "Phiên trên trình duyệt"
         },
         "show_avatar_changes": "Hiện các thay đổi ảnh hồ sơ",
-        "show_breadcrumbs": "Hiển thị shortcuts cho các phòng đã xem gần đây phía trên danh sách phòng",
         "show_chat_effects": "Hiển thị các hiệu ứng trò chuyện (hình ảnh động khi nhận được ví dụ như hoa giấy)",
         "show_displayname_changes": "Hiển thị thay đổi tên hiển thị",
         "show_join_leave": "Hiển thị các tin nhắn tham gia / rời khỏi (các tin nhắn mời / xóa / cấm không bị ảnh hưởng)",

@@ -1212,8 +1212,6 @@
         "bridge_state_workspace": "工作區：<networkLink/>",
         "click_for_info": "點擊以取得更多資訊",
         "currently_experimental": "目前為實驗性。",
-        "dynamic_room_predecessors": "動態聊天室前身",
-        "dynamic_room_predecessors_description": "請啟用 MSC3946（為了支援遲到聊天室存檔）",
         "element_call_video_rooms": "Element Call 視訊聊天室",
         "experimental_description": "想要做點實驗？歡迎測試我們開發中的最新創意功能。這些功能尚未完成設計；可能不穩定、可能會變動，也可能會被完全捨棄。<a>取得更多資訊</a>。",
         "experimental_section": "提早預覽",
@@ -2392,7 +2390,6 @@
             "web_session": "網頁工作階段"
         },
         "show_avatar_changes": "顯示個人檔案圖片變更",
-        "show_breadcrumbs": "在聊天室清單上方顯示最近看過的聊天室的捷徑",
         "show_chat_effects": "顯示聊天效果（例：收到彩帶時顯示動畫）",
         "show_displayname_changes": "顯示名稱變更",
         "show_join_leave": "顯示加入／離開訊息（邀請 / 移除 / 封鎖則不受影響）",

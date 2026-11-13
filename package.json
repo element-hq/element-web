@@ -22,7 +22,7 @@
         "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
         "lint:unused-settings": "node scripts/find-unused-settings.ts",
         "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
+        "postinstall": "node scripts/pnpm-link.ts",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
         "docs:preview": "vitepress preview docs",
@@ -32,23 +32,23 @@
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
-        "@nx-tools/nx-container": "^7.2.1",
+        "@nx-tools/nx-container": "^7.3.0",
         "@playwright/test": "catalog:",
         "@types/node": "25",
         "@typescript/native": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "@vitest/ui": "catalog:",
-        "cronstrue": "^3.0.0",
+        "cronstrue": "^3.38.0",
         "eslint-plugin-element-call": "github:element-hq/element-call#main&path:/eslint",
         "eslint-plugin-element-web": "workspace:*",
-        "eslint-plugin-react-web-api": "^5.24.2",
-        "eslint-plugin-storybook": "^10.4.6",
-        "husky": "^9.0.0",
-        "knip": "6.43.0",
-        "lint-staged": "^17.0.0",
-        "lodash": "^4.17.21",
-        "mermaid": "^12.0.0",
-        "minimist": "^1.2.6",
+        "eslint-plugin-react-web-api": "^5.28.8",
+        "eslint-plugin-storybook": "^10.6.5",
+        "husky": "^9.1.7",
+        "knip": "6.45.1",
+        "lint-staged": "^17.6.0",
+        "lodash": "^4.18.1",
+        "mermaid": "^12.2.0",
+        "minimist": "^1.2.8",
         "nx": "catalog:",
         "oxfmt": "0.75.0",
         "oxlint": "catalog:",
@@ -57,7 +57,7 @@
         "vitepress": "^1.6.4",
         "vitepress-plugin-mermaid": "^2.0.17",
         "vitest": "catalog:",
-        "yaml": "^2.3.3"
+        "yaml": "^2.9.1"
     },
     "engines": {
         "node": ">=22.18"
@@ -65,7 +65,7 @@
     "devEngines": {
         "packageManager": {
             "name": "pnpm",
-            "version": "12.16.1",
+            "version": "12.18.0",
             "onFail": "download"
         }
     },

@@ -5,7 +5,12 @@
     "targets": {
         "build": {
             "cache": true,
-            "inputs": ["src"],
+            "inputs": [
+                "production",
+                "buildConfig",
+                "{projectRoot}/api-extractor.json",
+                "{workspaceRoot}/packages/shared-types/lib/**/*"
+            ],
             "outputs": ["{projectRoot}/lib"],
             "command": "vite build",
             "options": { "cwd": "packages/module-api" }

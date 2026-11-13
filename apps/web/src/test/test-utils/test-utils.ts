@@ -320,7 +320,7 @@ export function createTestClient(): MatrixClient {
         _unstable_sendScheduledDelayedEvent: vi.fn(),
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
-        _unstable_getRTCTransports: vi.fn(),
+        getRTCTransports: vi.fn(),
         _unstable_getLivekitToken: vi.fn(),
         _unstable_delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
@@ -396,7 +396,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
-        session.getConsensusCallIntent = () => "video";
+        session.getConsensusIntent = () => "m.video";
         return session;
     });
     return {

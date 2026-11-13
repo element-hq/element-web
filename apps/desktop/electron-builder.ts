@@ -13,10 +13,14 @@ import {
     type Configuration as BaseConfiguration,
     type AfterPackContext,
     type BeforeBuildContext,
+    type CustomWindowsSign,
     Arch,
     log,
 } from "electron-builder";
+import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
+
+import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -24,6 +28,8 @@ import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/modul
  * On Windows:
  *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
+ *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
+ *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
@@ -127,7 +133,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         loadBrowserProcessSpecificV8Snapshot: false,
         enableEmbeddedAsarIntegrityValidation: true,
     },
-    files: ["package.json", "lib/**"],
+    files: [
+        "package.json",
+        "lib/**",
+        // electron-builder strips node-gyp's Make build leftovers from native modules but not MSBuild's on Windows
+        "!**/node_modules/*/build/*.{vcxproj,vcxproj.filters}",
+        "!**/node_modules/*/build/Release/{obj,*.iobj,*.ipdb,*.exp,*.lib}",
+        // pkcs11js is compiled from source on install, its sources are not needed at runtime
+        "!**/node_modules/pkcs11js/{src,includes}",
+    ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
         name: variant.name,
@@ -189,6 +203,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             signingHashAlgorithms: ["sha256"],
         },
         icon: "build/icon.ico",
+        signExts: [".msi", ".exe", ".dll", ".node"],
     },
     msi: {
         perMachine: true,
@@ -259,6 +274,31 @@ if (variant["linux.deb.name"]) {
     config.deb.fpm.push("--name", variant["linux.deb.name"]);
 }
 
+const cachedSign = createCachedSign();
+
+/**
+ * Signs a file with signtool, unless it already carries a valid signature, e.g. Microsoft's DirectX DLLs bundled
+ * with Electron, or a signed copy can be reused from the sign cache, as EV code signing is charged per signature.
+ */
+async function signUnlessSigned(...[config, packager]: Parameters<CustomWindowsSign>): Promise<void> {
+    // Nested signatures are appended to the one we just made, so the file is expected to be signed already
+    if (!config.isNest) {
+        try {
+            if ((await getAuthenticodeSignature(config.path)).status === "Valid") {
+                log.info({ file: log.filePath(config.path) }, "skipped signing as file is already signed");
+                return;
+            }
+        } catch (e) {
+            log.warn({ file: log.filePath(config.path), error: String(e) }, "failed to check existing signature");
+        }
+    }
+
+    if (cachedSign) return cachedSign(config, packager);
+
+    const manager = (await packager!.signingManager.value) as WindowsSignToolManager;
+    await manager.doSign(config, packager!);
+}
+
 /**
  * Allow specifying windows signing cert via env vars
  * @param {string} process.env.ED_SIGNTOOL_SUBJECT_NAME
@@ -268,6 +308,7 @@ if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) 
     config.win.signtoolOptions!.certificateSubjectName = process.env.ED_SIGNTOOL_SUBJECT_NAME;
     config.win.signtoolOptions!.certificateSha1 = process.env.ED_SIGNTOOL_THUMBPRINT;
     config.extraMetadata.electron_windows_cert_sn = config.win.signtoolOptions!.certificateSubjectName;
+    config.win.signtoolOptions!.sign = signUnlessSigned;
 }
 
 if (os.platform() === "linux") {

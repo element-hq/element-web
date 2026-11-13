@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -276,23 +276,6 @@ describe("Spotlight Dialog", () => {
         });
     });
 
-    describe("when MSC3946 dynamic room predecessors is enabled", () => {
-        beforeEach(async () => {
-            await SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
-        });
-
-        afterEach(() => {
-            vi.restoreAllMocks();
-        });
-
-        it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            render(<SpotlightDialog onFinished={() => null} />);
-            vi.advanceTimersByTime(200);
-            await flushPromisesWithFakeTimers();
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
-    });
-
     describe("should apply manually selected filter", () => {
         it("with public rooms", async () => {
             render(<SpotlightDialog onFinished={() => null} />);
@@ -314,9 +297,6 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBe(1);
                 expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
             });
-
-            // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
         });
         it("with people", async () => {
             render(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);

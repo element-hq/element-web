@@ -68,6 +68,9 @@ jobs:
         name: Build macOS Universal
         runs-on: macos-26 # M1
         environment: ${{ inputs.sign && 'Desktop Apple' || '' }}
+        env:
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
               with:
@@ -202,7 +205,7 @@ jobs:
         with:
             project: macos
             artifact: ${{ inputs.artifact-prefix }}macos
-            runs-on: macos-14
+            runs-on: macos-15
             executable: /Users/runner/Applications/Element*.app/Contents/MacOS/Element*
             # We need to mount the DMG and copy the app to the Applications folder as a mounted DMG is
             # read-only and thus would not allow us to override the fuses as is required for Playwright.

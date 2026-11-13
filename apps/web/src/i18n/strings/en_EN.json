@@ -1194,6 +1194,10 @@
             "user": "%(sender)s reacted %(reaction)s to %(message)s",
             "you": "You reacted %(reaction)s to %(message)s"
         },
+        "m.rtc.notification": {
+            "ended": "Call ended",
+            "started": "Call started"
+        },
         "m.sticker": "%(senderName)s: %(stickerName)s",
         "m.text": "%(senderName)s: %(message)s",
         "prefix": {
@@ -1505,6 +1509,8 @@
         "shift": "Shift",
         "space": "Space",
         "switch_to_space": "Switch to space by number",
+        "timeline_navigate_down": "Navigate down in the timeline",
+        "timeline_navigate_up": "Navigate up in the timeline",
         "toggle_hidden_events": "Toggle hidden event visibility",
         "toggle_microphone_mute": "Toggle microphone mute",
         "toggle_right_panel": "Toggle right panel",
@@ -1530,8 +1536,6 @@
         "currently_experimental": "Currently experimental.",
         "document_previews": "Experimental document previews",
         "document_previews_description": "Open PDF and Markdown attachments in the right panel.",
-        "dynamic_room_predecessors": "Dynamic room predecessors",
-        "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
         "encrypted_state_events": "Encrypted state events (MSC4362)",
         "encrypted_state_events_description": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
@@ -2563,6 +2567,9 @@
                 "title": "Key storage"
             },
             "recovery": {
+                "backup_set_up_hint": "To change your recovery key, go to <b>Settings → Encryption → Backup</b>",
+                "backup_set_up_title": "Your backup is now fully set up",
+                "backup_set_up_toast": "Backup is now fully set up",
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
                 "change_recovery_confirm_title": "Enter your new recovery key",
@@ -2984,7 +2991,6 @@
             "web_session": "Browser"
         },
         "show_avatar_changes": "Show profile picture changes",
-        "show_breadcrumbs": "Show shortcuts to recently viewed rooms above the room list",
         "show_chat_effects": "Show chat effects (animations when receiving e.g. confetti)",
         "show_displayname_changes": "Show display name changes",
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
