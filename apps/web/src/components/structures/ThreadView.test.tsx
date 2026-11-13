@@ -140,6 +140,25 @@ describe("ThreadView", () => {
         vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(SENDER);
     });
 
+    it("skips redundant thread reply and breakpoint updates", () => {
+        const view = new ThreadView({
+            room,
+            mxEvent: rootEvent,
+            resizeNotifier: new ResizeNotifier(),
+            onClose: vi.fn(),
+        });
+        const setState = vi.spyOn(view, "setState").mockImplementation(() => {});
+
+        // Repeated room-wide local echo events need not repaint an unchanged thread.
+        view["updateThreadRelation"]();
+        // Repeated measurements should not trigger an identical layout update either.
+        view["onMeasurement"](false);
+        expect(setState).not.toHaveBeenCalled();
+
+        view["onMeasurement"](true);
+        expect(setState).toHaveBeenCalledWith({ narrow: true });
+    });
+
     it("does not include pending root event in the timeline twice", async () => {
         rootEvent = mkMessage({
             user: mockClient.getUserId()!,

@@ -340,8 +340,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
             logger.warn("Replacing timelineSet on a TimelinePanel - confusion may ensue");
         }
 
-        this.props.timelineSet.room?.off(ThreadEvent.Update, this.onThreadUpdate);
-        this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
+        // Reattach only when the room changes. Re-subscribing on every render
+        // adds listener churn to hot paths such as active thread timelines.
+        if (prevProps.timelineSet.room !== this.props.timelineSet.room) {
+            prevProps.timelineSet.room?.off(ThreadEvent.Update, this.onThreadUpdate);
+            this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
+        }
 
         const differentEventId = prevProps.eventId != this.props.eventId;
         const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;

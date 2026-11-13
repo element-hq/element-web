@@ -513,6 +513,21 @@ describe("TimelinePanel", () => {
         });
     });
 
+    it("keeps the thread listener attached across ordinary re-renders", async () => {
+        const [client, room, events] = setupTestData();
+        const props = getProps(room, events);
+        const { rerender } = render(<TimelinePanel {...props} />, clientAndSDKContextRenderOptions(client, sdkContext));
+        await flushPromises();
+
+        const onSpy = vi.spyOn(room, "on");
+        const offSpy = vi.spyOn(room, "off");
+        rerender(<TimelinePanel {...props} className="updated" />);
+        await flushPromises();
+
+        expect(offSpy).not.toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+        expect(onSpy).not.toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+    });
+
     it("only re-renders when sync changes forward pagination state", async () => {
         const [client, room, events] = setupTestData();
         let timelinePanel: TimelinePanel | null = null;

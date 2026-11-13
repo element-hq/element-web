@@ -86,6 +86,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
     // Set by setEventId in ctor.
     private eventId!: string;
 
+    // Track the ID separately: MatrixEvent objects can be mutated in place when sent.
+    private lastReplyEventId?: string;
+
     public constructor(props: IProps) {
         super(props);
 
@@ -100,6 +103,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 return ev.isRelation(THREAD_RELATION_TYPE.name) && !ev.status;
             }),
         };
+        this.lastReplyEventId = this.state.lastReply?.getId();
     }
 
     public componentDidMount(): void {
@@ -234,9 +238,13 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private updateThreadRelation = (): void => {
-        this.setState({
-            lastReply: this.threadLastReply,
-        });
+        const lastReply = this.threadLastReply;
+        // The room emits LocalEchoUpdated for messages outside this thread too.
+        // Avoid re-rendering the entire thread timeline when its last reply is unchanged.
+        const sameReply = lastReply === this.state.lastReply || (!lastReply && !this.state.lastReply);
+        if (sameReply && lastReply?.getId() === this.lastReplyEventId) return;
+        this.lastReplyEventId = lastReply?.getId();
+        this.setState({ lastReply });
     };
 
     private get threadLastReply(): MatrixEvent | undefined {
@@ -302,7 +310,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private onMeasurement = (narrow: boolean): void => {
-        this.setState({ narrow });
+        // ResizeObserver can report the same breakpoint state more than once.
+        if (narrow !== this.state.narrow) this.setState({ narrow });
     };
 
     private onKeyDown = (ev: KeyboardEvent): void => {
