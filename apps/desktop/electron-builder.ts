@@ -43,6 +43,7 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
  *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
  *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
  *  Converts a Nightly $VERSION into a semver one, as required by Squirrel.Windows.
+ *  Makes native modules compiled during the build reproducible, so they can be reused from the sign cache.
  *
  * On macOS:
  *  Writes releases.json & releases-legacy.json for Squirrel.Mac if $ED_BASE_URL, the URL the build will be deployed to,
@@ -262,6 +263,15 @@ const config: Omit<Writable<Configuration>, "electronFuses" | "publish"> & {
             );
             throw err;
         }
+
+        if (os.platform() === "win32") {
+            // Make MSVC output reproducible, so that native modules compiled when rebuilding them (e.g. pkcs11js) are
+            // byte-identical between builds and can be reused from the sign cache. -Brepro drops timestamps & random
+            // PDB GUIDs, -PDBALTPATH stops the checkout path being embedded via the PDB path.
+            process.env._CL_ ??= "-Brepro";
+            process.env._LINK_ ??= "-Brepro -PDBALTPATH:%_PDB%";
+        }
+
         return true; // Continue build
     },
     afterPack: async (context: AfterPackContext) => {
