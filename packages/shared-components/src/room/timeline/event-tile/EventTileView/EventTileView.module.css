@@ -1229,8 +1229,13 @@
        regular room bubble margins would overflow the thread card because the
        thread shell is otherwise full-width. */
     &.layoutBubble {
+        --event-tile-thread-bubble-margin-inline-end: var(--event-tile-thread-margin-inline);
+
         width: auto;
-        margin-inline: var(--event-tile-thread-margin-inline);
+        margin-inline: var(--event-tile-thread-margin-inline) var(--event-tile-thread-bubble-margin-inline-end);
+        /* The receipts are positioned in the line, so they measure the row
+           with container units to find its end. */
+        container-type: inline-size;
 
         .line {
             /* Reserve the legacy body-to-receipt gap even though the receipt
@@ -1241,16 +1246,25 @@
                 flex: 0 0 0;
             }
 
+            /* The line is only as wide as its bubble, so place the receipts
+               from the row instead: 100% - 100cqi + the line's start margin
+               puts their end at the row's end, and the row's end margin moves
+               it on to the timeline's content edge. Every receipt then ends in
+               one column, however long the bubble is. */
             > .slotReceipt {
                 position: absolute;
                 z-index: 1;
                 inset-block-end: -3px;
-                inset-inline-end: -78px;
+                inset-inline-end: calc(
+                    100% - 100cqi + var(--event-tile-bubble-line-margin-inline-start) -
+                        var(--event-tile-thread-bubble-margin-inline-end)
+                );
             }
         }
 
         &::before {
-            inset-inline: calc(-1 * var(--event-tile-thread-margin-inline));
+            inset-inline: calc(-1 * var(--event-tile-thread-margin-inline))
+                calc(-1 * var(--event-tile-thread-bubble-margin-inline-end));
             z-index: auto;
         }
 
@@ -1259,8 +1273,21 @@
             position: relative;
         }
 
+        /* Your own bubbles keep the room's 60px end margin, which leaves room
+           for the receipts beside them. */
         &.stateOwnEvent {
+            --event-tile-thread-bubble-margin-inline-end: var(--event-tile-bubble-margin-inline-end);
+
             align-items: flex-end;
+        }
+
+        /* Your own lines end at the row's end, overhanging it by the line's
+           negative end margin, so their receipts reach the same content edge
+           from the line's end. */
+        &.stateOwnEvent .line > .slotReceipt {
+            inset-inline-end: calc(
+                -1 * var(--event-tile-thread-bubble-margin-inline-end) - var(--event-tile-bubble-line-margin-inline-end)
+            );
         }
     }
 
