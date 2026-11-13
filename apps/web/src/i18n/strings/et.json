@@ -1509,6 +1509,8 @@
         "shift": "Shift",
         "space": "Tühikuklahv",
         "switch_to_space": "Vaata kogukonda tema numbri alusel",
+        "timeline_navigate_down": "Liigu ajajoonel allapoole",
+        "timeline_navigate_up": "Liigu ajajoonel ülespoole",
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
         "toggle_microphone_mute": "Lülita mikrofoni summutamine sisse/välja",
         "toggle_right_panel": "Lülita parem paan sisse/välja",
@@ -2564,6 +2566,9 @@
                 "title": "Krüptovõtmete hoidla"
             },
             "recovery": {
+                "backup_set_up_hint": "Taastevõtme muutmiseks ava menüüst <b>Seadistused → Krüptimine → Varundus</b>",
+                "backup_set_up_title": "Sinu varundus on nüüd täielikult seadistatud",
+                "backup_set_up_toast": "Varundamine on nüüd täielikult seadistatud",
                 "change_recovery_confirm_button": "Korda uut taastevõtit",
                 "change_recovery_confirm_description": "Toimingu lõpetamiseks palun sisesta alljärgnevalt oma uus taastevõti. Senine taastevõti enam ei toimi.",
                 "change_recovery_confirm_title": "Sisesta oma uus taastevõti",

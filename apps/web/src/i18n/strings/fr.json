@@ -1194,6 +1194,10 @@
             "user": "%(sender)s a réagi avec %(reaction)s à %(message)s",
             "you": "Vous avez réagi avec %(reaction)s à %(message)s"
         },
+        "m.rtc.notification": {
+            "ended": "Appel terminé",
+            "started": "Appel démarré"
+        },
         "m.sticker": "%(senderName)s : %(stickerName)s",
         "m.text": "%(senderName)s : %(message)s",
         "prefix": {
@@ -2560,6 +2564,9 @@
                 "title": "Stockage des clés"
             },
             "recovery": {
+                "backup_set_up_hint": "Pour modifier votre clé de récupération, accédez à <b>Paramètres → Chiffrement → Sauvegarde</b>",
+                "backup_set_up_title": "Votre sauvegarde est maintenant entièrement configurée.",
+                "backup_set_up_toast": "La sauvegarde est désormais entièrement configurée.",
                 "change_recovery_confirm_button": "Confirmez la nouvelle clé de récupération",
                 "change_recovery_confirm_description": "Saisissez votre nouvelle clé de récupération ci-dessous pour terminer. Votre ancienne clé ne fonctionnera plus.",
                 "change_recovery_confirm_title": "Saisir votre nouvelle clé de récupération",
