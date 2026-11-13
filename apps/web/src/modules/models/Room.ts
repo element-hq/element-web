@@ -12,12 +12,12 @@ import {
 } from "@element-hq/element-web-module-api";
 import { EventType, type MatrixEvent, RoomEvent, RoomStateEvent, type Room as SdkRoom } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomEventState } from "./RoomEventState";
+import { RoomStateEventWatchable } from "./RoomStateEventWatchable";
 
 export class Room implements IRoom {
     public name: Watchable<string>;
     public isEncrypted: Watchable<boolean | undefined>;
-    private readonly stateWatchables = new Map<string, RoomEventState>();
+    private readonly stateWatchables = new Map<string, RoomStateEventWatchable>();
 
     public constructor(private sdkRoom: SdkRoom) {
         this.name = new WatchableName(sdkRoom);
@@ -32,7 +32,7 @@ export class Room implements IRoom {
     public getStateEvents(eventType: string): Watchable<ModuleRoomStateEvent[]> {
         let watchable = this.stateWatchables.get(eventType);
         if (!watchable) {
-            watchable = new RoomEventState(this.sdkRoom, eventType);
+            watchable = new RoomStateEventWatchable(this.sdkRoom, eventType);
             this.stateWatchables.set(eventType, watchable);
         }
         return watchable;

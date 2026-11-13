@@ -17,14 +17,14 @@ import {
 import { isEqual } from "lodash";
 
 /** A watchable snapshot of one event type in a room's live state. */
-export class RoomEventState extends Watchable<ModuleRoomStateEvent[]> {
+export class RoomStateEventWatchable extends Watchable<ModuleRoomStateEvent[]> {
     private listening = false;
 
     public constructor(
         private readonly sdkRoom: SdkRoom,
         private readonly eventType: string,
     ) {
-        super(RoomEventState.getSnapshot(sdkRoom, eventType));
+        super(RoomStateEventWatchable.getSnapshot(sdkRoom, eventType));
     }
 
     protected onFirstWatch(): void {
@@ -56,7 +56,7 @@ export class RoomEventState extends Watchable<ModuleRoomStateEvent[]> {
     };
 
     private refresh(): void {
-        const snapshot = RoomEventState.getSnapshot(this.sdkRoom, this.eventType);
+        const snapshot = RoomStateEventWatchable.getSnapshot(this.sdkRoom, this.eventType);
         if (!isEqual(snapshot, this.value)) this.value = snapshot;
     }
 
