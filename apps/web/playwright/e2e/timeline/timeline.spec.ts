@@ -871,6 +871,27 @@ test.describe("Timeline", () => {
             expect(await fontSize(message.locator(".mx_Emoji"))).not.toEqual(await fontSize(message));
         });
 
+        test("should render a code block quoted in a reply", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst first = 1;\nconst second = 2;\nconst third = 3;\nconst fourth = 4;\n```");
+            await composer.press("Enter");
+
+            const codeTile = page.locator(".mx_EventTile").last();
+            await expect(codeTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
+            await codeTile.getByTestId("event-tile-slot-body").hover();
+            await codeTile.getByRole("button", { name: "Reply", exact: true }).click();
+            await composer.fill("Reply");
+            await composer.press("Enter");
+
+            const quotedCodeBlock = page.locator(".mx_EventTile").last().getByTestId("reply-tile-body").locator("pre");
+            await expect(quotedCodeBlock).toBeVisible();
+
+            // The reply quote's own 4px under the block, not the 16px of a code block in the timeline
+            await expect(quotedCodeBlock).toHaveCSS("margin-bottom", "4px");
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },

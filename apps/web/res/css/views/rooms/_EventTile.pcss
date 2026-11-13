@@ -347,6 +347,12 @@ $left-gutter: 64px;
             padding-bottom: var(--cpd-space-3x);
         }
 
+        /* ReplyTileView puts 4px under a quoted code block, but github-markdown-css's 16px wins from this later
+           cascade layer */
+        :is(.mx_ReplyChain, .mx_ReplyPreview) & > pre {
+            margin-block-end: var(--cpd-space-1x);
+        }
+
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */
         .mx_EventTile_button {
             position: absolute;
