@@ -10,6 +10,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, beforeAll } from "vitest";
 import { RelationType } from "matrix-js-sdk/src/matrix";
+import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
+import { mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 import { mkEvent, stubClient } from "test-utils";
 
 // Import directly from the file to avoid circular dependencies with MessagePreviewStore
@@ -74,6 +76,16 @@ describe("MessageEventPreview", () => {
                 type: "m.room.message",
             });
             expect(preview.getTextFor(event)).toBe(`${userId}: test new content body`);
+        });
+
+        it("should return »user: Unable to decrypt message« for a decryption failure", async () => {
+            const event = await mkDecryptionFailureMatrixEvent({
+                code: DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID,
+                msg: "The sender's device has not sent us the keys for this message.",
+                roomId: "!room:example.com",
+                sender: userId,
+            });
+            expect(preview.getTextFor(event)).toBe(`${userId}: Unable to decrypt message`);
         });
     });
 });
