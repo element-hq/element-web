@@ -1027,7 +1027,8 @@
     }
 
     &.stateNoBubble .lineEmote {
-        padding-inline-end: 60px;
+        /* Start the text where the text of a bubble starts, clear of the avatar. */
+        padding-inline: calc(var(--event-tile-bubble-gutter) - 1px) 60px;
         font-style: italic;
 
         .slotBody {
@@ -1041,9 +1042,10 @@
         }
     }
 
-    /* Events without sender details use the same avatar placement as an own
-       message whose sender row is hidden. */
-    &.stateNoSender .slotAvatar {
+    /* Events without sender details, and emotes, which have no sender row, use
+       the same avatar placement as an own message whose sender row is hidden. */
+    &.stateNoSender .slotAvatar,
+    &.stateEmote .slotAvatar {
         inset-block-start: -19px;
     }
 

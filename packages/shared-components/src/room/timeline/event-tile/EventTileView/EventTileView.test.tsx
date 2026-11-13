@@ -930,3 +930,47 @@ describe("EventTileView bubble layout informational rows", () => {
         expect(info.receipt.getBoundingClientRect().right).toBe(message.receipt.getBoundingClientRect().right);
     });
 });
+
+describe("EventTileView bubble layout emotes", () => {
+    const emoteState = { emote: true, noBubble: true };
+
+    const renderTile = (
+        state: Partial<EventTileViewRootState>,
+        line?: EventTileViewLine,
+    ): { line: Element; avatar: Element; body: Element } => {
+        const { container } = render(
+            <div style={{ width: 880 }}>
+                <EventTileView
+                    {...createProps({
+                        root: { ...renderState, state: { isOwnEvent: false, hasReply: false, ...state } },
+                        line,
+                        slots: {
+                            avatar: <span style={{ display: "block", width: 30, height: 30 }} />,
+                            body: <div data-testid="body">* Alice waves</div>,
+                        },
+                    })}
+                />
+            </div>,
+            { presentation: { layout: "bubble" } },
+        );
+
+        return {
+            line: container.querySelector(`.${styles.line}`)!,
+            avatar: container.querySelector(`.${styles.slotAvatar}`)!,
+            body: container.querySelector("[data-testid='body']")!,
+        };
+    };
+
+    it("keeps another user's avatar beside the emote instead of below it", () => {
+        const { line, avatar } = renderTile(emoteState, { emote: true });
+
+        expect(avatar.getBoundingClientRect().bottom).toBeLessThanOrEqual(line.getBoundingClientRect().bottom);
+    });
+
+    it("starts another user's emote where the text of their bubbles starts", () => {
+        const message = renderTile({});
+        const emote = renderTile(emoteState, { emote: true });
+
+        expect(emote.body.getBoundingClientRect().left).toBe(message.body.getBoundingClientRect().left);
+    });
+});
