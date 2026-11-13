@@ -9,7 +9,8 @@ import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { test, expect } from "../../element-web-test";
-import { checkRetentionInRoom, ONE_MINUTE } from "./utils";
+import { checkRetentionInRoom, ONE_MINUTE, openRoomWithRetention } from "./utils";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 const ONE_MINUTE_STR = "60s";
 
@@ -120,5 +121,75 @@ test.describe("Retention", () => {
         await app.client.sendStateEvent(roomId, "org.matrix.msc1763.retention", {});
         await page.clock.fastForward(ONE_MINUTE + 1);
         await expect(page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${eventId}']`)).toBeVisible();
+    });
+
+    test("should stop showing an expired message in the pinned message banner", async ({ app, page, bot }) => {
+        const roomId = await openRoomWithRetention({ app, bot });
+        const { event_id: eventId } = await bot.sendMessage(roomId, "Pinned message");
+        await expect(page.locator(`.mx_EventTile[data-event-id='${eventId}']`)).toBeVisible();
+        await app.client.sendStateEvent(roomId, "m.room.pinned_events", { pinned: [eventId] });
+        const banner = page.getByTestId("pinned-message-banner");
+        await expect(banner.getByText("Pinned message")).toBeVisible();
+
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        await expect(banner.getByText("Message deleted")).toBeVisible();
+        await expect(banner.getByText("Pinned message")).toBeHidden();
+    });
+
+    test("should stop showing an expired message in the room list preview", async ({ app, page, bot }) => {
+        await app.settings.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, true);
+        const roomId = await openRoomWithRetention({ app, bot });
+        await bot.sendMessage(roomId, "Expiring message");
+        const roomListItem = page.getByTestId("room-list").getByRole("option", { name: /Test/ });
+        await expect(roomListItem.getByText("Expiring message")).toBeVisible();
+
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        await expect(roomListItem.getByText("Expiring message")).toBeHidden();
+    });
+
+    test("should expire the replies of an open thread", async ({ app, page, bot }) => {
+        const roomId = await openRoomWithRetention({ app, bot });
+        const { event_id: rootId } = await bot.sendMessage(roomId, "Thread root");
+        await bot.sendMessage(roomId, "Thread reply", rootId);
+        await page.locator(".mx_EventTile", { hasText: "Thread root" }).getByText("1 reply").click();
+        const thread = page.locator(".mx_ThreadView");
+        await expect(thread.getByText("Thread reply")).toBeVisible();
+
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        await expect(thread.getByText("Thread reply")).toBeHidden();
+    });
+
+    test("should expire messages loaded from the sync cache after a reload", async ({ app, page, bot }) => {
+        const roomId = await openRoomWithRetention({ app, bot });
+        const tiles = (await Promise.all([1, 2, 3].map((index) => bot.sendMessage(roomId, `Message ${index}`)))).map(
+            ({ event_id: evtId }) => page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${evtId}']`),
+        );
+        for (const tile of tiles) {
+            await expect(tile).toBeVisible();
+        }
+        // The client only writes its sync cache every few minutes; write it now so that the reload starts from it.
+        await app.client.evaluate((cli) =>
+            (cli.store as unknown as { save(force: boolean): Promise<void> }).save(true),
+        );
+        // Synapse only serves the retention configuration behind an experimental flag. Without it, which is the
+        // default, a reply to that request cannot recalculate the policy after the room has loaded and hide a
+        // missing expiry check.
+        await page.route("**/_matrix/client/unstable/org.matrix.msc1763/retention/configuration", (route) =>
+            route.fulfill({ status: 404, json: { errcode: "M_UNRECOGNIZED", error: "Unrecognized request" } }),
+        );
+
+        await page.reload();
+        await app.viewRoomByName("Test");
+        for (const tile of tiles) {
+            await expect(tile).toBeVisible();
+        }
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        for (const tile of tiles) {
+            await expect(tile).toBeHidden();
+        }
     });
 });

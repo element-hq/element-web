@@ -244,14 +244,25 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<void> {
         if (!this.matrixClient) return;
         this.matrixClient.on(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+        this.matrixClient.on(RoomEvent.Redaction, this.onRedaction);
         CallStore.instance.on(CallStoreEvent.Call, this.onCallChanged);
     }
 
     protected async onNotReady(): Promise<void> {
         if (!this.matrixClient) return;
         this.matrixClient.off(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+        this.matrixClient.off(RoomEvent.Redaction, this.onRedaction);
         CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);
     }
+
+    /**
+     * A redaction usually lands in the timeline, which regenerates the preview anyway, but the local redactions a
+     * retention policy applies to expired messages do not, so the preview would keep the expired message's text.
+     */
+    private onRedaction = async (_redaction: MatrixEvent, room: Room): Promise<void> => {
+        if (!this.previews.has(room.roomId)) return;
+        await this.generatePreview(room, TAG_ANY);
+    };
 
     /**
      * The rtc notification preview depends on whether the call is still going, so regenerate it when the call

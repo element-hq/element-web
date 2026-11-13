@@ -17,10 +17,11 @@ import {
     M_POLL_START,
     M_TEXT,
     type MatrixClient,
-    type MatrixEvent,
+    MatrixEvent,
     PendingEventOrdering,
     RelationType,
     Room,
+    RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "test-utils";
 import { mkThread } from "test-utils/threads";
@@ -287,6 +288,35 @@ describe("MessagePreviewStore", () => {
 
         expect((await store.getPreviewForRoom(room, DefaultTagID.DM))?.text).toMatchInlineSnapshot(
             `"@sender:server: Second message"`,
+        );
+    });
+
+    it("should drop the preview of a message that a retention policy expires", async () => {
+        const message = mkMessage({
+            user: "@sender:server",
+            event: true,
+            room: room.roomId,
+            msg: "Expiring message",
+        });
+        await addEvent(store, room, message);
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toContain("Expiring message");
+
+        // A retention policy redacts expired events locally: nothing new reaches the timeline.
+        const redaction = new MatrixEvent({
+            type: EventType.RoomRedaction,
+            redacts: message.getId(),
+            content: { reason: "Retention policy" },
+            sender: "@sender:server",
+            room_id: room.roomId,
+            event_id: "$synthetic_redaction",
+        });
+        room.tryApplyRedaction(redaction);
+        client.emit(RoomEvent.Redaction, redaction, room);
+
+        await vi.waitFor(async () =>
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text ?? "").not.toContain(
+                "Expiring message",
+            ),
         );
     });
 

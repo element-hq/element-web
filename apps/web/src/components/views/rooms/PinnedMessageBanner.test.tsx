@@ -10,7 +10,7 @@
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { act, screen, render } from "test-utils-rtl";
+import { act, screen, render, waitFor } from "test-utils-rtl";
 import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions, TestSDKContext } from "test-utils";
@@ -334,6 +334,63 @@ describe("<PinnedMessageBanner />", () => {
                 RightPanelStore.instance.emit(UPDATE_EVENT);
             });
             expect(screen.getByRole("button", { name: "View all" })).toBeVisible();
+        });
+    });
+
+    describe("Redaction", () => {
+        let pinnedEvent: MatrixEvent;
+
+        beforeEach(async () => {
+            vi.mocked(mockClient.getRoom).mockReturnValue(room);
+            // A fresh event, as redacting it mutates it.
+            pinnedEvent = makePinEvent();
+            const pinnedEventsState = new MatrixEvent({
+                type: EventType.RoomPinnedEvents,
+                state_key: "",
+                content: { pinned: [pinnedEvent.getId()] },
+                sender: userId,
+                room_id: roomId,
+                origin_server_ts: 0,
+                event_id: "$pinnedEventsState",
+            });
+            await room.addLiveEvents([pinnedEventsState, pinnedEvent], { addToState: true });
+        });
+
+        function makeRedaction(eventId: string, reason?: string): MatrixEvent {
+            return new MatrixEvent({
+                type: EventType.RoomRedaction,
+                redacts: pinnedEvent.getId(),
+                content: { reason },
+                sender: userId,
+                room_id: roomId,
+                origin_server_ts: 1,
+                event_id: eventId,
+            });
+        }
+
+        it("should stop showing the content of a pinned message that is redacted", async () => {
+            renderBanner();
+            await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
+
+            await act(async () => {
+                await room.addLiveEvents([makeRedaction("$redaction")], { addToState: false });
+            });
+
+            await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
+            expect(screen.getByText("Message deleted")).toBeVisible();
+        });
+
+        it("should stop showing the content of a pinned message that a retention policy expires", async () => {
+            renderBanner();
+            await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
+
+            // A retention policy redacts expired events locally, without a redaction in the timeline.
+            act(() => {
+                room.tryApplyRedaction(makeRedaction("$synthetic_redaction", "Retention policy"));
+            });
+
+            await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
+            expect(screen.getByText("Message deleted")).toBeVisible();
         });
     });
 });
