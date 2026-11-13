@@ -62,4 +62,18 @@ test.describe("SSO buttons", () => {
             expect(box!.y).toBeCloseTo(boxes[0]!.y, 0);
         }
     });
+
+    test("should vertically center the logo of an identity provider", async ({ page }) => {
+        await offerIdentityProviders(page, ["github"]);
+        await page.goto("/#/login");
+
+        const button = page.getByTestId("idp-github");
+        await expect(button).toBeVisible();
+        const buttonBox = await button.boundingBox();
+        const logoBox = await button.locator("svg").boundingBox();
+        expect(logoBox!.y - buttonBox!.y).toBeCloseTo(
+            buttonBox!.y + buttonBox!.height - (logoBox!.y + logoBox!.height),
+            0,
+        );
+    });
 });
