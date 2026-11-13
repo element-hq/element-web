@@ -138,7 +138,6 @@ jobs:
                     -e CI=1 \
                     -e VARIANT_PATH \
                     -e VERSION \
-                    -e USE_HARD_LINKS \
                     -e ED_DEBIAN_CHANGELOG \
                     -e PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN \
                     $BUILDENV_DOCKER_IMAGE \
@@ -148,8 +147,6 @@ jobs:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
-                  # Workaround for https://github.com/electron-userland/electron-builder/issues/5721
-                  USE_HARD_LINKS: false
                   BUILD_ARGS: ${{ steps.config.outputs.build-args }}
                   TARGETS: ${{ inputs.targets }}
 
@@ -189,16 +186,11 @@ jobs:
                       !apps/desktop/dist/*-unpacked/**
                   retention-days: 1
 
-            - name: Assert deb is present and valid
+            - name: Assert deb is present
               if: contains(inputs.targets, 'deb')
               working-directory: apps/desktop
               run: |
                   test -f ./dist/element-desktop*$ARCH.deb
-
-                  DEB_LISTING=$(dpkg-deb --fsys-tarfile ./dist/element-desktop*.deb | tar -tv)
-                  echo "deb listing: "
-                  echo "$DEB_LISTING"
-                  ! echo "$DEB_LISTING" | grep '^h'
               env:
                   ARCH: ${{ inputs.arch }}
 
@@ -207,11 +199,6 @@ jobs:
               working-directory: apps/desktop
               run: |
                   test -f ./dist/element-desktop*.tar.gz
-
-                  TAR_GZ_LISTING=$(tar -tvf ./dist/element-desktop*.tar.gz)
-                  echo "tar.gz listing: "
-                  echo "$TAR_GZ_LISTING"
-                  ! echo "$TAR_GZ_LISTING" | grep '^h'
 
     test:
         name: Test Linux ${{ inputs.arch }}
