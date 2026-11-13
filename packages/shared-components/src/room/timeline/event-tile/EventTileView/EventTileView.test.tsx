@@ -1010,3 +1010,39 @@ describe("EventTileView bubble layout emotes", () => {
         expect(spaceBeforeTime(emote)).toBe(spaceBeforeTime(message));
     });
 });
+
+describe("EventTileView bubble layout thread summary", () => {
+    const renderWithThreadSummary = (isOwnEvent: boolean): { line: DOMRect; summary: DOMRect } => {
+        const { container } = render(
+            <div style={{ width: 880 }}>
+                <EventTileView
+                    {...createProps({
+                        root: { ...renderState, state: { isOwnEvent, hasReply: false } },
+                        slots: {
+                            body: <div>Draft for the offsite agenda</div>,
+                            threadInfo: <div data-testid="thread-summary">3 replies</div>,
+                        },
+                    })}
+                />
+            </div>,
+            { presentation: { layout: "bubble" } },
+        );
+
+        return {
+            line: container.querySelector(`.${styles.line}`)!.getBoundingClientRect(),
+            summary: container.querySelector("[data-testid='thread-summary']")!.getBoundingClientRect(),
+        };
+    };
+
+    it("starts the thread summary where another user's bubble starts", () => {
+        const { line, summary } = renderWithThreadSummary(false);
+
+        expect(summary.left).toBe(line.left);
+    });
+
+    it("ends the thread summary where your own bubble ends", () => {
+        const { line, summary } = renderWithThreadSummary(true);
+
+        expect(summary.right).toBe(line.right);
+    });
+});

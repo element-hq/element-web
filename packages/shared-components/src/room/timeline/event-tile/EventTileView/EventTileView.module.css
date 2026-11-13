@@ -874,7 +874,7 @@
         display: flex;
         width: fit-content;
         max-width: 100%;
-        margin-inline-start: -11px;
+        margin-inline-start: var(--event-tile-bubble-line-margin-inline-start);
         margin-inline-end: auto;
     }
 
@@ -959,7 +959,7 @@
 
     &.stateOwnEvent .slotThreadInfo {
         margin-inline-start: auto;
-        margin-inline-end: -11px;
+        margin-inline-end: var(--event-tile-bubble-line-margin-inline-end);
     }
 
     &:hover::before,
