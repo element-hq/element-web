@@ -168,9 +168,6 @@ jobs:
                       }],
                     }
                   ' > dist/releases.json
-                  jq -n --arg url "$URL" '
-                    { url: $url }
-                  ' > dist/releases-legacy.json
               env:
                   VERSION: ${{ inputs.version }}
                   BASE_URL: ${{ inputs.base-url }}
