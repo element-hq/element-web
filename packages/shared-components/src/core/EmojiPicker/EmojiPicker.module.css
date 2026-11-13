@@ -181,8 +181,9 @@
 
 .footer {
     border-top: 1px solid var(--cpd-color-gray-400);
-    min-height: 72px;
-    max-height: 72px;
+    /* 72px, growing above the default font size like the label and emoji inside it */
+    min-height: max(72px, 4.5rem);
+    max-height: max(72px, 4.5rem);
 
     display: flex;
     align-items: center;
