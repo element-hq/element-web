@@ -38,6 +38,8 @@ import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import * as mapUtilHooks from "../../../utils/location/useMap";
 import { LocationShareError } from "../../../utils/location";
 import * as maplibregl from "../../../utils/location/maplibre";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
+import { Layout } from "../../../settings/enums/Layout";
 
 vi.mock("maplibre-gl");
 
@@ -281,6 +283,32 @@ describe("<MBeaconBody />", () => {
                 expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 52, lon: 42 });
                 expect(mockMarker.setLngLat).toHaveBeenCalledWith({ lat: 52, lon: 42 });
             });
+        });
+    });
+
+    describe("layout", () => {
+        const getComponentInLayout = (layout: Layout) =>
+            render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <EventPresentationContextProvider layout={layout}>
+                        <MBeaconBody {...defaultProps} />
+                    </EventPresentationContextProvider>
+                </MatrixClientContext.Provider>,
+            );
+
+        it("sizes the body for the bubble layout", () => {
+            makeRoomWithStateEvents([defaultEvent], { roomId, mockClient });
+            const component = getComponentInLayout(Layout.Bubble);
+
+            // Bubble lines shrink to fit their content, so without its own width the body collapses
+            expect(component.container.querySelector(".mx_MBeaconBody")).toHaveClass("mx_MBeaconBody_bubble");
+        });
+
+        it("keeps the default size outside the bubble layout", () => {
+            makeRoomWithStateEvents([defaultEvent], { roomId, mockClient });
+            const component = getComponentInLayout(Layout.Group);
+
+            expect(component.container.querySelector(".mx_MBeaconBody")).not.toHaveClass("mx_MBeaconBody_bubble");
         });
     });
 
