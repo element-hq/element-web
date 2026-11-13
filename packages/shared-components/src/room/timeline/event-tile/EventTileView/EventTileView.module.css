@@ -1188,6 +1188,9 @@
                 "reply reply" auto
                 "shield body" auto
                 / auto 1fr;
+            /* The reply row is empty unless the event quotes a reply, so the gap
+               below it belongs to the reply instead. */
+            row-gap: 0;
         }
 
         .slotPadlock {
@@ -1195,12 +1198,16 @@
             margin-block: auto;
         }
 
-        .slotBody {
+        /* The body and reply-chain slots are display: contents in this layout,
+           so their contents are the grid items. The body goes beside the
+           shield; without one, as in ThreadView, it keeps the first column. */
+        .slotPadlock ~ .slotBody > * {
             grid-area: body;
         }
 
-        .slotReplyChain {
+        .slotReplyChain > * {
             grid-area: reply;
+            margin-block-end: var(--event-tile-bubble-gap);
         }
 
         &.stateInfo .line {
@@ -1211,7 +1218,7 @@
                 / auto 1fr;
         }
 
-        &.stateInfo .slotBody {
+        &.stateInfo .slotPadlock ~ .slotBody > * {
             grid-area: source;
         }
     }
