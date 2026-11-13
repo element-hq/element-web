@@ -74,7 +74,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Field_postfix {
-        padding: 9px 10px;
+        /* Same vertical padding as the field's input, so the postfix doesn't make the field taller */
+        padding: var(--cpd-space-2x) 10px;
     }
 }
 
