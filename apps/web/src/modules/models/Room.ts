@@ -40,6 +40,7 @@ class WatchableName extends Watchable<string> {
     };
     protected onFirstWatch(): void {
         this.sdkRoom.on(RoomEvent.Name, this.onNameUpdate);
+        this.onNameUpdate();
     }
 
     protected onLastWatch(): void {
