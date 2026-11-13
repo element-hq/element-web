@@ -229,25 +229,6 @@ jobs:
                   if-no-files-found: ignore
                   retention-days: 1
 
-            - name: Assert executable is present
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/win-*unpacked/Element*.exe'
-
-            - name: Assert all Squirrel files are present
-              if: contains(inputs.targets, 'squirrel')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/squirrel-windows*/Element Setup*.exe'
-                  Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
-                  Test-Path './dist/squirrel-windows*/RELEASES'
-
-            - name: Assert MSI is present
-              if: contains(inputs.targets, 'msi')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/Element*.msi'
-
     test:
         name: Test Windows ${{ inputs.arch }}
         needs: build

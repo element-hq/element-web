@@ -145,18 +145,6 @@ jobs:
                       !apps/desktop/dist/mac-universal/**
                   retention-days: 1
 
-            - name: Assert zip is present
-              if: contains(inputs.targets, 'zip')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/Element*-mac.zip
-
-            - name: Assert dmg is present
-              if: contains(inputs.targets, 'dmg')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/Element*.dmg
-
     test:
         name: Test macOS Universal
         needs: build

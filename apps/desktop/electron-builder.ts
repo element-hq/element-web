@@ -26,12 +26,14 @@ import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache
 import { assertNoHardLinks } from "./scripts/hard-links.ts";
 import { pruneSeshatBinaries } from "./scripts/seshat-binaries.ts";
 import { writeMacReleasesJson } from "./scripts/mac-releases.ts";
+import { assertArtifactsPresent } from "./scripts/artifacts.ts";
 import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
  * This script has different outputs depending on your os platform.
  *
  * On all platforms:
+ *  Fails the build if a target did not produce the files the deploy & test jobs expect.
  *  Skips electron-updater's update metadata, as we update via Squirrel and our own repositories instead.
  *
  * On Windows:
@@ -267,6 +269,7 @@ const config: Omit<Writable<Configuration>, "electronFuses" | "publish"> & {
         await assertNoHardLinks(event);
     },
     afterAllArtifactBuild: async (buildResult: BuildResult): Promise<string[]> => {
+        await assertArtifactsPresent(buildResult);
         return writeMacReleasesJson(buildResult, config.extraMetadata.version ?? pkg.version, process.env.ED_BASE_URL);
     },
 };
