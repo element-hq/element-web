@@ -127,6 +127,8 @@ jobs:
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
                   TARGETS: ${{ inputs.targets }}
+                  # Generates releases.json for Squirrel.Mac when set
+                  ED_BASE_URL: ${{ inputs.base-url }}
 
             - name: Check app was signed & notarised successfully
               if: inputs.sign != ''
@@ -146,34 +148,8 @@ jobs:
                   CSC_IDENTITY_AUTO_DISCOVERY: false
                   VARIANT_PATH: variant.json
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Generate releases.json
-              if: inputs.base-url
-              working-directory: apps/desktop
-              run: |
-                  PKG_JSON_VERSION=$(cat package.json | jq -r .version)
-                  LATEST=$(find dist -type f -iname "*-mac.zip" | xargs -0 -n1 -- basename)
-                  # Encode spaces in the URL as Squirrel.Mac complains about bad JSON otherwise
-                  URL="${BASE_URL}/update/macos/${LATEST// /%20}"
-
-                  jq -n --arg version "${VERSION:-$PKG_JSON_VERSION}" --arg url "$URL" '
-                    {
-                      currentRelease: $version,
-                      releases: [{
-                        version: $version,
-                        updateTo: {
-                          version: $version,
-                          url: $url,
-                        },
-                      }],
-                    }
-                  ' > dist/releases.json
-                  jq -n --arg url "$URL" '
-                    { url: $url }
-                  ' > dist/releases-legacy.json
-              env:
-                  VERSION: ${{ inputs.version }}
-                  BASE_URL: ${{ inputs.base-url }}
+                  # Generates releases.json for Squirrel.Mac when set
+                  ED_BASE_URL: ${{ inputs.base-url }}
 
             # We exclude mac-universal as the unpacked app takes forever to upload and zip and dmg already contains it
             - name: Upload Artifacts

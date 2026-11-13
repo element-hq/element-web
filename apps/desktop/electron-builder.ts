@@ -14,15 +14,18 @@ import {
     type AfterPackContext,
     type ArtifactCreated,
     type BeforeBuildContext,
+    type BuildResult,
     type CustomWindowsSign,
     log,
 } from "electron-builder";
 import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
+import pkg from "./package.json" with { type: "json" };
 import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
 import { assertNoHardLinks } from "./scripts/hard-links.ts";
 import { pruneSeshatBinaries } from "./scripts/seshat-binaries.ts";
+import { writeMacReleasesJson } from "./scripts/mac-releases.ts";
 import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
@@ -34,6 +37,10 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
  *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
  *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
  *  Converts a Nightly $VERSION into a semver one, as required by Squirrel.Windows.
+ *
+ * On macOS:
+ *  Writes releases.json & releases-legacy.json for Squirrel.Mac if $ED_BASE_URL, the URL the build will be deployed to,
+ *      is specified.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
@@ -241,6 +248,9 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     },
     artifactBuildCompleted: async (event: ArtifactCreated) => {
         await assertNoHardLinks(event);
+    },
+    afterAllArtifactBuild: async (buildResult: BuildResult): Promise<string[]> => {
+        return writeMacReleasesJson(buildResult, config.extraMetadata.version ?? pkg.version, process.env.ED_BASE_URL);
     },
 };
 
