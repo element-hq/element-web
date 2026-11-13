@@ -31,6 +31,8 @@ import { PreviewRoomListItemViewModel } from "./PreviewRoomListItemViewModel";
 import { type RoomViewStore } from "../../stores/RoomViewStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
@@ -47,6 +49,10 @@ vi.mock("../../utils/room/tagRoom", () => ({
 
 vi.mock("../../utils/room/getSectionTagForRoom", () => ({
     getSectionTagForRoom: vi.fn().mockReturnValue(null),
+}));
+
+vi.mock("../../customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: vi.fn().mockReturnValue(true),
 }));
 
 vi.mock("./utils", () => ({
@@ -154,15 +160,18 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().isFlatList).toBe(true);
         });
 
-        it("should set canCreateRoom based on user rights", () => {
-            vi.mocked(hasCreateRoomRights).mockReturnValue(true);
+        it.each([true, false])("should set canCreateRoom and canStartChat based on user rights (%s)", (rights) => {
+            vi.mocked(hasCreateRoomRights).mockReturnValue(rights);
+            vi.mocked(shouldShowComponent).mockReturnValue(rights);
             viewModel = new RoomListViewModel({
                 client: matrixClient,
                 spaceStore: SDKContextClass.instance.spaceStore,
                 roomViewStore: SDKContextClass.instance.roomViewStore,
             });
 
-            expect(viewModel.getSnapshot().canCreateRoom).toBe(true);
+            expect(viewModel.getSnapshot().canCreateRoom).toBe(rights);
+            expect(viewModel.getSnapshot().canStartChat).toBe(rights);
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateRooms);
         });
     });
 

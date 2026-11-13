@@ -10,6 +10,7 @@ import { type RoomListHeaderViewSnapshot } from "./RoomListHeaderView";
 export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     title: "Rooms",
     displaySpaceMenu: true,
+    canStartChat: true,
     canCreateRoom: true,
     canCreateVideoRoom: true,
     canInviteInSpace: true,
