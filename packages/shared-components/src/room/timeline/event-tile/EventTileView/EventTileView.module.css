@@ -771,7 +771,13 @@
         }
     }
 
-    .lineMedia.lineImage .slotTimestamp {
+    /* Pictures show their time on a dark backdrop. The timestamp slot has no
+       box in this layout, so the backdrop goes on the timestamp itself. The
+       8px margin keeps it inside the picture's rounded corner: 8px from its
+       side, and 4px from its bottom edge as the image body has a 4px bottom
+       margin. */
+    .lineMedia.lineImage .slotTimestamp > * {
+        margin: var(--cpd-space-2x);
         border-radius: 8px;
         background-color: rgb(0 0 0 / 60%);
         color: #fff;
