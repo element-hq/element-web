@@ -461,6 +461,14 @@ test.describe("Spaces", () => {
         });
         await app.viewSpaceByName("Root Space");
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
+
+        const tile = page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Child Space 1" });
+        // The subspace toggle's background must not show as a square on the hovered tile
+        await tile.hover();
+        await expect(tile.locator(".mx_SpaceHierarchy_subspace_toggle")).toHaveCSS(
+            "background-color",
+            "rgba(0, 0, 0, 0)",
+        );
     });
 
     test("should render spaces visibility settings", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
