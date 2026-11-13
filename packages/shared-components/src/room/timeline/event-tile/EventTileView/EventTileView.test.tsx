@@ -891,3 +891,42 @@ describe("EventTileView bubble layout decryption failure", () => {
         expect(failure.line.height).toBe(message.line.height);
     });
 });
+
+describe("EventTileView bubble layout informational rows", () => {
+    const renderRow = (state: Partial<EventTileViewRootState>): { root: Element; line: Element; receipt: Element } => {
+        const { container } = render(
+            <div style={{ width: 520 }}>
+                <EventTileView
+                    {...createProps({
+                        root: { ...renderState, state: { isOwnEvent: false, hasReply: false, ...state } },
+                        slots: {
+                            avatar: <span style={{ display: "block", width: 14, height: 14 }} />,
+                            body: <div>Alice changed the topic to the move to the fifth floor on Monday</div>,
+                            receipt: <span data-testid="receipt" style={{ display: "block", width: 34, height: 24 }} />,
+                        },
+                    })}
+                />
+            </div>,
+            { presentation: { layout: "bubble" } },
+        );
+
+        return {
+            root: container.querySelector(`.${styles.root}`)!,
+            line: container.querySelector(`.${styles.line}`)!,
+            receipt: container.querySelector("[data-testid='receipt']")!,
+        };
+    };
+
+    it("keeps the line inside the row beside the avatar", () => {
+        const { root, line } = renderRow({ info: true });
+
+        expect(line.getBoundingClientRect().right).toBe(root.getBoundingClientRect().right);
+    });
+
+    it("puts read receipts where a message's read receipts are", () => {
+        const message = renderRow({});
+        const info = renderRow({ info: true });
+
+        expect(info.receipt.getBoundingClientRect().right).toBe(message.receipt.getBoundingClientRect().right);
+    });
+});

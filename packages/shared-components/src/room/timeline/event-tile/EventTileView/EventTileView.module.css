@@ -1144,12 +1144,19 @@
 
         .line {
             width: 100%;
-            min-width: 100%;
+            /* Shrink beside the avatar instead of overflowing the row. */
+            min-width: 0;
             max-width: 100%;
             margin: 0;
             padding-block: 0;
             padding-inline: 0 60px;
             background: transparent;
+        }
+
+        /* These rows have no end margin, so take the bubble end margin off the
+           78px receipt offset of messages to put their receipts in the same place. */
+        > .slotReceipt {
+            inset-inline-end: calc(var(--event-tile-bubble-margin-inline-end) - 78px);
         }
 
         .slotTimestamp {
