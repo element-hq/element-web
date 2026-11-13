@@ -28,7 +28,8 @@
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
-        margin-top: var(--cpd-space-1x);
+        /* Center the 16px icon on the first line of the title; 1lh is that line's height, set by the layout */
+        margin-block-start: calc((1lh - 16px) / 2);
     }
 
     .title,
