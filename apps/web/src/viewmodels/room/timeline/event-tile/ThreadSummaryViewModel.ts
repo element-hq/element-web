@@ -228,7 +228,7 @@ export class ThreadMessagePreviewViewModel
     private async updateFromThread(): Promise<void> {
         const requestId = ++this.previewRequestId;
         const lastReply = this.props.thread.replyToEvent ?? undefined;
-        this.eventContentListener.setEvent(lastReply, this.onEventContentChanged);
+        this.eventContentListener.setEvent(lastReply, this.onEventContentChanged, this.props.thread.room);
         this.setupMemberListener(lastReply);
 
         if (!lastReply) {
