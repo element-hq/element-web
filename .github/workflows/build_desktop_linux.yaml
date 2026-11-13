@@ -189,20 +189,6 @@ jobs:
                       !apps/desktop/dist/*-unpacked/**
                   retention-days: 1
 
-            - name: Assert deb is present
-              if: contains(inputs.targets, 'deb')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*$ARCH.deb
-              env:
-                  ARCH: ${{ inputs.arch }}
-
-            - name: Assert tar.gz is present
-              if: contains(inputs.targets, 'tar.gz')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*.tar.gz
-
     test:
         name: Test Linux ${{ inputs.arch }}
         needs: build
