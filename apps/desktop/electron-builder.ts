@@ -21,6 +21,7 @@ import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
+import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -30,6 +31,7 @@ import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
  *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
  *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
+ *  Converts a Nightly $VERSION into a semver one, as required by Squirrel.Windows.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
@@ -267,7 +269,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
  * @param {string} process.env.VERSION
  */
 if (process.env.VERSION) {
-    config.extraMetadata.version = process.env.VERSION;
+    config.extraMetadata.version =
+        os.platform() === "win32" ? toSquirrelVersion(process.env.VERSION) : process.env.VERSION;
 }
 
 if (variant["linux.deb.name"]) {
