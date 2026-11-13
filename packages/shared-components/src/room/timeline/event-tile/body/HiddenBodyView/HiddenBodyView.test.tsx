@@ -9,6 +9,8 @@ import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import { describe, expect, it } from "vitest";
+import compoundTokens from "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css?inline";
+import compoundWeb from "@vector-im/compound-web/dist/style.css?inline";
 
 import { MockViewModel } from "../../../../../core/viewmodel";
 import { HiddenBodyView, type HiddenBodyViewModel, type HiddenBodyViewSnapshot } from "./HiddenBodyView";
@@ -51,5 +53,24 @@ describe("HiddenBodyView", () => {
 
         expect(ref.current).toBeInstanceOf(HTMLSpanElement);
         expect(ref.current).toHaveTextContent("Message pending moderation");
+    });
+
+    it("keeps the line height of the text around it", () => {
+        // Unit tests do not load Compound's styles, which give the Text label its own line height.
+        const compoundStyles = document.createElement("style");
+        compoundStyles.textContent = compoundTokens + compoundWeb;
+        document.head.append(compoundStyles);
+
+        try {
+            render(
+                <div style={{ lineHeight: "18px" }}>
+                    <Default />
+                </div>,
+            );
+
+            expect(getComputedStyle(screen.getByText("Message pending moderation")).lineHeight).toBe("18px");
+        } finally {
+            compoundStyles.remove();
+        }
     });
 });
