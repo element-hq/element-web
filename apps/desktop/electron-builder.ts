@@ -15,7 +15,6 @@ import {
     type ArtifactCreated,
     type BeforeBuildContext,
     type CustomWindowsSign,
-    Arch,
     log,
 } from "electron-builder";
 import type { WindowsSignToolManager } from "app-builder-lib";
@@ -23,6 +22,7 @@ import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/modul
 
 import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
 import { assertNoHardLinks } from "./scripts/hard-links.ts";
+import { pruneSeshatBinaries } from "./scripts/seshat-binaries.ts";
 import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
@@ -237,32 +237,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         return true; // Continue build
     },
     afterPack: async (context: AfterPackContext) => {
-        // @matrix-org/seshat pulls in a prebuilt binary package per platform+arch as optional dependencies.
-        // CI installs more than one of them so that cross-arch builds work, so prune the ones we don't need
-        // from the packaged app. We always keep both darwin architectures as electron-builder packs each half
-        // of a universal build separately, and @electron/universal requires them to contain the same files.
-        const platform = context.electronPlatformName;
-        const arch = Arch[context.arch];
-        const keep = platform === "darwin" ? /^seshat-darwin-/ : new RegExp(`^seshat-${platform}-${arch}$`);
-
-        const modulesDir = path.join(
-            context.packager.getResourcesDir(context.appOutDir),
-            "app.asar.unpacked",
-            "node_modules",
-            "@matrix-org",
-        );
-        let entries: string[];
-        try {
-            entries = await fsp.readdir(modulesDir);
-        } catch {
-            return; // No unpacked seshat binaries in this build
-        }
-        for (const entry of entries) {
-            if (entry.startsWith("seshat-") && !keep.test(entry)) {
-                console.log(`Pruning ${entry} from ${platform}-${arch} build`);
-                await fsp.rm(path.join(modulesDir, entry), { recursive: true, force: true });
-            }
-        }
+        await pruneSeshatBinaries(context);
     },
     artifactBuildCompleted: async (event: ArtifactCreated) => {
         await assertNoHardLinks(event);
