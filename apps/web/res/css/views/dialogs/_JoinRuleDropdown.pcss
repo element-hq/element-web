@@ -34,6 +34,11 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
+    .mx_Dropdown_menu .mx_Dropdown_option {
+        /* The menu rows keep the 35px min-height from _Dropdown.pcss, so match it to center their content */
+        line-height: $font-35px;
+    }
+
     .mx_JoinRuleDropdown_icon {
         color: $secondary-content;
         position: absolute;
