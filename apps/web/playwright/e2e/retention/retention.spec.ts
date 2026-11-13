@@ -9,7 +9,7 @@ import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { test, expect } from "../../element-web-test";
-import { checkRetentionInRoom, ONE_MINUTE } from "./utils";
+import { checkRetentionInRoom, ONE_MINUTE, openRoomWithRetention } from "./utils";
 
 const ONE_MINUTE_STR = "60s";
 
@@ -120,5 +120,19 @@ test.describe("Retention", () => {
         await app.client.sendStateEvent(roomId, "org.matrix.msc1763.retention", {});
         await page.clock.fastForward(ONE_MINUTE + 1);
         await expect(page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${eventId}']`)).toBeVisible();
+    });
+
+    test("should stop showing an expired message in the pinned message banner", async ({ app, page, bot }) => {
+        const roomId = await openRoomWithRetention({ app, bot });
+        const { event_id: eventId } = await bot.sendMessage(roomId, "Pinned message");
+        await expect(page.locator(`.mx_EventTile[data-event-id='${eventId}']`)).toBeVisible();
+        await app.client.sendStateEvent(roomId, "m.room.pinned_events", { pinned: [eventId] });
+        const banner = page.getByTestId("pinned-message-banner");
+        await expect(banner.getByText("Pinned message")).toBeVisible();
+
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        await expect(banner.getByText("Message deleted")).toBeVisible();
+        await expect(banner.getByText("Pinned message")).toBeHidden();
     });
 });
