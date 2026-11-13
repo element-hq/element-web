@@ -54,11 +54,13 @@ export class Watchable<T> {
     }
 
     public watch(listener: (value: T) => void): void {
-        // Call onFirstWatch if there was no listener before.
-        if (this.listeners.size === 0) {
+        const isFirstListener = this.listeners.size === 0;
+        this.listeners.add(listener);
+
+        // Register the listener first so updates during subscription setup are not missed.
+        if (isFirstListener) {
             this.onFirstWatch();
         }
-        this.listeners.add(listener);
     }
 
     public unwatch(listener: (value: T) => void): void {
