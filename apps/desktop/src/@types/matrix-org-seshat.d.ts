@@ -68,8 +68,14 @@ declare module "@matrix-org/seshat" {
     interface ILoadArgs {
         roomId: string;
         limit: number;
-        fromEvent: string;
-        direction: "b" | "f";
+        fromEvent?: string;
+        direction?: "b" | "f";
+    }
+
+    interface IIndexedEvent {
+        eventId: string;
+        type: "m.room.message" | "m.room.name" | "m.room.topic";
+        serverTs: number;
     }
 
     interface ILoadResult {
@@ -115,6 +121,7 @@ declare module "@matrix-org/seshat" {
         public getUserVersion(): Promise<number>;
         public setUserVersion(version: number): Promise<void>;
         public loadFileEvents(args: ILoadArgs): Promise<ILoadResult[]>;
+        public loadEventIds(args: ILoadArgs): Promise<IIndexedEvent[]>;
     }
 
     interface IRecoveryInfo {
