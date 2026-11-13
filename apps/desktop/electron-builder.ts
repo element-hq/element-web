@@ -12,6 +12,7 @@ import path from "node:path";
 import {
     type Configuration as BaseConfiguration,
     type AfterPackContext,
+    type ArtifactCreated,
     type BeforeBuildContext,
     type CustomWindowsSign,
     Arch,
@@ -21,6 +22,7 @@ import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
 import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
+import { assertNoHardLinks } from "./scripts/hard-links.ts";
 import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
@@ -36,6 +38,7 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
  *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
+ *  Fails the build if the deb or tar.gz contains hard links.
  */
 
 /**
@@ -260,6 +263,9 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
                 await fsp.rm(path.join(modulesDir, entry), { recursive: true, force: true });
             }
         }
+    },
+    artifactBuildCompleted: async (event: ArtifactCreated) => {
+        await assertNoHardLinks(event);
     },
 };
 
