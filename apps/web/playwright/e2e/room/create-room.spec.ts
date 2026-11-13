@@ -30,7 +30,15 @@ test.describe("Create Room", () => {
             await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
             // Change room to public
             await dialog.getByRole("button", { name: "Room visibility" }).click();
-            await dialog.getByRole("option", { name: "Public room" }).click();
+            // The option's label must sit in the middle of the row. The icon follows the label's baseline, so it
+            // can be up to a pixel off center depending on the font rendering.
+            const publicOption = dialog.getByRole("option", { name: "Public room" });
+            const optionBox = await publicOption.boundingBox();
+            const iconBox = await publicOption.locator("svg").boundingBox();
+            const iconTop = iconBox!.y - optionBox!.y;
+            const iconBottom = optionBox!.y + optionBox!.height - (iconBox!.y + iconBox!.height);
+            expect(Math.abs(iconTop - iconBottom)).toBeLessThan(2);
+            await publicOption.click();
             // Fill room address
             await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-standard");
 
