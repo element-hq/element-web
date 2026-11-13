@@ -669,6 +669,7 @@
         "join_rule_invite": "Invite only",
         "join_rule_invite_label": "Only people invited will be able to find and join this room.",
         "join_rule_knock_label": "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
+        "join_rule_knock_restricted_label": "Members of %(spaceName)s can join without asking.",
         "join_rule_public_label": "Anyone can join, including people outside your organisation.",
         "join_rule_public_parent_space_label": "Anyone can join, including people outside your organisation, not just members of <SpaceName/>.",
         "join_rule_restricted": "Standard",
@@ -2356,6 +2357,7 @@
             "join_rule_invite_description": "Only invited people can join.",
             "join_rule_knock": "Ask to join",
             "join_rule_knock_description": "People cannot join unless access is granted.",
+            "join_rule_knock_restricted": "Members of authorised spaces can join without asking.",
             "join_rule_public": "Anyone",
             "join_rule_public_description": "Anyone can join, including people outside your organisation.",
             "join_rule_restricted": "Space members",
@@ -3502,6 +3504,7 @@
         "m.room.join_rules": {
             "invite": "%(senderDisplayName)s made the room invite only.",
             "knock": "%(senderDisplayName)s changed the join rule to ask to join.",
+            "knock_restricted": "%(senderDisplayName)s changed the join rule to ask to join, or join from authorised spaces.",
             "public": "%(senderDisplayName)s made the room public to whoever knows the link.",
             "restricted": "%(senderDisplayName)s changed who can join this room.",
             "restricted_settings": "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.",

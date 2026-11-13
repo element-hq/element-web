@@ -150,6 +150,12 @@ describe("RoomKnocksBar", () => {
             expect(container.firstChild).not.toBeNull();
         });
 
+        it("renders for a knock_restricted room", () => {
+            vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.KnockRestricted);
+            getComponent(room);
+            expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");
+        });
+
         it("updates when the list of knocking users changes", () => {
             getComponent(room);
             expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");

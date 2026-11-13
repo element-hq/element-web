@@ -56,6 +56,11 @@ interface IState {
      */
     isPublicKnockRoom: boolean;
     /**
+     * Indicates whether members of the parent space can join without asking (the `knock_restricted` join rule).
+     * Only applicable if `joinRule` == `JoinRule.Knock` and there is a parent space.
+     */
+    isKnockRestricted: boolean;
+    /**
      * Indicates whether end-to-end encryption is enabled for the room.
      */
     isEncrypted: boolean;
@@ -122,6 +127,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
         this.state = {
             isPublicKnockRoom: defaultPublic || false,
+            isKnockRestricted: false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
             isStateEncrypted: this.props.defaultStateEncrypted ?? false,
             joinRule,
@@ -167,7 +173,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         if (this.state.joinRule === JoinRule.Knock) {
-            opts.joinRule = JoinRule.Knock;
+            opts.joinRule =
+                this.props.parentSpace && this.state.isKnockRestricted ? JoinRule.KnockRestricted : JoinRule.Knock;
             createOpts.visibility = this.state.isPublicKnockRoom ? Visibility.Public : Visibility.Private;
         }
 
@@ -272,6 +279,10 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.setState({ isPublicKnockRoom: evt.target.checked });
     };
 
+    private onIsKnockRestrictedChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ isKnockRestricted: evt.target.checked });
+    };
+
     private static validateRoomName = withValidation({
         rules: [
             {
@@ -356,13 +367,26 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         let visibilitySection: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Knock) {
             visibilitySection = (
-                <SettingsToggleInput
-                    name="publish-room"
-                    className="mx_CreateRoomDialog_labelledCheckbox"
-                    label={_t("room_settings|security|publish_room")}
-                    onChange={this.onIsPublicKnockRoomChange}
-                    checked={this.state.isPublicKnockRoom}
-                />
+                <>
+                    <SettingsToggleInput
+                        name="publish-room"
+                        className="mx_CreateRoomDialog_labelledCheckbox"
+                        label={_t("room_settings|security|publish_room")}
+                        onChange={this.onIsPublicKnockRoomChange}
+                        checked={this.state.isPublicKnockRoom}
+                    />
+                    {this.props.parentSpace && (
+                        <SettingsToggleInput
+                            name="knock-restricted"
+                            className="mx_CreateRoomDialog_labelledCheckbox"
+                            label={_t("create_room|join_rule_knock_restricted_label", {
+                                spaceName: this.props.parentSpace.name ?? _t("common|unnamed_space"),
+                            })}
+                            onChange={this.onIsKnockRestrictedChange}
+                            checked={this.state.isKnockRestricted}
+                        />
+                    )}
+                </>
             );
         }
 

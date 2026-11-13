@@ -118,12 +118,17 @@ describe("<RoomSettingsDialog />", () => {
                 expect(screen.queryByTestId("settings-tab-ROOM_PEOPLE_TAB")).not.toBeInTheDocument();
             });
 
-            it("renders when enabled and room join rule is knock", () => {
-                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
-                vi.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
-                getComponent();
-                expect(screen.getByTestId("settings-tab-ROOM_PEOPLE_TAB")).toBeInTheDocument();
-            });
+            it.each([JoinRule.Knock, JoinRule.KnockRestricted])(
+                "renders when enabled and room join rule is %s",
+                (joinRule) => {
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                        (setting) => setting === "feature_ask_to_join",
+                    );
+                    vi.spyOn(room, "getJoinRule").mockReturnValue(joinRule);
+                    getComponent();
+                    expect(screen.getByTestId("settings-tab-ROOM_PEOPLE_TAB")).toBeInTheDocument();
+                },
+            );
 
             it("re-renders on room join rule changes", async () => {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");

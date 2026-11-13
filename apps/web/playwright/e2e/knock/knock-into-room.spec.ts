@@ -356,3 +356,68 @@ test.describe("Knock Into Room", () => {
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
     });
 });
+
+test.describe("Knock into a knock_restricted room", () => {
+    test.skip(isDendrite, "Dendrite does not have support for knocking");
+    // The space whose members can join the room without asking
+    let spaceId: string;
+    test.use({
+        displayName: "Alice",
+        labsFlags: ["feature_ask_to_join"],
+        botCreateOpts: {
+            displayName: "Bob",
+        },
+        room: async ({ bot }, use) => {
+            // Alice is not a member of this space, so she has to ask to join
+            spaceId = await bot.createSpace({ name: "Team" });
+            const roomId = await bot.createRoom({
+                name: "Cybersecurity",
+                room_version: "10",
+                initial_state: [
+                    {
+                        type: "m.room.join_rules",
+                        content: {
+                            join_rule: "knock_restricted",
+                            allow: [{ type: "m.room_membership", room_id: spaceId }],
+                        },
+                        state_key: "",
+                    },
+                ],
+            });
+            await use({ roomId });
+        },
+    });
+
+    test("should knock into a knock_restricted room when not a member of the allowed space", async ({
+        page,
+        app,
+        room,
+    }) => {
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
+    });
+
+    test("should join a knock_restricted room directly when a member of the allowed space", async ({
+        page,
+        app,
+        user,
+        bot,
+        room,
+    }) => {
+        await bot.inviteUser(spaceId, user.userId);
+        await app.client.joinRoom(spaceId);
+
+        await app.viewRoomById(room.roomId);
+
+        const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).not.toBeVisible();
+        await roomPreviewBar.getByRole("button", { name: "Join the discussion" }).click();
+
+        // Alice joined the room without a knock
+        await expect(page.getByRole("textbox", { name: "Send an unencrypted message…" })).toBeVisible();
+    });
+});

@@ -355,6 +355,8 @@ function textForJoinRulesEvent(ev: MatrixEvent, client: MatrixClient, allowJSX: 
                 });
         case JoinRule.Knock:
             return () => _t("timeline|m.room.join_rules|knock", { senderDisplayName });
+        case JoinRule.KnockRestricted:
+            return () => _t("timeline|m.room.join_rules|knock_restricted", { senderDisplayName });
         case JoinRule.Restricted:
             if (allowJSX) {
                 return () => (
