@@ -71,6 +71,7 @@ describe("<EncryptionUserSettingsTab />", () => {
                 screen.getByText("You need to verify this device in order to view your encryption settings."),
             ).toBeInTheDocument(),
         );
+        await screen.findByText("ed25519");
         expect(asFragment()).toMatchSnapshot();
 
         const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([true]) } as any);
@@ -108,6 +109,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         const { asFragment } = renderComponent();
 
         await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        await screen.findByText("ed25519");
         expect(asFragment()).toMatchSnapshot();
     });
 

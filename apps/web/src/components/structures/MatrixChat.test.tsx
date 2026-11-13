@@ -163,7 +163,7 @@ describe("<MatrixChat />", () => {
         getSyncStateData: vi.fn().mockReturnValue(null),
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
-        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        getRTCTransports: vi.fn().mockResolvedValue([]),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
             get: vi.fn().mockReturnValue([]),

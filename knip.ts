@@ -14,7 +14,6 @@ process.env.CI = "1";
 export default {
     workspaces: {
         "packages/shared-components": {
-            entry: ["src/index.ts!", "scripts/**"],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
                 "!scripts/**!",
@@ -49,8 +48,8 @@ export default {
                 "src/workers/*.worker.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
-                "scripts/**",
-                "playwright/**",
+                "playwright/sample-files/*.js",
+                "playwright/e2e/crypto/test_legacy_indexeddb_cryptostore_dump/load.js",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
@@ -73,6 +72,7 @@ export default {
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
+                "!playwright/**!",
                 "!recorder-worklet-loader.cjs!",
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
@@ -88,7 +88,7 @@ export default {
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!"],
             project: ["**/*.{js,ts,pcss}"],
             ignoreBinaries: [
                 // Used by the fetch-package script (optional)
@@ -112,7 +112,8 @@ export default {
             ],
         },
         ".": {
-            entry: ["scripts/**", "docs/**"],
+            entry: ["docs/**"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!scripts/**!"],
         },
     },
     ignoreDependencies: [
