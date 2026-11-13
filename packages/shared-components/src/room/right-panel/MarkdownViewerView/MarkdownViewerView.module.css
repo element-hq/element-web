@@ -103,9 +103,10 @@ Please see LICENSE in the repository root for full details.
 }
 
 .content blockquote {
-    padding: 0 0 0 var(--cpd-space-3x);
+    padding: 0;
+    padding-inline-start: var(--cpd-space-3x);
     color: var(--cpd-color-text-secondary);
-    border-left: var(--cpd-border-width-4) solid var(--cpd-color-border-interactive-secondary);
+    border-inline-start: var(--cpd-border-width-4) solid var(--cpd-color-border-interactive-secondary);
 }
 
 .content table {

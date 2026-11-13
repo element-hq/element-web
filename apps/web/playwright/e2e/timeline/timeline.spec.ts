@@ -941,6 +941,23 @@ test.describe("Timeline", () => {
             await expect(inlineCode).not.toHaveCSS("padding-right", "0px");
         });
 
+        test("should put the quote bar at the start of a right-to-left quote", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("> مرحبا بالعالم!");
+            await composer.press("Enter");
+
+            const quote = page
+                .locator(".mx_EventTile")
+                .last()
+                .getByTestId("event-tile-slot-body")
+                .locator("blockquote");
+            await expect(quote).toHaveCSS("direction", "rtl");
+            await expect(quote).toHaveCSS("border-right-width", "2px");
+            await expect(quote).toHaveCSS("border-left-style", "none");
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },

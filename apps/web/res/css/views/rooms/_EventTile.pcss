@@ -214,7 +214,9 @@ $left-gutter: 64px;
         }
 
         blockquote {
-            border-left: 2px solid $blockquote-bar-color;
+            border-inline-start: 2px solid $blockquote-bar-color;
+            /* github-markdown-css draws its bar on the left, which is the end side in right-to-left text */
+            border-inline-end: none;
             color: $secondary-content;
             border-radius: 2px;
             padding: 0 10px;
