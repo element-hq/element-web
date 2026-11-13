@@ -149,6 +149,11 @@ test.describe("Polls", () => {
         const barBox = (await maybeOption.locator(".mx_PollOption_popularityBackground").boundingBox())!;
         expect(voteCountBox.x + voteCountBox.width).toBeCloseTo(barBox.x + barBox.width, 0);
 
+        // the radio is centered on the line of the option text
+        const radioBox = (await maybeOption.locator('input[type="radio"] + div').boundingBox())!;
+        const optionTextBox = (await maybeOption.locator(".mx_PollOption_optionText").boundingBox())!;
+        expect(radioBox.y + radioBox.height / 2).toBeCloseTo(optionTextBox.y + optionTextBox.height / 2, 0);
+
         // change my vote to 'Yes'
         await getPollOption(page, pollId, pollParams.options[0]).click();
 
