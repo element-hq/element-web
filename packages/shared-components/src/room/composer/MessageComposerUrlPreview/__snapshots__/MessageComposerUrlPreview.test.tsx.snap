@@ -1,823 +1,150 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`MessageComposerUrlPreview > failed entries > renders the failed placeholder when expanded 1`] = `
+exports[`MessageComposerUrlPreview > renders a card per link, with the image, site logo or link icon 1`] = `
 <div>
   <div
-    class="MessageComposerUrlPreview-module_wrapper"
+    style="max-width: 480px;"
   >
     <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
-          >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-              />
-            </svg>
-          </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
+      class="MessageComposerUrlPreview-module_wrapper"
     >
       <div
-        class="MessageComposerUrlPreview-module_left"
+        class="MessageComposerUrlPreview-module_header"
       >
         <div
-          class="MessageComposerUrlPreview-module_failedIcon"
+          class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 MessageComposerUrlPreview-module_heading"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://example.com"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            Failed to fetch preview
-          </a>
-          <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
-          >
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              example.com
-            </span>
-          </div>
+          4 links
         </div>
       </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+      <ul
+        class="MessageComposerUrlPreview-module_list"
       >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
+        <li
+          class="MessageComposerUrlPreview-module_card"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailImage"
           >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            <img
+              alt=""
+              src="/static/wideImage.png"
             />
-          </svg>
-        </div>
-      </button>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MessageComposerUrlPreview > failed entries > renders the failed summary icon when collapsed 1`] = `
-<div>
-  <div
-    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
-  >
-    <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
-          >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-              />
-            </svg>
           </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
           <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
+            class="MessageComposerUrlPreview-module_text"
           >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://www.bbc.co.uk/news/business-56559073"
+              rel="noreferrer noopener"
+              target="_blank"
             >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MessageComposerUrlPreview > loading entries > renders the loading placeholder when expanded 1`] = `
-<div>
-  <div
-    class="MessageComposerUrlPreview-module_wrapper"
-  >
-    <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
-          >
-            <svg
-              class="_icon_1855a_18"
-              fill="currentColor"
-              height="1em"
-              style="width: 20px; height: 20px;"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
-    >
-      <div
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <div
-          class="MessageComposerUrlPreview-module_loadingSpinner"
-        >
-          <svg
-            class="_icon_1855a_18"
-            fill="currentColor"
-            height="1em"
-            style="width: 20px; height: 20px;"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://element.io"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            Fetching preview…
-          </a>
-          <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
-          >
+              UK economy rebounds as Covid restrictions ease
+            </a>
             <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
             >
-              element.io
+              bbc.co.uk
             </span>
           </div>
-        </div>
-      </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
+        </li>
+        <li
+          class="MessageComposerUrlPreview-module_card"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailLogo"
           >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            <img
+              alt=""
+              src="/static/element.png"
             />
-          </svg>
-        </div>
-      </button>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MessageComposerUrlPreview > loading entries > renders the loading summary icon when collapsed 1`] = `
-<div>
-  <div
-    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
-  >
-    <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
+          </div>
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
+            class="MessageComposerUrlPreview-module_text"
           >
-            <svg
-              class="_icon_1855a_18"
-              fill="currentColor"
-              height="1em"
-              style="width: 20px; height: 20px;"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://github.com/element-hq/element-web/issues/12490"
+              rel="noreferrer noopener"
+              target="_blank"
             >
-              <path
-                clip-rule="evenodd"
-                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MessageComposerUrlPreview > renders a mix of loaded, loading and failed entries 1`] = `
-<div>
-  <div
-    class="MessageComposerUrlPreview-module_wrapper"
-  >
-    <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            data-color="4"
-          >
-            M
-          </div>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconLoading"
-          >
-            <svg
-              class="_icon_1855a_18"
-              fill="currentColor"
-              height="1em"
-              style="width: 20px; height: 20px;"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon MessageComposerUrlPreview-module_summaryIconFailed"
-          >
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-              />
-            </svg>
-          </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          3 links
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
-    >
-      <div
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <div
-          class="MessageComposerUrlPreview-module_entryIcon"
-          data-color="4"
-        >
-          M
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-          <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
-          >
+              filepanel is missing entries · Issue #12490
+            </a>
             <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              github.com
+            </span>
+          </div>
+        </li>
+        <li
+          class="MessageComposerUrlPreview-module_card"
+        >
+          <div
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailImage"
+          >
+            <img
+              alt=""
+              src="/static/tallImage.png"
+            />
+          </div>
+          <div
+            class="MessageComposerUrlPreview-module_text"
+          >
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://nextcloud.com/s/frog"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Frog.jpg
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              nextcloud.com
+            </span>
+          </div>
+        </li>
+        <li
+          class="MessageComposerUrlPreview-module_card"
+        >
+          <div
+            class="MessageComposerUrlPreview-module_thumbnail"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+              />
+            </svg>
+          </div>
+          <div
+            class="MessageComposerUrlPreview-module_text"
+          >
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://matrix.org"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Matrix.org
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
             >
               matrix.org
             </span>
           </div>
-        </div>
-      </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-            />
-          </svg>
-        </div>
-      </button>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
-    >
-      <div
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <div
-          class="MessageComposerUrlPreview-module_loadingSpinner"
-        >
-          <svg
-            class="_icon_1855a_18"
-            fill="currentColor"
-            height="1em"
-            style="width: 20px; height: 20px;"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://element.io"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            Fetching preview…
-          </a>
-          <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
-          >
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              element.io
-            </span>
-          </div>
-        </div>
-      </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-            />
-          </svg>
-        </div>
-      </button>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
-    >
-      <div
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <div
-          class="MessageComposerUrlPreview-module_failedIcon"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://example.com"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            Failed to fetch preview
-          </a>
-          <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
-          >
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              example.com
-            </span>
-          </div>
-        </div>
-      </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-            />
-          </svg>
-        </div>
-      </button>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MessageComposerUrlPreview > renders a preview 1`] = `
-<div>
-  <div
-    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
-  >
-    <div
-      class="MessageComposerUrlPreview-module_summary"
-    >
-      <span
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <span>
-          <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            data-color="4"
-          >
-            M
-          </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
-          </div>
-        </button>
-      </span>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
@@ -826,112 +153,152 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
 exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
 <div>
   <div
-    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
+    style="max-width: 480px;"
   >
     <div
-      class="MessageComposerUrlPreview-module_summary"
+      class="MessageComposerUrlPreview-module_wrapper"
     >
-      <span
-        class="MessageComposerUrlPreview-module_left"
+      <div
+        class="MessageComposerUrlPreview-module_header"
       >
-        <span>
+        <div
+          class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 MessageComposerUrlPreview-module_heading"
+        >
+          1 link
+        </div>
+      </div>
+      <ul
+        class="MessageComposerUrlPreview-module_list"
+      >
+        <li
+          class="MessageComposerUrlPreview-module_card"
+        >
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailImage"
           >
             <img
-              alt="The element logo"
+              alt=""
               src="/static/wideImage.png"
             />
           </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
-        >
           <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
+            class="MessageComposerUrlPreview-module_text"
           >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://www.bbc.co.uk/news/business-56559073"
+              rel="noreferrer noopener"
+              target="_blank"
             >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
+              UK economy rebounds as Covid restrictions ease
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              bbc.co.uk
+            </span>
           </div>
-        </button>
-      </span>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
 `;
 
-exports[`MessageComposerUrlPreview > renders the expanded previews when not collapsed 1`] = `
+exports[`MessageComposerUrlPreview > renders loading and failed entries 1`] = `
 <div>
   <div
-    class="MessageComposerUrlPreview-module_wrapper"
+    style="max-width: 480px;"
   >
     <div
-      class="MessageComposerUrlPreview-module_summary"
+      class="MessageComposerUrlPreview-module_wrapper"
     >
-      <span
-        class="MessageComposerUrlPreview-module_left"
+      <div
+        class="MessageComposerUrlPreview-module_header"
       >
-        <span>
+        <div
+          class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 MessageComposerUrlPreview-module_heading"
+        >
+          3 links
+        </div>
+      </div>
+      <ul
+        class="MessageComposerUrlPreview-module_list"
+      >
+        <li
+          class="MessageComposerUrlPreview-module_card"
+        >
           <div
-            class="MessageComposerUrlPreview-module_summaryIcon"
-            data-color="4"
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailImage"
           >
-            M
+            <img
+              alt=""
+              src="/static/wideImage.png"
+            />
           </div>
-        </span>
-        <span
-          class="MessageComposerUrlPreview-module_linkCount"
-        >
-          1 link
-        </span>
-      </span>
-      <span
-        class="MessageComposerUrlPreview-module_right"
-      >
-        <button
-          class="MessageComposerUrlPreview-module_clearAll MessageComposerUrlPreview-module_spanLike"
-          type="button"
-        >
-          Clear all
-        </button>
-        <button
-          aria-label="Collapse URL previews"
-          class="_icon-button_1215g_8 MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
-          data-kind="primary"
-          role="button"
-          style="--cpd-icon-button-size: 32px;"
-          tabindex="0"
-          type="button"
+          <div
+            class="MessageComposerUrlPreview-module_text"
+          >
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://www.bbc.co.uk/news/business-56559073"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              UK economy rebounds as Covid restrictions ease
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              bbc.co.uk
+            </span>
+          </div>
+        </li>
+        <li
+          class="MessageComposerUrlPreview-module_card"
         >
           <div
-            class="_indicator-icon_j097f_17"
-            style="--cpd-icon-button-size: 100%;"
+            class="MessageComposerUrlPreview-module_thumbnail"
+          >
+            <svg
+              class="_icon_1855a_18"
+              fill="currentColor"
+              height="1em"
+              style="width: 20px; height: 20px;"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            class="MessageComposerUrlPreview-module_text"
+          >
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://element.io"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Fetching preview…
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              element.io
+            </span>
+          </div>
+        </li>
+        <li
+          class="MessageComposerUrlPreview-module_card"
+        >
+          <div
+            class="MessageComposerUrlPreview-module_thumbnail MessageComposerUrlPreview-module_thumbnailFailed"
           >
             <svg
               aria-hidden="true"
@@ -942,73 +309,29 @@ exports[`MessageComposerUrlPreview > renders the expanded previews when not coll
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
               />
             </svg>
           </div>
-        </button>
-      </span>
-    </div>
-    <div
-      class="MessageComposerUrlPreview-module_container"
-    >
-      <div
-        class="MessageComposerUrlPreview-module_left"
-      >
-        <div
-          class="MessageComposerUrlPreview-module_entryIcon"
-          data-color="4"
-        >
-          M
-        </div>
-        <div
-          class="MessageComposerUrlPreview-module_text"
-        >
-          <a
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title MessageComposerUrlPreview-module_linkTitle"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
           <div
-            class="MessageComposerUrlPreview-module_siteName MessageComposerUrlPreview-module_linkSiteName"
+            class="MessageComposerUrlPreview-module_text"
           >
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            <a
+              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 MessageComposerUrlPreview-module_title"
+              href="https://example.com"
+              rel="noreferrer noopener"
+              target="_blank"
             >
-              matrix.org
+              Failed to fetch preview
+            </a>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 MessageComposerUrlPreview-module_host"
+            >
+              example.com
             </span>
           </div>
-        </div>
-      </div>
-      <button
-        aria-label="Remove URL preview"
-        class="_icon-button_1215g_8 MessageComposerUrlPreview-module_removePreview MessageComposerUrlPreview-module_spanLike"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_j097f_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-            />
-          </svg>
-        </div>
-      </button>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
