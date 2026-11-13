@@ -12,10 +12,12 @@ Please see LICENSE files in the repository root for full details.
     padding: 6px 12px;
     background-color: $background;
 
-    .mx_StyledRadioButton_content,
+    /* The extra .mx_StyledRadioButton outweighs the 8px end margin from _StyledRadioButton.pcss, which loads
+       later, so the vote count ends where the bar does */
+    .mx_StyledRadioButton > .mx_StyledRadioButton_content,
     .mx_PollOption_endedOption {
         padding-top: 2px;
-        margin-right: 0px;
+        margin-inline-end: 0;
     }
 
     .mx_StyledRadioButton_spacer {
