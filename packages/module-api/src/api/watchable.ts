@@ -55,9 +55,9 @@ export class Watchable<T> {
 
     public watch(listener: (value: T) => void): void {
         const isFirstListener = this.listeners.size === 0;
+        // Register the listener first so updates during subscription setup are not missed.
         this.listeners.add(listener);
 
-        // Register the listener first so updates during subscription setup are not missed.
         if (isFirstListener) {
             this.onFirstWatch();
         }
