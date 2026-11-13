@@ -1,19 +1,182 @@
 /*
-Copyright 2025 Element Creations Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from "vitest";
-import { EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkRoom, stubClient } from "test-utils";
 
 import { Room } from "./Room";
 
 describe("Room", () => {
+    describe("getStateEvents", () => {
+        it("returns detached current snapshots and keeps the same watchable per type", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            const sourceEvent = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { nested: { value: "original" } },
+                skey: "",
+            });
+            const disabledEvent = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { disabled: true },
+                skey: "second-connection",
+            });
+            const state = {
+                getStateEvents: vi.fn().mockReturnValue([sourceEvent, disabledEvent]),
+            } as unknown as RoomState;
+            vi.spyOn(sdkRoom.getLiveTimeline(), "getState").mockReturnValue(state);
+            const room = new Room(sdkRoom);
+            const watchable = room.getStateEvents("com.example.config");
+
+            expect(room.getStateEvents("com.example.config")).toBe(watchable);
+            expect(watchable.value).toEqual([
+                { stateKey: "", content: { nested: { value: "original" } } },
+                { stateKey: "second-connection", content: { disabled: true } },
+            ]);
+            (watchable.value[0].content.nested as Record<string, unknown>).value = "module edit";
+            expect(sourceEvent.getContent().nested).toEqual({ value: "original" });
+        });
+
+        it("updates on relevant live state changes and removes its listener after the last unwatch", async () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            let currentEvents: ReturnType<typeof mkEvent>[] = [];
+            const state = { getStateEvents: vi.fn(() => currentEvents) } as unknown as RoomState;
+            vi.spyOn(sdkRoom.getLiveTimeline(), "getState").mockReturnValue(state);
+            const room = new Room(sdkRoom);
+            const watchable = room.getStateEvents("com.example.config");
+            const listener = vi.fn();
+            const onSpy = vi.spyOn(sdkRoom, "on");
+            const offSpy = vi.spyOn(sdkRoom, "off");
+            watchable.watch(listener);
+
+            const event = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { enabled: true },
+                skey: "connection",
+            });
+            currentEvents = [event];
+            sdkRoom.emit(RoomStateEvent.Events, event, state, null);
+            expect(listener).toHaveBeenCalledWith([{ stateKey: "connection", content: { enabled: true } }]);
+
+            const unrelated = mkEvent({
+                event: true,
+                type: "com.example.other",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: {},
+                skey: "",
+            });
+            sdkRoom.emit(RoomStateEvent.Events, unrelated, state, null);
+            expect(listener).toHaveBeenCalledTimes(1);
+
+            const identical = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { enabled: true },
+                skey: "connection",
+            });
+            sdkRoom.emit(RoomStateEvent.Events, identical, state, null);
+            const otherRoomEvent = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: "!other:m.org",
+                user: "@a:m.org",
+                content: { enabled: false },
+                skey: "connection",
+            });
+            sdkRoom.emit(RoomStateEvent.Events, otherRoomEvent, state, null);
+            expect(listener).toHaveBeenCalledTimes(1);
+            expect(onSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+            watchable.unwatch(listener);
+            expect(offSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+            currentEvents = [
+                mkEvent({
+                    event: true,
+                    type: "com.example.config",
+                    room: sdkRoom.roomId,
+                    user: "@a:m.org",
+                    content: { enabled: false },
+                    skey: "connection",
+                }),
+            ];
+            watchable.watch(listener);
+            await vi.waitFor(() =>
+                expect(listener).toHaveBeenLastCalledWith([{ stateKey: "connection", content: { enabled: false } }]),
+            );
+            watchable.unwatch(listener);
+        });
+
+        it("starts empty when the requested type is absent", () => {
+            const sdkRoom = mkRoom(stubClient(), "!foo:m.org");
+            expect(new Room(sdkRoom).getStateEvents("com.example.missing").value).toEqual([]);
+        });
+
+        it("clears state on leave and refreshes it again after rejoin", () => {
+            const sdkRoom = mkRoom(stubClient(), "!foo:m.org");
+            let membership: ReturnType<typeof sdkRoom.getMyMembership> = "join";
+            vi.spyOn(sdkRoom, "getMyMembership").mockImplementation(() => membership);
+            const connection = mkEvent({
+                event: true,
+                type: "com.example.config",
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { enabled: true },
+                skey: "connection",
+            });
+            const state = { getStateEvents: vi.fn().mockReturnValue([connection]) } as unknown as RoomState;
+            vi.spyOn(sdkRoom.getLiveTimeline(), "getState").mockReturnValue(state);
+            const watchable = new Room(sdkRoom).getStateEvents("com.example.config");
+            const listener = vi.fn();
+            watchable.watch(listener);
+
+            membership = "leave";
+            const leaveEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMember,
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { membership: "leave" },
+                skey: "@a:m.org",
+            });
+            sdkRoom.emit(RoomStateEvent.Events, leaveEvent, state, null);
+            expect(listener).toHaveBeenLastCalledWith([]);
+
+            membership = "join";
+            const joinEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMember,
+                room: sdkRoom.roomId,
+                user: "@a:m.org",
+                content: { membership: "join" },
+                skey: "@a:m.org",
+            });
+            sdkRoom.emit(RoomStateEvent.Events, joinEvent, state, null);
+            expect(listener).toHaveBeenLastCalledWith([{ stateKey: "connection", content: { enabled: true } }]);
+            watchable.unwatch(listener);
+        });
+    });
+
     it("should return id from sdk room", () => {
         const cli = stubClient();
         const sdkRoom = mkRoom(cli, "!foo:m.org");
