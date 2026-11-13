@@ -341,10 +341,14 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_EventTile_collapsedCodeBlock {
-            max-height: 30vh;
+        /* The same padding whether the block is collapsed or not, so that expanding it doesn't move the code */
+        > pre {
             padding-top: var(--cpd-space-3x);
             padding-bottom: var(--cpd-space-3x);
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            max-height: 30vh;
         }
 
         /* Put the line numbers beside the code, so that a block as wide as its content (as in the bubble layout)

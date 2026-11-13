@@ -909,6 +909,25 @@ test.describe("Timeline", () => {
             expect(await codeBlock.evaluate((pre) => pre.scrollWidth - pre.clientWidth)).toBe(0);
         });
 
+        test("should not move the code when expanding a code block", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst a = 1;\nconst b = 2;\nconst c = 3;\nconst d = 4;\nconst e = 5;\n```");
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile").last().locator(".mx_EventTile_pre_container");
+            const pre = codeBlock.locator("pre");
+            await expect(pre).toHaveClass("mx_EventTile_collapsedCodeBlock");
+            const collapsedPadding = await pre.evaluate((node) => window.getComputedStyle(node).paddingTop);
+
+            await codeBlock.hover();
+            await codeBlock.getByRole("button", { name: "Expand" }).click();
+
+            await expect(pre).not.toHaveClass("mx_EventTile_collapsedCodeBlock");
+            await expect(pre).toHaveCSS("padding-top", collapsedPadding);
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },
