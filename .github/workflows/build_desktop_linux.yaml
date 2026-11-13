@@ -53,10 +53,6 @@ on:
                 required: false
                 description: "List of targets to build"
                 default: "tar.gz deb"
-env:
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro. Debian bookworm (2.36) and newer are a superset.
-    # Currently, our newest linked glibc version is 2.34 in the prebuilt Seshat binaries, Electron only links against 2.25.
-    MAX_GLIBC: 2.34
 permissions:
     contents: read
 jobs:
@@ -68,22 +64,6 @@ jobs:
             # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
             PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
-            - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
-              id: config
-              with:
-                  key: "${{ inputs.arch }}"
-                  export_to: output
-                  map: |
-                      {
-                        "amd64": {
-                          "arch": "x86-64"
-                        },
-                        "arm64": {
-                          "arch": "aarch64",
-                          "build-args": "--arm64"
-                        }
-                      }
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
@@ -116,10 +96,13 @@ jobs:
 
             # Install dependencies inside container so we compile native modules (like pkcs11js)
             # against bookworm's glibc.
+            # The container runs as the runner's user so that the files it writes stay owned by the runner,
+            # with a writable HOME for the pnpm, node-gyp & electron-builder caches.
             - name: Install Deps
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm install --frozen-lockfile --filter element-desktop
@@ -135,49 +118,20 @@ jobs:
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     -e VARIANT_PATH \
                     -e VERSION \
-                    -e USE_HARD_LINKS \
                     -e ED_DEBIAN_CHANGELOG \
                     -e PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm run build --publish never $BUILD_ARGS -l $TARGETS
-                  sudo chown -R $USER:$USER apps/desktop/dist
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
-                  # Workaround for https://github.com/electron-userland/electron-builder/issues/5721
-                  USE_HARD_LINKS: false
-                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Check native libraries
-              working-directory: apps/desktop
-              run: |
-                  set -x
-                  shopt -s globstar
-
-                  FILES=$(file dist/**/*.node)
-                  echo $FILES
-
-                  ! echo "$FILES" | grep -v "$ARCH"
-
-                  LIBS=$(readelf -d dist/**/*.node | grep NEEDED)
-                  echo "$LIBS"
-
-                  set +x
-                  assert_contains_string() { [[ "$1" == *"$2"* ]]; }
-                  # The prebuilt seshat binaries statically link sqlcipher & openssl
-                  ! assert_contains_string "$LIBS" "libcrypto.so"
-                  ! assert_contains_string "$LIBS" "libsqlcipher.so"
-
-                  for filename in dist/**/*.node dist/linux-*unpacked/element-desktop*; do
-                      ./scripts/glibc-check.sh $filename
-                  done
-              env:
-                  ARCH: ${{ steps.config.outputs.arch }}
 
             # We exclude *-unpacked as it loses permissions and the tarball contains it with correct permissions
             - name: Upload Artifacts
@@ -188,30 +142,6 @@ jobs:
                       apps/desktop/dist
                       !apps/desktop/dist/*-unpacked/**
                   retention-days: 1
-
-            - name: Assert deb is present and valid
-              if: contains(inputs.targets, 'deb')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*$ARCH.deb
-
-                  DEB_LISTING=$(dpkg-deb --fsys-tarfile ./dist/element-desktop*.deb | tar -tv)
-                  echo "deb listing: "
-                  echo "$DEB_LISTING"
-                  ! echo "$DEB_LISTING" | grep '^h'
-              env:
-                  ARCH: ${{ inputs.arch }}
-
-            - name: Assert tar.gz is present
-              if: contains(inputs.targets, 'tar.gz')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*.tar.gz
-
-                  TAR_GZ_LISTING=$(tar -tvf ./dist/element-desktop*.tar.gz)
-                  echo "tar.gz listing: "
-                  echo "$TAR_GZ_LISTING"
-                  ! echo "$TAR_GZ_LISTING" | grep '^h'
 
     test:
         name: Test Linux ${{ inputs.arch }}

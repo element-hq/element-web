@@ -5,12 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import * as fsp from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
 import { log } from "electron-builder";
 import type {
     CustomWindowsSign,
@@ -19,10 +17,7 @@ import type {
     WinPackager,
 } from "app-builder-lib";
 
-/**
- * Runs a command and resolves with its stdout, rejecting if it exits non-zero.
- */
-export type Exec = (file: string, args: string[], env?: NodeJS.ProcessEnv) => Promise<string>;
+import { defaultExec, type Exec } from "./exec.ts";
 
 /**
  * Configuration for the Windows signed file cache.
@@ -51,11 +46,6 @@ const CACHEABLE_FILES = ["Squirrel.exe"];
 function isCacheable(file: string): boolean {
     return CACHEABLE_EXTS.includes(path.extname(file)) || CACHEABLE_FILES.includes(path.basename(file));
 }
-
-const defaultExec: Exec = async (file, args, env) => {
-    const { stdout } = await promisify(execFile)(file, args, { env: env ?? process.env });
-    return stdout;
-};
 
 /**
  * The Authenticode signature of a file, as seen by Windows.

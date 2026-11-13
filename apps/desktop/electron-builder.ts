@@ -12,28 +12,49 @@ import path from "node:path";
 import {
     type Configuration as BaseConfiguration,
     type AfterPackContext,
+    type ArtifactCreated,
     type BeforeBuildContext,
+    type BuildResult,
     type CustomWindowsSign,
-    Arch,
     log,
 } from "electron-builder";
 import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
 
+import pkg from "./package.json" with { type: "json" };
 import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
+import { assertNoHardLinks } from "./scripts/hard-links.ts";
+import { pruneSeshatBinaries } from "./scripts/seshat-binaries.ts";
+import { writeMacReleasesJson } from "./scripts/mac-releases.ts";
+import { assertArtifactsPresent } from "./scripts/artifacts.ts";
+import { assertNativeLibraries } from "./scripts/native-libraries.ts";
+import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 
 /**
  * This script has different outputs depending on your os platform.
+ *
+ * On all platforms:
+ *  Fails the build if a target did not produce the files the deploy & test jobs expect.
+ *  Skips electron-updater's update metadata, as we update via Squirrel and our own repositories instead.
  *
  * On Windows:
  *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
  *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
  *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
+ *  Converts a Nightly $VERSION into a semver one, as required by Squirrel.Windows.
+ *  Makes native modules compiled during the build reproducible, so they can be reused from the sign cache.
+ *
+ * On macOS:
+ *  Writes releases.json & releases-legacy.json for Squirrel.Mac if $ED_BASE_URL, the URL the build will be deployed to,
+ *      is specified.
+ *  Disables automatic discovery of a signing identity on CI when $CSC_LINK is not specified.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
  *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
+ *  Checks the native libraries in the packaged app, failing the build on CI and warning otherwise.
+ *  Fails the build if the deb or tar.gz contains hard links.
  */
 
 /**
@@ -99,6 +120,19 @@ for (const key in variant) {
     console.log(`${key}: ${variant[key as keyof Variant]}`);
 }
 
+/**
+ * CI passes the macOS signing credentials as empty strings when not signing, but electron-builder treats an empty
+ * CSC_LINK as a certificate to import, so treat empty values as unset.
+ */
+for (const name of ["CSC_LINK", "CSC_KEY_PASSWORD", "APPLE_ID", "APPLE_APP_SPECIFIC_PASSWORD", "APPLE_TEAM_ID"]) {
+    if (process.env[name] === "") delete process.env[name];
+}
+
+// Don't let unsigned CI builds pick up a signing identity from the runner's keychain
+if (process.env.CI && !process.env.CSC_LINK) {
+    process.env.CSC_IDENTITY_AUTO_DISCOVERY ??= "false";
+}
+
 interface Configuration extends BaseConfiguration {
     extraMetadata: Partial<Pick<Pkg, "version">> & ExtraMetadata;
     linux: BaseConfiguration["linux"];
@@ -113,11 +147,15 @@ interface Configuration extends BaseConfiguration {
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
-const config: Omit<Writable<Configuration>, "electronFuses"> & {
+const config: Omit<Writable<Configuration>, "electronFuses" | "publish"> & {
     // Make all fuses required to ensure they are all explicitly specified
     electronFuses: Required<Configuration["electronFuses"]>;
+    publish: null;
 } = {
     appId: variant.appId,
+    // We don't use electron-updater, so skip its metadata: latest-*.yml, app-update.yml & the deb package-type file.
+    // Otherwise electron-builder infers a GitHub publish configuration from the repository in package.json.
+    publish: null,
     asarUnpack: "**/*.node",
     electronFuses: {
         enableCookieEncryption: true,
@@ -196,6 +234,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     },
     dmg: {
         badgeIcon: "build/icon.icon",
+        // Skip the blockmap used for electron-updater differential updates
+        writeUpdateInfo: false,
     },
     win: {
         target: ["squirrel", "msi"],
@@ -229,35 +269,28 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             );
             throw err;
         }
+
+        if (os.platform() === "win32") {
+            // Make MSVC output reproducible, so that native modules compiled when rebuilding them (e.g. pkcs11js) are
+            // byte-identical between builds and can be reused from the sign cache. -Brepro drops timestamps & random
+            // PDB GUIDs, -PDBALTPATH stops the checkout path being embedded via the PDB path.
+            process.env._CL_ ??= "-Brepro";
+            process.env._LINK_ ??= "-Brepro -PDBALTPATH:%_PDB%";
+        }
+
         return true; // Continue build
     },
     afterPack: async (context: AfterPackContext) => {
-        // @matrix-org/seshat pulls in a prebuilt binary package per platform+arch as optional dependencies.
-        // CI installs more than one of them so that cross-arch builds work, so prune the ones we don't need
-        // from the packaged app. We always keep both darwin architectures as electron-builder packs each half
-        // of a universal build separately, and @electron/universal requires them to contain the same files.
-        const platform = context.electronPlatformName;
-        const arch = Arch[context.arch];
-        const keep = platform === "darwin" ? /^seshat-darwin-/ : new RegExp(`^seshat-${platform}-${arch}$`);
-
-        const modulesDir = path.join(
-            context.packager.getResourcesDir(context.appOutDir),
-            "app.asar.unpacked",
-            "node_modules",
-            "@matrix-org",
-        );
-        let entries: string[];
-        try {
-            entries = await fsp.readdir(modulesDir);
-        } catch {
-            return; // No unpacked seshat binaries in this build
-        }
-        for (const entry of entries) {
-            if (entry.startsWith("seshat-") && !keep.test(entry)) {
-                console.log(`Pruning ${entry} from ${platform}-${arch} build`);
-                await fsp.rm(path.join(modulesDir, entry), { recursive: true, force: true });
-            }
-        }
+        await pruneSeshatBinaries(context);
+        // Runs after pruning, as the binaries for other architectures would fail the checks
+        await assertNativeLibraries(context);
+    },
+    artifactBuildCompleted: async (event: ArtifactCreated) => {
+        await assertNoHardLinks(event);
+    },
+    afterAllArtifactBuild: async (buildResult: BuildResult): Promise<string[]> => {
+        await assertArtifactsPresent(buildResult);
+        return writeMacReleasesJson(buildResult, config.extraMetadata.version ?? pkg.version, process.env.ED_BASE_URL);
     },
 };
 
@@ -267,7 +300,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
  * @param {string} process.env.VERSION
  */
 if (process.env.VERSION) {
-    config.extraMetadata.version = process.env.VERSION;
+    config.extraMetadata.version =
+        os.platform() === "win32" ? toSquirrelVersion(process.env.VERSION) : process.env.VERSION;
 }
 
 if (variant["linux.deb.name"]) {

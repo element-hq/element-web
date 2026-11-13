@@ -91,19 +91,7 @@ jobs:
             BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
             # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
             PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
-            # Make MSVC output reproducible, so that native modules compiled during the build (e.g. pkcs11js) are
-            # byte-identical between builds and can be reused from the sign cache. -Brepro drops timestamps & random
-            # PDB GUIDs, -PDBALTPATH stops the checkout path being embedded via the PDB path.
-            # Uses the `-` form of the options as Git Bash rewrites `/`-prefixed env values into Windows paths.
-            _CL_: -Brepro
-            _LINK_: -Brepro -PDBALTPATH:%_PDB%
         steps:
-            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
-            - name: Configure git line endings
-              run: |
-                  git config --system core.autocrlf false
-                  git config --system core.eol lf
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
@@ -200,13 +188,8 @@ jobs:
               shell: bash
               env:
                   VARIANT_PATH: variant.json
-                  # Only set for Nightly builds
-                  # The windows packager relies on parsing this as semver, so we have to make it look like one.
-                  # This will give our update packages really stupid names, but we probably can't change that either
-                  # because squirrel windows parses them for the version too. We don't really care: nobody sees them.
-                  # We just give the installer a static name, so you'll just see this in the 'about' dialog.
-                  # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
-                  VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
+                  # Only set for Nightly builds, electron-builder.ts converts it into a semver version for Squirrel.Windows
+                  VERSION: ${{ inputs.version }}
                   TARGETS: ${{ inputs.targets }}
                   ED_SIGN_CACHE_URL: ${{ inputs.sign && inputs.sign-cache-url || '' }}
                   ED_SIGN_CACHE_DIR: sign-cache
@@ -239,25 +222,6 @@ jobs:
                   path: apps/desktop/sign-cache
                   if-no-files-found: ignore
                   retention-days: 1
-
-            - name: Assert executable is present
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/win-*unpacked/Element*.exe'
-
-            - name: Assert all Squirrel files are present
-              if: contains(inputs.targets, 'squirrel')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/squirrel-windows*/Element Setup*.exe'
-                  Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
-                  Test-Path './dist/squirrel-windows*/RELEASES'
-
-            - name: Assert MSI is present
-              if: contains(inputs.targets, 'msi')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/Element*.msi'
 
     test:
         name: Test Windows ${{ inputs.arch }}
