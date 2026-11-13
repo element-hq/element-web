@@ -78,8 +78,11 @@ const useSignOut = (
             false, // isPriority
             true, // isStatic
             {
-                // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
-                onBeforeClose: async (reason) => reason !== "backgroundClick",
+                onBeforeClose: async (reason) => {
+                    // Inhibit closure due to clicking in the background.
+                    // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
+                    return reason !== "backgroundClick";
+                },
             },
         );
     };
