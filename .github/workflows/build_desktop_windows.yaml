@@ -98,12 +98,6 @@ jobs:
             _CL_: -Brepro
             _LINK_: -Brepro -PDBALTPATH:%_PDB%
         steps:
-            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
-            - name: Configure git line endings
-              run: |
-                  git config --system core.autocrlf false
-                  git config --system core.eol lf
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
