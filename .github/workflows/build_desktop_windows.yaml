@@ -113,6 +113,8 @@ jobs:
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             # Ensure the prebuilt seshat binaries for the target architecture get installed when cross-building
