@@ -1031,14 +1031,15 @@
         padding-inline: calc(var(--event-tile-bubble-gutter) - 1px) 60px;
         font-style: italic;
 
-        .slotBody {
-            padding-block: 4px;
+        .slotTimestamp {
+            font-style: normal;
         }
 
-        .slotTimestamp {
-            inset-block: auto;
-            align-self: center;
-            font-style: normal;
+        /* Without a bubble around the text, put the time on the line box of
+           the last line of text, which ends at the body padding. */
+        .slotTimestamp > * {
+            inset-block-end: var(--event-tile-body-padding, 1px);
+            padding-block: 0;
         }
     }
 

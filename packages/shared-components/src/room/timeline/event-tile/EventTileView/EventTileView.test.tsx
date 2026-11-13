@@ -937,7 +937,8 @@ describe("EventTileView bubble layout emotes", () => {
     const renderTile = (
         state: Partial<EventTileViewRootState>,
         line?: EventTileViewLine,
-    ): { line: Element; avatar: Element; body: Element } => {
+        text: React.ReactNode = "* Alice waves",
+    ): { line: Element; avatar: Element; body: Element; timestamp: Element } => {
         const { container } = render(
             <div style={{ width: 880 }}>
                 <EventTileView
@@ -946,7 +947,8 @@ describe("EventTileView bubble layout emotes", () => {
                         line,
                         slots: {
                             avatar: <span style={{ display: "block", width: 30, height: 30 }} />,
-                            body: <div data-testid="body">* Alice waves</div>,
+                            body: <div data-testid="body">{text}</div>,
+                            timestamp: <span data-testid="timestamp">12:47</span>,
                         },
                     })}
                 />
@@ -958,6 +960,7 @@ describe("EventTileView bubble layout emotes", () => {
             line: container.querySelector(`.${styles.line}`)!,
             avatar: container.querySelector(`.${styles.slotAvatar}`)!,
             body: container.querySelector("[data-testid='body']")!,
+            timestamp: container.querySelector("[data-testid='timestamp']")!,
         };
     };
 
@@ -972,5 +975,25 @@ describe("EventTileView bubble layout emotes", () => {
         const emote = renderTile(emoteState, { emote: true });
 
         expect(emote.body.getBoundingClientRect().left).toBe(message.body.getBoundingClientRect().left);
+    });
+
+    it("centers the time on the last line of the emote", () => {
+        const { body, timestamp } = renderTile(
+            emoteState,
+            { emote: true },
+            <>
+                * Alice waves
+                <br />
+                at everyone
+            </>,
+        );
+        const bodyStyle = getComputedStyle(body);
+        const lastLineCenter =
+            body.getBoundingClientRect().bottom -
+            parseFloat(bodyStyle.paddingBottom) -
+            parseFloat(bodyStyle.lineHeight) / 2;
+        const time = timestamp.getBoundingClientRect();
+
+        expect(time.top + time.height / 2).toBe(lastLineCenter);
     });
 });
