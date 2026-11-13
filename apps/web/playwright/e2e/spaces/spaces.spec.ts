@@ -246,6 +246,15 @@ test.describe("Spaces", () => {
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
     });
 
+    test("should line up the space name with the options in the space menu", async ({ page, app }) => {
+        await app.client.createSpace({ name: "Test Space" });
+
+        const menu = await openSpaceContextMenu(page, app, "Test Space");
+        const name = (await menu.getByText("Test Space", { exact: true }).boundingBox())!;
+        const icon = (await menu.getByRole("menuitem", { name: "Space home" }).locator("svg").boundingBox())!;
+        expect(name.x).toBeCloseTo(icon.x, 0);
+    });
+
     test("should show space invites at the top of the space panel", async ({ page, app, user, bot }) => {
         await app.client.createSpace({
             name: "My Space",
