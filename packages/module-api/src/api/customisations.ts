@@ -56,6 +56,11 @@ export const enum UIComponent {
      * `UIFeature.allowCreatingPublicRooms` and `UIFeature.allowCreatingPublicSpaces` to false.
      */
     PublicRooms = "UIComponent.publicRooms",
+
+    /**
+     * Release announcements highlighting new features.
+     */
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
 }
 
 /**
