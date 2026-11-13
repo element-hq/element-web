@@ -1112,7 +1112,7 @@
         "verification_requested_toast_title": "Verifiering begärd",
         "verified_identity_changed": "Verifierad identitet för %(displayName)s (<b>%(userId)s</b>) har ändrats. <a>Läs mer </a>",
         "verified_identity_changed_no_displayname": "Verifierad identitet för <b>%(userId)s</b> har ändrats. <a>Läs mer </a>",
-        "verify_toast_description": "Från och med slutet av oktober 2026 kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>",
+        "verify_toast_description": "Snart kommer overifierade enheter inte att kunna skicka och ta emot meddelanden. <a>Läs mer</a>",
         "verify_toast_title": "Verifiera den här enheten",
         "withdraw_verification_action": "Återkalla verifieringen"
     },
@@ -1509,6 +1509,8 @@
         "shift": "Skift",
         "space": "Utrymme",
         "switch_to_space": "Byt till utrymme med nummer",
+        "timeline_navigate_down": "Bläddra nedåt i tidslinjen",
+        "timeline_navigate_up": "Navigera uppåt i tidslinjen",
         "toggle_hidden_events": "Växla synlighet för dolda händelser",
         "toggle_microphone_mute": "Växla mikrofontystning",
         "toggle_right_panel": "Växla högerpanelen",
@@ -2564,6 +2566,9 @@
                 "title": "Nyckellagring"
             },
             "recovery": {
+                "backup_set_up_hint": "För att ändra din återställningsnyckel, gå till <b>Inställningar → Kryptering → Säkerhetskopiering</b>",
+                "backup_set_up_title": "Din säkerhetskopia är nu helt konfigurerad",
+                "backup_set_up_toast": "Säkerhetskopieringen är nu helt konfigurerad",
                 "change_recovery_confirm_button": "Bekräfta ny återställningsnyckel",
                 "change_recovery_confirm_description": "Ange din nya återställningsnyckel nedan för att slutföra. Din gamla kommer inte att funka längre.",
                 "change_recovery_confirm_title": "Ange din nya återställningsnyckel",

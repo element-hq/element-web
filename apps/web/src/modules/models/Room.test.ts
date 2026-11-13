@@ -216,6 +216,19 @@ describe("Room", () => {
             room.name.unwatch(fn);
             expect(offSpy).toHaveBeenCalledTimes(1);
         });
+
+        it("should refresh the name when first watched", () => {
+            const sdkRoom = mkRoom(stubClient(), "!foo:m.org");
+            sdkRoom.name = "Initial name";
+            const room = new Room(sdkRoom);
+            const listener = vi.fn();
+            sdkRoom.name = "Updated name";
+
+            room.name.watch(listener);
+
+            expect(listener).toHaveBeenCalledExactlyOnceWith("Updated name");
+            room.name.unwatch(listener);
+        });
     });
 
     describe("watchableIsEncrypted", () => {

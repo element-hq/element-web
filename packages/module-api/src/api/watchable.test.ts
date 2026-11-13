@@ -42,6 +42,22 @@ test("watchers are not notified if value does not change", () => {
     watchable.unwatch(listener); // Clean up after the test
 });
 
+test("first watcher receives updates made while subscribing", () => {
+    class UpdatingWatchable extends Watchable<number> {
+        protected onFirstWatch(): void {
+            this.value = 2;
+        }
+    }
+
+    const watchable = new UpdatingWatchable(1);
+    const listener = vitest.fn();
+
+    watchable.watch(listener);
+
+    expect(listener).toHaveBeenCalledExactlyOnceWith(2);
+    watchable.unwatch(listener);
+});
+
 test("when value is an object, shallow comparison works", () => {
     const watchable = new Watchable({ a: 1, b: 2 });
     const listener = vitest.fn();

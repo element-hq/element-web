@@ -1502,6 +1502,8 @@
         "shift": "",
         "space": "空格",
         "switch_to_space": "使用数字切换空间",
+        "timeline_navigate_down": "向下导航时间线",
+        "timeline_navigate_up": "向上导航时间线",
         "toggle_hidden_events": "切换隐藏事件的可见性",
         "toggle_microphone_mute": "切换麦克风静音",
         "toggle_right_panel": "切换右侧面板",
@@ -2554,6 +2556,9 @@
                 "title": "密钥存储"
             },
             "recovery": {
+                "backup_set_up_hint": "转到<b>“设置”→“加密”→“备份”</b>以更改恢复密钥。",
+                "backup_set_up_title": "你已完成备份设置",
+                "backup_set_up_toast": "已完成备份设置",
                 "change_recovery_confirm_button": "确认新的恢复密钥",
                 "change_recovery_confirm_description": "请在下面输入新的恢复密钥以完成验证。你的旧密钥将不再有效。",
                 "change_recovery_confirm_title": "输入新的恢复密钥",
