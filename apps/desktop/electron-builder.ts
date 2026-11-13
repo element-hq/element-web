@@ -31,6 +31,9 @@ import { toSquirrelVersion } from "./scripts/squirrel-version.ts";
 /**
  * This script has different outputs depending on your os platform.
  *
+ * On all platforms:
+ *  Skips electron-updater's update metadata, as we update via Squirrel and our own repositories instead.
+ *
  * On Windows:
  *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
@@ -133,11 +136,15 @@ interface Configuration extends BaseConfiguration {
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
-const config: Omit<Writable<Configuration>, "electronFuses"> & {
+const config: Omit<Writable<Configuration>, "electronFuses" | "publish"> & {
     // Make all fuses required to ensure they are all explicitly specified
     electronFuses: Required<Configuration["electronFuses"]>;
+    publish: null;
 } = {
     appId: variant.appId,
+    // We don't use electron-updater, so skip its metadata: latest-*.yml, app-update.yml & the deb package-type file.
+    // Otherwise electron-builder infers a GitHub publish configuration from the repository in package.json.
+    publish: null,
     asarUnpack: "**/*.node",
     electronFuses: {
         enableCookieEncryption: true,
@@ -216,6 +223,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     },
     dmg: {
         badgeIcon: "build/icon.icon",
+        // Skip the blockmap used for electron-updater differential updates
+        writeUpdateInfo: false,
     },
     win: {
         target: ["squirrel", "msi"],
