@@ -246,6 +246,21 @@ test.describe("Spaces", () => {
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
     });
 
+    test("should align the buttons of the add subspace dialog", async ({ page, app, user }) => {
+        await app.client.createSpace({
+            name: "My Space",
+        });
+
+        const menu = await openSpaceContextMenu(page, app, "My Space");
+        await menu.getByTestId("new-subspace-option").click();
+
+        const footer = page.locator(".mx_CreateSubspaceDialog_footer");
+        const cancelBox = await footer.getByRole("button", { name: "Cancel" }).boundingBox();
+        const addBox = await footer.getByRole("button", { name: "Add", exact: true }).boundingBox();
+        expect(addBox!.height).toBeCloseTo(cancelBox!.height, 0);
+        expect(addBox!.y).toBeCloseTo(cancelBox!.y, 0);
+    });
+
     test("should show space invites at the top of the space panel", async ({ page, app, user, bot }) => {
         await app.client.createSpace({
             name: "My Space",
