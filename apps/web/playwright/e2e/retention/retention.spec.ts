@@ -10,6 +10,7 @@ import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { test, expect } from "../../element-web-test";
 import { checkRetentionInRoom, ONE_MINUTE, openRoomWithRetention } from "./utils";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 const ONE_MINUTE_STR = "60s";
 
@@ -134,5 +135,17 @@ test.describe("Retention", () => {
 
         await expect(banner.getByText("Message deleted")).toBeVisible();
         await expect(banner.getByText("Pinned message")).toBeHidden();
+    });
+
+    test("should stop showing an expired message in the room list preview", async ({ app, page, bot }) => {
+        await app.settings.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, true);
+        const roomId = await openRoomWithRetention({ app, bot });
+        await bot.sendMessage(roomId, "Expiring message");
+        const roomListItem = page.getByTestId("room-list").getByRole("option", { name: /Test/ });
+        await expect(roomListItem.getByText("Expiring message")).toBeVisible();
+
+        await page.clock.fastForward(ONE_MINUTE + 1);
+
+        await expect(roomListItem.getByText("Expiring message")).toBeHidden();
     });
 });
