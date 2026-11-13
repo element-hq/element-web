@@ -24,6 +24,33 @@ export class ClientApi implements IClientApi {
         dispatcher.register(this.onAction);
     }
 
+    public doAuthenticatedRequest: typeof fetch = async (input, init) => {
+        // Build the Request first so string, URL and Request inputs all give us a fully resolved URL to check.
+        const request = new Request(input, init);
+        const homeserverOrigin = new URL(MatrixClientPeg.safeGet().getHomeserverUrl()).origin;
+
+        if (new URL(request.url).origin !== homeserverOrigin) {
+            throw new Error("Request origin does not match homeserver. Refusing to make request");
+        }
+
+        return this.doUnsafeAuthenticatedRequest(request);
+    };
+
+    public doUnsafeAuthenticatedRequest: typeof fetch = async (input, init) => {
+        const token = MatrixClientPeg.safeGet().getAccessToken();
+        if (!token) {
+            throw new Error("Client has no token. Refusing to make request");
+        }
+
+        const request = new Request(input, init);
+        const headers = new Headers(request.headers);
+        if (headers.has("Authorization")) {
+            throw new Error("Request already has an Authorization header. Refusing to make request");
+        }
+        headers.set("Authorization", `Bearer ${token}`);
+        return fetch(new Request(request, { headers }));
+    };
+
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);
