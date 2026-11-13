@@ -273,7 +273,8 @@ $voice-record-icon-color: $tertiary-content;
 /* ******************** */
 $eventbubble-self-bg: var(--cpd-color-green-300);
 $eventbubble-others-bg: var(--cpd-color-gray-300);
-$eventbubble-bg-hover: var(--cpd-color-bg-subtle-secondary);
+/* Must differ from $eventbubble-others-bg, or other people's bubbles disappear on a hovered or selected row */
+$eventbubble-bg-hover: var(--cpd-color-bg-subtle-primary);
 /* ******************** */
 
 /* Lightbox */

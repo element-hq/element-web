@@ -36,7 +36,8 @@
     --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
     --event-tile-bubble-self-background: var(--cpd-color-green-300);
-    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
+    /* Must differ from the other-user background, or those bubbles disappear on a hovered or selected row. */
+    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-primary);
 
     /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
