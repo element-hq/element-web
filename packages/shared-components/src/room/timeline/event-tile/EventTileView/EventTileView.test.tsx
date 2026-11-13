@@ -869,4 +869,28 @@ describe("EventTileView bubble layout in a thread", () => {
             receipts[2].getBoundingClientRect().left,
         );
     });
+
+    it.each([
+        ["another user's", false],
+        ["your own", true],
+    ])("keeps the time of %s hidden event in the thread and its avatar beside the text", (_, isOwnEvent) => {
+        const { getByRole, getByTestId } = renderThread(
+            <EventTileView
+                root={{ ...renderState, shape: "Thread", state: { isOwnEvent, hasReply: false, info: true } }}
+                slots={{
+                    avatar: <span data-testid="avatar" style={{ display: "block", width: "14px", height: "14px" }} />,
+                    body: <span data-testid="body">{'{ "type": m.reaction }'}</span>,
+                    timestamp: <span data-testid="time">12:41</span>,
+                }}
+            />,
+        );
+        const contentStart = getByRole("list").getBoundingClientRect().left + 8;
+        const time = getByTestId("time").getBoundingClientRect();
+        const avatar = getByTestId("avatar").getBoundingClientRect();
+
+        expect(time.left).toBeGreaterThanOrEqual(contentStart);
+        expect(time.right).toBeLessThanOrEqual(avatar.left);
+        // The avatar ends 6px before the text, as in the group layout.
+        expect(getByTestId("body").getBoundingClientRect().left - avatar.right).toBeCloseTo(6, 0);
+    });
 });

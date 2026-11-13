@@ -1448,8 +1448,21 @@
             }
         }
 
+        /* ThreadView stacks the row in a column, so the room's alignment
+           would center the line across the row, or end it for your own
+           events. Start it at the row's start, which the text inset below
+           is measured from. */
         &.layoutBubble {
+            align-items: flex-start;
+
+            /* As in the group layout, the avatar sits 6px before the text. */
             .senderDetails .slotAvatar {
+                inset-inline-start: var(--event-tile-thread-spacing-inline-start);
+            }
+
+            /* The room's 77px offset puts the time outside the thread panel.
+               As in the group layout, it sits at the row's start instead. */
+            .slotTimestamp > * {
                 inset-inline-start: 0;
             }
 
