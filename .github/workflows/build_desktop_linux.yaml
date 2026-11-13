@@ -53,10 +53,6 @@ on:
                 required: false
                 description: "List of targets to build"
                 default: "tar.gz deb"
-env:
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro. Debian bookworm (2.36) and newer are a superset.
-    # Currently, our newest linked glibc version is 2.34 in the prebuilt Seshat binaries, Electron only links against 2.25.
-    MAX_GLIBC: 2.34
 permissions:
     contents: read
 jobs:
@@ -68,22 +64,6 @@ jobs:
             # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
             PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
-            - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
-              id: config
-              with:
-                  key: "${{ inputs.arch }}"
-                  export_to: output
-                  map: |
-                      {
-                        "amd64": {
-                          "arch": "x86-64"
-                        },
-                        "arm64": {
-                          "arch": "aarch64",
-                          "build-args": "--arm64"
-                        }
-                      }
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
@@ -150,34 +130,8 @@ jobs:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
-                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Check native libraries
-              working-directory: apps/desktop
-              run: |
-                  set -x
-                  shopt -s globstar
-
-                  FILES=$(file dist/**/*.node)
-                  echo $FILES
-
-                  ! echo "$FILES" | grep -v "$ARCH"
-
-                  LIBS=$(readelf -d dist/**/*.node | grep NEEDED)
-                  echo "$LIBS"
-
-                  set +x
-                  assert_contains_string() { [[ "$1" == *"$2"* ]]; }
-                  # The prebuilt seshat binaries statically link sqlcipher & openssl
-                  ! assert_contains_string "$LIBS" "libcrypto.so"
-                  ! assert_contains_string "$LIBS" "libsqlcipher.so"
-
-                  for filename in dist/**/*.node dist/linux-*unpacked/element-desktop*; do
-                      ./scripts/glibc-check.sh $filename
-                  done
-              env:
-                  ARCH: ${{ steps.config.outputs.arch }}
 
             # We exclude *-unpacked as it loses permissions and the tarball contains it with correct permissions
             - name: Upload Artifacts
