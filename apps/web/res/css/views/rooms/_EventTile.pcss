@@ -382,7 +382,8 @@ $left-gutter: 64px;
             visibility: hidden;
 
             &.mx_EventTile_buttonBottom {
-                top: 33px;
+                /* Under the 28px expand button */
+                top: calc(var(--cpd-space-2x) + 28px);
             }
 
             svg {
