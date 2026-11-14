@@ -63,7 +63,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &[data-expanded="false"] {
-            align-items: center;
+            /* Keep the toggle on the first line of a wrapped summary, as in the other layouts */
+            align-items: flex-start;
             justify-content: space-between;
             column-gap: 5px;
         }
