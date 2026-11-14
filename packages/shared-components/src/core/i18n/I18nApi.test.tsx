@@ -9,6 +9,7 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 
 import { I18nApi } from "./I18nApi";
+import { getLocale, setLocale } from "./i18n";
 
 describe("I18nApi", () => {
     it("can register a translation and use it", () => {
@@ -37,5 +38,26 @@ describe("I18nApi", () => {
                 Hello, <strong>World!</strong>
             </span>,
         );
+    });
+
+    it("can register pipe-separated keys in multiple languages", () => {
+        const i18n = new I18nApi();
+        const key = "module_test|account|email.address" as TranslationKey;
+        const locale = getLocale();
+        i18n.register({
+            [key]: {
+                en: "Email address",
+                fr: "Adresse mail",
+            },
+        });
+
+        try {
+            setLocale("en");
+            expect(i18n.translate(key)).toBe("Email address");
+            setLocale("fr");
+            expect(i18n.translate(key)).toBe("Adresse mail");
+        } finally {
+            setLocale(locale);
+        }
     });
 });
