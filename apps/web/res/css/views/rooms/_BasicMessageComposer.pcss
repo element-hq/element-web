@@ -26,6 +26,13 @@ Please see LICENSE files in the repository root for full details.
         white-space: nowrap;
     }
 
+    /* An empty composer still contains a line break (<br>), which select-all highlights
+       as an invisible selected character. There is no text to select, so hide it. */
+    .mx_BasicMessageComposer_inputEmpty::selection,
+    .mx_BasicMessageComposer_inputEmpty ::selection {
+        background-color: transparent;
+    }
+
     @keyframes visualbell {
         from {
             background-color: $visual-bell-bg-color;
