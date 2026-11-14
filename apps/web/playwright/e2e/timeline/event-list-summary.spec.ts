@@ -294,6 +294,25 @@ test.describe("Event List Summary", () => {
             );
         },
     );
+
+    test("should center the avatars on the summary text", async ({ app, page, user }) => {
+        const roomId = await app.client.createRoom({ name: "My room" });
+        await page.goto(`/#/room/${roomId}`);
+
+        const summary = page.locator(".mx_RoomView_body .mx_GenericEventListSummary[data-layout='group']", {
+            hasText: `${user.displayName} created and configured the room.`,
+        });
+        await expect(summary).toBeVisible();
+
+        // The avatar used to rest on the baseline of the text, 2px above its middle.
+        // Centered on the lowercase letters instead, it sits less than 1px below that middle.
+        // See https://github.com/element-hq/element-web/issues/26552
+        const avatarBox = (await summary.locator(".mx_BaseAvatar").boundingBox())!;
+        const textBox = (await summary.locator(".mx_GenericEventListSummary_summary").boundingBox())!;
+        const avatarCenter = avatarBox.y + avatarBox.height / 2;
+        const textCenter = textBox.y + textBox.height / 2;
+        expect(Math.abs(avatarCenter - textCenter)).toBeLessThan(1.5);
+    });
 });
 
 const ignoreTimestamps = {

@@ -123,8 +123,10 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_GenericEventListSummary_avatars {
-    display: inline-block;
-    line-height: $font-12px;
+    /* An inline flex box is exactly as tall as its 14px avatars at any font size, */
+    /* so that `middle` centers the avatars themselves on the summary text */
+    display: inline-flex;
+    vertical-align: middle;
 
     .mx_BaseAvatar {
         margin-right: -4px;
