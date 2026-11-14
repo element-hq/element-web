@@ -353,6 +353,7 @@ export interface Settings {
     "Spaces.allRoomsInHome": IBaseSetting<boolean>;
     "Spaces.enabledMetaSpaces": IBaseSetting<Partial<Record<MetaSpace, boolean>>>;
     "Spaces.showPeopleInSpace": IBaseSetting<boolean>;
+    "Spaces.isPanelCollapsed": IBaseSetting<boolean>;
     "developerMode": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
@@ -1356,6 +1357,10 @@ export const SETTINGS: Settings = {
     },
     "Spaces.showPeopleInSpace": {
         supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        default: true,
+    },
+    "Spaces.isPanelCollapsed": {
+        supportedLevels: [SettingLevel.DEVICE],
         default: true,
     },
     "developerMode": {
