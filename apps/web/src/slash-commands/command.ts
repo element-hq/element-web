@@ -40,6 +40,7 @@ type RunFn = (
  * @param aliases - Alternative names for the command
  * @param args - The arguments for the command, e.g. "<message>" for the /me command
  * @param description - A translation key describing the command
+ * @param isDescriptionTranslated - Whether `description` is already translated, e.g. when provided by a module
  * @param analyticsName - The name to use for analytics tracking
  * @param runFn - The function to execute when the command is run
  * @param category - The category of the command, e.g. CommandCategories.emoji
@@ -52,6 +53,7 @@ interface ICommandOpts {
     aliases?: string[];
     args?: string;
     description: TranslationKey;
+    isDescriptionTranslated?: boolean;
     analyticsName?: SlashCommandEvent["command"];
     runFn?: RunFn;
     category: string;
@@ -65,6 +67,7 @@ export class Command {
     public readonly aliases: string[];
     public readonly args?: string;
     public readonly description: TranslationKey;
+    public readonly isDescriptionTranslated: boolean;
     public readonly runFn?: RunFn;
     public readonly category: string;
     public readonly hideCompletionAfterSpace: boolean;
@@ -77,6 +80,7 @@ export class Command {
         this.aliases = opts.aliases || [];
         this.args = opts.args || "";
         this.description = opts.description;
+        this.isDescriptionTranslated = opts.isDescriptionTranslated ?? false;
         this.runFn = opts.runFn?.bind(this);
         this.category = opts.category || CommandCategories.other;
         this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
@@ -117,6 +121,13 @@ export class Command {
         }
 
         return this.runFn(matrixClient, roomId, threadId, args);
+    }
+
+    /**
+     * Get the human-readable description of the command, in the user's language.
+     */
+    public getDescription(): string {
+        return this.isDescriptionTranslated ? this.description : _t(this.description);
     }
 
     public getUsage(): string {
