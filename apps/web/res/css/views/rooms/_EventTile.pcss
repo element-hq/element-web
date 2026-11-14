@@ -347,6 +347,16 @@ $left-gutter: 64px;
             padding-bottom: var(--cpd-space-3x);
         }
 
+        /* Put the line numbers beside the code, so that a block as wide as its content (as in the bubble layout)
+           makes room for them on every line, not just the first. Not in reply quotes, which clamp the block to two
+           lines and hide the numbers. */
+        > pre:has(> .mx_EventTile_lineNumbers):not(:is(.mx_ReplyChain, .mx_ReplyPreview) pre) {
+            display: flex;
+            /* Keep the numbers and the code as tall as their lines rather than the collapsed block's max-height, so
+               that a block that scrolls still ends with its bottom padding */
+            align-items: flex-start;
+        }
+
         /* ReplyTileView puts 4px under a quoted code block, but github-markdown-css's 16px wins from this later
            cascade layer */
         :is(.mx_ReplyChain, .mx_ReplyPreview) & > pre {
@@ -382,14 +392,13 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_lineNumbers {
-    float: left;
-    margin: 0 0.5em 0 -1.5em;
+    margin-inline: -1.5em 0.5em;
     color: gray;
 
     & span {
-        text-align: right;
+        text-align: end;
         display: block;
-        padding-left: 1em;
+        padding-inline-start: 1em;
     }
 }
 

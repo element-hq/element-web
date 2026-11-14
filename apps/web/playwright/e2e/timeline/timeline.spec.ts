@@ -894,6 +894,21 @@ test.describe("Timeline", () => {
             await expect(quotedCodeBlock).toHaveCSS("overflow-clip-margin", "content-box");
         });
 
+        test("should make room for line numbers in a code block in a bubble", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+
+            const composer = app.getComposerField();
+            await composer.fill('```\nfn main() {\n    let greeting = "hello from a longer line";\n}\n```');
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile").last().locator("pre");
+            await expect(codeBlock).toBeVisible();
+
+            // The bubble's width must count the line numbers on every line, or the block scrolls sideways
+            expect(await codeBlock.evaluate((pre) => pre.scrollWidth - pre.clientWidth)).toBe(0);
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },
