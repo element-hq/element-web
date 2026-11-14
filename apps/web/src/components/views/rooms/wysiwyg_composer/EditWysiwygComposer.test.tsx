@@ -312,6 +312,24 @@ describe("EditWysiwygComposer", () => {
         });
     });
 
+    it("Should have focus when rendered in the right panel", async () => {
+        // When
+        render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ScopedRoomContextProvider {...defaultRoomContext}>
+                    <RoomUploadContextProvider>
+                        <div className="mx_RightPanel">
+                            <EditWysiwygComposer editorStateTransfer={editorStateTransfer} />
+                        </div>
+                    </RoomUploadContextProvider>
+                </ScopedRoomContextProvider>
+            </MatrixClientContext.Provider>,
+        );
+
+        // Then
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveFocus());
+    });
+
     it("Should focus when receiving an Action.FocusEditMessageComposer action", async () => {
         // Given we don't have focus
         customRender();
