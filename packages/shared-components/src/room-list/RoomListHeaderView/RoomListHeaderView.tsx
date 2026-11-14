@@ -73,6 +73,11 @@ export interface RoomListHeaderViewSnapshot {
      *  Whether to display the section release announcement
      */
     displaySectionReleaseAnnouncement: boolean;
+    /**
+     * Whether the notification list is displayed instead of the room list.
+     * Room list options (sorting, previews, sections) are then hidden.
+     */
+    isNotificationsViewActive?: boolean;
 }
 
 export interface RoomListHeaderViewActions {
@@ -149,8 +154,15 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, collapseSections, areSectionsEnabled, canCreateRoom, canCreateVideoRoom } =
-        useViewModel(vm);
+    const {
+        title,
+        displaySpaceMenu,
+        collapseSections,
+        areSectionsEnabled,
+        canCreateRoom,
+        canCreateVideoRoom,
+        isNotificationsViewActive,
+    } = useViewModel(vm);
     const canOnlyStartChat = !areSectionsEnabled && !canCreateRoom && !canCreateVideoRoom;
 
     return (
@@ -169,8 +181,8 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                     {displaySpaceMenu && <SpaceMenuView vm={vm} />}
                 </Flex>
                 <Flex align="center" gap="var(--cpd-space-2x)">
-                    <OptionMenuView vm={vm} />
-                    {areSectionsEnabled && collapseSections && (
+                    {!isNotificationsViewActive && <OptionMenuView vm={vm} />}
+                    {!isNotificationsViewActive && areSectionsEnabled && collapseSections && (
                         <IconButton
                             size="28px"
                             style={{ padding: "4px" }}

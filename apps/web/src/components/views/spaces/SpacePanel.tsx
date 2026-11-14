@@ -30,6 +30,7 @@ import {
     VideoCallSolidIcon,
     PlusIcon,
     ChevronRightIcon,
+    NotificationsSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useCreateAutoDisposedViewModel, UserMenu } from "@element-hq/web-shared-components";
 
@@ -210,6 +211,19 @@ const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCol
     );
 };
 
+const NotificationsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+    return (
+        <MetaSpaceButton
+            spaceKey={MetaSpace.Notifications}
+            selected={selected}
+            isPanelCollapsed={isPanelCollapsed}
+            label={getMetaSpaceName(MetaSpace.Notifications)}
+            size="32px"
+            icon={<NotificationsSolidIcon />}
+        />
+    );
+};
+
 const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">> = ({
     isPanelCollapsed,
     setPanelCollapsed,
@@ -262,6 +276,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
 
 const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
     [MetaSpace.Home]: HomeButton,
+    [MetaSpace.Notifications]: NotificationsButton,
     [MetaSpace.Orphans]: OrphansButton,
     [MetaSpace.VideoRooms]: VideoRoomsButton,
 };

@@ -118,6 +118,17 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().canCreateVideoRoom).toBe(false);
         });
 
+        it("should flag the notifications view when the notifications meta space is active", () => {
+            vi.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Home);
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore });
+            expect(vm.getSnapshot().isNotificationsViewActive).toBe(false);
+
+            vi.spyOn(sdkContext.spaceStore, "activeSpace", "get").mockReturnValue(MetaSpace.Notifications);
+            sdkContext.spaceStore.emit(UPDATE_SELECTED_SPACE);
+            expect(vm.getSnapshot().isNotificationsViewActive).toBe(true);
+            expect(vm.getSnapshot().title).toBe("Notifications");
+        });
+
         it("should show alphabetical sort option when RoomList.preferredSorting is Alphabetic", () => {
             vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
                 if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Alphabetic;
