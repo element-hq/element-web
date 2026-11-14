@@ -353,6 +353,13 @@ $left-gutter: 64px;
             margin-block-end: var(--cpd-space-1x);
         }
 
+        /* A collapsed reply quote clamps a code block to two lines, but the line after them is still laid out in the
+           block's bottom padding, so clip at the content box rather than the padding box */
+        :is(.mx_ReplyChain:not(.mx_ReplyChain--expanded), .mx_ReplyPreview) & > pre {
+            overflow: clip;
+            overflow-clip-margin: content-box;
+        }
+
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */
         .mx_EventTile_button {
             position: absolute;

@@ -890,6 +890,8 @@ test.describe("Timeline", () => {
 
             // The reply quote's own 4px under the block, not the 16px of a code block in the timeline
             await expect(quotedCodeBlock).toHaveCSS("margin-bottom", "4px");
+            // The quote shows two lines, and the third must not show through the block's bottom padding
+            await expect(quotedCodeBlock).toHaveCSS("overflow-clip-margin", "content-box");
         });
 
         test(
