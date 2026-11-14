@@ -26,6 +26,36 @@ describe("NavigationApi", () => {
             expect(spy).toHaveBeenCalledWith(link);
         });
 
+        it("should dispatch an event permalink on every request, including when already viewing it", async () => {
+            const link = "https://matrix.to/#/!roomId:server.com/$eventId";
+            const spy = vi.spyOn(defaultDispatcher, "dispatch");
+            const navigateSpy = vi.spyOn(navigator, "navigateToPermalink").mockClear();
+
+            await api.toMatrixToLink(link);
+            await api.toMatrixToLink(link);
+
+            expect(spy).toHaveBeenCalledTimes(2);
+            expect(navigateSpy).not.toHaveBeenCalled();
+            expect(spy).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: "!roomId:server.com",
+                    event_id: "$eventId",
+                    highlighted: true,
+                }),
+            );
+            expect(spy).toHaveBeenNthCalledWith(
+                2,
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: "!roomId:server.com",
+                    event_id: "$eventId",
+                    highlighted: true,
+                }),
+            );
+        });
+
         it("should set auto_join to true when join=true", async () => {
             const link = "https://matrix.to/#/#alias:server.com?via=server.com";
             const spy = vi.spyOn(defaultDispatcher, "dispatch");
