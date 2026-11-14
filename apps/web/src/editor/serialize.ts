@@ -17,7 +17,12 @@ import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 import { Type } from "./parts";
 
-export function mdSerialize(model: EditorModel): string {
+/**
+ * Serialize editor parts as Markdown.
+ * @param model - The editor content.
+ * @param pillUrl - Transform user and room pill URLs before serialization.
+ */
+export function mdSerialize(model: EditorModel, pillUrl = (url: string): string => url): string {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
             case Type.Newline:
@@ -29,7 +34,7 @@ export function mdSerialize(model: EditorModel): string {
             case Type.AtRoomPill:
                 return html + part.text;
             case Type.RoomPill: {
-                const url = makeGenericPermalink(part.resourceId, true);
+                const url = pillUrl(makeGenericPermalink(part.resourceId, true));
                 // Escape square brackets and backslashes
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
@@ -37,7 +42,7 @@ export function mdSerialize(model: EditorModel): string {
                 return html + `[${title}](${url})`;
             }
             case Type.UserPill: {
-                const url = makeGenericPermalink(part.resourceId, true);
+                const url = pillUrl(makeGenericPermalink(part.resourceId, true));
                 // Escape square brackets and backslashes; convert newlines to HTML
                 const title = part.text.replace(/[[\\\]]/g, (c) => "\\" + c).replace(/\n/g, "<br>");
                 return html + `[${title}](${url})`;
@@ -51,6 +56,12 @@ interface ISerializeOpts {
     useMarkdown?: boolean;
 }
 
+/**
+ * Serialize editor content, marking authored links as explicit and preserving mention pills.
+ * @param model - The editor content.
+ * @param options - Whether to force HTML output and interpret Markdown.
+ * @returns Formatted content, or undefined when no formatting is needed.
+ */
 export function htmlSerializeIfNeeded(
     model: EditorModel,
     { forceHTML = false, useMarkdown = true }: ISerializeOpts = {},
@@ -59,10 +70,40 @@ export function htmlSerializeIfNeeded(
         return escapeHtml(textSerialize(model)).replace(/\n/g, "<br/>");
     }
 
-    const md = mdSerialize(model);
-    return htmlSerializeFromMdIfNeeded(md, { forceHTML });
+    // Keep mention pills separate from authored links with the same URL.
+    const pillUrls = new Map<string, string>();
+    const md = mdSerialize(model, (url) => {
+        let placeholder = `https://element.invalid/mention/${pillUrls.size}/`;
+        while (model.parts.some((part) => part.text.includes(placeholder))) placeholder += "_";
+        pillUrls.set(placeholder, url);
+        return placeholder;
+    });
+    const html = htmlSerializeFromMdIfNeeded(md, { forceHTML });
+    if (!html || !pillUrls.size) return html;
+    const document = new DOMParser().parseFromString(html, "text/html");
+    for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
+        const url = pillUrls.get(anchor.getAttribute("href")!);
+        if (url) {
+            anchor.setAttribute("href", url);
+            delete anchor.dataset["org.matrix.msc4550.link"];
+        }
+    }
+    // Restore pill URLs inside code too.
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+        for (const [placeholder, url] of pillUrls) {
+            walker.currentNode.textContent = walker.currentNode.textContent!.replaceAll(placeholder, url);
+        }
+    }
+    return document.body.innerHTML;
 }
 
+/**
+ * Render Markdown with explicit links and optional maths formatting.
+ * @param md - The Markdown source.
+ * @param options - Whether to emit HTML even for plain text.
+ * @returns Formatted content, or undefined when no formatting or unescaping is needed.
+ */
 export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string | undefined {
     // copy of raw input to remove unwanted math later
     const orig = md;
@@ -134,6 +175,11 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
         const phtml = new DOMParser().parseFromString(parser.toHTML(), "text/html");
+        if (SettingsStore.getValue("feature_msc4550_explicit_links")) {
+            for (const anchor of phtml.querySelectorAll("a")) {
+                anchor.dataset["org.matrix.msc4550.link"] = "";
+            }
+        }
 
         if (SettingsStore.getValue("feature_latex_maths")) {
             // original Markdown without LaTeX replacements
