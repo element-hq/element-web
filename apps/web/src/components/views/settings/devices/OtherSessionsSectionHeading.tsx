@@ -40,15 +40,19 @@ export const OtherSessionsSectionHeading: React.FC<Props> = ({
         ) : null,
     ]);
     return (
-        <SettingsSubsectionHeading heading={_t("settings|sessions|other_sessions_heading")}>
-            {!!menuOptions.length && (
-                <KebabContextMenu
-                    disabled={disabled}
-                    title={_t("common|options")}
-                    options={menuOptions}
-                    data-testid="other-sessions-menu"
-                />
-            )}
+        <SettingsSubsectionHeading
+            contextMenu={
+                !!menuOptions.length && (
+                    <KebabContextMenu
+                        disabled={disabled}
+                        title={_t("common|options")}
+                        options={menuOptions}
+                        data-testid="other-sessions-menu"
+                    />
+                )
+            }
+        >
+            {_t("settings|sessions|other_sessions_heading")}
         </SettingsSubsectionHeading>
     );
 };
