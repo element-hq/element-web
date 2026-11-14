@@ -21,18 +21,13 @@ const InviteProgressDialog: React.FC = (_) => {
  * Returns a callback which will close the dialog again.
  */
 export function openInviteProgressDialog(): () => void {
-    const onBeforeClose = async (reason?: string): Promise<boolean> => {
-        // Inhibit closing via background click
-        return reason != "backgroundClick";
-    };
-
     const { close } = Modal.createDialog(
         InviteProgressDialog,
         /* props */ {},
         /* className */ undefined,
         /* isPriorityModal */ false,
         /* isStaticModal */ false,
-        { onBeforeClose },
+        { blockBackgroundClick: true },
     );
     return close;
 }
