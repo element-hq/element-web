@@ -50,6 +50,35 @@ class ExampleModule implements Module {
 // ...
 ```
 
+### Resetting module state on session changes
+
+Modules can optionally implement two lifecycle hooks: `onLoggedIn` and `onLoggedOut`. A module holding data relevant to a single session should use `onLoggedOut` to reset it, so that the data does not carry over to the next session.
+
+`onLoggedIn` is called whenever a session becomes active, including when a stored session is restored on app start.
+It can also be called again without a preceding `onLoggedOut` when a session is replaced, e.g. when logging back in
+after a soft logout.
+
+```typescript
+// Example module that needs to reset on logout.
+class ExampleModule implements Module {
+    // ...
+    private cache = new Map<string, string>();
+    private disposables = new Disposable();
+
+    public async onLoggedIn(): Promise<void> {
+        const vm = this.disposables.track(new SomeViewModel());
+        this.api.extras.addRoomHeaderButtonCallback(() => <SomeView vm={vm} />);
+    }
+
+    public async onLoggedOut(): Promise<void> {
+        this.cache.clear();
+        localStorage.clear();
+        this.disposables.dispose();
+    }
+}
+// ...
+```
+
 ## Releases
 
 The API is versioned using semver, with the major version incremented for breaking changes.
