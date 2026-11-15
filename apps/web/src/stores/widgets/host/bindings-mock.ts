@@ -62,7 +62,7 @@ export class FakeWidgetHostDriver {
     public setOpenidAutoApproved = vi.fn<(autoApproved: boolean) => void>();
     public approved: string[] = [];
     public snapshot = vi.fn<() => DriverSnapshot>(() => ({
-        contentLoaded: false,
+        ready: false,
         approved: this.approved,
         pendingRequested: [],
         autoApproved: [],

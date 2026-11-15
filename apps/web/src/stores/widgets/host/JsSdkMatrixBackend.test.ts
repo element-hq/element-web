@@ -25,6 +25,8 @@ import type { RoomSink, StateKeySelector } from "@matrix-widget-tools/widget-hos
 import { JsSdkMatrixBackend } from "./JsSdkMatrixBackend";
 import { createFakeCodec, FakeBackendFailed } from "./bindings-mock";
 import { OwnProfileStore } from "../../OwnProfileStore";
+import * as Media from "../../../customisations/Media";
+import SdkConfig from "../../../SdkConfig";
 
 const ROOM_ID = "!room:example.org";
 const USER_ID = "@userId:matrix.org";
@@ -239,6 +241,110 @@ describe("JsSdkMatrixBackend", () => {
             tokenType: "Bearer",
             matrixServerName: "example.org",
             expiresIn: 3600n,
+        });
+    });
+
+    describe("homeserver requests", () => {
+        it("returns the RTC transports, falling back to .well-known on old homeservers", async () => {
+            const wait = vi.fn().mockResolvedValue([{ type: "livekit" }]);
+            Object.defineProperty(client, "cachedRtcTransports", { value: { wait }, configurable: true });
+            await expect(backend.rtcTransports()).resolves.toEqual([{ type: "livekit" }]);
+
+            wait.mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED", error: "nope" }, 404));
+            vi.spyOn(SdkConfig, "get").mockReturnValue(true);
+            client.waitForClientWellKnown = vi
+                .fn()
+                .mockResolvedValue({ "org.matrix.msc4143.rtc_foci": [{ type: "well-known" }] });
+            await expect(backend.rtcTransports()).resolves.toEqual([{ type: "well-known" }]);
+
+            client.waitForClientWellKnown = vi.fn().mockResolvedValue({});
+            await expect(backend.rtcTransports()).rejects.toMatchObject({ inner: { errcode: "M_UNRECOGNIZED" } });
+        });
+
+        it("searches the user directory", async () => {
+            client.searchUserDirectory = vi.fn().mockResolvedValue({
+                limited: true,
+                results: [{ user_id: "@bob:example.org", display_name: "Bob", avatar_url: "mxc://a/b" }],
+            });
+
+            await expect(backend.searchUserDirectory("bo", 5)).resolves.toEqual({
+                limited: true,
+                results: [{ userId: "@bob:example.org", displayName: "Bob", avatarUrl: "mxc://a/b" }],
+            });
+            expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "bo", limit: 5 });
+        });
+
+        it("reads the media config, and uploads and downloads media", async () => {
+            client.getMediaConfig = vi.fn().mockResolvedValue({ "m.upload.size": 1024 });
+            await expect(backend.mediaConfig()).resolves.toEqual({ uploadSize: 1024n });
+            client.getMediaConfig = vi.fn().mockResolvedValue({});
+            await expect(backend.mediaConfig()).resolves.toEqual({ uploadSize: undefined });
+
+            client.uploadContent = vi.fn().mockResolvedValue({ content_uri: "mxc://example.org/up" });
+            const data = new TextEncoder().encode("hello").buffer;
+            await expect(backend.uploadMedia({ data, mimetype: "text/plain" })).resolves.toBe("mxc://example.org/up");
+            const uploaded = vi.mocked(client.uploadContent).mock.calls[0][0] as Blob;
+            expect(uploaded.type).toBe("text/plain");
+            expect(uploaded.size).toBe(5);
+
+            const blob = new Blob(["world"], { type: "text/plain" });
+            vi.spyOn(Media, "mediaFromMxc").mockReturnValue({
+                downloadSource: () => Promise.resolve({ blob: () => Promise.resolve(blob) }),
+            } as unknown as ReturnType<typeof Media.mediaFromMxc>);
+            const file = await backend.downloadMedia("mxc://example.org/down");
+            expect(new TextDecoder().decode(file.data)).toBe("world");
+            expect(file.mimetype).toBe("text/plain");
+        });
+
+        it("reads room account data", async () => {
+            await expect(backend.readRoomAccountData(ROOM_ID, "m.tag")).resolves.toEqual([]);
+
+            room.addAccountData([mkEvent({ event: true, type: "m.tag", user: USER_ID, content: { tags: {} } })]);
+            await expect(backend.readRoomAccountData(ROOM_ID, "m.tag")).resolves.toEqual([
+                { eventType: "m.tag", roomId: ROOM_ID, content: { tags: {} } },
+            ]);
+        });
+
+        it("gets a LiveKit token and delegates a delayed leave", async () => {
+            client._unstable_getLivekitToken = vi.fn().mockResolvedValue({ jwt: "token" });
+            client._unstable_delegateDelayedLeave = vi.fn().mockResolvedValue({});
+
+            await expect(
+                backend.rtcLivekitGetToken("example.org", "https://sfu.example", ROOM_ID, "slot", "member"),
+            ).resolves.toBe("token");
+            expect(client._unstable_getLivekitToken).toHaveBeenCalledWith({
+                server_name: "example.org",
+                url: "https://sfu.example",
+                room_id: ROOM_ID,
+                slot_id: "slot",
+                member_id: "member",
+            });
+
+            await backend.rtcLivekitDelegateDelayedLeave("wss://sfu.example", ROOM_ID, "slot", "member", "delay");
+            expect(client._unstable_delegateDelayedLeave).toHaveBeenCalledWith({
+                url: "wss://sfu.example",
+                room_id: ROOM_ID,
+                slot_id: "slot",
+                member_id: "member",
+                delay_id: "delay",
+            });
+        });
+
+        it("forwards the current TURN server and every refresh until cancelled", () => {
+            const first = { urls: ["turn:a"], username: "u1", credential: "p1" };
+            const second = { urls: ["turn:b"], username: "u2", credential: "p2" };
+            client.getTurnServers = vi.fn().mockReturnValue([first]);
+            const sink = { onTurnServer: vi.fn<(server: unknown) => void>() };
+
+            const subscription = backend.subscribeTurnServers(sink);
+            expect(sink.onTurnServer).toHaveBeenCalledWith({ uris: ["turn:a"], username: "u1", password: "p1" });
+
+            client.emit(ClientEvent.TurnServers, [second]);
+            expect(sink.onTurnServer).toHaveBeenLastCalledWith({ uris: ["turn:b"], username: "u2", password: "p2" });
+
+            subscription.cancel();
+            client.emit(ClientEvent.TurnServers, [first]);
+            expect(sink.onTurnServer).toHaveBeenCalledTimes(2);
         });
     });
 

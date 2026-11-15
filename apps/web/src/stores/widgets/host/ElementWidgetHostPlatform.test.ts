@@ -15,6 +15,7 @@ import { ElementWidgetHostPlatform } from "./ElementWidgetHostPlatform";
 import * as WidgetCapabilityApproval from "../WidgetCapabilityApproval";
 import * as WidgetOpenIdApproval from "../WidgetOpenIdApproval";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
+import * as Navigator from "../../../utils/permalinks/navigator";
 
 vi.stubGlobal("matchMedia", (query: string) => ({
     matches: false,
@@ -43,7 +44,8 @@ describe("ElementWidgetHostPlatform", () => {
         approveCapabilities: Mock<(approved: string[]) => void>;
         resolveOpenid: Mock<(allowed: boolean) => Promise<void>>;
     };
-    let onContentLoaded: Mock<() => void>;
+    let onReady: Mock<() => void>;
+    let setAlwaysOnScreen: Mock<(value: boolean) => boolean>;
     let onCapabilitiesChanged: Mock<() => void>;
     let approve: MockInstance<typeof WidgetCapabilityApproval.approveWidgetCapabilities>;
     let platform: ElementWidgetHostPlatform;
@@ -52,7 +54,8 @@ describe("ElementWidgetHostPlatform", () => {
         contentWindow = { postMessage: vi.fn() };
         iframe = { contentWindow } as unknown as HTMLIFrameElement;
         driver = { approveCapabilities: vi.fn(), resolveOpenid: vi.fn().mockResolvedValue(undefined) };
-        onContentLoaded = vi.fn();
+        onReady = vi.fn();
+        setAlwaysOnScreen = vi.fn().mockReturnValue(true);
         onCapabilitiesChanged = vi.fn();
         approve = vi.spyOn(WidgetCapabilityApproval, "approveWidgetCapabilities");
         platform = new ElementWidgetHostPlatform({
@@ -60,7 +63,8 @@ describe("ElementWidgetHostPlatform", () => {
             widgetKind: WidgetKind.Room,
             roomId: "!room:example.org",
             getIframe: () => iframe,
-            onContentLoaded,
+            onReady,
+            setAlwaysOnScreen,
             onCapabilitiesChanged,
         });
         platform.setDriver(driver);
@@ -138,9 +142,18 @@ describe("ElementWidgetHostPlatform", () => {
         await waitFor(() => expect(driver.resolveOpenid).toHaveBeenCalledWith(false));
     });
 
-    it("reports content loaded and the client context", () => {
-        platform.onContentLoaded();
-        expect(onContentLoaded).toHaveBeenCalledTimes(1);
+    it("opens permalinks and passes on always-on-screen requests", () => {
+        const navigate = vi.spyOn(Navigator, "navigateToPermalink").mockReturnValue();
+        platform.navigate("https://matrix.to/#/!room:example.org");
+        expect(navigate).toHaveBeenCalledWith("https://matrix.to/#/!room:example.org");
+
+        expect(platform.setAlwaysOnScreen(true)).toBe(true);
+        expect(setAlwaysOnScreen).toHaveBeenCalledWith(true);
+    });
+
+    it("reports readiness and the client context", () => {
+        platform.onReady();
+        expect(onReady).toHaveBeenCalledTimes(1);
         expect(platform.clientId()).toBe(ELEMENT_CLIENT_ID);
         expect(typeof platform.clientTheme()).toBe("string");
         expect(typeof platform.clientLanguage()).toBe("string");

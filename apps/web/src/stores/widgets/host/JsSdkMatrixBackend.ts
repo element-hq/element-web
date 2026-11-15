@@ -11,6 +11,7 @@ import {
     Direction,
     EventType,
     type IContent,
+    type ITurnServer,
     type MatrixClient,
     type MatrixEvent as SdkMatrixEvent,
     MatrixError,
@@ -28,16 +29,21 @@ import type {
     JsonValue,
     MatrixBackend,
     MatrixEvent,
+    MediaConfigResponse,
+    MediaFile,
     OpenIdToken,
     RelationDirection,
     RelationsChunk,
+    RoomAccountData,
     RoomSink,
     RoomSubjects,
+    SearchUserDirectoryResponse,
     StateKeySelector,
     Subscription,
     ToDeviceDelivery,
     ToDeviceMessage,
     ToDeviceSink,
+    TurnServerSink,
 } from "@matrix-widget-tools/widget-host-bindings";
 
 import { type WidgetHostBindings } from "./bindings";
@@ -46,6 +52,8 @@ import { readRoomTimeline } from "../readRoomTimeline";
 import { CHAT_EFFECTS } from "../../../effects";
 import { containsEmoji } from "../../../effects/utils";
 import dis from "../../../dispatcher/dispatcher";
+import { mediaFromMxc } from "../../../customisations/Media";
+import SdkConfig from "../../../SdkConfig";
 
 /**
  * The parts of the bindings the backend needs: error and event constructors, and the state key
@@ -171,9 +179,33 @@ class ToDeviceSubscription implements Subscription {
 }
 
 /**
+ * Forwards the client's TURN servers to the widget host driver: the current one right away, then
+ * every refresh. Created by {@link JsSdkMatrixBackend.subscribeTurnServers}.
+ */
+class TurnServerSubscription implements Subscription {
+    public constructor(
+        private readonly client: MatrixClient,
+        private readonly sink: TurnServerSink,
+    ) {
+        client.on(ClientEvent.TurnServers, this.onTurnServers);
+        this.onTurnServers(client.getTurnServers());
+    }
+
+    public cancel = (): void => {
+        this.client.off(ClientEvent.TurnServers, this.onTurnServers);
+    };
+
+    private onTurnServers = ([server]: ITurnServer[]): void => {
+        if (server === undefined) return;
+        this.sink.onTurnServer({ uris: server.urls, username: server.username, password: server.credential });
+    };
+}
+
+/**
  * The `MatrixBackend` of the MSC4412 widget host driver, on matrix-js-sdk: identity for the
- * widget's `matrix_context`, sending and reading events in the widget's room, and the room
- * subscription that feeds events to the widget.
+ * widget's `matrix_context`, sending and reading events in the widget's room, the homeserver
+ * requests widgets may make (media, user directory, MatrixRTC), and the subscriptions that feed
+ * events and TURN servers to the widget.
  */
 export class JsSdkMatrixBackend implements MatrixBackend {
     private readonly subscriptions = new Set<Subscription>();
@@ -450,6 +482,111 @@ export class JsSdkMatrixBackend implements MatrixBackend {
                 expiresIn: BigInt(token.expires_in),
             };
         });
+    }
+
+    public async rtcTransports(): Promise<JsonValue> {
+        return this.guard(async () => {
+            try {
+                return (await this.client.cachedRtcTransports.wait()) ?? [];
+            } catch (e) {
+                // Homeservers without the endpoint may still announce transports in .well-known
+                if (
+                    e instanceof MatrixError &&
+                    e.errcode === "M_UNRECOGNIZED" &&
+                    SdkConfig.get("enable_client_well_known_lookups")
+                ) {
+                    const wellKnown = await this.client.waitForClientWellKnown();
+                    const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+                    if (Array.isArray(foci)) return foci;
+                }
+                throw e;
+            }
+        });
+    }
+
+    public async searchUserDirectory(
+        searchTerm: string,
+        limit: number | undefined,
+    ): Promise<SearchUserDirectoryResponse> {
+        return this.guard(async () => {
+            const { limited, results } = await this.client.searchUserDirectory({ term: searchTerm, limit });
+            return {
+                limited,
+                results: results.map((r) => ({
+                    userId: r.user_id,
+                    displayName: r.display_name,
+                    avatarUrl: r.avatar_url,
+                })),
+            };
+        });
+    }
+
+    public async mediaConfig(): Promise<MediaConfigResponse> {
+        return this.guard(async () => {
+            const uploadSize = (await this.client.getMediaConfig())["m.upload.size"];
+            return { uploadSize: uploadSize === undefined ? undefined : BigInt(uploadSize) };
+        });
+    }
+
+    public async uploadMedia(file: MediaFile): Promise<string> {
+        return this.guard(async () => {
+            const blob = new Blob([file.data], { type: file.mimetype });
+            return (await this.client.uploadContent(blob)).content_uri;
+        });
+    }
+
+    public async downloadMedia(contentUri: string): Promise<MediaFile> {
+        return this.guard(async () => {
+            const response = await mediaFromMxc(contentUri, this.client).downloadSource();
+            const blob = await response.blob();
+            return { data: await blob.arrayBuffer(), mimetype: blob.type || undefined };
+        });
+    }
+
+    public async readRoomAccountData(roomId: string, eventType: string): Promise<RoomAccountData[]> {
+        const event = this.getRoom(roomId).getAccountData(eventType);
+        return event === undefined ? [] : [{ eventType, roomId, content: event.getContent() }];
+    }
+
+    public async rtcLivekitGetToken(
+        serverName: string,
+        url: string,
+        roomId: string,
+        slotId: string,
+        memberId: string,
+    ): Promise<string> {
+        return this.guard(async () => {
+            const { jwt } = await this.client._unstable_getLivekitToken({
+                server_name: serverName,
+                url,
+                room_id: roomId,
+                slot_id: slotId,
+                member_id: memberId,
+            });
+            return jwt;
+        });
+    }
+
+    public async rtcLivekitDelegateDelayedLeave(
+        url: string,
+        roomId: string,
+        slotId: string,
+        memberId: string,
+        delayId: string,
+    ): Promise<void> {
+        await this.guard(() =>
+            this.client._unstable_delegateDelayedLeave({
+                url,
+                room_id: roomId,
+                slot_id: slotId,
+                member_id: memberId,
+                delay_id: delayId,
+            }),
+        );
+    }
+
+    public subscribeTurnServers(sink: TurnServerSink): Subscription {
+        return this.track(new TurnServerSubscription(this.client, sink));
     }
 
     public subscribeRoom(roomId: string, subjects: RoomSubjects, sink: RoomSink): Subscription {

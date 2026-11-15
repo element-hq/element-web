@@ -14,6 +14,7 @@ import { approveWidgetOpenId } from "../WidgetOpenIdApproval";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import { getUserLanguage } from "../../../i18n/settings";
 import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
+import { navigateToPermalink } from "../../../utils/permalinks/navigator";
 
 interface ElementWidgetHostPlatformOptions {
     /** The widget, as matrix-widget-api sees it (for the capability prompt and the module API). */
@@ -23,15 +24,17 @@ interface ElementWidgetHostPlatformOptions {
     roomId: string;
     /** The iframe the widget is rendered in, once it exists. */
     getIframe: () => HTMLIFrameElement | null;
-    /** The widget reported that it is loaded. */
-    onContentLoaded: () => void;
+    /** The widget reported that it is ready to be shown. */
+    onReady: () => void;
+    /** The widget asked to stay on screen, or to stop doing so. Returns whether that is honoured. */
+    setAlwaysOnScreen: (value: boolean) => boolean;
     /** A capability negotiation finished. */
     onCapabilitiesChanged: () => void;
 }
 
 /**
  * What Element Web provides to the MSC4412 widget host driver: delivery of messages to the widget's
- * iframe, the capability prompt, and the client context reported to the widget.
+ * iframe, the capability and OpenID prompts, navigation, and the client context reported to the widget.
  */
 export class ElementWidgetHostPlatform implements WidgetHostPlatform {
     private driver: Pick<WidgetHostDriverLike, "approveCapabilities" | "resolveOpenid"> | null = null;
@@ -103,9 +106,16 @@ export class ElementWidgetHostPlatform implements WidgetHostPlatform {
         await driver.resolveOpenid(allowed);
     }
 
-    public onContentLoaded = (): void => {
-        this.opts.onContentLoaded();
+    public onReady = (): void => {
+        this.opts.onReady();
     };
+
+    public navigate = (uri: string): void => {
+        // The driver only passes on matrix.to permalinks
+        navigateToPermalink(uri);
+    };
+
+    public setAlwaysOnScreen = (value: boolean): boolean => this.opts.setAlwaysOnScreen(value);
 
     public clientId = (): string => ELEMENT_CLIENT_ID;
 

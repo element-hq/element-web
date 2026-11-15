@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import { type IWidget, MatrixCapabilities, WidgetKind } from "matrix-widget-api";
+import { type IWidget, WidgetKind } from "matrix-widget-api";
 import { type MatrixClient, type Room, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import type { WidgetHostDriver } from "@matrix-widget-tools/widget-host-bindings";
@@ -32,14 +32,19 @@ import { type IApp } from "../../../utils/WidgetUtils-types";
 import { WidgetType } from "../../../widgets/WidgetType";
 
 /**
- * Capabilities granted without asking: the context the compat wrapper needs to template a legacy
- * widget's URL (a legacy client handed the same facts over as URL parameters), plus the ones the
- * matrix-widget-api host also grants to every widget.
+ * Capabilities granted without asking, because a matrix-widget-api host does not ask for them
+ * either: the context the compat wrapper needs to template a legacy widget's URL, the theme,
+ * language and visibility updates, asking for an OpenID token (each request still prompts), and
+ * the legacy capability Element grants to every widget.
+ *
+ * The first six are the compat wrapper's own requests; keep them in line with the SDK.
  */
 const AUTO_APPROVED_CAPABILITIES: string[] = [
-    "m.matrix_context",
-    "m.client_context",
-    MatrixCapabilities.Screenshots,
+    "widget:org.matrix.mscXXXX.get_matrix_context",
+    "widget:org.matrix.mscXXXX.get_client_context",
+    "host:org.matrix.mscXXXX.update_theme",
+    "host:org.matrix.mscXXXX.update_language",
+    "host:org.matrix.mscXXXX.update_visibility",
     ElementWidgetCapabilities.RequiresClient,
 ];
 
@@ -57,14 +62,6 @@ export function isWidgetHostEligible(app: IWidget | IApp, room: Room | undefined
         !WidgetType.JITSI.matches(app.type) &&
         !WidgetType.STICKERPICKER.matches(app.type)
     );
-}
-
-/**
- * Normalises the two spellings of MSC2762 capabilities so that `m.` and `org.matrix.msc2762.`
- * compare equal.
- */
-function normaliseCapability(capability: string): string {
-    return capability.replace(/^m\./, "org.matrix.msc2762.");
 }
 
 /**
@@ -88,6 +85,7 @@ export class WidgetHostMessaging
     private iframe: HTMLIFrameElement | null = null;
     private driver: WidgetHostDriver | null = null;
     private backend: JsSdkMatrixBackend | null = null;
+    private readonly stickyPromise?: () => Promise<void>;
     private scalarToken?: string;
     // Messages the widget sent while the bindings were still loading
     private pendingMessages: string[] = [];
@@ -104,6 +102,7 @@ export class WidgetHostMessaging
         this.room = options.room;
         this.kind = options.userWidget ? WidgetKind.Account : WidgetKind.Room;
         this.widget = new ElementWidget(app);
+        this.stickyPromise = options.stickyPromise;
     }
 
     public get isStarted(): boolean {
@@ -120,10 +119,12 @@ export class WidgetHostMessaging
         return this.widget.getCompleteUrl(params, true);
     }
 
+    /**
+     * Whether the widget holds `capability`, spelled as the driver knows it. Legacy capabilities the
+     * driver has no equivalent for, such as `io.element.requires_client`, keep their legacy spelling.
+     */
     public hasCapability(capability: string): boolean {
-        const wanted = normaliseCapability(capability);
-        const approved = this.driver?.snapshot().approved ?? [];
-        return approved.some((cap) => normaliseCapability(cap) === wanted);
+        return this.driver?.snapshot().approved.includes(capability) ?? false;
     }
 
     public async prepare(): Promise<void> {
@@ -156,7 +157,8 @@ export class WidgetHostMessaging
             widgetKind: this.kind,
             roomId: this.room.roomId,
             getIframe: () => this.iframe,
-            onContentLoaded: () => this.emit(WidgetMessagingEvent.Ready),
+            onReady: () => this.emit(WidgetMessagingEvent.Ready),
+            setAlwaysOnScreen: this.setAlwaysOnScreen,
             onCapabilitiesChanged: () => this.emit(WidgetMessagingEvent.CapabilitiesChanged),
         });
         const driver = new bindings.WidgetHostDriver(backend, platform);
@@ -174,6 +176,25 @@ export class WidgetHostMessaging
         // There is a handleWidgetMessage right behind it anyways
         for (const json of pending) this.handleWidgetMessage(json);
     }
+
+    /**
+     * Makes the widget persistent (kept on screen when its room is left) or stops that, as the
+     * matrix-widget-api host does for `set_always_on_screen`.
+     */
+    private setAlwaysOnScreen = (value: boolean): boolean => {
+        const apply = (): void => {
+            // Stopped while waiting to become sticky
+            if (this.iframe === null) return;
+            ActiveWidgetStore.instance.setWidgetPersistence(this.app.id, this.room.roomId, value);
+        };
+        if (value && this.stickyPromise) {
+            // Becoming sticky waits for the tile to be ready for it; stopping is instant
+            this.stickyPromise().then(apply, (e) => logger.warn("Widget could not stay on screen", e));
+        } else {
+            apply();
+        }
+        return true;
+    };
 
     private onMessage = (ev: MessageEvent): void => {
         // Only the wrapper in our iframe, which is served from our own origin

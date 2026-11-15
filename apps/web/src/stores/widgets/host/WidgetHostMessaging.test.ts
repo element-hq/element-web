@@ -20,6 +20,7 @@ import { ElementWidgetHostPlatform } from "./ElementWidgetHostPlatform";
 import { WidgetMessagingEvent } from "../IWidgetMessaging";
 import * as WidgetMessagingModule from "../WidgetMessaging";
 import { WidgetMessagingStore } from "../WidgetMessagingStore";
+import { ElementWidgetCapabilities } from "../ElementWidgetCapabilities";
 import ActiveWidgetStore from "../../ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type IApp } from "../../../utils/WidgetUtils-types";
@@ -164,7 +165,11 @@ describe("WidgetHostMessaging", () => {
         expect(onStart).toHaveBeenCalledWith(null);
         expect(driver().platform).toBeInstanceOf(ElementWidgetHostPlatform);
         expect(driver().setAutoApproved).toHaveBeenCalledWith(
-            expect.arrayContaining(["m.matrix_context", "m.client_context", MatrixCapabilities.Screenshots]),
+            expect.arrayContaining([
+                "widget:org.matrix.mscXXXX.get_matrix_context",
+                "widget:org.matrix.mscXXXX.get_client_context",
+                ElementWidgetCapabilities.RequiresClient,
+            ]),
         );
         expect(driver().handleMessageFromWidget).toHaveBeenCalledWith(
             JSON.stringify({ action: "request_capabilities", requestId: "1" }),
@@ -194,13 +199,38 @@ describe("WidgetHostMessaging", () => {
         await waitFor(() => expect(messaging.isStarted).toBe(true));
 
         const platform = driver().platform as ElementWidgetHostPlatform;
-        platform.onContentLoaded();
+        platform.onReady();
         expect(onReady).toHaveBeenCalledTimes(1);
 
-        driver().approved = ["m.capability.screenshot", "org.matrix.msc2762.receive.event:m.room.message"];
-        expect(messaging.hasCapability(MatrixCapabilities.Screenshots)).toBe(true);
-        expect(messaging.hasCapability("m.receive.event:m.room.message")).toBe(true);
-        expect(messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)).toBe(false);
+        driver().approved = [ElementWidgetCapabilities.RequiresClient, "widget:org.matrix.mscXXXX.send_event"];
+        expect(messaging.hasCapability(ElementWidgetCapabilities.RequiresClient)).toBe(true);
+        expect(messaging.hasCapability(MatrixCapabilities.Screenshots)).toBe(false);
+    });
+
+    it("keeps the widget on screen once the tile is ready for it, and stops instantly", async () => {
+        const setPersistence = vi.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence").mockReturnValue();
+        const sticky = Promise.withResolvers<void>();
+        messaging = new WidgetHostMessaging(app, {
+            app,
+            room,
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+            stickyPromise: () => sticky.promise,
+        });
+        messaging.start(iframe);
+        bindingsReady.resolve(createFakeBindings());
+        await waitFor(() => expect(messaging.isStarted).toBe(true));
+        const platform = driver().platform as ElementWidgetHostPlatform;
+
+        expect(platform.setAlwaysOnScreen(true)).toBe(true);
+        expect(setPersistence).not.toHaveBeenCalled();
+        sticky.resolve();
+        await waitFor(() => expect(setPersistence).toHaveBeenCalledWith("widget-1", ROOM_ID, true));
+
+        expect(platform.setAlwaysOnScreen(false)).toBe(true);
+        expect(setPersistence).toHaveBeenLastCalledWith("widget-1", ROOM_ID, false);
     });
 
     it("does not start a driver when stopped while the bindings load", async () => {
