@@ -115,6 +115,26 @@ describe("ModuleLoader", () => {
             expect(onLoggedOut).not.toHaveBeenCalled();
         });
 
+        test("should not start onLoggedIn until the previous onLoggedOut has finished", async () => {
+            const { promise: logoutDone, resolve: finishLogout } = Promise.withResolvers<void>();
+            const onLoggedOut = vi.fn().mockReturnValue(logoutDone);
+            const onLoggedIn = vi.fn().mockResolvedValue(undefined);
+
+            const loader = new ModuleLoader(mockApi);
+            await loader.load(makeModule({ onLoggedIn, onLoggedOut }));
+            await loader.start();
+
+            const loggedOut = loader.onLoggedOut();
+            const loggedIn = loader.onLoggedIn();
+            await vi.waitFor(() => expect(onLoggedOut).toHaveBeenCalledTimes(1));
+            expect(onLoggedIn).not.toHaveBeenCalled();
+
+            finishLogout();
+            await Promise.all([loggedOut, loggedIn]);
+            expect(onLoggedIn).toHaveBeenCalledTimes(1);
+            expect(onLoggedOut.mock.invocationCallOrder[0]).toBeLessThan(onLoggedIn.mock.invocationCallOrder[0]);
+        });
+
         test("should call the remaining modules when one fails", async () => {
             const error = new Error("oh no");
             const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
