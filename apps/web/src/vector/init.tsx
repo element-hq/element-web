@@ -27,10 +27,9 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
-import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { type URLParams } from "./url_utils.ts";
 import { Action } from "../dispatcher/actions.ts";
-import { type MatrixDispatcher } from "../dispatcher/dispatcher.ts";
+import defaultDispatcher, { type MatrixDispatcher } from "../dispatcher/dispatcher.ts";
 import { type ActionPayload } from "../dispatcher/payloads.ts";
 
 export const rageshakePromise = initRageshake();
