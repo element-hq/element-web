@@ -13,7 +13,7 @@ import type { WidgetHostDriver } from "@matrix-widget-tools/widget-host-bindings
 import { loadWidgetHostBindings } from "./bindings";
 import { JsSdkMatrixBackend } from "./JsSdkMatrixBackend";
 import { ElementWidgetHostPlatform } from "./ElementWidgetHostPlatform";
-import { buildCompatWrapperUrl } from "./compatWrapperUrl";
+import { buildCompatWrapperUrl, isCompatWrapperUrlAllowed } from "./compatWrapperUrl";
 import {
     type IWidgetMessaging,
     WidgetMessagingEvent,
@@ -52,11 +52,13 @@ const AUTO_APPROVED_CAPABILITIES: string[] = [
  * Whether a widget is rendered on the MSC4412 widget host rather than on matrix-widget-api.
  * Only room widgets of generic types qualify while the host is in labs: Element Call, Jitsi and
  * the sticker picker need actions the host does not offer yet, and account widgets follow the
- * viewed room, which the host does not support yet either.
+ * viewed room, which the host does not support yet either. Widgets whose URL is not a web page
+ * stay on matrix-widget-api too, as the compat wrapper must not load them.
  */
 export function isWidgetHostEligible(app: IWidget | IApp, room: Room | undefined): boolean {
     if (!SettingsStore.getValue("feature_msc4412_widget_host")) return false;
     if (room === undefined || !isAppWidget(app)) return false;
+    if (!isCompatWrapperUrlAllowed(app.url)) return false;
     return (
         !WidgetType.CALL.matches(app.type) &&
         !WidgetType.JITSI.matches(app.type) &&

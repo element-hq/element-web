@@ -70,6 +70,11 @@ describe("isWidgetHostEligible", () => {
         expect(isWidgetHostEligible({ ...app, type: WidgetType.JITSI.preferred }, room)).toBe(false);
         expect(isWidgetHostEligible({ ...app, type: WidgetType.STICKERPICKER.preferred }, room)).toBe(false);
     });
+
+    it("leaves widgets whose URL is not a web page on matrix-widget-api", () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_msc4412_widget_host");
+        expect(isWidgetHostEligible({ ...app, url: "javascript:alert(1)" }, room)).toBe(false);
+    });
 });
 
 describe("WidgetHostMessaging", () => {

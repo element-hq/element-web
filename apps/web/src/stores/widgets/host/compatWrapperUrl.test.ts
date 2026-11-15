@@ -10,7 +10,7 @@ Please see LICENSE in the repository root for full details.
 import { describe, expect, it } from "vitest";
 
 import { type IApp } from "../../../utils/WidgetUtils-types";
-import { buildCompatWrapperUrl } from "./compatWrapperUrl";
+import { buildCompatWrapperUrl, isCompatWrapperUrlAllowed } from "./compatWrapperUrl";
 
 describe("buildCompatWrapperUrl", () => {
     const app: IApp = {
@@ -48,6 +48,19 @@ describe("buildCompatWrapperUrl", () => {
         const url = new URL(buildCompatWrapperUrl(app, { scalarToken: "tok/en" }));
 
         expect(url.searchParams.get("legacy_widget_url")).toBe(`${app.url}&scalar_token=tok%2Fen`);
+    });
+
+    it.each(["javascript:alert(1)", "data:text/html,<script>alert(1)</script>", "blob:https://a/b", "$url", ""])(
+        "refuses to embed %s",
+        (url) => {
+            expect(isCompatWrapperUrlAllowed(url)).toBe(false);
+            expect(() => buildCompatWrapperUrl({ ...app, url })).toThrow("not a web page");
+        },
+    );
+
+    it("allows http and https widget URLs", () => {
+        expect(isCompatWrapperUrlAllowed("http://localhost:8080/widget")).toBe(true);
+        expect(isCompatWrapperUrlAllowed(app.url)).toBe(true);
     });
 
     it("starts the query of a widget URL without one", () => {
