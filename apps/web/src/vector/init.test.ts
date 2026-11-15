@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 // @vitest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
 
-import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mock, type MockInstance } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "@fetch-mock/vitest";
 import { waitFor, screen } from "test-utils-rtl";
@@ -23,6 +23,7 @@ import {
     registerModuleLifecycle,
 } from "./init.tsx";
 import SdkConfig from "../SdkConfig.ts";
+import { ModuleApi } from "../modules/Api.ts";
 import MatrixChat from "../components/structures/MatrixChat.tsx";
 import { parseAppUrl } from "./url_utils.ts";
 import { Action } from "../dispatcher/actions.ts";
@@ -104,7 +105,24 @@ describe("loadApp", () => {
 });
 
 describe("loadPlugins", () => {
-    beforeEach(setUpMatrixChatDiv);
+    let registerSpy: MockInstance<MatrixDispatcher["register"]>;
+
+    beforeEach(() => {
+        setUpMatrixChatDiv();
+        // Create the ModuleApi first so the spy only sees the listeners loadPlugins registers.
+        void ModuleApi.instance;
+        registerSpy = vi.spyOn(defaultDispatcher, "register");
+    });
+
+    afterEach(() => {
+        // Remove the module lifecycle listener so it can't fire in later tests.
+        for (const result of registerSpy.mock.results) {
+            if (result.type === "return") defaultDispatcher.unregister(result.value);
+        }
+        registerSpy.mockRestore();
+        vi.unstubAllGlobals();
+        SdkConfig.reset();
+    });
 
     it("should call module lifecycle hooks on login and logout", async () => {
         const moduleSrc = `
@@ -124,7 +142,6 @@ describe("loadPlugins", () => {
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn }, true);
         defaultDispatcher.fire(Action.OnLoggedOut, true);
         await waitFor(() => expect(events).toEqual(["in", "out"]));
-        vi.unstubAllGlobals();
     });
 });
 
