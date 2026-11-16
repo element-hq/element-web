@@ -36,8 +36,7 @@
     --event-tile-bubble-margin-inline-end: 60px;
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
     --event-tile-bubble-self-background: var(--cpd-color-green-300);
-    /* Must differ from the other-user background, or those bubbles disappear on a hovered or selected row. */
-    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-primary);
+    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
 
     /* Shared preview, action-bar, bubble, and interaction values. */
     --event-tile-preview-offset: 48px;
@@ -875,7 +874,7 @@
         display: flex;
         width: fit-content;
         max-width: 100%;
-        margin-inline-start: var(--event-tile-bubble-line-margin-inline-start);
+        margin-inline-start: -11px;
         margin-inline-end: auto;
     }
 
@@ -960,7 +959,7 @@
 
     &.stateOwnEvent .slotThreadInfo {
         margin-inline-start: auto;
-        margin-inline-end: var(--event-tile-bubble-line-margin-inline-end);
+        margin-inline-end: -11px;
     }
 
     &:hover::before,
@@ -1028,33 +1027,23 @@
     }
 
     &.stateNoBubble .lineEmote {
-        /* Start the text where the text of a bubble starts, clear of the avatar. */
-        padding-inline: calc(var(--event-tile-bubble-gutter) - 1px) 60px;
+        padding-inline-end: 60px;
         font-style: italic;
 
+        .slotBody {
+            padding-block: 4px;
+        }
+
         .slotTimestamp {
+            inset-block: auto;
+            align-self: center;
             font-style: normal;
         }
-
-        /* Without a bubble around the text, put the time on the line box of
-           the last line of text, which ends at the body padding. */
-        .slotTimestamp > * {
-            inset-block-end: var(--event-tile-body-padding, 1px);
-            padding-block: 0;
-        }
     }
 
-    /* Your own avatar starts where the row ends. A bubble reaches under it,
-       but an emote is too short for its time to clear it, so end the line
-       where the row ends. */
-    &.stateOwnEvent .lineEmote {
-        margin-inline-end: 0;
-    }
-
-    /* Events without sender details, and emotes, which have no sender row, use
-       the same avatar placement as an own message whose sender row is hidden. */
-    &.stateNoSender .slotAvatar,
-    &.stateEmote .slotAvatar {
+    /* Events without sender details use the same avatar placement as an own
+       message whose sender row is hidden. */
+    &.stateNoSender .slotAvatar {
         inset-block-start: -19px;
     }
 
@@ -1155,19 +1144,12 @@
 
         .line {
             width: 100%;
-            /* Shrink beside the avatar instead of overflowing the row. */
-            min-width: 0;
+            min-width: 100%;
             max-width: 100%;
             margin: 0;
             padding-block: 0;
             padding-inline: 0 60px;
             background: transparent;
-        }
-
-        /* These rows have no end margin, so take the bubble end margin off the
-           78px receipt offset of messages to put their receipts in the same place. */
-        > .slotReceipt {
-            inset-inline-end: calc(var(--event-tile-bubble-margin-inline-end) - 78px);
         }
 
         .slotTimestamp {

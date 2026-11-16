@@ -97,7 +97,7 @@ Please see LICENSE files in the repository root for full details.
     --event-tile-state-highlight-background: var(--cpd-color-yellow-200);
     --event-tile-state-hover-background: var(--cpd-color-bg-subtle-secondary);
     --event-tile-state-selected-background: var(--cpd-color-bg-subtle-secondary);
-    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-primary);
+    --event-tile-bubble-hover-background: var(--cpd-color-bg-subtle-secondary);
     --event-tile-bubble-other-background: var(--cpd-color-gray-300);
     --event-tile-bubble-self-background: var(--cpd-color-green-300);
     --event-tile-preview-hover-background: var(--cpd-color-bg-subtle-secondary);
